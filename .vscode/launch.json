@@ -2,19 +2,36 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Chrome",
+            "name": "Client",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:9222/",
-            "webRoot": "${workspaceRoot}\\",
-            "file": "${workspaceRoot}/src/index.html"
+            "url": "http://localhost:4200",
+            "sourceMaps": true,
+            "trace": true,
+            "webRoot": "${workspaceRoot}/src",
+            "userDataDir": "${workspaceRoot}/.vscode/chrome",
+            "sourceMapPathOverrides": {
+                "webpack:///C:*":"C:/*"
+            }
         },
         {
+            "name": "Server",
             "type": "chrome",
-            "request": "attach",
-            "name": "Attach to Chrome",
-            "port": 9222,
-            "webRoot": "${workspaceRoot}"
+            "request": "launch",
+            "url": "http://localhost:5000",
+            "sourceMaps": true,
+            "trace": true,
+            "webRoot": "${workspaceRoot}/src",
+            "userDataDir": "${workspaceRoot}/.vscode/chrome",
+            "sourceMapPathOverrides": {
+                "webpack:///C:*":"C:/*"
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Server/Client",
+            "configurations": ["Server", "Client"]
         }
     ]
 }
