@@ -1,0 +1,4 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "pgsql.connection": "postgres://vvbtixriggqnkz:dda3a35edddd2ccb79bafa2bdddad61531827529d4c78c9843a0c02aa17c5660@ec2-54-83-26-65.compute-1.amazonaws.com:5432/dboab0kq8r4usn?ssl=true"
+}
