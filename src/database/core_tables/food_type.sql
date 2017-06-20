@@ -10,5 +10,3 @@ CREATE TABLE IF NOT EXISTS FoodType
 ALTER TABLE FoodType ADD COLUMN IF NOT EXISTS foodTypeDescription VARCHAR(128) NOT NULL;
 
 -- We can add all our FoodType entries here.
-
-CREATE INDEX IF NOT EXISTS appUserFullNameIdx ON AppUser (appUserLastName, appUserFirstName);
