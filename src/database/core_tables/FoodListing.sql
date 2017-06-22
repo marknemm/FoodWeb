@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS FoodListing
 );
 
 -- Foreign Key to FoodType table.
-ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS foodType           INTEGER NOT NULL REFERENCES FoodType (foodTypeKey);
+ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS foodTypeKey        INTEGER NOT NULL REFERENCES FoodType (foodTypeKey);
 
 ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS perishable         BOOLEAN NOT NULL;
 
@@ -16,10 +16,14 @@ ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS foodDescription    TEXT;
 
 ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS imgUrl             TEXT;
 
+ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS expireDate         TIMESTAMP;
+
 ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS postDate           TIMESTAMP;
 
 -- Add more columns here --
 
-CREATE INDEX IF NOT EXISTS foodListingFoodTypeIdx ON FoodListing (foodType);
+CREATE INDEX IF NOT EXISTS foodListingFoodTypeIdx ON FoodListing (foodTypeKey);
+
+CREATE INDEX IF NOT EXISTS expireDateIdx ON FoodListing (expireDate);
 
 -- Create more indexes here --

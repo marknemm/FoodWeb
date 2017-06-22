@@ -5,3 +5,5 @@ CREATE TABLE IF NOT EXISTS Donor
 );
 
 ALTER TABLE Donor ADD COLUMN IF NOT EXISTS donorOrganization VARCHAR(128);
+
+CREATE INDEX IF NOT EXISTS donorOrganizationIdx ON Donor (donorOrganization);
