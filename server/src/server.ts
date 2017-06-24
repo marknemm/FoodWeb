@@ -2,26 +2,34 @@ var express = require('express');
 var pg = require('pg');
 var app = express();
 
+const path = require('path');
+const clientBuildDir = __dirname + '/../../client/app/';
+
 app.set('port', (process.env.PORT || 5000));
 
-app.use(express.static(__dirname + '/../../dist'));
-
-const path = require('path');
+app.use(express.static(clientBuildDir));
 
 //app.use(express.static(__dirname + '/../../public'));
 
 // views is directory for all template files
-app.set('views', __dirname + '/../../views/');
+//app.set('views', __dirname + '/../../views/');
 app.set('view engine', 'ejs');
 
+/**
+ * Respond to the root address of our webapp with the index.html page.
+ */
 app.get('/', function(request, response) {
-  response.sendFile(path.join(__dirname + '/../../dist/index.html'));
+  response.sendFile(path.join(clientBuildDir + '/index.html'));
+});
+
+app.get('/Donor', function(request, response) {
+  // response.sendFile(path.join(clientBuildDir))
 });
 
 app.get('/times', function(request, response) {
   var result = '';
   var times = process.env.TIMES || 5;
-  for (i = 0; i < times; i++)
+  for (var i = 0; i < times; i++)
     result += i + ' ';
   response.send(result);
 });
