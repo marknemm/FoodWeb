@@ -15,17 +15,6 @@ app.use(express.static(clientBuildDir));
 //app.set('views', __dirname + '/../../views/');
 app.set('view engine', 'ejs');
 
-/**
- * Respond to the root address of our webapp with the index.html page.
- */
-app.get('/', function(request, response) {
-  response.sendFile(path.join(clientBuildDir + '/index.html'));
-});
-
-app.get('/Donor', function(request, response) {
-  // response.sendFile(path.join(clientBuildDir))
-});
-
 app.get('/times', function(request, response) {
   var result = '';
   var times = process.env.TIMES || 5;
@@ -52,6 +41,10 @@ app.get('/db', function(request, response) {
       }
     });
   });
+});
+
+app.get('*', function (request, response) {
+      response.sendFile(path.join(clientBuildDir + '/index.html'));
 });
 
 app.listen(app.get('port'), function() {
