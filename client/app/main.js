@@ -1,1 +1,0 @@
-"use strict";var _platformBrowserDynamic=require("@angular/platform-browser-dynamic"),_core=require("@angular/core"),_environment=require("./environments/environment"),_app=require("./app.module");_environment.environment.production&&(0,_core.enableProdMode)(),(0,_platformBrowserDynamic.platformBrowserDynamic)().bootstrapModule(_app.AppModule);

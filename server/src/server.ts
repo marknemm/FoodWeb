@@ -3,7 +3,7 @@ var pg = require('pg');
 var app = express();
 
 const path = require('path');
-const clientBuildDir = __dirname + '/../../client/app/';
+const clientBuildDir = __dirname + '/../../client/dist/';
 
 app.set('port', (process.env.PORT || 5000));
 
