@@ -7,7 +7,7 @@
     "mapRoot": "./",
     "module": "es6",
     "rootDir": "./src/",
-    "outDir": "./app/",
+    "outDir": "./dist/",
     "moduleResolution": "node",
     "sourceMap": true,
     "target": "es5",

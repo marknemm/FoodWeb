@@ -25,7 +25,7 @@ gulp.task('default', [ /*'clientscripts',*/ 'serverscripts' ]);
                             gutil.log(error);
                         }))
                         .pipe(sourcemaps.write('.'))
-                        .pipe(gulp.dest('client/app'));
+                        .pipe(gulp.dest('client/dist'));
 });*/
 
 // This task can be run alone with "gulp serverscripts"
@@ -41,7 +41,7 @@ gulp.task('serverscripts', () => {
                         }))
                         .pipe(sourcemaps.init())
                         .pipe(sourcemaps.write('.'))
-                        .pipe(gulp.dest('server/app'));
+                        .pipe(gulp.dest('server/dist'));
 });
 
 // By adding this, we can run "gulp watch" to automatically

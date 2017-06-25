@@ -51,10 +51,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-debugger;
 var AppComponent = (function () {
     function AppComponent() {
-        this.title = 'app change 2';
+        this.title = 'app change 3';
     }
     AppComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["U" /* Component */])({
