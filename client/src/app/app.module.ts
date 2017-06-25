@@ -1,14 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { LoginComponent } from './login/login.component';
-
-import { RouterModule, Routes } from '@angular/router'
+import { DonorComponent } from './donor/donor.component';
+import { ReceiverComponent } from './receiver/receiver.component'
 
 const appRoutes:Routes = [
   {
@@ -18,6 +19,14 @@ const appRoutes:Routes = [
   {
     path: 'home',
     component: HomeComponent
+  },
+  {
+    path: 'donor',
+    component: DonorComponent
+  },
+  {
+    path: 'receiver',
+    component: ReceiverComponent
   }
 ]
 
@@ -27,7 +36,9 @@ const appRoutes:Routes = [
     HomeComponent,
     HeaderComponent,
     FooterComponent,
-    LoginComponent
+    LoginComponent,
+    DonorComponent,
+    ReceiverComponent
   ],
   imports: [
     NgbModule.forRoot(),
