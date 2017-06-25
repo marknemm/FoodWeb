@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+.nav > li:hover {
+    background-color: #444444;
+}
+
+.nav > li  {
+    margin-left: 5px;
+    margin-right: 5px;
+}

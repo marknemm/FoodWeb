@@ -218,7 +218,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/header/header.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header>Connect Food</header>\n"
+module.exports = "<nav class=\"navbar navbar-toggleable-sm navbar-fixed-top navbar-inverse bg-inverse\" id=\"#headerNavBar\">\n    <div class=\"navbar-brand\">Connect Food</div>\n    <div class='container-fluid'>\n        <ul class=\"nav navbar-nav\">\n            <li class='nav-item'>\n                <a class='nav-link' routerLink=\"/home\" routerLinkActive=\"active\">Home</a>\n            </li>\n            <li class='nav-item'>\n                <a class='nav-link' routerLink=\"/login\" routerLinkActive=\"active\">Login</a>\n            </li>\n            <li class='nav-item'>\n                <a class='nav-link' routerLink=\"/donor\" routerLinkActive=\"active\">Donor</a>\n            </li>\n            <li class='nav-item'>\n                <a class='nav-link' routerLink=\"/receiver\" routerLinkActive=\"active\">Receiver</a>\n            </li>\n        </ul>\n    </div>\n</nav>"
 
 /***/ }),
 
@@ -279,7 +279,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  Connect Food Homepage!\n</p>\n"
+module.exports = "\n"
 
 /***/ }),
 
@@ -368,6 +368,7 @@ var LoginComponent = (function () {
         this.router = router;
     }
     LoginComponent.prototype.ngOnInit = function () {
+        document.getElementById('headerNavBar').style.visibility = 'hidden';
     };
     LoginComponent.prototype.loginUser = function (event) {
         event.preventDefault();

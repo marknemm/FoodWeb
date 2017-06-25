@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
   constructor(private router:Router) { }
 
   ngOnInit() {
+    document.getElementById('headerNavBar').style.visibility='hidden';
   }
 
   loginUser(event) {
