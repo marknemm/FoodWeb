@@ -4,7 +4,7 @@
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
-    "start": "gulp && concurrently \"gulp watch\" \"ng build --watch\" \"nodemon server/distn/server.js\"",
+    "start": "gulp && concurrently \"gulp watch\" \"ng build --watch\" \"nodemon server/dist/server.js\"",
     "html": "copyfiles -u 2 \"./src/web/**/*.{css,html}\" \"./dist/web/\""
   },
   "private": true,
