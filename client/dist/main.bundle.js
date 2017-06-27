@@ -34,7 +34,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The whole content below can be removed with the new code.-->\n<div id=\"fullPage\">\n\t<app-header></app-header>\n\n\t<router-outlet></router-outlet>\n\n\t<app-footer></app-footer>\n</div>\n"
+module.exports = "<!--The whole content below can be removed with the new code.-->\r\n<div id=\"fullPage\">\r\n\t<app-header></app-header>\r\n\r\n\t<router-outlet></router-outlet>\r\n\r\n\t<app-footer></app-footer>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -65,7 +65,7 @@ AppComponent = __decorate([
     })
 ], AppComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/app.component.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/app.component.js.map
 
 /***/ }),
 
@@ -132,7 +132,7 @@ AppModule = __decorate([
     })
 ], AppModule);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/app.module.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/app.module.js.map
 
 /***/ }),
 
@@ -157,7 +157,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/footer/footer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  Copyright &copy; Connect Food\n</p>"
+module.exports = "<p>\r\n  Copyright &copy; Connect Food\r\n</p>"
 
 /***/ }),
 
@@ -193,7 +193,7 @@ FooterComponent = __decorate([
     __metadata("design:paramtypes", [])
 ], FooterComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/footer/footer.component.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/footer/footer.component.js.map
 
 /***/ }),
 
@@ -218,7 +218,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/header/header.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-toggleable-sm navbar-fixed-top navbar-inverse bg-inverse\" id=\"#headerNavBar\">\n    <div class=\"navbar-brand\">Connect Food</div>\n    <div class='container-fluid'>\n        <ul class=\"nav navbar-nav\">\n            <li class='nav-item'>\n                <a class='nav-link' routerLink=\"/home\" routerLinkActive=\"active\">Home</a>\n            </li>\n            <li class='nav-item'>\n                <a class='nav-link' routerLink=\"/login\" routerLinkActive=\"active\">Login</a>\n            </li>\n            <li class='nav-item'>\n                <a class='nav-link' routerLink=\"/donor\" routerLinkActive=\"active\">Donor</a>\n            </li>\n            <li class='nav-item'>\n                <a class='nav-link' routerLink=\"/receiver\" routerLinkActive=\"active\">Receiver</a>\n            </li>\n        </ul>\n    </div>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-toggleable-sm navbar-fixed-top navbar-inverse bg-inverse\" id=\"#headerNavBar\">\r\n    <div class=\"navbar-brand\">Connect Food</div>\r\n    <div class='container-fluid'>\r\n        <ul class=\"nav navbar-nav\">\r\n            <li class='nav-item'>\r\n                <a class='nav-link' routerLink=\"/home\" routerLinkActive=\"active\">Home</a>\r\n            </li>\r\n            <li class='nav-item'>\r\n                <a class='nav-link' routerLink=\"/login\" routerLinkActive=\"active\">Login</a>\r\n            </li>\r\n            <li class='nav-item'>\r\n                <a class='nav-link' routerLink=\"/donor\" routerLinkActive=\"active\">Donor</a>\r\n            </li>\r\n            <li class='nav-item'>\r\n                <a class='nav-link' routerLink=\"/receiver\" routerLinkActive=\"active\">Receiver</a>\r\n            </li>\r\n        </ul>\r\n    </div>\r\n</nav>"
 
 /***/ }),
 
@@ -254,7 +254,7 @@ HeaderComponent = __decorate([
     __metadata("design:paramtypes", [])
 ], HeaderComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/header/header.component.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/header/header.component.js.map
 
 /***/ }),
 
@@ -279,7 +279,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n"
+module.exports = "\r\n"
 
 /***/ }),
 
@@ -315,7 +315,7 @@ HomeComponent = __decorate([
     __metadata("design:paramtypes", [])
 ], HomeComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/home/home.component.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/home/home.component.js.map
 
 /***/ }),
 
@@ -340,7 +340,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<form (submit)=\"loginUser($event)\">\n\t<div class=\"input\">\n\t\t<label>Username</label>\n\t\t<input type=\"text\">\n\t</div>\n\t<div class=\"input\">\n\t\t<label>Password</label>\n\t\t<input type=\"password\">\n\t</div>\n\t<div class=\"input\">\n\t\t<input type=\"submit\" value=\"Login\">\n\t</div>\n</form>\n"
+module.exports = "<form (submit)=\"loginUser($event)\">\r\n\t<div class=\"input\">\r\n\t\t<label>Username</label>\r\n\t\t<input type=\"text\">\r\n\t</div>\r\n\t<div class=\"input\">\r\n\t\t<label>Password</label>\r\n\t\t<input type=\"password\">\r\n\t</div>\r\n\t<div class=\"input\">\r\n\t\t<input type=\"submit\" value=\"Login\">\r\n\t</div>\r\n</form>\r\n"
 
 /***/ }),
 
@@ -392,7 +392,7 @@ LoginComponent = __decorate([
 ], LoginComponent);
 
 var _a;
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/login/login.component.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/login/login.component.js.map
 
 /***/ }),
 
@@ -409,7 +409,7 @@ var _a;
 var environment = {
     production: false
 };
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/environments/environment.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/environments/environment.js.map
 
 /***/ }),
 
@@ -430,7 +430,7 @@ if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment *
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["a" /* enableProdMode */])();
 }
 __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */]);
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/main.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/main.js.map
 
 /***/ }),
 
