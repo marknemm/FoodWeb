@@ -3,3 +3,9 @@
     this procedure should either UPDATE
     or create a AppUser */
 
+SELECT dropFunction ('updateappuser');
+
+CREATE OR REPLACE updateAppUser
+(
+    
+)
