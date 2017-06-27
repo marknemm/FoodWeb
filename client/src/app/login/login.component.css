@@ -27,3 +27,12 @@ div.input input {
 div.input {
 	margin-top: 20px;
 }
+
+.close {
+	display:block;
+	height: 25px;
+	width: 25px;
+	border-radius: 50%;
+	background-color: red;
+	border: 1px solid red;
+}
