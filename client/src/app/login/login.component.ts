@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { DialogComponent, DialogService } from "ng2-bootstrap-modal";
 import { Router } from '@angular/router';
-//import {UserService} from '../user.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent extends DialogComponent<null, boolean> {
 
-  constructor(private router:Router) { }
-
-  ngOnInit() {
-    
+  constructor(dialogService: DialogService) {
+    super(dialogService);
   }
 
   loginUser(event) {
@@ -21,10 +19,7 @@ export class LoginComponent implements OnInit {
     var username = event.target.elements[0].value;
     var password = event.target.elements[1].value;
     console.log(username, password);
-
-    if (username == 'admin' && password == 'admin') {
-      this.router.navigate(['home']);
-    }
+    this.result = true;
+    this.close();
   }
-
 }

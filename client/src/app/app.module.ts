@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -13,7 +14,7 @@ import { ReceiverComponent } from './receiver/receiver.component'
 
 const appRoutes:Routes = [
   {
-    path: 'login',
+    path: 'login', // This can be both modal popup and its own page!
     component: LoginComponent
   },
   {
@@ -43,7 +44,11 @@ const appRoutes:Routes = [
   imports: [
     NgbModule.forRoot(),
     RouterModule.forRoot(appRoutes),
-    BrowserModule
+    BrowserModule,
+    BootstrapModalModule
+  ],
+  entryComponents: [
+    LoginComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
