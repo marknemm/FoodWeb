@@ -4,3 +4,8 @@ header {
 	font-size: 30px;
 	border-bottom: 2px solid #eee;
 }
+
+#loginButton:hover {
+	cursor: pointer;
+	cursor: hand;
+}
