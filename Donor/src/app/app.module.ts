@@ -1,23 +1,14 @@
+import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
-import {NgModule} from '@ng-bootstrap/ng-bootstrap';
-
-import { AppComponent } from './app.component';
+import { AppComponent }  from './app.component';
+import { app_routing } from './app.routing';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    NgModule.forRoot()
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+  imports:      [ BrowserModule, FormsModule, ReactiveFormsModule, app_routing.routes, NgbModule.forRoot() ],
+  declarations: [ AppComponent, app_routing.components ],
+  bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
