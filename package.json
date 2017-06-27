@@ -25,6 +25,7 @@
     "@angular/router": "^4.0.0",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.26",
     "angular2-modal": "^3.0.1",
+    "body-parser": "^1.17.2",
     "bootstrap": "^4.0.0-alpha.6",
     "concurrently": "^3.5.0",
     "core-js": "^2.4.1",
