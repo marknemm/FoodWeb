@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http'
+import { HttpModule } from '@angular/http'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { RouterModule, Routes } from '@angular/router';
@@ -46,7 +46,8 @@ const appRoutes:Routes = [
     NgbModule.forRoot(),
     RouterModule.forRoot(appRoutes),
     BrowserModule,
-    BootstrapModalModule
+    BootstrapModalModule,
+    HttpModule
   ],
   entryComponents: [
     LoginComponent

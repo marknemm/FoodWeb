@@ -29,10 +29,15 @@ div.input {
 }
 
 .close {
-	display:block;
+	display: block;
 	height: 25px;
 	width: 25px;
 	border-radius: 50%;
 	background-color: red;
 	border: 1px solid red;
+}
+
+#loginErr {
+	text-align: center;
+	color: red;
 }

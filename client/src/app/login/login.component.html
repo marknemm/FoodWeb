@@ -1,13 +1,13 @@
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-header">
-			<h1 class="modal-title">Login</h1>
+			<h1 class="modal-title">Sign In</h1>
 			<button type="button" class="close" (click)="close()" >&times;</button>
 		</div>
 		<div class="modal-body">
 			<form (submit)="loginUser($event)">
 				<div class="input">
-					<label>Username</label>
+					<label>Email</label>
 					<input type="text">
 				</div>
 				<div class="input">
@@ -18,6 +18,9 @@
 					<input type="submit" value="Login">
 				</div>
 			</form>
+		</div>
+		<div class="modal-footer">
+			<p *ngIf="loginError" id="loginErr">Incorrect login information. Please Try Again.</p>
 		</div>
 	</div>
 </div>
