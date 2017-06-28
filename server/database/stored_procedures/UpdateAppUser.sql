@@ -11,20 +11,22 @@ SELECT dropFunction ('updateappuser');
     you shall need to provide the userEmail, Password, LastName
     and FirstName.*/
 
-CREATE OR REPLACE updateAppUser
+CREATE OR REPLACE FUNCTION updateAppUser
 (
+    newUser                 BOOLEAN             DEFAULT NULL,
     _appUserEmail           VARCHAR(128)        DEFAULT NULL, 
     _appUserPassword        TEXT                DEFAULT NULL,
     _appUserLastName        VARCHAR(60)         DEFAULT NULL,
-    _appUserFirstName       VARCHAR(60)         DEFAULT NULL,
-    newUser                 BOOLEAN             DEFAULT NULL
+    _appUserFirstName       VARCHAR(60)         DEFAULT NULL
+    
 )
+RETURNS VOID
 AS $$
     --DECLARE newUser BOOLEAN = FALSE;
     DECLARE _appUserKey INTEGER;
 
 /* If new user, then simply insertIntoAppUser
-   Else get donor or reciever key, and Update ALL
+   Else get appUserKey, and Update ALL
    Info on that row with new, non-null info */ 
 BEGIN
 
@@ -32,7 +34,7 @@ BEGIN
         WHEN newUser = true
             THEN SELECT insertIntoAppUser(_appUserEmail, _appUserPassword,
                                             _appUserLastName, _appUserFirstName )
-        ELSE 
+        WHEN newUser = false 
             _appUserKey = SELECT appUserKey FROM appUser 
                             WHERE (_appUserEmail != NULL AND appUserEmail = _appUserEmail) OR
                                 (_appUserPassword != NULL AND appUserPassword = _appUserPassword) OR
@@ -52,5 +54,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--SELECT * FROM appUser;
+SELECT updateAppUser (FALSE, aghose@buffalo.edu, password, Ghose, Akash);
 SELECT * FROM appUser;
-
