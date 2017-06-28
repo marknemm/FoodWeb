@@ -1,6 +1,7 @@
 /**
  * A basic search function for retrieving food listings that meet specific criteria.
  */
+ SELECT dropFunction('searchfoodlisting');
 CREATE OR REPLACE FUNCTION searchFoodListing
 (
     _foodListingKey     INTEGER         DEFAULT NULL,   -- This is for when we are looking for a specific Food Listing.
