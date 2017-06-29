@@ -29,31 +29,28 @@ AS $$
    Else get appUserKey, and Update ALL
    Info on that row with new, non-null info */ 
 BEGIN
-
+    raise notice 'Values: %, %, %, %', _appUserEmail, _appUserPassword, _appUserLastName, _appUserFirstName;
     CASE
         WHEN newUser = true
-            THEN SELECT insertIntoAppUser(_appUserEmail, _appUserPassword,
-                                            _appUserLastName, _appUserFirstName )
+            THEN PERFORM insertIntoAppUser(_appUserEmail, _appUserPassword,
+                                            _appUserLastName, _appUserFirstName );
         WHEN newUser = false 
-            _appUserKey = SELECT appUserKey FROM appUser 
-                            WHERE (_appUserEmail != NULL AND appUserEmail = _appUserEmail) OR
-                                (_appUserPassword != NULL AND appUserPassword = _appUserPassword) OR
-                                (_appUserLastName != NULL AND appUserLastName = _appUserLastName) OR
-                                (_appUserFirstName != NULL AND appUserFirstName = _appUserFirstName);
+           THEN  _appUserKey = (SELECT appUserKey FROM appUser 
+                            WHERE (_appUserEmail IS NOT NULL AND appUserEmail = _appUserEmail));
+                            raise notice 'Value: %', _appUserKey;
             UPDATE AppUser
-                CASE 
-                    WHEN _appUserEmail != NULL THEN SET appUserEmail = _appUserEmail
-                    WHEN _appUserPassword != NULL THEN SET appUserPassword = _appUserPassword
-                    WHEN _appUserLastName != NULL THEN SET appUserLastName = _appUserLastName
-                    WHEN _appUserFirstName != NULL THEN SET appUserFirstName = _appUserFirstName
-                END
-            WHERE appUserKey = _appUserKey;
-    END   
+            SET appUserEmail = COALESCE(_appUserEmail, appUserEmail),
+                appUserPassword = COALESCE(_appUserPassword, appUserPassword),
+                appUserLastName = COALESCE(_appUserLastName, appUserLastName),
+                appUserFirstName = COALESCE(_appUserFirstName, appUserFirstName)
+            WHERE appUserKey = _appUserKey; 
+    END CASE; 
 
 
 END;
 $$ LANGUAGE plpgsql;
 
 --SELECT * FROM appUser;
-SELECT updateAppUser (FALSE, aghose@buffalo.edu, password, Ghose, Akash);
+--SELECT updateAppUser(TRUE, 'testUser3@test.edu', 'password', 'User3', 'Test3');
+SELECT updateAppUser (FALSE, 'akasgosh@buffalo.edu', 'password', 'Ghose', 'Akash');
 SELECT * FROM appUser;
