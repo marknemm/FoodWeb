@@ -26,13 +26,13 @@ SELECT * FROM Receiver;
 
 
 -- Fill AppUser with junk data --
-INSERT INTO AppUser ( appuserEmail, appuserPassword, appuserLastName, appuserFirstName, donorKey, receiverKey )
-VALUES ( 'marknemm1@buffalo.edu', 'password', 'Nemmer', 'Mark', (SELECT donorKey FROM Donor WHERE donorOrganization = 'Wegmans'), null ),
-       ( 'johnnemm2@buffalo.edu', 'password', 'Nemmer', 'John', null, (SELECT receiverKey FROM Receiver WHERE receiverOrganization = 'St. Gregs') ),
-       ( 'bethnemm3@buffalo.edu', 'password', 'Nemmer', 'Bethany', null, null ),
-       ( 'laurnemm4@buffalo.edu', 'password', 'Nemmer', 'Laura', null, null ),
-       ( 'jessnemm5@buffalo.edu', 'password', 'Nemmer', 'Jessalyn', null, null ),
-       ( 'akasgosh@buffalo.edu', 'password', 'Goshe', 'Akash', null, null );
+INSERT INTO AppUser ( appUserEmail, appUserPassword, userName, appUserLastName, appUserFirstName, donorKey, receiverKey )
+VALUES ( 'marknemm1@buffalo.edu', 'password','markiese', 'Nemmer', 'Mark', (SELECT donorKey FROM Donor WHERE donorOrganization = 'Wegmans'), null ),
+       ( 'johnnemm2@buffalo.edu', 'password','toilet', 'Nemmer', 'John', null, (SELECT receiverKey FROM Receiver WHERE receiverOrganization = 'St. Gregs') ),
+       ( 'bethnemm3@buffalo.edu', 'password','potato', 'Nemmer', 'Bethany', null, null ),
+       ( 'laurnemm4@buffalo.edu', 'password','aLaura', 'Nemmer', 'Laura', null, null ),
+       ( 'jessnemm5@buffalo.edu', 'password','jDizzle', 'Nemmer', 'Jessalyn', null, null ),
+       ( 'akasgosh@buffalo.edu', 'password','amazingHumanPerson', 'Gose', 'Akash', null, null );
 
 SELECT * FROM AppUser;
 

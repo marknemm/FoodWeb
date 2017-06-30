@@ -1,8 +1,8 @@
 
 --SELECT dropFunction('updateappuser');
-
 CREATE OR REPLACE FUNCTION insertIntoAppUser
 (
+    _userName               VARCHAR(128)        DEFAULT NULL,
     _appUserEmail           VARCHAR(128)        DEFAULT NULL, 
     _appUserPassword        TEXT                DEFAULT NULL,
     _appUserLastName        VARCHAR(60)         DEFAULT NULL,
@@ -19,4 +19,4 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 --SELECT insertIntoAppUser('testUser@test.edu', 'password', 'User', 'Test');
-SELECT* FROM appUser; 
+SELECT * FROM appUser; 

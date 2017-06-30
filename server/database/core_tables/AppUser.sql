@@ -10,6 +10,9 @@ ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserEmail           VARCHAR(128)
 -- Password must be encrypted when entered into this table!
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserPassword        TEXT            NOT NULL;
 
+--A unique userName for every user. This, along with the email shall be the primary identifiers
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS userName               VARCHAR(128)    NOT NULL UNIQUE; 
+
 -- The App User's Last Name.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserLastName        VARCHAR(60)     NOT NULL;
 
