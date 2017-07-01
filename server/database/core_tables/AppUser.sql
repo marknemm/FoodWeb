@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS AppUser
 );
 
 -- Email will be the username also.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserEmail           VARCHAR(128);
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserEmail           VARCHAR(128)    UNIQUE;
 
 -- Password must be encrypted when entered into this table!
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserPassword        TEXT            NOT NULL;
