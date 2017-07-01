@@ -1,55 +1,80 @@
 var express = require('express');
+var session = require('express-session')
 var pg = require('pg');
 var http = require('http');
 var bodyParser = require('body-parser')
-var app = express();
-
 const path = require('path');
-const clientBuildDir = __dirname + '/../../client/dist/';
+
+var connectionPool = require('./database_help/connection_pool');
 
 // Our controllers that will handle requests after this router hands off the data to them.
-import { LoginController } from './controllers/login_controller';
-import { DonorController } from './controllers/donor_controller';
-import { ReceiverController } from './controllers/receiver_controller';
+import { AuthenticationController } from './authentication/authentication_controller';
+import { DonorController } from './donor/donor_controller';
+import { ReceiverController } from './receiver/receiver_controller';
 
-var loginController : LoginController = new LoginController();
+var app = express();
 
-app.set('port', (process.env.PORT || 5000));
+// This is where compiled client ts files will go. We need this to locate index.html!
+const clientBuildDir = __dirname + '/../../client/dist/';
+// Make sure that we can locate our environmental variable (.env) file!
+require('dotenv').config({path: __dirname + '/../../.env'});
+
+// Some configuration settings for our App.
+app.set('port', (process.env.NODE_PORT || 5000));
+app.set('connectionPool', connectionPool);
 app.use(express.static(clientBuildDir));
 app.use(bodyParser.json());
+app.use(session({ 
+  secret: 'xefbwefiefw',
+  cookie: { maxAge: 60000 }, // 1 hour.
+  resave: false,
+  saveUninitialized: false 
+}));
 
-/*app.get('/times', function(request, response) {
-  var result = '';
-  var times = process.env.TIMES || 5;
-  for (var i = 0; i < times; i++)
-    result += i + ' ';
-  response.send(result);
-});
+// Initialize our Controller objects. These are used to actually handle routes defined in this file.
+var authenticationController : AuthenticationController = new AuthenticationController();
+var donorController : DonorController = new DonorController();
+var receeverController : ReceiverController = new ReceiverController();
 
+/**
+ * This is a crude example of connecting to the database.
+ * You can look at it to see what is going on.
+ */
 app.get('/db', function(request, response) {
-  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-    if (err) {
-	console.error(err);
-	response.send('Error ' + err);
-	return;
-    }
+  connectionPool.connect().then(client => {
     client.query('SELECT * FROM test_table;', function(err, result) {
-      done();
       if (err) {
         console.error(err);
-	response.send('Error ' + err);
+	      response.send('Error ' + err);
       }
       else {
-        response.render('pages/db', {results: result.rows});
+        response.send({results: result.rows});
       }
     });
+
+    client.query('SELECT * FROM test_table;').then(res => {
+      client.done();
+      console.log(res.rows[0]);
+    })
+    .catch(err => {
+      client.done();
+      console.error('query error', err.message, err.stack);
+      response.send('Error ' + err);
+    });
+  })
+  .catch(err => {
+    console.error('query error', err.message, err.stack);
+    response.send('Error ' + err);
   });
-});*/
+});
 
 // Handle /login route by passing off to LoginController.
-app.post('/login', loginController.login);
+app.post('/login', authenticationController.login);
+
+app.post('/addFoodListings', )
 
 app.get('*', function (request, response) {
+    console.log(process.env.DATABASE_URL);
       response.sendFile(path.join(clientBuildDir + '/index.html'));
 });
 
