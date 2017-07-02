@@ -11,7 +11,8 @@
             <li class="nav-item"><a class='nav-link' [routerLink]="['/receiver']">Receiver</a></li>
         </ul>
         <ul class="navbar-nav navbar-right">
-            <li class="nav-item"><a id='loginButton' class='nav-link' (click)="showConfirm()">Login</a></li>
+            <li *ngIf="localStorage.getItem('username') === null" class="nav-item"><a id='loginButton' class='nav-link' (click)="showConfirm()">Login</a></li>
+            <li *ngIf="localStorage.getItem('username') !== null" class="nav-item"><a class='nav-link'>{{localStorage.getItem('username')}}</a></li>
         </ul>
     </div>
 </nav>

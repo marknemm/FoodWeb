@@ -7,19 +7,18 @@ export class LoginService {
 
   constructor(private http: Http) { }
  
-  login(username: string, password: string) {
+  login(username : string, password: string) {
+    console.log('username: ' + username);
+    console.log('password: ' + password);
     var observer : Observable<Response> = this.http.post('/login', JSON.stringify({ username: username, password: password }))
-    return observer.map((response: Response) =>
+    return observer.map((response : Response) =>
       {
-        // login successful if there's a jwt token in the response
         let user = response.json();
-        if (user && user.email) {
-            // store user details and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem('currentUser', user.email);
-            console.log('Got email respons: ' + user.email);
+        if (user && user.username) {
+            console.log('Got login response: ' + user.username);
         }
 
-        return user.email;
+        return user;
       }
     );
   }

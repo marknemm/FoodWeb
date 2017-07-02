@@ -36,7 +36,7 @@ module.exports.query = function(text, values, callback) {
  * This is used to grab a connection from the underlying connection pool.
  * You are expected to release the conneciton back into the pool to make it available for others to use when you are done with it.
  * To do this, call release() on the connection object returned by this method.
- * @return A connection object that can 
+ * @return A connection object that can be used to execute several queries.
  */ 
 module.exports.connect = function(callback) {
   return pool.connect(callback);

@@ -21,7 +21,6 @@ require('dotenv').config({path: __dirname + '/../../.env'});
 
 // Some configuration settings for our App.
 app.set('port', (process.env.NODE_PORT || 5000));
-app.set('connectionPool', connectionPool);
 app.use(express.static(clientBuildDir));
 app.use(bodyParser.json());
 app.use(session({ 
@@ -41,7 +40,9 @@ var receeverController : ReceiverController = new ReceiverController();
  * You can look at it to see what is going on.
  */
 app.get('/db', function(request, response) {
+  // Grab a connection. This comes in the form of a Promise.
   connectionPool.connect().then(client => {
+    // Grabbing a connection succeeded. Now we can execute a query using a callback function.
     client.query('SELECT * FROM test_table;', function(err, result) {
       if (err) {
         console.error(err);
@@ -52,12 +53,13 @@ app.get('/db', function(request, response) {
       }
     });
 
+    // We can execute another query using a Promise.
     client.query('SELECT * FROM test_table;').then(res => {
       client.done();
       console.log(res.rows[0]);
     })
     .catch(err => {
-      client.done();
+      client.done(); // Make sure to release the connection back into the connection pool when finished!!!!!!!
       console.error('query error', err.message, err.stack);
       response.send('Error ' + err);
     });
@@ -69,9 +71,7 @@ app.get('/db', function(request, response) {
 });
 
 // Handle /login route by passing off to LoginController.
-app.post('/login', authenticationController.login);
-
-app.post('/addFoodListings', )
+app.post('/login', authenticationController.login.bind(authenticationController));
 
 app.get('*', function (request, response) {
     console.log(process.env.DATABASE_URL);
