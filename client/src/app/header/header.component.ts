@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginComponent } from '../login/login.component';
+import { LoginComponent } from '../authentication/login.component';
 import { DialogService } from "ng2-bootstrap-modal";
 
 @Component({
@@ -9,13 +9,15 @@ import { DialogService } from "ng2-bootstrap-modal";
 })
 export class HeaderComponent implements OnInit {
 
+  public localStorage = localStorage;
+
   constructor(private dialogService:DialogService) {}
 
   ngOnInit() {
   }
 
   showConfirm() {
-    let dialogObserver = this.dialogService.addDialog (
+    var dialogObserver = this.dialogService.addDialog (
       LoginComponent,
       // Dialog Initalization Data
       null,

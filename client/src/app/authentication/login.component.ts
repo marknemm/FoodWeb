@@ -12,7 +12,7 @@ import { LoginModel } from './login-model'
 })
 export class LoginComponent extends DialogComponent<null, boolean> {
 
-  public loginError : boolean;
+  public loginModel : LoginModel;
 
   constructor (
     public dialogService: DialogService,
@@ -20,34 +20,26 @@ export class LoginComponent extends DialogComponent<null, boolean> {
   )
   {
     super(dialogService);
-    this.loginError = false;
+    this.loginModel = new LoginModel();
   }
 
   loginUser(event) {
     event.preventDefault();
     console.log(event);
-    var username = event.target.elements[0].value;
-    var password = event.target.elements[1].value;
-    console.log(username, password);
 
-    this.authenticationService.login(username, password)
-      .subscribe(
-        data => {
-          if (data && data.email) {
-            this.loginError = false;
-            this.result = true;
-            this.close();
-          }
-          else {
-            this.loginError = true;
-            // Don't close in this case, allow the user to try again!
-          }
-        },
-        error => {
-          console.log(error);
-          // Shouldn't happen!
-        }
-      );
+    var observer = this.authenticationService.login(this.loginModel.getLoginUsername(), this.loginModel.getLoginPassword());
+    // This is the promise we get
+    observer.subscribe(
+      data => {
+        // Fill our model with the JSON result and see if Login is a success.
+        var loginSuccess : boolean = this.loginModel.processLoginResult(data);
+        if (loginSuccess) this.close();
+      },
+      error => {
+        console.log(error);
+        // Shouldn't happen!
+      }
+    );
 
     // TODO: We should put some loading symbol in login popup here!!!
   }
