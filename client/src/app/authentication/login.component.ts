@@ -12,7 +12,7 @@ import { LoginModel } from './login-model'
 })
 export class LoginComponent extends DialogComponent<null, boolean> {
 
-  public loginModel : LoginModel;
+  private _loginModel : LoginModel;
 
   constructor (
     public dialogService: DialogService,
@@ -20,14 +20,14 @@ export class LoginComponent extends DialogComponent<null, boolean> {
   )
   {
     super(dialogService);
-    this.loginModel = new LoginModel();
+    this._loginModel = new LoginModel();
   }
 
   loginUser(event) {
     event.preventDefault();
     console.log(event);
 
-    var observer = this.authenticationService.login(this.loginModel.getLoginUsername(), this.loginModel.getLoginPassword());
+    var observer = this.authenticationService.login(this.loginModel.username, this.loginModel.password);
     // This is the promise we get
     observer.subscribe(
       data => {
@@ -42,5 +42,9 @@ export class LoginComponent extends DialogComponent<null, boolean> {
     );
 
     // TODO: We should put some loading symbol in login popup here!!!
+  }
+
+  get loginModel() : LoginModel {
+    return this._loginModel;
   }
 }
