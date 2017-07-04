@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
-  showConfirm() {
+  showLogin() {
     var dialogObserver = this.dialogService.addDialog (
       LoginComponent,
       // Dialog Initalization Data

@@ -544,7 +544,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/header/header.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-toggleable-sm navbar-inverse bg-inverse\">\r\n    <button type=\"button\" class=\"navbar-toggler navbar-toggler-right\" (click)=\"isExpanded = !isExpanded\" [attr.aria-expanded]=\"!isExpanded\" aria-controls=\"navbarContent\">\r\n        <span class=\"navbar-toggler-icon\"></span>\r\n    </button>\r\n    <div class=\"navbar-brand\" [routerLink]=\"['/home']\">Connect Food</div>\r\n\r\n    <div class=\"collapse navbar-collapse\" id=\"navbarContent\" [ngbCollapse]=\"!isExpanded\">\r\n        <ul class=\"navbar-nav mr-auto\">\r\n            <li class=\"nav-item\"><a class='nav-link' [routerLink]=\"['/home']\">Home</a></li>\r\n            <li class=\"nav-item\"><a class='nav-link' [routerLink]=\"['/donor']\">Donor</a></li>\r\n            <li class=\"nav-item\"><a class='nav-link' [routerLink]=\"['/receiver']\">Receiver</a></li>\r\n        </ul>\r\n        <ul class=\"navbar-nav navbar-right\">\r\n            <li *ngIf=\"localStorage.getItem('username') === null\" class=\"nav-item\"><a id='loginButton' class='nav-link' (click)=\"showConfirm()\">Login</a></li>\r\n            <li *ngIf=\"localStorage.getItem('username') !== null\" class=\"nav-item\"><a class='nav-link'>{{localStorage.getItem('username')}}</a></li>\r\n        </ul>\r\n    </div>\r\n</nav>"
+module.exports = "<nav class=\"navbar navbar-toggleable-sm navbar-inverse bg-inverse\">\r\n    <button type=\"button\" class=\"navbar-toggler navbar-toggler-right\" (click)=\"isExpanded = !isExpanded\" [attr.aria-expanded]=\"!isExpanded\" aria-controls=\"navbarContent\">\r\n        <span class=\"navbar-toggler-icon\"></span>\r\n    </button>\r\n    <div class=\"navbar-brand\" [routerLink]=\"['/home']\">Connect Food</div>\r\n\r\n    <div class=\"collapse navbar-collapse\" id=\"navbarContent\" [ngbCollapse]=\"!isExpanded\">\r\n        <ul class=\"navbar-nav mr-auto\">\r\n            <li class=\"nav-item\"><a class='nav-link' [routerLink]=\"['/home']\">Home</a></li>\r\n            <li class=\"nav-item\"><a class='nav-link' [routerLink]=\"['/donor']\">Donor</a></li>\r\n            <li class=\"nav-item\"><a class='nav-link' [routerLink]=\"['/receiver']\">Receiver</a></li>\r\n        </ul>\r\n        <ul class=\"navbar-nav navbar-right\">\r\n            <li *ngIf=\"localStorage.getItem('username') === null\" class=\"nav-item\"><a id='loginButton' class='nav-link' (click)=\"showLogin()\">Login</a></li>\r\n            <li *ngIf=\"localStorage.getItem('username') !== null\" class=\"nav-item\"><a class='nav-link'>{{localStorage.getItem('username')}}</a></li>\r\n        </ul>\r\n    </div>\r\n</nav>"
 
 /***/ }),
 
@@ -576,7 +576,7 @@ var HeaderComponent = (function () {
     }
     HeaderComponent.prototype.ngOnInit = function () {
     };
-    HeaderComponent.prototype.showConfirm = function () {
+    HeaderComponent.prototype.showLogin = function () {
         var dialogObserver = this.dialogService.addDialog(__WEBPACK_IMPORTED_MODULE_1__authentication_login_component__["a" /* LoginComponent */], 
         // Dialog Initalization Data
         null, 
