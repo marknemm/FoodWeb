@@ -13,37 +13,36 @@ SELECT dropFunction ('updateappuser');
 
 CREATE OR REPLACE FUNCTION updateAppUser
 (
-    newUser                 BOOLEAN             DEFAULT NULL,
-    _userName               VARCHAR(128)        DEFAULT NULL,
-    _appUserEmail           VARCHAR(128)        DEFAULT NULL, 
-    _appUserPassword        TEXT                DEFAULT NULL,
-    _appUserLastName        VARCHAR(60)         DEFAULT NULL,
-    _appUserFirstName       VARCHAR(60)         DEFAULT NULL
+    _newUser        BOOLEAN             DEFAULT NULL,
+    _username       VARCHAR(128)        DEFAULT NULL,
+    _email          VARCHAR(128)        DEFAULT NULL, 
+    _password       TEXT                DEFAULT NULL,
+    _lastName       VARCHAR(60)         DEFAULT NULL,
+    _firstName      VARCHAR(60)         DEFAULT NULL
     
 )
 RETURNS VOID
 AS $$
-    --DECLARE newUser BOOLEAN = FALSE;
     DECLARE _appUserKey INTEGER;
 
 /* If new user, then simply insertIntoAppUser
    Else get appUserKey, and Update ALL
    Info on that row with new, non-null info */ 
 BEGIN
-    raise notice 'Values: %, %, %, %, %', _userName, _appUserEmail, _appUserPassword, _appUserLastName, _appUserFirstName;
+    raise notice 'Values: %, %, %, %, %', _username, _email, _password, _lastName, _firstName;
     CASE
-        WHEN newUser = true
-            THEN PERFORM insertIntoAppUser(_appUserEmail, _appUserPassword,
-                                            _appUserLastName, _appUserFirstName );
-        WHEN newUser = false 
-           THEN  _appUserKey = (SELECT appUserKey FROM appUser 
-                            WHERE(_userName IS NOT NULL AND userName = _userName) OR (_appUserEmail IS NOT NULL AND appUserEmail = _appUserEmail));
-                            raise notice 'Value: %', _appUserKey;
+        WHEN _newUser = true
+            THEN PERFORM insertIntoAppUser(_username, _email, _password,
+                                           _lastName, _firstName );
+        WHEN _newUser = false 
+            THEN  _appUserKey = (SELECT appUserKey FROM AppUser 
+                                 WHERE(_userName IS NOT NULL AND username = _username) OR (_email IS NOT NULL AND email = _email));
+            raise notice 'Value: %', _appUserKey;
             UPDATE AppUser
-            SET appUserEmail = COALESCE(_appUserEmail, appUserEmail),
-                appUserPassword = COALESCE(_appUserPassword, appUserPassword),
-                appUserLastName = COALESCE(_appUserLastName, appUserLastName),
-                appUserFirstName = COALESCE(_appUserFirstName, appUserFirstName)
+            SET email = COALESCE(_email, email),
+                password = COALESCE(_password, password),
+                lastName = COALESCE(_lastName, lastName),
+                firstName = COALESCE(_firstName, firstName)
             WHERE appUserKey = _appUserKey; 
     END CASE; 
 

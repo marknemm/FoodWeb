@@ -175,7 +175,7 @@ var LoginModel = (function () {
         // Clear these out whenever the user may be redirected to Login by the server!
         localStorage.removeItem('appUserKey');
         localStorage.removeItem('username');
-        this.loginError = false;
+        this._loginError = false;
     }
     /**
      * Processes a JSON Login Result from the server.
@@ -185,35 +185,57 @@ var LoginModel = (function () {
      * True if the login was successful, false if it was not.
      */
     LoginModel.prototype.processLoginResult = function (data) {
-        this.appUserKey = null;
-        this.username = null;
+        this._appUserKey = null;
+        this._username = null;
         // Check to see if we got back a response that says the user is logged in.
         if (data && data.username) {
-            this.loginError = false;
-            this.appUserKey = data.appUserKey;
-            this.username = data.username;
+            this._loginError = false;
+            this._appUserKey = data.appUserKey;
+            this._username = data.username;
             // Set the localStorage global items in the client side cache for session info on client!
             // This basically tells the client that we are logged in.
-            localStorage.setItem('appUserKey', '' + this.appUserKey);
-            localStorage.setItem('username', this.username);
+            localStorage.setItem('appUserKey', '' + this._appUserKey);
+            localStorage.setItem('username', this._username);
             return true;
         }
         // If we reach here, then the response indicated that the user did not login successfully.
-        this.loginError = true;
+        this._loginError = true;
         return false;
     };
-    LoginModel.prototype.getLoginErrorState = function () {
-        return this.loginError;
-    };
-    LoginModel.prototype.getLoginUsername = function () {
-        return this.username;
-    };
-    LoginModel.prototype.getLoginPassword = function () {
-        return this.password;
-    };
-    LoginModel.prototype.getLoginAppUserKey = function () {
-        return this.appUserKey;
-    };
+    Object.defineProperty(LoginModel.prototype, "loginError", {
+        get: function () {
+            return this._loginError;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LoginModel.prototype, "username", {
+        get: function () {
+            return this._username;
+        },
+        set: function (val) {
+            this._username = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LoginModel.prototype, "password", {
+        get: function () {
+            return this._password;
+        },
+        set: function (val) {
+            this._password = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LoginModel.prototype, "appUserKey", {
+        get: function () {
+            return this._appUserKey;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return LoginModel;
 }());
 
@@ -335,14 +357,14 @@ var LoginComponent = (function (_super) {
         var _this = _super.call(this, dialogService) || this;
         _this.dialogService = dialogService;
         _this.authenticationService = authenticationService;
-        _this.loginModel = new __WEBPACK_IMPORTED_MODULE_3__login_model__["a" /* LoginModel */]();
+        _this._loginModel = new __WEBPACK_IMPORTED_MODULE_3__login_model__["a" /* LoginModel */]();
         return _this;
     }
     LoginComponent.prototype.loginUser = function (event) {
         var _this = this;
         event.preventDefault();
         console.log(event);
-        var observer = this.authenticationService.login(this.loginModel.getLoginUsername(), this.loginModel.getLoginPassword());
+        var observer = this.authenticationService.login(this.loginModel.username, this.loginModel.password);
         // This is the promise we get
         observer.subscribe(function (data) {
             // Fill our model with the JSON result and see if Login is a success.
@@ -355,6 +377,13 @@ var LoginComponent = (function (_super) {
         });
         // TODO: We should put some loading symbol in login popup here!!!
     };
+    Object.defineProperty(LoginComponent.prototype, "loginModel", {
+        get: function () {
+            return this._loginModel;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return LoginComponent;
 }(__WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogComponent"]));
 LoginComponent = __decorate([
