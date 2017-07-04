@@ -246,7 +246,7 @@ var LoginService = (function () {
     LoginService.prototype.login = function (username, password) {
         console.log('username: ' + username);
         console.log('password: ' + password);
-        var observer = this.http.post('/login', JSON.stringify({ username: username, password: password }));
+        var observer = this.http.post('/authentication/login', JSON.stringify({ username: username, password: password }));
         return observer.map(function (response) {
             var user = response.json();
             if (user && user.username) {

@@ -70,8 +70,8 @@ app.get('/db', function(request, response) {
   });
 });
 
-// Handle /login route by passing off to LoginController.
-app.post('/login', authenticationController.login.bind(authenticationController));
+// Handle /authentication/login route by passing off to LoginController.
+app.post('/authentication/login', authenticationController.login.bind(authenticationController));
 
 app.get('*', function (request, response) {
     console.log(process.env.DATABASE_URL);

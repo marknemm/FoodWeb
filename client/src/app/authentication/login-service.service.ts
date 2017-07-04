@@ -7,10 +7,10 @@ export class LoginService {
 
   constructor(private http: Http) { }
  
-  login(username : string, password: string) {
+  login(username : string, password : string) {
     console.log('username: ' + username);
     console.log('password: ' + password);
-    var observer : Observable<Response> = this.http.post('/login', JSON.stringify({ username: username, password: password }))
+    var observer : Observable<Response> = this.http.post('/authentication/login', JSON.stringify({ username: username, password: password }))
     return observer.map((response : Response) =>
       {
         let user = response.json();
