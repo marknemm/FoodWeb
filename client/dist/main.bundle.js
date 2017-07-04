@@ -34,7 +34,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The whole content below can be removed with the new code.-->\n<div id=\"fullPage\">\n\t<app-header id='appHeader'></app-header>\n\n\t<router-outlet></router-outlet>\n\n\t<app-footer id='appFooter'></app-footer>\n</div>\n"
+module.exports = "<!--The whole content below can be removed with the new code.-->\r\n<div id=\"fullPage\">\r\n\t<app-header id='appHeader'></app-header>\r\n\r\n\t<router-outlet></router-outlet>\r\n\r\n\t<app-footer id='appFooter'></app-footer>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -64,7 +64,7 @@ AppComponent = __decorate([
     })
 ], AppComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/app.component.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/app.component.js.map
 
 /***/ }),
 
@@ -158,7 +158,7 @@ AppModule = __decorate([
     })
 ], AppModule);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/app.module.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/app.module.js.map
 
 /***/ }),
 
@@ -217,7 +217,7 @@ var LoginModel = (function () {
     return LoginModel;
 }());
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/authentication/login-model.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/authentication/login-model.js.map
 
 /***/ }),
 
@@ -267,7 +267,7 @@ LoginService = __decorate([
 ], LoginService);
 
 var _a;
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/authentication/login-service.service.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/authentication/login-service.service.js.map
 
 /***/ }),
 
@@ -292,7 +292,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/authentication/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal-dialog\">\n\t<div class=\"modal-content\">\n\t\t<div class=\"modal-header\">\n\t\t\t<h1 class=\"modal-title\">Sign In</h1>\n\t\t\t<button type=\"button\" class=\"close\" (click)=\"close()\" >&times;</button>\n\t\t</div>\n\t\t<div class=\"modal-body\">\n\t\t\t<form ngNativeValidate (submit)=\"loginUser($event)\">\n\t\t\t\t<div class=\"input\">\n\t\t\t\t\t<label>Username</label>\n\t\t\t\t\t<input name=\"Username\" [(ngModel)]=\"loginModel.username\" type=\"text\" required autofocus>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"input\">\n\t\t\t\t\t<label>Password</label>\n\t\t\t\t\t<input name=\"Password\" [(ngModel)]=\"loginModel.password\" type=\"password\" required>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"input\">\n\t\t\t\t\t<input type=\"submit\" value=\"Login\">\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</div>\n\t\t<div class=\"modal-footer\">\n\t\t\t<p *ngIf=\"loginModel.loginError\" id=\"loginErr\">Incorrect login information. Please Try Again.</p>\n\t\t</div>\n\t</div>\n</div>\n"
+module.exports = "<div class=\"modal-dialog\">\r\n\t<div class=\"modal-content\">\r\n\t\t<div class=\"modal-header\">\r\n\t\t\t<h1 class=\"modal-title\">Sign In</h1>\r\n\t\t\t<button type=\"button\" class=\"close\" (click)=\"close()\" >&times;</button>\r\n\t\t</div>\r\n\t\t<div class=\"modal-body\">\r\n\t\t\t<form ngNativeValidate (submit)=\"loginUser($event)\">\r\n\t\t\t\t<div class=\"input\">\r\n\t\t\t\t\t<label>Username</label>\r\n\t\t\t\t\t<input name=\"Username\" [(ngModel)]=\"loginModel.username\" type=\"text\" required autofocus>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"input\">\r\n\t\t\t\t\t<label>Password</label>\r\n\t\t\t\t\t<input name=\"Password\" [(ngModel)]=\"loginModel.password\" type=\"password\" required>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"input\">\r\n\t\t\t\t\t<input type=\"submit\" value=\"Login\">\r\n\t\t\t\t</div>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t\t<div class=\"modal-footer\">\r\n\t\t\t<p *ngIf=\"loginModel.loginError\" id=\"loginErr\">Incorrect login information. Please Try Again.</p>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -368,7 +368,7 @@ LoginComponent = __decorate([
 ], LoginComponent);
 
 var _a, _b;
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/authentication/login.component.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/authentication/login.component.js.map
 
 /***/ }),
 
@@ -393,7 +393,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/donor/donor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  donor works!\n</p>\n"
+module.exports = "<p>\r\n  donor works!\r\n</p>\r\n"
 
 /***/ }),
 
@@ -429,7 +429,7 @@ DonorComponent = __decorate([
     __metadata("design:paramtypes", [])
 ], DonorComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/donor/donor.component.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/donor/donor.component.js.map
 
 /***/ }),
 
@@ -454,7 +454,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/footer/footer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  Copyright &copy; Connect Food\n</p>"
+module.exports = "<p>\r\n  Copyright &copy; Connect Food\r\n</p>"
 
 /***/ }),
 
@@ -490,7 +490,7 @@ FooterComponent = __decorate([
     __metadata("design:paramtypes", [])
 ], FooterComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/footer/footer.component.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/footer/footer.component.js.map
 
 /***/ }),
 
@@ -573,7 +573,7 @@ HeaderComponent = __decorate([
 ], HeaderComponent);
 
 var _a;
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/header/header.component.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/header/header.component.js.map
 
 /***/ }),
 
@@ -598,7 +598,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n    Home works!\n</p>\n"
+module.exports = "<p>\r\n    Home works!\r\n</p>\r\n"
 
 /***/ }),
 
@@ -634,7 +634,7 @@ HomeComponent = __decorate([
     __metadata("design:paramtypes", [])
 ], HomeComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/home/home.component.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/home/home.component.js.map
 
 /***/ }),
 
@@ -659,7 +659,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/receiver/receiver.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  receiver works!\n</p>\n"
+module.exports = "<p>\r\n  receiver works!\r\n</p>\r\n"
 
 /***/ }),
 
@@ -695,7 +695,7 @@ ReceiverComponent = __decorate([
     __metadata("design:paramtypes", [])
 ], ReceiverComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/app/receiver/receiver.component.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/receiver/receiver.component.js.map
 
 /***/ }),
 
@@ -712,7 +712,7 @@ ReceiverComponent = __decorate([
 var environment = {
     production: false
 };
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/environments/environment.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/environments/environment.js.map
 
 /***/ }),
 
@@ -733,7 +733,7 @@ if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment *
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["enableProdMode"])();
 }
 __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */]);
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/main.js.map
+//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/main.js.map
 
 /***/ }),
 
