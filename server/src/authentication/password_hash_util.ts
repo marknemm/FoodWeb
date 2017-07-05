@@ -5,7 +5,6 @@
 'use strict'; 
 var crypt = require('crypto');
 var Bcrypt = require('bcrypt');
-var pgSql = require('plpgsql');
 
 /**
  * generates random string of characters i.e salt
@@ -22,11 +21,10 @@ var genRandomString = function(length){
  * @param ID - This is the userName or email
  * @param password - This is the raw password passed in
  */
-var saltHashPassword = function (ID, password){
+export function saltHashPassword(password, callBack){
     var salt = genRandomString(20);
-    var actHash = Bcrypt.hash(password, salt, null, function(err,hash){
-        if (err) throw err;
-        var sql = "INSERT INTO appUser(password) WHERE ID = username OR ID = email ";
+    var actHash = Bcrypt.hash(password, salt, null, function(err, hash){
+      callBack({salt, hash}, err);
     });
-}
+};
  
