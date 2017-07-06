@@ -1,3 +1,4 @@
+'use strict';
 var express = require('express');
 var session = require('express-session')
 var pg = require('pg');
@@ -9,6 +10,7 @@ var connectionPool = require('./database_help/connection_pool');
 
 // Our controllers that will handle requests after this router hands off the data to them.
 import { AuthenticationController } from './authentication/authentication_controller';
+import { AuthenticationModel} from './authentication/authentication_model';
 import { DonorController } from './donor/donor_controller';
 import { ReceiverController } from './receiver/receiver_controller';
 
@@ -32,6 +34,7 @@ app.use(session({
 
 // Initialize our Controller objects. These are used to actually handle routes defined in this file.
 var authenticationController : AuthenticationController = new AuthenticationController();
+var authenticationModel : AuthenticationModel = new AuthenticationModel();
 var donorController : DonorController = new DonorController();
 var receeverController : ReceiverController = new ReceiverController();
 
@@ -72,6 +75,12 @@ app.get('/db', function(request, response) {
 
 // Handle /authentication/login route by passing off to LoginController.
 app.post('/authentication/login', authenticationController.login.bind(authenticationController));
+
+//Handle /authentication/signup route by passing it off to SignupController
+app.post('/authentication/signup', authenticationController.signup.bind(authenticationController));
+
+//Handle /authentication/logout route by passing it off to LogoutController
+app.post('/authentication/logout', authenticationController.logout.bind(authenticationController));
 
 app.get('*', function (request, response) {
     console.log(process.env.DATABASE_URL);

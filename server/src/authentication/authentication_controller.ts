@@ -1,3 +1,4 @@
+'use strict';
 import { NextFunction, Request, Response } from "express";
 import { AuthenticationModel } from './authentication_model';
 
@@ -29,8 +30,22 @@ export class AuthenticationController {
         return response.send(JSON.stringify({ appUserKey: 1, username : 'marknemm' }));
     }
 
+    /**
+     * Handles logout request for a given user
+     * @param request //todo
+     * @param result //todo
+     */
     public logout(request, result) {
+        //TODO
+    }
 
+    /**
+     * Handels signup request for a give user
+     * @param request TODO
+     * @param result TODO
+     */
+    public signup(request, result){
+        //TODO
     }
 
 };
