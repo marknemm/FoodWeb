@@ -82,6 +82,10 @@ app.post('/authentication/signup', authenticationController.signup.bind(authenti
 //Handle /authentication/logout route by passing it off to LogoutController
 app.post('/authentication/logout', authenticationController.logout.bind(authenticationController));
 
+// Handle /donor/addFoodListing route by passing off to DonorController.
+app.post('/donor/addFoodListing', donorController.addFoodListing.bind(donorController));
+
+
 app.get('*', function (request, response) {
     console.log(process.env.DATABASE_URL);
       response.sendFile(path.join(clientBuildDir + '/index.html'));
