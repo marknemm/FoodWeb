@@ -21,10 +21,10 @@ var genRandomString = function(length){
  * @param ID - This is the userName or email
  * @param password - This is the raw password passed in
  */
-export function saltHashPassword(password, callBack){
+export function saltHashPassword(password : string) {
     var salt = genRandomString(20);
-    var actHash = Bcrypt.hash(password, salt, null, function(err, hash){
-      callBack({salt, hash}, err);
-    });
+    return { hashVal : Bcrypt.hash(password, salt, null), saltVal: salt};
 };
+
+
  
