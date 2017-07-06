@@ -12,7 +12,7 @@ export class AuthenticationModel {
     }
    
     public authenticateAppUser(){
-
+        connectionPool.query()
    }
 
 };
