@@ -11,7 +11,23 @@ export class AuthenticationModel {
 
     }
    
-    public authenticateAppUser(){
+    public authenticateAppUser(identifier, password){
+        return new Promise (function (resolve, reject){
+            var queryString = 'SELECT appUserKey, salt FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1';
+            var queryArgs = [identifier];
+            connectionPool.connect().then(client =>{
+                client.query(queryString, queryArgs).then(result =>{
+                    console.log(result);
+                })
+                .catch(err =>{
+                    console.log('issue with query'+ queryString);
+                    console.log(err);
+                });
+            })
+            .catch(err =>{
+                
+            });
+        });
 
     }
 
