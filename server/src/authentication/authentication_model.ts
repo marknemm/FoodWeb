@@ -40,7 +40,7 @@ export class AuthenticationModel {
             .catch(err => {
                 console.log(err);
             });
-        }
+        }else{return "Invalid email or password"};
                         
     } // end signUpUser
 
