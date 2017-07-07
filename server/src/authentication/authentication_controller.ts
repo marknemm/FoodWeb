@@ -22,6 +22,7 @@ export class AuthenticationController {
     public login(request, response : Response) {
         debugger;
         this.authenticatonModel.authenticateAppUser();
+        //this.authenticatonModel.SignUpUser('marknemm@buffalo.edu', 'mypasswordIsThis1', 'ABCDEFGHIGJJKDJKEKJWEFJWJ', 'marknemm', 'Nemmer', 'Mark');
 
         // TODO: Use return value from authenticateUser() to set session info on the request and populate the response JSON body.
         request.session["appUserKey"] = 1;
@@ -44,8 +45,14 @@ export class AuthenticationController {
      * @param request TODO
      * @param result TODO
      */
-    public signup(request, result){
-        //TODO
+    public signup(request: Request, result: Response){
+        var _email = request.body().email;
+        var _password = request.body().password;
+        var _userName = request.body().username;
+        var _lastName = request.body().lastName;
+        var _firstName = request.body().firstName;
+        var promise = new Promise(this.authenticatonModel.SignUpUser(_email, _password, _lastName, _firstName))";
+        
     }
 
 };

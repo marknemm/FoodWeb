@@ -15,18 +15,25 @@ export class AuthenticationModel {
 
     }
 
-    public SignUpUser(email,password,salt,username,lastname,firstname){
+    public SignUpUser(email,password,username,lastname,firstname){
         if (this.isValidEmail(email) && this.isValidPassword(password)){
             // Grab a connection. This comes in the form of a Promise.
             connectionPool.connect().then(client => {
                 // Grabbing a connection succeeded. Now we can execute a query using a callback function.
                 // The client is the result of the promise. It is just something we can run sql on.
-                var queryString = 'SELECT insertIntoAppUser ($1, $2, $3, $4, $5, $6);';
+                /**
+                 * The var queryString and queryArgs are just there for beauty purposes, but the sytax for 
+                 * writting sql code is through client.query, and you pass in the args as a second parameter
+                 * while using the $1, $2... as placeholders
+                 */
+                var queryString = 'SELECT * FROM insertIntoAppUser($1, $2, $3, $4, $5, $6);';
                 var queryArgs = [email, password, salt, username, lastname, firstname];
                 client.query(queryString, queryArgs).then(result => {
-                    console.log('Yay! It worked' + result);
+                    console.log('it worked!');
+                    console.log(result);
                 })
                 .catch(err => {
+                    console.log('Error with query: ' + queryString);
                     console.log(err);
                 });
             })
@@ -52,12 +59,7 @@ export class AuthenticationModel {
         var length = password.length;
         var HasUpper = false;       
         if(length > 5){
-            for(var i = 0; i < length; i++) {
-                if(password[i] = password[i].toUpperCase()){
-                    HasUpper = true;
-                    return true;
-                }
-            } // todo: check if password has special char (make a list of all special chars)
+            return true;
         }
         return false;
     }
