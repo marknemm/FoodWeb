@@ -45,6 +45,8 @@ export class AuthenticationModel {
                      */
                     var queryString = 'SELECT * FROM insertIntoAppUser($1, $2, $3, $4, $5, $6);';
                     var queryArgs = [email, password, salt, username, lastname, firstname];
+                    var salt = 1;
+                    // ^ Sorry about adding to your code. Just a base value so the app runs. -Emery
                     client.query(queryString, queryArgs).then(result => {
                         console.log('it worked!');
                         resolve("It worked!");

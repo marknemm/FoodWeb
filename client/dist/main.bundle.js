@@ -64,7 +64,7 @@ AppComponent = __decorate([
     })
 ], AppComponent);
 
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/app.component.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/app.component.js.map
 
 /***/ }),
 
@@ -114,6 +114,11 @@ var appRoutes = [
       component: LoginComponent
     },*/
     {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: '/home'
+    },
+    {
         path: 'home',
         component: __WEBPACK_IMPORTED_MODULE_8__home_home_component__["a" /* HomeComponent */]
     },
@@ -148,7 +153,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_4_ng2_bootstrap_modal__["BootstrapModalModule"],
             __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormsModule */]
+            __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormsModule */],
+            __WEBPACK_IMPORTED_MODULE_6__angular_forms__["b" /* ReactiveFormsModule */]
         ],
         entryComponents: [
             __WEBPACK_IMPORTED_MODULE_11__authentication_login_component__["a" /* LoginComponent */]
@@ -158,7 +164,7 @@ AppModule = __decorate([
     })
 ], AppModule);
 
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/app.module.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/app.module.js.map
 
 /***/ }),
 
@@ -239,7 +245,7 @@ var LoginModel = (function () {
     return LoginModel;
 }());
 
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/authentication/login-model.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/authentication/login-model.js.map
 
 /***/ }),
 
@@ -289,7 +295,7 @@ LoginService = __decorate([
 ], LoginService);
 
 var _a;
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/authentication/login-service.service.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/authentication/login-service.service.js.map
 
 /***/ }),
 
@@ -397,7 +403,7 @@ LoginComponent = __decorate([
 ], LoginComponent);
 
 var _a, _b;
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/authentication/login.component.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/authentication/login.component.js.map
 
 /***/ }),
 
@@ -458,7 +464,7 @@ DonorComponent = __decorate([
     __metadata("design:paramtypes", [])
 ], DonorComponent);
 
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/donor/donor.component.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/donor/donor.component.js.map
 
 /***/ }),
 
@@ -519,7 +525,7 @@ FooterComponent = __decorate([
     __metadata("design:paramtypes", [])
 ], FooterComponent);
 
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/footer/footer.component.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/footer/footer.component.js.map
 
 /***/ }),
 
@@ -602,7 +608,7 @@ HeaderComponent = __decorate([
 ], HeaderComponent);
 
 var _a;
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/header/header.component.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/header/header.component.js.map
 
 /***/ }),
 
@@ -663,7 +669,7 @@ HomeComponent = __decorate([
     __metadata("design:paramtypes", [])
 ], HomeComponent);
 
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/home/home.component.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/home/home.component.js.map
 
 /***/ }),
 
@@ -688,7 +694,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/receiver/receiver.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\r\n  receiver works!\r\n</p>\r\n"
+module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-2\">\n      <h2>Filters</h2>\n      <hr>\n      <form [formGroup]=\"filterForm\">\n        <div class=\"btn-group\" data-toggle=\"buttons\">\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.tFrame0\">\n            <input type=\"checkbox\" formControlName=\"tFrame0\">0-6\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.tFrame1\">\n            <input type=\"checkbox\" formControlName=\"tFrame1\">6-12\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.tFrame2\">\n            <input type=\"checkbox\" formControlName=\"tFrame2\">12+\n          </label>\n        </div>\n        <div class=\"btn-group\" data-toggle=\"buttons\">\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.quantity0\">\n            <input type=\"checkbox\" formControlName=\"quantity0\">Car\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.quantity1\">\n            <input type=\"checkbox\" formControlName=\"quantity1\">Van\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.quantity2\">\n            <input type=\"checkbox\" formControlName=\"quantity2\">Truck\n          </label>\n        </div>\n        <div class=\"btn-group\" data-toggle=\"buttons\">\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.pornp0\">\n            <input type=\"checkbox\" formControlName=\"pornp0\">Perishable\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.pornp1\">\n            <input type=\"checkbox\" formControlName=\"pornp1\">Not\n          </label>\n        </div>\n        <hr>\n      </form>\n    </div>\n    <div class=\"col-md-10\">\n      <h2>Listings</h2>\n      <hr>\n      <div class=\"list-group\" style=\"overflow-y:auto\">\n        <a href=\"#\" *ngFor=\"let model of models\" (click)=\"selectItem(model)\" class=\"list-group-item\">\n          <img src=\"{{model.iurl}}\" alt=\"No Picture\" class=\"img-thumbnail\" style=\"width:6vw;height:6vw\">\n          <div>\n            <h4 style=\"margin-left:1vw\">{{model.name}}</h4>\n            <hr>\n            <p style=\"margin-left:1vw\">Requires a {{quantityVals[model.quantity]}}. Must be picked up in {{tFrameVals[model.tframe]}} from {{model.location}}. Perishable: {{model.porn}}</p>\n          </div>\n        </a>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -697,6 +703,8 @@ module.exports = "<p>\r\n  receiver works!\r\n</p>\r\n"
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_filters__ = __webpack_require__("../../../../../client/src/app/receiver/shared/filters.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReceiverComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -708,10 +716,48 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
+var MODELS = [
+    { id: 0, name: "Beef Stew", iurl: "http://www.onceuponachef.com/images/2011/02/6a0115721bb963970b0147e234ca30970b-450wi.jpg",
+        tframe: 0, quantity: 1, location: "NY", porn: true },
+    { id: 1, name: "Noodles", iurl: "https://budgetbytes.com/wp-content/uploads/2009/12/Garlic-Noodles-front.jpg",
+        tframe: 0, quantity: 1, location: "NY", porn: true },
+    { id: 2, name: "Apple", iurl: "http://jonvilma.com/images/apple-16.jpg",
+        tframe: 0, quantity: 1, location: "NY", porn: true },
+    { id: 3, name: "Beef Stew", iurl: "http://www.onceuponachef.com/images/2011/02/6a0115721bb963970b0147e234ca30970b-450wi.jpg",
+        tframe: 0, quantity: 1, location: "NY", porn: true },
+    { id: 4, name: "Noodles", iurl: "https://budgetbytes.com/wp-content/uploads/2009/12/Garlic-Noodles-front.jpg",
+        tframe: 0, quantity: 1, location: "NY", porn: true },
+    { id: 5, name: "Apple", iurl: "http://jonvilma.com/images/apple-16.jpg",
+        tframe: 0, quantity: 1, location: "NY", porn: true }
+];
 var ReceiverComponent = (function () {
-    function ReceiverComponent() {
+    function ReceiverComponent(formBuilder) {
+        this.formBuilder = formBuilder;
+        this.models = MODELS;
     }
     ReceiverComponent.prototype.ngOnInit = function () {
+        this.filters = new __WEBPACK_IMPORTED_MODULE_2__shared_filters__["a" /* Filters */]([true, false, false], [true, false, false], [true, false]);
+        this.quantityVals = ["car", "can", "truck"];
+        this.tFrameVals = ["0-6 hours", "6-12 hours", "12+ hours"];
+        this.filterForm = this.formBuilder.group({
+            tFrame: this.filters.tFrame,
+            tFrame0: this.filters.tFrame[0],
+            tFrame1: this.filters.tFrame[1],
+            tFrame2: this.filters.tFrame[2],
+            quantity0: this.filters.quantity[0],
+            quantity1: this.filters.quantity[1],
+            quantity2: this.filters.quantity[2],
+            pornp0: this.filters.pornp[0],
+            pornp1: this.filters.pornp[1]
+        });
+    };
+    ReceiverComponent.prototype.onChange = function (value) {
+        this.submittedFilters = value;
+    };
+    ReceiverComponent.prototype.selectItem = function (value) {
+        this.selectedModel = value;
     };
     return ReceiverComponent;
 }());
@@ -721,10 +767,29 @@ ReceiverComponent = __decorate([
         template: __webpack_require__("../../../../../client/src/app/receiver/receiver.component.html"),
         styles: [__webpack_require__("../../../../../client/src/app/receiver/receiver.component.css")]
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["e" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["e" /* FormBuilder */]) === "function" && _a || Object])
 ], ReceiverComponent);
 
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/app/receiver/receiver.component.js.map
+var _a;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/receiver/receiver.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../client/src/app/receiver/shared/filters.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Filters; });
+var Filters = (function () {
+    function Filters(tFrame, quantity, pornp) {
+        this.tFrame = tFrame;
+        this.quantity = quantity;
+        this.pornp = pornp;
+    }
+    return Filters;
+}());
+
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/receiver/shared/filters.js.map
 
 /***/ }),
 
@@ -741,7 +806,7 @@ ReceiverComponent = __decorate([
 var environment = {
     production: false
 };
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/environments/environment.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/environments/environment.js.map
 
 /***/ }),
 
@@ -762,7 +827,7 @@ if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment *
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["enableProdMode"])();
 }
 __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */]);
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/main.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/main.js.map
 
 /***/ }),
 

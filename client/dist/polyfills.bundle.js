@@ -69,7 +69,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * Need to import at least one locale-data with intl.
  */
 // import 'intl/locale-data/jsonp/en';
-//# sourceMappingURL=C:/Users/asgho/Desktop/ConnectFood/ConnectFood/client/polyfills.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/polyfills.js.map
 
 /***/ }),
 
