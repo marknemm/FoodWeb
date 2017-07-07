@@ -42,8 +42,8 @@ export class AuthenticationController {
 
     /**
      * Handels signup request for a give user
-     * @param request TODO
-     * @param result TODO
+     * @param request contains JSON obj
+     * @param result what we send back to frontEnd
      */
     public signup(request: Request, result: Response){
         var _email = request.body().email;
@@ -51,7 +51,16 @@ export class AuthenticationController {
         var _userName = request.body().username;
         var _lastName = request.body().lastName;
         var _firstName = request.body().firstName;
-        var promise = new Promise(this.authenticatonModel.SignUpUser(_email, _password, _lastName, _firstName))";
+        var promise = new Promise(function(resolve, reject){
+            this.authenticateAppUser.signup(_email, _password, _userName, _lastName, _firstName);
+        });
+        promise.then(resolve =>{
+            return result.send("Welcome to the party!!!");
+        });
+        promise.catch(reject =>{
+            
+        });
+
         
     }
 
