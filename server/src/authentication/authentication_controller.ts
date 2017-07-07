@@ -51,14 +51,12 @@ export class AuthenticationController {
         var _userName = request.body().username;
         var _lastName = request.body().lastName;
         var _firstName = request.body().firstName;
-        var promise = new Promise(function(resolve, reject){
-            this.authenticateAppUser.signup(_email, _password, _userName, _lastName, _firstName);
-        });
+        var promise = this.authenticatonModel.SignUpUser(_email, _password, _userName, _lastName, _firstName);
         promise.then(resolve =>{
             return result.send("Welcome to the party!!!");
         });
         promise.catch(reject =>{
-            
+            return result.send("Error");
         });
 
         
