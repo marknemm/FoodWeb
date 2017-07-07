@@ -11,7 +11,23 @@ export class AuthenticationModel {
 
     }
    
-    public authenticateAppUser(){
+    public authenticateAppUser(identifier, password){
+        return new Promise (function (resolve, reject){
+            var queryString = 'SELECT appUserKey, salt FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1';
+            var queryArgs = [identifier];
+            connectionPool.connect().then(client =>{
+                client.query(queryString, queryArgs).then(result =>{
+                    console.log(result);
+                })
+                .catch(err =>{
+                    console.log('issue with query'+ queryString);
+                    console.log(err);
+                });
+            })
+            .catch(err =>{
+                
+            });
+        });
 
     }
 
@@ -29,6 +45,8 @@ export class AuthenticationModel {
                      */
                     var queryString = 'SELECT * FROM insertIntoAppUser($1, $2, $3, $4, $5, $6);';
                     var queryArgs = [email, password, salt, username, lastname, firstname];
+                    var salt = 1;
+                    // ^ Sorry about adding to your code. Just a base value so the app runs. -Emery
                     client.query(queryString, queryArgs).then(result => {
                         console.log('it worked!');
                         resolve("It worked!");

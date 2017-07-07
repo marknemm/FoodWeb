@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -19,6 +19,11 @@ const appRoutes:Routes = [
     path: 'login', // This can be both modal popup and its own page!
     component: LoginComponent
   },*/
+  { 
+    path: '',
+    pathMatch:'full', 
+    redirectTo: '/home' 
+  },
   {
     path: 'home',
     component: HomeComponent
@@ -49,7 +54,8 @@ const appRoutes:Routes = [
     BrowserModule,
     BootstrapModalModule,
     HttpModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   entryComponents: [
     LoginComponent
