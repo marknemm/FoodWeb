@@ -18,6 +18,16 @@ export class AuthenticationModel {
             connectionPool.connect().then(client =>{
                 client.query(queryString, queryArgs).then(result =>{
                     console.log(result);
+                    var _salt = result.salt;
+                    var _key = result.appUserKey;
+                    var hashedPassword = hashedPassword(password, _salt);
+                    client.query('SELECT * FROM LogInWithKey($1,$2)', [_key,hashedPassword]).then(result =>{
+                        resolve (result);
+                    })
+                    .catch(err =>{
+                        console.log('You wrote this wrong, dipshit');
+                    });
+                    
                 })
                 .catch(err =>{
                     console.log('issue with query'+ queryString);
@@ -25,7 +35,7 @@ export class AuthenticationModel {
                 });
             })
             .catch(err =>{
-                
+                reject (new Error("Something is wrong"));
             });
         });
 
@@ -43,6 +53,7 @@ export class AuthenticationModel {
                      * writting sql code is through client.query, and you pass in the args as a second parameter
                      * while using the $1, $2... as placeholders
                      */
+                    var salt = 'ABCDEFG';
                     var queryString = 'SELECT * FROM insertIntoAppUser($1, $2, $3, $4, $5, $6);';
                     var queryArgs = [email, password, salt, username, lastname, firstname];
                     client.query(queryString, queryArgs).then(result => {
