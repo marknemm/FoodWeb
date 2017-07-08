@@ -18,8 +18,11 @@ export class DonorModel {
         var perishable = donorsubmission.perishable;
         var postedByAppUserKey = donorsubmission.postedByAppUserKey;
         var foodDescription = donorsubmission.foodDescription;
-        var imgstring = donorsubmission.img;
         var expireDate = donorsubmission.expireDate;
+
+        //Still need to deal with uploaded donor image and saving it via mutler
+        //  var imgstring = donorsubmission.img;
+
    }
 
 };
