@@ -5,7 +5,10 @@ let ts = require('gulp-typescript');
 let uglify = require('gulp-uglify');
 let babel = require('gulp-babel');
 let sourcemaps = require('gulp-sourcemaps');
-//let gutil = require('gulp-util');
+let gutil = require('gulp-util');
+//let browserify = require('gulp-browserify');
+//let tsify = require('tsify');
+//let babelify = require('babelify');
 //let exec = require('child_process').exec;
 
 //let clientTsProject = ts.createProject('client/tsconfig.json');
@@ -26,8 +29,8 @@ gulp.task('default', [ /*'clientscripts',*/ 'serverscripts' ]);
 // This task can be run alone with "gulp serverscripts"
 gulp.task('serverscripts', () => {
   return serverTsProject.src()
-                        .pipe(serverTsProject())
-                        .js
+                        .pipe(sourcemaps.init())
+                        .pipe(serverTsProject()).js
                         // This basically translate es6 to es5 so that uglify can run correctly.
                         .pipe(babel({
                             presets: ['es2015']
@@ -37,7 +40,6 @@ gulp.task('serverscripts', () => {
                             gutil.log(error);
                         }))
                         // Source maps basically provide a mapping from typescript to javascript so that you can debug the typescript directly.
-                        .pipe(sourcemaps.init())
                         .pipe(sourcemaps.write('.'))
                         // This is where we are going to put the compiled code.
                         .pipe(gulp.dest('server/dist'));

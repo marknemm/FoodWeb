@@ -11,6 +11,7 @@ export class AuthenticationModel {
 
     }
    
+<<<<<<< HEAD
     public authenticateAppUser(identifier, password){
         return new Promise (function (resolve, reject){
             var queryString = 'SELECT appUserKey, salt FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1';
@@ -18,6 +19,16 @@ export class AuthenticationModel {
             connectionPool.connect().then(client =>{
                 client.query(queryString, queryArgs).then(result =>{
                     console.log(result);
+                    var _salt = result.salt;
+                    var _key = result.appUserKey;
+                    var hashedPassword = hashedPassword(password, _salt);
+                    client.query('SELECT * FROM LogInWithKey($1,$2)', [_key,hashedPassword]).then(result =>{
+                        resolve (result);
+                    })
+                    .catch(err =>{
+                        console.log('You wrote this wrong, dipshit');
+                    });
+                    
                 })
                 .catch(err =>{
                     console.log('issue with query'+ queryString);
@@ -25,10 +36,29 @@ export class AuthenticationModel {
                 });
             })
             .catch(err =>{
-                
-            });
-        });
+                reject (new Error("Something is wrong"));
+=======
+    public authenticateAppUser(identifier, password) {
+        var connection;
 
+        connectionPool.connect().then(client => {
+            let queryString = "SELECT appUserKey, salt FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1;";
+            let queryArgs = [identifier];
+            connection = client;
+            return connection.query(queryString, queryArgs);
+        })
+        .then(queryResult => {
+            console.log("Query Result Below --");
+            console.log(queryResult);
+            queryResult.rows.forEach(row => {
+                console.log('printing row');
+                console.log(row);
+>>>>>>> 91ce307e76d790e98cca7cb3397ca191e27d1db1
+            });
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
 
     public SignUpUser(email, password, username, lastname, firstname) {
@@ -43,6 +73,7 @@ export class AuthenticationModel {
                      * writting sql code is through client.query, and you pass in the args as a second parameter
                      * while using the $1, $2... as placeholders
                      */
+                    var salt = 'ABCDEFG';
                     var queryString = 'SELECT * FROM insertIntoAppUser($1, $2, $3, $4, $5, $6);';
                     var salt = passHashUtil.saltHashPassword()
                     var hashedPassword = passHashUtil.HashPassword(password,salt)

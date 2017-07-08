@@ -21,12 +21,16 @@ export class AuthenticationController {
      */
     public login(request, response : Response) {
         debugger;
-        this.authenticatonModel.authenticateAppUser('marknemm', 'mypasswordIsThis1');
+<<<<<<< HEAD
+        this.authenticatonModel.authenticateAppUser('marknemm@buffalo.edu', 'mypasswordIsThis1');
+=======
+        this.authenticatonModel.authenticateAppUser('marknemm1@buffalo.edu', 'password');
+>>>>>>> 91ce307e76d790e98cca7cb3397ca191e27d1db1
         //this.authenticatonModel.SignUpUser('marknemm@buffalo.edu', 'mypasswordIsThis1', 'ABCDEFGHIGJJKDJKEKJWEFJWJ', 'marknemm', 'Nemmer', 'Mark');
 
         // TODO: Use return value from authenticateUser() to set session info on the request and populate the response JSON body.
         request.session["appUserKey"] = 1;
-        console.log(request.session);
+        //console.log(request.session);
         response.setHeader('Content-Type', 'application/json');
         return response.send(JSON.stringify({ appUserKey: 1, username : 'marknemm' }));
     }
