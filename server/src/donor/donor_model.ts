@@ -1,6 +1,7 @@
 'use strict';
 var multer = require('multer');
-var upload = multer({dest: __dirname+'../../donoruploads'})
+var upload = multer({dest: __dirname+'../../donoruploads'});
+var connectionPool = require('../database_help/connection_pool');
 
 
 /**
