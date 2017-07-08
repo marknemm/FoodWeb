@@ -7,7 +7,7 @@ export class ReceiverController {
 
     }
 
-    public getFoodListings() {
+    public getFoodListings(request: Request, result: Response) {
         
     }
 

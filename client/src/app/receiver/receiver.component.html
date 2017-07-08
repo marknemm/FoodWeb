@@ -1,3 +1,55 @@
-<p>
-  receiver works!
-</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2">
+      <h2>Filters</h2>
+      <hr>
+      <form [formGroup]="filterForm">
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-primary" [class.active]="filterForm.value.tFrame0">
+            <input type="checkbox" formControlName="tFrame0">0-6
+          </label>
+          <label class="btn btn-primary" [class.active]="filterForm.value.tFrame1">
+            <input type="checkbox" formControlName="tFrame1">6-12
+          </label>
+          <label class="btn btn-primary" [class.active]="filterForm.value.tFrame2">
+            <input type="checkbox" formControlName="tFrame2">12+
+          </label>
+        </div>
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-primary" [class.active]="filterForm.value.quantity0">
+            <input type="checkbox" formControlName="quantity0">Car
+          </label>
+          <label class="btn btn-primary" [class.active]="filterForm.value.quantity1">
+            <input type="checkbox" formControlName="quantity1">Van
+          </label>
+          <label class="btn btn-primary" [class.active]="filterForm.value.quantity2">
+            <input type="checkbox" formControlName="quantity2">Truck
+          </label>
+        </div>
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-primary" [class.active]="filterForm.value.pornp0">
+            <input type="checkbox" formControlName="pornp0">Perishable
+          </label>
+          <label class="btn btn-primary" [class.active]="filterForm.value.pornp1">
+            <input type="checkbox" formControlName="pornp1">Not
+          </label>
+        </div>
+        <hr>
+      </form>
+    </div>
+    <div class="col-md-10">
+      <h2>Listings</h2>
+      <hr>
+      <div class="list-group" style="overflow-y:auto">
+        <a href="#" *ngFor="let model of models" (click)="selectItem(model)" class="list-group-item">
+          <img src="{{model.iurl}}" alt="No Picture" class="img-thumbnail" style="width:6vw;height:6vw">
+          <div>
+            <h4 style="margin-left:1vw">{{model.name}}</h4>
+            <hr>
+            <p style="margin-left:1vw">Requires a {{quantityVals[model.quantity]}}. Must be picked up in {{tFrameVals[model.tframe]}} from {{model.location}}. Perishable: {{model.porn}}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
