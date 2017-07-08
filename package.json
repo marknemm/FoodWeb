@@ -39,12 +39,9 @@
     "gulp": "^3.9.1",
     "gulp-typescript": "^3.1.7",
     "gulp-uglify": "^3.0.0",
-<<<<<<< HEAD
     "multer": "^1.3.0",
-=======
     "mocha": "^3.4.2",
     "ng2-bootstrap-modal": "^1.0.1",
->>>>>>> ccfe68aba9a17d06b00c3435ec6f6cf4179c7e56
     "nodemon": "^1.11.0",
     "pg": "6.x",
     "rimraf": "^2.6.1",
