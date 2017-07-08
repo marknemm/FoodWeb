@@ -11,24 +11,26 @@ export class AuthenticationModel {
 
     }
    
-    public authenticateAppUser(identifier, password){
-        return new Promise (function (resolve, reject){
-            var queryString = 'SELECT appUserKey, salt FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1';
-            var queryArgs = [identifier];
-            connectionPool.connect().then(client =>{
-                client.query(queryString, queryArgs).then(result =>{
-                    console.log(result);
-                })
-                .catch(err =>{
-                    console.log('issue with query'+ queryString);
-                    console.log(err);
-                });
-            })
-            .catch(err =>{
-                
-            });
-        });
+    public authenticateAppUser(identifier, password) {
+        var connection;
 
+        connectionPool.connect().then(client => {
+            let queryString = "SELECT appUserKey, salt FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1;";
+            let queryArgs = [identifier];
+            connection = client;
+            return connection.query(queryString, queryArgs);
+        })
+        .then(queryResult => {
+            console.log("Query Result Below --");
+            console.log(queryResult);
+            queryResult.rows.forEach(row => {
+                console.log('printing row');
+                console.log(row);
+            });
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
 
     public SignUpUser(email, password, username, lastname, firstname) {
