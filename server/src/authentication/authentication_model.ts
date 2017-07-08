@@ -44,9 +44,10 @@ export class AuthenticationModel {
                      * while using the $1, $2... as placeholders
                      */
                     var queryString = 'SELECT * FROM insertIntoAppUser($1, $2, $3, $4, $5, $6);';
-                    var queryArgs = [email, password, salt, username, lastname, firstname];
-                    var salt = 1;
-                    // ^ Sorry about adding to your code. Just a base value so the app runs. -Emery
+                    var salt = passHashUtil.saltHashPassword()
+                    var hashedPassword = passHashUtil.HashPassword(password,salt)
+                    var queryArgs = [email, hashedPassword, salt, username, lastname, firstname];
+
                     client.query(queryString, queryArgs).then(result => {
                         console.log('it worked!');
                         resolve("It worked!");
@@ -68,7 +69,6 @@ export class AuthenticationModel {
             };
         });         
     } // end signUpUser
-
 
     //currently just checks if email contains an @
     private isValidEmail(email){

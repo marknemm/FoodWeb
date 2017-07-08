@@ -15,6 +15,7 @@ import { DonorController } from './donor/donor_controller';
 import { ReceiverController } from './receiver/receiver_controller';
 
 var app = express();
+module.exports = app;
 
 // This is where compiled client ts files will go. We need this to locate index.html!
 const clientBuildDir = __dirname + '/../../client/dist/';
