@@ -1,67 +1,98 @@
 import { Component, OnInit, NgModule, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { Food } from './shared/food';
 import { Filters } from './shared/filters';
+import { ReceiverPrimaryService } from './receiver-primary.service';
 
 const MODELS: Food[] = [
-  { id: 0, name: "Beef Stew", iurl: "http://www.onceuponachef.com/images/2011/02/6a0115721bb963970b0147e234ca30970b-450wi.jpg",
-    tframe: 0, quantity: 1, location: "NY", porn: true},
-  { id: 1, name: "Noodles", iurl: "https://budgetbytes.com/wp-content/uploads/2009/12/Garlic-Noodles-front.jpg",
-    tframe: 0, quantity: 1, location: "NY", porn: true},
-  { id: 2, name: "Apple", iurl: "http://jonvilma.com/images/apple-16.jpg",
-    tframe: 0, quantity: 1, location: "NY", porn: true},
-  { id: 3, name: "Beef Stew", iurl: "http://www.onceuponachef.com/images/2011/02/6a0115721bb963970b0147e234ca30970b-450wi.jpg",
-    tframe: 0, quantity: 1, location: "NY", porn: true},
-  { id: 4, name: "Noodles", iurl: "https://budgetbytes.com/wp-content/uploads/2009/12/Garlic-Noodles-front.jpg",
-    tframe: 0, quantity: 1, location: "NY", porn: true},
-  { id: 5, name: "Apple", iurl: "http://jonvilma.com/images/apple-16.jpg",
-    tframe: 0, quantity: 1, location: "NY", porn: true}
+    {name: "Beef Stew",
+    foodListingKey: 0,
+    donorOrganizationName: "Stew's Stews",
+    donorOrganizationAddress: "800 Beef Lane",
+    donorOrganizationCity: "Williamsville",
+    donorOrganizationState: "New York",
+    donorOrganizationZip: 14221,
+    donorLastName: "Stew",
+    donorFirstName: "Steven",
+    donorDistance: 6,
+    foodTypeDescription: "Meat, Vegetable, Drink",
+    foodDescription: "Quite the beefy stew...",
+    preishable: true,
+    expirationDate: "13/32/2017",
+    quantityClass: "Car",
+    imgUrl: "https://i5.walmartimages.com/asr/4026d667-1824-48e3-acab-c46642521070_1.a0a61552b58949ce15a4990a2e02b050.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF"}
 ]
 
 @Component({
   selector: 'app-receiver',
   templateUrl: './receiver.component.html',
-  styleUrls: ['./receiver.component.css']
+  styleUrls: ['./receiver.component.css'],
+  providers: [ReceiverPrimaryService]
 })
 
 export class ReceiverComponent implements OnInit {
-  
-  models = MODELS;
+  tester: any;
+  models: Food[];
   selectedModel: Food;
   filters: Filters;
-  submittedFilters: Filters;
   filterForm: FormGroup;
   quantityVals: string[];
   tFrameVals: string[];
+  distVals: string[];
   
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder,
+  private receiverPrimaryService: ReceiverPrimaryService,
+  private modalService: NgbModal) {}
 
   ngOnInit() {
-    this.filters = new Filters([true, false, false], [true, false, false], [true, false]);
+    this.filters = new Filters(true, true, true, true, true, true, false, 0, 0, 0);
 
-    this.quantityVals = ["car", "can", "truck"];
-    this.tFrameVals = ["0-6 hours", "6-12 hours", "12+ hours"];
+    this.onChange(this.filters);
+
+    this.quantityVals = ["Car", "Van", "Truck"];
+    this.tFrameVals = ["0-6 Days", "6-12 Days", "12+ Days"];
+    this.distVals = ["0-6 Miles", "6-12 Miles", "12+ Miles"];
 
     this.filterForm = this.formBuilder.group({
-      tFrame: this.filters.tFrame,
-      tFrame0: this.filters.tFrame[0],
-      tFrame1: this.filters.tFrame[1],
-      tFrame2: this.filters.tFrame[2],
-      quantity0: this.filters.quantity[0],
-      quantity1: this.filters.quantity[1],
-      quantity2: this.filters.quantity[2],
-      pornp0: this.filters.pornp[0],
-      pornp1: this.filters.pornp[1]
+      grain: this.filters.grain,
+      meat: this.filters.meat,
+      vegetable: this.filters.vegetable,
+      fruit: this.filters.fruit,
+      drink: this.filters.drink,
+      minExpireAfterDays: this.filters.minExpireAfterDays,
+      maxQuantity: this.filters.maxQuantity,
+      maxDistance: this.filters.maxDistance,
+      perishable: this.filters.perishable,
+      notPerishable: this.filters.notPerishable
+    });
+
+    this.filterForm.valueChanges.subscribe(data => {
+      this.onChange(this.filterForm.value);
     });
   }
   
   onChange(value: Filters) {
-    this.submittedFilters = value;
+    //this.receiverPrimaryService.updateFeed(value).then(models => this.models = models);
+    var observer = this.receiverPrimaryService.updateFeed(value);
+
+    observer.subscribe(
+      data => {
+        //Apply Food model to data and store in this.models
+        this.models = data as Food[];
+      }
+    );
+    //this.models = MODELS;
   }
 
-  selectItem(value: Food) {
+  selectItem(content, value: Food) {
+    //For viewing specifics and taking a listing down from the server
     this.selectedModel = value;
+    this.modalService.open(content).result.then((result) => {
+      if (result === "Request click") {
+        //Send item request to back end
+      }
+    })
   }
 }

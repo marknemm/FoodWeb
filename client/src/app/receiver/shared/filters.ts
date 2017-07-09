@@ -1,16 +1,24 @@
 export class Filters{
     constructor(
-        public tFrame?: boolean[],
-        public quantity?: boolean[],
-        public pornp?: boolean[]
+        public grain: boolean,
+        public meat: boolean,
+        public fruit: boolean,
+        public vegetable: boolean,
+        public drink: boolean,
+        public perishable?: boolean,
+        public notPerishable?: boolean,
+        public minExpireAfterDays?: number,
+        public maxQuantity?: number,
+        public maxDistance?: number,
     ){}
     /*
     constructor(
-        public foodType?: number,
-        preishable?: boolean,
-        expireAfterDate?: string,
-        maxDistance?: number,
-        quantity?: number
+        public foodType?: number[],
+        public preishable?: boolean,
+        public notPerishable?: boolean,
+        public minExpireAfterDays?: number,
+        public maxDistance?: number,
+        public maxQuantity?: number
     ){}
     */
 }

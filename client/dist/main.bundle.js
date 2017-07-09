@@ -154,7 +154,7 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_4_ng2_bootstrap_modal__["BootstrapModalModule"],
             __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* HttpModule */],
             __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormsModule */],
-            __WEBPACK_IMPORTED_MODULE_6__angular_forms__["b" /* ReactiveFormsModule */]
+            __WEBPACK_IMPORTED_MODULE_6__angular_forms__["b" /* ReactiveFormsModule */],
         ],
         entryComponents: [
             __WEBPACK_IMPORTED_MODULE_11__authentication_login_component__["a" /* LoginComponent */]
@@ -673,6 +673,68 @@ HomeComponent = __decorate([
 
 /***/ }),
 
+/***/ "../../../../../client/src/app/receiver/receiver-primary.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReceiverPrimaryService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var MODELS = [
+    { name: "Beef Stew",
+        foodListingKey: 0,
+        donorOrganizationName: "Stew's Stews",
+        donorOrganizationAddress: "800 Beef Lane",
+        donorOrganizationCity: "Williamsville",
+        donorOrganizationState: "New York",
+        donorOrganizationZip: 14221,
+        donorLastName: "Stew",
+        donorFirstName: "Steven",
+        donorDistance: 6,
+        foodTypeDescription: "Meat, Vegetable, Drink",
+        foodDescription: "Quite the beefy stew...",
+        preishable: true,
+        expirationDate: "13/32/2017",
+        quantityClass: "Car",
+        imgUrl: "https://i5.walmartimages.com/asr/4026d667-1824-48e3-acab-c46642521070_1.a0a61552b58949ce15a4990a2e02b050.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF" }
+];
+var ReceiverPrimaryService = (function () {
+    function ReceiverPrimaryService(http) {
+        this.http = http;
+    }
+    ReceiverPrimaryService.prototype.updateFeed = function (filterObj) {
+        var observer = this.http.post('/receiver/filter', JSON.stringify({ filters: filterObj }));
+        return observer.map(function (response) {
+            var feed = response.json();
+            if (feed && feed.name) {
+                console.log('Got feed response: ' + feed.name);
+            }
+            return name;
+        });
+    };
+    return ReceiverPrimaryService;
+}());
+ReceiverPrimaryService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
+], ReceiverPrimaryService);
+
+var _a;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/receiver/receiver-primary.service.js.map
+
+/***/ }),
+
 /***/ "../../../../../client/src/app/receiver/receiver.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -694,7 +756,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/receiver/receiver.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-2\">\n      <h2>Filters</h2>\n      <hr>\n      <form [formGroup]=\"filterForm\">\n        <div class=\"btn-group\" data-toggle=\"buttons\">\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.tFrame0\">\n            <input type=\"checkbox\" formControlName=\"tFrame0\">0-6\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.tFrame1\">\n            <input type=\"checkbox\" formControlName=\"tFrame1\">6-12\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.tFrame2\">\n            <input type=\"checkbox\" formControlName=\"tFrame2\">12+\n          </label>\n        </div>\n        <div class=\"btn-group\" data-toggle=\"buttons\">\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.quantity0\">\n            <input type=\"checkbox\" formControlName=\"quantity0\">Car\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.quantity1\">\n            <input type=\"checkbox\" formControlName=\"quantity1\">Van\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.quantity2\">\n            <input type=\"checkbox\" formControlName=\"quantity2\">Truck\n          </label>\n        </div>\n        <div class=\"btn-group\" data-toggle=\"buttons\">\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.pornp0\">\n            <input type=\"checkbox\" formControlName=\"pornp0\">Perishable\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.pornp1\">\n            <input type=\"checkbox\" formControlName=\"pornp1\">Not\n          </label>\n        </div>\n        <hr>\n      </form>\n    </div>\n    <div class=\"col-md-10\">\n      <h2>Listings</h2>\n      <hr>\n      <div class=\"list-group\" style=\"overflow-y:auto\">\n        <a href=\"#\" *ngFor=\"let model of models\" (click)=\"selectItem(model)\" class=\"list-group-item\">\n          <img src=\"{{model.iurl}}\" alt=\"No Picture\" class=\"img-thumbnail\" style=\"width:6vw;height:6vw\">\n          <div>\n            <h4 style=\"margin-left:1vw\">{{model.name}}</h4>\n            <hr>\n            <p style=\"margin-left:1vw\">Requires a {{quantityVals[model.quantity]}}. Must be picked up in {{tFrameVals[model.tframe]}} from {{model.location}}. Perishable: {{model.porn}}</p>\n          </div>\n        </a>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-4\">\n      <h2>Filters</h2>\n      <hr>\n      <form [formGroup]=\"filterForm\">\n      <h4>Acceptable Food Types:</h4>\n        <div class=\"btn-group\" data-toggle=\"buttons\">\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.grain\">\n            <input type=\"checkbox\" formControlName=\"grain\">Grain\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.meat\">\n            <input type=\"checkbox\" formControlName=\"meat\">Meat\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.fruit\">\n            <input type=\"checkbox\" formControlName=\"fruit\">Fruit\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.vegetable\">\n            <input type=\"checkbox\" formControlName=\"vegetable\">Vegetable\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.drink\">\n            <input type=\"checkbox\" formControlName=\"drink\">Drink\n          </label>\n        </div>\n        <h4>Minimum Expiration:</h4>\n        <div ngbRadioGroup name=\"radioBasic\" formControlName=\"minExpireAfterDays\">\n          <label class=\"btn btn-primary\">\n            <input type=\"radio\" [value]=\"0\">{{tFrameVals[0]}}\n          </label>\n          <label class=\"btn btn-primary\">\n            <input type=\"radio\" [value]=\"1\">{{tFrameVals[1]}}\n          </label>\n          <label class=\"btn btn-primary\">\n            <input type=\"radio\" [value]=\"2\">{{tFrameVals[2]}}\n          </label>\n        </div>\n        <h4>Maximum Distance:</h4>\n        <div ngbRadioGroup name=\"radioBasic\" formControlName=\"maxDistance\">\n          <label class=\"btn btn-primary\">\n            <input type=\"radio\" [value]=\"0\">{{distVals[0]}}\n          </label>\n          <label class=\"btn btn-primary\">\n            <input type=\"radio\" [value]=\"1\">{{distVals[1]}}\n          </label>\n          <label class=\"btn btn-primary\">\n            <input type=\"radio\" [value]=\"2\">{{distVals[2]}}\n          </label>\n        </div>\n        <h4>Must Fit in a:</h4>\n        <div ngbRadioGroup name=\"radioBasic\" formControlName=\"maxQuantity\">\n          <label class=\"btn btn-primary\">\n            <input type=\"radio\" [value]=\"0\">{{quantityVals[0]}}\n          </label>\n          <label class=\"btn btn-primary\">\n            <input type=\"radio\" [value]=\"1\">{{quantityVals[1]}}\n          </label>\n          <label class=\"btn btn-primary\">\n            <input type=\"radio\" [value]=\"2\">{{quantityVals[2]}}\n          </label>\n        </div>\n        <h4>Acceptable Perishability:</h4>\n        <div class=\"btn-group\" data-toggle=\"buttons\">\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.perishable\">\n            <input type=\"checkbox\" formControlName=\"perishable\">Perishable\n          </label>\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.notPerishable\">\n            <input type=\"checkbox\" formControlName=\"notPerishable\">Not Perishable\n          </label>\n        </div>\n        <hr>\n      </form>\n    </div>\n    <div class=\"col-md-8\">\n      <ng-template #content let-c=\"close\" let-d=\"dismss\">\n        <div class=\"modal-header\">\n          <h4 class=\"modal-title\">{{selectedModel.name}}</h4>\n          <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"c('Cross click')\">\n            <span aria-hidden=\"true\">&times;</span>\n          </button>\n        </div>\n        <div class=\"modal-body\">\n          <p>{{selectedModel.foodDescription}}</p>\n        </div>\n          <div class=\"modal-footer\">\n          <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Request click')\">Request</button>\n          <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Close click')\">Close</button>\n        </div>\n      </ng-template>\n\n      <h2>Listings</h2>\n      <hr>\n      <div class=\"list-group\" style=\"overflow-y:auto\">\n        <a *ngFor=\"let model of models\" class=\"list-group-item\">\n          <img src=\"{{model.imgUrl}}\" alt=\"No Picture\" class=\"img-thumbnail\" style=\"width:7vw;height:7vw\">\n          <div>\n            <h4 style=\"margin-left:1vw\">{{model.name}}\n              <button style=\"float:right\" class=\"btn btn-primary btn-sm\" (click)=\"selectItem(content, model)\">\n                Details\n              </button>\n            </h4>\n            <hr>\n            <p style=\"margin-left:1vw\">\n              From {{model.donorOrganizationName}}, at {{model.donorOrganizationAddress}} {{model.donorDistance}} miles away. <br>\n              Present food types: {{model.foodTypeDescription}}. Expires: {{model.expirationDate}}. Requires a {{model.quantityClass}}.\n            </p>\n          </div>\n        </a>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -704,7 +766,9 @@ module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <d
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_filters__ = __webpack_require__("../../../../../client/src/app/receiver/shared/filters.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_filters__ = __webpack_require__("../../../../../client/src/app/receiver/shared/filters.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__receiver_primary_service__ = __webpack_require__("../../../../../client/src/app/receiver/receiver-primary.service.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReceiverComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -718,46 +782,75 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var MODELS = [
-    { id: 0, name: "Beef Stew", iurl: "http://www.onceuponachef.com/images/2011/02/6a0115721bb963970b0147e234ca30970b-450wi.jpg",
-        tframe: 0, quantity: 1, location: "NY", porn: true },
-    { id: 1, name: "Noodles", iurl: "https://budgetbytes.com/wp-content/uploads/2009/12/Garlic-Noodles-front.jpg",
-        tframe: 0, quantity: 1, location: "NY", porn: true },
-    { id: 2, name: "Apple", iurl: "http://jonvilma.com/images/apple-16.jpg",
-        tframe: 0, quantity: 1, location: "NY", porn: true },
-    { id: 3, name: "Beef Stew", iurl: "http://www.onceuponachef.com/images/2011/02/6a0115721bb963970b0147e234ca30970b-450wi.jpg",
-        tframe: 0, quantity: 1, location: "NY", porn: true },
-    { id: 4, name: "Noodles", iurl: "https://budgetbytes.com/wp-content/uploads/2009/12/Garlic-Noodles-front.jpg",
-        tframe: 0, quantity: 1, location: "NY", porn: true },
-    { id: 5, name: "Apple", iurl: "http://jonvilma.com/images/apple-16.jpg",
-        tframe: 0, quantity: 1, location: "NY", porn: true }
+    { name: "Beef Stew",
+        foodListingKey: 0,
+        donorOrganizationName: "Stew's Stews",
+        donorOrganizationAddress: "800 Beef Lane",
+        donorOrganizationCity: "Williamsville",
+        donorOrganizationState: "New York",
+        donorOrganizationZip: 14221,
+        donorLastName: "Stew",
+        donorFirstName: "Steven",
+        donorDistance: 6,
+        foodTypeDescription: "Meat, Vegetable, Drink",
+        foodDescription: "Quite the beefy stew...",
+        preishable: true,
+        expirationDate: "13/32/2017",
+        quantityClass: "Car",
+        imgUrl: "https://i5.walmartimages.com/asr/4026d667-1824-48e3-acab-c46642521070_1.a0a61552b58949ce15a4990a2e02b050.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF" }
 ];
 var ReceiverComponent = (function () {
-    function ReceiverComponent(formBuilder) {
+    function ReceiverComponent(formBuilder, receiverPrimaryService, modalService) {
         this.formBuilder = formBuilder;
-        this.models = MODELS;
+        this.receiverPrimaryService = receiverPrimaryService;
+        this.modalService = modalService;
     }
     ReceiverComponent.prototype.ngOnInit = function () {
-        this.filters = new __WEBPACK_IMPORTED_MODULE_2__shared_filters__["a" /* Filters */]([true, false, false], [true, false, false], [true, false]);
-        this.quantityVals = ["car", "can", "truck"];
-        this.tFrameVals = ["0-6 hours", "6-12 hours", "12+ hours"];
+        var _this = this;
+        this.filters = new __WEBPACK_IMPORTED_MODULE_3__shared_filters__["a" /* Filters */](true, true, true, true, true, true, false, 0, 0, 0);
+        this.onChange(this.filters);
+        this.quantityVals = ["Car", "Van", "Truck"];
+        this.tFrameVals = ["0-6 Days", "6-12 Days", "12+ Days"];
+        this.distVals = ["0-6 Miles", "6-12 Miles", "12+ Miles"];
         this.filterForm = this.formBuilder.group({
-            tFrame: this.filters.tFrame,
-            tFrame0: this.filters.tFrame[0],
-            tFrame1: this.filters.tFrame[1],
-            tFrame2: this.filters.tFrame[2],
-            quantity0: this.filters.quantity[0],
-            quantity1: this.filters.quantity[1],
-            quantity2: this.filters.quantity[2],
-            pornp0: this.filters.pornp[0],
-            pornp1: this.filters.pornp[1]
+            grain: this.filters.grain,
+            meat: this.filters.meat,
+            vegetable: this.filters.vegetable,
+            fruit: this.filters.fruit,
+            drink: this.filters.drink,
+            minExpireAfterDays: this.filters.minExpireAfterDays,
+            maxQuantity: this.filters.maxQuantity,
+            maxDistance: this.filters.maxDistance,
+            perishable: this.filters.perishable,
+            notPerishable: this.filters.notPerishable
+        });
+        this.filterForm.valueChanges.subscribe(function (data) {
+            _this.onChange(_this.filterForm.value);
         });
     };
     ReceiverComponent.prototype.onChange = function (value) {
-        this.submittedFilters = value;
+        //this.receiverPrimaryService.updateFeed(value).then(models => this.models = models);
+        /*var observer = this.receiverPrimaryService.updateFeed(value);
+    
+        observer.subscribe(
+          data => {
+            //Apply Food model to data and store in this.models
+            this.models = data as Food[];
+          }
+        );*/
+        this.models = MODELS;
     };
-    ReceiverComponent.prototype.selectItem = function (value) {
+    ReceiverComponent.prototype.selectItem = function (content, value) {
+        //For viewing specifics and taking a listing down from the server
         this.selectedModel = value;
+        this.modalService.open(content).result.then(function (result) {
+            if (result === "Request click") {
+                //Send item request to back end
+            }
+        });
     };
     return ReceiverComponent;
 }());
@@ -765,12 +858,13 @@ ReceiverComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'app-receiver',
         template: __webpack_require__("../../../../../client/src/app/receiver/receiver.component.html"),
-        styles: [__webpack_require__("../../../../../client/src/app/receiver/receiver.component.css")]
+        styles: [__webpack_require__("../../../../../client/src/app/receiver/receiver.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_4__receiver_primary_service__["a" /* ReceiverPrimaryService */]]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["e" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["e" /* FormBuilder */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["e" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["e" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__receiver_primary_service__["a" /* ReceiverPrimaryService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__receiver_primary_service__["a" /* ReceiverPrimaryService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbModal */]) === "function" && _c || Object])
 ], ReceiverComponent);
 
-var _a;
+var _a, _b, _c;
 //# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/app/receiver/receiver.component.js.map
 
 /***/ }),
@@ -781,10 +875,17 @@ var _a;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Filters; });
 var Filters = (function () {
-    function Filters(tFrame, quantity, pornp) {
-        this.tFrame = tFrame;
-        this.quantity = quantity;
-        this.pornp = pornp;
+    function Filters(grain, meat, fruit, vegetable, drink, perishable, notPerishable, minExpireAfterDays, maxQuantity, maxDistance) {
+        this.grain = grain;
+        this.meat = meat;
+        this.fruit = fruit;
+        this.vegetable = vegetable;
+        this.drink = drink;
+        this.perishable = perishable;
+        this.notPerishable = notPerishable;
+        this.minExpireAfterDays = minExpireAfterDays;
+        this.maxQuantity = maxQuantity;
+        this.maxDistance = maxDistance;
     }
     return Filters;
 }());
