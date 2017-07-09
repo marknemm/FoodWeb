@@ -15,17 +15,21 @@
             }
         },
         {
-            "name": "Server",
-            "type": "chrome",
+            "name": "server",
+            "type": "node",
             "request": "launch",
-            "url": "http://localhost:5000",
-            "sourceMaps": true,
-            "trace": true,
-            "webRoot": "${workspaceRoot}",
-            "userDataDir": "${workspaceRoot}/.vscode/chrome",
-            "sourceMapPathOverrides": {
-                "webpack:///C:*":"C:/*"
-            }
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": "npm",
+            "windows": {
+                "runtimeExecutable": "npm.cmd"
+            },
+            "runtimeArgs": [
+                "run-script", "debug-server"
+            ],
+            "port": 5858,
+            "outFiles": [
+                "${workspaceRoot}\\server\\dist\\**\\*"
+            ]
         }
     ],
     "compounds": [

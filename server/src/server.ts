@@ -1,9 +1,9 @@
 'use strict';
 var express = require('express');
-var session = require('express-session')
+var session = require('express-session');
 var pg = require('pg');
 var http = require('http');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 const path = require('path');
 
 var connectionPool = require('./database_help/connection_pool');

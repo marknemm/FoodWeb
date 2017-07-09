@@ -2,8 +2,6 @@
 import { NextFunction, Request, Response } from "express";
 import { AuthenticationModel } from './authentication_model';
 
-debugger;
-
 /**
  * Login Controller for handling of all Donor requests.
  */
@@ -12,7 +10,6 @@ export class AuthenticationController {
     private authenticatonModel : AuthenticationModel;
 
     public constructor() {
-        debugger;
         this.authenticatonModel = new AuthenticationModel();
     }
 
@@ -20,7 +17,6 @@ export class AuthenticationController {
      * Handles login request for a given user.
      */
     public login(request, response : Response) {
-        debugger;
         this.authenticatonModel.authenticateAppUser('marknemm1@buffalo.edu', 'password');
         //this.authenticatonModel.SignUpUser('marknemm@buffalo.edu', 'mypasswordIsThis1', 'ABCDEFGHIGJJKDJKEKJWEFJWJ', 'marknemm', 'Nemmer', 'Mark');
 
