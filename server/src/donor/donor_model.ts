@@ -27,6 +27,7 @@ export class DonorModel {
         return new Promise(function(resolve, reject) {
 
                 // Grab a connection. This comes in the form of a Promise.
+                
                 connectionPool.connect().then(client => {
                     // Grabbing a connection succeeded. Now we can execute a query using a callback function.
                     // The client is the result of the promise. It is just something we can run sql on.
@@ -56,8 +57,6 @@ export class DonorModel {
             
           
         });         
-
-     
 
    }
 
