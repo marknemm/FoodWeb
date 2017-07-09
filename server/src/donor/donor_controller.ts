@@ -15,9 +15,13 @@ export class DonorController {
         this.donorModel = new DonorModel();
     }
 
-    public addFoodListing(request, response) {
-        var donorsubmission = request.body()
-        this.donorModel.intepretData(donorsubmission);
+    public addFoodListing(req, res) {
+        var promise = this.donorModel.intepretData(req.body);
+        promise.then(function(){
+            res.send('Submitted!');
+        }).catch(function(){
+            res.send('Could not submit');
+        });
     }
 
 };

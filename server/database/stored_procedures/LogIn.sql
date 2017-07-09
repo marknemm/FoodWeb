@@ -28,4 +28,5 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT login('marknemm1@buffalo.edu', 'password');
+SELECT * FROM AppUser;
+--SELECT login('marknemm1@buffalo.edu', 'password');

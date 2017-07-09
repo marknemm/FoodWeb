@@ -17,7 +17,15 @@ export class AuthenticationController {
      * Handles login request for a given user.
      */
     public login(request, response : Response) {
+<<<<<<< HEAD
+=======
+        debugger;
+<<<<<<< HEAD
+        this.authenticatonModel.authenticateAppUser('marknemm@buffalo.edu', 'mypasswordIsThis1');
+=======
+>>>>>>> e77f87f6dcd8e2a9d3ab79885f56bffd845ac0e8
         this.authenticatonModel.authenticateAppUser('marknemm1@buffalo.edu', 'password');
+>>>>>>> 91ce307e76d790e98cca7cb3397ca191e27d1db1
         //this.authenticatonModel.SignUpUser('marknemm@buffalo.edu', 'mypasswordIsThis1', 'ABCDEFGHIGJJKDJKEKJWEFJWJ', 'marknemm', 'Nemmer', 'Mark');
 
         // TODO: Use return value from authenticateUser() to set session info on the request and populate the response JSON body.

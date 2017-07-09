@@ -11,6 +11,33 @@ export class AuthenticationModel {
 
     }
    
+<<<<<<< HEAD
+    public authenticateAppUser(identifier, password){
+        return new Promise (function (resolve, reject){
+            var queryString = 'SELECT appUserKey, salt FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1';
+            var queryArgs = [identifier];
+            connectionPool.connect().then(client =>{
+                client.query(queryString, queryArgs).then(result =>{
+                    console.log(result);
+                    var _salt = result.salt;
+                    var _key = result.appUserKey;
+                    var hashedPassword = hashedPassword(password, _salt);
+                    client.query('SELECT * FROM LogInWithKey($1,$2)', [_key,hashedPassword]).then(result =>{
+                        resolve (result);
+                    })
+                    .catch(err =>{
+                        console.log('You wrote this wrong, dipshit');
+                    });
+                    
+                })
+                .catch(err =>{
+                    console.log('issue with query'+ queryString);
+                    console.log(err);
+                });
+            })
+            .catch(err =>{
+                reject (new Error("Something is wrong"));
+=======
     public authenticateAppUser(identifier, password) {
         var connection;
 
@@ -26,6 +53,7 @@ export class AuthenticationModel {
             queryResult.rows.forEach(row => {
                 console.log('printing row');
                 console.log(row);
+>>>>>>> 91ce307e76d790e98cca7cb3397ca191e27d1db1
             });
         })
         .catch(err => {
@@ -45,6 +73,7 @@ export class AuthenticationModel {
                      * writting sql code is through client.query, and you pass in the args as a second parameter
                      * while using the $1, $2... as placeholders
                      */
+                    var salt = 'ABCDEFG';
                     var queryString = 'SELECT * FROM insertIntoAppUser($1, $2, $3, $4, $5, $6);';
                     var salt = passHashUtil.saltHashPassword()
                     var hashedPassword = passHashUtil.HashPassword(password,salt)
