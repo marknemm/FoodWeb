@@ -11,7 +11,6 @@ export class AuthenticationModel {
 
     }
    
-<<<<<<< HEAD
     public authenticateAppUser(identifier, password){
         return new Promise (function (resolve, reject){
             var queryString = 'SELECT appUserKey, salt FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1';
@@ -37,23 +36,6 @@ export class AuthenticationModel {
             })
             .catch(err =>{
                 reject (new Error("Something is wrong"));
-=======
-    public authenticateAppUser(identifier, password) {
-        var connection;
-
-        connectionPool.connect().then(client => {
-            let queryString = "SELECT appUserKey, salt FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1;";
-            let queryArgs = [identifier];
-            connection = client;
-            return connection.query(queryString, queryArgs);
-        })
-        .then(queryResult => {
-            console.log("Query Result Below --");
-            console.log(queryResult);
-            queryResult.rows.forEach(row => {
-                console.log('printing row');
-                console.log(row);
->>>>>>> 91ce307e76d790e98cca7cb3397ca191e27d1db1
             });
         })
         .catch(err => {
