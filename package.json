@@ -5,7 +5,7 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
-    "start": "concurrently \"tsc -w -p server/tsconfig.json\" \"ng build --watch\"",
+    "start": "concurrently \"tsc -w -p server/tsconfig.json\" \"ng build --watch\" \"node --nolazy --inspect server/dist/server.js\" ",
     "html": "copyfiles -u 2 \"./src/web/**/*.{css,html}\" \"./dist/web/\"",
     "build": "concurrently \"tsc -p server/tsconfig.json\" \"ng build\"",
     "test": "ng test",

@@ -2,7 +2,27 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Client",
+            "name": "Node",
+            "type":  "node",
+            "request": "attach",
+            "port": 9229,
+            "outFiles": [
+                "${workspaceRoot}\\server\\dist\\**\\*.js"
+            ]
+        },
+        {
+            "name": "Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "port": 9222,
+            "url": "http://localhost:5000",
+            "webRoot": "${workspaceRoot}",
+            "trace": true,
+            "sourceMaps": true,
+            "userDataDir": "${workspaceRoot}/.vscode/chrome"
+        },
+        {
+            "name": "Client-Only",
             "type": "chrome",
             "request": "launch",
             "url": "http://localhost:4200",
@@ -15,7 +35,7 @@
             }
         },
         {
-            "name": "server",
+            "name": "Server-Only",
             "type": "node",
             "request": "launch",
             "cwd": "${workspaceRoot}",
@@ -28,14 +48,15 @@
             ],
             "port": 5858,
             "outFiles": [
-                "${workspaceRoot}\\server\\dist\\**\\*"
+                "${workspaceRoot}\\server\\dist\\**\\*.js",
+                "${workspaceRoot}\\client\\dist\\**\\*.js"
             ]
         }
     ],
     "compounds": [
-        {
-            "name": "Server/Client",
-            "configurations": ["Server", "Client"]
+        { 
+            "name": "Hybrid",
+            "configurations": ["Node", "Chrome"]
         }
-    ]
+    ]    
 }
