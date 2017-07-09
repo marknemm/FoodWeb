@@ -1,6 +1,6 @@
 'use strict';
-var multer = require('multer');
-var upload = multer({dest: __dirname+'../../donoruploads'});
+// var multer = require('multer');
+// var upload = multer({dest: __dirname+'../../donoruploads'});
 var connectionPool = require('../database_help/connection_pool');
 
 
@@ -14,15 +14,14 @@ export class DonorModel {
     }
    
    //interprets the JSON data recieved from the frontend and adds information recieved to the FoodListing table.
-    public intepretData(donorsubmission){
+    public intepretData(donorsubmission,multerinfo){
+
         var foodTypeKey = donorsubmission.foodTypeKey;
         var perishable = donorsubmission.perishable;
         var postedByAppUserKey = donorsubmission.postedByAppUserKey;
         var foodDescription = donorsubmission.foodDescription;
         var expireDate = donorsubmission.expireDate;
-
-        //Still need to deal with uploaded donor image and saving it via mutler
-        var imgurl = donorsubmission.img;
+        var imgpath = '/server/donoruploads/'+multerinfo.filename;
 
         return new Promise(function(resolve, reject) {
 
@@ -37,7 +36,7 @@ export class DonorModel {
                      * while using the $1, $2... as placeholders
                      */
                     var queryString = 'SELECT * FROM addFoodListing($1, $2, $3, $4, $5, $6);';
-                    var queryArgs = [foodTypeKey, perishable, expireDate, postedByAppUserKey, foodDescription, imgurl];
+                    var queryArgs = [foodTypeKey, perishable, expireDate, postedByAppUserKey, foodDescription, imgpath];
 
                     client.query(queryString, queryArgs).then(result => {
                         console.log('it worked!');
