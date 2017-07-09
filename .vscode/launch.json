@@ -38,19 +38,18 @@
             "name": "Server-Only",
             "type": "node",
             "request": "launch",
-            "cwd": "${workspaceRoot}",
-            "runtimeExecutable": "npm",
-            "windows": {
-                "runtimeExecutable": "npm.cmd"
-            },
-            "runtimeArgs": [
-                "run-script", "debug-server"
-            ],
-            "port": 5858,
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceRoot}\\server\\dist\\**\\*.js",
-                "${workspaceRoot}\\client\\dist\\**\\*.js"
-            ]
+                "${workspaceRoot}\\server\\dist\\**\\*.js"
+            ],
+            "stopOnEntry": false,
+            "args": ["--no-timeouts", "--colors", "--debug-brk", "${workspaceRoot}/server/test/test-server.js"],
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": null,
+            "env": {
+                "NODE_ENV": "testing"
+            }
         }
     ],
     "compounds": [
