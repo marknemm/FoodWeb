@@ -21,7 +21,7 @@ export class DonorModel {
         var postedByAppUserKey = donorsubmission.postedByAppUserKey;
         var foodDescription = donorsubmission.foodDescription;
         var expireDate = donorsubmission.expireDate;
-        var imgpath = '/server/donoruploads/'+multerinfo.filename;
+        var imgpath = multerinfo.path;
 
         return new Promise(function(resolve, reject) {
 
