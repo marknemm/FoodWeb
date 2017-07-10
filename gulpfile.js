@@ -5,11 +5,14 @@ let ts = require('gulp-typescript');
 let uglify = require('gulp-uglify');
 let babel = require('gulp-babel');
 let sourcemaps = require('gulp-sourcemaps');
-//let gutil = require('gulp-util');
+let gutil = require('gulp-util');
+//let browserify = require('gulp-browserify');
+//let tsify = require('tsify');
+//let babelify = require('babelify');
 //let exec = require('child_process').exec;
 
-//let clientTsProject = ts.createProject('client/tsconfig.json');
-let serverTsProject = ts.createProject('server/tsconfig.json');
+//let clientTsProject = ts.createProject(__dirname + '/client/tsconfig.json');
+let serverTsProject = ts.createProject(__dirname + '/server/tsconfig.json');
 
 // These tasks will be run when you just type "gulp"
 gulp.task('default', [ /*'clientscripts',*/ 'serverscripts' ]);
@@ -23,11 +26,11 @@ gulp.task('default', [ /*'clientscripts',*/ 'serverscripts' ]);
   });
 });*/
 
-// This task can be run alone with "gulp serverscripts"
+// This task can be run alone with "gulp serverscripts". This seems to break sourcemaps right now (doesn't generate them correctly). Instead, will use tsc.
 gulp.task('serverscripts', () => {
   return serverTsProject.src()
-                        .pipe(serverTsProject())
-                        .js
+                        .pipe(sourcemaps.init())
+                        .pipe(serverTsProject()).js
                         // This basically translate es6 to es5 so that uglify can run correctly.
                         .pipe(babel({
                             presets: ['es2015']
@@ -37,10 +40,9 @@ gulp.task('serverscripts', () => {
                             gutil.log(error);
                         }))
                         // Source maps basically provide a mapping from typescript to javascript so that you can debug the typescript directly.
-                        .pipe(sourcemaps.init())
-                        .pipe(sourcemaps.write('.'))
+                        .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: __dirname + '/server/src/', mapRoot: __dirname + '/server/dist/' }))
                         // This is where we are going to put the compiled code.
-                        .pipe(gulp.dest('server/dist'));
+                        .pipe(gulp.dest(__dirname + '/server/dist'));
 });
 
 // By adding this, we can run "gulp watch" to automatically run the build when we change a script

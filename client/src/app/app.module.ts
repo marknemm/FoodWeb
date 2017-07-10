@@ -12,7 +12,8 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { LoginComponent } from './authentication/login.component';
 import { DonorComponent } from './donor/donor.component';
-import { ReceiverComponent } from './receiver/receiver.component'
+import { ReceiverComponent } from './receiver/receiver.component';
+import { SignupComponent } from './authentication/signup.component'
 
 const appRoutes:Routes = [
   /*{
@@ -46,7 +47,8 @@ const appRoutes:Routes = [
     FooterComponent,
     LoginComponent,
     DonorComponent,
-    ReceiverComponent
+    ReceiverComponent,
+    SignupComponent
   ],
   imports: [
     NgbModule.forRoot(),

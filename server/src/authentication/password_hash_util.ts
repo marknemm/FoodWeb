@@ -26,7 +26,7 @@ export function saltHashPassword(password : string) {
     return { hashVal : Bcrypt.hash(password, salt, null), saltVal: salt};
 };
 
-export function hashPassword(password : string, salt) {
+export function hashPassword(password : string, salt : string) {
     return { hashVal : Bcrypt.hash(password, salt, null), saltVal: salt};
 };
 
