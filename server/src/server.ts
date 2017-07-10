@@ -5,6 +5,8 @@ var pg = require('pg');
 var http = require('http');
 var bodyParser = require('body-parser');
 const path = require('path');
+var multer = require('multer');
+
 
 var connectionPool = require('./database_help/connection_pool');
 
@@ -74,6 +76,18 @@ app.get('/db', function(request, response) {
   });
 });
 
+//Multer configuration to handle donor image uplaods
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../donoruploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+});
+
+var upload = multer({ storage: storage });
+
 // Handle /authentication/login route by passing off to LoginController.
 app.post('/authentication/login', authenticationController.login.bind(authenticationController));
 
@@ -84,7 +98,7 @@ app.post('/authentication/signup', authenticationController.signup.bind(authenti
 app.post('/authentication/logout', authenticationController.logout.bind(authenticationController));
 
 // Handle /donor/addFoodListing route by passing off to DonorController.
-app.post('/donor/addFoodListing', donorController.addFoodListing.bind(donorController));
+app.post('/donor/addFoodListing', upload.single('img'), donorController.addFoodListing.bind(donorController));
 
 
 app.get('*', function (request, response) {

@@ -16,7 +16,7 @@ export class DonorController {
     }
 
     public addFoodListing(req, res) {
-        var promise = this.donorModel.intepretData(req.body);
+        var promise = this.donorModel.intepretData(req.body,req.file);
         promise.then(function(){
             res.send('Submitted!');
         }).catch(function(){
