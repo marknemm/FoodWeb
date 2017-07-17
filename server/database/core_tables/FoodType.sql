@@ -7,6 +7,6 @@ CREATE TABLE IF NOT EXISTS FoodType
     foodTypeKey SERIAL PRIMARY KEY
 );
 
-ALTER TABLE FoodType ADD COLUMN IF NOT EXISTS foodTypeDescription VARCHAR(128) NOT NULL;
+ALTER TABLE FoodType ADD COLUMN IF NOT EXISTS foodTypeDescription VARCHAR(60) NOT NULL;
 
 -- We can add all our FoodType entries here.

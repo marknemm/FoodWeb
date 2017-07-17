@@ -1,6 +1,6 @@
 'use strict';
 import { NextFunction, Request, Response } from "express";
-import { AuthenticationModel } from './authentication_model';
+import { AuthenticationModel, AppUserPrimaryInfo } from './authentication_model';
 
 /**
  * Login Controller for handling of all Donor requests.
@@ -16,15 +16,18 @@ export class AuthenticationController {
     /**
      * Handles login request for a given user.
      */
-    public login(request, response : Response) {
-        this.authenticatonModel.authenticateAppUser('marknemm1@buffalo.edu', 'password');
-        //this.authenticatonModel.SignUpUser('marknemm@buffalo.edu', 'mypasswordIsThis1', 'ABCDEFGHIGJJKDJKEKJWEFJWJ', 'marknemm', 'Nemmer', 'Mark');
-
-        // TODO: Use return value from authenticateUser() to set session info on the request and populate the response JSON body.
-        request.session["appUserKey"] = 1;
-        //console.log(request.session);
+    public login(request : Request, response : Response) {
         response.setHeader('Content-Type', 'application/json');
-        return response.send(JSON.stringify({ appUserKey: 1, username : 'marknemm' }));
+        this.authenticatonModel.authenticateAppUser(request.body.username, request.body.password)
+        .then((appUserPrimaryInfo : AppUserPrimaryInfo) => {
+            request.session['appUserKey'] = appUserPrimaryInfo.appUserKey;
+            request.session['username'] = appUserPrimaryInfo.username;
+            request.session['email'] = appUserPrimaryInfo.email;
+            response.send(JSON.stringify({ appUserKey: 1, username : 'marknemm' }))
+        })
+        .catch((err : Error) => {
+            response.send(JSON.stringify({err: err.message}));
+        });
     }
 
     /**

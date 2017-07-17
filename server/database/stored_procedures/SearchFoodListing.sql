@@ -5,9 +5,9 @@
 CREATE OR REPLACE FUNCTION searchFoodListing
 (
     _foodListingKey         INTEGER         DEFAULT NULL,   -- This is for when we are looking for a specific Food Listing.
-    _foodTypeKey            INTEGER         DEFAULT NULL,   -- This is when we have a selection from a Food Type Combo Box.
-    _perishable             BOOLEAN         DEFAULT NULL,   -- Are we looking for perishable food?
-    _donorOrganizationName  VARCHAR(128)    DEFAULT NULL,   -- Are we looking for food from a specific organization?
+    _foodTypes              VARCHAR(60)[]   DEFAULT NULL,   -- This is when we may be filtering by one or many food types. Null is for all food types.
+    _perishable             BOOLEAN         DEFAULT NULL,   -- Are we looking for perishable food? Input true for perishable only, false for non-perishable, and null for both.
+    _donorOrganizationName  VARCHAR(128)    DEFAULT NULL,   -- Are we looking for food from a specific organization? Null if not.
     _earliestExpireDate     TEXT            DEFAULT NULL    -- Do we require food that is going to expire after a specific date?
                                                             -- Must be in the format MM/DD/YYYY!
 )
@@ -49,7 +49,10 @@ BEGIN
     INNER JOIN AppUser              ON FoodListing.postedByAppUserKey = AppUser.appUserKey
     INNER JOIN DonorOrganization    ON AppUser.donorOrganizationKey = DonorOrganization.donorOrganizationKey
     WHERE (_foodListingKey IS NULL          OR FoodListing.foodListingKey = _foodListingKey)
-      AND (_foodTypeKey IS NULL             OR FoodType.foodTypeKey = _foodTypeKey)
+      -- We will translate the list of food type descriptions into integer keys for lookup efficiency.
+      AND (_foodTypes IS NULL               OR FoodType.foodTypeKey = ANY (SELECT foodTypeKey
+                                                                           FROM FoodType
+                                                                           WHERE FoodType.foodTypeDescription = ANY(_foodTypes)))
       AND (_perishable IS NULL              OR FoodListing.perishable = _perishable)
       AND (_donorOrganizationName IS NULL   OR DonorOrganization.name = _donorOrganizationName)
       AND (_earliestExpireDate IS NULL      OR FoodListing.expireDate >= TO_TIMESTAMP(_earliestExpireDate, 'MM/DD/YYYY'))
@@ -60,18 +63,16 @@ $$ LANGUAGE plpgsql;
 
 -- Test the Stored Procedure here --
 
-/*
-select searchFoodListing();
+/*select searchFoodListing();
 
 select searchFoodListing(1);
 
-select searchFoodListing(NULL, (SELECT foodTypeKey FROM FoodType WHERE foodTypeDescription = 'Bread'));
+select searchFoodListing(NULL, '{Grain}');
 
-select searchFoodListing(2, (SELECT foodTypeKey FROM FoodType WHERE foodTypeDescription = 'Bread'));
+select searchFoodListing(NULL, '{Meat, Drink}');
 
 select searchFoodListing(NULL, NULL, true);
 
 select searchFoodListing(NULL, NULL, NULL, 'Wegmans');
 
-select searchFoodListing(NULL, NULL, NULL, NULL, '7/1/2017');
-*/
+select searchFoodListing(NULL, NULL, NULL, NULL, '7/1/2017');*/

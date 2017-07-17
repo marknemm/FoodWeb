@@ -39,20 +39,22 @@ SELECT * FROM AppUser;
 
 -- Fill FoodType with junk data --
 INSERT INTO FoodType ( foodTypeDescription )
-VALUES ( 'Pasta' ),
-       ( 'Bread' ),
-       ( 'Dairy' );
+VALUES ( 'Grain' ),
+       ( 'Meat' ),
+       ( 'Fruit' ),
+       ( 'Vegetable' ),
+       ( 'Drink' );
 
 SELECT * FROM FoodType;
 
 
 -- Fill FoodListing with junk data --
 INSERT INTO FoodListing ( foodTypeKey, perishable, postedByAppUserKey, foodDescription, expireDate, postDate )
-VALUES ( (SELECT foodTypeKey FROM FoodType WHERE foodTypeDescription = 'Pasta'), true,
+VALUES ( (SELECT foodTypeKey FROM FoodType WHERE foodTypeDescription = 'Meat'), true,
          (SELECT appUserKey FROM AppUser WHERE lastName = 'Nemmer' AND firstName = 'Mark'), 'Mmmm, yummy yummy!!!', now() + INTERVAL '10 day', now() ),
-       ( (SELECT foodTypeKey FROM FoodType WHERE foodTypeDescription = 'Bread'), false,
+       ( (SELECT foodTypeKey FROM FoodType WHERE foodTypeDescription = 'Grain'), false,
          (SELECT appUserKey FROM AppUser WHERE lastName = 'Nemmer' AND firstName = 'Mark'), 'Nice and stale!!!', now() + INTERVAL '10 week', now() ),
-       ( (SELECT foodTypeKey FROM FoodType WHERE foodTypeDescription = 'Dairy'), true,
+       ( (SELECT foodTypeKey FROM FoodType WHERE foodTypeDescription = 'Drink'), true,
          (SELECT appUserKey FROM AppUser WHERE lastName = 'Nemmer' AND firstName = 'Mark'), 'Chunky chunky!', now(), now() );
 
 SELECT * FROM FoodListing;

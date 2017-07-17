@@ -16,7 +16,7 @@ describe('Authentication', function() {
     it('should login', function(done) {
     chai.request(server)
         .post('/authentication/login')
-        .send({'username': 'marknemm', 'password': 'xxxxxx'})
+        .send({'username': 'marknemm1@buffalo.edu', 'password': 'password'})
         .end(function(err, res) {
             console.log('Result of /authentication/login');
             console.log(res.body);
