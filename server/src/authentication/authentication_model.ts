@@ -56,6 +56,12 @@ export class AuthenticationModel {
         });
     }
 
+    /**
+     * Gets the salt stored in the database for a given AppUser with username or email.
+     * @param connection: The database connection.
+     * @param usernameOrEmail: The username or email of the user to get the salt for.
+     * @return A promise with the query result. The query result should simply contain one row with a salt member.
+     */
     private getSaltForAppUser(connection: Client, usernameOrEmail: string): Promise<QueryResult> {
         let queryString : string = 'SELECT salt FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1';
         let queryArgs : Array<string> = [usernameOrEmail];
@@ -63,6 +69,13 @@ export class AuthenticationModel {
         return connection.query(queryString, queryArgs);
     }
 
+    /**
+     * 
+     * @param usernameOrEmail The username or the email of the user that the password is being hashed for.
+     * @param password The plain text password that is to be hashed.
+     * @param getSaltQueryResult The query result that on success should contain a single row with one salt member.
+     * @return A promise that on success will give a Hash Password Info object (which contains the hashed password and the salt used for hashing).
+     */
     private hashPassword(usernameOrEmail: string, password: string, getSaltQueryResult: QueryResult): Promise<HashPasswordInfo> {
         // We should only be getting one row back with the salt!
         if (getSaltQueryResult.rowCount === 1) {
@@ -75,12 +88,27 @@ export class AuthenticationModel {
         }
     }
 
+    /**
+     * Final step in authentication/login. Sends username/email and hashed password to the database to compare with what is on record.
+     * @param connection The database connection.
+     * @param usernameOrEmail The username or email of the AppUser that is logging in.
+     * @param hashPasswordInfo The Hash Password Info that should contain the hashed password for the user that is logging in.
+     * @return A promise that will contain the result of the login query. On success, the query result will conain a single row with primary indentification info for the user.
+     *         On failure, there will be no rows in the result.
+     */
     private loginWithHashedPassword(connection: Client, usernameOrEmail: string, hashPasswordInfo: HashPasswordInfo): Promise<QueryResult> {
         let queryString : string = 'SELECT login($1, $2)';
         let queryArgs : Array<string> = [usernameOrEmail, hashPasswordInfo.hashedPassword];
         return connection.query(queryString, queryArgs);
     }
 
+    /**
+     * Analyzes and handles the final result of the login/authentication.
+     * @param connection The database connection. Must finally be released here because we are done with it now!
+     * @param loginQueryResult The result of the login SP call. If successful, then one row will be returned with the primary indentification info for the user.
+     *                         On failure, there will be no rows in the result.
+     * @return A promise containing the primary identification info for the user on success. On failure, a promise rejection is returned.
+     */
     private handleLoginResult(connection: Client, loginQueryResult: QueryResult): Promise<AppUserPrimaryInfo> {
         connection.release();
         // If we get back single row of primary AppUser info, then login is a success.
@@ -95,6 +123,12 @@ export class AuthenticationModel {
         }
     }
 
+    /**
+     * Handles any errors with the authentication/login process.
+     * @param connection The database connection. Must be released on error!
+     * @param err The error messgae and stack trace.
+     * @return A promoise rejection.
+     */
     private handleAuthenticateAppUserErr(connection: Client, err: Error): Promise<AppUserPrimaryInfo> {
         // We have a connection, so we need to release it.
         if (connection != null) {
