@@ -3,23 +3,25 @@ SELECT dropFunction('insertIntoAppUser');
 
 CREATE OR REPLACE FUNCTION insertIntoAppUser
 (
-    _username   VARCHAR(128)        DEFAULT NULL,
-    _email      VARCHAR(128)        DEFAULT NULL, 
-    _password   TEXT                DEFAULT NULL,
-    _salt       TEXT                DEFAULT NULL,
-    _lastName   VARCHAR(60)         DEFAULT NULL,
-    _firstName  VARCHAR(60)         DEFAULT NULL
+    _username   VARCHAR(128),
+    _email      VARCHAR(128), 
+    _password   CHAR(60),
+    _lastName   VARCHAR(60),
+    _firstName  VARCHAR(60)
 )
-RETURNS VOID
+RETURNS INTEGER -- Returns the new AppUser's appUserKey
 AS $$
+    DECLARE _appUserKey INTEGER;
 BEGIN
 
-    INSERT INTO AppUser (username, email, password,
-                         salt, lastName, firstName)
-    VALUES (_username, _email, _password, _salt, _lastName, _firstName);
+    INSERT INTO AppUser (username, email, password, lastName, firstName)
+    VALUES (_username, _email, _password, _lastName, _firstName)
+    RETURNING appUserKey INTO _appUserKey;
+
+    RETURN _appUserKey;
 
 END;
 $$ LANGUAGE plpgsql;
 
---SELECT insertIntoAppUser('testusername', 'testUser@test.edu', 'password', 'User', 'Test');
---SELECT * FROM appUser; 
+SELECT insertIntoAppUser('testusername', 'testUser@test.edu', 'password', 'User', 'Test');
+SELECT * FROM appUser; 

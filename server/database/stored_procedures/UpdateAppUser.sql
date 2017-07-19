@@ -5,7 +5,7 @@
 
 /* The dropFucntion clears all prior copies of a function to
    avoid conflict.*/
-SELECT dropFunction ('updateappuser');
+SELECT dropFunction ('updateAppUser');
 
 /* In order update existing user info, or to create a new user,
     you shall need to provide the userEmail, Password, LastName
@@ -13,15 +13,14 @@ SELECT dropFunction ('updateappuser');
 
 CREATE OR REPLACE FUNCTION updateAppUser
 (
-    _newUser        BOOLEAN             DEFAULT NULL,
     _username       VARCHAR(128)        DEFAULT NULL,
     _email          VARCHAR(128)        DEFAULT NULL, 
-    _password       TEXT                DEFAULT NULL,
+    _password       CHAR(60)            DEFAULT NULL,
     _lastName       VARCHAR(60)         DEFAULT NULL,
-    _firstName      VARCHAR(60)         DEFAULT NULL
-    
+    _firstName      VARCHAR(60)         DEFAULT NULL,
+    _newUser        BOOLEAN             DEFAULT FALSE
 )
-RETURNS VOID
+RETURNS INTEGER -- Returns the appUserKey
 AS $$
     DECLARE _appUserKey INTEGER;
 
@@ -29,28 +28,28 @@ AS $$
    Else get appUserKey, and Update ALL
    Info on that row with new, non-null info */ 
 BEGIN
-    raise notice 'Values: %, %, %, %, %', _username, _email, _password, _lastName, _firstName;
     CASE
-        WHEN _newUser = true
-            THEN PERFORM insertIntoAppUser(_username, _email, _password,
-                                           _lastName, _firstName );
-        WHEN _newUser = false 
-            THEN  _appUserKey = (SELECT appUserKey FROM AppUser 
-                                 WHERE(_userName IS NOT NULL AND username = _username) OR (_email IS NOT NULL AND email = _email));
-            raise notice 'Value: %', _appUserKey;
+        WHEN _newUser = true THEN
+            RETURN insertIntoAppUser(_username, _email, _password, _lastName, _firstName);
+        WHEN _newUser = false THEN
+            _appUserKey = (SELECT appUserKey
+                           FROM AppUser 
+                           WHERE (_userName IS NOT NULL AND username = _username)
+                              OR (_email IS NOT NULL AND email = _email));
+
             UPDATE AppUser
             SET email = COALESCE(_email, email),
                 password = COALESCE(_password, password),
                 lastName = COALESCE(_lastName, lastName),
                 firstName = COALESCE(_firstName, firstName)
-            WHERE appUserKey = _appUserKey; 
+            WHERE appUserKey = _appUserKey;
+            RETURN _appUserKey;
     END CASE; 
 
+    RETURN NULL;
 
 END;
 $$ LANGUAGE plpgsql;
 
---SELECT * FROM appUser;
---SELECT updateAppUser(TRUE, 'testUser3@test.edu', 'password', 'User3', 'Test3');
-SELECT updateAppUser (FALSE,'amazingHumanPerson', 'aghose@buffalo.edu', 'password', 'Ghose', 'Akash');
+SELECT updateAppUser ('amazingHumanPerson', 'aghose@buffalo.edu', 'password', 'Ghose', 'Akash');
 SELECT * FROM appUser;

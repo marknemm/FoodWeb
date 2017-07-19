@@ -36,11 +36,9 @@ export function logSqlQueryExec(query : string, args? : Array<any>) : void {
     
     // Print the arguments to the SQL query.
     if (args != null) {
-        console.log("\n");
         console.log("SQL Query Arguments: ");
         for (let i : number = 0; i < args.length; i++) {
-            console.log(i.toString() + "$: ");
-            console.log(args[i]);
+            console.log((i + 1).toString() + "$: " + args[i].toString());
         }
     }
 

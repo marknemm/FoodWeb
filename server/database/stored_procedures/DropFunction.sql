@@ -8,7 +8,7 @@ DECLARE
     i int;
     paramtext text;
 BEGIN
-FOR funcrow IN SELECT proargtypes FROM pg_proc WHERE proname = functionname LOOP
+FOR funcrow IN SELECT proargtypes FROM pg_proc WHERE proname = LOWER(functionname) LOOP
 
     --for some reason array_upper is off by one for the oidvector type, hence the +1
     numparameters = array_upper(funcrow.proargtypes, 1) + 1;
@@ -28,7 +28,7 @@ FOR funcrow IN SELECT proargtypes FROM pg_proc WHERE proname = functionname LOOP
         END IF;
     END LOOP;
 
-    EXECUTE 'DROP FUNCTION ' || functionname || '(' || paramtext || ');';
+    EXECUTE 'DROP FUNCTION ' || LOWER(functionname) || '(' || paramtext || ');';
     numfunctions = numfunctions + 1;
 
 END LOOP;

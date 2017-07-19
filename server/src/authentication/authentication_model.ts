@@ -1,7 +1,8 @@
 'use strict';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
 import { connect, query, Client, QueryResult } from '../database_help/connection_pool';
-import { hashPassword, HashPasswordInfo } from './password_hash_util';
+import { hashPassword, checkPassword } from './password_hash_util';
+import { isValidEmail, isValidPassword } from './user_info_criteria';
 
 /**
  * Container for primary App User identification info.
@@ -34,165 +35,135 @@ export class AuthenticationModel {
      * @return A promise where on success it will provide the primary AppUser information of the logged in user.
      */
     public authenticateAppUser(usernameOrEmail : string, password : string) : Promise<AppUserPrimaryInfo> {
-        let connection: Client;
         let self: AuthenticationModel = this; // Needed because this inside the then callbacks will not refer to AuthenticationModel!
         
         // First grab a connection so that we can exectue multiple queries with it.
-        return connect().then((client : Client) => {
-            connection = client;
-            return self.getSaltForAppUser(connection, usernameOrEmail)
-        })
-        .then((getSaltQueryResult : QueryResult) => {
-            return self.hashPassword(usernameOrEmail, password, getSaltQueryResult);
-        })
-        .then((hashPasswordInfo: HashPasswordInfo) => {
-            return self.loginWithHashedPassword(connection, usernameOrEmail, hashPasswordInfo);
-        })
-        .then((loginQueryResult: QueryResult) => {
-            return self.handleLoginResult(connection, loginQueryResult);
-        })
-        .catch((err : Error) => {
-            return self.handleAuthenticateAppUserErr(connection, err);
-        });
+        return this.getAppUserInfo(usernameOrEmail)
+            .then((getAppUserInfoResult : QueryResult) => {
+                return self.checkPassword(usernameOrEmail, password, getAppUserInfoResult);
+            })
+            .catch((err : Error) => {
+                return self.handleAuthenticateAppUserErr(err);
+            });
     }
 
     /**
      * Gets the salt stored in the database for a given AppUser with username or email.
-     * @param connection: The database connection.
      * @param usernameOrEmail: The username or email of the user to get the salt for.
      * @return A promise with the query result. The query result should simply contain one row with a salt member.
      */
-    private getSaltForAppUser(connection: Client, usernameOrEmail: string): Promise<QueryResult> {
-        let queryString : string = 'SELECT salt FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1';
+    private getAppUserInfo(usernameOrEmail: string): Promise<QueryResult> {
+        let queryString : string = 'SELECT appUserKey, username, email, password FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1';
         let queryArgs : Array<string> = [usernameOrEmail];
-
-        return connection.query(queryString, queryArgs);
+        logSqlQueryExec(queryString, queryArgs);
+        return query(queryString, queryArgs);
     }
 
     /**
      * 
      * @param usernameOrEmail The username or the email of the user that the password is being hashed for.
      * @param password The plain text password that is to be hashed.
-     * @param getSaltQueryResult The query result that on success should contain a single row with one salt member.
-     * @return A promise that on success will give a Hash Password Info object (which contains the hashed password and the salt used for hashing).
+     * @param getAppUserInfoResult The query result that on success should contain a single row with the AppUser primary info for a given email/username.
+     * @return A promise that on success will give a string containing the primary app user info.
      */
-    private hashPassword(usernameOrEmail: string, password: string, getSaltQueryResult: QueryResult): Promise<HashPasswordInfo> {
+    private checkPassword(usernameOrEmail: string, password: string, getAppUserInfoResult: QueryResult): Promise<AppUserPrimaryInfo> {
+        logSqlQueryResult(getAppUserInfoResult.rows);
+
         // We should only be getting one row back with the salt!
-        if (getSaltQueryResult.rowCount === 1) {
-            return hashPassword(password, getSaltQueryResult.rows[0].salt);
+        if (getAppUserInfoResult.rowCount === 1) {
+            let appUserKey: number = getAppUserInfoResult.rows[0].appuserkey;
+            let username: string = getAppUserInfoResult.rows[0].username;
+            let email: string = getAppUserInfoResult.rows[0].email;
+            let hashPassword: string = getAppUserInfoResult.rows[0].password;
+
+            return checkPassword(password, hashPassword)
+                .then((isMatch: boolean) => {
+                    return new AppUserPrimaryInfo(appUserKey, username, email);
+                })
+                .catch((err: Error) => {
+                    return Promise.reject(new Error('Password is incorrect'));
+                });
         }
         // Otherwise, we could not find an AppUser with username or email in database.
         else {
-            logSqlQueryResult(getSaltQueryResult.rows);
-            return Promise.reject('AppUser could not be found with username or email: ' + usernameOrEmail);
-        }
-    }
-
-    /**
-     * Final step in authentication/login. Sends username/email and hashed password to the database to compare with what is on record.
-     * @param connection The database connection.
-     * @param usernameOrEmail The username or email of the AppUser that is logging in.
-     * @param hashPasswordInfo The Hash Password Info that should contain the hashed password for the user that is logging in.
-     * @return A promise that will contain the result of the login query. On success, the query result will conain a single row with primary indentification info for the user.
-     *         On failure, there will be no rows in the result.
-     */
-    private loginWithHashedPassword(connection: Client, usernameOrEmail: string, hashPasswordInfo: HashPasswordInfo): Promise<QueryResult> {
-        let queryString : string = 'SELECT login($1, $2)';
-        let queryArgs : Array<string> = [usernameOrEmail, hashPasswordInfo.hashedPassword];
-        return connection.query(queryString, queryArgs);
-    }
-
-    /**
-     * Analyzes and handles the final result of the login/authentication.
-     * @param connection The database connection. Must finally be released here because we are done with it now!
-     * @param loginQueryResult The result of the login SP call. If successful, then one row will be returned with the primary indentification info for the user.
-     *                         On failure, there will be no rows in the result.
-     * @return A promise containing the primary identification info for the user on success. On failure, a promise rejection is returned.
-     */
-    private handleLoginResult(connection: Client, loginQueryResult: QueryResult): Promise<AppUserPrimaryInfo> {
-        connection.release();
-        // If we get back single row of primary AppUser info, then login is a success.
-        if (loginQueryResult.rowCount === 1) {
-            return Promise.resolve(new AppUserPrimaryInfo(loginQueryResult.rows[0].appUserKey,
-                                                          loginQueryResult.rows[0].username,
-                                                          loginQueryResult.rows[0].email));
-        }
-        // Otherwise, the hashed password did not match, and login was a failure.
-        else {
-            return Promise.reject('Password is incorrect.');
+            return Promise.reject(new Error('AppUser could not be found with username or email: ' + usernameOrEmail));
         }
     }
 
     /**
      * Handles any errors with the authentication/login process.
-     * @param connection The database connection. Must be released on error!
      * @param err The error messgae and stack trace.
      * @return A promoise rejection.
      */
-    private handleAuthenticateAppUserErr(connection: Client, err: Error): Promise<AppUserPrimaryInfo> {
-        // We have a connection, so we need to release it.
-        if (connection != null) {
-            connection.release();
-        }
+    private handleAuthenticateAppUserErr(err: Error): Promise<AppUserPrimaryInfo> {
         console.log(err);
         // Finally return general login error if te login fails.
-        return Promise.reject('Login information is incorrect');
+        return Promise.reject(new Error('Login information is incorrect'));
     }
 
-    public SignUpUser(email, password, username, lastname, firstname) {
-        return new Promise(function(resolve, reject) {
-            if (this.isValidEmail(email) && this.isValidPassword(password)){
-                // Grab a connection. This comes in the form of a Promise.
-                connect().then(client => {
-                    // Grabbing a connection succeeded. Now we can execute a query using a callback function.
-                    // The client is the result of the promise. It is just something we can run sql on.
-                    /**
-                     * The var queryString and queryArgs are just there for beauty purposes, but the sytax for 
-                     * writting sql code is through client.query, and you pass in the args as a second parameter
-                     * while using the $1, $2... as placeholders
-                     */
-                    var queryString = 'SELECT * FROM insertIntoAppUser($1, $2, $3, $4, $5, $6);';
-                    var hashedPassword = hashPassword(password)
-                    var queryArgs = [email, hashedPassword, salt, username, lastname, firstname];
+    /**
+     * Performs the signup for a new user.
+     * @param email The new user's email.
+     * @param password The new user's plain text password.
+     * @param username The new user's username.
+     * @param lastName The new user's last name.
+     * @param firstName The new user's first name.
+     * @return A promise that on success will contain the primary AppUser information.
+     */
+    public SignUpUser(email: string, password: string, username: string, lastName: string, firstName: string): Promise<AppUserPrimaryInfo> {
+        let self = this; // Needed because this inside the then callbacks will not refer to AuthenticationModel!
 
-                    client.query(queryString, queryArgs).then(result => {
-                        console.log('it worked!');
-                        resolve("It worked!");
-                        console.log(result);
-                    })
-                    .catch(err => {
-                        reject(err);
-                        console.log('Error with query: ' + queryString);
-                        console.log(err);
-                    });
-                })
-                .catch(err => {
-                    reject(err);
-                    console.log(err);
-                });
-            }
-            else {
-                reject(new Error("Invalid email or password"));
-            };
-        });         
+        // First validate new email and password.
+        if (!isValidEmail) {
+            return Promise.reject(new Error('Signup failed. Invalid email provided.'));
+        }
+        if (!isValidPassword) {
+            return Promise.reject(new Error('Signup failed. Invalid password provided.'));
+        }
+
+        // Then generate password hash and insert new AppUser data into the database.
+        // TODO: write SQL function that seperately checks if the given username or email already exists!!!
+        return hashPassword(password)
+            .then((hashedPassword: string) => {
+                return self.insertIntoAppUser(email, hashedPassword, username, lastName, firstName);
+            })
+            .then((insertQueryResult: QueryResult) => {
+                return self.handleSignUpUserResult(email, username, insertQueryResult);
+            })
+            .catch((err: Error) => {
+                console.log(err);
+                return Promise.reject(new Error('Signup failed. Provided Username and/or Email are not unique.'));
+            });
     } // end signUpUser
 
-    //currently just checks if email contains an @
-    private isValidEmail(email){
-        var length = email.length;
-        for(var i = 0; i < length; i++) {
-        if(email[i] == '@')
-            return true;
-        }
-        return false;
+    /**
+     * Inserts the new user's data into the AppUser table, completing the signup process in the database.
+     * @param email The eamil of the user that is signing up.
+     * @param hashedPassword The generated hashed password (with salt included).
+     * @param username The username of the user that is signing up.
+     * @param lastName The last name of the user that is signing up.
+     * @param firstName The first name of the user that is signing up.
+     */
+    private insertIntoAppUser(email: string, hashedPassword: string, username: string, lastName: string, firstName: string): Promise<QueryResult> {
+        let queryString : string = 'SELECT insertIntoAppUser($1, $2, $3, $4, $5)';
+        let queryArgs : Array<string> = [username, email, hashedPassword, lastName, firstName];
+        logSqlQueryExec(queryString, queryArgs);
+        return query(queryString, queryArgs);
     }
 
-    private isValidPassword(password){
-        var length = password.length;
-        var HasUpper = false;       
-        if(length > 5){
-            return true;
+    /**
+     * Analyzes and hndles the result of the insert into AppUser query. Generates the final result of the signup operation.
+     * @param email The email of the user that is signing up.
+     * @param username The username of the user that is signing up.
+     * @param insertQueryResult The result of the insert of the new user into the AppUser table.
+     */
+    private handleSignUpUserResult(email: string, username: string, insertQueryResult: QueryResult): Promise<AppUserPrimaryInfo> {
+        logSqlQueryResult(insertQueryResult.rows);
+        if (insertQueryResult.rows.length = 1) {
+            return Promise.resolve(new AppUserPrimaryInfo(insertQueryResult.rows[0]['insertintoappuser'], username, email));
         }
-        return false;
+        else {
+            return Promise.reject(new Error('Signup failed. Provided Username and/or Email are not unique.'));
+        }
     }
 };
