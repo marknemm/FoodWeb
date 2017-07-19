@@ -78,9 +78,9 @@ export class AuthenticationModel {
 
             return checkPassword(password, hashPassword)
                 .then((isMatch: boolean) => {
-                    return new AppUserPrimaryInfo(appUserKey, username, email);
-                })
-                .catch((err: Error) => {
+                    if (isMatch) {
+                        return Promise.resolve(new AppUserPrimaryInfo(appUserKey, username, email));
+                    }
                     return Promise.reject(new Error('Password is incorrect'));
                 });
         }

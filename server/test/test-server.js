@@ -43,7 +43,7 @@ describe('Authentication', function() {
     it('should login', function(done) {
         chai.request(server)
             .post('/authentication/login')
-            .send({ username: 'marknemm', password: 'MyPassword1' })
+            .send({ username: 'marknemm', password: 'MyPasword' })
             .end(function(err, res) {
                 console.log('Result of /authentication/login');
                 console.log(res.body);
