@@ -50,7 +50,9 @@ export class AuthenticationController {
      * @param result //todo
      */
     public logout(request: Request, result: Response): void {
-        //TODO
+        request.session.destroy(function(){
+            result.redirect('/');
+        });
     }
 
     /**
