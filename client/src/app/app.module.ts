@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injectable } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { HttpModule } from '@angular/http'
 import { NgbModule, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
@@ -14,6 +15,8 @@ import { LoginComponent } from './authentication/login.component';
 import { DonorComponent } from './donor/donor.component';
 import { ReceiverComponent } from './receiver/receiver.component';
 import { SignupComponent } from './authentication/signup.component'
+import {ImageCropperComponent } from 'ng2-img-cropper';
+import { DateFormatterPipe } from "./shared/date-formatter.pipe"
 
 const appRoutes:Routes = [
   /*{
@@ -48,7 +51,9 @@ const appRoutes:Routes = [
     LoginComponent,
     DonorComponent,
     ReceiverComponent,
-    SignupComponent
+    SignupComponent,
+    ImageCropperComponent,
+    DateFormatterPipe
   ],
   imports: [
     NgbModule.forRoot(),
@@ -62,7 +67,7 @@ const appRoutes:Routes = [
   entryComponents: [
     LoginComponent
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ],
+  providers: [ DateFormatterPipe ]
 })
 export class AppModule { }

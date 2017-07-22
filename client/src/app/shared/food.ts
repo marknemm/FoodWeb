@@ -1,13 +1,14 @@
+import { NgbDateStruct } from "@ng-bootstrap/ng-bootstrap";
+
 export class Food {
 
-  constructor(
-    public id?: number,
-    public name?: string,
-    public quantity?: string,
-    public location?: string,
-    public pornp?: string,
-    public rornr?: string){
+  constructor (
+    public foodType?: string,
+    public perishable?: string,
+    public foodDescription?: string,
+    public expirationDate?: NgbDateStruct,
+    public image?: any
+  )
+  {}
 
-  }
-
-}
+};

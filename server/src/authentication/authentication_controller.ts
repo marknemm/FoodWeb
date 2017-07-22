@@ -14,6 +14,28 @@ export class AuthenticationController {
     }
 
     /**
+     * Checks if the user is logged in.
+     * @param request The request made to the server. Should contain session info if user is logged in.
+     */
+    public reAuthenticate(request: Request, response: Response): void {
+        response.setHeader('Content-Type', 'application/json');
+        if (request.session['appUserKey'] != null) {
+            response.send({ success: true,
+                            message: 'Logged in.',
+                            appUserKey: request.session['appUserKey'],
+                            username : request.session['username'],
+                            email: request.session['email']});
+        }
+        else {
+            response.send({ success: false,
+                            message: 'Not logged in.',
+                            appUserKey: null,
+                            username : null,
+                            email: null});
+        }
+    }
+
+    /**
      * Handles login request for a given user.
      * @param request The request from the client. Should contain login credentials.
      * @param response The response to send back to the client. 

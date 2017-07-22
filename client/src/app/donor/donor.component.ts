@@ -1,41 +1,90 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ImageCropperComponent, CropperSettings } from 'ng2-img-cropper';
 
 import { ValidationService } from '../shared/validation.service';
 import { Food } from '../shared/food';
+import { DonorPrimaryService } from "./donor-primary.service";
+import { DateFormatterPipe } from "../shared/date-formatter.pipe"
 
 @Component({
   moduleId: module.id,
   selector: 'donor',
-  templateUrl: 'donor.component.html'
+  templateUrl: 'donor.component.html',
+  providers: [ DonorPrimaryService ],
+  styleUrls: [ 'donor.component.css' ]
 })
 export class DonorComponent implements OnInit {
   foodForm: FormGroup;
   model: Food;
-  submittedModel: Food;
-  pornp: string[];
-  rornr: string[];
-  submitted: boolean = false;
+  perishableOptions: string[];
+  foodTypeOptions: string[];
+  forceValidation: boolean;
+  submitted: boolean;
+  dispUrl: string;
 
-  constructor(private formBuilder: FormBuilder) { }
+  cropperSettings: CropperSettings;
+
+  constructor(private formBuilder: FormBuilder,
+              private donorPrimaryService: DonorPrimaryService,
+              private element: ElementRef,
+              private dateFormatter: DateFormatterPipe)
+  {
+    // Want to force validators to process on submit. Non-text fields will only validate on submit too!
+    this.forceValidation = false;
+    this.submitted = false;
+
+    this.cropperSettings = new CropperSettings();
+    this.cropperSettings.width = 100;
+    this.cropperSettings.height = 100;
+    this.cropperSettings.croppedWidth =100;
+    this.cropperSettings.croppedHeight = 100;
+    this.cropperSettings.canvasWidth = 400;
+    this.cropperSettings.canvasHeight = 300;
+
+    this.model = new Food();
+    this.perishableOptions = ['Perishable', 'Not Perishable'];
+    this.foodTypeOptions = ['Grain', 'Meat', 'Fruit', 'Vegetable', 'Drink'];
+    this.model.image = {};
+  }
 
   ngOnInit() {
-      this.model = new Food(15, 'Spaghetti', '1', 'Bassett Park', 'Perishable', 'Not Refrigerated');
-
-      this.pornp = ['Perishable', 'Not Perishable'];
-      this.rornr = ['Refrigerated', 'Not Refrigerated'];
-
       this.foodForm = this.formBuilder.group({
-        name:     [this.model.name, Validators.required],
-        quantity: [this.model.quantity, Validators.required],
-        location:    [this.model.location, Validators.required],
-        pornp:    [this.model.pornp, Validators.required],
-        rornr: [this.model.rornr, Validators.required]
+        foodType:         [this.model.foodType, Validators.required],
+        perishable:       [this.model.perishable, Validators.required],
+        foodDescription:  [this.model.foodDescription, Validators.required],
+        expirationDate:   [this.model.expirationDate, Validators.required]
       });
   }
 
+  onFileChange(event) {
+    var files = event.srcElement.files;
+    this.model.image = event.srcElement.files[0];
+    console.log(files);
+  }
+
+  shouldFireRequireValidation(validField): boolean {
+    return validField.errors != null && validField.errors.required && (validField.dirty || this.forceValidation);
+  }
+
   onSubmit({ value, valid }: { value: Food, valid: boolean }) {
-    this.submitted = true;
-    this.submittedModel = value;
+    this.forceValidation = true;
+    if (value.foodType != null && value.foodDescription != null && value.perishable != null && value.expirationDate != null) {
+      this.model.foodType = value.foodType;
+      this.model.foodDescription = value.foodDescription;
+      this.model.perishable = value.perishable;
+      this.model.expirationDate = value.expirationDate;
+      var observer = this.donorPrimaryService.addFoodListing(this.model);
+      observer.subscribe(
+        data => {
+          // Fill our model with the JSON result and see if Login is a success.
+          console.log(data);
+        },
+        error => {
+          console.log(error);
+          // Shouldn't happen!
+        }
+      );
+    }
   }
 }
