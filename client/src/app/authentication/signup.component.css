@@ -1,0 +1,35 @@
+.layout{
+    display: table;
+    border: 1px solid gray;
+    border-radius: 25px;
+    width: 385px;
+    margin: auto;
+    margin-top: 50px;
+    padding: 2px;
+
+}
+
+.rowLayout{
+    display: table-row;
+    padding: 2px; 
+}
+
+.tableCell{
+    display: table-cell;
+    
+}
+
+h2{
+    text-align: center;
+
+}
+
+input {
+    display: block;
+    margin: 0 auto;
+    width: 200px;
+}
+
+form{
+    text-align: center;
+}

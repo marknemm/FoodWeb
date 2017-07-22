@@ -1,3 +1,32 @@
-<p>
-  signup works!
-</p>
+<div class="layout" ng-controller="myCtrl">
+              <br/>
+                <h2>Create your account</h2>
+                <hr/>
+                <form #signupForm="ngForm" (ngSubmit)="onSubmit" >
+                <br/>
+                    Enter Your First Name:<br/>
+                    <input type="text" name="firstName" required autofocus autocomplete="on" #firstName [(ngModel)]="model.firstName"> 
+                    <br/>
+
+                    Enter your Last Name:<br/> 
+                    <input type="text" name="lastName" required autocomplete="on" #lastName>
+                    <br/>
+
+                    Enter your email address:<br/>
+                    <input type="text" name="email" required autocomplete="on" #email>
+                    <br/>
+
+                    Create a username:<br/> 
+                    <input type="text" name="username" required autocomplete="on" #username>
+                    <br/>
+
+                    Create a password:<br/> 
+                    <input type="password" name="password" required #password>
+                    <br/>
+
+                    <button type="Submit" ng-click="signup(firstName, lastName, email, username, password)">Submit</button>
+                    <br/>
+                    </form>
+  
+              </div>
+

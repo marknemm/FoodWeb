@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injectable } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { HttpModule } from '@angular/http'
-import { NgbModule, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,10 +14,11 @@ import { FooterComponent } from './footer/footer.component';
 import { LoginComponent } from './authentication/login.component';
 import { DonorComponent } from './donor/donor.component';
 import { ReceiverComponent } from './receiver/receiver.component';
-import { SignupComponent } from './authentication/signup.component'
 import {ImageCropperComponent } from 'ng2-img-cropper';
 import { DateFormatterPipe } from "./shared/date-formatter.pipe"
 
+import { SignupComponent } from './authentication/signup.component';
+import { SignupService } from './authentication/signup.service';
 const appRoutes:Routes = [
   /*{
     path: 'login', // This can be both modal popup and its own page!
@@ -39,6 +40,11 @@ const appRoutes:Routes = [
   {
     path: 'receiver',
     component: ReceiverComponent
+  },
+
+  {
+    path: 'signup',
+    component: SignupComponent
   }
 ]
 
@@ -62,12 +68,13 @@ const appRoutes:Routes = [
     BootstrapModalModule,
     HttpModule,
     FormsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
   entryComponents: [
     LoginComponent
   ],
   bootstrap: [ AppComponent ],
-  providers: [ DateFormatterPipe ]
+  providers: [ DateFormatterPipe, SignupService ]
 })
 export class AppModule { }
+
