@@ -14,6 +14,7 @@
             <li class="nav-item"><a id='loginButton' class='nav-link' (click)="showLogin()">Login</a></li>
             <!--<li *ngIf="localStorage.getItem('username') === null" class="nav-item"><a id='loginButton' class='nav-link' (click)="showLogin()">Login</a></li>
             <li *ngIf="localStorage.getItem('username') !== null" class="nav-item"><a class='nav-link'>{{localStorage.getItem('username')}}</a></li>-->
+            <li class="nav-item"><a id='signupButton' class='nav-link' [routerLink]="['/signup']">Sign Up</a></li>
         </ul>
     </div>
 </nav>
