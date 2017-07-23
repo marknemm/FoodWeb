@@ -3,6 +3,11 @@ import { connect, query, Client, QueryResult } from '../database_help/connection
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
 require('dotenv').config({ path: __dirname + '/../../../.env' });
 var AWS = require('aws-sdk');
+var config = new AWS.Config({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
+});
 
 
 export class DonorSubmission {
@@ -57,12 +62,6 @@ export class DonorModel {
     private writeImgToCDN(image: string, imageName: string): Promise<void> {
         // Configure AWS.
         return new Promise(function(resolve, reject) {
-            var config = new AWS.Config({
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-                region: process.env.AWS_REGION
-            });
-
             var s3Bucket = new AWS.S3({
                 params: { Bucket: process.env.AWS_BUCKET_NAME }
             });

@@ -1,32 +1,34 @@
 <div class="layout" ng-controller="myCtrl">
-              <br/>
-                <h2>Create your account</h2>
-                <hr/>
-                <form #signupForm="ngForm" (ngSubmit)="onSubmit" >
-                <br/>
-                    Enter Your First Name:<br/>
-                    <input type="text" name="firstName" required autofocus autocomplete="on" #firstName [(ngModel)]="model.firstName"> 
-                    <br/>
+<br/>
+  <h2>Create your account</h2>
+  <hr/>
+  <form ngNativeValidate (submit)="signupUser($event)" >
+  <br/>
+      Enter Your First Name:<br/>
+      <input type="text" name="firstName" [(ngModel)]="signupModel.firstName" required autofocus autocomplete="on"> 
+      <br/>
 
-                    Enter your Last Name:<br/> 
-                    <input type="text" name="lastName" required autocomplete="on" #lastName>
-                    <br/>
+      Enter your Last Name:<br/> 
+      <input type="text" name="lastName" [(ngModel)]="signupModel.lastName" required autocomplete="on" #lastName>
+      <br/>
 
-                    Enter your email address:<br/>
-                    <input type="text" name="email" required autocomplete="on" #email>
-                    <br/>
+      Enter your email address:<br/>
+      <input type="text" name="email" [(ngModel)]="signupModel.email" required autocomplete="on" #email>
+      <br/>
 
-                    Create a username:<br/> 
-                    <input type="text" name="username" required autocomplete="on" #username>
-                    <br/>
+      Create a username:<br/> 
+      <input type="text" name="username" [(ngModel)]="signupModel.username" required autocomplete="on" #username>
+      <br/>
 
-                    Create a password:<br/> 
-                    <input type="password" name="password" required #password>
-                    <br/>
+      Create a password:<br/> 
+      <input type="password" name="password" [(ngModel)]="signupModel.password" required #password>
+      <br/>
 
-                    <button type="Submit" ng-click="signup(firstName, lastName, email, username, password)">Submit</button>
-                    <br/>
-                    </form>
-  
-              </div>
+      <button type="submit">Sign Up</button>
+      <br/>
+  </form>
+
+  <div *ngIf="signupModel.signupError != null" id="signupErr">{{signupModel.signupError}}</div>
+
+</div>
 

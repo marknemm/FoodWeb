@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogComponent, DialogService } from "ng2-bootstrap-modal";
 import { Router } from '@angular/router';
-import { LoginService } from './login-service.service';
+import { LoginService } from './login.service';
 import { LoginModel } from './login-model'
 
 @Component({
@@ -12,7 +12,7 @@ import { LoginModel } from './login-model'
 })
 export class LoginComponent extends DialogComponent<null, boolean> {
 
-  private _loginModel : LoginModel;
+  public loginModel : LoginModel;
 
   constructor (
     public dialogService: DialogService,
@@ -20,20 +20,19 @@ export class LoginComponent extends DialogComponent<null, boolean> {
   )
   {
     super(dialogService);
-    this._loginModel = new LoginModel();
+    this.loginModel = new LoginModel();
   }
 
   loginUser(event) {
     event.preventDefault();
-    console.log(event);
 
-    var observer = this.authenticationService.login(this.loginModel.username, this.loginModel.password);
+    var observer = this.authenticationService.login(this.loginModel);
     // This is the promise we get
     observer.subscribe(
       data => {
         // Fill our model with the JSON result and see if Login is a success.
-        var loginSuccess : boolean = this.loginModel.processLoginResult(data);
-        if (loginSuccess) this.close();
+        this.loginModel.processLoginResult(data.success, data.appUserKey, data.username);
+        if (data.success) this.close();
       },
       error => {
         console.log(error);
@@ -42,9 +41,5 @@ export class LoginComponent extends DialogComponent<null, boolean> {
     );
 
     // TODO: We should put some loading symbol in login popup here!!!
-  }
-
-  get loginModel() : LoginModel {
-    return this._loginModel;
   }
 }

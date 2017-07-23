@@ -25,7 +25,7 @@ export class DonorPrimaryService {
         var headers = new Headers({
             'Content-Type': 'application/json'
         });
-        var observer: Observable<Response> = this.http.post('/donor/addFoodListing', JSON.stringify(donorSubmission), {headers: headers});
+        var observer: Observable<Response> = this.http.post('/donor/addFoodListing', JSON.stringify(donorSubmission), {headers: headers, withCredentials: true});
         return observer.map((response : Response) => {
             console.log(response);
             let feed = response.json();

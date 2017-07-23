@@ -71,9 +71,9 @@ export class AuthenticationController {
      * @param request //todo
      * @param result //todo
      */
-    public logout(request: Request, result: Response): void {
-        request.session.destroy(function(){
-            result.redirect('/');
+    public logout(request: Request, response: Response): void {
+        request.session.destroy(function() {
+            response.end();
         });
     }
 

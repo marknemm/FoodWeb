@@ -49,7 +49,7 @@ app.post('/authentication/login', authenticationController.login.bind(authentica
 app.post('/authentication/signup', authenticationController.signup.bind(authenticationController));
 
 //Handle /authentication/logout route by passing it off to LogoutController
-app.post('/authentication/logout', authenticationController.logout.bind(authenticationController));
+app.get('/authentication/logout', authenticationController.logout.bind(authenticationController));
 
 // Handle /donor/addFoodListing route by passing off to DonorController.
 app.post('/donor/addFoodListing', donorController.addFoodListing.bind(donorController));

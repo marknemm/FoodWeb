@@ -14,16 +14,17 @@ import { FooterComponent } from './footer/footer.component';
 import { LoginComponent } from './authentication/login.component';
 import { DonorComponent } from './donor/donor.component';
 import { ReceiverComponent } from './receiver/receiver.component';
-import {ImageCropperComponent } from 'ng2-img-cropper';
+import { ImageCropperComponent } from 'ng2-img-cropper';
 import { DateFormatterPipe } from "./shared/date-formatter.pipe"
+import { AuthGaurdService } from './authentication/auth-gaurd.service'
 
 import { SignupComponent } from './authentication/signup.component';
-import { SignupService } from './authentication/signup.service';
-const appRoutes:Routes = [
-  /*{
+
+const appRoutes: Routes = [
+  {
     path: 'login', // This can be both modal popup and its own page!
     component: LoginComponent
-  },*/
+  },
   { 
     path: '',
     pathMatch:'full', 
@@ -35,13 +36,14 @@ const appRoutes:Routes = [
   },
   {
     path: 'donor',
-    component: DonorComponent
+    component: DonorComponent,
+    canActivate: [ AuthGaurdService ]
   },
   {
     path: 'receiver',
-    component: ReceiverComponent
+    component: ReceiverComponent,
+    canActivate: [ AuthGaurdService ]
   },
-
   {
     path: 'signup',
     component: SignupComponent
@@ -74,7 +76,10 @@ const appRoutes:Routes = [
     LoginComponent
   ],
   bootstrap: [ AppComponent ],
-  providers: [ DateFormatterPipe, SignupService ]
+  providers: [ 
+    DateFormatterPipe,
+    AuthGaurdService
+  ]
 })
 export class AppModule { }
 
