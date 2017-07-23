@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.use(express.static(clientBuildDir));
 app.use(session({ 
   secret: 'xefbwefiefw',
-  cookie: { maxAge: 60000 }, // 1 hour.
+  cookie: { maxAge: 2000000 }, // Alot.
   resave: false,
   saveUninitialized: false
 }));
