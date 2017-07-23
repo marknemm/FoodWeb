@@ -24,7 +24,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-app.set('port', (process.env.NODE_PORT || 5000));
+app.set('port', (process.env.PORT || 5000));
 module.exports = app;
 // Make sure that we can locate our environmental variable (.env) file!
 require('dotenv').config({ path: __dirname + '/../../.env' });

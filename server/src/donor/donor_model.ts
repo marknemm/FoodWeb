@@ -34,7 +34,7 @@ export class DonorModel {
     }
 
     //interprets the JSON data recieved from the frontend and adds information recieved to the FoodListing table.
-    public intepretData(donorSubmission: DonorSubmission): Promise<void> {
+    public intepretData(donorSubmission: DonorSubmission): Promise<any> {
         var self = this;
         var imageUrl = null;
 
@@ -68,7 +68,7 @@ export class DonorModel {
         });
     }
 
-    private writeImgToCDN(image: string, imageName: string): Promise<void> {
+    private writeImgToCDN(image: string, imageName: string): Promise<any> {
         // Configure AWS.
         return new Promise(function(resolve, reject) {
             var s3Bucket = new AWS.S3({
