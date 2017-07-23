@@ -1,1 +1,1 @@
-web: node --debug server/dist/server.js
+web: node server/dist/server.js
