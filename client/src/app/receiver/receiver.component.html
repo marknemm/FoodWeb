@@ -91,7 +91,7 @@
       <hr>
       <div class="list-group" style="overflow-y:auto">
         <a *ngFor="let model of models" class="list-group-item">
-          <img src="{{model.imgUrl}}" alt="No Picture" class="img-thumbnail" style="width:7vw;height:7vw">
+          <img [src]="model.imgUrl" alt="No Picture" class="img-thumbnail" style="width:7vw;height:7vw">
           <div>
             <h4 style="margin-left:1vw">{{model.name}}
               <button style="float:right" class="btn btn-primary btn-sm" (click)="selectItem(content, model)">

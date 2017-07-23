@@ -54,6 +54,8 @@ app.get('/authentication/logout', authenticationController.logout.bind(authentic
 // Handle /donor/addFoodListing route by passing off to DonorController.
 app.post('/donor/addFoodListing', donorController.addFoodListing.bind(donorController));
 
+app.post('/receiver/getFoodListings', receeverController.getFoodListings.bind(receeverController));
+
 
 app.get('*', function (request, response) {
     response.sendFile(path.join(clientBuildDir + '/index.html'));

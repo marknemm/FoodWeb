@@ -16,22 +16,24 @@ export class DonorController {
     }
 
     public addFoodListing(request: Request, response: Response) {
+        response.setHeader('Content-Type', 'application/json');
+
         var donorSubmission: DonorSubmission = new DonorSubmission(
             request.session['appUserKey'],
             request.body.foodType,
             request.body.perishable,
             request.body.foodDescription,
-            request.body.expirationDate,
+            request.body.expireDate,
             request.body.image,
             null // The model will generate the image name and fill this for now!
         );
 
         var promise = this.donorModel.intepretData(donorSubmission);
         promise.then(function() {
-            response.send('Submitted!');
+            response.send({ success: true, message: 'Food listing added successfully' });
         })
-        .catch(function(){
-            response.send('Could not submit');
+        .catch(function() {
+            response.send({ success: false, message: 'Error: food listing add failed' });
         });
     }
 

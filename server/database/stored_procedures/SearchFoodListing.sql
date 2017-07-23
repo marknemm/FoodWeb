@@ -47,7 +47,7 @@ BEGIN
     FROM FoodListing
     INNER JOIN FoodType             ON FoodListing.foodTypeKey = FoodType.foodTypeKey
     INNER JOIN AppUser              ON FoodListing.postedByAppUserKey = AppUser.appUserKey
-    INNER JOIN DonorOrganization    ON AppUser.donorOrganizationKey = DonorOrganization.donorOrganizationKey
+    LEFT JOIN DonorOrganization     ON AppUser.donorOrganizationKey = DonorOrganization.donorOrganizationKey
     WHERE (_foodListingKey IS NULL          OR FoodListing.foodListingKey = _foodListingKey)
       -- We will translate the list of food type descriptions into integer keys for lookup efficiency.
       AND (_foodTypes IS NULL               OR FoodType.foodTypeKey = ANY (SELECT foodTypeKey

@@ -11,7 +11,7 @@ export class DonorPrimaryService {
     constructor(private http: Http,
                 private dateFormatter: DateFormatterPipe) {}
 
-    addFoodListing(foodListing: Food) {
+    addFoodListing(foodListing: Food): Observable<boolean> {
         // This is uniform with object on Server. In future, will make a shared directory where these class definitions can uniformly reside!
         var donorSubmission: DonorSubmission = new DonorSubmission(
             null,
@@ -28,11 +28,7 @@ export class DonorPrimaryService {
         var observer: Observable<Response> = this.http.post('/donor/addFoodListing', JSON.stringify(donorSubmission), {headers: headers, withCredentials: true});
         return observer.map((response : Response) => {
             console.log(response);
-            let feed = response.json();
-            if (feed && feed.name) {
-                console.log('Got feed response: ' + feed.name);
-            }
-            return name;
+            return response.json().success;
         });
     }
 }

@@ -13,7 +13,7 @@ CREATE OR REPLACE FUNCTION addFoodListing
 )
 RETURNS VOID
 AS $$
-    DECLARE _expTimeStamp TIMESTAMP = to_timestamp(_expireDate, 'DD/MM/YYYY');
+    DECLARE _expTimeStamp TIMESTAMP = to_timestamp(_expireDate, 'MM/DD/YYYY');
     DECLARE _postDate TIMESTAMP = now();
     DECLARE _foodTypeKey INTEGER;
 BEGIN

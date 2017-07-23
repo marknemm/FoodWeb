@@ -1,1 +1,1 @@
-SELECT * FROM AppUser;
+SELECT * FROM FoodListing;

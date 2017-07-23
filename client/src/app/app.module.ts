@@ -41,8 +41,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'receiver',
-    component: ReceiverComponent,
-    canActivate: [ AuthGaurdService ]
+    component: ReceiverComponent
   },
   {
     path: 'signup',

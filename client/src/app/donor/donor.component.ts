@@ -45,7 +45,6 @@ export class DonorComponent implements OnInit {
     this.model = new Food();
     this.perishableOptions = ['Perishable', 'Not Perishable'];
     this.foodTypeOptions = ['Grain', 'Meat', 'Fruit', 'Vegetable', 'Drink'];
-    this.model.image = {};
   }
 
   ngOnInit() {
@@ -76,11 +75,10 @@ export class DonorComponent implements OnInit {
       this.model.expirationDate = value.expirationDate;
       var observer = this.donorPrimaryService.addFoodListing(this.model);
       observer.subscribe(
-        data => {
-          // Fill our model with the JSON result and see if Login is a success.
-          console.log(data);
+        (success: boolean) => {
+          this.submitted = true;
         },
-        error => {
+        (error: Error) => {
           console.log(error);
           // Shouldn't happen!
         }

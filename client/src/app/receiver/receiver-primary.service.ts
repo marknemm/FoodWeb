@@ -31,15 +31,15 @@ export class ReceiverPrimaryService {
     constructor(private http: Http) { }
     
     updateFeed(filterObj: Filters) {
-      var observer : Observable<Response> = this.http.post('/receiver/filter',
-      JSON.stringify({ filters: filterObj }))
+      var headers = new Headers({
+        'Content-Type': 'application/json'
+      });
+
+      var observer : Observable<Response> = this.http.post('/receiver/getFoodListings', JSON.stringify(filterObj), { headers: headers, withCredentials: true })
       return observer.map((response : Response) =>
         {
-          let feed = response.json();
-          if (feed && feed.name) {
-              console.log('Got feed response: ' + feed.name);
-          }
-          return name;
+          console.log(response.json());
+          return response.json();
         }
       );
     }

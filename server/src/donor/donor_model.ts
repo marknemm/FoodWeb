@@ -36,9 +36,14 @@ export class DonorModel {
     //interprets the JSON data recieved from the frontend and adds information recieved to the FoodListing table.
     public intepretData(donorSubmission: DonorSubmission): Promise<void> {
         var self = this;
+        var imageUrl = null;
 
-        donorSubmission.imageName = 'img-' + Date.now().toString();
-        var imageUrl = process.env.AWS_BUCKET_URL + donorSubmission.imageName;
+        // If we have an image form the Donor, then generate the name and URL for it before we create database entry.
+        if (donorSubmission.image != null) {
+            donorSubmission.imageName = 'img-' + Date.now().toString();
+            imageUrl = process.env.AWS_BUCKET_URL + donorSubmission.imageName;
+        }
+        
         var queryString = 'SELECT * FROM addFoodListing($1, $2, $3, $4, $5, $6);';
         var queryArgs = [donorSubmission.foodType,
                          donorSubmission.perishable,
@@ -51,7 +56,11 @@ export class DonorModel {
         return query(queryString, queryArgs)
         .then((result: QueryResult) => {
             logSqlQueryResult(result.rows);
-            return self.writeImgToCDN(donorSubmission.image, donorSubmission.imageName);
+            // If we have an image, then store it on AWS.
+            if (donorSubmission.image != null) {
+                return self.writeImgToCDN(donorSubmission.image, donorSubmission.imageName);
+            }
+            return Promise.resolve();
         })
         .catch((err: Error) => {
             console.log(err);
