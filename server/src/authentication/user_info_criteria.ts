@@ -1,11 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 
 // This function validates email addresses for signup. First it checks to see if an '@' and a '.' are present in the correct order.
 // Then it checks to see that the '@' is not the first or second character, there is at least a two character gap between '@' and '.',
 // and that the '.' is not the last character.
 // Returns boolean value.
-function isValidEmail(email) {
+export function isValidEmail(email: string): boolean) {
     var length = email.length;
     var atPos;
     var dotPos;
@@ -23,12 +21,11 @@ function isValidEmail(email) {
     }
     return false;
 }
-exports.isValidEmail = isValidEmail;
 
 // This function checks to see if the password length is at least 6, has at least one of each: lowercase, uppercase, digit, and special character.
 // Returns boolean value.
 
-function isValidPassword(password) {
+export function isValidPassword(password: string): boolean {
     var length = password.length;
     var hasUpper = /[A-Z]/.test(password);
     var hasLower = /[a-z]/.test(password);
@@ -53,5 +50,3 @@ function isValidPassword(password) {
     }
     return false;
 }
-exports.isValidPassword = isValidPassword;
-//# sourceMappingURL=C:/Users/IPA/Documents/Coding/ConnectFood-master/server/dist/authentication/user_info_criteria.js.map
