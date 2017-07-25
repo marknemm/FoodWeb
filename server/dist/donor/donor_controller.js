@@ -10,7 +10,7 @@ var DonorController = (function () {
     }
     DonorController.prototype.addFoodListing = function (request, response) {
         response.setHeader('Content-Type', 'application/json');
-        var donorSubmission = new donor_model_1.DonorSubmission(request.session['appUserKey'], request.body.foodType, request.body.perishable, request.body.foodDescription, request.body.expireDate, request.body.image, null // The model will generate the image name and fill this for now!
+        var donorSubmission = new donor_model_1.DonorSubmission(request.session['appUserKey'], request.body.foodType, request.body.perishable, request.body.foodDescription, request.body.expirationDate, request.body.image, null // The model will generate the image name and fill this for now!
         );
         var promise = this.donorModel.intepretData(donorSubmission);
         promise.then(function () {

@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ImageCropperComponent, CropperSettings } from 'ng2-img-cropper';
 
 import { ValidationService } from '../shared/validation.service';
@@ -16,13 +16,13 @@ import { DateFormatterPipe } from "../shared/date-formatter.pipe"
 })
 export class DonorComponent implements OnInit {
   foodForm: FormGroup;
-  model: Food;
   perishableOptions: string[];
   foodTypeOptions: string[];
   forceValidation: boolean;
   submitted: boolean;
   dispUrl: string;
 
+  image: string;
   cropperSettings: CropperSettings;
 
   constructor(private formBuilder: FormBuilder,
@@ -42,38 +42,27 @@ export class DonorComponent implements OnInit {
     this.cropperSettings.canvasWidth = 400;
     this.cropperSettings.canvasHeight = 300;
 
-    this.model = new Food();
     this.perishableOptions = ['Perishable', 'Not Perishable'];
     this.foodTypeOptions = ['Grain', 'Meat', 'Fruit', 'Vegetable', 'Drink'];
   }
 
   ngOnInit() {
       this.foodForm = this.formBuilder.group({
-        foodType:         [this.model.foodType, Validators.required],
-        perishable:       [this.model.perishable, Validators.required],
-        foodDescription:  [this.model.foodDescription, Validators.required],
-        expirationDate:   [this.model.expirationDate, Validators.required]
+        foodType:         ['', Validators.required],
+        perishable:       [''],
+        foodDescription:  ['', Validators.required],
+        expirationDate:   ['', Validators.required]
       });
   }
 
-  onFileChange(event) {
-    var files = event.srcElement.files;
-    this.model.image = event.srcElement.files[0];
-    console.log(files);
-  }
-
-  shouldFireRequireValidation(validField): boolean {
-    return validField.errors != null && validField.errors.required && (validField.dirty || this.forceValidation);
+  shouldFireRequireValidation(validField: AbstractControl): boolean {
+    return validField.errors != null && validField.errors.required && (validField.touched || this.forceValidation);
   }
 
   onSubmit({ value, valid }: { value: Food, valid: boolean }) {
     this.forceValidation = true;
-    if (value.foodType != null && value.foodDescription != null && value.perishable != null && value.expirationDate != null) {
-      this.model.foodType = value.foodType;
-      this.model.foodDescription = value.foodDescription;
-      this.model.perishable = value.perishable;
-      this.model.expirationDate = value.expirationDate;
-      var observer = this.donorPrimaryService.addFoodListing(this.model);
+    if (valid) {
+      var observer = this.donorPrimaryService.addFoodListing(this.foodForm.getRawValue(), this.image);
       observer.subscribe(
         (success: boolean) => {
           this.submitted = true;

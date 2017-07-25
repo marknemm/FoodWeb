@@ -23,7 +23,7 @@ export class DonorController {
             request.body.foodType,
             request.body.perishable,
             request.body.foodDescription,
-            request.body.expireDate,
+            request.body.expirationDate,
             request.body.image,
             null // The model will generate the image name and fill this for now!
         );

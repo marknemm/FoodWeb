@@ -4,10 +4,10 @@ export class Food {
 
   constructor (
     public foodType?: string,
-    public perishable?: string,
+    public perishable?: boolean,
     public foodDescription?: string,
     public expirationDate?: NgbDateStruct,
-    public image?: any
+    public image?: string
   )
   {}
 

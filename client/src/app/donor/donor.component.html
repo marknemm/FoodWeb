@@ -4,7 +4,7 @@
     <div *ngIf="!submitted" class="row">
         <div class="col-md-5">
             <label>Upload Image</label>
-            <img-cropper [image]="model" [settings]="cropperSettings"></img-cropper>
+            <img-cropper [image]="this" [settings]="cropperSettings"></img-cropper>
         </div>
         <div class="col-md-7">
             <form [formGroup]="foodForm" (ngSubmit)="onSubmit(foodForm)">
@@ -16,11 +16,8 @@
                     <div class="alert alert-danger" [hidden]="!shouldFireRequireValidation(foodForm.controls.foodType)">Food Type is required</div>
                 </div>
                 <div class="form-group">
-                    <label for="perishable">Perishability</label>
-                    <select class="form-control" formControlName="perishable">
-                        <option *ngFor="let perishOpt of perishableOptions" [value]="perishOpt">{{perishOpt}}</option>
-                    </select>
-                    <div class="alert alert-danger" [hidden]="!shouldFireRequireValidation(foodForm.controls.perishable)">Perishability is required</div>
+                    <label for="perishable">Perishabible</label>
+                    <input type="checkbox" formControlName="perishable">
                 </div>
                 <div class="form-group">
                     <label for="foodDescription">Description</label>

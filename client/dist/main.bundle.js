@@ -676,7 +676,6 @@ var SignupService = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_date_formatter_pipe__ = __webpack_require__("../../../../../client/src/app/shared/date-formatter.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_donor_submission__ = __webpack_require__("../../../../../client/src/app/shared/donor-submission.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -689,19 +688,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var DonorPrimaryService = (function () {
     function DonorPrimaryService(http, dateFormatter) {
         this.http = http;
         this.dateFormatter = dateFormatter;
     }
-    DonorPrimaryService.prototype.addFoodListing = function (foodListing) {
+    DonorPrimaryService.prototype.addFoodListing = function (foodListing, image) {
+        foodListing.image = image;
+        foodListing.perishable;
         // This is uniform with object on Server. In future, will make a shared directory where these class definitions can uniformly reside!
-        var donorSubmission = new __WEBPACK_IMPORTED_MODULE_3__shared_donor_submission__["a" /* DonorSubmission */](null, foodListing.foodType, foodListing.perishable === 'Perishable', foodListing.foodDescription, this.dateFormatter.formatDate(foodListing.expirationDate), foodListing.image, null);
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
             'Content-Type': 'application/json'
         });
-        var observer = this.http.post('/donor/addFoodListing', JSON.stringify(donorSubmission), { headers: headers, withCredentials: true });
+        var observer = this.http.post('/donor/addFoodListing', JSON.stringify(foodListing), { headers: headers, withCredentials: true });
         return observer.map(function (response) {
             console.log(response);
             return response.json().success;
@@ -727,7 +726,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "label {\r\n    font-weight: bold;\r\n    font-size: 25px;\r\n}\r\n\r\ninput[type=checkbox]\r\n{\r\n  /* Double-sized Checkboxes */\r\n  -ms-transform: scale(2); /* IE */\r\n  -moz-transform: scale(2); /* FF */\r\n  -webkit-transform: scale(2); /* Safari and Chrome */\r\n  -o-transform: scale(2); /* Opera */\r\n  padding: 10px;\r\n}", ""]);
+exports.push([module.i, "label {\r\n    font-weight: bold;\r\n    font-size: 25px;\r\n}\r\n\r\ninput[type=checkbox]\r\n{\r\n  /* Double-sized Checkboxes */\r\n  -ms-transform: scale(2); /* IE */\r\n  -moz-transform: scale(2); /* FF */\r\n  -webkit-transform: scale(2); /* Safari and Chrome */\r\n  -o-transform: scale(2); /* Opera */\r\n  padding: 10px;\r\n  margin-left: 10px;\r\n}", ""]);
 
 // exports
 
@@ -740,7 +739,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/donor/donor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n    <h1>Donor Form</h1>\n    <hr>\n    <div *ngIf=\"!submitted\" class=\"row\">\n        <div class=\"col-md-5\">\n            <label>Upload Image</label>\n            <img-cropper [image]=\"model\" [settings]=\"cropperSettings\"></img-cropper>\n        </div>\n        <div class=\"col-md-7\">\n            <form [formGroup]=\"foodForm\" (ngSubmit)=\"onSubmit(foodForm)\">\n                <div class=\"form-group\">\n                    <label for=\"foodType\">Food Type</label>\n                    <select class=\"form-control\" formControlName=\"foodType\">\n                        <option *ngFor=\"let foodT of foodTypeOptions\" [value]=\"foodT\">{{foodT}}</option>\n                    </select>\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodType)\">Food Type is required</div>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"perishable\">Perishability</label>\n                    <select class=\"form-control\" formControlName=\"perishable\">\n                        <option *ngFor=\"let perishOpt of perishableOptions\" [value]=\"perishOpt\">{{perishOpt}}</option>\n                    </select>\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.perishable)\">Perishability is required</div>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"foodDescription\">Description</label>\n                    <textarea class=\"form-control\" formControlName=\"foodDescription\"></textarea>\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodDescription)\">Description is required</div>\n                </div>\n                <div class=\"form-group\">\n                    <div class=\"input-group\">\n                        <input class=\"form-control\" placeholder=\"yyyy-mm-dd\" formControlName=\"expirationDate\" ngbDatepicker #d=\"ngbDatepicker\">\n                        <div class=\"input-group-addon\" (click)=\"d.toggle()\" >\n                            <img src=\"img/calendar-icon.svg\" style=\"width: 1.2rem; height: 1rem; cursor: pointer;\"/>\n                        </div>\n                    </div>\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.expirationDate)\">Expiration Date is required</div>\n                </div>\n\n                <button type=\"submit\" class=\"btn btn-default\">Submit</button>\n            </form>\n        </div>\n    </div>\n\n    <div *ngIf=\"submitted\">\n        <h2>You submitted the following:</h2>\n        <div class=\"row\">\n            <div class=\"col-md-2\">Food Type</div>\n            <div class=\"col-md-10 pull-left\">{{ model.foodType }}</div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-md-2\">Description</div>\n            <div class=\"col-md-10 pull-left\">{{ model.foodDescription }}</div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-md-2\">Perishability</div>\n            <div class=\"col-md-10 pull-left\">{{ model.perishable }}</div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-md-2\">Expiration Date</div>\n            <div class=\"col-md-10 pull-left\">{{ model.expirationDate | dateFormatter }}</div>\n        </div>\n        <br />\n        <button class=\"btn btn-default\" (click)=\"submitted=false\">Edit</button>\n    </div>\n</div>"
+module.exports = "<div class=\"container\">\n    <h1>Donor Form</h1>\n    <hr>\n    <div *ngIf=\"!submitted\" class=\"row\">\n        <div class=\"col-md-5\">\n            <label>Upload Image</label>\n            <img-cropper [image]=\"this\" [settings]=\"cropperSettings\"></img-cropper>\n        </div>\n        <div class=\"col-md-7\">\n            <form [formGroup]=\"foodForm\" (ngSubmit)=\"onSubmit(foodForm)\">\n                <div class=\"form-group\">\n                    <label for=\"foodType\">Food Type</label>\n                    <select class=\"form-control\" formControlName=\"foodType\">\n                        <option *ngFor=\"let foodT of foodTypeOptions\" [value]=\"foodT\">{{foodT}}</option>\n                    </select>\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodType)\">Food Type is required</div>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"perishable\">Perishabible</label>\n                    <input type=\"checkbox\" formControlName=\"perishable\">\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"foodDescription\">Description</label>\n                    <textarea class=\"form-control\" formControlName=\"foodDescription\"></textarea>\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodDescription)\">Description is required</div>\n                </div>\n                <div class=\"form-group\">\n                    <div class=\"input-group\">\n                        <input class=\"form-control\" placeholder=\"yyyy-mm-dd\" formControlName=\"expirationDate\" ngbDatepicker #d=\"ngbDatepicker\">\n                        <div class=\"input-group-addon\" (click)=\"d.toggle()\" >\n                            <img src=\"img/calendar-icon.svg\" style=\"width: 1.2rem; height: 1rem; cursor: pointer;\"/>\n                        </div>\n                    </div>\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.expirationDate)\">Expiration Date is required</div>\n                </div>\n\n                <button type=\"submit\" class=\"btn btn-default\">Submit</button>\n            </form>\n        </div>\n    </div>\n\n    <div *ngIf=\"submitted\">\n        <h2>You submitted the following:</h2>\n        <div class=\"row\">\n            <div class=\"col-md-2\">Food Type</div>\n            <div class=\"col-md-10 pull-left\">{{ model.foodType }}</div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-md-2\">Description</div>\n            <div class=\"col-md-10 pull-left\">{{ model.foodDescription }}</div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-md-2\">Perishability</div>\n            <div class=\"col-md-10 pull-left\">{{ model.perishable }}</div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-md-2\">Expiration Date</div>\n            <div class=\"col-md-10 pull-left\">{{ model.expirationDate | dateFormatter }}</div>\n        </div>\n        <br />\n        <button class=\"btn btn-default\" (click)=\"submitted=false\">Edit</button>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -752,9 +751,8 @@ module.exports = "<div class=\"container\">\n    <h1>Donor Form</h1>\n    <hr>\n
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_img_cropper__ = __webpack_require__("../../../../ng2-img-cropper/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_food__ = __webpack_require__("../../../../../client/src/app/shared/food.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__donor_primary_service__ = __webpack_require__("../../../../../client/src/app/donor/donor-primary.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_date_formatter_pipe__ = __webpack_require__("../../../../../client/src/app/shared/date-formatter.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__donor_primary_service__ = __webpack_require__("../../../../../client/src/app/donor/donor-primary.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_date_formatter_pipe__ = __webpack_require__("../../../../../client/src/app/shared/date-formatter.pipe.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -764,7 +762,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -786,36 +783,26 @@ var DonorComponent = (function () {
         this.cropperSettings.croppedHeight = 100;
         this.cropperSettings.canvasWidth = 400;
         this.cropperSettings.canvasHeight = 300;
-        this.model = new __WEBPACK_IMPORTED_MODULE_3__shared_food__["a" /* Food */]();
         this.perishableOptions = ['Perishable', 'Not Perishable'];
         this.foodTypeOptions = ['Grain', 'Meat', 'Fruit', 'Vegetable', 'Drink'];
     }
     DonorComponent.prototype.ngOnInit = function () {
         this.foodForm = this.formBuilder.group({
-            foodType: [this.model.foodType, __WEBPACK_IMPORTED_MODULE_1__angular_forms__["f" /* Validators */].required],
-            perishable: [this.model.perishable, __WEBPACK_IMPORTED_MODULE_1__angular_forms__["f" /* Validators */].required],
-            foodDescription: [this.model.foodDescription, __WEBPACK_IMPORTED_MODULE_1__angular_forms__["f" /* Validators */].required],
-            expirationDate: [this.model.expirationDate, __WEBPACK_IMPORTED_MODULE_1__angular_forms__["f" /* Validators */].required]
+            foodType: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["f" /* Validators */].required],
+            perishable: [''],
+            foodDescription: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["f" /* Validators */].required],
+            expirationDate: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["f" /* Validators */].required]
         });
     };
-    DonorComponent.prototype.onFileChange = function (event) {
-        var files = event.srcElement.files;
-        this.model.image = event.srcElement.files[0];
-        console.log(files);
-    };
     DonorComponent.prototype.shouldFireRequireValidation = function (validField) {
-        return validField.errors != null && validField.errors.required && (validField.dirty || this.forceValidation);
+        return validField.errors != null && validField.errors.required && (validField.touched || this.forceValidation);
     };
     DonorComponent.prototype.onSubmit = function (_a) {
         var _this = this;
         var value = _a.value, valid = _a.valid;
         this.forceValidation = true;
-        if (value.foodType != null && value.foodDescription != null && value.perishable != null && value.expirationDate != null) {
-            this.model.foodType = value.foodType;
-            this.model.foodDescription = value.foodDescription;
-            this.model.perishable = value.perishable;
-            this.model.expirationDate = value.expirationDate;
-            var observer = this.donorPrimaryService.addFoodListing(this.model);
+        if (valid) {
+            var observer = this.donorPrimaryService.addFoodListing(this.foodForm.getRawValue(), this.image);
             observer.subscribe(function (success) {
                 _this.submitted = true;
             }, function (error) {
@@ -828,10 +815,10 @@ var DonorComponent = (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'donor',
             template: __webpack_require__("../../../../../client/src/app/donor/donor.component.html"),
-            providers: [__WEBPACK_IMPORTED_MODULE_4__donor_primary_service__["a" /* DonorPrimaryService */]],
+            providers: [__WEBPACK_IMPORTED_MODULE_3__donor_primary_service__["a" /* DonorPrimaryService */]],
             styles: [__webpack_require__("../../../../../client/src/app/donor/donor.component.css")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__donor_primary_service__["a" /* DonorPrimaryService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__donor_primary_service__["a" /* DonorPrimaryService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_5__shared_date_formatter_pipe__["a" /* DateFormatterPipe */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__shared_date_formatter_pipe__["a" /* DateFormatterPipe */]) === "function" && _d || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__donor_primary_service__["a" /* DonorPrimaryService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__donor_primary_service__["a" /* DonorPrimaryService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__shared_date_formatter_pipe__["a" /* DateFormatterPipe */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__shared_date_formatter_pipe__["a" /* DateFormatterPipe */]) === "function" && _d || Object])
     ], DonorComponent);
     return DonorComponent;
     var _a, _b, _c, _d;
@@ -1306,49 +1293,6 @@ var DateFormatterPipe = (function () {
 }());
 
 //# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/shared/date-formatter.pipe.js.map
-
-/***/ }),
-
-/***/ "../../../../../client/src/app/shared/donor-submission.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DonorSubmission; });
-var DonorSubmission = (function () {
-    function DonorSubmission(postedByAppUserKey, foodType, perishable, foodDescription, expireDate, image, imageName) {
-        this.postedByAppUserKey = postedByAppUserKey;
-        this.foodType = foodType;
-        this.perishable = perishable;
-        this.foodDescription = foodDescription;
-        this.expireDate = expireDate;
-        this.image = image;
-        this.imageName = imageName;
-    }
-    return DonorSubmission;
-}());
-
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/shared/donor-submission.js.map
-
-/***/ }),
-
-/***/ "../../../../../client/src/app/shared/food.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Food; });
-var Food = (function () {
-    function Food(foodType, perishable, foodDescription, expirationDate, image) {
-        this.foodType = foodType;
-        this.perishable = perishable;
-        this.foodDescription = foodDescription;
-        this.expirationDate = expirationDate;
-        this.image = image;
-    }
-    return Food;
-}());
-
-;
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/shared/food.js.map
 
 /***/ }),
 

@@ -1,6 +1,7 @@
 'use strict';
 import { connect, query, Client, QueryResult } from '../database_help/connection_pool';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
+import { NgbDateStruct } from "@ng-bootstrap/ng-bootstrap";
 require('dotenv').config({ path: __dirname + '/../../../.env' });
 var AWS = require('aws-sdk');
 var config = new AWS.Config({
@@ -16,7 +17,7 @@ export class DonorSubmission {
         public foodType: string,
         public perishable: boolean,
         public foodDescription: string,
-        public expireDate: string,
+        public expirationDate: NgbDateStruct,
         public image: string,
         public imageName: string
     )
@@ -47,7 +48,7 @@ export class DonorModel {
         var queryString = 'SELECT * FROM addFoodListing($1, $2, $3, $4, $5, $6);';
         var queryArgs = [donorSubmission.foodType,
                          donorSubmission.perishable,
-                         donorSubmission.expireDate,
+                         donorSubmission.expirationDate.month + '/' + donorSubmission.expirationDate.day + '/' + donorSubmission.expirationDate.year,
                          donorSubmission.postedByAppUserKey,
                          donorSubmission.foodDescription,
                          imageUrl

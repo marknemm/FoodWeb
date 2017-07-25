@@ -10,12 +10,12 @@ var config = new AWS.Config({
     region: process.env.AWS_REGION
 });
 var DonorSubmission = (function () {
-    function DonorSubmission(postedByAppUserKey, foodType, perishable, foodDescription, expireDate, image, imageName) {
+    function DonorSubmission(postedByAppUserKey, foodType, perishable, foodDescription, expirationDate, image, imageName) {
         this.postedByAppUserKey = postedByAppUserKey;
         this.foodType = foodType;
         this.perishable = perishable;
         this.foodDescription = foodDescription;
-        this.expireDate = expireDate;
+        this.expirationDate = expirationDate;
         this.image = image;
         this.imageName = imageName;
     }
@@ -40,7 +40,7 @@ var DonorModel = (function () {
         var queryString = 'SELECT * FROM addFoodListing($1, $2, $3, $4, $5, $6);';
         var queryArgs = [donorSubmission.foodType,
             donorSubmission.perishable,
-            donorSubmission.expireDate,
+            donorSubmission.expirationDate.month + '/' + donorSubmission.expirationDate.day + '/' + donorSubmission.expirationDate.year,
             donorSubmission.postedByAppUserKey,
             donorSubmission.foodDescription,
             imageUrl
