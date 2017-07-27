@@ -69,6 +69,7 @@ export class ReceiverModel {
             result.push({
                 foodListingKey: rows[i].foodlistingkey,
                 foodTypeDescription: rows[i].foodtypedescription,
+                foodDescription: rows[i].fooddescription,
                 perishable: rows[i].perishable,
                 donorOrganizationName: rows[i].donororganizationname,
                 donorOrganizationAddress: rows[i].donororganizationaddress,

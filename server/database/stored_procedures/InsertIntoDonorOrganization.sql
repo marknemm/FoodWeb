@@ -1,7 +1,7 @@
 
-SELECT dropFunction('insertIntoDonor');
+SELECT dropFunction('insertIntoDonorOrganization');
 
-CREATE OR REPLACE FUNCTION insertIntoDonor
+CREATE OR REPLACE FUNCTION insertIntoDonorOrganization
 (
     _orgName    VARCHAR(128),
     _address    VARCHAR(128),
