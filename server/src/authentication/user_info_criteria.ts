@@ -3,7 +3,7 @@
 // Then it checks to see that the '@' is not the first or second character, there is at least a two character gap between '@' and '.',
 // and that the '.' is not the last character.
 // Returns boolean value.
-export function isValidEmail(email: string): boolean) {
+export function isValidEmail(email: string): boolean {
     var length = email.length;
     var atPos;
     var dotPos;
@@ -31,7 +31,7 @@ export function isValidPassword(password: string): boolean {
     var hasLower = /[a-z]/.test(password);
     var hasDigit = false;
     var hasSpecial = false;
-    var digits = [0,1,2,3,4,5,6,7,8,9];
+    var digits = ['0','1','2','3','4','5','6','7','8','9'];
     var specials = ['~','!','@','#','%','^','&','*','(',')','_','+'];
     for (var i = 0; i < length; i++) {
         for( var j = 0; j < 10; j++){
