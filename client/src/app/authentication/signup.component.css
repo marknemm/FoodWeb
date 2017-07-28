@@ -9,6 +9,12 @@
 
 }
 
+.checkOptions{
+    text-align: left;
+}
+
+
+
 .rowLayout{
     display: table-row;
     padding: 2px; 
@@ -38,3 +44,8 @@ form{
 	text-align: center;
 	color: red;
 }
+
+.checkbox{
+
+}
+

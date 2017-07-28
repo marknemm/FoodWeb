@@ -1,31 +1,64 @@
-<div class="layout" ng-controller="myCtrl">
+<div class="layout">
 <br/>
   <h2>Create your account</h2>
   <hr/>
-  <form ngNativeValidate (submit)="signupUser($event)" >
+  <form ngNativeValidate (submit)="signupUser($event)" (select)="showStates($array)" >
   <br/>
+    
+  <input type="checkbox">Sign up as a Donor 
+  <input type="checkbox">Sign up as a Receiver <br/> 
+    
+      <br/>
       Enter Your First Name:<br/>
       <input type="text" name="firstName" [(ngModel)]="signupModel.firstName" required autofocus autocomplete="on"> 
       <br/>
 
       Enter your Last Name:<br/> 
-      <input type="text" name="lastName" [(ngModel)]="signupModel.lastName" required autocomplete="on" #lastName>
+      <input type="text" name="lastName" [(ngModel)]="signupModel.lastName" required autocomplete="on">
       <br/>
 
       Enter your email address:<br/>
-      <input type="text" name="email" [(ngModel)]="signupModel.email" required autocomplete="on" #email>
+      <input type="email" name="email" [(ngModel)]="signupModel.email" required autocomplete="on">
       <br/>
 
+      Enter your address:<br/>
+      <input type="text" name="address" [(ngModel)]="signupModel.address" required >
+      <br/>
+
+      Enter your city:<br/>
+      <input type="text" name="city" [(ngModel)]="signupModel.city" required>
+      <br/>
+
+      Enter your state:<br/>
+      <select >
+      <option *ngFor="let state of signupModel.stateList" [value]="state">{{state}} </option>
+      </select>
+      <br/>
+      <br/>
+     
+      Enter your ZIP Code:<br/>
+      <input type="text" name="zip" maxlength="5" [(ngModel)]="signupModel.zip" required >
+      <br/>
+
+      Enter your phone number:<br/>
+      <input type="text" name="phone" [(ngModel)]="signupModel.phone" minlength="10" maxlength="10" required> 
+      <br/>
+
+
       Create a username:<br/> 
-      <input type="text" name="username" [(ngModel)]="signupModel.username" required autocomplete="on" #username>
+      <input type="text" name="username" [(ngModel)]="signupModel.username" required autocomplete="on">
       <br/>
 
       Create a password:<br/> 
-      <input type="password" name="password" [(ngModel)]="signupModel.password" required #password>
+      <input type="password" name="password" [(ngModel)]="signupModel.password" required>
       <br/>
+
+
 
       <button type="submit">Sign Up</button>
       <br/>
+
+
   </form>
 
   <div *ngIf="signupModel.signupError != null" id="signupErr">{{signupModel.signupError}}</div>
