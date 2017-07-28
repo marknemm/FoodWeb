@@ -24,13 +24,13 @@ RETURNS INTEGER -- Returns the appUserKey
 AS $$
     DECLARE _appUserKey INTEGER;
 
-/* If new user, then simply insertIntoAppUser
+/* If new user, then simply addAppUser
    Else get appUserKey, and Update ALL
    Info on that row with new, non-null info */ 
 BEGIN
     CASE
         WHEN _newUser = true THEN
-            RETURN insertIntoAppUser(_username, _email, _password, _lastName, _firstName);
+            RETURN addAppUser(_username, _email, _password, _lastName, _firstName);
         WHEN _newUser = false THEN
             _appUserKey = (SELECT appUserKey
                            FROM AppUser 

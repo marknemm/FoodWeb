@@ -12,8 +12,7 @@ var connectionPool = require('./database_help/connection_pool');
 // Our controllers that will handle requests after this router hands off the data to them.
 import { AuthenticationController } from './authentication/authentication_controller';
 import { AuthenticationModel} from './authentication/authentication_model';
-import { DonorController } from './donor/donor_controller';
-import { ReceiverController } from './receiver/receiver_controller';
+import { handleAddFoodListingRequest, handleGetFoodListingsRequest } from './food-listing/food-listing-controller';
 
 // This is where compiled client ts files will go. We need this to locate index.html!
 const clientBuildDir = __dirname + '/../../client/dist/';
@@ -37,8 +36,6 @@ require('dotenv').config({path: __dirname + '/../../.env'});
 // Initialize our Controller objects. These are used to actually handle routes defined in this file.
 var authenticationController : AuthenticationController = new AuthenticationController();
 var authenticationModel : AuthenticationModel = new AuthenticationModel();
-var donorController : DonorController = new DonorController();
-var receeverController : ReceiverController = new ReceiverController();
 
 app.get('/authentication/reAuthenticate', authenticationController.reAuthenticate.bind(authenticationController));
 
@@ -51,10 +48,11 @@ app.post('/authentication/signup', authenticationController.signup.bind(authenti
 //Handle /authentication/logout route by passing it off to LogoutController
 app.get('/authentication/logout', authenticationController.logout.bind(authenticationController));
 
-// Handle /donor/addFoodListing route by passing off to DonorController.
-app.post('/donor/addFoodListing', donorController.addFoodListing.bind(donorController));
+// Handle /donor/addFoodListing route by passing off to FoodListingController.
+app.post('/donor/addFoodListing', handleAddFoodListingRequest);
 
-app.post('/receiver/getFoodListings', receeverController.getFoodListings.bind(receeverController));
+// Handle /receiver/getFoodListings route by passing off to FoodListingController.
+app.post('/receiver/getFoodListings', handleGetFoodListingsRequest);
 
 
 app.get('*', function (request, response) {

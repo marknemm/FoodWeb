@@ -19,6 +19,7 @@ import { DateFormatterPipe } from "./shared/date-formatter.pipe"
 import { AuthGaurdService } from './authentication/auth-gaurd.service'
 
 import { SignupComponent } from './authentication/signup.component';
+import { ReceiverCartComponent } from './receiver-cart/receiver-cart.component';
 
 const appRoutes: Routes = [
   {
@@ -60,7 +61,8 @@ const appRoutes: Routes = [
     ReceiverComponent,
     SignupComponent,
     ImageCropperComponent,
-    DateFormatterPipe
+    DateFormatterPipe,
+    ReceiverCartComponent
   ],
   imports: [
     NgbModule.forRoot(),

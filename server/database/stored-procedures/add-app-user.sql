@@ -1,7 +1,7 @@
 
-SELECT dropFunction('insertIntoAppUser');
+SELECT dropFunction('addAppUser');
 
-CREATE OR REPLACE FUNCTION insertIntoAppUser
+CREATE OR REPLACE FUNCTION addAppUser
 (
     _username       VARCHAR(128),
     _email          VARCHAR(128), 
@@ -27,10 +27,12 @@ BEGIN
     CASE
         WHEN (_isDonorOrg = TRUE) 
             THEN 
-                SELECT insertIntoDonorOrganization(_orgName, _address, _city, _state, _zip, _phone) INTO _donorOrganizationKey;
+                SELECT addOrganization(_orgName, _address, _city, _state, _zip, _phone, _isDonorOrg, _isReceiverOrg) INTO _donorOrganizationKey;
         WHEN (_isReceiverOrg = TRUE)
             THEN
-                SELECT insertIntoReceiverOrganization(_orgName, _address, _city, _state, _zip, _phone) INTO _receiverOrganizationKey;
+                SELECT addOrganization(_orgName, _address, _city, _state, _zip, _phone, _isDonorOrg, _isReceiverOrg) INTO _receiverOrganizationKey;
+        ELSE
+                RAISE NOTICE 'Not associating organization with App User on Sign Up';
     END CASE;
 
     INSERT INTO AppUser (username, email, password, lastName, firstName, 

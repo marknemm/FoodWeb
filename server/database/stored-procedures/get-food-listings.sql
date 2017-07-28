@@ -1,8 +1,8 @@
 /**
  * A basic search function for retrieving food listings that meet specific criteria.
  */
- SELECT dropFunction('searchfoodlisting');
-CREATE OR REPLACE FUNCTION searchFoodListing
+SELECT dropFunction('getFoodListings');
+CREATE OR REPLACE FUNCTION getFoodListings
 (
     _foodListingKey         INTEGER         DEFAULT NULL,   -- This is for when we are looking for a specific Food Listing.
     _foodTypes              VARCHAR(60)[]   DEFAULT NULL,   -- This is when we may be filtering by one or many food types. Null is for all food types.
@@ -34,11 +34,11 @@ BEGIN
     SELECT  FoodListing.foodListingKey,
             FoodType.foodTypeDescription,
             FoodListing.perishable,
-            DonorOrganization.name,
-            DonorOrganization.address,
-            DonorOrganization.city,
-            DonorOrganization.state,
-            DonorOrganization.zip,
+            OrganizationInfo.name,
+            OrganizationInfo.address,
+            OrganizationInfo.city,
+            OrganizationInfo.state,
+            OrganizationInfo.zip,
             AppUser.lastName,
             AppUser.firstName,
             TO_CHAR(FoodListing.expireDate, 'MM/DD/YYYY'),
@@ -46,15 +46,16 @@ BEGIN
             FoodListing.imgUrl
     FROM FoodListing
     INNER JOIN FoodType             ON FoodListing.foodTypeKey = FoodType.foodTypeKey
-    INNER JOIN AppUser              ON FoodListing.postedByAppUserKey = AppUser.appUserKey
+    INNER JOIN AppUser              ON FoodListing.donorAppUserKey = AppUser.appUserKey
     LEFT JOIN DonorOrganization     ON AppUser.donorOrganizationKey = DonorOrganization.donorOrganizationKey
+    LEFT JOIN OrganizationInfo      ON DonorOrganization.organizationInfoKey = OrganizationInfo.organizationInfoKey
     WHERE (_foodListingKey IS NULL          OR FoodListing.foodListingKey = _foodListingKey)
       -- We will translate the list of food type descriptions into integer keys for lookup efficiency.
       AND (_foodTypes IS NULL               OR FoodType.foodTypeKey = ANY (SELECT foodTypeKey
                                                                            FROM FoodType
                                                                            WHERE FoodType.foodTypeDescription = ANY(_foodTypes)))
       AND (_perishable IS NULL              OR FoodListing.perishable = _perishable)
-      AND (_donorOrganizationName IS NULL   OR DonorOrganization.name = _donorOrganizationName)
+      AND (_donorOrganizationName IS NULL   OR OrganizationInfo.name = _donorOrganizationName)
       AND (_earliestExpireDate IS NULL      OR FoodListing.expireDate >= TO_TIMESTAMP(_earliestExpireDate, 'MM/DD/YYYY'))
     ORDER BY FoodListing.expireDate ASC;
 
@@ -63,16 +64,18 @@ $$ LANGUAGE plpgsql;
 
 -- Test the Stored Procedure here --
 
-/*select searchFoodListing();
+/*
+select getFoodListings();
 
-select searchFoodListing(1);
+select getFoodListings(1);
 
-select searchFoodListing(NULL, '{Grain}');
+select getFoodListings(NULL, '{Grain}');
 
-select searchFoodListing(NULL, '{Meat, Drink}');
+select getFoodListings(NULL, '{Meat, Drink}');
 
-select searchFoodListing(NULL, NULL, true);
+select getFoodListings(NULL, NULL, true);
 
-select searchFoodListing(NULL, NULL, NULL, 'Wegmans');
+select getFoodListings(NULL, NULL, NULL, 'Wegmans');
 
-select searchFoodListing(NULL, NULL, NULL, NULL, '7/1/2017');*/
+select getFoodListings(NULL, NULL, NULL, NULL, '7/1/2017');
+*/

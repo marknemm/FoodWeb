@@ -18,7 +18,6 @@ AS $$
     DECLARE _foodTypeKey INTEGER;
 BEGIN
     
-    raise notice 'Values: %, %, %', _foodType, _perishable, _expireDate;
     SELECT foodTypeKey INTO _foodTypeKey FROM FoodType WHERE foodTypeDescription = _foodType; 
 
     INSERT INTO FoodListing (foodTypeKey, perishable, expireDate, 

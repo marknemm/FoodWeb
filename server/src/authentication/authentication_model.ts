@@ -145,7 +145,7 @@ export class AuthenticationModel {
      * @param firstName The first name of the user that is signing up.
      */
     private insertIntoAppUser(email: string, hashedPassword: string, username: string, lastName: string, firstName: string): Promise<QueryResult> {
-        let queryString : string = 'SELECT insertIntoAppUser($1, $2, $3, $4, $5)';
+        let queryString : string = 'SELECT addAppUser($1, $2, $3, $4, $5)';
         let queryArgs : Array<string> = [username, email, hashedPassword, lastName, firstName];
         logSqlQueryExec(queryString, queryArgs);
         return query(queryString, queryArgs);
@@ -160,7 +160,7 @@ export class AuthenticationModel {
     private handleSignUpUserResult(email: string, username: string, insertQueryResult: QueryResult): Promise<AppUserPrimaryInfo> {
         logSqlQueryResult(insertQueryResult.rows);
         if (insertQueryResult.rows.length = 1) {
-            return Promise.resolve(new AppUserPrimaryInfo(insertQueryResult.rows[0]['insertintoappuser'], username, email));
+            return Promise.resolve(new AppUserPrimaryInfo(insertQueryResult.rows[0]['addappuser'], username, email));
         }
         else {
             return Promise.reject(new Error('Signup failed. Provided Username and/or Email are not unique.'));
