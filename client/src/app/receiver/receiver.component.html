@@ -74,7 +74,7 @@
     <div class="col-md-8">
       <ng-template #content let-c="close" let-d="dismss">
         <div class="modal-header">
-          <h4 class="modal-title">{{selectedModel.name}}</h4>
+          <h4 class="modal-title">Food Description</h4>
           <button type="button" class="close" aria-label="Close" (click)="c('Cross click')">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -101,8 +101,9 @@
             </h4>
             <hr>
             <p style="margin-left:1vw">
-              From {{model.donorOrganizationName}}, at {{model.donorOrganizationAddress}} {{model.donorDistance}} miles away. <br>
-              Present food types: {{model.foodTypeDescription}}. Expires: {{model.expirationDate}}. Requires a {{model.quantityClass}}.
+              Posted By: <b>{{model.donorFirstName}} {{model.donorLastName}}</b><br>
+              Present food types: <b>{{model.foodTypeDescription}}</b> <br>
+              Expires: <b>{{model.expirationDate}}</b> <!--Requires a {{model.quantityClass}}-->
             </p>
           </div>
         </a>

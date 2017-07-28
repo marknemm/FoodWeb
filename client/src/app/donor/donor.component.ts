@@ -61,8 +61,12 @@ export class DonorComponent implements OnInit {
 
   onSubmit({ value, valid }: { value: Food, valid: boolean }) {
     this.forceValidation = true;
+    // Checkbox when unchecked resolves to empty string, so explicitely set it to false if not given the value of true from the form!
+    if (value.perishable != true) {
+      value.perishable = false;
+    }
     if (valid) {
-      var observer = this.donorPrimaryService.addFoodListing(this.foodForm.getRawValue(), this.image);
+      var observer = this.donorPrimaryService.addFoodListing(value, this.image);
       observer.subscribe(
         (success: boolean) => {
           this.submitted = true;
