@@ -5,16 +5,11 @@ var sql_logger_1 = require("../logging/sql_logger");
 function getFoodListing(foodObject) {
     var perishableArg = generatePerishabilityArg(foodObject);
     var foodTypesArg = generateFoodTypesArg(foodObject);
+    var expireDateArg = generateExpireDateArg(foodObject);
     var queryArgs;
     var queryString;
-    if (perishableArg != null) {
-        queryArgs = [foodTypesArg, perishableArg];
-        queryString = 'SELECT * FROM getFoodListings(null, $1, $2, null, null);';
-    }
-    else {
-        queryArgs = [foodTypesArg];
-        queryString = 'SELECT * FROM getFoodListings(null, $1, null, null, null);';
-    }
+    queryArgs = [foodTypesArg, perishableArg != null ? perishableArg : 'null', expireDateArg != null ? expireDateArg : 'null'];
+    queryString = 'SELECT * FROM getFoodListings(null, $1, $2, null, $3);';
     sql_logger_1.logSqlQueryExec(queryString, queryArgs);
     return connection_pool_1.query(queryString, queryArgs)
         .then(function (queryResult) {
@@ -52,7 +47,10 @@ function generateFoodTypesArg(foodObject) {
     foodTypesArg = foodTypesArg.substr(0, foodTypesArg.length - 2) + " }";
     return foodTypesArg;
 }
-function generateExpireDateArg() {
+function generateExpireDateArg(foodObject) {
+    if (foodObject.minExpireAfterDays != null) {
+        return foodObject.minExpireAfterDays.month + '/' + foodObject.minExpireAfterDays.day + '/' + foodObject.minExpireAfterDays.year;
+    }
     return null;
 }
 function generateResultArray(rows) {

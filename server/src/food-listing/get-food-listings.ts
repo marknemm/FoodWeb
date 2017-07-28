@@ -5,17 +5,12 @@ import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sq
 export function getFoodListing(foodObject): Promise<Array<object>> {
     var perishableArg: boolean = generatePerishabilityArg(foodObject);   
     var foodTypesArg: string = generateFoodTypesArg(foodObject);
+    var expireDateArg: string = generateExpireDateArg(foodObject);
     var queryArgs: Array<any>;
     var queryString: string;
 
-    if (perishableArg != null) {
-        queryArgs = [ foodTypesArg, perishableArg ]
-        queryString = 'SELECT * FROM getFoodListings(null, $1, $2, null, null);';
-    }
-    else {
-        queryArgs = [ foodTypesArg ];
-        queryString = 'SELECT * FROM getFoodListings(null, $1, null, null, null);';
-    }
+    queryArgs = [ foodTypesArg, perishableArg != null ? perishableArg : 'null', expireDateArg != null ? expireDateArg : 'null' ]
+    queryString = 'SELECT * FROM getFoodListings(null, $1, $2, null, $3);';
     logSqlQueryExec(queryString, queryArgs);
 
     return query(queryString, queryArgs)
@@ -53,7 +48,10 @@ function generateFoodTypesArg(foodObject): string {
     return foodTypesArg;
 }
 
-function generateExpireDateArg(): string {
+function generateExpireDateArg(foodObject): string {
+    if (foodObject.minExpireAfterDays != null) {
+        return foodObject.minExpireAfterDays.month + '/' + foodObject.minExpireAfterDays.day + '/' + foodObject.minExpireAfterDays.year;
+    }
     return null;
 }
 

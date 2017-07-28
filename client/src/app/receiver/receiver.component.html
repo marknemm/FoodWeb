@@ -24,7 +24,7 @@
             </label>
           </div>
           <h4>Minimum Expiration:</h4>
-          <ngb-datepicker #dp [(ngModel)]="filterForm.value.minExpireAfterDays" (navigate)="date = $event.next"></ngb-datepicker>
+          <ngb-datepicker #dp [(ngModel)]="filterForm.value.minExpireAfterDays" (onChange)="onChange(this.filterForm.getRawValues())" (onClick)="onChange(this.filterForm.getRawValues())" (navigate)="date = $event.next;"></ngb-datepicker>
           <!--<div ngbRadioGroup name="radioBasic" formControlName="minExpireAfterDays">
             <label class="btn btn-primary">
               <input type="radio" [value]="0">{{tFrameVals[0]}}
