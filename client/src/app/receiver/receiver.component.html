@@ -23,7 +23,8 @@
           </label>
         </div>
         <h4>Minimum Expiration:</h4>
-        <div ngbRadioGroup name="radioBasic" formControlName="minExpireAfterDays">
+        <ngb-datepicker #dp [(ngModel)]="filterForm.value.minExpireAfterDays" (navigate)="date = $event.next"></ngb-datepicker>
+        <!--<div ngbRadioGroup name="radioBasic" formControlName="minExpireAfterDays">
           <label class="btn btn-primary">
             <input type="radio" [value]="0">{{tFrameVals[0]}}
           </label>
@@ -57,7 +58,7 @@
           <label class="btn btn-primary">
             <input type="radio" [value]="2">{{quantityVals[2]}}
           </label>
-        </div>
+        </div>-->
         <h4>Acceptable Perishability:</h4>
         <div class="btn-group" data-toggle="buttons">
           <label class="btn btn-primary" [class.active]="filterForm.value.perishable">

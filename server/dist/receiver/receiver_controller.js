@@ -22,4 +22,4 @@ var ReceiverController = (function () {
 }());
 exports.ReceiverController = ReceiverController;
 ;
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/server/dist/receiver/receiver_controller.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/server/dist/receiver/receiver_controller.js.map

@@ -27,4 +27,4 @@ function checkPassword(password, hashedPassword) {
     return bcrypt_1.compare(password, hashedPassword);
 }
 exports.checkPassword = checkPassword;
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/server/dist/authentication/password_hash_util.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/server/dist/authentication/password_hash_util.js.map

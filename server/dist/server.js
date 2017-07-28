@@ -49,4 +49,4 @@ app.get('*', function (request, response) {
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
 });
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/server/dist/server.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/server/dist/server.js.map

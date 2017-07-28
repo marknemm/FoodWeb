@@ -102,4 +102,4 @@ var AuthenticationController = (function () {
 }());
 exports.AuthenticationController = AuthenticationController;
 ;
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/server/dist/authentication/authentication_controller.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/server/dist/authentication/authentication_controller.js.map

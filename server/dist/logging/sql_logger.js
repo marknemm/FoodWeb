@@ -53,4 +53,4 @@ function logSqlQueryResult(rows) {
     console.log(_enclosingString);
 }
 exports.logSqlQueryResult = logSqlQueryResult;
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/server/dist/logging/sql_logger.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/server/dist/logging/sql_logger.js.map

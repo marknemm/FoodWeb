@@ -82,4 +82,4 @@ var ReceiverModel = (function () {
 }());
 exports.ReceiverModel = ReceiverModel;
 ;
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/server/dist/receiver/receiver_model.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/server/dist/receiver/receiver_model.js.map

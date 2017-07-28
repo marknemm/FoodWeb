@@ -1,10 +1,12 @@
 import { Component, OnInit, NgModule, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbModule, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 import { Food } from './shared/food';
 import { Filters } from './shared/filters';
 import { ReceiverPrimaryService } from './receiver-primary.service';
+
+const now = new Date();
 
 const MODELS: Food[] = [
     {name: "Beef Stew",
@@ -47,7 +49,7 @@ export class ReceiverComponent implements OnInit {
   private modalService: NgbModal) {}
 
   ngOnInit() {
-    this.filters = new Filters(true, true, true, true, true, true, false, 0, 0, 0);
+    this.filters = new Filters(true, true, true, true, true, true, false, {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()}, 0, 0);
 
     this.onChange(this.filters);
 

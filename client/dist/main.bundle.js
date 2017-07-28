@@ -1,15 +1,15 @@
 webpackJsonp([1],{
 
-/***/ "../../../../../client lazy recursive":
+/***/ "../../../../../client async recursive":
 /***/ (function(module, exports) {
 
-function webpackEmptyAsyncContext(req) {
-	return new Promise(function(resolve, reject) { reject(new Error("Cannot find module '" + req + "'.")); });
+function webpackEmptyContext(req) {
+	throw new Error("Cannot find module '" + req + "'.");
 }
-webpackEmptyAsyncContext.keys = function() { return []; };
-webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
-module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = "../../../../../client lazy recursive";
+webpackEmptyContext.keys = function() { return []; };
+webpackEmptyContext.resolve = webpackEmptyContext;
+module.exports = webpackEmptyContext;
+webpackEmptyContext.id = "../../../../../client async recursive";
 
 /***/ }),
 
@@ -34,7 +34,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The whole content below can be removed with the new code.-->\n<div id=\"fullPage\">\n\t<app-header id='appHeader'></app-header>\n\n\t<router-outlet></router-outlet>\n\n\t<app-footer id='appFooter'></app-footer>\n</div>\n"
+module.exports = "<!--The whole content below can be removed with the new code.-->\r\n<div id=\"fullPage\">\r\n\t<app-header id='appHeader'></app-header>\r\n\r\n\t<router-outlet></router-outlet>\r\n\r\n\t<app-footer id='appFooter'></app-footer>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -42,8 +42,8 @@ module.exports = "<!--The whole content below can be removed with the new code.-
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -54,17 +54,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var AppComponent = (function () {
     function AppComponent() {
     }
-    AppComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-root',
-            template: __webpack_require__("../../../../../client/src/app/app.component.html"),
-            styles: [__webpack_require__("../../../../../client/src/app/app.component.css")]
-        })
-    ], AppComponent);
     return AppComponent;
 }());
+AppComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-root',
+        template: __webpack_require__("../../../../../client/src/app/app.component.html"),
+        styles: [__webpack_require__("../../../../../client/src/app/app.component.css")]
+    })
+], AppComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/app.component.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/app.component.js.map
 
 /***/ }),
 
@@ -72,7 +72,6 @@ var AppComponent = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
@@ -92,6 +91,7 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__shared_date_formatter_pipe__ = __webpack_require__("../../../../../client/src/app/shared/date-formatter.pipe.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__authentication_auth_gaurd_service__ = __webpack_require__("../../../../../client/src/app/authentication/auth-gaurd.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__authentication_signup_component__ = __webpack_require__("../../../../../client/src/app/authentication/signup.component.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -147,43 +147,43 @@ var appRoutes = [
 var AppModule = (function () {
     function AppModule() {
     }
-    AppModule = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
-            declarations: [
-                __WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_8__home_home_component__["a" /* HomeComponent */],
-                __WEBPACK_IMPORTED_MODULE_9__header_header_component__["a" /* HeaderComponent */],
-                __WEBPACK_IMPORTED_MODULE_10__footer_footer_component__["a" /* FooterComponent */],
-                __WEBPACK_IMPORTED_MODULE_11__authentication_login_component__["a" /* LoginComponent */],
-                __WEBPACK_IMPORTED_MODULE_12__donor_donor_component__["a" /* DonorComponent */],
-                __WEBPACK_IMPORTED_MODULE_13__receiver_receiver_component__["a" /* ReceiverComponent */],
-                __WEBPACK_IMPORTED_MODULE_17__authentication_signup_component__["a" /* SignupComponent */],
-                __WEBPACK_IMPORTED_MODULE_14_ng2_img_cropper__["b" /* ImageCropperComponent */],
-                __WEBPACK_IMPORTED_MODULE_15__shared_date_formatter_pipe__["a" /* DateFormatterPipe */]
-            ],
-            imports: [
-                __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["b" /* NgbModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_5__angular_router__["b" /* RouterModule */].forRoot(appRoutes),
-                __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_4_ng2_bootstrap_modal__["BootstrapModalModule"],
-                __WEBPACK_IMPORTED_MODULE_2__angular_http__["c" /* HttpModule */],
-                __WEBPACK_IMPORTED_MODULE_6__angular_forms__["b" /* FormsModule */],
-                __WEBPACK_IMPORTED_MODULE_6__angular_forms__["e" /* ReactiveFormsModule */]
-            ],
-            entryComponents: [
-                __WEBPACK_IMPORTED_MODULE_11__authentication_login_component__["a" /* LoginComponent */]
-            ],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */]],
-            providers: [
-                __WEBPACK_IMPORTED_MODULE_15__shared_date_formatter_pipe__["a" /* DateFormatterPipe */],
-                __WEBPACK_IMPORTED_MODULE_16__authentication_auth_gaurd_service__["a" /* AuthGaurdService */]
-            ]
-        })
-    ], AppModule);
     return AppModule;
 }());
+AppModule = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
+        declarations: [
+            __WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */],
+            __WEBPACK_IMPORTED_MODULE_8__home_home_component__["a" /* HomeComponent */],
+            __WEBPACK_IMPORTED_MODULE_9__header_header_component__["a" /* HeaderComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__footer_footer_component__["a" /* FooterComponent */],
+            __WEBPACK_IMPORTED_MODULE_11__authentication_login_component__["a" /* LoginComponent */],
+            __WEBPACK_IMPORTED_MODULE_12__donor_donor_component__["a" /* DonorComponent */],
+            __WEBPACK_IMPORTED_MODULE_13__receiver_receiver_component__["a" /* ReceiverComponent */],
+            __WEBPACK_IMPORTED_MODULE_17__authentication_signup_component__["a" /* SignupComponent */],
+            __WEBPACK_IMPORTED_MODULE_14_ng2_img_cropper__["a" /* ImageCropperComponent */],
+            __WEBPACK_IMPORTED_MODULE_15__shared_date_formatter_pipe__["a" /* DateFormatterPipe */]
+        ],
+        imports: [
+            __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */].forRoot(),
+            __WEBPACK_IMPORTED_MODULE_5__angular_router__["a" /* RouterModule */].forRoot(appRoutes),
+            __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+            __WEBPACK_IMPORTED_MODULE_4_ng2_bootstrap_modal__["BootstrapModalModule"],
+            __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* HttpModule */],
+            __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormsModule */],
+            __WEBPACK_IMPORTED_MODULE_6__angular_forms__["b" /* ReactiveFormsModule */]
+        ],
+        entryComponents: [
+            __WEBPACK_IMPORTED_MODULE_11__authentication_login_component__["a" /* LoginComponent */]
+        ],
+        bootstrap: [__WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */]],
+        providers: [
+            __WEBPACK_IMPORTED_MODULE_15__shared_date_formatter_pipe__["a" /* DateFormatterPipe */],
+            __WEBPACK_IMPORTED_MODULE_16__authentication_auth_gaurd_service__["a" /* AuthGaurdService */]
+        ]
+    })
+], AppModule);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/app.module.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/app.module.js.map
 
 /***/ }),
 
@@ -191,13 +191,13 @@ var AppModule = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthGaurdService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__ = __webpack_require__("../../../../ng2-bootstrap-modal/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_component__ = __webpack_require__("../../../../../client/src/app/authentication/login.component.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthGaurdService; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -226,7 +226,7 @@ var AuthGaurdService = (function () {
             return false;
         }
         // We are marked as logged in locally, but check with server to ensure we are still authenticated!
-        var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Headers */]({
+        var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["c" /* Headers */]({
             'Content-Type': 'application/json'
         });
         var observer = this.http.get('/authentication/reAuthenticate');
@@ -262,15 +262,15 @@ var AuthGaurdService = (function () {
             }
         });
     };
-    AuthGaurdService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__["DialogService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__["DialogService"]) === "function" && _c || Object])
-    ], AuthGaurdService);
     return AuthGaurdService;
-    var _a, _b, _c;
 }());
+AuthGaurdService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__["DialogService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__["DialogService"]) === "function" && _c || Object])
+], AuthGaurdService);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/authentication/auth-gaurd.service.js.map
+var _a, _b, _c;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/authentication/auth-gaurd.service.js.map
 
 /***/ }),
 
@@ -312,7 +312,7 @@ var LoginModel = (function () {
     return LoginModel;
 }());
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/authentication/login-model.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/authentication/login-model.js.map
 
 /***/ }),
 
@@ -337,7 +337,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/authentication/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal-dialog\">\n\t<div class=\"modal-content\">\n\t\t<div class=\"modal-header\">\n\t\t\t<h1 class=\"modal-title\">Sign In</h1>\n\t\t\t<button type=\"button\" class=\"close\" (click)=\"close()\" >&times;</button>\n\t\t</div>\n\t\t<div class=\"modal-body\">\n\t\t\t<form ngNativeValidate (submit)=\"loginUser($event)\">\n\t\t\t\t<div class=\"input\">\n\t\t\t\t\t<label>Username</label>\n\t\t\t\t\t<input name=\"Username\" [(ngModel)]=\"loginModel.username\" type=\"text\" required autofocus>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"input\">\n\t\t\t\t\t<label>Password</label>\n\t\t\t\t\t<input name=\"Password\" [(ngModel)]=\"loginModel.password\" type=\"password\" required>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"input\">\n\t\t\t\t\t<input type=\"submit\" value=\"Login\">\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</div>\n\t\t<div class=\"modal-footer\">\n\t\t\t<p *ngIf=\"loginModel.loginError\" id=\"loginErr\">Incorrect login information. Please Try Again.</p>\n\t\t</div>\n\t</div>\n</div>\n"
+module.exports = "<div class=\"modal-dialog\">\r\n\t<div class=\"modal-content\">\r\n\t\t<div class=\"modal-header\">\r\n\t\t\t<h1 class=\"modal-title\">Sign In</h1>\r\n\t\t\t<button type=\"button\" class=\"close\" (click)=\"close()\" >&times;</button>\r\n\t\t</div>\r\n\t\t<div class=\"modal-body\">\r\n\t\t\t<form ngNativeValidate (submit)=\"loginUser($event)\">\r\n\t\t\t\t<div class=\"input\">\r\n\t\t\t\t\t<label>Username</label>\r\n\t\t\t\t\t<input name=\"Username\" [(ngModel)]=\"loginModel.username\" type=\"text\" required autofocus>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"input\">\r\n\t\t\t\t\t<label>Password</label>\r\n\t\t\t\t\t<input name=\"Password\" [(ngModel)]=\"loginModel.password\" type=\"password\" required>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"input\">\r\n\t\t\t\t\t<input type=\"submit\" value=\"Login\">\r\n\t\t\t\t</div>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t\t<div class=\"modal-footer\">\r\n\t\t\t<p *ngIf=\"loginModel.loginError\" id=\"loginErr\">Incorrect login information. Please Try Again.</p>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -345,12 +345,12 @@ module.exports = "<div class=\"modal-dialog\">\n\t<div class=\"modal-content\">\
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__ = __webpack_require__("../../../../ng2-bootstrap-modal/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__login_service__ = __webpack_require__("../../../../../client/src/app/authentication/login.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_model__ = __webpack_require__("../../../../../client/src/app/authentication/login-model.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginComponent; });
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -399,20 +399,20 @@ var LoginComponent = (function (_super) {
         });
         // TODO: We should put some loading symbol in login popup here!!!
     };
-    LoginComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-login',
-            template: __webpack_require__("../../../../../client/src/app/authentication/login.component.html"),
-            styles: [__webpack_require__("../../../../../client/src/app/authentication/login.component.css")],
-            providers: [__WEBPACK_IMPORTED_MODULE_2__login_service__["a" /* LoginService */]]
-        }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogService"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__login_service__["a" /* LoginService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__login_service__["a" /* LoginService */]) === "function" && _b || Object])
-    ], LoginComponent);
     return LoginComponent;
-    var _a, _b;
 }(__WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogComponent"]));
+LoginComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-login',
+        template: __webpack_require__("../../../../../client/src/app/authentication/login.component.html"),
+        styles: [__webpack_require__("../../../../../client/src/app/authentication/login.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_2__login_service__["a" /* LoginService */]]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogService"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__login_service__["a" /* LoginService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__login_service__["a" /* LoginService */]) === "function" && _b || Object])
+], LoginComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/authentication/login.component.js.map
+var _a, _b;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/authentication/login.component.js.map
 
 /***/ }),
 
@@ -420,9 +420,9 @@ var LoginComponent = (function (_super) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginService; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -439,21 +439,21 @@ var LoginService = (function () {
         this.http = http;
     }
     LoginService.prototype.login = function (loginModel) {
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* Headers */]({
             'Content-Type': 'application/json'
         });
         var observer = this.http.post('/authentication/login', JSON.stringify(loginModel), { headers: headers });
         return observer.map(function (response) { return response.json(); });
     };
-    LoginService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
-    ], LoginService);
     return LoginService;
-    var _a;
 }());
+LoginService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
+], LoginService);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/authentication/login.service.js.map
+var _a;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/authentication/login.service.js.map
 
 /***/ }),
 
@@ -461,10 +461,10 @@ var LoginService = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogoutService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogoutService; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -488,15 +488,15 @@ var LogoutService = (function () {
         this.router.navigate(['/home']);
         // Not interested in the response...
     };
-    LogoutService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]) === "function" && _b || Object])
-    ], LogoutService);
     return LogoutService;
-    var _a, _b;
 }());
+LogoutService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object])
+], LogoutService);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/authentication/logout.service.js.map
+var _a, _b;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/authentication/logout.service.js.map
 
 /***/ }),
 
@@ -531,7 +531,7 @@ var SignupModel = (function () {
     return SignupModel;
 }());
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/authentication/signup-model.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/authentication/signup-model.js.map
 
 /***/ }),
 
@@ -564,11 +564,11 @@ module.exports = "<div class=\"layout\" ng-controller=\"myCtrl\">\r\n<br/>\r\n  
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SignupComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__signup_model__ = __webpack_require__("../../../../../client/src/app/authentication/signup-model.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__signup_service__ = __webpack_require__("../../../../../client/src/app/authentication/signup.service.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SignupComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -608,20 +608,20 @@ var SignupComponent = (function () {
             // Shouldn't happen!
         });
     };
-    SignupComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
-            selector: 'app-signup',
-            template: __webpack_require__("../../../../../client/src/app/authentication/signup.component.html"),
-            styles: [__webpack_require__("../../../../../client/src/app/authentication/signup.component.css")],
-            providers: [__WEBPACK_IMPORTED_MODULE_3__signup_service__["a" /* SignupService */]]
-        }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__signup_service__["a" /* SignupService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__signup_service__["a" /* SignupService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */]) === "function" && _b || Object])
-    ], SignupComponent);
     return SignupComponent;
-    var _a, _b;
 }());
+SignupComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
+        selector: 'app-signup',
+        template: __webpack_require__("../../../../../client/src/app/authentication/signup.component.html"),
+        styles: [__webpack_require__("../../../../../client/src/app/authentication/signup.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_3__signup_service__["a" /* SignupService */]]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__signup_service__["a" /* SignupService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__signup_service__["a" /* SignupService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_router__["b" /* Router */]) === "function" && _b || Object])
+], SignupComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/authentication/signup.component.js.map
+var _a, _b;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/authentication/signup.component.js.map
 
 /***/ }),
 
@@ -629,9 +629,9 @@ var SignupComponent = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SignupService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SignupService; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -648,7 +648,7 @@ var SignupService = (function () {
         this.http = http;
     }
     SignupService.prototype.signup = function (signupModel) {
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* Headers */]({
             'Content-Type': 'application/json'
         });
         var observer = this.http.post('/authentication/signup', JSON.stringify(signupModel), { headers: headers });
@@ -656,15 +656,15 @@ var SignupService = (function () {
             return response.json();
         });
     };
-    SignupService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
-    ], SignupService);
     return SignupService;
-    var _a;
 }());
+SignupService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
+], SignupService);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/authentication/signup.service.js.map
+var _a;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/authentication/signup.service.js.map
 
 /***/ }),
 
@@ -672,10 +672,10 @@ var SignupService = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DonorPrimaryService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_date_formatter_pipe__ = __webpack_require__("../../../../../client/src/app/shared/date-formatter.pipe.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DonorPrimaryService; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -697,7 +697,7 @@ var DonorPrimaryService = (function () {
         foodListing.image = image;
         foodListing.perishable;
         // This is uniform with object on Server. In future, will make a shared directory where these class definitions can uniformly reside!
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* Headers */]({
             'Content-Type': 'application/json'
         });
         var observer = this.http.post('/donor/addFoodListing', JSON.stringify(foodListing), { headers: headers, withCredentials: true });
@@ -706,15 +706,15 @@ var DonorPrimaryService = (function () {
             return response.json().success;
         });
     };
-    DonorPrimaryService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__shared_date_formatter_pipe__["a" /* DateFormatterPipe */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__shared_date_formatter_pipe__["a" /* DateFormatterPipe */]) === "function" && _b || Object])
-    ], DonorPrimaryService);
     return DonorPrimaryService;
-    var _a, _b;
 }());
+DonorPrimaryService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__shared_date_formatter_pipe__["a" /* DateFormatterPipe */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__shared_date_formatter_pipe__["a" /* DateFormatterPipe */]) === "function" && _b || Object])
+], DonorPrimaryService);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/donor/donor-primary.service.js.map
+var _a, _b;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/donor/donor-primary.service.js.map
 
 /***/ }),
 
@@ -739,7 +739,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/donor/donor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n    <h1>Donor Form</h1>\n    <hr>\n    <div *ngIf=\"!submitted\" class=\"row\">\n        <div class=\"col-md-5\">\n            <label>Upload Image</label>\n            <img-cropper [image]=\"this\" [settings]=\"cropperSettings\"></img-cropper>\n        </div>\n        <div class=\"col-md-7\">\n            <form [formGroup]=\"foodForm\" (ngSubmit)=\"onSubmit(foodForm)\">\n                <div class=\"form-group\">\n                    <label for=\"foodType\">Food Type</label>\n                    <select class=\"form-control\" formControlName=\"foodType\">\n                        <option *ngFor=\"let foodT of foodTypeOptions\" [value]=\"foodT\">{{foodT}}</option>\n                    </select>\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodType)\">Food Type is required</div>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"perishable\">Perishabible</label>\n                    <input type=\"checkbox\" formControlName=\"perishable\">\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"foodDescription\">Description</label>\n                    <textarea class=\"form-control\" formControlName=\"foodDescription\"></textarea>\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodDescription)\">Description is required</div>\n                </div>\n                <div class=\"form-group\">\n                    <div class=\"input-group\">\n                        <input class=\"form-control\" placeholder=\"yyyy-mm-dd\" formControlName=\"expirationDate\" ngbDatepicker #d=\"ngbDatepicker\">\n                        <div class=\"input-group-addon\" (click)=\"d.toggle()\" >\n                            <img src=\"img/calendar-icon.svg\" style=\"width: 1.2rem; height: 1rem; cursor: pointer;\"/>\n                        </div>\n                    </div>\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.expirationDate)\">Expiration Date is required</div>\n                </div>\n\n                <button type=\"submit\" class=\"btn btn-default\">Submit</button>\n            </form>\n        </div>\n    </div>\n\n    <div *ngIf=\"submitted\">\n        <h2>You submitted the following:</h2>\n        <div class=\"row\">\n            <div class=\"col-md-2\">Food Type</div>\n            <div class=\"col-md-10 pull-left\">{{ model.foodType }}</div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-md-2\">Description</div>\n            <div class=\"col-md-10 pull-left\">{{ model.foodDescription }}</div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-md-2\">Perishability</div>\n            <div class=\"col-md-10 pull-left\">{{ model.perishable }}</div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-md-2\">Expiration Date</div>\n            <div class=\"col-md-10 pull-left\">{{ model.expirationDate | dateFormatter }}</div>\n        </div>\n        <br />\n        <button class=\"btn btn-default\" (click)=\"submitted=false\">Edit</button>\n    </div>\n</div>"
+module.exports = "<div class=\"container\">\r\n    <h1>Donor Form</h1>\r\n    <hr>\r\n    <div *ngIf=\"!submitted\" class=\"row\">\r\n        <div class=\"col-md-5\">\r\n            <label>Upload Image</label>\r\n            <img-cropper [image]=\"this\" [settings]=\"cropperSettings\"></img-cropper>\r\n        </div>\r\n        <div class=\"col-md-7\">\r\n            <form [formGroup]=\"foodForm\" (ngSubmit)=\"onSubmit(foodForm)\">\r\n                <div class=\"form-group\">\r\n                    <label for=\"foodType\">Food Type</label>\r\n                    <select class=\"form-control\" formControlName=\"foodType\">\r\n                        <option *ngFor=\"let foodT of foodTypeOptions\" [value]=\"foodT\">{{foodT}}</option>\r\n                    </select>\r\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodType)\">Food Type is required</div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <label for=\"perishable\">Perishabible</label>\r\n                    <input type=\"checkbox\" formControlName=\"perishable\">\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <label for=\"foodDescription\">Description</label>\r\n                    <textarea class=\"form-control\" formControlName=\"foodDescription\"></textarea>\r\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodDescription)\">Description is required</div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"input-group\">\r\n                        <input class=\"form-control\" placeholder=\"yyyy-mm-dd\" formControlName=\"expirationDate\" ngbDatepicker #d=\"ngbDatepicker\">\r\n                        <div class=\"input-group-addon\" (click)=\"d.toggle()\" >\r\n                            <img src=\"img/calendar-icon.svg\" style=\"width: 1.2rem; height: 1rem; cursor: pointer;\"/>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.expirationDate)\">Expiration Date is required</div>\r\n                </div>\r\n\r\n                <button type=\"submit\" class=\"btn btn-default\">Submit</button>\r\n            </form>\r\n        </div>\r\n    </div>\r\n\r\n    <div *ngIf=\"submitted\">\r\n        <h2>You submitted the following:</h2>\r\n        <div class=\"row\">\r\n            <div class=\"col-md-2\">Food Type</div>\r\n            <div class=\"col-md-10 pull-left\">{{ model.foodType }}</div>\r\n        </div>\r\n        <div class=\"row\">\r\n            <div class=\"col-md-2\">Description</div>\r\n            <div class=\"col-md-10 pull-left\">{{ model.foodDescription }}</div>\r\n        </div>\r\n        <div class=\"row\">\r\n            <div class=\"col-md-2\">Perishability</div>\r\n            <div class=\"col-md-10 pull-left\">{{ model.perishable }}</div>\r\n        </div>\r\n        <div class=\"row\">\r\n            <div class=\"col-md-2\">Expiration Date</div>\r\n            <div class=\"col-md-10 pull-left\">{{ model.expirationDate | dateFormatter }}</div>\r\n        </div>\r\n        <br />\r\n        <button class=\"btn btn-default\" (click)=\"submitted=false\">Edit</button>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -747,12 +747,12 @@ module.exports = "<div class=\"container\">\n    <h1>Donor Form</h1>\n    <hr>\n
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DonorComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_img_cropper__ = __webpack_require__("../../../../ng2-img-cropper/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__donor_primary_service__ = __webpack_require__("../../../../../client/src/app/donor/donor-primary.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_date_formatter_pipe__ = __webpack_require__("../../../../../client/src/app/shared/date-formatter.pipe.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DonorComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -776,7 +776,7 @@ var DonorComponent = (function () {
         // Want to force validators to process on submit. Non-text fields will only validate on submit too!
         this.forceValidation = false;
         this.submitted = false;
-        this.cropperSettings = new __WEBPACK_IMPORTED_MODULE_2_ng2_img_cropper__["a" /* CropperSettings */]();
+        this.cropperSettings = new __WEBPACK_IMPORTED_MODULE_2_ng2_img_cropper__["b" /* CropperSettings */]();
         this.cropperSettings.width = 100;
         this.cropperSettings.height = 100;
         this.cropperSettings.croppedWidth = 100;
@@ -811,20 +811,20 @@ var DonorComponent = (function () {
             });
         }
     };
-    DonorComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'donor',
-            template: __webpack_require__("../../../../../client/src/app/donor/donor.component.html"),
-            providers: [__WEBPACK_IMPORTED_MODULE_3__donor_primary_service__["a" /* DonorPrimaryService */]],
-            styles: [__webpack_require__("../../../../../client/src/app/donor/donor.component.css")]
-        }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__donor_primary_service__["a" /* DonorPrimaryService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__donor_primary_service__["a" /* DonorPrimaryService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__shared_date_formatter_pipe__["a" /* DateFormatterPipe */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__shared_date_formatter_pipe__["a" /* DateFormatterPipe */]) === "function" && _d || Object])
-    ], DonorComponent);
     return DonorComponent;
-    var _a, _b, _c, _d;
 }());
+DonorComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'donor',
+        template: __webpack_require__("../../../../../client/src/app/donor/donor.component.html"),
+        providers: [__WEBPACK_IMPORTED_MODULE_3__donor_primary_service__["a" /* DonorPrimaryService */]],
+        styles: [__webpack_require__("../../../../../client/src/app/donor/donor.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["e" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["e" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__donor_primary_service__["a" /* DonorPrimaryService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__donor_primary_service__["a" /* DonorPrimaryService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__shared_date_formatter_pipe__["a" /* DateFormatterPipe */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__shared_date_formatter_pipe__["a" /* DateFormatterPipe */]) === "function" && _d || Object])
+], DonorComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/donor/donor.component.js.map
+var _a, _b, _c, _d;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/donor/donor.component.js.map
 
 /***/ }),
 
@@ -849,7 +849,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/footer/footer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  Copyright &copy; Connect Food\n</p>"
+module.exports = "<p>\r\n  Copyright &copy; Connect Food\r\n</p>"
 
 /***/ }),
 
@@ -857,8 +857,8 @@ module.exports = "<p>\n  Copyright &copy; Connect Food\n</p>"
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FooterComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FooterComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -874,18 +874,18 @@ var FooterComponent = (function () {
     }
     FooterComponent.prototype.ngOnInit = function () {
     };
-    FooterComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-footer',
-            template: __webpack_require__("../../../../../client/src/app/footer/footer.component.html"),
-            styles: [__webpack_require__("../../../../../client/src/app/footer/footer.component.css")]
-        }),
-        __metadata("design:paramtypes", [])
-    ], FooterComponent);
     return FooterComponent;
 }());
+FooterComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-footer',
+        template: __webpack_require__("../../../../../client/src/app/footer/footer.component.html"),
+        styles: [__webpack_require__("../../../../../client/src/app/footer/footer.component.css")]
+    }),
+    __metadata("design:paramtypes", [])
+], FooterComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/footer/footer.component.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/footer/footer.component.js.map
 
 /***/ }),
 
@@ -918,12 +918,12 @@ module.exports = "<nav class=\"navbar navbar-toggleable-sm navbar-inverse bg-inv
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HeaderComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__ = __webpack_require__("../../../../ng2-bootstrap-modal/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__authentication_login_component__ = __webpack_require__("../../../../../client/src/app/authentication/login.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__authentication_logout_service__ = __webpack_require__("../../../../../client/src/app/authentication/logout.service.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HeaderComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -962,20 +962,20 @@ var HeaderComponent = (function () {
     HeaderComponent.prototype.logout = function () {
         this.logoutService.logout();
     };
-    HeaderComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-header',
-            template: __webpack_require__("../../../../../client/src/app/header/header.component.html"),
-            styles: [__webpack_require__("../../../../../client/src/app/header/header.component.css")],
-            providers: [__WEBPACK_IMPORTED_MODULE_3__authentication_logout_service__["a" /* LogoutService */]]
-        }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogService"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__authentication_logout_service__["a" /* LogoutService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__authentication_logout_service__["a" /* LogoutService */]) === "function" && _b || Object])
-    ], HeaderComponent);
     return HeaderComponent;
-    var _a, _b;
 }());
+HeaderComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-header',
+        template: __webpack_require__("../../../../../client/src/app/header/header.component.html"),
+        styles: [__webpack_require__("../../../../../client/src/app/header/header.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_3__authentication_logout_service__["a" /* LogoutService */]]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogService"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__authentication_logout_service__["a" /* LogoutService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__authentication_logout_service__["a" /* LogoutService */]) === "function" && _b || Object])
+], HeaderComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/header/header.component.js.map
+var _a, _b;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/header/header.component.js.map
 
 /***/ }),
 
@@ -1000,7 +1000,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n    Home works!\n</p>\n"
+module.exports = "<p>\r\n    Home works!\r\n</p>\r\n"
 
 /***/ }),
 
@@ -1008,8 +1008,8 @@ module.exports = "<p>\n    Home works!\n</p>\n"
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomeComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomeComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1025,18 +1025,18 @@ var HomeComponent = (function () {
     }
     HomeComponent.prototype.ngOnInit = function () {
     };
-    HomeComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-home',
-            template: __webpack_require__("../../../../../client/src/app/home/home.component.html"),
-            styles: [__webpack_require__("../../../../../client/src/app/home/home.component.css")]
-        }),
-        __metadata("design:paramtypes", [])
-    ], HomeComponent);
     return HomeComponent;
 }());
+HomeComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-home',
+        template: __webpack_require__("../../../../../client/src/app/home/home.component.html"),
+        styles: [__webpack_require__("../../../../../client/src/app/home/home.component.css")]
+    }),
+    __metadata("design:paramtypes", [])
+], HomeComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/home/home.component.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/home/home.component.js.map
 
 /***/ }),
 
@@ -1044,9 +1044,9 @@ var HomeComponent = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReceiverPrimaryService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReceiverPrimaryService; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1081,7 +1081,7 @@ var ReceiverPrimaryService = (function () {
         this.http = http;
     }
     ReceiverPrimaryService.prototype.updateFeed = function (filterObj) {
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* Headers */]({
             'Content-Type': 'application/json'
         });
         var observer = this.http.post('/receiver/getFoodListings', JSON.stringify(filterObj), { headers: headers, withCredentials: true });
@@ -1090,15 +1090,15 @@ var ReceiverPrimaryService = (function () {
             return response.json();
         });
     };
-    ReceiverPrimaryService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
-    ], ReceiverPrimaryService);
     return ReceiverPrimaryService;
-    var _a;
 }());
+ReceiverPrimaryService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
+], ReceiverPrimaryService);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/receiver/receiver-primary.service.js.map
+var _a;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/receiver/receiver-primary.service.js.map
 
 /***/ }),
 
@@ -1123,7 +1123,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/receiver/receiver.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\">\r\n  <div class=\"row\">\r\n    <div class=\"col-md-4\">\r\n      <h2>Filters</h2>\r\n      <hr>\r\n      <form [formGroup]=\"filterForm\">\r\n      <h4>Acceptable Food Types:</h4>\r\n        <div class=\"btn-group\" data-toggle=\"buttons\">\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.grain\">\r\n            <input type=\"checkbox\" formControlName=\"grain\">Grain\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.meat\">\r\n            <input type=\"checkbox\" formControlName=\"meat\">Meat\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.fruit\">\r\n            <input type=\"checkbox\" formControlName=\"fruit\">Fruit\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.vegetable\">\r\n            <input type=\"checkbox\" formControlName=\"vegetable\">Vegetable\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.drink\">\r\n            <input type=\"checkbox\" formControlName=\"drink\">Drink\r\n          </label>\r\n        </div>\r\n        <h4>Minimum Expiration:</h4>\r\n        <div ngbRadioGroup name=\"radioBasic\" formControlName=\"minExpireAfterDays\">\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"0\">{{tFrameVals[0]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"1\">{{tFrameVals[1]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"2\">{{tFrameVals[2]}}\r\n          </label>\r\n        </div>\r\n        <h4>Maximum Distance:</h4>\r\n        <div ngbRadioGroup name=\"radioBasic\" formControlName=\"maxDistance\">\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"0\">{{distVals[0]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"1\">{{distVals[1]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"2\">{{distVals[2]}}\r\n          </label>\r\n        </div>\r\n        <h4>Must Fit in a:</h4>\r\n        <div ngbRadioGroup name=\"radioBasic\" formControlName=\"maxQuantity\">\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"0\">{{quantityVals[0]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"1\">{{quantityVals[1]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"2\">{{quantityVals[2]}}\r\n          </label>\r\n        </div>\r\n        <h4>Acceptable Perishability:</h4>\r\n        <div class=\"btn-group\" data-toggle=\"buttons\">\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.perishable\">\r\n            <input type=\"checkbox\" formControlName=\"perishable\">Perishable\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.notPerishable\">\r\n            <input type=\"checkbox\" formControlName=\"notPerishable\">Not Perishable\r\n          </label>\r\n        </div>\r\n        <hr>\r\n      </form>\r\n    </div>\r\n    <div class=\"col-md-8\">\r\n      <ng-template #content let-c=\"close\" let-d=\"dismss\">\r\n        <div class=\"modal-header\">\r\n          <h4 class=\"modal-title\">{{selectedModel.name}}</h4>\r\n          <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"c('Cross click')\">\r\n            <span aria-hidden=\"true\">&times;</span>\r\n          </button>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n          <p>{{selectedModel.foodDescription}}</p>\r\n        </div>\r\n          <div class=\"modal-footer\">\r\n          <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Request click')\">Request</button>\r\n          <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Close click')\">Close</button>\r\n        </div>\r\n      </ng-template>\r\n\r\n      <h2>Listings</h2>\r\n      <hr>\r\n      <div class=\"list-group\" style=\"overflow-y:auto\">\r\n        <a *ngFor=\"let model of models\" class=\"list-group-item\">\r\n          <img [src]=\"model.imgUrl\" alt=\"No Picture\" class=\"img-thumbnail\" style=\"width:7vw;height:7vw\">\r\n          <div>\r\n            <h4 style=\"margin-left:1vw\">{{model.name}}\r\n              <button style=\"float:right\" class=\"btn btn-primary btn-sm\" (click)=\"selectItem(content, model)\">\r\n                Details\r\n              </button>\r\n            </h4>\r\n            <hr>\r\n            <p style=\"margin-left:1vw\">\r\n              From {{model.donorOrganizationName}}, at {{model.donorOrganizationAddress}} {{model.donorDistance}} miles away. <br>\r\n              Present food types: {{model.foodTypeDescription}}. Expires: {{model.expirationDate}}. Requires a {{model.quantityClass}}.\r\n            </p>\r\n          </div>\r\n        </a>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"container-fluid\">\r\n  <div class=\"row\">\r\n    <div class=\"col-md-4\">\r\n      <h2>Filters</h2>\r\n      <hr>\r\n      <form [formGroup]=\"filterForm\">\r\n      <h4>Acceptable Food Types:</h4>\r\n        <div class=\"btn-group\" data-toggle=\"buttons\">\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.grain\">\r\n            <input type=\"checkbox\" formControlName=\"grain\">Grain\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.meat\">\r\n            <input type=\"checkbox\" formControlName=\"meat\">Meat\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.fruit\">\r\n            <input type=\"checkbox\" formControlName=\"fruit\">Fruit\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.vegetable\">\r\n            <input type=\"checkbox\" formControlName=\"vegetable\">Vegetable\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.drink\">\r\n            <input type=\"checkbox\" formControlName=\"drink\">Drink\r\n          </label>\r\n        </div>\r\n        <h4>Minimum Expiration:</h4>\r\n        <ngb-datepicker #dp [(ngModel)]=\"filterForm.value.minExpireAfterDays\" (navigate)=\"date = $event.next\"></ngb-datepicker>\r\n        <!--<div ngbRadioGroup name=\"radioBasic\" formControlName=\"minExpireAfterDays\">\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"0\">{{tFrameVals[0]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"1\">{{tFrameVals[1]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"2\">{{tFrameVals[2]}}\r\n          </label>\r\n        </div>\r\n        <h4>Maximum Distance:</h4>\r\n        <div ngbRadioGroup name=\"radioBasic\" formControlName=\"maxDistance\">\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"0\">{{distVals[0]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"1\">{{distVals[1]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"2\">{{distVals[2]}}\r\n          </label>\r\n        </div>\r\n        <h4>Must Fit in a:</h4>\r\n        <div ngbRadioGroup name=\"radioBasic\" formControlName=\"maxQuantity\">\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"0\">{{quantityVals[0]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"1\">{{quantityVals[1]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"2\">{{quantityVals[2]}}\r\n          </label>\r\n        </div>-->\r\n        <h4>Acceptable Perishability:</h4>\r\n        <div class=\"btn-group\" data-toggle=\"buttons\">\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.perishable\">\r\n            <input type=\"checkbox\" formControlName=\"perishable\">Perishable\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.notPerishable\">\r\n            <input type=\"checkbox\" formControlName=\"notPerishable\">Not Perishable\r\n          </label>\r\n        </div>\r\n        <hr>\r\n      </form>\r\n    </div>\r\n    <div class=\"col-md-8\">\r\n      <ng-template #content let-c=\"close\" let-d=\"dismss\">\r\n        <div class=\"modal-header\">\r\n          <h4 class=\"modal-title\">{{selectedModel.name}}</h4>\r\n          <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"c('Cross click')\">\r\n            <span aria-hidden=\"true\">&times;</span>\r\n          </button>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n          <p>{{selectedModel.foodDescription}}</p>\r\n        </div>\r\n          <div class=\"modal-footer\">\r\n          <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Request click')\">Request</button>\r\n          <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Close click')\">Close</button>\r\n        </div>\r\n      </ng-template>\r\n\r\n      <h2>Listings</h2>\r\n      <hr>\r\n      <div class=\"list-group\" style=\"overflow-y:auto\">\r\n        <a *ngFor=\"let model of models\" class=\"list-group-item\">\r\n          <img [src]=\"model.imgUrl\" alt=\"No Picture\" class=\"img-thumbnail\" style=\"width:7vw;height:7vw\">\r\n          <div>\r\n            <h4 style=\"margin-left:1vw\">{{model.name}}\r\n              <button style=\"float:right\" class=\"btn btn-primary btn-sm\" (click)=\"selectItem(content, model)\">\r\n                Details\r\n              </button>\r\n            </h4>\r\n            <hr>\r\n            <p style=\"margin-left:1vw\">\r\n              From {{model.donorOrganizationName}}, at {{model.donorOrganizationAddress}} {{model.donorDistance}} miles away. <br>\r\n              Present food types: {{model.foodTypeDescription}}. Expires: {{model.expirationDate}}. Requires a {{model.quantityClass}}.\r\n            </p>\r\n          </div>\r\n        </a>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1131,12 +1131,12 @@ module.exports = "<div class=\"container-fluid\">\r\n  <div class=\"row\">\r\n  
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReceiverComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_filters__ = __webpack_require__("../../../../../client/src/app/receiver/shared/filters.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__receiver_primary_service__ = __webpack_require__("../../../../../client/src/app/receiver/receiver-primary.service.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReceiverComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1151,6 +1151,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+var now = new Date();
 var MODELS = [
     { name: "Beef Stew",
         foodListingKey: 0,
@@ -1177,7 +1178,7 @@ var ReceiverComponent = (function () {
     }
     ReceiverComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.filters = new __WEBPACK_IMPORTED_MODULE_3__shared_filters__["a" /* Filters */](true, true, true, true, true, true, false, 0, 0, 0);
+        this.filters = new __WEBPACK_IMPORTED_MODULE_3__shared_filters__["a" /* Filters */](true, true, true, true, true, true, false, { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() }, 0, 0);
         this.onChange(this.filters);
         this.quantityVals = ["Car", "Van", "Truck"];
         this.tFrameVals = ["0-6 Days", "6-12 Days", "12+ Days"];
@@ -1217,20 +1218,20 @@ var ReceiverComponent = (function () {
             }
         });
     };
-    ReceiverComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-receiver',
-            template: __webpack_require__("../../../../../client/src/app/receiver/receiver.component.html"),
-            styles: [__webpack_require__("../../../../../client/src/app/receiver/receiver.component.css")],
-            providers: [__WEBPACK_IMPORTED_MODULE_4__receiver_primary_service__["a" /* ReceiverPrimaryService */]]
-        }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__receiver_primary_service__["a" /* ReceiverPrimaryService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__receiver_primary_service__["a" /* ReceiverPrimaryService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbModal */]) === "function" && _c || Object])
-    ], ReceiverComponent);
     return ReceiverComponent;
-    var _a, _b, _c;
 }());
+ReceiverComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-receiver',
+        template: __webpack_require__("../../../../../client/src/app/receiver/receiver.component.html"),
+        styles: [__webpack_require__("../../../../../client/src/app/receiver/receiver.component.css")],
+        providers: [__WEBPACK_IMPORTED_MODULE_4__receiver_primary_service__["a" /* ReceiverPrimaryService */]]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["e" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["e" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__receiver_primary_service__["a" /* ReceiverPrimaryService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__receiver_primary_service__["a" /* ReceiverPrimaryService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbModal */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["b" /* NgbModal */]) === "function" && _c || Object])
+], ReceiverComponent);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/receiver/receiver.component.js.map
+var _a, _b, _c;
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/receiver/receiver.component.js.map
 
 /***/ }),
 
@@ -1255,7 +1256,7 @@ var Filters = (function () {
     return Filters;
 }());
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/receiver/shared/filters.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/receiver/shared/filters.js.map
 
 /***/ }),
 
@@ -1263,8 +1264,8 @@ var Filters = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DateFormatterPipe; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DateFormatterPipe; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1284,15 +1285,15 @@ var DateFormatterPipe = (function () {
         }
         return '';
     };
-    DateFormatterPipe = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
-            name: 'dateFormatter'
-        })
-    ], DateFormatterPipe);
     return DateFormatterPipe;
 }());
+DateFormatterPipe = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({
+        name: 'dateFormatter'
+    })
+], DateFormatterPipe);
 
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/app/shared/date-formatter.pipe.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/shared/date-formatter.pipe.js.map
 
 /***/ }),
 
@@ -1305,10 +1306,11 @@ var DateFormatterPipe = (function () {
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
+// The file contents for the current environment will overwrite these during build.
 var environment = {
     production: false
 };
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/environments/environment.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/environments/environment.js.map
 
 /***/ }),
 
@@ -1326,10 +1328,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].production) {
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["enableProdMode"])();
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["enableProdMode"])();
 }
-Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */]);
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/client/dist/main.js.map
+__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */]);
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/main.js.map
 
 /***/ }),
 

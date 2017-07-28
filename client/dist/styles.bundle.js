@@ -35,7 +35,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 exports.i(__webpack_require__("../../../../css-loader/index.js?{\"sourceMap\":false,\"importLoaders\":1}!../../../../postcss-loader/index.js?{\"ident\":\"postcss\"}!../../../../bootstrap/dist/css/bootstrap.min.css"), "");
 
 // module
-exports.push([module.i, "/* You can add global styles to this file, and also import other style files */\n\n.nav > li:hover {\n    background-color: #444444;\n}\n\n.nav > li  {\n    margin-left: 5px;\n    margin-right: 5px;\n}\n", ""]);
+exports.push([module.i, "/* You can add global styles to this file, and also import other style files */\r\n\r\n.nav > li:hover {\r\n    background-color: #444444;\r\n}\r\n\r\n.nav > li  {\r\n    margin-left: 5px;\r\n    margin-right: 5px;\r\n}\r\n", ""]);
 
 // exports
 

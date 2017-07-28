@@ -24,4 +24,4 @@ var DonorController = (function () {
 }());
 exports.DonorController = DonorController;
 ;
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/server/dist/donor/donor_controller.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/server/dist/donor/donor_controller.js.map

@@ -152,4 +152,4 @@ var AuthenticationModel = (function () {
 }());
 exports.AuthenticationModel = AuthenticationModel;
 ;
-//# sourceMappingURL=C:/Users/User Name/ConnectFood/server/dist/authentication/authentication_model.js.map
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/server/dist/authentication/authentication_model.js.map
