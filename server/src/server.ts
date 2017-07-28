@@ -21,6 +21,7 @@ var app = express();
 // Some configuration settings for our App.
 app.use(bodyParser.json());
 app.use(express.static(clientBuildDir));
+app.use(express.static(__dirname + '/../../public'));
 app.use(session({ 
   secret: 'xefbwefiefw',
   cookie: { maxAge: 2000000 }, // Alot.
@@ -53,6 +54,11 @@ app.post('/donor/addFoodListing', handleAddFoodListingRequest);
 
 // Handle /receiver/getFoodListings route by passing off to FoodListingController.
 app.post('/receiver/getFoodListings', handleGetFoodListingsRequest);
+
+
+app.get('/public/*', function(request, response) {
+    response.sendFile(path.resolve(__dirname + "/../.." + request.url));
+});
 
 
 app.get('*', function (request, response) {

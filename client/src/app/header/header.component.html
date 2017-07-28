@@ -1,20 +1,25 @@
-<nav class="navbar navbar-toggleable-sm navbar-inverse bg-inverse">
-    <button type="button" class="navbar-toggler navbar-toggler-right" (click)="isExpanded = !isExpanded" [attr.aria-expanded]="!isExpanded" aria-controls="navbarContent">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="navbar-brand" [routerLink]="['/home']">Connect Food</div>
+<header>
+    <img id="logo" class="navbar-brand" src="./assets/HeaderImg.jpg" [routerLink]="['/home']">
 
-    <div class="collapse navbar-collapse" id="navbarContent" [ngbCollapse]="!isExpanded">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item"><a class='nav-link' [routerLink]="['/home']">Home</a></li>
-            <li class="nav-item"><a class='nav-link' [routerLink]="['/donor']">Donor</a></li>
-            <li class="nav-item"><a class='nav-link' [routerLink]="['/receiver']">Receiver</a></li>
-        </ul>
-        <ul class="navbar-nav navbar-right">
-            <li *ngIf="sessionStorage.getItem('appUserKey') === null" class="nav-item"><a id='loginButton' class='nav-link' (click)="showLogin()">Login</a></li>
-            <li *ngIf="sessionStorage.getItem('appUserKey') === null" class="nav-item"><a id='signupButton' class='nav-link' [routerLink]="['/signup']">Sign Up</a></li>
-            <li *ngIf="sessionStorage.getItem('appUserKey') !== null" class="nav-item"><a class='nav-link'>{{sessionStorage.getItem('username')}}</a></li>
-            <li *ngIf="sessionStorage.getItem('appUserKey') !== null" class="nav-item"><a id='logoutButton' class='nav-link' (click)="logout()">Logout</a></li>
-        </ul>
-    </div>
-</nav>
+    <nav class="navbar navbar-toggleable-sm navbar-inverse bg-inverse">
+        <button type="button" class="navbar-toggler navbar-toggler-right" (click)="isExpanded = !isExpanded" [attr.aria-expanded]="!isExpanded" aria-controls="navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent" [ngbCollapse]="!isExpanded">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class='nav-link' [routerLink]="['/home']">Home</a></li>
+                <li class="nav-item"><a class='nav-link' [routerLink]="['/donor']">Donor</a></li>
+                <li class="nav-item"><a class='nav-link' [routerLink]="['/receiver']">Receiver</a></li>
+            </ul>
+            <ul class="navbar-nav navbar-right">
+                <li *ngIf="sessionStorage.getItem('appUserKey') === null" class="nav-item"><a id='loginButton' class='nav-link' (click)="showLogin()">Login</a></li>
+                <li *ngIf="sessionStorage.getItem('appUserKey') === null" class="nav-item"><a id='signupButton' class='nav-link' [routerLink]="['/signup']">Sign Up</a></li>
+                <li *ngIf="sessionStorage.getItem('appUserKey') !== null" class="nav-item"><a class='nav-link'>{{sessionStorage.getItem('username')}}</a></li>
+                <li *ngIf="sessionStorage.getItem('appUserKey') !== null" class="nav-item"><a id='logoutButton' class='nav-link' (click)="logout()">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <img id="banner" src="./assets/BannerImg.jpg">
+</header>

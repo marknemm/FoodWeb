@@ -2,6 +2,7 @@
 import { connect, query, Client, QueryResult } from '../database_help/connection_pool';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
 import { FoodListing } from './food-listing';
+var fs = require('fs');
 require('dotenv').config({ path: __dirname + '/../../../.env' });
 var AWS = require('aws-sdk');
 var config = new AWS.Config({
@@ -17,7 +18,8 @@ export function addFoodListing(foodListing: FoodListing): Promise<any> {
     // If we have an image form the Donor, then generate the name and URL for it before we create database entry.
     if (foodListing.image != null) {
         foodListing.imageName = 'img-' + Date.now().toString();
-        imageUrl = process.env.AWS_BUCKET_URL + foodListing.imageName;
+        //imageUrl = process.env.AWS_BUCKET_URL + foodListing.imageName;
+        imageUrl = __dirname + '\\..\\..\\..\\public\\' + foodListing.imageName;
     }
     
     var queryString = 'SELECT * FROM addFoodListing($1, $2, $3, $4, $5, $6);';
@@ -31,9 +33,10 @@ export function addFoodListing(foodListing: FoodListing): Promise<any> {
     return query(queryString, queryArgs)
     .then((result: QueryResult) => {
         logSqlQueryResult(result.rows);
-        // If we have an image, then store it on AWS.
+        // If we have an image, then store it on AWS / Heroku.
         if (foodListing.image != null) {
-            return writeImgToCDN(foodListing.image, foodListing.imageName);
+            //return writeImgToCDN(foodListing.image, foodListing.imageName);
+            return writeImgToHerokuFs(foodListing.image, imageUrl);
         }
         return Promise.resolve();
     })
@@ -58,7 +61,7 @@ function writeImgToCDN(image: string, imageName: string): Promise<any> {
             ContentEncoding: 'base64',
             ContentType: 'image/png'
         };
-        s3Bucket.putObject(data, function(err, data){
+        s3Bucket.putObject(data, function(err: Error, data){
             if (err) { 
                 console.log(err);
                 console.log('Error uploading data: ', data); 
@@ -66,6 +69,23 @@ function writeImgToCDN(image: string, imageName: string): Promise<any> {
             }
             else {
                 console.log('succesfully uploaded the image!');
+                resolve();
+            }
+        });
+    });
+}
+
+function writeImgToHerokuFs(image: string, imageUrl: string): Promise<any> {
+    var data = image.replace(/^data:image\/\w+;base64,/, '');
+
+    return new Promise(function(resolve, reject) {
+        fs.writeFile(imageUrl, data, {encoding: 'base64'}, function(err: Error) {
+            if (err) {
+                console.log(err);
+                reject();
+            }
+            else {
+                console.log('successfully saved the image on Heroku!');
                 resolve();
             }
         });

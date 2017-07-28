@@ -12,7 +12,7 @@ export class DateFormatterPipe implements PipeTransform {
 
   formatDate(value: NgbDateStruct): string {
     if (value != null) {
-      return (value.month.toString() + '/' + value.day.toString() + '/' + value.year.toString());
+      return (value.year.toString() + '-' + value.month.toString() + '-' + value.day.toString());
     }
     return '';
   }

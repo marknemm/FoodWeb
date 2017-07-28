@@ -40,24 +40,24 @@
     </div>
 
     <div *ngIf="submitted">
-        <h2>You submitted the following:</h2>
+        <h2>Thank-you for submitting the following:</h2>
         <div class="row">
             <div class="col-md-2">Food Type</div>
-            <div class="col-md-10 pull-left">{{ model.foodType }}</div>
+            <div class="col-md-10 pull-left">{{ foodForm.controls.foodType.value }}</div>
         </div>
         <div class="row">
             <div class="col-md-2">Description</div>
-            <div class="col-md-10 pull-left">{{ model.foodDescription }}</div>
+            <div class="col-md-10 pull-left">{{ foodForm.controls.foodDescription.value }}</div>
         </div>
         <div class="row">
-            <div class="col-md-2">Perishability</div>
-            <div class="col-md-10 pull-left">{{ model.perishable }}</div>
+            <div class="col-md-2">Perishabe</div>
+            <div class="col-md-10 pull-left">{{ (foodForm.controls.perishable.value == true) ? 'true' : 'false' }}</div>
         </div>
         <div class="row">
             <div class="col-md-2">Expiration Date</div>
-            <div class="col-md-10 pull-left">{{ model.expirationDate | dateFormatter }}</div>
+            <div class="col-md-10 pull-left">{{ foodForm.controls.expirationDate.value | dateFormatter }}</div>
         </div>
         <br />
-        <button class="btn btn-default" (click)="submitted=false">Edit</button>
+        <button class="btn btn-default" (click)="submitted=false">Donate Again</button>
     </div>
 </div>
