@@ -31,11 +31,7 @@ export function isValidPassword(password: string): boolean {
     var hasLower = /[a-z]/.test(password);
     var hasDigit = false;
     var hasSpecial = false;
-<<<<<<< HEAD
     var digits = ["0","1","2","3","4","5","6","7","8","9"];
-=======
-    var digits = ['0','1','2','3','4','5','6','7','8','9'];
->>>>>>> af06ba1772d3990ff270607f9bbc070215a57a6f
     var specials = ['~','!','@','#','%','^','&','*','(',')','_','+'];
     for (var i = 0; i < length; i++) {
         for( var j = 0; j < 10; j++){
