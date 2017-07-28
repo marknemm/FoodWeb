@@ -34,7 +34,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The whole content below can be removed with the new code.-->\r\n<div id=\"fullPage\">\r\n\t<app-header id='appHeader'></app-header>\r\n\r\n\t<router-outlet></router-outlet>\r\n\r\n\t<!--<app-footer id='appFooter'></app-footer>-->\r\n</div>\r\n"
+module.exports = "<!--The whole content below can be removed with the new code.-->\r\n<div id=\"fullPage\">\r\n\t<app-header id='appHeader'></app-header>\r\n\r\n\t<router-outlet></router-outlet>\r\n\r\n\t<app-footer id='appFooter'></app-footer>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -845,7 +845,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "footer {\r\n    margin-top: 200px;\r\n}", ""]);
 
 // exports
 
@@ -858,7 +858,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/footer/footer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = "<footer>\r\n  Copyright &copy; Food Web\r\n</footer>"
 
 /***/ }),
 
@@ -1009,7 +1009,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n    Home works!\n</p>\n"
+module.exports = "<p>\n    \n</p>\n"
 
 /***/ }),
 

@@ -3,3 +3,5 @@ INNER JOIN OrganizationInfo ON ReceiverOrganization.organizationInfoKey = Organi
 
 SELECT * FROM DonorOrganization
 INNER JOIN OrganizationInfo ON DonorOrganization.organizationInfoKey = OrganizationInfo.organizationInfoKey;
+
+DELETE FROM FoodListing;
