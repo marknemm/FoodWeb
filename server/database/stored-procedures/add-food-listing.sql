@@ -18,11 +18,10 @@ AS $$
     DECLARE _foodTypeKey INTEGER;
 BEGIN
     
-    raise notice 'Values: %, %, %', _foodType, _perishable, _expireDate;
     SELECT foodTypeKey INTO _foodTypeKey FROM FoodType WHERE foodTypeDescription = _foodType; 
 
     INSERT INTO FoodListing (foodTypeKey, perishable, expireDate, 
-                                postedByAppUserKey, foodDescription, imgurl, postDate)
+                             donorAppUserKey, foodDescription, imgurl, postDate)
     SELECT _foodTypeKey, _perishable, _expTimeStamp, _appUserKey, _foodDescription, _imgURL, _postDate;
 
 END;

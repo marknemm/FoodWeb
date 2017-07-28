@@ -128,7 +128,7 @@ var AuthenticationModel = (function () {
      * @param firstName The first name of the user that is signing up.
      */
     AuthenticationModel.prototype.insertIntoAppUser = function (email, hashedPassword, username, lastName, firstName) {
-        var queryString = 'SELECT insertIntoAppUser($1, $2, $3, $4, $5)';
+        var queryString = 'SELECT addAppUser($1, $2, $3, $4, $5)';
         var queryArgs = [username, email, hashedPassword, lastName, firstName];
         sql_logger_1.logSqlQueryExec(queryString, queryArgs);
         return connection_pool_1.query(queryString, queryArgs);
@@ -142,7 +142,7 @@ var AuthenticationModel = (function () {
     AuthenticationModel.prototype.handleSignUpUserResult = function (email, username, insertQueryResult) {
         sql_logger_1.logSqlQueryResult(insertQueryResult.rows);
         if (insertQueryResult.rows.length = 1) {
-            return Promise.resolve(new AppUserPrimaryInfo(insertQueryResult.rows[0]['insertintoappuser'], username, email));
+            return Promise.resolve(new AppUserPrimaryInfo(insertQueryResult.rows[0]['addappuser'], username, email));
         }
         else {
             return Promise.reject(new Error('Signup failed. Provided Username and/or Email are not unique.'));

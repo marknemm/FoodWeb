@@ -91,6 +91,7 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__shared_date_formatter_pipe__ = __webpack_require__("../../../../../client/src/app/shared/date-formatter.pipe.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__authentication_auth_gaurd_service__ = __webpack_require__("../../../../../client/src/app/authentication/auth-gaurd.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__authentication_signup_component__ = __webpack_require__("../../../../../client/src/app/authentication/signup.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__receiver_cart_receiver_cart_component__ = __webpack_require__("../../../../../client/src/app/receiver-cart/receiver-cart.component.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -98,6 +99,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -161,7 +163,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_13__receiver_receiver_component__["a" /* ReceiverComponent */],
             __WEBPACK_IMPORTED_MODULE_17__authentication_signup_component__["a" /* SignupComponent */],
             __WEBPACK_IMPORTED_MODULE_14_ng2_img_cropper__["a" /* ImageCropperComponent */],
-            __WEBPACK_IMPORTED_MODULE_15__shared_date_formatter_pipe__["a" /* DateFormatterPipe */]
+            __WEBPACK_IMPORTED_MODULE_15__shared_date_formatter_pipe__["a" /* DateFormatterPipe */],
+            __WEBPACK_IMPORTED_MODULE_18__receiver_cart_receiver_cart_component__["a" /* ReceiverCartComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_3__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */].forRoot(),
@@ -509,7 +512,9 @@ var _a, _b;
  * Contains state data for the Signup Component.
  */
 var SignupModel = (function () {
+    //stateList = ['CA', 'NY', 'IN'];
     function SignupModel() {
+        this.stateList = ['CA', 'NY', 'IN'];
     }
     /**
      * Processes the result of a signup (from the server).
@@ -543,7 +548,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".layout{\r\n    display: table;\r\n    border: 1px solid gray;\r\n    border-radius: 25px;\r\n    width: 385px;\r\n    margin: auto;\r\n    margin-top: 50px;\r\n    padding: 2px;\r\n\r\n}\r\n\r\n.rowLayout{\r\n    display: table-row;\r\n    padding: 2px; \r\n}\r\n\r\n.tableCell{\r\n    display: table-cell;\r\n    \r\n}\r\n\r\nh2{\r\n    text-align: center;\r\n\r\n}\r\n\r\ninput {\r\n    display: block;\r\n    margin: 0 auto;\r\n    width: 200px;\r\n}\r\n\r\nform{\r\n    text-align: center;\r\n}\r\n\r\n#signupErr {\r\n\ttext-align: center;\r\n\tcolor: red;\r\n}\r\n", ""]);
+exports.push([module.i, ".layout{\r\n    display: table;\r\n    border: 1px solid gray;\r\n    border-radius: 25px;\r\n    width: 385px;\r\n    margin: auto;\r\n    margin-top: 50px;\r\n    padding: 2px;\r\n\r\n}\r\n\r\n.checkOptions{\r\n    text-align: left;\r\n}\r\n\r\n\r\n\r\n.rowLayout{\r\n    display: table-row;\r\n    padding: 2px; \r\n}\r\n\r\n.tableCell{\r\n    display: table-cell;\r\n    \r\n}\r\n\r\nh2{\r\n    text-align: center;\r\n\r\n}\r\n\r\ninput {\r\n    display: block;\r\n    margin: 0 auto;\r\n    width: 200px;\r\n}\r\n\r\nform{\r\n    text-align: center;\r\n}\r\n\r\n#signupErr {\r\n\ttext-align: center;\r\n\tcolor: red;\r\n}\r\n\r\n.checkbox{\r\n\r\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -556,7 +561,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/authentication/signup.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"layout\" ng-controller=\"myCtrl\">\r\n<br/>\r\n  <h2>Create your account</h2>\r\n  <hr/>\r\n  <form ngNativeValidate (submit)=\"signupUser($event)\" >\r\n  <br/>\r\n      Enter Your First Name:<br/>\r\n      <input type=\"text\" name=\"firstName\" [(ngModel)]=\"signupModel.firstName\" required autofocus autocomplete=\"on\"> \r\n      <br/>\r\n\r\n      Enter your Last Name:<br/> \r\n      <input type=\"text\" name=\"lastName\" [(ngModel)]=\"signupModel.lastName\" required autocomplete=\"on\" #lastName>\r\n      <br/>\r\n\r\n      Enter your email address:<br/>\r\n      <input type=\"text\" name=\"email\" [(ngModel)]=\"signupModel.email\" required autocomplete=\"on\" #email>\r\n      <br/>\r\n\r\n      Create a username:<br/> \r\n      <input type=\"text\" name=\"username\" [(ngModel)]=\"signupModel.username\" required autocomplete=\"on\" #username>\r\n      <br/>\r\n\r\n      Create a password:<br/> \r\n      <input type=\"password\" name=\"password\" [(ngModel)]=\"signupModel.password\" required #password>\r\n      <br/>\r\n\r\n      <button type=\"submit\">Sign Up</button>\r\n      <br/>\r\n  </form>\r\n\r\n  <div *ngIf=\"signupModel.signupError != null\" id=\"signupErr\">{{signupModel.signupError}}</div>\r\n\r\n</div>\r\n\r\n"
+module.exports = "<div class=\"layout\">\r\n<br/>\r\n  <h2>Create your account</h2>\r\n  <hr/>\r\n  <form ngNativeValidate (submit)=\"signupUser($event)\" (select)=\"showStates($array)\" >\r\n  <br/>\r\n    \r\n  <input type=\"checkbox\">Sign up as a Donor \r\n  <input type=\"checkbox\">Sign up as a Receiver <br/> \r\n    \r\n      <br/>\r\n      Enter Your First Name:<br/>\r\n      <input type=\"text\" name=\"firstName\" [(ngModel)]=\"signupModel.firstName\" required autofocus autocomplete=\"on\"> \r\n      <br/>\r\n\r\n      Enter your Last Name:<br/> \r\n      <input type=\"text\" name=\"lastName\" [(ngModel)]=\"signupModel.lastName\" required autocomplete=\"on\">\r\n      <br/>\r\n\r\n      Enter your email address:<br/>\r\n      <input type=\"email\" name=\"email\" [(ngModel)]=\"signupModel.email\" required autocomplete=\"on\">\r\n      <br/>\r\n\r\n      Enter your address:<br/>\r\n      <input type=\"text\" name=\"address\" [(ngModel)]=\"signupModel.address\" required >\r\n      <br/>\r\n\r\n      Enter your city:<br/>\r\n      <input type=\"text\" name=\"city\" [(ngModel)]=\"signupModel.city\" required>\r\n      <br/>\r\n\r\n      Enter your state:<br/>\r\n      <select >\r\n      <option *ngFor=\"let state of signupModel.stateList\" [value]=\"state\">{{state}} </option>\r\n      </select>\r\n      <br/>\r\n      <br/>\r\n     \r\n      Enter your ZIP Code:<br/>\r\n      <input type=\"text\" name=\"zip\" maxlength=\"5\" [(ngModel)]=\"signupModel.zip\" required >\r\n      <br/>\r\n\r\n      Enter your phone number:<br/>\r\n      <input type=\"text\" name=\"phone\" [(ngModel)]=\"signupModel.phone\" minlength=\"10\" maxlength=\"10\" required> \r\n      <br/>\r\n\r\n\r\n      Create a username:<br/> \r\n      <input type=\"text\" name=\"username\" [(ngModel)]=\"signupModel.username\" required autocomplete=\"on\">\r\n      <br/>\r\n\r\n      Create a password:<br/> \r\n      <input type=\"password\" name=\"password\" [(ngModel)]=\"signupModel.password\" required>\r\n      <br/>\r\n\r\n\r\n\r\n      <button type=\"submit\">Sign Up</button>\r\n      <br/>\r\n\r\n\r\n  </form>\r\n\r\n  <div *ngIf=\"signupModel.signupError != null\" id=\"signupErr\">{{signupModel.signupError}}</div>\r\n\r\n</div>\r\n\r\n"
 
 /***/ }),
 
@@ -739,7 +744,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/donor/donor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n    <h1>Donor Form</h1>\r\n    <hr>\r\n    <div *ngIf=\"!submitted\" class=\"row\">\r\n        <div class=\"col-md-5\">\r\n            <label>Upload Image</label>\r\n            <img-cropper [image]=\"this\" [settings]=\"cropperSettings\"></img-cropper>\r\n        </div>\r\n        <div class=\"col-md-7\">\r\n            <form [formGroup]=\"foodForm\" (ngSubmit)=\"onSubmit(foodForm)\">\r\n                <div class=\"form-group\">\r\n                    <label for=\"foodType\">Food Type</label>\r\n                    <select class=\"form-control\" formControlName=\"foodType\">\r\n                        <option *ngFor=\"let foodT of foodTypeOptions\" [value]=\"foodT\">{{foodT}}</option>\r\n                    </select>\r\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodType)\">Food Type is required</div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <label for=\"perishable\">Perishabible</label>\r\n                    <input type=\"checkbox\" formControlName=\"perishable\">\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <label for=\"foodDescription\">Description</label>\r\n                    <textarea class=\"form-control\" formControlName=\"foodDescription\"></textarea>\r\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodDescription)\">Description is required</div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"input-group\">\r\n                        <input class=\"form-control\" placeholder=\"yyyy-mm-dd\" formControlName=\"expirationDate\" ngbDatepicker #d=\"ngbDatepicker\">\r\n                        <div class=\"input-group-addon\" (click)=\"d.toggle()\" >\r\n                            <img src=\"img/calendar-icon.svg\" style=\"width: 1.2rem; height: 1rem; cursor: pointer;\"/>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.expirationDate)\">Expiration Date is required</div>\r\n                </div>\r\n\r\n                <button type=\"submit\" class=\"btn btn-default\">Submit</button>\r\n            </form>\r\n        </div>\r\n    </div>\r\n\r\n    <div *ngIf=\"submitted\">\r\n        <h2>You submitted the following:</h2>\r\n        <div class=\"row\">\r\n            <div class=\"col-md-2\">Food Type</div>\r\n            <div class=\"col-md-10 pull-left\">{{ model.foodType }}</div>\r\n        </div>\r\n        <div class=\"row\">\r\n            <div class=\"col-md-2\">Description</div>\r\n            <div class=\"col-md-10 pull-left\">{{ model.foodDescription }}</div>\r\n        </div>\r\n        <div class=\"row\">\r\n            <div class=\"col-md-2\">Perishability</div>\r\n            <div class=\"col-md-10 pull-left\">{{ model.perishable }}</div>\r\n        </div>\r\n        <div class=\"row\">\r\n            <div class=\"col-md-2\">Expiration Date</div>\r\n            <div class=\"col-md-10 pull-left\">{{ model.expirationDate | dateFormatter }}</div>\r\n        </div>\r\n        <br />\r\n        <button class=\"btn btn-default\" (click)=\"submitted=false\">Edit</button>\r\n    </div>\r\n</div>"
+module.exports = "<div class=\"container\">\r\n    <h1>Donor Form</h1>\r\n    <hr>\r\n    <div *ngIf=\"!submitted\" class=\"row\">\r\n        <div class=\"col-md-5\">\r\n            <label>Upload Image</label>\r\n            <img-cropper [image]=\"this\" [settings]=\"cropperSettings\"></img-cropper>\r\n        </div>\r\n        <div class=\"col-md-7\">\r\n            <form [formGroup]=\"foodForm\" (ngSubmit)=\"onSubmit(foodForm)\">\r\n                <div class=\"form-group\">\r\n                    <label for=\"foodType\">Food Type</label>\r\n                    <select class=\"form-control\" formControlName=\"foodType\">\r\n                        <option *ngFor=\"let foodT of foodTypeOptions\" [value]=\"foodT\">{{foodT}}</option>\r\n                    </select>\r\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodType)\">Food Type is required</div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <label for=\"perishable\">Perishable</label>\r\n                    <input type=\"checkbox\" formControlName=\"perishable\">\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <label for=\"foodDescription\">Description</label>\r\n                    <textarea class=\"form-control\" formControlName=\"foodDescription\"></textarea>\r\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodDescription)\">Description is required</div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"input-group\">\r\n                        <input class=\"form-control\" placeholder=\"yyyy-mm-dd\" formControlName=\"expirationDate\" ngbDatepicker #d=\"ngbDatepicker\">\r\n                        <div class=\"input-group-addon\" (click)=\"d.toggle()\" >\r\n                            <img src=\"img/calendar-icon.svg\" style=\"width: 1.2rem; height: 1rem; cursor: pointer;\"/>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.expirationDate)\">Expiration Date is required</div>\r\n                </div>\r\n\r\n                <button type=\"submit\" class=\"btn btn-default\">Submit</button>\r\n            </form>\r\n        </div>\r\n    </div>\r\n\r\n    <div *ngIf=\"submitted\">\r\n        <h2>You submitted the following:</h2>\r\n        <div class=\"row\">\r\n            <div class=\"col-md-2\">Food Type</div>\r\n            <div class=\"col-md-10 pull-left\">{{ model.foodType }}</div>\r\n        </div>\r\n        <div class=\"row\">\r\n            <div class=\"col-md-2\">Description</div>\r\n            <div class=\"col-md-10 pull-left\">{{ model.foodDescription }}</div>\r\n        </div>\r\n        <div class=\"row\">\r\n            <div class=\"col-md-2\">Perishability</div>\r\n            <div class=\"col-md-10 pull-left\">{{ model.perishable }}</div>\r\n        </div>\r\n        <div class=\"row\">\r\n            <div class=\"col-md-2\">Expiration Date</div>\r\n            <div class=\"col-md-10 pull-left\">{{ model.expirationDate | dateFormatter }}</div>\r\n        </div>\r\n        <br />\r\n        <button class=\"btn btn-default\" (click)=\"submitted=false\">Edit</button>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -1037,6 +1042,67 @@ HomeComponent = __decorate([
 ], HomeComponent);
 
 //# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/home/home.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../client/src/app/receiver-cart/receiver-cart.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../client/src/app/receiver-cart/receiver-cart.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container-fluid\">\r\n  <div class=\"row\">\r\n    <div class=\"col-md-4\">\r\n      <h2>Filters</h2>\r\n      <hr>\r\n      <form [formGroup]=\"filterForm\">\r\n      <h4>Food Types:</h4>\r\n        <div class=\"btn-group\" data-toggle=\"buttons\">\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.grain\">\r\n            <input type=\"checkbox\" formControlName=\"grain\">Grain\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.meat\">\r\n            <input type=\"checkbox\" formControlName=\"meat\">Meat\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.fruit\">\r\n            <input type=\"checkbox\" formControlName=\"fruit\">Fruit\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.vegetable\">\r\n            <input type=\"checkbox\" formControlName=\"vegetable\">Vegetable\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.drink\">\r\n            <input type=\"checkbox\" formControlName=\"drink\">Drink\r\n          </label>\r\n        </div>\r\n        <h4>Minimum Expiration:</h4>\r\n        <div ngbRadioGroup name=\"radioBasic\" formControlName=\"minExpireAfterDays\">\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"0\">{{tFrameVals[0]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"1\">{{tFrameVals[1]}}\r\n          </label>\r\n          <label class=\"btn btn-primary\">\r\n            <input type=\"radio\" [value]=\"2\">{{tFrameVals[2]}}\r\n          </label>\r\n        </div>\r\n        <h4>Acceptable Perishability:</h4>\r\n        <div class=\"btn-group\" data-toggle=\"buttons\">\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.perishable\">\r\n            <input type=\"checkbox\" formControlName=\"perishable\">Perishable\r\n          </label>\r\n          <label class=\"btn btn-primary\" [class.active]=\"filterForm.value.notPerishable\">\r\n            <input type=\"checkbox\" formControlName=\"notPerishable\">Not Perishable\r\n          </label>\r\n        </div>\r\n        <hr>\r\n      </form>\r\n    </div>\r\n    <div class=\"col-md-8\">\r\n      <ng-template #content let-c=\"close\" let-d=\"dismss\">\r\n        <div class=\"modal-header\">\r\n          <h4 class=\"modal-title\">{{selectedModel.name}}</h4>\r\n          <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"c('Cross click')\">\r\n            <span aria-hidden=\"true\">&times;</span>\r\n          </button>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n          <p>{{selectedModel.foodDescription}}</p>\r\n        </div>\r\n          <div class=\"modal-footer\">\r\n          <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Request click')\">Request</button>\r\n          <button type=\"button\" class=\"btn btn-secondary\" (click)=\"c('Close click')\">Close</button>\r\n        </div>\r\n      </ng-template>\r\n\r\n      <h2>Listings</h2>\r\n      <hr>\r\n      <div class=\"list-group\" style=\"overflow-y:auto\">\r\n        <a *ngFor=\"let model of models\" class=\"list-group-item\">\r\n          <img [src]=\"model.imgUrl\" alt=\"No Picture\" class=\"img-thumbnail\" style=\"width:7vw;height:7vw\">\r\n          <div>\r\n            <h4 style=\"margin-left:1vw\">{{model.name}}\r\n              <button style=\"float:right\" class=\"btn btn-primary btn-sm\" (click)=\"selectItem(content, model)\">\r\n                Details\r\n              </button>\r\n            </h4>\r\n            <hr>\r\n            <p style=\"margin-left:1vw\">\r\n              From {{model.donorOrganizationName}}, at {{model.donorOrganizationAddress}} {{model.donorDistance}} miles away. <br>\r\n              Present food types: {{model.foodTypeDescription}}. Expires: {{model.expirationDate}}. Requires a {{model.quantityClass}}.\r\n            </p>\r\n          </div>\r\n        </a>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "../../../../../client/src/app/receiver-cart/receiver-cart.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReceiverCartComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ReceiverCartComponent = (function () {
+    function ReceiverCartComponent() {
+    }
+    ReceiverCartComponent.prototype.ngOnInit = function () {
+    };
+    return ReceiverCartComponent;
+}());
+ReceiverCartComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-receiver-cart',
+        template: __webpack_require__("../../../../../client/src/app/receiver-cart/receiver-cart.component.html"),
+        styles: [__webpack_require__("../../../../../client/src/app/receiver-cart/receiver-cart.component.css")]
+    }),
+    __metadata("design:paramtypes", [])
+], ReceiverCartComponent);
+
+//# sourceMappingURL=C:/Users/Emery.Emery-PC/Documents/GitHub/ConnectFood/client/dist/app/receiver-cart/receiver-cart.component.js.map
 
 /***/ }),
 

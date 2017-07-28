@@ -9,7 +9,18 @@ export class SignupModel {
     public username: string;
     public email: string
     public password: string;
+    public city: string;
+    public address: string;
+    public stateList: string[] = ['CA', 'NY', 'IN'];
+    public zip: number;
+
     public appUserKey: number;
+
+    //stateList = ['CA', 'NY', 'IN'];
+
+     
+
+    
 
     constructor() {}
 
