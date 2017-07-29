@@ -77,5 +77,7 @@ select getFoodListings(NULL, NULL, true);
 
 select getFoodListings(NULL, NULL, NULL, 'Wegmans');
 
-select getFoodListings(NULL, NULL, NULL, NULL, '7/1/2017');
 */
+
+select getFoodListings(NULL, NULL, NULL, NULL, '7/8/2017');
+

@@ -1,20 +1,24 @@
 'use strict'
 import { connect, query, Client, QueryResult } from '../database_help/connection_pool';
+import { fixNullQueryArgs } from '../database_help/prepared-statement-helper';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
 
 export function getFoodListing(foodObject): Promise<Array<object>> {
     var perishableArg: boolean = generatePerishabilityArg(foodObject);   
     var foodTypesArg: string = generateFoodTypesArg(foodObject);
     var expireDateArg: string = generateExpireDateArg(foodObject);
-    var queryArgs: Array<any>;
-    var queryString: string;
+    var queryArgs: Array<any> = new Array<any>();
 
-    queryArgs = [ foodTypesArg, perishableArg != null ? perishableArg : 'null', expireDateArg != null ? expireDateArg : 'null' ]
-    queryString = 'SELECT * FROM getFoodListings(null, $1, $2, null, $3);';
+    // Build our prepared statement.
+    var queryString: string = 'SELECT * FROM getFoodListings(null, $1, $2, null, $3);';
+    queryArgs = [ foodTypesArg, perishableArg, expireDateArg ];
+    queryString = fixNullQueryArgs(queryString, queryArgs);
+
+    // Log and execute query.
     logSqlQueryExec(queryString, queryArgs);
-
     return query(queryString, queryArgs)
     .then((queryResult: QueryResult) => {
+        // Generate result array and return it.
         logSqlQueryResult(queryResult.rows);
         let resultArray: Array<object> = generateResultArray(queryResult.rows);
         return Promise.resolve(resultArray);
@@ -36,23 +40,25 @@ function generatePerishabilityArg(foodObject): boolean {
 }
 
 function generateFoodTypesArg(foodObject): string {
-    let foodTypesArg: string = "{ ";
+    let foodTypesArg: string = null;
 
-    if (foodObject.grain)       foodTypesArg += "Grain, ";
-    if (foodObject.meat)        foodTypesArg += "Meat, ";
-    if (foodObject.fruit)       foodTypesArg += "Fruit, ";
-    if (foodObject.vegetable)   foodTypesArg += "Vegetable, ";
-    if (foodObject.drink)       foodTypesArg += "Drink, ";
+    if (foodObject.grain || foodObject.meat || foodObject.fruit || foodObject.vegetable || foodObject.drink) {
+        foodTypesArg = "{ ";
 
-    foodTypesArg = foodTypesArg.substr(0, foodTypesArg.length - 2) + " }";
+        if (foodObject.grain)       foodTypesArg += "Grain, ";
+        if (foodObject.meat)        foodTypesArg += "Meat, ";
+        if (foodObject.fruit)       foodTypesArg += "Fruit, ";
+        if (foodObject.vegetable)   foodTypesArg += "Vegetable, ";
+        if (foodObject.drink)       foodTypesArg += "Drink, ";
+
+        foodTypesArg = foodTypesArg.substr(0, foodTypesArg.length - 2) + " }";
+    }
+
     return foodTypesArg;
 }
 
 function generateExpireDateArg(foodObject): string {
-    if (foodObject.minExpireAfterDays != null) {
-        return foodObject.minExpireAfterDays.month + '/' + foodObject.minExpireAfterDays.day + '/' + foodObject.minExpireAfterDays.year;
-    }
-    return null;
+    return (foodObject.minExpireAfterDays.month + '/' + foodObject.minExpireAfterDays.day + '/' + foodObject.minExpireAfterDays.year);
 }
 
 function generateResultArray(rows: Array<any>): Array<object> {

@@ -9,8 +9,12 @@ ul.nav a:hover { color: yellow !important; }
 header {
 	text-align: center;
 	font-size: 30px;
-	height: 680px;
-	position: relative;
+	height: 100px;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	z-index: 100; /*Keep this on top!*/
 }
 
 #logo {
@@ -33,9 +37,9 @@ li {
 	padding-right: 5px;
 }
 
-#banner {
-	width: 100%;
-	height: 600px;
+#vertSpacer {
+	position: relative;
+	margin-top: 100px; /* Everything must fall below the header on the page!*/
 }
 
 @media screen and (max-width: 767px) {
@@ -47,13 +51,14 @@ li {
 
 	header {
 		height: auto;
+		position: relative;
 	}
 
 	#logo {
 		visibility: hidden;
 	}
 
-	#banner {
+	#vertSpacer {
 		visibility: hidden;
 		position: absolute;
 	}
