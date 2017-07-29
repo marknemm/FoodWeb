@@ -108,9 +108,13 @@ export class AuthenticationModel {
      * @param username The new user's username.
      * @param lastName The new user's last name.
      * @param firstName The new user's first name.
+     * @param city The new user's city.
+     * @param address The new user's address.
+     * @param state The new user's state.
+     * @param zip The new user's zip code.
      * @return A promise that on success will contain the primary AppUser information.
      */
-    public SignUpUser(email: string, password: string, username: string, lastName: string, firstName: string): Promise<AppUserPrimaryInfo> {
+    public SignUpUser(email: string, password: string, username: string, lastName: string, firstName: string, city: string, address: string, state: string, zip: string): Promise<AppUserPrimaryInfo> {
         let self = this; // Needed because this inside the then callbacks will not refer to AuthenticationModel!
 
         // First validate new email and password.
@@ -125,7 +129,7 @@ export class AuthenticationModel {
         // TODO: write SQL function that seperately checks if the given username or email already exists!!!
         return hashPassword(password)
             .then((hashedPassword: string) => {
-                return self.insertIntoAppUser(email, hashedPassword, username, lastName, firstName);
+                return self.insertIntoAppUser(email, hashedPassword, username, lastName, firstName, city, address, state, zip);
             })
             .then((insertQueryResult: QueryResult) => {
                 return self.handleSignUpUserResult(email, username, insertQueryResult);
@@ -143,10 +147,14 @@ export class AuthenticationModel {
      * @param username The username of the user that is signing up.
      * @param lastName The last name of the user that is signing up.
      * @param firstName The first name of the user that is signing up.
+     * @param city The new user's city.
+     * @param address The new user's address.
+     * @param state The new user's state.
+     * @param zip The new user's zip code.
      */
-    private insertIntoAppUser(email: string, hashedPassword: string, username: string, lastName: string, firstName: string): Promise<QueryResult> {
-        let queryString : string = 'SELECT addAppUser($1, $2, $3, $4, $5)';
-        let queryArgs : Array<string> = [username, email, hashedPassword, lastName, firstName];
+    private insertIntoAppUser(email: string, hashedPassword: string, username: string, lastName: string, firstName: string, city: string, address: string, state: string, zip: string): Promise<QueryResult> {
+        let queryString : string = 'SELECT addAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+        let queryArgs : Array<string> = [username, email, hashedPassword, lastName, firstName,  city, address, state, zip];
         logSqlQueryExec(queryString, queryArgs);
         return query(queryString, queryArgs);
     }

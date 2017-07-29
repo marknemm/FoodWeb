@@ -89,7 +89,12 @@ export class AuthenticationController {
         var username: string = request.body.username;
         var lastName: string = request.body.lastName;
         var firstName: string = request.body.firstName;
-        var promise: Promise<AppUserPrimaryInfo> = this.authenticatonModel.SignUpUser(email, password, username, lastName, firstName);
+        var city: string = request.body.city;
+        var address: string = request.body.address;
+        var zip: string = request.body.zip;
+        var state: string = request.body.state;
+        var stateList: string[] = request.body.stateList;
+        var promise: Promise<AppUserPrimaryInfo> = this.authenticatonModel.SignUpUser(email, password, username, lastName, firstName, city, address, state, zip);
 
         promise.then((appUserPrimaryInfo: AppUserPrimaryInfo) => {
             request.session['appUserKey'] = appUserPrimaryInfo.appUserKey;
