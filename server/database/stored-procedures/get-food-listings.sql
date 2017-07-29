@@ -59,7 +59,7 @@ BEGIN
       AND (_donorOrganizationName IS NULL   OR OrganizationInfo.name = _donorOrganizationName)
       AND (_earliestExpireDate IS NULL      OR FoodListing.expireDate >= TO_TIMESTAMP(_earliestExpireDate, 'MM/DD/YYYY'))
     ORDER BY FoodListing.expireDate ASC;
-    SELECT claimFoodListing(_foodListingKey, _receiverAppUserKey);
+    --SELECT claimFoodListing(_foodListingKey, _receiverAppUserKey);
 
 END;
 $$ LANGUAGE plpgsql;
