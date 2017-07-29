@@ -3,7 +3,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 import { Observable } from 'rxjs/Observable';
 import { Http, Headers, Response } from '@angular/http';
 import { DialogService } from "ng2-bootstrap-modal";
-import { LoginComponent } from './login.component'
+import { LoginComponent } from '../login/login.component'
 
 @Injectable()
 export class AuthGaurdService implements CanActivate {

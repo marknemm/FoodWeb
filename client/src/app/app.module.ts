@@ -11,21 +11,22 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { LoginComponent } from './authentication/login.component';
+import { LoginComponent } from './authentication/login/login.component';
 import { DonorComponent } from './donor/donor.component';
 import { ReceiverComponent } from './receiver/receiver.component';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { DateFormatterPipe } from "./shared/date-formatter.pipe"
-import { AuthGaurdService } from './authentication/auth-gaurd.service'
+import { AuthGaurdService } from './authentication/misc/auth-gaurd.service'
 
-import { SignupComponent } from './authentication/signup.component';
+import { SignupComponent } from './authentication/signup/signup.component';
 import { ReceiverCartComponent } from './receiver-cart/receiver-cart.component';
+import { BannerComponent } from './banner/banner.component';
 
 const appRoutes: Routes = [
-  {
+  /*{
     path: 'login', // This can be both modal popup and its own page!
     component: LoginComponent
-  },
+  },*/
   { 
     path: '',
     pathMatch:'full', 
@@ -62,7 +63,8 @@ const appRoutes: Routes = [
     SignupComponent,
     ImageCropperComponent,
     DateFormatterPipe,
-    ReceiverCartComponent
+    ReceiverCartComponent,
+    BannerComponent
   ],
   imports: [
     NgbModule.forRoot(),

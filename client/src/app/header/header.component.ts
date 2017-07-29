@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogService } from "ng2-bootstrap-modal";
-import { LoginComponent } from '../authentication/login.component';
-import { LogoutService } from '../authentication/logout.service';
+import { LoginComponent } from '../authentication/login/login.component';
+import { LogoutService } from '../authentication/misc/logout.service';
 
 @Component({
   selector: 'app-header',

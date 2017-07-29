@@ -1,3 +1,5 @@
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+
 export class Filters{
     constructor(
         public grain: boolean,
@@ -7,7 +9,7 @@ export class Filters{
         public drink: boolean,
         public perishable?: boolean,
         public notPerishable?: boolean,
-        public minExpireAfterDays?: number,
+        public minExpireAfterDays?: NgbDateStruct,
         public maxQuantity?: number,
         public maxDistance?: number,
     ){}

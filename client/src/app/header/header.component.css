@@ -1,11 +1,65 @@
-header {
-	text-align: center;
-	padding: 20px 0;
-	font-size: 30px;
-	border-bottom: 2px solid #eee;
+.nav-link:hover {
+	color: yellow;
+    cursor: pointer;
+	cursor: hand;
 }
 
-#loginButton:hover, #logoutButton:hover {
-	cursor: pointer;
-	cursor: hand;
+ul.nav a:hover { color: yellow !important; }
+
+header {
+	text-align: center;
+	font-size: 30px;
+	height: 100px;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	z-index: 100; /*Keep this on top!*/
+}
+
+#logo {
+	height: 100px;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 175px;
+	padding: 0;
+	margin: 0;
+}
+
+nav {
+	max-height: 65px;
+	margin-left: 175px;
+}
+
+li {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#vertSpacer {
+	position: relative;
+	margin-top: 100px; /* Everything must fall below the header on the page!*/
+}
+
+@media screen and (max-width: 767px) {
+	nav {
+		max-height: 100%;
+		min-height: 65px;
+		margin-left: 0px;
+	}
+
+	header {
+		height: auto;
+		position: relative;
+	}
+
+	#logo {
+		visibility: hidden;
+	}
+
+	#vertSpacer {
+		visibility: hidden;
+		position: absolute;
+	}
 }

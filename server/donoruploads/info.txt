@@ -1,1 +1,0 @@
-This is the folder where all donor image uploads will be stored.
