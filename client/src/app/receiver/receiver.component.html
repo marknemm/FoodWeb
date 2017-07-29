@@ -1,12 +1,12 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-4">
-      <div class="fixed">
+      <div id="filters" #filters>
         <h2>Filters</h2>
-        <hr>
+        <button type="button" class="navbar-toggler arrow right" id="filters-button" #filterButton (click)="toggleFilters(filters, filterButton)">></button>
         <form [formGroup]="filterForm">
-        <h4>Acceptable Food Types:</h4>
-          <div class="btn-group" data-toggle="buttons">
+          <h4>Acceptable Food Types:</h4>
+          <div class="btn-group" style="display: flex" data-toggle="buttons">
             <label class="btn btn-primary" [class.active]="filterForm.value.grain">
               <input type="checkbox" formControlName="grain">Grain
             </label>
@@ -69,7 +69,6 @@
               <input type="checkbox" formControlName="notPerishable">Not Perishable
             </label>
           </div>
-          <hr>
         </form>
       </div>
     </div>

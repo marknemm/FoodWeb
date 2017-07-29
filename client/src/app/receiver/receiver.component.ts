@@ -74,6 +74,27 @@ export class ReceiverComponent implements OnInit {
       this.onChange(this.filterForm.value);
     });
   }
+
+  toggleFilters(filters, filtersButton) {
+    // Change translation amount based off of current state.
+    if (filtersButton.textContent === '>') {
+      // First calculate what our offset should be to move just the filters onto the page!
+      filters.style.transform = 'translateX(' + filters.offsetWidth + 'px)';
+      filtersButton.textContent = '<';
+      window.onresize = function() {
+        if (window.innerWidth > 1200) {
+          filters.style.transform = 'none';
+          filtersButton.textContent = '>';
+          window.onresize = undefined;
+        }
+      }
+    }
+    else {
+      filters.style.transform = 'none';
+      filtersButton.textContent = '>';
+      window.onresize = undefined;
+    }
+  }
   
   onChange(value: Filters) {
     //this.receiverPrimaryService.updateFeed(value).then(models => this.models = models);
