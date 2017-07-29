@@ -8,8 +8,9 @@ CREATE OR REPLACE FUNCTION getFoodListings
     _foodTypes              VARCHAR(60)[]   DEFAULT NULL,   -- This is when we may be filtering by one or many food types. Null is for all food types.
     _perishable             BOOLEAN         DEFAULT NULL,   -- Are we looking for perishable food? Input true for perishable only, false for non-perishable, and null for both.
     _donorOrganizationName  VARCHAR(128)    DEFAULT NULL,   -- Are we looking for food from a specific organization? Null if not.
-    _earliestExpireDate     TEXT            DEFAULT NULL    -- Do we require food that is going to expire after a specific date?
+    _earliestExpireDate     TEXT            DEFAULT NULL,   -- Do we require food that is going to expire after a specific date?
                                                             -- Must be in the format MM/DD/YYYY!
+    _receiverAppUserKey     INTEGER         DEFAULT NULL    -- Key of the reciever who is claiming this listing.
 )
 RETURNS TABLE
 (
@@ -58,6 +59,7 @@ BEGIN
       AND (_donorOrganizationName IS NULL   OR OrganizationInfo.name = _donorOrganizationName)
       AND (_earliestExpireDate IS NULL      OR FoodListing.expireDate >= TO_TIMESTAMP(_earliestExpireDate, 'MM/DD/YYYY'))
     ORDER BY FoodListing.expireDate ASC;
+    SELECT claimFoodListing(_foodListingKey, _receiverAppUserKey);
 
 END;
 $$ LANGUAGE plpgsql;
