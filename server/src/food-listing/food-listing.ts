@@ -2,7 +2,7 @@ import { NgbDateStruct } from "@ng-bootstrap/ng-bootstrap";
 
 export class FoodListing {
     constructor(
-        public donorAppUserKey: number,
+        public postedByAppUserKey: number,
         public foodType: string,
         public perishable: boolean,
         public foodDescription: string,

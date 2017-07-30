@@ -10,7 +10,7 @@ CREATE OR REPLACE FUNCTION getFoodListings
     _donorOrganizationName  VARCHAR(128)    DEFAULT NULL,   -- Are we looking for food from a specific organization? Null if not.
     _earliestExpireDate     TEXT            DEFAULT NULL,   -- Do we require food that is going to expire after a specific date?
                                                             -- Must be in the format MM/DD/YYYY!
-    _receiverAppUserKey     INTEGER         DEFAULT NULL    -- Key of the reciever who is claiming this listing.
+    _requestedByAppUserKey     INTEGER         DEFAULT NULL    -- Key of the reciever who is claiming this listing.
 )
 RETURNS TABLE
 (
@@ -47,7 +47,7 @@ BEGIN
             FoodListing.imgUrl
     FROM FoodListing
     INNER JOIN FoodType             ON FoodListing.foodTypeKey = FoodType.foodTypeKey
-    INNER JOIN AppUser              ON FoodListing.donorAppUserKey = AppUser.appUserKey
+    INNER JOIN AppUser              ON FoodListing.postedByAppUserKey = AppUser.appUserKey
     LEFT JOIN DonorOrganization     ON AppUser.donorOrganizationKey = DonorOrganization.donorOrganizationKey
     LEFT JOIN OrganizationInfo      ON DonorOrganization.organizationInfoKey = OrganizationInfo.organizationInfoKey
     WHERE (_foodListingKey IS NULL          OR FoodListing.foodListingKey = _foodListingKey)

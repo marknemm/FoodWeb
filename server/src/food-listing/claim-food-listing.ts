@@ -6,18 +6,18 @@ import { FoodListing } from './food-listing';
 export function claimFoodListing(claimRequest): Promise<Boolean>{
 
     var _foodListingKey = claimRequest.foodListingKey;
-    var _receiverAppUserKey = claimRequest.receiverAppUserKey;
+    var _requestedByAppUserKey = claimRequest.requestedByAppUserKey;
 
     // Build our prepared statement.
     var queryString: string = 'SELECT * FROM claimFoodListings($1, $2);';
-    var queryArgs: Array<any> = [_foodListingKey, _receiverAppUserKey];
+    var queryArgs: Array<any> = [_foodListingKey, _requestedByAppUserKey];
 
     return query(queryString, queryArgs)
     .then((queryResult: QueryResult) =>{
         return Promise.resolve(true);
     })
     .catch((err: Error)=>{
-        return Promise.reject(new Error("Incorrect FoodListing or receiverAppUserKey"));
+        return Promise.reject(new Error("Incorrect FoodListing or requestedByAppUserKey"));
     });
 
 }

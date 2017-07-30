@@ -68,5 +68,25 @@ describe('Authentication', function() {
     });
 });
 
+describe('Food-Listing',function(){
+    it('should work?', function(done){
+        chai.request(server)
+            .post('/receiver/claimFoodListing')
+            .send({foodListingKey: 1, requestedByAppUserKey: 1})
+            .end(function(err, res){
+                console.log('Result of /authentication/login');
+                console.log(res.body);
+                res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.should.have.property('success');
+                res.body.success.should.be.a('boolean');
+                res.body.success ==true; 
+                res.body.should.have.property('message');
+                res.body.message.should.be.a('string');
+                done();
+            });
+    });
+});
+
 
 

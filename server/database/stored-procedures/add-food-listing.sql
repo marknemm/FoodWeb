@@ -21,7 +21,7 @@ BEGIN
     SELECT foodTypeKey INTO _foodTypeKey FROM FoodType WHERE foodTypeDescription = _foodType; 
 
     INSERT INTO FoodListing (foodTypeKey, perishable, expireDate, 
-                             donorAppUserKey, foodDescription, imgurl, postDate)
+                             postedByAppUserKey, foodDescription, imgurl, postDate)
     SELECT _foodTypeKey, _perishable, _expTimeStamp, _appUserKey, _foodDescription, _imgURL, _postDate;
 
 END;

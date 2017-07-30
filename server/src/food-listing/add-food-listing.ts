@@ -26,7 +26,7 @@ export function addFoodListing(foodListing: FoodListing): Promise<any> {
     var queryArgs = [foodListing.foodType,
                     foodListing.perishable,
                     foodListing.expirationDate.month + '/' + foodListing.expirationDate.day + '/' + foodListing.expirationDate.year,
-                    foodListing.donorAppUserKey,
+                    foodListing.postedByAppUserKey,
                     foodListing.foodDescription,
                     imageUrl];
 

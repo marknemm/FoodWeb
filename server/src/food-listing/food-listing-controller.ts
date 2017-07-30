@@ -44,6 +44,6 @@ export function handleClaimFoodListingRequest(request: Request, response: Respon
         response.send({success: true, message: "FoodListing has been successfully claimed"});
     })
     .catch((err: Error) => {
-        response.send({Error: err, message: err.message});
+        response.send({success: false, message: err.message});
     })
 }
