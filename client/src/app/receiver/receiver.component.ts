@@ -78,6 +78,11 @@ export class ReceiverComponent implements OnInit {
     window.onscroll = this.onScroll.bind(this);
   }
 
+  /**
+   * Called whenever the filters button is pressed. Handles the toggling of the filters panel when in mobile mode.
+   * @param filters The filters panel (div) element which will be toggled in or out of the viewport.
+   * @param filtersButton The filters button (button) element which was pressed.
+   */
   private toggleFilters(filters: HTMLElement, filtersButton: HTMLElement): void {
     var self = this;
     // Change translation amount based off of current state.
@@ -111,8 +116,8 @@ export class ReceiverComponent implements OnInit {
   }
 
   /**
-   * 
-   * @param elements 
+   * Temporarily disables any smooth translation effects defined in css for the given elements so that they will move instantly.
+   * @param elements The elements to disable smooth translate for.
    */
   private tempDisableSmoothTranslate(elements: Array<HTMLElement>): void {
     for (let i: number = 0; i < elements.length; i++) {
@@ -157,6 +162,10 @@ export class ReceiverComponent implements OnInit {
     return top;
   }
   
+  /**
+   * Whenever our filterForm form group changes state, this method will be invoked.
+   * @param value The current raw values of our filterForm form group abstract controls.
+   */
   private onChange(value: Filters): void {
     //this.receiverPrimaryService.updateFeed(value).then(models => this.models = models);
     var observer = this.receiverPrimaryService.updateFeed(value);
