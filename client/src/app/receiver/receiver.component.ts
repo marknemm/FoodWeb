@@ -6,6 +6,7 @@ import { Food } from './shared/food';
 import { Filters } from './shared/filters';
 import { ReceiverPrimaryService } from './receiver-primary.service';
 
+const appReceiverTagName = 'app-receiver';
 const now = new Date();
 
 const MODELS: Food[] = [
@@ -26,8 +27,6 @@ const MODELS: Food[] = [
     quantityClass: "Car",
     imgUrl: "https://i5.walmartimages.com/asr/4026d667-1824-48e3-acab-c46642521070_1.a0a61552b58949ce15a4990a2e02b050.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF"}
 ]
-
-let appReceiverTagName = 'app-receiver';
 
 @Component({
   selector: appReceiverTagName,
@@ -130,7 +129,7 @@ export class ReceiverComponent implements OnInit {
    * @param event The scroll event.
    */
   private onScroll(event: Event): void {
-    let filters: HTMLElement = document.getElementById('filters');
+    let filters: HTMLElement = document.getElementById('filters'); // This can potentially get out of sync with template if id changes!
     let fixCutoff = this.getAbsolutePosTop(document.getElementsByTagName(appReceiverTagName)[0]);
 
     if (document.body.scrollTop >= fixCutoff) {
