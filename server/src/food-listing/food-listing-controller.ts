@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { addFoodListing } from './add-food-listing';
 import { getFoodListing } from './get-food-listings';
 import { FoodListing } from './food-listing';
+import { claimFoodListing} from './claim-food-listing';
 
 export function handleAddFoodListingRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
@@ -33,5 +34,16 @@ export function handleGetFoodListingsRequest(request: Request, response: Respons
     })
     .catch((err: Error) => {
         response.send(JSON.stringify([]))
+    })
+}
+
+export function handleClaimFoodListingRequest(request: Request, response: Response): void{
+    response.setHeader('Content-Type', 'application/json');
+    var promise = claimFoodListing(request.body);
+    promise.then((claimResult: Boolean) => {
+        response.send({success: true, message: "FoodListing has been successfully claimed"});
+    })
+    .catch((err: Error) => {
+        response.send({Error: err, message: err.message});
     })
 }
