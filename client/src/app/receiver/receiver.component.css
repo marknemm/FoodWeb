@@ -1,3 +1,52 @@
-@media only screen and (min-width: 760px) {
-    
+#filters {
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
+    position: fixed;
+    z-index: 100;
+    padding-right: 0px;
+    word-wrap: break-word;
+    transform: none;
+}
+
+#filters-button {
+    position: absolute;
+    right: -30px;
+    top:0;
+    background: black;
+    opacity: 0;
+    cursor: pointer;
+    cursor: hand;
+    visibility: hidden;
+    -webkit-transition: background 0.5s ease;
+    -moz-transition: background 0.5s ease;
+    -o-transition: background 0.5s ease;
+    -ms-transition: background 0.5s ease;
+    transition: background 0.5s ease;
+    color: white;
+    font-weight: bolder;
+}
+
+#filters-button:hover {
+    background: darkgray;
+}
+
+@media only screen and (max-width: 1200px) {
+    #filters {
+        right: 100%;
+        background: white;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    #filters-button {
+        visibility: visible;
+        opacity: 0.67;
+    }
+
+    .translate {
+        transform: translateX(200px);
+    }
 }
