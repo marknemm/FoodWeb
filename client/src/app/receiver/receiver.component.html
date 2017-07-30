@@ -75,41 +75,43 @@
       </div>
     </div>
     <div class="col-md-8">
-      <ng-template #content let-c="close" let-d="dismss">
-        <div class="modal-header">
-          <h4 class="modal-title">Food Description</h4>
-          <button type="button" class="close" aria-label="Close" (click)="c('Cross click')">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>{{selectedModel.foodDescription}}</p>
-        </div>
-          <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="c('Request click')">Request</button>
-          <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
-        </div>
-      </ng-template>
-
-      <h2>Listings</h2>
-      <hr>
-      <div class="list-group" style="overflow-y:auto">
-        <a *ngFor="let model of models" class="list-group-item">
-          <img [src]="model.imgUrl" alt="No Picture" class="img-thumbnail" style="width:7vw;height:7vw">
-          <div>
-            <h4 style="margin-left:1vw">{{model.name}}
-              <button style="float:right" class="btn btn-primary btn-sm" (click)="selectItem(content, model)">
-                Details
-              </button>
-            </h4>
-            <hr>
-            <p style="margin-left:1vw">
-              Posted By: <b>{{model.donorFirstName}} {{model.donorLastName}}</b><br>
-              Present food types: <b>{{model.foodTypeDescription}}</b> <br>
-              Expires: <b>{{model.expirationDate}}</b> <!--Requires a {{model.quantityClass}}-->
-            </p>
+      <div id="food-listings">
+        <ng-template #content let-c="close" let-d="dismss">
+          <div class="modal-header">
+            <h4 class="modal-title">Food Description</h4>
+            <button type="button" class="close" aria-label="Close" (click)="c('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-        </a>
+          <div class="modal-body">
+            <p>{{selectedModel.foodDescription}}</p>
+          </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="c('Request click')">Request</button>
+            <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+          </div>
+        </ng-template>
+
+        <h2>Listings</h2>
+        <hr>
+        <div class="list-group" style="overflow-y:auto">
+          <a *ngFor="let model of models" class="list-group-item">
+            <img [src]="model.imgUrl" alt="No Picture" class="img-thumbnail" style="width:7vw;height:7vw">
+            <div>
+              <h4 style="margin-left:1vw">{{model.name}}
+                <button style="float:right" class="btn btn-primary btn-sm" (click)="selectItem(content, model)">
+                  Details
+                </button>
+              </h4>
+              <hr>
+              <p style="margin-left:1vw">
+                Posted By: <b>{{model.donorFirstName}} {{model.donorLastName}}</b><br>
+                Present food types: <b>{{model.foodTypeDescription}}</b> <br>
+                Expires: <b>{{model.expirationDate}}</b> <!--Requires a {{model.quantityClass}}-->
+              </p>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>

@@ -35,11 +35,15 @@
         right: 100%;
         background: white;
         width: 100%;
-        max-width: 400px;
+        max-width: 500px;
     }
 
     #filters-button {
         visibility: visible;
         opacity: 0.67;
+    }
+
+    #food-listings {
+        margin-left: 40px;
     }
 }
