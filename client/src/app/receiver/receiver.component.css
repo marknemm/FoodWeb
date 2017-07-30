@@ -8,6 +8,7 @@
 
 #filters-button {
     position: absolute;
+    height: 50px;
     width: 37px;
     right: -37px;
     top:0;
