@@ -82,13 +82,15 @@ export class ReceiverComponent implements OnInit {
       // First calculate what our offset should be to move just the filters onto the page!
       filters.style.transform = 'translateX(' + filters.offsetWidth + 'px)';
       filtersButton.textContent = '<';
+      filtersButton.style.right = '0px';
       // We have to handle position of filters panel when we resize the window.
       window.onresize = function() {
-        self.tempDisableSmoothTranslate(filters);
+        self.tempDisableSmoothTranslate([filters, filtersButton]);
         // Moving from mobile to desktop filters panel style. Here we have to make sure we get rid of any translation that was applied!
         if (window.innerWidth > 1200) {
           filters.style.transform = 'none';
           filtersButton.textContent = '>';
+          filtersButton.style.right = '-' + filtersButton.offsetWidth + 'px';
           window.onresize = undefined;
         }
         // Else if we are going 
@@ -100,14 +102,18 @@ export class ReceiverComponent implements OnInit {
     else {
       filters.style.transform = 'none';
       filtersButton.textContent = '>';
+      filtersButton.style.right = '-' + filtersButton.offsetWidth + 'px';
       window.onresize = undefined;
     }
   }
 
-  private tempDisableSmoothTranslate(filters: HTMLElement) {
-    filters.style.transition = undefined; // Stop the smooth translation with delay for an instant.
-    // This shall run after we are finished with all of our processing!
-    setTimeout(() => {filters.style.transition = 'all 1s ease';}, 0);
+  private tempDisableSmoothTranslate(elements: Array<HTMLElement>) {
+    for (let i: number = 0; i < elements.length; i++) {
+      let element: HTMLElement = elements[i];
+      element.style.transition = undefined; // Stop the smooth translation with delay for an instant.
+      // This shall run after we are finished with all of our processing!
+      setTimeout(() => {element.style.transition = 'all 1s ease';}, 0);
+    }
   }
   
   onChange(value: Filters) {
