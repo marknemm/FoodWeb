@@ -12,7 +12,7 @@ var connectionPool = require('./database_help/connection_pool');
 // Our controllers that will handle requests after this router hands off the data to them.
 import { AuthenticationController } from './authentication/authentication_controller';
 import { AuthenticationModel} from './authentication/authentication_model';
-import { handleAddFoodListingRequest, handleGetFoodListingsRequest } from './food-listing/food-listing-controller';
+import { handleAddFoodListingRequest, handleGetFoodListingsRequest, handleClaimFoodListingRequest } from './food-listing/food-listing-controller';
 
 // This is where compiled client ts files will go. We need this to locate index.html!
 const clientBuildDir = __dirname + '/../../client/dist/';
@@ -54,6 +54,9 @@ app.post('/donor/addFoodListing', handleAddFoodListingRequest);
 
 // Handle /receiver/getFoodListings route by passing off to FoodListingController.
 app.post('/receiver/getFoodListings', handleGetFoodListingsRequest);
+
+// Handle /receiver/claimFoodListing route by passing off to FoodListingController.
+app.post('/receiver/claimFoodListing', handleClaimFoodListingRequest);
 
 
 app.get('/public/*', function(request, response) {

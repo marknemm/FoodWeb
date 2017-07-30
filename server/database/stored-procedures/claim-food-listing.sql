@@ -13,6 +13,5 @@ BEGIN
     UPDATE FoodListing
     SET receiverAppUserKey = _receiverAppUserKey
     WHERE _foodListingKey = foodListingKey;
-
 END;
 $$ LANGUAGE plpgsql;
