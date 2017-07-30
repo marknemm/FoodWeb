@@ -63,6 +63,9 @@ describe('Authentication', function() {
                 res.body.should.have.property('email');
                 if (res.body.success)
                     res.body.email.should.be.a('string');
+                if (!res.body.success) {
+                    fail();
+                }
                 done();
             });
     });

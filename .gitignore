@@ -9,7 +9,7 @@
 /node_modules
 
 # sensitive data
-.env
+# .env
 
 # IDEs and editors
 /.idea

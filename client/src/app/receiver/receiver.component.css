@@ -1,14 +1,13 @@
 #filters {
-    -webkit-transition: all 1s ease;
-    -moz-transition: all 1s ease;
-    -o-transition: all 1s ease;
-    -ms-transition: all 1s ease;
     transition: all 1s ease;
     position: fixed;
     z-index: 100;
     padding-right: 0px;
     word-wrap: break-word;
-    transform: none;
+}
+
+#filters-content {
+    position: relative;
 }
 
 #filters-button {
@@ -44,9 +43,5 @@
     #filters-button {
         visibility: visible;
         opacity: 0.67;
-    }
-
-    .translate {
-        transform: translateX(200px);
     }
 }

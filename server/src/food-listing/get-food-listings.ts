@@ -16,6 +16,7 @@ export function getFoodListing(foodObject): Promise<Array<object>> {
 
     // Log and execute query.
     logSqlQueryExec(queryString, queryArgs);
+
     return query(queryString, queryArgs)
     .then((queryResult: QueryResult) => {
         // Generate result array and return it.
