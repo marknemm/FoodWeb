@@ -27,8 +27,10 @@ const MODELS: Food[] = [
     imgUrl: "https://i5.walmartimages.com/asr/4026d667-1824-48e3-acab-c46642521070_1.a0a61552b58949ce15a4990a2e02b050.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF"}
 ]
 
+let appReceiverTagName = 'app-receiver';
+
 @Component({
-  selector: 'app-receiver',
+  selector: appReceiverTagName,
   templateUrl: './receiver.component.html',
   styleUrls: ['./receiver.component.css'],
   providers: [ReceiverPrimaryService]
@@ -42,7 +44,6 @@ export class ReceiverComponent implements OnInit {
   quantityVals: string[];
   tFrameVals: string[];
   distVals: string[];
-  filtersOriginalTop: number;
   
   constructor(private formBuilder: FormBuilder,
   private receiverPrimaryService: ReceiverPrimaryService,
@@ -75,7 +76,6 @@ export class ReceiverComponent implements OnInit {
     });
 
     // We want to handle scroll events to determine when we should start fixing the filters at top of viewport!
-    this.filtersOriginalTop = this.getAbsolutePosTop(document.getElementById('filters'));
     window.onscroll = this.onScroll.bind(this);
   }
 
@@ -131,8 +131,9 @@ export class ReceiverComponent implements OnInit {
    */
   private onScroll(event: Event): void {
     let filters: HTMLElement = document.getElementById('filters');
+    let fixCutoff = this.getAbsolutePosTop(document.getElementsByTagName(appReceiverTagName)[0]);
 
-    if (document.body.scrollTop >= this.filtersOriginalTop) {
+    if (document.body.scrollTop >= fixCutoff) {
       filters.style.position = 'fixed';
       filters.style.top = '0px';
     }
