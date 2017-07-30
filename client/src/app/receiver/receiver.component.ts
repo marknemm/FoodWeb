@@ -75,17 +75,25 @@ export class ReceiverComponent implements OnInit {
     });
   }
 
-  toggleFilters(filters, filtersButton) {
+  toggleFilters(filters: HTMLElement, filtersButton: HTMLElement) {
+    var self = this;
     // Change translation amount based off of current state.
     if (filtersButton.textContent === '>') {
       // First calculate what our offset should be to move just the filters onto the page!
       filters.style.transform = 'translateX(' + filters.offsetWidth + 'px)';
       filtersButton.textContent = '<';
+      // We have to handle position of filters panel when we resize the window.
       window.onresize = function() {
+        self.tempDisableSmoothTranslate(filters);
+        // Moving from mobile to desktop filters panel style. Here we have to make sure we get rid of any translation that was applied!
         if (window.innerWidth > 1200) {
           filters.style.transform = 'none';
           filtersButton.textContent = '>';
           window.onresize = undefined;
+        }
+        // Else if we are going 
+        else {
+          filters.style.transform = 'translateX(' + filters.offsetWidth + 'px)';
         }
       }
     }
@@ -94,6 +102,12 @@ export class ReceiverComponent implements OnInit {
       filtersButton.textContent = '>';
       window.onresize = undefined;
     }
+  }
+
+  private tempDisableSmoothTranslate(filters: HTMLElement) {
+    filters.style.transition = undefined; // Stop the smooth translation with delay for an instant.
+    // This shall run after we are finished with all of our processing!
+    setTimeout(() => {filters.style.transition = 'all 1s ease';}, 0);
   }
   
   onChange(value: Filters) {
