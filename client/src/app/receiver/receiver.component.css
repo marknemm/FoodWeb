@@ -1,6 +1,6 @@
 #filters {
     transition: all 1s ease;
-    position: fixed;
+    position: absolute;
     z-index: 100;
     padding-right: 0px;
     word-wrap: break-word;

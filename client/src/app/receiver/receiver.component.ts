@@ -33,7 +33,6 @@ const MODELS: Food[] = [
   styleUrls: ['./receiver.component.css'],
   providers: [ReceiverPrimaryService]
 })
-
 export class ReceiverComponent implements OnInit {
   tester: any;
   models: Food[];
@@ -43,6 +42,7 @@ export class ReceiverComponent implements OnInit {
   quantityVals: string[];
   tFrameVals: string[];
   distVals: string[];
+  filtersOriginalTop: number;
   
   constructor(private formBuilder: FormBuilder,
   private receiverPrimaryService: ReceiverPrimaryService,
@@ -73,9 +73,13 @@ export class ReceiverComponent implements OnInit {
     this.filterForm.valueChanges.subscribe(data => {
       this.onChange(this.filterForm.value);
     });
+
+    // We want to handle scroll events to determine when we should start fixing the filters at top of viewport!
+    this.filtersOriginalTop = this.getAbsolutePosTop(document.getElementById('filters'));
+    window.onscroll = this.onScroll.bind(this);
   }
 
-  toggleFilters(filters: HTMLElement, filtersButton: HTMLElement) {
+  private toggleFilters(filters: HTMLElement, filtersButton: HTMLElement): void {
     var self = this;
     // Change translation amount based off of current state.
     if (filtersButton.textContent === '>') {
@@ -97,7 +101,7 @@ export class ReceiverComponent implements OnInit {
         else {
           filters.style.transform = 'translateX(' + filters.offsetWidth + 'px)';
         }
-      }
+      };
     }
     else {
       filters.style.transform = 'none';
@@ -107,7 +111,11 @@ export class ReceiverComponent implements OnInit {
     }
   }
 
-  private tempDisableSmoothTranslate(elements: Array<HTMLElement>) {
+  /**
+   * 
+   * @param elements 
+   */
+  private tempDisableSmoothTranslate(elements: Array<HTMLElement>): void {
     for (let i: number = 0; i < elements.length; i++) {
       let element: HTMLElement = elements[i];
       element.style.transition = undefined; // Stop the smooth translation with delay for an instant.
@@ -115,8 +123,41 @@ export class ReceiverComponent implements OnInit {
       setTimeout(() => {element.style.transition = 'all 1s ease';}, 0);
     }
   }
+
+  /**
+   * Handles a scroll event to determine when to fix the filters div to the top of the viewport. We will fix it when
+   * we scroll to or past the top of the filters div. We will unfix it when we scroll above this position once more.
+   * @param event The scroll event.
+   */
+  private onScroll(event: Event): void {
+    let filters: HTMLElement = document.getElementById('filters');
+
+    if (document.body.scrollTop >= this.filtersOriginalTop) {
+      filters.style.position = 'fixed';
+      filters.style.top = '0px';
+    }
+    else {
+      filters.style.position = 'absolute';
+      filters.style.top = 'auto';
+    }
+  }
+
+  /**
+   * Calculates the absolute position of the top of a given HTML element.
+   * @param element The element to get the absolute position of.
+   */
+  private getAbsolutePosTop(element): number {
+    var top: number = 0;
+
+    do {
+        top += element.offsetTop  || 0;
+        element = element.offsetParent;
+    } while (element);
+
+    return top;
+  }
   
-  onChange(value: Filters) {
+  private onChange(value: Filters): void {
     //this.receiverPrimaryService.updateFeed(value).then(models => this.models = models);
     var observer = this.receiverPrimaryService.updateFeed(value);
 
@@ -129,7 +170,7 @@ export class ReceiverComponent implements OnInit {
     //this.models = MODELS;
   }
 
-  selectItem(content, value: Food) {
+  private selectItem(content, value: Food): void {
     //For viewing specifics and taking a listing down from the server
     this.selectedModel = value;
     this.modalService.open(content).result.then((result) => {
