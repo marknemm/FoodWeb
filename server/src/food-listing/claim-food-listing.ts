@@ -9,7 +9,7 @@ export function claimFoodListing(claimRequest): Promise<Boolean>{
     var _requestedByAppUserKey = claimRequest.requestedByAppUserKey;
 
     // Build our prepared statement.
-    var queryString: string = 'SELECT * FROM claimFoodListings($1, $2);';
+    var queryString: string = 'SELECT * FROM claimFoodListing($1, $2);';
     var queryArgs: Array<any> = [_foodListingKey, _requestedByAppUserKey];
 
     return query(queryString, queryArgs)
@@ -17,6 +17,7 @@ export function claimFoodListing(claimRequest): Promise<Boolean>{
         return Promise.resolve(true);
     })
     .catch((err: Error)=>{
+        console.log(err);
         return Promise.reject(new Error("Incorrect FoodListing or requestedByAppUserKey"));
     });
 
