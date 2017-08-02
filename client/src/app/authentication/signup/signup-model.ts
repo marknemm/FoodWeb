@@ -11,12 +11,15 @@ export class SignupModel {
     public password: string;
     public city: string;
     public address: string;
+    public state: string;
     public stateList: string[] = ['CA', 'NY', 'IN'];
     public zip: number;
+    public donor: boolean;
+    public receiver: boolean;
 
     public appUserKey: number;
 
-    //stateList = ['CA', 'NY', 'IN'];
+    
 
      
 

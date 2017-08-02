@@ -1,13 +1,15 @@
 <div class="layout">
-<br/>
+  <br/>
   <h2>Create your account</h2>
   <hr/>
-  <form ngNativeValidate (submit)="signupUser($event)" (select)="showStates($array)" >
-  <br/>
-    
-  <!--<input type="checkbox">Sign up as a Donor 
-  <input type="checkbox">Sign up as a Receiver <br/>-->
-    
+  <form ngNativeValidate (submit)="signupUser($event)" >
+    <br/>
+
+      <!--div class="checkbox">
+        Sign up as a Donor <input type="checkbox" name="donor" [(checked)]="signupModel.donor"><br/> 
+        Sign up as a Receiver<input type="checkbox" name="receiver" [(checked)]="signupModel.receiver"> <br/>
+      </div-->  
+
       <br/>
       Enter Your First Name:<br/>
       <input type="text" name="firstName" [(ngModel)]="signupModel.firstName" required autofocus autocomplete="on"> 
@@ -19,6 +21,13 @@
 
       Enter your email address:<br/>
       <input type="email" name="email" [(ngModel)]="signupModel.email" required autocomplete="on">
+      <br/>
+
+       Enter your state:<br/>
+      <select [(ngModel)]="signupModel.state">
+      <option *ngFor="let state of signupModel.stateList" [value]="state">{{state}} </option>
+      </select>
+      <br/>
       <br/>
 
       <!--Enter your address:<br/>

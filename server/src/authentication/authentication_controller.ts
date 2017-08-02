@@ -94,6 +94,8 @@ export class AuthenticationController {
         var zip: string = request.body.zip;
         var state: string = request.body.state;
         var stateList: string[] = request.body.stateList;
+        var donor: boolean = request.body.donor;
+        var receiver: boolean = request.body.receiver;
         var promise: Promise<AppUserPrimaryInfo> = this.authenticatonModel.SignUpUser(email, password, username, lastName, firstName, city, address, state, zip);
 
         promise.then((appUserPrimaryInfo: AppUserPrimaryInfo) => {

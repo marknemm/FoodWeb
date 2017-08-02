@@ -9,7 +9,9 @@
 
 }
 
-.checkOptions{
+.checkbox{
+    display: block;
+    float: left;
     text-align: left;
 }
 
@@ -45,7 +47,4 @@ form{
 	color: red;
 }
 
-.checkbox{
-
-}
 
