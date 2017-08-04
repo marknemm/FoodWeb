@@ -10,7 +10,7 @@ CREATE OR REPLACE FUNCTION getFoodListings
     _donorOrganizationName  VARCHAR(128)    DEFAULT NULL,   -- Are we looking for food from a specific organization? Null if not.
     _earliestExpireDate     TEXT            DEFAULT NULL,   -- Do we require food that is going to expire after a specific date?
                                                             -- Must be in the format MM/DD/YYYY!
-    _requestedByAppUserKey     INTEGER         DEFAULT NULL    -- Key of the reciever who is claiming this listing.
+    _requestedByAppUserKey     INTEGER      DEFAULT NULL    -- Key of the reciever who is claiming this listing.
 )
 RETURNS TABLE
 (
@@ -33,6 +33,7 @@ BEGIN
 
     RETURN QUERY
     SELECT  FoodListing.foodListingKey,
+            FoodListing.requestedByAppUserKey,
             FoodType.foodTypeDescription,
             FoodListing.perishable,
             OrganizationInfo.name,
@@ -58,6 +59,7 @@ BEGIN
       AND (_perishable IS NULL              OR FoodListing.perishable = _perishable)
       AND (_donorOrganizationName IS NULL   OR OrganizationInfo.name = _donorOrganizationName)
       AND (_earliestExpireDate IS NULL      OR FoodListing.expireDate >= TO_TIMESTAMP(_earliestExpireDate, 'MM/DD/YYYY'))
+      AND (FoodListing.requestedByAppUserKey IS NULL OR FoodListing.requestedByAppUserKey = _requestedByAppUserKey)
     ORDER BY FoodListing.expireDate ASC;
     --SELECT claimFoodListing(_foodListingKey, _receiverAppUserKey);
 
@@ -81,5 +83,5 @@ select getFoodListings(NULL, NULL, NULL, 'Wegmans');
 
 */
 
-select getFoodListings(NULL, NULL, NULL, NULL, '7/8/2017');
+--select getFoodListings(NULL, NULL, NULL, NULL, '7/8/2017');
 
