@@ -58,8 +58,8 @@ BEGIN
       AND (_perishable IS NULL              OR FoodListing.perishable = _perishable)
       AND (_donorOrganizationName IS NULL   OR OrganizationInfo.name = _donorOrganizationName)
       AND (_earliestExpireDate IS NULL      OR FoodListing.expireDate >= TO_TIMESTAMP(_earliestExpireDate, 'MM/DD/YYYY'))
-      AND ((_requestedByAppUserKey IS NOT NULL AND FoodListing.requestedByAppUserKey = _requestedByAppUserKey) 
-            OR FoodListing.requestedByAppUserKey IS NULL)
+      AND ((_requestedByAppUserKey IS NULL AND FoodListing.requestedByAppUserKey IS NULL) 
+            OR FoodListing.requestedByAppUserKey = _requestedByAppUserKey)
     ORDER BY FoodListing.expireDate ASC;
     --SELECT claimFoodListing(_foodListingKey, _receiverAppUserKey);
 
@@ -83,4 +83,4 @@ select getFoodListings(NULL, NULL, NULL, 'Wegmans');
 
 */
 
-SELECT * FROM getFoodListings(NULL, NULL, NULL, NULL, NULL, NULL);
+SELECT getFoodListings(NULL, NULL, NULL, NULL, NULL, NULL);
