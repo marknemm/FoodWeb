@@ -37,6 +37,17 @@ export function handleGetFoodListingsRequest(request: Request, response: Respons
     })
 }
 
+export function handleReceiverCartGetFoodListingsRequest(request: Request, response: Response): void {
+    response.setHeader('Content-Type', 'application/json');
+    var promise = getFoodListing(request.body);
+    promise.then((searchResult: Array<object>) => {
+        response.send(JSON.stringify(searchResult));
+    })
+    .catch((err: Error) => {
+        response.send(JSON.stringify([]))
+    })
+}
+
 export function handleClaimFoodListingRequest(request: Request, response: Response): void{
     response.setHeader('Content-Type', 'application/json');
     var promise = claimFoodListing(request.body);

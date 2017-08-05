@@ -21,6 +21,7 @@ import { AuthGaurdService } from './authentication/misc/auth-gaurd.service'
 import { SignupComponent } from './authentication/signup/signup.component';
 import { ReceiverCartComponent } from './receiver-cart/receiver-cart.component';
 import { BannerComponent } from './banner/banner.component';
+import { DonorCartComponent } from './donor-cart/donor-cart.component';
 
 const appRoutes: Routes = [
   /*{
@@ -64,7 +65,8 @@ const appRoutes: Routes = [
     ImageCropperComponent,
     DateFormatterPipe,
     ReceiverCartComponent,
-    BannerComponent
+    BannerComponent,
+    DonorCartComponent
   ],
   imports: [
     NgbModule.forRoot(),

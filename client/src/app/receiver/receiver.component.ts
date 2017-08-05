@@ -85,34 +85,51 @@ export class ReceiverComponent implements OnInit {
    */
   private toggleFilters(filters: HTMLElement, filtersButton: HTMLElement): void {
     var self = this;
-    // Change translation amount based off of current state.
+    
+    // If our filters div is outside the viewport, and we are translating it into the viewport
     if (filtersButton.textContent === '>') {
-      // First calculate what our offset should be to move just the filters onto the page!
-      filters.style.transform = 'translateX(' + filters.offsetWidth + 'px)';
-      filtersButton.textContent = '<';
-      filtersButton.style.right = '0px';
-      // We have to handle position of filters panel when we resize the window.
+      self.toggleFiltersInsideViewport(filters, filtersButton);
+      // We have to handle position of filters panel when we resize the window b/c the filters div will potentially resize based off of the window size.
       window.onresize = function() {
         self.tempDisableSmoothTranslate([filters, filtersButton]);
-        // Moving from mobile to desktop filters panel style. Here we have to make sure we get rid of any translation that was applied!
+        // Moving from mobile to desktop filters panel style.
         if (window.innerWidth > 1200) {
-          filters.style.transform = 'none';
-          filtersButton.textContent = '>';
-          filtersButton.style.right = '-' + filtersButton.offsetWidth + 'px';
-          window.onresize = undefined;
+          self.toggleFiltersOutsideViewport(filters, filtersButton);
         }
-        // Else if we are going 
+        // Else staying in mobile mode. Recalculate the translation based off of new width.
         else {
           filters.style.transform = 'translateX(' + filters.offsetWidth + 'px)';
         }
       };
     }
+    // Else if our filters div is inside the viewport, and we are translating it out of the viewport (getting rid of translation).
     else {
-      filters.style.transform = 'none';
-      filtersButton.textContent = '>';
-      filtersButton.style.right = '-' + filtersButton.offsetWidth + 'px';
-      window.onresize = undefined;
+      self.toggleFiltersOutsideViewport(filters, filtersButton);
     }
+  }
+
+  /**
+   * Toggles the filters panel into the viewport.
+   * @param filters The filters panel (div) element which will be toggled into the viewport.
+   * @param filtersButton The filters button (button) element which was pressed.
+   */
+  private toggleFiltersInsideViewport(filters: HTMLElement, filtersButton: HTMLElement): void {
+    // The translation amount will be the width of the filters div.
+    filters.style.transform = 'translateX(' + filters.offsetWidth + 'px)';
+    filtersButton.textContent = '<';
+    filtersButton.style.right = '0px';
+  }
+
+  /**
+   * Toggles the filters panel out of the viewport.
+   * @param filters The filters panel (div) element which will be toggled out of the viewport.
+   * @param filtersButton The filters button (button) element which was pressed.
+   */
+  private toggleFiltersOutsideViewport(filters: HTMLElement, filtersButton: HTMLElement): void {
+    filters.style.transform = 'none';
+    filtersButton.textContent = '>';
+    filtersButton.style.right = '-' + filtersButton.offsetWidth + 'px';
+    window.onresize = undefined;
   }
 
   /**
