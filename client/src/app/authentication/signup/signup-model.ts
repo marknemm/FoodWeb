@@ -14,16 +14,11 @@ export class SignupModel {
     public state: string;
     public stateList: string[] = ['CA', 'NY', 'IN'];
     public zip: number;
-    public donor: boolean;
-    public receiver: boolean;
+    public isDonor: boolean;
+    public isReceiver: boolean;
 
     public appUserKey: number;
 
-    
-
-     
-
-    
 
     constructor() {}
 

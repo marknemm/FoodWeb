@@ -5,10 +5,10 @@
   <form ngNativeValidate (submit)="signupUser($event)" >
     <br/>
 
-      <!--div class="checkbox">
-        Sign up as a Donor <input type="checkbox" name="donor" [(checked)]="signupModel.donor"><br/> 
-        Sign up as a Receiver<input type="checkbox" name="receiver" [(checked)]="signupModel.receiver"> <br/>
-      </div-->  
+      <div class="checkbox">
+        Sign up as a Donor <input type="checkbox" name="donor" [(ngModel)]="signupModel.isDonor"><br/> 
+        Sign up as a Receiver<input type="checkbox" name="receiver" [(ngModel)]="signupModel.isReceiver"> <br/>
+      </div>  
 
       <br/>
       Enter Your First Name:<br/>
@@ -24,7 +24,7 @@
       <br/>
 
        Enter your state:<br/>
-      <select [(ngModel)]="signupModel.state">
+      <select  name="state" [(ngModel)]="signupModel.state">
       <option *ngFor="let state of signupModel.stateList" [value]="state">{{state}} </option>
       </select>
       <br/>
