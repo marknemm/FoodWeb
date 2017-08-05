@@ -38,7 +38,7 @@ export function logSqlQueryExec(query : string, args? : Array<any>) : void {
     if (args != null) {
         console.log("SQL Query Arguments: ");
         for (let i : number = 0; i < args.length; i++) {
-            console.log((i + 1).toString() + "$: " + args[i].toString());
+            console.log((i + 1).toString() + "$: " + args[i]);
         }
     }
 
@@ -52,7 +52,7 @@ export function logSqlQueryExec(query : string, args? : Array<any>) : void {
 export function logSqlQueryResult(rows : Array<any>) : void {
     console.log(_enclosingString);
 
-    console.log("Number of rows in query result: " + rows.length.toString());
+    console.log("Number of rows in query result: " + rows.length);
 
     if (rows.length > 0) {
         console.log("\n");
