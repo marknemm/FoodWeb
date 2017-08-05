@@ -28,7 +28,7 @@ export function handleAddFoodListingRequest(request: Request, response: Response
 
 export function handleGetFoodListingsRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
-    var promise = getFoodListing(request.body);
+    var promise = getFoodListing(request.body, request.session);
     promise.then((searchResult: Array<object>) => {
         response.send(JSON.stringify(searchResult));
     })
