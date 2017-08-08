@@ -8,15 +8,10 @@ export function getFoodListing(foodObject, requesetedByAppUserKey: number): Prom
     var foodTypesArg: string = generateFoodTypesArg(foodObject);
     var expireDateArg: string = generateExpireDateArg(foodObject);
     var queryArgs: Array<any> = new Array<any>();
-   // let requesetedByAppUserKey: number = generateRequestedByAppUserKey(foodObject, sessionObject);
-
-    // if(requesetedByAppUserKey == -1){
-    //     return Promise.reject(new Error("You need to Log in"));
-    // }
-
+   
     // Build our prepared statement.
     var queryString: string = 'SELECT * FROM getFoodListings(null, $1, $2, null, $3, $4);';
-    queryArgs = [ foodTypesArg, perishableArg, expireDateArg, null ];
+    queryArgs = [ foodTypesArg, perishableArg, expireDateArg, requesetedByAppUserKey ];
     queryString = fixNullQueryArgs(queryString, queryArgs);
 
     // Log and execute query.
