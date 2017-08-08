@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { addFoodListing } from './add-food-listing';
 import { getFoodListing } from './get-food-listings';
+import { fetchAppUserKey} from './fetch-App-User-Key';
 import { FoodListing } from './food-listing';
 import { claimFoodListing} from './claim-food-listing';
 
@@ -26,9 +27,9 @@ export function handleAddFoodListingRequest(request: Request, response: Response
     });
 }
 
-export function handleGetFoodListingsRequest(request: Request, response: Response): void {
+export function handleReceiverGetFoodListingsRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
-    var promise = getFoodListing(request.body);
+    var promise = getFoodListing(request.body, null);
     promise.then((searchResult: Array<object>) => {
         response.send(JSON.stringify(searchResult));
     })
@@ -39,7 +40,11 @@ export function handleGetFoodListingsRequest(request: Request, response: Respons
 
 export function handleReceiverCartGetFoodListingsRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
-    var promise = getFoodListing(request.body);
+    let requestedByAppUserKey: number = fetchAppUserKey(request.session);
+    if (requestedByAppUserKey == -1){
+        response.send(new Error("You need to Log in"));
+    }
+    var promise = getFoodListing(request.body, requestedByAppUserKey);
     promise.then((searchResult: Array<object>) => {
         response.send(JSON.stringify(searchResult));
     })

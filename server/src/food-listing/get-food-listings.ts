@@ -3,7 +3,7 @@ import { connect, query, Client, QueryResult } from '../database_help/connection
 import { fixNullQueryArgs } from '../database_help/prepared-statement-helper';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
 
-export function getFoodListing(foodObject): Promise<Array<object>> {
+export function getFoodListing(foodObject, requesetedByAppUserKey: number): Promise<Array<object>> {
     var perishableArg: boolean = generatePerishabilityArg(foodObject);   
     var foodTypesArg: string = generateFoodTypesArg(foodObject);
     var expireDateArg: string = generateExpireDateArg(foodObject);
