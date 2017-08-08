@@ -1,77 +1,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <app-slick-left-panel>
-                <h2>Filters</h2>
-                <hr>
-                <form [formGroup]="filterForm">
-                    <h4>Acceptable Food Types:</h4>
-                    <div data-toggle="buttons">
-                        <label class="btn btn-primary" [class.active]="filterForm.value.grain">
-                    <input type="checkbox" formControlName="grain">Grain
-                    </label>
-                        <label class="btn btn-primary" [class.active]="filterForm.value.meat">
-                    <input type="checkbox" formControlName="meat">Meat
-                    </label>
-                        <label class="btn btn-primary" [class.active]="filterForm.value.fruit">
-                    <input type="checkbox" formControlName="fruit">Fruit
-                    </label>
-                        <label class="btn btn-primary" [class.active]="filterForm.value.vegetable">
-                    <input type="checkbox" formControlName="vegetable">Vegetable
-                    </label>
-                        <label class="btn btn-primary" [class.active]="filterForm.value.drink">
-                    <input type="checkbox" formControlName="drink">Drink
-                    </label>
-                    </div>
-                    <h4>Minimum Expiration:</h4>
-                    <ngb-datepicker #dp formControlName="minExpireAfterDays" (navigate)="date = $event.next"></ngb-datepicker>
-                    <!--<div ngbRadioGroup name="radioBasic" formControlName="minExpireAfterDays">
-                    <label class="btn btn-primary">
-                    <input type="radio" [value]="0">{{tFrameVals[0]}}
-                    </label>
-                    <label class="btn btn-primary">
-                    <input type="radio" [value]="1">{{tFrameVals[1]}}
-                    </label>
-                    <label class="btn btn-primary">
-                    <input type="radio" [value]="2">{{tFrameVals[2]}}
-                    </label>
-                    </div>
-                    <h4>Maximum Distance:</h4>
-                    <div ngbRadioGroup name="radioBasic" formControlName="maxDistance">
-                        <label class="btn btn-primary">
-                        <input type="radio" [value]="0">{{distVals[0]}}
-                        </label>
-                        <label class="btn btn-primary">
-                        <input type="radio" [value]="1">{{distVals[1]}}
-                        </label>
-                        <label class="btn btn-primary">
-                        <input type="radio" [value]="2">{{distVals[2]}}
-                        </label>
-                    </div>
-                    <h4>Must Fit in a:</h4>
-                    <div ngbRadioGroup name="radioBasic" formControlName="maxQuantity">
-                        <label class="btn btn-primary">
-                        <input type="radio" [value]="0">{{quantityVals[0]}}
-                        </label>
-                        <label class="btn btn-primary">
-                        <input type="radio" [value]="1">{{quantityVals[1]}}
-                        </label>
-                        <label class="btn btn-primary">
-                        <input type="radio" [value]="2">{{quantityVals[2]}}
-                        </label>
-                    </div>-->
-                    <h4>Acceptable Perishability:</h4>
-                    <div data-toggle="buttons">
-                        <label class="btn btn-primary" [class.active]="filterForm.value.perishable">
-                    <input type="checkbox" formControlName="perishable">Perishable
-                    </label>
-                        <label class="btn btn-primary" [class.active]="filterForm.value.notPerishable">
-                    <input type="checkbox" formControlName="notPerishable">Not Perishable
-                    </label>
-                    </div>
-                </form>
-                <hr>
-            </app-slick-left-panel>
+            <form [formGroup]="filterForm">
+                <app-food-listings-filters #foodListingsFilters>
+                    <!-- This is how you would add filters specific to the receiver form -->
+                    <!--<label name="dummyControl">
+                        Dummy Control: <input formControlName="dummyControl">
+                    </label>-->
+                </app-food-listings-filters>
+            </form>
         </div>
         <div class="col-md-8">
             <div id="food-listings">

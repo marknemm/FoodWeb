@@ -23,6 +23,7 @@ import { ReceiverCartComponent } from './receiver-cart/receiver-cart.component';
 import { BannerComponent } from './banner/banner.component';
 import { DonorCartComponent } from './donor-cart/donor-cart.component';
 import { SlickLeftPanelComponent } from './slick-left-panel/slick-left-panel.component';
+import { FoodListingsFiltersComponent } from './food-listings-filters/food-listings-filters.component';
 
 const appRoutes: Routes = [
   /*{
@@ -68,7 +69,8 @@ const appRoutes: Routes = [
     ReceiverCartComponent,
     BannerComponent,
     DonorCartComponent,
-    SlickLeftPanelComponent
+    SlickLeftPanelComponent,
+    FoodListingsFiltersComponent
   ],
   imports: [
     NgbModule.forRoot(),

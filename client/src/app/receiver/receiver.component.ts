@@ -1,5 +1,5 @@
-import { Component, OnInit, NgModule, Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, NgModule, Injectable, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { NgbModule, NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 import { Food } from './shared/food';
@@ -42,35 +42,19 @@ export class ReceiverComponent implements OnInit {
     selectedModel: Food;
     filters: Filters;
     filterForm: FormGroup;
-    quantityVals: string[];
-    tFrameVals: string[];
-    distVals: string[];
+
+    @ViewChild('foodListingsFilters') foodListingsFilters;
 
     constructor(private formBuilder: FormBuilder,
-        private receiverPrimaryService: ReceiverPrimaryService,
-        private modalService: NgbModal) { }
+                private receiverPrimaryService: ReceiverPrimaryService,
+                private modalService: NgbModal) { }
 
     ngOnInit() {
         this.filters = new Filters(true, true, true, true, true, true, false, { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() }, 0, 0);
 
-        this.onChange(this.filters);
-
-        this.quantityVals = ["Car", "Van", "Truck"];
-        this.tFrameVals = ["0-6 Days", "6-12 Days", "12+ Days"];
-        this.distVals = ["0-6 Miles", "6-12 Miles", "12+ Miles"];
-
-        this.filterForm = this.formBuilder.group({
-            grain: this.filters.grain,
-            meat: this.filters.meat,
-            vegetable: this.filters.vegetable,
-            fruit: this.filters.fruit,
-            drink: this.filters.drink,
-            minExpireAfterDays: this.filters.minExpireAfterDays,
-            maxQuantity: this.filters.maxQuantity,
-            maxDistance: this.filters.maxDistance,
-            perishable: this.filters.perishable,
-            notPerishable: this.filters.notPerishable
-        });
+        this.filterForm = this.foodListingsFilters.filterForm;
+        // This is how you would add the code behind for additional filters specific to the receiver form.
+        // this.filterForm.addControl('dummyControl', new FormControl('dummy control'));
 
         this.filterForm.valueChanges.subscribe(data => {
             this.onChange(this.filterForm.value);
