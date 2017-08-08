@@ -36,7 +36,7 @@ export function addFoodListing(foodListing: FoodListing): Promise<any> {
         // If we have an image, then store it on AWS / Heroku.
         if (foodListing.image != null) {
             //return writeImgToCDN(foodListing.image, foodListing.imageName);
-            return writeImgToHerokuFs(foodListing.image, imageUrl);
+            return writeImgToLocalFs(foodListing.image, imageUrl);
         }
         return Promise.resolve();
     })
@@ -75,7 +75,7 @@ function writeImgToCDN(image: string, imageName: string): Promise<any> {
     });
 }
 
-function writeImgToHerokuFs(image: string, imageUrl: string): Promise<any> {
+function writeImgToLocalFs(image: string, imageUrl: string): Promise<any> {
     var data = image.replace(/^data:image\/\w+;base64,/, '');
 
     return new Promise(function(resolve, reject) {
@@ -85,7 +85,7 @@ function writeImgToHerokuFs(image: string, imageUrl: string): Promise<any> {
                 reject();
             }
             else {
-                console.log('successfully saved the image on Heroku!');
+                console.log('successfully saved the image on local filesystem!');
                 resolve();
             }
         });

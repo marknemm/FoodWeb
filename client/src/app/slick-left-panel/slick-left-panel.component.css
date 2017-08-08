@@ -1,0 +1,47 @@
+#slick-left-panel {
+    transition: all 1s ease;
+    position: absolute;
+    z-index: 100;
+    padding-left: 10px;
+    padding-right: 10px;
+    word-wrap: break-word;
+}
+
+#slick-left-panel-button {
+    position: absolute;
+    height: 50px;
+    width: 37px;
+    right: -37px;
+    top:0;
+    background: darkgray;
+    opacity: 0;
+    cursor: pointer;
+    cursor: hand;
+    visibility: hidden;
+    -webkit-transition: 0.5s ease;
+    -moz-transition: 0.5s ease;
+    -o-transition: 0.5s ease;
+    -ms-transition: 0.5s ease;
+    transition: 0.5s ease;
+    color: white;
+    font-weight: bolder;
+    z-index: 101;
+}
+
+#slick-left-panel-button:hover {
+    background: black;
+}
+
+@media only screen and (max-width: 1200px) {
+    #slick-left-panel {
+        right: 100%;
+        background: white;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    #slick-left-panel-button {
+        visibility: visible;
+        opacity: 0.67;
+    }
+}
