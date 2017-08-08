@@ -11,11 +11,16 @@ export class AppUserPrimaryInfo {
     public appUserKey;
     public username;
     public email;
+    public receiverOrganizationKey;
+    public donorOrganizationKey;
 
-    constructor(appUserKey : number, username : string, email : string) {
+    constructor(appUserKey: number, username: string, email: string,
+        receiverOrganizationKey: number, donorOrganizationKey: number) {
         this.appUserKey = appUserKey;
         this.username = username;
         this.email = email;
+        this.receiverOrganizationKey = receiverOrganizationKey;
+        this.donorOrganizationKey = donorOrganizationKey;
     }
 }
 
@@ -27,22 +32,22 @@ export class AuthenticationModel {
     constructor() {
 
     }
-    
+
     /**
      * Authenticates a given user.
      * @param usernameOrEmail The username or email of the user to authenticate.
      * @param password The password of the user to authenticate.
      * @return A promise where on success it will provide the primary AppUser information of the logged in user.
      */
-    public authenticateAppUser(usernameOrEmail : string, password : string) : Promise<AppUserPrimaryInfo> {
+    public authenticateAppUser(usernameOrEmail: string, password: string): Promise<AppUserPrimaryInfo> {
         let self: AuthenticationModel = this; // Needed because this inside the then callbacks will not refer to AuthenticationModel!
-        
+
         // First grab a connection so that we can exectue multiple queries with it.
         return this.getAppUserInfo(usernameOrEmail)
-            .then((getAppUserInfoResult : QueryResult) => {
+            .then((getAppUserInfoResult: QueryResult) => {
                 return self.checkPassword(usernameOrEmail, password, getAppUserInfoResult);
             })
-            .catch((err : Error) => {
+            .catch((err: Error) => {
                 return self.handleAuthenticateAppUserErr(err);
             });
     }
@@ -53,8 +58,8 @@ export class AuthenticationModel {
      * @return A promise with the query result. The query result should simply contain one row with a salt member.
      */
     private getAppUserInfo(usernameOrEmail: string): Promise<QueryResult> {
-        let queryString : string = 'SELECT appUserKey, username, email, password FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1';
-        let queryArgs : Array<string> = [usernameOrEmail];
+        let queryString: string = 'SELECT appUserKey, username, email, password, donorOrganizationKey, receiverOrganizationKey FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1';
+        let queryArgs: Array<string> = [usernameOrEmail];
         logSqlQueryExec(queryString, queryArgs);
         return query(queryString, queryArgs);
     }
@@ -75,11 +80,13 @@ export class AuthenticationModel {
             let username: string = getAppUserInfoResult.rows[0].username;
             let email: string = getAppUserInfoResult.rows[0].email;
             let hashPassword: string = getAppUserInfoResult.rows[0].password;
+            let donorOrganizationKey: number = getAppUserInfoResult.rows[0].donorOrganizationKey;
+            let receiverOrganizationKey: number = getAppUserInfoResult.rows[0].receiverOrganizationKey;
 
             return checkPassword(password, hashPassword)
                 .then((isMatch: boolean) => {
                     if (isMatch) {
-                        return Promise.resolve(new AppUserPrimaryInfo(appUserKey, username, email));
+                        return Promise.resolve(new AppUserPrimaryInfo(appUserKey, username, email, receiverOrganizationKey, donorOrganizationKey));
                     }
                     return Promise.reject(new Error('Password is incorrect'));
                 });
@@ -160,9 +167,9 @@ export class AuthenticationModel {
      * @param zip The new user's zip code.
      * @param phone
      */
-    private insertIntoAppUser(email: string, hashedPassword: string, username: string, lastName: string, firstName: string, isReceiver: boolean, isDonor: boolean, orgName: string, address: string, city: string,  state: string, zip: string, phone: string): Promise<QueryResult> {
-        let queryString : string = 'SELECT addAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)';
-        let queryArgs : Array<string> = [username, email, hashedPassword, lastName, firstName, orgName, address, city, state, zip, phone];
+    private insertIntoAppUser(email: string, hashedPassword: string, username: string, lastName: string, firstName: string, isReceiver: boolean, isDonor: boolean, orgName: string, address: string, city: string, state: string, zip: string, phone: string): Promise<QueryResult> {
+        let queryString: string = 'SELECT * FROM addAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)';
+        let queryArgs: Array<any> = [username, email, hashedPassword, lastName, firstName, isReceiver, isDonor, orgName, address, city, state, zip, phone];
         logSqlQueryExec(queryString, queryArgs);
         return query(queryString, queryArgs);
     }
@@ -176,7 +183,8 @@ export class AuthenticationModel {
     private handleSignUpUserResult(email: string, username: string, insertQueryResult: QueryResult): Promise<AppUserPrimaryInfo> {
         logSqlQueryResult(insertQueryResult.rows);
         if (insertQueryResult.rows.length = 1) {
-            return Promise.resolve(new AppUserPrimaryInfo(insertQueryResult.rows[0]['addappuser'], username, email));
+            return Promise.resolve(new AppUserPrimaryInfo(insertQueryResult.rows[0].appuserkey, username, email,
+                                    insertQueryResult.rows[0].receiverorganizationkey, insertQueryResult.rows[0].donororganizationkey));
         }
         else {
             return Promise.reject(new Error('Signup failed. Provided Username and/or Email are not unique.'));

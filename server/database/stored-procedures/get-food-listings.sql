@@ -10,7 +10,7 @@ CREATE OR REPLACE FUNCTION getFoodListings
     _donorOrganizationName  VARCHAR(128)    DEFAULT NULL,   -- Are we looking for food from a specific organization? Null if not.
     _earliestExpireDate     TEXT            DEFAULT NULL,   -- Do we require food that is going to expire after a specific date?
                                                             -- Must be in the format MM/DD/YYYY!
-    _requestedByAppUserKey     INTEGER      DEFAULT NULL    -- Key of the reciever who is claiming this listing.
+    _requestedByAppUserKey  INTEGER         DEFAULT NULL       -- Key of the reciever who is claiming this listing.
 )
 RETURNS TABLE
 (

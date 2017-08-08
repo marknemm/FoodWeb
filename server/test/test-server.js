@@ -16,7 +16,9 @@ describe('Authentication', function() {
     it('should sign up', function(done) {
         chai.request(server)
             .post('/authentication/signup')
-            .send({ email: 'marknemm@buffalo.edu', username: 'marknemm', password: 'MyPassword1', firstName: 'Mark', lastName: 'Nemmer' })
+            .send({ email: 'lucifer55@hotMail.edu', username: 'whoGivesAFauq55', password: 'MyPassword1', firstName: 'Fauq', lastName: 'Yu',
+                    isReceiver: true, isDonor: false, orgName: 'allHailSatan', address: '666 HellRoad', city: 'CityOfSins', 
+                    state: 'FU', zip: '66666', phone: '6666666666' })
             .end(function(err, res) {
                 console.log('Result of /authentication/signup');
                 console.log(res.body);
