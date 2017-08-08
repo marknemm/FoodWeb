@@ -22,6 +22,7 @@ import { SignupComponent } from './authentication/signup/signup.component';
 import { ReceiverCartComponent } from './receiver-cart/receiver-cart.component';
 import { BannerComponent } from './banner/banner.component';
 import { DonorCartComponent } from './donor-cart/donor-cart.component';
+import { SlickLeftPanelComponent } from './slick-left-panel/slick-left-panel.component';
 
 const appRoutes: Routes = [
   /*{
@@ -66,7 +67,8 @@ const appRoutes: Routes = [
     DateFormatterPipe,
     ReceiverCartComponent,
     BannerComponent,
-    DonorCartComponent
+    DonorCartComponent,
+    SlickLeftPanelComponent
   ],
   imports: [
     NgbModule.forRoot(),

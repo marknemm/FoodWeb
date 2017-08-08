@@ -27,7 +27,6 @@ const pool : Pool = new Pool(config);
  * @param text The prepared query statement.
  * @param values (OPTIONAL) The arguments to the prepared query statement.
  * @return A JavaScript Promise that will contain the result of the query upon success and error information upon failure.
- *         See the handling of the /db route in server.ts to see the structure of what is returned!
  */
 export function query(text: string, values: Array<any>) : Promise<QueryResult> {
     return pool.query(text, values);
