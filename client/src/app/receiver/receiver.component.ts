@@ -4,7 +4,7 @@ import { NgbModule, NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-boo
 
 import { Food } from './shared/food';
 import { Filters } from './shared/filters';
-import { ReceiverPrimaryService } from './receiver-primary.service';
+import { UnclaimedFoodListingService } from './unclaimed-food-listings.service';
 
 const appReceiverTagName = 'app-receiver';
 const now = new Date();
@@ -34,24 +34,20 @@ const MODELS: Food[] = [
     selector: appReceiverTagName,
     templateUrl: './receiver.component.html',
     styleUrls: ['./receiver.component.css'],
-    providers: [ReceiverPrimaryService]
+    providers: [UnclaimedFoodListingService]
 })
 export class ReceiverComponent implements OnInit {
-    tester: any;
     models: Food[];
     selectedModel: Food;
-    filters: Filters;
     filterForm: FormGroup;
 
     @ViewChild('foodListingsFilters') foodListingsFilters;
 
     constructor(private formBuilder: FormBuilder,
-                private receiverPrimaryService: ReceiverPrimaryService,
+                private unclaimedFoodListingService: UnclaimedFoodListingService,
                 private modalService: NgbModal) { }
 
     ngOnInit() {
-        this.filters = new Filters(true, true, true, true, true, true, false, { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() }, 0, 0);
-
         this.filterForm = this.foodListingsFilters.filterForm;
         // This is how you would add the code behind for additional filters specific to the receiver form.
         // this.filterForm.addControl('dummyControl', new FormControl('dummy control'));
@@ -59,6 +55,7 @@ export class ReceiverComponent implements OnInit {
         this.filterForm.valueChanges.subscribe(data => {
             this.onChange(this.filterForm.value);
         });
+        this.onChange(this.filterForm.value);
     }
 
     /**
@@ -67,7 +64,7 @@ export class ReceiverComponent implements OnInit {
      */
     private onChange(value: Filters): void {
         //this.receiverPrimaryService.updateFeed(value).then(models => this.models = models);
-        var observer = this.receiverPrimaryService.updateFeed(value);
+        var observer = this.unclaimedFoodListingService.getUnclaimedFoodListings(value);
 
         observer.subscribe(
             data => {

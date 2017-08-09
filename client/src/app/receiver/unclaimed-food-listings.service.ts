@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { Food } from '../receiver/shared/food';
-import { Filters } from '../receiver/shared/filters';
+import { Food } from './shared/food';
+import { Filters } from './shared/filters';
 
 const MODELS: Food[] = [
     {name: "Beef Stew",
@@ -25,12 +25,12 @@ const MODELS: Food[] = [
 ]
 
 @Injectable()
-export class SearchFoodListingService {
+export class UnclaimedFoodListingService {
     models: Food[];
 
     constructor(private http: Http) { }
     
-    updateFeed(filterObj: Filters) {
+    getUnclaimedFoodListings(filterObj: Filters) {
       var headers = new Headers({
         'Content-Type': 'application/json'
       });
@@ -43,10 +43,9 @@ export class SearchFoodListingService {
         }
       );
     }
-
     /*
     updateFeed(filterObj: Filters): Promise<Food[]> {
       return Promise.resolve(MODELS);
-    }
-    */
+    }*/
+
 }
