@@ -61,6 +61,7 @@ BEGIN
       AND (_earliestExpireDate IS NULL      OR FoodListing.expireDate >= TO_TIMESTAMP(_earliestExpireDate, 'MM/DD/YYYY'))
       AND ((_requestedByAppUserKey IS NULL AND FoodListing.requestedByAppUserKey IS NULL) 
             OR FoodListing.requestedByAppUserKey = _requestedByAppUserKey)
+      AND (_organizationKey IS NOT NULL AND FoodListing.receiverOrganizationKey = _re)
     ORDER BY FoodListing.expireDate ASC;
     --SELECT claimFoodListing(_foodListingKey, _receiverAppUserKey);
 
