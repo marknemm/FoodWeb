@@ -2,8 +2,9 @@
 import { connect, query, Client, QueryResult } from '../database_help/connection_pool';
 import { fixNullQueryArgs } from '../database_help/prepared-statement-helper';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
+//filterByMyAppUser;
 
-export function getFoodListing(foodObject, requesetedByAppUserKey: number): Promise<Array<object>> {
+export function getFoodListing(foodObject, requesetedByAppUserKey: number, organizationKey: number): Promise<Array<object>> {
     var perishableArg: boolean = generatePerishabilityArg(foodObject);   
     var foodTypesArg: string = generateFoodTypesArg(foodObject);
     var expireDateArg: string = generateExpireDateArg(foodObject);
@@ -38,16 +39,6 @@ function generatePerishabilityArg(foodObject): boolean {
         return foodObject.perishable;
     }
     return null;
-}
-
-function generateRequestedByAppUserKey(foodObject, sessionObject): number{
-    if(foodObject.filterByRequester == true){
-        if(sessionObject.appUserKey != null){
-            return sessionObject.appUserKey
-        }
-        else return -1;
-    }
-    else return null;
 }
 
 function generateFoodTypesArg(foodObject): string {
