@@ -5,10 +5,10 @@
   <form ngNativeValidate (submit)="signupUser($event)" >
     <br/>
 
-      <div class="checkbox">
+      
         Sign up as a Donor <input type="checkbox" name="donor" [(ngModel)]="signupModel.isDonor"><br/> 
         Sign up as a Receiver<input type="checkbox" name="receiver" [(ngModel)]="signupModel.isReceiver"> <br/>
-      </div>  
+       
 
       <br/>
       Enter Your First Name:<br/>
@@ -23,14 +23,13 @@
       <input type="email" name="email" [(ngModel)]="signupModel.email" required autocomplete="on">
       <br/>
 
-       Enter your state:<br/>
-      <select  name="state" [(ngModel)]="signupModel.state">
-      <option *ngFor="let state of signupModel.stateList" [value]="state">{{state}} </option>
-      </select>
+      <div *ngIf="signupModel.isReceiver || signupModel.isDonor">    
+      Enter your Organization's name: <br/>
+      <input type="text" name="orgName" [(ngModel)]="signupModel.orgName"  required>
       <br/>
-      <br/>
+     
 
-      <!--Enter your address:<br/>
+      Enter your address:<br/>
       <input type="text" name="address" [(ngModel)]="signupModel.address" required >
       <br/>
 
@@ -39,11 +38,12 @@
       <br/>
 
       Enter your state:<br/>
-      <select >
+      <select  name="state" [(ngModel)]="signupModel.state">
       <option *ngFor="let state of signupModel.stateList" [value]="state">{{state}} </option>
       </select>
       <br/>
       <br/>
+      
      
       Enter your ZIP Code:<br/>
       <input type="text" name="zip" maxlength="5" [(ngModel)]="signupModel.zip" required >
@@ -51,8 +51,8 @@
 
       Enter your phone number:<br/>
       <input type="text" name="phone" [(ngModel)]="signupModel.phone" minlength="10" maxlength="10" required> 
-      <br/>-->
-
+      <br/>
+       </div>
 
       Create a username:<br/> 
       <input type="text" name="username" [(ngModel)]="signupModel.username" required autocomplete="on">

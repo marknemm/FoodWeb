@@ -93,7 +93,7 @@ export class AuthenticationController {
         var address: string = request.body.address;
         var zip: string = request.body.zip;
         var state: string = request.body.state;
-        var stateList: string[] = request.body.stateList;
+        //var stateList: string[] = request.body.stateList;
         var isDonor: boolean = request.body.isDonor;
         var isReceiver: boolean = request.body.isReceiver;
         var phone: string = request.body.phone;
