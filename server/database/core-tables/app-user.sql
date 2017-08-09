@@ -1,4 +1,5 @@
 -- USER table for basic application info such as login and contact data.
+--DROP TABLE AppUser CASCADE;
 CREATE TABLE IF NOT EXISTS AppUser
 (
     appUserKey SERIAL PRIMARY KEY
@@ -8,7 +9,7 @@ CREATE TABLE IF NOT EXISTS AppUser
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS email                      VARCHAR(128)    NOT NULL UNIQUE;
 
 -- Password must be encrypted when entered into this table!
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS password                   CHAR(60)        NOT NULL;
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserPasswordKey         INTEGER         REFERENCES AppUserPassword(appUserPasswordKey);
 
 --A unique username for every user. This, along with the email shall be the primary identifiers
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS username                   VARCHAR(128)    NOT NULL UNIQUE; 
@@ -18,28 +19,6 @@ ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS lastName                   VARCHAR(
 
 -- The App User's First Name.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS firstName                  VARCHAR(60)     NOT NULL;
-
--- The App User's phone number.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS phone                      CHAR(12);
-
--- The App User's Street Address.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS address                    VARCHAR(128);
-
--- City name.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS city                       VARCHAR(60);
-
--- Zip code.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS zip                        INTEGER;
-
--- Two letter state abbreviation.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS state                      CHAR(2);
-
--- Foreign key to the Donor table.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS donorOrganizationKey       INTEGER         REFERENCES DonorOrganization (donorOrganizationKey);
-
--- Foreign key to the Receiver table.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS receiverOrganizationKey    INTEGER         REFERENCES ReceiverOrganization (receiverOrganizationKey);
-
 
 -- Index on username.
 CREATE UNIQUE INDEX IF NOT EXISTS appUserUsernameIdx ON AppUser (username);
