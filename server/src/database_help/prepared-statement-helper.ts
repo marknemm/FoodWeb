@@ -1,5 +1,5 @@
 /**
- * Replaces all null entries in an argument list to a parameterized SQL prepared statement to prevent errors.
+ * Removes all null entries in an argument list to a parameterized SQL prepared statement to prevent errors.
  * @param queryStr The query string with parameters in it.
  * @param queryArgs The arguments to a parameterized SQL prepared statement. All null entries will be removed.
  * @return The resulting queryStr with all paraemters corresponding to null arguments replaced with null literals.

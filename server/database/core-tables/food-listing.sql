@@ -22,7 +22,7 @@ ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS expireDate             TIMESTAM
 ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS postDate               TIMESTAMP;
 
 -- If this is NULL, then the food listing is still posted and not part of a receiver's cart.
-ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS requestedByAppUserKey     INTEGER REFERENCES AppUser (appUserKey); 
+ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS requestedByAppUserKey                  INTEGER REFERENCES AppUser (appUserKey);
 
 -- Add more columns here --
 

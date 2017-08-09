@@ -17,7 +17,12 @@ CREATE OR REPLACE FUNCTION addAppUser
     _zip            INTEGER         DEFAULT NULL,
     _phone          CHAR(12)        DEFAULT NULL
 )
-RETURNS INTEGER -- Returns the new AppUser's appUserKey
+RETURNS TABLE
+(
+    appUserKey                  INTEGER,
+    donorOrganizationKey        INTEGER,
+    receiverOrganizationKey     INTEGER
+) -- Returns the new AppUser's KEYS
 AS $$
     DECLARE _appUserKey                 INTEGER;
     DECLARE _donorOrganizationKey       INTEGER     DEFAULT NULL;
@@ -39,9 +44,12 @@ BEGIN
                         phone, address, city, zip, state, donorOrganizationKey, receiverOrganizationKey)
     VALUES (_username, _email, _password, _lastName, _firstName,
                         _phone, _address, _city, _zip, _state, _donorOrganizationKey, _receiverOrganizationKey)
-    RETURNING appUserKey INTO _appUserKey;
+    RETURNING AppUser.appUserKey INTO _appUserKey;
 
-    RETURN _appUserKey;
+    RETURN QUERY
+    SELECT _appUserKey, _receiverOrganizationKey, _donorOrganizationKey;
 
 END;
 $$ LANGUAGE plpgsql;
+
+--SELECT addAppUser('testUseName', 'test@test.com', 'testPass', 'testLast', 'testFirst', true, false, 'orgName', 'blah', 'blah', 'bl', 0, 'blah')

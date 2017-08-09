@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { addFoodListing } from './add-food-listing';
 import { getFoodListing } from './get-food-listings';
-import { fetchAppUserKey} from './fetch-App-User-Key';
 import { FoodListing } from './food-listing';
-import { claimFoodListing} from './claim-food-listing';
+import { claimFoodListing } from './claim-food-listing';
 
 export function handleAddFoodListingRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
@@ -19,47 +18,50 @@ export function handleAddFoodListingRequest(request: Request, response: Response
     );
 
     var promise = addFoodListing(foodListing);
-    promise.then(function() {
+    promise.then(function () {
         response.send({ success: true, message: 'Food listing added successfully' });
     })
-    .catch(function() {
-        response.send({ success: false, message: 'Error: food listing add failed' });
-    });
+        .catch(function () {
+            response.send({ success: false, message: 'Error: food listing add failed' });
+        });
 }
 
 export function handleReceiverGetFoodListingsRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
-    var promise = getFoodListing(request.body, null);
+    var promise = getFoodListing(request.body, null, null);
     promise.then((searchResult: Array<object>) => {
         response.send(JSON.stringify(searchResult));
     })
-    .catch((err: Error) => {
-        response.send(JSON.stringify([]))
-    })
+        .catch((err: Error) => {
+            response.send(JSON.stringify([]))
+        })
 }
 
 export function handleReceiverCartGetFoodListingsRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
-    let requestedByAppUserKey: number = fetchAppUserKey(request.session);
-    if (requestedByAppUserKey == -1){
-        response.send(new Error("You need to Log in"));
+    let requestedByAppUserKey: number = request.session.appUserKey;
+    let organizationKey: number = request.session.receiverOrganizationKey;
+    if (organizationKey == null) {
+        response.send(new Error("Session has ended"));
     }
-    var promise = getFoodListing(request.body, requestedByAppUserKey);
-    promise.then((searchResult: Array<object>) => {
-        response.send(JSON.stringify(searchResult));
-    })
-    .catch((err: Error) => {
-        response.send(JSON.stringify([]))
-    })
+    else {
+        var promise = getFoodListing(request.body, requestedByAppUserKey, organizationKey);
+        promise.then((searchResult: Array<object>) => {
+            response.send(JSON.stringify(searchResult));
+        })
+            .catch((err: Error) => {
+                response.send(JSON.stringify([]))
+            })
+    }
 }
 
-export function handleClaimFoodListingRequest(request: Request, response: Response): void{
+export function handleClaimFoodListingRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
     var promise = claimFoodListing(request.body);
     promise.then((claimResult: Boolean) => {
-        response.send({success: true, message: "FoodListing has been successfully claimed"});
+        response.send({ success: true, message: "FoodListing has been successfully claimed" });
     })
-    .catch((err: Error) => {
-        response.send({success: false, message: err.message});
-    })
+        .catch((err: Error) => {
+            response.send({ success: false, message: err.message });
+        })
 }
