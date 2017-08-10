@@ -7,4 +7,5 @@ CREATE TABLE IF NOT EXISTS ReceiverOrganization
 
 ALTER TABLE ReceiverOrganization ADD COLUMN IF NOT EXISTS organizationKey   INTEGER    REFERENCES Organization (organizationKey);
 
-CREATE INDEX IF NOT EXISTS receiverOrganizationInfoIdx ON ReceiverOrganization (organizationKey);
+
+CREATE INDEX IF NOT EXISTS receiverOrganizationOrganizationKeyIdx ON ReceiverOrganization (organizationKey);

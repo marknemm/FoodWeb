@@ -7,4 +7,5 @@ CREATE TABLE IF NOT EXISTS DonorOrganization
 
 ALTER TABLE DonorOrganization ADD COLUMN IF NOT EXISTS organizationKey   INTEGER    REFERENCES Organization (organizationKey);
 
-CREATE INDEX IF NOT EXISTS donorOrganizationInfoIdx ON DonorOrganization (organizationKey);
+
+CREATE INDEX IF NOT EXISTS donorOrganizationOrganizationKeyIdx ON DonorOrganization (organizationKey);
