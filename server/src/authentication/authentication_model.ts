@@ -11,10 +11,10 @@ export class AppUserPrimaryInfo {
     public appUserKey;
     public username;
     public email;
-    public organizationKey;
+    public organizationKey: Array<number>;
 
     constructor(appUserKey: number, username: string, email: string,
-        organizationKey: number) {
+        organizationKey: Array<number>) {
         this.appUserKey = appUserKey;
         this.username = username;
         this.email = email;
@@ -73,13 +73,18 @@ export class AuthenticationModel {
         logSqlQueryResult(getAppUserInfoResult.rows);
 
         // We should only be getting one row back with the salt!
-        if (getAppUserInfoResult.rowCount === 1) {
+        if (getAppUserInfoResult.rowCount <0) {
             let appUserKey: number = getAppUserInfoResult.rows[0].appuserkey;
             let username: string = getAppUserInfoResult.rows[0].username;
             let email: string = getAppUserInfoResult.rows[0].email;
             let hashPassword: string = getAppUserInfoResult.rows[0].password;
-            let organizationKey: number = getAppUserInfoResult.rows[0].organizationKey;
-
+            let count: number = getAppUserInfoResult.rowCount;
+            let organizationKey: Array<number>;
+            while (count< 0){
+                organizationKey = getAppUserInfoResult.rows[count].organizationKey;
+                count--; 
+            } 
+            
             return checkPassword(password, hashPassword)
                 .then((isMatch: boolean) => {
                     if (isMatch) {
@@ -179,9 +184,15 @@ export class AuthenticationModel {
      */
     private handleSignUpUserResult(email: string, username: string, insertQueryResult: QueryResult): Promise<AppUserPrimaryInfo> {
         logSqlQueryResult(insertQueryResult.rows);
-        if (insertQueryResult.rows.length = 1) {
+        if (insertQueryResult.rows.length < 0) {
+            let count = insertQueryResult.rowCount;
+            let organizationkey: Array<number>;
+            while(count< 0){
+                insertQueryResult.rows[count].organizationkey;
+                count--; 
+            }
             return Promise.resolve(new AppUserPrimaryInfo(insertQueryResult.rows[0].appuserkey, username, email,
-                                    insertQueryResult.rows[0].organizationkey));
+                                    organizationkey));
         }
         else {
             return Promise.reject(new Error('Signup failed. Provided Username and/or Email are not unique.'));
