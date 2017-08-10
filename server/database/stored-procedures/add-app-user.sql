@@ -48,10 +48,17 @@ BEGIN
     VALUES (_username, _email, _lastName, _firstName, _appUserPasswordKey)
     RETURNING AppUser.appUserKey INTO _appUserKey;
 
+    CASE
+        WHEN (_isDonorOrg = TRUE OR _isReceiverOrg = TRUE) 
+            THEN 
+                INSERT INTO AppUserOrganizationMap (appUserKey, organizationKey)
+                VALUES (_appUserKey, _organizationKey);
+    END CASE;
+
     RETURN QUERY
     SELECT _appUserKey, _organizationKey;
 
 END;
 $$ LANGUAGE plpgsql;
 
---SELECT addAppUser('testUseNamead', 'tesadsft@test.com', 'testPass', 'testLast', 'testFirst', true, false, 'orgName', 'blah', 'blah', 'bl', 0, 'blah')
+SELECT addAppUser('testUseNamead', 'tesadsft@test.com', 'testPass', 'testLast', 'testFirst', true, false, 'orgName', 'blah', 'blah', 'bl', 0, 'blah')

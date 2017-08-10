@@ -1,5 +1,5 @@
 -- Donor table for holding Donor Organizations.
--- DROP TABLE DonorOrganization CASCADE;
+--DROP TABLE DonorOrganization CASCADE;
 CREATE TABLE IF NOT EXISTS DonorOrganization
 (
     donorOrganizationKey SERIAL PRIMARY KEY

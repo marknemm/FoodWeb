@@ -1,4 +1,5 @@
 -- Table for holding basic Contact Info.
+--DROP TABLE ContactInfo CASCADE;
 CREATE TABLE IF NOT EXISTS ContactInfo
 (
     contactInfoKey SERIAL PRIMARY KEY

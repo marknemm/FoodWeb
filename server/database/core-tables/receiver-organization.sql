@@ -1,4 +1,5 @@
 -- Receiver table for holding Receiver Organizations.
+--DROP TABLE ReceiverOrganization CASCADE;
 CREATE TABLE IF NOT EXISTS ReceiverOrganization
 (
     receiverOrganizationKey SERIAL PRIMARY KEY

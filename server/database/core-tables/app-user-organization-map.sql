@@ -1,4 +1,5 @@
 
+--DROP TABLE AppUserOrganizationMap CASCADE;
 CREATE TABLE IF NOT EXISTS AppUserOrganizationMap
 (
     appUserOrganizationMapKey SERIAL PRIMARY KEY
