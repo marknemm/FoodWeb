@@ -23,26 +23,11 @@ export class SlickLeftPanelComponent implements OnInit {
     private togglePanelVisibility(slickLeftPanel: HTMLElement, slickLeftPanelButton: HTMLElement): void {
         // If our slickLeftPanel div is outside the viewport, and we are translating it into the viewport
         if (!this.isPanelToggledIntoView(slickLeftPanel)) {
-            this.translateIntoView(slickLeftPanel, slickLeftPanelButton);
-
-            // We have to handle position of slickLeftPanel when we resize the window b/c the slickLeftPanel div will potentially resize based off of the window size.
-            let self = this;
-            window.onresize = function () {
-                self.tempDisableSmoothTranslate([slickLeftPanel, slickLeftPanelButton]);
-                // Moving from mobile to desktop slickLeftPanel style.
-                if (window.innerWidth > 1200) {
-                    // This actually clears the translation for non-mobile view!
-                    self.translateOutOfView(slickLeftPanel, slickLeftPanelButton);
-                }
-                // Else staying in mobile mode. Recalculate the translation based off of new width.
-                else {
-                    slickLeftPanel.style.transform = 'translateX(' + slickLeftPanel.offsetWidth + 'px)';
-                }
-            };
+            this.toggleIntoView(slickLeftPanel, slickLeftPanelButton);
         }
         // Else if our slickLeftPanel div is inside the viewport, and we are translating it out of the viewport (getting rid of translation).
         else {
-            this.translateOutOfView(slickLeftPanel, slickLeftPanelButton);
+            this.toggleOutOfView(slickLeftPanel, slickLeftPanelButton);
         }
     }
 
@@ -52,9 +37,7 @@ export class SlickLeftPanelComponent implements OnInit {
      */
     private isPanelToggledIntoView(slickLeftPanel: HTMLElement): boolean {
         // If it is in view, then there will be a translation value!
-        return (slickLeftPanel.style.transform != null &&
-                slickLeftPanel.style.transform.length !== 0 &&
-                slickLeftPanel.style.transform !== 'none');
+        return slickLeftPanel.classList.contains('toggle-into-view');
     }
 
     /**
@@ -62,9 +45,9 @@ export class SlickLeftPanelComponent implements OnInit {
      * @param slickLeftPanel The slickLeftPanel (div) element which will be toggled into the viewport.
      * @param slickLeftPanelButton The slickLeftPanelButton (button) element which was pressed.
      */
-    private translateIntoView(slickLeftPanel: HTMLElement, slickLeftPanelButton: HTMLElement): void {
-        // The translation amount will be the width of the slickLeftPanel div.
-        slickLeftPanel.style.transform = 'translateX(' + slickLeftPanel.offsetWidth + 'px)';
+    private toggleIntoView(slickLeftPanel: HTMLElement, slickLeftPanelButton: HTMLElement): void {
+        // The toggle-into-view css class contains the translation.
+        slickLeftPanel.classList.add('toggle-into-view');
         slickLeftPanelButton.textContent = '<';
         slickLeftPanelButton.style.right = '0px';
     }
@@ -74,24 +57,10 @@ export class SlickLeftPanelComponent implements OnInit {
      * @param slickLeftPanel The slickLeftPanel (div) element which will be toggled out of the viewport.
      * @param slickLeftPanelButton The slickLeftPanelButton (button) element which was pressed.
      */
-    private translateOutOfView(slickLeftPanel: HTMLElement, slickLeftPanelButton: HTMLElement): void {
-        slickLeftPanel.style.transform = null;
+    private toggleOutOfView(slickLeftPanel: HTMLElement, slickLeftPanelButton: HTMLElement): void {
+        slickLeftPanel.classList.remove('toggle-into-view');
         slickLeftPanelButton.textContent = '>';
         slickLeftPanelButton.style.right = '-' + slickLeftPanelButton.offsetWidth + 'px';
-        window.onresize = undefined;
-    }
-
-    /**
-     * Temporarily disables any smooth translation effects defined in css for the given elements so that they will move instantly.
-     * @param elements The elements to disable smooth translate for.
-     */
-    private tempDisableSmoothTranslate(elements: Array<HTMLElement>): void {
-        for (let i: number = 0; i < elements.length; i++) {
-            let element: HTMLElement = elements[i];
-            element.style.transition = undefined; // Stop the smooth translation with delay for an instant.
-            // This shall run after we are finished with all of our processing!
-            setTimeout(() => { element.style.transition = 'all 1s ease'; }, 0);
-        }
     }
 
     /**
@@ -101,9 +70,10 @@ export class SlickLeftPanelComponent implements OnInit {
      */
     private monitorScrollForStickyTop(event: Event): void {
         let slickLeftPanel: HTMLElement = document.getElementById('slick-left-panel'); // This can potentially get out of sync with template if id changes!
-        let fixCutoff = this.getAbsolutePosTop(slickLeftPanel.parentElement);
+        let fixCutoff: number = this.getAbsolutePosTop(slickLeftPanel.parentElement);
+        let scrollPosition: number = (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0);
 
-        if (document.body.scrollTop >= fixCutoff) {
+        if (scrollPosition >= fixCutoff) {
             slickLeftPanel.style.position = 'fixed';
             slickLeftPanel.style.top = '0px';
         }

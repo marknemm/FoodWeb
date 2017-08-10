@@ -1,15 +1,49 @@
-.nav-link:hover {
-	color: yellow;
-    cursor: pointer;
-	cursor: hand;
+.nav-link {
+    width: 100%;
+    /* Make border same color as navigation bar background when not in hover state so size remains consistent */
+    border-right: 1px solid #292B2C;
+    border-left: 1px solid #292B2C;
+    transition: background 0.5s ease, color 0.5s ease;
+    -webkit-transition: background 0.5s ease, color 0.5s ease;
+    -moz-transition: background 0.5s ease, color 0.5s ease;
+    -ms-transition: background 0.5s ease, color 0.5s ease;
+    -o-transition: background 0.5s ease, color 0.5s ease;
 }
 
-ul.nav a:hover { color: yellow !important; }
+.nav-link:hover {
+    background-color: #444444;
+    color: goldenrod !important;
+    cursor: pointer;
+    cursor: hand;
+    border-right: 1px solid #555555;
+    border-left: 1px solid #555555;
+}
+
+.nav-item {
+    margin: 0px;
+    margin: 0px 10px 0px 10px;
+    white-space: nowrap;
+}
+
+.navbar-toggler {
+    margin-top: 10px;
+    transition: background 0.5s ease;
+    -webkit-transition: background 0.5s ease;
+    -moz-transition: background 0.5s ease;
+    -ms-transition: background 0.5s ease;
+    -o-transition: background 0.5s ease;
+}
+
+.navbar-toggler:hover {
+    background-color: #444444;
+    cursor: pointer;
+    cursor: hand;
+}
 
 header {
 	text-align: center;
 	font-size: 30px;
-	height: 100px;
+	height: 150px;
 	position: absolute;
 	left: 0px;
 	top: 0px;
@@ -18,28 +52,24 @@ header {
 }
 
 #logo {
-	height: 100px;
+	height: 150px;
 	position: absolute;
 	left: 0px;
 	top: 0px;
-	width: 175px;
+	width: 262px;
 	padding: 0;
 	margin: 0;
 }
 
 nav {
-	max-height: 65px;
-	margin-left: 175px;
-}
-
-li {
-	padding-left: 5px;
-	padding-right: 5px;
+	max-height: 75px;
+    margin-left: 262px;
+    padding: 0px 2px 0px 2px;
 }
 
 #vertSpacer {
 	position: relative;
-	margin-top: 100px; /* Everything must fall below the header on the page!*/
+	margin-top: 150px; /* Everything must fall below the header on the page!*/
 }
 
 @media screen and (max-width: 767px) {

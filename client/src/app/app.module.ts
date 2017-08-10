@@ -6,6 +6,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Ng2StickyModule } from 'ng2-sticky';
+import { NguiStickyModule } from '@ngui/sticky';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -23,7 +25,8 @@ import { ReceiverCartComponent } from './receiver-cart/receiver-cart.component';
 import { BannerComponent } from './banner/banner.component';
 import { DonorCartComponent } from './donor-cart/donor-cart.component';
 import { SlickLeftPanelComponent } from './slick-left-panel/slick-left-panel.component';
-import { FoodListingsFiltersComponent } from './food-listings-filters/food-listings-filters.component';
+import { FoodListingsFiltersComponent } from './food-listings/food-listings-filters/food-listings-filters.component';
+import { FoodListingsComponent } from './food-listings/food-listings.component';
 
 const appRoutes: Routes = [
   /*{
@@ -70,7 +73,8 @@ const appRoutes: Routes = [
     BannerComponent,
     DonorCartComponent,
     SlickLeftPanelComponent,
-    FoodListingsFiltersComponent
+    FoodListingsFiltersComponent,
+    FoodListingsComponent
   ],
   imports: [
     NgbModule.forRoot(),
@@ -79,7 +83,9 @@ const appRoutes: Routes = [
     BootstrapModalModule,
     HttpModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    Ng2StickyModule,
+    NguiStickyModule
   ],
   entryComponents: [
     LoginComponent
