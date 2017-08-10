@@ -7,7 +7,7 @@ import { AuthenticationModel, AppUserPrimaryInfo } from './authentication_model'
  */
 export class AuthenticationController {
 
-    private authenticatonModel : AuthenticationModel;
+    private authenticatonModel: AuthenticationModel;
 
     public constructor() {
         this.authenticatonModel = new AuthenticationModel();
@@ -20,18 +20,22 @@ export class AuthenticationController {
     public reAuthenticate(request: Request, response: Response): void {
         response.setHeader('Content-Type', 'application/json');
         if (request.session['appUserKey'] != null) {
-            response.send({ success: true,
-                            message: 'Logged in.',
-                            appUserKey: request.session['appUserKey'],
-                            username : request.session['username'],
-                            email: request.session['email']});
+            response.send({
+                success: true,
+                message: 'Logged in.',
+                appUserKey: request.session['appUserKey'],
+                username: request.session['username'],
+                email: request.session['email']
+            });
         }
         else {
-            response.send({ success: false,
-                            message: 'Not logged in.',
-                            appUserKey: null,
-                            username : null,
-                            email: null});
+            response.send({
+                success: false,
+                message: 'Not logged in.',
+                appUserKey: null,
+                username: null,
+                email: null
+            });
         }
     }
 
@@ -45,25 +49,30 @@ export class AuthenticationController {
         let username: string = request.body.username;
         let password: string = request.body.password;
         let promise: Promise<AppUserPrimaryInfo> = this.authenticatonModel.authenticateAppUser(username, password)
-        
-        promise.then((appUserPrimaryInfo : AppUserPrimaryInfo) => {
+
+        promise.then((appUserPrimaryInfo: AppUserPrimaryInfo) => {
             request.session['appUserKey'] = appUserPrimaryInfo.appUserKey;
             request.session['username'] = appUserPrimaryInfo.username;
             request.session['email'] = appUserPrimaryInfo.email;
+            request.session['organizationKey'] = appUserPrimaryInfo.organizationKey;
 
-            response.send(JSON.stringify({ success: true,
-                                           message: 'Login successful.',
-                                           appUserKey: appUserPrimaryInfo.appUserKey,
-                                           username : appUserPrimaryInfo.username,
-                                           email: appUserPrimaryInfo.email }));
+            response.send(JSON.stringify({
+                success: true,
+                message: 'Login successful.',
+                appUserKey: appUserPrimaryInfo.appUserKey,
+                username: appUserPrimaryInfo.username,
+                email: appUserPrimaryInfo.email
+            }));
         })
-        .catch((err : Error) => {
-            response.send(JSON.stringify({ success: false,
-                                           message: err.message,
-                                           appUserKey: null,
-                                           username: null,
-                                           email: null }));
-        });
+            .catch((err: Error) => {
+                response.send(JSON.stringify({
+                    success: false,
+                    message: err.message,
+                    appUserKey: null,
+                    username: null,
+                    email: null
+                }));
+            });
     }
 
     /**
@@ -72,7 +81,7 @@ export class AuthenticationController {
      * @param result //todo
      */
     public logout(request: Request, response: Response): void {
-        request.session.destroy(function() {
+        request.session.destroy(function () {
             response.end();
         });
     }
@@ -93,30 +102,35 @@ export class AuthenticationController {
         var address: string = request.body.address;
         var zip: string = request.body.zip;
         var state: string = request.body.state;
-        var stateList: string[] = request.body.stateList;
+        //var stateList: string[] = request.body.stateList;
         var isDonor: boolean = request.body.isDonor;
         var isReceiver: boolean = request.body.isReceiver;
         var phone: string = request.body.phone;
-        var orgName:string = request.body.orgName;
+        var orgName: string = request.body.orgName;
         var promise: Promise<AppUserPrimaryInfo> = this.authenticatonModel.SignUpUser(email, password, username, lastName, firstName, isReceiver, isDonor, orgName, address, city, state, zip, phone);
 
         promise.then((appUserPrimaryInfo: AppUserPrimaryInfo) => {
             request.session['appUserKey'] = appUserPrimaryInfo.appUserKey;
             request.session['username'] = appUserPrimaryInfo.username;
             request.session['email'] = appUserPrimaryInfo.email;
+            request.session['organizationKey'] = appUserPrimaryInfo.organizationKey;
 
-            return response.send(JSON.stringify({ success: true,
-                                                  message: 'sign Up Successful.',
-                                                  appUserKey: appUserPrimaryInfo.appUserKey,
-                                                  username: appUserPrimaryInfo.username,
-                                                  email: appUserPrimaryInfo.email }));
+            return response.send(JSON.stringify({
+                success: true,
+                message: 'sign Up Successful.',
+                appUserKey: appUserPrimaryInfo.appUserKey,
+                username: appUserPrimaryInfo.username,
+                email: appUserPrimaryInfo.email
+            }));
         })
-        .catch((err: Error) => {
-            return response.send(JSON.stringify({ success: false,
-                                                  message: err.message,
-                                                  appUserKey: null,
-                                                  username: null,
-                                                  email: null }));
-        });        
+            .catch((err: Error) => {
+                return response.send(JSON.stringify({
+                    success: false,
+                    message: err.message,
+                    appUserKey: null,
+                    username: null,
+                    email: null
+                }));
+            });
     }
 };

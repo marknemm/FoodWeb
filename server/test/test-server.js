@@ -13,7 +13,7 @@ chai.use(chaiHttp);
  * You can add tests to this suite and add other testing suites.
  */
 describe('Authentication', function() {
-    it('should sign up', function(done) {
+   /*
         chai.request(server)
             .post('/authentication/signup')
             .send({ email: 'lucifer55@hotMail.edu', username: 'whoGivesAFauq55', password: 'MyPassword1', firstName: 'Fauq', lastName: 'Yu',
@@ -40,12 +40,12 @@ describe('Authentication', function() {
                     res.body.email.should.be.a('string');
                 done();
             });
-    });
+    });*/
 
     it('should login', function(done) {
         chai.request(server)
             .post('/authentication/login')
-            .send({ username: 'marknemm', password: 'MyPasword' })
+            .send({ username: 'whoGivesAFauq55', password: 'MyPassword1' })
             .end(function(err, res) {
                 console.log('Result of /authentication/login');
                 console.log(res.body);

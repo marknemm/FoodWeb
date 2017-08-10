@@ -20,36 +20,45 @@ CREATE OR REPLACE FUNCTION addAppUser
 RETURNS TABLE
 (
     appUserKey                  INTEGER,
-    donorOrganizationKey        INTEGER,
-    receiverOrganizationKey     INTEGER
+    organizationKey             INTEGER
 ) -- Returns the new AppUser's KEYS
 AS $$
-    DECLARE _appUserKey                 INTEGER;
-    DECLARE _donorOrganizationKey       INTEGER     DEFAULT NULL;
-    DECLARE _receiverOrganizationKey    INTEGER     DEFAULT NULL;
+    DECLARE _appUserKey                 INTEGER     DEFAULT NULL;
+    DECLARE _organizationKey            INTEGER     DEFAULT NULL;
+    DECLARE _appUserPasswordKey         INTEGER     DEFAULT NULL;
+    DECLARE _contactInfoKey             INTEGER     DEFAULT NULL;
+
 BEGIN
-    -- Process Donor/Receiver Information First, and Generate Corresponding Primary Keys.
+    
+    SELECT INTO _contactInfoKey FROM addContactInfo (_address, _city, _state, _zip, _phone);
+
     CASE
-        WHEN (_isDonorOrg = TRUE) 
+        WHEN (_isDonorOrg = TRUE OR _isReceiverOrg = TRUE) 
             THEN 
-                SELECT addOrganization(_orgName, _address, _city, _state, _zip, _phone, _isDonorOrg, _isReceiverOrg) INTO _donorOrganizationKey;
-        WHEN (_isReceiverOrg = TRUE)
-            THEN
-                SELECT addOrganization(_orgName, _address, _city, _state, _zip, _phone, _isDonorOrg, _isReceiverOrg) INTO _receiverOrganizationKey;
+                SELECT addOrganization(_orgName, _isDonorOrg, _isReceiverOrg, _contactInfoKey) INTO _organizationKey;
         ELSE
                 RAISE NOTICE 'Not associating organization with App User on Sign Up';
     END CASE;
 
-    INSERT INTO AppUser (username, email, password, lastName, firstName, 
-                        phone, address, city, zip, state, donorOrganizationKey, receiverOrganizationKey)
-    VALUES (_username, _email, _password, _lastName, _firstName,
-                        _phone, _address, _city, _zip, _state, _donorOrganizationKey, _receiverOrganizationKey)
+    INSERT INTO AppUserPassword (password)
+    VALUES (_password) 
+    RETURNING AppUserPassword.appUserPasswordKey INTO _appUserPasswordKey;
+
+    INSERT INTO AppUser (username, email, lastName, firstName, appUserPasswordKey )                  
+    VALUES (_username, _email, _lastName, _firstName, _appUserPasswordKey)
     RETURNING AppUser.appUserKey INTO _appUserKey;
 
+    CASE
+        WHEN (_isDonorOrg = TRUE OR _isReceiverOrg = TRUE) 
+            THEN 
+                INSERT INTO AppUserOrganizationMap (appUserKey, organizationKey)
+                VALUES (_appUserKey, _organizationKey);
+    END CASE;
+
     RETURN QUERY
-    SELECT _appUserKey, _receiverOrganizationKey, _donorOrganizationKey;
+    SELECT _appUserKey, _organizationKey;
 
 END;
 $$ LANGUAGE plpgsql;
 
---SELECT addAppUser('testUseName', 'test@test.com', 'testPass', 'testLast', 'testFirst', true, false, 'orgName', 'blah', 'blah', 'bl', 0, 'blah')
+SELECT addAppUser('testUseNamead', 'tesadsft@test.com', 'testPass', 'testLast', 'testFirst', true, false, 'orgName', 'blah', 'blah', 'bl', 0, 'blah')

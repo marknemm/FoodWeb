@@ -14,8 +14,9 @@ export class SignupModel {
     public state: string;
     public stateList: string[] = ['CA', 'NY', 'IN'];
     public zip: number;
-    public isDonor: boolean;
-    public isReceiver: boolean;
+    public isDonor: boolean = false;
+    public isReceiver: boolean = false;
+    public orgName: string;
 
     public appUserKey: number;
 

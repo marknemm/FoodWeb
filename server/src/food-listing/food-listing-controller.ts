@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { addFoodListing } from './add-food-listing';
 import { getFoodListing } from './get-food-listings';
-import { fetchAppUserKey } from './fetch-app-user-key';
 import { FoodListing } from './food-listing';
 import { claimFoodListing } from './claim-food-listing';
 
@@ -29,7 +28,7 @@ export function handleAddFoodListingRequest(request: Request, response: Response
 
 export function handleReceiverGetFoodListingsRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
-    var promise = getFoodListing(request.body, null);
+    var promise = getFoodListing(request.body, null, null);
     promise.then((searchResult: Array<object>) => {
         response.send(JSON.stringify(searchResult));
     })
@@ -40,12 +39,13 @@ export function handleReceiverGetFoodListingsRequest(request: Request, response:
 
 export function handleReceiverCartGetFoodListingsRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
-    let requestedByAppUserKey: number = fetchAppUserKey(request.session);
-    if (requestedByAppUserKey == -1) {
-        response.send(new Error("You need to Log in"));
+    let requestedByAppUserKey: number = request.session.appUserKey;
+    let organizationKey: number = request.session.receiverOrganizationKey;
+    if (organizationKey == null) {
+        response.send(new Error("Session has ended"));
     }
     else {
-        var promise = getFoodListing(request.body, requestedByAppUserKey);
+        var promise = getFoodListing(request.body, requestedByAppUserKey, organizationKey);
         promise.then((searchResult: Array<object>) => {
             response.send(JSON.stringify(searchResult));
         })
