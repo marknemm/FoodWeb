@@ -6,17 +6,18 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarContent" [ngbCollapse]="!isExpanded">
+        <div class="collapse navbar-collapse" [ngbCollapse]="!isExpanded">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class='nav-link' [routerLink]="['/home']">Home</a></li>
-                <li class="nav-item"><a class='nav-link' [routerLink]="['/donor']">Donor</a></li>
-                <li class="nav-item"><a class='nav-link' [routerLink]="['/receiver']">Receiver</a></li>
+                <a class='nav-link' [routerLink]="['/home']"><li class="nav-item">Home</li></a>
+                <a class='nav-link' [routerLink]="['/donor']"><li class="nav-item">Donor</li></a>
+                <a class='nav-link' [routerLink]="['/receiver']"><li class="nav-item">Receiver</li></a>
             </ul>
+
             <ul class="navbar-nav navbar-right">
-                <li *ngIf="sessionStorage.getItem('appUserKey') === null" class="nav-item"><a id='loginButton' class='nav-link' (click)="showLogin()">Login</a></li>
-                <li *ngIf="sessionStorage.getItem('appUserKey') === null" class="nav-item"><a id='signupButton' class='nav-link' [routerLink]="['/signup']">Sign Up</a></li>
-                <li *ngIf="sessionStorage.getItem('appUserKey') !== null" class="nav-item"><a class='nav-link'>{{sessionStorage.getItem('username')}}</a></li>
-                <li *ngIf="sessionStorage.getItem('appUserKey') !== null" class="nav-item"><a id='logoutButton' class='nav-link' (click)="logout()">Logout</a></li>
+                <a *ngIf="sessionStorage.getItem('appUserKey') === null" class='nav-link' (click)="showLogin()"><li class="nav-item">Login</li></a>
+                <a *ngIf="sessionStorage.getItem('appUserKey') === null" class='nav-link' [routerLink]="['/signup']"><li class="nav-item">Sign Up</li></a>
+                <a *ngIf="sessionStorage.getItem('appUserKey') !== null" class='nav-link'><li class="nav-item">{{sessionStorage.getItem('username')}}</li></a>
+                <a *ngIf="sessionStorage.getItem('appUserKey') !== null" class='nav-link' (click)="logout()"><li class="nav-item">Logout</li></a>
             </ul>
         </div>
     </nav>

@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
+
+import { FoodListingsFilters } from "./food-listings-filters";
 
 
 const now = new Date();
@@ -12,19 +14,19 @@ const now = new Date();
 })
 export class FoodListingsFiltersComponent implements OnInit {
 
-    private filterForm: FormGroup;
     private quantityVals: string[];
     private tFrameVals: string[];
     private distVals: string[];
 
     @Input()
-    title: string = 'Filters';
+    private title: string = 'Filters';
 
     @Output()
-    filtersForm: FormGroup = this.filtersForm;
+    private filtersForm: FormGroup;
 
     constructor(private formBuilder: FormBuilder) {
-        this.filterForm = this.formBuilder.group({
+        // Must be in the constructor so it is available in parent's ngOnInit() call!
+        this.filtersForm = this.formBuilder.group({
             grain: true,
             meat: true,
             vegetable: true,
@@ -36,12 +38,31 @@ export class FoodListingsFiltersComponent implements OnInit {
             perishable: true,
             notPerishable: true
         });
-    }
 
-    ngOnInit() {
         this.quantityVals = ["Car", "Van", "Truck"];
         this.tFrameVals = ["0-6 Days", "6-12 Days", "12+ Days"];
         this.distVals = ["0-6 Miles", "6-12 Miles", "12+ Miles"];
     }
 
+    ngOnInit() {}
+
+    /**
+     * Adds a form control to the underlying filters form model.
+     * @param name The name of the form control.
+     * @param control The logical representation of the form control.
+     */
+    public addControl(name: string, control: AbstractControl) {
+        this.filtersForm.addControl(name, control);
+    }
+
+    @Output()
+    public onFiltersUpdate(callback) {
+        this.filtersForm.valueChanges.subscribe(data => {
+            callback(this.filtersForm.value);
+        });
+    }
+
+    public getFilterValues(): FoodListingsFilters {
+        return this.filtersForm.value;
+    }
 }

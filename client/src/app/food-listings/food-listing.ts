@@ -1,4 +1,4 @@
-export class Food {
+export class FoodListing {
     constructor(
         public name?: string,
         public foodListingKey?: number,
