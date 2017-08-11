@@ -7,7 +7,7 @@ import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Ng2StickyModule } from 'ng2-sticky';
-import { NguiStickyModule } from '@ngui/sticky';
+//import { NguiStickyModule } from '@ngui/sticky';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -81,7 +81,7 @@ const appRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     Ng2StickyModule,
-    NguiStickyModule
+    //NguiStickyModule
   ],
   entryComponents: [
     LoginComponent
