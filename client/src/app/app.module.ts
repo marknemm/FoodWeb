@@ -6,8 +6,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Ng2StickyModule } from 'ng2-sticky';
-import { NguiStickyModule } from '@ngui/sticky';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -25,72 +23,78 @@ import { BannerComponent } from './banner/banner.component';
 import { SlickLeftPanelComponent } from './slick-left-panel/slick-left-panel.component';
 import { FoodListingsFiltersComponent } from './food-listings/food-listings-filters/food-listings-filters.component';
 import { FoodListingsComponent } from './food-listings/food-listings.component';
+import { FoodTypesService } from './food-listings/food-types/food-types.service';
+import { FoodTypesComponent } from './food-listings/food-types/food-types.component';
 
 const appRoutes: Routes = [
-  /*{
-    path: 'login', // This can be both modal popup and its own page!
-    component: LoginComponent
-  },*/
-  { 
-    path: '',
-    pathMatch:'full', 
-    redirectTo: '/home' 
-  },
-  {
-    path: 'home',
-    component: HomeComponent
-  },
-  {
-    path: 'donor',
-    component: DonorComponent,
-    canActivate: [ AuthGaurdService ]
-  },
-  {
-    path: 'receiver',
-    component: ReceiverComponent
-  },
-  {
-    path: 'signup',
-    component: SignupComponent
-  }
+    /*{
+        path: 'login', // This can be both modal popup and its own page!
+        component: LoginComponent
+    },*/
+    {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: '/home'
+    },
+    {
+        path: 'home',
+        component: HomeComponent
+    },
+    {
+        path: 'donor',
+        component: DonorComponent,
+        canActivate: [AuthGaurdService]
+    },
+    {
+        path: 'receiver',
+        component: ReceiverComponent,
+        // Make sure that we get the FoodTypes form the back end before routing to the receiver interface!
+        resolve: {
+            foodTypes: FoodTypesService
+        }
+    },
+    {
+        path: 'signup',
+        component: SignupComponent
+    }
 ]
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    HeaderComponent,
-    FooterComponent,
-    LoginComponent,
-    DonorComponent,
-    ReceiverComponent,
-    SignupComponent,
-    ImageCropperComponent,
-    DateFormatterPipe,
-    BannerComponent,
-    SlickLeftPanelComponent,
-    FoodListingsFiltersComponent,
-    FoodListingsComponent
-  ],
-  imports: [
-    NgbModule.forRoot(),
-    RouterModule.forRoot(appRoutes),
-    BrowserModule,
-    BootstrapModalModule,
-    HttpModule,
-    FormsModule,
-    ReactiveFormsModule,
-    Ng2StickyModule,
-    NguiStickyModule
-  ],
-  entryComponents: [
-    LoginComponent
-  ],
-  bootstrap: [ AppComponent ],
-  providers: [ 
-    DateFormatterPipe,
-    AuthGaurdService
-  ]
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        HeaderComponent,
+        FooterComponent,
+        LoginComponent,
+        DonorComponent,
+        ReceiverComponent,
+        SignupComponent,
+        ImageCropperComponent,
+        DateFormatterPipe,
+        BannerComponent,
+        SlickLeftPanelComponent,
+        FoodListingsFiltersComponent,
+        FoodListingsComponent,
+        FoodTypesComponent
+    ],
+    imports: [
+        NgbModule.forRoot(),
+        RouterModule.forRoot(appRoutes),
+        BrowserModule,
+        BootstrapModalModule,
+        HttpModule,
+        FormsModule,
+        ReactiveFormsModule
+    ],
+    entryComponents: [
+        LoginComponent
+    ],
+    bootstrap: [AppComponent],
+    providers: [
+        DateFormatterPipe,
+        AuthGaurdService,
+        FoodTypesService
+    ]
 })
 export class AppModule { }
 

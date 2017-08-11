@@ -4,26 +4,12 @@
     <div [formGroup]="filtersForm">
 
         <h4>Acceptable Food Types:</h4>
-        <div data-toggle="buttons">
-            <label class="btn btn-primary" [class.active]="filtersForm.value.grain">
-                <input type="checkbox" formControlName="grain">Grain
-            </label>
-            <label class="btn btn-primary" [class.active]="filtersForm.value.meat">
-                <input type="checkbox" formControlName="meat">Meat
-            </label>
-            <label class="btn btn-primary" [class.active]="filtersForm.value.fruit">
-                <input type="checkbox" formControlName="fruit">Fruit
-            </label>
-            <label class="btn btn-primary" [class.active]="filtersForm.value.vegetable">
-                <input type="checkbox" formControlName="vegetable">Vegetable
-            </label>
-            <label class="btn btn-primary" [class.active]="filtersForm.value.drink">
-                <input type="checkbox" formControlName="drink">Drink
-            </label>
-        </div>
+        <app-food-types #FoodTypesComponent></app-food-types>
+        <br>
 
         <h4>Minimum Expiration:</h4>
         <ngb-datepicker #dp formControlName="minExpireAfterDays" (navigate)="date = $event.next"></ngb-datepicker>
+        <br><br>
 
         <!--<h4>Maximum Distance:</h4>
         <div ngbRadioGroup name="radioBasic" formControlName="maxDistance">
@@ -52,12 +38,13 @@
         </div>-->
 
         <h4>Acceptable Perishability:</h4>
-        <div data-toggle="buttons">
-            <label class="btn btn-primary" [class.active]="filtersForm.value.perishable">
-                <input type="checkbox" formControlName="perishable">Perishable
+        <div>
+            <label class="checkbox-compress">
+                <input type="checkbox" formControlName="perishable"> Perishable
             </label>
-            <label class="btn btn-primary" [class.active]="filtersForm.value.notPerishable">
-                <input type="checkbox" formControlName="notPerishable">Not Perishable
+            <br>
+            <label class="checkbox-compress">
+                <input type="checkbox" formControlName="notPerishable"> Not Perishable
             </label>
         </div>
 

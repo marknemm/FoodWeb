@@ -12,7 +12,7 @@ export class SlickLeftPanelComponent implements OnInit {
 
     ngOnInit() {
         // We want to handle scroll events to determine when we should start fixing the slickLeftPanel at top of viewport!
-        window.onscroll = this.monitorScrollForStickyTop.bind(this);
+        //window.onscroll = this.monitorScrollForStickyTop.bind(this);
     }
 
     /**
@@ -48,7 +48,6 @@ export class SlickLeftPanelComponent implements OnInit {
     private toggleIntoView(slickLeftPanel: HTMLElement, slickLeftPanelButton: HTMLElement): void {
         // The toggle-into-view css class contains the translation.
         slickLeftPanel.classList.add('toggle-into-view');
-        slickLeftPanelButton.textContent = '<';
         slickLeftPanelButton.style.right = '0px';
     }
 
@@ -59,7 +58,6 @@ export class SlickLeftPanelComponent implements OnInit {
      */
     private toggleOutOfView(slickLeftPanel: HTMLElement, slickLeftPanelButton: HTMLElement): void {
         slickLeftPanel.classList.remove('toggle-into-view');
-        slickLeftPanelButton.textContent = '>';
         slickLeftPanelButton.style.right = '-' + slickLeftPanelButton.offsetWidth + 'px';
     }
 
@@ -68,7 +66,7 @@ export class SlickLeftPanelComponent implements OnInit {
      * we scroll to or past the top of the slickLeftPanel div. We will unfix it when we scroll above this position once more.
      * @param event The scroll event.
      */
-    private monitorScrollForStickyTop(event: Event): void {
+    /*private monitorScrollForStickyTop(event: Event): void {
         let slickLeftPanel: HTMLElement = document.getElementById('slick-left-panel'); // This can potentially get out of sync with template if id changes!
         let fixCutoff: number = this.getAbsolutePosTop(slickLeftPanel.parentElement);
         let scrollPosition: number = (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0);
@@ -81,13 +79,13 @@ export class SlickLeftPanelComponent implements OnInit {
             slickLeftPanel.style.position = 'absolute';
             slickLeftPanel.style.top = 'auto';
         }
-    }
+    }*/
 
     /**
      * Calculates the absolute position of the top of a given HTML element.
      * @param element The element to get the absolute position of.
      */
-    private getAbsolutePosTop(element): number {
+    /*private getAbsolutePosTop(element): number {
         let top: number = 0;
 
         do {
@@ -96,5 +94,5 @@ export class SlickLeftPanelComponent implements OnInit {
         } while (element);
 
         return top;
-    }
+    }*/
 }

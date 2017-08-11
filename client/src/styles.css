@@ -1,9 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "../../node_modules/angular2-busy/build/style/busy.css";
 
 html, body {
     padding: 0;
     margin: 0;
     height: 100%;
     width: 100%;
+}
+
+.checkbox-compress {
+    margin: 0px;
+    padding: 0px;
 }

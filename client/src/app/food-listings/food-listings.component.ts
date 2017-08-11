@@ -33,7 +33,10 @@ export class FoodListingsComponent implements OnInit {
         var observer = this.foodListingsService.getFoodListings(filters);
 
         observer.subscribe(data => {
-            this.foodListings = data as FoodListing[];
+            console.log(data.message);
+            if (data.success) {
+                this.foodListings = data.foodListings as FoodListing[];
+            }
         });
     }
 }

@@ -2,12 +2,13 @@
 import { connect, query, Client, QueryResult } from '../database_help/connection_pool';
 import { fixNullQueryArgs } from '../database_help/prepared-statement-helper';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
+import { NgbDateStruct } from "@ng-bootstrap/ng-bootstrap";
 //filterByMyAppUser;
 
 export function getFoodListing(foodObject, requesetedByAppUserKey: number, organizationKey: number): Promise<Array<object>> {
-    var perishableArg: boolean = generatePerishabilityArg(foodObject);   
-    var foodTypesArg: string = generateFoodTypesArg(foodObject);
-    var expireDateArg: string = generateExpireDateArg(foodObject);
+    var perishableArg: boolean = generatePerishabilityArg(foodObject.perishable, foodObject.notPerishable);
+    var foodTypesArg: string = generateFoodTypesArg(foodObject.foodTypes);
+    var expireDateArg: string = generateExpireDateArg(foodObject.minExpireAfterDays);
     var queryArgs: Array<any> = new Array<any>();
    
     // Build our prepared statement.
@@ -31,27 +32,25 @@ export function getFoodListing(foodObject, requesetedByAppUserKey: number, organ
     });
 }
 
-function generatePerishabilityArg(foodObject): boolean {
+function generatePerishabilityArg(perishable: boolean, notPerishable: boolean): boolean {
     // If exactly one filter is only active, then we apply filter.
-    var notBoth = !(foodObject.perishable && foodObject.notPerishable);
-    var notNeither = (foodObject.perishable || foodObject.notPerishable);
+    var notBoth = !(perishable && notPerishable);
+    var notNeither = (perishable || notPerishable);
     if (notBoth && notNeither) {
-        return foodObject.perishable;
+        return perishable;
     }
     return null;
 }
 
-function generateFoodTypesArg(foodObject): string {
+function generateFoodTypesArg(foodTypes: string[]): string {
     let foodTypesArg: string = null;
 
-    if (foodObject.grain || foodObject.meat || foodObject.fruit || foodObject.vegetable || foodObject.drink) {
-        foodTypesArg = "{ ";
+    if (foodTypes != null && foodTypes.length > 0) {
+        foodTypesArg = '{ ';
 
-        if (foodObject.grain)       foodTypesArg += "Grain, ";
-        if (foodObject.meat)        foodTypesArg += "Meat, ";
-        if (foodObject.fruit)       foodTypesArg += "Fruit, ";
-        if (foodObject.vegetable)   foodTypesArg += "Vegetable, ";
-        if (foodObject.drink)       foodTypesArg += "Drink, ";
+        for (let i: number = 0; i < foodTypes.length; i++) {
+            foodTypesArg += foodTypes[i] + ', ';
+        }
 
         foodTypesArg = foodTypesArg.substr(0, foodTypesArg.length - 2) + " }";
     }
@@ -59,8 +58,8 @@ function generateFoodTypesArg(foodObject): string {
     return foodTypesArg;
 }
 
-function generateExpireDateArg(foodObject): string {
-    return (foodObject.minExpireAfterDays.month + '/' + foodObject.minExpireAfterDays.day + '/' + foodObject.minExpireAfterDays.year);
+function generateExpireDateArg(minExpireAfterDays: NgbDateStruct): string {
+    return (minExpireAfterDays.month + '/' + minExpireAfterDays.day + '/' + minExpireAfterDays.year);
 }
 
 function generateResultArray(rows: Array<any>): Array<object> {

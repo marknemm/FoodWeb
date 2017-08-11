@@ -47,8 +47,10 @@ export class FoodListingsService {
      * @param filters The selected filter criteria used to limit the food listings that are retrieved on the server.
      * @param getMoreListings Set to true if the server should get more listings to be diplayed, otherwise, it will get food listings to replace
      *                        the current ones with (will start back at 0 retrieval offset).
+     * @return An observable object that resolves to an object that contains the array of FoodListing objects.
      */
-    public getFoodListings(filters: FoodListingsFilters, getMoreListings: boolean = false): Observable<object> {
+    public getFoodListings(filters: FoodListingsFilters, getMoreListings: boolean = false): Observable<any> {
+
         // If we are simply getting more food listings, then we will set the retrievalOffset to the beginning of next segment of entries.
         (getMoreListings) ? this.retrievalOffset += FoodListingsService.RETRIEVAL_AMOUNT
                           : this.retrievalOffset = 0;
@@ -57,7 +59,7 @@ export class FoodListingsService {
         filters.retrievalOffset = this.retrievalOffset;
         filters.retrievalAmount = FoodListingsService.RETRIEVAL_AMOUNT;
 
-        let observer: Observable<Response> = this.http.post('/receiver/getFoodListings',
+        let observer: Observable<Response> = this.http.post('/foodListings/getFoodListings',
                                                             JSON.stringify(filters),
                                                             { headers: FoodListingsService.JSON_HEADERS, withCredentials: true });
         return observer.map((response: Response) => {
@@ -65,19 +67,4 @@ export class FoodListingsService {
             return response.json();
         });
     }
-
-    public getFoodTypes(): Observable<string[]> {
-        let observer: Observable<Response> = this.http.get('/foodListings/getFoodTypes',
-                                                           { headers: FoodListingsService.JSON_HEADERS, withCredentials: true });
-        return observer.map((response: Response) => {
-            console.log(response.json());
-            // The json object should contain an array of strings that signify the food listing types.
-            return response.json().foodTypes;
-        });
-    }
-
-    /*updateFeed(filterObj: Filters): Promise<Food[]> {
-      return Promise.resolve(MODELS);
-    }*/
-
 }

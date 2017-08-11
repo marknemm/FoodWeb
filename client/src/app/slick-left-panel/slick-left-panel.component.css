@@ -2,7 +2,7 @@
     position: absolute;
     z-index: 100;
     padding-left: 10px;
-    padding-right: 10px;
+    padding-right: 25px;
     word-wrap: break-word;
     width: calc(100vw - 20px);
     max-width: 400px; /* This is (4 / 12) of 1200px so that we will never overlap anything to the right in non-mobile mode! */
@@ -10,9 +10,9 @@
 
 #slick-left-panel-button {
     position: absolute;
-    height: 50px;
-    width: 37px;
-    right: -37px;
+    height: 100%;
+    width: 25px;
+    right: -25px;
     top:0;
     background: darkgray;
     opacity: 0;
@@ -27,6 +27,7 @@
     color: white;
     font-weight: bolder;
     z-index: 101;
+    opacity: 0.67;
 }
 
 #slick-left-panel-button:hover {
@@ -54,6 +55,5 @@
 
     #slick-left-panel-button {
         visibility: visible;
-        opacity: 0.67;
     }
 }
