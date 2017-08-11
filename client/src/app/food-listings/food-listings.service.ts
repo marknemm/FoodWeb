@@ -34,6 +34,9 @@ export class FoodListingsService {
     
     private retrievalOffset: number;
     private static readonly RETRIEVAL_AMOUNT: number = 20;
+    private static readonly JSON_HEADERS: Headers = new Headers({
+        'Content-Type': 'application/json'
+    });
 
     constructor(private http: Http) { 
         this.retrievalOffset = 0;
@@ -46,10 +49,6 @@ export class FoodListingsService {
      *                        the current ones with (will start back at 0 retrieval offset).
      */
     public getFoodListings(filters: FoodListingsFilters, getMoreListings: boolean = false): Observable<object> {
-        var headers = new Headers({
-            'Content-Type': 'application/json'
-        });
-
         // If we are simply getting more food listings, then we will set the retrievalOffset to the beginning of next segment of entries.
         (getMoreListings) ? this.retrievalOffset += FoodListingsService.RETRIEVAL_AMOUNT
                           : this.retrievalOffset = 0;
@@ -58,10 +57,22 @@ export class FoodListingsService {
         filters.retrievalOffset = this.retrievalOffset;
         filters.retrievalAmount = FoodListingsService.RETRIEVAL_AMOUNT;
 
-        var observer: Observable<Response> = this.http.post('/receiver/getFoodListings', JSON.stringify(filters), { headers: headers, withCredentials: true })
+        let observer: Observable<Response> = this.http.post('/receiver/getFoodListings',
+                                                            JSON.stringify(filters),
+                                                            { headers: FoodListingsService.JSON_HEADERS, withCredentials: true });
         return observer.map((response: Response) => {
             console.log(response.json());
             return response.json();
+        });
+    }
+
+    public getFoodTypes(): Observable<string[]> {
+        let observer: Observable<Response> = this.http.get('/foodListings/getFoodTypes',
+                                                           { headers: FoodListingsService.JSON_HEADERS, withCredentials: true });
+        return observer.map((response: Response) => {
+            console.log(response.json());
+            // The json object should contain an array of strings that signify the food listing types.
+            return response.json().foodTypes;
         });
     }
 

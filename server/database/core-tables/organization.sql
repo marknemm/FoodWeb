@@ -1,6 +1,5 @@
 -- Table for holding basic Organization Info.
 
-
 --DROP TABLE Organization CASCADE;
 CREATE TABLE IF NOT EXISTS Organization
 (
@@ -11,4 +10,4 @@ ALTER TABLE Organization ADD COLUMN IF NOT EXISTS name              VARCHAR(128)
 ALTER TABLE Organization ADD COLUMN IF NOT EXISTS contactInfoKey    INTEGER         REFERENCES ContactInfo (contactInfoKey);
 
 
-CREATE INDEX IF NOT EXISTS organizationInfoNameIdx ON OrganizationInfo (name);
+CREATE INDEX IF NOT EXISTS organizationNameIdx ON Organization (name);
