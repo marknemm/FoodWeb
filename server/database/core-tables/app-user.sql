@@ -20,7 +20,6 @@ ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS lastName                   VARCHAR(
 -- The App User's First Name.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS firstName                  VARCHAR(60)     NOT NULL;
 
-<<<<<<< HEAD
 -- The App User's phone number.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS phone                      CHAR(12);
 
@@ -49,8 +48,6 @@ ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS donorOrganizationKey       INTEGER 
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS receiverOrganizationKey    INTEGER         REFERENCES ReceiverOrganization (receiverOrganizationKey);
 
 
-=======
->>>>>>> 7b8f615a2a961490a2c82921697fe066dc240d23
 -- Index on username.
 CREATE UNIQUE INDEX IF NOT EXISTS appUserUsernameIdx ON AppUser (username);
 
