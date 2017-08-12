@@ -1,8 +1,8 @@
-<!--The whole content below can be removed with the new code.-->
-<div id="fullPage">
-	<app-header id='appHeader'></app-header>
+<div style="min-height:100%; margin-bottom: 0px; padding-bottom: 0px;">
+    <app-header></app-header>
 
-	<router-outlet></router-outlet>
-
-	<app-footer id='appFooter'></app-footer>
+    <!-- This is replaced with each component we route to -->
+    <router-outlet></router-outlet>
 </div>
+
+<app-footer></app-footer>

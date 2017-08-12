@@ -11,16 +11,14 @@ export class AppUserPrimaryInfo {
     public appUserKey;
     public username;
     public email;
-    public receiverOrganizationKey;
-    public donorOrganizationKey;
+    public organizationKey: Array<number>;
 
     constructor(appUserKey: number, username: string, email: string,
-        receiverOrganizationKey: number, donorOrganizationKey: number) {
+        organizationKey: Array<number>) {
         this.appUserKey = appUserKey;
         this.username = username;
         this.email = email;
-        this.receiverOrganizationKey = receiverOrganizationKey;
-        this.donorOrganizationKey = donorOrganizationKey;
+        this.organizationKey = organizationKey;
     }
 }
 
@@ -58,7 +56,7 @@ export class AuthenticationModel {
      * @return A promise with the query result. The query result should simply contain one row with a salt member.
      */
     private getAppUserInfo(usernameOrEmail: string): Promise<QueryResult> {
-        let queryString: string = 'SELECT appUserKey, username, email, password, donorOrganizationKey, receiverOrganizationKey FROM AppUser WHERE AppUser.username = $1 OR AppUser.email = $1';
+        let queryString: string = 'SELECT * FROM getAppUserInfo($1)';
         let queryArgs: Array<string> = [usernameOrEmail];
         logSqlQueryExec(queryString, queryArgs);
         return query(queryString, queryArgs);
@@ -75,18 +73,22 @@ export class AuthenticationModel {
         logSqlQueryResult(getAppUserInfoResult.rows);
 
         // We should only be getting one row back with the salt!
-        if (getAppUserInfoResult.rowCount === 1) {
+        if (getAppUserInfoResult.rowCount <0) {
             let appUserKey: number = getAppUserInfoResult.rows[0].appuserkey;
             let username: string = getAppUserInfoResult.rows[0].username;
             let email: string = getAppUserInfoResult.rows[0].email;
             let hashPassword: string = getAppUserInfoResult.rows[0].password;
-            let donorOrganizationKey: number = getAppUserInfoResult.rows[0].donorOrganizationKey;
-            let receiverOrganizationKey: number = getAppUserInfoResult.rows[0].receiverOrganizationKey;
-
+            let count: number = getAppUserInfoResult.rowCount;
+            let organizationKey: Array<number>;
+            while (count< 0){
+                organizationKey = getAppUserInfoResult.rows[count].organizationKey;
+                count--; 
+            } 
+            
             return checkPassword(password, hashPassword)
                 .then((isMatch: boolean) => {
                     if (isMatch) {
-                        return Promise.resolve(new AppUserPrimaryInfo(appUserKey, username, email, receiverOrganizationKey, donorOrganizationKey));
+                        return Promise.resolve(new AppUserPrimaryInfo(appUserKey, username, email, organizationKey));
                     }
                     return Promise.reject(new Error('Password is incorrect'));
                 });
@@ -182,9 +184,15 @@ export class AuthenticationModel {
      */
     private handleSignUpUserResult(email: string, username: string, insertQueryResult: QueryResult): Promise<AppUserPrimaryInfo> {
         logSqlQueryResult(insertQueryResult.rows);
-        if (insertQueryResult.rows.length = 1) {
+        if (insertQueryResult.rows.length < 0) {
+            let count = insertQueryResult.rowCount;
+            let organizationkey: Array<number>;
+            while(count< 0){
+                insertQueryResult.rows[count].organizationkey;
+                count--; 
+            }
             return Promise.resolve(new AppUserPrimaryInfo(insertQueryResult.rows[0].appuserkey, username, email,
-                                    insertQueryResult.rows[0].receiverorganizationkey, insertQueryResult.rows[0].donororganizationkey));
+                                    organizationkey));
         }
         else {
             return Promise.reject(new Error('Signup failed. Provided Username and/or Email are not unique.'));

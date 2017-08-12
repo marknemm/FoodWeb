@@ -21,39 +21,44 @@ import { DateFormatterPipe } from "./shared/date-formatter.pipe"
 import { AuthGaurdService } from './authentication/misc/auth-gaurd.service'
 
 import { SignupComponent } from './authentication/signup/signup.component';
-import { ReceiverCartComponent } from './receiver-cart/receiver-cart.component';
 import { BannerComponent } from './banner/banner.component';
-import { DonorCartComponent } from './donor-cart/donor-cart.component';
 import { SlickLeftPanelComponent } from './slick-left-panel/slick-left-panel.component';
-import { FoodListingsFiltersComponent } from './food-listings-filters/food-listings-filters.component';
+import { FoodListingsFiltersComponent } from './food-listings/food-listings-filters/food-listings-filters.component';
+import { FoodListingsComponent } from './food-listings/food-listings.component';
+import { FoodTypesService } from './food-listings/food-types/food-types.service';
+import { FoodTypesComponent } from './food-listings/food-types/food-types.component';
 
 const appRoutes: Routes = [
-  /*{
-    path: 'login', // This can be both modal popup and its own page!
-    component: LoginComponent
-  },*/
-  { 
-    path: '',
-    pathMatch:'full', 
-    redirectTo: '/home' 
-  },
-  {
-    path: 'home',
-    component: HomeComponent
-  },
-  {
-    path: 'donor',
-    component: DonorComponent,
-    canActivate: [ AuthGaurdService ]
-  },
-  {
-    path: 'receiver',
-    component: ReceiverComponent
-  },
-  {
-    path: 'signup',
-    component: SignupComponent
-  }
+    /*{
+        path: 'login', // This can be both modal popup and its own page!
+        component: LoginComponent
+    },*/
+    {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: '/home'
+    },
+    {
+        path: 'home',
+        component: HomeComponent
+    },
+    {
+        path: 'donor',
+        component: DonorComponent,
+        canActivate: [AuthGaurdService]
+    },
+    {
+        path: 'receiver',
+        component: ReceiverComponent,
+        // Make sure that we get the FoodTypes form the back end before routing to the receiver interface!
+        resolve: {
+            foodTypes: FoodTypesService
+        }
+    },
+    {
+        path: 'signup',
+        component: SignupComponent
+    }
 ]
 
 @NgModule({
@@ -92,6 +97,41 @@ const appRoutes: Routes = [
     DateFormatterPipe,
     AuthGaurdService
   ]
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        HeaderComponent,
+        FooterComponent,
+        LoginComponent,
+        DonorComponent,
+        ReceiverComponent,
+        SignupComponent,
+        ImageCropperComponent,
+        DateFormatterPipe,
+        BannerComponent,
+        SlickLeftPanelComponent,
+        FoodListingsFiltersComponent,
+        FoodListingsComponent,
+        FoodTypesComponent
+    ],
+    imports: [
+        NgbModule.forRoot(),
+        RouterModule.forRoot(appRoutes),
+        BrowserModule,
+        BootstrapModalModule,
+        HttpModule,
+        FormsModule,
+        ReactiveFormsModule
+    ],
+    entryComponents: [
+        LoginComponent
+    ],
+    bootstrap: [AppComponent],
+    providers: [
+        DateFormatterPipe,
+        AuthGaurdService,
+        FoodTypesService
+    ]
 })
 export class AppModule { }
 

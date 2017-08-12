@@ -1,11 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
-.nav > li:hover {
-    background-color: #444444;
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
 }
 
-.nav > li  {
-    margin-left: 5px;
-    margin-right: 5px;
+.checkbox-compress {
+    margin: 0px;
+    padding: 0px;
 }

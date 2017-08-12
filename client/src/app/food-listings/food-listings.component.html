@@ -1,0 +1,23 @@
+<h2>{{title}}</h2>
+<hr>
+
+<div class="list-group" style="overflow-y:auto">
+    <a *ngFor="let foodListing of foodListings" class="list-group-item">
+        <img [src]="foodListing.imgUrl" alt="No Picture" class="img-thumbnail" style="width:7vw;height:7vw">
+
+        <div>
+            <h4 style="margin-left:1vw">{{foodListing.name}}
+                <button style="float:right" class="btn btn-primary btn-sm" (click)="selectItem(content, foodListing)">Details</button>
+            </h4>
+            <hr>
+
+            <p style="margin-left:1vw">
+                Posted By: <b>{{foodListing.donorFirstName}} {{foodListing.donorLastName}}</b><br>
+                Present food types: <b>{{foodListing.foodTypeDescription}}</b> <br>
+                Expires: <b>{{foodListing.expirationDate}}</b> <!--Requires a {{foodListing.quantityClass}}-->
+
+                <ng-content></ng-content>
+            </p>
+        </div>
+    </a>
+</div>

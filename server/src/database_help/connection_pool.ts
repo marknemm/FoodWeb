@@ -11,9 +11,9 @@ const config : PoolConfig = {
     user:       process.env.DATABASE_USERNAME,
     password:   process.env.DATABASE_PASSWORD,
     host:       process.env.DATABASE_HOST,
-    port:       process.env.DATABASE_PORT,
+    port:       parseInt(process.env.DATABASE_PORT),
     database:   process.env.DATABASE_DATABASE,
-    ssl:        process.env.DATABASE_SSL
+    ssl:        (process.env.DATABASE_SSL.toLowerCase() === 'true')
 }
 
 /**
@@ -28,8 +28,13 @@ const pool : Pool = new Pool(config);
  * @param values (OPTIONAL) The arguments to the prepared query statement.
  * @return A JavaScript Promise that will contain the result of the query upon success and error information upon failure.
  */
-export function query(text: string, values: Array<any>) : Promise<QueryResult> {
-    return pool.query(text, values);
+export function query(text: string, values: Array<any> = null) : Promise<QueryResult> {
+    if (values != null) {
+        return pool.query(text, values);
+    }
+    else {
+        return pool.query(text);
+    }
 };
     
 /**

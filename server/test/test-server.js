@@ -13,7 +13,7 @@ chai.use(chaiHttp);
  * You can add tests to this suite and add other testing suites.
  */
 describe('Authentication', function() {
-    it('should sign up', function(done) {
+   /*
         chai.request(server)
             .post('/authentication/signup')
             .send({ email: 'lucifer55@hotMail.edu', username: 'whoGivesAFauq55', password: 'MyPassword1', firstName: 'Fauq', lastName: 'Yu',
@@ -40,12 +40,12 @@ describe('Authentication', function() {
                     res.body.email.should.be.a('string');
                 done();
             });
-    });
+    });*/
 
     it('should login', function(done) {
         chai.request(server)
             .post('/authentication/login')
-            .send({ username: 'marknemm', password: 'MyPasword' })
+            .send({ username: 'whoGivesAFauq55', password: 'MyPassword1' })
             .end(function(err, res) {
                 console.log('Result of /authentication/login');
                 console.log(res.body);
@@ -73,10 +73,10 @@ describe('Authentication', function() {
 describe('Food-Listing',function(){
     it('should work?', function(done){
         chai.request(server)
-            .post('/receiver/claimFoodListing')
+            .post('/foodListings/claimFoodListing')
             .send({foodListingKey: 1, requestedByAppUserKey: 1})
             .end(function(err, res){
-                console.log('Result of /authentication/login');
+                console.log('Result of /foodListings/claimFoodListing');
                 console.log(res.body);
                 res.should.be.json;
                 res.body.should.be.a('object');
@@ -90,5 +90,21 @@ describe('Food-Listing',function(){
     });
 });
 
-
+describe('Get Food Types', function() {
+    it('should work', function(done) {
+        chai.request(server)
+            .get('/foodListings/getFoodTypes')
+            .end(function(err, res) {
+                console.log('Result of /foodListings/getFoodTypes');
+                console.log(res.body);
+                res.should.be.json;
+                res.body.should.have.property('success');
+                res.body.success.should.be.a('boolean');
+                res.body.should.have.property('message');
+                res.body.message.should.be.a('string');
+                res.body.should.have.property('foodTypes');
+                done();
+            });
+    })
+});
 

@@ -54,8 +54,7 @@ export class AuthenticationController {
             request.session['appUserKey'] = appUserPrimaryInfo.appUserKey;
             request.session['username'] = appUserPrimaryInfo.username;
             request.session['email'] = appUserPrimaryInfo.email;
-            request.session['receiverOrganizationKey'] = appUserPrimaryInfo.receiverOrganizationKey;
-            request.session['donorOrganizationKey'] = appUserPrimaryInfo.donorOrganizationKey;
+            request.session['organizationKey'] = appUserPrimaryInfo.organizationKey;
 
             response.send(JSON.stringify({
                 success: true,
@@ -114,9 +113,7 @@ export class AuthenticationController {
             request.session['appUserKey'] = appUserPrimaryInfo.appUserKey;
             request.session['username'] = appUserPrimaryInfo.username;
             request.session['email'] = appUserPrimaryInfo.email;
-            request.session['receiverOrganizationKey'] = appUserPrimaryInfo.receiverOrganizationKey;
-            request.session['donorOrganizationKey'] = appUserPrimaryInfo.donorOrganizationKey;
-
+            request.session['organizationKey'] = appUserPrimaryInfo.organizationKey;
 
             return response.send(JSON.stringify({
                 success: true,

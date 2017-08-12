@@ -1,41 +1,37 @@
 
-SELECT dropFunction('addOrganization');
+SELECT dropFunction('addorganization');
 
 CREATE OR REPLACE FUNCTION addOrganization
 (
-    _orgName    VARCHAR(128),
-    _address    VARCHAR(128),
-    _city       VARCHAR(60),
-    _state      CHAR(2),
-    _zip        INTEGER,
-    _phone      CHAR(12),
-    _isDonor    BOOLEAN,
-    _isReceiver BOOLEAN
+    _orgName                            VARCHAR(128),
+    _isDonor                            BOOLEAN,
+    _isReceiver                         BOOLEAN,
+    _contactInfoKey                     INTEGER
 )
-RETURNS INTEGER -- Returns the new Donor's donorOrganizationKey
+RETURNS INTEGER -- Returns the new Donor's/Receiver's donorOrganizationKey
 AS $$
-    DECLARE _orgInfoKey   INTEGER     DEFAULT NULL;
-    DECLARE _orgKey       INTEGER     DEFAULT NULL;
+    DECLARE _organizationKey            INTEGER     DEFAULT NULL;
 BEGIN
-    INSERT INTO OrganizationInfo (name, address, city, state, zip, phone)
-    VALUES (_orgName, _address, _city, _state, _zip, _phone)
-    RETURNING organizationInfoKey INTO _orgInfoKey;
+
+    INSERT INTO Organization (name, contactInfoKey)
+    VALUES (_orgName, _contactInfoKey)
+    RETURNING Organization.organizationKey INTO _organizationKey;
 
     IF (_isDonor = TRUE) THEN
-        INSERT INTO DonorOrganization (organizationInfoKey)
-        VALUES (_orgInfoKey)
-        RETURNING donorOrganizationKey INTO _orgKey;
+        INSERT INTO DonorOrganization (organizationKey)
+        VALUES (_organizationKey);
     END IF;
     IF (_isReceiver = TRUE) THEN
-        INSERT INTO ReceiverOrganization (organizationInfoKey)
-        VALUES (_orgInfoKey)
-        RETURNING receiverOrganizationKey INTO _orgKey;
+        INSERT INTO ReceiverOrganization (organizationKey)
+        VALUES (_organizationKey);
     END IF;
     IF (_isDonor = FALSE AND _isReceiver = FALSE) THEN
         RAISE NOTICE 'Error: _isDonor and _isReceiver both not specified as TRUE';
     END IF;
 
-    RETURN _orgKey;
+    RETURN _organizationKey;
 
 END;
 $$ LANGUAGE plpgsql;
+
+--SELECT addOrganization('testOrganization', true, false, 1);

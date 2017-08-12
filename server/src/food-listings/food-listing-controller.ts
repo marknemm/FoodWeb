@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { addFoodListing } from './add-food-listing';
 import { getFoodListing } from './get-food-listings';
+import { getFoodTypes } from './get-food-types';
 import { FoodListing } from './food-listing';
 import { claimFoodListing } from './claim-food-listing';
 
@@ -21,20 +22,16 @@ export function handleAddFoodListingRequest(request: Request, response: Response
     promise.then(function () {
         response.send({ success: true, message: 'Food listing added successfully' });
     })
-        .catch(function () {
-            response.send({ success: false, message: 'Error: food listing add failed' });
-        });
+    .catch(handleErrorResponse.bind(this, response));
 }
 
 export function handleReceiverGetFoodListingsRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
     var promise = getFoodListing(request.body, null, null);
     promise.then((searchResult: Array<object>) => {
-        response.send(JSON.stringify(searchResult));
+        response.send({ success: true, message: 'Food Listings successfully retrieved', searchResult: searchResult });
     })
-        .catch((err: Error) => {
-            response.send(JSON.stringify([]))
-        })
+    .catch(handleErrorResponse.bind(this, response));
 }
 
 export function handleReceiverCartGetFoodListingsRequest(request: Request, response: Response): void {
@@ -47,11 +44,9 @@ export function handleReceiverCartGetFoodListingsRequest(request: Request, respo
     else {
         var promise = getFoodListing(request.body, requestedByAppUserKey, organizationKey);
         promise.then((searchResult: Array<object>) => {
-            response.send(JSON.stringify(searchResult));
+            response.send({ success: true, message: 'Food Listings successfully retrieved', searchResult: searchResult });
         })
-            .catch((err: Error) => {
-                response.send(JSON.stringify([]))
-            })
+        .catch(handleErrorResponse.bind(this, response));
     }
 }
 
@@ -61,7 +56,24 @@ export function handleClaimFoodListingRequest(request: Request, response: Respon
     promise.then((claimResult: Boolean) => {
         response.send({ success: true, message: "FoodListing has been successfully claimed" });
     })
-        .catch((err: Error) => {
-            response.send({ success: false, message: err.message });
-        })
+    .catch(handleErrorResponse.bind(this, response));
+}
+
+
+export function handleGetFoodTypes(request: Request, response: Response): void {
+    response.setHeader('Content-Type', 'application/json');
+    var promise = getFoodTypes();
+    promise.then((foodTypes: Array<string>) => {
+        response.send({ success: true, message: "Food Types successfully retrieved", foodTypes: foodTypes });
+    })
+    .catch(handleErrorResponse.bind(this, response));
+}
+
+/**
+ * Handles an error from the model and sends an appropriate response to the front end.
+ * @param response The response that will be sent to the front end.
+ * @param err The error from the model.
+ */
+function handleErrorResponse(response: Response, err: Error): void {
+    response.send({ success: false, message: err.message });
 }
