@@ -4,7 +4,7 @@ import { NgbModule, NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-boo
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { FoodListing } from "../food-listings/food-listing";
-import { FoodListingsFilters } from "../food-listings/food-listings-filters/food-listings-filters";
+import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
 import { FoodListingsComponent } from "../food-listings/food-listings.component";
 import { FoodListingsFiltersComponent } from "../food-listings/food-listings-filters/food-listings-filters.component";
 

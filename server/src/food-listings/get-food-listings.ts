@@ -2,13 +2,13 @@
 import { connect, query, Client, QueryResult } from '../database_help/connection_pool';
 import { fixNullQueryArgs } from '../database_help/prepared-statement-helper';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
-import { NgbDateStruct } from "@ng-bootstrap/ng-bootstrap";
+import { FoodListingsFilters, NgbDateStruct } from '../../../shared/food-listings/food-listings-filters';
 //filterByMyAppUser;
 
-export function getFoodListing(foodObject, requesetedByAppUserKey: number, organizationKey: number): Promise<Array<object>> {
-    var perishableArg: boolean = generatePerishabilityArg(foodObject.perishable, foodObject.notPerishable);
-    var foodTypesArg: string = generateFoodTypesArg(foodObject.foodTypes);
-    var expireDateArg: string = generateExpireDateArg(foodObject.minExpireAfterDays);
+export function getFoodListing(filters: FoodListingsFilters, requesetedByAppUserKey: number, organizationKey: number): Promise<Array<object>> {
+    var perishableArg: boolean = generatePerishabilityArg(filters.perishable, filters.notPerishable);
+    var foodTypesArg: string = generateFoodTypesArg(filters.foodTypes);
+    var expireDateArg: string = generateExpireDateArg(filters.minExpireAfterDays);
     var queryArgs: Array<any> = new Array<any>();
    
     // Build our prepared statement.

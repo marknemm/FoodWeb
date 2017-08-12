@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
 
 import { FoodListing } from './food-listing';
-import { FoodListingsFilters } from "./food-listings-filters/food-listings-filters";
+import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
 import { FoodListingsService } from "./food-listings.service";
 
 
@@ -20,7 +20,7 @@ export class FoodListingsComponent implements OnInit {
     constructor(private foodListingsService: FoodListingsService) {}
 
     ngOnInit() {
-        this.foodListings = [];
+        this.foodListings = new Array<FoodListing>();
     }
 
     /**

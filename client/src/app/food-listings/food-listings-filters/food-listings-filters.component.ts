@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, AbstractControl, FormControl } from '@angular/forms';
 
-import { FoodListingsFilters } from "./food-listings-filters";
+import { FoodListingsFilters, NgbDateStruct } from "../../../../../shared/food-listings/food-listings-filters";
 import { FoodTypesComponent } from "../food-types/food-types.component";
 
 
@@ -29,7 +29,7 @@ export class FoodListingsFiltersComponent implements OnInit {
 
         // Must be in the constructor so it is available in parent's ngOnInit() call!
         this.filtersForm = this.formBuilder.group({
-            minExpireAfterDays: { year: this.now.getFullYear(), month: this.now.getMonth() + 1, day: this.now.getDate() },
+            minExpireAfterDays: { year: this.now.getFullYear(), month: this.now.getMonth() + 1, day: this.now.getDate() } as NgbDateStruct,
             maxQuantity: null,
             maxDistance: null,
             perishable: new FormControl(true),

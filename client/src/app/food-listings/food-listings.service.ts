@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 
 //import { Food } from '../receiver/shared/food';
-import { FoodListingsFilters } from "./food-listings-filters/food-listings-filters";
+import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
 
 
 /*const MODELS: Food[] = [
