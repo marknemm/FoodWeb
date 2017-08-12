@@ -1,4 +1,5 @@
 -- USER table for basic application info such as login and contact data.
+--DROP TABLE AppUser CASCADE;
 CREATE TABLE IF NOT EXISTS AppUser
 (
     appUserKey SERIAL PRIMARY KEY
@@ -8,7 +9,7 @@ CREATE TABLE IF NOT EXISTS AppUser
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS email                      VARCHAR(128)    NOT NULL UNIQUE;
 
 -- Password must be encrypted when entered into this table!
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS password                   CHAR(60)        NOT NULL;
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserPasswordKey         INTEGER         REFERENCES AppUserPassword(appUserPasswordKey);
 
 --A unique username for every user. This, along with the email shall be the primary identifiers
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS username                   VARCHAR(128)    NOT NULL UNIQUE; 
@@ -24,6 +25,12 @@ ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS phone                      CHAR(12)
 
 -- The App User's Street Address.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS address                    VARCHAR(128);
+
+-- The Longitude of the App User's Address
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS addressLongitude           INTEGER;
+
+-- The Latitude of the App User's Address
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS addressLatitude            INTEGER; 
 
 -- City name.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS city                       VARCHAR(60);
@@ -49,3 +56,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS appUserEmailIdx ON AppUser (email);
 
 -- Index for quick sorting and searching by full name.
 CREATE INDEX IF NOT EXISTS appUserFullNameIdx ON AppUser (lastName, firstName);
+
+-- Index on addressLongitude.
+CREATE INDEX IF NOT EXISTS appUserAddressLongitudeIdx ON AppUser (addressLongitude);
+
+-- Index on addressLatitude.
+CREATE INDEX IF NOT EXISTS appUserAddressLatitudeIdx ON AppUser (addressLatitude);

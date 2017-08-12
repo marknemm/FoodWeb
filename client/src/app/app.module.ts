@@ -6,6 +6,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AgmCoreModule } from '@agm/core';
+
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -79,7 +81,8 @@ const appRoutes: Routes = [
     BootstrapModalModule,
     HttpModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule, 
+    AgmCoreModule.forRoot({apiKey: 'AIzaSyCljknY2lfGxVQDQbdDG1I53hiESK3QeqU'})
   ],
   entryComponents: [
     LoginComponent
