@@ -18,9 +18,6 @@ export class SignupService {
     });
   }
 
-  //getCoordinates(address: SignupModel){
-    //return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?address="+ address + "CA&key=AIzaSyCljknY2lfGxVQDQbdDG1I53hiESK3QeqU')
-
-  //}
+  
 
 }

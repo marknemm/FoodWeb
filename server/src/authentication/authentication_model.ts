@@ -3,6 +3,8 @@ import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sq
 import { connect, query, Client, QueryResult } from '../database_help/connection_pool';
 import { hashPassword, checkPassword } from './password_hash_util';
 import { isValidEmail, isValidPassword } from './user_info_criteria';
+import { Http, Headers, Response } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 
 /**
  * Container for primary App User identification info.
@@ -30,6 +32,7 @@ export class AuthenticationModel {
     constructor() {
 
     }
+    private http: Http
 
     /**
      * Authenticates a given user.
@@ -152,6 +155,13 @@ export class AuthenticationModel {
                 return Promise.reject(new Error('Signup failed. Provided Username and/or Email are not unique.'));
             });
     } // end signUpUser
+
+    getCoordinates(address: string){
+        return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?address='+ address + 'CA&key=AIzaSyCljknY2lfGxVQDQbdDG1I53hiESK3QeqU').toPromise()
+        .then((response) => Promise.resolve(response.json()));
+        //.catch((error) => {Promise.resolve(error.json()));}
+
+    }
 
     /**
      * Inserts the new user's data into the AppUser table, completing the signup process in the database.

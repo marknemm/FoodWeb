@@ -73,9 +73,7 @@ const appRoutes: Routes = [
     SignupComponent,
     ImageCropperComponent,
     DateFormatterPipe,
-    ReceiverCartComponent,
     BannerComponent,
-    DonorCartComponent,
     SlickLeftPanelComponent,
     FoodListingsFiltersComponent
   ],
@@ -97,7 +95,7 @@ const appRoutes: Routes = [
     DateFormatterPipe,
     AuthGaurdService
   ]
-    declarations: [
+    /*declarations: [
         AppComponent,
         HomeComponent,
         HeaderComponent,
@@ -131,7 +129,7 @@ const appRoutes: Routes = [
         DateFormatterPipe,
         AuthGaurdService,
         FoodTypesService
-    ]
+    ]*/
 })
 export class AppModule { }
 
