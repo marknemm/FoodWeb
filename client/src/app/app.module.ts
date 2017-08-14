@@ -75,7 +75,9 @@ const appRoutes: Routes = [
     DateFormatterPipe,
     BannerComponent,
     SlickLeftPanelComponent,
-    FoodListingsFiltersComponent
+    FoodListingsFiltersComponent,
+    FoodListingsComponent,
+    FoodTypesComponent
   ],
   imports: [
     NgbModule.forRoot(),
@@ -95,41 +97,7 @@ const appRoutes: Routes = [
     DateFormatterPipe,
     AuthGaurdService
   ]
-    /*declarations: [
-        AppComponent,
-        HomeComponent,
-        HeaderComponent,
-        FooterComponent,
-        LoginComponent,
-        DonorComponent,
-        ReceiverComponent,
-        SignupComponent,
-        ImageCropperComponent,
-        DateFormatterPipe,
-        BannerComponent,
-        SlickLeftPanelComponent,
-        FoodListingsFiltersComponent,
-        FoodListingsComponent,
-        FoodTypesComponent
-    ],
-    imports: [
-        NgbModule.forRoot(),
-        RouterModule.forRoot(appRoutes),
-        BrowserModule,
-        BootstrapModalModule,
-        HttpModule,
-        FormsModule,
-        ReactiveFormsModule
-    ],
-    entryComponents: [
-        LoginComponent
-    ],
-    bootstrap: [AppComponent],
-    providers: [
-        DateFormatterPipe,
-        AuthGaurdService,
-        FoodTypesService
-    ]*/
+    
 })
 export class AppModule { }
 

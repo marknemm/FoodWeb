@@ -128,11 +128,13 @@ export class AuthenticationModel {
      * @param state The new user's state.
      * @param zip The new user's zip code.
      * @param phone
+     * @param addressLatitude
+     * @param addressLongitude
      * @return A promise that on success will contain the primary AppUser information.
      */
-    public SignUpUser(email: string, password: string, username: string, lastName: string, firstName: string, isReceiver: boolean, isDonor: boolean, orgName: string, address: string, city: string, state: string, zip: string, phone: string): Promise<AppUserPrimaryInfo> {
+    public SignUpUser(email: string, password: string, username: string, lastName: string, firstName: string, isReceiver: boolean, isDonor: boolean, orgName: string, address: string, city: string, state: string, zip: string, phone: string, addressLatitude: number, addressLongitude: number): Promise<AppUserPrimaryInfo> {
         let self = this; // Needed because this inside the then callbacks will not refer to AuthenticationModel!
-
+        var hashedPassword: string;
         // First validate new email and password.
         if (!isValidEmail) {
             return Promise.reject(new Error('Signup failed. Invalid email provided.'));
@@ -145,8 +147,12 @@ export class AuthenticationModel {
         // TODO: write SQL function that seperately checks if the given username or email already exists!!!
         return hashPassword(password)
             .then((hashedPassword: string) => {
-                return self.insertIntoAppUser(email, hashedPassword, username, lastName, firstName, isReceiver, isDonor, orgName, address, city, state, zip, phone);
+                return self.getCoordinates(address, city, state, zip);
             })
+            .then((gpsCoordinates: any) => {
+                return self.insertIntoAppUser(email, hashedPassword, username, lastName, firstName, phone, address, city, state, zip, isReceiver, isDonor, orgName, addressLatitude, addressLongitude);
+            })
+            
             .then((insertQueryResult: QueryResult) => {
                 return self.handleSignUpUserResult(email, username, insertQueryResult);
             })
@@ -156,9 +162,22 @@ export class AuthenticationModel {
             });
     } // end signUpUser
 
-    getCoordinates(address: string){
-        return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?address='+ address + 'CA&key=AIzaSyCljknY2lfGxVQDQbdDG1I53hiESK3QeqU').toPromise()
-        .then((response) => Promise.resolve(response.json()));
+    public getCoordinates(address: string, city: string, state: string, zip: string): Promise<any>{
+        var latitude, longitude;
+        var geocoder = require('geocoder');
+        var fullAddress = address  + ', ' + city + ', ' + state + ', ' + zip;
+        var coordinates = [{latitude, longitude}];
+        return geocoder.geocode(fullAddress)
+        .then((response) => {
+            let latitude = response[0].geometry.location.lat;
+            let longitude = response[0].geometry.location.lng;
+            console.log(response);
+        })
+        .catch((err: Error) => {
+            Promise.resolve(err);
+        })
+        //return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?address='+ address + 'CA&key=AIzaSyCljknY2lfGxVQDQbdDG1I53hiESK3QeqU').toPromise()
+        //.then((response) => Promise.resolve(response.json()));
         //.catch((error) => {Promise.resolve(error.json()));}
 
     }
@@ -178,9 +197,11 @@ export class AuthenticationModel {
      * @param state The new user's state.
      * @param zip The new user's zip code.
      * @param phone
+     * @param addressLatitude
+     * @param addressLongitude
      */
-    private insertIntoAppUser(email: string, hashedPassword: string, username: string, lastName: string, firstName: string, isReceiver: boolean, isDonor: boolean, orgName: string, address: string, city: string, state: string, zip: string, phone: string): Promise<QueryResult> {
-        let queryString: string = 'SELECT * FROM addAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)';
+    private insertIntoAppUser(email: string, hashedPassword: string, username: string, lastName: string, firstName: string, phone: string, address: string, city: string, state: string, zip: string, isReceiver: boolean, isDonor: boolean, orgName: string,  addressLatitude: number, addressLongitude: number): Promise<QueryResult> {
+        let queryString: string = 'SELECT * FROM addAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)';
         let queryArgs: Array<any> = [username, email, hashedPassword, lastName, firstName, isReceiver, isDonor, orgName, address, city, state, zip, phone];
         logSqlQueryExec(queryString, queryArgs);
         return query(queryString, queryArgs);

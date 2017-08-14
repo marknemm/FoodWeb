@@ -108,7 +108,9 @@ export class AuthenticationController {
         var isReceiver: boolean = request.body.isReceiver;
         var phone: string = request.body.phone;
         var orgName: string = request.body.orgName;
-        var promise: Promise<AppUserPrimaryInfo> = this.authenticatonModel.SignUpUser(email, password, username, lastName, firstName, isReceiver, isDonor, orgName, address, city, state, zip, phone);
+        //var addressLatitude: number = request.body.addressLatitude;
+        //var addressLongitude: number = request.body.addressLongitude;
+        var promise: Promise<AppUserPrimaryInfo> = this.authenticatonModel.SignUpUser(email, password, username, lastName, firstName, isReceiver, isDonor, orgName, address, city, state, zip, phone, addressLatitude, addressLongitude);
 
         promise.then((appUserPrimaryInfo: AppUserPrimaryInfo) => {
             request.session['appUserKey'] = appUserPrimaryInfo.appUserKey;
