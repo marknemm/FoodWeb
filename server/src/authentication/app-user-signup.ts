@@ -2,7 +2,8 @@
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
 import { hashPassword } from './password-util';
-import { isValidEmail, isValidPassword } from '../../../shared/util/user_info_criteria';
+import { isValidEmail, isValidPassword } from '../../../shared/util/user-info-criteria';
+import { AppUserSignupInfo } from '../../../shared/authentication/app-user-signup-info';
 import { AppUserPrimaryInfo } from '../../../shared/authentication/app-user-primary-info';
 import { GPSCoordinates, getGPSCoordinates } from '../common-util/geocode';
 
@@ -26,7 +27,7 @@ import { GPSCoordinates, getGPSCoordinates } from '../common-util/geocode';
  * @param addressLongitude
  * @return A promise that on success will contain the primary AppUser information.
  */
-export function signup(email: string, password: string, username: string, lastName: string, firstName: string, isReceiver: boolean, isDonor: boolean, orgName: string, address: string, city: string, state: string, zip: string, phone: string): Promise<AppUserPrimaryInfo> {
+export function signup(appUserSignupInfo: AppUserSignupInfo): Promise<AppUserPrimaryInfo> {
     let self = this; // Needed because this inside the then callbacks will not refer to AuthenticationModel!
     // First validate new email and password.
     if (!isValidEmail) {
@@ -38,19 +39,19 @@ export function signup(email: string, password: string, username: string, lastNa
 
     // Then generate password hash and insert new AppUser data into the database.
     // TODO: write SQL function that seperately checks if the given username or email already exists!!!
-    return hashPassword(password)
+    return hashPassword(appUserSignupInfo.password)
         .then((hashedPassword: string) => {
-            password = hashedPassword;
-            return getGPSCoordinates(address, city, state, zip);
+            appUserSignupInfo.password = hashedPassword;
+            return getGPSCoordinates(appUserSignupInfo.getFullAddress());
         })
         .then((gpsCoordinates: GPSCoordinates) => {
             let latitude: number = gpsCoordinates.latitude;
             let longitude: number = gpsCoordinates.longitude;
-            return self.insertIntoAppUser(email, password, username, lastName, firstName, phone, address, city, state, zip, isReceiver, isDonor, orgName, latitude, longitude);
+            return self.insertIntoAppUser(appUserSignupInfo, latitude, longitude);
         })
         
         .then((insertQueryResult: QueryResult) => {
-            return self.handleSignUpUserResult(email, username, insertQueryResult);
+            return self.handleSignUpUserResult(appUserSignupInfo.email, appUserSignupInfo.username, insertQueryResult);
         })
         .catch((err: Error) => {
             console.log(err);
@@ -78,9 +79,18 @@ export function signup(email: string, password: string, username: string, lastNa
  * @param addressLatitude
  * @param addressLongitude
  */
-function insertIntoAppUser(email: string, hashedPassword: string, username: string, lastName: string, firstName: string, phone: string, address: string, city: string, state: string, zip: string, isReceiver: boolean, isDonor: boolean, orgName: string,  addressLatitude: number, addressLongitude: number): Promise<QueryResult> {
+function insertIntoAppUser(appUserSignupInfo: AppUserSignupInfo, hashedPassword: string): Promise<QueryResult> {
     let queryString: string = 'SELECT * FROM addAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)';
-    let queryArgs: Array<any> = [username, email, hashedPassword, lastName, firstName, isReceiver, isDonor, orgName, address, city, state, zip, phone];
+    let queryArgs: Array<any> = [ appUserSignupInfo.username,
+                                  appUserSignupInfo.email,
+                                  hashedPassword,
+                                  appUserSignupInfo.lastName,
+                                  appUserSignupInfo.firstName, 
+                                  appUserSignupInfo.address,
+                                  appUserSignupInfo.city,
+                                  appUserSignupInfo.state,
+                                  appUserSignupInfo.zip,
+                                  appUserSignupInfo.phone ];
     logSqlQueryExec(queryString, queryArgs);
     return query(queryString, queryArgs);
 }

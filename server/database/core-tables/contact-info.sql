@@ -5,12 +5,21 @@ CREATE TABLE IF NOT EXISTS ContactInfo
     contactInfoKey SERIAL PRIMARY KEY
 );
 
-ALTER TABLE ContactInfo ADD COLUMN IF NOT EXISTS address     VARCHAR(128)    NOT NULL;
+ALTER TABLE ContactInfo ADD COLUMN IF NOT EXISTS address            VARCHAR(128)    NOT NULL;
 
-ALTER TABLE ContactInfo ADD COLUMN IF NOT EXISTS city        VARCHAR(60)     NOT NULL;
+ALTER TABLE ContactInfo ADD COLUMN IF NOT EXISTS addressLongitude   NUMERIC(7, 4)   NOT NULL;
 
-ALTER TABLE ContactInfo ADD COLUMN IF NOT EXISTS state       CHAR(2)         NOT NULL;
+ALTER TABLE ContactInfo ADD COLUMN IF NOT EXISTS addressLatitude    NUMERIC(7, 4)   NOT NULL; 
 
-ALTER TABLE ContactInfo ADD COLUMN IF NOT EXISTS zip         INTEGER         NOT NULL;
+ALTER TABLE ContactInfo ADD COLUMN IF NOT EXISTS city               VARCHAR(60)     NOT NULL;
 
-ALTER TABLE ContactInfo ADD COLUMN IF NOT EXISTS phone       CHAR(12)        NOT NULL;
+ALTER TABLE ContactInfo ADD COLUMN IF NOT EXISTS state              CHAR(2)         NOT NULL;
+
+ALTER TABLE ContactInfo ADD COLUMN IF NOT EXISTS zip                INTEGER         NOT NULL;
+
+ALTER TABLE ContactInfo ADD COLUMN IF NOT EXISTS phone              CHAR(12)        NOT NULL;
+
+
+CREATE INDEX IF NOT EXISTS contactInfoAddressLongitudeIdx ON ContactInfo (addressLongitude);
+
+CREATE INDEX IF NOT EXISTS contactInfoAddressLatitudeIdx ON ContactInfo (addressLatitude);

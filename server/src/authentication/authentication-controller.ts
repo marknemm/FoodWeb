@@ -1,8 +1,8 @@
 'use strict';
 import * as http from 'http';
 import { NextFunction, Request, Response } from "express";
-import { login } from "./login";
-import { signup } from './signup';
+import { login } from "./app-user-login";
+import { signup } from './app-user-signup';
 import { AppUserPrimaryInfo } from '../../../shared/authentication/app-user-primary-info';
 
 
