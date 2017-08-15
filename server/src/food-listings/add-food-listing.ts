@@ -1,6 +1,6 @@
 'use strict';
-import { connect, query, Client, QueryResult } from '../database_help/connection_pool';
-import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
+import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
+import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { FoodListing } from './food-listing';
 var fs = require('fs');
 require('dotenv').config({ path: __dirname + '/../../../.env' });

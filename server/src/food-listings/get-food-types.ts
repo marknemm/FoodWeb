@@ -1,6 +1,6 @@
 'use strict'
-import { query, QueryResult } from '../database_help/connection_pool';
-import { logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
+import { query, QueryResult } from '../database-help/connection-pool';
+import { logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 
 /**
  * Gets all food types from the FoodType domain table in the database.

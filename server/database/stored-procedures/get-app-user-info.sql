@@ -1,7 +1,7 @@
 --This will be called by the 'getAppUserInfo' ts function,
 --and it will collect and return all the necessary DATA
-SELECT dropFunction('getAppUserInfo');
-CREATE OR REPLACE FUNCTION getAppUserInfo
+SELECT dropFunction('getAppUserPrimaryInfo');
+CREATE OR REPLACE FUNCTION getAppUserPrimaryInfo
 (
     usernameOrEmail         VARCHAR(128)        DEFAULT NULL   
 )
@@ -18,6 +18,7 @@ AS $$
 
 BEGIN
 
+    -- Note: this will potentially return multiple rows due to the 1 - many relationship between a given AppUser and related Organization(s).
     RETURN QUERY
     SELECT  AppUser.appUserKey, 
             AppUser.userName,
@@ -29,10 +30,9 @@ BEGIN
     INNER JOIN AppUserOrganizationMap       ON AppUserOrganizationMap.appUserKey = AppUser.appUserKey
     WHERE (AppUser.username = usernameOrEmail OR AppUser.email = usernameOrEmail);
 
-
 END;
 $$ LANGUAGE plpgsql;
 
 SELECT * FROM AppUser;
 SELECT * FROM AppUserOrganizationMap;
-SELECT * FROM getAppUserInfo('whoGivesAFauq55');
+SELECT * FROM getAppUserPrimaryInfo('whoGivesAFauq55');

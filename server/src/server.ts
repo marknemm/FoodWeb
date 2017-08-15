@@ -10,8 +10,10 @@ let rootDir = __dirname + '/../../../../';
 require('dotenv').config({ path: rootDir + '.env' });
 
 // Our controllers that will handle requests after this router hands off the data to them.
-import { AuthenticationController } from './authentication/authentication_controller';
-import { AuthenticationModel} from './authentication/authentication_model';
+import { handleLoginRequest,
+         handleLogoutRequest,
+         handleReAuthenticateRequest,
+         handleSignupRequest } from './authentication/authentication-controller';
 import { handleAddFoodListingRequest,
          handleGetFoodListingsRequest,
          handleClaimFoodListingRequest,
@@ -34,30 +36,28 @@ app.use(session({
 app.set('port', (process.env.PORT || 5000));
 module.exports = app;
 
-// Initialize our Controller objects. These are used to actually handle routes defined in this file.
-var authenticationController : AuthenticationController = new AuthenticationController();
-var authenticationModel : AuthenticationModel = new AuthenticationModel();
+// Handle /authentication/login route by passing off to AuthenticationController.
+app.post('/authentication/login', handleLoginRequest);
 
-app.get('/authentication/reAuthenticate', authenticationController.reAuthenticate.bind(authenticationController));
+//Handle /authentication/logout route by passing it off to AuthenticationController.
+app.get('/authentication/logout', handleLogoutRequest);
 
-// Handle /authentication/login route by passing off to LoginController.
-app.post('/authentication/login', authenticationController.login.bind(authenticationController));
+// Handle /authentication/reAuthenticate route by passing off to AuthenticationController.
+app.get('/authentication/reAuthenticate', handleReAuthenticateRequest);
 
-//Handle /authentication/signup route by passing it off to SignupController
-app.post('/authentication/signup', authenticationController.signup.bind(authenticationController));
+//Handle /authentication/signup route by passing it off to AuthenticationController.
+app.post('/authentication/signup', handleSignupRequest);
 
-//Handle /authentication/logout route by passing it off to LogoutController
-app.get('/authentication/logout', authenticationController.logout.bind(authenticationController));
-
-// Handle /donor/addFoodListing route by passing off to FoodListingController.
+// Handle /foodListings/addFoodListing route by passing off to FoodListingController.
 app.post('/foodListings/addFoodListing', handleAddFoodListingRequest);
 
-// Handle /receiver/getFoodListings route by passing off to FoodListingController.
+// Handle /foodListings/getFoodListings route by passing off to FoodListingController.
 app.post('/foodListings/getFoodListings', handleGetFoodListingsRequest);
 
-// Handle /receiver/claimFoodListing route by passing off to FoodListingController.
+// Handle /foodListings/claimFoodListing route by passing off to FoodListingController.
 app.post('/foodListings/claimFoodListing', handleClaimFoodListingRequest);
 
+// Handle /foodListings/getFoodTypes route by passing off to FoodListingController.
 app.get('/foodListings/getFoodTypes', handleGetFoodTypes);
 
 

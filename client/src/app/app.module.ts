@@ -6,6 +6,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AgmCoreModule } from '@agm/core';
+
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -60,41 +62,43 @@ const appRoutes: Routes = [
 ]
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomeComponent,
-        HeaderComponent,
-        FooterComponent,
-        LoginComponent,
-        DonorComponent,
-        ReceiverComponent,
-        SignupComponent,
-        ImageCropperComponent,
-        DateFormatterPipe,
-        BannerComponent,
-        SlickLeftPanelComponent,
-        FoodListingsFiltersComponent,
-        FoodListingsComponent,
-        FoodTypesComponent
-    ],
-    imports: [
-        NgbModule.forRoot(),
-        RouterModule.forRoot(appRoutes),
-        BrowserModule,
-        BootstrapModalModule,
-        HttpModule,
-        FormsModule,
-        ReactiveFormsModule
-    ],
-    entryComponents: [
-        LoginComponent
-    ],
-    bootstrap: [AppComponent],
-    providers: [
-        DateFormatterPipe,
-        AuthGaurdService,
-        FoodTypesService
-    ]
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    HeaderComponent,
+    FooterComponent,
+    LoginComponent,
+    DonorComponent,
+    ReceiverComponent,
+    SignupComponent,
+    ImageCropperComponent,
+    DateFormatterPipe,
+    BannerComponent,
+    SlickLeftPanelComponent,
+    FoodListingsFiltersComponent,
+    FoodListingsComponent,
+    FoodTypesComponent
+  ],
+  imports: [
+    NgbModule.forRoot(),
+    RouterModule.forRoot(appRoutes),
+    BrowserModule,
+    BootstrapModalModule,
+    HttpModule,
+    FormsModule,
+    ReactiveFormsModule, 
+    AgmCoreModule.forRoot({apiKey: 'AIzaSyCljknY2lfGxVQDQbdDG1I53hiESK3QeqU'})
+  ],
+  entryComponents: [
+    LoginComponent
+  ],
+  bootstrap: [ AppComponent ],
+  providers: [ 
+    DateFormatterPipe,
+    AuthGaurdService,
+    FoodTypesService
+  ]
+    
 })
 export class AppModule { }
 

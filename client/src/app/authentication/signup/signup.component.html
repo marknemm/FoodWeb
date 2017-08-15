@@ -4,13 +4,7 @@
   <hr/>
   <form ngNativeValidate (submit)="signupUser($event)" >
     <br/>
-
-      
-        Sign up as a Donor <input type="checkbox" name="donor" [(ngModel)]="signupModel.isDonor"><br/> 
-        Sign up as a Receiver<input type="checkbox" name="receiver" [(ngModel)]="signupModel.isReceiver"> <br/>
-       
-
-      <br/>
+        
       Enter Your First Name:<br/>
       <input type="text" name="firstName" [(ngModel)]="signupModel.firstName" required autofocus autocomplete="on"> 
       <br/>
@@ -22,12 +16,6 @@
       Enter your email address:<br/>
       <input type="email" name="email" [(ngModel)]="signupModel.email" required autocomplete="on">
       <br/>
-
-      <div *ngIf="signupModel.isReceiver || signupModel.isDonor">    
-      Enter your Organization's name: <br/>
-      <input type="text" name="orgName" [(ngModel)]="signupModel.orgName"  required>
-      <br/>
-     
 
       Enter your address:<br/>
       <input type="text" name="address" [(ngModel)]="signupModel.address" required >
@@ -52,7 +40,7 @@
       Enter your phone number:<br/>
       <input type="text" name="phone" [(ngModel)]="signupModel.phone" minlength="10" maxlength="10" required> 
       <br/>
-       </div>
+       
 
       Create a username:<br/> 
       <input type="text" name="username" [(ngModel)]="signupModel.username" required autocomplete="on">
@@ -62,11 +50,20 @@
       <input type="password" name="password" [(ngModel)]="signupModel.password" required>
       <br/>
 
+      Sign up as a Donor <input type="checkbox" name="donor" [(ngModel)]="signupModel.isDonor"><br/> 
+      Sign up as a Receiver<input type="checkbox" name="receiver" [(ngModel)]="signupModel.isReceiver"> <br/>
+
+      <div *ngIf="signupModel.isReceiver || signupModel.isDonor">
+          Enter your Organization's name: <br/>
+          <input type="text" name="orgName" [(ngModel)]="signupModel.orgName"  required>
+          <br/>
+      </div>  
+
 
 
       <button type="submit">Sign Up</button>
       <br/>
-
+     
 
   </form>
 

@@ -1,7 +1,7 @@
 'use strict'
-import { connect, query, Client, QueryResult } from '../database_help/connection_pool';
-import { fixNullQueryArgs } from '../database_help/prepared-statement-helper';
-import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
+import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
+import { fixNullQueryArgs } from '../database-help/prepared-statement-helper';
+import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { FoodListingsFilters, NgbDateStruct } from '../../../shared/food-listings/food-listings-filters';
 //filterByMyAppUser;
 

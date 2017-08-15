@@ -1,6 +1,6 @@
 var chai = require('chai');
 var chaiHttp = require('chai-http');
-var server = require('../dist/server');
+var server = require('../dist/server/src/server');
 var should = chai.should();
 
 chai.use(chaiHttp);
@@ -13,7 +13,8 @@ chai.use(chaiHttp);
  * You can add tests to this suite and add other testing suites.
  */
 describe('Authentication', function() {
-   /*
+
+    it('should signup', function(done) {
         chai.request(server)
             .post('/authentication/signup')
             .send({ email: 'lucifer55@hotMail.edu', username: 'whoGivesAFauq55', password: 'MyPassword1', firstName: 'Fauq', lastName: 'Yu',
@@ -40,9 +41,9 @@ describe('Authentication', function() {
                     res.body.email.should.be.a('string');
                 done();
             });
-    });*/
+    });
 
-    it('should login', function(done) {
+    /*it('should login', function(done) {
         chai.request(server)
             .post('/authentication/login')
             .send({ username: 'whoGivesAFauq55', password: 'MyPassword1' })
@@ -67,10 +68,10 @@ describe('Authentication', function() {
                     res.body.email.should.be.a('string');
                 done();
             });
-    });
+    });*/
 });
 
-describe('Food-Listing',function(){
+/*describe('Food-Listing',function(){
     it('should work?', function(done){
         chai.request(server)
             .post('/foodListings/claimFoodListing')
@@ -106,5 +107,4 @@ describe('Get Food Types', function() {
                 done();
             });
     })
-});
-
+});*/

@@ -1,7 +1,7 @@
 /**   
-  * This will take the raw password as a parameter, salt it,
-  *  prepend it, encrypt it, and then insert it into the database
-  */
+ * This will take the raw password as a parameter, salt it, prepend the salt to it,
+ * hash the password with the salt, and then insert it into the database
+ */
 'use strict'; 
 import { hash, genSalt, compare } from 'bcrypt';
 
@@ -22,6 +22,12 @@ export function hashPassword(password: string): Promise<string> {
     });
 };
 
+/**
+ * Checks to see if a given plain text password matches a hashed password on record.
+ * @param password The plain text password.
+ * @param hashedPassword The hashed password.
+ * @return A promise containing a boolean. If the passwords match, then true, otherwise false.
+ */
 export function checkPassword(password: string, hashedPassword: string): Promise<boolean> {
     return compare(password, hashedPassword);
 }

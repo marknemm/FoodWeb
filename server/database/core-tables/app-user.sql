@@ -20,6 +20,34 @@ ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS lastName                   VARCHAR(
 -- The App User's First Name.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS firstName                  VARCHAR(60)     NOT NULL;
 
+-- The App User's phone number.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS phone                      CHAR(12);
+
+-- The App User's Street Address.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS address                    VARCHAR(128);
+
+-- The Longitude of the App User's Address
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS addressLongitude           INTEGER;
+
+-- The Latitude of the App User's Address
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS addressLatitude            INTEGER; 
+
+-- City name.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS city                       VARCHAR(60);
+
+-- Zip code.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS zip                        INTEGER;
+
+-- Two letter state abbreviation.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS state                      CHAR(2);
+
+-- Foreign key to the Donor table.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS donorOrganizationKey       INTEGER         REFERENCES DonorOrganization (donorOrganizationKey);
+
+-- Foreign key to the Receiver table.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS receiverOrganizationKey    INTEGER         REFERENCES ReceiverOrganization (receiverOrganizationKey);
+
+
 -- Index on username.
 CREATE UNIQUE INDEX IF NOT EXISTS appUserUsernameIdx ON AppUser (username);
 
@@ -28,3 +56,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS appUserEmailIdx ON AppUser (email);
 
 -- Index for quick sorting and searching by full name.
 CREATE INDEX IF NOT EXISTS appUserFullNameIdx ON AppUser (lastName, firstName);
+
+-- Index on addressLongitude.
+CREATE INDEX IF NOT EXISTS appUserAddressLongitudeIdx ON AppUser (addressLongitude);
+
+-- Index on addressLatitude.
+CREATE INDEX IF NOT EXISTS appUserAddressLatitudeIdx ON AppUser (addressLatitude);
