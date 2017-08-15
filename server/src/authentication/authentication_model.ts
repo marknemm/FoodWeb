@@ -2,25 +2,9 @@
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
 import { connect, query, Client, QueryResult } from '../database_help/connection_pool';
 import { hashPassword, checkPassword } from './password_hash_util';
-import { isValidEmail, isValidPassword } from './user_info_criteria';
+import { isValidEmail, isValidPassword } from '../../../shared/util/user_info_criteria';
+import { AppUserPrimaryInfo } from '../../../shared/authentication/app-user-primary-info';
 
-/**
- * Container for primary App User identification info.
- */
-export class AppUserPrimaryInfo {
-    public appUserKey;
-    public username;
-    public email;
-    public organizationKey: Array<number>;
-
-    constructor(appUserKey: number, username: string, email: string,
-        organizationKey: Array<number>) {
-        this.appUserKey = appUserKey;
-        this.username = username;
-        this.email = email;
-        this.organizationKey = organizationKey;
-    }
-}
 
 /**
  * Model for authentication business logic. Contains functionality for authenticating or logging a user in, logging out, and signing up.

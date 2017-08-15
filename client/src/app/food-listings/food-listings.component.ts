@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
 
-import { FoodListing } from './food-listing';
+import { FoodListing } from '../../../../shared/food-listings/food-listing';
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
 import { FoodListingsService } from "./food-listings.service";
 
@@ -15,7 +15,7 @@ export class FoodListingsComponent implements OnInit {
 
     @Input() title: string = 'Food Listings';
 
-    private foodListings: FoodListing[];
+    private foodListings: Array<FoodListing>;
 
     constructor(private foodListingsService: FoodListingsService) {}
 
@@ -32,11 +32,8 @@ export class FoodListingsComponent implements OnInit {
     public refreshFoodListings(filters: FoodListingsFilters) {
         var observer = this.foodListingsService.getFoodListings(filters);
 
-        observer.subscribe(data => {
-            console.log(data.message);
-            if (data.success) {
-                this.foodListings = data.foodListings as FoodListing[];
-            }
+        observer.subscribe((foodListings: FoodListing[]) => {
+            this.foodListings = foodListings as FoodListing[];
         });
     }
 }

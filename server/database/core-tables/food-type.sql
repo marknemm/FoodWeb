@@ -9,57 +9,57 @@ CREATE TABLE IF NOT EXISTS FoodType
     foodTypeKey SERIAL PRIMARY KEY
 );
 
-ALTER TABLE FoodType ADD COLUMN IF NOT EXISTS foodTypeDescription VARCHAR(60) NOT NULL UNIQUE;
+ALTER TABLE FoodType ADD COLUMN IF NOT EXISTS foodType VARCHAR(60) NOT NULL UNIQUE;
 
 -- We can add all our FoodType entries here.
 DO $$ BEGIN
 
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodTypeDescription = 'Produce') THEN
-        INSERT INTO FoodType (foodTypeDescription) VALUES ('Produce');
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Produce') THEN
+        INSERT INTO FoodType (foodType) VALUES ('Produce');
     END IF;
     
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodTypeDescription = 'Canned Goods') THEN
-        INSERT INTO FoodType (foodTypeDescription) VALUES ('Canned Goods');
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Canned Goods') THEN
+        INSERT INTO FoodType (foodType) VALUES ('Canned Goods');
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodTypeDescription = 'Dessert') THEN
-        INSERT INTO FoodType (foodTypeDescription) VALUES ('Dessert');
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Dessert') THEN
+        INSERT INTO FoodType (foodType) VALUES ('Dessert');
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodTypeDescription = 'Frozen') THEN
-        INSERT INTO FoodType (foodTypeDescription) VALUES ('Frozen');
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Frozen') THEN
+        INSERT INTO FoodType (foodType) VALUES ('Frozen');
     END IF;
     
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodTypeDescription = 'Grain') THEN
-        INSERT INTO FoodType (foodTypeDescription) VALUES ('Grain');
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Grain') THEN
+        INSERT INTO FoodType (foodType) VALUES ('Grain');
     END IF;
     
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodTypeDescription = 'Dairy') THEN
-        INSERT INTO FoodType (foodTypeDescription) VALUES ('Dairy');
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Dairy') THEN
+        INSERT INTO FoodType (foodType) VALUES ('Dairy');
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodTypeDescription = 'Meat') THEN
-        INSERT INTO FoodType (foodTypeDescription) VALUES ('Meat');
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Meat') THEN
+        INSERT INTO FoodType (foodType) VALUES ('Meat');
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodTypeDescription = 'Sea Food') THEN
-        INSERT INTO FoodType (foodTypeDescription) VALUES ('Sea Food');
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Sea Food') THEN
+        INSERT INTO FoodType (foodType) VALUES ('Sea Food');
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodTypeDescription = 'Baked Goods') THEN
-        INSERT INTO FoodType (foodTypeDescription) VALUES ('Baked Goods');
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Baked Goods') THEN
+        INSERT INTO FoodType (foodType) VALUES ('Baked Goods');
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodTypeDescription = 'Beverages') THEN
-        INSERT INTO FoodType (foodTypeDescription) VALUES ('Beverages');
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Beverages') THEN
+        INSERT INTO FoodType (foodType) VALUES ('Beverages');
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodTypeDescription = 'Snacks') THEN
-        INSERT INTO FoodType (foodTypeDescription) VALUES ('Snacks');
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Snacks') THEN
+        INSERT INTO FoodType (foodType) VALUES ('Snacks');
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodTypeDescription = 'Meal') THEN
-        INSERT INTO FoodType (foodTypeDescription) VALUES ('Meal');
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Meal') THEN
+        INSERT INTO FoodType (foodType) VALUES ('Meal');
     END IF;
 
 END$$;

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router/router";
-import { Observable } from "rxjs/Observable";
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router/router';
+import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Http, Headers, Response } from '@angular/http';
+
+import { GetFoodTypesResponse } from '../../../../../shared/message-protocol/get-food-types-response';
 
 
 /**
@@ -15,7 +17,7 @@ export class FoodTypesService implements Resolve<string[]> {
     });
 
     // We will cache any Food Types that come back from the server so we only need to contact server once!
-    private static foodTypes: string[] = null;
+    private static foodTypesCache: string[] = null;
 
     constructor(private http: Http) {}
 
@@ -33,20 +35,32 @@ export class FoodTypesService implements Resolve<string[]> {
      */
     public getFoodTypes(): Observable<string[]> {
         // If we do not have cached Food Types, then we will contact the server.
-        if (FoodTypesService.foodTypes === null) {
+        if (FoodTypesService.foodTypesCache === null) {
             let observer: Observable<Response> = this.http.get('/foodListings/getFoodTypes',
                                                                { headers: FoodTypesService.JSON_HEADERS, withCredentials: true });
-            
+
             return observer.map((response: Response) => {
-                console.log(response.json());
-                FoodTypesService.foodTypes = response.json().foodTypes;
-                // The json object should contain an array of strings that signify the food listing types.
-                return response.json().foodTypes;
+                let getFoodTypesResponse: GetFoodTypesResponse = response.json();
+                console.log(getFoodTypesResponse.message);
+
+                if (getFoodTypesResponse.success) {
+                    FoodTypesService.foodTypesCache = getFoodTypesResponse.foodTypes;
+                    return getFoodTypesResponse.foodTypes;
+                }
+                
+                // On failure, simply goto catch callback below!
+                throw new Error(getFoodTypesResponse.message);
+            })
+            .catch((err: any, caught: Observable<string[]>) => {
+                console.log(err);
+                // Simply fill the Food Types with dummy data for now if cannot properly communicate with the server.
+                FoodTypesService.foodTypesCache = ['Food Type 1', 'Food Type 2', 'Food Type 3'];
+                return Observable.of(FoodTypesService.foodTypesCache);
             });
         }
         // Else, we do have cached Food Types, and we have no need of contacting the server.
         else {
-            return Observable.of(FoodTypesService.foodTypes);
+            return Observable.of(FoodTypesService.foodTypesCache);
         }
     }
 

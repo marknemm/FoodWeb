@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { NgbModule, NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { FoodListing } from "../food-listings/food-listing";
+import { FoodListing } from "../../../../shared/food-listings/food-listing";
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
 import { FoodListingsComponent } from "../food-listings/food-listings.component";
 import { FoodListingsFiltersComponent } from "../food-listings/food-listings-filters/food-listings-filters.component";

@@ -12,7 +12,7 @@ var config = new AWS.Config({
 });
 
 //interprets the JSON data recieved from the frontend and adds information recieved to the FoodListing table.
-export function addFoodListing(foodListing: FoodListing): Promise<any> {
+export function addFoodListing(foodListing): Promise<any> {
     var imageUrl = null;
 
     // If we have an image form the Donor, then generate the name and URL for it before we create database entry.

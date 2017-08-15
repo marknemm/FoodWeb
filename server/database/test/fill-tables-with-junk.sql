@@ -1,9 +1,13 @@
 -- DO NOT RUN THIS IF WE HAVE VALID DATA IN THE TABLES!!!
+DELETE FROM ClaimedFoodListing;
 DELETE FROM FoodListing;
 DELETE FROM FoodType;
+DELETE FROM UserPass;
 DELETE FROM AppUser;
 DELETE FROM DonorOrganization;
 DELETE FROM ReceiverOrganization;
+DELETE FROM Organization;
+DELETE FROM AppUserOrganizationMap;
 
 
 -- Fill Donor with junk data --

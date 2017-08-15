@@ -7,7 +7,7 @@ import { logSqlQueryExec, logSqlQueryResult } from '../logging/sql_logger';
  * @return A promise that resolves to an array of food type strings.
  */
 export function getFoodTypes(): Promise<Array<string>> {
-    var queryString = 'SELECT foodTypeDescription AS "foodTypeDescription" FROM FoodType;'
+    let queryString = 'SELECT foodType AS "foodType" FROM FoodType;'
     logSqlQueryExec(queryString);
 
     return query(queryString)
@@ -30,7 +30,7 @@ function processFoodTypeSelectResult(queryResult: QueryResult): Promise<Array<st
     logSqlQueryResult(queryResult.rows);
 
     for (let i: number = 0; i < queryResult.rowCount; i++) {
-        foodTypes.push(queryResult.rows[i].foodTypeDescription);
+        foodTypes.push(queryResult.rows[i].foodType);
     }
 
     return Promise.resolve(foodTypes);

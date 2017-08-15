@@ -1,7 +1,7 @@
 import { PoolConfig, Pool, Client, Query, QueryResult } from 'pg';
 export * from 'pg';
 
-require('dotenv').config({path: __dirname + '/../../../.env'});
+require('dotenv');
 
 /**
  * The process.env object contains the global environmental variables set in the root directory's .env file.

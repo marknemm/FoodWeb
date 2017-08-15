@@ -1,13 +1,15 @@
+"use strict";
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-
-//import { Food } from '../receiver/shared/food';
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
+import { GetFoodListingsRequest } from "../../../../shared/message-protocol/get-food-listings-request";
+import { GetFoodListingsResponse } from "../../../../shared/message-protocol/get-food-listings-response";
+import { FoodListing } from "../../../../shared/food-listings/food-listing";
 
 
-/*const MODELS: Food[] = [
+/*const MODELS: FoodListing[] = [
     {
         name: "Beef Stew",
         foodListingKey: 0,
@@ -49,8 +51,7 @@ export class FoodListingsService {
      *                        the current ones with (will start back at 0 retrieval offset).
      * @return An observable object that resolves to an object that contains the array of FoodListing objects.
      */
-    public getFoodListings(filters: FoodListingsFilters, getMoreListings: boolean = false): Observable<any> {
-
+    public getFoodListings(filters: FoodListingsFilters, getMoreListings: boolean = false): Observable<FoodListing[]> {
         // If we are simply getting more food listings, then we will set the retrievalOffset to the beginning of next segment of entries.
         (getMoreListings) ? this.retrievalOffset += FoodListingsService.RETRIEVAL_AMOUNT
                           : this.retrievalOffset = 0;
@@ -59,12 +60,18 @@ export class FoodListingsService {
         filters.retrievalOffset = this.retrievalOffset;
         filters.retrievalAmount = FoodListingsService.RETRIEVAL_AMOUNT;
 
+        let getFoodListingsRequest: GetFoodListingsRequest = new GetFoodListingsRequest(filters);
         let observer: Observable<Response> = this.http.post('/foodListings/getFoodListings',
-                                                            JSON.stringify(filters),
+                                                            JSON.stringify(getFoodListingsRequest),
                                                             { headers: FoodListingsService.JSON_HEADERS, withCredentials: true });
         return observer.map((response: Response) => {
-            console.log(response.json());
-            return response.json();
+            let getFoodListingsResponse: GetFoodListingsResponse = response.json();
+            console.log(getFoodListingsResponse.message);
+            if (getFoodListingsResponse.success) {
+                return getFoodListingsResponse.foodListings;
+            }
+            // If the response success flag is false, then we will simply send back an empty array to the calling component.
+            return new Array<FoodListing>();
         });
     }
 }

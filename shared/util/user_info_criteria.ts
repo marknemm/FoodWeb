@@ -1,4 +1,3 @@
-
 // This function validates email addresses for signup. First it checks to see if an '@' and a '.' are present in the correct order.
 // Then it checks to see that the '@' is not the first or second character, there is at least a two character gap between '@' and '.',
 // and that the '.' is not the last character.
@@ -24,7 +23,6 @@ export function isValidEmail(email: string): boolean {
 
 // This function checks to see if the password length is at least 6, has at least one of each: lowercase, uppercase, digit, and special character.
 // Returns boolean value.
-
 export function isValidPassword(password: string): boolean {
     var length = password.length;
     var hasUpper = /[A-Z]/.test(password);

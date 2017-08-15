@@ -1,6 +1,7 @@
 'use strict';
 import { NextFunction, Request, Response } from "express";
-import { AuthenticationModel, AppUserPrimaryInfo } from './authentication_model';
+import { AuthenticationModel } from './authentication_model';
+import { AppUserPrimaryInfo } from '../../../shared/authentication/app-user-primary-info';
 
 /**
  * Login Controller for handling of all Donor requests.
@@ -54,7 +55,7 @@ export class AuthenticationController {
             request.session['appUserKey'] = appUserPrimaryInfo.appUserKey;
             request.session['username'] = appUserPrimaryInfo.username;
             request.session['email'] = appUserPrimaryInfo.email;
-            request.session['organizationKey'] = appUserPrimaryInfo.organizationKey;
+            request.session['organizationKeys'] = appUserPrimaryInfo.organizationKeys;
 
             response.send(JSON.stringify({
                 success: true,
@@ -113,7 +114,7 @@ export class AuthenticationController {
             request.session['appUserKey'] = appUserPrimaryInfo.appUserKey;
             request.session['username'] = appUserPrimaryInfo.username;
             request.session['email'] = appUserPrimaryInfo.email;
-            request.session['organizationKey'] = appUserPrimaryInfo.organizationKey;
+            request.session['organizationKeys'] = appUserPrimaryInfo.organizationKeys;
 
             return response.send(JSON.stringify({
                 success: true,

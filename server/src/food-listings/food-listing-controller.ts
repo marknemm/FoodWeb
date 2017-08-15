@@ -2,8 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 import { addFoodListing } from './add-food-listing';
 import { getFoodListing } from './get-food-listings';
 import { getFoodTypes } from './get-food-types';
-import { FoodListing } from './food-listing';
 import { claimFoodListing } from './claim-food-listing';
+
+import { GetFoodListingsRequest } from '../../../shared/message-protocol/get-food-listings-request';
+import { GetFoodListingsResponse, FoodListing } from '../../../shared/message-protocol/get-food-listings-response';
+import { GetFoodTypesResponse } from '../../../shared/message-protocol/get-food-types-response';
+import { FoodWebResponse } from "../message-protocol/food-web-response";
 
 export function handleAddFoodListingRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
@@ -25,16 +29,20 @@ export function handleAddFoodListingRequest(request: Request, response: Response
     .catch(handleErrorResponse.bind(this, response));
 }
 
-export function handleReceiverGetFoodListingsRequest(request: Request, response: Response): void {
+export function handleGetFoodListingsRequest(request: Request, response: Response): void {
+    let getFoodListingsRequest: GetFoodListingsRequest = request.body;
     response.setHeader('Content-Type', 'application/json');
-    var promise = getFoodListing(request.body, null, null);
-    promise.then((searchResult: Array<object>) => {
-        response.send({ success: true, message: 'Food Listings successfully retrieved', searchResult: searchResult });
+
+    let promise = getFoodListing(getFoodListingsRequest.filters, null, null);
+    promise.then((foodListings: Array<FoodListing>) => {
+        response.send(new GetFoodListingsResponse(foodListings, true, 'Food Listings Successfully Retrieved'));
     })
-    .catch(handleErrorResponse.bind(this, response));
+    .catch((err: Error) => {
+        response.send(new GetFoodListingsResponse(null, false, err.message));
+    });
 }
 
-export function handleReceiverCartGetFoodListingsRequest(request: Request, response: Response): void {
+/*export function handleReceiverCartGetFoodListingsRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
     let requestedByAppUserKey: number = request.session.appUserKey;
     let organizationKey: number = request.session.receiverOrganizationKey;
@@ -48,7 +56,7 @@ export function handleReceiverCartGetFoodListingsRequest(request: Request, respo
         })
         .catch(handleErrorResponse.bind(this, response));
     }
-}
+}*/
 
 export function handleClaimFoodListingRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
@@ -62,11 +70,14 @@ export function handleClaimFoodListingRequest(request: Request, response: Respon
 
 export function handleGetFoodTypes(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
+
     var promise = getFoodTypes();
     promise.then((foodTypes: Array<string>) => {
-        response.send({ success: true, message: "Food Types successfully retrieved", foodTypes: foodTypes });
+        response.send(new GetFoodTypesResponse(foodTypes, true, 'Food Types Successfully Retrieved'));
     })
-    .catch(handleErrorResponse.bind(this, response));
+    .catch((err: Error) => {
+        response.send(new GetFoodTypesResponse(null, false, err.message));
+    });
 }
 
 /**

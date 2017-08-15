@@ -1,41 +1,38 @@
 'use strict';
 var express = require('express');
 var session = require('express-session');
-var pg = require('pg');
 var http = require('http');
 var bodyParser = require('body-parser');
 const path = require('path');
 
-
-var connectionPool = require('./database_help/connection_pool');
+// Set global root directory variable and configure .env path.
+let rootDir = __dirname + '/../../../../';
+require('dotenv').config({ path: rootDir + '.env' });
 
 // Our controllers that will handle requests after this router hands off the data to them.
 import { AuthenticationController } from './authentication/authentication_controller';
 import { AuthenticationModel} from './authentication/authentication_model';
 import { handleAddFoodListingRequest,
-         handleReceiverGetFoodListingsRequest,
+         handleGetFoodListingsRequest,
          handleClaimFoodListingRequest,
          handleGetFoodTypes } from './food-listings/food-listing-controller';
 
 // This is where compiled client ts files will go. We need this to locate index.html!
-const clientBuildDir = __dirname + '/../../client/dist/';
+const clientBuildDir = rootDir + 'client/dist/';
 
 var app = express();
 // Some configuration settings for our App.
 app.use(bodyParser.json());
 app.use(express.static(clientBuildDir));
-app.use(express.static(__dirname + '/../../public'));
+app.use(express.static(__dirname + 'public'));
 app.use(session({ 
-  secret: 'xefbwefiefw',
+  secret: process.env.SESSION_SECRET,
   cookie: { maxAge: 2000000 }, // Alot.
   resave: false,
   saveUninitialized: false
 }));
 app.set('port', (process.env.PORT || 5000));
 module.exports = app;
-
-// Make sure that we can locate our environmental variable (.env) file!
-require('dotenv').config({path: __dirname + '/../../.env'});
 
 // Initialize our Controller objects. These are used to actually handle routes defined in this file.
 var authenticationController : AuthenticationController = new AuthenticationController();
@@ -56,7 +53,7 @@ app.get('/authentication/logout', authenticationController.logout.bind(authentic
 app.post('/foodListings/addFoodListing', handleAddFoodListingRequest);
 
 // Handle /receiver/getFoodListings route by passing off to FoodListingController.
-app.post('/foodListings/getFoodListings', handleReceiverGetFoodListingsRequest);
+app.post('/foodListings/getFoodListings', handleGetFoodListingsRequest);
 
 // Handle /receiver/claimFoodListing route by passing off to FoodListingController.
 app.post('/foodListings/claimFoodListing', handleClaimFoodListingRequest);
