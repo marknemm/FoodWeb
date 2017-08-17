@@ -1,5 +1,9 @@
 /**
  * A basic search function for retrieving food listings that meet specific criteria.
+ * NOTE: This may need to be further optimized given that it will be dealing with a large amount of rows.
+ *       -One idea is to combine the dynamic query and return query and just do the group by in one return query. The query optimizer may come through here.
+ *       -Another idea is to first get all Food Listing keys that meet search criteria in a temp table using a dynamic query (no group by),
+ *        and then do a group by off of the small amount of food listing keys.
  */
 SELECT dropFunction('getFoodListings');
 CREATE OR REPLACE FUNCTION getFoodListings
@@ -11,25 +15,21 @@ CREATE OR REPLACE FUNCTION getFoodListings
     _foodTypes                  VARCHAR(60)[]   DEFAULT NULL,   -- This is when we may be filtering by one or many food types. Null is for all food types.
     _perishable                 BOOLEAN         DEFAULT NULL,   -- Are we looking for perishable food? Input true for perishable only, false for non-perishable, and null for both.
     _earliestExpireDate         TEXT            DEFAULT NULL,   -- Do we require food that is going to expire after a specific date? Must be in the format MM/DD/YYYY!
-    _postedByAppUserKey         INTEGER         DEFAULT NULL,   -- App User key of the logged in AppUser who is trying to view the items they posted for donation.
-    _claimedByAppUserKey        INTEGER         DEFAULT NULL,   -- App User key of the logged in AppUser who is trying to view the items they claimed.
-    _postedByOrganizationKey    INTEGER         DEFAULT NULL,   -- Organization key to filter by. The organization will be the one that posted or donated the item.
-    _claimedByOrganizationKey   INTEGER         DEFAULT NULL,   -- Organization key to filter by. The organization will be the one that claimed or is to receive the item.
-    _postedByOrganizationName   VARCHAR(128)    DEFAULT NULL,   -- Are we looking for food associated with a specific organization (by name) that posted the item.
-    _claimedByOrganizationName  VARCHAR(128)    DEFAULT NULL    -- Are wo looking for food associated with a specific organization (by name) that claimed the item.
+    _DonatedByAppUserKey        INTEGER         DEFAULT NULL,   -- App User key of the logged in AppUser who is trying to view the items they donated.
+    _claimedByAppUserKey        INTEGER         DEFAULT NULL    -- App User key of the logged in AppUser who is trying to view the items they claimed.
 )
 RETURNS TABLE
 (
     foodListingKey              INTEGER,
     foodTypes                   VARCHAR(60)[],
     perishable                  BOOLEAN,
-    postedByOrganizationName    VARCHAR(128),
-    postedByOrganizationAddress VARCHAR(128),
-    postedByOrganizationCity    VARCHAR(60),
-    postedByOrganizationState   CHAR(2),
-    postedByOrganizationZip     INTEGER,
-    postedByLastName            VARCHAR(60),
-    postedByFirstName           VARCHAR(60),
+    donorOrganizationName       VARCHAR(128),
+    donorOrganizationAddress    VARCHAR(128),
+    donorOrganizationCity       VARCHAR(60),
+    donorOrganizationState      CHAR(2),
+    donorOrganizationZip        INTEGER,
+    donorLastName               VARCHAR(60),
+    donorFirstName              VARCHAR(60),
     expireDate                  TEXT,
     foodDescription             TEXT,
     imgUrl                      TEXT
@@ -74,7 +74,22 @@ BEGIN
                                                         WHERE   FoodType.foodType = ANY($2)))
           AND ($3 IS NULL   OR FoodListing.perishable = $3)
           AND ($4 IS NULL   OR FoodListing.expireDate >= TO_TIMESTAMP($4, ''MM/DD/YYYY''))
+          AND ($5 IS NULL   OR FoodListing.DonatedByAppUserKey = $5)
     ';
+
+    -- Do we have any filter pertaining to claimer?
+    IF (_claimedByAppUserKey IS NOT NULL)
+    THEN
+
+        queryBase := queryBase || '
+            INNER JOIN ClaimedFoodListing                               ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
+        ';
+
+        queryFilters := queryFilters || '
+              AND (ClaimedFoodListing.claimedByAppUserKey = $6)
+        ';
+
+    END IF;
 
     -- Do we want to exclude all claimed food listings?
     IF (_unclaimedOnly = true)
@@ -90,70 +105,11 @@ BEGIN
         ';
     END IF;
 
-     -- Do we have any fitlers related to donor/poster?
-    IF (   _postedByAppUserKey IS NOT NULL
-        OR _postedByOrganizationKey IS NOT NULL
-        OR _postedByOrganizationName IS NOT NULL)
-    THEN
-        
-        queryBase := queryBase || '
-            INNER JOIN AppUserOrganizationMap AS PostByAppUserOrgMap    ON FoodListing.postedByKey = PostByAppUserOrgMap.appUserOrganizationMapKey
-        ';
-
-        queryFilters := queryFilters || '
-              AND ($5 IS NULL OR $5 = PostByAppUserOrgMap.appUserKey)
-              AND ($6 IS NULL OR $6 = PostedByAppUserOrgMap.organizationKey)
-        ';
-
-        -- Are we specifically dealing with filters realted to Posting Organization's name?
-        IF (_postedByOrganizationName IS NOT NULL)
-        THEN
-            queryBase := queryBase || '
-                INNER JOIN Organization AS PostByOrg  ON PostByAppUserOrgMap.organizationKey = PostByOrg.organizationKey
-            ';
-
-            queryFilters := queryFilters || '
-                  AND ($7 = PostByOrg.name)
-            ';
-        END IF;
-
-    END IF;
-
-    -- Do we have any filters pertaining to receiver/claimer?
-    IF (   _claimedByAppUserKey IS NOT NULL
-        OR _claimedByOrganizationKey IS NOT NULL
-        OR _claimedByOrganizationName IS NOT NULL)
-    THEN
-
-        queryBase := queryBase || '
-            INNER JOIN ClaimedFoodListing                               ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
-            INNER JOIN AppUserOrganizationMap AS ClaimByAppUserOrgMap   ON ClaimedFoodListing.claimedByKey = ClaimByAppUserOrgMap.appUserOrganizationMapKey
-        ';
-        
-        queryFilters := queryFilters || '
-              AND ($8 IS NULL OR $8 = ClaimByAppUserOrgMap.appUserKey)
-              AND ($9 IS NULL OR $9 = ClaimByAppUserOrgMap.organizationKey)
-        ';
-
-        -- Are we specifically dealing with filters realted to Organization that is the poster of an item?
-        IF (_claimedByOrganizationName IS NOT NULL)
-        THEN
-            queryBase := queryBase || '
-                INNER JOIN Organization AS ClaimByOrg  ON ClaimByAppUserOrgMap.organizationKey = ClaimByOrg.organizationKey
-            ';
-
-            queryFilters := queryFilters || '
-                  AND ($10 = ClaimByOrg.name)
-            ';
-        END IF;
-
-    END IF;
-
     queryGroupAndSort := '
         GROUP BY FoodListing.foodListingKey
         ORDER BY FoodListing.expireDate
-        OFFSET $11
-        LIMIT $12
+        OFFSET $7
+        LIMIT $8
     ';
 
 
@@ -168,12 +124,8 @@ BEGIN
           _foodTypes,
           _perishable,
           _earliestExpireDate,
-          _postedByAppUserKey,
-          _postedByOrganizationKey,
-          _postedByOrganizationName,
+          _DonatedByAppUserKey,
           _claimedByAppUserKey,
-          _claimedByOrganizationKey,
-          _claimedByOrganizationName,
           _retrievalOffset,
           _retrievalAmount;
     
@@ -186,23 +138,22 @@ BEGIN
     SELECT  FoodListing.foodListingKey,
             FiltFoodListingsAndTypes.foodTypes,
             FoodListing.perishable,
-            PostByOrg.name,
-            PostByOrgContact.address,
-            PostByOrgContact.city,
-            PostByOrgContact.state,
-            PostByOrgContact.zip,
-            PostByAppUser.lastName,
-            PostByAppUser.firstName,
+            DonatedByOrganization.name,
+            DonatedByContactInfo.address,
+            DonatedByContactInfo.city,
+            DonatedByContactInfo.state,
+            DonatedByContactInfo.zip,
+            DonatedByAppUser.lastName,
+            DonatedByAppUser.firstName,
             TO_CHAR(FoodListing.expireDate, 'MM/DD/YYYY'),
             FoodListing.foodDescription,
             FoodListing.imgUrl
     FROM FiltFoodListingsAndTypes
-    INNER JOIN FoodListing                                      ON FiltFoodListingsAndTypes.foodListingKey = FoodListing.foodListingKey
-    INNER JOIN ClaimedFoodListing                               ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
-    INNER JOIN AppUserOrganizationMap   AS PostByAppUserOrgMap  ON FoodListing.postedByKey = PostByAppUserOrgMap.appUserOrganizationMapKey
-    INNER JOIN AppUser                  AS PostByAppUser        ON PostByAppUserOrgMap.appUserKey = PostByAppUser.appUserKey
-    LEFT JOIN Organization              AS PostByOrg            ON PostByAppUserOrgMap.organizationKey = PostByOrg.organizationKey
-    LEFT JOIN ContactInfo               AS PostByOrgContact     ON PostByOrg.contactInfoKey = PostByOrgContact.contactInfoKey
+    INNER JOIN FoodListing                                          ON FiltFoodListingsAndTypes.foodListingKey = FoodListing.foodListingKey
+    INNER JOIN ClaimedFoodListing                                   ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
+    INNER JOIN AppUser                  AS DonatedByAppUser         ON FoodListing.donatedByAppUserKey = DonatedByAppUser.appUserKey
+    INNER JOIN ContactInfo              AS DonatedByContactInfo     ON DonatedByAppUser.contactInfoKey = DonatedByContactInfo.contactInfoKey
+    LEFT JOIN  Organization             AS DonatedByOrganization    ON DonatedByAppUser.organizationKey = DonatedByOrganization.organizationKey
     ORDER BY FoodListing.expireDate ASC;
 
 END;

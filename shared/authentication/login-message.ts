@@ -1,8 +1,23 @@
-/**
- * Basic format for responses from the server. All responses should follow this interface!
- */
-export class FoodWebResponse {
+import { FoodWebResponse } from '../message-protocol/food-web-response';
+import { AppUserInfo } from '../authentication/app-user-info';
+
+
+export class LoginRequest {
+
     constructor(
+        public email: string,
+        public password: string
+    ) { }
+}
+
+
+export class LoginResponse extends FoodWebResponse {
+
+    constructor(
+        /**
+         * The shared info related to the App User that has successfully signed up.
+         */
+        public appUserInfo?: AppUserInfo,
         /**
          * Indicates whether or not the operation on the back end was successful.
          */
@@ -20,5 +35,7 @@ export class FoodWebResponse {
          * Indicates if there is a need for the user to have their signup confirmed before performing certain functionality.
          */
         public signupConfirmRequired: boolean = false
-    ) { }
+    ) {
+        super(success, message, loginRequired, signupConfirmRequired);
+    }
 }

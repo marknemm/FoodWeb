@@ -6,8 +6,7 @@ CREATE TABLE IF NOT EXISTS Organization
     organizationKey SERIAL PRIMARY KEY
 );
 
-ALTER TABLE Organization ADD COLUMN IF NOT EXISTS name              VARCHAR(128)    NOT NULL;
-ALTER TABLE Organization ADD COLUMN IF NOT EXISTS contactInfoKey    INTEGER         REFERENCES ContactInfo (contactInfoKey);
+ALTER TABLE Organization ADD COLUMN IF NOT EXISTS name      VARCHAR(128)    NOT NULL;
+-- More fields will likely be added that are unique to an Organization!
 
-
-CREATE INDEX IF NOT EXISTS organizationNameIdx ON Organization (name);
+CREATE INDEX IF NOT EXISTS organization_NameIdx     ON Organization (name);

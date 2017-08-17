@@ -4,10 +4,8 @@ import { getFoodListing } from './get-food-listings';
 import { getFoodTypes } from './get-food-types';
 import { claimFoodListing } from './claim-food-listing';
 
-import { GetFoodListingsRequest } from '../../../shared/message-protocol/get-food-listings-request';
-import { GetFoodListingsResponse, FoodListing } from '../../../shared/message-protocol/get-food-listings-response';
-import { GetFoodTypesResponse } from '../../../shared/message-protocol/get-food-types-response';
-import { FoodWebResponse } from "../message-protocol/food-web-response";
+import { GetFoodListingsRequest, GetFoodListingsResponse, FoodListing } from '../../../shared/food-listings/get-food-listings-message';
+import { GetFoodTypesResponse } from '../../../shared/food-listings/get-food-types-message';
 
 export function handleAddFoodListingRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');

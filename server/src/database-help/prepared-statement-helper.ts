@@ -30,3 +30,25 @@ export function fixNullQueryArgs(queryStr: string, queryArgs: Array<any>): strin
 
     return queryStr;
 }
+
+
+/**
+ * Converts a given JavaScript array to a PGSQL array (in string format).
+ * @param jsArr The JavaScript array.
+ * @return The PGSQL array (in string format). Returns null if the given jsArr is null or empty.
+ */
+export function toPostgresArray(jsArr: Array<any>): string {
+    let postgresArrStr: string = null;
+    
+    if (jsArr != null && jsArr.length > 0) {
+        postgresArrStr = '{ ';
+
+        for (let i: number = 0; i < jsArr.length; i++) {
+            postgresArrStr += jsArr[i] + ', ';
+        }
+
+        postgresArrStr = postgresArrStr.substr(0, postgresArrStr.length - 2) + " }";
+    }
+    
+    return postgresArrStr;
+}

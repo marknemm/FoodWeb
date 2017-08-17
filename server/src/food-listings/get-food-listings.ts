@@ -1,13 +1,13 @@
 'use strict'
 import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
-import { fixNullQueryArgs } from '../database-help/prepared-statement-helper';
+import { fixNullQueryArgs, toPostgresArray } from '../database-help/prepared-statement-helper';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { FoodListingsFilters, NgbDateStruct } from '../../../shared/food-listings/food-listings-filters';
 //filterByMyAppUser;
 
 export function getFoodListing(filters: FoodListingsFilters, requesetedByAppUserKey: number, organizationKey: number): Promise<Array<object>> {
     var perishableArg: boolean = generatePerishabilityArg(filters.perishable, filters.notPerishable);
-    var foodTypesArg: string = generateFoodTypesArg(filters.foodTypes);
+    var foodTypesArg: string = toPostgresArray(filters.foodTypes);
     var expireDateArg: string = generateExpireDateArg(filters.minExpireAfterDays);
     var queryArgs: Array<any> = new Array<any>();
    
@@ -40,22 +40,6 @@ function generatePerishabilityArg(perishable: boolean, notPerishable: boolean): 
         return perishable;
     }
     return null;
-}
-
-function generateFoodTypesArg(foodTypes: string[]): string {
-    let foodTypesArg: string = null;
-
-    if (foodTypes != null && foodTypes.length > 0) {
-        foodTypesArg = '{ ';
-
-        for (let i: number = 0; i < foodTypes.length; i++) {
-            foodTypesArg += foodTypes[i] + ', ';
-        }
-
-        foodTypesArg = foodTypesArg.substr(0, foodTypesArg.length - 2) + " }";
-    }
-
-    return foodTypesArg;
 }
 
 function generateExpireDateArg(minExpireAfterDays: NgbDateStruct): string {

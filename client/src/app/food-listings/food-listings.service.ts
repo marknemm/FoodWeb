@@ -4,8 +4,8 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
-import { GetFoodListingsRequest } from "../../../../shared/message-protocol/get-food-listings-request";
-import { GetFoodListingsResponse } from "../../../../shared/message-protocol/get-food-listings-response";
+import { GetFoodListingsRequest } from "../../../../shared/food-listings/get-food-listings-message";
+import { GetFoodListingsResponse } from "../../../../shared/food-listings/get-food-listings-message";
 import { FoodListing } from "../../../../shared/food-listings/food-listing";
 
 

@@ -17,7 +17,7 @@ import { LoginComponent } from './authentication/login/login.component';
 import { DonorComponent } from './donor/donor.component';
 import { ReceiverComponent } from './receiver/receiver.component';
 import { ImageCropperComponent } from 'ng2-img-cropper';
-import { DateFormatterPipe } from "./shared/date-formatter.pipe"
+import { DateFormatterPipe } from "./common-util/date-formatter.pipe"
 import { AuthGaurdService } from './authentication/misc/auth-gaurd.service'
 
 import { SignupComponent } from './authentication/signup/signup.component';

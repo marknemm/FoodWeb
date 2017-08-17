@@ -6,16 +6,15 @@ import { Router } from '@angular/router';
 @Injectable()
 export class LogoutService {
 
-  constructor(
-    private http: Http,
-    private router: Router
-  ) {}
+    constructor(
+        private http: Http,
+        private router: Router
+    ) { }
 
-  public logout(): void {
-    sessionStorage.clear();
-    this.http.get('/authentication/logout')
-    this.router.navigate([ '/home' ]);
-    // Not interested in the response...
-  }
-
+    public logout(): void {
+        sessionStorage.clear();
+        this.http.get('/authentication/logout');
+        this.router.navigate(['/home']);
+        // Not interested in the response...
+    }
 }

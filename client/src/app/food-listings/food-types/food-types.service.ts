@@ -3,7 +3,7 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Http, Headers, Response } from '@angular/http';
 
-import { GetFoodTypesResponse } from '../../../../../shared/message-protocol/get-food-types-response';
+import { GetFoodTypesResponse } from '../../../../../shared/food-listings/get-food-types-message';
 
 
 /**

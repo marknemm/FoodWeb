@@ -6,56 +6,56 @@
     <br/>
         
       Enter Your First Name:<br/>
-      <input type="text" name="firstName" [(ngModel)]="signupModel.firstName" required autofocus autocomplete="on"> 
+      <input type="text" name="firstName" [(ngModel)]="appUserSignupInfo.firstName" required autofocus autocomplete="on"> 
       <br/>
 
       Enter your Last Name:<br/> 
-      <input type="text" name="lastName" [(ngModel)]="signupModel.lastName" required autocomplete="on">
+      <input type="text" name="lastName" [(ngModel)]="appUserSignupInfo.lastName" required autocomplete="on">
       <br/>
 
       Enter your email address:<br/>
-      <input type="email" name="email" [(ngModel)]="signupModel.email" required autocomplete="on">
+      <input type="email" name="email" [(ngModel)]="appUserSignupInfo.email" required autocomplete="on">
       <br/>
 
       Enter your address:<br/>
-      <input type="text" name="address" [(ngModel)]="signupModel.address" required >
+      <input type="text" name="address" [(ngModel)]="appUserSignupInfo.address" required >
       <br/>
 
       Enter your city:<br/>
-      <input type="text" name="city" [(ngModel)]="signupModel.city" required>
+      <input type="text" name="city" [(ngModel)]="appUserSignupInfo.city" required>
       <br/>
 
       Enter your state:<br/>
-      <select  name="state" [(ngModel)]="signupModel.state">
-      <option *ngFor="let state of signupModel.stateList" [value]="state">{{state}} </option>
+      <select  name="state" [(ngModel)]="appUserSignupInfo.state">
+      <option *ngFor="let state of stateList" [value]="state">{{state}} </option>
       </select>
       <br/>
       <br/>
       
      
       Enter your ZIP Code:<br/>
-      <input type="text" name="zip" maxlength="5" [(ngModel)]="signupModel.zip" required >
+      <input type="text" name="zip" maxlength="5" [(ngModel)]="appUserSignupInfo.zip" required >
       <br/>
 
       Enter your phone number:<br/>
-      <input type="text" name="phone" [(ngModel)]="signupModel.phone" minlength="10" maxlength="10" required> 
+      <input type="text" name="phone" [(ngModel)]="appUserSignupInfo.phone" minlength="10" maxlength="10" required> 
       <br/>
        
 
       Create a username:<br/> 
-      <input type="text" name="username" [(ngModel)]="signupModel.username" required autocomplete="on">
+      <input type="text" name="username" [(ngModel)]="appUserSignupInfo.username" required autocomplete="on">
       <br/>
 
       Create a password:<br/> 
-      <input type="password" name="password" [(ngModel)]="signupModel.password" required>
+      <input type="password" name="password" [(ngModel)]="appUserSignupInfo.password" required>
       <br/>
 
-      Sign up as a Donor <input type="checkbox" name="donor" [(ngModel)]="signupModel.isDonor"><br/> 
-      Sign up as a Receiver<input type="checkbox" name="receiver" [(ngModel)]="signupModel.isReceiver"> <br/>
+      Sign up as a Donor <input type="checkbox" name="donor" [(ngModel)]="appUserSignupInfo.isDonor"><br/> 
+      Sign up as a Receiver<input type="checkbox" name="receiver" [(ngModel)]="appUserSignupInfo.isReceiver"> <br/>
 
-      <div *ngIf="signupModel.isReceiver || signupModel.isDonor">
+      <div *ngIf="appUserSignupInfo.isReceiver || appUserSignupInfo.isDonor">
           Enter your Organization's name: <br/>
-          <input type="text" name="orgName" [(ngModel)]="signupModel.orgName"  required>
+          <input type="text" name="orgName" [(ngModel)]="appUserSignupInfo.orgName"  required>
           <br/>
       </div>  
 
@@ -67,7 +67,7 @@
 
   </form>
 
-  <div *ngIf="signupModel.signupError != null" id="signupErr">{{signupModel.signupError}}</div>
+  <div *ngIf="signupError != null" id="signupErr">{{appUserSignupInfo.signupError}}</div>
 
 </div>
 

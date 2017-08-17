@@ -1,8 +1,19 @@
+import { FoodWebResponse } from '../message-protocol/food-web-response';
+
+
+// No request since this message does not require a request payload.
+
+
 /**
- * Basic format for responses from the server. All responses should follow this interface!
+ * The expected response from the server after the get food types operation.
  */
-export class FoodWebResponse {
+export class GetFoodTypesResponse extends FoodWebResponse {
+
     constructor(
+        /**
+         * A list of food types retrieved on the server.
+         */
+        public foodTypes?: string[],
         /**
          * Indicates whether or not the operation on the back end was successful.
          */
@@ -20,5 +31,7 @@ export class FoodWebResponse {
          * Indicates if there is a need for the user to have their signup confirmed before performing certain functionality.
          */
         public signupConfirmRequired: boolean = false
-    ) { }
+    ) {
+        super(success, message, loginRequired, signupConfirmRequired);
+    }
 }

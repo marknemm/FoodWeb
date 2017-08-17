@@ -49,6 +49,7 @@
         "node-gyp": "^3.6.2",
         "node-sass": "^4.5.3",
         "pg": "7.x",
+        "postgres-array": "^1.0.2",
         "process-nextick-args": "^1.0.7",
         "rimraf": "^2.6.1",
         "rxjs": "^5.1.0",

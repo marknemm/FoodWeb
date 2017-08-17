@@ -20,6 +20,7 @@ BEGIN
     RETURNING ContactInfo.contactInfoKey INTO _contactInfoKey;
 
     RETURN _contactInfoKey;
+
 END;
 $$ LANGUAGE plpgsql;
 

@@ -5,35 +5,37 @@ CREATE TABLE IF NOT EXISTS AppUser
     appUserKey SERIAL PRIMARY KEY
 );
 
---A unique username for every user. This, along with the email shall be the primary identifiers
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS username               VARCHAR(128)    NOT NULL UNIQUE; 
-
+-- The email is the username and primary identifier for an account.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS email                  VARCHAR(128)    NOT NULL UNIQUE;
+-- Link to password data.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserPasswordKey     INTEGER         NOT NULL UNIQUE REFERENCES AppUserPassword (appUserPasswordKey);
+-- Link to contact information.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS contactInfoKey         INTEGER         NOT NULL UNIQUE REFERENCES ContactInfo (contactInfoKey);
+-- If this account is for an organization, then this will be populated.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS organizationKey        INTEGER         REFERENCES Organization (organizationKey);
 
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserPasswordKey     INTEGER         REFERENCES AppUserPassword(appUserPasswordKey);
-
+-- In the case of the AppUser being an Organization, this will refer to the administrator of the organization.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS lastName               VARCHAR(60)     NOT NULL;
-
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS firstName              VARCHAR(60)     NOT NULL;
 
+-- Date that the AppUser was created.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS createDate             TIMESTAMP       DEFAULT CURRENT_TIMESTAMP;
 
--- Flag to determine if the user has confirmed their signup/registration via link sent in email.
+-- Flag to determine if the user has confirmed their signup/registration via link sent in email if individual or via other methods if organization.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS singupConfirmed        BOOLEAN         DEFAULT FALSE;
 
 -- Next three entries relate to disabling a user for violation of terms of use.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS disabled               BOOLEAN         DEFAULT FALSE;
-
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS disabledDate           TIMESTAMP       DEFAULT NULL;
-
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS disabledReason         TEXT            DEFAULT NULL;
 
+-- Flags that determine how this AppUser can function.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS isDonor                BOOLEAN         NOT NULL;
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS isReceiver             BOOLEAN         NOT NULL;
 
-CREATE UNIQUE INDEX IF NOT EXISTS appUser_UsernameIdx           ON AppUser (username);
 
 CREATE UNIQUE INDEX IF NOT EXISTS appUser_EmailIdx              ON AppUser (email);
-
 CREATE UNIQUE INDEX IF NOT EXISTS appUser_AppUserPasswordKeyIdx ON AppUser (appUserPasswordKey);
-
--- Index for quick sorting and searching by full name.
-CREATE INDEX IF NOT EXISTS appUser_FullNameIdx                  ON AppUser (lastName, firstName);
+CREATE UNIQUE INDEX IF NOT EXISTS appUser_ContactInfoKeyIdx     ON AppUser (contactInfoKey);
+CREATE INDEX IF NOT EXISTS appUser_fullNameIdx                  ON AppUser (lastName, firstName);
+CREATE INDEX IF NOT EXISTS appUser_OrganizationKeyIdx           ON AppUser (organizationKey);

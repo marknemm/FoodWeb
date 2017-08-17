@@ -1,28 +1,40 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { DateFormatterPipe } from "../shared/date-formatter.pipe"
-import { DonorSubmission } from "../shared/donor-submission"
 
-import { Food } from '../shared/food';
+import { FoodListing } from "../../../../shared/food-listings/food-listing";
+import { AddFoodListingRequest, AddFoodListingResponse } from "../../../../shared/food-listings/add-food-listing-message";
+
 
 @Injectable()
 export class DonorPrimaryService {
-    constructor(private http: Http,
-                private dateFormatter: DateFormatterPipe) {}
+    constructor(
+        private http: Http
+    ) { }
 
-    addFoodListing(foodListing: Food, image: string): Observable<boolean> {
-        foodListing.image = image;
-        foodListing.perishable;
-
-        // This is uniform with object on Server. In future, will make a shared directory where these class definitions can uniformly reside!
-        var headers = new Headers({
+    /**
+     * Adds a food listing on the server.
+     * @param foodListing The food listing to be added.
+     * @param imageUpload The image component of the food listing that is to be added.
+     * @return An observable that on success will provide the added food listings key (unique ID).
+     */
+    public addFoodListing(foodListing: FoodListing, imageUpload: string): Observable<number> {
+        let headers = new Headers({
             'Content-Type': 'application/json'
         });
-        var observer: Observable<Response> = this.http.post('/donor/addFoodListing', JSON.stringify(foodListing), {headers: headers, withCredentials: true});
+
+        foodListing.imageUpload = imageUpload;
+
+        let observer: Observable<Response> = this.http.post('/donor/addFoodListing', new AddFoodListingRequest(foodListing),
+                                                            {headers: headers, withCredentials: true});
         return observer.map((response : Response) => {
-            console.log(response);
-            return response.json().success;
+            let addFoodListingResponse: AddFoodListingResponse = response.json();
+            console.log(addFoodListingResponse.message);
+            
+            if (addFoodListingResponse.success) {
+                return addFoodListingResponse.foodListingKey;
+            }
+            throw new Error(addFoodListingResponse.message);
         });
     }
 }
