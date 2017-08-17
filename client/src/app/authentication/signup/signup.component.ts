@@ -11,7 +11,7 @@ import { FoodWebResponse } from "../../../../../shared/message-protocol/food-web
     selector: 'app-signup',
     templateUrl: './signup.component.html',
     styleUrls: ['./signup.component.css'],
-    providers: [SignupService]
+    providers: [SignupService, AuthSessionService]
 })
 export class SignupComponent implements OnInit {
 
