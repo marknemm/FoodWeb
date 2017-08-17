@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { SignupService } from './signup.service'
-import { AuthSessionService } from "../misc/auth-session";
+import { AuthSessionService } from "../misc/auth-session.service";
 
 import { AppUserInfo } from "../../../../../shared/authentication/app-user-info";
 import { FoodWebResponse } from "../../../../../shared/message-protocol/food-web-response";
