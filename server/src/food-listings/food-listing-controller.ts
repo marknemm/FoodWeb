@@ -4,23 +4,18 @@ import { getFoodListing } from './get-food-listings';
 import { getFoodTypes } from './get-food-types';
 import { claimFoodListing } from './claim-food-listing';
 
+import { AddFoodListingRequest, FoodListingUpload } from '../../../shared/food-listings/add-food-listing-message'
 import { GetFoodListingsRequest, GetFoodListingsResponse, FoodListing } from '../../../shared/food-listings/get-food-listings-message';
 import { GetFoodTypesResponse } from '../../../shared/food-listings/get-food-types-message';
 
 export function handleAddFoodListingRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
+    
+    let addFoodListingRequest: AddFoodListingRequest = request.body;
+    let foodListingUpload: FoodListingUpload = addFoodListingRequest.foodListingUpload;
+    foodListingUpload.donorAppUserKey = request.session['appUserInfo'].appUserKey;
 
-    var foodListing: FoodListing = new FoodListing(
-        request.session['appUserKey'],
-        request.body.foodType,
-        request.body.perishable,
-        request.body.foodDescription,
-        request.body.expirationDate,
-        request.body.image,
-        null // The model will generate the image name and fill this for now!
-    );
-
-    var promise = addFoodListing(foodListing);
+    var promise = addFoodListing(foodListingUpload);
     promise.then(function () {
         response.send({ success: true, message: 'Food listing added successfully' });
     })

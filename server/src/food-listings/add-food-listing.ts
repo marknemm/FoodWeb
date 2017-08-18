@@ -1,9 +1,14 @@
 'use strict';
 import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
-import { FoodListing } from './food-listing';
+
+import { toPostgresArray } from '../database-help/prepared-statement-helper';
+
+import { FoodListingUpload } from '../../../shared/food-listings/food-listing-upload';
+import { FoodListing } from '../../../shared/food-listings/food-listing';
+
 var fs = require('fs');
-require('dotenv').config({ path: __dirname + '/../../../.env' });
+
 var AWS = require('aws-sdk');
 var config = new AWS.Config({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -11,44 +16,47 @@ var config = new AWS.Config({
     region: process.env.AWS_REGION
 });
 
+
 //interprets the JSON data recieved from the frontend and adds information recieved to the FoodListing table.
-export function addFoodListing(foodListing): Promise<any> {
+export function addFoodListing(foodListingUpload: FoodListingUpload): Promise<any> {
     var imageUrl = null;
 
     // If we have an image form the Donor, then generate the name and URL for it before we create database entry.
-    if (foodListing.image != null) {
-        foodListing.imageName = 'img-' + Date.now().toString();
-        //imageUrl = process.env.AWS_BUCKET_URL + foodListing.imageName;
-        imageUrl = __dirname + '\\..\\..\\..\\public\\' + foodListing.imageName;
+    if (foodListingUpload.imageUpload != null) {
+        let imageName: string = 'img-' + Date.now().toString();
+        imageUrl = __dirname + '\\..\\..\\..\\..\\..\\public\\' + imageName;
+        //imageUrl = process.env.AWS_BUCKET_URL + imageName;
     }
     
     var queryString = 'SELECT * FROM addFoodListing($1, $2, $3, $4, $5, $6);';
-    var queryArgs = [foodListing.foodType,
-                    foodListing.perishable,
-                    foodListing.expirationDate.month + '/' + foodListing.expirationDate.day + '/' + foodListing.expirationDate.year,
-                    foodListing.postedByAppUserKey,
-                    foodListing.foodDescription,
-                    imageUrl];
+    var queryArgs = [ toPostgresArray(foodListingUpload.foodTypes),
+                      foodListingUpload.perishable,
+                      foodListingUpload.expirationDate.month + '/' + foodListingUpload.expirationDate.day + '/' + foodListingUpload.expirationDate.year,
+                      foodListingUpload.donorAppUserKey,
+                      foodListingUpload.foodDescription,
+                      imageUrl ];
 
     return query(queryString, queryArgs)
-    .then((result: QueryResult) => {
-        logSqlQueryResult(result.rows);
-        // If we have an image, then store it on AWS / Heroku.
-        if (foodListing.image != null) {
-            //return writeImgToCDN(foodListing.image, foodListing.imageName);
-            return writeImgToLocalFs(foodListing.image, imageUrl);
-        }
-        return Promise.resolve();
-    })
-    .catch((err: Error) => {
-        console.log(err);
-        return Promise.reject(new Error('Donor submission failed.'));
-    });
+        .then((result: QueryResult) => {
+            logSqlQueryResult(result.rows);
+
+            // If we have an image, then store it on AWS / Heroku.
+            if (foodListingUpload.imageUpload != null) {
+                //return writeImgToCDN(foodListing.image, foodListing.imageName);
+                return writeImgToLocalFs(foodListingUpload.imageUpload, imageUrl);
+            }
+
+            return Promise.resolve();
+        })
+        .catch((err: Error) => {
+            console.log(err);
+            return Promise.reject(new Error('Donor submission failed.'));
+        });
 }
 
 function writeImgToCDN(image: string, imageName: string): Promise<any> {
-    // Configure AWS.
     return new Promise(function(resolve, reject) {
+        // Configure AWS.
         var s3Bucket = new AWS.S3({
             params: { Bucket: process.env.AWS_BUCKET_NAME }
         });
@@ -61,7 +69,9 @@ function writeImgToCDN(image: string, imageName: string): Promise<any> {
             ContentEncoding: 'base64',
             ContentType: 'image/png'
         };
-        s3Bucket.putObject(data, function(err: Error, data){
+
+        // Upload the image.
+        s3Bucket.putObject(data, (err: Error, data) => {
             if (err) { 
                 console.log(err);
                 console.log('Error uploading data: ', data); 
@@ -76,10 +86,12 @@ function writeImgToCDN(image: string, imageName: string): Promise<any> {
 }
 
 function writeImgToLocalFs(image: string, imageUrl: string): Promise<any> {
+    // Strip off the base64 image header.
     var data = image.replace(/^data:image\/\w+;base64,/, '');
 
-    return new Promise(function(resolve, reject) {
-        fs.writeFile(imageUrl, data, {encoding: 'base64'}, function(err: Error) {
+    return new Promise((resolve, reject) => {
+        // Write to local file system.
+        fs.writeFile(imageUrl, data, {encoding: 'base64'}, (err: Error) => {
             if (err) {
                 console.log(err);
                 reject();

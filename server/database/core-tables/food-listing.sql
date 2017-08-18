@@ -5,13 +5,10 @@ CREATE TABLE IF NOT EXISTS FoodListing
     foodListingKey SERIAL PRIMARY KEY
 );
 
--- Foreign Key to FoodType table.
-ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS foodListingFoodTypeMapKey      INTEGER NOT NULL REFERENCES FoodListingFoodTypeMap (foodListingFoodTypeMapKey);
-
-ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS perishable                     BOOLEAN NOT NULL;
+ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS perishable                     BOOLEAN     NOT NULL;
 
 --The Posted by key refers to the app user organization map key
-ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS donatedByAppUserKey            INTEGER NOT NULL REFERENCES AppUser (appUserKey);
+ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS donatedByAppUserKey            INTEGER     NOT NULL REFERENCES AppUser (appUserKey);
 
 ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS foodDescription                TEXT;
 
@@ -19,12 +16,10 @@ ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS imgUrl                         
 
 ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS expireDate                     TIMESTAMP;
 
-ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS postDate                       TIMESTAMP;
+ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS postDate                       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 
 -- Add more columns here --
-
-CREATE INDEX IF NOT EXISTS foodListing_FoodListingFoodTypeMapKeyIdx     ON FoodListing (foodListingFoodTypeMapKey);
 
 CREATE INDEX IF NOT EXISTS foodListing_DonatedByAppUserKeyIdx           ON FoodListing (donatedByAppUserKey);
 

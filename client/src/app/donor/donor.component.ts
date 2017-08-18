@@ -1,22 +1,24 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ImageCropperComponent, CropperSettings } from 'ng2-img-cropper';
 
-import { DonorPrimaryService } from "./donor-primary.service";
+import { DonateService } from "./donate.service";
 import { DateFormatterPipe } from "../common-util/date-formatter.pipe"
-import { FoodListing } from "../../../../shared/food-listings/food-listing";
+
+import { FoodTypesComponent } from "../food-listings/food-types/food-types.component";
+
+import { FoodListingUpload } from "../../../../shared/food-listings/food-listing-upload";
+
 
 @Component({
     moduleId: module.id,
     selector: 'donor',
     templateUrl: 'donor.component.html',
-    providers: [DonorPrimaryService],
+    providers: [DonateService],
     styleUrls: ['donor.component.css']
 })
 export class DonorComponent implements OnInit {
     foodForm: FormGroup;
-    perishableOptions: string[];
-    foodTypeOptions: string[];
     forceValidation: boolean;
     submitted: boolean;
     dispUrl: string;
@@ -24,10 +26,11 @@ export class DonorComponent implements OnInit {
     image: string;
     cropperSettings: CropperSettings;
 
+    @ViewChild('FoodTypesComponent') private foodTypesComponent: FoodTypesComponent;
+
     constructor(
         private formBuilder: FormBuilder,
-        private donorPrimaryService: DonorPrimaryService,
-        private element: ElementRef,
+        private donateService: DonateService,
         private dateFormatter: DateFormatterPipe
     ) {
         // Want to force validators to process on submit. Non-text fields will only validate on submit too!
@@ -41,14 +44,10 @@ export class DonorComponent implements OnInit {
         this.cropperSettings.croppedHeight = 100;
         this.cropperSettings.canvasWidth = 400;
         this.cropperSettings.canvasHeight = 300;
-
-        this.perishableOptions = ['Perishable', 'Not Perishable'];
-        this.foodTypeOptions = ['Grain', 'Meat', 'Fruit', 'Vegetable', 'Drink'];
     }
 
     ngOnInit() {
         this.foodForm = this.formBuilder.group({
-            foodType: ['', Validators.required],
             perishable: [''],
             foodDescription: ['', Validators.required],
             expirationDate: ['', Validators.required]
@@ -59,22 +58,21 @@ export class DonorComponent implements OnInit {
         return validField.errors != null && validField.errors.required && (validField.touched || this.forceValidation);
     }
 
-    onSubmit({ value, valid }: { value: FoodListing, valid: boolean }) {
+    onSubmit({ value, valid }: { value: FoodListingUpload, valid: boolean }) {
         this.forceValidation = true;
 
-        // Checkbox when unchecked resolves to empty string, so explicitely set it to false if not given the value of true from the form!
-        if (value.perishable != true) {
-            value.perishable = false;
-        }
+        // Make sure we get all the selected Food Types.
+        value.foodTypes = this.foodTypesComponent.getSelectedFoodTypes();
 
         if (valid) {
-            let observer = this.donorPrimaryService.addFoodListing(value, this.image);
+            let observer = this.donateService.addFoodListing(value, this.image);
             observer.subscribe(
-                (foodListingKey: number) => {
+                (valueKey: number) => {
                     // TODO: Add functionality for edit of added food listing using the returned key!
                     this.submitted = true;
                 },
                 (err: Error) => {
+                    alert('An error has occured which caused your donation to fail.\nPlease contact Food Web for assistnace.\n\nThank-you.');
                     console.log(err);
                 }
             );

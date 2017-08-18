@@ -22,7 +22,7 @@ export class FoodListingsFiltersComponent implements OnInit {
 
     @Output() private filtersForm: FormGroup;
 
-    @ViewChild('FoodTypesComponent') private foodTypesComponent: FoodTypesComponent
+    @ViewChild('FoodTypesComponent') private foodTypesComponent: FoodTypesComponent;
 
 
     constructor(private formBuilder: FormBuilder) {

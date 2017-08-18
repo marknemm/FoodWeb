@@ -27,11 +27,6 @@ export class FoodListing {
         /**
          * The url of a saved Food Listing that will be used to display the associated image.
          */
-        public imgUrl?: string,
-        /**
-         * The string representation of the image associated with the listing.
-         * Should only be populated for the addition or upload of a new Food Listing.
-         */
-        public imageUpload?: string
+        public imgUrl?: string
     ) { }
 }

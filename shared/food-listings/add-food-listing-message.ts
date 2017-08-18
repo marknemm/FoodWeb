@@ -1,11 +1,12 @@
 import { FoodWebResponse } from '../message-protocol/food-web-response'
-import { FoodListing } from './food-listing';
+import { FoodListingUpload } from './food-listing-upload';
+export { FoodListingUpload };
 
 
 export class AddFoodListingRequest {
 
     constructor(
-        public foodListing?: FoodListing
+        public foodListingUpload?: FoodListingUpload
     ) { }
 }
 

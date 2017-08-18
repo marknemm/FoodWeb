@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 // import { ActivatedRoute } from "@angular/router";
 
@@ -15,12 +15,16 @@ export class FoodTypesComponent implements OnInit {
     private foodTypes: string[];
     private foodTypesForm: FormGroup;
 
+    @Input() private initiallyChecked: boolean = true;
+
     constructor(// private routerSnapshot: ActivatedRoute,
                 private foodTypesService: FoodTypesService)
-    {
+    { 
         this.foodTypes = [];
         this.foodTypesForm = new FormGroup({});
+    }
 
+    ngOnInit() {
         // this.foodTypes = this.routerSnapshot.data['value']['foodTypes'];
 
         /* Ideally, this should resolve immediately because of a resolver used in route to parent component! The Food Types should have
@@ -30,12 +34,10 @@ export class FoodTypesComponent implements OnInit {
             this.foodTypes = foodTypes;
 
             for (let i: number = 0; i < this.foodTypes.length; i++) {
-                this.foodTypesForm.addControl(this.foodTypes[i], new FormControl(true));
+                this.foodTypesForm.addControl(this.foodTypes[i], new FormControl(this.initiallyChecked));
             }
         });
     }
-
-    ngOnInit() {}
     
     /**
      * Called whenever there is an update to the Food Types form controls. Will provide the caller with a (string) list of the selected Food Types.

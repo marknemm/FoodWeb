@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { FoodListing } from "../../../../shared/food-listings/food-listing";
+import { FoodListingUpload } from "../../../../shared/food-listings/food-listing-upload";
 import { AddFoodListingRequest, AddFoodListingResponse } from "../../../../shared/food-listings/add-food-listing-message";
 
 
 @Injectable()
-export class DonorPrimaryService {
+export class DonateService {
     constructor(
         private http: Http
     ) { }
@@ -18,14 +18,14 @@ export class DonorPrimaryService {
      * @param imageUpload The image component of the food listing that is to be added.
      * @return An observable that on success will provide the added food listings key (unique ID).
      */
-    public addFoodListing(foodListing: FoodListing, imageUpload: string): Observable<number> {
+    public addFoodListing(foodListingUpload: FoodListingUpload, imageUpload: string): Observable<number> {
         let headers = new Headers({
             'Content-Type': 'application/json'
         });
 
-        foodListing.imageUpload = imageUpload;
+        foodListingUpload.imageUpload = imageUpload;
 
-        let observer: Observable<Response> = this.http.post('/donor/addFoodListing', new AddFoodListingRequest(foodListing),
+        let observer: Observable<Response> = this.http.post('/foodListings/addFoodListing', new AddFoodListingRequest(foodListingUpload),
                                                             {headers: headers, withCredentials: true});
         return observer.map((response : Response) => {
             let addFoodListingResponse: AddFoodListingResponse = response.json();

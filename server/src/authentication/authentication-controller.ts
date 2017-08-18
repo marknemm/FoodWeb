@@ -19,7 +19,7 @@ import { SignupRequest } from '../../../shared/authentication/signup-message';
 export function handleReAuthenticateRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
 
-    if (request.session['appUserKey'] != null) {
+    if (request.session['appUserInfo'] != null) {
         response.send(new FoodWebResponse(true, 'Logged in'));
     }
     else {
@@ -70,7 +70,7 @@ export function handleSignupRequest(request: Request, response: Response): void 
     let promise: Promise<AppUserInfo> = signup(signupRequest.appUserInfo);
 
     promise.then((appUserInfo: AppUserInfo) => {
-        request.session['appUserKeysAndInfo'] = appUserInfo;
+        request.session['appUserInfo'] = appUserInfo;
         return response.send(new FoodWebResponse(true, 'Signup successful'));
     })
     .catch((err: Error) => {
