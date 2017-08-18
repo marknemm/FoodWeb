@@ -24,7 +24,7 @@ export function signup(appUserSignupInfo: AppUserInfo): Promise<AppUserInfo> {
         return Promise.reject(new Error('Signup failed. Invalid email provided.'));
     }
     if (!Validation.passwordValidator(appUserSignupInfo.password)) {
-        return Promise.reject(new Error('Signup failed. Invalid password provided.'));
+        return Promise.reject(new Error('Signup failed. Password must be at least 6 letters and contain 1 number.'));
     }
 
     // Then generate password hash and insert new AppUser data into the database.
@@ -32,7 +32,7 @@ export function signup(appUserSignupInfo: AppUserInfo): Promise<AppUserInfo> {
     return hashPassword(appUserSignupInfo.password)
         .then((hashPass: string) => {
             hashedPassword = hashPass;
-            return getGPSCoordinates(appUserSignupInfo.getFullAddress());
+            return getGPSCoordinates(appUserSignupInfo.address, appUserSignupInfo.city, appUserSignupInfo.state, appUserSignupInfo.zip);
         })
         .then((gpsCoordinates: GPSCoordinates) => {
             let latitude: number = gpsCoordinates.latitude;
@@ -44,7 +44,7 @@ export function signup(appUserSignupInfo: AppUserInfo): Promise<AppUserInfo> {
         })
         .catch((err: Error) => {
             console.log(err);
-            return Promise.reject(new Error('Signup failed. Provided Username and/or Email are not unique.'));
+            return Promise.reject(new Error('Signup failed. Either email is already registered, or an incorrect address was given.'));
         });
 }
 

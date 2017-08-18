@@ -34,10 +34,9 @@ export function handleReAuthenticateRequest(request: Request, response: Response
  */
 export function handleLoginRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
-    let username: string = request.body.username;
-    let password: string = request.body.password;
-    let promise: Promise<AppUserInfo> = login(username, password)
-
+    let loginRequest: LoginRequest = request.body;
+    
+    let promise: Promise<AppUserInfo> = login(loginRequest.email, loginRequest.password)
     promise.then((appUserInfo: AppUserInfo) => {
         request.session['appUserInfo'] = appUserInfo;
         response.send(new LoginResponse(appUserInfo, true, 'Login successful'));
