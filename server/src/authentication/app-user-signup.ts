@@ -72,7 +72,7 @@ function insertIntoAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: strin
                                   appUserSignupInfo.isReceiver,
                                   appUserSignupInfo.organizationName ];
     
-    fixNullQueryArgs(queryString, queryArgs);
+    queryString = fixNullQueryArgs(queryString, queryArgs);
     logSqlQueryExec(queryString, queryArgs);
     return query(queryString, queryArgs);
 }

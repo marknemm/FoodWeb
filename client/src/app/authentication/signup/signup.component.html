@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="!signupComplete" class="container">
 
     <form ngNativeValidate (submit)="signupUser($event)">
         <h2 class="center-text">What Type of User Are You</h2>
@@ -115,4 +115,19 @@
         </ng-container>
     </form>
     <div *ngIf="signupError != null" id="signup-error">{{signupError}}</div>
+</div>
+
+
+<div *ngIf="signupComplete" class="container">
+    <p>
+        Thank-you for joining Food Web!
+    </p>
+    <br>
+    
+    <p *ngIf="isBusiness">
+        We will contact you by phone to verify your signup. Please allow up to 2 business days to receive a call from us.
+    </p>
+    <p *ngIf="!isBusiness">
+        A confirmation link will be sent to you via email. Please follow the link to confirm your signup.
+    </p>
 </div>

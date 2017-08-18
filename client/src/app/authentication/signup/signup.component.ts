@@ -17,6 +17,7 @@ export class SignupComponent implements OnInit {
     private appUserSignupInfo: AppUserInfo;
     private stateList: string[];
     private signupError: string;
+    private signupComplete: boolean;
 
     private appUserTypeSelected: boolean;
     private appUserFunctionSelected: boolean;
@@ -35,6 +36,7 @@ export class SignupComponent implements OnInit {
         this.appUserSignupInfo = new AppUserInfo();
         this.stateList = ['CA', 'NY', 'IN'];
         this.signupError = null;
+        this.signupComplete = false;
 
         this.appUserTypeSelected = false;
         this.appUserFunctionSelected = false;
@@ -52,8 +54,8 @@ export class SignupComponent implements OnInit {
             (signupResponse: FoodWebResponse) => {
                 if (signupResponse.success) {
                     this.signupError = null;
+                    this.signupComplete = true;
                     scroll(0, 0);
-                    this.router.navigate(['/home']);
                 }
                 else {
                     this.signupError = signupResponse.message;
