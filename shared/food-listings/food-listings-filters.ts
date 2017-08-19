@@ -33,6 +33,10 @@ export class FoodListingsFilters {
         /**
          * Determines the number of food listings that will be contained in the limited segment of retrievals.
          */
-        public retrievalAmount?: number
+        public retrievalAmount?: number,
+        /**
+         * Determines if we should only be bringing back unclaimed food listings.
+         */
+        public unclaimedOnly?: boolean
     ) { }
 }

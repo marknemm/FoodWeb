@@ -46,14 +46,21 @@ export class ReceiverComponent implements OnInit {
                 private modalService: NgbModal)
     {}
 
-    ngOnInit() {
-        // This is how you would add the code behind for additional filters specific to the receiver form.
-        //this.foodListingsFiltersComponent.addControl('dummyControl', new FormControl('dummy control'));
-    }
+    ngOnInit() { }
 
     ngAfterViewInit() {
-        this.foodListingsFiltersComponent.onFiltersUpdate(this.foodListingsComponent.refreshFoodListings.bind(this.foodListingsComponent));
-        this.foodListingsComponent.refreshFoodListings(this.foodListingsFiltersComponent.getFilterValues());
+        // This is how you would add the code behind for additional filters specific to the receiver form.
+        //this.foodListingsFiltersComponent.addControl('dummyControl', new FormControl('dummy control'));
+        this.handleFilterUpdate(this.foodListingsFiltersComponent.getFilterValues());
+    }
+
+    /**
+     * Handles filter updates by setting any necessary additional values in the filters and passing them off to the Food Listings Componet.
+     * @param foodListingsFilters The updated Food Listing Filters.
+     */
+    private handleFilterUpdate(foodListingsFilters: FoodListingsFilters): void {
+        foodListingsFilters.unclaimedOnly = true;
+        this.foodListingsComponent.refreshFoodListings(foodListingsFilters);
     }
 
     private selectItem(content, value: FoodListing): void {
