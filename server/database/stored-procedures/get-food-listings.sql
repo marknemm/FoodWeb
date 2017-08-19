@@ -41,6 +41,7 @@ AS $$
 BEGIN
 
     -- We will fill this table with our filtered food listings and associated food types (in aggregate array form).
+    DROP TABLE IF EXISTS FiltFoodListingsAndTypes;
     CREATE TEMP TABLE FiltFoodListingsAndTypes
     (
         foodListingKey  INTEGER PRIMARY KEY,
@@ -160,8 +161,18 @@ $$ LANGUAGE plpgsql;
 
 -- Test the Stored Procedure here --
 
-SELECT * FROM FoodListing;
-select * FROM getFoodListings(0, 1000);
+
+SELECT
+    FoodListing.foodListingKey,
+    ARRAY_AGG(FoodType.foodType) AS foodTypes -- Concatenates the food types into an array { Type1, Type2, ..., TypeN }
+FROM FoodListing
+INNER JOIN FoodListingFoodTypeMap   ON FoodListing.foodListingKey = FoodListingFoodTypeMap.foodListingKey
+INNER JOIN FoodType                 ON FoodListingFoodTypeMap.foodTypeKey = FoodType.foodTypeKey
+GROUP BY FoodListing.foodListingKey;
+
+SELECT * FROM FoodListingFoodTypeMap;
+
+--select * FROM getFoodListings(0, 1000);
 
 /*
 

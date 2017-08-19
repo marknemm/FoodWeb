@@ -1,5 +1,4 @@
 import { Component, OnInit, NgModule, Injectable, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { NgbModule, NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -37,21 +36,22 @@ import { FoodListingsFiltersComponent } from "../food-listings/food-listings-fil
 export class ReceiverComponent implements OnInit {
     
     private selectedFoodListing: FoodListing;
-    private filtersForm: FormGroup;
 
     @ViewChild('foodListingsFilters') foodListingsFiltersComponent: FoodListingsFiltersComponent;
     @ViewChild('foodListings') foodListingsComponent: FoodListingsComponent;
 
-    constructor(private formBuilder: FormBuilder,
-                private modalService: NgbModal)
-    {}
+    constructor(private modalService: NgbModal) { }
 
     ngOnInit() { }
 
+    /**
+     * Executed after all of the view children have been initialized (so safest to interact with them now).
+     */
     ngAfterViewInit() {
         // This is how you would add the code behind for additional filters specific to the receiver form.
         //this.foodListingsFiltersComponent.addControl('dummyControl', new FormControl('dummy control'));
         this.handleFilterUpdate(this.foodListingsFiltersComponent.getFilterValues());
+        this.foodListingsFiltersComponent.onFiltersUpdate(this.handleFilterUpdate.bind(this));
     }
 
     /**

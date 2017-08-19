@@ -24,10 +24,10 @@ BEGIN
     RETURNING FoodListing.foodListingKey INTO _foodListingKey;
 
     -- Insert all the food types that are associated with the new food listing.
-    FOREACH _foodType SLICE 1 IN ARRAY _foodTypes
+    FOR i IN array_lower(_foodTypes, 1) .. array_upper(_foodTypes, 1)
     LOOP
         INSERT INTO FoodListingFoodTypeMap (foodListingKey, foodTypeKey)
-        VALUES (_foodListingKey, (SELECT foodTypeKey FROM FoodType WHERE FoodType.foodType = _foodType[1]));
+        VALUES (_foodListingKey, (SELECT foodTypeKey FROM FoodType WHERE FoodType.foodType = _foodTypes[i]));
     END LOOP;
 
     RETURN _foodListingKey;
@@ -36,5 +36,5 @@ END;
 $$ LANGUAGE plpgsql;
 
 --SELECT * FROM AppUser;
---SELECT addFoodListing('{ Meal }', false, '1/2/2021', 2, NULL, NULL);
+--SELECT addFoodListing('{ Meal, Dairy, Canned }', false, '1/2/2021', 2, NULL, NULL);
 --SELECT * FROM FoodListing;

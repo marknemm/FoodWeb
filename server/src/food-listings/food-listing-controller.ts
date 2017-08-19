@@ -8,6 +8,7 @@ import { AddFoodListingRequest, FoodListingUpload } from '../../../shared/food-l
 import { GetFoodListingsRequest, GetFoodListingsResponse, FoodListing } from '../../../shared/food-listings/get-food-listings-message';
 import { GetFoodTypesResponse } from '../../../shared/food-listings/get-food-types-message';
 
+
 export function handleAddFoodListingRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
     

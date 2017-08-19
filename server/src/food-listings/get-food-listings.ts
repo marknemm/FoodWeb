@@ -3,9 +3,10 @@ import { connect, query, Client, QueryResult } from '../database-help/connection
 import { fixNullQueryArgs, toPostgresArray } from '../database-help/prepared-statement-helper';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { FoodListingsFilters, NgbDateStruct } from '../../../shared/food-listings/food-listings-filters';
-//filterByMyAppUser;
+import { FoodListing } from "../../../shared/food-listings/food-listing";
 
-export function getFoodListing(filters: FoodListingsFilters, donatedByAppUserKey: number, claimedByAppUserKey: number): Promise<Array<object>> {
+
+export function getFoodListing(filters: FoodListingsFilters, donatedByAppUserKey: number, claimedByAppUserKey: number): Promise<Array<FoodListing>> {
     let perishableArg: boolean = generatePerishabilityArg(filters.perishable, filters.notPerishable);
     let foodTypesArg: string = toPostgresArray(filters.foodTypes);
     let expireDateArg: string = generateExpireDateArg(filters.earliestExpireDate);
@@ -14,9 +15,9 @@ export function getFoodListing(filters: FoodListingsFilters, donatedByAppUserKey
     let queryString: string = 'SELECT * FROM getFoodListings($1, $2, null, $3, $4, $5, $6, $7, $8);';
     let queryArgs: Array<any> = [ filters.retrievalOffset, filters.retrievalAmount, filters.unclaimedOnly, foodTypesArg,
                                   perishableArg, expireDateArg, donatedByAppUserKey, claimedByAppUserKey ];
-    queryString = fixNullQueryArgs(queryString, queryArgs);
 
-    // Log and execute query.
+    // Replace any NULL query arguments with literals in query string.
+    queryString = fixNullQueryArgs(queryString, queryArgs);
     logSqlQueryExec(queryString, queryArgs);
 
     return query(queryString, queryArgs)
@@ -46,25 +47,27 @@ function generateExpireDateArg(minExpireAfterDays: NgbDateStruct): string {
     return (minExpireAfterDays.month + '/' + minExpireAfterDays.day + '/' + minExpireAfterDays.year);
 }
 
-function generateResultArray(rows: Array<any>): Array<object> {
-    let result: Array<object> = [];
+function generateResultArray(rows: Array<any>): Array<FoodListing> {
+    let result: Array<FoodListing> = [];
 
     for (let i: number = 0; i < rows.length; i++) {
-        result.push({
-            foodListingKey: rows[i].foodlistingkey,
-            foodTypeDescription: rows[i].foodtypedescription,
-            foodDescription: rows[i].fooddescription,
-            perishable: rows[i].perishable,
-            donorOrganizationName: rows[i].donororganizationname,
-            donorOrganizationAddress: rows[i].donororganizationaddress,
-            donorOrganizationCity: rows[i].donororganizationcity,
-            donorOrganizationState: rows[i].donororganizationstate,
-            donorOrganizationZip: rows[i].donororganizationzip,
-            donorLastName: rows[i].donorlastname,
-            donorFirstName: rows[i].donorfirstname,
-            expirationDate: rows[i].expiredate,
-            imgUrl: rows[i].imgurl             
-        });
+        result.push(new FoodListing(
+            rows[i].foodlistingkey,
+            rows[i].donororganizationname,
+            rows[i].donororganizationaddress,
+            rows[i].donororganizationcity,
+            rows[i].donororganizationstate,
+            rows[i].donororganizationzip,
+            rows[i].donorlastname,
+            rows[i].donorfirstname,
+            null,
+            rows[i].foodtypes,
+            rows[i].fooddescription,
+            null,
+            rows[i].perishable,
+            rows[i].expiredate,
+            rows[i].imgurl             
+        ));
     }
 
     return result;

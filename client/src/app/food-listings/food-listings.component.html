@@ -11,9 +11,21 @@
             </h4>
             <hr>
 
-            <p style="margin-left:1vw">
-                Posted By: <b>{{foodListing.donorFirstName}} {{foodListing.donorLastName}}</b><br>
-                Present food types: <b>{{foodListing.foodTypeDescription}}</b> <br>
+            <p style="margin-left:1vw; text-align:left;">
+                Donated By:
+                <ng-container *ngIf="foodListing.donorOrganizationName != null">
+                        <b>{{foodListing.donorOrganizationName}}</b>
+                </ng-container>
+                <ng-container *ngIf="foodListing.donorOrganizationName == null">
+                        <b>{{foodListing.donorFirstName}} {{foodListing.donorLastName}}</b>
+                </ng-container>
+                <br>
+                Present food types:
+                <ng-container *ngFor="let foodType of foodListing.foodTypes; let i = index;">
+                    <b>
+                        {{foodType}}<ng-container *ngIf="i !== (foodListing.foodTypes.length - 1)">,</ng-container>
+                    </b>
+                </ng-container><br>
                 Expires: <b>{{foodListing.expirationDate}}</b> <!--Requires a {{foodListing.quantityClass}}-->
 
                 <ng-content></ng-content>
