@@ -49,6 +49,9 @@ export class ReceiverComponent implements OnInit {
     ngOnInit() {
         // This is how you would add the code behind for additional filters specific to the receiver form.
         //this.foodListingsFiltersComponent.addControl('dummyControl', new FormControl('dummy control'));
+    }
+
+    ngAfterViewInit() {
         this.foodListingsFiltersComponent.onFiltersUpdate(this.foodListingsComponent.refreshFoodListings.bind(this.foodListingsComponent));
         this.foodListingsComponent.refreshFoodListings(this.foodListingsFiltersComponent.getFilterValues());
     }

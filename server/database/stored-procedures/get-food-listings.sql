@@ -116,7 +116,7 @@ BEGIN
 -- ==================================== Dynamic Query Execution Phase ======================================== --
 -- =========================================================================================================== --
 
-    raise notice '% % %', queryBase, queryFilters, queryGroupAndSort;
+    --raise notice '% % %', queryBase, queryFilters, queryGroupAndSort;
 
     -- Insert our filtered Food Listing Key - Food Listing Types pairs into our temporary table.
     EXECUTE (queryBase || queryFilters || queryGroupAndSort)
@@ -150,7 +150,6 @@ BEGIN
             FoodListing.imgUrl
     FROM FiltFoodListingsAndTypes
     INNER JOIN FoodListing                                          ON FiltFoodListingsAndTypes.foodListingKey = FoodListing.foodListingKey
-    INNER JOIN ClaimedFoodListing                                   ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
     INNER JOIN AppUser                  AS DonatedByAppUser         ON FoodListing.donatedByAppUserKey = DonatedByAppUser.appUserKey
     INNER JOIN ContactInfo              AS DonatedByContactInfo     ON DonatedByAppUser.contactInfoKey = DonatedByContactInfo.contactInfoKey
     LEFT JOIN  Organization             AS DonatedByOrganization    ON DonatedByAppUser.organizationKey = DonatedByOrganization.organizationKey
@@ -161,8 +160,8 @@ $$ LANGUAGE plpgsql;
 
 -- Test the Stored Procedure here --
 
-
-select getFoodListings(0, 1000);
+SELECT * FROM FoodListing;
+select * FROM getFoodListings(0, 1000);
 
 /*
 

@@ -5,15 +5,15 @@ import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sq
 import { FoodListingsFilters, NgbDateStruct } from '../../../shared/food-listings/food-listings-filters';
 //filterByMyAppUser;
 
-export function getFoodListing(filters: FoodListingsFilters, requesetedByAppUserKey: number, organizationKey: number): Promise<Array<object>> {
+export function getFoodListing(filters: FoodListingsFilters, donatedByAppUserKey: number, claimedByAppUserKey: number): Promise<Array<object>> {
     var perishableArg: boolean = generatePerishabilityArg(filters.perishable, filters.notPerishable);
     var foodTypesArg: string = toPostgresArray(filters.foodTypes);
-    var expireDateArg: string = generateExpireDateArg(filters.minExpireAfterDays);
+    var expireDateArg: string = generateExpireDateArg(filters.earliestExpireDate);
     var queryArgs: Array<any> = new Array<any>();
    
     // Build our prepared statement.
-    var queryString: string = 'SELECT * FROM getFoodListings(null, $1, $2, null, $3, $4);';
-    queryArgs = [ foodTypesArg, perishableArg, expireDateArg, requesetedByAppUserKey ];
+    var queryString: string = 'SELECT * FROM getFoodListings($1, $2, null, true, $3, $4, $5, $6, $7);';
+    queryArgs = [ filters.retrievalOffset, filters.retrievalAmount, foodTypesArg, perishableArg, expireDateArg, donatedByAppUserKey, claimedByAppUserKey ];
     queryString = fixNullQueryArgs(queryString, queryArgs);
 
     // Log and execute query.

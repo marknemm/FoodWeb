@@ -29,7 +29,7 @@ export class FoodListingsFiltersComponent implements OnInit {
 
         // Must be in the constructor so it is available in parent's ngOnInit() call!
         this.filtersForm = this.formBuilder.group({
-            minExpireAfterDays: { year: this.now.getFullYear(), month: this.now.getMonth() + 1, day: this.now.getDate() } as NgbDateStruct,
+            earliestExpireDate: { year: this.now.getFullYear(), month: this.now.getMonth() + 1, day: this.now.getDate() } as NgbDateStruct,
             maxQuantity: null,
             maxDistance: null,
             perishable: new FormControl(true),

@@ -21,7 +21,7 @@ export class FoodListingsFilters {
         /**
          * Determines the minimum date that retrieved items may expire after.
          */
-        public minExpireAfterDays?: NgbDateStruct,
+        public earliestExpireDate?: NgbDateStruct,
         /**
          * Determines the maximum distance from the requesting entity that donations must fall within.
          */
