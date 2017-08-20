@@ -6,8 +6,8 @@ var bodyParser = require('body-parser');
 const path = require('path');
 
 // Set global root directory variable and configure .env path.
-let rootDir = __dirname + '/../../../../';
-require('dotenv').config({ path: rootDir + '.env' });
+global['rootDir'] = __dirname + '/../../../../';
+require('dotenv').config({ path: global['rootDir'] + '.env' });
 
 // Our controllers that will handle requests after this router hands off the data to them.
 import { handleLoginRequest,
@@ -20,13 +20,14 @@ import { handleAddFoodListingRequest,
          handleGetFoodTypes } from './food-listings/food-listing-controller';
 
 // This is where compiled client ts files will go. We need this to locate index.html!
-const clientBuildDir = rootDir + 'client/dist/';
+const clientBuildDir = global['rootDir'] + 'client/dist/';
+const publicDir = global['rootDir'] + 'public';
 
 var app = express();
 // Some configuration settings for our App.
 app.use(bodyParser.json());
 app.use(express.static(clientBuildDir));
-app.use(express.static(__dirname + 'public'));
+app.use(express.static(publicDir));
 app.use(session({ 
   secret: process.env.SESSION_SECRET,
   cookie: { maxAge: 2000000 }, // Alot.
@@ -62,7 +63,7 @@ app.get('/foodListings/getFoodTypes', handleGetFoodTypes);
 
 
 app.get('/public/*', function(request, response) {
-    response.sendFile(path.resolve(__dirname + "/../.." + request.url));
+    response.sendFile(path.resolve(global['rootDir'] + request.url));
 });
 
 

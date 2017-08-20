@@ -1,11 +1,13 @@
-import { Component, OnInit, NgModule, Injectable, ViewChild } from '@angular/core';
-import { NgbModule, NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, ViewChild } from '@angular/core';
+import { Observable } from "rxjs/Observable";
+
+import { FoodListingsComponent } from "../food-listings/food-listings.component";
+import { FoodListingsFiltersComponent } from "../food-listings/food-listings-filters/food-listings-filters.component";
+import { FoodListingsService } from "../food-listings/food-listings.service";
 
 import { FoodListing } from "../../../../shared/food-listings/food-listing";
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
-import { FoodListingsComponent } from "../food-listings/food-listings.component";
-import { FoodListingsFiltersComponent } from "../food-listings/food-listings-filters/food-listings-filters.component";
+
 
 /*const FOOD_LISTINGS_MODEL: FoodListing[] = [
     {
@@ -28,21 +30,21 @@ import { FoodListingsFiltersComponent } from "../food-listings/food-listings-fil
     }
 ]*/
 
+
 @Component({
     selector: 'app-receiver',
     templateUrl: './receiver.component.html',
-    styleUrls: ['./receiver.component.css']
+    styleUrls: ['./receiver.component.css'],
+    providers: [FoodListingsService]
 })
-export class ReceiverComponent implements OnInit {
+export class ReceiverComponent {
     
-    private selectedFoodListing: FoodListing;
-
     @ViewChild('foodListingsFilters') foodListingsFiltersComponent: FoodListingsFiltersComponent;
     @ViewChild('foodListings') foodListingsComponent: FoodListingsComponent;
 
-    constructor(private modalService: NgbModal) { }
-
-    ngOnInit() { }
+    constructor(
+        private foodListingsService: FoodListingsService
+    ) { }
 
     /**
      * Executed after all of the view children have been initialized (so safest to interact with them now).
@@ -63,13 +65,22 @@ export class ReceiverComponent implements OnInit {
         this.foodListingsComponent.refreshFoodListings(foodListingsFilters);
     }
 
-    private selectItem(content, value: FoodListing): void {
-        //For viewing specifics and taking a listing down from the server
-        this.selectedFoodListing = value;
-        this.modalService.open(content).result.then((result) => {
-            if (result === "Request click") {
-                //Send item request to back end
+    /**
+     * Claims the currently selected Food Listing.
+     */
+    private claimSelectedFoodListing(): void {
+        let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedFoodListing();
+        let observer: Observable<void> = this.foodListingsService.claimFoodListing(selectedFoodListing.foodListingKey);
+        
+        // Listen for result.
+        observer.subscribe(
+            () => {
+                // On success, simply remove the Food Listing from the Receiver Food Listings interface.
+                this.foodListingsComponent.removeSelectedFoodListing();
+            },
+            (err) => {
+                console.log(err);
             }
-        })
+        );
     }
 }

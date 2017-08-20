@@ -24,7 +24,7 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
     // If we have an image form the Donor, then generate the name and URL for it before we create database entry.
     if (foodListingUpload.imageUpload != null) {
         let imageName: string = 'img-' + Date.now().toString();
-        imageUrl = __dirname + '\\..\\..\\..\\..\\..\\public\\' + imageName;
+        imageUrl = '\\public\\' + imageName;
         //imageUrl = process.env.AWS_BUCKET_URL + imageName;
     }
     
@@ -91,7 +91,7 @@ function writeImgToLocalFs(image: string, imageUrl: string): Promise<any> {
 
     return new Promise((resolve, reject) => {
         // Write to local file system.
-        fs.writeFile(imageUrl, data, {encoding: 'base64'}, (err: Error) => {
+        fs.writeFile(global['rootDir'] + imageUrl, data, {encoding: 'base64'}, (err: Error) => {
             if (err) {
                 console.log(err);
                 reject();

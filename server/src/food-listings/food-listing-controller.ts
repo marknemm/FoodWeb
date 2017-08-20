@@ -26,6 +26,7 @@ export function handleAddFoodListingRequest(request: Request, response: Response
     });
 }
 
+
 export function handleGetFoodListingsRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
 
@@ -39,6 +40,7 @@ export function handleGetFoodListingsRequest(request: Request, response: Respons
         response.send(new GetFoodListingsResponse(null, false, err.message));
     });
 }
+
 
 export function handleClaimFoodListingRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
@@ -54,6 +56,7 @@ export function handleClaimFoodListingRequest(request: Request, response: Respon
         response.send();
     });
 }
+
 
 export function handleGetFoodTypes(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');

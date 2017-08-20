@@ -1,9 +1,9 @@
-#receivers-row {
-    height: 5000px;
-}
-
 #filters {
     position: sticky;
+}
+
+#details-img {
+    float: left;
 }
 
 /* When the screen gets small and the filters panel goes into mobile mode, then center the food listings */
