@@ -18,7 +18,7 @@ var config = new AWS.Config({
 
 
 //interprets the JSON data recieved from the frontend and adds information recieved to the FoodListing table.
-export function addFoodListing(foodListingUpload: FoodListingUpload): Promise<any> {
+export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUserKey: number): Promise<any> {
     var imageUrl = null;
 
     // If we have an image form the Donor, then generate the name and URL for it before we create database entry.
@@ -32,7 +32,7 @@ export function addFoodListing(foodListingUpload: FoodListingUpload): Promise<an
     var queryArgs = [ toPostgresArray(foodListingUpload.foodTypes),
                       foodListingUpload.perishable,
                       foodListingUpload.expirationDate.month + '/' + foodListingUpload.expirationDate.day + '/' + foodListingUpload.expirationDate.year,
-                      foodListingUpload.donorAppUserKey,
+                      donorAppUserKey,
                       foodListingUpload.foodDescription,
                       imageUrl ];
 
