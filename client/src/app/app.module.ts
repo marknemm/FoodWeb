@@ -8,7 +8,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
 
-
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
@@ -16,6 +15,7 @@ import { FooterComponent } from './footer/footer.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { DonorComponent } from './donor/donor.component';
 import { ReceiverComponent } from './receiver/receiver.component';
+import { CartComponent } from './cart/cart.component';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { DateFormatterPipe } from "./shared/date-formatter.pipe"
 import { AuthGaurdService } from './authentication/misc/auth-gaurd.service'
@@ -56,6 +56,10 @@ const appRoutes: Routes = [
         }
     },
     {
+        path: 'cart',
+        component: CartComponent
+    },
+    {
         path: 'signup',
         component: SignupComponent
     }
@@ -77,7 +81,8 @@ const appRoutes: Routes = [
     SlickLeftPanelComponent,
     FoodListingsFiltersComponent,
     FoodListingsComponent,
-    FoodTypesComponent
+    FoodTypesComponent,
+    CartComponent
   ],
   imports: [
     NgbModule.forRoot(),

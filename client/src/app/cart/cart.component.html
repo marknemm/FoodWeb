@@ -1,0 +1,31 @@
+<div class="container-fluid">
+  <div id="cart-row" class="row" style="padding-top:2vh">
+    <div id="cart-btn-col" class="col-md-4">
+      <app-slick-left-panel>
+        <button id="btn-set-posted" type="button" class="btn btn-primary" hidden="true">View My Posted Items</button>
+        <button id="btn-set-ordered"type="button" class="btn btn-primary" hidden="true">View My Ordered Items</button>
+        <button id="btn-remove-all" type="button" class="btn btn-danger">Remove All Items</button>
+        <button id="btn-finalize-all" type="button" class="btn btn-success">Finalize All Items</button>
+      </app-slick-left-panel>
+    </div>
+    <div id="cart-listings-col" class="col-md-12">
+      <ng-template #content let-c="close" let-d="dismss">
+        <div class="modal-header">
+          <h4 class="modal-title">Food Description</h4>
+          <button type="button" class="close" aria-label="Close" (click)="c('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{selectedFoodListing.foodDescription}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="c('Finalize click')">Finalize Listing</button>
+          <button type="button" class="btn btn-secondary" (click)="c('Remove click')">Remove Listing</button>
+          <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+        </div>
+      </ng-template>
+      <app-food-listings #foodListings></app-food-listings>
+    </div>
+  </div>
+</div>
