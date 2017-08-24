@@ -1,44 +1,64 @@
-import { Component, OnInit, NgModule, Injectable, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { NgbModule, NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, ViewChild } from '@angular/core';
+import { Observable } from "rxjs/Observable";
+
+import { FoodListingsComponent } from "../food-listings/food-listings.component";
+import { FoodListingsFiltersComponent } from "../food-listings/food-listings-filters/food-listings-filters.component";
+import { FoodListingsService } from "../food-listings/food-listings.service";
 
 import { FoodListing } from "../../../../shared/food-listings/food-listing";
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
-import { FoodListingsComponent } from "../food-listings/food-listings.component";
-import { FoodListingsFiltersComponent } from "../food-listings/food-listings-filters/food-listings-filters.component";
+
 
 @Component({
     selector: 'app-receiver',
     templateUrl: './receiver.component.html',
-    styleUrls: ['./receiver.component.css']
+    styleUrls: ['./receiver.component.css'],
+    providers: [FoodListingsService]
 })
-export class ReceiverComponent implements OnInit {
+export class ReceiverComponent {
     
-    private selectedFoodListing: FoodListing;
-    private filtersForm: FormGroup;
-
     @ViewChild('foodListingsFilters') foodListingsFiltersComponent: FoodListingsFiltersComponent;
     @ViewChild('foodListings') foodListingsComponent: FoodListingsComponent;
 
-    constructor(private formBuilder: FormBuilder,
-                private modalService: NgbModal)
-    {}
+    constructor(
+        private foodListingsService: FoodListingsService
+    ) { }
 
-    ngOnInit() {
+    /**
+     * Executed after all of the view children have been initialized (so safest to interact with them now).
+     */
+    ngAfterViewInit() {
         // This is how you would add the code behind for additional filters specific to the receiver form.
         //this.foodListingsFiltersComponent.addControl('dummyControl', new FormControl('dummy control'));
-        this.foodListingsFiltersComponent.onFiltersUpdate(this.foodListingsComponent.refreshFoodListings.bind(this.foodListingsComponent));
-        this.foodListingsComponent.refreshFoodListings(this.foodListingsFiltersComponent.getFilterValues());
+        this.handleFilterUpdate(this.foodListingsFiltersComponent.getFilterValues());
+        this.foodListingsFiltersComponent.onFiltersUpdate(this.handleFilterUpdate.bind(this));
     }
 
-    private selectItem(content, value: FoodListing): void {
-        //For viewing specifics and taking a listing down from the server
-        this.selectedFoodListing = value;
-        this.modalService.open(content).result.then((result) => {
-            if (result === "Request click") {
-                //Send item request to back end
+    /**
+     * Handles filter updates by setting any necessary additional values in the filters and passing them off to the Food Listings Componet.
+     * @param foodListingsFilters The updated Food Listing Filters.
+     */
+    private handleFilterUpdate(foodListingsFilters: FoodListingsFilters): void {
+        foodListingsFilters.unclaimedOnly = true;
+        this.foodListingsComponent.refreshFoodListings(foodListingsFilters);
+    }
+
+    /**
+     * Claims the currently selected Food Listing.
+     */
+    private claimSelectedFoodListing(): void {
+        let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedFoodListing();
+        let observer: Observable<void> = this.foodListingsService.claimFoodListing(selectedFoodListing.foodListingKey);
+        
+        // Listen for result.
+        observer.subscribe(
+            () => {
+                // On success, simply remove the Food Listing from the Receiver Food Listings interface.
+                this.foodListingsComponent.removeSelectedFoodListing();
+            },
+            (err) => {
+                console.log(err);
             }
-        })
+        );
     }
 }

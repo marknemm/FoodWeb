@@ -1,23 +1,37 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { SignupModel } from './signup-model';
+
+import { AppUserInfo } from "../../../../../shared/authentication/app-user-info";
+import { SignupRequest } from "../../../../../shared/authentication/signup-message";
+import { FoodWebResponse } from "../../../../../shared/message-protocol/food-web-response";
+import { AuthSessionService } from "../misc/auth-session.service";
+
 
 @Injectable()
 export class SignupService {
 
-  constructor(private http: Http) { }
+    constructor(
+        private http: Http,
+        private authSessionService: AuthSessionService
+    ) { }
 
-  signup(signupModel: SignupModel) {
-    var headers = new Headers({
-      'Content-Type': 'application/json'
-    });
-    var observer : Observable<Response> = this.http.post('/authentication/signup', JSON.stringify(signupModel), {headers: headers})
-    return observer.map((response : Response) => {
-      return response.json();
-    });
-  }
+    signup(appUserSignupInfo: AppUserInfo) {
+        var headers = new Headers({
+            'Content-Type': 'application/json'
+        });
 
-  
+        var observer: Observable<Response> = this.http.post('/authentication/signup', new SignupRequest(appUserSignupInfo), { headers: headers })
+        return observer.map((response: Response): FoodWebResponse => {
+            let signupResponse: FoodWebResponse = response.json();
+            console.log(signupResponse.message);
 
+            // On successful signup, cache the App User's data in global front end session storage.
+            if (signupResponse.success) {
+                this.authSessionService.updateAppUserSessionInfo(appUserSignupInfo);
+            }
+
+            return signupResponse;
+        });
+    }
 }

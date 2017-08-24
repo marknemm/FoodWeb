@@ -14,17 +14,17 @@ export class GPSCoordinates {
 
 /**
  * Gets the GPS Coordinates for a given address.
- * @param address The street address.
+ * @param address The street address used to get the GPS Coordinates.
  * @param city The city.
  * @param state The state (can be abbreviated).
- * @param zip The 5 digit zip code.
+ * @param zip The 5 digit numeric ZIP code.
  * @return A promise containing the latitude and longitude GPS Coordinates wrapped in a container.
  */
-export function getGPSCoordinates(address: string, city: string, state: string, zip: string): Promise<GPSCoordinates>{
+export function getGPSCoordinates(address: string, city: string, state: string, zip: number): Promise<GPSCoordinates>{
     // Wrap the result in a promise.
     return new Promise<GPSCoordinates>(
         function(resolve: (value?: GPSCoordinates) => void, reject: (reason?: Error) => void) {
-            let fullAddress = address  + ', ' + city + ', ' + state + ', ' + zip;
+            let fullAddress = address + ', ' + city + ', ' + state + ', ' + zip.toString();
 
             // Use geocoder (which basically invokes Google Maps API) to get information on address.
             geocoder.geocode(fullAddress, function(err, data) {
@@ -41,3 +41,6 @@ export function getGPSCoordinates(address: string, city: string, state: string, 
         }
     );
 }
+
+
+

@@ -3,57 +3,66 @@ SELECT dropFunction('addAppUser');
 
 CREATE OR REPLACE FUNCTION addAppUser
 (
-    _username       VARCHAR(128),
-    _email          VARCHAR(128), 
-    _password       CHAR(60),
-    _lastName       VARCHAR(60),
-    _firstName      VARCHAR(60),
-    _isReceiverOrg  BOOLEAN         DEFAULT NULL,
-    _isDonorOrg     BOOLEAN         DEFAULT NULL,
-    _orgName        VARCHAR(128)    DEFAULT NULL,
-    _address        VARCHAR(128)    DEFAULT NULL,
-    _city           VARCHAR(60)     DEFAULT NULL,
-    _state          CHAR(2)         DEFAULT NULL,
-    _zip            INTEGER         DEFAULT NULL,
-    _phone          CHAR(12)        DEFAULT NULL
+    _email                  VARCHAR(128), 
+    _password               CHAR(60),
+    _lastName               VARCHAR(60),
+    _firstName              VARCHAR(60),
+    _address                VARCHAR(128),
+    _addressLatitude        NUMERIC(7, 4),
+    _addressLongitude       NUMERIC(7, 4),
+    _city                   VARCHAR(60),
+    _state                  CHAR(2),
+    _zip                    INTEGER,
+    _phone                  CHAR(12),
+    _isDonor                BOOLEAN,
+    _isReceiver             BOOLEAN,
+    _organizationName       VARCHAR(128)    DEFAULT NULL
 )
+-- Returns the new App User's key and associated Organization key.
 RETURNS TABLE
 (
-    appUserKey                  INTEGER,
-    organizationKey             INTEGER
-) -- Returns the new AppUser's KEYS
+    appUserKey      INTEGER,
+    organizationKey INTEGER
+)
 AS $$
-    DECLARE _appUserKey                 INTEGER     DEFAULT NULL;
-    DECLARE _organizationKey            INTEGER     DEFAULT NULL;
-    DECLARE _appUserPasswordKey         INTEGER     DEFAULT NULL;
-    DECLARE _contactInfoKey             INTEGER     DEFAULT NULL;
-
+    DECLARE _appUserKey             INTEGER         DEFAULT NULL;
+    DECLARE _appUserPasswordKey     INTEGER         DEFAULT NULL;
+    DECLARE _contactInfoKey         INTEGER         DEFAULT NULL;
+    DECLARE _organizationKey        INTEGER         DEFAULT NULL;
 BEGIN
+
+    -- First, ensure that email does not already exist!
+    IF EXISTS(SELECT 1 FROM AppUser WHERE email = _email LIMIT 1)
+    THEN
+        RAISE EXCEPTION 'Duplicate email provided';
+    END IF;
+
+    -- Ensure that we are giving donor or receiver capabilities to new user (cannot have neither).
+    IF (_isDonor = FALSE AND _isReceiver = FALSE)
+    THEN
+        _isReceiver := TRUE; -- If neither, then default to receiver.
+    END IF;
     
-    SELECT INTO _contactInfoKey FROM addContactInfo (_address, _city, _state, _zip, _phone);
+    -- Add the new user's contact info and get reference to entry.
+    SELECT * INTO _contactInfoKey FROM addContactInfo (_address, _addressLatitude, _addressLongitude, _city, _state, _zip, _phone);
 
-    CASE
-        WHEN (_isDonorOrg = TRUE OR _isReceiverOrg = TRUE) 
-            THEN 
-                SELECT addOrganization(_orgName, _isDonorOrg, _isReceiverOrg, _contactInfoKey) INTO _organizationKey;
-        ELSE
-                RAISE NOTICE 'Not associating organization with App User on Sign Up';
-    END CASE;
-
+    -- Add the new user's password and get reference to entry.
     INSERT INTO AppUserPassword (password)
-    VALUES (_password) 
+    VALUES (_password)
     RETURNING AppUserPassword.appUserPasswordKey INTO _appUserPasswordKey;
 
-    INSERT INTO AppUser (username, email, lastName, firstName, appUserPasswordKey )                  
-    VALUES (_username, _email, _lastName, _firstName, _appUserPasswordKey)
-    RETURNING AppUser.appUserKey INTO _appUserKey;
+    -- Add the new user's organization data if the user is and oragnization, and get a reference to the entry.
+    IF (_organizationName IS NOT NULL)
+    THEN
+        INSERT INTO Organization (name)
+        VALUES (_organizationName)
+        RETURNING Organization.organizationKey INTO _organizationKey;
+    END IF;
 
-    CASE
-        WHEN (_isDonorOrg = TRUE OR _isReceiverOrg = TRUE) 
-            THEN 
-                INSERT INTO AppUserOrganizationMap (appUserKey, organizationKey)
-                VALUES (_appUserKey, _organizationKey);
-    END CASE;
+    -- Add the new user and get reference to entry.
+    INSERT INTO AppUser (email, appUserPasswordKey, contactInfoKey, organizationKey, lastName, firstName, isDonor, isReceiver)                  
+    VALUES (_email, _appUserPasswordKey, _contactInfoKey, _organizationKey, _lastName, _firstName, _isDonor, _isReceiver)
+    RETURNING AppUser.appUserKey INTO _appUserKey;
 
     RETURN QUERY
     SELECT _appUserKey, _organizationKey;
@@ -61,4 +70,4 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT addAppUser('testUseNamead', 'tesadsft@test.com', 'testPass', 'testLast', 'testFirst', true, false, 'orgName', 'blah', 'blah', 'bl', 0, 'blah')
+SELECT addAppUser('testemail1@test.com', 'testPass', 'testLast', 'testFirst', '11 test rd.', 43.123456, 83.33, 'Test City', 'NY', 12345, '777-777-7777', true, true);

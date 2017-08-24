@@ -1,13 +1,23 @@
-import { FoodWebResponse } from './food-web-response';
+import { FoodWebResponse } from '../message-protocol/food-web-response'
+import { FoodListingUpload } from './food-listing-upload';
+export { FoodListingUpload };
 
 
-export class GetFoodTypesResponse extends FoodWebResponse {
+export class AddFoodListingRequest {
 
     constructor(
+        public foodListingUpload?: FoodListingUpload
+    ) { }
+}
+
+
+export class AddFoodListingResponse extends FoodWebResponse {
+    
+    constructor(
         /**
-         * A list of food types retrieved on the server.
+         * The key of the added food listing. Can be used to edit the added listing.
          */
-        public foodTypes?: string[],
+        public foodListingKey?: number,
         /**
          * Indicates whether or not the operation on the back end was successful.
          */
@@ -22,14 +32,10 @@ export class GetFoodTypesResponse extends FoodWebResponse {
          */
         public loginRequired: boolean = false,
         /**
-         * Indicates if there is a need for the user to associate with a donor organization to perform the related operation on the server.
+         * Indicates if there is a need for the user to have their signup confirmed before performing certain functionality.
          */
-        public donorRequired: boolean = false,
-        /**
-         * Indicates if there is a need for the user to associate with a receiver organization to perform the related operation on the server.
-         */
-        public receiverRequired: boolean = false
+        public signupConfirmRequired: boolean = false
     ) {
-        super(success, message, loginRequired, donorRequired, receiverRequired);
+        super(success, message, loginRequired, signupConfirmRequired);
     }
 }

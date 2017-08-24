@@ -1,6 +1,24 @@
-import { FoodWebResponse } from './food-web-response';
+import { FoodListingsFilters, NgbDateStruct } from '../food-listings/food-listings-filters';
+export { FoodListingsFilters, NgbDateStruct };
+
+import { FoodWebResponse } from '../message-protocol/food-web-response';
 import { FoodListing } from "../food-listings/food-listing";
 export { FoodListing };
+
+
+/**
+ * The expected request for the get food listings operation. Should be sent from the client to the server.
+ */
+export class GetFoodListingsRequest {
+
+    constructor(
+        /**
+         * Filters to use when getting food listings.
+         */
+        public filters: FoodListingsFilters
+    ) { }
+}
+
 
 /**
  * The expected response from the get food listings operation. Should be sent form the server to the client.
@@ -26,14 +44,10 @@ export class GetFoodListingsResponse extends FoodWebResponse {
          */
         public loginRequired: boolean = false,
         /**
-         * Indicates if there is a need for the user to associate with a donor organization to perform the related operation on the server.
+         * Indicates if there is a need for the user to have their signup confirmed before performing certain functionality.
          */
-        public donorRequired: boolean = false,
-        /**
-         * Indicates if there is a need for the user to associate with a receiver organization to perform the related operation on the server.
-         */
-        public receiverRequired: boolean = false
+        public signupConfirmRequired: boolean = false
     ) {
-        super(success, message, loginRequired, donorRequired, receiverRequired);
+        super(success, message, loginRequired, signupConfirmRequired);
     }
 }

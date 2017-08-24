@@ -1,73 +1,133 @@
-<div class="layout">
-  <br/>
-  <h2>Create your account</h2>
-  <hr/>
-  <form ngNativeValidate (submit)="signupUser($event)" >
-    <br/>
-        
-      Enter Your First Name:<br/>
-      <input type="text" name="firstName" [(ngModel)]="signupModel.firstName" required autofocus autocomplete="on"> 
-      <br/>
+<div *ngIf="!signupComplete" class="container">
 
-      Enter your Last Name:<br/> 
-      <input type="text" name="lastName" [(ngModel)]="signupModel.lastName" required autocomplete="on">
-      <br/>
+    <form ngNativeValidate (submit)="signupUser($event)">
+        <h2 class="center-text">What Type of User Are You</h2>
+        <hr>
+        <div class="row center-text">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="is-business" class="checkbox-label no-select">
+                        Business <input type="radio" id="is-business" name="account-type" class="checkbox" value="business" required (click)="setAppUserType('business')">
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="is-personal" class="checkbox-label no-select">
+                        Personal <input type="radio" id="is-personal" name="account-type" class="checkbox" value="personal" required (click)="setAppUserType('personal')">
+                    </label>
+                </div>
+            </div>
+        </div>
 
-      Enter your email address:<br/>
-      <input type="email" name="email" [(ngModel)]="signupModel.email" required autocomplete="on">
-      <br/>
+        <ng-container *ngIf="appUserTypeSelected">
+            <br><br><br><br>
 
-      Enter your address:<br/>
-      <input type="text" name="address" [(ngModel)]="signupModel.address" required >
-      <br/>
+            <h2 class="center-text">What Will You Be Doing</h2>
+            <hr>
+            <div class="row center-text">
+                <div class ="col-md-4">
+                    <div class="form-group">
+                        <label for="donor" class="checkbox-label no-select">
+                            Donating <input type="radio" id="donor" name="account-function" class="checkbox" required (click)="setAppUserFunction('donor')">
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="receiver" class="checkbox-label no-select">
+                            Receiving <input type="radio" id="receiver" name="account-function" class="checkbox" required (click)="setAppUserFunction('receiver')">
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="both" class="checkbox-label no-select">
+                            Both <input type="radio" id="both" name="account-function" class="checkbox" required (click)="setAppUserFunction('both')">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <br><br><br><br>
+        </ng-container>
 
-      Enter your city:<br/>
-      <input type="text" name="city" [(ngModel)]="signupModel.city" required>
-      <br/>
+        <ng-container *ngIf="appUserTypeSelected && appUserFunctionSelected">
+            <h2 class="center-text">Credentials and Contact Info</h2>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="email">{{emailLabel}}:</label>
+                        <input type="email" id="email" name="email" class="form-control" [(ngModel)]="appUserSignupInfo.email" required autocomplete="on">
+                    </div>
 
-      Enter your state:<br/>
-      <select  name="state" [(ngModel)]="signupModel.state">
-      <option *ngFor="let state of signupModel.stateList" [value]="state">{{state}} </option>
-      </select>
-      <br/>
-      <br/>
-      
-     
-      Enter your ZIP Code:<br/>
-      <input type="text" name="zip" maxlength="5" [(ngModel)]="signupModel.zip" required >
-      <br/>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" class="form-control" [(ngModel)]="appUserSignupInfo.password" required>
+                    </div>
 
-      Enter your phone number:<br/>
-      <input type="text" name="phone" [(ngModel)]="signupModel.phone" minlength="10" maxlength="10" required> 
-      <br/>
-       
+                    <div *ngIf="isBusiness" class="form-group">
+                        <label for="organization-name">Organization Name:</label>
+                        <input type="text" id="organization-name" name="organization-name" class="form-control" [(ngModel)]="appUserSignupInfo.organizationName" required autofocus autocomplete="on">
+                    </div>
 
-      Create a username:<br/> 
-      <input type="text" name="username" [(ngModel)]="signupModel.username" required autocomplete="on">
-      <br/>
+                    <div class="form-group">
+                        <label for="first-name">{{firstNameLabel}}:</label>
+                        <input type="text" id="first-name" name="first-name" class="form-control" [(ngModel)]="appUserSignupInfo.firstName" required autofocus autocomplete="on">
+                    </div>
 
-      Create a password:<br/> 
-      <input type="password" name="password" [(ngModel)]="signupModel.password" required>
-      <br/>
+                    <div class="form-group">
+                        <label for="last-name">{{lastNameLabel}}:</label>
+                        <input type="text" id="last-name" name="last-name" class="form-control" [(ngModel)]="appUserSignupInfo.lastName" required autocomplete="on">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="address">Street Address:</label>
+                        <input type="text" id="address" name="address" class="form-control" [(ngModel)]="appUserSignupInfo.address" required>
+                    </div>
 
-      Sign up as a Donor <input type="checkbox" name="donor" [(ngModel)]="signupModel.isDonor"><br/> 
-      Sign up as a Receiver<input type="checkbox" name="receiver" [(ngModel)]="signupModel.isReceiver"> <br/>
+                    <div class="form-group">
+                        <label for="city">City:</label>
+                        <input type="text" id="city" name="city" class="form-control" [(ngModel)]="appUserSignupInfo.city" required>
+                    </div>
 
-      <div *ngIf="signupModel.isReceiver || signupModel.isDonor">
-          Enter your Organization's name: <br/>
-          <input type="text" name="orgName" [(ngModel)]="signupModel.orgName"  required>
-          <br/>
-      </div>  
+                    <div class="form-group">
+                        <label for="state">State:</label>
+                        <select id="state" name="state" class="form-control" [(ngModel)]="appUserSignupInfo.state">
+                            <option *ngFor="let state of stateList" [value]="state">{{state}} </option>
+                        </select>
+                    </div>
 
+                    <div class="form-group">
+                        <label for="zip">ZIP Code:</label>
+                        <input type="text" id="zip" name="zip" class="form-control" maxlength="5" [(ngModel)]="appUserSignupInfo.zip" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="text" id="phone" name="phone" class="form-control" [(ngModel)]="appUserSignupInfo.phone" minlength="12" maxlength="12" placeholder="xxx-xxx-xxxx" required>
+                    </div>
+                </div>
 
-
-      <button type="submit">Sign Up</button>
-      <br/>
-     
-
-  </form>
-
-  <div *ngIf="signupModel.signupError != null" id="signupErr">{{signupModel.signupError}}</div>
-
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </ng-container>
+    </form>
+    <div *ngIf="signupError != null" id="signup-error">{{signupError}}</div>
 </div>
 
+
+<div *ngIf="signupComplete" class="container">
+    <p>
+        Thank-you for joining Food Web!
+    </p>
+    <br>
+    
+    <p *ngIf="isBusiness">
+        We will contact you by phone to verify your signup. Please allow up to 2 business days to receive a call from us.
+    </p>
+    <p *ngIf="!isBusiness">
+        A confirmation link will be sent to you via email. Please follow the link to confirm your signup.
+    </p>
+</div>

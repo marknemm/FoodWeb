@@ -17,8 +17,9 @@ import { DonorComponent } from './donor/donor.component';
 import { ReceiverComponent } from './receiver/receiver.component';
 import { CartComponent } from './cart/cart.component';
 import { ImageCropperComponent } from 'ng2-img-cropper';
-import { DateFormatterPipe } from "./shared/date-formatter.pipe"
+import { DateFormatterPipe } from "./common-util/date-formatter.pipe"
 import { AuthGaurdService } from './authentication/misc/auth-gaurd.service'
+import { AuthSessionService } from "./authentication/misc/auth-session.service";
 
 import { SignupComponent } from './authentication/signup/signup.component';
 import { BannerComponent } from './banner/banner.component';
@@ -101,6 +102,7 @@ const appRoutes: Routes = [
   providers: [ 
     DateFormatterPipe,
     AuthGaurdService,
+    AuthSessionService,
     FoodTypesService
   ]
     

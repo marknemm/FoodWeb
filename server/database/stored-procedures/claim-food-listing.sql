@@ -2,18 +2,22 @@
 SELECT dropFunction('claimFoodListing');
 CREATE OR REPLACE FUNCTION claimFoodListing
 (
-     _foodListingKey            INTEGER        DEFAULT NULL,   -- This is for when we are looking for a specific Food Listing.
-     _requestedByAppUserKey     INTEGER        DEFAULT NULL    -- This is the key we shall use to claim a listing
-
+     _foodListingKey        INTEGER,   -- This is the key of the Food Listing that is being claimed.
+     _claimedByAppUserKey   INTEGER    -- This is the key of the user who is claiming the Food Listing.
 )
-RETURNS VOID
+RETURNS INTEGER -- The claimedFoodListing primary key.
 AS $$
-
+    DECLARE _claimedFoodListingKey  INTEGER;
 BEGIN
-    UPDATE FoodListing
-    SET requestedByAppUserKey = _requestedByAppUserKey
-    WHERE _foodListingKey = foodListingKey;
+
+    -- The constraints on included insert columns will ensure that the AppUser and FoodListing exist.
+    INSERT INTO ClaimedFoodListing (claimedByAppUserKey, foodListingKey)
+    VALUES (_claimedByAppUserKey, _foodListingKey)
+    RETURNING ClaimedFoodListing.claimedFoodListingKey INTO _claimedFoodListingKey;
+
+    RETURN _claimedFoodListingKey;
+
 END;
 $$ LANGUAGE plpgsql;
 
---SELECT claimFoodListing(1, 1);
+--SELECT * FROM claimFoodListing(1, 1);

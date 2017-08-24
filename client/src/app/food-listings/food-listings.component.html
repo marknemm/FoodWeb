@@ -2,22 +2,53 @@
 <hr>
 
 <div class="list-group" style="overflow-y:auto">
-    <a *ngFor="let foodListing of foodListings" class="list-group-item">
+    <a *ngFor="let foodListing of foodListings; let i = index" class="list-group-item">
         <img [src]="foodListing.imgUrl" alt="No Picture" class="img-thumbnail" style="width:7vw;height:7vw">
 
         <div>
-            <h4 style="margin-left:1vw">{{foodListing.name}}
-                <button style="float:right" class="btn btn-primary btn-sm" (click)="selectItem(content, foodListing)">Details</button>
-            </h4>
+            <h5 style="margin-left:1vw">Donation-{{foodListing.foodListingKey}}
+                <button style="float:right" class="btn btn-primary btn-sm" (click)="showDetails(detailsHTML, i)">Details</button>
+            </h5>
             <hr>
 
-            <p style="margin-left:1vw">
-                Posted By: <b>{{foodListing.donorFirstName}} {{foodListing.donorLastName}}</b><br>
-                Present food types: <b>{{foodListing.foodTypeDescription}}</b> <br>
+            <p style="margin-left:1vw; text-align:left;">
+                Donated By:
+                <ng-container *ngIf="foodListing.donorOrganizationName != null">
+                        <b>{{foodListing.donorOrganizationName}}</b>
+                </ng-container>
+                <ng-container *ngIf="foodListing.donorOrganizationName == null">
+                        <b>{{foodListing.donorFirstName}} {{foodListing.donorLastName}}</b>
+                </ng-container>
+                <br>
+                Present food types:
+                <ng-container *ngFor="let foodType of foodListing.foodTypes; let i = index;">
+                    <b>
+                        {{foodType}}<ng-container *ngIf="i !== (foodListing.foodTypes.length - 1)">,</ng-container>
+                    </b>
+                </ng-container><br>
                 Expires: <b>{{foodListing.expirationDate}}</b> <!--Requires a {{foodListing.quantityClass}}-->
 
-                <ng-content></ng-content>
+                <ng-content select="[food-listing-info]"></ng-content>
             </p>
         </div>
     </a>
 </div>
+
+
+<ng-template #detailsHTML let-c="close" let-d="dismss">
+    <div class="modal-header">
+        <h4 class="modal-title">Donation-{{foodListings[selectedFoodListingIndex].foodListingKey}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="c('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <img [src]="foodListings[selectedFoodListingIndex].imgUrl" id="details-img" align="left" alt="No Picture" class="img-thumbnail" style="width:7vw;height:7vw">
+        <p>{{foodListings[selectedFoodListingIndex].foodDescription}}</p>
+        <ng-content select="[details-modal-body]"></ng-content>
+    </div>
+    <div class="modal-footer">
+        <ng-content select="[details-modal-footer]"></ng-content>
+        <button type="button" class="btn btn-secondary" (click)="c('Close')">Close</button>
+    </div>
+</ng-template>

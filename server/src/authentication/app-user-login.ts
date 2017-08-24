@@ -3,7 +3,7 @@ import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sq
 import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
 import { checkPassword } from './password-util';
 
-import { AppUserPrimaryInfo } from '../../../shared/authentication/app-user-primary-info';
+import { AppUserInfo } from '../../../shared/authentication/app-user-info';
 
 
 /**
@@ -12,7 +12,7 @@ import { AppUserPrimaryInfo } from '../../../shared/authentication/app-user-prim
  * @param password The password of the user.
  * @return A promise where on success it will provide the primary AppUser information of the logged in user.
  */
-export function login(usernameOrEmail: string, password: string): Promise<AppUserPrimaryInfo> {
+export function login(usernameOrEmail: string, password: string): Promise<AppUserInfo> {
     // First grab a connection so that we can exectue multiple queries with it.
     return getAppUserPrimaryInfo(usernameOrEmail)
         .then((getAppUserInfoResult: QueryResult) => {
@@ -26,44 +26,43 @@ export function login(usernameOrEmail: string, password: string): Promise<AppUse
 }
 
 /**
- * Gets the 
+ * Gets the primary info for a given App User.
  * @param usernameOrEmail: The username or email of the user to get the salt for.
- * @return A promise with the query result. The query result should simply contain one row with a salt member.
+ * @return A promise with the query result. The query result should simply contain one row information pertaining to the App User.
  */
 function getAppUserPrimaryInfo(usernameOrEmail: string): Promise<QueryResult> {
-    let queryString: string = 'SELECT * FROM getAppUserPrimaryInfo($1)';
+    let queryString: string = `SELECT * FROM getAppUserInfo(NULL, $1);`;
     let queryArgs: Array<string> = [usernameOrEmail];
     logSqlQueryExec(queryString, queryArgs);
     return query(queryString, queryArgs);
 }
 
 /**
- * 
+ * Anyalyzes the result of getting the App User's primary info. If the App User does exist, then we will check the password and bring back all organizations
+ * associated with the given App User if the password is correct.
  * @param usernameOrEmail The username or the email of the user that the password is being hashed for.
  * @param password The plain text password that is to be hashed.
- * @param getAppUserInfoResult The query result that on success should contain a single row with the AppUser primary info for a given email/username.
+ * @param getAppUserInfoResult The query result that on success should contain a single row with the App User info.
  * @return A promise that on success will give a string containing the primary app user info.
  */
-function analyzeAppUserPrimaryInfo(usernameOrEmail: string, password: string, getAppUserInfoResult: QueryResult): Promise<AppUserPrimaryInfo> {
+function analyzeAppUserPrimaryInfo(usernameOrEmail: string, password: string, getAppUserInfoResult: QueryResult): Promise<AppUserInfo> {
     logSqlQueryResult(getAppUserInfoResult.rows);
 
-    // We should only be getting one row back with the salt!
-    if (getAppUserInfoResult.rowCount <0) {
-        let appUserKey: number = getAppUserInfoResult.rows[0].appuserkey;
-        let username: string = getAppUserInfoResult.rows[0].username;
-        let email: string = getAppUserInfoResult.rows[0].email;
-        let hashPassword: string = getAppUserInfoResult.rows[0].password;
-        let count: number = getAppUserInfoResult.rowCount;
-        let organizationKey: Array<number>;
-        while (count< 0){
-            organizationKey = getAppUserInfoResult.rows[count].organizationKey;
-            count--; 
-        } 
+    // We should only be getting one row back with the app user data!
+    if (getAppUserInfoResult.rowCount === 1) {
+        let firstRowResult: any = getAppUserInfoResult.rows[0];
+        let hashPassword: string = firstRowResult.password;
         
         return checkPassword(password, hashPassword)
             .then((isMatch: boolean) => {
                 if (isMatch) {
-                    return Promise.resolve(new AppUserPrimaryInfo(appUserKey, username, email, organizationKey));
+                    return Promise.resolve(
+                        new AppUserInfo(firstRowResult.appuserkey, firstRowResult.organizationkey,
+                                        firstRowResult.email, null /* No password data to be sent to client! */,
+                                        firstRowResult.lastname, firstRowResult.firstname,
+                                        firstRowResult.address, firstRowResult.city, firstRowResult.state, firstRowResult.zip, firstRowResult.phone,
+                                        firstRowResult.isdonor, firstRowResult.isreceiver, firstRowResult.organizationname)
+                    );
                 }
                 return Promise.reject(new Error('Password is incorrect'));
             });

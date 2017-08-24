@@ -5,60 +5,37 @@ CREATE TABLE IF NOT EXISTS AppUser
     appUserKey SERIAL PRIMARY KEY
 );
 
--- Unique Email address.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS email                      VARCHAR(128)    NOT NULL UNIQUE;
+-- The email is the username and primary identifier for an account.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS email                  VARCHAR(128)    NOT NULL UNIQUE;
+-- Link to password data.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserPasswordKey     INTEGER         NOT NULL UNIQUE REFERENCES AppUserPassword (appUserPasswordKey);
+-- Link to contact information.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS contactInfoKey         INTEGER         NOT NULL UNIQUE REFERENCES ContactInfo (contactInfoKey);
+-- If this account is for an organization, then this will be populated.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS organizationKey        INTEGER         REFERENCES Organization (organizationKey);
 
--- Password must be encrypted when entered into this table!
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserPasswordKey         INTEGER         REFERENCES AppUserPassword(appUserPasswordKey);
+-- In the case of the AppUser being an Organization, this will refer to the administrator of the organization.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS lastName               VARCHAR(60)     NOT NULL;
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS firstName              VARCHAR(60)     NOT NULL;
 
---A unique username for every user. This, along with the email shall be the primary identifiers
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS username                   VARCHAR(128)    NOT NULL UNIQUE; 
+-- Date that the AppUser was created.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS createDate             TIMESTAMP       DEFAULT CURRENT_TIMESTAMP;
 
--- The App User's Last Name.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS lastName                   VARCHAR(60)     NOT NULL;
+-- Flag to determine if the user has confirmed their signup/registration via link sent in email if individual or via other methods if organization.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS singupConfirmed        BOOLEAN         DEFAULT FALSE;
 
--- The App User's First Name.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS firstName                  VARCHAR(60)     NOT NULL;
+-- Next three entries relate to disabling a user for violation of terms of use.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS disabled               BOOLEAN         DEFAULT FALSE;
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS disabledDate           TIMESTAMP       DEFAULT NULL;
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS disabledReason         TEXT            DEFAULT NULL;
 
--- The App User's phone number.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS phone                      CHAR(12);
-
--- The App User's Street Address.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS address                    VARCHAR(128);
-
--- The Longitude of the App User's Address
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS addressLongitude           INTEGER;
-
--- The Latitude of the App User's Address
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS addressLatitude            INTEGER; 
-
--- City name.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS city                       VARCHAR(60);
-
--- Zip code.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS zip                        INTEGER;
-
--- Two letter state abbreviation.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS state                      CHAR(2);
-
--- Foreign key to the Donor table.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS donorOrganizationKey       INTEGER         REFERENCES DonorOrganization (donorOrganizationKey);
-
--- Foreign key to the Receiver table.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS receiverOrganizationKey    INTEGER         REFERENCES ReceiverOrganization (receiverOrganizationKey);
+-- Flags that determine how this AppUser can function.
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS isDonor                BOOLEAN         NOT NULL;
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS isReceiver             BOOLEAN         NOT NULL;
 
 
--- Index on username.
-CREATE UNIQUE INDEX IF NOT EXISTS appUserUsernameIdx ON AppUser (username);
-
--- Index on email.
-CREATE UNIQUE INDEX IF NOT EXISTS appUserEmailIdx ON AppUser (email);
-
--- Index for quick sorting and searching by full name.
-CREATE INDEX IF NOT EXISTS appUserFullNameIdx ON AppUser (lastName, firstName);
-
--- Index on addressLongitude.
-CREATE INDEX IF NOT EXISTS appUserAddressLongitudeIdx ON AppUser (addressLongitude);
-
--- Index on addressLatitude.
-CREATE INDEX IF NOT EXISTS appUserAddressLatitudeIdx ON AppUser (addressLatitude);
+CREATE UNIQUE INDEX IF NOT EXISTS appUser_EmailIdx              ON AppUser (email);
+CREATE UNIQUE INDEX IF NOT EXISTS appUser_AppUserPasswordKeyIdx ON AppUser (appUserPasswordKey);
+CREATE UNIQUE INDEX IF NOT EXISTS appUser_ContactInfoKeyIdx     ON AppUser (contactInfoKey);
+CREATE INDEX IF NOT EXISTS appUser_fullNameIdx                  ON AppUser (lastName, firstName);
+CREATE INDEX IF NOT EXISTS appUser_OrganizationKeyIdx           ON AppUser (organizationKey);
