@@ -37,6 +37,14 @@ export class FoodListingsFilters {
         /**
          * Determines if we should only be bringing back unclaimed food listings.
          */
-        public unclaimedOnly?: boolean
+        public unclaimedOnly?: boolean,
+        /**
+         * Determines if only claimed listings should be shown
+         */
+        public myClaimedListings?: boolean,
+        /**
+         * Determines if only donated listings should be shown
+         */
+        public myDonatedListings?: boolean
     ) { }
 }

@@ -87,4 +87,9 @@ export class FoodListingsComponent {
         this.foodListings.splice(this.selectedFoodListingIndex, 1);
         this.selectedFoodListingIndex = null;
     }
+
+    // Gets the entire array of current Food Listings
+    public getDisplayedListings() {
+        return this.foodListings;
+    }
 }
