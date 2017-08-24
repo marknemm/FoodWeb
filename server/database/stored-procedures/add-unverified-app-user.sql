@@ -5,14 +5,14 @@ SELECT dropFunction('addUnverifiedAppUser');
 CREATE OR REPLACE FUNCTION addUnverifiedAppUser
 (
 _appUserKey  INTEGER,
-_stringToken   CHAR(20)
+_token   CHAR(20)
 )
 RETURNS void AS $$
 
 BEGIN
 
-INSERT INTO UnverifiedAppUser(appUserKey, stringToken)
-VALUES (_appUserkey, _stringToken);
+INSERT INTO UnverifiedAppUser(appUserKey, token)
+VALUES (_appUserkey, _token);
 
 END;
 

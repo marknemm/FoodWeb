@@ -1,6 +1,7 @@
 'use strict';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
-import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
+import { connect, query } from '../database-help/connection-pool';
+import { Client, QueryResult } from 'pg';
 
 import { hashPassword } from './password-util';
 import { GPSCoordinates, getGPSCoordinates } from '../common-util/geocode';
@@ -54,6 +55,15 @@ export function signup(appUserSignupInfo: AppUserInfo): Promise<AppUserInfo> {
             console.log(err);
             return Promise.reject(new Error('Signup failed. Either email is already registered, or an incorrect address was given.'));
         });
+}
+
+
+export function signupVerify(token: String): Promise<QueryResult> {
+    let queryString: string = 'SELECT * FROM removeUnverifiedAppUser($1)';
+    let queryArgs: Array<any> = [token];
+
+    return query(queryString, queryArgs);
+
 }
 
 /**
