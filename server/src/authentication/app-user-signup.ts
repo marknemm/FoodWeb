@@ -46,9 +46,9 @@ export function signup(appUserSignupInfo: AppUserInfo): Promise<AppUserInfo> {
             return handleSignUpUserResult(appUserSignupInfo, insertQueryResult);
         })
         .then((appUserSignupInfo: AppUserInfo)=> {
-            let stringToken: String = stringTokenGenerator();
-            let userType: String = insertIntoUnverifiedAppUser(appUserSignupInfo, stringToken)
-            return sendUserEmail(appUserSignupInfo,stringToken, userType)
+            let token: string = stringTokenGenerator();
+            let userType: string = insertIntoUnverifiedAppUser(appUserSignupInfo, token)
+            return sendUserEmail(appUserSignupInfo,token, userType)
         })
         .catch((err: Error) => {
             console.log(err);
@@ -104,11 +104,11 @@ function handleSignUpUserResult(appUserSignupInfo: AppUserInfo, addAppUserResult
 }
 
 
-function insertIntoUnverifiedAppUser(appUserSignupInfo: AppUserInfo, stringToken: String) : String {
+function insertIntoUnverifiedAppUser(appUserSignupInfo: AppUserInfo, token: string) : string {
 
         let queryString: string = 'SELECT * FROM addUnverifiedAppUser($1, $2)';
         let queryArgs: Array<any> = [ appUserSignupInfo.appUserKey,
-                                      stringToken ];
+                                      token ];
         
         query(queryString, queryArgs);
 
@@ -122,9 +122,9 @@ function insertIntoUnverifiedAppUser(appUserSignupInfo: AppUserInfo, stringToken
 }
 
 
-function sendUserEmail(appUserSignupInfo: AppUserInfo, stringToken: String, userType: String) : Promise<AppUserInfo>{
+function sendUserEmail(appUserSignupInfo: AppUserInfo, token: string, userType: string) : Promise<AppUserInfo>{
 
-    let verificationLink = 'http://connect-food.herokuapp.com/authentication/verify?token='+stringToken
+    let verificationLink = 'http://connect-food.herokuapp.com/authentication/verify?token='+token
 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -183,6 +183,6 @@ function sendUserEmail(appUserSignupInfo: AppUserInfo, stringToken: String, user
 }
 
 
-function stringTokenGenerator(): String{
+function stringTokenGenerator(): string{
     return randomstring.generate(20);
 }

@@ -13,7 +13,8 @@ require('dotenv').config({ path: global['rootDir'] + '.env' });
 import { handleLoginRequest,
          handleLogoutRequest,
          handleReAuthenticateRequest,
-         handleSignupRequest } from './authentication/authentication-controller';
+         handleSignupRequest,
+         handleSignupVerification } from './authentication/authentication-controller';
 import { handleAddFoodListingRequest,
          handleGetFoodListingsRequest,
          handleClaimFoodListingRequest,
@@ -48,6 +49,9 @@ app.get('/authentication/reAuthenticate', handleReAuthenticateRequest);
 
 //Handle /authentication/signup route by passing it off to AuthenticationController.
 app.post('/authentication/signup', handleSignupRequest);
+
+//Handle /authentication/verify route by passing it off to AuthenticationController.
+app.get('/authentication/verify', handleSignupVerification);
 
 // Handle /foodListings/addFoodListing route by passing off to FoodListingController.
 app.post('/foodListings/addFoodListing', handleAddFoodListingRequest);

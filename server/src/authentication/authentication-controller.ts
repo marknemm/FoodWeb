@@ -77,3 +77,17 @@ export function handleSignupRequest(request: Request, response: Response): void 
         return response.send(new FoodWebResponse(false, err.message));
     });
 }
+
+export function handleSignupVerification(request: Request, response: Response): void {
+    response.setHeader('Content-Type', 'application/json');
+    let token: string = request.query.token;
+    // let promise: Promise<AppUserInfo> = signup(signupRequest.appUserInfo);
+
+    // promise.then((appUserInfo: AppUserInfo) => {
+    //     request.session['appUserInfo'] = appUserInfo;
+    //     return response.send(new FoodWebResponse(true, 'Signup successful'));
+    // })
+    // .catch((err: Error) => {
+    //     return response.send(new FoodWebResponse(false, err.message));
+    // });
+}
