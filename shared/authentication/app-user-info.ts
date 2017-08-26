@@ -22,12 +22,4 @@ export class AppUserInfo {
         public isReceiver?: boolean,
         public organizationName?: string
     ) { }
-
-    /**
-     * Gets the full address which contains this format: <steet address>, <city>, <state>, <zip>.
-     * @return The full address.
-     */
-    public getFullAddress(): string {
-        return (this.address + ', ' + this.city + ', ' + this.state + ', ' + this.zip);
-    }
 }

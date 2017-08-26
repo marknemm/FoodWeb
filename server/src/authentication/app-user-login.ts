@@ -58,10 +58,10 @@ function analyzeAppUserPrimaryInfo(usernameOrEmail: string, password: string, ge
                 if (isMatch) {
                     return Promise.resolve(
                         new AppUserInfo(firstRowResult.appuserkey, firstRowResult.organizationkey,
-                                        firstRowResult.email, firstRowResult.lastname,
-                                        firstRowResult.firstname, firstRowResult.organizationname,
-                                        firstRowResult.address, firstRowResult.city, firstRowResult.state,
-                                        firstRowResult.zip, firstRowResult.phone)
+                                        firstRowResult.email, null /* No password data to be sent to client! */,
+                                        firstRowResult.lastname, firstRowResult.firstname,
+                                        firstRowResult.address, firstRowResult.city, firstRowResult.state, firstRowResult.zip, firstRowResult.phone,
+                                        firstRowResult.isdonor, firstRowResult.isreceiver, firstRowResult.organizationname)
                     );
                 }
                 return Promise.reject(new Error('Password is incorrect'));

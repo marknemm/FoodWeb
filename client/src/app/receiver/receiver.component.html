@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div id="receivers-row" class="row">
-        <div class="col-md-4" id="filters">
+        <div class="col-md-3" id="filters">
             <form [formGroup]="foodListingsFiltersComponent.filtersForm">
                 <app-food-listings-filters title="Search Filters" #foodListingsFilters>
                     <!-- This is how you would add filters specific to the receiver form -->
@@ -11,24 +11,12 @@
             </form>
         </div>
 
-        <div id="food-listings" class="col-md-8">
-            <ng-template #content let-c="close" let-d="dismss">
-                <div class="modal-header">
-                    <h4 class="modal-title">Food Description</h4>
-                    <button type="button" class="close" aria-label="Close" (click)="c('Cross click')">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>{{selectedFoodListing.foodDescription}}</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="c('Request click')">Request</button>
-                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
-                </div>
-            </ng-template>
-
-            <app-food-listings #foodListings></app-food-listings>
+        <div id="food-listings" class="col-md-9">
+            <app-food-listings #foodListings>
+                <ng-container details-modal-footer>
+                    <button type="button" class="btn btn-secondary" (click)="claimSelectedFoodListing()">Claim</button>
+                </ng-container>
+            </app-food-listings>
         </div>
     </div>
 </div>

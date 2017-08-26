@@ -1,7 +1,7 @@
 <!-- This will be data driven by the Food Types stored on the server -->
 <div [formGroup]="foodTypesForm">
     <ng-container *ngFor="let foodType of foodTypes;">
-        <label class="checkbox-compress">
+        <label class="checkbox-compress no-select">
             <input type="checkbox" [formControlName]="foodType"> {{foodType}}
         </label>
         <br>

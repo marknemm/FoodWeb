@@ -21,7 +21,7 @@ export class FoodListingsFilters {
         /**
          * Determines the minimum date that retrieved items may expire after.
          */
-        public minExpireAfterDays?: NgbDateStruct,
+        public earliestExpireDate?: NgbDateStruct,
         /**
          * Determines the maximum distance from the requesting entity that donations must fall within.
          */
@@ -33,6 +33,18 @@ export class FoodListingsFilters {
         /**
          * Determines the number of food listings that will be contained in the limited segment of retrievals.
          */
-        public retrievalAmount?: number
+        public retrievalAmount?: number,
+        /**
+         * Determines if we should only be bringing back unclaimed food listings.
+         */
+        public unclaimedOnly?: boolean,
+        /**
+         * Determines if only claimed listings should be shown
+         */
+        public myClaimedListings?: boolean,
+        /**
+         * Determines if only donated listings should be shown
+         */
+        public myDonatedListings?: boolean
     ) { }
 }

@@ -5,12 +5,16 @@ import { Observable } from 'rxjs/Observable';
 import { AppUserInfo } from "../../../../../shared/authentication/app-user-info";
 import { SignupRequest } from "../../../../../shared/authentication/signup-message";
 import { FoodWebResponse } from "../../../../../shared/message-protocol/food-web-response";
+import { AuthSessionService } from "../misc/auth-session.service";
 
 
 @Injectable()
 export class SignupService {
 
-    constructor(private http: Http) { }
+    constructor(
+        private http: Http,
+        private authSessionService: AuthSessionService
+    ) { }
 
     signup(appUserSignupInfo: AppUserInfo) {
         var headers = new Headers({
@@ -21,6 +25,12 @@ export class SignupService {
         return observer.map((response: Response): FoodWebResponse => {
             let signupResponse: FoodWebResponse = response.json();
             console.log(signupResponse.message);
+
+            // On successful signup, cache the App User's data in global front end session storage.
+            if (signupResponse.success) {
+                this.authSessionService.updateAppUserSessionInfo(appUserSignupInfo);
+            }
+
             return signupResponse;
         });
     }

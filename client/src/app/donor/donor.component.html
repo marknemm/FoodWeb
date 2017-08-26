@@ -1,29 +1,38 @@
 <div class="container">
     <h1>Donor Form</h1>
     <hr>
+
     <div *ngIf="!submitted" class="row">
         <div class="col-md-5">
             <label>Upload Image</label>
             <img-cropper [image]="this" [settings]="cropperSettings"></img-cropper>
         </div>
+
         <div class="col-md-7">
             <form [formGroup]="foodForm" (ngSubmit)="onSubmit(foodForm)">
+
                 <div class="form-group">
-                    <label for="foodType">Food Type</label>
-                    <select class="form-control" formControlName="foodType">
-                        <option *ngFor="let foodT of foodTypeOptions" [value]="foodT">{{foodT}}</option>
-                    </select>
-                    <div class="alert alert-danger" [hidden]="!shouldFireRequireValidation(foodForm.controls.foodType)">Food Type is required</div>
+                    <label>Food Types</label>
+                    <app-food-types [initiallyChecked]="false" #FoodTypesComponent></app-food-types>
+                    <!--<div class="alert alert-danger" [hidden]="!shouldFireRequireValidation(foodForm.controls.foodType)">At least one Food Type is required</div>-->
                 </div>
+
                 <div class="form-group">
-                    <label for="perishable">Perishable</label>
-                    <input type="checkbox" formControlName="perishable">
+                    <label>Perishable</label><br>
+                    <label for="perishable-yes-check" id="perishable-yes" class="perishable-label no-select">
+                        <input type="radio" formControlName="perishable" name="perishable" id="perishable-yes-check" [value]="true"> Yes
+                    </label>
+                    <label for="perishable-no-check" class="perishable-label no-select">
+                        <input type="radio" formControlName="perishable" name="perishable" id="perishable-no-check" [value]="false"> No
+                    </label>
                 </div>
+
                 <div class="form-group">
                     <label for="foodDescription">Description</label>
                     <textarea class="form-control" formControlName="foodDescription"></textarea>
                     <div class="alert alert-danger" [hidden]="!shouldFireRequireValidation(foodForm.controls.foodDescription)">Description is required</div>
                 </div>
+
                 <div class="form-group">
                     <label for="expirationDate">Expiration Date</label>
                     <div class="input-group">
@@ -36,29 +45,36 @@
                 </div>
 
                 <button type="submit" class="btn btn-default">Submit</button>
+
             </form>
         </div>
     </div>
 
+
     <div *ngIf="submitted">
         <h2>Thank-you for submitting the following:</h2>
+
         <div class="row">
             <div class="col-md-2">Food Type</div>
             <div class="col-md-10 pull-left">{{ foodForm.controls.foodType.value }}</div>
         </div>
+
         <div class="row">
             <div class="col-md-2">Description</div>
             <div class="col-md-10 pull-left">{{ foodForm.controls.foodDescription.value }}</div>
         </div>
+
         <div class="row">
             <div class="col-md-2">Perishabe</div>
             <div class="col-md-10 pull-left">{{ (foodForm.controls.perishable.value == true) ? 'true' : 'false' }}</div>
         </div>
+
         <div class="row">
             <div class="col-md-2">Expiration Date</div>
             <div class="col-md-10 pull-left">{{ foodForm.controls.expirationDate.value | dateFormatter }}</div>
         </div>
-        <br />
+        <br>
+
         <button class="btn btn-default" (click)="submitted=false">Donate Again</button>
     </div>
 </div>

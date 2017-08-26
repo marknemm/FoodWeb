@@ -4,9 +4,10 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
-import { GetFoodListingsRequest } from "../../../../shared/food-listings/get-food-listings-message";
-import { GetFoodListingsResponse } from "../../../../shared/food-listings/get-food-listings-message";
+import { GetFoodListingsRequest, GetFoodListingsResponse } from "../../../../shared/food-listings/get-food-listings-message";
+import { ClaimFoodListingRequest } from "../../../../shared/food-listings/claim-food-listing-message";
 import { FoodListing } from "../../../../shared/food-listings/food-listing";
+import { FoodWebResponse } from "../../../../shared/message-protocol/food-web-response";
 
 
 /*const MODELS: FoodListing[] = [
@@ -64,6 +65,7 @@ export class FoodListingsService {
         let observer: Observable<Response> = this.http.post('/foodListings/getFoodListings',
                                                             JSON.stringify(getFoodListingsRequest),
                                                             { headers: FoodListingsService.JSON_HEADERS, withCredentials: true });
+        // Listen for a response now.                                                 
         return observer.map((response: Response) => {
             let getFoodListingsResponse: GetFoodListingsResponse = response.json();
             console.log(getFoodListingsResponse.message);
@@ -72,6 +74,28 @@ export class FoodListingsService {
             }
             // If the response success flag is false, then we will simply send back an empty array to the calling component.
             return new Array<FoodListing>();
+        });
+    }
+
+
+    /**
+     * Claims a given Food Listing.
+     * @param foodListingKey The key (identifier) for the Food Listing that is to be claimed.
+     */
+    public claimFoodListing(foodListingKey: number): Observable<void> {
+        let claimFoodListingRequest: ClaimFoodListingRequest = new ClaimFoodListingRequest(foodListingKey);
+        let observer: Observable<Response> = this.http.post('/foodListings/claimFoodListing',
+                                                            JSON.stringify(claimFoodListingRequest),
+                                                            { headers: FoodListingsService.JSON_HEADERS, withCredentials: true });
+
+        // Listen for a response now.
+        return observer.map((response: Response) => {
+            let claimFoodListingResponse: FoodWebResponse = response.json();
+            // On failure.
+            if (!claimFoodListingResponse.success) {
+                console.log(claimFoodListingResponse.message);
+                throw new Error(claimFoodListingResponse.message);
+            }
         });
     }
 }

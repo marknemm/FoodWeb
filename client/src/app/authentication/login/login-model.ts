@@ -32,14 +32,8 @@ export class LoginModel {
         if (success) {
             this.appUserKey = appUserKey;
             this.username = username;
-
-            // Set the sessionStorage global items in the client side cache for session info on client!
-            // This basically tells the client that we are logged in.
-            sessionStorage.setItem('appUserKey', '' + this.appUserKey);
-            sessionStorage.setItem('username', this.username);
         }
 
-        // If we reach here, then the response indicated that the user did not login successfully.
         this.loginError = !success;
     }
 

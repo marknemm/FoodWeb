@@ -1,50 +1,46 @@
-.layout{
-    display: table;
-    border: 1px solid gray;
-    border-radius: 25px;
-    width: 385px;
-    margin: auto;
-    margin-top: 50px;
-    padding: 2px;
-
+.horizontal-checkbox-group {
+    display: inline-block;
 }
 
-.checkbox{
-    display: block;
-    float: left;
-    text-align: left;
+.checkbox-label {
+    vertical-align: middle;
+    margin-right: 25px;
 }
 
-
-
-.rowLayout{
-    display: table-row;
-    padding: 2px; 
+.checkbox {
+    transform: translateY(-2px);
+    /* 1.5x sized Checkboxes */
+    transform: scale(1.5);
+    -ms-transform: scale(1.5); /* IE */
+    -moz-transform: scale(1.5); /* FF */
+    -webkit-transform: scale(1.5); /* Safari and Chrome */
+    -o-transform: scale(1.5); /* Opera */
+    padding: 10px;
+    margin-left: 10px;
+    display: inline-block;    
+    vertical-align: middle;
 }
 
-.tableCell{
-    display: table-cell;
-    
-}
-
-h2{
-    text-align: center;
-
-}
-
-input {
-    display: block;
-    margin: 0 auto;
-    width: 200px;
-}
-
-form{
-    text-align: center;
-}
-
-#signupErr {
+#signup-error {
 	text-align: center;
-	color: red;
+    color: red;
+    font-weight: bold;
+    font-size: 20px;
 }
 
+label {
+    font-weight: bold;
+    font-size: 25px;
+}
 
+h2 {
+    font-weight: bold;
+}
+
+.btn {
+    margin-left: 15px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    min-width: 150px;
+    font-weight: bold;
+}

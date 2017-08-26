@@ -3,7 +3,9 @@ import * as http from 'http';
 import { NextFunction, Request, Response } from "express";
 
 import { login } from "./app-user-login";
-import { signup } from './app-user-signup';
+import { signup, signupVerify } from './app-user-signup';
+import { QueryResult } from 'pg';
+
 
 import { AppUserInfo } from '../../../shared/authentication/app-user-info';
 import { FoodWebResponse } from "../../../shared/message-protocol/food-web-response";
@@ -19,7 +21,7 @@ import { SignupRequest } from '../../../shared/authentication/signup-message';
 export function handleReAuthenticateRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
 
-    if (request.session['appUserKey'] != null) {
+    if (request.session['appUserInfo'] != null) {
         response.send(new FoodWebResponse(true, 'Logged in'));
     }
     else {
@@ -34,10 +36,9 @@ export function handleReAuthenticateRequest(request: Request, response: Response
  */
 export function handleLoginRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
-    let username: string = request.body.username;
-    let password: string = request.body.password;
-    let promise: Promise<AppUserInfo> = login(username, password)
-
+    let loginRequest: LoginRequest = request.body;
+    
+    let promise: Promise<AppUserInfo> = login(loginRequest.email, loginRequest.password)
     promise.then((appUserInfo: AppUserInfo) => {
         request.session['appUserInfo'] = appUserInfo;
         response.send(new LoginResponse(appUserInfo, true, 'Login successful'));
@@ -71,10 +72,23 @@ export function handleSignupRequest(request: Request, response: Response): void 
     let promise: Promise<AppUserInfo> = signup(signupRequest.appUserInfo);
 
     promise.then((appUserInfo: AppUserInfo) => {
-        request.session['appUserKeysAndInfo'] = appUserInfo;
+        request.session['appUserInfo'] = appUserInfo;
         return response.send(new FoodWebResponse(true, 'Signup successful'));
     })
     .catch((err: Error) => {
         return response.send(new FoodWebResponse(false, err.message));
+    });
+}
+
+export function handleSignupVerification(request: Request, response: Response): void {
+    response.setHeader('Content-Type', 'application/json');
+    let token: string = request.query.token;
+    let promise: Promise<QueryResult> = signupVerify(token);
+
+    promise.then((removeQueryResult: QueryResult) => {
+        return response.send(new FoodWebResponse(true, 'Signup verification complete'));
+    })
+    .catch((err: Error) => {
+        return response.send(new FoodWebResponse(false, 'Sorry, something went wrong. Unable to verify you.'));
     });
 }
