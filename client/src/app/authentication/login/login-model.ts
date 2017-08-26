@@ -1,12 +1,17 @@
+import { HeaderComponent } from '../../header/header.component';
 /**
  * Contains state data for the Login Component.
  */
 export class LoginModel {
 
     public loginError : boolean;
+    public email: string;
     public username : string;
     public password : string;
     public appUserKey : number;
+    public submitButtonText: string = 'Login';
+    public header: string = 'Sign Up';
+    public forgotPassword: boolean = false;
 
     constructor() {
         // Clear these out whenever the user may be redirected to Login by the server!
@@ -36,5 +41,12 @@ export class LoginModel {
 
         // If we reach here, then the response indicated that the user did not login successfully.
         this.loginError = !success;
+    }
+
+    public recoverPasswordForm(){
+        this.forgotPassword = true;
+        this.header = 'Recover Password';
+        this.submitButtonText = 'Recover';
+
     }
 }

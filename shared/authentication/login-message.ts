@@ -39,3 +39,23 @@ export class LoginResponse extends FoodWebResponse {
         super(success, message, loginRequired, signupConfirmRequired);
     }
 }
+
+export class RecoverPasswordRequest{
+    constructor(
+        public email: string
+    ){}
+}
+
+export class RecoverPasswordResponse extends FoodWebResponse{
+    constructor(
+        public success?: boolean,
+
+        public message?: string,
+
+        public passwordFound: boolean = false
+
+
+    ){
+        super(success, message, passwordFound);
+    }
+}
