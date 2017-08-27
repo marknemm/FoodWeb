@@ -24,7 +24,7 @@ export function getGPSCoordinates(address: string, city: string, state: string, 
     // Wrap the result in a promise.
     return new Promise<GPSCoordinates>(
         function(resolve: (value?: GPSCoordinates) => void, reject: (reason?: Error) => void) {
-            let fullAddress = address + ', ' + city + ', ' + state + ', ' + zip.toString();
+            let fullAddress = address + ', ' + city + ', ' + zip.toString();
 
             // Use geocoder (which basically invokes Google Maps API) to get information on address.
             geocoder.geocode(fullAddress, function(err, data) {
@@ -32,11 +32,12 @@ export function getGPSCoordinates(address: string, city: string, state: string, 
                 if (!err && data.results.length !== 0) {
                     let latitude: number = data.results[0].geometry.location.lat;
                     let longitude: number = data.results[0].geometry.location.lng;
+                    console.log('Successfully generated GPS coordinates: (' + latitude + ', ' + longitude + ')');
                     resolve(new GPSCoordinates(latitude, longitude));
                 }
                 
                 // On failure.
-                reject(new Error('Geocoder failed to convert address to GPS latitude and longitude coordinates'))
+                reject(new Error('Invalid address provided.'));
             });
         }
     );

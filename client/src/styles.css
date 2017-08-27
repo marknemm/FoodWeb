@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "../../node_modules/angular2-busy/build/style/busy.css";
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
 
 html, body {
     padding: 0;
@@ -14,21 +16,21 @@ html, body {
 }
 
 .no-select {
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; /* Non-prefixed version, currently
-                          supported by Chrome and Opera */
-  }
+-webkit-touch-callout: none; /* iOS Safari */
+-webkit-user-select: none; /* Safari */
+-khtml-user-select: none; /* Konqueror HTML */
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* Internet Explorer/Edge */
+user-select: none; /* Non-prefixed version, currently
+                        supported by Chrome and Opera */
+}
 
-  .center-text {
-      text-align: center;
-      vertical-align: middle;
-  }
+.center-text {
+    text-align: center;
+    vertical-align: middle;
+}
 
-  button {
+.btn, button {
     transition: background 0.5s ease;
     -webkit-transition: background 0.5s ease;
     -moz-transition: background 0.5s ease;
@@ -36,8 +38,13 @@ html, body {
     -o-transition: background 0.5s ease;
     cursor: pointer;
     cursor: hand;
-  }
+}
 
-  button:hover {
-      background-color: #B2B2B2;
-  }
+.btn:hover {
+    background-color: #B2B2B2;
+}
+
+a:hover {
+    cursor: pointer;
+    cursor: hand;
+}

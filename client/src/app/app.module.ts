@@ -7,6 +7,8 @@ import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BusyModule } from 'angular2-busy';
 
 
 import { AppComponent } from './app.component';
@@ -18,7 +20,7 @@ import { DonorComponent } from './donor/donor.component';
 import { ReceiverComponent } from './receiver/receiver.component';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { DateFormatterPipe } from "./common-util/date-formatter.pipe"
-import { AuthGaurdService } from './authentication/misc/auth-gaurd.service'
+import { AuthWatchService } from './authentication/misc/auth-watch.service'
 import { AuthSessionService } from "./authentication/misc/auth-session.service";
 
 import { SignupComponent } from './authentication/signup/signup.component';
@@ -28,6 +30,7 @@ import { FoodListingsFiltersComponent } from './food-listings/food-listings-filt
 import { FoodListingsComponent } from './food-listings/food-listings.component';
 import { FoodTypesService } from './food-listings/food-types/food-types.service';
 import { FoodTypesComponent } from './food-listings/food-types/food-types.component';
+import { AppUserInfoComponent } from './authentication/app-user-info/app-user-info.component';
 
 const appRoutes: Routes = [
     /*{
@@ -41,66 +44,78 @@ const appRoutes: Routes = [
     },
     {
         path: 'home',
-        component: HomeComponent
+        component: HomeComponent,
+        canActivate: [AuthWatchService],
     },
     {
         path: 'donor',
         component: DonorComponent,
-        canActivate: [AuthGaurdService]
+        canActivate: [AuthWatchService]
     },
     {
         path: 'receiver',
         component: ReceiverComponent,
-        // Make sure that we get the FoodTypes form the back end before routing to the receiver interface!
+        canActivate: [AuthWatchService],
+        // Make sure that we get the FoodTypes from the back end before routing to the receiver interface!
         resolve: {
             foodTypes: FoodTypesService
         }
     },
     {
         path: 'signup',
-        component: SignupComponent
+        component: SignupComponent,
+        canActivate: [AuthWatchService]
+    },
+    {
+        path: 'appUserInfo',
+        component: AppUserInfoComponent,
+        canActivate: [AuthWatchService]
     }
 ]
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    HeaderComponent,
-    FooterComponent,
-    LoginComponent,
-    DonorComponent,
-    ReceiverComponent,
-    SignupComponent,
-    ImageCropperComponent,
-    DateFormatterPipe,
-    BannerComponent,
-    SlickLeftPanelComponent,
-    FoodListingsFiltersComponent,
-    FoodListingsComponent,
-    FoodTypesComponent
-  ],
-  imports: [
-    NgbModule.forRoot(),
-    RouterModule.forRoot(appRoutes),
-    BrowserModule,
-    BootstrapModalModule,
-    HttpModule,
-    FormsModule,
-    ReactiveFormsModule, 
-    AgmCoreModule.forRoot({apiKey: 'AIzaSyCljknY2lfGxVQDQbdDG1I53hiESK3QeqU'})
-  ],
-  entryComponents: [
-    LoginComponent
-  ],
-  bootstrap: [ AppComponent ],
-  providers: [ 
-    DateFormatterPipe,
-    AuthGaurdService,
-    AuthSessionService,
-    FoodTypesService
-  ]
-    
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        HeaderComponent,
+        FooterComponent,
+        LoginComponent,
+        DonorComponent,
+        ReceiverComponent,
+        SignupComponent,
+        ImageCropperComponent,
+        DateFormatterPipe,
+        BannerComponent,
+        SlickLeftPanelComponent,
+        FoodListingsFiltersComponent,
+        FoodListingsComponent,
+        FoodTypesComponent,
+        AppUserInfoComponent
+    ],
+    imports: [
+        NgbModule.forRoot(),
+        RouterModule.forRoot(appRoutes),
+        BrowserModule,
+        BootstrapModalModule,
+        HttpModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        BusyModule
+    ],
+    entryComponents: [
+        LoginComponent
+    ],
+    bootstrap: [
+        AppComponent
+    ],
+    providers: [
+        DateFormatterPipe,
+        AuthWatchService,
+        AuthSessionService,
+        FoodTypesService
+    ]
+
 })
 export class AppModule { }
 

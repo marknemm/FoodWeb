@@ -9,15 +9,15 @@
         <div class="collapse navbar-collapse" [ngbCollapse]="!isExpanded">
             <ul class="navbar-nav mr-auto">
                 <a class='nav-link' [routerLink]="['/home']"><li class="nav-item">Home</li></a>
-                <a class='nav-link' [routerLink]="['/donor']"><li class="nav-item">Donor</li></a>
-                <a class='nav-link' [routerLink]="['/receiver']"><li class="nav-item">Receiver</li></a>
+                <a class='nav-link' [routerLink]="['/donor']"><li class="nav-item">Donate</li></a>
+                <a class='nav-link' [routerLink]="['/receiver']"><li class="nav-item">Receive</li></a>
             </ul>
 
             <ul class="navbar-nav navbar-right">
-                <a *ngIf="sessionStorage.getItem('name') === null" class='nav-link' (click)="showLogin()"><li class="nav-item">Login</li></a>
-                <a *ngIf="sessionStorage.getItem('name') === null" class='nav-link' [routerLink]="['/signup']"><li class="nav-item">Signup</li></a>
-                <a *ngIf="sessionStorage.getItem('name') !== null" class='nav-link'><li class="nav-item">{{sessionStorage.getItem('name')}}</li></a>
-                <a *ngIf="sessionStorage.getItem('name') !== null" class='nav-link' (click)="logout()"><li class="nav-item">Logout</li></a>
+                <a *ngIf="!authSessionService.sessionInfoAvailable()" class='nav-link' (click)="showLogin()"><li class="nav-item">Login</li></a>
+                <a *ngIf="!authSessionService.sessionInfoAvailable()" class='nav-link' [routerLink]="['/signup']"><li class="nav-item">Signup</li></a>
+                <a *ngIf="authSessionService.sessionInfoAvailable()" class='nav-link' [routerLink]="['/appUserInfo']"><li class="nav-item">Account</li></a>
+                <a *ngIf="authSessionService.sessionInfoAvailable()" class='nav-link' (click)="logout()"><li class="nav-item">Logout</li></a>
             </ul>
         </div>
     </nav>

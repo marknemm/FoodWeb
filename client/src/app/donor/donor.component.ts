@@ -8,6 +8,7 @@ import { DateFormatterPipe } from "../common-util/date-formatter.pipe"
 import { FoodTypesComponent } from "../food-listings/food-types/food-types.component";
 
 import { FoodListingUpload } from "../../../../shared/food-listings/food-listing-upload";
+import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 
 @Component({
@@ -48,17 +49,17 @@ export class DonorComponent implements OnInit {
 
     ngOnInit() {
         this.foodForm = this.formBuilder.group({
-            perishable: [''],
+            perishable: ['', Validators.required],
             foodDescription: ['', Validators.required],
             expirationDate: ['', Validators.required]
         });
     }
 
-    shouldFireRequireValidation(validField: AbstractControl): boolean {
-        return validField.errors != null && validField.errors.required && (validField.touched || this.forceValidation);
+    private isValid(validField: AbstractControl): boolean {
+        return validField.errors == null || (!validField.touched && !this.forceValidation);
     }
 
-    onSubmit({ value, valid }: { value: FoodListingUpload, valid: boolean }) {
+    private onSubmit({ value, valid }: { value: FoodListingUpload, valid: boolean }) {
         this.forceValidation = true;
 
         // Make sure we get all the selected Food Types.
@@ -77,5 +78,17 @@ export class DonorComponent implements OnInit {
                 }
             );
         }
+    }
+
+    get perishable(): AbstractControl {
+        return this.foodForm.controls.perishable;
+    }
+
+    get foodDescription(): AbstractControl {
+        return this.foodForm.controls.foodDescription;
+    }
+
+    get expirationDate(): AbstractControl {
+        return this.foodForm.controls.expirationDate;
     }
 }

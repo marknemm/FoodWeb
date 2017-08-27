@@ -15,10 +15,12 @@ export function hashPassword(password: string): Promise<string> {
         return hash(password, salt)
     })
     .then((hashedPassword : string) => {
+        console.log('Password hashed successfully.');
         return hashedPassword;
     })
     .catch((err : Error) => {
-        return Promise.reject(err);
+        console.log(err);
+        throw new Error('An unexpected error has occured.');
     });
 };
 
