@@ -14,7 +14,7 @@
                 </span>
                 <span *ngIf="editFlags.get('firstName')" [ngBusy]="busySaveConfig">
                     <input type="text" id="firstName" formControlName="firstName" (keyup.enter)="save(controls.firstName, 'firstName')" autocomplete="on">
-                    <span class="error-msg" [hidden]="isValid(controls.firstName)"><br>* {{firstNameLabel}} Required</span>
+                    <div class="error-msg" [hidden]="isValid(controls.firstName)">* {{firstNameLabel}} Required<br></div>
                     <button class="btn" (click)="save(controls.firstName, 'firstName')">Save</button>
                 </span>
             </div>
@@ -28,7 +28,7 @@
                 </span>
                 <span *ngIf="editFlags.get('lastName')" [ngBusy]="busySaveConfig">
                     <input type="text" id="lastName" formControlName="lastName" (keyup.enter)="save(controls.lastName, 'lastName')" autocomplete="on">
-                    <span class="error-msg" [hidden]="isValid(controls.lastName)"><br>* {{lastNameLabel}} Required</span>
+                    <div class="error-msg" [hidden]="isValid(controls.lastName)">* {{lastNameLabel}} Required</div>
                     <button class="btn" (click)="save(controls.lastName, 'lastName')">Save</button>
                 </span>
             </div>
@@ -44,12 +44,12 @@
                 </span>
                 <span *ngIf="editFlags.get('email')" [ngBusy]="busySaveConfig">
                     <input type="email" id="email" formControlName="email" (keyup.enter)="save(controls.email, 'email')" autocomplete="on">
-                    <span class="error-msg" [hidden]="isValid(controls.email)"><br>* {{emailLabel}} Required</span>
+                    <div class="error-msg" [hidden]="isValid(controls.email)">* {{emailLabel}} Required</div>
                     <button class="btn" (click)="save(controls.email, 'email')">Save</button>
                 </span>
             </div>
 
-            <div *ngIf="controls.organizationName.value != null && controls.organizationName.value != ''" class="form-group">
+            <div *ngIf="isOrganization" class="form-group">
                 <label for="organizationName">Organization Name:</label><br>
                 <span *ngIf="!editFlags.get('organizationName')" class="classic-link">
                     <a (click)="setEditable('organizationName')" title="edit">
@@ -59,7 +59,7 @@
                 <span *ngIf="editFlags.get('organizationName')" [ngBusy]="busySaveConfig">
                     <input type="text" id="organizationName" formControlName="organizationName"
                      (keyup.enter)="save(controls.organizationName, 'organizationName')" autocomplete="on">
-                    <span class="error-msg" [hidden]="isValid(controls.organizationName)"><br>* Organization Name Required</span>
+                    <div class="error-msg" [hidden]="isValid(controls.organizationName)">* Organization Name Required</div>
                     <button class="btn" (click)="save(controls.organizationName, 'organizationName')">Save</button>
                 </span>
             </div>
@@ -81,7 +81,7 @@
                 </span>
                 <span *ngIf="editFlags.get('address')" [ngBusy]="busySaveConfig">
                     <input type="text" id="address" formControlName="address" (keyup.enter)="save(controls.address, 'address')" autocomplete="on">
-                    <span class="error-msg" [hidden]="isValid(controls.address)"><br>* Address Required</span>
+                    <div class="error-msg" [hidden]="isValid(controls.address)">* Address Required</div>
                     <button class="btn" (click)="save(controls.address, 'address')">Save</button>
                 </span>
             </div>
@@ -95,7 +95,7 @@
                 </span>
                 <span *ngIf="editFlags.get('city')" [ngBusy]="busySaveConfig">
                     <input type="text" id="city" formControlName="city" (keyup.enter)="save(controls.city, 'city')" autocomplete="on">
-                    <span class="error-msg" [hidden]="isValid(controls.city)"><br>* City Required</span>
+                    <div class="error-msg" [hidden]="isValid(controls.city)">* City Required</div>
                     <button class="btn" (click)="save(controls.city, 'city')">Save</button>
                 </span>
             </div>
@@ -111,7 +111,7 @@
                     <select id="state" formControlName="state" (keyup.enter)="saveState(controls.state, 'state')">
                         <option *ngFor="let stateStr of stateList" [selected]="stateStr == controls.state.value" [value]="stateStr">{{stateStr}}</option>
                     </select><br>
-                    <span class="error-msg" [hidden]="isValid(controls.state)"><br>* State Required</span>
+                    <div class="error-msg" [hidden]="isValid(controls.state)">* State Required</div>
                     <button class="btn" (click)="save(controls.state, 'state')">Save</button>
                 </span>
             </div>
@@ -127,7 +127,7 @@
                 </span>
                 <span *ngIf="editFlags.get('zip')" [ngBusy]="busySaveConfig">
                     <input type="text" id="zip" formControlName="zip" (keyup.enter)="save(controls.zip, 'zip')" autocomplete="on" maxlength="5">
-                    <span class="error-msg" [hidden]="isValid(controls.zip)"><br>* ZIP Code Required</span>
+                    <div class="error-msg" [hidden]="isValid(controls.zip)">* ZIP Code Required</div>
                     <button class="btn" (click)="save(controls.zip, 'zip')">Save</button>
                 </span>
             </div>
@@ -141,7 +141,7 @@
                 </span>
                 <span *ngIf="editFlags.get('phone')" [ngBusy]="busySaveConfig">
                     <input type="text" id="phone" formControlName="phone" (keyup.enter)="save(controls.phone, 'phone')" autocomplete="on" maxlength="12">
-                    <span class="error-msg" [hidden]="isValid(controls.phone)"><br>* Phone Number Required</span>
+                    <div class="error-msg" [hidden]="isValid(controls.phone)">* Phone Number Required</div>
                     <button class="btn" (click)="save(controls.phone, 'phone')">Save</button>
                 </span>
             </div>
@@ -162,19 +162,19 @@
                 <div class="form-group">
                     <label for="password">Current Password:</label>
                     <input class="form-control" formControlName="currentPassword" type="password" id="password" (keyup.enter)="savePassword()">
-                    <span class="error-msg" [hidden]="isValid(controls.currentPassword)"><br>* Old Password Required</span>
+                    <div class="error-msg" [hidden]="isValid(controls.currentPassword)">* Old Password Required</div>
                 </div>
                 
                 <div class="form-group">
                     <label for="password">New Password:</label>
                     <input class="form-control" formControlName="password" type="password" formControlName="password" (keyup.enter)="savePassword()">
-                    <span class="error-msg" [hidden]="isValid(controls.password)"><br>* New Password Required</span>
+                    <div class="error-msg" [hidden]="isValid(controls.password)">* New Password Required</div>
                 </div>
 
                 <div class="form-group">
                     <label for="password">Confirm Password:</label>
                     <input class="form-control" formControlName="confirmPassword" type="password" (keyup.enter)="savePassword()">
-                    <span class="error-msg" [hidden]="isValid(controls.confirmPassword)"><br>* Password Confirmation Required</span>
+                    <div class="error-msg" [hidden]="isValid(controls.confirmPassword)">* Password Confirmation Required</div>
                 </div>
 
                 <button class="btn btn-default" (click)="savePassword()">Save Password</button>

@@ -22,6 +22,7 @@ export class AppUserInfoComponent {
     
     private stateList: string[];
     
+    private isOrganization: boolean;
     private emailLabel: string;
     private firstNameLabel: string;
     private lastNameLabel: string;
@@ -40,7 +41,8 @@ export class AppUserInfoComponent {
         this.stateList = ['CA', 'NY', 'IN'];
 
         // Set some form labels based off of whether or not user is an organization.
-        if (appUserInfo.organizationName != null) {
+        this.isOrganization = (appUserInfo.organizationName != null);
+        if (this.isOrganization) {
             this.emailLabel = 'Organization Email';
             this.firstNameLabel = 'Admin First Name';
             this.lastNameLabel = 'Admin Last Name';
@@ -90,6 +92,13 @@ export class AppUserInfoComponent {
      * @param editFormControlId The id of the form control that will be used for editing.
      */
     private setEditable(editFormControlId: string): void {
+        // Reset the validation state of the fields involved in the edit.
+        this.controls[editFormControlId].markAsUntouched();
+        if (editFormControlId === 'password') {
+            this.controls.currentPassword.markAsUntouched();
+            this.controls.confirmPassword.markAsUntouched();
+        }
+
         this.editFlags.set(editFormControlId, true);
 
         // Force processing of form input element after it is shown (via *ngIf) by inserting into end of event queue (via setTimeout).
@@ -103,9 +112,10 @@ export class AppUserInfoComponent {
      * Saves the new password value.
      */
     private savePassword(): void {
-        // Mark as touched so validation occurs!
-        this.controls.currentPassword.markAsTouched();
-        this.controls.confirmPassword.markAsTouched();
+        // Make sure we can see valid state.
+        this.forceValidation(this.controls.currentPassword);
+        this.forceValidation(this.controls.password);
+        this.forceValidation(this.controls.confirmPassword);
 
         // First validate the current password and confirm password fields before saving the password.
         if (   this.isValid(this.controls.currentPassword)
@@ -122,7 +132,8 @@ export class AppUserInfoComponent {
      * @param saveFormControlName The name of the form control used for switching off the associated edit flag.
      */
     private save(saveFormControl: AbstractControl, saveFormControlName: string): void {
-        saveFormControl.markAsTouched(); // Mark touched so validation occurs!
+        // Make sure we can see valid state.
+        this.forceValidation(saveFormControl);
 
         if (this.isValid(saveFormControl)) {
             // Only send entry that is being saved to the server.
@@ -168,12 +179,22 @@ export class AppUserInfoComponent {
 
 
     /**
+     * Forces a given field to validate by marking it touched and dirty.
+     * @param validField The field to force validation on.
+     */
+    private forceValidation(validField: AbstractControl): void {
+        validField.markAsTouched();
+        validField.markAsDirty();
+    }
+
+
+    /**
      * Checks if a given field is valid.
      * @param validField The field to check for validity.
      * @return true if the field is valid, false if not.
      */
     private isValid(validField: AbstractControl): boolean {
-        return (validField.errors == null || !validField.touched);
+        return (validField.errors == null || !validField.touched || !validField.dirty);
     }
 
 

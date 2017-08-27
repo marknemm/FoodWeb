@@ -10,12 +10,12 @@ import { FoodListingsFilters } from "../../../../shared/food-listings/food-listi
 
 
 @Component({
-    selector: 'app-receiver',
-    templateUrl: './receiver.component.html',
-    styleUrls: ['./receiver.component.css'],
+    selector: 'app-receive',
+    templateUrl: './receive.component.html',
+    styleUrls: ['./receive.component.css'],
     providers: [FoodListingsService]
 })
-export class ReceiverComponent {
+export class ReceiveComponent {
     
     @ViewChild('foodListingsFilters') foodListingsFiltersComponent: FoodListingsFiltersComponent;
     @ViewChild('foodListings') foodListingsComponent: FoodListingsComponent;

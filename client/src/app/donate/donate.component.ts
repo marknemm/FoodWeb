@@ -13,12 +13,12 @@ import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
     moduleId: module.id,
-    selector: 'donor',
-    templateUrl: 'donor.component.html',
+    selector: 'app-donate',
+    templateUrl: 'donate.component.html',
     providers: [DonateService],
-    styleUrls: ['donor.component.css']
+    styleUrls: ['donate.component.css']
 })
-export class DonorComponent implements OnInit {
+export class DonateComponent implements OnInit {
     foodForm: FormGroup;
     forceValidation: boolean;
     submitted: boolean;

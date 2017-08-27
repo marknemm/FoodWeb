@@ -7,6 +7,7 @@ import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
+import { ImageCropperComponent } from 'ng2-img-cropper';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BusyModule } from 'angular2-busy';
 
@@ -15,22 +16,22 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { LoginComponent } from './authentication/login/login.component';
-import { DonorComponent } from './donor/donor.component';
-import { ReceiverComponent } from './receiver/receiver.component';
+import { DonateComponent } from './donate/donate.component';
+import { ReceiveComponent } from './receive/receive.component';
 import { CartComponent } from './cart/cart.component';
-import { ImageCropperComponent } from 'ng2-img-cropper';
-import { DateFormatterPipe } from "./common-util/date-formatter.pipe"
-import { AuthWatchService } from './authentication/misc/auth-watch.service'
-import { AuthSessionService } from "./authentication/misc/auth-session.service";
-
 import { SignupComponent } from './authentication/signup/signup.component';
 import { BannerComponent } from './banner/banner.component';
 import { SlickLeftPanelComponent } from './slick-left-panel/slick-left-panel.component';
 import { FoodListingsFiltersComponent } from './food-listings/food-listings-filters/food-listings-filters.component';
 import { FoodListingsComponent } from './food-listings/food-listings.component';
-import { FoodTypesService } from './food-listings/food-types/food-types.service';
 import { FoodTypesComponent } from './food-listings/food-types/food-types.component';
 import { AppUserInfoComponent } from './authentication/app-user-info/app-user-info.component';
+
+import { AuthWatchService } from './authentication/misc/auth-watch.service'
+import { AuthSessionService } from "./authentication/misc/auth-session.service";
+import { FoodTypesService } from './food-listings/food-types/food-types.service';
+import { DateFormatterPipe } from "./common-util/date-formatter.pipe"
+
 
 const appRoutes: Routes = [
     /*{
@@ -48,13 +49,13 @@ const appRoutes: Routes = [
         canActivate: [AuthWatchService],
     },
     {
-        path: 'donor',
-        component: DonorComponent,
+        path: 'donate',
+        component: DonateComponent,
         canActivate: [AuthWatchService]
     },
     {
-        path: 'receiver',
-        component: ReceiverComponent,
+        path: 'receive',
+        component: ReceiveComponent,
         canActivate: [AuthWatchService],
         // Make sure that we get the FoodTypes from the back end before routing to the receiver interface!
         resolve: {
@@ -63,7 +64,8 @@ const appRoutes: Routes = [
     },
     {
         path: 'cart',
-        component: CartComponent
+        component: CartComponent,
+        canActivate: [AuthWatchService]
     },
     {
         path: 'signup',
@@ -75,7 +77,7 @@ const appRoutes: Routes = [
         component: AppUserInfoComponent,
         canActivate: [AuthWatchService]
     }
-]
+];
 
 @NgModule({
     declarations: [
@@ -84,8 +86,8 @@ const appRoutes: Routes = [
         HeaderComponent,
         FooterComponent,
         LoginComponent,
-        DonorComponent,
-        ReceiverComponent,
+        DonateComponent,
+        ReceiveComponent,
         SignupComponent,
         ImageCropperComponent,
         DateFormatterPipe,
@@ -123,4 +125,3 @@ const appRoutes: Routes = [
 
 })
 export class AppModule { }
-

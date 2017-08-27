@@ -20,7 +20,7 @@ export class AuthWatchService implements CanActivate {
     /**
      * List of login restricted routes. User must be logged in to visit these pages!
      */
-    private static readonly LOGIN_RESTRICTED_ROUTES: string[] = ['/donor', '/appUserInfo'];
+    private static readonly LOGIN_RESTRICTED_ROUTES: string[] = ['/donate', '/appUserInfo', '/cart'];
 
 
     constructor(
@@ -31,7 +31,14 @@ export class AuthWatchService implements CanActivate {
     ) { }
 
 
-    public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
+    /**
+     * Determines if a given target route can be activated (or followed). Will check credentials on server regardless of whether or not
+     * the given route is in the LOGIN_RESTRICTED_ROUTES list.
+     * @param route The route that is being activated.
+     * @param state The state of the router.
+     * @return An observable that will resolve to true if the route can be activated, and false if it cannot.
+     */
+    public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         // Check with server to check if we are logged in!
         let headers = new Headers({
             'Content-Type': 'application/json'
@@ -54,6 +61,7 @@ export class AuthWatchService implements CanActivate {
             return true;
         });
     }
+
 
     /**
      * Generates a login dialog that the user can login with. If login is successful, then the user is redirected to their original target route.

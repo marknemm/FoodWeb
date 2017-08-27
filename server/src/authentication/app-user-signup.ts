@@ -13,6 +13,7 @@ import { AppUserInfo } from '../../../shared/authentication/app-user-info';
 var randomstring = require('randomstring');
 var nodemailer = require('nodemailer');
 
+
 /**
  * Performs the signup for a new app user.
  * @param appUserSignupInfo Shared app user into used for signup.
@@ -51,15 +52,27 @@ export function signup(appUserSignupInfo: AppUserInfo, isUpdate: boolean = false
             return handleAddOrUpdateResult(appUserSignupInfo, addOrUpdateResult, isUpdate);
         })
         .then((appUserSignupInfo: AppUserInfo)=> {
-            let token: string = stringTokenGenerator();
-            let userType: string = insertIntoUnverifiedAppUser(appUserSignupInfo, token)
-            return sendUserEmail(appUserSignupInfo,token, userType)
+            if (!isUpdate) {
+                let token: string = stringTokenGenerator();
+                let userType: string = insertIntoUnverifiedAppUser(appUserSignupInfo, token)
+                return sendUserEmail(appUserSignupInfo,token, userType)
+            }
+            return appUserSignupInfo;
         })
         .catch((err: Error) => {
             console.log(err);
             // We should have a user friendly error here!
             return Promise.reject(new Error(err.message));
         });
+}
+
+
+export function signupVerify(token: String): Promise<QueryResult> {
+    let queryString: string = 'SELECT * FROM removeUnverifiedAppUser($1)';
+    let queryArgs: Array<any> = [token];
+
+    return query(queryString, queryArgs);
+
 }
 
 
@@ -77,14 +90,6 @@ function genGPSCoordsAndHashPass(appUserSignupInfo: AppUserInfo, hashPass: strin
         });
 }
 
-
-export function signupVerify(token: String): Promise<QueryResult> {
-    let queryString: string = 'SELECT * FROM removeUnverifiedAppUser($1)';
-    let queryArgs: Array<any> = [token];
-
-    return query(queryString, queryArgs);
-
-}
 
 /**
  * Inserts the new user's data into the AppUser table, completing the signup process in the database.
