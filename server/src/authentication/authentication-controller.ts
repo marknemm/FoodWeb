@@ -2,8 +2,10 @@
 import { Request, Response } from "express";
 
 import { login } from "./app-user-login";
-import { signup } from './app-user-signup';
+import { signup, signupVerify } from './app-user-signup';
 import { updateAppUser } from './app-user-update';
+import { QueryResult } from 'pg';
+
 
 import { AppUserInfo } from '../../../shared/authentication/app-user-info';
 import { FoodWebResponse } from "../../../shared/message-protocol/food-web-response";
@@ -116,4 +118,18 @@ export function handleUpdateAppUserRequest(request: Request, response: Response)
     else {
         response.send(new FoodWebResponse(false, 'Login Required', true));
     }
+}
+
+
+export function handleSignupVerification(request: Request, response: Response): void {
+    response.setHeader('Content-Type', 'application/json');
+    let token: string = request.query.token;
+    let promise: Promise<QueryResult> = signupVerify(token);
+
+    promise.then((removeQueryResult: QueryResult) => {
+        return response.send(new FoodWebResponse(true, 'Signup verification complete'));
+    })
+    .catch((err: Error) => {
+        return response.send(new FoodWebResponse(false, 'Sorry, something went wrong. Unable to verify you.'));
+    });
 }

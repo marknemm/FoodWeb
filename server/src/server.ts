@@ -14,7 +14,8 @@ import { handleLoginRequest,
          handleLogoutRequest,
          handleReAuthenticateRequest,
          handleSignupRequest,
-         handleUpdateAppUserRequest } from './authentication/authentication-controller';
+         handleUpdateAppUserRequest,
+         handleSignupVerification } from './authentication/authentication-controller';
 import { handleAddFoodListingRequest,
          handleGetFoodListingsRequest,
          handleClaimFoodListingRequest,
@@ -52,6 +53,9 @@ app.post('/authentication/signup', handleSignupRequest);
 
 // Handle /authentication/updateAppUser route by passing it off to the AuthenticationController.
 app.post('/authentication/updateAppUser', handleUpdateAppUserRequest);
+
+//Handle /authentication/verify route by passing it off to AuthenticationController.
+app.get('/authentication/verify', handleSignupVerification);
 
 // Handle /foodListings/addFoodListing route by passing off to FoodListingController.
 app.post('/foodListings/addFoodListing', handleAddFoodListingRequest);

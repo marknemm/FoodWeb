@@ -1,6 +1,7 @@
 'use strict';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
-import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
+import { connect, query } from '../database-help/connection-pool';
+import { Client, QueryResult } from 'pg';
 
 import { hashPassword } from './password-util';
 import { GPSCoordinates, getGPSCoordinates } from '../common-util/geocode';
@@ -9,6 +10,8 @@ import { fixNullQueryArgs } from "../database-help/prepared-statement-helper";
 import { Validation } from '../../../shared/common-util/validation';
 import { AppUserInfo } from '../../../shared/authentication/app-user-info';
 
+var randomstring = require('randomstring');
+var nodemailer = require('nodemailer');
 
 /**
  * Performs the signup for a new app user.
@@ -47,6 +50,11 @@ export function signup(appUserSignupInfo: AppUserInfo, isUpdate: boolean = false
         .then((addOrUpdateResult: QueryResult) => {
             return handleAddOrUpdateResult(appUserSignupInfo, addOrUpdateResult, isUpdate);
         })
+        .then((appUserSignupInfo: AppUserInfo)=> {
+            let token: string = stringTokenGenerator();
+            let userType: string = insertIntoUnverifiedAppUser(appUserSignupInfo, token)
+            return sendUserEmail(appUserSignupInfo,token, userType)
+        })
         .catch((err: Error) => {
             console.log(err);
             // We should have a user friendly error here!
@@ -69,6 +77,14 @@ function genGPSCoordsAndHashPass(appUserSignupInfo: AppUserInfo, hashPass: strin
         });
 }
 
+
+export function signupVerify(token: String): Promise<QueryResult> {
+    let queryString: string = 'SELECT * FROM removeUnverifiedAppUser($1)';
+    let queryArgs: Array<any> = [token];
+
+    return query(queryString, queryArgs);
+
+}
 
 /**
  * Inserts the new user's data into the AppUser table, completing the signup process in the database.
@@ -120,7 +136,7 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
 
 
 /**
- * Analyzes and hndles the result of the insert into AppUser query. Generates the final result of the signup operation.
+ * Analyzes and handles the result of the insert into AppUser query. Generates the final result of the signup operation.
  * @param appUserSignupInfo The .
  * @param insertQueryResult The result of the insert of the new user into the AppUser table.
  */
@@ -144,4 +160,88 @@ function handleAddOrUpdateResult(appUserSignupInfo: AppUserInfo, addOrUpdateResu
 
     // This is an update, and we have no expectations for query return value.
     return Promise.resolve(null);
+}
+
+
+function insertIntoUnverifiedAppUser(appUserSignupInfo: AppUserInfo, token: string) : string {
+
+        let queryString: string = 'SELECT * FROM addUnverifiedAppUser($1, $2)';
+        let queryArgs: Array<any> = [ appUserSignupInfo.appUserKey,
+                                      token ];
+        
+        query(queryString, queryArgs);
+
+        if (appUserSignupInfo.organizationKey) {
+            return 'Organization'
+        }
+        else {
+            return 'Individual'
+        }
+
+}
+
+
+function sendUserEmail(appUserSignupInfo: AppUserInfo, token: string, userType: string) : Promise<AppUserInfo>{
+
+    let verificationLink = 'http://connect-food.herokuapp.com/authentication/verify?token='+token
+
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        secure: false,
+        port: 25,
+        auth : {
+            user: 'foodweb.noreply@gmail.com',
+            pass: 'connect-food!1'
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+    
+    if (userType === 'Individual'){
+
+        let mailOptions = {
+            from: '"Food Web" <foodweb.noreply@gmail.com',
+            to: appUserSignupInfo.email,
+            subject: 'Verify Your Account With Food Web',
+            html: 'Dear User,<br><br>Welcome to Food Web!<br><br>Please click <a href ="'+verificationLink+'">here</a> to verify your account with us.<br><br>Thank you,<br><br>The Food Web Team'
+        }
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                return Promise.reject(new Error('SignUp failed. Unable to send verification email.'));
+            } else {
+                console.log('Email sent!');
+            }
+        });
+
+    }
+
+    else {
+
+        let mailOptions = {
+            from: '"Food Web" <foodweb.noreply@gmail.com',
+            to: 'foodweb.noreply@gmail.com',
+            subject: 'A New Organization Has Signed Up With Food Web: Please Verify',
+            html: 'Dear User,<br><br>A new organization: '+appUserSignupInfo.organizationName+' has signed up With Food Web!<br><br>Their phone number is '+appUserSignupInfo.phone+' and their email is '+appUserSignupInfo.email+'.<br><br>Please click <a href ="'+verificationLink+'">here</a> to officially verify their account once their identity is validated.<br><br>Thank you,<br><br>The Food Web Team'
+        }
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                return Promise.reject(new Error('SignUp failed. Unable to send verification email.'));
+            } else {
+                console.log('Email sent!');
+            }
+        });
+
+
+    }
+   
+    return Promise.resolve(appUserSignupInfo);
+
+}
+
+
+function stringTokenGenerator(): string{
+    return randomstring.generate(20);
 }

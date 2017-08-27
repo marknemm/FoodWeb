@@ -10,7 +10,6 @@ import { AgmCoreModule } from '@agm/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BusyModule } from 'angular2-busy';
 
-
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
@@ -18,6 +17,7 @@ import { FooterComponent } from './footer/footer.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { DonorComponent } from './donor/donor.component';
 import { ReceiverComponent } from './receiver/receiver.component';
+import { CartComponent } from './cart/cart.component';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { DateFormatterPipe } from "./common-util/date-formatter.pipe"
 import { AuthWatchService } from './authentication/misc/auth-watch.service'
@@ -62,6 +62,10 @@ const appRoutes: Routes = [
         }
     },
     {
+        path: 'cart',
+        component: CartComponent
+    },
+    {
         path: 'signup',
         component: SignupComponent,
         canActivate: [AuthWatchService]
@@ -90,6 +94,7 @@ const appRoutes: Routes = [
         FoodListingsFiltersComponent,
         FoodListingsComponent,
         FoodTypesComponent,
+        CartComponent,
         AppUserInfoComponent
     ],
     imports: [
