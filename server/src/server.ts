@@ -14,6 +14,7 @@ import { handleLoginRequest,
          handleLogoutRequest,
          handleReAuthenticateRequest,
          handleSignupRequest,
+         handleUpdateAppUserRequest,
          handleSignupVerification } from './authentication/authentication-controller';
 import { handleAddFoodListingRequest,
          handleGetFoodListingsRequest,
@@ -41,14 +42,17 @@ module.exports = app;
 // Handle /authentication/login route by passing off to AuthenticationController.
 app.post('/authentication/login', handleLoginRequest);
 
-//Handle /authentication/logout route by passing it off to AuthenticationController.
+// Handle /authentication/logout route by passing it off to AuthenticationController.
 app.get('/authentication/logout', handleLogoutRequest);
 
 // Handle /authentication/reAuthenticate route by passing off to AuthenticationController.
 app.get('/authentication/reAuthenticate', handleReAuthenticateRequest);
 
-//Handle /authentication/signup route by passing it off to AuthenticationController.
+// Handle /authentication/signup route by passing it off to AuthenticationController.
 app.post('/authentication/signup', handleSignupRequest);
+
+// Handle /authentication/updateAppUser route by passing it off to the AuthenticationController.
+app.post('/authentication/updateAppUser', handleUpdateAppUserRequest);
 
 //Handle /authentication/verify route by passing it off to AuthenticationController.
 app.get('/authentication/verify', handleSignupVerification);

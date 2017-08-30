@@ -1,45 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DialogService } from "ng2-bootstrap-modal";
+
 import { LoginComponent } from '../authentication/login/login.component';
+import { AuthSessionService } from '../authentication/misc/auth-session.service';
 import { LogoutService } from '../authentication/misc/logout.service';
 
+
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'],
-  providers: [ LogoutService ]
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.css'],
+    providers: [LogoutService]
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
-  public sessionStorage = sessionStorage;
+    constructor(
+        private dialogService: DialogService,
+        private authSessionService: AuthSessionService,
+        private logoutService: LogoutService
+    ) { }
 
-  constructor(
-    private dialogService: DialogService,
-    private logoutService: LogoutService
-  ) {}
 
-  ngOnInit() {
-  }
+    private showLogin(): void {
+        var dialogObserver = this.dialogService.addDialog(
+            LoginComponent,
+            // Dialog Initalization Data
+            null,
+            // DialogOptions
+            {
+                closeByClickingOutside: true,
+                backdropColor: '#222222',
+            }
+        );
 
-  public showLogin(): void {
-    var dialogObserver = this.dialogService.addDialog (
-      LoginComponent,
-      // Dialog Initalization Data
-      null,
-      // DialogOptions
-      {
-        closeByClickingOutside: true,
-        backdropColor: '#222222',
-      }
-    );
+        // Observe what the dialog result is.
+        dialogObserver.subscribe((isConfirmed) => {
+            // TODO: Replace the Login link with username link.
+        });
+    }
 
-    // Observe what the dialog result is.
-    dialogObserver.subscribe((isConfirmed) => {
-        // TODO: Replace the Login link with username link.
-    });
-  }
 
-  public logout(): void {
-    this.logoutService.logout();
-  }
+    private logout(): void {
+        this.logoutService.logout();
+    }
 }

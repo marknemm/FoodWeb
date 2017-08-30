@@ -1,0 +1,187 @@
+<div [formGroup]="appUserInfoForm" class="container">
+
+    <h2 class>Identification</h2>
+    <hr>
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="firstName">{{firstNameLabel}}:</label><br>
+                <span *ngIf="!editFlags.get('firstName')" class="classic-link">
+                    <a (click)="setEditable('firstName')" title="edit">
+                        {{controls.firstName.value}}<i class="material-icons">&#xe254;</i>
+                    </a>
+                </span>
+                <span *ngIf="editFlags.get('firstName')" [ngBusy]="busySaveConfig">
+                    <input type="text" id="firstName" formControlName="firstName" (keyup.enter)="save(controls.firstName, 'firstName')" autocomplete="on">
+                    <div class="error-msg" [hidden]="isValid(controls.firstName)">* {{firstNameLabel}} Required<br></div>
+                    <button class="btn" (click)="save(controls.firstName, 'firstName')">Save</button>
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">{{lastNameLabel}}:</label><br>
+                <span *ngIf="!editFlags.get('lastName')" class="classic-link">
+                    <a (click)="setEditable('lastName')" title="edit">
+                        {{controls.lastName.value}}<i class="material-icons">&#xe254;</i>
+                    </a>                        
+                </span>
+                <span *ngIf="editFlags.get('lastName')" [ngBusy]="busySaveConfig">
+                    <input type="text" id="lastName" formControlName="lastName" (keyup.enter)="save(controls.lastName, 'lastName')" autocomplete="on">
+                    <div class="error-msg" [hidden]="isValid(controls.lastName)">* {{lastNameLabel}} Required</div>
+                    <button class="btn" (click)="save(controls.lastName, 'lastName')">Save</button>
+                </span>
+            </div>
+        </div><!-- col -->
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="email">{{emailLabel}}:</label><br>
+                <span *ngIf="!editFlags.get('email')" class="classic-link">
+                    <a (click)="setEditable('email')" title="edit">
+                        {{controls.email.value}}<i class="material-icons">&#xe254;</i>
+                    </a>
+                </span>
+                <span *ngIf="editFlags.get('email')" [ngBusy]="busySaveConfig">
+                    <input type="email" id="email" formControlName="email" (keyup.enter)="save(controls.email, 'email')" autocomplete="on">
+                    <div class="error-msg" [hidden]="isValid(controls.email)">* {{emailLabel}} Required</div>
+                    <button class="btn" (click)="save(controls.email, 'email')">Save</button>
+                </span>
+            </div>
+
+            <div *ngIf="isOrganization" class="form-group">
+                <label for="organizationName">Organization Name:</label><br>
+                <span *ngIf="!editFlags.get('organizationName')" class="classic-link">
+                    <a (click)="setEditable('organizationName')" title="edit">
+                        {{controls.organizationName.value}}<i class="material-icons">&#xe254;</i>
+                    </a>
+                </span>
+                <span *ngIf="editFlags.get('organizationName')" [ngBusy]="busySaveConfig">
+                    <input type="text" id="organizationName" formControlName="organizationName"
+                     (keyup.enter)="save(controls.organizationName, 'organizationName')" autocomplete="on">
+                    <div class="error-msg" [hidden]="isValid(controls.organizationName)">* Organization Name Required</div>
+                    <button class="btn" (click)="save(controls.organizationName, 'organizationName')">Save</button>
+                </span>
+            </div>
+        </div>
+
+    </div><br><br><!-- row -->
+
+    <h2 class>Contact Info</h2>
+    <hr>
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="address">Street Address:</label><br>
+                <span *ngIf="!editFlags.get('address')" class="classic-link">
+                    <a (click)="setEditable('address')" title="edit">
+                        {{controls.address.value}}<i class="material-icons">&#xe254;</i>
+                    </a>
+                </span>
+                <span *ngIf="editFlags.get('address')" [ngBusy]="busySaveConfig">
+                    <input type="text" id="address" formControlName="address" (keyup.enter)="save(controls.address, 'address')" autocomplete="on">
+                    <div class="error-msg" [hidden]="isValid(controls.address)">* Address Required</div>
+                    <button class="btn" (click)="save(controls.address, 'address')">Save</button>
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="city">City:</label><br>
+                <span *ngIf="!editFlags.get('city')" class="classic-link">
+                    <a (click)="setEditable('city')" title="edit">
+                        {{controls.city.value}}<i class="material-icons">&#xe254;</i>
+                    </a>
+                </span>
+                <span *ngIf="editFlags.get('city')" [ngBusy]="busySaveConfig">
+                    <input type="text" id="city" formControlName="city" (keyup.enter)="save(controls.city, 'city')" autocomplete="on">
+                    <div class="error-msg" [hidden]="isValid(controls.city)">* City Required</div>
+                    <button class="btn" (click)="save(controls.city, 'city')">Save</button>
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="state">State:</label><br>
+                <span *ngIf="!editFlags.get('state')" class="classic-link">
+                    <a (click)="setEditable('state')" title="edit">
+                        {{controls.state.value}}<i class="material-icons">&#xe254;</i>
+                    </a>
+                </span>
+                <span *ngIf="editFlags.get('state')" [ngBusy]="busySaveConfig">
+                    <select id="state" formControlName="state" (keyup.enter)="saveState(controls.state, 'state')">
+                        <option *ngFor="let stateStr of stateList" [selected]="stateStr == controls.state.value" [value]="stateStr">{{stateStr}}</option>
+                    </select><br>
+                    <div class="error-msg" [hidden]="isValid(controls.state)">* State Required</div>
+                    <button class="btn" (click)="save(controls.state, 'state')">Save</button>
+                </span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="zip">ZIP Code:</label><br>
+                <span *ngIf="!editFlags.get('zip')" class="classic-link">
+                    <a (click)="setEditable('zip')" title="edit">
+                        {{controls.zip.value}}<i class="material-icons">&#xe254;</i>
+                    </a>
+                </span>
+                <span *ngIf="editFlags.get('zip')" [ngBusy]="busySaveConfig">
+                    <input type="text" id="zip" formControlName="zip" (keyup.enter)="save(controls.zip, 'zip')" autocomplete="on" maxlength="5">
+                    <div class="error-msg" [hidden]="isValid(controls.zip)">* ZIP Code Required</div>
+                    <button class="btn" (click)="save(controls.zip, 'zip')">Save</button>
+                </span>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number:</label><br>
+                <span *ngIf="!editFlags.get('phone')" class="classic-link">
+                    <a (click)="setEditable('phone')" title="edit">
+                        {{controls.phone.value}}<i class="material-icons">&#xe254;</i>
+                    </a>
+                </span>
+                <span *ngIf="editFlags.get('phone')" [ngBusy]="busySaveConfig">
+                    <input type="text" id="phone" formControlName="phone" (keyup.enter)="save(controls.phone, 'phone')" autocomplete="on" maxlength="12">
+                    <div class="error-msg" [hidden]="isValid(controls.phone)">* Phone Number Required</div>
+                    <button class="btn" (click)="save(controls.phone, 'phone')">Save</button>
+                </span>
+            </div>
+        </div><!-- col -->
+
+    </div><br><br> <!-- row -->
+
+    <h2 class>Password</h2>
+    <hr>
+    <div class="row">
+            
+        <div class="col-md-6">
+            <button class="btn btn-default" *ngIf="!editFlags.get('password')" (click)="setEditable('password')" title="edit">
+                Change Password
+            </button>
+
+            <ng-container *ngIf="editFlags.get('password')" [ngBusy]="busySaveConfig">
+                <div class="form-group">
+                    <label for="password">Current Password:</label>
+                    <input class="form-control" formControlName="currentPassword" type="password" id="password" (keyup.enter)="savePassword()">
+                    <div class="error-msg" [hidden]="isValid(controls.currentPassword)">* Old Password Required</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">New Password:</label>
+                    <input class="form-control" formControlName="password" type="password" formControlName="password" (keyup.enter)="savePassword()">
+                    <div class="error-msg" [hidden]="isValid(controls.password)">* New Password Required</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Confirm Password:</label>
+                    <input class="form-control" formControlName="confirmPassword" type="password" (keyup.enter)="savePassword()">
+                    <div class="error-msg" [hidden]="isValid(controls.confirmPassword)">* Password Confirmation Required</div>
+                </div>
+
+                <button class="btn btn-default" (click)="savePassword()">Save Password</button>
+                <button class="btn btn-default" (click)="this.editFlags.set('password', false)">Cancel</button>
+            </ng-container>
+        </div>
+
+    </div>
+
+</div><!-- container -->

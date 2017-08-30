@@ -25,23 +25,24 @@
                     <label for="perishable-no-check" class="perishable-label no-select">
                         <input type="radio" formControlName="perishable" name="perishable" id="perishable-no-check" [value]="false"> No
                     </label>
+                    <div class="alert alert-danger" [hidden]="isValid(perishable)">Perishable selection is required</div>
                 </div>
 
                 <div class="form-group">
                     <label for="foodDescription">Description</label>
                     <textarea class="form-control" formControlName="foodDescription"></textarea>
-                    <div class="alert alert-danger" [hidden]="!shouldFireRequireValidation(foodForm.controls.foodDescription)">Description is required</div>
+                    <div class="alert alert-danger" [hidden]="isValid(foodDescription)">Description is required</div>
                 </div>
 
                 <div class="form-group">
                     <label for="expirationDate">Expiration Date</label>
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" formControlName="expirationDate" ngbDatepicker #d="ngbDatepicker">
-                        <div class="input-group-addon" (click)="d.toggle()" >
-                            <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                        <div class="input-group-addon" style="cursor: pointer;" (click)="d.toggle()" >
+                            <i class="material-icons">&#xE8A3;</i>
                         </div>
                     </div>
-                    <div class="alert alert-danger" [hidden]="!shouldFireRequireValidation(foodForm.controls.expirationDate)">Expiration Date is required</div>
+                    <div class="alert alert-danger" [hidden]="isValid(expirationDate)">Expiration Date is required</div>
                 </div>
 
                 <button type="submit" class="btn btn-default">Submit</button>

@@ -1,5 +1,4 @@
-//Original version created by Cory Rylan: https://coryrylan.com/blog/angular-2-form-builder-and-validation-management
-import { AbstractControl } from '@angular/forms';
+import { AppUserInfo } from "../authentication/app-user-info";
 
 /**
  * Validation definitions that can commonly be used by front end angular forms and back end node logic.
@@ -7,27 +6,24 @@ import { AbstractControl } from '@angular/forms';
 export class Validation {
 
     /**
-     * Gets a message associated with an error code or type.
-     * @param code The error code or type.
-     * @return The error message.
+     * Regular expression used for verifying email correctness.
      */
-    static getValidatorErrorMessage(code: string): string {
-        let config = {
-            'required': 'Required',
-            'invalidCreditCard': 'Is invalid credit card number',
-            'invalidEmailAddress': 'Invalid email address',
-            'invalidPassword': 'Invalid password. Password must be at least 6 characters long, and contain a number.'
-        };
-        return config[code];
-    }
+    public static readonly EMAIL_REGEX: RegExp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
-    public static emailFormValidator(email: AbstractControl): any {
-        if (Validation.emailValidator(email.value)) {
-            return null;
-        }
+    /**
+     * Regular expression used for verifying password correctness.
+     */
+    public static readonly PASSWORD_REGEX: RegExp = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,20}$/;
 
-        return { invalidEmailAddress: true };
-    }
+    /**
+     * Regular expression used for verifying 10 digit phone numbers with dashes.
+     */
+    public static readonly PHONE_REGEX: RegExp = /^\d{3}\-\d{3}\-\d{4}$/;
+
+    /**
+     * Regular expression used for verifying 5 digit ZIP codes.
+     */
+    public static readonly ZIP_REGEX: RegExp = /^\d{5}$/;
     
     /**
      * Checks if an email string is in the correct format.
@@ -36,15 +32,7 @@ export class Validation {
      */
     public static emailValidator(email: string): boolean {
         // RFC 2822 compliant regex
-        return email.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/).length != null;
-    }
-
-    public static passwordFormValidator(password: AbstractControl): any {
-        if (Validation.passwordValidator(password.value)) {
-            return null;
-        }
-
-        return { invalidPassword: true };
+        return email.match(Validation.EMAIL_REGEX).length != null;
     }
      
     /**
@@ -55,6 +43,46 @@ export class Validation {
     public static passwordValidator(password: string): boolean {
         // {6,20}           - Assert password is between 6 and 20 characters
         // (?=.*[0-9])      - Assert a string has at least one number
-        return password.match(/^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,20}$/) != null;
+        return password.match(Validation.PASSWORD_REGEX).length != null;
+    }
+
+    /**
+     * Checks if a 7 digit phone number with dashes (string) is in the correct format.
+     * @param phone The phone number string to check.
+     * @return true if it is, false if not.
+     */
+    public static phoneValidator(phone: string): boolean {
+        return phone.match(Validation.PHONE_REGEX).length != null;
+    }
+
+    /**
+     * Checks if a 5 digit ZIP code is in the correct format.
+     * @param zip The ZIP code to check.
+     * @return true if it is, false if not.
+     */
+    public static zipValidator(zip: string): boolean {
+        return zip.match(Validation.ZIP_REGEX).length != null;
+    }
+
+
+    /**
+     * Validates given app user information.
+     * @param appUserInfo The app user info to validate.
+     * @return On successful validation, null. On unsuccess, then an error is returned.
+     */
+    public static validateAppUserInfo(appUserInfo: AppUserInfo): Error {
+        if (appUserInfo.email != null && !Validation.emailValidator(appUserInfo.email)) {
+            return new Error('Provided email not in correct format.');
+        }
+
+        if (appUserInfo.password != null && !Validation.passwordValidator(appUserInfo.password)) {
+            return new Error('Incorrect password format. Password must contain a minimum of 6 characters and at least one number');
+        }
+
+        if (appUserInfo.zip != null && !Validation.zipValidator(appUserInfo.zip.toString())) {
+            return new Error('Incorrect ZIP code format. The ZIP code must contain exactly 5 numbers.');
+        }
+
+        return null;
     }
 }

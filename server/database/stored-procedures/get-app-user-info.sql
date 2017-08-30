@@ -57,4 +57,4 @@ END;
 $$ LANGUAGE plpgsql;
 
 SELECT * FROM AppUser;
-SELECT * FROM getAppUserInfo();
+SELECT * FROM getAppUserInfo(NULL, 'marknemms@gmail.com');
