@@ -50,12 +50,9 @@ export class RecoverPasswordResponse extends FoodWebResponse{
     constructor(
         public success?: boolean,
 
-        public message?: string,
-
-        public passwordFound: boolean = false
-
+        public message?: string
 
     ){
-        super(success, message, passwordFound);
+        super(success, message);
     }
 }
