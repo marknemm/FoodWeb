@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 
 @Component({
@@ -9,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class SlickLeftPanelComponent implements OnInit {
 
     constructor() { }
+
 
     ngOnInit() {
         // We want to handle scroll events to determine when we should start fixing the slickLeftPanel at top of viewport!
@@ -31,6 +32,7 @@ export class SlickLeftPanelComponent implements OnInit {
         }
     }
 
+
     /**
      * Determines if the slick left panel is toggled into the viewport.
      * @param slickLeftPanel The slick left panel (div) element.
@@ -39,6 +41,7 @@ export class SlickLeftPanelComponent implements OnInit {
         // If it is in view, then there will be a translation value!
         return slickLeftPanel.classList.contains('toggle-into-view');
     }
+
 
     /**
      * Toggles the slickLeftPanel into the viewport.
@@ -51,6 +54,7 @@ export class SlickLeftPanelComponent implements OnInit {
         slickLeftPanelButton.style.right = '0px';
     }
 
+
     /**
      * Toggles the slickLeftPanel out of the viewport.
      * @param slickLeftPanel The slickLeftPanel (div) element which will be toggled out of the viewport.
@@ -60,6 +64,7 @@ export class SlickLeftPanelComponent implements OnInit {
         slickLeftPanel.classList.remove('toggle-into-view');
         slickLeftPanelButton.style.right = '-' + slickLeftPanelButton.offsetWidth + 'px';
     }
+
 
     /**
      * Handles a scroll event to determine when to fix the slickLeftPanel div to the top of the viewport. We will fix it when
@@ -80,6 +85,7 @@ export class SlickLeftPanelComponent implements OnInit {
             slickLeftPanel.style.top = 'auto';
         }
     }*/
+
 
     /**
      * Calculates the absolute position of the top of a given HTML element.

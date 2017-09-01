@@ -65,7 +65,11 @@ const appRoutes: Routes = [
     {
         path: 'cart',
         component: CartComponent,
-        canActivate: [AuthWatchService]
+        canActivate: [AuthWatchService],
+        // Make sure that we get the FoodTypes from the back end before routing to the cart interface!
+        resolve: {
+            foodTypes: FoodTypesService
+        }
     },
     {
         path: 'signup',

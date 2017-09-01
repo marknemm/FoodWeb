@@ -1,15 +1,28 @@
 <div class="container-fluid">
     <div id="cart-row" class="row" style="padding-top:2vh">
-        <div id="cart-btn-col" class="col-md-4">
-            <app-slick-left-panel>
-                <button id="btn-set-posted" type="button" class="btn btn-primary" hidden={{!setDonorFlag}} (click)="setDonorMode()">View My Posted Items</button>
-                <button id="btn-set-claimed" type="button" class="btn btn-primary" hidden={{!setReceiverFlag}} (click)="setReceiverMode()">View My Ordered Items</button>
-                <button id="btn-remove-all" type="button" class="btn btn-danger">Remove All Items</button>
-                <button id="btn-finalize-all" type="button" class="btn btn-success">Finalize All Items</button>
-            </app-slick-left-panel>
+        <div class="col-md-3" id="filters">
+            <app-food-listings-filters title="Cart Filters" [formGroup]="foodListingsFiltersComponent.filtersForm" id="food-listings-filters" #foodListingsFilters>
+                <ng-container *ngIf="setReceiverFlag && setDonorFlag" top>
+                    <h4>Listings Status:</h4>
+                    <div class="form-group">
+                        <label for="claims">
+                            <input type="radio" id="claims" name="listingsStatus" checked="checked"
+                             formControlName="listingsStatus" [value]="LISTINGS_STATUS.myClaimedListings"/>
+                            Claimed
+                        </label>
+                        <br>
+                        <label for="donations">
+                            <input type="radio" id="donations" name="listingsStatus"
+                             formControlName="listingsStatus" [value]="LISTINGS_STATUS.myDonatedListings"/>
+                             Donated
+                        </label>
+                    </div>
+                </ng-container>
+            </app-food-listings-filters>
         </div>
-        <div id="cart-listings-col" class="col-md-8">
-            <app-food-listings #foodListings [title]="newTitle">
+
+        <div id="cart-listings-col" class="col-md-9">
+            <app-food-listings [title]="getFoodListingsTitle()" id="food-listings" #foodListings>
                 <ng-container details-modal-footer>
                     <button type="button" class="btn btn-secondary">Finalize Listing</button>
                     <button type="button" class="btn btn-secondary">Remove Listing</button>

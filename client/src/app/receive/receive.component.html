@@ -1,18 +1,12 @@
 <div class="container-fluid">
     <div id="receivers-row" class="row">
         <div class="col-md-3" id="filters">
-            <form [formGroup]="foodListingsFiltersComponent.filtersForm">
-                <app-food-listings-filters title="Search Filters" #foodListingsFilters>
-                    <!-- This is how you would add filters specific to the receiver form -->
-                    <!--<label name="dummyControl">
-                        Dummy Control: <input formControlName="dummyControl">
-                    </label>-->
-                </app-food-listings-filters>
-            </form>
+            <app-food-listings-filters title="Search Filters" [formGroup]="foodListingsFiltersComponent.filtersForm" #foodListingsFilters>
+            </app-food-listings-filters>
         </div>
 
         <div id="food-listings" class="col-md-9">
-            <app-food-listings #foodListings>
+            <app-food-listings title="Available Food" #foodListings>
                 <ng-container details-modal-footer>
                     <button type="button" class="btn btn-secondary" (click)="claimSelectedFoodListing()">Claim</button>
                 </ng-container>

@@ -41,9 +41,11 @@ export class FoodListingsService {
         'Content-Type': 'application/json'
     });
 
+    
     constructor(private http: Http) { 
         this.retrievalOffset = 0;
     }
+
 
     /**
      * Retrieves food listings based off of filter criteria.

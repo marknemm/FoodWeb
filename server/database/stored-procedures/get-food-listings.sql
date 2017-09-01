@@ -75,7 +75,7 @@ BEGIN
                                                         WHERE   FoodType.foodType = ANY($2)))
           AND ($3 IS NULL   OR FoodListing.perishable = $3)
           AND ($4 IS NULL   OR FoodListing.expireDate >= TO_TIMESTAMP($4, ''MM/DD/YYYY''))
-          AND ($5 IS NULL   OR FoodListing.DonatedByAppUserKey = $5)
+          AND ($5 IS NULL   OR FoodListing.donatedByAppUserKey = $5)
     ';
 
     -- Do we have any filter pertaining to claimer?
@@ -83,7 +83,7 @@ BEGIN
     THEN
 
         queryBase := queryBase || '
-            INNER JOIN ClaimedFoodListing                               ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
+            INNER JOIN ClaimedFoodListing ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
         ';
 
         queryFilters := queryFilters || '

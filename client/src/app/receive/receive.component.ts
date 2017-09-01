@@ -17,8 +17,8 @@ import { FoodListingsFilters } from "../../../../shared/food-listings/food-listi
 })
 export class ReceiveComponent {
     
-    @ViewChild('foodListingsFilters') foodListingsFiltersComponent: FoodListingsFiltersComponent;
-    @ViewChild('foodListings') foodListingsComponent: FoodListingsComponent;
+    @ViewChild('foodListingsFilters') private foodListingsFiltersComponent: FoodListingsFiltersComponent;
+    @ViewChild('foodListings') private foodListingsComponent: FoodListingsComponent;
 
     constructor(
         private foodListingsService: FoodListingsService
@@ -28,19 +28,8 @@ export class ReceiveComponent {
      * Executed after all of the view children have been initialized (so safest to interact with them now).
      */
     ngAfterViewInit() {
-        // This is how you would add the code behind for additional filters specific to the receiver form.
-        //this.foodListingsFiltersComponent.addControl('dummyControl', new FormControl('dummy control'));
-        this.handleFilterUpdate(this.foodListingsFiltersComponent.getFilterValues());
-        this.foodListingsFiltersComponent.onFiltersUpdate(this.handleFilterUpdate.bind(this));
-    }
-
-    /**
-     * Handles filter updates by setting any necessary additional values in the filters and passing them off to the Food Listings Componet.
-     * @param foodListingsFilters The updated Food Listing Filters.
-     */
-    private handleFilterUpdate(foodListingsFilters: FoodListingsFilters): void {
-        foodListingsFilters.unclaimedOnly = true;
-        this.foodListingsComponent.refreshFoodListings(foodListingsFilters);
+        this.foodListingsComponent.refreshFoodListings(this.foodListingsFiltersComponent.getFilterValues());
+        this.foodListingsFiltersComponent.onFiltersUpdate(this.foodListingsComponent.refreshFoodListings.bind(this.foodListingsComponent));
     }
 
     /**

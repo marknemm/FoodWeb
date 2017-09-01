@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { addFoodListing } from './add-food-listing';
-import { getFoodListing } from './get-food-listings';
+import { getFoodListings } from './get-food-listings';
 import { getFoodTypes } from './get-food-types';
 import { claimFoodListing } from './claim-food-listing';
 
@@ -8,6 +8,7 @@ import { AddFoodListingRequest, AddFoodListingResponse, FoodListingUpload } from
 import { GetFoodListingsRequest, GetFoodListingsResponse, FoodListing } from '../../../shared/food-listings/get-food-listings-message';
 import { GetFoodTypesResponse } from '../../../shared/food-listings/get-food-types-message';
 import { ClaimFoodListingRequest } from '../../../shared/food-listings/claim-food-listing-message';
+import { LISTINGS_STATUS } from "../../../shared/food-listings/food-listings-filters";
 
 
 export function handleAddFoodListingRequest(request: Request, response: Response): void {
@@ -31,8 +32,16 @@ export function handleGetFoodListingsRequest(request: Request, response: Respons
     response.setHeader('Content-Type', 'application/json');
 
     let getFoodListingsRequest: GetFoodListingsRequest = request.body;
-    let promise = getFoodListing(getFoodListingsRequest.filters, null, null);
+    let claimedByAppUserKey: number = null;
+    let donatedByAppUserKey: number = null;
 
+    // Grab session App User Key for claimed by and donated by filters if necessary.
+    switch(getFoodListingsRequest.filters.listingsStatus) {
+        case LISTINGS_STATUS.myClaimedListings:     claimedByAppUserKey = request.session['appUserInfo'].appUserKey;    break;
+        case LISTINGS_STATUS.myDonatedListings:     donatedByAppUserKey = request.session['appUserInfo'].appUserKey;    break;
+    }
+
+    let promise: Promise<Array<FoodListing>> = getFoodListings(getFoodListingsRequest.filters, donatedByAppUserKey, claimedByAppUserKey);
     promise.then((foodListings: Array<FoodListing>) => {
         response.send(new GetFoodListingsResponse(foodListings, true, 'Food Listings Successfully Retrieved'));
     })
