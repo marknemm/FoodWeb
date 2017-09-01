@@ -11,7 +11,9 @@ import { Validation } from '../../../shared/common-util/validation';
 import { AppUserInfo } from '../../../shared/authentication/app-user-info';
 
 var randomstring = require('randomstring');
-var nodemailer = require('nodemailer');
+// var nodemailer = require('nodemailer');
+var nodemailer = require("nodemailer-promise");
+
 
 
 /**
@@ -54,8 +56,9 @@ export function signup(appUserSignupInfo: AppUserInfo, isUpdate: boolean = false
         .then((appUserSignupInfo: AppUserInfo)=> {
             if (!isUpdate) {
                 let token: string = stringTokenGenerator();
-                let userType: string = insertIntoUnverifiedAppUser(appUserSignupInfo, token)
-                return sendUserEmail(appUserSignupInfo,token, userType)
+                let userType: string = insertIntoUnverifiedAppUser(appUserSignupInfo, token);
+                if (userType == 'Individual') return sendUserEmail(appUserSignupInfo,token);
+                else return sendOrganizationEmail(appUserSignupInfo,token);
             }
             return appUserSignupInfo;
         })
@@ -103,8 +106,12 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
 {
     // Generate query string based off of either signing up or updating App User.
     let queryString: string = 'SELECT * FROM ';
+    let queryString2: string = 'SELECT * FROM ';
     if (isUpdate)   queryString += 'updateAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)';
-    else            queryString += 'addAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
+    else  {
+        queryString += 'addAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
+        queryString2 += 'addUnverifiedAppUser($1, $2)'
+    }
 
     // Generate query args based off of either signing up or updating App User.
     let queryArgs: Array<any> = [ appUserSignupInfo.email,
@@ -121,6 +128,9 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
                                   appUserSignupInfo.isDonor,
                                   appUserSignupInfo.isReceiver,
                                   appUserSignupInfo.organizationName ];
+    
+    let queryArgs2: Array<any> = [ appUserSignupInfo.appUserKey,
+                                    token ];
     // If an update, then we will need additional appUserKey argument at beginning of list.
     if (isUpdate) queryArgs.unshift(appUserSignupInfo.appUserKey);
                                   
@@ -186,65 +196,60 @@ function insertIntoUnverifiedAppUser(appUserSignupInfo: AppUserInfo, token: stri
 }
 
 
-function sendUserEmail(appUserSignupInfo: AppUserInfo, token: string, userType: string) : Promise<AppUserInfo>{
+function sendUserEmail(appUserSignupInfo: AppUserInfo, token: string) : Promise<AppUserInfo>{
 
     let verificationLink = 'http://connect-food.herokuapp.com/authentication/verify?token='+token
 
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        secure: false,
-        port: 25,
-        auth : {
-            user: 'foodweb.noreply@gmail.com',
-            pass: 'connect-food!1'
-        },
-        tls: {
-            rejectUnauthorized: false
-        }
+    let sendEmail = nodemailer.config({
+        email: 'foodweb.noreply@gmail.com',
+        password: 'connect-food!1',
+        server: 'smtp.gmail.com',
     });
     
-    if (userType === 'Individual'){
 
-        let mailOptions = {
-            from: '"Food Web" <foodweb.noreply@gmail.com',
-            to: appUserSignupInfo.email,
-            subject: 'Verify Your Account With Food Web',
-            html: 'Dear User,<br><br>Welcome to Food Web!<br><br>Please click <a href ="'+verificationLink+'">here</a> to verify your account with us.<br><br>Thank you,<br><br>The Food Web Team'
-        }
+    let mailOptions = {
+        subject: 'Verify Your Account With Food Web',            
+        senderName: "Food Web",
+        receiver: appUserSignupInfo.email,
+        html: 'Dear User,<br><br>Welcome to Food Web!<br><br>Please click <a href ="'+verificationLink+'">here</a> to verify your account with us.<br><br>Thank you,<br><br>The Food Web Team'
+        };
 
-        transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-                return Promise.reject(new Error('SignUp failed. Unable to send verification email.'));
-            } else {
-                console.log('Email sent!');
-            }
-        });
-
-    }
-
-    else {
-
-        let mailOptions = {
-            from: '"Food Web" <foodweb.noreply@gmail.com',
-            to: 'foodweb.noreply@gmail.com',
-            subject: 'A New Organization Has Signed Up With Food Web: Please Verify',
-            html: 'Dear User,<br><br>A new organization: '+appUserSignupInfo.organizationName+' has signed up With Food Web!<br><br>Their phone number is '+appUserSignupInfo.phone+' and their email is '+appUserSignupInfo.email+'.<br><br>Please click <a href ="'+verificationLink+'">here</a> to officially verify their account once their identity is validated.<br><br>Thank you,<br><br>The Food Web Team'
-        }
-
-        transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-                return Promise.reject(new Error('SignUp failed. Unable to send verification email.'));
-            } else {
-                console.log('Email sent!');
-            }
-        });
-
-
-    }
-   
-    return Promise.resolve(appUserSignupInfo);
+    return sendEmail(mailOptions)
+        .then((info) => {
+            return Promise.resolve(appUserSignupInfo);
+        })
+        .catch((err) => {
+            return Promise.reject(new Error('Sorry, unable to send verification email'));
+       });
 
 }
+
+function sendOrganizationEmail(appUserSignupInfo: AppUserInfo, token: string) : Promise<AppUserInfo>{
+    
+        let verificationLink = 'http://connect-food.herokuapp.com/authentication/verify?token='+token
+    
+        let sendEmail = nodemailer.config({
+            email: 'foodweb.noreply@gmail.com',
+            password: 'connect-food!1',
+            server: 'smtp.gmail.com',
+        });
+        
+        let mailOptions = {
+            subject: 'A New Organization Has Signed Up With Food Web: Please Verify',            
+            senderName: "Food Web",
+            receiver: 'foodweb.noreply@gmail.com',
+            html: 'Dear User,<br><br>A new organization: '+appUserSignupInfo.organizationName+' has signed up With Food Web!<br><br>Their phone number is '+appUserSignupInfo.phone+' and their email is '+appUserSignupInfo.email+'.<br><br>Please click <a href ="'+verificationLink+'">here</a> to officially verify their account once their identity is validated.<br><br>Thank you,<br><br>The Food Web Team'
+        }
+            
+        return sendEmail(mailOptions)
+            .then((info) => {
+                return Promise.resolve(appUserSignupInfo);
+            })
+            .catch((err) => {
+                return Promise.reject(new Error('Sorry, unable to send verification email'));
+           });
+    
+    }
 
 
 function stringTokenGenerator(): string{
