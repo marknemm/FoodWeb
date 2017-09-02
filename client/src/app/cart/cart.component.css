@@ -3,13 +3,6 @@ label {
     margin-bottom: 0px;
 }
 
-button {
-    display: block;
-    margin: 2vh;
-    width: 100%;
-}
-
-/* When the screen gets small and the filters panel goes into mobile mode, then center the food listings */
 @media only screen and (max-width: 1200px) {
     #food-listings {
         float: none;

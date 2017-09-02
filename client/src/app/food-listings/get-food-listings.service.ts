@@ -3,11 +3,9 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
-import { GetFoodListingsRequest, GetFoodListingsResponse } from "../../../../shared/food-listings/get-food-listings-message";
-import { ClaimFoodListingRequest } from "../../../../shared/food-listings/claim-food-listing-message";
-import { FoodListing } from "../../../../shared/food-listings/food-listing";
-import { FoodWebResponse } from "../../../../shared/message-protocol/food-web-response";
+import { FoodListingsFilters } from "./../../../../shared/food-listings/food-listings-filters";
+import { GetFoodListingsRequest, GetFoodListingsResponse } from "./../../../../shared/food-listings/get-food-listings-message";
+import { FoodListing } from "./../../../../shared/food-listings/food-listing";
 
 
 /*const MODELS: FoodListing[] = [
@@ -33,7 +31,7 @@ import { FoodWebResponse } from "../../../../shared/message-protocol/food-web-re
 
 
 @Injectable()
-export class FoodListingsService {
+export class GetFoodListingsService {
     
     private retrievalOffset: number;
     private static readonly RETRIEVAL_AMOUNT: number = 20;
@@ -56,17 +54,17 @@ export class FoodListingsService {
      */
     public getFoodListings(filters: FoodListingsFilters, getMoreListings: boolean = false): Observable<FoodListing[]> {
         // If we are simply getting more food listings, then we will set the retrievalOffset to the beginning of next segment of entries.
-        (getMoreListings) ? this.retrievalOffset += FoodListingsService.RETRIEVAL_AMOUNT
+        (getMoreListings) ? this.retrievalOffset += GetFoodListingsService.RETRIEVAL_AMOUNT
                           : this.retrievalOffset = 0;
 
         // Set our retrieval range information for the server to filter by.
         filters.retrievalOffset = this.retrievalOffset;
-        filters.retrievalAmount = FoodListingsService.RETRIEVAL_AMOUNT;
+        filters.retrievalAmount = GetFoodListingsService.RETRIEVAL_AMOUNT;
 
         let getFoodListingsRequest: GetFoodListingsRequest = new GetFoodListingsRequest(filters);
         let observer: Observable<Response> = this.http.post('/foodListings/getFoodListings',
                                                             JSON.stringify(getFoodListingsRequest),
-                                                            { headers: FoodListingsService.JSON_HEADERS, withCredentials: true });
+                                                            { headers: GetFoodListingsService.JSON_HEADERS, withCredentials: true });
         // Listen for a response now.                                                 
         return observer.map((response: Response) => {
             let getFoodListingsResponse: GetFoodListingsResponse = response.json();
@@ -76,28 +74,6 @@ export class FoodListingsService {
             }
             // If the response success flag is false, then we will simply send back an empty array to the calling component.
             return new Array<FoodListing>();
-        });
-    }
-
-
-    /**
-     * Claims a given Food Listing.
-     * @param foodListingKey The key (identifier) for the Food Listing that is to be claimed.
-     */
-    public claimFoodListing(foodListingKey: number): Observable<void> {
-        let claimFoodListingRequest: ClaimFoodListingRequest = new ClaimFoodListingRequest(foodListingKey);
-        let observer: Observable<Response> = this.http.post('/foodListings/claimFoodListing',
-                                                            JSON.stringify(claimFoodListingRequest),
-                                                            { headers: FoodListingsService.JSON_HEADERS, withCredentials: true });
-
-        // Listen for a response now.
-        return observer.map((response: Response) => {
-            let claimFoodListingResponse: FoodWebResponse = response.json();
-            // On failure.
-            if (!claimFoodListingResponse.success) {
-                console.log(claimFoodListingResponse.message);
-                throw new Error(claimFoodListingResponse.message);
-            }
         });
     }
 }

@@ -24,8 +24,8 @@
         <div id="cart-listings-col" class="col-md-9">
             <app-food-listings [title]="getFoodListingsTitle()" id="food-listings" #foodListings>
                 <ng-container details-modal-footer>
-                    <button type="button" class="btn btn-secondary">Finalize Listing</button>
-                    <button type="button" class="btn btn-secondary">Remove Listing</button>
+                    <button *ngIf="isClaimedCart()" class="btn btn-primary" (click)="unclaimSelectedFoodListing()">Unclaim</button>
+                    <button *ngIf="isDonatedCart()" class="btn btn-primary" (click)="removeSelectedFoodListing()">Remove Donation</button>
                 </ng-container>
             </app-food-listings>
         </div>

@@ -1,5 +1,5 @@
 /**
- * The expected request for the claim food listings operation. Should be sent from the client to the server.
+ * The expected request for the (un)claim food listings operation. Should be sent from the client to the server.
  */
 export class ClaimFoodListingRequest {
 

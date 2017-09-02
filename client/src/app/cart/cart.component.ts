@@ -1,11 +1,13 @@
 import { Component, OnInit, NgModule, Injectable, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { NgbModule, NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from "rxjs/Observable";
 
 import { FoodListing } from "../../../../shared/food-listings/food-listing";
 import { FoodListingsFilters, LISTINGS_STATUS } from "../../../../shared/food-listings/food-listings-filters";
 import { FoodListingsFiltersComponent } from "../food-listings/food-listings-filters/food-listings-filters.component";
 import { FoodListingsComponent } from "../food-listings/food-listings.component";
+import { ClaimFoodListingService } from "../food-listings/claim-food-listing.service";
 import { AuthSessionService } from "../authentication/misc/auth-session.service";
 import { AppUserInfo } from "../../../../shared/authentication/app-user-info";
 
@@ -14,12 +16,10 @@ import { AppUserInfo } from "../../../../shared/authentication/app-user-info";
     selector: 'app-cart',
     templateUrl: './cart.component.html',
     styleUrls: ['./cart.component.css'],
-    providers: [AuthSessionService]
+    providers: [AuthSessionService, ClaimFoodListingService]
 })
 export class CartComponent implements OnInit {
 
-    private setReceiverFlag: boolean;
-    private setDonorFlag: boolean;
     // Need to declare LISTINGS_STATUS enum inside component to be used in the HTML template!
     private readonly LISTINGS_STATUS: typeof LISTINGS_STATUS = LISTINGS_STATUS;
 
@@ -28,7 +28,8 @@ export class CartComponent implements OnInit {
 
 
     constructor(
-        private authSessionService: AuthSessionService
+        private authSessionService: AuthSessionService,
+        private claimFoodListingService: ClaimFoodListingService
     ) { }
 
 
@@ -39,14 +40,12 @@ export class CartComponent implements OnInit {
          *  Retrieves user data from session storage to 
          *  determine initial cart type and mutability of cart type
          */
-        if (appUserInfo.isReceiver && appUserInfo.isDonor) {
-            this.setReceiverAndDonorMode();
+        if (appUserInfo.isReceiver) {
+            // If both receiver and donor, then default to receiver mode!
+            this.foodListingsFiltersComponent.addControl('listingsStatus', new FormControl(LISTINGS_STATUS.myClaimedListings));
         }
         else if (appUserInfo.isDonor) {
-            this.setDonorMode();
-        }
-        else if (appUserInfo.isReceiver) {
-            this.setReceiverMode();
+            this.foodListingsFiltersComponent.addControl('listingsStatus', new FormControl(LISTINGS_STATUS.myDonatedListings));
         }
     }
 
@@ -60,36 +59,53 @@ export class CartComponent implements OnInit {
     }
 
 
-    private setReceiverAndDonorMode(): void {
-        this.setReceiverFlag = true;
-        this.setDonorFlag = true;
-        this.foodListingsFiltersComponent.addControl('listingsStatus', new FormControl(LISTINGS_STATUS.myClaimedListings));
-    }
-
-
-    // Builds cart to display claimed listings
-    private setReceiverMode(): void {
-        // Simple logic to determine button visibility (id: btn-set-claimed)
-        this.setDonorFlag = false;
-        this.setReceiverFlag = true;
-        this.foodListingsFiltersComponent.addControl('listingsStatus', new FormControl(LISTINGS_STATUS.myClaimedListings));
-    }
-
-
-    // Builds cart to display donated listings
-    private setDonorMode(): void {
-        // Simple logic to determine button visibility (id: btn-set-posted)
-        this.setDonorFlag = true;
-        this.setReceiverFlag = false;
-        this.foodListingsFiltersComponent.addControl('listingsStatus', new FormControl(LISTINGS_STATUS.myDonatedListings));
-    }
-
-
     private getFoodListingsTitle(): string {
-        if (this.foodListingsFiltersComponent.getFilterValues().listingsStatus === LISTINGS_STATUS.myClaimedListings) {
+        if (this.isClaimedCart()) {
             return 'Claimed Food';
         }
         return 'Donated Food';
+    }
+
+
+    private isClaimedCart(): boolean {
+        return (this.foodListingsFiltersComponent.getFilterValues().listingsStatus === LISTINGS_STATUS.myClaimedListings);
+    }
+
+
+    private isDonatedCart(): boolean {
+        return (this.foodListingsFiltersComponent.getFilterValues().listingsStatus === LISTINGS_STATUS.myDonatedListings);
+    }
+
+
+    private unclaimSelectedFoodListing(): void {
+        if (confirm('Are you sure you want to unclaim the food?\nThis cannot be undone.')) {
+            let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedFoodListing();
+            let observer: Observable<void> = this.claimFoodListingService.unclaimFoodListing(selectedFoodListing.foodListingKey);
+
+            observer.subscribe(
+                () => {
+                    this.foodListingsComponent.removeSelectedFoodListing();
+                },
+                (err: Error) => {
+                    console.log(err);
+                }
+            );
+        }
+    }
+
+
+    private removeSelectedFoodListing(): void {
+        let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedFoodListing();
+        /*let observer: Observable<void> = this.claimFoodListingService.claimFoodListing(selectedFoodListing.foodListingKey);
+
+        observer.subscribe(
+            () => {
+                this.foodListingsComponent.removeSelectedFoodListing();
+            },
+            (err: Error) => {
+                console.log(err);
+            }
+        );*/
     }
 
 

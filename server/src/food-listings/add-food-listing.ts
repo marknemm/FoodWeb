@@ -54,6 +54,7 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
         });
 }
 
+
 function writeImgToCDN(image: string, imageName: string): Promise<any> {
     return new Promise(function(resolve, reject) {
         // Configure AWS.
@@ -84,6 +85,7 @@ function writeImgToCDN(image: string, imageName: string): Promise<any> {
         });
     });
 }
+
 
 function writeImgToLocalFs(image: string, imageUrl: string): Promise<any> {
     // Strip off the base64 image header.

@@ -16,9 +16,11 @@ import { handleLoginRequest,
          handleSignupRequest,
          handleUpdateAppUserRequest,
          handleSignupVerification } from './authentication/authentication-controller';
-import { handleAddFoodListingRequest,
-         handleGetFoodListingsRequest,
-         handleClaimFoodListingRequest,
+import { handleAddFoodListing,
+         handleRemoveFoodListing,
+         handleGetFoodListings,
+         handleClaimFoodListing,
+         handleUnclaimFoodListing,
          handleGetFoodTypes } from './food-listings/food-listing-controller';
 
 // This is where compiled client ts files will go. We need this to locate index.html!
@@ -58,13 +60,19 @@ app.post('/authentication/updateAppUser', handleUpdateAppUserRequest);
 app.get('/authentication/verify', handleSignupVerification);
 
 // Handle /foodListings/addFoodListing route by passing off to FoodListingController.
-app.post('/foodListings/addFoodListing', handleAddFoodListingRequest);
+app.post('/foodListings/addFoodListing', handleAddFoodListing);
+
+// Handle /foodListings/removeFoodListing route by passing off to FoodListingController.
+app.post('/foodListings/removeFoodListing', handleRemoveFoodListing);
 
 // Handle /foodListings/getFoodListings route by passing off to FoodListingController.
-app.post('/foodListings/getFoodListings', handleGetFoodListingsRequest);
+app.post('/foodListings/getFoodListings', handleGetFoodListings);
 
 // Handle /foodListings/claimFoodListing route by passing off to FoodListingController.
-app.post('/foodListings/claimFoodListing', handleClaimFoodListingRequest);
+app.post('/foodListings/claimFoodListing', handleClaimFoodListing);
+
+// Handle /foodListings/unclaimFoodListing route by passing off to FoodListingController.
+app.post('/foodListings/unclaimFoodListing', handleUnclaimFoodListing);
 
 // Handle /foodListings/getFoodTypes route by passing off to FoodListingController.
 app.get('/foodListings/getFoodTypes', handleGetFoodTypes);

@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { Observable } from "rxjs/Observable";
 
-import { FoodListingsService } from "./food-listings.service";
+import { GetFoodListingsService } from "./get-food-listings.service";
 
 import { FoodListing } from '../../../../shared/food-listings/food-listing';
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
@@ -12,7 +12,7 @@ import { FoodListingsFilters } from "../../../../shared/food-listings/food-listi
     selector: 'app-food-listings',
     templateUrl: './food-listings.component.html',
     styleUrls: ['./food-listings.component.css'],
-    providers: [FoodListingsService]
+    providers: [GetFoodListingsService]
 })
 export class FoodListingsComponent {
 
@@ -25,7 +25,7 @@ export class FoodListingsComponent {
 
     constructor(
         private modalService: NgbModal,
-        private foodListingsService: FoodListingsService
+        private getFoodListingsService: GetFoodListingsService
     ) {
         this.foodListings = new Array<FoodListing>();
         this.selectedFoodListingIndex = null;
@@ -39,7 +39,7 @@ export class FoodListingsComponent {
      * @param filters The filter criteria. 
      */
     public refreshFoodListings(filters: FoodListingsFilters) {
-        let observer: Observable<FoodListing[]> = this.foodListingsService.getFoodListings(filters);
+        let observer: Observable<FoodListing[]> = this.getFoodListingsService.getFoodListings(filters);
 
         observer.subscribe((foodListings: FoodListing[]) => {
             this.foodListings = foodListings as FoodListing[];
