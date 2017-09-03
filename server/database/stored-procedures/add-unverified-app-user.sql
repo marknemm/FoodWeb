@@ -4,16 +4,22 @@ SELECT dropFunction('addUnverifiedAppUser');
 
 CREATE OR REPLACE FUNCTION addUnverifiedAppUser
 (
-_appUserKey  INTEGER,
-_token   CHAR(20)
+    _appUserKey INTEGER
 )
-RETURNS void AS $$
-
+RETURNS CHAR(20) -- The verification token.
+AS $$
+    DECLARE _verificationToken  CHAR(20) = '';
 BEGIN
 
-INSERT INTO UnverifiedAppUser(appUserKey, token)
-VALUES (_appUserkey, _token);
+    -- First, generate a 20 character verification token consisting of upper case letters (for sake of simplicity).
+    FOR counter IN 1..20 LOOP
+        _verificationToken := _verificationToken || chr(ascii('A') + (random() * 26)::integer);
+    END LOOP;
+
+    INSERT INTO UnverifiedAppUser(appUserKey, verificationToken)
+    VALUES (_appUserkey, _verificationToken);
+
+    RETURN _verificationToken;
 
 END;
-
 $$ LANGUAGE plpgsql;

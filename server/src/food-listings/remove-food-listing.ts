@@ -7,6 +7,7 @@
  */
 export function removeFoodListing(foodListingKey: number, donorAppUserKey: number): Promise<void> {
     // TODO.
+    console.log('Remove food lisitng service/model has been invoked on server!');
 
     return Promise.resolve();
 }

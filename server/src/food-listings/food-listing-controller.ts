@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { addFoodListing } from './add-food-listing';
+import { removeFoodListing } from "./remove-food-listing";
 import { getFoodListings } from './get-food-listings';
 import { getFoodTypes } from './get-food-types';
 import { claimFoodListing, unclaimFoodListing } from './claim-food-listing';
@@ -55,7 +56,16 @@ export function handleAddFoodListing(request: Request, response: Response): void
 export function handleRemoveFoodListing(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
 
-    
+    let removeFoodListingRequest: ClaimFoodListingRequest = request.body;
+    let addedByAppUserKey: number = request.session['appUserInfo'].appUserKey;
+
+    let promise: Promise<void> = removeFoodListing(removeFoodListingRequest.foodListingKey, addedByAppUserKey);
+    promise.then(() => {
+        response.send(new FoodWebResponse(true, 'Food listing has been successfully removed.'));
+    })
+    .catch((err: Error) => {
+        response.send(new FoodWebResponse(false, err.message));
+    });
 }
 
 

@@ -162,6 +162,7 @@ $$ LANGUAGE plpgsql;
 -- Test the Stored Procedure here --
 
 
+/*
 SELECT
     FoodListing.foodListingKey,
     ARRAY_AGG(FoodType.foodType) AS foodTypes -- Concatenates the food types into an array { Type1, Type2, ..., TypeN }
@@ -169,8 +170,9 @@ FROM FoodListing
 INNER JOIN FoodListingFoodTypeMap   ON FoodListing.foodListingKey = FoodListingFoodTypeMap.foodListingKey
 INNER JOIN FoodType                 ON FoodListingFoodTypeMap.foodTypeKey = FoodType.foodTypeKey
 GROUP BY FoodListing.foodListingKey;
+*/
 
-SELECT * FROM FoodListingFoodTypeMap;
+--SELECT * FROM FoodListingFoodTypeMap;
 
 --select * FROM getFoodListings(0, 1000);
 

@@ -10,10 +10,8 @@ import { fixNullQueryArgs } from "../database-help/prepared-statement-helper";
 import { Validation } from '../../../shared/common-util/validation';
 import { AppUserInfo } from '../../../shared/authentication/app-user-info';
 
-var randomstring = require('randomstring');
-// var nodemailer = require('nodemailer');
-var nodemailer = require("nodemailer-promise");
-
+let nodemailer = require("nodemailer-promise");
+require('dotenv');
 
 
 /**
@@ -23,6 +21,7 @@ var nodemailer = require("nodemailer-promise");
  * @return A promise that on success will contain the primary AppUser information.
  */
 export function signup(appUserSignupInfo: AppUserInfo, isUpdate: boolean = false): Promise<AppUserInfo> {
+
     // First validate given App User signup info.
     let validationErr: Error = Validation.validateAppUserInfo(appUserSignupInfo);
     if (validationErr != null)  throw validationErr;
@@ -35,44 +34,36 @@ export function signup(appUserSignupInfo: AppUserInfo, isUpdate: boolean = false
     }
 
     return hashPasswordPromise
-        // Generate GPS coordinates.
+        // Generate GPS coordinates if initial signup (not an update).
         .then((hashPass: string) => {
-            // If we are signing up (not updating) or we have an address for update, then get GPS coordinates.
-            if (!isUpdate || appUserSignupInfo.address != null) {
-                return genGPSCoordsAndHashPass(appUserSignupInfo, hashPass);
-            }
-
-            // Else pass along null GPS Coordinates.
-            return {hashPass: hashPass, gpsCoordinates: null};
+            return (!isUpdate || appUserSignupInfo.address != null) ? genGPSCoordsAndHashPass(appUserSignupInfo, hashPass)
+                                                                    : { hashPass: hashPass, gpsCoordinates: null};
         })
         // Add new user into database on signup, or update information on App User update.
         .then(({hashPass, gpsCoordinates}) => {
             return addOrUpdateAppUser(appUserSignupInfo, hashPass, gpsCoordinates, isUpdate);
         })
-        // Handle the results of the add or update.
+        // Handle the results of the add or update (includes sending verification email).
         .then((addOrUpdateResult: QueryResult) => {
-            return handleAddOrUpdateResult(appUserSignupInfo, addOrUpdateResult, isUpdate);
-        })
-        .then((appUserSignupInfo: AppUserInfo)=> {
-            if (!isUpdate) {
-                let token: string = stringTokenGenerator();
-                let userType: string = insertIntoUnverifiedAppUser(appUserSignupInfo, token);
-                if (userType == 'Individual') return sendUserEmail(appUserSignupInfo,token);
-                else return sendOrganizationEmail(appUserSignupInfo,token);
-            }
-            return appUserSignupInfo;
+            return (!isUpdate) ? handleAddResult(appUserSignupInfo, addOrUpdateResult)
+                               : null; // Don't care about result on update!
         })
         .catch((err: Error) => {
             console.log(err);
             // We should have a user friendly error here!
             return Promise.reject(new Error(err.message));
         });
+
 }
 
 
-export function signupVerify(token: String): Promise<QueryResult> {
+/**
+ * Verifies the signup of a user by comparing a verfication token form the client (email link) with the one held in the database.
+ * @param verificationToken The verification token sent from the client which should match up against the token held in the database.
+ */
+export function signupVerify(verificationToken: String): Promise<QueryResult> {
     let queryString: string = 'SELECT * FROM removeUnverifiedAppUser($1)';
-    let queryArgs: Array<any> = [token];
+    let queryArgs: Array<any> = [verificationToken];
 
     return query(queryString, queryArgs);
 
@@ -89,7 +80,7 @@ function genGPSCoordsAndHashPass(appUserSignupInfo: AppUserInfo, hashPass: strin
     return getGPSCoordinates(appUserSignupInfo.address, appUserSignupInfo.city, appUserSignupInfo.state, appUserSignupInfo.zip)
         // Simply map the result to an aggregate of all results so far!
         .then((gpsCoordinates: GPSCoordinates) => {
-            return {hashPass: hashPass, gpsCoordinates: gpsCoordinates};
+            return { hashPass: hashPass, gpsCoordinates: gpsCoordinates };
         });
 }
 
@@ -106,12 +97,8 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
 {
     // Generate query string based off of either signing up or updating App User.
     let queryString: string = 'SELECT * FROM ';
-    let queryString2: string = 'SELECT * FROM ';
     if (isUpdate)   queryString += 'updateAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)';
-    else  {
-        queryString += 'addAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
-        queryString2 += 'addUnverifiedAppUser($1, $2)'
-    }
+    else            queryString += 'addAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
 
     // Generate query args based off of either signing up or updating App User.
     let queryArgs: Array<any> = [ appUserSignupInfo.email,
@@ -129,8 +116,6 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
                                   appUserSignupInfo.isReceiver,
                                   appUserSignupInfo.organizationName ];
     
-    let queryArgs2: Array<any> = [ appUserSignupInfo.appUserKey,
-                                    token ];
     // If an update, then we will need additional appUserKey argument at beginning of list.
     if (isUpdate) queryArgs.unshift(appUserSignupInfo.appUserKey);
                                   
@@ -139,7 +124,7 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
 
     return query(queryString, queryArgs)
         .then((insertQueryResult: QueryResult) => {
-            console.log('Successfully added or updated user in database.');
+            console.log('Successfully ' + (isUpdate ? 'updated' : 'added') + ' user in database.');
             return insertQueryResult;
         })
         .catch((err: Error) => {
@@ -153,57 +138,79 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
 /**
  * Analyzes and handles the result of the insert into AppUser query. Generates the final result of the signup operation.
  * @param appUserSignupInfo The .
- * @param insertQueryResult The result of the insert of the new user into the AppUser table.
+ * @param addResult The result of the insert of the new user into the AppUser table.
  */
-function handleAddOrUpdateResult(appUserSignupInfo: AppUserInfo, addOrUpdateResult: QueryResult, isUpdate: boolean): Promise<AppUserInfo> {
-    if (!isUpdate) {
-        logSqlQueryResult(addOrUpdateResult.rows);
+function handleAddResult(appUserSignupInfo: AppUserInfo, addResult: QueryResult): Promise<AppUserInfo> {
+    logSqlQueryResult(addResult.rows);
 
-        // Success: we got one row back when adding a new App User.
-        if (addOrUpdateResult.rows.length === 1) {
-            let firstRow: any = addOrUpdateResult.rows[0];
-            appUserSignupInfo.appUserKey = firstRow.appuserkey;
-            appUserSignupInfo.organizationKey = firstRow.organizationkey;
-            console.log('The addAppUserSQL function executed successfully.');
-            return Promise.resolve(appUserSignupInfo);
-        }
-        
-        // Fail: we didn't get one row back when adding a new App User.
-        console.log('Incorrect result returned form addAppUser SQL function.');
-        return Promise.reject(new Error('An unexpected error has occured.'));
+    // Success: we got one row back when adding a new App User.
+    if (addResult.rows.length === 1) {
+        let verificationToken = addResult.rows[0].verificationToken;
+        appUserSignupInfo.appUserKey = addResult.rows[0].appuserkey;
+
+        console.log('The addAppUser SQL function executed successfully.');
+        // Now we must send the verification email using the verification token form the results.
+        return sendVerificationEmail(appUserSignupInfo, verificationToken);
+    }
+    
+    // Fail: we didn't get one row back when adding a new App User.
+    console.log('Incorrect result returned form addAppUser SQL function.');
+    return Promise.reject(new Error('An unexpected error has occured.'));
+}
+
+
+/**
+ * Sends a signup verification email to a new user's email.
+ * @param appUserSignupInfo The app user signup information.
+ * @param verificationToken The verification token to be sent via email.
+ */
+function sendVerificationEmail(appUserSignupInfo: AppUserInfo, verificationToken: string): Promise<AppUserInfo> {
+    let isOrganization: boolean = (appUserSignupInfo.organizationName != null);
+
+    if (isOrganization) {
+        return sendOrganizationEmail(appUserSignupInfo, verificationToken);
     }
 
-    // This is an update, and we have no expectations for query return value.
-    return Promise.resolve(null);
+    return sendUserEmail(appUserSignupInfo, verificationToken);
 }
 
 
-function insertIntoUnverifiedAppUser(appUserSignupInfo: AppUserInfo, token: string) : string {
+function sendOrganizationEmail(appUserSignupInfo: AppUserInfo, verificationToken: string) : Promise<AppUserInfo> {
 
-        let queryString: string = 'SELECT * FROM addUnverifiedAppUser($1, $2)';
-        let queryArgs: Array<any> = [ appUserSignupInfo.appUserKey,
-                                      token ];
-        
-        query(queryString, queryArgs);
-
-        if (appUserSignupInfo.organizationKey) {
-            return 'Organization'
-        }
-        else {
-            return 'Individual'
-        }
-
-}
-
-
-function sendUserEmail(appUserSignupInfo: AppUserInfo, token: string) : Promise<AppUserInfo>{
-
-    let verificationLink = 'http://connect-food.herokuapp.com/authentication/verify?token='+token
+    let verificationLink = 'http://connect-food.herokuapp.com/authentication/verify?token='+verificationToken;
 
     let sendEmail = nodemailer.config({
-        email: 'foodweb.noreply@gmail.com',
-        password: 'connect-food!1',
-        server: 'smtp.gmail.com',
+        email: process.env.NOREPLY_EMAIL,
+        password: process.env.NOREPLY_PASSWORD,
+        server: process.env.NOREPLY_SERVER
+    });
+    
+    let mailOptions = {
+        subject: 'A New Organization Has Signed Up With Food Web: Please Verify',            
+        senderName: "Food Web",
+        receiver: 'foodweb.noreply@gmail.com',
+        html: 'Dear User,<br><br>A new organization: '+appUserSignupInfo.organizationName+' has signed up With Food Web!<br><br>Their phone number is '+appUserSignupInfo.phone+' and their email is '+appUserSignupInfo.email+'.<br><br>Please click <a href ="'+verificationLink+'">here</a> to officially verify their account once their identity is validated.<br><br>Thank you,<br><br>The Food Web Team'
+    }
+        
+    return sendEmail(mailOptions)
+        .then((info) => {
+            return Promise.resolve(appUserSignupInfo);
+        })
+        .catch((err) => {
+            return Promise.reject(new Error('Sorry, unable to send signup verification email'));
+        });
+
+}
+
+
+function sendUserEmail(appUserSignupInfo: AppUserInfo, verificationToken: string) : Promise<AppUserInfo> {
+
+    let verificationLink = 'http://connect-food.herokuapp.com/authentication/verify?token='+verificationToken;
+
+    let sendEmail = nodemailer.config({
+        email: process.env.NOREPLY_EMAIL,
+        password: process.env.NOREPLY_PASSWORD,
+        server: process.env.NOREPLY_SERVER
     });
     
 
@@ -212,46 +219,14 @@ function sendUserEmail(appUserSignupInfo: AppUserInfo, token: string) : Promise<
         senderName: "Food Web",
         receiver: appUserSignupInfo.email,
         html: 'Dear User,<br><br>Welcome to Food Web!<br><br>Please click <a href ="'+verificationLink+'">here</a> to verify your account with us.<br><br>Thank you,<br><br>The Food Web Team'
-        };
+    };
 
     return sendEmail(mailOptions)
         .then((info) => {
             return Promise.resolve(appUserSignupInfo);
         })
         .catch((err) => {
-            return Promise.reject(new Error('Sorry, unable to send verification email'));
+            return Promise.reject(new Error('Sorry, unable to send signup verification email'));
        });
 
-}
-
-function sendOrganizationEmail(appUserSignupInfo: AppUserInfo, token: string) : Promise<AppUserInfo>{
-    
-        let verificationLink = 'http://connect-food.herokuapp.com/authentication/verify?token='+token
-    
-        let sendEmail = nodemailer.config({
-            email: 'foodweb.noreply@gmail.com',
-            password: 'connect-food!1',
-            server: 'smtp.gmail.com',
-        });
-        
-        let mailOptions = {
-            subject: 'A New Organization Has Signed Up With Food Web: Please Verify',            
-            senderName: "Food Web",
-            receiver: 'foodweb.noreply@gmail.com',
-            html: 'Dear User,<br><br>A new organization: '+appUserSignupInfo.organizationName+' has signed up With Food Web!<br><br>Their phone number is '+appUserSignupInfo.phone+' and their email is '+appUserSignupInfo.email+'.<br><br>Please click <a href ="'+verificationLink+'">here</a> to officially verify their account once their identity is validated.<br><br>Thank you,<br><br>The Food Web Team'
-        }
-            
-        return sendEmail(mailOptions)
-            .then((info) => {
-                return Promise.resolve(appUserSignupInfo);
-            })
-            .catch((err) => {
-                return Promise.reject(new Error('Sorry, unable to send verification email'));
-           });
-    
-    }
-
-
-function stringTokenGenerator(): string{
-    return randomstring.generate(20);
 }

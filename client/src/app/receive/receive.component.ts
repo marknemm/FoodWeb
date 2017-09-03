@@ -3,7 +3,7 @@ import { Observable } from "rxjs/Observable";
 
 import { FoodListingsComponent } from "../food-listings/food-listings.component";
 import { FoodListingsFiltersComponent } from "../food-listings/food-listings-filters/food-listings-filters.component";
-import { ClaimFoodListingService } from "../food-listings/claim-food-listing.service";
+import { ClaimFoodListingService } from "../food-listings/claim-unclaim-food-listing.service";
 
 import { FoodListing } from "../../../../shared/food-listings/food-listing";
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
@@ -45,7 +45,7 @@ export class ReceiveComponent {
                 // On success, simply remove the Food Listing from the Receiver Food Listings interface.
                 this.foodListingsComponent.removeSelectedFoodListing();
             },
-            (err) => {
+            (err: Error) => {
                 console.log(err);
             }
         );

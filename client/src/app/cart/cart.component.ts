@@ -3,12 +3,14 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { NgbModule, NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from "rxjs/Observable";
 
-import { FoodListing } from "../../../../shared/food-listings/food-listing";
-import { FoodListingsFilters, LISTINGS_STATUS } from "../../../../shared/food-listings/food-listings-filters";
 import { FoodListingsFiltersComponent } from "../food-listings/food-listings-filters/food-listings-filters.component";
 import { FoodListingsComponent } from "../food-listings/food-listings.component";
-import { ClaimFoodListingService } from "../food-listings/claim-food-listing.service";
-import { AuthSessionService } from "../authentication/misc/auth-session.service";
+import { ClaimFoodListingService } from "../food-listings/claim-unclaim-food-listing.service";
+import { AddRemoveFoodListingService } from "../food-listings/add-remove-food-listing.service";
+import { AuthSessionService } from '../authentication/misc/auth-session.service';
+
+import { FoodListing } from "../../../../shared/food-listings/food-listing";
+import { FoodListingsFilters, LISTINGS_STATUS } from "../../../../shared/food-listings/food-listings-filters";
 import { AppUserInfo } from "../../../../shared/authentication/app-user-info";
 
 
@@ -16,12 +18,13 @@ import { AppUserInfo } from "../../../../shared/authentication/app-user-info";
     selector: 'app-cart',
     templateUrl: './cart.component.html',
     styleUrls: ['./cart.component.css'],
-    providers: [AuthSessionService, ClaimFoodListingService]
+    providers: [AuthSessionService, ClaimFoodListingService, AddRemoveFoodListingService]
 })
 export class CartComponent implements OnInit {
 
     // Need to declare LISTINGS_STATUS enum inside component to be used in the HTML template!
     private readonly LISTINGS_STATUS: typeof LISTINGS_STATUS = LISTINGS_STATUS;
+    private isDonorAndReceiver: boolean;
 
     @ViewChild('foodListingsFilters') private foodListingsFiltersComponent: FoodListingsFiltersComponent;
     @ViewChild('foodListings') private foodListingsComponent: FoodListingsComponent;
@@ -29,22 +32,24 @@ export class CartComponent implements OnInit {
 
     constructor(
         private authSessionService: AuthSessionService,
-        private claimFoodListingService: ClaimFoodListingService
+        private claimFoodListingService: ClaimFoodListingService,
+        private addRemoveFoodListingService: AddRemoveFoodListingService
     ) { }
 
 
     ngOnInit() {
-        let appUserInfo: AppUserInfo = this.authSessionService.getAppUserSessionInfo();
+        const appUserInfo: AppUserInfo = this.authSessionService.getAppUserSessionInfo();
 
         /**
          *  Retrieves user data from session storage to 
          *  determine initial cart type and mutability of cart type
          */
+        this.isDonorAndReceiver = (appUserInfo.isReceiver && appUserInfo.isDonor);
         if (appUserInfo.isReceiver) {
             // If both receiver and donor, then default to receiver mode!
             this.foodListingsFiltersComponent.addControl('listingsStatus', new FormControl(LISTINGS_STATUS.myClaimedListings));
-        }
-        else if (appUserInfo.isDonor) {
+        } 
+        else {
             this.foodListingsFiltersComponent.addControl('listingsStatus', new FormControl(LISTINGS_STATUS.myDonatedListings));
         }
     }
@@ -60,10 +65,8 @@ export class CartComponent implements OnInit {
 
 
     private getFoodListingsTitle(): string {
-        if (this.isClaimedCart()) {
-            return 'Claimed Food';
-        }
-        return 'Donated Food';
+        return (this.isClaimedCart() ? 'Claimed Food'
+                                     : 'Donated Food');
     }
 
 
@@ -96,7 +99,7 @@ export class CartComponent implements OnInit {
 
     private removeSelectedFoodListing(): void {
         let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedFoodListing();
-        /*let observer: Observable<void> = this.claimFoodListingService.claimFoodListing(selectedFoodListing.foodListingKey);
+        let observer: Observable<void> = this.addRemoveFoodListingService.removeFoodListing(selectedFoodListing.foodListingKey);
 
         observer.subscribe(
             () => {
@@ -105,7 +108,7 @@ export class CartComponent implements OnInit {
             (err: Error) => {
                 console.log(err);
             }
-        );*/
+        );
     }
 
 

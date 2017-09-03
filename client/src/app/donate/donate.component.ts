@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ImageCropperComponent, CropperSettings } from 'ng2-img-cropper';
 
-import { DonateService } from "./donate.service";
+import { AddRemoveFoodListingService } from "../food-listings/add-remove-food-listing.service";
 import { DateFormatterPipe } from "../common-util/date-formatter.pipe"
 
 import { FoodTypesComponent } from "../food-listings/food-types/food-types.component";
@@ -15,7 +15,7 @@ import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
     moduleId: module.id,
     selector: 'app-donate',
     templateUrl: 'donate.component.html',
-    providers: [DonateService],
+    providers: [AddRemoveFoodListingService],
     styleUrls: ['donate.component.css']
 })
 export class DonateComponent implements OnInit {
@@ -31,7 +31,7 @@ export class DonateComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private donateService: DonateService,
+        private addRemoveFoodListingService: AddRemoveFoodListingService,
         private dateFormatter: DateFormatterPipe
     ) {
         // Want to force validators to process on submit. Non-text fields will only validate on submit too!
@@ -66,7 +66,7 @@ export class DonateComponent implements OnInit {
         value.foodTypes = this.foodTypesComponent.getSelectedFoodTypes();
 
         if (valid) {
-            let observer = this.donateService.addFoodListing(value, this.image);
+            let observer = this.addRemoveFoodListingService.addFoodListing(value, this.image);
             observer.subscribe(
                 (valueKey: number) => {
                     // TODO: Add functionality for edit of added food listing using the returned key!

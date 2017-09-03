@@ -2,7 +2,7 @@
     <div id="cart-row" class="row" style="padding-top:2vh">
         <div class="col-md-3" id="filters">
             <app-food-listings-filters title="Cart Filters" [formGroup]="foodListingsFiltersComponent.filtersForm" id="food-listings-filters" #foodListingsFilters>
-                <ng-container *ngIf="setReceiverFlag && setDonorFlag" top>
+                <ng-container *ngIf="isDonorAndReceiver" top>
                     <h4>Listings Status:</h4>
                     <div class="form-group">
                         <label for="claims">
