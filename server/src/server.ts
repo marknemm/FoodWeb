@@ -4,6 +4,7 @@ var session = require('express-session');
 var http = require('http');
 var bodyParser = require('body-parser');
 const path = require('path');
+var email = require('emailjs');
 
 // Set global root directory variable and configure .env path.
 global['rootDir'] = __dirname + '/../../../../';
@@ -15,7 +16,8 @@ import { handleLoginRequest,
          handleReAuthenticateRequest,
          handleSignupRequest,
          handleUpdateAppUserRequest,
-         handleSignupVerification } from './authentication/authentication-controller';
+         handleSignupVerification,
+         /*sendMail*/ } from './authentication/authentication-controller';
 import { handleAddFoodListingRequest,
          handleGetFoodListingsRequest,
          handleClaimFoodListingRequest,
@@ -68,6 +70,9 @@ app.post('/foodListings/claimFoodListing', handleClaimFoodListingRequest);
 
 // Handle /foodListings/getFoodTypes route by passing off to FoodListingController.
 app.get('/foodListings/getFoodTypes', handleGetFoodTypes);
+
+//Handle /authentication/passwordRecovery route by passing off to AuthenticationController.
+//app.post('/authentication/passwordRecovery', sendMail);
 
 
 app.get('/public/*', function(request, response) {
