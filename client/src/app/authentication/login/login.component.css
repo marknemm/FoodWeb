@@ -32,9 +32,20 @@ div.input {
 	display: block;
 	height: 25px;
 	width: 25px;
-	border-radius: 50%;
-	background-color: red;
-	border: 1px solid red;
+    font-weight: bold;
+    font-size: 40px;
+    margin: 0px;
+    padding: 0px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;;
+    -webkit-transition: -webkit-transform .8s ease-in-out;
+    transition: transform .8s ease-in-out;
+}
+
+.close:hover {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 #loginErr {

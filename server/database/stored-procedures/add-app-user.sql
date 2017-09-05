@@ -66,9 +66,7 @@ BEGIN
     END IF;
 
     -- Add the new user to table of unverified app users (needs email verification) and grab generated verification token for email.
-    SELECT verificationToken
-    INTO _verificationToken
-    FROM addUnverifiedAppUser (_appUserKey);
+    _verificationToken := (SELECT * FROM addUnverifiedAppUser (_appUserKey));
 
     RETURN QUERY
     SELECT _appUserKey, _verificationToken;
@@ -76,7 +74,5 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-/*
-SELECT addAppUser('testemail1@test.com', 'testPass', 'testLast', 'testFirst', '11 test rd.',
-                  43.123456, 83.33, 'Test City', 'NY', 12345, '777-777-7777', true, true);
-*/
+/*SELECT addAppUser('testemail1@test.com', 'testPass', 'testLast', 'testFirst', '11 test rd.',
+                  43.123456, 83.33, 'Test City', 'NY', 12345, '777-777-7777', true, true);*/

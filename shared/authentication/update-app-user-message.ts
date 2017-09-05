@@ -7,7 +7,8 @@ import { AppUserInfo } from './app-user-info';
 export class UpdateAppUserRequest {
     
     constructor(
-        public appUserUpdateInfo: AppUserInfo,
+        public appUserUpdateInfo?: AppUserInfo,
+        public newPassword?: string,
         public currentPassword?: string
     ) { }
 }

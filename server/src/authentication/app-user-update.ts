@@ -2,37 +2,38 @@ import { logSqlQueryExec, logSqlQueryResult } from "../logging/sql-logger";
 import { query, QueryResult } from "../database-help/connection-pool";
 import { login } from './app-user-login';
 import { signup } from './app-user-signup';
+import { SessionData, AppUserInfo } from "./session-data";
 
-import { AppUserInfo } from '../../../shared/authentication/app-user-info';
 import { Validation } from "../../../shared/common-util/validation";
 
 
 /**
  * Performs the update of the App User associated with the held session data.
  * @param appUserUpdateInfo The update information for the App User.
- * @param appUserSessionInfo The session info for the App User. Contains the current email and address info of the App User.
- * @param currentPassword The current password of the App User (to be checked if provided from the client).
+ * @param newPassword The new password for the App User. May be null if the password is not changing.
+ * @param currentPasswordCheck The current password of the App User (to be checked if provided from the client).
+ * @param appUserSessionData The session data for the App User. Contains the current email and address info of the App User.
  * @return A promise without a payload. If it resolves, then the update was successful.
  */
-export function updateAppUser(appUserUpdateInfo: AppUserInfo, appUserSessionInfo: AppUserInfo, currentPassword: string): Promise<void> {
+export function updateAppUser(appUserUpdateInfo: AppUserInfo, newPassword: string, currentPasswordCheck: string, appUserSessionData: SessionData): Promise<void> {
     // Make sure that update information is in a correct format.
-    let validationErr: Error = Validation.validateAppUserInfo(appUserUpdateInfo);
+    let validationErr: Error = Validation.validateAppUserInfo(appUserUpdateInfo, newPassword);
     if (validationErr != null)  throw validationErr;
     
     // Check the current password if provided by user (when updating password).
     let passwordCheckPromise: Promise<void> = Promise.resolve();
-    if (currentPassword != null) {
-        passwordCheckPromise = checkPassword(appUserSessionInfo.email, currentPassword);
+    if (currentPasswordCheck != null) {
+        passwordCheckPromise = checkPassword(appUserSessionData.appUserInfo.email, currentPasswordCheck);
     }
 
     // Check if this is an address field(s) update, and fill any null address field(s) with session data for new GPS coordinates.
     if (isAddressInfoUpdate(appUserUpdateInfo)) {
-        fillAddressUpdateInfo(appUserUpdateInfo, appUserSessionInfo);
+        fillAddressUpdateInfo(appUserUpdateInfo, appUserSessionData.appUserInfo);
     }
 
     return passwordCheckPromise
         .then(() => {
-            return performDatabaseUpdate(appUserUpdateInfo);
+            return performDatabaseUpdate(appUserUpdateInfo, newPassword, appUserSessionData.appUserKey);
         })
         .catch((err: Error) => {
             console.log(err);
@@ -85,8 +86,14 @@ function fillAddressUpdateInfo(appUserUpdateInfo: AppUserInfo, appUserSessionInf
 }
 
 
-function performDatabaseUpdate(appUserUpdateInfo: AppUserInfo): Promise<void> {
-    return signup(appUserUpdateInfo, true)
+/**
+ * Performs the actual update in the database.
+ * @param appUserUpdateInfo The app user update information.
+ * @param newPassword The new password for the app user.
+ * @param appUserUpdateKey The key identifier of the app user to be updated.
+ */
+function performDatabaseUpdate(appUserUpdateInfo: AppUserInfo, newPassword: string, appUserUpdateKey: number): Promise<void> {
+    return signup(appUserUpdateInfo, newPassword, appUserUpdateKey)
         .then(() => {
             console.log('App User update successful.');
             return Promise.resolve();

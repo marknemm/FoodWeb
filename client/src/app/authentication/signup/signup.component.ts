@@ -15,6 +15,7 @@ import { FoodWebResponse } from "../../../../../shared/message-protocol/food-web
 export class SignupComponent implements OnInit {
 
     private appUserSignupInfo: AppUserInfo;
+    private password: string;
     private stateList: string[];
     private signupError: string;
     private signupComplete: boolean;
@@ -48,7 +49,7 @@ export class SignupComponent implements OnInit {
     private signupUser(event: Event): void {
         event.preventDefault();
 
-        var observer = this.signupService.signup(this.appUserSignupInfo);
+        var observer = this.signupService.signup(this.appUserSignupInfo, this.password);
         observer.subscribe(
             // When we have no errors connecting to server.
             (signupResponse: FoodWebResponse) => {

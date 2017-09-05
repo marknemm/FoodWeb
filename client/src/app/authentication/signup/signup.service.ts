@@ -16,12 +16,12 @@ export class SignupService {
         private authSessionService: AuthSessionService
     ) { }
 
-    signup(appUserSignupInfo: AppUserInfo) {
+    signup(appUserSignupInfo: AppUserInfo, password: string) {
         var headers = new Headers({
             'Content-Type': 'application/json'
         });
 
-        var observer: Observable<Response> = this.http.post('/authentication/signup', new SignupRequest(appUserSignupInfo), { headers: headers })
+        var observer: Observable<Response> = this.http.post('/authentication/signup', new SignupRequest(appUserSignupInfo, password), { headers: headers })
         return observer.map((response: Response): FoodWebResponse => {
             let signupResponse: FoodWebResponse = response.json();
             console.log(signupResponse.message);

@@ -3,7 +3,7 @@
  *  We may be able to get data from an online database for this in the future...
  */
 
---DROP TABLE FoodType CASCADE;
+DROP TABLE FoodType CASCADE;
 CREATE TABLE IF NOT EXISTS FoodType
 (
     foodTypeKey SERIAL PRIMARY KEY

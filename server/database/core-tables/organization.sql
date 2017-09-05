@@ -1,6 +1,6 @@
 -- Table for holding basic Organization Info.
 
---DROP TABLE Organization CASCADE;
+DROP TABLE Organization CASCADE;
 CREATE TABLE IF NOT EXISTS Organization
 (
     organizationKey SERIAL PRIMARY KEY

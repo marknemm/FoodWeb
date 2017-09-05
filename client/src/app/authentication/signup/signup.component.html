@@ -57,56 +57,58 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="email">{{emailLabel}}:</label>
-                        <input type="email" id="email" name="email" class="form-control" [(ngModel)]="appUserSignupInfo.email" required autocomplete="on">
+                        <label for="username">{{emailLabel}}:</label>
+                        <input type="email" id="email" name="username" class="form-control" [(ngModel)]="appUserSignupInfo.email" required autocomplete="on">
                     </div>
 
                     <div class="form-group">
                         <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" class="form-control" [(ngModel)]="appUserSignupInfo.password" required>
+                        <input type="password" id="password" name="password" class="form-control" [(ngModel)]="password" required>
                     </div>
 
                     <div *ngIf="isBusiness" class="form-group">
                         <label for="organization-name">Organization Name:</label>
-                        <input type="text" id="organization-name" name="organization-name" class="form-control" [(ngModel)]="appUserSignupInfo.organizationName" required autofocus autocomplete="on">
+                        <input type="text" id="organization-name" name="organization-name" class="form-control" [(ngModel)]="appUserSignupInfo.organizationName"
+                         required autocomplete="on">
                     </div>
 
                     <div class="form-group">
-                        <label for="first-name">{{firstNameLabel}}:</label>
-                        <input type="text" id="first-name" name="first-name" class="form-control" [(ngModel)]="appUserSignupInfo.firstName" required autofocus autocomplete="on">
+                        <label for="fname">{{firstNameLabel}}:</label>
+                        <input type="text" id="first-name" name="fname" class="form-control" [(ngModel)]="appUserSignupInfo.firstName" required autocomplete="on">
                     </div>
 
                     <div class="form-group">
-                        <label for="last-name">{{lastNameLabel}}:</label>
-                        <input type="text" id="last-name" name="last-name" class="form-control" [(ngModel)]="appUserSignupInfo.lastName" required autocomplete="on">
+                        <label for="lname">{{lastNameLabel}}:</label>
+                        <input type="text" id="last-name" name="lname" class="form-control" [(ngModel)]="appUserSignupInfo.lastName" required autocomplete="on">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="address">Street Address:</label>
-                        <input type="text" id="address" name="address" class="form-control" [(ngModel)]="appUserSignupInfo.address" required>
+                        <input type="text" id="address" name="address" class="form-control" [(ngModel)]="appUserSignupInfo.address" required autocomplete="on">
                     </div>
 
                     <div class="form-group">
                         <label for="city">City:</label>
-                        <input type="text" id="city" name="city" class="form-control" [(ngModel)]="appUserSignupInfo.city" required>
+                        <input type="text" id="city" name="city" class="form-control" [(ngModel)]="appUserSignupInfo.city" required autocomplete="on">
                     </div>
 
                     <div class="form-group">
                         <label for="state">State:</label>
-                        <select id="state" name="state" class="form-control" [(ngModel)]="appUserSignupInfo.state">
+                        <select id="state" name="state" class="form-control" [(ngModel)]="appUserSignupInfo.state" autocomplete="on">
                             <option *ngFor="let state of stateList" [value]="state">{{state}} </option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="zip">ZIP Code:</label>
-                        <input type="text" id="zip" name="zip" class="form-control" maxlength="5" [(ngModel)]="appUserSignupInfo.zip" required>
+                        <input type="text" id="zip" name="zip" class="form-control" maxlength="5" [(ngModel)]="appUserSignupInfo.zip" required autocomplete="on">
                     </div>
                     
                     <div class="form-group">
                         <label for="phone">Phone Number:</label>
-                        <input type="text" id="phone" name="phone" class="form-control" [(ngModel)]="appUserSignupInfo.phone" minlength="12" maxlength="12" placeholder="xxx-xxx-xxxx" required>
+                        <input type="text" id="phone" name="phone" class="form-control" [(ngModel)]="appUserSignupInfo.phone"
+                         minlength="12" maxlength="12" placeholder="xxx-xxx-xxxx" required autocomplete="on">
                     </div>
                 </div>
 

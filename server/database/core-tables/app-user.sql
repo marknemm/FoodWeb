@@ -1,5 +1,5 @@
 -- USER table for basic application info such as login and contact data.
---DROP TABLE AppUser CASCADE;
+DROP TABLE AppUser CASCADE;
 CREATE TABLE IF NOT EXISTS AppUser
 (
     appUserKey SERIAL PRIMARY KEY

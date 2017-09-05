@@ -16,7 +16,7 @@ psql --set=sslmode=require -h %server% -p %port% -d %database% -U %username% ^
     -f core-tables\food-listing-food-type-map.sql ^
     -f stored-procedures\drop-function.sql ^
     -f stored-procedures\add-unverified-app-user.sql ^
-    -f stored-procedures\remove-unverified-app-user.sql ^
+    -f stored-procedures\verify-app-user.sql ^
     -f stored-procedures\add-contact-info.sql ^
     -f stored-procedures\add-app-user.sql ^
     -f stored-procedures\get-app-user-info.sql ^

@@ -66,16 +66,17 @@ export class Validation {
 
 
     /**
-     * Validates given app user information.
+     * Validates given app user information and password.
      * @param appUserInfo The app user info to validate.
+     * @param password The password to validate.
      * @return On successful validation, null. On unsuccess, then an error is returned.
      */
-    public static validateAppUserInfo(appUserInfo: AppUserInfo): Error {
+    public static validateAppUserInfo(appUserInfo: AppUserInfo, password: string): Error {
         if (appUserInfo.email != null && !Validation.emailValidator(appUserInfo.email)) {
             return new Error('Provided email not in correct format.');
         }
 
-        if (appUserInfo.password != null && !Validation.passwordValidator(appUserInfo.password)) {
+        if (password != null && !Validation.passwordValidator(password)) {
             return new Error('Incorrect password format. Password must contain a minimum of 6 characters and at least one number');
         }
 

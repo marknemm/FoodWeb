@@ -68,7 +68,6 @@ export class AppUserInfoComponent {
                 // Add additional needed validators for email and password fields.
                 switch(property) {
                     case 'email':       validators.push(Validators.email);                                  break;
-                    case 'password':    validators.push(Validators.pattern(Validation.PASSWORD_REGEX));     break;
                     case 'zip':         validators.push(Validators.pattern(Validation.ZIP_REGEX));          break;
                     case 'phone':       validators.push(Validators.pattern(Validation.PHONE_REGEX));        break;
                 }
@@ -80,10 +79,11 @@ export class AppUserInfoComponent {
         }
 
         // Initialize form with elements that are not part of AppUserInfo object.
+        this.appUserInfoForm.addControl('password', new FormControl('', [Validators.pattern(Validation.PASSWORD_REGEX)]));
         this.appUserInfoForm.addControl('currentPassword', new FormControl('', [Validators.required, Validators.pattern(Validation.PASSWORD_REGEX),
-                                                                                this.passwordConfirmed.bind(this)]));                                                                                
+                                                                                this.passwordConfirmed.bind(this)]));
         this.appUserInfoForm.addControl('confirmPassword', new FormControl('', [Validators.required, Validators.pattern(Validation.PASSWORD_REGEX),
-                                                                                this.passwordConfirmed.bind(this)]))
+                                                                                this.passwordConfirmed.bind(this)]));
     }
 
 
@@ -136,24 +136,28 @@ export class AppUserInfoComponent {
         this.forceValidation(saveFormControl);
 
         if (this.isValid(saveFormControl)) {
-            // Only send entry that is being saved to the server.
             let appUserInfoUpdate: AppUserInfo = new AppUserInfo();
-            appUserInfoUpdate[saveFormControlName] = saveFormControl.value;
 
             // Grab current password entered by user if this is a password update.
+            let newPassword: string = null;
             let currentPassword: string = null;
-            if (appUserInfoUpdate.password != null) {
+            if (saveFormControlName === 'password') {
+                newPassword = saveFormControl.value;
                 currentPassword = this.controls.currentPassword.value;
+            }
+            else {
+                // Only send entry that is being saved to the server. AppUserInfo field will have same name as corresponding view model form control!
+                appUserInfoUpdate[saveFormControlName] = saveFormControl.value;
             }
 
             // Send save field update to server and listen for response.
-            let observable: Observable<FoodWebResponse> = this.appUserUpdateService.updateAppUserInfo(appUserInfoUpdate, currentPassword);
+            let observable: Observable<FoodWebResponse> = this.appUserUpdateService.updateAppUserInfo(appUserInfoUpdate, newPassword, currentPassword);
             this.busySaveConfig.busy = observable.subscribe((response: FoodWebResponse) => {
-                if (!response.success) {
-                    console.log(response.message);
+                if (response.success) {
+                    this.editFlags.set(saveFormControlName, false); // Set edit off for this valid field.
                 }
                 else {
-                    this.editFlags.set(saveFormControlName, false); // Set edit off for this valid field.
+                    console.log(response.message);
                 }
             });
         }

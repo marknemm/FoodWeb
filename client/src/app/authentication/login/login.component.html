@@ -7,12 +7,12 @@
 		<div class="modal-body">
 			<form ngNativeValidate (submit)="loginUser($event)">
 				<div class="input">
-					<label>Username</label>
-					<input name="Username" [(ngModel)]="loginModel.username" type="text" required autofocus>
+					<label for="username">Email</label>
+					<input name="username" [(ngModel)]="loginModel.username" type="text" required autofocus autocomplete="on">
 				</div>
 				<div class="input">
-					<label>Password</label>
-					<input name="Password" [(ngModel)]="loginModel.password" type="password" required>
+					<label for="password">Password</label>
+					<input name="password" [(ngModel)]="loginModel.password" type="password" required autocomplete="on">
 				</div>
 				<div class="input">
 					<input type="submit" value="Login">

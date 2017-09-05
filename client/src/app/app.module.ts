@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, Injectable } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { HttpModule } from '@angular/http'
@@ -8,8 +9,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
 import { ImageCropperComponent } from 'ng2-img-cropper';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BusyModule } from 'angular2-busy';
+
+import { PasswordModule } from 'primeng/primeng';
+import { InputMaskModule } from 'primeng/primeng';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -107,12 +110,14 @@ const appRoutes: Routes = [
         NgbModule.forRoot(),
         RouterModule.forRoot(appRoutes),
         BrowserModule,
+        BrowserAnimationsModule,
         BootstrapModalModule,
         HttpModule,
         FormsModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule,
-        BusyModule
+        BusyModule,
+        PasswordModule,
+        InputMaskModule
     ],
     entryComponents: [
         LoginComponent
@@ -126,6 +131,5 @@ const appRoutes: Routes = [
         AuthSessionService,
         FoodTypesService
     ]
-
 })
 export class AppModule { }

@@ -4,12 +4,7 @@
 export class AppUserInfo {
     
     constructor(
-        public appUserKey?: number,
         public email?: string,
-        /**
-         * Contains sensitive password data. Should NEVER be sent from server to client. ONLY should be sent from client to server.
-         */
-        public password?: string,
         public lastName?: string,
         public firstName?: string,
         public address?: string,
