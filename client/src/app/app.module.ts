@@ -11,9 +11,6 @@ import { AgmCoreModule } from '@agm/core';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { BusyModule } from 'angular2-busy';
 
-import { PasswordModule } from 'primeng/primeng';
-import { InputMaskModule } from 'primeng/primeng';
-
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
@@ -115,9 +112,7 @@ const appRoutes: Routes = [
         HttpModule,
         FormsModule,
         ReactiveFormsModule,
-        BusyModule,
-        PasswordModule,
-        InputMaskModule
+        BusyModule
     ],
     entryComponents: [
         LoginComponent
