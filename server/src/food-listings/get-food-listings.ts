@@ -2,18 +2,19 @@
 import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
 import { fixNullQueryArgs, toPostgresArray } from '../database-help/prepared-statement-helper';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
-import { FoodListingsFilters, NgbDateStruct } from '../../../shared/food-listings/food-listings-filters';
+import { FoodListingsFilters, NgbDateStruct, LISTINGS_STATUS } from '../../../shared/food-listings/food-listings-filters';
 import { FoodListing } from "../../../shared/food-listings/food-listing";
 
 
-export function getFoodListing(filters: FoodListingsFilters, donatedByAppUserKey: number, claimedByAppUserKey: number): Promise<Array<FoodListing>> {
+export function getFoodListings(filters: FoodListingsFilters, donatedByAppUserKey: number, claimedByAppUserKey: number): Promise<Array<FoodListing>> {
     let perishableArg: boolean = generatePerishabilityArg(filters.perishable, filters.notPerishable);
     let foodTypesArg: string = toPostgresArray(filters.foodTypes);
     let expireDateArg: string = generateExpireDateArg(filters.earliestExpireDate);
    
     // Build our prepared statement.
     let queryString: string = 'SELECT * FROM getFoodListings($1, $2, null, $3, $4, $5, $6, $7, $8);';
-    let queryArgs: Array<any> = [ filters.retrievalOffset, filters.retrievalAmount, filters.unclaimedOnly, foodTypesArg,
+    let queryArgs: Array<any> = [ filters.retrievalOffset, filters.retrievalAmount,
+                                  (filters.listingsStatus === LISTINGS_STATUS.unclaimedListings), foodTypesArg,
                                   perishableArg, expireDateArg, donatedByAppUserKey, claimedByAppUserKey ];
 
     // Replace any NULL query arguments with literals in query string.
@@ -33,6 +34,7 @@ export function getFoodListing(filters: FoodListingsFilters, donatedByAppUserKey
         });
 }
 
+
 function generatePerishabilityArg(perishable: boolean, notPerishable: boolean): boolean {
     // If exactly one filter is only active, then we apply filter.
     let notBoth = !(perishable && notPerishable);
@@ -43,9 +45,13 @@ function generatePerishabilityArg(perishable: boolean, notPerishable: boolean): 
     return null;
 }
 
+
 function generateExpireDateArg(minExpireAfterDays: NgbDateStruct): string {
+    if (minExpireAfterDays == null)  return null;
+
     return (minExpireAfterDays.month + '/' + minExpireAfterDays.day + '/' + minExpireAfterDays.year);
 }
+
 
 function generateResultArray(rows: Array<any>): Array<FoodListing> {
     let result: Array<FoodListing> = [];

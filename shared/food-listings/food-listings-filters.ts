@@ -1,10 +1,23 @@
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 export { NgbDateStruct };
 
+
+/**
+ * An emumeration of different food listing statuses to filter on.
+ */
+export enum LISTINGS_STATUS {
+    unclaimedListings,
+    myClaimedListings,
+    myDonatedListings
+};
+
+
 /**
  * A basic container for Food Listing filter data that may be sent to/from the server/client.
  */
 export class FoodListingsFilters {
+
+
     constructor(
         /**
          * Determines what food types the results should contain.
@@ -35,16 +48,8 @@ export class FoodListingsFilters {
          */
         public retrievalAmount?: number,
         /**
-         * Determines if we should only be bringing back unclaimed food listings.
+         * Determines what food listings we should bring back based off of their status (unclaimed, claimed, or donated relative to the current user).
          */
-        public unclaimedOnly?: boolean,
-        /**
-         * Determines if only claimed listings should be shown
-         */
-        public myClaimedListings?: boolean,
-        /**
-         * Determines if only donated listings should be shown
-         */
-        public myDonatedListings?: boolean
+        public listingsStatus: LISTINGS_STATUS = LISTINGS_STATUS.unclaimedListings
     ) { }
 }

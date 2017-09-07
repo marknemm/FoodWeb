@@ -21,9 +21,6 @@ CREATE OR REPLACE FUNCTION updateAppUser
 )
 RETURNS VOID
 AS $$
-    DECLARE _contactInfoKey     INTEGER;
-    DECLARE _organizationKey    INTEGER;
-    DECLARE _appUserPasswordKey INTEGER;
 BEGIN
 
     -- Permorm the update on the AppUser table fields and get keys to related tables that may need updating.
@@ -33,9 +30,7 @@ BEGIN
         firstName   = COALESCE(_firstName, firstName),
         isDonor     = COALESCE(_isDonor, isDonor),
         isReceiver  = COALESCE(_isReceiver, isReceiver)
-    WHERE appUserKey = _appUserKey
-    RETURNING contactInfoKey, organizationKey, appUserPasswordKey
-    INTO _contactInfoKey, _organizationKey, _appUserPasswordKey;
+    WHERE appUserKey = _appUserKey;
 
     -- Update any ContactInfo fields related to AppUser being updated.
     UPDATE ContactInfo
@@ -46,24 +41,21 @@ BEGIN
         state               = COALESCE(_state, state),
         zip                 = COALESCE(_zip, zip),
         phone               = COALESCE(_phone, phone)
-    WHERE contactInfoKey = _contactInfoKey;
+    WHERE appUserKey = _appUserKey;
 
     -- Update any Organization fields related to AppUser being updated.
     IF (_organizationName IS NOT NULL)
     THEN
         UPDATE Organization
         SET name = _organizationName
-        WHERE organizationKey = _organizationKey;
+        WHERE appUserKey = _appUserKey;
     END IF;
 
-    -- Update password related to AppUser being updated.
+    -- Update password related to AppUser being updated. We keep track of all old passwords, so this is an insert!
     IF (_password IS NOT NULL)
     THEN
-        UPDATE AppUserPassword
-        SET password = _password,
-            lastModDate = CURRENT_TIMESTAMP,
-            expireDate = CURRENT_TIMESTAMP + INTERVAL '60' DAY
-        WHERE appUserPasswordKey = _appUserPasswordKey;
+        INSERT INTO AppUserPassword (appUserKey, password)
+        VALUES (_appUserKey, _password);
     END IF;
     
 END;

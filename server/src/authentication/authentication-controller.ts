@@ -6,12 +6,11 @@ import { signup, signupVerify } from './app-user-signup';
 import { updateAppUser } from './app-user-update';
 import { QueryResult } from 'pg';
 
-
-import { AppUserInfo } from '../../../shared/authentication/app-user-info';
 import { FoodWebResponse } from "../../../shared/message-protocol/food-web-response";
 import { LoginRequest, LoginResponse } from '../../../shared/authentication/login-message';
 import { SignupRequest } from '../../../shared/authentication/signup-message';
 import { UpdateAppUserRequest } from '../../../shared/authentication/update-app-user-message';
+import { SessionData, AppUserInfo } from "./session-data";
 
 
 /**
@@ -21,9 +20,10 @@ import { UpdateAppUserRequest } from '../../../shared/authentication/update-app-
  */
 export function handleReAuthenticateRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
+    let sessionData: SessionData = request.session['sessionData'];
 
-    if (request.session['appUserInfo'] != null) {
-        response.send(new LoginResponse(request.session['appUserInfo'], true, 'Logged in'));
+    if (sessionData != null) {
+        response.send(new LoginResponse(sessionData.appUserInfo, true, 'Logged in'));
     }
     else {
         response.send(new LoginResponse(null, false, 'Not logged in'));
@@ -39,11 +39,11 @@ export function handleReAuthenticateRequest(request: Request, response: Response
 export function handleLoginRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
     let loginRequest: LoginRequest = request.body;
-    let promise: Promise<AppUserInfo> = login(loginRequest.email, loginRequest.password);
+    let promise: Promise<SessionData> = login(loginRequest.email, loginRequest.password);
 
-    promise.then((appUserInfo: AppUserInfo) => {
-        request.session['appUserInfo'] = appUserInfo;
-        response.send(new LoginResponse(appUserInfo, true, 'Login successful'));
+    promise.then((sessionData: SessionData) => {
+        request.session['sessionData'] = sessionData;
+        response.send(new LoginResponse(sessionData.appUserInfo, true, 'Login successful'));
     })
     .catch((err: Error) => {
         response.send(new LoginResponse(null, false, err.message));
@@ -73,10 +73,10 @@ export function handleLogoutRequest(request: Request, response: Response): void 
 export function handleSignupRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
     let signupRequest: SignupRequest = request.body;
-    let promise: Promise<AppUserInfo> = signup(signupRequest.appUserInfo);
+    let promise: Promise<SessionData> = signup(signupRequest.appUserInfo, signupRequest.password);
 
-    promise.then((appUserInfo: AppUserInfo) => {
-        request.session['appUserInfo'] = appUserInfo;
+    promise.then((sessionData: SessionData) => {
+        request.session['sessionData'] = sessionData;
         response.send(new FoodWebResponse(true, 'Signup successful'));
     })
     .catch((err: Error) => {
@@ -94,17 +94,19 @@ export function handleUpdateAppUserRequest(request: Request, response: Response)
     response.setHeader('Content-Type', 'application/json');
 
     // Only process if the user is logged in.
-    if (request.session['appUserInfo'] != null) {
+    if (request.session['sessionData'] != null) {
         let updateAppUserRequest: UpdateAppUserRequest = request.body;
         let appUserUpdateInfo: AppUserInfo = updateAppUserRequest.appUserUpdateInfo;
-        appUserUpdateInfo.appUserKey = request.session['appUserInfo'].appUserKey;
-        let promise: Promise<void> = updateAppUser(appUserUpdateInfo, request.session['appUserInfo'], updateAppUserRequest.currentPassword);
+        let sessionData: SessionData = request.session['sessionData'];
+        let newPassword: string = updateAppUserRequest.newPassword;
+        let currentPassword: string = updateAppUserRequest.currentPassword;
+        let promise: Promise<void> = updateAppUser(appUserUpdateInfo, newPassword, currentPassword, sessionData);
 
         promise.then(() => {
             // Iterate through appUserUpdateInfo fields and update session info for all non-null values.
             for (let field in appUserUpdateInfo) {
                 if (appUserUpdateInfo.hasOwnProperty(field) && appUserUpdateInfo[field] != null) {
-                    request.session['appUserInfo'][field] = appUserUpdateInfo[field];
+                    sessionData.appUserInfo[field] = appUserUpdateInfo[field];
                 }
             }
 
@@ -121,21 +123,30 @@ export function handleUpdateAppUserRequest(request: Request, response: Response)
 }
 
 
+/**
+ * Handles the signup verification for a given user.
+ * @param request The request from the client. Should contain verification token.
+ * @param response The response to send back to the client.
+ */
 export function handleSignupVerification(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
-    let token: string = request.query.token;
-    let promise: Promise<QueryResult> = signupVerify(token);
+    let appUserKey: number = parseInt(request.query.appUserKey);
+    let verificationToken: string = request.query.verificationToken;
+    let promise: Promise<void> = signupVerify(appUserKey, verificationToken);
 
-    promise.then((removeQueryResult: QueryResult) => {
+    promise.then(() => {
         return response.send(new FoodWebResponse(true, 'Signup verification complete'));
     })
     .catch((err: Error) => {
-        return response.send(new FoodWebResponse(false, 'Sorry, something went wrong. Unable to verify you.'));
+        return response.send(new FoodWebResponse(false, err.message));
     });
 
-    var email = require('emailjs');
+    
+}
 
-     function sendMail(request: Request, response: Response): void{
+var email = require('emailjs');
+
+export function sendMail(request: Request, response: Response): void{
         var server = email.server.connect({
             user: 'foodweb.noreply@gmail.com',
             password: 'connect-food!1',
@@ -154,4 +165,3 @@ export function handleSignupVerification(request: Request, response: Response): 
           });
         
     }
-}

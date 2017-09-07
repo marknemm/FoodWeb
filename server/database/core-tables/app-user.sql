@@ -1,18 +1,12 @@
 -- USER table for basic application info such as login and contact data.
---DROP TABLE AppUser CASCADE;
+DROP TABLE AppUser CASCADE;
 CREATE TABLE IF NOT EXISTS AppUser
 (
     appUserKey SERIAL PRIMARY KEY
 );
 
 -- The email is the username and primary identifier for an account.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS email                  VARCHAR(128)    NOT NULL UNIQUE;
--- Link to password data.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS appUserPasswordKey     INTEGER         NOT NULL UNIQUE REFERENCES AppUserPassword (appUserPasswordKey);
--- Link to contact information.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS contactInfoKey         INTEGER         NOT NULL UNIQUE REFERENCES ContactInfo (contactInfoKey);
--- If this account is for an organization, then this will be populated.
-ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS organizationKey        INTEGER         REFERENCES Organization (organizationKey);
+ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS email                  VARCHAR(128)    NOT NULL UNIQUE; -- UNIQUE automatically adds index!
 
 -- In the case of the AppUser being an Organization, this will refer to the administrator of the organization.
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS lastName               VARCHAR(60)     NOT NULL;
@@ -34,8 +28,4 @@ ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS isDonor                BOOLEAN     
 ALTER TABLE AppUser ADD COLUMN IF NOT EXISTS isReceiver             BOOLEAN         NOT NULL;
 
 
-CREATE UNIQUE INDEX IF NOT EXISTS appUser_EmailIdx              ON AppUser (email);
-CREATE UNIQUE INDEX IF NOT EXISTS appUser_AppUserPasswordKeyIdx ON AppUser (appUserPasswordKey);
-CREATE UNIQUE INDEX IF NOT EXISTS appUser_ContactInfoKeyIdx     ON AppUser (contactInfoKey);
-CREATE INDEX IF NOT EXISTS appUser_fullNameIdx                  ON AppUser (lastName, firstName);
-CREATE INDEX IF NOT EXISTS appUser_OrganizationKeyIdx           ON AppUser (organizationKey);
+CREATE INDEX IF NOT EXISTS appUser_fullNameIdx ON AppUser (lastName, firstName);

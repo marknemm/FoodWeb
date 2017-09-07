@@ -7,7 +7,8 @@ import { AppUserInfo } from './app-user-info';
 export class SignupRequest {
 
     constructor(
-        public appUserInfo: AppUserInfo
+        public appUserInfo: AppUserInfo,
+        public password: string
     ) { }
 }
 

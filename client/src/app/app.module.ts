@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, Injectable } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { HttpModule } from '@angular/http'
@@ -8,7 +9,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
 import { ImageCropperComponent } from 'ng2-img-cropper';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BusyModule } from 'angular2-busy';
 
 import { AppComponent } from './app.component';
@@ -65,7 +65,11 @@ const appRoutes: Routes = [
     {
         path: 'cart',
         component: CartComponent,
-        canActivate: [AuthWatchService]
+        canActivate: [AuthWatchService],
+        // Make sure that we get the FoodTypes from the back end before routing to the cart interface!
+        resolve: {
+            foodTypes: FoodTypesService
+        }
     },
     {
         path: 'signup',
@@ -103,11 +107,11 @@ const appRoutes: Routes = [
         NgbModule.forRoot(),
         RouterModule.forRoot(appRoutes),
         BrowserModule,
+        BrowserAnimationsModule,
         BootstrapModalModule,
         HttpModule,
         FormsModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule,
         BusyModule
     ],
     entryComponents: [
@@ -122,6 +126,5 @@ const appRoutes: Routes = [
         AuthSessionService,
         FoodTypesService
     ]
-
 })
 export class AppModule { }

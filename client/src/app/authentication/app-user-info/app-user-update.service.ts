@@ -18,15 +18,16 @@ export class AppUserUpdateService {
     /**
      * Sends App User Update Info to the server and listens for a response.
      * @param appUserInfoUpdate Contains the update information. Any non-null values will be used to update App User information.
+     * @param newPassword The password update.
      * @param currentPassword Only required when the password is being updated. Should contain the current password of the user.
      */
-    public updateAppUserInfo(appUserInfoUpdate: AppUserInfo, currentPassword?: string): Observable<FoodWebResponse> {
+    public updateAppUserInfo(appUserInfoUpdate: AppUserInfo, newPassword?: string, currentPassword?: string): Observable<FoodWebResponse> {
         let headers = new Headers({
             'Content-Type': 'application/json'
         });
 
         let observer: Observable<Response> = this.http.post('/authentication/updateAppUser',
-                                                            new UpdateAppUserRequest(appUserInfoUpdate, currentPassword),
+                                                            new UpdateAppUserRequest(appUserInfoUpdate, newPassword, currentPassword),
                                                             { headers: headers });
 
         return observer.map((response: Response): FoodWebResponse => {

@@ -71,7 +71,7 @@ export class RequestService {
 
         // Check if the user must confirm their signup in order to successfully perform the related request/action.
         if (foodWebResponse.signupConfirmRequired) {
-            alert('Sorry, you must confirm your registration by following the email confirmation link sent to your email account before performing this action');
+            alert('Sorry, you must confirm your registration by following the email confirmation link sent to your email account before performing this action.');
         }
         // Check if the user must login in order to successfully perform the related request/action.
         else if (foodWebResponse.loginRequired) {
@@ -89,6 +89,7 @@ export class RequestService {
             })
         }
 
+        // No problems with signup confirmation or login detected!
         return Observable.of(foodWebResponse);
     }
 

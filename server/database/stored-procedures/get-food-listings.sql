@@ -75,7 +75,7 @@ BEGIN
                                                         WHERE   FoodType.foodType = ANY($2)))
           AND ($3 IS NULL   OR FoodListing.perishable = $3)
           AND ($4 IS NULL   OR FoodListing.expireDate >= TO_TIMESTAMP($4, ''MM/DD/YYYY''))
-          AND ($5 IS NULL   OR FoodListing.DonatedByAppUserKey = $5)
+          AND ($5 IS NULL   OR FoodListing.donatedByAppUserKey = $5)
     ';
 
     -- Do we have any filter pertaining to claimer?
@@ -83,7 +83,7 @@ BEGIN
     THEN
 
         queryBase := queryBase || '
-            INNER JOIN ClaimedFoodListing                               ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
+            INNER JOIN ClaimedFoodListing ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
         ';
 
         queryFilters := queryFilters || '
@@ -162,6 +162,7 @@ $$ LANGUAGE plpgsql;
 -- Test the Stored Procedure here --
 
 
+/*
 SELECT
     FoodListing.foodListingKey,
     ARRAY_AGG(FoodType.foodType) AS foodTypes -- Concatenates the food types into an array { Type1, Type2, ..., TypeN }
@@ -169,8 +170,9 @@ FROM FoodListing
 INNER JOIN FoodListingFoodTypeMap   ON FoodListing.foodListingKey = FoodListingFoodTypeMap.foodListingKey
 INNER JOIN FoodType                 ON FoodListingFoodTypeMap.foodTypeKey = FoodType.foodTypeKey
 GROUP BY FoodListing.foodListingKey;
+*/
 
-SELECT * FROM FoodListingFoodTypeMap;
+--SELECT * FROM FoodListingFoodTypeMap;
 
 --select * FROM getFoodListings(0, 1000);
 

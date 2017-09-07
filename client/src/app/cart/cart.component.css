@@ -1,5 +1,13 @@
-button {
-    display: block;
-    margin: 2vh;
-    width: 100%;
+label {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+@media only screen and (max-width: 1200px) {
+    #food-listings {
+        float: none;
+        padding-left: 40px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }

@@ -14,15 +14,19 @@ export class FoodTypesComponent implements OnInit {
 
     private foodTypes: string[];
     private foodTypesForm: FormGroup;
+    private foodTypesLoaded: boolean;
 
     @Input() private initiallyChecked: boolean = true;
 
+    
     constructor(// private routerSnapshot: ActivatedRoute,
                 private foodTypesService: FoodTypesService)
     { 
         this.foodTypes = [];
         this.foodTypesForm = new FormGroup({});
+        this.foodTypesLoaded = false;
     }
+
 
     ngOnInit() {
         // this.foodTypes = this.routerSnapshot.data['value']['foodTypes'];
@@ -36,18 +40,28 @@ export class FoodTypesComponent implements OnInit {
             for (let i: number = 0; i < this.foodTypes.length; i++) {
                 this.foodTypesForm.addControl(this.foodTypes[i], new FormControl(this.initiallyChecked));
             }
+
+            this.foodTypesLoaded = true;
+            this.foodTypesForm.updateValueAndValidity(); // When finished adding all food type controls, then trigger a value update so callback will
+                                                         // get the selected food types.
         });
     }
     
+
     /**
      * Called whenever there is an update to the Food Types form controls. Will provide the caller with a (string) list of the selected Food Types.
      * @param callback The callback function that will be given the selected Food Types.
      */
     public onFoodTypesUpdate(callback: (foodTypes: string[]) => void): void {
         this.foodTypesForm.valueChanges.subscribe(data => {
-            callback(this.getSelectedFoodTypes());
+            /* Only signal callback that food types selection(s) have updated if they have been completely loaded. Otherwise, will fire every time
+               a food type control is added in ngOnInit(). */
+            if (this.foodTypesLoaded) {
+                callback(this.getSelectedFoodTypes());
+            }
         });
     }
+
 
     /**
      * Gets the currently selected Food Types.

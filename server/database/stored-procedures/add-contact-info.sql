@@ -2,6 +2,7 @@ SELECT dropFunction('addContactInfo');
 
 CREATE OR REPLACE FUNCTION addContactInfo
 (
+    _appUserKey         INTEGER,
     _address            VARCHAR(128),
     _addressLatitude    NUMERIC(7, 4),
     _addressLongitude   NUMERIC(7, 4),
@@ -15,14 +16,11 @@ AS $$
     DECLARE _contactInfoKey     INTEGER; 
 BEGIN
 
-    INSERT INTO ContactInfo (address, addressLatitude, addressLongitude, city, state, zip, phone)
-    VALUES (_address, _addressLatitude, _addressLongitude, _city, _state, _zip, _phone)
+    INSERT INTO ContactInfo (appUserKey, address, addressLatitude, addressLongitude, city, state, zip, phone)
+    VALUES (_appUserKey, _address, _addressLatitude, _addressLongitude, _city, _state, _zip, _phone)
     RETURNING ContactInfo.contactInfoKey INTO _contactInfoKey;
 
     RETURN _contactInfoKey;
 
 END;
 $$ LANGUAGE plpgsql;
-
---SELECT addContactInfo ('666 Hell St', 'Buffalo', 'NY', 2, '12324121');
-SELECT * FROM ContactInfo;

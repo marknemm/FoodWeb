@@ -3,11 +3,14 @@
     <hr>
     <div [formGroup]="filtersForm">
 
-        <h4>Acceptable Food Types:</h4>
+        <!-- Any additional filters will be transclused here -->
+        <ng-content select="[top]"></ng-content>
+
+        <h4>Food Types:</h4>
         <app-food-types #FoodTypesComponent></app-food-types>
         <br>
 
-        <h4>Minimum Expiration:</h4>
+        <h4>Expiration Date:</h4>
         <ngb-datepicker #dp formControlName="earliestExpireDate" (navigate)="date = $event.next"></ngb-datepicker>
         <br><br>
 
@@ -37,7 +40,7 @@
             </label>
         </div>-->
 
-        <h4>Acceptable Perishability:</h4>
+        <h4>Perishability:</h4>
         <div>
             <label class="checkbox-compress">
                 <input type="checkbox" formControlName="perishable"> Perishable
@@ -49,7 +52,7 @@
         </div>
 
         <!-- Any additional filters will be transclused here -->
-        <ng-content></ng-content>
+        <ng-content select="[botton]"></ng-content>
 
     </div>
     <hr>

@@ -6,6 +6,7 @@
     word-wrap: break-word;
     width: calc(100vw - 20px);
     max-width: 400px; /* This is (4 / 12) of 1200px so that we will never overlap anything to the right in non-mobile mode! */
+    background-color: inherit;
 }
 
 #slick-left-panel-button {
@@ -15,7 +16,6 @@
     right: -25px;
     top:0;
     background: darkgray;
-    opacity: 0;
     cursor: pointer;
     cursor: hand;
     visibility: hidden;
@@ -24,8 +24,6 @@
     -moz-transition: background 0.5s ease, right 0.5s linear;
     -ms-transition: background 0.5s ease, right 0.5s linear;
     -o-transition: background 0.5s ease, right 0.5s linear;
-    color: white;
-    font-weight: bolder;
     z-index: 101;
     opacity: 0.67;
 }
@@ -37,12 +35,12 @@
 @media only screen and (max-width: 1200px) {
     #slick-left-panel {
         right: 100%; /* The default state in mobile mode is to be off the screen to the left */
+        transition: transform 0.5s linear;
+        -webkit-transition: -webkit-transform 0.5s linear;
+        -moz-transition: -moz-transform 0.5s linear;
+        -ms-transition: -ms-transform 0.5s linear;
+        -o-transition: -o-transform 0.5s linear;
         background: white;
-        transition: transform 1s linear;
-        -webkit-transition: -webkit-transform 1s linear;
-        -moz-transition: -moz-transform 1s linear;
-        -ms-transition: -ms-transform 1s linear;
-        -o-transition: -o-transform 1s linear;
     }
 
     .toggle-into-view {

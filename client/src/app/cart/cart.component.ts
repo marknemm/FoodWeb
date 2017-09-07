@@ -1,11 +1,16 @@
 import { Component, OnInit, NgModule, Injectable, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { NgbModule, NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from "rxjs/Observable";
+
+import { FoodListingsFiltersComponent } from "../food-listings/food-listings-filters/food-listings-filters.component";
+import { FoodListingsComponent } from "../food-listings/food-listings.component";
+import { ClaimFoodListingService } from "../food-listings/claim-unclaim-food-listing.service";
+import { AddRemoveFoodListingService } from "../food-listings/add-remove-food-listing.service";
+import { AuthSessionService } from '../authentication/misc/auth-session.service';
 
 import { FoodListing } from "../../../../shared/food-listings/food-listing";
-import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
-import { FoodListingsComponent } from "../food-listings/food-listings.component";
-import { AuthSessionService } from "../authentication/misc/auth-session.service";
+import { FoodListingsFilters, LISTINGS_STATUS } from "../../../../shared/food-listings/food-listings-filters";
 import { AppUserInfo } from "../../../../shared/authentication/app-user-info";
 
 
@@ -13,70 +18,102 @@ import { AppUserInfo } from "../../../../shared/authentication/app-user-info";
     selector: 'app-cart',
     templateUrl: './cart.component.html',
     styleUrls: ['./cart.component.css'],
-    providers: [AuthSessionService]
+    providers: [AuthSessionService, ClaimFoodListingService, AddRemoveFoodListingService]
 })
 export class CartComponent implements OnInit {
 
-    private cartType: FoodListingsFilters = { myClaimedListings: false, myDonatedListings: false };
-    private newTitle: string = "Please sign in to view your cart...";
-    private setReceiverFlag: boolean;
-    private setDonorFlag: boolean;
+    // Need to declare LISTINGS_STATUS enum inside component to be used in the HTML template!
+    private readonly LISTINGS_STATUS: typeof LISTINGS_STATUS = LISTINGS_STATUS;
+    private isDonorAndReceiver: boolean;
 
-    @ViewChild('foodListings') foodListingsComponent: FoodListingsComponent;
+    @ViewChild('foodListingsFilters') private foodListingsFiltersComponent: FoodListingsFiltersComponent;
+    @ViewChild('foodListings') private foodListingsComponent: FoodListingsComponent;
+
 
     constructor(
-        private authSessionService: AuthSessionService
+        private authSessionService: AuthSessionService,
+        private claimFoodListingService: ClaimFoodListingService,
+        private addRemoveFoodListingService: AddRemoveFoodListingService
     ) { }
 
+
     ngOnInit() {
-        if (this.authSessionService.sessionInfoAvailable()) {
-            let appUserInfo: AppUserInfo = this.authSessionService.getAppUserSessionInfo();
+        const appUserInfo: AppUserInfo = this.authSessionService.getAppUserSessionInfo();
 
-            /**
-             *  Retrieves user data from session storage to 
-             *  determine initial cart type and mutability of cart type
-             */
-            if (appUserInfo.isReceiver && appUserInfo.isDonor) {
-                this.setReceiverMode();
-                this.setDonorFlag = true;
-            }
-            else if (appUserInfo.isDonor) {
-                this.setDonorMode();
-            }
-            else if (appUserInfo.isReceiver) {
-                this.setReceiverMode();
-            }
+        /**
+         *  Retrieves user data from session storage to 
+         *  determine initial cart type and mutability of cart type
+         */
+        this.isDonorAndReceiver = (appUserInfo.isReceiver && appUserInfo.isDonor);
+        if (appUserInfo.isReceiver) {
+            // If both receiver and donor, then default to receiver mode!
+            this.foodListingsFiltersComponent.addControl('listingsStatus', new FormControl(LISTINGS_STATUS.myClaimedListings));
+        } 
+        else {
+            this.foodListingsFiltersComponent.addControl('listingsStatus', new FormControl(LISTINGS_STATUS.myDonatedListings));
         }
     }
 
-    // Builds cart to display claimed listings
-    private setReceiverMode() {
-        this.cartType.myClaimedListings = true;
-        this.cartType.myDonatedListings = false;
-        // Simple logic to determine button visibility (id: btn-set-claimed)
-        if (this.setReceiverFlag) {
-            this.setDonorFlag = true;
-            this.setReceiverFlag = false;
-        }
-        this.newTitle = "Selected Listings";
-        this.foodListingsComponent.refreshFoodListings(this.cartType);
+
+    /**
+     * Executed after all of the view children have been initialized (so safest to interact with them now).
+     */
+    ngAfterViewInit() {
+        this.foodListingsComponent.refreshFoodListings(this.foodListingsFiltersComponent.getFilterValues());
+        this.foodListingsFiltersComponent.onFiltersUpdate(this.foodListingsComponent.refreshFoodListings.bind(this.foodListingsComponent));
     }
 
-    // Builds cart to display donated listings
-    private setDonorMode() {
-        this.cartType.myDonatedListings = true;
-        this.cartType.myClaimedListings = false;
-        // Simple logic to determine button visibility (id: btn-set-posted)
-        if (this.setDonorFlag) {
-            this.setReceiverFlag = true;
-            this.setDonorFlag = false;
-        }
-        this.newTitle = "Posted Listings";
-        this.foodListingsComponent.refreshFoodListings(this.cartType);
+
+    private getFoodListingsTitle(): string {
+        return (this.isClaimedCart() ? 'Claimed Food'
+                                     : 'Donated Food');
     }
+
+
+    private isClaimedCart(): boolean {
+        return (this.foodListingsFiltersComponent.getFilterValues().listingsStatus === LISTINGS_STATUS.myClaimedListings);
+    }
+
+
+    private isDonatedCart(): boolean {
+        return (this.foodListingsFiltersComponent.getFilterValues().listingsStatus === LISTINGS_STATUS.myDonatedListings);
+    }
+
+
+    private unclaimSelectedFoodListing(): void {
+        if (confirm('Are you sure you want to unclaim the food?\nThis cannot be undone.')) {
+            let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedFoodListing();
+            let observer: Observable<void> = this.claimFoodListingService.unclaimFoodListing(selectedFoodListing.foodListingKey);
+
+            observer.subscribe(
+                () => {
+                    this.foodListingsComponent.removeSelectedFoodListing();
+                },
+                (err: Error) => {
+                    console.log(err);
+                }
+            );
+        }
+    }
+
+
+    private removeSelectedFoodListing(): void {
+        let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedFoodListing();
+        let observer: Observable<void> = this.addRemoveFoodListingService.removeFoodListing(selectedFoodListing.foodListingKey);
+
+        observer.subscribe(
+            () => {
+                this.foodListingsComponent.removeSelectedFoodListing();
+            },
+            (err: Error) => {
+                console.log(err);
+            }
+        );
+    }
+
 
     // Changes status of listings in a use cart through left panel buttons or modal buttons
-    private mutateListingStatus(singleListingFlag: boolean, upgradeListingFlag: boolean) {
+    private mutateListingStatus(singleListingFlag: boolean, upgradeListingFlag: boolean): void {
         let selectedFoodListings: FoodListing[];
         if (singleListingFlag) {
             // For changing the status of only one listing (via modal button)

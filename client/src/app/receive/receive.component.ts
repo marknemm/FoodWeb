@@ -3,7 +3,7 @@ import { Observable } from "rxjs/Observable";
 
 import { FoodListingsComponent } from "../food-listings/food-listings.component";
 import { FoodListingsFiltersComponent } from "../food-listings/food-listings-filters/food-listings-filters.component";
-import { FoodListingsService } from "../food-listings/food-listings.service";
+import { ClaimFoodListingService } from "../food-listings/claim-unclaim-food-listing.service";
 
 import { FoodListing } from "../../../../shared/food-listings/food-listing";
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
@@ -13,34 +13,23 @@ import { FoodListingsFilters } from "../../../../shared/food-listings/food-listi
     selector: 'app-receive',
     templateUrl: './receive.component.html',
     styleUrls: ['./receive.component.css'],
-    providers: [FoodListingsService]
+    providers: [ClaimFoodListingService]
 })
 export class ReceiveComponent {
     
-    @ViewChild('foodListingsFilters') foodListingsFiltersComponent: FoodListingsFiltersComponent;
-    @ViewChild('foodListings') foodListingsComponent: FoodListingsComponent;
+    @ViewChild('foodListingsFilters') private foodListingsFiltersComponent: FoodListingsFiltersComponent;
+    @ViewChild('foodListings') private foodListingsComponent: FoodListingsComponent;
 
     constructor(
-        private foodListingsService: FoodListingsService
+        private claimFoodListingService: ClaimFoodListingService
     ) { }
 
     /**
      * Executed after all of the view children have been initialized (so safest to interact with them now).
      */
     ngAfterViewInit() {
-        // This is how you would add the code behind for additional filters specific to the receiver form.
-        //this.foodListingsFiltersComponent.addControl('dummyControl', new FormControl('dummy control'));
-        this.handleFilterUpdate(this.foodListingsFiltersComponent.getFilterValues());
-        this.foodListingsFiltersComponent.onFiltersUpdate(this.handleFilterUpdate.bind(this));
-    }
-
-    /**
-     * Handles filter updates by setting any necessary additional values in the filters and passing them off to the Food Listings Componet.
-     * @param foodListingsFilters The updated Food Listing Filters.
-     */
-    private handleFilterUpdate(foodListingsFilters: FoodListingsFilters): void {
-        foodListingsFilters.unclaimedOnly = true;
-        this.foodListingsComponent.refreshFoodListings(foodListingsFilters);
+        this.foodListingsComponent.refreshFoodListings(this.foodListingsFiltersComponent.getFilterValues());
+        this.foodListingsFiltersComponent.onFiltersUpdate(this.foodListingsComponent.refreshFoodListings.bind(this.foodListingsComponent));
     }
 
     /**
@@ -48,7 +37,7 @@ export class ReceiveComponent {
      */
     private claimSelectedFoodListing(): void {
         let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedFoodListing();
-        let observer: Observable<void> = this.foodListingsService.claimFoodListing(selectedFoodListing.foodListingKey);
+        let observer: Observable<void> = this.claimFoodListingService.claimFoodListing(selectedFoodListing.foodListingKey);
         
         // Listen for result.
         observer.subscribe(
@@ -56,7 +45,7 @@ export class ReceiveComponent {
                 // On success, simply remove the Food Listing from the Receiver Food Listings interface.
                 this.foodListingsComponent.removeSelectedFoodListing();
             },
-            (err) => {
+            (err: Error) => {
                 console.log(err);
             }
         );
