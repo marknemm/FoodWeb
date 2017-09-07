@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, AbstractControl, FormControl } from '@angular/forms';
 
-import { FoodListingsFilters, NgbDateStruct } from "../../../../../shared/food-listings/food-listings-filters";
+import { FoodListingsFilters } from "../../../../../shared/food-listings/food-listings-filters";
 import { FoodTypesComponent } from "../food-types/food-types.component";
 
 
@@ -12,36 +12,34 @@ import { FoodTypesComponent } from "../food-types/food-types.component";
 })
 export class FoodListingsFiltersComponent implements OnInit {
 
-    private readonly now: Date = new Date();
-
     private quantityVals: string[];
     private tFrameVals: string[];
     private distVals: string[];
+    private filtersForm: FormGroup;
 
-    @Input() private title: string = 'Filters';
-
-    @Output() private filtersForm: FormGroup;
+    @Input() private header: string = 'Filters';
+    @Input() private defaultLatestExpireNow: boolean = true;
 
     @ViewChild('FoodTypesComponent') private foodTypesComponent: FoodTypesComponent;
 
 
     constructor(private formBuilder: FormBuilder) {
+        // Must default initialize form so when referenced in parent, it is not null!
+        this.filtersForm = new FormGroup({});
+    }
 
-        // Must be in the constructor so it is available in parent's ngOnInit() call!
-        this.filtersForm = this.formBuilder.group({
-            earliestExpireDate: { year: this.now.getFullYear(), month: this.now.getMonth() + 1, day: this.now.getDate() } as NgbDateStruct,
-            maxQuantity: null,
-            maxDistance: null,
-            perishable: new FormControl(true),
-            notPerishable: new FormControl(true)
-        });
+
+    ngOnInit() {
+        // Actual form group initialization requires Input to be evaluated, so must be in init!
+        this.addControl('earliestExpireDate', new FormControl(this.defaultLatestExpireNow ? new Date() : null));
+        this.addControl('perishable', new FormControl(true));
+        this.addControl('notPerishable', new FormControl(true));
 
         this.quantityVals = ["Car", "Van", "Truck"];
         this.tFrameVals = ["0-6 Days", "6-12 Days", "12+ Days"];
         this.distVals = ["0-6 Miles", "6-12 Miles", "12+ Miles"];
     }
 
-    ngOnInit() {}
 
     /**
      * Adds a form control to the underlying filters form model.
@@ -52,11 +50,13 @@ export class FoodListingsFiltersComponent implements OnInit {
         this.filtersForm.addControl(name, control);
     }
 
+
     /**
      * Called whenever there is an update to the filters. Will provide the caller with updated filter values via a callback function.
      * @param callback The callback function that will be given the updated filter values.
      */
     public onFiltersUpdate(callback: (foodListingsFilters: FoodListingsFilters) => void): void {
+
         this.filtersForm.valueChanges.subscribe((data: any) => {
             callback(this.genFilterValues());
         });
@@ -65,15 +65,18 @@ export class FoodListingsFiltersComponent implements OnInit {
         });
     }
 
+
     public getFilterValues(): FoodListingsFilters {
         return this.genFilterValues();
     }
+
 
     /**
      * Gets the filter values according to the current state of the form and its associated form group (view model).
      * @return The Food Listings filter values.
      */
     private genFilterValues(foodTypes?: string[]): FoodListingsFilters {
+
         let foodListingsFilters = this.filtersForm.value;
         // See if we have been passed foodTypes or if we need to retrieve them from the Food Types component.
         if (foodTypes == null)  foodListingsFilters.foodTypes = this.foodTypesComponent.getSelectedFoodTypes();

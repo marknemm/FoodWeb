@@ -1,26 +1,29 @@
 <div class="modal-dialog">
 	<div class="modal-content">
-		<div class="modal-header">
+		<div class="modal-header" style="background-color: #222222">
 			<h1 class="modal-title">Sign In</h1>
-			<button type="button" class="close" (click)="close()" >&times;</button>
+			<button type="button" class="close" (click)="close()">&times;</button>
 		</div>
 		<div class="modal-body">
 			<form ngNativeValidate (submit)="loginUser($event)">
-				<div class="input">
-					<label for="username">Email</label>
-					<input name="username" [(ngModel)]="loginModel.username" type="text" required autofocus autocomplete="on">
-				</div>
-				<div class="input">
-					<label for="password">Password</label>
-					<input name="password" [(ngModel)]="loginModel.password" type="password" required autocomplete="on">
-				</div>
-				<div class="input">
-					<input type="submit" value="Login">
-				</div>
+                <div>
+                    <md-form-field>
+                        <input #email mdInput placeholder="email" id="email" name="username"
+                         [(ngModel)]="loginModel.username" type="text" required spellcheck="false" autocomplete="on">
+                    </md-form-field>
+                </div>
+                <div>
+                    <md-form-field>
+                        <input #password mdInput placeholder="password" id="password" name="password" [(ngModel)]="loginModel.password" type="password" required autocomplete="on">
+                    </md-form-field>
+                </div>
+                <div id="login-div" class="input">
+                    <button md-raised-button color="primary" class="submit-button" type="submit">Login</button>
+                </div>
 			</form>
 		</div>
-		<div class="modal-footer">
-			<p *ngIf="loginModel.loginError" id="loginErr">Incorrect login information. Please Try Again.</p>
+		<div class="modal-footer" *ngIf="loginModel.loginError">
+			<p id="loginErr">Incorrect login information. Please Try Again.</p>
 		</div>
 	</div>
 </div>

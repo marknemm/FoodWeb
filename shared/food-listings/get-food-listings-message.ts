@@ -1,5 +1,5 @@
-import { FoodListingsFilters, NgbDateStruct } from '../food-listings/food-listings-filters';
-export { FoodListingsFilters, NgbDateStruct };
+import { FoodListingsFilters } from '../food-listings/food-listings-filters';
+export { FoodListingsFilters };
 
 import { FoodWebResponse } from '../message-protocol/food-web-response';
 import { FoodListing } from "../food-listings/food-listing";

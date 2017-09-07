@@ -6,11 +6,12 @@ import { toPostgresArray } from '../database-help/prepared-statement-helper';
 
 import { FoodListingUpload } from '../../../shared/food-listings/food-listing-upload';
 import { FoodListing } from '../../../shared/food-listings/food-listing';
+import { DateFormatter } from '../../../shared/common-util/date-formatter';
 
-var fs = require('fs');
+let fs = require('fs');
 
-var AWS = require('aws-sdk');
-var config = new AWS.Config({
+let AWS = require('aws-sdk');
+let config = new AWS.Config({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     region: process.env.AWS_REGION
@@ -19,7 +20,7 @@ var config = new AWS.Config({
 
 //interprets the JSON data recieved from the frontend and adds information recieved to the FoodListing table.
 export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUserKey: number): Promise<any> {
-    var imageUrl = null;
+    let imageUrl = null;
 
     // If we have an image form the Donor, then generate the name and URL for it before we create database entry.
     if (foodListingUpload.imageUpload != null) {
@@ -28,10 +29,10 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
         //imageUrl = process.env.AWS_BUCKET_URL + imageName;
     }
     
-    var queryString = 'SELECT * FROM addFoodListing($1, $2, $3, $4, $5, $6);';
-    var queryArgs = [ toPostgresArray(foodListingUpload.foodTypes),
+    let queryString = 'SELECT * FROM addFoodListing($1, $2, $3, $4, $5, $6);';
+    let queryArgs = [ toPostgresArray(foodListingUpload.foodTypes),
                       foodListingUpload.perishable,
-                      foodListingUpload.expirationDate.month + '/' + foodListingUpload.expirationDate.day + '/' + foodListingUpload.expirationDate.year,
+                      DateFormatter.dateToMonthDayYearString(foodListingUpload.expirationDate),
                       donorAppUserKey,
                       foodListingUpload.foodDescription,
                       imageUrl ];
@@ -58,13 +59,13 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
 function writeImgToCDN(image: string, imageName: string): Promise<any> {
     return new Promise(function(resolve, reject) {
         // Configure AWS.
-        var s3Bucket = new AWS.S3({
+        let s3Bucket = new AWS.S3({
             params: { Bucket: process.env.AWS_BUCKET_NAME }
         });
 
         // Ready the image to be sent by stripping off base64 header.
-        var buf: Buffer = new Buffer(image.replace(/^data:image\/\w+;base64,/, ""), 'base64')
-        var data = {
+        let buf: Buffer = new Buffer(image.replace(/^data:image\/\w+;base64,/, ""), 'base64')
+        let data = {
             Key: imageName,
             Body: buf,
             ContentEncoding: 'base64',
@@ -89,7 +90,7 @@ function writeImgToCDN(image: string, imageName: string): Promise<any> {
 
 function writeImgToLocalFs(image: string, imageUrl: string): Promise<any> {
     // Strip off the base64 image header.
-    var data = image.replace(/^data:image\/\w+;base64,/, '');
+    let data = image.replace(/^data:image\/\w+;base64,/, '');
 
     return new Promise((resolve, reject) => {
         // Write to local file system.

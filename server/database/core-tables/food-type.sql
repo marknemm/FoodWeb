@@ -64,4 +64,4 @@ DO $$ BEGIN
 
 END$$;
 
---SELECT * FROM FoodType;
+SELECT * FROM FoodType;

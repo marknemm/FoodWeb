@@ -51,7 +51,7 @@ export class DonateComponent implements OnInit {
         this.foodForm = this.formBuilder.group({
             perishable: ['', Validators.required],
             foodDescription: ['', Validators.required],
-            expirationDate: ['', Validators.required]
+            expirationDate: [null, Validators.required]
         });
     }
 

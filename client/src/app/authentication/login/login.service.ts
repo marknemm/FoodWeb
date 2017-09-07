@@ -17,7 +17,7 @@ export class LoginService {
         private authSessionService: AuthSessionService
     ) { }
 
-    public login(loginModel: LoginModel): any {
+    public login(loginModel: LoginModel): Observable<{ success: boolean, message: string}> {
         let headers = new Headers({
             'Content-Type': 'application/json'
         });
@@ -32,12 +32,6 @@ export class LoginService {
             }
 
             return { success: loginResponse.success, message: loginResponse.message };
-
-            // TODO: Update this to use the new shared framework!
-            /*if (loginResponse.success) {
-                return loginResponse.appUserInfo;
-            }
-            throw new Error(loginResponse.message);*/
         });
     }
 

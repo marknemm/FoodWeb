@@ -152,8 +152,8 @@ BEGIN
     FROM FiltFoodListingsAndTypes
     INNER JOIN FoodListing                                          ON FiltFoodListingsAndTypes.foodListingKey = FoodListing.foodListingKey
     INNER JOIN AppUser                  AS DonatedByAppUser         ON FoodListing.donatedByAppUserKey = DonatedByAppUser.appUserKey
-    INNER JOIN ContactInfo              AS DonatedByContactInfo     ON DonatedByAppUser.contactInfoKey = DonatedByContactInfo.contactInfoKey
-    LEFT JOIN  Organization             AS DonatedByOrganization    ON DonatedByAppUser.organizationKey = DonatedByOrganization.organizationKey
+    INNER JOIN ContactInfo              AS DonatedByContactInfo     ON DonatedByAppUser.appUserKey = DonatedByContactInfo.appUserKey
+    LEFT JOIN  Organization             AS DonatedByOrganization    ON DonatedByAppUser.appUserKey = DonatedByOrganization.appUserKey
     ORDER BY FoodListing.expireDate ASC;
 
 END;

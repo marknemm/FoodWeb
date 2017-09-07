@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DialogService } from "ng2-bootstrap-modal";
+import { Observable } from "rxjs/Observable";
 
 import { LoginComponent } from '../authentication/login/login.component';
 import { AuthSessionService } from '../authentication/misc/auth-session.service';
@@ -22,21 +23,9 @@ export class HeaderComponent {
 
 
     private showLogin(): void {
-        var dialogObserver = this.dialogService.addDialog(
-            LoginComponent,
-            // Dialog Initalization Data
-            null,
-            // DialogOptions
-            {
-                closeByClickingOutside: true,
-                backdropColor: '#222222',
-            }
-        );
-
-        // Observe what the dialog result is.
-        dialogObserver.subscribe((isConfirmed) => {
-            // TODO: Replace the Login link with username link.
-        });
+        let dialogObserver: Observable<boolean> = LoginComponent.display(this.dialogService); 
+        // Necessary so that observable action takes place!
+        dialogObserver.subscribe(() => {});
     }
 
 

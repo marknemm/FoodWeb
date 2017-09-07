@@ -11,6 +11,18 @@ import { AgmCoreModule } from '@agm/core';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { BusyModule } from 'angular2-busy';
 
+import { MdCheckboxModule,
+         MdRadioModule,
+         MdButtonModule,
+         MdInputModule,
+         MdSelectModule,
+         MdDatepickerModule,
+         MdNativeDateModule,
+         DateAdapter,
+         NativeDateAdapter,
+         MD_DATE_FORMATS,
+         MD_NATIVE_DATE_FORMATS } from '@angular/material';
+
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
@@ -112,7 +124,14 @@ const appRoutes: Routes = [
         HttpModule,
         FormsModule,
         ReactiveFormsModule,
-        BusyModule
+        BusyModule,
+        MdCheckboxModule,
+        MdRadioModule,
+        MdInputModule,
+        MdSelectModule,
+        MdButtonModule,
+        MdDatepickerModule,
+        MdNativeDateModule
     ],
     entryComponents: [
         LoginComponent
@@ -124,7 +143,9 @@ const appRoutes: Routes = [
         DateFormatterPipe,
         AuthWatchService,
         AuthSessionService,
-        FoodTypesService
+        FoodTypesService,
+        { provide: DateAdapter, useClass: NativeDateAdapter },
+        { provide: MD_DATE_FORMATS, useValue: MD_NATIVE_DATE_FORMATS }
     ]
 })
 export class AppModule { }

@@ -1,6 +1,6 @@
 <div id="slick-left-panel" #slickLeftPanel>
 
-    <button type="button" class="navbar-toggler arrow right" id="slick-left-panel-button"
+    <button type="button" class="navbar-toggler arrow right" id="slick-left-panel-button" [title]="buttonTitle"
      #slickLeftPanelButton (click)="togglePanelVisibility(slickLeftPanel, slickLeftPanelButton)"></button>
 
     <ng-content></ng-content>

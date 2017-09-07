@@ -78,7 +78,7 @@ export class RequestService {
             // Mark the session ended (or not logged in) in this client.
             this.authSessionService.clearSessionInfo();
 
-            return this.attemptLogin().map((): Observable<any | FoodWebResponse> => {
+            return LoginComponent.display(this.dialogService).map((): Observable<any | FoodWebResponse> => {
                 // If login successful, then re-send original request and go through this process recursively.
                 if (this.authSessionService.sessionInfoAvailable()) {
                     retrySendRequestCallback();
@@ -91,23 +91,5 @@ export class RequestService {
 
         // No problems with signup confirmation or login detected!
         return Observable.of(foodWebResponse);
-    }
-
-
-    /**
-     * Generates a login dialog that the user can login with and listens for the dialog to close.
-     * @return An observable that resolves when the dialog closes.
-     */
-    private attemptLogin(): Observable<boolean> {
-        return this.dialogService.addDialog(
-            LoginComponent,
-            // Dialog Initalization Data
-            null,
-            // DialogOptions
-            {
-                closeByClickingOutside: true,
-                backdropColor: '#222222',
-            }
-        );
     }
 }

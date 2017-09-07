@@ -13,39 +13,45 @@
 
                 <div class="form-group">
                     <label>Food Types</label>
-                    <app-food-types [initiallyChecked]="false" #FoodTypesComponent></app-food-types>
+                    <app-food-types [initiallyChecked]="false" [numColumns]="2" [required]="true" [extraValidation]="forceValidation" #FoodTypesComponent></app-food-types>
                     <!--<div class="alert alert-danger" [hidden]="!shouldFireRequireValidation(foodForm.controls.foodType)">At least one Food Type is required</div>-->
                 </div>
 
                 <div class="form-group">
                     <label>Perishable</label><br>
-                    <label for="perishable-yes-check" id="perishable-yes" class="perishable-label no-select">
-                        <input type="radio" formControlName="perishable" name="perishable" id="perishable-yes-check" [value]="true"> Yes
-                    </label>
-                    <label for="perishable-no-check" class="perishable-label no-select">
-                        <input type="radio" formControlName="perishable" name="perishable" id="perishable-no-check" [value]="false"> No
-                    </label>
-                    <div class="alert alert-danger" [hidden]="isValid(perishable)">Perishable selection is required</div>
+                    <md-radio-group [ngClass]="{'warn-foreground': !isValid(perishable)}" formControlName="perishable" required>
+                        <label for="perishable-yes-check" id="perishable-yes" class="perishable-label no-select">
+                            <md-radio-button name="perishable" id="perishable-yes-check" [value]="true">Yes</md-radio-button>
+                        </label>
+                        <label for="perishable-no-check" class="perishable-label no-select">
+                            <md-radio-button name="perishable" id="perishable-no-check" [value]="false">No</md-radio-button>
+                        </label>
+                        <!--<div class="warn-foreground inline-error" [hidden]="isValid(perishable)">*</div>-->
+                    </md-radio-group>
                 </div>
 
                 <div class="form-group">
                     <label for="foodDescription">Description</label>
-                    <textarea class="form-control" formControlName="foodDescription"></textarea>
-                    <div class="alert alert-danger" [hidden]="isValid(foodDescription)">Description is required</div>
+                    <div>
+                        <md-input-container class="input-group" floatPlaceholder="never">
+                            <textarea mdInput mdTextareaAutosize id="foodDescription" placeholder="Describe donation here"
+                             formControlName="foodDescription" required></textarea>
+                        </md-input-container>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="expirationDate">Expiration Date</label>
-                    <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" formControlName="expirationDate" ngbDatepicker #d="ngbDatepicker">
-                        <div class="input-group-addon" style="cursor: pointer;" (click)="d.toggle()" >
-                            <i class="material-icons">&#xE8A3;</i>
-                        </div>
+                    <div>
+                        <md-input-container class="input-group" floatPlaceholder="never">
+                            <input mdInput id="expirationDate" [mdDatepicker]="picker" placeholder="mm/dd/yyyy" formControlName="expirationDate" required>
+                            <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
+                            <md-datepicker touchUi="true" #picker opened="true"></md-datepicker>
+                        </md-input-container>
                     </div>
-                    <div class="alert alert-danger" [hidden]="isValid(expirationDate)">Expiration Date is required</div>
                 </div>
 
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button md-raised-button color="primary">Submit</button>
 
             </form>
         </div>
@@ -57,7 +63,7 @@
 
         <div class="row">
             <div class="col-md-2">Food Type</div>
-            <div class="col-md-10 pull-left">{{ foodForm.controls.foodTypes.value }}</div>
+            <div class="col-md-10 pull-left">{{ foodTypesComponent.getSelectedFoodTypes() }}</div>
         </div>
 
         <div class="row">
@@ -67,7 +73,7 @@
 
         <div class="row">
             <div class="col-md-2">Perishabe</div>
-            <div class="col-md-10 pull-left">{{ (foodForm.controls.perishable.value == true) ? 'true' : 'false' }}</div>
+            <div class="col-md-10 pull-left">{{ (foodForm.controls.perishable.value === true) ? 'true' : 'false' }}</div>
         </div>
 
         <div class="row">
@@ -76,6 +82,6 @@
         </div>
         <br>
 
-        <button class="btn btn-default" (click)="submitted=false">Donate Again</button>
+        <button md-raised-button color="primary" (click)="submitted=false">Donate Again</button>
     </div>
 </div>

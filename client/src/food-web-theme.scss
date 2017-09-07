@@ -1,0 +1,44 @@
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue.
+$food-web-primary: mat-palette($mat-grey, 200, 100, 300);
+$food-web-accent:  mat-palette($mat-green, 200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$food-web-warn:    mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$food-web-theme:   mat-light-theme($food-web-primary, $food-web-accent, $food-web-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($food-web-theme);
+
+
+
+// Define an alternate inverted theme.
+$food-web-inverted-theme:   mat-light-theme($food-web-accent, $food-web-primary, $food-web-warn);
+.food-web-inverted-theme {
+    @include angular-material-theme($food-web-inverted-theme);
+}
+
+
+
+// Define theme specifically for date picker (white background and pale green selection).
+$food-web-date-picker-accent:  mat-palette($mat-grey, 0);
+$food-web-date-picker-theme:   mat-light-theme($food-web-accent, $food-web-date-picker-accent, $food-web-warn);
+@include mat-datepicker-theme($food-web-date-picker-theme);
+
+
+@include mat-form-field-theme($food-web-inverted-theme);
+@include mat-input-theme($food-web-inverted-theme);
+@include mat-select-theme($food-web-inverted-theme);

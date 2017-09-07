@@ -69,19 +69,10 @@ export class AuthWatchService implements CanActivate {
      */
     private attemptLoginAndRedirect(toUrl: string): void {
         // Generate the login dialog.
-        let dialogObserver = this.dialogService.addDialog(
-            LoginComponent,
-            // Dialog Initalization Data
-            null,
-            // DialogOptions
-            {
-                closeByClickingOutside: true,
-                backdropColor: '#222222',
-            }
-        );
+        let dialogObserver: Observable<boolean> = LoginComponent.display(this.dialogService);
 
         // Observe what the dialog result is.
-        dialogObserver.subscribe((isConfirmed) => {
+        dialogObserver.subscribe(() => {
             // After done with login dialog, if we are logged in, then we can redirect to original intended link!
             if (this.authSessionService.sessionInfoAvailable()) {
                 this.router.navigate([toUrl]);

@@ -8,6 +8,9 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class SlickLeftPanelComponent implements OnInit {
 
+    @Input() private buttonTitle: string = "toggle";
+
+
     constructor() { }
 
 

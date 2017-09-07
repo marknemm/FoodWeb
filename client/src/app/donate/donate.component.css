@@ -18,3 +18,20 @@ input[type=checkbox]
 #perishable-yes {
     margin-right: 20px;
 }
+
+md-form-field, md-input-container {
+    width: 100%;
+}
+
+.inline-error, md-form-field, md-input-container {
+    font-size: 20px;
+}
+
+:host ::ng-deep .mat-form-field-infix {
+    border: none;
+}
+
+.inline-error {
+    line-height: 20px;
+    vertical-align: top;
+}
