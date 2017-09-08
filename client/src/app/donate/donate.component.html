@@ -2,14 +2,14 @@
     <h1>Donor Form</h1>
     <hr>
 
-    <div *ngIf="!submitted" class="row">
+    <div [hidden]="submitted" class="row">
         <div class="col-md-5">
             <label>Upload Image</label>
             <img-cropper [image]="this" [settings]="cropperSettings"></img-cropper>
         </div>
 
         <div class="col-md-7">
-            <form [formGroup]="foodForm" (ngSubmit)="onSubmit(foodForm)">
+            <form [formGroup]="foodForm" (ngSubmit)="onSubmit(foodForm, $event)">
 
                 <div class="form-group">
                     <label>Food Types</label>
@@ -19,14 +19,14 @@
 
                 <div class="form-group">
                     <label>Perishable</label><br>
-                    <md-radio-group [ngClass]="{'warn-foreground': !isValid(perishable)}" formControlName="perishable" required>
+                    <md-radio-group [ngClass]="{'warn-foreground': isInvalid(perishable)}" formControlName="perishable" required>
                         <label for="perishable-yes-check" id="perishable-yes" class="perishable-label no-select">
                             <md-radio-button name="perishable" id="perishable-yes-check" [value]="true">Yes</md-radio-button>
                         </label>
                         <label for="perishable-no-check" class="perishable-label no-select">
                             <md-radio-button name="perishable" id="perishable-no-check" [value]="false">No</md-radio-button>
                         </label>
-                        <!--<div class="warn-foreground inline-error" [hidden]="isValid(perishable)">*</div>-->
+                        <!--<div class="warn-foreground inline-error" [hidden]="!isInvalid(perishable)">*</div>-->
                     </md-radio-group>
                 </div>
 
@@ -35,7 +35,7 @@
                     <div>
                         <md-input-container class="input-group" floatPlaceholder="never">
                             <textarea mdInput mdTextareaAutosize id="foodDescription" placeholder="Describe donation here"
-                             formControlName="foodDescription" required></textarea>
+                             formControlName="foodDescription" [errorStateMatcher]="isInvalid.bind(this)" required></textarea>
                         </md-input-container>
                     </div>
                 </div>
@@ -44,14 +44,15 @@
                     <label for="expirationDate">Expiration Date</label>
                     <div>
                         <md-input-container class="input-group" floatPlaceholder="never">
-                            <input mdInput id="expirationDate" [mdDatepicker]="picker" placeholder="mm/dd/yyyy" formControlName="expirationDate" required>
+                            <input mdInput id="expirationDate" [mdDatepicker]="picker" placeholder="mm/dd/yyyy"
+                             formControlName="expirationDate" [errorStateMatcher]="isInvalid.bind(this)" required>
                             <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
                             <md-datepicker touchUi="true" #picker opened="true"></md-datepicker>
                         </md-input-container>
                     </div>
                 </div>
 
-                <button md-raised-button color="primary">Submit</button>
+                <button md-raised-button color="primary" class="button-md">Submit</button>
 
             </form>
         </div>
@@ -82,6 +83,7 @@
         </div>
         <br>
 
-        <button md-raised-button color="primary" (click)="submitted=false">Donate Again</button>
+        <button md-raised-button color="primary" class="button-md" (click)="donateAgain()">Donate Again</button>
+        <button md-raised-button color="primary" class="button-md" >Edit Donation</button>
     </div>
 </div>

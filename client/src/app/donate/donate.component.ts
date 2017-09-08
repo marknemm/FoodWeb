@@ -19,15 +19,17 @@ import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
     styleUrls: ['donate.component.css']
 })
 export class DonateComponent implements OnInit {
-    foodForm: FormGroup;
-    forceValidation: boolean;
-    submitted: boolean;
-    dispUrl: string;
+    
+    private foodForm: FormGroup;
+    private forceValidation: boolean;
+    private submitted: boolean;
+    private dispUrl: string;
 
-    image: string;
-    cropperSettings: CropperSettings;
+    private image: string;
+    private cropperSettings: CropperSettings;
 
     @ViewChild('FoodTypesComponent') private foodTypesComponent: FoodTypesComponent;
+
 
     constructor(
         private formBuilder: FormBuilder,
@@ -47,6 +49,7 @@ export class DonateComponent implements OnInit {
         this.cropperSettings.canvasHeight = 300;
     }
 
+
     ngOnInit() {
         this.foodForm = this.formBuilder.group({
             perishable: ['', Validators.required],
@@ -55,15 +58,19 @@ export class DonateComponent implements OnInit {
         });
     }
 
-    private isValid(validField: AbstractControl): boolean {
-        return validField.errors == null || (!validField.touched && !this.forceValidation);
+
+    private isInvalid(validField: AbstractControl): boolean {
+        return validField.errors != null && (validField.touched || this.forceValidation);
     }
 
-    private onSubmit({ value, valid }: { value: FoodListingUpload, valid: boolean }) {
+
+    private onSubmit({ value, valid }: { value: FoodListingUpload, valid: boolean }, event: Event) {
+        event.preventDefault();
         this.forceValidation = true;
 
         // Make sure we get all the selected Food Types.
         value.foodTypes = this.foodTypesComponent.getSelectedFoodTypes();
+        valid = (valid && value.foodTypes.length !== 0);
 
         if (valid) {
             let observer = this.addRemoveFoodListingService.addFoodListing(value, this.image);
@@ -79,6 +86,17 @@ export class DonateComponent implements OnInit {
             );
         }
     }
+
+
+    private donateAgain(): void {
+        this.foodForm.reset();
+        this.foodForm.markAsPristine();
+        this.foodForm.markAsUntouched();
+        this.foodTypesComponent.reset();
+        this.forceValidation = false;
+        this.submitted = false;
+    }
+
 
     get perishable(): AbstractControl {
         return this.foodForm.controls.perishable;

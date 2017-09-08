@@ -168,7 +168,7 @@
     <div class="row">
             
         <div class="col-md-6">
-            <button md-raised-button color="primary" *ngIf="!editFlags.get('password')" (click)="setEditable('password')" title="edit">
+            <button md-raised-button color="primary" class="button-md" *ngIf="!editFlags.get('password')" (click)="setEditable('password')">
                 Update Password
             </button>
 
@@ -195,8 +195,8 @@
                     </md-input-container>
                 </div>
 
-                <button md-raised-button color="primary" (click)="savePassword()">Save</button>
-                <button md-raised-button color="primary" (click)="this.editFlags.set('password', false)">Cancel</button>
+                <button md-raised-button color="primary" class="button-md" (click)="savePassword()">Save</button>
+                <button md-raised-button color="primary" class="button-md" (click)="this.editFlags.set('password', false)">Cancel</button>
             </ng-container>
         </div><!-- col -->
 

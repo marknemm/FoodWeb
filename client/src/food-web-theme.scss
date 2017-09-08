@@ -1,44 +1,187 @@
 @import '~@angular/material/theming';
-// Plus imports for other components in your app.
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat-core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue.
-$food-web-primary: mat-palette($mat-grey, 200, 100, 300);
-$food-web-accent:  mat-palette($mat-green, 200, A100, A400);
 
-// The warn palette is optional (defaults to red).
+
+
+/* =========== Angular Material site-wide color theme definitions =========== */
+
+/**
+ * These are the color definitions for our website's primary color theme.
+ * Changing color values here should take effect everywhere!
+ */
+$lighter-primary:  50;
+$darker-primary:   300;
+$food-web-primary: mat-palette($mat-grey, 50, $lighter-primary, $darker-primary);
+
+$lighter-accent:   A100;
+$darker-accent:    A400;
+$food-web-accent:  mat-palette($mat-green, 200, $lighter-accent, $darker-accent);
+
 $food-web-warn:    mat-palette($mat-red);
 
-// Create the theme object (a Sass map containing all of the palettes).
 $food-web-theme:   mat-light-theme($food-web-primary, $food-web-accent, $food-web-warn);
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 @include angular-material-theme($food-web-theme);
 
 
-
-// Define an alternate inverted theme.
+/**
+ * Define an inverted color theme for convenience.
+ */
 $food-web-inverted-theme:   mat-light-theme($food-web-accent, $food-web-primary, $food-web-warn);
 .food-web-inverted-theme {
     @include angular-material-theme($food-web-inverted-theme);
 }
 
 
-
-// Define theme specifically for date picker (white background and pale green selection).
-$food-web-date-picker-accent:  mat-palette($mat-grey, 0);
-$food-web-date-picker-theme:   mat-light-theme($food-web-accent, $food-web-date-picker-accent, $food-web-warn);
-@include mat-datepicker-theme($food-web-date-picker-theme);
-
-
+/**
+ * Define Angular Material component specific color themes.
+ */
+@include mat-datepicker-theme($food-web-inverted-theme);
 @include mat-form-field-theme($food-web-inverted-theme);
 @include mat-input-theme($food-web-inverted-theme);
 @include mat-select-theme($food-web-inverted-theme);
+
+
+
+
+/* =========== Grab theme colors and wrap them in classes to be used in components =========== */
+
+/* Primary Background */
+.primary-background {
+    background-color: mat-color($food-web-primary);
+}
+
+.primary-background-lighter {
+    background-color: mat-color($food-web-primary, $lighter-primary);
+}
+
+.primary-background-darker {
+    background-color: mat-color($food-web-primary, $darker-primary);
+}
+
+
+/* Primary foreground */
+.primary-foreground {
+    color: mat-color($food-web-primary);
+}
+
+.primary-foreground-lighter {
+    color: mat-color($food-web-primary, $lighter-primary);
+}
+
+.primary-foreground-darker {
+    color: mat-color($food-web-primary, $darker-primary);
+}
+
+
+/* Accent Background */
+.accent-background {
+    background-color: mat-color($food-web-accent);   
+}
+
+.accent-background-lighter {
+    background-color: mat-color($food-web-accent, $lighter-accent);
+}
+
+.accent-background-darker {
+    background-color: mat-color($food-web-accent, $darker-accent);
+}
+
+
+/* Accent Foreground */
+.accent-foreground {
+    color: mat-color($food-web-accent);
+}
+
+.accent-foreground-hover:hover {
+    color: mat-color($food-web-accent) !important;
+}
+
+.accent-foreground-lighter {
+    color: mat-color($food-web-accent, $lighter-accent);
+}
+
+.accent-foreground-darker {
+    color: mat-color($food-web-accent, $darker-accent);
+}
+
+.accent-foreground-darker-hover:hover {
+    color: mat-color($food-web-accent, $darker-accent) !important;
+}
+
+
+/* Warn Background & Foreground */
+.warn-background {
+    background-color: mat-color($food-web-warn);
+}
+
+.warn-foreground {
+    color: mat-color($food-web-warn);
+}
+
+
+
+
+/* =========== Define app-wide styles for Angular Material components =========== */
+
+/* Default styling for all Angular Material raised buttons */
+button.mat-raised-button.mat-primary {
+    vertical-align: middle;
+    border: 1px solid lightgray;
+    box-shadow: none;
+    border-radius: 10%;
+    outline: none; 
+}
+
+/* Background transition between hover and unhover */
+button.mat-raised-button.mat-primary, button.mat-icon-button {
+    transition: background 0.5s ease;
+    -webkit-transition: background 0.5s ease;
+    -moz-transition: background 0.5s ease;
+    -ms-transition: background 0.5s ease;
+    -o-transition: background 0.5s ease;
+}
+
+/* This shows the darker primary color on hover */
+button.mat-raised-button.mat-primary:hover, button.mat-icon-button:hover {
+    background-color: mat-color($food-web-primary, $darker-primary);
+}
+
+/* This briefly shows the accent color on click for the ripple effect */
+button.mat-raised-button.mat-primary:active, button.mat-icon-button:active {
+    transition: none;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+    box-shadow: none;
+    background-color: mat-color($food-web-accent);
+}
+
+button.mat-icon-button {
+    outline: none;
+}
+
+/* Use .button-lg class for large Angular Material raised button */
+button.button-lg {
+    font-size: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/* Use .button-md class for medium Angular Material raised button */
+button.button-md {
+    font-size: 20px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+/* Use .button-sm class for small Angular Material raised button */
+button.button-sm {
+    font-size: 15px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    line-height: 20px;
+    min-height: 20px;
+    vertical-align: top;
+}

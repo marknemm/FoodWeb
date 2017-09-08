@@ -10,38 +10,6 @@ html, body {
     width: 100%;
 }
 
-.primary-background {
-    background-color: #EEEEEE;
-}
-
-.primary-foreground {
-    color: #EEEEEE;
-}
-
-.accent-background {
-    background-color: #A5D6A7;    
-}
-
-.accent-foreground {
-    color: #A5D6A7;
-}
-
-.accent-background-darker {
-    background-color: #00E676;
-}
-
-.accent-foreground-darker {
-    color: #00E676;
-}
-
-.warn-background {
-    background-color: #F44336;
-}
-
-.warn-foreground {
-    color: #F44336
-}
-
 .inline-error {
     display: inline-block;
     margin-left: 20px;
@@ -74,37 +42,6 @@ button {
 button:hover, a:hover {
     cursor: pointer;
     cursor: hand;
-}
-
-button.mat-raised-button.mat-primary {
-    font-size: 20px;
-    vertical-align: middle;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    border: 1px solid lightgray;
-    box-shadow: none;
-    border-radius: 10%;
-    outline: none;
-}
-
-button.mat-raised-button.mat-primary, button.mat-icon-button {
-    transition: background 0.5s ease;
-    -webkit-transition: background 0.5s ease;
-    -moz-transition: background 0.5s ease;
-    -ms-transition: background 0.5s ease;
-    -o-transition: background 0.5s ease;
-}
-
-button.mat-raised-button.mat-primary:hover {
-    background-color: #B2B2B2;
-}
-
-button.mat-raised-button.mat-primary:active, button.mat-icon-button:active {
-    background-color: green;
-}
-
-button.mat-icon-button {
-    outline: none;
 }
 
 .modal-dialog {

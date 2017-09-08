@@ -88,6 +88,18 @@ export class FoodTypesComponent implements OnInit {
 
 
     /**
+     * Resets the checkboxes to their initial checked value. Also resets any associated validation.
+     */
+    public reset(): void {
+        for (let i: number = 0; i < this.foodTypes.length; i++) {
+            this.foodTypesForm.controls[this.foodTypes[i]].setValue(this.initiallyChecked);
+        }
+        this.foodTypesForm.markAsPristine();
+        this.foodTypesForm.markAsUntouched();
+    }
+
+
+    /**
      * Gets the number of selected Food Types.
      * @return The number of selected Food Types.
      */

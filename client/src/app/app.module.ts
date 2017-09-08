@@ -11,7 +11,8 @@ import { AgmCoreModule } from '@agm/core';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { BusyModule } from 'angular2-busy';
 
-import { MdCheckboxModule,
+import { MdListModule,
+         MdCheckboxModule,
          MdRadioModule,
          MdButtonModule,
          MdInputModule,
@@ -125,6 +126,7 @@ const appRoutes: Routes = [
         FormsModule,
         ReactiveFormsModule,
         BusyModule,
+        MdListModule,
         MdCheckboxModule,
         MdRadioModule,
         MdInputModule,
