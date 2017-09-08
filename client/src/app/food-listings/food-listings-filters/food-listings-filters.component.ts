@@ -54,33 +54,48 @@ export class FoodListingsFiltersComponent implements OnInit {
     /**
      * Called whenever there is an update to the filters. Will provide the caller with updated filter values via a callback function.
      * @param callback The callback function that will be given the updated filter values.
+     * @param excludeDisabled Optionally set to true if caller does not want to get filter values pertaining to filters that
+     *                        are not enabled or visible (due to a false *ngIf condition). Default is false (which means get these values).
      */
-    public onFiltersUpdate(callback: (foodListingsFilters: FoodListingsFilters) => void): void {
-
+    public onFiltersUpdate(callback: (foodListingsFilters: FoodListingsFilters) => void, excludeDisabled: boolean = false): void {
+        // Liisten for changes in all values excluding Food Types.
         this.filtersForm.valueChanges.subscribe((data: any) => {
-            callback(this.genFilterValues());
+            callback(this.genFilterValues(excludeDisabled));
         });
+
+        // Listen for changes in child Food Types component.
         this.foodTypesComponent.onFoodTypesUpdate((foodTypes: string[]) => {
-            callback(this.genFilterValues(foodTypes));
+            callback(this.genFilterValues(excludeDisabled, foodTypes));
         });
     }
 
 
-    public getFilterValues(): FoodListingsFilters {
-        return this.genFilterValues();
+    /**
+     * Gets the current values of all filters.
+     * @param excludeDisabled Optionally set to true if caller does not want to get filter values pertaining to filters that
+     *                        are not enabled or visible (due to a false *ngIf condition). Default is false (which means get these values).
+     * @return The retrieved filter values.
+     */
+    public getFilterValues(excludeDisabled: boolean = false): FoodListingsFilters {
+        return this.genFilterValues(excludeDisabled);
     }
 
 
     /**
      * Gets the filter values according to the current state of the form and its associated form group (view model).
+     * @param excludeDisabled Optionally set to true if caller does not want to get filter values pertaining to filters that
+     *                        are not enabled or visible (due to a false *ngIf condition). Default is false (which means get these values).
+     * @param foodTypes Optionally provide food types value that has already been obtained in the caller. Obtaining the food types value
+     *                  is a bit more expensive than normally obaining form values since a transformation happens with the contained form
+     *                  values. So, provide this value whenever possible.
      * @return The Food Listings filter values.
      */
-    private genFilterValues(foodTypes?: string[]): FoodListingsFilters {
+    private genFilterValues(excludeDisabled: boolean = false, foodTypes?: string[]): FoodListingsFilters {
 
-        let foodListingsFilters = this.filtersForm.value;
+        let foodListingsFilters = (excludeDisabled ? this.filtersForm.value : this.filtersForm.getRawValue());
         // See if we have been passed foodTypes or if we need to retrieve them from the Food Types component.
-        if (foodTypes == null)  foodListingsFilters.foodTypes = this.foodTypesComponent.getSelectedFoodTypes();
-        else                    foodListingsFilters.foodTypes = foodTypes;
+        foodListingsFilters.foodTypes = (foodTypes == null) ? this.foodTypesComponent.getSelectedFoodTypes()
+                                                            : foodListingsFilters.foodTypes = foodTypes;
         return foodListingsFilters;
     }
 }
