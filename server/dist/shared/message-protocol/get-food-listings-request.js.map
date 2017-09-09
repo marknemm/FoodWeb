@@ -1,0 +1,1 @@
+{"version":3,"file":"get-food-listings-request.js","sourceRoot":"","sources":["../../../../shared/message-protocol/get-food-listings-request.ts"],"names":[],"mappings":";;AAAA,gFAA4F;AACnF,8BADA,2CAAmB,CACA;AAE5B;;GAEG;AACH;IAEI;QACI;;WAEG;QACI,OAA4B;QAA5B,YAAO,GAAP,OAAO,CAAqB;IACnC,CAAC;IACT,6BAAC;AAAD,CAAC,AARD,IAQC;AARY,wDAAsB"}
