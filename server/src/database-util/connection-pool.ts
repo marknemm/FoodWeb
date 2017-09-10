@@ -3,6 +3,7 @@ export * from 'pg';
 
 require('dotenv');
 
+
 /**
  * The process.env object contains the global environmental variables set in the root directory's .env file.
  * For deployment on Heroku, we will explicitly set the environmental variables using 'heroku config:set ENVIRONEMNTAL_VAR_NAME = value' via the heroku cli.
@@ -16,10 +17,12 @@ const config : PoolConfig = {
     ssl:        (process.env.DATABASE_SSL.toLowerCase() === 'true')
 }
 
+
 /**
  * A static instace of a connection pool for pgsql.
  */
 const pool : Pool = new Pool(config);
+
  
 /**
  * This is a convenience method for quickly implicitly obtaining a connection, executing a single query, and releasing the connection automatically when finished.
@@ -29,13 +32,10 @@ const pool : Pool = new Pool(config);
  * @return A JavaScript Promise that will contain the result of the query upon success and error information upon failure.
  */
 export function query(text: string, values: Array<any> = null) : Promise<QueryResult> {
-    if (values != null) {
-        return pool.query(text, values);
-    }
-    else {
-        return pool.query(text);
-    }
-};
+    return (values != null) ? pool.query(text, values)
+                            : pool.query(text);
+}
+
     
 /**
  * This is used to grab a connection from the underlying connection pool.
@@ -44,5 +44,5 @@ export function query(text: string, values: Array<any> = null) : Promise<QueryRe
  * @return A Promise that will provide a client or connection object on success that can have queries exected on it.
  */ 
 export function connect() : Promise<Client> {
-  return pool.connect();
-};
+    return pool.connect();
+}

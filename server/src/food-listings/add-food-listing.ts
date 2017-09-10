@@ -1,8 +1,8 @@
 'use strict';
-import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
+import { connect, query, Client, QueryResult } from '../database-util/connection-pool';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 
-import { toPostgresArray } from '../database-help/prepared-statement-helper';
+import { toPostgresArray } from './../database-util/prepared-statement-util';
 
 import { FoodListingUpload } from '../../../shared/food-listings/food-listing-upload';
 import { FoodListing } from '../../../shared/food-listings/food-listing';
@@ -39,6 +39,7 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
 
     return query(queryString, queryArgs)
         .then((result: QueryResult) => {
+
             logSqlQueryResult(result.rows);
 
             // If we have an image, then store it on AWS / Heroku.
@@ -58,6 +59,7 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
 
 function writeImgToCDN(image: string, imageName: string): Promise<any> {
     return new Promise(function(resolve, reject) {
+
         // Configure AWS.
         let s3Bucket = new AWS.S3({
             params: { Bucket: process.env.AWS_BUCKET_NAME }
@@ -74,6 +76,7 @@ function writeImgToCDN(image: string, imageName: string): Promise<any> {
 
         // Upload the image.
         s3Bucket.putObject(data, (err: Error, data) => {
+
             if (err) { 
                 console.log(err);
                 console.log('Error uploading data: ', data); 
@@ -93,8 +96,10 @@ function writeImgToLocalFs(image: string, imageUrl: string): Promise<any> {
     let data = image.replace(/^data:image\/\w+;base64,/, '');
 
     return new Promise((resolve, reject) => {
+
         // Write to local file system.
         fs.writeFile(global['rootDir'] + imageUrl, data, {encoding: 'base64'}, (err: Error) => {
+            
             if (err) {
                 console.log(err);
                 reject();

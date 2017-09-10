@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Removes a donated food listing and all assocaited claims for the given food listing.

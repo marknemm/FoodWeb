@@ -1,6 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-var connection_pool_1 = require("../database-help/connection-pool");
+var connection_pool_1 = require("../database-util/connection-pool");
 var sql_logger_1 = require("../logging/sql-logger");
 /**
  * Gets all food types from the FoodType domain table in the database.

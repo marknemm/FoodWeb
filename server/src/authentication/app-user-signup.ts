@@ -1,14 +1,14 @@
 'use strict';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
-import { connect, query } from '../database-help/connection-pool';
+import { connect, query } from '../database-util/connection-pool';
 import { Client, QueryResult } from 'pg';
 
 import { hashPassword } from './password-util';
 import { GPSCoordinates, getGPSCoordinates } from '../common-util/geocode';
-import { fixNullQueryArgs } from "../database-help/prepared-statement-helper";
+import { fixNullQueryArgs } from "./../database-util/prepared-statement-util";
 
 import { Validation } from '../../../shared/common-util/validation';
-import { SessionData, AppUserInfo } from './session-data';
+import { SessionData, AppUserInfo } from '../common-util/session-data';
 
 let nodemailer = require("nodemailer-promise");
 require('dotenv');

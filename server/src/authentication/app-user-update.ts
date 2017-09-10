@@ -1,8 +1,8 @@
 import { logSqlQueryExec, logSqlQueryResult } from "../logging/sql-logger";
-import { query, QueryResult } from "../database-help/connection-pool";
+import { query, QueryResult } from "../database-util/connection-pool";
 import { login } from './app-user-login';
 import { signup } from './app-user-signup';
-import { SessionData, AppUserInfo } from "./session-data";
+import { SessionData, AppUserInfo } from "../common-util/session-data";
 
 import { Validation } from "../../../shared/common-util/validation";
 

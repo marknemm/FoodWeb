@@ -1,8 +1,8 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-var connection_pool_1 = require("../database-help/connection-pool");
+var connection_pool_1 = require("../database-util/connection-pool");
 var sql_logger_1 = require("../logging/sql-logger");
-var prepared_statement_helper_1 = require("../database-help/prepared-statement-helper");
+var prepared_statement_util_1 = require("./../database-util/prepared-statement-util");
 var date_formatter_1 = require("../../../shared/common-util/date-formatter");
 var fs = require('fs');
 var AWS = require('aws-sdk');
@@ -21,7 +21,7 @@ function addFoodListing(foodListingUpload, donorAppUserKey) {
         //imageUrl = process.env.AWS_BUCKET_URL + imageName;
     }
     var queryString = 'SELECT * FROM addFoodListing($1, $2, $3, $4, $5, $6);';
-    var queryArgs = [prepared_statement_helper_1.toPostgresArray(foodListingUpload.foodTypes),
+    var queryArgs = [prepared_statement_util_1.toPostgresArray(foodListingUpload.foodTypes),
         foodListingUpload.perishable,
         date_formatter_1.DateFormatter.dateToMonthDayYearString(foodListingUpload.expirationDate),
         donorAppUserKey,

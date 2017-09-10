@@ -14,11 +14,11 @@ export function hashPassword(password: string): Promise<string> {
     return genSalt().then((salt: string) => {
         return hash(password, salt)
     })
-    .then((hashedPassword : string) => {
+    .then((hashedPassword: string) => {
         console.log('Password hashed successfully.');
         return hashedPassword;
     })
-    .catch((err : Error) => {
+    .catch((err: Error) => {
         console.log(err);
         throw new Error('An unexpected error has occured.');
     });

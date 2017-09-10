@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router/router';
 import { Observable, ObservableInput } from 'rxjs/Observable';
-import { Http, Headers, Response } from '@angular/http';
+
+import { RequestService, Response } from "../../common-util/request.service";
 
 import { GetFoodTypesResponse } from '../../../../../shared/food-listings/get-food-types-message';
 
@@ -11,15 +12,11 @@ import { GetFoodTypesResponse } from '../../../../../shared/food-listings/get-fo
  */
 @Injectable()
 export class FoodTypesService implements Resolve<string[]> {
-    
-    private static readonly JSON_HEADERS: Headers = new Headers({
-        'Content-Type': 'application/json'
-    });
 
     // We will cache any Food Types that come back from the server so we only need to contact server once!
     private static foodTypesCache: string[] = null;
 
-    constructor(private http: Http) {}
+    constructor(private requestService: RequestService) {}
 
     /**
      * Retrieves food types from the server if they have not previously been retrieved. Otherwise, fetches them from contained cache.
@@ -36,8 +33,7 @@ export class FoodTypesService implements Resolve<string[]> {
     public getFoodTypes(): Observable<string[]> {
         // If we do not have cached Food Types, then we will contact the server.
         if (FoodTypesService.foodTypesCache === null) {
-            let observer: Observable<Response> = this.http.get('/foodListings/getFoodTypes',
-                                                               { headers: FoodTypesService.JSON_HEADERS, withCredentials: true });
+            let observer: Observable<Response> = this.requestService.get('/foodListings/getFoodTypes');
 
             return observer.map((response: Response) => {
                 let getFoodTypesResponse: GetFoodTypesResponse = response.json();

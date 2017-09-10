@@ -1,12 +1,12 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 var sql_logger_1 = require("../logging/sql-logger");
-var connection_pool_1 = require("../database-help/connection-pool");
+var connection_pool_1 = require("../database-util/connection-pool");
 var password_util_1 = require("./password-util");
 var geocode_1 = require("../common-util/geocode");
-var prepared_statement_helper_1 = require("../database-help/prepared-statement-helper");
+var prepared_statement_util_1 = require("./../database-util/prepared-statement-util");
 var validation_1 = require("../../../shared/common-util/validation");
-var session_data_1 = require("./session-data");
+var session_data_1 = require("../common-util/session-data");
 var nodemailer = require("nodemailer-promise");
 require('dotenv');
 /**
@@ -110,7 +110,7 @@ function addOrUpdateAppUser(appUserSignupInfo, hashedPassword, gpsCoordinates, a
     // If an update, then we will need additional appUserKey argument at beginning of list.
     if (isUpdate)
         queryArgs.unshift(appUserUpdateKey);
-    queryString = prepared_statement_helper_1.fixNullQueryArgs(queryString, queryArgs);
+    queryString = prepared_statement_util_1.fixNullQueryArgs(queryString, queryArgs);
     sql_logger_1.logSqlQueryExec(queryString, queryArgs);
     return connection_pool_1.query(queryString, queryArgs)
         .then(function (insertQueryResult) {

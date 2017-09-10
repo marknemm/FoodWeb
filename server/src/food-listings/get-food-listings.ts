@@ -1,12 +1,13 @@
 'use strict'
-import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
-import { fixNullQueryArgs, toPostgresArray } from '../database-help/prepared-statement-helper';
+import { connect, query, Client, QueryResult } from '../database-util/connection-pool';
+import { fixNullQueryArgs, toPostgresArray } from './../database-util/prepared-statement-util';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { FoodListingsFilters, LISTINGS_STATUS } from '../../../shared/food-listings/food-listings-filters';
 import { FoodListing } from "../../../shared/food-listings/food-listing";
 
 
 export function getFoodListings(filters: FoodListingsFilters, donatedByAppUserKey: number, claimedByAppUserKey: number): Promise<Array<FoodListing>> {
+
     let perishableArg: boolean = generatePerishabilityArg(filters.perishable, filters.notPerishable);
     let foodTypesArg: string = toPostgresArray(filters.foodTypes);
     // Important to wrap the received JSON stringified Date object in a new Date object (one we receive will not contain Date methods)!
@@ -49,7 +50,6 @@ function generatePerishabilityArg(perishable: boolean, notPerishable: boolean): 
 
 function generateExpireDateArg(earliestExpireDate: Date): string {
     if (earliestExpireDate == null)  return null;
-
     return (earliestExpireDate.getMonth() + '/' + earliestExpireDate.getDate() + '/' + earliestExpireDate.getFullYear());
 }
 

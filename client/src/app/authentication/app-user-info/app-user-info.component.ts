@@ -4,7 +4,7 @@ import { Observable } from "rxjs/Observable";
 import { Subscription } from "rxjs/Subscription";
 
 import { AppUserUpdateService } from "./app-user-update.service";
-import { AuthSessionService } from "../misc/auth-session.service";
+import { SessionDataService } from "../../common-util/session-data.service";
 import { FoodWebBusyConfig } from "../../common-util/food-web-busy-config";
 
 import { AppUserInfo } from "../../../../../shared/authentication/app-user-info";
@@ -35,9 +35,9 @@ export class AppUserInfoComponent {
     constructor(
         private formBuilder: FormBuilder,
         private appUserUpdateService: AppUserUpdateService,
-        private authSessionService: AuthSessionService
+        private sessionDataService: SessionDataService
     ) {
-        let appUserInfo: AppUserInfo = authSessionService.getAppUserSessionInfo();
+        let appUserInfo: AppUserInfo = sessionDataService.getAppUserSessionData();
         this.stateList = ['CA', 'NY', 'IN'];
 
         // Set some form labels based off of whether or not user is an organization.

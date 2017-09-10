@@ -14,11 +14,11 @@
             </ul>
 
             <ul class="navbar-nav navbar-right">
-                <button md-button *ngIf="!authSessionService.sessionInfoAvailable()" class='nav-link' (click)="showLogin()"><li class="nav-item">Login</li></button>
-                <button md-button *ngIf="!authSessionService.sessionInfoAvailable()" class='nav-link' [routerLink]="['/signup']"><li class="nav-item">Signup</li></button>
-                <button md-button *ngIf="authSessionService.sessionInfoAvailable()" class='nav-link' [routerLink]="['/cart']"><li class="nav-item">Cart</li></button>
-                <button md-button *ngIf="authSessionService.sessionInfoAvailable()" class='nav-link' [routerLink]="['/appUserInfo']"><li class="nav-item">Account</li></button>
-                <button md-button *ngIf="authSessionService.sessionInfoAvailable()" class='nav-link' (click)="logout()"><li class="nav-item">Logout</li></button>
+                <button md-button *ngIf="!sessionDataAvailable()" class='nav-link' (click)="showLogin()"><li class="nav-item">Login</li></button>
+                <button md-button *ngIf="!sessionDataAvailable()" class='nav-link' [routerLink]="['/signup']"><li class="nav-item">Signup</li></button>
+                <button md-button *ngIf="sessionDataAvailable()" class='nav-link' [routerLink]="['/cart']"><li class="nav-item">Cart</li></button>
+                <button md-button *ngIf="sessionDataAvailable()" class='nav-link' [routerLink]="['/appUserInfo']"><li class="nav-item">Account</li></button>
+                <button md-button *ngIf="sessionDataAvailable()" class='nav-link' (click)="logout()"><li class="nav-item">Logout</li></button>
             </ul>
         </div>
     </nav>

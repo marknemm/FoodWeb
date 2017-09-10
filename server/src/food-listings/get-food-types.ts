@@ -1,5 +1,5 @@
 'use strict'
-import { query, QueryResult } from '../database-help/connection-pool';
+import { query, QueryResult } from '../database-util/connection-pool';
 import { logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 
 /**

@@ -8,14 +8,15 @@ var path = require('path');
 // Set global root directory variable and configure .env path.
 global['rootDir'] = __dirname + '/../../../../';
 require('dotenv').config({ path: global['rootDir'] + '.env' });
-// Our controllers that will handle requests after this router hands off the data to them.
+// Our session middleware and controllers that will handle requests after this router hands off the data to them.
+var session_data_1 = require("./common-util/session-data");
 var authentication_controller_1 = require("./authentication/authentication-controller");
 var food_listing_controller_1 = require("./food-listings/food-listing-controller");
-// This is where compiled client ts files will go. We need this to locate index.html!
+// Configure paths to client JS files and public resource files (such as images).
 var clientBuildDir = global['rootDir'] + 'client/dist/';
 var publicDir = global['rootDir'] + 'public';
+// Initialize & Configure Express App (Establish App-Wide Middleware).
 var app = express();
-// Some configuration settings for our App.
 app.use(bodyParser.json());
 app.use(express.static(clientBuildDir));
 app.use(express.static(publicDir));
@@ -26,37 +27,31 @@ app.use(session({
     saveUninitialized: false
 }));
 app.set('port', (process.env.PORT || 5000));
-module.exports = app;
-// Handle /authentication/login route by passing off to AuthenticationController.
+module.exports = app; // Make available for mocha testing suites.
+// Authentication Controller Routes.
 app.post('/authentication/login', authentication_controller_1.handleLoginRequest);
-// Handle /authentication/logout route by passing it off to AuthenticationController.
 app.get('/authentication/logout', authentication_controller_1.handleLogoutRequest);
-// Handle /authentication/reAuthenticate route by passing off to AuthenticationController.
 app.get('/authentication/reAuthenticate', authentication_controller_1.handleReAuthenticateRequest);
-// Handle /authentication/signup route by passing it off to AuthenticationController.
 app.post('/authentication/signup', authentication_controller_1.handleSignupRequest);
-// Handle /authentication/updateAppUser route by passing it off to the AuthenticationController.
-app.post('/authentication/updateAppUser', authentication_controller_1.handleUpdateAppUserRequest);
-//Handle /authentication/verify route by passing it off to AuthenticationController.
 app.get('/authentication/verify', authentication_controller_1.handleSignupVerification);
-// Handle /foodListings/addFoodListing route by passing off to FoodListingController.
-app.post('/foodListings/addFoodListing', food_listing_controller_1.handleAddFoodListing);
-// Handle /foodListings/removeFoodListing route by passing off to FoodListingController.
-app.post('/foodListings/removeFoodListing', food_listing_controller_1.handleRemoveFoodListing);
-// Handle /foodListings/getFoodListings route by passing off to FoodListingController.
-app.post('/foodListings/getFoodListings', food_listing_controller_1.handleGetFoodListings);
-// Handle /foodListings/claimFoodListing route by passing off to FoodListingController.
-app.post('/foodListings/claimFoodListing', food_listing_controller_1.handleClaimFoodListing);
-// Handle /foodListings/unclaimFoodListing route by passing off to FoodListingController.
-app.post('/foodListings/unclaimFoodListing', food_listing_controller_1.handleUnclaimFoodListing);
-// Handle /foodListings/getFoodTypes route by passing off to FoodListingController.
+app.post('/authentication/updateAppUser', session_data_1.SessionData.ensureSessionActive, authentication_controller_1.handleUpdateAppUserRequest);
+// Food Listing Controller Routes.
+app.post('/foodListings/addFoodListing', session_data_1.SessionData.ensureSessionActive, food_listing_controller_1.handleAddFoodListing);
+app.post('/foodListings/removeFoodListing', session_data_1.SessionData.ensureSessionActive, food_listing_controller_1.handleRemoveFoodListing);
+app.post('/foodListings/getReceiverFoodListings', food_listing_controller_1.handleGetReceiverFoodListings);
+app.post('/foodListings/getCartFoodListings', session_data_1.SessionData.ensureSessionActive, food_listing_controller_1.handleGetCartFoodListings);
+app.post('/foodListings/claimFoodListing', session_data_1.SessionData.ensureSessionActive, food_listing_controller_1.handleClaimFoodListing);
+app.post('/foodListings/unclaimFoodListing', session_data_1.SessionData.ensureSessionActive, food_listing_controller_1.handleUnclaimFoodListing);
 app.get('/foodListings/getFoodTypes', food_listing_controller_1.handleGetFoodTypes);
+// Public Resource Route Handler (for local image hosting).
 app.get('/public/*', function (request, response) {
     response.sendFile(path.resolve(global['rootDir'] + request.url));
 });
+// All Remaining Routes Handler (for serving our main web page).
 app.get('*', function (request, response) {
     response.sendFile(path.join(clientBuildDir + '/index.html'));
 });
+// Log Message That Says When App is Up & Running.
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
 });

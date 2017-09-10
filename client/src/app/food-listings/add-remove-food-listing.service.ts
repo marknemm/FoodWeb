@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+
+import { RequestService, Response } from "../common-util/request.service";
 
 import { FoodListingUpload } from "./../../../../shared/food-listings/food-listing-upload";
 import { AddFoodListingRequest, AddFoodListingResponse } from "./../../../../shared/food-listings/add-food-listing-message";
@@ -11,13 +12,9 @@ import { ClaimFoodListingRequest } from "./../../../../shared/food-listings/clai
 @Injectable()
 export class AddRemoveFoodListingService {
 
-    private static readonly HEADERS: Headers = new Headers({
-        'Content-Type': 'application/json'
-    });
-
 
     constructor(
-        private http: Http
+        private requestService: RequestService
     ) { }
 
 
@@ -30,8 +27,9 @@ export class AddRemoveFoodListingService {
     public addFoodListing(foodListingUpload: FoodListingUpload, imageUpload: string): Observable<number> {
         foodListingUpload.imageUpload = imageUpload;
 
-        let observer: Observable<Response> = this.http.post('/foodListings/addFoodListing', new AddFoodListingRequest(foodListingUpload),
-                                                            { headers: AddRemoveFoodListingService.HEADERS, withCredentials: true });
+        let body: AddFoodListingRequest = new AddFoodListingRequest(foodListingUpload);
+        let observer: Observable<Response> = this.requestService.post('/foodListings/addFoodListing', body);
+
         return observer.map((response: Response) => {
             let addFoodListingResponse: AddFoodListingResponse = response.json();
             console.log(addFoodListingResponse.message);
@@ -49,8 +47,9 @@ export class AddRemoveFoodListingService {
      * @param foodListingKey The key identifier of the food listing that is to be removed.
      */
     public removeFoodListing(foodListingKey: number): Observable<void> {
-        let observer: Observable<Response> = this.http.post('/foodListings/removeFoodListing', new ClaimFoodListingRequest(foodListingKey),
-                                                            { headers: AddRemoveFoodListingService.HEADERS, withCredentials: true });
+        let body: ClaimFoodListingRequest = new ClaimFoodListingRequest(foodListingKey);
+        let observer: Observable<Response> = this.requestService.post('/foodListings/removeFoodListing', body);
+        
         return observer.map((response: Response) => {
             let removeFoodListingResponse: FoodWebResponse = response.json();
             console.log(removeFoodListingResponse.message);

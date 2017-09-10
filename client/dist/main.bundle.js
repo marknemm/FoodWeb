@@ -101,16 +101,18 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__food_listings_food_listings_component__ = __webpack_require__("../../../../../client/src/app/food-listings/food-listings.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__food_listings_food_types_food_types_component__ = __webpack_require__("../../../../../client/src/app/food-listings/food-types/food-types.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__authentication_app_user_info_app_user_info_component__ = __webpack_require__("../../../../../client/src/app/authentication/app-user-info/app-user-info.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__authentication_misc_auth_watch_service__ = __webpack_require__("../../../../../client/src/app/authentication/misc/auth-watch.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__authentication_misc_auth_session_service__ = __webpack_require__("../../../../../client/src/app/authentication/misc/auth-session.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__food_listings_food_types_food_types_service__ = __webpack_require__("../../../../../client/src/app/food-listings/food-types/food-types.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__common_util_date_formatter_pipe__ = __webpack_require__("../../../../../client/src/app/common-util/date-formatter.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__common_util_request_service__ = __webpack_require__("../../../../../client/src/app/common-util/request.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__common_util_route_preprocess_service__ = __webpack_require__("../../../../../client/src/app/common-util/route-preprocess.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__common_util_session_data_service__ = __webpack_require__("../../../../../client/src/app/common-util/session-data.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__food_listings_food_types_food_types_service__ = __webpack_require__("../../../../../client/src/app/food-listings/food-types/food-types.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__common_util_date_formatter_pipe__ = __webpack_require__("../../../../../client/src/app/common-util/date-formatter.pipe.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -154,40 +156,40 @@ var appRoutes = [
     {
         path: 'home',
         component: __WEBPACK_IMPORTED_MODULE_12__home_home_component__["a" /* HomeComponent */],
-        canActivate: [__WEBPACK_IMPORTED_MODULE_26__authentication_misc_auth_watch_service__["a" /* AuthWatchService */]],
+        canActivate: [__WEBPACK_IMPORTED_MODULE_27__common_util_route_preprocess_service__["a" /* RoutePreprocessService */]],
     },
     {
         path: 'donate',
         component: __WEBPACK_IMPORTED_MODULE_16__donate_donate_component__["a" /* DonateComponent */],
-        canActivate: [__WEBPACK_IMPORTED_MODULE_26__authentication_misc_auth_watch_service__["a" /* AuthWatchService */]]
+        canActivate: [__WEBPACK_IMPORTED_MODULE_27__common_util_route_preprocess_service__["a" /* RoutePreprocessService */]]
     },
     {
         path: 'receive',
         component: __WEBPACK_IMPORTED_MODULE_17__receive_receive_component__["a" /* ReceiveComponent */],
-        canActivate: [__WEBPACK_IMPORTED_MODULE_26__authentication_misc_auth_watch_service__["a" /* AuthWatchService */]],
+        canActivate: [__WEBPACK_IMPORTED_MODULE_27__common_util_route_preprocess_service__["a" /* RoutePreprocessService */]],
         // Make sure that we get the FoodTypes from the back end before routing to the receiver interface!
         resolve: {
-            foodTypes: __WEBPACK_IMPORTED_MODULE_28__food_listings_food_types_food_types_service__["a" /* FoodTypesService */]
+            foodTypes: __WEBPACK_IMPORTED_MODULE_29__food_listings_food_types_food_types_service__["a" /* FoodTypesService */]
         }
     },
     {
         path: 'cart',
         component: __WEBPACK_IMPORTED_MODULE_18__cart_cart_component__["a" /* CartComponent */],
-        canActivate: [__WEBPACK_IMPORTED_MODULE_26__authentication_misc_auth_watch_service__["a" /* AuthWatchService */]],
+        canActivate: [__WEBPACK_IMPORTED_MODULE_27__common_util_route_preprocess_service__["a" /* RoutePreprocessService */]],
         // Make sure that we get the FoodTypes from the back end before routing to the cart interface!
         resolve: {
-            foodTypes: __WEBPACK_IMPORTED_MODULE_28__food_listings_food_types_food_types_service__["a" /* FoodTypesService */]
+            foodTypes: __WEBPACK_IMPORTED_MODULE_29__food_listings_food_types_food_types_service__["a" /* FoodTypesService */]
         }
     },
     {
         path: 'signup',
         component: __WEBPACK_IMPORTED_MODULE_19__authentication_signup_signup_component__["a" /* SignupComponent */],
-        canActivate: [__WEBPACK_IMPORTED_MODULE_26__authentication_misc_auth_watch_service__["a" /* AuthWatchService */]]
+        canActivate: [__WEBPACK_IMPORTED_MODULE_27__common_util_route_preprocess_service__["a" /* RoutePreprocessService */]]
     },
     {
         path: 'appUserInfo',
         component: __WEBPACK_IMPORTED_MODULE_25__authentication_app_user_info_app_user_info_component__["a" /* AppUserInfoComponent */],
-        canActivate: [__WEBPACK_IMPORTED_MODULE_26__authentication_misc_auth_watch_service__["a" /* AuthWatchService */]]
+        canActivate: [__WEBPACK_IMPORTED_MODULE_27__common_util_route_preprocess_service__["a" /* RoutePreprocessService */]]
     }
 ];
 var AppModule = (function () {
@@ -205,7 +207,7 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_17__receive_receive_component__["a" /* ReceiveComponent */],
                 __WEBPACK_IMPORTED_MODULE_19__authentication_signup_signup_component__["a" /* SignupComponent */],
                 __WEBPACK_IMPORTED_MODULE_8_ng2_img_cropper__["b" /* ImageCropperComponent */],
-                __WEBPACK_IMPORTED_MODULE_29__common_util_date_formatter_pipe__["a" /* DateFormatterPipe */],
+                __WEBPACK_IMPORTED_MODULE_30__common_util_date_formatter_pipe__["a" /* DateFormatterPipe */],
                 __WEBPACK_IMPORTED_MODULE_20__banner_banner_component__["a" /* BannerComponent */],
                 __WEBPACK_IMPORTED_MODULE_21__slick_left_panel_slick_left_panel_component__["a" /* SlickLeftPanelComponent */],
                 __WEBPACK_IMPORTED_MODULE_22__food_listings_food_listings_filters_food_listings_filters_component__["a" /* FoodListingsFiltersComponent */],
@@ -240,10 +242,11 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_11__app_component__["a" /* AppComponent */]
             ],
             providers: [
-                __WEBPACK_IMPORTED_MODULE_29__common_util_date_formatter_pipe__["a" /* DateFormatterPipe */],
-                __WEBPACK_IMPORTED_MODULE_26__authentication_misc_auth_watch_service__["a" /* AuthWatchService */],
-                __WEBPACK_IMPORTED_MODULE_27__authentication_misc_auth_session_service__["a" /* AuthSessionService */],
-                __WEBPACK_IMPORTED_MODULE_28__food_listings_food_types_food_types_service__["a" /* FoodTypesService */],
+                __WEBPACK_IMPORTED_MODULE_30__common_util_date_formatter_pipe__["a" /* DateFormatterPipe */],
+                __WEBPACK_IMPORTED_MODULE_26__common_util_request_service__["a" /* RequestService */],
+                __WEBPACK_IMPORTED_MODULE_28__common_util_session_data_service__["a" /* SessionDataService */],
+                __WEBPACK_IMPORTED_MODULE_27__common_util_route_preprocess_service__["a" /* RoutePreprocessService */],
+                __WEBPACK_IMPORTED_MODULE_29__food_listings_food_types_food_types_service__["a" /* FoodTypesService */],
                 { provide: __WEBPACK_IMPORTED_MODULE_10__angular_material__["a" /* DateAdapter */], useClass: __WEBPACK_IMPORTED_MODULE_10__angular_material__["l" /* NativeDateAdapter */] },
                 { provide: __WEBPACK_IMPORTED_MODULE_10__angular_material__["b" /* MD_DATE_FORMATS */], useValue: __WEBPACK_IMPORTED_MODULE_10__angular_material__["c" /* MD_NATIVE_DATE_FORMATS */] }
             ]
@@ -289,7 +292,7 @@ module.exports = "<div [formGroup]=\"appUserInfoForm\" class=\"container\" [ngBu
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_user_update_service__ = __webpack_require__("../../../../../client/src/app/authentication/app-user-info/app-user-update.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__misc_auth_session_service__ = __webpack_require__("../../../../../client/src/app/authentication/misc/auth-session.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_util_session_data_service__ = __webpack_require__("../../../../../client/src/app/common-util/session-data.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__common_util_food_web_busy_config__ = __webpack_require__("../../../../../client/src/app/common-util/food-web-busy-config.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_authentication_app_user_info__ = __webpack_require__("../../../../../shared/authentication/app-user-info.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__shared_common_util_validation__ = __webpack_require__("../../../../../shared/common-util/validation.ts");
@@ -310,11 +313,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var AppUserInfoComponent = (function () {
-    function AppUserInfoComponent(formBuilder, appUserUpdateService, authSessionService) {
+    function AppUserInfoComponent(formBuilder, appUserUpdateService, sessionDataService) {
         this.formBuilder = formBuilder;
         this.appUserUpdateService = appUserUpdateService;
-        this.authSessionService = authSessionService;
-        var appUserInfo = authSessionService.getAppUserSessionInfo();
+        this.sessionDataService = sessionDataService;
+        var appUserInfo = sessionDataService.getAppUserSessionData();
         this.stateList = ['CA', 'NY', 'IN'];
         // Set some form labels based off of whether or not user is an organization.
         this.isOrganization = (appUserInfo.organizationName != null);
@@ -472,7 +475,7 @@ var AppUserInfoComponent = (function () {
             styles: [__webpack_require__("../../../../../client/src/app/authentication/app-user-info/app-user-info.component.css")],
             providers: [__WEBPACK_IMPORTED_MODULE_2__app_user_update_service__["a" /* AppUserUpdateService */]]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__app_user_update_service__["a" /* AppUserUpdateService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__app_user_update_service__["a" /* AppUserUpdateService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__misc_auth_session_service__["a" /* AuthSessionService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__misc_auth_session_service__["a" /* AuthSessionService */]) === "function" && _c || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__app_user_update_service__["a" /* AppUserUpdateService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__app_user_update_service__["a" /* AppUserUpdateService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__common_util_session_data_service__["a" /* SessionDataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__common_util_session_data_service__["a" /* SessionDataService */]) === "function" && _c || Object])
     ], AppUserInfoComponent);
     return AppUserInfoComponent;
     var _a, _b, _c;
@@ -488,7 +491,7 @@ var AppUserInfoComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppUserUpdateService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__ = __webpack_require__("../../../../../client/src/app/common-util/request.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_authentication_update_app_user_message__ = __webpack_require__("../../../../../shared/authentication/update-app-user-message.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -503,8 +506,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var AppUserUpdateService = (function () {
-    function AppUserUpdateService(http) {
-        this.http = http;
+    function AppUserUpdateService(requestService) {
+        this.requestService = requestService;
     }
     /**
      * Sends App User Update Info to the server and listens for a response.
@@ -513,10 +516,8 @@ var AppUserUpdateService = (function () {
      * @param currentPassword Only required when the password is being updated. Should contain the current password of the user.
      */
     AppUserUpdateService.prototype.updateAppUserInfo = function (appUserInfoUpdate, newPassword, currentPassword) {
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
-            'Content-Type': 'application/json'
-        });
-        var observer = this.http.post('/authentication/updateAppUser', new __WEBPACK_IMPORTED_MODULE_2__shared_authentication_update_app_user_message__["a" /* UpdateAppUserRequest */](appUserInfoUpdate, newPassword, currentPassword), { headers: headers });
+        var body = new __WEBPACK_IMPORTED_MODULE_2__shared_authentication_update_app_user_message__["a" /* UpdateAppUserRequest */](appUserInfoUpdate, newPassword, currentPassword);
+        var observer = this.requestService.post('/authentication/updateAppUser', body);
         return observer.map(function (response) {
             var appUserUpdateResponse = response.json();
             console.log(appUserUpdateResponse.message);
@@ -526,7 +527,7 @@ var AppUserUpdateService = (function () {
     };
     AppUserUpdateService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__["a" /* RequestService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__["a" /* RequestService */]) === "function" && _a || Object])
     ], AppUserUpdateService);
     return AppUserUpdateService;
     var _a;
@@ -679,7 +680,7 @@ var LoginComponent = (function (_super) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__misc_auth_session_service__ = __webpack_require__("../../../../../client/src/app/authentication/misc/auth-session.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_util_session_data_service__ = __webpack_require__("../../../../../client/src/app/common-util/session-data.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_authentication_login_message__ = __webpack_require__("../../../../../shared/authentication/login-message.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -695,28 +696,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var LoginService = (function () {
-    function LoginService(http, authSessionService) {
+    function LoginService(http, sessionDataService) {
         this.http = http;
-        this.authSessionService = authSessionService;
+        this.sessionDataService = sessionDataService;
     }
     LoginService.prototype.login = function (loginModel) {
         var _this = this;
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
             'Content-Type': 'application/json'
         });
+        // NOTE: Should user raw http request here instead of RequestService wrapper since RequestService depends on this LoginService (prevent circular dependency)!
         var observer = this.http.post('/authentication/login', new __WEBPACK_IMPORTED_MODULE_3__shared_authentication_login_message__["a" /* LoginRequest */](loginModel.username, loginModel.password), { headers: headers });
         return observer.map(function (response) {
             var loginResponse = response.json();
             console.log(loginResponse.message);
             if (loginResponse.success) {
-                _this.authSessionService.updateAppUserSessionInfo(loginResponse.appUserInfo);
+                _this.sessionDataService.updateAppUserSessionData(loginResponse.appUserInfo);
             }
             return { success: loginResponse.success, message: loginResponse.message };
         });
     };
     LoginService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__misc_auth_session_service__["a" /* AuthSessionService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__misc_auth_session_service__["a" /* AuthSessionService */]) === "function" && _b || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__common_util_session_data_service__["a" /* SessionDataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__common_util_session_data_service__["a" /* SessionDataService */]) === "function" && _b || Object])
     ], LoginService);
     return LoginService;
     var _a, _b;
@@ -726,188 +728,15 @@ var LoginService = (function () {
 
 /***/ }),
 
-/***/ "../../../../../client/src/app/authentication/misc/auth-session.service.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthSessionService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-var AuthSessionService = (function () {
-    function AuthSessionService() {
-    }
-    AuthSessionService_1 = AuthSessionService;
-    /**
-     * Updates the browser's session data based off of given App User info.
-     * @param appUserInfo The App User info to update the browser session data with.
-     */
-    AuthSessionService.prototype.updateAppUserSessionInfo = function (appUserInfo) {
-        AuthSessionService_1.appUserInfo = appUserInfo;
-    };
-    /**
-     * Fills and returns an AppUserInfo container with available front-end session data.
-     * @return The filled AppUserInfo container.
-     */
-    AuthSessionService.prototype.getAppUserSessionInfo = function () {
-        return AuthSessionService_1.appUserInfo;
-    };
-    /**
-     * convenience method for retrieving the full name of a logged in organization or individual user.
-     */
-    AuthSessionService.prototype.getFullName = function () {
-        if (AuthSessionService_1.appUserInfo != null) {
-            if (AuthSessionService_1.appUserInfo.organizationName != null) {
-                return AuthSessionService_1.appUserInfo.organizationName;
-            }
-            return (AuthSessionService_1.appUserInfo.firstName + ' ' + AuthSessionService_1.appUserInfo.lastName);
-        }
-        return null;
-    };
-    /**
-     * Clears the current session info.
-     */
-    AuthSessionService.prototype.clearSessionInfo = function () {
-        AuthSessionService_1.appUserInfo = null;
-    };
-    /**
-     * Determines if any session info is currently available or being held.
-     * @return true if session info is available, false if not (it is clear).
-     */
-    AuthSessionService.prototype.sessionInfoAvailable = function () {
-        return (AuthSessionService_1.appUserInfo != null);
-    };
-    /**
-     * The App User Info belonging to the current signed in user.
-     */
-    AuthSessionService.appUserInfo = null;
-    AuthSessionService = AuthSessionService_1 = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [])
-    ], AuthSessionService);
-    return AuthSessionService;
-    var AuthSessionService_1;
-}());
-
-//# sourceMappingURL=auth-session.service.js.map
-
-/***/ }),
-
-/***/ "../../../../../client/src/app/authentication/misc/auth-watch.service.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthWatchService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__ = __webpack_require__("../../../../ng2-bootstrap-modal/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__auth_session_service__ = __webpack_require__("../../../../../client/src/app/authentication/misc/auth-session.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login_component__ = __webpack_require__("../../../../../client/src/app/authentication/login/login.component.ts");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-/**
- * Re-authenticates the user whenever there is a route change. Also, makes a user login if they visit restricted routes which require login.
- */
-var AuthWatchService = (function () {
-    function AuthWatchService(http, router, dialogService, authSessionService) {
-        this.http = http;
-        this.router = router;
-        this.dialogService = dialogService;
-        this.authSessionService = authSessionService;
-    }
-    AuthWatchService_1 = AuthWatchService;
-    /**
-     * Determines if a given target route can be activated (or followed). Will check credentials on server regardless of whether or not
-     * the given route is in the LOGIN_RESTRICTED_ROUTES list.
-     * @param route The route that is being activated.
-     * @param state The state of the router.
-     * @return An observable that will resolve to true if the route can be activated, and false if it cannot.
-     */
-    AuthWatchService.prototype.canActivate = function (route, state) {
-        var _this = this;
-        // Check with server to check if we are logged in!
-        var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Headers */]({
-            'Content-Type': 'application/json'
-        });
-        var observer = this.http.get('/authentication/reAuthenticate');
-        // Finally, check the response from the server and react appropriately.
-        return observer.map(function (response) {
-            var reAuthenticateResponse = response.json();
-            console.log(reAuthenticateResponse.message);
-            // Make sure we update the session info we are holding.
-            _this.authSessionService.updateAppUserSessionInfo(reAuthenticateResponse.appUserInfo);
-            // If not authenticated, and we are visiting a route that requires us to be logged in, then redirect to login.
-            if (!reAuthenticateResponse.success && AuthWatchService_1.LOGIN_RESTRICTED_ROUTES.indexOf(state.url) >= 0) {
-                _this.attemptLoginAndRedirect(state.url);
-                return false;
-            }
-            return true;
-        });
-    };
-    /**
-     * Generates a login dialog that the user can login with. If login is successful, then the user is redirected to their original target route.
-     * @param toUrl THe url that the user was trying to access before reAuthentication.
-     */
-    AuthWatchService.prototype.attemptLoginAndRedirect = function (toUrl) {
-        var _this = this;
-        // Generate the login dialog.
-        var dialogObserver = __WEBPACK_IMPORTED_MODULE_5__login_login_component__["a" /* LoginComponent */].display(this.dialogService);
-        // Observe what the dialog result is.
-        dialogObserver.subscribe(function () {
-            // After done with login dialog, if we are logged in, then we can redirect to original intended link!
-            if (_this.authSessionService.sessionInfoAvailable()) {
-                _this.router.navigate([toUrl]);
-            }
-        });
-    };
-    /**
-     * List of login restricted routes. User must be logged in to visit these pages!
-     */
-    AuthWatchService.LOGIN_RESTRICTED_ROUTES = ['/donate', '/appUserInfo', '/cart'];
-    AuthWatchService = AuthWatchService_1 = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__["DialogService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__["DialogService"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__auth_session_service__["a" /* AuthSessionService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__auth_session_service__["a" /* AuthSessionService */]) === "function" && _d || Object])
-    ], AuthWatchService);
-    return AuthWatchService;
-    var AuthWatchService_1, _a, _b, _c, _d;
-}());
-
-//# sourceMappingURL=auth-watch.service.js.map
-
-/***/ }),
-
 /***/ "../../../../../client/src/app/authentication/misc/logout.service.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogoutService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__auth_session_service__ = __webpack_require__("../../../../../client/src/app/authentication/misc/auth-session.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_util_request_service__ = __webpack_require__("../../../../../client/src/app/common-util/request.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_util_session_data_service__ = __webpack_require__("../../../../../client/src/app/common-util/session-data.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -922,22 +751,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var LogoutService = (function () {
-    function LogoutService(http, router, authSessionService) {
-        this.http = http;
+    function LogoutService(router, requestService, sessionDataService) {
         this.router = router;
-        this.authSessionService = authSessionService;
+        this.requestService = requestService;
+        this.sessionDataService = sessionDataService;
     }
     LogoutService.prototype.logout = function () {
         var _this = this;
-        this.http.get('/authentication/logout').subscribe(function () {
-            _this.authSessionService.clearSessionInfo();
+        this.requestService.get('/authentication/logout').subscribe(function () {
+            _this.sessionDataService.clearSessionData();
             _this.router.navigate(['/home']);
         });
         // Not interested in the response...
     };
     LogoutService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__auth_session_service__["a" /* AuthSessionService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__auth_session_service__["a" /* AuthSessionService */]) === "function" && _c || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__common_util_request_service__["a" /* RequestService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__common_util_request_service__["a" /* RequestService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__common_util_session_data_service__["a" /* SessionDataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__common_util_session_data_service__["a" /* SessionDataService */]) === "function" && _c || Object])
     ], LogoutService);
     return LogoutService;
     var _a, _b, _c;
@@ -1083,9 +912,9 @@ var SignupComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SignupService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_authentication_signup_message__ = __webpack_require__("../../../../../shared/authentication/signup-message.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__misc_auth_session_service__ = __webpack_require__("../../../../../client/src/app/authentication/misc/auth-session.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__ = __webpack_require__("../../../../../client/src/app/common-util/request.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_util_session_data_service__ = __webpack_require__("../../../../../client/src/app/common-util/session-data.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_authentication_signup_message__ = __webpack_require__("../../../../../shared/authentication/signup-message.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1100,29 +929,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var SignupService = (function () {
-    function SignupService(http, authSessionService) {
-        this.http = http;
-        this.authSessionService = authSessionService;
+    function SignupService(requestService, sessionDataService) {
+        this.requestService = requestService;
+        this.sessionDataService = sessionDataService;
     }
     SignupService.prototype.signup = function (appUserSignupInfo, password) {
         var _this = this;
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
-            'Content-Type': 'application/json'
-        });
-        var observer = this.http.post('/authentication/signup', new __WEBPACK_IMPORTED_MODULE_2__shared_authentication_signup_message__["a" /* SignupRequest */](appUserSignupInfo, password), { headers: headers });
+        var body = new __WEBPACK_IMPORTED_MODULE_3__shared_authentication_signup_message__["a" /* SignupRequest */](appUserSignupInfo, password);
+        var observer = this.requestService.post('/authentication/signup', body);
         return observer.map(function (response) {
             var signupResponse = response.json();
             console.log(signupResponse.message);
             // On successful signup, cache the App User's data in global front end session storage.
             if (signupResponse.success) {
-                _this.authSessionService.updateAppUserSessionInfo(appUserSignupInfo);
+                _this.sessionDataService.updateAppUserSessionData(appUserSignupInfo);
             }
             return signupResponse;
         });
     };
     SignupService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__misc_auth_session_service__["a" /* AuthSessionService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__misc_auth_session_service__["a" /* AuthSessionService */]) === "function" && _b || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__["a" /* RequestService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__["a" /* RequestService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__common_util_session_data_service__["a" /* SessionDataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__common_util_session_data_service__["a" /* SessionDataService */]) === "function" && _b || Object])
     ], SignupService);
     return SignupService;
     var _a, _b;
@@ -1237,7 +1064,7 @@ module.exports = "<div class=\"container-fluid\">\r\n    <div id=\"cart-row\" cl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__food_listings_food_listings_component__ = __webpack_require__("../../../../../client/src/app/food-listings/food-listings.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__food_listings_claim_unclaim_food_listing_service__ = __webpack_require__("../../../../../client/src/app/food-listings/claim-unclaim-food-listing.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__food_listings_add_remove_food_listing_service__ = __webpack_require__("../../../../../client/src/app/food-listings/add-remove-food-listing.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__authentication_misc_auth_session_service__ = __webpack_require__("../../../../../client/src/app/authentication/misc/auth-session.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__common_util_session_data_service__ = __webpack_require__("../../../../../client/src/app/common-util/session-data.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_food_listings_food_listings_filters__ = __webpack_require__("../../../../../shared/food-listings/food-listings-filters.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1257,15 +1084,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var CartComponent = (function () {
-    function CartComponent(authSessionService, claimFoodListingService, addRemoveFoodListingService) {
-        this.authSessionService = authSessionService;
+    function CartComponent(sessionDataService, claimFoodListingService, addRemoveFoodListingService) {
+        this.sessionDataService = sessionDataService;
         this.claimFoodListingService = claimFoodListingService;
         this.addRemoveFoodListingService = addRemoveFoodListingService;
         // Need to declare LISTINGS_STATUS enum inside component to be used in the HTML template!
         this.LISTINGS_STATUS = __WEBPACK_IMPORTED_MODULE_7__shared_food_listings_food_listings_filters__["a" /* LISTINGS_STATUS */];
     }
     CartComponent.prototype.ngOnInit = function () {
-        var appUserInfo = this.authSessionService.getAppUserSessionInfo();
+        var appUserInfo = this.sessionDataService.getAppUserSessionData();
         /**
          *  Retrieves user data from session storage to
          *  determine initial cart type and mutability of cart type
@@ -1349,9 +1176,13 @@ var CartComponent = (function () {
             selector: 'app-cart',
             template: __webpack_require__("../../../../../client/src/app/cart/cart.component.html"),
             styles: [__webpack_require__("../../../../../client/src/app/cart/cart.component.css")],
-            providers: [__WEBPACK_IMPORTED_MODULE_6__authentication_misc_auth_session_service__["a" /* AuthSessionService */], __WEBPACK_IMPORTED_MODULE_4__food_listings_claim_unclaim_food_listing_service__["a" /* ClaimFoodListingService */], __WEBPACK_IMPORTED_MODULE_5__food_listings_add_remove_food_listing_service__["a" /* AddRemoveFoodListingService */]]
+            providers: [
+                __WEBPACK_IMPORTED_MODULE_6__common_util_session_data_service__["a" /* SessionDataService */],
+                __WEBPACK_IMPORTED_MODULE_4__food_listings_claim_unclaim_food_listing_service__["a" /* ClaimFoodListingService */],
+                __WEBPACK_IMPORTED_MODULE_5__food_listings_add_remove_food_listing_service__["a" /* AddRemoveFoodListingService */]
+            ]
         }),
-        __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_6__authentication_misc_auth_session_service__["a" /* AuthSessionService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__authentication_misc_auth_session_service__["a" /* AuthSessionService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__food_listings_claim_unclaim_food_listing_service__["a" /* ClaimFoodListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__food_listings_claim_unclaim_food_listing_service__["a" /* ClaimFoodListingService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_5__food_listings_add_remove_food_listing_service__["a" /* AddRemoveFoodListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__food_listings_add_remove_food_listing_service__["a" /* AddRemoveFoodListingService */]) === "function" && _e || Object])
+        __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_6__common_util_session_data_service__["a" /* SessionDataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__common_util_session_data_service__["a" /* SessionDataService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__food_listings_claim_unclaim_food_listing_service__["a" /* ClaimFoodListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__food_listings_claim_unclaim_food_listing_service__["a" /* ClaimFoodListingService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_5__food_listings_add_remove_food_listing_service__["a" /* AddRemoveFoodListingService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__food_listings_add_remove_food_listing_service__["a" /* AddRemoveFoodListingService */]) === "function" && _e || Object])
     ], CartComponent);
     return CartComponent;
     var _a, _b, _c, _d, _e;
@@ -1421,6 +1252,321 @@ var FoodWebBusyConfig = (function () {
 
 /***/ }),
 
+/***/ "../../../../../client/src/app/common-util/request.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RequestService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__ = __webpack_require__("../../../../rxjs/Observable.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__ = __webpack_require__("../../../../ng2-bootstrap-modal/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__common_util_session_data_service__ = __webpack_require__("../../../../../client/src/app/common-util/session-data.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__authentication_login_login_component__ = __webpack_require__("../../../../../client/src/app/authentication/login/login.component.ts");
+/* unused harmony reexport Response */
+/* TODO: This file is a hell of a lot confusing... simplify in future. For now, just made lots of comments. */
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+/**
+ * All requests made to the server should be processed through this service. There should be no raw http requests.
+ * This service acts as client side middleware that checks the error state of the response to see if it can remedy the error
+ * (like in cases where a login is required) and resend the request.
+ */
+var RequestService = (function () {
+    function RequestService(http, dialogService, sessionDataService) {
+        this.http = http;
+        this.dialogService = dialogService;
+        this.sessionDataService = sessionDataService;
+    }
+    /**
+     * Performs an HTTP POST Request. The result will be examined to determine if the user needs to re-login.
+     * If so, then it will automatically trigger the Login Component (popup) to display. If the login is successful,
+     * then it will resend the request. If not, then it will fail with appropriate error flag and message.
+     * @param url The destination URL for the request. Can be a relative URL.
+     * @param body The body or payload of the request. This will be sent in JSON format.
+     */
+    RequestService.prototype.post = function (url, body) {
+        /* Wrap the request in a function so that it can recursively be called by response handler if necessary.
+           Such cases would include when the user must login and they successfully login (repeat request). */
+        var sendRequest = function () {
+            var _this = this;
+            var options = {
+                headers: new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
+                    'Content-Type': 'application/json'
+                })
+            };
+            return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].create(function (observer) {
+                _this.http.post(url, body, options).subscribe(function (response) {
+                    // Make the response handler its own Observable because it can evaluate to a recursive call to sendRequest()!
+                    _this.handleResponse(sendRequest, response).subscribe(function (response) {
+                        observer.next(response);
+                        observer.complete();
+                    });
+                });
+            });
+        }
+            .bind(this);
+        return sendRequest();
+    };
+    /**
+     * Performs an HTTP GET Request. The result will be examined to determine if the user needs to re-login.
+     * If so, then it will automatically trigger the Login Component (popup) to display. If the login is successful,
+     * then it will resend the request. If not, then it will fail with appropriate error flag and message.
+     * @param url The destination URL for the request. Can be a relative URL.
+     */
+    RequestService.prototype.get = function (url) {
+        /* Wrap the request in a function so that it can recursively be called by response handler if necessary.
+           Such cases would include when the user must login and they successfully login (repeat request). */
+        var sendRequest = function () {
+            var _this = this;
+            return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].create(function (observer) {
+                _this.http.get(url).subscribe(function (response) {
+                    // Make the response handler its own Observable because it can evaluate to a recursive call to sendRequest()!
+                    _this.handleResponse(sendRequest, response).subscribe(function (response) {
+                        observer.next(response);
+                        observer.complete();
+                    });
+                });
+            });
+        }
+            .bind(this);
+        return sendRequest();
+    };
+    /**
+     * Handles the response of either an HTTP POST or GET request. Determines if re-login is required and acts accordingly.
+     * @param retrySendRequestCallback A callback function that may be called to recursively retry the request.
+     * @param response The response of either an HTTP POST or GET request.
+     */
+    RequestService.prototype.handleResponse = function (retrySendRequestCallback, response) {
+        var _this = this;
+        var foodWebResponse = response.json();
+        // Check if the user must confirm their signup in order to successfully perform the related request/action.
+        if (foodWebResponse.signupConfirmRequired) {
+            alert('Sorry, you must confirm your registration by following the email confirmation link sent to your email account before performing this action.');
+        }
+        else if (foodWebResponse.loginRequired) {
+            // Mark the session ended (or not logged in) in this client.
+            this.sessionDataService.clearSessionData();
+            // Wrap login result in a newly created Observable.
+            return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].create(function (observer) {
+                // Attempt login.
+                __WEBPACK_IMPORTED_MODULE_5__authentication_login_login_component__["a" /* LoginComponent */].display(_this.dialogService).subscribe(function () {
+                    // If login successful, then re-send original request and go through this process recursively.
+                    if (_this.sessionDataService.sessionDataAvailable()) {
+                        retrySendRequestCallback().subscribe(function (response) {
+                            observer.next(response);
+                            observer.complete();
+                        });
+                    }
+                    else {
+                        observer.next(response);
+                        observer.complete();
+                    }
+                });
+            });
+        }
+        // No problems with signup confirmation or login detected!
+        return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].of(response);
+    };
+    RequestService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__["DialogService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_bootstrap_modal__["DialogService"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__common_util_session_data_service__["a" /* SessionDataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__common_util_session_data_service__["a" /* SessionDataService */]) === "function" && _c || Object])
+    ], RequestService);
+    return RequestService;
+    var _a, _b, _c;
+}());
+
+//# sourceMappingURL=request.service.js.map
+
+/***/ }),
+
+/***/ "../../../../../client/src/app/common-util/route-preprocess.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RoutePreprocessService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_bootstrap_modal__ = __webpack_require__("../../../../ng2-bootstrap-modal/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_bootstrap_modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_bootstrap_modal__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__request_service__ = __webpack_require__("../../../../../client/src/app/common-util/request.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__session_data_service__ = __webpack_require__("../../../../../client/src/app/common-util/session-data.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__authentication_login_login_component__ = __webpack_require__("../../../../../client/src/app/authentication/login/login.component.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+/**
+ * Contains route preprocessing logic. Re-authenticates the user whenever there is a route change.
+ * Also, makes a user login if they visit restricted routes which require login.
+ */
+var RoutePreprocessService = (function () {
+    function RoutePreprocessService(requestService, router, dialogService, authSessionService) {
+        this.requestService = requestService;
+        this.router = router;
+        this.dialogService = dialogService;
+        this.authSessionService = authSessionService;
+    }
+    RoutePreprocessService_1 = RoutePreprocessService;
+    /**
+     * Determines if a given target route can be activated (or followed). Will check credentials on server regardless of whether or not
+     * the given route is in the LOGIN_RESTRICTED_ROUTES list.
+     * @param route The route that is being activated.
+     * @param state The state of the router.
+     * @return An observable that will resolve to true if the route can be activated, and false if it cannot.
+     */
+    RoutePreprocessService.prototype.canActivate = function (route, state) {
+        var _this = this;
+        // Check with server to check if we are logged in!
+        var observer = this.requestService.get('/authentication/reAuthenticate');
+        // Finally, check the response from the server and react appropriately.
+        return observer.map(function (response) {
+            var reAuthenticateResponse = response.json();
+            console.log(reAuthenticateResponse.message);
+            // Make sure we update the session info we are holding.
+            _this.authSessionService.updateAppUserSessionData(reAuthenticateResponse.appUserInfo);
+            // If not authenticated, and we are visiting a route that requires us to be logged in, then redirect to login.
+            if (!reAuthenticateResponse.success && RoutePreprocessService_1.LOGIN_RESTRICTED_ROUTES.indexOf(state.url) >= 0) {
+                _this.attemptLoginAndRedirect(state.url);
+                return false;
+            }
+            return true;
+        });
+    };
+    /**
+     * Generates a login dialog that the user can login with. If login is successful, then the user is redirected to their original target route.
+     * @param toUrl THe url that the user was trying to access before reAuthentication.
+     */
+    RoutePreprocessService.prototype.attemptLoginAndRedirect = function (toUrl) {
+        var _this = this;
+        // Generate the login dialog.
+        var dialogObserver = __WEBPACK_IMPORTED_MODULE_5__authentication_login_login_component__["a" /* LoginComponent */].display(this.dialogService);
+        // Observe what the dialog result is.
+        dialogObserver.subscribe(function () {
+            // After done with login dialog, if we are logged in, then we can redirect to original intended link!
+            if (_this.authSessionService.sessionDataAvailable()) {
+                _this.router.navigate([toUrl]);
+            }
+        });
+    };
+    /**
+     * List of login restricted routes. User must be logged in to visit these pages!
+     */
+    RoutePreprocessService.LOGIN_RESTRICTED_ROUTES = ['/donate', '/appUserInfo', '/cart'];
+    RoutePreprocessService = RoutePreprocessService_1 = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__request_service__["a" /* RequestService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__request_service__["a" /* RequestService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ng2_bootstrap_modal__["DialogService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ng2_bootstrap_modal__["DialogService"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__session_data_service__["a" /* SessionDataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__session_data_service__["a" /* SessionDataService */]) === "function" && _d || Object])
+    ], RoutePreprocessService);
+    return RoutePreprocessService;
+    var RoutePreprocessService_1, _a, _b, _c, _d;
+}());
+
+//# sourceMappingURL=route-preprocess.service.js.map
+
+/***/ }),
+
+/***/ "../../../../../client/src/app/common-util/session-data.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SessionDataService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var SessionDataService = (function () {
+    function SessionDataService() {
+    }
+    SessionDataService_1 = SessionDataService;
+    /**
+     * Updates the client's session data based off of given App User info.
+     * @param appUserInfo The App User info to update the client session data with.
+     */
+    SessionDataService.prototype.updateAppUserSessionData = function (appUserInfo) {
+        SessionDataService_1.appUserInfo = appUserInfo;
+    };
+    /**
+     * Fills and returns an AppUserInfo container with available client session data.
+     * @return The filled AppUserInfo container.
+     */
+    SessionDataService.prototype.getAppUserSessionData = function () {
+        return SessionDataService_1.appUserInfo;
+    };
+    /**
+     * convenience method for retrieving the full name of a logged in organization or individual user.
+     */
+    SessionDataService.prototype.getFullName = function () {
+        if (SessionDataService_1.appUserInfo != null) {
+            if (SessionDataService_1.appUserInfo.organizationName != null) {
+                return SessionDataService_1.appUserInfo.organizationName;
+            }
+            return (SessionDataService_1.appUserInfo.firstName + ' ' + SessionDataService_1.appUserInfo.lastName);
+        }
+        return null;
+    };
+    /**
+     * Clears the current session data.
+     */
+    SessionDataService.prototype.clearSessionData = function () {
+        SessionDataService_1.appUserInfo = null;
+    };
+    /**
+     * Determines if any session data is currently available or being held.
+     * @return true if session data is available, false if not (it is clear).
+     */
+    SessionDataService.prototype.sessionDataAvailable = function () {
+        return (SessionDataService_1.appUserInfo != null);
+    };
+    /**
+     * Raw client session data. The App User Info belonging to the current signed in user.
+     */
+    SessionDataService.appUserInfo = null;
+    SessionDataService = SessionDataService_1 = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [])
+    ], SessionDataService);
+    return SessionDataService;
+    var SessionDataService_1;
+}());
+
+//# sourceMappingURL=session-data.service.js.map
+
+/***/ }),
+
 /***/ "../../../../../client/src/app/donate/donate.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1442,7 +1588,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/donate/donate.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n    <h1>Donor Form</h1>\n    <hr>\n\n    <div [hidden]=\"submitted\" class=\"row\">\n        <div class=\"col-md-5\">\n            <label>Upload Image</label>\n            <img-cropper [image]=\"this\" [settings]=\"cropperSettings\"></img-cropper>\n        </div>\n\n        <div class=\"col-md-7\">\n            <form [formGroup]=\"foodForm\" (ngSubmit)=\"onSubmit(foodForm, $event)\">\n\n                <div class=\"form-group\">\n                    <label>Food Types</label>\n                    <app-food-types [initiallyChecked]=\"false\" [numColumns]=\"2\" [required]=\"true\" [extraValidation]=\"forceValidation\" #FoodTypesComponent></app-food-types>\n                    <!--<div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodType)\">At least one Food Type is required</div>-->\n                </div>\n\n                <div class=\"form-group\">\n                    <label>Perishable</label><br>\n                    <md-radio-group [ngClass]=\"{'warn-foreground': isInvalid(perishable)}\" formControlName=\"perishable\" required>\n                        <label for=\"perishable-yes-check\" id=\"perishable-yes\" class=\"perishable-label no-select\">\n                            <md-radio-button name=\"perishable\" id=\"perishable-yes-check\" [value]=\"true\">Yes</md-radio-button>\n                        </label>\n                        <label for=\"perishable-no-check\" class=\"perishable-label no-select\">\n                            <md-radio-button name=\"perishable\" id=\"perishable-no-check\" [value]=\"false\">No</md-radio-button>\n                        </label>\n                        <!--<div class=\"warn-foreground inline-error\" [hidden]=\"!isInvalid(perishable)\">*</div>-->\n                    </md-radio-group>\n                </div>\n\n                <div class=\"form-group\">\n                    <label for=\"foodDescription\">Description</label>\n                    <md-input-container class=\"input-group\" floatPlaceholder=\"never\">\n                        <textarea mdInput mdTextareaAutosize id=\"foodDescription\" placeholder=\"Describe donation here\"\n                            formControlName=\"foodDescription\" [errorStateMatcher]=\"isInvalid.bind(this)\" required></textarea>\n                    </md-input-container>\n                </div>\n\n                <div class=\"form-group\">\n                    <label for=\"expirationDate\">Expiration Date</label>\n                    <md-input-container class=\"input-group\" floatPlaceholder=\"never\">\n                        <input mdInput id=\"expirationDate\" [mdDatepicker]=\"picker\" placeholder=\"mm/dd/yyyy\"\n                            formControlName=\"expirationDate\" [errorStateMatcher]=\"isInvalid.bind(this)\" required>\n                        <md-datepicker-toggle mdSuffix [for]=\"picker\"></md-datepicker-toggle>\n                        <md-datepicker touchUi=\"true\" #picker opened=\"true\"></md-datepicker>\n                    </md-input-container>\n                </div>\n\n                <button md-raised-button color=\"primary\" class=\"button-md\">Submit</button>\n\n            </form>\n        </div>\n    </div>\n\n\n    <div *ngIf=\"submitted\">\n        <h2>Thank-you for submitting the following:</h2>\n\n        <div class=\"row\">\n            <div class=\"col-md-2\">Food Type</div>\n            <div class=\"col-md-10 pull-left\">{{ foodTypesComponent.getSelectedFoodTypes() }}</div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-md-2\">Description</div>\n            <div class=\"col-md-10 pull-left\">{{ foodForm.controls.foodDescription.value }}</div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-md-2\">Perishabe</div>\n            <div class=\"col-md-10 pull-left\">{{ (foodForm.controls.perishable.value === true) ? 'true' : 'false' }}</div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-md-2\">Expiration Date</div>\n            <div class=\"col-md-10 pull-left\">{{ foodForm.controls.expirationDate.value | dateFormatter }}</div>\n        </div>\n        <br>\n\n        <button md-raised-button color=\"primary\" class=\"button-md\" (click)=\"donateAgain()\">Donate Again</button>\n        <button md-raised-button color=\"primary\" class=\"button-md\" >Edit Donation</button>\n    </div>\n</div>"
+module.exports = "<div class=\"container\">\n    <h1 class=\"primary-background\">Donor Form</h1>\n    <hr>\n\n    <div [hidden]=\"submitted\" class=\"row\">\n        <div class=\"col-md-5\">\n            <label>Upload Image</label>\n            <img-cropper [image]=\"this\" [settings]=\"cropperSettings\"></img-cropper>\n        </div>\n\n        <div class=\"col-md-7\">\n            <form [formGroup]=\"foodForm\" (ngSubmit)=\"onSubmit(foodForm, $event)\">\n\n                <div class=\"form-group\">\n                    <label>Food Types</label>\n                    <app-food-types [initiallyChecked]=\"false\" [numColumns]=\"2\" [required]=\"true\" [extraValidation]=\"forceValidation\" #FoodTypesComponent></app-food-types>\n                    <!--<div class=\"alert alert-danger\" [hidden]=\"!shouldFireRequireValidation(foodForm.controls.foodType)\">At least one Food Type is required</div>-->\n                </div>\n\n                <div class=\"form-group\">\n                    <label>Perishable</label><br>\n                    <md-radio-group [ngClass]=\"{'warn-foreground': isInvalid(perishable)}\" formControlName=\"perishable\" required>\n                        <label for=\"perishable-yes-check\" id=\"perishable-yes\" class=\"perishable-label no-select\">\n                            <md-radio-button name=\"perishable\" id=\"perishable-yes-check\" [value]=\"true\">Yes</md-radio-button>\n                        </label>\n                        <label for=\"perishable-no-check\" class=\"perishable-label no-select\">\n                            <md-radio-button name=\"perishable\" id=\"perishable-no-check\" [value]=\"false\">No</md-radio-button>\n                        </label>\n                        <!--<div class=\"warn-foreground inline-error\" [hidden]=\"!isInvalid(perishable)\">*</div>-->\n                    </md-radio-group>\n                </div>\n\n                <div class=\"form-group\">\n                    <label for=\"foodDescription\">Description</label>\n                    <md-input-container class=\"input-group\" floatPlaceholder=\"never\">\n                        <textarea mdInput mdTextareaAutosize id=\"foodDescription\" placeholder=\"Describe donation here\"\n                            formControlName=\"foodDescription\" [errorStateMatcher]=\"isInvalid.bind(this)\" required></textarea>\n                    </md-input-container>\n                </div>\n\n                <div class=\"form-group\">\n                    <label for=\"expirationDate\">Expiration Date</label>\n                    <md-input-container class=\"input-group\" floatPlaceholder=\"never\">\n                        <input mdInput id=\"expirationDate\" [mdDatepicker]=\"picker\" placeholder=\"mm/dd/yyyy\"\n                            formControlName=\"expirationDate\" [errorStateMatcher]=\"isInvalid.bind(this)\" required>\n                        <md-datepicker-toggle mdSuffix [for]=\"picker\"></md-datepicker-toggle>\n                        <md-datepicker touchUi=\"true\" #picker opened=\"true\"></md-datepicker>\n                    </md-input-container>\n                </div>\n\n                <button md-raised-button color=\"primary\" class=\"button-md\">Submit</button>\n\n            </form>\n        </div>\n    </div>\n\n\n    <div *ngIf=\"submitted\">\n        <h2>Thank-you for submitting the following:</h2>\n\n        <div class=\"row\">\n            <div class=\"col-md-2\">Food Type</div>\n            <div class=\"col-md-10 pull-left\">{{ foodTypesComponent.getSelectedFoodTypes() }}</div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-md-2\">Description</div>\n            <div class=\"col-md-10 pull-left\">{{ foodForm.controls.foodDescription.value }}</div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-md-2\">Perishabe</div>\n            <div class=\"col-md-10 pull-left\">{{ (foodForm.controls.perishable.value === true) ? 'true' : 'false' }}</div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-md-2\">Expiration Date</div>\n            <div class=\"col-md-10 pull-left\">{{ foodForm.controls.expirationDate.value | dateFormatter }}</div>\n        </div>\n        <br>\n\n        <button md-raised-button color=\"primary\" class=\"button-md\" (click)=\"donateAgain()\">Donate Again</button>\n        <button md-raised-button color=\"primary\" class=\"button-md\" >Edit Donation</button>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -1573,7 +1719,7 @@ var DonateComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AddRemoveFoodListingService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__ = __webpack_require__("../../../../../client/src/app/common-util/request.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_food_listings_add_food_listing_message__ = __webpack_require__("../../../../../shared/food-listings/add-food-listing-message.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_food_listings_claim_food_listing_message__ = __webpack_require__("../../../../../shared/food-listings/claim-food-listing-message.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1590,10 +1736,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var AddRemoveFoodListingService = (function () {
-    function AddRemoveFoodListingService(http) {
-        this.http = http;
+    function AddRemoveFoodListingService(requestService) {
+        this.requestService = requestService;
     }
-    AddRemoveFoodListingService_1 = AddRemoveFoodListingService;
     /**
      * Adds a food listing on the server.
      * @param foodListing The food listing to be added.
@@ -1602,7 +1747,8 @@ var AddRemoveFoodListingService = (function () {
      */
     AddRemoveFoodListingService.prototype.addFoodListing = function (foodListingUpload, imageUpload) {
         foodListingUpload.imageUpload = imageUpload;
-        var observer = this.http.post('/foodListings/addFoodListing', new __WEBPACK_IMPORTED_MODULE_2__shared_food_listings_add_food_listing_message__["a" /* AddFoodListingRequest */](foodListingUpload), { headers: AddRemoveFoodListingService_1.HEADERS, withCredentials: true });
+        var body = new __WEBPACK_IMPORTED_MODULE_2__shared_food_listings_add_food_listing_message__["a" /* AddFoodListingRequest */](foodListingUpload);
+        var observer = this.requestService.post('/foodListings/addFoodListing', body);
         return observer.map(function (response) {
             var addFoodListingResponse = response.json();
             console.log(addFoodListingResponse.message);
@@ -1617,7 +1763,8 @@ var AddRemoveFoodListingService = (function () {
      * @param foodListingKey The key identifier of the food listing that is to be removed.
      */
     AddRemoveFoodListingService.prototype.removeFoodListing = function (foodListingKey) {
-        var observer = this.http.post('/foodListings/removeFoodListing', new __WEBPACK_IMPORTED_MODULE_3__shared_food_listings_claim_food_listing_message__["a" /* ClaimFoodListingRequest */](foodListingKey), { headers: AddRemoveFoodListingService_1.HEADERS, withCredentials: true });
+        var body = new __WEBPACK_IMPORTED_MODULE_3__shared_food_listings_claim_food_listing_message__["a" /* ClaimFoodListingRequest */](foodListingKey);
+        var observer = this.requestService.post('/foodListings/removeFoodListing', body);
         return observer.map(function (response) {
             var removeFoodListingResponse = response.json();
             console.log(removeFoodListingResponse.message);
@@ -1626,15 +1773,12 @@ var AddRemoveFoodListingService = (function () {
             }
         });
     };
-    AddRemoveFoodListingService.HEADERS = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
-        'Content-Type': 'application/json'
-    });
-    AddRemoveFoodListingService = AddRemoveFoodListingService_1 = __decorate([
+    AddRemoveFoodListingService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__["a" /* RequestService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__["a" /* RequestService */]) === "function" && _a || Object])
     ], AddRemoveFoodListingService);
     return AddRemoveFoodListingService;
-    var AddRemoveFoodListingService_1, _a;
+    var _a;
 }());
 
 //# sourceMappingURL=add-remove-food-listing.service.js.map
@@ -1647,7 +1791,7 @@ var AddRemoveFoodListingService = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ClaimFoodListingService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__ = __webpack_require__("../../../../../client/src/app/common-util/request.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_food_listings_claim_food_listing_message__ = __webpack_require__("../../../../../shared/food-listings/claim-food-listing-message.ts");
 
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1663,10 +1807,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var ClaimFoodListingService = (function () {
-    function ClaimFoodListingService(http) {
-        this.http = http;
+    function ClaimFoodListingService(requestService) {
+        this.requestService = requestService;
     }
-    ClaimFoodListingService_1 = ClaimFoodListingService;
     /**
      * Claims a given Food Listing.
      * @param foodListingKey The key (identifier) for the Food Listing that is to be claimed.
@@ -1690,8 +1833,8 @@ var ClaimFoodListingService = (function () {
      * @return An observable that has no payload (simply resolves on success).
      */
     ClaimFoodListingService.prototype.claimOrUnclaimFoodListing = function (foodListingKey, isClaim) {
-        var claimFoodListingRequest = new __WEBPACK_IMPORTED_MODULE_2__shared_food_listings_claim_food_listing_message__["a" /* ClaimFoodListingRequest */](foodListingKey);
-        var observer = this.http.post('/foodListings/' + (isClaim ? '' : 'un') + 'claimFoodListing', JSON.stringify(claimFoodListingRequest), { headers: ClaimFoodListingService_1.JSON_HEADERS, withCredentials: true });
+        var body = new __WEBPACK_IMPORTED_MODULE_2__shared_food_listings_claim_food_listing_message__["a" /* ClaimFoodListingRequest */](foodListingKey);
+        var observer = this.requestService.post('/foodListings/' + (isClaim ? '' : 'un') + 'claimFoodListing', body);
         // Listen for a response now.
         return observer.map(function (response) {
             var claimFoodListingResponse = response.json();
@@ -1702,15 +1845,12 @@ var ClaimFoodListingService = (function () {
             }
         });
     };
-    ClaimFoodListingService.JSON_HEADERS = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
-        'Content-Type': 'application/json'
-    });
-    ClaimFoodListingService = ClaimFoodListingService_1 = __decorate([
+    ClaimFoodListingService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__["a" /* RequestService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__["a" /* RequestService */]) === "function" && _a || Object])
     ], ClaimFoodListingService);
     return ClaimFoodListingService;
-    var ClaimFoodListingService_1, _a;
+    var _a;
 }());
 
 //# sourceMappingURL=claim-unclaim-food-listing.service.js.map
@@ -2177,7 +2317,7 @@ var FoodTypesComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__("../../../../rxjs/Observable.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_util_request_service__ = __webpack_require__("../../../../../client/src/app/common-util/request.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2194,8 +2334,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * A global service that is used to load Food Types before displaying certain components or pages.
  */
 var FoodTypesService = (function () {
-    function FoodTypesService(http) {
-        this.http = http;
+    function FoodTypesService(requestService) {
+        this.requestService = requestService;
     }
     FoodTypesService_1 = FoodTypesService;
     /**
@@ -2212,7 +2352,7 @@ var FoodTypesService = (function () {
     FoodTypesService.prototype.getFoodTypes = function () {
         // If we do not have cached Food Types, then we will contact the server.
         if (FoodTypesService_1.foodTypesCache === null) {
-            var observer = this.http.get('/foodListings/getFoodTypes', { headers: FoodTypesService_1.JSON_HEADERS, withCredentials: true });
+            var observer = this.requestService.get('/foodListings/getFoodTypes');
             return observer.map(function (response) {
                 var getFoodTypesResponse = response.json();
                 console.log(getFoodTypesResponse.message);
@@ -2249,14 +2389,11 @@ var FoodTypesService = (function () {
         }
         return foodTypesAssocWithTrue;
     };
-    FoodTypesService.JSON_HEADERS = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Headers */]({
-        'Content-Type': 'application/json'
-    });
     // We will cache any Food Types that come back from the server so we only need to contact server once!
     FoodTypesService.foodTypesCache = null;
     FoodTypesService = FoodTypesService_1 = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__common_util_request_service__["a" /* RequestService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__common_util_request_service__["a" /* RequestService */]) === "function" && _a || Object])
     ], FoodTypesService);
     return FoodTypesService;
     var FoodTypesService_1, _a;
@@ -2273,8 +2410,9 @@ var FoodTypesService = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GetFoodListingsService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_food_listings_get_food_listings_message__ = __webpack_require__("../../../../../shared/food-listings/get-food-listings-message.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__ = __webpack_require__("../../../../../client/src/app/common-util/request.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_food_listings_food_listings_filters__ = __webpack_require__("../../../../../shared/food-listings/food-listings-filters.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_food_listings_get_food_listings_message__ = __webpack_require__("../../../../../shared/food-listings/get-food-listings-message.ts");
 
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2285,6 +2423,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -2309,8 +2448,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     }
 ]*/
 var GetFoodListingsService = (function () {
-    function GetFoodListingsService(http) {
-        this.http = http;
+    function GetFoodListingsService(requestService) {
+        this.requestService = requestService;
         this.retrievalOffset = 0;
     }
     GetFoodListingsService_1 = GetFoodListingsService;
@@ -2329,8 +2468,12 @@ var GetFoodListingsService = (function () {
         // Set our retrieval range information for the server to filter by.
         filters.retrievalOffset = this.retrievalOffset;
         filters.retrievalAmount = GetFoodListingsService_1.RETRIEVAL_AMOUNT;
-        var getFoodListingsRequest = new __WEBPACK_IMPORTED_MODULE_2__shared_food_listings_get_food_listings_message__["a" /* GetFoodListingsRequest */](filters);
-        var observer = this.http.post('/foodListings/getFoodListings', JSON.stringify(getFoodListingsRequest), { headers: GetFoodListingsService_1.JSON_HEADERS, withCredentials: true });
+        // Determine the route based off of the requested Food Listings' status (Are we getting food listings for receive or cart interface).
+        var route = (filters.listingsStatus == null || filters.listingsStatus === __WEBPACK_IMPORTED_MODULE_2__shared_food_listings_food_listings_filters__["a" /* LISTINGS_STATUS */].unclaimedListings)
+            ? '/foodListings/getReceiverFoodListings'
+            : '/foodListings/getCartFoodListings';
+        var body = new __WEBPACK_IMPORTED_MODULE_3__shared_food_listings_get_food_listings_message__["a" /* GetFoodListingsRequest */](filters);
+        var observer = this.requestService.post(route, body);
         // Listen for a response now.                                                 
         return observer.map(function (response) {
             var getFoodListingsResponse = response.json();
@@ -2343,12 +2486,9 @@ var GetFoodListingsService = (function () {
         });
     };
     GetFoodListingsService.RETRIEVAL_AMOUNT = 20;
-    GetFoodListingsService.JSON_HEADERS = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
-        'Content-Type': 'application/json'
-    });
     GetFoodListingsService = GetFoodListingsService_1 = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__["a" /* RequestService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__common_util_request_service__["a" /* RequestService */]) === "function" && _a || Object])
     ], GetFoodListingsService);
     return GetFoodListingsService;
     var GetFoodListingsService_1, _a;
@@ -2440,7 +2580,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../client/src/app/header/header.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header>\r\n    <img id=\"logo\" class=\"navbar-brand\" src=\"./assets/HeaderImg.jpg\" [routerLink]=\"['/home']\">\r\n\r\n    <nav class=\"navbar navbar-toggleable-sm navbar-inverse bg-inverse no-select\">\r\n        <button md-button class=\"navbar-toggler\" (click)=\"isExpanded = !isExpanded\" [attr.aria-expanded]=\"!isExpanded\" aria-controls=\"navbarContent\">\r\n            <span class=\"navbar-toggler-icon\"></span>\r\n        </button>\r\n\r\n        <div class=\"collapse navbar-collapse\" [ngbCollapse]=\"!isExpanded\">\r\n            <ul class=\"navbar-nav mr-auto\">\r\n                <button md-button class='nav-link' [routerLink]=\"['/home']\"><li class=\"nav-item\">Home</li></button>\r\n                <button md-button class='nav-link' [routerLink]=\"['/donate']\"><li class=\"nav-item\">Donate</li></button>\r\n                <button md-button class='nav-link' [routerLink]=\"['/receive']\"><li class=\"nav-item\">Receive</li></button>\r\n            </ul>\r\n\r\n            <ul class=\"navbar-nav navbar-right\">\r\n                <button md-button *ngIf=\"!authSessionService.sessionInfoAvailable()\" class='nav-link' (click)=\"showLogin()\"><li class=\"nav-item\">Login</li></button>\r\n                <button md-button *ngIf=\"!authSessionService.sessionInfoAvailable()\" class='nav-link' [routerLink]=\"['/signup']\"><li class=\"nav-item\">Signup</li></button>\r\n                <button md-button *ngIf=\"authSessionService.sessionInfoAvailable()\" class='nav-link' [routerLink]=\"['/cart']\"><li class=\"nav-item\">Cart</li></button>\r\n                <button md-button *ngIf=\"authSessionService.sessionInfoAvailable()\" class='nav-link' [routerLink]=\"['/appUserInfo']\"><li class=\"nav-item\">Account</li></button>\r\n                <button md-button *ngIf=\"authSessionService.sessionInfoAvailable()\" class='nav-link' (click)=\"logout()\"><li class=\"nav-item\">Logout</li></button>\r\n            </ul>\r\n        </div>\r\n    </nav>\r\n</header>\r\n<div id=\"vertSpacer\"></div>"
+module.exports = "<header>\r\n    <img id=\"logo\" class=\"navbar-brand\" src=\"./assets/HeaderImg.jpg\" [routerLink]=\"['/home']\">\r\n\r\n    <nav class=\"navbar navbar-toggleable-sm navbar-inverse bg-inverse no-select\">\r\n        <button md-button class=\"navbar-toggler\" (click)=\"isExpanded = !isExpanded\" [attr.aria-expanded]=\"!isExpanded\" aria-controls=\"navbarContent\">\r\n            <span class=\"navbar-toggler-icon\"></span>\r\n        </button>\r\n\r\n        <div class=\"collapse navbar-collapse\" [ngbCollapse]=\"!isExpanded\">\r\n            <ul class=\"navbar-nav mr-auto\">\r\n                <button md-button class='nav-link' [routerLink]=\"['/home']\"><li class=\"nav-item\">Home</li></button>\r\n                <button md-button class='nav-link' [routerLink]=\"['/donate']\"><li class=\"nav-item\">Donate</li></button>\r\n                <button md-button class='nav-link' [routerLink]=\"['/receive']\"><li class=\"nav-item\">Receive</li></button>\r\n            </ul>\r\n\r\n            <ul class=\"navbar-nav navbar-right\">\r\n                <button md-button *ngIf=\"!sessionDataAvailable()\" class='nav-link' (click)=\"showLogin()\"><li class=\"nav-item\">Login</li></button>\r\n                <button md-button *ngIf=\"!sessionDataAvailable()\" class='nav-link' [routerLink]=\"['/signup']\"><li class=\"nav-item\">Signup</li></button>\r\n                <button md-button *ngIf=\"sessionDataAvailable()\" class='nav-link' [routerLink]=\"['/cart']\"><li class=\"nav-item\">Cart</li></button>\r\n                <button md-button *ngIf=\"sessionDataAvailable()\" class='nav-link' [routerLink]=\"['/appUserInfo']\"><li class=\"nav-item\">Account</li></button>\r\n                <button md-button *ngIf=\"sessionDataAvailable()\" class='nav-link' (click)=\"logout()\"><li class=\"nav-item\">Logout</li></button>\r\n            </ul>\r\n        </div>\r\n    </nav>\r\n</header>\r\n<div id=\"vertSpacer\"></div>"
 
 /***/ }),
 
@@ -2453,7 +2593,7 @@ module.exports = "<header>\r\n    <img id=\"logo\" class=\"navbar-brand\" src=\"
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__ = __webpack_require__("../../../../ng2-bootstrap-modal/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__authentication_login_login_component__ = __webpack_require__("../../../../../client/src/app/authentication/login/login.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__authentication_misc_auth_session_service__ = __webpack_require__("../../../../../client/src/app/authentication/misc/auth-session.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_util_session_data_service__ = __webpack_require__("../../../../../client/src/app/common-util/session-data.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__authentication_misc_logout_service__ = __webpack_require__("../../../../../client/src/app/authentication/misc/logout.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2470,9 +2610,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var HeaderComponent = (function () {
-    function HeaderComponent(dialogService, authSessionService, logoutService) {
+    function HeaderComponent(dialogService, sessionDataService, logoutService) {
         this.dialogService = dialogService;
-        this.authSessionService = authSessionService;
+        this.sessionDataService = sessionDataService;
         this.logoutService = logoutService;
     }
     HeaderComponent.prototype.showLogin = function () {
@@ -2483,6 +2623,9 @@ var HeaderComponent = (function () {
     HeaderComponent.prototype.logout = function () {
         this.logoutService.logout();
     };
+    HeaderComponent.prototype.sessionDataAvailable = function () {
+        return this.sessionDataService.sessionDataAvailable();
+    };
     HeaderComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-header',
@@ -2490,7 +2633,7 @@ var HeaderComponent = (function () {
             styles: [__webpack_require__("../../../../../client/src/app/header/header.component.css")],
             providers: [__WEBPACK_IMPORTED_MODULE_4__authentication_misc_logout_service__["a" /* LogoutService */]]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogService"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__authentication_misc_auth_session_service__["a" /* AuthSessionService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__authentication_misc_auth_session_service__["a" /* AuthSessionService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__authentication_misc_logout_service__["a" /* LogoutService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__authentication_misc_logout_service__["a" /* LogoutService */]) === "function" && _c || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ng2_bootstrap_modal__["DialogService"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__common_util_session_data_service__["a" /* SessionDataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__common_util_session_data_service__["a" /* SessionDataService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__authentication_misc_logout_service__["a" /* LogoutService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__authentication_misc_logout_service__["a" /* LogoutService */]) === "function" && _c || Object])
     ], HeaderComponent);
     return HeaderComponent;
     var _a, _b, _c;

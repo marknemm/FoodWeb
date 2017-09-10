@@ -40,8 +40,9 @@ import { FoodListingsComponent } from './food-listings/food-listings.component';
 import { FoodTypesComponent } from './food-listings/food-types/food-types.component';
 import { AppUserInfoComponent } from './authentication/app-user-info/app-user-info.component';
 
-import { AuthWatchService } from './authentication/misc/auth-watch.service'
-import { AuthSessionService } from "./authentication/misc/auth-session.service";
+import { RequestService } from './common-util/request.service';
+import { RoutePreprocessService } from './common-util/route-preprocess.service';
+import { SessionDataService } from "./common-util/session-data.service";
 import { FoodTypesService } from './food-listings/food-types/food-types.service';
 import { DateFormatterPipe } from "./common-util/date-formatter.pipe"
 
@@ -59,17 +60,17 @@ const appRoutes: Routes = [
     {
         path: 'home',
         component: HomeComponent,
-        canActivate: [AuthWatchService],
+        canActivate: [RoutePreprocessService],
     },
     {
         path: 'donate',
         component: DonateComponent,
-        canActivate: [AuthWatchService]
+        canActivate: [RoutePreprocessService]
     },
     {
         path: 'receive',
         component: ReceiveComponent,
-        canActivate: [AuthWatchService],
+        canActivate: [RoutePreprocessService],
         // Make sure that we get the FoodTypes from the back end before routing to the receiver interface!
         resolve: {
             foodTypes: FoodTypesService
@@ -78,7 +79,7 @@ const appRoutes: Routes = [
     {
         path: 'cart',
         component: CartComponent,
-        canActivate: [AuthWatchService],
+        canActivate: [RoutePreprocessService],
         // Make sure that we get the FoodTypes from the back end before routing to the cart interface!
         resolve: {
             foodTypes: FoodTypesService
@@ -87,12 +88,12 @@ const appRoutes: Routes = [
     {
         path: 'signup',
         component: SignupComponent,
-        canActivate: [AuthWatchService]
+        canActivate: [RoutePreprocessService]
     },
     {
         path: 'appUserInfo',
         component: AppUserInfoComponent,
-        canActivate: [AuthWatchService]
+        canActivate: [RoutePreprocessService]
     }
 ];
 
@@ -143,8 +144,9 @@ const appRoutes: Routes = [
     ],
     providers: [
         DateFormatterPipe,
-        AuthWatchService,
-        AuthSessionService,
+        RequestService,
+        SessionDataService,
+        RoutePreprocessService,
         FoodTypesService,
         { provide: DateAdapter, useClass: NativeDateAdapter },
         { provide: MD_DATE_FORMATS, useValue: MD_NATIVE_DATE_FORMATS }

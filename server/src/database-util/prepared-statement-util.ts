@@ -9,7 +9,10 @@ export function fixNullQueryArgs(queryStr: string, queryArgs: Array<any>): strin
     let replaceVal: string;
 
     for (let i: number = 0; i < queryArgs.length; i++) {
+
+        // If we have a null query argument, then replace its placeholder with a null literal!
         if (queryArgs[i] == null) {
+
             // Replace the argument in the query string with null
             replaceSearch = '$' + (i + 1).toString();
             replaceVal = 'null';

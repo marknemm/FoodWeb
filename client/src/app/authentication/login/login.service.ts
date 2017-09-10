@@ -3,7 +3,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { LoginModel } from './login-model'
-import { AuthSessionService } from '../misc/auth-session.service';
+import { SessionDataService } from '../../common-util/session-data.service';
 
 import { LoginRequest, LoginResponse } from '../../../../../shared/authentication/login-message';
 import { AppUserInfo } from "../../../../../shared/authentication/app-user-info";
@@ -14,21 +14,25 @@ export class LoginService {
 
     constructor(
         private http: Http,
-        private authSessionService: AuthSessionService
+        private sessionDataService: SessionDataService
     ) { }
 
     public login(loginModel: LoginModel): Observable<{ success: boolean, message: string}> {
+
         let headers = new Headers({
             'Content-Type': 'application/json'
         });
 
+        // NOTE: Should user raw http request here instead of RequestService wrapper since RequestService depends on this LoginService (prevent circular dependency)!
         let observer: Observable<Response> = this.http.post('/authentication/login', new LoginRequest(loginModel.username, loginModel.password), { headers: headers })
+
         return observer.map((response: Response): any /* AppUserInfo */ => {
+            
             let loginResponse: LoginResponse = response.json();
             console.log(loginResponse.message);
 
             if (loginResponse.success) {
-                this.authSessionService.updateAppUserSessionInfo(loginResponse.appUserInfo);
+                this.sessionDataService.updateAppUserSessionData(loginResponse.appUserInfo);
             }
 
             return { success: loginResponse.success, message: loginResponse.message };

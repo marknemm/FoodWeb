@@ -1,9 +1,9 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 var sql_logger_1 = require("../logging/sql-logger");
-var connection_pool_1 = require("../database-help/connection-pool");
+var connection_pool_1 = require("../database-util/connection-pool");
 var password_util_1 = require("./password-util");
-var session_data_1 = require("./session-data");
+var session_data_1 = require("../common-util/session-data");
 /**
  * Performs the login for a given user.
  * @param email The email (username) of the user.
