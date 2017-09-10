@@ -15,26 +15,32 @@ if "%1"=="-nuke_database" (
 
 :: Construct the database by (re)initializing all tables and functions.
 psql --set=sslmode=require -h %server% -p %port% -d %database% -U %username% ^
-    -f core-tables\app-user.sql ^
-    -f core-tables\app-user-password.sql ^
-    -f core-tables\contact-info.sql ^
-    -f core-tables\organization.sql ^
-    -f core-tables\unverified-app-user.sql ^
-    -f core-tables\food-listing.sql ^
-    -f core-tables\claimed-food-listing.sql ^
-    -f core-tables\food-type.sql ^
-    -f core-tables\food-listing-food-type-map.sql ^
-    -f stored-procedures\drop-function.sql ^
-    -f stored-procedures\add-unverified-app-user.sql ^
-    -f stored-procedures\verify-app-user.sql ^
-    -f stored-procedures\add-contact-info.sql ^
-    -f stored-procedures\add-app-user.sql ^
-    -f stored-procedures\get-app-user-info.sql ^
-    -f stored-procedures\get-missing-address-info.sql ^
-    -f stored-procedures\update-app-user.sql ^
-    -f stored-procedures\add-food-listing.sql ^
-    -f stored-procedures\get-food-listings.sql ^
-    -f stored-procedures\claim-food-listing.sql ^
-    -f stored-procedures\unclaim-food-listing.sql ^
-    -f stored-procedures\remove-food-listing.sql ^
-    -c "SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name;"
+ ^
+    -f tables\app-user\app-user.sql ^
+    -f tables\app-user\app-user-password.sql ^
+    -f tables\app-user\contact-info.sql ^
+    -f tables\app-user\organization.sql ^
+    -f tables\app-user\unverified-app-user.sql ^
+ ^
+    -f tables\food-listing\food-listing.sql ^
+    -f tables\food-listing\claimed-food-listing.sql ^
+    -f tables\food-listing\food-type.sql ^
+    -f tables\food-listing\food-listing-food-type-map.sql ^
+ ^
+    -f functions\common-util\drop-function.sql ^
+ ^
+    -f functions\app-user\add-unverified-app-user.sql ^
+    -f functions\app-user\verify-app-user.sql ^
+    -f functions\app-user\add-contact-info.sql ^
+    -f functions\app-user\add-app-user.sql ^
+    -f functions\app-user\get-app-user-info.sql ^
+    -f functions\app-user\update-app-user.sql ^
+ ^
+    -f functions\food-listing\add-food-listing.sql ^
+    -f functions\food-listing\get-food-listings.sql ^
+    -f functions\food-listing\claim-food-listing.sql ^
+    -f functions\food-listing\unclaim-food-listing.sql ^
+    -f functions\food-listing\remove-food-listing.sql ^
+ ^
+    -c "SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name;" ^
+    -c "SELECT routines.routine_name FROM information_schema.routines WHERE routines.specific_schema = 'public' ORDER BY routines.routine_name;"
