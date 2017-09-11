@@ -5,6 +5,9 @@
 /server/dist
 /tmp
 
+# resources
+/public
+
 # dependencies
 /node_modules
 
