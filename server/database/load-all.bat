@@ -18,6 +18,7 @@ psql --set=sslmode=require -h %server% -p %port% -d %database% -U %username% ^
  ^
     -f tables\app-user\app-user.sql ^
     -f tables\app-user\app-user-password.sql ^
+    -f tables\app-user\app-user-availability ^
     -f tables\app-user\contact-info.sql ^
     -f tables\app-user\organization.sql ^
     -f tables\app-user\unverified-app-user.sql ^
