@@ -66,8 +66,8 @@ function writeImg(image: string, imageUrl: string, imageName: string): Promise<a
     // If we have an image, then store it on AWS / Heroku.
     if (image != null) {
         // Write image to appropriate storage location. On failure, do nothing for now...
-        return (process.env.DEVELOPER_MODE) ? writeImgToLocalFs(image, imageUrl)
-                                            : writeImgToBucket(image, imageName);
+        return (process.env.DEVELOPER_MODE === 'true') ? writeImgToLocalFs(image, imageUrl)
+                                                       : writeImgToBucket(image, imageName);
     }
 }
 
