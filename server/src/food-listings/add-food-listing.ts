@@ -8,27 +8,31 @@ import { FoodListingUpload } from '../../../shared/food-listings/food-listing-up
 import { FoodListing } from '../../../shared/food-listings/food-listing';
 import { DateFormatter } from '../../../shared/common-util/date-formatter';
 
+require('dotenv');
 let fs = require('fs');
-
-let AWS = require('aws-sdk');
-let config = new AWS.Config({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION
+let storageBucket = require('@google-cloud/storage') ({
+    projectId: process.env.GOOGLE_CLOUD_PROJECT_ID
 });
 
 
-//interprets the JSON data recieved from the frontend and adds information recieved to the FoodListing table.
+/**
+ * Adds a food listing to the database and saves associated image to either a local filesystem (development mode) or Google photo bucket.
+ * @param foodListingUpload The food listing that will be added.
+ * @param donorAppUserKey The key identifier of the App User that donated the food listing.
+ */
 export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUserKey: number): Promise<any> {
-    let imageUrl = null;
+
+    let imageName: string = null;
+    let imageUrl: string = null;
 
     // If we have an image form the Donor, then generate the name and URL for it before we create database entry.
     if (foodListingUpload.imageUpload != null) {
-        let imageName: string = 'img-' + Date.now().toString();
-        imageUrl = '\\public\\' + imageName;
-        //imageUrl = process.env.AWS_BUCKET_URL + imageName;
+        imageName = 'img-' + Date.now().toString();
+        imageUrl = (process.env.DEVELOPER_MODE.toLowerCase() === 'true') ? ('//public//' + imageName)
+                                                                         : (process.env.BUCKET_URL + '/' + imageName);
     }
     
+    // Construct prepared statement.
     let queryString = 'SELECT * FROM addFoodListing($1, $2, $3, $4, $5, $6);';
     let queryArgs = [ toPostgresArray(foodListingUpload.foodTypes),
                       foodListingUpload.perishable,
@@ -37,64 +41,49 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
                       foodListingUpload.foodDescription,
                       imageUrl ];
 
+    // Execute prepared statement.
     return query(queryString, queryArgs)
         .then((result: QueryResult) => {
-
             logSqlQueryResult(result.rows);
-
-            // If we have an image, then store it on AWS / Heroku.
-            if (foodListingUpload.imageUpload != null) {
-                //return writeImgToCDN(foodListing.image, foodListing.imageName);
-                return writeImgToLocalFs(foodListingUpload.imageUpload, imageUrl);
-            }
-
-            return Promise.resolve();
+            return writeImg(foodListingUpload.imageUpload, imageUrl, imageName);
         })
         .catch((err: Error) => {
             console.log(err);
-            return Promise.reject(new Error('Donor submission failed.'));
+            throw new Error('Donor submission failed.');
         });
 }
 
 
-function writeImgToCDN(image: string, imageName: string): Promise<any> {
-    return new Promise(function(resolve, reject) {
-
-        // Configure AWS.
-        let s3Bucket = new AWS.S3({
-            params: { Bucket: process.env.AWS_BUCKET_NAME }
-        });
-
-        // Ready the image to be sent by stripping off base64 header.
-        let buf: Buffer = new Buffer(image.replace(/^data:image\/\w+;base64,/, ""), 'base64')
-        let data = {
-            Key: imageName,
-            Body: buf,
-            ContentEncoding: 'base64',
-            ContentType: 'image/png'
-        };
-
-        // Upload the image.
-        s3Bucket.putObject(data, (err: Error, data) => {
-
-            if (err) { 
-                console.log(err);
-                console.log('Error uploading data: ', data); 
-                reject();
-            }
-            else {
-                console.log('succesfully uploaded the image!');
-                resolve();
-            }
-        });
-    });
+/**
+ * Writes a base64 image to its appropriate storage destination - either local filesystem in development mode
+ * or Google Cloud storage bucket in deployment mode.
+ * @param image The base64 image that is to be written to storage.
+ * @param imageUrl The URL which will be used to reference the image.
+ * @param imageName The name of the image.
+ * @return A promise with no payload that will resolve on success.
+ */
+function writeImg(image: string, imageUrl: string, imageName: string): Promise<any> {
+    // If we have an image, then store it on AWS / Heroku.
+    if (image != null) {
+        // Write image to appropriate storage location. On failure, do nothing for now...
+        return (process.env.DEVELOPER_MODE) ? writeImgToLocalFs(image, imageUrl)
+                                            : writeImgToBucket(image, imageName);
+    }
 }
 
 
+/**
+ * Writes a food listing image to the local filesystem (should be used in development mode).
+ * @param image The image to write to the local filesystem.
+ * @param imageUrl The url of the image.
+ * @return A promise with no payload that will resolve on success.
+ */
 function writeImgToLocalFs(image: string, imageUrl: string): Promise<any> {
+
     // Strip off the base64 image header.
     let data = image.replace(/^data:image\/\w+;base64,/, '');
 
+    // Wrap result in a promise.
     return new Promise((resolve, reject) => {
 
         // Write to local file system.
@@ -110,4 +99,38 @@ function writeImgToLocalFs(image: string, imageUrl: string): Promise<any> {
             }
         });
     });
+}
+
+
+/**
+ * Writes a food listing image to a Google Cloud storage bucket (should be used in deployment mode).
+ * @param image The image to write to the storage bucket.
+ * @param imageName The name of the image.
+ * @return A promise with no payload that will resolve on success.
+ */
+function writeImgToBucket(image: string, imageName: string): Promise<any> {
+
+    let bucket = storageBucket.bucket(process.env.GOOGLE_CLOUD_BUCKET_ID);
+    let file = bucket.file(imageName + '.jpeg');
+
+    // Save config for saving base64 image as jpeg.
+    let saveConfig = {
+        metadata: {
+            contentType: 'image/jpeg',
+            metadata: {
+                custom: 'metadata'
+            }
+        },
+        public: true,
+        validation: 'md5'
+    };
+
+    return file.save(image, saveConfig)
+        .then(() => {
+            console.log('Successfully saved image in Google Cloud storage bucket.');
+        })
+        .catch((err: Error) => {
+            console.log(err);
+            throw new Error('Failed to save image in Google Cloud storage bucket.');
+        }); 
 }
