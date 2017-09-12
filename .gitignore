@@ -12,7 +12,7 @@
 /node_modules
 
 # sensitive data
-# .env
+app.yaml
 
 # IDEs and editors
 /.idea
