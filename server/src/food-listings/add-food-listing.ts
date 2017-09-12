@@ -29,7 +29,7 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
     if (foodListingUpload.imageUpload != null) {
         imageName = 'img-' + Date.now().toString() + '.jpeg';
         imageUrl = (process.env.DEVELOPER_MODE.toLowerCase() === 'true') ? ('//public//' + imageName)
-                                                                         : (process.env.BUCKET_URL + '/' + imageName);
+                                                                         : (process.env.BUCKET_URL + imageName);
     }
     
     // Construct prepared statement.
@@ -63,8 +63,12 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
  * @return A promise with no payload that will resolve on success.
  */
 function writeImg(image: string, imageUrl: string, imageName: string): Promise<any> {
-    // If we have an image, then store it on AWS / Heroku.
+
+    // If we have an image, then store it
     if (image != null) {
+        // strip off the base64 header.
+        image = image.replace(/^data:image\/\w+;base64,/, '');
+
         // Write image to appropriate storage location. On failure, do nothing for now...
         return (process.env.DEVELOPER_MODE === 'true') ? writeImgToLocalFs(image, imageUrl)
                                                        : writeImgToBucket(image, imageName);
@@ -80,14 +84,11 @@ function writeImg(image: string, imageUrl: string, imageName: string): Promise<a
  */
 function writeImgToLocalFs(image: string, imageUrl: string): Promise<any> {
 
-    // Strip off the base64 image header.
-    let data = image.replace(/^data:image\/\w+;base64,/, '');
-
     // Wrap result in a promise.
     return new Promise((resolve, reject) => {
 
         // Write to local file system.
-        fs.writeFile(global['rootDir'] + imageUrl, data, {encoding: 'base64'}, (err: Error) => {
+        fs.writeFile(global['rootDir'] + imageUrl, image, {encoding: 'base64'}, (err: Error) => {
             
             if (err) {
                 console.log(err);
@@ -112,7 +113,7 @@ function writeImgToBucket(image: string, imageName: string): Promise<any> {
 
     let bucket = storageBucket.bucket(process.env.GOOGLE_CLOUD_BUCKET_ID);
     let file = bucket.file(imageName);
-    let imageBinary = new Buffer(image.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+    let imageBinary = new Buffer(image, 'base64');
 
     // Save config for saving base64 image as jpeg.
     let saveConfig = {
@@ -122,10 +123,9 @@ function writeImgToBucket(image: string, imageName: string): Promise<any> {
                 custom: 'metadata'
             }
         },
-        public: true
+        public: true,
+        resumable: false
     };
-
-    
 
     return file.save(imageBinary, saveConfig)
         .then(() => {
