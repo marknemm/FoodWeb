@@ -27,7 +27,7 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
 
     // If we have an image form the Donor, then generate the name and URL for it before we create database entry.
     if (foodListingUpload.imageUpload != null) {
-        imageName = 'img-' + Date.now().toString();
+        imageName = 'img-' + Date.now().toString() + '.jpeg';
         imageUrl = (process.env.DEVELOPER_MODE.toLowerCase() === 'true') ? ('//public//' + imageName)
                                                                          : (process.env.BUCKET_URL + '/' + imageName);
     }
@@ -111,7 +111,7 @@ function writeImgToLocalFs(image: string, imageUrl: string): Promise<any> {
 function writeImgToBucket(image: string, imageName: string): Promise<any> {
 
     let bucket = storageBucket.bucket(process.env.GOOGLE_CLOUD_BUCKET_ID);
-    let file = bucket.file(imageName + '.jpeg');
+    let file = bucket.file(imageName);
 
     // Save config for saving base64 image as jpeg.
     let saveConfig = {
@@ -121,11 +121,10 @@ function writeImgToBucket(image: string, imageName: string): Promise<any> {
                 custom: 'metadata'
             }
         },
-        public: true,
-        validation: 'md5'
+        public: true
     };
 
-    return file.save(image, saveConfig)
+    return file.save(Buffer.from(image, 'base64'), saveConfig)
         .then(() => {
             console.log('Successfully saved image in Google Cloud storage bucket.');
         })
