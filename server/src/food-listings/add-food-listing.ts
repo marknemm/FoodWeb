@@ -112,6 +112,7 @@ function writeImgToBucket(image: string, imageName: string): Promise<any> {
 
     let bucket = storageBucket.bucket(process.env.GOOGLE_CLOUD_BUCKET_ID);
     let file = bucket.file(imageName);
+    let imageBinary = new Buffer(image.replace(/^data:image\/\w+;base64,/, ""), 'base64');
 
     // Save config for saving base64 image as jpeg.
     let saveConfig = {
@@ -124,7 +125,9 @@ function writeImgToBucket(image: string, imageName: string): Promise<any> {
         public: true
     };
 
-    return file.save(Buffer.from(image, 'base64'), saveConfig)
+    
+
+    return file.save(imageBinary, saveConfig)
         .then(() => {
             console.log('Successfully saved image in Google Cloud storage bucket.');
         })
