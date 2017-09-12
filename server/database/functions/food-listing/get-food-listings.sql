@@ -41,11 +41,10 @@ AS $$
 BEGIN
 
     -- We will fill this table with our filtered food listings and associated food types (in aggregate array form).
-    DROP TABLE IF EXISTS FiltFoodListingsAndTypes;
-    CREATE TEMP TABLE FiltFoodListingsAndTypes
+    DROP TABLE IF EXISTS FiltFoodListing;
+    CREATE TEMP TABLE FiltFoodListing
     (
-        foodListingKey  INTEGER PRIMARY KEY,
-        foodTypes       VARCHAR(60)[]
+        foodListingKey  INTEGER PRIMARY KEY
     );
 
 -- ==================================== Dynamic Query Generation Phase ======================================= --
@@ -54,14 +53,12 @@ BEGIN
     -- We will pull back the filtered aggregate food listing keys. This query, without the group by aggregate,
     -- would pull back rows that have duplicate values for each member other than the food type column(s).
     queryBase := '
-        INSERT INTO FiltFoodListingsAndTypes
+        INSERT INTO FiltFoodListing
         (
-            foodListingKey,
-            foodTypes
+            foodListingKey
         )
         SELECT
-            FoodListing.foodListingKey,
-            ARRAY_AGG(FoodType.foodType) AS foodTypes -- Concatenates the food types into an array { Type1, Type2, ..., TypeN }
+            FoodListing.foodListingKey
         FROM FoodListing
         INNER JOIN FoodListingFoodTypeMap   ON FoodListing.foodListingKey = FoodListingFoodTypeMap.foodListingKey
         INNER JOIN FoodType                 ON FoodListingFoodTypeMap.foodTypeKey = FoodType.foodTypeKey
@@ -137,7 +134,14 @@ BEGIN
     -- Here we will be doing a select using the filtered food listing keys from the dynamic query above. No grouping will be necessary.
     RETURN QUERY
     SELECT  FoodListing.foodListingKey,
-            FiltFoodListingsAndTypes.foodTypes,
+            -- Concatenates the food types into an array { Type1, Type2, ..., TypeN }
+            (
+                SELECT ARRAY_AGG(FoodType.foodType) AS foodTypes
+                FROM FoodListingFoodTypeMap
+                INNER JOIN FoodType ON FoodListingFoodTypeMap.foodTypeKey = FoodType.foodTypeKey
+                WHERE FoodListingFoodTypeMap.foodListingKey = FoodListing.foodListingKey
+                GROUP BY FoodListingFoodTypeMap.foodListingKey
+            ),
             FoodListing.perishable,
             DonatedByOrganization.name,
             DonatedByContactInfo.address,
@@ -149,8 +153,8 @@ BEGIN
             TO_CHAR(FoodListing.expireDate, 'MM/DD/YYYY'),
             FoodListing.foodDescription,
             FoodListing.imgUrl
-    FROM FiltFoodListingsAndTypes
-    INNER JOIN FoodListing                                          ON FiltFoodListingsAndTypes.foodListingKey = FoodListing.foodListingKey
+    FROM FiltFoodListing
+    INNER JOIN FoodListing                                          ON FiltFoodListing.foodListingKey = FoodListing.foodListingKey
     INNER JOIN AppUser                  AS DonatedByAppUser         ON FoodListing.donatedByAppUserKey = DonatedByAppUser.appUserKey
     INNER JOIN ContactInfo              AS DonatedByContactInfo     ON DonatedByAppUser.appUserKey = DonatedByContactInfo.appUserKey
     LEFT JOIN  Organization             AS DonatedByOrganization    ON DonatedByAppUser.appUserKey = DonatedByOrganization.appUserKey
@@ -174,7 +178,7 @@ GROUP BY FoodListing.foodListingKey;
 
 --SELECT * FROM FoodListingFoodTypeMap;
 
---select * FROM getFoodListings(0, 1000);
+select * FROM getFoodListings(0, 1000);
 
 /*
 

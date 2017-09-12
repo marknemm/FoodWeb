@@ -4,6 +4,7 @@ import { fixNullQueryArgs, toPostgresArray } from './../database-util/prepared-s
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { FoodListingsFilters, LISTINGS_STATUS } from '../../../shared/food-listings/food-listings-filters';
 import { FoodListing } from "../../../shared/food-listings/food-listing";
+import { DateFormatter } from "../../../shared/common-util/date-formatter";
 
 
 export function getFoodListings(filters: FoodListingsFilters, donatedByAppUserKey: number, claimedByAppUserKey: number): Promise<Array<FoodListing>> {
@@ -49,8 +50,8 @@ function generatePerishabilityArg(perishable: boolean, notPerishable: boolean): 
 
 
 function generateExpireDateArg(earliestExpireDate: Date): string {
-    if (earliestExpireDate == null)  return null;
-    return (earliestExpireDate.getMonth() + '/' + earliestExpireDate.getDate() + '/' + earliestExpireDate.getFullYear());
+    return (earliestExpireDate == null) ? null
+                                        : DateFormatter.dateToMonthDayYearString(earliestExpireDate);
 }
 
 

@@ -5,6 +5,7 @@ var prepared_statement_util_1 = require("./../database-util/prepared-statement-u
 var sql_logger_1 = require("../logging/sql-logger");
 var food_listings_filters_1 = require("../../../shared/food-listings/food-listings-filters");
 var food_listing_1 = require("../../../shared/food-listings/food-listing");
+var date_formatter_1 = require("../../../shared/common-util/date-formatter");
 function getFoodListings(filters, donatedByAppUserKey, claimedByAppUserKey) {
     var perishableArg = generatePerishabilityArg(filters.perishable, filters.notPerishable);
     var foodTypesArg = prepared_statement_util_1.toPostgresArray(filters.foodTypes);
@@ -41,9 +42,8 @@ function generatePerishabilityArg(perishable, notPerishable) {
     return null;
 }
 function generateExpireDateArg(earliestExpireDate) {
-    if (earliestExpireDate == null)
-        return null;
-    return (earliestExpireDate.getMonth() + '/' + earliestExpireDate.getDate() + '/' + earliestExpireDate.getFullYear());
+    return (earliestExpireDate == null) ? null
+        : date_formatter_1.DateFormatter.dateToMonthDayYearString(earliestExpireDate);
 }
 function generateResultArray(rows) {
     var result = [];

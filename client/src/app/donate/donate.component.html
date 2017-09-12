@@ -1,14 +1,14 @@
 <div class="container">
-    <h1 class="primary-background">Donor Form</h1>
+    <h1>Donor Form</h1>
     <hr>
 
     <div [hidden]="submitted" class="row">
-        <div class="col-md-5">
+        <!--<div class="col-md-5">
             <label>Upload Image</label>
             <img-cropper [image]="this" [settings]="cropperSettings"></img-cropper>
-        </div>
+        </div>-->
 
-        <div class="col-md-7">
+        <div class="col-md-12">
             <form [formGroup]="foodForm" (ngSubmit)="onSubmit(foodForm, $event)">
 
                 <div class="form-group">
