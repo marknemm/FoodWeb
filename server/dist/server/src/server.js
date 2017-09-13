@@ -1,14 +1,12 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require('express');
-var session = require('express-session');
 var http = require('http');
 var bodyParser = require('body-parser');
 var path = require('path');
 // Set global root directory variable and configure .env path.
 global['rootDir'] = __dirname + '/../../../../';
 require('dotenv').config({ path: global['rootDir'] + '.env' });
-// Our session middleware and controllers that will handle requests after this router hands off the data to them.
 var session_data_1 = require("./common-util/session-data");
 var authentication_controller_1 = require("./authentication/authentication-controller");
 var food_listing_controller_1 = require("./food-listings/food-listing-controller");
@@ -20,12 +18,7 @@ var app = express();
 app.use(bodyParser.json());
 app.use(express.static(clientBuildDir));
 app.use(express.static(publicDir));
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    cookie: { maxAge: 2000000 },
-    resave: false,
-    saveUninitialized: false
-}));
+session_data_1.SessionData.sessionBootstrap(app);
 app.set('port', (process.env.PORT || 5000));
 module.exports = app; // Make available for mocha testing suites.
 // Authentication Controller Routes.

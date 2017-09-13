@@ -1,5 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require('dotenv');
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 var food_web_response_1 = require("./../../../shared/message-protocol/food-web-response");
 var app_user_info_1 = require("./../../../shared/authentication/app-user-info");
 exports.AppUserInfo = app_user_info_1.AppUserInfo;
@@ -12,6 +15,38 @@ var SessionData = (function () {
         this.appUserKey = appUserKey;
         this.signupVerified = signupVerified;
     }
+    /**
+     * Bootstrap routine for the session storage (based off of value of environmental variable DEVELOPER_MODE).
+     * @param app The express application.
+     */
+    SessionData.sessionBootstrap = function (app) {
+        var sessionOpts = null;
+        var ttlMs = parseInt(process.env.SESSION_TTL_MS);
+        // Developer mode (MemoryStore).
+        if (process.env.DEVELOPER_MODE === 'true') {
+            sessionOpts = {
+                secret: process.env.SESSION_SECRET,
+                cookie: { maxAge: ttlMs },
+                saveUninitialized: false,
+                resave: false
+            };
+        }
+        else {
+            var redisOpts = {
+                url: process.env.REDIS_URL,
+                ttl: (ttlMs / 1000),
+                pass: process.env.REDIS_PASSWORD,
+                logErrors: (process.env.LOG_CONSOLE_REDIS_ERRS === 'true')
+            };
+            sessionOpts = {
+                secret: process.env.SESSION_SECRET,
+                store: new RedisStore(redisOpts),
+                saveUninitialized: false,
+                resave: false
+            };
+        }
+        app.use(session(sessionOpts));
+    };
     /**
      * Middleware that ensures that there is an active session for the client issuing the request.
      * If an active session exists (meaning that the user is logged in), then the next route handler is called.
@@ -29,6 +64,11 @@ var SessionData = (function () {
             response.send(new food_web_response_1.FoodWebResponse(false, 'Login required.', true));
         }
     };
+    /**
+     * Checks if a session exists for the client that is issuing the current request.
+     * @param request The request from the client.
+     * @return true if the session exists (logged in), false if not.
+     */
     SessionData.doesSessionExist = function (request) {
         return (request.session[SessionData.SESSION_DATA_KEY] != null);
     };

@@ -1,6 +1,5 @@
 'use strict';
 let express = require('express');
-let session = require('express-session');
 let http = require('http');
 let bodyParser = require('body-parser');
 const path = require('path');
@@ -12,6 +11,7 @@ require('dotenv').config({ path: global['rootDir'] + '.env' });
 
 
 // Our session middleware and controllers that will handle requests after this router hands off the data to them.
+import { Application } from 'express';
 import { SessionData } from "./common-util/session-data";
 import { handleLoginRequest,
          handleLogoutRequest,
@@ -34,18 +34,11 @@ const publicDir: string = global['rootDir'] + 'public';
 
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
-let app = express();
+let app: Application = express();
 app.use(bodyParser.json());
 app.use(express.static(clientBuildDir));
 app.use(express.static(publicDir));
-app.use(
-    session({ 
-        secret: process.env.SESSION_SECRET,
-        cookie: { maxAge: 2000000 }, // Alot.
-        resave: false,
-        saveUninitialized: false
-    })
-);
+SessionData.sessionBootstrap(app);
 app.set('port', (process.env.PORT || 5000));
 module.exports = app; // Make available for mocha testing suites.
 
