@@ -88,7 +88,7 @@ export class SignupComponent implements OnInit {
     }
 
     private setAppUserFunction(appUserFunction: string): void {
-        // First set all possible App User functions to true, and turn certain ones off based off of given function.
+        // First set all possible App User functions to true, and turn certain ones off based on given function.
         this.appUserSignupInfo.isDonor = true;
         this.appUserSignupInfo.isReceiver = true;
 

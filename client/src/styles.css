@@ -10,19 +10,24 @@ html, body {
     width: 100%;
 }
 
+.inline-error {
+    display: inline-block;
+    margin-left: 20px;
+}
+
 .checkbox-compress {
     margin: 0px;
     padding: 0px;
 }
 
 .no-select {
--webkit-touch-callout: none; /* iOS Safari */
--webkit-user-select: none; /* Safari */
--khtml-user-select: none; /* Konqueror HTML */
--moz-user-select: none; /* Firefox */
--ms-user-select: none; /* Internet Explorer/Edge */
-user-select: none; /* Non-prefixed version, currently
-                        supported by Chrome and Opera */
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                            supported by Chrome and Opera */
 }
 
 .center-text {
@@ -30,21 +35,15 @@ user-select: none; /* Non-prefixed version, currently
     vertical-align: middle;
 }
 
-.btn, button {
-    transition: background 0.5s ease;
-    -webkit-transition: background 0.5s ease;
-    -moz-transition: background 0.5s ease;
-    -ms-transition: background 0.5s ease;
-    -o-transition: background 0.5s ease;
+button {
+    outline: none;
+}
+
+button:hover, a:hover {
     cursor: pointer;
     cursor: hand;
 }
 
-.btn:hover {
-    background-color: #B2B2B2;
-}
-
-a:hover {
-    cursor: pointer;
-    cursor: hand;
+.modal-dialog {
+    min-width: 320px;
 }

@@ -1,8 +1,8 @@
 'use strict';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
-import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
+import { connect, query, Client, QueryResult } from '../database-util/connection-pool';
 import { checkPassword } from './password-util';
-import { SessionData, AppUserInfo } from "./session-data";
+import { SessionData, AppUserInfo } from "../common-util/session-data";
 
 
 /**

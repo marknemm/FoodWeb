@@ -1,89 +1,76 @@
-.horizontal-checkbox-group {
-    display: inline-block;
-}
-
-.checkbox-label {
-    vertical-align: middle;
-    margin-right: 25px;
-}
-
-.checkbox {
-    transform: translateY(-2px);
-    /* 1.5x sized Checkboxes */
-    transform: scale(1.5);
-    -ms-transform: scale(1.5); /* IE */
-    -moz-transform: scale(1.5); /* FF */
-    -webkit-transform: scale(1.5); /* Safari and Chrome */
-    -o-transform: scale(1.5); /* Opera */
-    padding: 10px;
-    margin-left: 10px;
-    display: inline-block;    
-    vertical-align: middle;
-}
-
 label {
     font-weight: bold;
     font-size: 22px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 h2 {
     font-weight: bold;
 }
 
-.btn {
-    margin-top: 10px;
-    font-weight: bold;
-}
-
-.btn-default {
-    margin-bottom: 20px;
-}
-
-a, span {
-    font-size: 20px;
-    vertical-align: center;
-}
-
-a {
-    padding-right: 40px;
-}
-
 .classic-link {
     color: blue;
+    cursor: pointer;
+    cursor: hand;
+    display: inline-block;
+    padding-right: 40px;
 }
 
 .classic-link:hover {
     text-decoration: underline;
 }
 
-a i {
+span {
+    font-size: 20px;
+    display: block;
+    min-height: 50px;
+}
+
+span > i {
     display: none;
     position: absolute;
-    margin-left: 5px;
+    margin-left: 3px;
     margin-top: 5px;
 }
 
-span:hover a i, a:hover i {
+span:hover > i {
     display: inline-block;
-}
-
-input:not(.form-control), select {
-    margin-top: 0px;
-    font-size: 20px;
-    height: 28px;
 }
 
 input:not(.form-control) {
     width: 100%;
-    padding-left: 5px;
 }
 
-.error-msg {
-    color: red;
-    font-size: 15px;
+.full-width {
+    width: 100%;
 }
 
-label {
-    padding-bottom: 0px;
-    margin-bottom: 0px;
+.input-infix {
+    width: 100%;
+    padding-right: 30px;
+    position: absolute;
+    transform: translateY(-20px);
+}
+
+.select-infix {
+    position: absolute;
+}
+
+.select-infix md-select {
+    transform: translateY(-20px);
+}
+
+.select-infix i {
+    transform: translateY(-3px);
+}
+
+input:not(.form-control), md-select {
+    margin-top: 0px;
+    font-size: 20px;
+}
+
+md-icon {
+    cursor: pointer;
+    cursor: hand;
 }

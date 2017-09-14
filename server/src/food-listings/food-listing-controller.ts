@@ -1,4 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
+
+import { SessionData } from "../common-util/session-data";
 import { addFoodListing } from './add-food-listing';
 import { removeFoodListing } from "./remove-food-listing";
 import { getFoodListings } from './get-food-listings';
@@ -13,26 +15,42 @@ import { LISTINGS_STATUS } from "../../../shared/food-listings/food-listings-fil
 import { FoodWebResponse } from "../../../shared/message-protocol/food-web-response";
 
 
-export function handleGetFoodListings(request: Request, response: Response): void {
-    response.setHeader('Content-Type', 'application/json');
+export function handleGetReceiverFoodListings(request: Request, response: Response): void {
+    handleGetFoodListings(request.body, response);
+}
 
-    let getFoodListingsRequest: GetFoodListingsRequest = request.body;
-    let claimedByAppUserKey: number = null;
-    let donatedByAppUserKey: number = null;
 
-    // Grab session App User Key for claimed by and donated by filters if necessary.
-    switch(getFoodListingsRequest.filters.listingsStatus) {
-        case LISTINGS_STATUS.myClaimedListings:     claimedByAppUserKey = request.session['appUserInfo'].appUserKey;    break;
-        case LISTINGS_STATUS.myDonatedListings:     donatedByAppUserKey = request.session['appUserInfo'].appUserKey;    break;
+export function handleGetCartFoodListings(request: Request, response: Response): void {
+
+    let getCartFoodListingsRequest: GetFoodListingsRequest = request.body;
+    let listingsStatus: LISTINGS_STATUS = getCartFoodListingsRequest.filters.listingsStatus;
+    let sessionData: SessionData = SessionData.loadSessionData(request);
+    let claimedByAppUserKey = null;
+    let donatedByAppUserKey = null;
+    
+    // Grab current App User key to identify cart owner.
+    switch(listingsStatus) {
+        case LISTINGS_STATUS.myClaimedListings:     claimedByAppUserKey = sessionData.appUserKey;    break;
+        case LISTINGS_STATUS.myDonatedListings:     donatedByAppUserKey = sessionData.appUserKey;    break;
+        default:                                    throw new Error('Incorrect Listings Status: ' + listingsStatus);
     }
 
-    let promise: Promise<Array<FoodListing>> = getFoodListings(getFoodListingsRequest.filters, donatedByAppUserKey, claimedByAppUserKey);
-    promise.then((foodListings: Array<FoodListing>) => {
-        response.send(new GetFoodListingsResponse(foodListings, true, 'Food Listings Successfully Retrieved'));
-    })
-    .catch((err: Error) => {
-        response.send(new GetFoodListingsResponse(null, false, err.message));
-    });
+    handleGetFoodListings(getCartFoodListingsRequest, response, claimedByAppUserKey, donatedByAppUserKey);
+}
+
+
+function handleGetFoodListings(getFoodListingsRequest: GetFoodListingsRequest,
+                               response: Response, claimedByAppUserKey?: number, donatedByAppUserKey?: number): void
+{
+    response.setHeader('Content-Type', 'application/json');
+
+    getFoodListings(getFoodListingsRequest.filters, donatedByAppUserKey, claimedByAppUserKey)
+        .then((foodListings: FoodListing[]) => {
+            response.send(new GetFoodListingsResponse(foodListings, true, 'Food Listings Successfully Retrieved'));
+        })
+        .catch((err: Error) => {
+            response.send(new GetFoodListingsResponse(null, false, err.message));
+        });
 }
 
 
@@ -41,15 +59,15 @@ export function handleAddFoodListing(request: Request, response: Response): void
     
     let addFoodListingRequest: AddFoodListingRequest = request.body;
     // The currently logged in user must be the Donor.
-    let donorAppUserKey: number = request.session['appUserInfo'].appUserKey;
+    let donorAppUserKey: number = SessionData.loadSessionData(request).appUserKey;
 
-    let promise: Promise<number> = addFoodListing(addFoodListingRequest.foodListingUpload, donorAppUserKey);
-    promise.then((foodListingKey: number) => {
-        response.send(new AddFoodListingResponse(foodListingKey, true, 'Food Listing Added Successfully'));
-    })
-    .catch((err: Error) => {
-        response.send(new AddFoodListingResponse(null, false, 'Food Listing Add Failed'));
-    });
+    addFoodListing(addFoodListingRequest.foodListingUpload, donorAppUserKey)
+        .then((foodListingKey: number) => {
+            response.send(new AddFoodListingResponse(foodListingKey, true, 'Food Listing Added Successfully'));
+        })
+        .catch((err: Error) => {
+            response.send(new AddFoodListingResponse(null, false, 'Food Listing Add Failed'));
+        });
 }
 
 
@@ -57,15 +75,16 @@ export function handleRemoveFoodListing(request: Request, response: Response): v
     response.setHeader('Content-Type', 'application/json');
 
     let removeFoodListingRequest: ClaimFoodListingRequest = request.body;
-    let addedByAppUserKey: number = request.session['appUserInfo'].appUserKey;
+    // The currently logged in user must be the original Donor (have authority to remove Food Listing).
+    let donorAppUserKey: number = SessionData.loadSessionData(request).appUserKey;
 
-    let promise: Promise<void> = removeFoodListing(removeFoodListingRequest.foodListingKey, addedByAppUserKey);
-    promise.then(() => {
-        response.send(new FoodWebResponse(true, 'Food listing has been successfully removed.'));
-    })
-    .catch((err: Error) => {
-        response.send(new FoodWebResponse(false, err.message));
-    });
+    removeFoodListing(removeFoodListingRequest.foodListingKey, donorAppUserKey)
+        .then(() => {
+            response.send(new FoodWebResponse(true, 'Food listing has been successfully removed.'));
+        })
+        .catch((err: Error) => {
+            response.send(new FoodWebResponse(false, err.message));
+        });
 }
 
 
@@ -73,15 +92,15 @@ export function handleClaimFoodListing(request: Request, response: Response): vo
     response.setHeader('Content-Type', 'application/json');
 
     let claimFoodListingRequest: ClaimFoodListingRequest = request.body;
-    let claimedByAppUserKey: number = request.session['appUserInfo'].appUserKey;
+    let claimedByAppUserKey: number = SessionData.loadSessionData(request).appUserKey;
 
-    let promise: Promise<void> = claimFoodListing(claimFoodListingRequest.foodListingKey, claimedByAppUserKey);
-    promise.then(() => {
-        response.send(new FoodWebResponse(true, 'Food listing has been successfully claimed.'));
-    })
-    .catch((err: Error) => {
-        response.send(new FoodWebResponse(false, err.message));
-    });
+    claimFoodListing(claimFoodListingRequest.foodListingKey, claimedByAppUserKey)
+        .then(() => {
+            response.send(new FoodWebResponse(true, 'Food listing has been successfully claimed.'));
+        })
+        .catch((err: Error) => {
+            response.send(new FoodWebResponse(false, err.message));
+        });
 }
 
 
@@ -89,25 +108,26 @@ export function handleUnclaimFoodListing(request: Request, response: Response): 
     response.setHeader('Content-Type', 'application/json');
 
     let unclaimFoodListingRequest: ClaimFoodListingRequest = request.body;
-    let claimedByAppUserKey: number = request.session['appUserInfo'].appUserKey;
+    let claimedByAppUserKey: number = SessionData.loadSessionData(request).appUserKey;
 
-    let promise: Promise<void> = unclaimFoodListing(unclaimFoodListingRequest.foodListingKey, claimedByAppUserKey);
-    promise.then(() => {
-        response.send(new FoodWebResponse(true, 'Food listing has been successfully unclaimed.'));
-    })
-    .catch((err: Error) => {
-        response.send(new FoodWebResponse(false, err.message));
-    });
+    unclaimFoodListing(unclaimFoodListingRequest.foodListingKey, claimedByAppUserKey)
+        .then(() => {
+            response.send(new FoodWebResponse(true, 'Food listing has been successfully unclaimed.'));
+        })
+        .catch((err: Error) => {
+            response.send(new FoodWebResponse(false, err.message));
+        });
 }
 
 
 export function handleGetFoodTypes(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
 
-    getFoodTypes().then((foodTypes: Array<string>) => {
-        response.send(new GetFoodTypesResponse(foodTypes, true, 'Food types successfully retrieved.'));
-    })
-    .catch((err: Error) => {
-        response.send(new GetFoodTypesResponse(null, false, err.message));
-    });
+    getFoodTypes()
+        .then((foodTypes: string[]) => {
+            response.send(new GetFoodTypesResponse(foodTypes, true, 'Food types successfully retrieved.'));
+        })
+        .catch((err: Error) => {
+            response.send(new GetFoodTypesResponse(null, false, err.message));
+        });
 }

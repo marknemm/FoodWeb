@@ -1,15 +1,18 @@
 'use strict'
-import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
-import { fixNullQueryArgs, toPostgresArray } from '../database-help/prepared-statement-helper';
+import { connect, query, Client, QueryResult } from '../database-util/connection-pool';
+import { fixNullQueryArgs, toPostgresArray } from './../database-util/prepared-statement-util';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
-import { FoodListingsFilters, NgbDateStruct, LISTINGS_STATUS } from '../../../shared/food-listings/food-listings-filters';
+import { FoodListingsFilters, LISTINGS_STATUS } from '../../../shared/food-listings/food-listings-filters';
 import { FoodListing } from "../../../shared/food-listings/food-listing";
+import { DateFormatter } from "../../../shared/common-util/date-formatter";
 
 
 export function getFoodListings(filters: FoodListingsFilters, donatedByAppUserKey: number, claimedByAppUserKey: number): Promise<Array<FoodListing>> {
+
     let perishableArg: boolean = generatePerishabilityArg(filters.perishable, filters.notPerishable);
     let foodTypesArg: string = toPostgresArray(filters.foodTypes);
-    let expireDateArg: string = generateExpireDateArg(filters.earliestExpireDate);
+    // Important to wrap the received JSON stringified Date object in a new Date object (one we receive will not contain Date methods)!
+    let expireDateArg: string = generateExpireDateArg(new Date(filters.earliestExpireDate));
    
     // Build our prepared statement.
     let queryString: string = 'SELECT * FROM getFoodListings($1, $2, null, $3, $4, $5, $6, $7, $8);';
@@ -46,10 +49,9 @@ function generatePerishabilityArg(perishable: boolean, notPerishable: boolean): 
 }
 
 
-function generateExpireDateArg(minExpireAfterDays: NgbDateStruct): string {
-    if (minExpireAfterDays == null)  return null;
-
-    return (minExpireAfterDays.month + '/' + minExpireAfterDays.day + '/' + minExpireAfterDays.year);
+function generateExpireDateArg(earliestExpireDate: Date): string {
+    return (earliestExpireDate == null) ? null
+                                        : DateFormatter.dateToMonthDayYearString(earliestExpireDate);
 }
 
 

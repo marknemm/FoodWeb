@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+
+import { RequestService, Response } from '../../common-util/request.service';
 
 import { UpdateAppUserRequest } from '../../../../../shared/authentication/update-app-user-message';
 import { AppUserInfo } from "../../../../../shared/authentication/app-user-info";
@@ -11,7 +12,7 @@ import { FoodWebResponse } from "../../../../../shared/message-protocol/food-web
 export class AppUserUpdateService {
 
     constructor(
-        private http: Http
+        private requestService: RequestService
     ) { }
 
 
@@ -22,13 +23,9 @@ export class AppUserUpdateService {
      * @param currentPassword Only required when the password is being updated. Should contain the current password of the user.
      */
     public updateAppUserInfo(appUserInfoUpdate: AppUserInfo, newPassword?: string, currentPassword?: string): Observable<FoodWebResponse> {
-        let headers = new Headers({
-            'Content-Type': 'application/json'
-        });
 
-        let observer: Observable<Response> = this.http.post('/authentication/updateAppUser',
-                                                            new UpdateAppUserRequest(appUserInfoUpdate, newPassword, currentPassword),
-                                                            { headers: headers });
+        let body: UpdateAppUserRequest = new UpdateAppUserRequest(appUserInfoUpdate, newPassword, currentPassword);
+        let observer: Observable<Response> = this.requestService.post('/authentication/updateAppUser', body);
 
         return observer.map((response: Response): FoodWebResponse => {
             let appUserUpdateResponse: FoodWebResponse = response.json();

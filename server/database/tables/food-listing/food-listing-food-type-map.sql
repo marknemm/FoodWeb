@@ -1,5 +1,5 @@
 
-DROP TABLE FoodListingFoodTypeMap CASCADE;
+--DROP TABLE FoodListingFoodTypeMap CASCADE;
 CREATE TABLE IF NOT EXISTS FoodListingFoodTypeMap
 (
     FoodListingFoodTypeMapKey SERIAL PRIMARY KEY

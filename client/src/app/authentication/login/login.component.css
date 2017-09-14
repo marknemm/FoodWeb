@@ -1,44 +1,37 @@
 :host {
 	flex-grow: 1;
-	display: flex;
+    display: flex;
+    text-align: center;
 	justify-content: center;
 	align-items: center;
 }
 
-div.input {
-	position: relative;
+md-form-field {
+    font-size: 25px;
+    width: 100%;
 }
 
-div.input label {
-	position: absolute;
-	top: 0;
-	transform: translateY(-50%);
-	left: 10px;
-	background: white;
-	padding: 5px 2px;
+.modal-header {
+    background-color: #222222;
+    color: white;
 }
 
-div.input input {
-	padding: 10px 20px;
-	font-size: 25px;
-	outline: 0;
-}
-
-div.input {
-	margin-top: 20px;
+#login-div {
+    text-align: right;
 }
 
 .close {
+    color: white;
 	display: block;
-	height: 25px;
-	width: 25px;
-    font-weight: bold;
+    border-radius: 50%;
     font-size: 40px;
     margin: 0px;
     padding: 0px;
+    width: 40px;
     height: 40px;
     line-height: 40px;
-    text-align: center;;
+    text-align: center;
+    outline: none;
     -webkit-transition: -webkit-transform .8s ease-in-out;
     transition: transform .8s ease-in-out;
 }

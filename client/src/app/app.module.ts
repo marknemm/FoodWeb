@@ -11,6 +11,19 @@ import { AgmCoreModule } from '@agm/core';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { BusyModule } from 'angular2-busy';
 
+import { MdListModule,
+         MdCheckboxModule,
+         MdRadioModule,
+         MdButtonModule,
+         MdInputModule,
+         MdSelectModule,
+         MdDatepickerModule,
+         MdNativeDateModule,
+         DateAdapter,
+         NativeDateAdapter,
+         MD_DATE_FORMATS,
+         MD_NATIVE_DATE_FORMATS } from '@angular/material';
+
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
@@ -27,8 +40,9 @@ import { FoodListingsComponent } from './food-listings/food-listings.component';
 import { FoodTypesComponent } from './food-listings/food-types/food-types.component';
 import { AppUserInfoComponent } from './authentication/app-user-info/app-user-info.component';
 
-import { AuthWatchService } from './authentication/misc/auth-watch.service'
-import { AuthSessionService } from "./authentication/misc/auth-session.service";
+import { RequestService } from './common-util/request.service';
+import { RoutePreprocessService } from './common-util/route-preprocess.service';
+import { SessionDataService } from "./common-util/session-data.service";
 import { FoodTypesService } from './food-listings/food-types/food-types.service';
 import { DateFormatterPipe } from "./common-util/date-formatter.pipe"
 
@@ -46,17 +60,17 @@ const appRoutes: Routes = [
     {
         path: 'home',
         component: HomeComponent,
-        canActivate: [AuthWatchService],
+        canActivate: [RoutePreprocessService],
     },
     {
         path: 'donate',
         component: DonateComponent,
-        canActivate: [AuthWatchService]
+        canActivate: [RoutePreprocessService]
     },
     {
         path: 'receive',
         component: ReceiveComponent,
-        canActivate: [AuthWatchService],
+        canActivate: [RoutePreprocessService],
         // Make sure that we get the FoodTypes from the back end before routing to the receiver interface!
         resolve: {
             foodTypes: FoodTypesService
@@ -65,7 +79,7 @@ const appRoutes: Routes = [
     {
         path: 'cart',
         component: CartComponent,
-        canActivate: [AuthWatchService],
+        canActivate: [RoutePreprocessService],
         // Make sure that we get the FoodTypes from the back end before routing to the cart interface!
         resolve: {
             foodTypes: FoodTypesService
@@ -74,12 +88,12 @@ const appRoutes: Routes = [
     {
         path: 'signup',
         component: SignupComponent,
-        canActivate: [AuthWatchService]
+        canActivate: [RoutePreprocessService]
     },
     {
         path: 'appUserInfo',
         component: AppUserInfoComponent,
-        canActivate: [AuthWatchService]
+        canActivate: [RoutePreprocessService]
     }
 ];
 
@@ -112,7 +126,15 @@ const appRoutes: Routes = [
         HttpModule,
         FormsModule,
         ReactiveFormsModule,
-        BusyModule
+        BusyModule,
+        MdListModule,
+        MdCheckboxModule,
+        MdRadioModule,
+        MdInputModule,
+        MdSelectModule,
+        MdButtonModule,
+        MdDatepickerModule,
+        MdNativeDateModule
     ],
     entryComponents: [
         LoginComponent
@@ -122,9 +144,12 @@ const appRoutes: Routes = [
     ],
     providers: [
         DateFormatterPipe,
-        AuthWatchService,
-        AuthSessionService,
-        FoodTypesService
+        RequestService,
+        SessionDataService,
+        RoutePreprocessService,
+        FoodTypesService,
+        { provide: DateAdapter, useClass: NativeDateAdapter },
+        { provide: MD_DATE_FORMATS, useValue: MD_NATIVE_DATE_FORMATS }
     ]
 })
 export class AppModule { }

@@ -5,11 +5,14 @@
 /client/dist
 /tmp
 
+# resources
+/public
+
 # dependencies
 /node_modules
 
 # sensitive data
-# .env
+app.yaml
 
 # IDEs and editors
 /.idea

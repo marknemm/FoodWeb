@@ -1,6 +1,6 @@
 -- Table for holding info of unverified app users.
 
-DROP TABLE UnverifiedAppUser CASCADE;
+--DROP TABLE UnverifiedAppUser CASCADE;
 CREATE TABLE IF NOT EXISTS UnverifiedAppUser
 (
 	appUserKey INTEGER PRIMARY KEY REFERENCES AppUser (appUserKey)

@@ -1,14 +1,14 @@
 <div class="container-fluid">
     <div id="receivers-row" class="row">
         <div class="col-md-3" id="filters">
-            <app-food-listings-filters title="Search Filters" [formGroup]="foodListingsFiltersComponent.filtersForm" #foodListingsFilters>
+            <app-food-listings-filters header="Search Filters" [formGroup]="foodListingsFiltersComponent.filtersForm" #foodListingsFilters>
             </app-food-listings-filters>
         </div>
 
         <div id="food-listings" class="col-md-9">
-            <app-food-listings title="Available Food" #foodListings>
+            <app-food-listings header="Available Food" #foodListings>
                 <ng-container details-modal-footer>
-                    <button type="button" class="btn btn-secondary" (click)="claimSelectedFoodListing()">Claim</button>
+                    <button md-raised-button color="primary" class="button-md" (click)="claimSelectedFoodListing()">Claim</button>
                 </ng-container>
             </app-food-listings>
         </div>

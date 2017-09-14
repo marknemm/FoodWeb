@@ -1,5 +1,5 @@
 
-DROP TABLE ClaimedFoodListing CASCADE; 
+--DROP TABLE ClaimedFoodListing CASCADE; 
 CREATE TABLE IF NOT EXISTS ClaimedFoodListing
 (
     claimedFoodListingKey SERIAL PRIMARY KEY

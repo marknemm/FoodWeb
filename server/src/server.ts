@@ -1,16 +1,19 @@
 'use strict';
-var express = require('express');
-var session = require('express-session');
-var http = require('http');
-var bodyParser = require('body-parser');
+let express = require('express');
+let http = require('http');
+let bodyParser = require('body-parser');
 const path = require('path');
 var email = require('emailjs');
+
 
 // Set global root directory variable and configure .env path.
 global['rootDir'] = __dirname + '/../../../../';
 require('dotenv').config({ path: global['rootDir'] + '.env' });
 
-// Our controllers that will handle requests after this router hands off the data to them.
+
+// Our session middleware and controllers that will handle requests after this router hands off the data to them.
+import { Application } from 'express';
+import { SessionData } from "./common-util/session-data";
 import { handleLoginRequest,
          handleLogoutRequest,
          handleReAuthenticateRequest,
@@ -20,79 +23,63 @@ import { handleLoginRequest,
          sendMail } from './authentication/authentication-controller';
 import { handleAddFoodListing,
          handleRemoveFoodListing,
-         handleGetFoodListings,
+         handleGetReceiverFoodListings,
+         handleGetCartFoodListings,
          handleClaimFoodListing,
          handleUnclaimFoodListing,
          handleGetFoodTypes } from './food-listings/food-listing-controller';
 
-// This is where compiled client ts files will go. We need this to locate index.html!
-const clientBuildDir = global['rootDir'] + 'client/dist/';
-const publicDir = global['rootDir'] + 'public';
 
-var app = express();
-// Some configuration settings for our App.
+// Configure paths to client JS files and public resource files (such as images).
+const clientBuildDir: string = global['rootDir'] + 'client/dist/';
+const publicDir: string = global['rootDir'] + 'public';
+
+
+// Initialize & Configure Express App (Establish App-Wide Middleware).
+let app: Application = express();
 app.use(bodyParser.json());
 app.use(express.static(clientBuildDir));
 app.use(express.static(publicDir));
-app.use(session({ 
-  secret: process.env.SESSION_SECRET,
-  cookie: { maxAge: 2000000 }, // Alot.
-  resave: false,
-  saveUninitialized: false
-}));
+SessionData.sessionBootstrap(app);
 app.set('port', (process.env.PORT || 5000));
-module.exports = app;
+module.exports = app; // Make available for mocha testing suites.
 
-// Handle /authentication/login route by passing off to AuthenticationController.
-app.post('/authentication/login', handleLoginRequest);
 
-// Handle /authentication/logout route by passing it off to AuthenticationController.
-app.get('/authentication/logout', handleLogoutRequest);
+// Authentication Controller Routes.
+app.post('/authentication/login',           handleLoginRequest);
+app.get( '/authentication/logout',          handleLogoutRequest);
+app.get( '/authentication/reAuthenticate',  handleReAuthenticateRequest);
+app.post('/authentication/signup',          handleSignupRequest);
+app.get( '/authentication/verify',          handleSignupVerification);
+app.post('/authentication/updateAppUser',   SessionData.ensureSessionActive, handleUpdateAppUserRequest);
 
-// Handle /authentication/reAuthenticate route by passing off to AuthenticationController.
-app.get('/authentication/reAuthenticate', handleReAuthenticateRequest);
 
-// Handle /authentication/signup route by passing it off to AuthenticationController.
-app.post('/authentication/signup', handleSignupRequest);
-
-// Handle /authentication/updateAppUser route by passing it off to the AuthenticationController.
-app.post('/authentication/updateAppUser', handleUpdateAppUserRequest);
-
-//Handle /authentication/verify route by passing it off to AuthenticationController.
-app.get('/authentication/verify', handleSignupVerification);
-
-// Handle /foodListings/addFoodListing route by passing off to FoodListingController.
-app.post('/foodListings/addFoodListing', handleAddFoodListing);
-
-// Handle /foodListings/removeFoodListing route by passing off to FoodListingController.
-app.post('/foodListings/removeFoodListing', handleRemoveFoodListing);
-
-// Handle /foodListings/getFoodListings route by passing off to FoodListingController.
-app.post('/foodListings/getFoodListings', handleGetFoodListings);
-
-// Handle /foodListings/claimFoodListing route by passing off to FoodListingController.
-app.post('/foodListings/claimFoodListing', handleClaimFoodListing);
-
-// Handle /foodListings/unclaimFoodListing route by passing off to FoodListingController.
-app.post('/foodListings/unclaimFoodListing', handleUnclaimFoodListing);
-
-// Handle /foodListings/getFoodTypes route by passing off to FoodListingController.
-app.get('/foodListings/getFoodTypes', handleGetFoodTypes);
+// Food Listing Controller Routes.
+app.post('/foodListings/addFoodListing',            SessionData.ensureSessionActive, handleAddFoodListing);
+app.post('/foodListings/removeFoodListing',         SessionData.ensureSessionActive, handleRemoveFoodListing);
+app.post('/foodListings/getReceiverFoodListings',   handleGetReceiverFoodListings);
+app.post('/foodListings/getCartFoodListings',       SessionData.ensureSessionActive, handleGetCartFoodListings);
+app.post('/foodListings/claimFoodListing',          SessionData.ensureSessionActive, handleClaimFoodListing);
+app.post('/foodListings/unclaimFoodListing',        SessionData.ensureSessionActive, handleUnclaimFoodListing);
+app.get( '/foodListings/getFoodTypes',              handleGetFoodTypes);
 
 //Handle /authentication/passwordRecovery route by passing off to AuthenticationController.
 app.post('/authentication/passwordRecovery', sendMail);
 
 
+// Public Resource Route Handler (for local image hosting).
 app.get('/public/*', function(request, response) {
     response.sendFile(path.resolve(global['rootDir'] + request.url));
 });
 
 
+// All Remaining Routes Handler (for serving our main web page).
 app.get('*', function (request, response) {
     response.sendFile(path.join(clientBuildDir + '/index.html'));
 });
 
 
+// Log Message That Says When App is Up & Running.
 app.listen(app.get('port'), function() {
     console.log('Node app is running on port', app.get('port'));
 });

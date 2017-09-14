@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 
-import { AuthSessionService } from './auth-session.service';
+import { RequestService } from "../../common-util/request.service";
+import { SessionDataService } from '../../common-util/session-data.service';
 
 @Injectable()
 export class LogoutService {
 
     constructor(
-        private http: Http,
         private router: Router,
-        private authSessionService: AuthSessionService,
+        private requestService: RequestService,
+        private sessionDataService: SessionDataService,
     ) { }
 
     public logout(): void {
-        this.http.get('/authentication/logout').subscribe(() => {
-            this.authSessionService.clearSessionInfo();
+        this.requestService.get('/authentication/logout').subscribe(() => {
+            this.sessionDataService.clearSessionData();
             this.router.navigate(['/home']);
         });
         // Not interested in the response...

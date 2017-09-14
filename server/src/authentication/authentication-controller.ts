@@ -10,7 +10,7 @@ import { FoodWebResponse } from "../../../shared/message-protocol/food-web-respo
 import { LoginRequest, LoginResponse } from '../../../shared/authentication/login-message';
 import { SignupRequest } from '../../../shared/authentication/signup-message';
 import { UpdateAppUserRequest } from '../../../shared/authentication/update-app-user-message';
-import { SessionData, AppUserInfo } from "./session-data";
+import { SessionData, AppUserInfo } from "../common-util/session-data";
 
 
 /**
@@ -20,10 +20,9 @@ import { SessionData, AppUserInfo } from "./session-data";
  */
 export function handleReAuthenticateRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
-    let sessionData: SessionData = request.session['sessionData'];
 
-    if (sessionData != null) {
-        response.send(new LoginResponse(sessionData.appUserInfo, true, 'Logged in'));
+    if (SessionData.doesSessionExist(request)) {
+        response.send(new LoginResponse(SessionData.loadSessionData(request).appUserInfo, true, 'Logged in'));
     }
     else {
         response.send(new LoginResponse(null, false, 'Not logged in'));
@@ -37,17 +36,18 @@ export function handleReAuthenticateRequest(request: Request, response: Response
  * @param response The response to send back to the client. 
  */
 export function handleLoginRequest(request: Request, response: Response): void {
+
     response.setHeader('Content-Type', 'application/json');
     let loginRequest: LoginRequest = request.body;
-    let promise: Promise<SessionData> = login(loginRequest.email, loginRequest.password);
 
-    promise.then((sessionData: SessionData) => {
-        request.session['sessionData'] = sessionData;
-        response.send(new LoginResponse(sessionData.appUserInfo, true, 'Login successful'));
-    })
-    .catch((err: Error) => {
-        response.send(new LoginResponse(null, false, err.message));
-    });
+    login(loginRequest.email, loginRequest.password)
+        .then((sessionData: SessionData) => {
+            SessionData.saveSessionData(request, sessionData);
+            response.send(new LoginResponse(sessionData.appUserInfo, true, 'Login successful'));
+        })
+        .catch((err: Error) => {
+            response.send(new LoginResponse(null, false, err.message));
+        });
 }
 
 
@@ -57,11 +57,10 @@ export function handleLoginRequest(request: Request, response: Response): void {
  * @param result The response to send back to the client.
  */
 export function handleLogoutRequest(request: Request, response: Response): void {
-    response.setHeader('Content-Type', 'application/json');
 
-    request.session.destroy(() => {
-        response.send(new FoodWebResponse(true, 'Logout successful'));
-    });
+    response.setHeader('Content-Type', 'application/json');
+    SessionData.deleteSessionData(request);
+    response.send(new FoodWebResponse(true, 'Logout successful'));
 }
 
 
@@ -71,17 +70,18 @@ export function handleLogoutRequest(request: Request, response: Response): void 
  * @param response The response to send back to the client.
  */
 export function handleSignupRequest(request: Request, response: Response): void {
+
     response.setHeader('Content-Type', 'application/json');
     let signupRequest: SignupRequest = request.body;
-    let promise: Promise<SessionData> = signup(signupRequest.appUserInfo, signupRequest.password);
 
-    promise.then((sessionData: SessionData) => {
-        request.session['sessionData'] = sessionData;
-        response.send(new FoodWebResponse(true, 'Signup successful'));
-    })
-    .catch((err: Error) => {
-        response.send(new FoodWebResponse(false, err.message));
-    });
+    signup(signupRequest.appUserInfo, signupRequest.password)
+        .then((sessionData: SessionData) => {
+            SessionData.saveSessionData(request, sessionData);
+            response.send(new FoodWebResponse(true, 'Signup successful'));
+        })
+        .catch((err: Error) => {
+            response.send(new FoodWebResponse(false, err.message));
+        });
 }
 
 
@@ -92,17 +92,16 @@ export function handleSignupRequest(request: Request, response: Response): void 
  */
 export function handleUpdateAppUserRequest(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
+    
+    let updateAppUserRequest: UpdateAppUserRequest = request.body;
+    let appUserUpdateInfo: AppUserInfo = updateAppUserRequest.appUserUpdateInfo;
+    let sessionData: SessionData = SessionData.loadSessionData(request);
+    let newPassword: string = updateAppUserRequest.newPassword;
+    let currentPassword: string = updateAppUserRequest.currentPassword;
 
-    // Only process if the user is logged in.
-    if (request.session['sessionData'] != null) {
-        let updateAppUserRequest: UpdateAppUserRequest = request.body;
-        let appUserUpdateInfo: AppUserInfo = updateAppUserRequest.appUserUpdateInfo;
-        let sessionData: SessionData = request.session['sessionData'];
-        let newPassword: string = updateAppUserRequest.newPassword;
-        let currentPassword: string = updateAppUserRequest.currentPassword;
-        let promise: Promise<void> = updateAppUser(appUserUpdateInfo, newPassword, currentPassword, sessionData);
+    updateAppUser(appUserUpdateInfo, newPassword, currentPassword, sessionData)
+        .then(() => {
 
-        promise.then(() => {
             // Iterate through appUserUpdateInfo fields and update session info for all non-null values.
             for (let field in appUserUpdateInfo) {
                 if (appUserUpdateInfo.hasOwnProperty(field) && appUserUpdateInfo[field] != null) {
@@ -115,11 +114,6 @@ export function handleUpdateAppUserRequest(request: Request, response: Response)
         .catch((err: Error) => {
             response.send(new FoodWebResponse(false, err.message));
         });
-    }
-    // Else we are not logged in.
-    else {
-        response.send(new FoodWebResponse(false, 'Login Required', true));
-    }
 }
 
 
@@ -129,19 +123,18 @@ export function handleUpdateAppUserRequest(request: Request, response: Response)
  * @param response The response to send back to the client.
  */
 export function handleSignupVerification(request: Request, response: Response): void {
+
     response.setHeader('Content-Type', 'application/json');
     let appUserKey: number = parseInt(request.query.appUserKey);
     let verificationToken: string = request.query.verificationToken;
-    let promise: Promise<void> = signupVerify(appUserKey, verificationToken);
 
-    promise.then(() => {
-        return response.send(new FoodWebResponse(true, 'Signup verification complete'));
-    })
-    .catch((err: Error) => {
-        return response.send(new FoodWebResponse(false, err.message));
-    });
-
-    
+    signupVerify(appUserKey, verificationToken)
+        .then(() => {
+            return response.send(new FoodWebResponse(true, 'Signup verification complete'));
+        })
+        .catch((err: Error) => {
+            return response.send(new FoodWebResponse(false, err.message));
+        });
 }
 
 var email = require('emailjs');

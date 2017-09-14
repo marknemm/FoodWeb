@@ -16,7 +16,22 @@ export class FoodTypesComponent implements OnInit {
     private foodTypesForm: FormGroup;
     private foodTypesLoaded: boolean;
 
+    /**
+     * Determines if the Food Type checkboxes should initially be checked. Default is true.
+     */
     @Input() private initiallyChecked: boolean = true;
+    /**
+     * The number of columns that the Food Types checkboxes will be displayed in. Default is 1, and make is 4.
+     */
+    @Input() private numColumns: number = 1;
+    /**
+     * Determines if at least one selection is required. Default is false.
+     */
+    @Input() private required: boolean = false;
+    /**
+     * Any extra required validation constraint. Ignored on default.
+     */
+    @Input() private extraValidation: boolean = true;
 
     
     constructor(// private routerSnapshot: ActivatedRoute,
@@ -69,5 +84,61 @@ export class FoodTypesComponent implements OnInit {
      */
     public getSelectedFoodTypes(): string[] {
         return this.foodTypesService.getFoodTypesAssocWithTrue(this.foodTypesForm.value);
+    }
+
+
+    /**
+     * Resets the checkboxes to their initial checked value. Also resets any associated validation.
+     */
+    public reset(): void {
+        for (let i: number = 0; i < this.foodTypes.length; i++) {
+            this.foodTypesForm.controls[this.foodTypes[i]].setValue(this.initiallyChecked);
+        }
+        this.foodTypesForm.markAsPristine();
+        this.foodTypesForm.markAsUntouched();
+    }
+
+
+    /**
+     * Gets the number of selected Food Types.
+     * @return The number of selected Food Types.
+     */
+    private numSelections(): number {
+        return this.foodTypesService.getFoodTypesAssocWithTrue(this.foodTypesForm.value).length;
+    }
+
+
+    /**
+     * Creates an array/range containing incremental integers representing each column (for *ngFor column iterations).
+     * @return The array or range of column numbers.
+     */
+    private createColumnsRange(): number[] {
+        return Array.from(Array(this.numColumns).keys());
+    }
+
+
+    /**
+     * Creates an array/range containing incremental integers representing the Food Types array indexes of all Food Types that
+     * should be placed in a given column.
+     * @param column The column that the numeric range shall be generated for (columns are zero based!).
+     * @return The array or range of Food Type indexes that are to be rendered in the column.
+     */
+    private createFoodTypesRange(column: number) {
+        let range: number[] = [];
+
+        /* Calculate the number of extra Food Types that must be added to the first column if the total number of Food TYpes is not
+           evenly divisble by the number of columns! Also, all other ranges (column begins) must be offset by this amount! */
+        let remainder: number = (this.foodTypes.length % this.numColumns);
+
+        // Base range parameters off of number of columns specified by parent component and the number of Food Types from server.
+        let rangeLength: number = Math.floor(this.foodTypes.length / this.numColumns);
+        let rangeBegin: number = (column * rangeLength) + (column !== 0 ? remainder : 0);
+        let rangeEnd: number = (rangeBegin + rangeLength) + (column === 0 ? remainder : 0);
+
+        for (let i: number = rangeBegin; i < rangeEnd; i++) {
+            range.push(i);
+        }
+
+        return range;
     }
 }

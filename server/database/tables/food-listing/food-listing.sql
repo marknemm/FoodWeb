@@ -1,5 +1,6 @@
 -- Food Listings table for holding record of all food that Donors have posted.
-DROP TABLE FoodListing CASCADE; 
+
+--DROP TABLE FoodListing CASCADE; 
 CREATE TABLE IF NOT EXISTS FoodListing
 (
     foodListingKey SERIAL PRIMARY KEY

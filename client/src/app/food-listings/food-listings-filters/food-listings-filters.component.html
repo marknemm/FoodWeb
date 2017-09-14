@@ -1,5 +1,6 @@
-<app-slick-left-panel>
-    <h2>{{title}}</h2>
+<app-slick-left-panel [buttonTitle]="header">
+    
+    <h2>{{header}}</h2>
     <hr>
     <div [formGroup]="filtersForm">
 
@@ -11,43 +12,21 @@
         <br>
 
         <h4>Expiration Date:</h4>
-        <ngb-datepicker #dp formControlName="earliestExpireDate" (navigate)="date = $event.next"></ngb-datepicker>
-        <br><br>
-
-        <!--<h4>Maximum Distance:</h4>
-        <div ngbRadioGroup name="radioBasic" formControlName="maxDistance">
-            <label class="btn btn-primary">
-                <input type="radio" [value]="0">{{distVals[0]}}
-            </label>
-            <label class="btn btn-primary">
-                <input type="radio" [value]="1">{{distVals[1]}}
-            </label>
-            <label class="btn btn-primary">
-                <input type="radio" [value]="2">{{distVals[2]}}
-            </label>
-        </div>
-
-        <h4>Must Fit in a:</h4>
-        <div ngbRadioGroup name="radioBasic" formControlName="maxQuantity">
-            <label class="btn btn-primary">
-                <input type="radio" [value]="0">{{quantityVals[0]}}
-            </label>
-            <label class="btn btn-primary">
-                <input type="radio" [value]="1">{{quantityVals[1]}}
-            </label>
-            <label class="btn btn-primary">
-                <input type="radio" [value]="2">{{quantityVals[2]}}
-            </label>
-        </div>-->
+        <md-input-container floatPlaceholder="never" (click)="picker.open()">
+            <input mdInput [mdDatepicker]="picker" placeholder="mm/dd/yyyy" formControlName="earliestExpireDate" readonly="true">
+            <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
+            <md-datepicker touchUi="true" #picker></md-datepicker>
+        </md-input-container>
+        <br>
 
         <h4>Perishability:</h4>
         <div>
             <label class="checkbox-compress">
-                <input type="checkbox" formControlName="perishable"> Perishable
+                <md-checkbox formControlName="perishable">Perishable</md-checkbox>
             </label>
             <br>
             <label class="checkbox-compress">
-                <input type="checkbox" formControlName="notPerishable"> Not Perishable
+                <md-checkbox formControlName="notPerishable">Not Perishable</md-checkbox>
             </label>
         </div>
 
@@ -56,4 +35,5 @@
 
     </div>
     <hr>
+
 </app-slick-left-panel>

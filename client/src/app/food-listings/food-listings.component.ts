@@ -16,7 +16,7 @@ import { FoodListingsFilters } from "../../../../shared/food-listings/food-listi
 })
 export class FoodListingsComponent {
 
-    @Input() title: string = 'Food Listings';
+    @Input() private header: string = 'Food Listings';
 
     private foodListings: Array<FoodListing>;
     private selectedFoodListingIndex: number;
@@ -54,7 +54,7 @@ export class FoodListingsComponent {
      */
     private showDetails(detailsHTML: HTMLElement, selectedFoodListingIndex: number): void {
         this.selectedFoodListingIndex = selectedFoodListingIndex;
-        this.modalFoodListingDetails = this.modalService.open(detailsHTML)
+        this.modalFoodListingDetails = this.modalService.open(detailsHTML);
         this.modalFoodListingDetails.result.then((result: string) => {
             // Don't really need to listen for any signals from details modal popup since parent will be handling any non-close button presses!
         });

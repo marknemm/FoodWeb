@@ -7,7 +7,7 @@ import { FoodListingsFiltersComponent } from "../food-listings/food-listings-fil
 import { FoodListingsComponent } from "../food-listings/food-listings.component";
 import { ClaimFoodListingService } from "../food-listings/claim-unclaim-food-listing.service";
 import { AddRemoveFoodListingService } from "../food-listings/add-remove-food-listing.service";
-import { AuthSessionService } from '../authentication/misc/auth-session.service';
+import { SessionDataService } from '../common-util/session-data.service';
 
 import { FoodListing } from "../../../../shared/food-listings/food-listing";
 import { FoodListingsFilters, LISTINGS_STATUS } from "../../../../shared/food-listings/food-listings-filters";
@@ -18,7 +18,11 @@ import { AppUserInfo } from "../../../../shared/authentication/app-user-info";
     selector: 'app-cart',
     templateUrl: './cart.component.html',
     styleUrls: ['./cart.component.css'],
-    providers: [AuthSessionService, ClaimFoodListingService, AddRemoveFoodListingService]
+    providers: [
+        SessionDataService,
+        ClaimFoodListingService,
+        AddRemoveFoodListingService
+    ]
 })
 export class CartComponent implements OnInit {
 
@@ -31,14 +35,14 @@ export class CartComponent implements OnInit {
 
 
     constructor(
-        private authSessionService: AuthSessionService,
+        private sessionDataService: SessionDataService,
         private claimFoodListingService: ClaimFoodListingService,
         private addRemoveFoodListingService: AddRemoveFoodListingService
     ) { }
 
 
     ngOnInit() {
-        const appUserInfo: AppUserInfo = this.authSessionService.getAppUserSessionInfo();
+        const appUserInfo: AppUserInfo = this.sessionDataService.getAppUserSessionData();
 
         /**
          *  Retrieves user data from session storage to 

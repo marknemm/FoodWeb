@@ -2,23 +2,23 @@
     <img id="logo" class="navbar-brand" src="./assets/HeaderImg.jpg" [routerLink]="['/home']">
 
     <nav class="navbar navbar-toggleable-sm navbar-inverse bg-inverse no-select">
-        <button type="button" class="navbar-toggler navbar-toggler-right" (click)="isExpanded = !isExpanded" [attr.aria-expanded]="!isExpanded" aria-controls="navbarContent">
+        <button md-button class="navbar-toggler" (click)="isExpanded = !isExpanded" [attr.aria-expanded]="!isExpanded" aria-controls="navbarContent">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" [ngbCollapse]="!isExpanded">
             <ul class="navbar-nav mr-auto">
-                <a class='nav-link' [routerLink]="['/home']"><li class="nav-item">Home</li></a>
-                <a class='nav-link' [routerLink]="['/donate']"><li class="nav-item">Donate</li></a>
-                <a class='nav-link' [routerLink]="['/receive']"><li class="nav-item">Receive</li></a>
+                <button md-button class='nav-link' [routerLink]="['/home']"><li class="nav-item">Home</li></button>
+                <button md-button class='nav-link' [routerLink]="['/donate']"><li class="nav-item">Donate</li></button>
+                <button md-button class='nav-link' [routerLink]="['/receive']"><li class="nav-item">Receive</li></button>
             </ul>
 
             <ul class="navbar-nav navbar-right">
-                <a *ngIf="!authSessionService.sessionInfoAvailable()" class='nav-link' (click)="showLogin()"><li class="nav-item">Login</li></a>
-                <a *ngIf="!authSessionService.sessionInfoAvailable()" class='nav-link' [routerLink]="['/signup']"><li class="nav-item">Signup</li></a>
-                <a *ngIf="authSessionService.sessionInfoAvailable()" class='nav-link' [routerLink]="['/cart']"><li class="nav-item">Cart</li></a>
-                <a *ngIf="authSessionService.sessionInfoAvailable()" class='nav-link' [routerLink]="['/appUserInfo']"><li class="nav-item">Account</li></a>
-                <a *ngIf="authSessionService.sessionInfoAvailable()" class='nav-link' (click)="logout()"><li class="nav-item">Logout</li></a>
+                <button md-button *ngIf="!sessionDataAvailable()" class='nav-link' (click)="showLogin()"><li class="nav-item">Login</li></button>
+                <button md-button *ngIf="!sessionDataAvailable()" class='nav-link' [routerLink]="['/signup']"><li class="nav-item">Signup</li></button>
+                <button md-button *ngIf="sessionDataAvailable()" class='nav-link' [routerLink]="['/cart']"><li class="nav-item">Cart</li></button>
+                <button md-button *ngIf="sessionDataAvailable()" class='nav-link' [routerLink]="['/appUserInfo']"><li class="nav-item">Account</li></button>
+                <button md-button *ngIf="sessionDataAvailable()" class='nav-link' (click)="logout()"><li class="nav-item">Logout</li></button>
             </ul>
         </div>
     </nav>

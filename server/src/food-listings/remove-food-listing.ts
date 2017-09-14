@@ -1,3 +1,8 @@
+'use strict';
+import { connect, query, Client, QueryResult } from '../database-util/connection-pool';
+import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
+
+
 /**
  * Removes a donated food listing and all assocaited claims for the given food listing.
  * @param foodListingKey The key identifier for the food listing that is to be removed.

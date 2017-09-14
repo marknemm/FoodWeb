@@ -1,5 +1,5 @@
 'use strict'
-import { connect, query, Client, QueryResult } from '../database-help/connection-pool';
+import { connect, query, Client, QueryResult } from '../database-util/connection-pool';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { FoodListing } from './food-listing';
 
@@ -15,6 +15,7 @@ export function unclaimFoodListing(foodListingKey: number, claimedByAppUserKey: 
 
 
 function claimOrUnclaimFoodListing(foodListingKey: number, claimedByAppUserKey: number, isClaim: boolean): Promise<void> {
+    
     let queryString: string = 'SELECT * FROM ' + (isClaim ? '' : 'un') + 'claimFoodListing($1, $2)';
     let queryArgs: Array<any> = [foodListingKey, claimedByAppUserKey];
 

@@ -3,51 +3,41 @@
     <form ngNativeValidate (submit)="signupUser($event)">
         <h2 class="center-text">What Type of User Are You</h2>
         <hr>
-        <div class="row center-text">
+        <md-radio-group class="row center-text" required>
             <div class="col-md-6">
-                <div class="form-group">
-                    <label for="is-business" class="checkbox-label no-select">
-                        Business <input type="radio" id="is-business" name="account-type" class="checkbox" value="business" required (click)="setAppUserType('business')">
-                    </label>
-                </div>
+                <md-radio-button name="accountType" value="business" (click)="setAppUserType('business')">
+                    Business
+                </md-radio-button>
             </div>
             <div class="col-md-6">
-                <div class="form-group">
-                    <label for="is-personal" class="checkbox-label no-select">
-                        Personal <input type="radio" id="is-personal" name="account-type" class="checkbox" value="personal" required (click)="setAppUserType('personal')">
-                    </label>
-                </div>
+                <md-radio-button name="accountType" value="personal" (click)="setAppUserType('personal')">
+                    Personal
+                </md-radio-button>
             </div>
-        </div>
+        </md-radio-group>
 
         <ng-container *ngIf="appUserTypeSelected">
             <br><br><br><br>
 
             <h2 class="center-text">What Will You Be Doing</h2>
             <hr>
-            <div class="row center-text">
-                <div class ="col-md-4">
-                    <div class="form-group">
-                        <label for="donor" class="checkbox-label no-select">
-                            Donating <input type="radio" id="donor" name="account-function" class="checkbox" required (click)="setAppUserFunction('donor')">
-                        </label>
-                    </div>
+            <md-radio-group class="row center-text" required>
+                <div class="col-md-4">
+                    <md-radio-button name="accountFunction" value="donor" (click)="setAppUserFunction('donor')">
+                        Donating
+                    </md-radio-button>
                 </div>
                 <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="receiver" class="checkbox-label no-select">
-                            Receiving <input type="radio" id="receiver" name="account-function" class="checkbox" required (click)="setAppUserFunction('receiver')">
-                        </label>
-                    </div>
+                    <md-radio-button name="accountFunction" value="receiver" (click)="setAppUserFunction('receiver')">
+                        Receiving
+                    </md-radio-button>
                 </div>
                 <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="both" class="checkbox-label no-select">
-                            Both <input type="radio" id="both" name="account-function" class="checkbox" required (click)="setAppUserFunction('both')">
-                        </label>
-                    </div>
+                    <md-radio-button name="accountFunction" value="both" (click)="setAppUserFunction('both')">
+                        Both
+                    </md-radio-button>
                 </div>
-            </div>
+            </md-radio-group>
             <br><br><br><br>
         </ng-container>
 
@@ -56,63 +46,52 @@
             <hr>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="username">{{emailLabel}}:</label>
-                        <input type="email" id="email" name="username" class="form-control" [(ngModel)]="appUserSignupInfo.email" required autocomplete="on">
-                    </div>
+                    <md-input-container class="form-group">
+                        <input mdInput [placeholder]="emailLabel" type="email" name="username" [(ngModel)]="appUserSignupInfo.email" required autocomplete="off">
+                    </md-input-container>
 
-                    <div class="form-group">
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" class="form-control" [(ngModel)]="password" required>
-                    </div>
+                    <md-input-container class="form-group">
+                        <input mdInput placeholder="Password" type="password" name="password" [(ngModel)]="password" required autocomplete="new-password">
+                    </md-input-container>
 
-                    <div *ngIf="isBusiness" class="form-group">
-                        <label for="organization-name">Organization Name:</label>
-                        <input type="text" id="organization-name" name="organization-name" class="form-control" [(ngModel)]="appUserSignupInfo.organizationName"
-                         required autocomplete="on">
-                    </div>
+                    <md-input-container class="form-group" *ngIf="isBusiness">
+                        <input mdInput placeholder="Organization Name" name="organizationName" [(ngModel)]="appUserSignupInfo.organizationName" required>
+                    </md-input-container>
 
-                    <div class="form-group">
-                        <label for="fname">{{firstNameLabel}}:</label>
-                        <input type="text" id="first-name" name="fname" class="form-control" [(ngModel)]="appUserSignupInfo.firstName" required autocomplete="on">
-                    </div>
+                    <md-input-container class="form-group">
+                        <input mdInput [placeholder]="firstNameLabel" name="fname" [(ngModel)]="appUserSignupInfo.firstName" required>
+                    </md-input-container>
 
-                    <div class="form-group">
-                        <label for="lname">{{lastNameLabel}}:</label>
-                        <input type="text" id="last-name" name="lname" class="form-control" [(ngModel)]="appUserSignupInfo.lastName" required autocomplete="on">
-                    </div>
+                    <md-input-container class="form-group">
+                        <input mdInput [placeholder]="lastNameLabel" name="lname" [(ngModel)]="appUserSignupInfo.lastName" required>
+                    </md-input-container>
                 </div>
+
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="address">Street Address:</label>
-                        <input type="text" id="address" name="address" class="form-control" [(ngModel)]="appUserSignupInfo.address" required autocomplete="on">
-                    </div>
+                    <md-input-container class="form-group">
+                        <input mdInput placeholder="Street Address" name="address" [(ngModel)]="appUserSignupInfo.address" required>
+                    </md-input-container>
+
+                    <md-input-container class="form-group">
+                        <input mdInput placeholder="City" name="city" [(ngModel)]="appUserSignupInfo.city" required>
+                    </md-input-container>
 
                     <div class="form-group">
-                        <label for="city">City:</label>
-                        <input type="text" id="city" name="city" class="form-control" [(ngModel)]="appUserSignupInfo.city" required autocomplete="on">
+                        <md-select name="state" placeholder="State" [(ngModel)]="appUserSignupInfo.state" required>
+                            <md-option *ngFor="let stateStr of stateList" [value]="stateStr">{{stateStr}}</md-option>
+                        </md-select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="state">State:</label>
-                        <select id="state" name="state" class="form-control" [(ngModel)]="appUserSignupInfo.state" autocomplete="on">
-                            <option *ngFor="let state of stateList" [value]="state">{{state}} </option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="zip">ZIP Code:</label>
-                        <input type="text" id="zip" name="zip" class="form-control" maxlength="5" [(ngModel)]="appUserSignupInfo.zip" required autocomplete="on">
-                    </div>
+                    <md-input-container class="form-group">
+                        <input mdInput placeholder="ZIP Code" name="zip" maxlength="5" [(ngModel)]="appUserSignupInfo.zip" required>
+                    </md-input-container>
                     
-                    <div class="form-group">
-                        <label for="phone">Phone Number:</label>
-                        <input type="text" id="phone" name="phone" class="form-control" [(ngModel)]="appUserSignupInfo.phone"
-                         minlength="12" maxlength="12" placeholder="xxx-xxx-xxxx" required autocomplete="on">
-                    </div>
+                    <md-input-container class="form-group">
+                        <input mdInput placeholder="Phone" name="phone" [(ngModel)]="appUserSignupInfo.phone" minlength="12" maxlength="12" required>
+                    </md-input-container>
                 </div>
 
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button md-raised-button color="primary" class="button-md" type="submit">Submit</button>
             </div>
         </ng-container>
     </form>

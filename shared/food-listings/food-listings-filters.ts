@@ -1,7 +1,3 @@
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-export { NgbDateStruct };
-
-
 /**
  * An emumeration of different food listing statuses to filter on.
  */
@@ -34,7 +30,7 @@ export class FoodListingsFilters {
         /**
          * Determines the minimum date that retrieved items may expire after.
          */
-        public earliestExpireDate?: NgbDateStruct,
+        public earliestExpireDate?: Date,
         /**
          * Determines the maximum distance from the requesting entity that donations must fall within.
          */

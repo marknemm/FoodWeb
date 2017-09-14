@@ -1,6 +1,6 @@
 --Table to store everything related directly to the PASSWORD
 
-DROP TABLE AppUserPassword CASCADE;
+--DROP TABLE AppUserPassword CASCADE;
 CREATE TABLE IF NOT EXISTS AppUserPassword
 (
     appUserPasswordKey SERIAL PRIMARY KEY

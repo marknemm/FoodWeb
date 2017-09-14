@@ -1,7 +1,8 @@
 "use strict";
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+
+import { RequestService, Response } from "../common-util/request.service";
 
 import { ClaimFoodListingRequest } from "./../../../../shared/food-listings/claim-food-listing-message";
 import { FoodWebResponse } from "./../../../../shared/message-protocol/food-web-response";
@@ -10,12 +11,9 @@ import { FoodWebResponse } from "./../../../../shared/message-protocol/food-web-
 @Injectable()
 export class ClaimFoodListingService {
     
-    private static readonly JSON_HEADERS: Headers = new Headers({
-        'Content-Type': 'application/json'
-    });
-
-    
-    constructor(private http: Http) { }
+    constructor(
+        private requestService: RequestService
+    ) { }
 
 
     /**
@@ -45,14 +43,15 @@ export class ClaimFoodListingService {
      * @return An observable that has no payload (simply resolves on success).
      */
     private claimOrUnclaimFoodListing(foodListingKey: number, isClaim: boolean): Observable<void> {
-        let claimFoodListingRequest: ClaimFoodListingRequest = new ClaimFoodListingRequest(foodListingKey);
-        let observer: Observable<Response> = this.http.post('/foodListings/' + (isClaim ? '' : 'un') + 'claimFoodListing',
-                                                            JSON.stringify(claimFoodListingRequest),
-                                                            { headers: ClaimFoodListingService.JSON_HEADERS, withCredentials: true });
+
+        let body: ClaimFoodListingRequest = new ClaimFoodListingRequest(foodListingKey);
+        let observer: Observable<Response> = this.requestService.post('/foodListings/' + (isClaim ? '' : 'un') + 'claimFoodListing', body);
 
         // Listen for a response now.
         return observer.map((response: Response) => {
+
             let claimFoodListingResponse: FoodWebResponse = response.json();
+            
             // On failure.
             if (!claimFoodListingResponse.success) {
                 console.log(claimFoodListingResponse.message);

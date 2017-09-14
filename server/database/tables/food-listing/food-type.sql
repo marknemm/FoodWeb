@@ -3,7 +3,7 @@
  *  We may be able to get data from an online database for this in the future...
  */
 
-DROP TABLE FoodType CASCADE;
+--DROP TABLE FoodType CASCADE;
 CREATE TABLE IF NOT EXISTS FoodType
 (
     foodTypeKey SERIAL PRIMARY KEY
@@ -18,7 +18,7 @@ DO $$ BEGIN
         INSERT INTO FoodType (foodType) VALUES ('Produce');
     END IF;
     
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Canned Goods') THEN
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Canned Good') THEN
         INSERT INTO FoodType (foodType) VALUES ('Canned Goods');
     END IF;
 
@@ -46,15 +46,15 @@ DO $$ BEGIN
         INSERT INTO FoodType (foodType) VALUES ('Sea Food');
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Baked Goods') THEN
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Baked Good') THEN
         INSERT INTO FoodType (foodType) VALUES ('Baked Goods');
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Beverages') THEN
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Beverage') THEN
         INSERT INTO FoodType (foodType) VALUES ('Beverages');
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Snacks') THEN
+    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Snack') THEN
         INSERT INTO FoodType (foodType) VALUES ('Snacks');
     END IF;
 
@@ -64,4 +64,4 @@ DO $$ BEGIN
 
 END$$;
 
---SELECT * FROM FoodType;
+SELECT * FROM FoodType;

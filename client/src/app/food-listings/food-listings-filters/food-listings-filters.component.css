@@ -1,0 +1,12 @@
+md-input-container, input {
+    cursor: pointer;
+    cursor: hand;
+}
+
+:host ::ng-deep .mat-form-field-infix {
+    border: none;
+}
+
+md-input-container, input, md-datepicker-toggle {
+    font-size: 20px;
+}

@@ -14,9 +14,6 @@ export class LoginModel {
     public forgotPassword: boolean = false;
 
     constructor() {
-        // Clear these out whenever the user may be redirected to Login by the server!
-        sessionStorage.removeItem('appUserKey');
-        sessionStorage.removeItem('username');
         this.loginError = false;
     }
 
