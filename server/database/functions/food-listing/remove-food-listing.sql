@@ -1,5 +1,5 @@
 /**
- * A basic function for adding a food listing.
+ * A basic function for removing a food listing and any associated data.
  */
 SELECT dropFunction('removefoodlisting');
 CREATE OR REPLACE FUNCTION removeFoodListing
@@ -7,31 +7,32 @@ CREATE OR REPLACE FUNCTION removeFoodListing
     _foodListingKey         INTEGER,
     _donatedByAppUserKey    INTEGER
 )
-RETURNS INTEGER -- The food listing key of the new food listing.
+RETURNS VOID -- TODO: Return contact info of App User who lost their claim due to this action for email notification!
 AS $$
 BEGIN
 
-    IF NOT EXISTS (SELECT *)
+    -- Make sure the food listing we are to delete exists and was donated by user issuing this command.
+    IF NOT EXISTS (
+        SELECT 1
+        FROM FoodListing
+        WHERE FoodListing.foodListingKey = _foodListingKey
+          AND FoodListing.appUserKey = _appUserKey
+    )
+    THEN
+        RAISE EXCEPTION 'Food listing does not exist, or user not authorized.';
+    END IF;
     
+    -- Delete Food Type associations.
     DELETE FROM FoodListingFoodTypeMap
-    WHERE 
-    -- Insert the new food listing and get the food listing key for it.
-    INSERT INTO FoodListing (perishable, expireDate, donatedByAppUserKey, foodDescription, imgUrl)
-    VALUES (_perishable, _expTimeStamp, _donorAppUserKey, _foodDescription, _imgURL)
-    RETURNING FoodListing.foodListingKey INTO _foodListingKey;
+    WHERE FoodListingFoodTypeMap.foodListingKey = _foodListingKey;
 
-    -- Insert all the food types that are associated with the new food listing.
-    FOR i IN array_lower(_foodTypes, 1) .. array_upper(_foodTypes, 1)
-    LOOP
-        INSERT INTO FoodListingFoodTypeMap (foodListingKey, foodTypeKey)
-        VALUES (_foodListingKey, (SELECT foodTypeKey FROM FoodType WHERE FoodType.foodType = _foodTypes[i]));
-    END LOOP;
+    -- Delete any claims on the Food Listing.
+    DELETE FROM ClaimedFoodListing
+    WHERE ClaimedFoodListing.foodListingKey = _foodListingKey;
 
-    RETURN _foodListingKey;
+    -- Delete the actual Food Listing.
+    DELETE FROM FoodListing
+    WHERE FoodListingKey = _foodListingKey;
 
 END;
 $$ LANGUAGE plpgsql;
-
---SELECT * FROM AppUser;
---SELECT addFoodListing('{ Meal, Dairy, Canned }', false, '1/2/2021', 2, NULL, NULL);
---SELECT * FROM FoodListing;

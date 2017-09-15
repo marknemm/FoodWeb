@@ -9,16 +9,18 @@ RETURNS VOID
 AS $$
 BEGIN
 
-    -- Make sure the food listing(s) we are to delete exist(s).
+    -- Make sure the claimed food listing we are to delete exists and was claimed by user issuing this command.
     IF (    
             _claimedByAppUserKey IS NOT NULL
-        AND NOT EXISTS ( SELECT 1
-                         FROM ClaimedFoodListing
-                         WHERE foodListingKey = _foodListingKey
-                           AND claimedByAppUserKey = _claimedByAppUserKey )
+        AND NOT EXISTS (
+            SELECT 1
+            FROM ClaimedFoodListing
+            WHERE foodListingKey = _foodListingKey
+              AND claimedByAppUserKey = _claimedByAppUserKey
+        )
     )
     THEN
-        RAISE EXCEPTION 'Claimed food listing does not exist.';
+        RAISE EXCEPTION 'Claimed food listing does not exist, or user not authorized.';
     END IF;
 
     -- Perform the actual delete now.
