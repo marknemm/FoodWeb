@@ -7,7 +7,7 @@ export PGPASSWORD="dda3a35edddd2ccb79bafa2bdddad61531827529d4c78c9843a0c02aa17c5
 
 
 # WARNING: The -nuke_database argument will literally drop and recreate the entire development database (destroying all data)!
-if [ $1 == "-nuke_database" ]
+if [ "$1" == "-nuke_database" ]
 then
     echo "=== Warning: If you confirm this action, then all development data will be lost!"
     heroku pg:reset DATABASE_URL -a connect-food
