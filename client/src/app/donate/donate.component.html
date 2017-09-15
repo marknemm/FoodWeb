@@ -3,12 +3,12 @@
     <hr>
 
     <div [hidden]="submitted" class="row">
-        <!--<div class="col-md-5">
+        <div class="col-md-5">
             <label>Upload Image</label>
             <img-cropper [image]="this" [settings]="cropperSettings"></img-cropper>
-        </div>-->
+        </div>
 
-        <div class="col-md-12">
+        <div class="col-md-7">
             <form [formGroup]="foodForm" (ngSubmit)="onSubmit(foodForm, $event)">
 
                 <div class="form-group">

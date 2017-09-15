@@ -43,8 +43,8 @@
     </div>
 
     <div class="modal-body">
-        <!--<img *ngIf="foodListings[selectedFoodListingIndex].imgUrl != null" [src]="foodListings[selectedFoodListingIndex].imgUrl"
-         id="details-img" align="left" class="img-thumbnail modal-img">-->
+        <img *ngIf="foodListings[selectedFoodListingIndex].imgUrl != null" [src]="foodListings[selectedFoodListingIndex].imgUrl"
+         id="details-img" align="left" class="img-thumbnail modal-img">
         <p>
             Donated By:
             <ng-container *ngIf="foodListings[selectedFoodListingIndex].donorOrganizationName != null">

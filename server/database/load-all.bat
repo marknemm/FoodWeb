@@ -3,7 +3,7 @@ set server="ec2-54-83-26-65.compute-1.amazonaws.com"
 set port=5432
 set database="dboab0kq8r4usn"
 set username="vvbtixriggqnkz"
-set PGPASSWORD=dda3a35edddd2ccb79bafa2bdddad61531827529d4c78c9843a0c02aa17c5660
+set PGPASSWORD="dda3a35edddd2ccb79bafa2bdddad61531827529d4c78c9843a0c02aa17c5660"
 
 
 :: WARNING: The -nuke_database argument will literally drop and recreate the entire development database (destroying all data)!
