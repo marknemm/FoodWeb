@@ -8,7 +8,7 @@ import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
-import { ImageCropperComponent } from 'ng2-img-cropper';
+import { ImageCropperModule } from 'ng2-img-cropper';
 import { BusyModule } from 'angular2-busy';
 
 import { MdListModule,
@@ -107,7 +107,6 @@ const appRoutes: Routes = [
         DonateComponent,
         ReceiveComponent,
         SignupComponent,
-        ImageCropperComponent,
         DateFormatterPipe,
         BannerComponent,
         SlickLeftPanelComponent,
@@ -123,6 +122,7 @@ const appRoutes: Routes = [
         BrowserModule,
         BrowserAnimationsModule,
         BootstrapModalModule,
+        ImageCropperModule,
         HttpModule,
         FormsModule,
         ReactiveFormsModule,
