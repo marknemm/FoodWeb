@@ -8,6 +8,7 @@
     "start": "node server/dist/server/src/server.js",
     "start-dev": "nodemon --nolazy --inspect server/dist/server/src/server.js",
     "start-build-dev": "tsc -p server/tsconfig.json && concurrently \"tsc -w -p server/tsconfig.json\" \"ng build --watch\" \"nodemon --nolazy --inspect server/dist/server/src/server.js\" ",
+    "postinstall": "npm run-script build",
     "build": "tsc -p server/tsconfig.json && ng build",
     "debug-server": "concurrently \"node --nolazy --debug-brk=5858 server/dist/server.js\" \"opn http://localhost:5000\""
   },
