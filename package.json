@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "angular-cli": {},
+  "main": "server/dist/server/src/server.js",
   "scripts": {
     "ng": "ng",
     "start": "node server/dist/server/src/server.js",
