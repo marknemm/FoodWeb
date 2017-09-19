@@ -13,6 +13,7 @@
 
 # sensitive data
 app.yaml
+startup.sh
 
 # IDEs and editors
 /.idea
