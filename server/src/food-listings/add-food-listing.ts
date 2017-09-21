@@ -28,7 +28,7 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
     // If we have an image form the Donor, then generate the name and URL for it before we create database entry.
     if (foodListingUpload.imageUpload != null) {
         imageName = 'img-' + Date.now().toString() + '.jpeg';
-        imageUrl = (process.env.DEVELOPER_MODE.toLowerCase() === 'true') ? ('//public//' + imageName)
+        imageUrl = (process.env.DEVELOPER_MODE.toLowerCase() === 'true') ? ('/public/' + imageName)
                                                                          : (process.env.BUCKET_URL + imageName);
     }
     
