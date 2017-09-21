@@ -1,67 +1,29 @@
-/*  A domain table that holds all possible hard-coded short hand food type descriptions.
- *  Should be used to populate some form item such as a combobox for selection.
- *  We may be able to get data from an online database for this in the future...
+/** 
+ *  A domain enum (table) that holds all possible hard-coded short hand food type descriptions.
+ *  Should be used to populate some form item such as checkboxes for filtering.
  */
+DO $$
+BEGIN
 
---DROP TABLE FoodType CASCADE;
-CREATE TABLE IF NOT EXISTS FoodType
-(
-    foodTypeKey SERIAL PRIMARY KEY
-);
-
-ALTER TABLE FoodType ADD COLUMN IF NOT EXISTS foodType VARCHAR(60) NOT NULL UNIQUE;
-
--- We can add all our FoodType entries here.
-DO $$ BEGIN
-
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Produce') THEN
-        INSERT INTO FoodType (foodType) VALUES ('Produce');
-    END IF;
-    
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Canned Good') THEN
-        INSERT INTO FoodType (foodType) VALUES ('Canned Goods');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Dessert') THEN
-        INSERT INTO FoodType (foodType) VALUES ('Dessert');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Frozen') THEN
-        INSERT INTO FoodType (foodType) VALUES ('Frozen');
-    END IF;
-    
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Grain') THEN
-        INSERT INTO FoodType (foodType) VALUES ('Grain');
-    END IF;
-    
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Dairy') THEN
-        INSERT INTO FoodType (foodType) VALUES ('Dairy');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Meat') THEN
-        INSERT INTO FoodType (foodType) VALUES ('Meat');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Sea Food') THEN
-        INSERT INTO FoodType (foodType) VALUES ('Sea Food');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Baked Good') THEN
-        INSERT INTO FoodType (foodType) VALUES ('Baked Goods');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Beverage') THEN
-        INSERT INTO FoodType (foodType) VALUES ('Beverages');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Snack') THEN
-        INSERT INTO FoodType (foodType) VALUES ('Snacks');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM FoodType WHERE foodType = 'Meal') THEN
-        INSERT INTO FoodType (foodType) VALUES ('Meal');
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'foodtype')
+    THEN
+        CREATE TYPE FoodType AS ENUM ();
     END IF;
 
 END$$;
 
-SELECT * FROM FoodType;
+-- Fill the Enum with all of our Food Types. Each one has an external string representation, but is internally an integer!
+ALTER TYPE FoodType ADD VALUE IF NOT EXISTS 'Produce';
+ALTER TYPE FoodType ADD VALUE IF NOT EXISTS 'Canned Good';
+ALTER TYPE FoodType ADD VALUE IF NOT EXISTS 'Dessert';
+ALTER TYPE FoodType ADD VALUE IF NOT EXISTS 'Frozen';
+ALTER TYPE FoodType ADD VALUE IF NOT EXISTS 'Grain';
+ALTER TYPE FoodType ADD VALUE IF NOT EXISTS 'Dairy';
+ALTER TYPE FoodType ADD VALUE IF NOT EXISTS 'Meat';
+ALTER TYPE FoodType ADD VALUE IF NOT EXISTS 'Sea Food';
+ALTER TYPE FoodType ADD VALUE IF NOT EXISTS 'Baked Good';
+ALTER TYPE FoodType ADD VALUE IF NOT EXISTS 'Beverage';
+ALTER TYPE FoodType ADD VALUE IF NOT EXISTS 'Snack';
+ALTER TYPE FoodType ADD VALUE IF NOT EXISTS 'Meal';
+
+SELECT unnest(enum_range(NULL::FoodType)) AS foodType;

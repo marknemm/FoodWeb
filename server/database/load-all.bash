@@ -26,6 +26,7 @@ psql --set=sslmode=require -h $server -p $port -d $database -U $username \
  \
     -f tables/food-listing/food-listing.sql \
     -f tables/food-listing/claimed-food-listing.sql \
+    -f tables/food-listing/delivery-food-listing.sql \
     -f tables/food-listing/food-type.sql \
     -f tables/food-listing/food-listing-food-type-map.sql \
  \

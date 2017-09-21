@@ -8,7 +8,7 @@ import { DateFormatterPipe } from "../common-util/date-formatter.pipe"
 import { FoodTypesComponent } from "../food-listings/food-types/food-types.component";
 
 import { FoodListingUpload } from "../../../../shared/food-listings/food-listing-upload";
-import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
+import { Validation } from '../../../../shared/common-util/validation';
 
 
 @Component({
@@ -27,6 +27,8 @@ export class DonateComponent implements OnInit {
 
     private image: string;
     private cropperSettings: CropperSettings;
+
+    private foodTitleMaxLength: number;
 
     @ViewChild('FoodTypesComponent') private foodTypesComponent: FoodTypesComponent;
 
@@ -47,20 +49,23 @@ export class DonateComponent implements OnInit {
         this.cropperSettings.croppedHeight = 100;
         this.cropperSettings.canvasWidth = 400;
         this.cropperSettings.canvasHeight = 300;
+
+        this.foodTitleMaxLength = 100;
     }
 
 
     ngOnInit() {
         this.foodForm = this.formBuilder.group({
             perishable: ['', Validators.required],
-            foodDescription: ['', Validators.required],
-            expirationDate: [null, Validators.required]
+            foodTitle: ['', [Validators.required, Validators.maxLength(this.foodTitleMaxLength)]],
+            foodDescription: [''],
+            availableUntilDate: [null, Validators.required]
         });
     }
 
 
     private isInvalid(validField: AbstractControl): boolean {
-        return validField.errors != null && (validField.touched || this.forceValidation);
+        return validField != null && validField.errors != null && (validField.touched || this.forceValidation);
     }
 
 
@@ -95,18 +100,5 @@ export class DonateComponent implements OnInit {
         this.foodTypesComponent.reset();
         this.forceValidation = false;
         this.submitted = false;
-    }
-
-
-    get perishable(): AbstractControl {
-        return this.foodForm.controls.perishable;
-    }
-
-    get foodDescription(): AbstractControl {
-        return this.foodForm.controls.foodDescription;
-    }
-
-    get expirationDate(): AbstractControl {
-        return this.foodForm.controls.expirationDate;
     }
 }

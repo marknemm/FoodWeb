@@ -8,20 +8,20 @@
 SELECT dropFunction('getFoodListings');
 CREATE OR REPLACE FUNCTION getFoodListings
 (
-    _retrievalOffset            INTEGER,                        -- The offof records that should be retrieved.
+    _retrievalOffset            INTEGER,                        -- The offset of records that should be retrieved.
     _retrievalAmount            INTEGER,                        -- The number of records that should be retrieved starting at _retrievalOffset.
     _foodListingKey             INTEGER         DEFAULT NULL,   -- This is for when we are looking for a specific Food Listing.
     _unclaimedOnly              BOOLEAN         DEFAULT FALSE,  -- to true if only unclaimed results should come back.
-    _foodTypes                  VARCHAR(60)[]   DEFAULT NULL,   -- This is when we may be filtering by one or many food types. Null is for all food types.
+    _foodTypes                  FoodType[]      DEFAULT NULL,   -- This is when we may be filtering by one or many food types. Null is for all food types.
     _perishable                 BOOLEAN         DEFAULT NULL,   -- Are we looking for perishable food? Input true for perishable only, false for non-perishable, and null for both.
-    _earliestExpireDate         TEXT            DEFAULT NULL,   -- Do we require food that is going to expire after a specific date? Must be in the format MM/DD/YYYY!
+    _availableUntilDate         TEXT            DEFAULT NULL,   -- Do we require food that is going to be available until a given date? Must be in the format MM/DD/YYYY!
     _DonatedByAppUserKey        INTEGER         DEFAULT NULL,   -- App User key of the logged in AppUser who is trying to view the items they donated.
     _claimedByAppUserKey        INTEGER         DEFAULT NULL    -- App User key of the logged in AppUser who is trying to view the items they claimed.
 )
 RETURNS TABLE
 (
     foodListingKey              INTEGER,
-    foodTypes                   VARCHAR(60)[],
+    foodTypes                   FoodType[],
     perishable                  BOOLEAN,
     donorOrganizationName       VARCHAR(128),
     donorOrganizationAddress    VARCHAR(128),
@@ -30,7 +30,7 @@ RETURNS TABLE
     donorOrganizationZip        INTEGER,
     donorLastName               VARCHAR(60),
     donorFirstName              VARCHAR(60),
-    expireDate                  TEXT,
+    availableUntilDate          TEXT,
     foodDescription             TEXT,
     imgUrl                      TEXT
 )
@@ -61,17 +61,14 @@ BEGIN
             FoodListing.foodListingKey
         FROM FoodListing
         INNER JOIN FoodListingFoodTypeMap   ON FoodListing.foodListingKey = FoodListingFoodTypeMap.foodListingKey
-        INNER JOIN FoodType                 ON FoodListingFoodTypeMap.foodTypeKey = FoodType.foodTypeKey
     ';
 
     queryFilters := '
         WHERE ($1 IS NULL   OR FoodListing.foodListingKey = $1)
           -- We will translate the list of food type descriptions into integer keys for lookup efficiency.
-          AND ($2 IS NULL   OR FoodType.foodTypeKey IN (SELECT  FoodType.foodTypeKey
-                                                        FROM    FoodType
-                                                        WHERE   FoodType.foodType = ANY($2)))
+          AND ($2 IS NULL   OR FoodListingFoodTypeMap.foodType = ANY($2))
           AND ($3 IS NULL   OR FoodListing.perishable = $3)
-          AND ($4 IS NULL   OR FoodListing.expireDate >= TO_TIMESTAMP($4, ''MM/DD/YYYY''))
+          AND ($4 IS NULL   OR FoodListing.availableUntilDate >= TO_TIMESTAMP($4, ''MM/DD/YYYY''))
           AND ($5 IS NULL   OR FoodListing.donatedByAppUserKey = $5)
     ';
 
@@ -105,7 +102,7 @@ BEGIN
 
     queryGroupAndSort := '
         GROUP BY FoodListing.foodListingKey
-        ORDER BY FoodListing.expireDate
+        ORDER BY FoodListing.availableUntilDate
         OFFSET $7
         LIMIT $8
     ';
@@ -121,7 +118,7 @@ BEGIN
     USING _foodListingKey,
           _foodTypes,
           _perishable,
-          _earliestExpireDate,
+          _availableUntilDate,
           _DonatedByAppUserKey,
           _claimedByAppUserKey,
           _retrievalOffset,
@@ -136,9 +133,8 @@ BEGIN
     SELECT  FoodListing.foodListingKey,
             -- Concatenates the food types into an array { Type1, Type2, ..., TypeN }
             (
-                SELECT ARRAY_AGG(FoodType.foodType) AS foodTypes
+                SELECT ARRAY_AGG(FoodListingFoodTypeMap.foodType) AS foodTypes
                 FROM FoodListingFoodTypeMap
-                INNER JOIN FoodType ON FoodListingFoodTypeMap.foodTypeKey = FoodType.foodTypeKey
                 WHERE FoodListingFoodTypeMap.foodListingKey = FoodListing.foodListingKey
                 GROUP BY FoodListingFoodTypeMap.foodListingKey
             ),
@@ -150,7 +146,7 @@ BEGIN
             DonatedByContactInfo.zip,
             DonatedByAppUser.lastName,
             DonatedByAppUser.firstName,
-            TO_CHAR(FoodListing.expireDate, 'MM/DD/YYYY'),
+            TO_CHAR(FoodListing.availableUntilDate, 'MM/DD/YYYY'),
             FoodListing.foodDescription,
             FoodListing.imgUrl
     FROM FiltFoodListing
@@ -158,7 +154,7 @@ BEGIN
     INNER JOIN AppUser                  AS DonatedByAppUser         ON FoodListing.donatedByAppUserKey = DonatedByAppUser.appUserKey
     INNER JOIN ContactInfo              AS DonatedByContactInfo     ON DonatedByAppUser.appUserKey = DonatedByContactInfo.appUserKey
     LEFT JOIN  Organization             AS DonatedByOrganization    ON DonatedByAppUser.appUserKey = DonatedByOrganization.appUserKey
-    ORDER BY FoodListing.expireDate ASC;
+    ORDER BY FoodListing.availableUntilDate ASC;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -178,7 +174,7 @@ GROUP BY FoodListing.foodListingKey;
 
 --SELECT * FROM FoodListingFoodTypeMap;
 
-select * FROM getFoodListings(0, 1000);
+--select * FROM getFoodListings(0, 1000);
 
 /*
 
