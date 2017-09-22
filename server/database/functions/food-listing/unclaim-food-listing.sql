@@ -10,17 +10,37 @@ CREATE OR REPLACE FUNCTION unclaimFoodListing
 RETURNS VOID
 AS $$
     DECLARE _totalClaimedUnitsCount     INTEGER DEFAULT 0;
-    DECLARE _examinedClaimKey           INTEGER; -- This is the claimedFoodListingKey of a Claimed Food Listing we are looking into.
-    DECLARE _examinedClaimUnitsCount    INTEGER;
+    DECLARE _unclaimCandidate           RECORD;
 BEGIN
 
-    -- Grab the total number of Claimed Food Listing units (among all claims that fit Food Listing & App User arguments).
-    SELECT      SUM(claimedUnitsCount)
-    INTO        _totalClaimedUnitsCount
+    -- Create a temporary table that will be filled with all of the Claimed Food Listing candidates for unclaiming (based on function args).
+    DROP TABLE IF EXISTS UnclaimCandidates;
+    CREATE TEMP TABLE UnclaimCandidates
+    (
+        claimedFoodListingKey   INTEGER,
+        claimedUnitsCount       INTEGER,
+        claimedDate             TIMESTAMP
+    );
+
+    -- Grab all of the keys of Claimed Food Listings that are candidates for being unclaiemd.
+    -- NOTE: The result set here should be very small (<= 3 rows on average).
+    INSERT INTO UnclaimCandidates
+    SELECT      claimedFoodListingKey,
+                claimedUnitsCount,
+                claimedDate
     FROM        ClaimedFoodListing
     WHERE       foodListingKey = _foodListingKey
       AND       (_claimedByAppUserKey IS NULL OR claimedByAppUserKey = _claimedByAppUserKey)
-    GROUP BY    foodListingKey;
+      -- The claimed food listings (to be unclaimed) should not have yet entered the delivery phase!
+      AND       NOT EXISTS (
+                    SELECT  1 FROM DeliveryFoodListing
+                    WHERE   ClaimedFoodListing.claimedFoodListingKey = DeliveryFoodListing.claimedFoodListingKey
+                );
+
+    -- Grab the total number of Claimed Food Listing units among the unclaim candidates for edit check.
+    SELECT      SUM(claimedUnitsCount)
+    INTO        _totalClaimedUnitsCount
+    FROM        UnclaimCandidates;
 
 
     -- Make sure the claimed food listing we are to delete exists.
@@ -51,35 +71,32 @@ BEGIN
     -- Get rid of claims by removing specified number of units from each claimed food listing matching function arguments.
     -- If given a specific App User who originally claimed the listing, then we will only be interacting with one claim here (single iteration).
     -- If not given specific App User, then will be looping through all claims on the given Food Listing in order from youngest claim to oldest.
+    FOR _unclaimCandidate IN (
+        SELECT      *
+        FROM        UnclaimCandidates
+        ORDER BY    claimedDate DESC
+    )
     LOOP
 
-        -- Examine the next claim in the loop (from which we are going to remove claimed units from).
-        SELECT      claimedFoodListingKey, claimedUnitsCount
-        INTO        _examinedClaimKey, _examinedClaimUnitsCount
-        FROM        ClaimedFoodListing
-        WHERE       foodListingKey = _foodListingKey
-          AND       (_claimedByAppUserKey IS NULL OR claimedByAppUserKey = _claimedByAppUserKey)
-        ORDER BY    claimedDate DESC;
-
         -- If we have less claim units to remove than the number of units in the examined Claimed Food Listing.
-        IF (_examinedClaimUnitsCount > _unitsCount)
+        IF (_unclaimCandidate.claimedUnitsCount > _unitsCount)
         THEN
 
             -- Update the claim units count.
             UPDATE  ClaimedFoodListing
             SET     claimedUnitsCount = (claimedUnitsCount - _unitsCount)
-            WHERE   claimedFoodListingKey = _examinedClaimKey;
+            WHERE   claimedFoodListingKey = _unclaimCandidate.claimedFoodListingKey;
 
         -- Else we have more than or equal the number of units in the examined Claimed Food Listing.
         ELSE
 
             -- Remove the claim entirely (units have reached 0).
             DELETE FROM ClaimedFoodListing
-            WHERE       claimedFoodListingKey = _examinedClaimKey;
+            WHERE       claimedFoodListingKey = _unclaimCandidate.claimedFoodListingKey;
 
         END IF;
 
-        _unitsCount := (_unitsCount - _examinedClaimUnitsCount); -- Update the number of remaining Claimed Food Listing units.
+        _unitsCount := (_unitsCount - _unclaimCandidate.claimedUnitsCount); -- Update the number of remaining Claimed Food Listing units.
         EXIT WHEN (_unitsCount <= 0); -- Exit loop here since we have removed all of the units from ClaimedFoodListings fitting argument criteria.
     
     END LOOP;
