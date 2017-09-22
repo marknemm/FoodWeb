@@ -7,7 +7,7 @@ import { logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
  * @return A promise that resolves to an array of food type strings.
  */
 export function getFoodTypes(): Promise<Array<string>> {
-    let queryString = 'SELECT foodType AS "foodType" FROM FoodType;'
+    let queryString = 'SELECT unnest(enum_range(NULL::FoodType)) AS "foodType";'
     logSqlQueryExec(queryString);
 
     return query(queryString)

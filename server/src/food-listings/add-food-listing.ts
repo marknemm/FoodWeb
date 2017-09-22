@@ -28,18 +28,22 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
     // If we have an image form the Donor, then generate the name and URL for it before we create database entry.
     if (foodListingUpload.imageUpload != null) {
         imageName = 'img-' + Date.now().toString() + '.jpeg';
-        imageUrl = (process.env.DEVELOPER_MODE.toLowerCase() === 'true') ? ('//public//' + imageName)
+        imageUrl = (process.env.DEVELOPER_MODE.toLowerCase() === 'true') ? ('/public/' + imageName)
                                                                          : (process.env.BUCKET_URL + imageName);
     }
     
     // Construct prepared statement.
-    let queryString = 'SELECT * FROM addFoodListing($1, $2, $3, $4, $5, $6);';
-    let queryArgs = [ toPostgresArray(foodListingUpload.foodTypes),
+    let queryString = 'SELECT * FROM addFoodListing($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);';
+    let queryArgs = [ donorAppUserKey,
+                      toPostgresArray(foodListingUpload.foodTypes),
+                      foodListingUpload.foodTitle,
                       foodListingUpload.perishable,
-                      DateFormatter.dateToMonthDayYearString(foodListingUpload.expirationDate),
-                      donorAppUserKey,
+                      DateFormatter.dateToMonthDayYearString(foodListingUpload.availableUntilDate),
+                      foodListingUpload.totalWeight,
                       foodListingUpload.foodDescription,
-                      imageUrl ];
+                      imageUrl,
+                      foodListingUpload.totalUnitsCount,
+                      foodListingUpload.unitsLabel ];
 
     // Execute prepared statement.
     return query(queryString, queryArgs)

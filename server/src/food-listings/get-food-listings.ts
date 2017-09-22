@@ -5,6 +5,7 @@ import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sq
 import { FoodListingsFilters, LISTINGS_STATUS } from '../../../shared/food-listings/food-listings-filters';
 import { FoodListing } from "../../../shared/food-listings/food-listing";
 import { DateFormatter } from "../../../shared/common-util/date-formatter";
+let postgresArray = require('postgres-array');
 
 
 export function getFoodListings(filters: FoodListingsFilters, donatedByAppUserKey: number, claimedByAppUserKey: number): Promise<Array<FoodListing>> {
@@ -69,11 +70,10 @@ function generateResultArray(rows: Array<any>): Array<FoodListing> {
             rows[i].donorlastname,
             rows[i].donorfirstname,
             null,
-            rows[i].foodtypes,
+            postgresArray.parse(rows[i].foodtypes),
             rows[i].fooddescription,
-            null,
             rows[i].perishable,
-            rows[i].expiredate,
+            rows[i].availableuntildate,
             rows[i].imgurl             
         ));
     }

@@ -25,7 +25,7 @@
                 </b>
             </ng-container>
             <br>
-            Expires: <b>{{foodListing.expirationDate}}</b> <!--Requires a {{foodListing.quantityClass}}-->
+            Available Until: <b>{{foodListing.availableUntilDate}}</b> <!--Requires a {{foodListing.quantityClass}}-->
 
             <ng-content select="[food-listing-info]"></ng-content>
         </p>
@@ -43,8 +43,8 @@
     </div>
 
     <div class="modal-body">
-        <!--<img *ngIf="foodListings[selectedFoodListingIndex].imgUrl != null" [src]="foodListings[selectedFoodListingIndex].imgUrl"
-         id="details-img" align="left" class="img-thumbnail modal-img">-->
+        <img *ngIf="foodListings[selectedFoodListingIndex].imgUrl != null" [src]="foodListings[selectedFoodListingIndex].imgUrl"
+         id="details-img" align="left" class="img-thumbnail modal-img">
         <p>
             Donated By:
             <ng-container *ngIf="foodListings[selectedFoodListingIndex].donorOrganizationName != null">
@@ -61,7 +61,7 @@
                 </b>
             </ng-container>
             <br>
-            Expires: <b>{{foodListings[selectedFoodListingIndex].expirationDate}}</b> <!--Requires a {{foodListing.quantityClass}}-->
+            Available Until: <b>{{foodListings[selectedFoodListingIndex].availableUntilDate}}</b> <!--Requires a {{foodListing.quantityClass}}-->
         </p>
         <ng-content select="[details-modal-body]"></ng-content>
     </div>

@@ -24,6 +24,11 @@ export class Validation {
      * Regular expression used for verifying 5 digit ZIP codes.
      */
     public static readonly ZIP_REGEX: RegExp = /^\d{5}$/;
+
+    /**
+     * Regular expression used for verifying date string (mm/dd/yyyy) format.
+     */
+    public static readonly DATE_REGEX: RegExp = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
     
     /**
      * Checks if an email string is in the correct format.
@@ -62,6 +67,15 @@ export class Validation {
      */
     public static zipValidator(zip: string): boolean {
         return zip.match(Validation.ZIP_REGEX).length != null;
+    }
+
+    /**
+     * Checks if a date string is in the correct (mm/dd/yyyy) format.
+     * @param date The date string to check.
+     * @return true if it is, false if not.
+     */
+    public static dateValidator(date: string): boolean {
+        return date.match(Validation.DATE_REGEX) != null;    
     }
 
 

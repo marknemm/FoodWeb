@@ -13,6 +13,8 @@
 
 # sensitive data
 app.yaml
+startup.sh
+nginx-ssl-setup.sh
 
 # IDEs and editors
 /.idea

@@ -18,12 +18,11 @@ export class FoodListing {
         public donorDistance?: number,
         public foodTypes?: string[],
         public foodDescription?: string,
-        public quantityClass?: string,
         public perishable?: boolean,
         /**
-         * Expiration date of the format mm/dd/yyyy
+         * The date until the Food Listing expires of the format mm/dd/yyyy
          */
-        public expirationDate?: string,
+        public availableUntilDate?: string,
         /**
          * The url of a saved Food Listing that will be used to display the associated image.
          */
