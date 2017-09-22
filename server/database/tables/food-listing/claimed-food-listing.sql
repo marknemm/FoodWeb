@@ -10,5 +10,7 @@ ALTER TABLE ClaimedFoodListing ADD COLUMN IF NOT EXISTS foodListingKey      INTE
 
 ALTER TABLE ClaimedFoodListing ADD COLUMN IF NOT EXISTS claimedDate         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
+ALTER TABLE ClaimedFoodListing ADD COLUMN IF NOT EXISTS claimedUnitsCount   INTEGER NOT NULL;
+
 CREATE INDEX IF NOT EXISTS claimedFoodListing_ClaimedByAppUserKey   ON ClaimedFoodListing (claimedByAppUserKey);
 CREATE INDEX IF NOT EXISTS claimedFoodListing_FoodListingKey        ON ClaimedFoodListing (foodListingKey);

@@ -51,5 +51,5 @@ END;
 $$ LANGUAGE plpgsql;
 
 --SELECT * FROM AppUser;
---SELECT addFoodListing('{ Meal, Dairy, Canned }', false, '1/2/2021', 2, NULL, NULL);
+--SELECT addFoodListing(1, '{ Meal, Dairy }', 'Some food with many parts!', false, '1/2/2021', 2, 'Description of food here!', NULL, 10, 'bottles');
 --SELECT * FROM FoodListing;

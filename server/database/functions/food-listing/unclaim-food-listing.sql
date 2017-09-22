@@ -1,38 +1,93 @@
 SELECT dropFunction('unclaimFoodListing');
 CREATE OR REPLACE FUNCTION unclaimFoodListing
 (
-     _foodListingKey        INTEGER,                -- This is the key of the Food Listing that is being unclaimed.
-     _claimedByAppUserKey   INTEGER DEFAULT NULL    -- This is the key of the user who is unclaiming the Food Listing.
+    _foodListingKey         INTEGER,                -- This is the key of the Food Listing that is being unclaimed.
+    _claimedByAppUserKey    INTEGER DEFAULT NULL,   -- This is the key of the user who is unclaiming the Food Listing and holds the claim (never Donor's key).
                                                     -- NOTE: Should only be NULL if all claims on food listing are to be deleted regardless of user!
+    _unitsCount             INTEGER DEFAULT NULL    -- The number of units/parts that the Receiver is unclaiming.
+                                                    -- NOTE: NULL is interpreted as * all units *!
 )
 RETURNS VOID
 AS $$
+    DECLARE _totalClaimedUnitsCount     INTEGER DEFAULT 0;
+    DECLARE _examinedClaimKey           INTEGER; -- This is the claimedFoodListingKey of a Claimed Food Listing we are looking into.
+    DECLARE _examinedClaimUnitsCount    INTEGER;
 BEGIN
 
-    -- Make sure the claimed food listing we are to delete exists and was claimed by user issuing this command.
-    IF (    
-            _claimedByAppUserKey IS NOT NULL
-        AND NOT EXISTS (
-            SELECT 1
-            FROM ClaimedFoodListing
-            WHERE foodListingKey = _foodListingKey
-              AND claimedByAppUserKey = _claimedByAppUserKey
-        )
-    )
+    -- Grab the total number of Claimed Food Listing units (among all claims that fit Food Listing & App User arguments).
+    SELECT      SUM(claimedUnitsCount)
+    INTO        _totalClaimedUnitsCount
+    FROM        ClaimedFoodListing
+    WHERE       foodListingKey = _foodListingKey
+      AND       (_claimedByAppUserKey IS NULL OR claimedByAppUserKey = _claimedByAppUserKey)
+    GROUP BY    foodListingKey;
+
+
+    -- Make sure the claimed food listing we are to delete exists.
+    IF (_totalClaimedUnitsCount = 0 OR _totalClaimedUnitsCount IS NULL)
     THEN
-        RAISE EXCEPTION 'Claimed food listing does not exist, or user not authorized.';
+        RAISE EXCEPTION 'Either the claimed food listing does not exist, or the current user is not authroized to unclaim the given listing.';
     END IF;
 
-    -- Perform the actual delete now.
-    DELETE FROM ClaimedFoodListing
-    WHERE foodListingKey = _foodListingKey
-      AND (_claimedByAppUserKey IS NULL OR claimedByAppUserKey = _claimedByAppUserKey);
+    -- Make sure we are not removing more claimed Food Listing units (parts) than we have.
+    IF (_unitsCount IS NOT NULL AND _unitsCount > _totalClaimedUnitsCount)
+    THEN
+        RAISE EXCEPTION 'Attempting to unclaim more food listing units than the number that exists.';
+    END IF;
+
+    -- If the number of units to remove is unspecified, then assign it to total number of claimed units under the Food Listing.
+    IF (_unitsCount IS NULL)
+    THEN
+        _unitsCount := _totalClaimedUnitsCount;
+    END IF;
+
+
+    -- Replenish the Food Listing's available units based off of the number of units that are being unclaimed.
+    UPDATE  FoodListing
+    SET     availableUnitsCount = (availableUnitsCount + _unitsCount)
+    WHERE   foodListingKey = _foodListingKey;
+
+
+    -- Get rid of claims by removing specified number of units from each claimed food listing matching function arguments.
+    -- If given a specific App User who originally claimed the listing, then we will only be interacting with one claim here (single iteration).
+    -- If not given specific App User, then will be looping through all claims on the given Food Listing in order from youngest claim to oldest.
+    LOOP
+
+        -- Examine the next claim in the loop (from which we are going to remove claimed units from).
+        SELECT      claimedFoodListingKey, claimedUnitsCount
+        INTO        _examinedClaimKey, _examinedClaimUnitsCount
+        FROM        ClaimedFoodListing
+        WHERE       foodListingKey = _foodListingKey
+          AND       (_claimedByAppUserKey IS NULL OR claimedByAppUserKey = _claimedByAppUserKey)
+        ORDER BY    claimedDate DESC;
+
+        -- If we have less claim units to remove than the number of units in the examined Claimed Food Listing.
+        IF (_examinedClaimUnitsCount > _unitsCount)
+        THEN
+
+            -- Update the claim units count.
+            UPDATE  ClaimedFoodListing
+            SET     claimedUnitsCount = (claimedUnitsCount - _unitsCount)
+            WHERE   claimedFoodListingKey = _examinedClaimKey;
+
+        -- Else we have more than or equal the number of units in the examined Claimed Food Listing.
+        ELSE
+
+            -- Remove the claim entirely (units have reached 0).
+            DELETE FROM ClaimedFoodListing
+            WHERE       claimedFoodListingKey = _examinedClaimKey;
+
+        END IF;
+
+        _unitsCount := (_unitsCount - _examinedClaimUnitsCount); -- Update the number of remaining Claimed Food Listing units.
+        EXIT WHEN (_unitsCount <= 0); -- Exit loop here since we have removed all of the units from ClaimedFoodListings fitting argument criteria.
+    
+    END LOOP;
 
 END;
 $$ LANGUAGE plpgsql;
 
-/*
+
 SELECT * FROM ClaimedFoodListing;
-SELECT * FROM unclaimFoodListing(5, 4);
+SELECT * FROM unclaimFoodListing(7);
 SELECT * FROM ClaimedFoodListing;
-*/
