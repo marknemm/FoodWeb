@@ -5,6 +5,7 @@ export class FoodListing {
 
     constructor(
         public foodListingKey?: number,
+        public foodTitle?: string,
         public donorOrganizationName?: string,
         public donorOrganizationAddress?: string,
         public donorOrganizationCity?: string,

@@ -98,6 +98,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT * FROM ClaimedFoodListing;
-SELECT * FROM unclaimFoodListing(1);
-SELECT * FROM ClaimedFoodListing;
+--SELECT * FROM ClaimedFoodListing;
+--SELECT * FROM unclaimFoodListing(1);
+--SELECT * FROM ClaimedFoodListing;

@@ -9,15 +9,15 @@ h2 {
     font-weight: bold;
 }
 
-.classic-link {
-    color: blue;
+.link-content {
     cursor: pointer;
     cursor: hand;
     display: inline-block;
     padding-right: 40px;
 }
 
-.classic-link:hover {
+.link-content:hover {
+    color: green;
     text-decoration: underline;
 }
 

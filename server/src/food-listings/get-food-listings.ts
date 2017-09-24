@@ -62,6 +62,7 @@ function generateResultArray(rows: Array<any>): Array<FoodListing> {
     for (let i: number = 0; i < rows.length; i++) {
         result.push(new FoodListing(
             rows[i].foodlistingkey,
+            rows[i].foodtitle,
             rows[i].donororganizationname,
             rows[i].donororganizationaddress,
             rows[i].donororganizationcity,

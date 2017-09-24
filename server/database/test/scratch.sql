@@ -1,2 +1,2 @@
-SELECT * FROM ClaimedFoodListing;
 SELECT * FROM FoodListing;
+SELECT * FROM ClaimedFoodListing;

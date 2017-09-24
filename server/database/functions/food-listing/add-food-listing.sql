@@ -30,7 +30,7 @@ BEGIN
     -- Insert the new food listing and get the food listing key for it.
     INSERT INTO FoodListing (
         donatedByAppUserKey, foodTitle, perishable, availableUntilDate,
-        totalUnitsCount, availableUnitsCount, donorUnitsOnHandCount, foodDescription, imgUrl
+        totalUnitsCount, availableUnitsCount, donorOnHandUnitsCount, foodDescription, imgUrl
     )
     VALUES (
         _donorAppUserKey, _foodTitle, _perishable, _availableUntilTimeStamp,

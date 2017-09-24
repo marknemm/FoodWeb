@@ -6,17 +6,17 @@
 
     <div class="food-listing-contents" style="text-align:left;">
         <h5 class="link-content">
-            <a (click)="showDetails(detailsHTML, i)" title="Click for Details">{{foodListing.foodDescription}}</a>
+            <a (click)="showDetails(detailsHTML, i)" title="Click for Details">{{foodListing.foodTitle}}</a>
         </h5>
 
         <p>
             Donated By:
-            <ng-container *ngIf="foodListing.donorOrganizationName != null">
-                    <b>{{foodListing.donorOrganizationName}}</b>
-            </ng-container>
-            <ng-container *ngIf="foodListing.donorOrganizationName == null">
-                    <b>{{foodListing.donorFirstName}} {{foodListing.donorLastName}}</b>
-            </ng-container>
+            <b *ngIf="foodListing.donorOrganizationName != null">
+                {{foodListing.donorOrganizationName}}
+            </b>
+            <b *ngIf="foodListing.donorOrganizationName == null">
+                {{foodListing.donorFirstName}} {{foodListing.donorLastName}}
+            </b>
             <br>
             Present food types:
             <ng-container *ngFor="let foodType of foodListing.foodTypes; let i = index;">
@@ -36,33 +36,41 @@
 
 <ng-template #detailsHTML let-c="close" let-d="dismss">
     <div class="modal-header">
-        <h4 class="modal-title">{{foodListings[selectedFoodListingIndex].foodDescription}}</h4>
+        <h4 class="modal-title">{{getSelectedFoodListing().foodTitle}}</h4>
         <button type="button" class="close" aria-label="Close" (click)="c('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
 
     <div class="modal-body">
-        <img *ngIf="foodListings[selectedFoodListingIndex].imgUrl != null" [src]="foodListings[selectedFoodListingIndex].imgUrl"
+        <img *ngIf="getSelectedFoodListing().imgUrl != null" [src]="getSelectedFoodListing().imgUrl"
          id="details-img" align="left" class="img-thumbnail modal-img">
         <p>
             Donated By:
-            <ng-container *ngIf="foodListings[selectedFoodListingIndex].donorOrganizationName != null">
-                    <b>{{foodListings[selectedFoodListingIndex].donorOrganizationName}}</b>
-            </ng-container>
-            <ng-container *ngIf="foodListings[selectedFoodListingIndex].donorOrganizationName == null">
-                    <b>{{foodListings[selectedFoodListingIndex].donorFirstName}} {{foodListings[selectedFoodListingIndex].donorLastName}}</b>
-            </ng-container>
+            <b *ngIf="getSelectedFoodListing().donorOrganizationName != null">
+                {{getSelectedFoodListing().donorOrganizationName}}
+            </b>
+            <b *ngIf="getSelectedFoodListing().donorOrganizationName == null">
+                {{getSelectedFoodListing().donorFirstName}} {{getSelectedFoodListing().donorLastName}}
+            </b>
             <br>
+
             Present food types:
-            <ng-container *ngFor="let foodType of foodListings[selectedFoodListingIndex].foodTypes; let i = index;">
+            <ng-container *ngFor="let foodType of getSelectedFoodListing().foodTypes; let i = index;">
                 <b>
-                    {{foodType}}<ng-container *ngIf="i !== (foodListings[selectedFoodListingIndex].foodTypes.length - 1)">,</ng-container>
+                    {{foodType}}<ng-container *ngIf="i !== (getSelectedFoodListing().foodTypes.length - 1)">,</ng-container>
                 </b>
             </ng-container>
             <br>
-            Available Until: <b>{{foodListings[selectedFoodListingIndex].availableUntilDate}}</b> <!--Requires a {{foodListing.quantityClass}}-->
+
+            Available Until: <b>{{getSelectedFoodListing().availableUntilDate}}</b> <!--Requires a {{foodListing.quantityClass}}-->
+            <br>
+
+            <ng-container *ngIf="getSelectedFoodListing().foodDescription != null">
+                Description: <b>{{getSelectedFoodListing().foodDescription}}</b>
+            </ng-container>
         </p>
+
         <ng-content select="[details-modal-body]"></ng-content>
     </div>
     

@@ -7,7 +7,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="firstName">{{firstNameLabel}}:</label><br>
-                <span *ngIf="!editFlags.get('firstName')" class="classic-link" (click)="setEditable('firstName')" title="edit">
+                <span *ngIf="!editFlags.get('firstName')" class="link-content" (click)="setEditable('firstName')" title="edit">
                     {{controls.firstName.value}}<i class="material-icons">&#xe254;</i>
                 </span>
                 <span *ngIf="editFlags.get('firstName')">
@@ -23,7 +23,7 @@
 
             <div class="form-group">
                 <label for="lastName">{{lastNameLabel}}:</label><br>
-                <span *ngIf="!editFlags.get('lastName')" class="classic-link" (click)="setEditable('lastName')" title="edit">
+                <span *ngIf="!editFlags.get('lastName')" class="link-content" (click)="setEditable('lastName')" title="edit">
                     {{controls.lastName.value}}<i class="material-icons">&#xe254;</i>
                 </span>
                 <span *ngIf="editFlags.get('lastName')">
@@ -41,7 +41,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="email">{{emailLabel}}:</label><br>
-                <span *ngIf="!editFlags.get('email')" class="classic-link" (click)="setEditable('email')" title="edit">
+                <span *ngIf="!editFlags.get('email')" class="link-content" (click)="setEditable('email')" title="edit">
                     {{controls.email.value}}<i class="material-icons">&#xe254;</i>
                 </span>
                 <span *ngIf="editFlags.get('email')">
@@ -57,7 +57,7 @@
 
             <div *ngIf="isOrganization" class="form-group">
                 <label for="organizationName">Organization Name:</label><br>
-                <span *ngIf="!editFlags.get('organizationName')" class="classic-link" (click)="setEditable('organizationName')" title="edit">
+                <span *ngIf="!editFlags.get('organizationName')" class="link-content" (click)="setEditable('organizationName')" title="edit">
                     {{controls.organizationName.value}}<i class="material-icons">&#xe254;</i>
                 </span>
                 <span *ngIf="editFlags.get('organizationName')">
@@ -81,7 +81,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="address">Street Address:</label><br>
-                <span *ngIf="!editFlags.get('address')" class="classic-link" (click)="setEditable('address')" title="edit">
+                <span *ngIf="!editFlags.get('address')" class="link-content" (click)="setEditable('address')" title="edit">
                     {{controls.address.value}}<i class="material-icons">&#xe254;</i>
                 </span>
                 <span *ngIf="editFlags.get('address')">
@@ -97,7 +97,7 @@
 
             <div class="form-group">
                 <label for="city">City:</label><br>
-                <span *ngIf="!editFlags.get('city')" class="classic-link" (click)="setEditable('city')" title="edit">
+                <span *ngIf="!editFlags.get('city')" class="link-content" (click)="setEditable('city')" title="edit">
                     {{controls.city.value}}<i class="material-icons">&#xe254;</i>
                 </span>
                 <span *ngIf="editFlags.get('city')">
@@ -113,7 +113,7 @@
 
             <div class="form-group">
                 <label for="state">State:</label><br>
-                <span *ngIf="!editFlags.get('state')" class="classic-link" (click)="setEditable('state')" title="edit">
+                <span *ngIf="!editFlags.get('state')" class="link-content" (click)="setEditable('state')" title="edit">
                     {{controls.state.value}}<i class="material-icons">&#xe254;</i>
                 </span>
                 <span *ngIf="editFlags.get('state')" class="select-infix">
@@ -130,7 +130,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="zip">ZIP Code:</label><br>
-                <span *ngIf="!editFlags.get('zip')" class="classic-link" (click)="setEditable('zip')" title="edit">
+                <span *ngIf="!editFlags.get('zip')" class="link-content" (click)="setEditable('zip')" title="edit">
                     {{controls.zip.value}}<i class="material-icons">&#xe254;</i>
                 </span>
                 <span *ngIf="editFlags.get('zip')">
@@ -146,7 +146,7 @@
             
             <div class="form-group">
                 <label for="phone">Phone Number:</label><br>
-                <span *ngIf="!editFlags.get('phone')" class="classic-link" (click)="setEditable('phone')" title="edit">
+                <span *ngIf="!editFlags.get('phone')" class="link-content" (click)="setEditable('phone')" title="edit">
                     {{controls.phone.value}}<i class="material-icons">&#xe254;</i>
                 </span>
                 <span *ngIf="editFlags.get('phone')">

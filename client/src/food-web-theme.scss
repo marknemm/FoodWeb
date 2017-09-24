@@ -120,6 +120,16 @@ $food-web-inverted-theme:   mat-light-theme($food-web-accent, $food-web-primary,
 }
 
 
+/* Link Colors */
+.link-content {
+    color: green;
+}
+
+.link-content:hover {
+    color: goldenrod;
+}
+
+
 
 
 /* =========== Define app-wide styles for Angular Material components =========== */

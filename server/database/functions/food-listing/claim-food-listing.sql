@@ -34,9 +34,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
+/*
 SELECT * FROM ClaimedFoodListing;
-SELECT * FROM claimFoodListing(1, 1, 4);
-SELECT * FROM claimFoodListing(1, 2, 6);
+SELECT * FROM claimFoodListing(4, 1, 2);
+SELECT * FROM claimFoodListing(4, 2, 2);
 SELECT * FROM ClaimedFoodListing;
-
+*/

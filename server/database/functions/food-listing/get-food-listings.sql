@@ -21,6 +21,7 @@ CREATE OR REPLACE FUNCTION getFoodListings
 RETURNS TABLE
 (
     foodListingKey              INTEGER,
+    foodTitle                   VARCHAR(100),
     foodTypes                   FoodType[],
     perishable                  BOOLEAN,
     donorOrganizationName       VARCHAR(128),
@@ -127,6 +128,7 @@ BEGIN
     -- Here we will be doing a select using the filtered food listing keys from the dynamic query above. No grouping will be necessary.
     RETURN QUERY
     SELECT  FoodListing.foodListingKey,
+            FoodListing.foodTitle,
             -- Concatenates the food types into an array { Type1, Type2, ..., TypeN }
             (
                 SELECT ARRAY_AGG(FoodListingFoodTypeMap.foodType) AS foodTypes
