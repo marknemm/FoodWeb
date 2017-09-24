@@ -1,29 +1,49 @@
-<div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header" style="background-color: #222222">
-			<h1 class="modal-title">Login</h1>
-			<button type="button" class="close" (click)="close()">&times;</button>
-		</div>
-		<div class="modal-body">
-			<form ngNativeValidate (submit)="loginUser($event)">
-                <div>
-                    <md-form-field>
-                        <input #email mdInput placeholder="email" id="email" name="username"
-                         [(ngModel)]="loginModel.username" type="text" required spellcheck="false" autocomplete="on">
-                    </md-form-field>
-                </div>
-                <div>
-                    <md-form-field>
-                        <input #password mdInput placeholder="password" id="password" name="password" [(ngModel)]="loginModel.password" type="password" required autocomplete="on">
-                    </md-form-field>
-                </div>
-                <div id="login-div" class="input">
-                    <button md-raised-button color="primary" class="button-md" type="submit">Login</button>
-                </div>
-			</form>
-		</div>
-		<div class="modal-footer" *ngIf="loginModel.loginError">
-			<p id="loginErr">Incorrect login information. Please Try Again.</p>
-		</div>
-	</div>
-</div>
+	
+	<div class="modal-dialog">
+		<div class="modal-content">	
+			<div class="modal-header" style="background-color: #222222">
+					<div *ngIf="loginModel.forgotPassword">
+						<h1 class="modal-title">{{loginModel.header}}</h1>
+					</div>
+					<div *ngIf="!loginModel.forgotPassword">
+						<h1 class="modal-title">{{loginModel.header}}</h1>
+					</div>
+				<button type="button" class="close" (click)="close()" >&times;</button>
+			</div>
+				<div class="modal-body">
+					<form ngNativeValidate (submit)="loginUser($event)">
+						<div>
+							<!--label>Email</label>
+							<input name="Username" [(ngModel)]="loginModel.username" type="text" required autofocus-->
+							<md-form-field>
+								<input #email mdInput placeholder="email" id="email" name="username"
+								 [(ngModel)]="loginModel.username" type="text" required spellcheck="false" autocomplete="on">
+							</md-form-field>
+						</div>
+						<div *ngIf="!loginModel.forgotPassword">
+							<!--label>Password</label>
+							<input name="Password" [(ngModel)]="loginModel.password" type="password" required-->
+
+							<md-form-field>
+								<input #password mdInput placeholder="password" id="password" name="password" [(ngModel)]="loginModel.password" type="password" required autocomplete="on">
+							</md-form-field>
+						</div>
+						<!--div class="input" >
+							<input type="submit" value="">
+						</div-->
+						<div id="login-div" class="input" *ngIf="!loginModel.forgotPassword">
+							<button md-raised-button color="primary" class="button-md" type="submit">{{loginModel.submitButtonText}}</button>
+						</div>
+						<div class="input" *ngIf="loginModel.forgotPassword">
+							<input type="submit" value="{{loginModel.submitButtonText}}">
+						</div>
+						<div style="text-align:center" *ngIf="!loginModel.forgotPassword">
+							<a (click)="loginModel.recoverPasswordForm()">Forgot your password? Click here.</a>
+						</div>
+					</form>
+					</div>
+				</div>
+
+			<div class="modal-footer" *ngIf="loginModel.loginError">
+					<p id="loginErr">Incorrect login information. Please Try Again.</p>
+			</div>

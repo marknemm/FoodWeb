@@ -3,6 +3,7 @@ let express = require('express');
 let http = require('http');
 let bodyParser = require('body-parser');
 const path = require('path');
+var email = require('emailjs');
 
 
 // Set global root directory variable and configure .env path.
@@ -18,7 +19,8 @@ import { handleLoginRequest,
          handleReAuthenticateRequest,
          handleSignupRequest,
          handleUpdateAppUserRequest,
-         handleSignupVerification } from './authentication/authentication-controller';
+         handleSignupVerification,
+         sendMail } from './authentication/authentication-controller';
 import { handleAddFoodListing,
          handleRemoveFoodListing,
          handleGetReceiverFoodListings,
@@ -60,6 +62,9 @@ app.post('/foodListings/getCartFoodListings',       SessionData.ensureSessionAct
 app.post('/foodListings/claimFoodListing',          SessionData.ensureSessionActive, handleClaimFoodListing);
 app.post('/foodListings/unclaimFoodListing',        SessionData.ensureSessionActive, handleUnclaimFoodListing);
 app.get( '/foodListings/getFoodTypes',              handleGetFoodTypes);
+
+//Handle /authentication/passwordRecovery route by passing off to AuthenticationController.
+app.post('/authentication/passwordRecovery', sendMail);
 
 
 // Public Resource Route Handler (for local image hosting).

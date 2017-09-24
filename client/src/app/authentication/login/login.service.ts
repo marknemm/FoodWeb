@@ -6,6 +6,8 @@ import { LoginModel } from './login-model'
 import { SessionDataService } from '../../common-util/session-data.service';
 
 import { LoginRequest, LoginResponse } from '../../../../../shared/authentication/login-message';
+import { RecoverPasswordRequest } from '../../../../../shared/authentication/login-message';
+import { RecoverPasswordResponse } from '../../../../../shared/authentication/login-message';
 import { AppUserInfo } from "../../../../../shared/authentication/app-user-info";
 
 
@@ -38,5 +40,21 @@ export class LoginService {
             return { success: loginResponse.success, message: loginResponse.message };
         });
     }
+
+  recoverPassword(loginModel: LoginModel){
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    let observer : Observable<Response> = this.http.post('/authentication/recoverPassword', new RecoverPasswordRequest(loginModel.email), {headers: headers})
+    return observer.map((response : Response): any =>{
+      let recoverPasswordResponse: RecoverPasswordResponse = response.json();
+      console.log(recoverPasswordResponse.message);
+
+      return { success: recoverPasswordResponse.success, message: recoverPasswordResponse.message };
+
+    })
+
+  }
 
 }
