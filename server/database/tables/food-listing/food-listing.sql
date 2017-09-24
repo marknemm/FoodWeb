@@ -46,3 +46,9 @@ CREATE INDEX IF NOT EXISTS foodListing_availableUntilDate   ON FoodListing (avai
 CREATE INDEX IF NOT EXISTS foodListing_availableUnitsCount  ON FoodListing (availableUnitsCount);
 
 -- Create more indexes here --
+
+-- Create triggers --
+DROP TRIGGER IF EXISTS foodListing_availableUnitsCountUpdate ON FoodListing;
+CREATE TRIGGER foodListing_availableUnitsCountUpdate
+    BEFORE UPDATE OF availableUnitsCount ON FoodListing
+    FOR EACH ROW EXECUTE PROCEDURE beforeAvailableUnitsCountUpdate();

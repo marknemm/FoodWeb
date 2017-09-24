@@ -1,4 +1,6 @@
-
+/**
+ * Claims (units/parts of) a Food Listing.
+ */
 SELECT dropFunction('claimFoodListing');
 CREATE OR REPLACE FUNCTION claimFoodListing
 (
@@ -13,23 +15,13 @@ AS $$
 BEGIN
 
     -- TODO: Need to perform an edit check that ensures that the FoodListing and AppUser exist!!!
-    -- TODO: Need to perform an edit check to ensure that we are not claiming more parts than what is available!!!!
+    -- TODO: Need to create a trigger that ensures we are not claiming more parts than what is available!!!!
 
     -- If the given units count to claim is NULL, then we are to claim all available units!
     IF (_unitsCount IS NULL)
     THEN
-
-        SELECT  availableUnitsCount
-        INTO    _unitsCount
-        FROM    FoodListing
-        WHERE   FoodListing.foodListingKey = _foodListingKey;
-
+        _unitsCount := (SELECT getAvailableUnitsCount(_foodListingKey));
     END IF;
-
-    -- Subtract from the number of available units/parts by the amount of units being claimed.
-    UPDATE  FoodListing
-    SET     availableUnitsCount = (availableUnitsCount - _unitsCount)
-    WHERE   FoodListing.foodListingKey = _foodListingKey;
 
     -- The constraints on included insert columns will ensure that the AppUser and FoodListing exist.
     INSERT INTO ClaimedFoodListing (claimedByAppUserKey, foodListingKey, claimedUnitsCount)
@@ -44,6 +36,7 @@ $$ LANGUAGE plpgsql;
 
 
 SELECT * FROM ClaimedFoodListing;
-SELECT * FROM claimFoodListing(7, 2, 3);
+SELECT * FROM claimFoodListing(1, 1, 4);
+SELECT * FROM claimFoodListing(1, 2, 6);
 SELECT * FROM ClaimedFoodListing;
 

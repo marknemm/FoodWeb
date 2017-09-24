@@ -82,7 +82,7 @@ BEGIN
         ';
 
         queryFilters := queryFilters || '
-              AND (ClaimedFoodListing.claimedByAppUserKey = $6)
+            AND (ClaimedFoodListing.claimedByAppUserKey = $6)
         ';
 
     END IF;
@@ -92,12 +92,7 @@ BEGIN
     THEN
         -- If we have at least 1 member in ClaimedFoodListing for our FoodListing that we are examining, then it has been claimed.
         queryFilters := queryFilters || '
-              AND NOT EXISTS (
-                  SELECT 1
-                  FROM   ClaimedFoodListing As ExcludeClaimedFoodListing
-                  WHERE  FoodListing.foodListingKey = ExcludeClaimedFoodListing.foodListingKey
-                  LIMIT  1
-              )
+            AND (FoodListing.availableUnitsCount > 0)
         ';
     END IF;
 
@@ -176,7 +171,7 @@ GROUP BY FoodListing.foodListingKey;
 
 --SELECT * FROM FoodListingFoodTypeMap;
 
---select * FROM getFoodListings(0, 1000);
+select * FROM getFoodListings(0, 1000, NULL, true);
 
 /*
 

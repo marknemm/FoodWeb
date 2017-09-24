@@ -63,7 +63,8 @@ export class GetFoodListingsService {
         filters.retrievalAmount = GetFoodListingsService.RETRIEVAL_AMOUNT;
 
         // Determine the route based off of the requested Food Listings' status (Are we getting food listings for receive or cart interface).
-        let route: string = (filters.listingsStatus == null || filters.listingsStatus === LISTINGS_STATUS.unclaimedListings)
+        if (filters.listingsStatus == null)  filters.listingsStatus = LISTINGS_STATUS.unclaimedListings;
+        let route: string = (filters.listingsStatus === LISTINGS_STATUS.unclaimedListings)
                             ? '/foodListings/getReceiverFoodListings'
                             : '/foodListings/getCartFoodListings';
         let body: GetFoodListingsRequest = new GetFoodListingsRequest(filters);

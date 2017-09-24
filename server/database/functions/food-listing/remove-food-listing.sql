@@ -1,11 +1,13 @@
 /**
- * A basic function for removing a food listing and any associated data.
+ * A basic function for removing a food listing (donation) and any associated data.
  */
 SELECT dropFunction('removefoodlisting');
 CREATE OR REPLACE FUNCTION removeFoodListing
 (
     _foodListingKey         INTEGER,
-    _donatedByAppUserKey    INTEGER
+    _donatedByAppUserKey    INTEGER,
+    _unitsCount             INTEGER DEFAULT NULL    -- The number of units/parts that the donor wishes to remove.
+                                                    -- NOTE: Default NULL means that all parts (the whole FoodListing) shall be removed.
 )
 RETURNS VOID -- TODO: Return contact info of App User who lost their claim due to this action for email notification!
 AS $$

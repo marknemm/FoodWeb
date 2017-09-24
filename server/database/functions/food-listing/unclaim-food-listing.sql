@@ -62,12 +62,6 @@ BEGIN
     END IF;
 
 
-    -- Replenish the Food Listing's available units based off of the number of units that are being unclaimed.
-    UPDATE  FoodListing
-    SET     availableUnitsCount = (availableUnitsCount + _unitsCount)
-    WHERE   foodListingKey = _foodListingKey;
-
-
     -- Get rid of claims by removing specified number of units from each claimed food listing matching function arguments.
     -- If given a specific App User who originally claimed the listing, then we will only be interacting with one claim here (single iteration).
     -- If not given specific App User, then will be looping through all claims on the given Food Listing in order from youngest claim to oldest.
@@ -104,7 +98,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
 SELECT * FROM ClaimedFoodListing;
-SELECT * FROM unclaimFoodListing(7);
+SELECT * FROM unclaimFoodListing(1);
 SELECT * FROM ClaimedFoodListing;
