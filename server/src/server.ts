@@ -3,7 +3,6 @@ let express = require('express');
 let http = require('http');
 let bodyParser = require('body-parser');
 const path = require('path');
-var email = require('emailjs');
 
 
 // Set global root directory variable and configure .env path.

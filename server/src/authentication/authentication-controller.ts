@@ -137,24 +137,24 @@ export function handleSignupVerification(request: Request, response: Response): 
         });
 }
 
-var email = require('emailjs');
+let nodemailer = require("nodemailer-promise");
 
-export function sendMail(request: Request, response: Response): void{
-        var server = email.server.connect({
-            user: 'foodweb.noreply@gmail.com',
-            password: 'connect-food!1',
-            host: 'smtp.gmail.com',
-            ssl: true
-          });
-          
-          server.send({
-            text: 'This is a test email',
-            from: 'Food Web',
-            to: request.body.email,
-            cc: '',
-            subject: 'Test Email'
-          }, function (err, message) {
-            console.log(err || message);
-          });
+export function sendMail(request: Request, response: Response): void {
+    /*var server = email.server.connect({
+        user: 'foodweb.noreply@gmail.com',
+        password: 'connect-food!1',
+        host: 'smtp.gmail.com',
+        ssl: true
+        });
         
-    }
+        server.send({
+        text: 'This is a test email',
+        from: 'Food Web',
+        to: request.body.email,
+        cc: '',
+        subject: 'Test Email'
+        }, function (err, message) {
+        console.log(err || message);
+        });*/
+    
+}
