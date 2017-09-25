@@ -1,11 +1,9 @@
 #slick-left-panel {
-    position: absolute;
+    position: relative;
     z-index: 100;
     padding-left: 10px;
     padding-right: 25px;
     word-wrap: break-word;
-    width: calc(100vw - 20px);
-    max-width: 400px; /* This is (4 / 12) of 1200px so that we will never overlap anything to the right in non-mobile mode! */
     background-color: inherit;
 }
 
@@ -32,8 +30,11 @@
     background: black;
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 991px) {
     #slick-left-panel {
+        position: absolute;
+        width: calc(100vw - 20px);
+        max-width: 400px; /* This is (4 / 12) of 1200px so that we will never overlap anything to the right in non-mobile mode! */
         right: 100%; /* The default state in mobile mode is to be off the screen to the left */
         transition: transform 0.5s linear;
         -webkit-transition: -webkit-transform 0.5s linear;

@@ -1,13 +1,19 @@
-#details-img {
-    float: left;
+.no-pad {
+    padding-right: 0px;
+    padding-left: 0px;
+    margin-right: 0px;
+    margin-left: 0px;
 }
 
 /* When the screen gets small and the filters panel goes into mobile mode, then center the food listings */
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 991px) {
     #food-listings {
-        float: none;
-        padding-left: 40px;
-        margin-left: auto;
-        margin-right: auto;
+        padding-left: 40px; /* Make room for filters expansion button */
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    #food-listings {
+        text-align: center;
     }
 }

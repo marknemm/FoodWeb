@@ -26,8 +26,7 @@ export class LoginComponent extends DialogComponent<null, boolean> implements On
 
     public ngOnInit(): void {
         // Required to fix bug where autofocus does not work when opening dialog more than once (cannot just use HTML autofocus property)!
-        let emailInput: HTMLInputElement = document.getElementById('email') as HTMLInputElement;
-        emailInput.focus();
+        document.getElementById('email').focus();
     }
 
     public static display(dialogService: DialogService): Observable<boolean> {
