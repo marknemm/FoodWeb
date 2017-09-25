@@ -18,6 +18,7 @@ export class FoodTypesService implements Resolve<string[]> {
 
     constructor(private requestService: RequestService) {}
 
+
     /**
      * Retrieves food types from the server if they have not previously been retrieved. Otherwise, fetches them from contained cache.
      * @return An observable object that resolves to an array of food type strings.
@@ -26,16 +27,19 @@ export class FoodTypesService implements Resolve<string[]> {
         return this.getFoodTypes();
     }
 
+
     /**
      * Retrieves food types from the server if they have not previously been retrieved. Otherwise, fetches them from contained cache.
      * @return An observable object that resolves to an array of food type strings.
      */
     public getFoodTypes(): Observable<string[]> {
+
         // If we do not have cached Food Types, then we will contact the server.
         if (FoodTypesService.foodTypesCache === null) {
             let observer: Observable<Response> = this.requestService.get('/foodListings/getFoodTypes');
 
             return observer.map((response: Response) => {
+
                 let getFoodTypesResponse: GetFoodTypesResponse = response.json();
                 console.log(getFoodTypesResponse.message);
 
@@ -60,11 +64,13 @@ export class FoodTypesService implements Resolve<string[]> {
         }
     }
 
+    
     /**
      * Examines an object with Food Type keys and boolean values and extracts the Food Types that are associated with true.
      * @param foodTypeBooleans An object that contains Food Type keys associated with boolean values.
      */
     public getFoodTypesAssocWithTrue(foodTypeBooleans: object): string[] {
+
         let foodTypesAssocWithTrue: string[] = [];
         let allFoodTypes: string[] = Object.keys(foodTypeBooleans);
 

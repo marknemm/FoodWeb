@@ -59,7 +59,7 @@ export class DonateComponent implements OnInit {
 
     ngOnInit() {
         this.foodForm = this.formBuilder.group({
-            perishable: ['', Validators.required],
+            perishable: [null, Validators.required],
             foodTitle: ['', [Validators.required, Validators.maxLength(this.foodTitleMaxLength)]],
             foodDescription: [''],
             availableUntilDate: [null, Validators.required]

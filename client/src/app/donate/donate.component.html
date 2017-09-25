@@ -4,14 +4,18 @@
 
     <div [hidden]="submitted" class="row">
 
-        <div class="col-md-5" [style.min-width]="(cropperSettings.canvasWidth + 30) + 'px'">
-            <button md-raised-button color="primary" class="button-md file-upload-button" [style.width]="cropperSettings.canvasWidth + 'px'"
-             (click)="hiddenFileInput.click()">Upload Image</button>
-            <!-- This is an invisible file input triggerd by above button -->
-            <div class="file-upload" style="display:none;">
-                <input #hiddenFileInput id="custom-input" type="file" (change)="fileChangeListener($event)">
+        <div class="col-md-12 col-lg-5 mobile-center">
+            <div class="crop-container" [style.max-width]="cropperSettings.canvasWidth + 'px'">
+                <button md-raised-button color="primary" class="button-md file-upload-button"
+                [style.width]="cropperSettings.canvasWidth + 'px'" (click)="hiddenFileInput.click()">Upload Image</button>
+    
+                <!-- This is an invisible file input triggerd by above button -->
+                <div class="file-upload" style="display:none;">
+                    <input #hiddenFileInput id="custom-input" type="file" (change)="fileChangeListener($event)">
+                </div>
+    
+                <img-cropper #cropper [image]="this" [settings]="cropperSettings"></img-cropper>
             </div>
-            <img-cropper #cropper [image]="this" [settings]="cropperSettings"></img-cropper>
 
             <!-- Sample of actual result cropped image -->
             <div *ngIf="this.image != null" class="crop-sample-container" [style.width]="cropperSettings.canvasWidth + 'px'">
@@ -20,7 +24,7 @@
             </div>
         </div>
 
-        <div class="col-md-7">
+        <div class="col-md-12 col-lg-7">
             <form [formGroup]="foodForm" (ngSubmit)="onSubmit(foodForm, $event)">
 
                 <div class="form-group">
@@ -45,19 +49,17 @@
                 <div class="form-group">
                     <label>Food Types</label>
                     <app-food-types [initiallyChecked]="false" [numColumns]="2" [required]="true" [extraValidation]="forceValidation" #FoodTypesComponent></app-food-types>
-                    <!--<div class="alert alert-danger" [hidden]="!shouldFireRequireValidation(foodType)">At least one Food Type is required</div>-->
                 </div>
 
                 <div class="form-group">
                     <label>Perishable</label><br>
-                    <md-radio-group #perishable [ngClass]="{'warn-foreground': isInvalid(perishable)}" formControlName="perishable" required>
+                    <md-radio-group [ngClass]="{'warn-foreground': isInvalid(foodForm.controls.perishable)}" formControlName="perishable" required>
                         <label for="perishable-yes-check" id="perishable-yes" class="perishable-label no-select">
                             <md-radio-button name="perishable" id="perishable-yes-check" [value]="true">Yes</md-radio-button>
                         </label>
                         <label for="perishable-no-check" class="perishable-label no-select">
                             <md-radio-button name="perishable" id="perishable-no-check" [value]="false">No</md-radio-button>
                         </label>
-                        <!--<div class="warn-foreground inline-error" [hidden]="!isInvalid(perishable)">*</div>-->
                     </md-radio-group>
                 </div>
 

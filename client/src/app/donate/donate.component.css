@@ -43,3 +43,17 @@ button.mat-raised-button.mat-primary.file-upload-button {
 .crop-sample-container {
     text-align: center;
 }
+
+.crop-container, .crop-sample-container {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* Custom mobile formatting */
+@media screen and (max-width: 1024px) {
+
+    .mobile-center {
+        text-align: center;
+    }
+
+}
