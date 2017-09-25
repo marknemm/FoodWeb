@@ -4,12 +4,13 @@ CREATE OR REPLACE FUNCTION unclaimFoodListing
     _foodListingKey         INTEGER,                -- This is the key of the Food Listing that is being unclaimed.
     _claimedByAppUserKey    INTEGER DEFAULT NULL,   -- This is the key of the user who is unclaiming the Food Listing and holds the claim (never Donor's key).
                                                     -- NOTE: Should only be NULL if all claims on food listing are to be deleted regardless of user!
-    _unitsCount             INTEGER DEFAULT NULL    -- The number of units/parts that the Receiver is unclaiming.
+    _unclaimUnitsCount      INTEGER DEFAULT NULL    -- The number of units/parts that the Receiver is unclaiming.
                                                     -- NOTE: NULL is interpreted as * all units *!
 )
 RETURNS VOID
 AS $$
     DECLARE _totalClaimedUnitsCount     INTEGER DEFAULT 0;
+    DECLARE _remainingUnitsToUnclaim    INTEGER;
     DECLARE _unclaimCandidate           RECORD;
 BEGIN
 
@@ -50,21 +51,22 @@ BEGIN
     END IF;
 
     -- Make sure we are not removing more claimed Food Listing units (parts) than we have.
-    IF (_unitsCount IS NOT NULL AND _unitsCount > _totalClaimedUnitsCount)
+    IF (_unclaimUnitsCount IS NOT NULL AND _unclaimUnitsCount > _totalClaimedUnitsCount)
     THEN
         RAISE EXCEPTION 'Attempting to unclaim more food listing units than the number that exists.';
     END IF;
 
     -- If the number of units to remove is unspecified, then assign it to total number of claimed units under the Food Listing.
-    IF (_unitsCount IS NULL)
+    IF (_unclaimUnitsCount IS NULL)
     THEN
-        _unitsCount := _totalClaimedUnitsCount;
+        _unclaimUnitsCount := _totalClaimedUnitsCount;
     END IF;
 
 
     -- Get rid of claims by removing specified number of units from each claimed food listing matching function arguments.
     -- If given a specific App User who originally claimed the listing, then we will only be interacting with one claim here (single iteration).
     -- If not given specific App User, then will be looping through all claims on the given Food Listing in order from youngest claim to oldest.
+    _remainingUnitsToUnclaim := _unclaimUnitsCount;
     FOR _unclaimCandidate IN (
         SELECT      *
         FROM        UnclaimCandidates
@@ -73,12 +75,12 @@ BEGIN
     LOOP
 
         -- If we have less claim units to remove than the number of units in the examined Claimed Food Listing.
-        IF (_unclaimCandidate.claimedUnitsCount > _unitsCount)
+        IF (_unclaimCandidate.claimedUnitsCount > _remainingUnitsToUnclaim)
         THEN
 
             -- Update the claim units count.
             UPDATE  ClaimedFoodListing
-            SET     claimedUnitsCount = (claimedUnitsCount - _unitsCount)
+            SET     claimedUnitsCount = (claimedUnitsCount - _remainingUnitsToUnclaim)
             WHERE   claimedFoodListingKey = _unclaimCandidate.claimedFoodListingKey;
 
         -- Else we have more than or equal the number of units in the examined Claimed Food Listing.
@@ -90,14 +92,21 @@ BEGIN
 
         END IF;
 
-        _unitsCount := (_unitsCount - _unclaimCandidate.claimedUnitsCount); -- Update the number of remaining Claimed Food Listing units.
-        EXIT WHEN (_unitsCount <= 0); -- Exit loop here since we have removed all of the units from ClaimedFoodListings fitting argument criteria.
+        _remainingUnitsToUnclaim := (_remainingUnitsToUnclaim - _unclaimCandidate.claimedUnitsCount); -- Update the number of remaining Claimed Food Listing units.
+        EXIT WHEN (_remainingUnitsToUnclaim <= 0); -- Exit loop here since we have removed all of the units from ClaimedFoodListings fitting argument criteria.
     
     END LOOP;
+
+    -- VERY IMPORTANT: Update the available units count!
+    UPDATE  FoodListing
+    SET     availableUnitsCount = (availableUnitsCount + _unclaimUnitsCount)
+    WHERE   foodListingKey = _foodListingKey;
 
 END;
 $$ LANGUAGE plpgsql;
 
---SELECT * FROM ClaimedFoodListing;
---SELECT * FROM unclaimFoodListing(1);
---SELECT * FROM ClaimedFoodListing;
+/*
+SELECT * FROM ClaimedFoodListing;
+SELECT * FROM unclaimFoodListing(1);
+SELECT * FROM ClaimedFoodListing;
+*/

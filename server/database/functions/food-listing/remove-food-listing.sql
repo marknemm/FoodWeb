@@ -13,7 +13,6 @@ CREATE OR REPLACE FUNCTION removeFoodListing
 RETURNS VOID -- TODO: Return contact info of App User who lost their claim due to this action for email notification!
 AS $$
     DECLARE _donorOnHandUnitsCount          INTEGER;
-    DECLARE _claimeddonorOnHandUnitsCount   INTEGER;
     DECLARE _availableUnitsCount            INTEGER;
     DECLARE _claimedUnitsDeleteCount        INTEGER;
     DECLARE _totalUnitsCount                INTEGER;
@@ -31,14 +30,21 @@ BEGIN
     END IF;
 
     -- Get the count of units that the Donor still has control over.
-    SELECT  donorOnHandUnitsCount,
-            (donorOnHandUnitsCount - availableUnitsCount),
-            availableUnitsCount
-    INTO    _donorOnHandUnitsCount,
-            _claimeddonorOnHandUnitsCount,
-            _availableUnitsCount
-    FROM    FoodListing
-    WHERE   foodListingKey = _foodListingKey;
+    SELECT      availableUnitsCount + COALESCE(SUM(claimedUnitsCount), 0),
+                availableUnitsCount
+    INTO        _donorOnHandUnitsCount,
+                _availableUnitsCount
+    FROM        FoodListing
+    LEFT JOIN   ClaimedFoodListing ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
+    WHERE       FoodListing.foodListingKey = _foodListingKey
+    -- Donor only has control over available listings and * claimed listings that have not yet entered in delivery phase *!
+      AND       NOT EXISTS (
+                    SELECT 1 FROM DeliveryFoodListing
+                    WHERE DeliveryFoodListing.claimedFoodListingKey = ClaimedFoodListing.claimedFoodListingKey
+                )
+    GROUP BY    FoodListing.foodListingKey, FoodListing.availableUnitsCount;
+
+
 
     -- If _deleteUnitsCount is unspecified, set it to total number of deletable (donor on hand) units.
     IF (_deleteUnitsCount IS NULL)
@@ -65,17 +71,24 @@ BEGIN
         PERFORM unclaimFoodListing(_foodListingKey, NULL, _claimedUnitsDeleteCount);
     END IF;
 
-    -- Remove all units from total units that are to be deleted.
+    -- Remove all units from available units that are to be deleted.
     UPDATE    FoodListing
-    SET       totalUnitsCount = (totalUnitsCount - _deleteUnitsCount)
-              -- NOTE: aggregates availableUnitsCount & donorOnHandUnitsCount will be updated via trigger function (afterTotalUnitsCountUpdate).
-              --       They should never be updated manually so that data integrity remains intact (exception is thrown if updated manually)!!!
+    SET       availableUnitsCount = (availableUnitsCount - _deleteUnitsCount)
     WHERE     foodListingKey = _foodListingKey
-    RETURNING totalUnitsCount INTO _totalUnitsCount;
+    RETURNING availableUnitsCount
+    INTO      _availableUnitsCount;
 
     
     -- Check if all units under the Food Listing have been removed (meaning we should delete Food Listing).
-    IF (_totalUnitsCount = 0)
+    IF (_availableUnitsCount = 0
+        -- No units in claimed or delivery states.
+        AND NOT EXISTS(
+                SELECT 1 FROM FoodListing
+                INNER JOIN ClaimedFoodListing  ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
+                LEFT JOIN  DeliveryFoodListing ON ClaimedFoodListing.claimedFoodListingKey = DeliveryFoodListing.claimedFoodListingKey
+                WHERE FoodListing.foodListingKey = _foodListingKey
+        )
+    )
     THEN
 
         -- Delete type associates with Food Listing.
@@ -91,8 +104,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-/*
+
 SELECT * FROM FoodListing;
-SELECT removeFoodListing(4, 1, 3);
+SELECT removeFoodListing(3, 1);
 SELECT * FROM FoodListing;
-*/
+

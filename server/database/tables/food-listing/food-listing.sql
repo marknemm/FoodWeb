@@ -21,14 +21,8 @@ ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS postDate                       
 
 ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS availableUntilDate             TIMESTAMP       NOT NULL;
 
--- Totoal number of parts of a Food Listing (e.g. 12 cans, 3 5lb bags, etc).
-ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS totalUnitsCount                INTEGER         NOT NULL DEFAULT 1;
-
 -- Number of parts of Food Listing that Receivers are free to Claim (Not Claimed yet).
 ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS availableUnitsCount            INTEGER         NOT NULL;
-
--- Number of parts of Food Listing that the Donor still has control over (these food items should not be marked for delivery).
-ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS donorOnHandUnitsCount          INTEGER         NOT NULL;
 
 -- The units label used to designate the type of each part (e.g. cans, bottles, etc).
 ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS unitsLabel                     TEXT            DEFAULT NULL;
@@ -39,26 +33,10 @@ ALTER TABLE FoodListing ADD COLUMN IF NOT EXISTS totalWeight                    
 
 -- Add more columns here --
 
-CREATE INDEX IF NOT EXISTS foodListing_DonatedByIdx         ON FoodListing (donatedByAppUserKey, donorOnHandUnitsCount);
+CREATE INDEX IF NOT EXISTS foodListing_DonatedByIdx         ON FoodListing (donatedByAppUserKey);
 
 CREATE INDEX IF NOT EXISTS foodListing_AvailableUntilDate   ON FoodListing (availableUntilDate);
 
 CREATE INDEX IF NOT EXISTS foodListing_AvailableUnitsCount  ON FoodListing (availableUnitsCount);
 
 -- Create more indexes here --
-
--- Create triggers --
-DROP TRIGGER IF EXISTS foodListing_AvailableUnitsCountUpdate ON FoodListing;
-CREATE TRIGGER foodListing_AvailableUnitsCountUpdate
-    BEFORE UPDATE OF availableUnitsCount ON FoodListing
-    FOR EACH ROW EXECUTE PROCEDURE beforeAvailableUnitsCountUpdate();
-
-DROP TRIGGER IF EXISTS foodListing_DonorOnHandUnitsCountUpdate ON FoodListing;
-CREATE TRIGGER foodListing_DonorOnHandUnitsCountUpdate
-    BEFORE UPDATE OF donorOnHandUnitsCount ON FoodListing
-    FOR EACH ROW EXECUTE PROCEDURE beforeDonorOnHandUnitsCountUpdate();
-
-DROP TRIGGER IF EXISTS foodListing_AfterTotalUnitsCountUpdate ON FoodListing;
-CREATE TRIGGER foodListing_AfterTotalUnitsCountUpdate
-    AFTER UPDATE OF totalUnitsCount ON FoodListing
-    FOR EACH ROW EXECUTE PROCEDURE afterTotalUnitsCountUpdate();
