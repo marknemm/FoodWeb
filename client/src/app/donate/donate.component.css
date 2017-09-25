@@ -35,3 +35,11 @@ md-form-field, md-input-container {
     line-height: 20px;
     vertical-align: top;
 }
+
+button.mat-raised-button.mat-primary.file-upload-button {
+    border-radius: 0%;
+}
+
+.crop-sample-container {
+    text-align: center;
+}

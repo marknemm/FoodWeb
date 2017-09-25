@@ -30,6 +30,7 @@ export class DonateComponent implements OnInit {
 
     private foodTitleMaxLength: number;
 
+    @ViewChild('cropper', undefined) private cropper: ImageCropperComponent;
     @ViewChild('FoodTypesComponent') private foodTypesComponent: FoodTypesComponent;
 
 
@@ -43,12 +44,14 @@ export class DonateComponent implements OnInit {
         this.submitted = false;
 
         this.cropperSettings = new CropperSettings();
-        this.cropperSettings.width = 100;
-        this.cropperSettings.height = 100;
-        this.cropperSettings.croppedWidth = 100;
-        this.cropperSettings.croppedHeight = 100;
-        this.cropperSettings.canvasWidth = 400;
+        this.cropperSettings.width = 300;
+        this.cropperSettings.height = 300;
+        this.cropperSettings.croppedWidth = 300;
+        this.cropperSettings.croppedHeight = 300;
+        this.cropperSettings.canvasWidth = 320;
         this.cropperSettings.canvasHeight = 300;
+        this.cropperSettings.noFileInput = true;
+        this.cropperSettings.fileType = 'image/jpeg';
 
         this.foodTitleMaxLength = 100;
     }
@@ -61,6 +64,21 @@ export class DonateComponent implements OnInit {
             foodDescription: [''],
             availableUntilDate: [null, Validators.required]
         });
+    }
+
+
+    fileChangeListener($event) {
+        let image: HTMLImageElement = new Image();
+        let file: File = $event.target.files[0];
+        let myReader: FileReader = new FileReader();
+        let self = this;
+
+        myReader.onloadend = (loadEvent: any) => {
+            image.src = loadEvent.target.result;
+            self.cropper.setImage(image);
+        };
+     
+        myReader.readAsDataURL(file);
     }
 
 
@@ -98,6 +116,7 @@ export class DonateComponent implements OnInit {
         this.foodForm.markAsPristine();
         this.foodForm.markAsUntouched();
         this.foodTypesComponent.reset();
+        this.cropper.reset();
         this.forceValidation = false;
         this.submitted = false;
     }

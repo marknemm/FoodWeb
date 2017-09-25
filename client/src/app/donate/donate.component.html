@@ -3,13 +3,44 @@
     <hr>
 
     <div [hidden]="submitted" class="row">
-        <div class="col-md-5">
-            <label>Upload Image</label>
-            <img-cropper [image]="this" [settings]="cropperSettings"></img-cropper>
+
+        <div class="col-md-5" [style.min-width]="(cropperSettings.canvasWidth + 30) + 'px'">
+            <button md-raised-button color="primary" class="button-md file-upload-button" [style.width]="cropperSettings.canvasWidth + 'px'"
+             (click)="hiddenFileInput.click()">Upload Image</button>
+            <!-- This is an invisible file input triggerd by above button -->
+            <div class="file-upload" style="display:none;">
+                <input #hiddenFileInput id="custom-input" type="file" (change)="fileChangeListener($event)">
+            </div>
+            <img-cropper #cropper [image]="this" [settings]="cropperSettings"></img-cropper>
+
+            <!-- Sample of actual result cropped image -->
+            <div *ngIf="this.image != null" class="crop-sample-container" [style.width]="cropperSettings.canvasWidth + 'px'">
+                <label>Crop Result</label>
+                <img [src]="this.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+            </div>
         </div>
 
         <div class="col-md-7">
             <form [formGroup]="foodForm" (ngSubmit)="onSubmit(foodForm, $event)">
+
+                <div class="form-group">
+                    <label for="foodTitle">Title</label>
+                    <md-input-container class="input-group" floatPlaceholder="never">
+                        <textarea #foodTitle mdInput mdTextareaAutosize id="foodTitle" placeholder="Short Description"
+                                    formControlName="foodTitle" [errorStateMatcher]="isInvalid.bind(this)" required [maxlength]="foodTitleMaxLength"></textarea>
+                        <md-hint align="end">{{foodTitle.value.length}} / {{foodTitleMaxLength}}</md-hint>
+                    </md-input-container>
+                </div>
+
+                <div class="form-group">
+                    <label for="availableUntilDate">Available Until</label>
+                    <md-input-container class="input-group" floatPlaceholder="never">
+                        <input #availableUntilDate mdInput id="availableUntilDate" [mdDatepicker]="picker" placeholder="mm/dd/yyyy"
+                            formControlName="availableUntilDate" [errorStateMatcher]="isInvalid.bind(this)" required>
+                        <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
+                        <md-datepicker touchUi="true" #picker opened="true"></md-datepicker>
+                    </md-input-container>
+                </div>
 
                 <div class="form-group">
                     <label>Food Types</label>
@@ -31,25 +62,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="foodTitle">Title</label>
-                    <md-input-container class="input-group" floatPlaceholder="never">
-                        <textarea #foodTitle mdInput mdTextareaAutosize id="foodTitle" placeholder="Short Description"
-                                  formControlName="foodTitle" [errorStateMatcher]="isInvalid.bind(this)" required [maxlength]="foodTitleMaxLength"></textarea>
-                        <md-hint align="end">{{foodTitle.value.length}} / {{foodTitleMaxLength}}</md-hint>
-                    </md-input-container>
-                </div>
-
-                <div class="form-group">
-                    <label for="availableUntilDate">Available Until</label>
-                    <md-input-container class="input-group" floatPlaceholder="never">
-                        <input #availableUntilDate mdInput id="availableUntilDate" [mdDatepicker]="picker" placeholder="mm/dd/yyyy"
-                            formControlName="availableUntilDate" [errorStateMatcher]="isInvalid.bind(this)" required>
-                        <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
-                        <md-datepicker touchUi="true" #picker opened="true"></md-datepicker>
-                    </md-input-container>
-                </div>
-
-                <div class="form-group">
                     <label for="foodDescription">Description</label>
                     <md-input-container class="input-group" floatPlaceholder="never">
                         <textarea #foodDescription mdInput mdTextareaAutosize id="foodDescription" placeholder="Long Description"
@@ -57,7 +69,7 @@
                     </md-input-container>
                 </div>
 
-                <button md-raised-button color="primary" class="button-md">Submit</button>
+                <button md-raised-button type="submit" color="primary" class="button-md">Submit</button>
 
             </form>
         </div>
