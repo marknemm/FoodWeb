@@ -130,31 +130,21 @@ export function handleSignupVerification(request: Request, response: Response): 
 
     signupVerify(appUserKey, verificationToken)
         .then(() => {
-            return response.send(new FoodWebResponse(true, 'Signup verification complete'));
+            response.send(new FoodWebResponse(true, 'Signup verification complete'));
         })
         .catch((err: Error) => {
-            return response.send(new FoodWebResponse(false, err.message));
+            response.send(new FoodWebResponse(false, err.message));
         });
 }
 
-let nodemailer = require("nodemailer-promise");
 
-export function sendMail(request: Request, response: Response): void {
-    /*var server = email.server.connect({
-        user: 'foodweb.noreply@gmail.com',
-        password: 'connect-food!1',
-        host: 'smtp.gmail.com',
-        ssl: true
-        });
-        
-        server.send({
-        text: 'This is a test email',
-        from: 'Food Web',
-        to: request.body.email,
-        cc: '',
-        subject: 'Test Email'
-        }, function (err, message) {
-        console.log(err || message);
-        });*/
-    
+/**
+ * Handles password recovery by sending a password resent email with a generated password reset token for a given user.
+ * @param request The request from the client. Should contain the email of the user that wants to recover their password.
+ * @param response The response to send back to the client.
+ */
+export function handlePasswordRecovery(request: Request, response: Response): void {
+    response.setHeader('Content-Type', 'application/json');
+    // TODO: Handle password recovery by sending password reset email.
+    response.send(new FoodWebResponse(true, 'Password recovery not implemented yet'));
 }

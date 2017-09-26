@@ -10,22 +10,7 @@
         </h5>
 
         <p>
-            Donated By:
-            <b *ngIf="foodListing.donorOrganizationName != null">
-                {{foodListing.donorOrganizationName}}
-            </b>
-            <b *ngIf="foodListing.donorOrganizationName == null">
-                {{foodListing.donorFirstName}} {{foodListing.donorLastName}}
-            </b>
-            <br>
-            Present food types:
-            <ng-container *ngFor="let foodType of foodListing.foodTypes; let i = index;">
-                <b>
-                    {{foodType}}<ng-container *ngIf="i !== (foodListing.foodTypes.length - 1)">,</ng-container>
-                </b>
-            </ng-container>
-            <br>
-            Available Until: <b>{{foodListing.availableUntilDate}}</b> <!--Requires a {{foodListing.quantityClass}}-->
+            <base-food-listing-info [foodListing]="foodListing"></base-food-listing-info>
 
             <ng-content select="[food-listing-info]"></ng-content>
         </p>
@@ -43,39 +28,43 @@
     </div>
 
     <div class="modal-body">
-        <img *ngIf="getSelectedFoodListing().imgUrl != null" [src]="getSelectedFoodListing().imgUrl"
-         id="details-img" align="left" class="img-thumbnail modal-img">
-        <p>
-            Donated By:
-            <b *ngIf="getSelectedFoodListing().donorOrganizationName != null">
-                {{getSelectedFoodListing().donorOrganizationName}}
-            </b>
-            <b *ngIf="getSelectedFoodListing().donorOrganizationName == null">
-                {{getSelectedFoodListing().donorFirstName}} {{getSelectedFoodListing().donorLastName}}
-            </b>
-            <br>
 
-            Present food types:
-            <ng-container *ngFor="let foodType of getSelectedFoodListing().foodTypes; let i = index;">
-                <b>
-                    {{foodType}}<ng-container *ngIf="i !== (getSelectedFoodListing().foodTypes.length - 1)">,</ng-container>
-                </b>
-            </ng-container>
-            <br>
+        <!-- Standard modal body -->
+        <ng-container *ngIf="!showConfirmDialog">
+            <img *ngIf="getSelectedFoodListing().imgUrl != null" [src]="getSelectedFoodListing().imgUrl"
+                id="details-img" align="left" class="modal-img">
+            <p>
+                <base-food-listing-info [foodListing]="getSelectedFoodListing()"></base-food-listing-info>
 
-            Available Until: <b>{{getSelectedFoodListing().availableUntilDate}}</b> <!--Requires a {{foodListing.quantityClass}}-->
-            <br>
+                <ng-container *ngIf="getSelectedFoodListing().foodDescription != null">
+                    Description: <b>{{getSelectedFoodListing().foodDescription}}</b>
+                </ng-container>
+            </p>
 
-            <ng-container *ngIf="getSelectedFoodListing().foodDescription != null">
-                Description: <b>{{getSelectedFoodListing().foodDescription}}</b>
-            </ng-container>
-        </p>
+            <ng-content select="[details-modal-body]"></ng-content>
+        </ng-container>
 
-        <ng-content select="[details-modal-body]"></ng-content>
+        <!-- Confirm modal body -->
+        <ng-container *ngIf="showConfirmDialog">
+            <ng-content select="[confirm-modal-body]"></ng-content>
+        </ng-container>
+
     </div>
     
     <div class="modal-footer">
-        <ng-content select="[details-modal-footer]"></ng-content>
-        <button md-raised-button color="primary" class="button-md" (click)="c('Close')">Close</button>
+        
+        <!-- Standard modal footer -->
+        <ng-container *ngIf="!showConfirmDialog">
+            <ng-content select="[details-modal-footer]"></ng-content>
+            <button md-raised-button color="primary" class="button-md" (click)="c('Close')">Close</button>
+        </ng-container>
+
+        <!-- Confirm modal footer -->
+        <ng-container *ngIf="showConfirmDialog">
+            <ng-content select="[confirm-modal-footer]"></ng-content>
+            <button md-raised-button color="primary" class="button-md" (click)="c('Close')">Close</button>
+        </ng-container>
+
     </div>
+
 </ng-template>

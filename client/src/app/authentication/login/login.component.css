@@ -6,6 +6,10 @@
 	align-items: center;
 }
 
+#login-form {
+    max-width: 400px;
+}
+
 md-form-field {
     font-size: 25px;
     width: 100%;
@@ -16,11 +20,14 @@ md-form-field {
     color: white;
 }
 
-#login-div {
+#login-button-div {
     text-align: right;
 }
 
 .close {
+    position: absolute;
+    top: 0px;
+    right: 0px;
     color: white;
 	display: block;
     border-radius: 50%;
@@ -41,7 +48,27 @@ md-form-field {
     transform: rotate(180deg);
 }
 
-#loginErr {
-	text-align: center;
-	color: red;
+.modal-footer {
+    max-height: 40px;
+}
+
+.link-content {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: right;
+    float: right;
+}
+
+#login-button {
+    min-width: 125px;
+}
+
+#login-err {
+    padding-top: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+#recovery-response-message {
+    text-align: left;
 }

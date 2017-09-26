@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { Http, Headers, Response, RequestOptionsArgs } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { LoginModel } from './login-model'
 import { SessionDataService } from '../../common-util/session-data.service';
 
 import { LoginRequest, LoginResponse } from '../../../../../shared/authentication/login-message';
-import { RecoverPasswordRequest } from '../../../../../shared/authentication/login-message';
-import { RecoverPasswordResponse } from '../../../../../shared/authentication/login-message';
-import { AppUserInfo } from "../../../../../shared/authentication/app-user-info";
+import { FoodWebResponse } from '../../../../../shared/message-protocol/food-web-response';
 
 
 @Injectable()
@@ -19,17 +16,27 @@ export class LoginService {
         private sessionDataService: SessionDataService
     ) { }
 
-    public login(loginModel: LoginModel): Observable<{ success: boolean, message: string}> {
 
-        let headers = new Headers({
-            'Content-Type': 'application/json'
-        });
+    /**
+     * Performs the login operation by contacting the server.
+     * NOTE: Also, sets all associated session data on successful login.
+     * @param email The email of the user that is logging in.
+     * @param password The password of the user that is logging in.
+     * @return An observable that will resolve to a Food Web Response object that pertains success or failure data pertaining to the login operation.
+     */
+    public login(email: string, password: string): Observable<FoodWebResponse> {
+
+        const requestOptions: RequestOptionsArgs = {
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        };
 
         // NOTE: Should user raw http request here instead of RequestService wrapper since RequestService depends on this LoginService (prevent circular dependency)!
-        let observer: Observable<Response> = this.http.post('/authentication/login', new LoginRequest(loginModel.username, loginModel.password), { headers: headers })
+        let observer: Observable<Response> = this.http.post('/authentication/login', new LoginRequest(email, password), requestOptions);
 
         return observer.map((response: Response): any /* AppUserInfo */ => {
-            
+
             let loginResponse: LoginResponse = response.json();
             console.log(loginResponse.message);
 
@@ -37,24 +44,7 @@ export class LoginService {
                 this.sessionDataService.updateAppUserSessionData(loginResponse.appUserInfo);
             }
 
-            return { success: loginResponse.success, message: loginResponse.message };
+            return (loginResponse as FoodWebResponse);
         });
     }
-
-  recoverPassword(loginModel: LoginModel){
-    let headers = new Headers({
-      'Content-Type': 'application/json'
-    });
-
-    let observer : Observable<Response> = this.http.post('/authentication/recoverPassword', new RecoverPasswordRequest(loginModel.email), {headers: headers})
-    return observer.map((response : Response): any =>{
-      let recoverPasswordResponse: RecoverPasswordResponse = response.json();
-      console.log(recoverPasswordResponse.message);
-
-      return { success: recoverPasswordResponse.success, message: recoverPasswordResponse.message };
-
-    })
-
-  }
-
 }

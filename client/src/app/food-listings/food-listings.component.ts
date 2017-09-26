@@ -38,25 +38,11 @@ export class FoodListingsComponent {
      * reset to 0.
      * @param filters The filter criteria. 
      */
-    public refreshFoodListings(filters: FoodListingsFilters) {
+    public refreshFoodListings(filters: FoodListingsFilters): void {
         let observer: Observable<FoodListing[]> = this.getFoodListingsService.getFoodListings(filters);
 
         observer.subscribe((foodListings: FoodListing[]) => {
             this.foodListings = foodListings as FoodListing[];
-        });
-    }
-
-
-    /**
-     * Displays a Food Listing details modal popup.
-     * @param detailsHTML The Food Listing detals modal HTML Element.
-     * @param selectedFoodListing The selected Food Listing.
-     */
-    private showDetails(detailsHTML: HTMLElement, selectedFoodListingIndex: number): void {
-        this.selectedFoodListingIndex = selectedFoodListingIndex;
-        this.modalFoodListingDetails = this.modalService.open(detailsHTML);
-        this.modalFoodListingDetails.result.then((result: string) => {
-            // Don't really need to listen for any signals from details modal popup since parent will be handling any non-close button presses!
         });
     }
 
@@ -88,8 +74,20 @@ export class FoodListingsComponent {
         this.selectedFoodListingIndex = null;
     }
 
-    // Gets the entire array of current Food Listings
-    public getDisplayedListings() {
-        return this.foodListings;
+
+    /**
+     * Displays a Food Listing details modal popup.
+     * @param detailsHTML The Food Listing detals modal HTML Element.
+     * @param selectedFoodListing The selected Food Listing.
+     */
+    private showDetails(detailsHTML: HTMLElement, selectedFoodListingIndex: number): void {
+        this.selectedFoodListingIndex = selectedFoodListingIndex;
+        this.modalFoodListingDetails = this.modalService.open(detailsHTML);
+        this.modalFoodListingDetails.result.then((result: string) => {
+            // Don't really need to listen for any signals from details modal popup since parent will be handling any non-close button presses!
+        })
+        .catch((err: Error) => {
+            if (err)  console.log(err);
+        });
     }
 }

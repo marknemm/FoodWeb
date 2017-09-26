@@ -1,49 +1,59 @@
-	
-	<div class="modal-dialog">
-		<div class="modal-content">	
-			<div class="modal-header" style="background-color: #222222">
-					<div *ngIf="loginModel.forgotPassword">
-						<h1 class="modal-title">{{loginModel.header}}</h1>
-					</div>
-					<div *ngIf="!loginModel.forgotPassword">
-						<h1 class="modal-title">{{loginModel.header}}</h1>
-					</div>
-				<button type="button" class="close" (click)="close()" >&times;</button>
-			</div>
-				<div class="modal-body">
-					<form ngNativeValidate (submit)="loginUser($event)">
-						<div>
-							<!--label>Email</label>
-							<input name="Username" [(ngModel)]="loginModel.username" type="text" required autofocus-->
-							<md-form-field>
-								<input #email mdInput placeholder="email" id="email" name="username"
-								 [(ngModel)]="loginModel.username" type="text" required spellcheck="false" autocomplete="on">
-							</md-form-field>
-						</div>
-						<div *ngIf="!loginModel.forgotPassword">
-							<!--label>Password</label>
-							<input name="Password" [(ngModel)]="loginModel.password" type="password" required-->
+<div class="modal-dialog">
 
-							<md-form-field>
-								<input #password mdInput placeholder="password" id="password" name="password" [(ngModel)]="loginModel.password" type="password" required autocomplete="on">
-							</md-form-field>
-						</div>
-						<!--div class="input" >
-							<input type="submit" value="">
-						</div-->
-						<div id="login-div" class="input" *ngIf="!loginModel.forgotPassword">
-							<button md-raised-button color="primary" class="button-md" type="submit">{{loginModel.submitButtonText}}</button>
-						</div>
-						<div class="input" *ngIf="loginModel.forgotPassword">
-							<input type="submit" value="{{loginModel.submitButtonText}}">
-						</div>
-						<div style="text-align:center" *ngIf="!loginModel.forgotPassword">
-							<a (click)="loginModel.recoverPasswordForm()">Forgot your password? Click here.</a>
-						</div>
-					</form>
-					</div>
-				</div>
+    <div class="modal-content">
 
-			<div class="modal-footer" *ngIf="loginModel.loginError">
-					<p id="loginErr">Incorrect login information. Please Try Again.</p>
-			</div>
+        <div class="modal-header">
+            <h1 class="modal-title">
+                {{forgotPassword ? "Password Recovery"
+                                 : "Sign In"}}
+            </h1>
+
+            <div id="close-container">
+                <button type="button" class="close" (click)="close()">&times;</button>
+            </div>
+        </div>
+
+        <!-- Regular Modal Dialog Body -->
+        <form ngNativeValidate *ngIf="!displayRecoveryResponseMessage" class="modal-body" (ngSubmit)="loginUser($event)" id="login-form" [formGroup]="loginForm">
+            <div>
+                <md-form-field>
+                    <input mdInput placeholder="email" name="email" appAutoFocus formControlName="email" type="text" spellcheck="false" required>
+                </md-form-field>
+
+                <md-form-field *ngIf="!forgotPassword">
+                    <input mdInput placeholder="password" name="password" formControlName="password" type="password" required>
+                </md-form-field>
+            </div>
+            
+            <div id="login-button-div">
+                <button id="login-button" md-raised-button color="primary" class="button-md" type="submit">
+                    {{forgotPassword ? "Recover"
+                                        : "Login"}}
+                </button>
+            </div>
+
+            <div class="link-content">
+                <a (click)="toggleForgotPassword()">
+                    {{forgotPassword ? "Click here to login."
+                                        : "Forgot your password? Click here."}}
+                </a>
+            </div>
+        </form>
+
+        <!-- Password Recovery Response Message Dialog Body -->
+        <div *ngIf="displayRecoveryResponseMessage" id="recovery-response-message" class="modal-body">
+            <p>We have sent a password reset message to your email address: <b>{{loginForm.value.email}}</b>.</p>
+            <p>Please click on the link in the email message to reset your password.</p>
+            <p>Thank-you!</p>
+            <div id="login-button-div">
+                <button id="login-button" md-raised-button color="primary" class="button-md" (click)="close()">Close</button>
+            </div>
+        </div>
+
+        <div id="login-err" class="modal-footer warn-foreground" *ngIf="loginError != null">
+            {{loginError}}
+        </div>
+
+    </div>
+
+</div>

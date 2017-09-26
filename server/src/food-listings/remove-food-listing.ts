@@ -11,8 +11,17 @@ import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sq
  * @return A promise that simply resolve on success without any payload.
  */
 export function removeFoodListing(foodListingKey: number, donorAppUserKey: number): Promise<void> {
-    // TODO.
-    console.log('Remove food lisitng service/model has been invoked on server!');
+    
+    // Construct prepared statement.
+    let queryString = 'SELECT * FROM removeFoodListing($1, $2);';
+    let queryArgs = [ foodListingKey,
+                      donorAppUserKey ];
 
-    return Promise.resolve();
+    // Execute prepared statement.
+    return query(queryString, queryArgs)
+        .then((result: QueryResult) => {
+            logSqlQueryResult(result.rows);
+            // TODO: Email all receivers whose claims were revoked due to this action!
+            return Promise.resolve();
+        });
 }

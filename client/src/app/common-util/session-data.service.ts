@@ -36,13 +36,19 @@ export class SessionDataService {
      * convenience method for retrieving the full name of a logged in organization or individual user.
      */
     public getFullName(): string {
-        if (SessionDataService.appUserInfo != null) {
-            if (SessionDataService.appUserInfo.organizationName != null) {
-                return SessionDataService.appUserInfo.organizationName;
-            }
-            return (SessionDataService.appUserInfo.firstName + ' ' + SessionDataService.appUserInfo.lastName);
+
+        // Session does not exist, so no name available.
+        if (SessionDataService.appUserInfo == null) {
+            return null;
         }
-        return null;
+
+        // Session pertains to an organization user, so use organization name as full name.
+        if (SessionDataService.appUserInfo.organizationName != null) {
+            return SessionDataService.appUserInfo.organizationName;
+        }
+
+        // Session pertains to an individual user, so use first & last name of individual as full name.
+        return (SessionDataService.appUserInfo.firstName + ' ' + SessionDataService.appUserInfo.lastName);
     }
 
 

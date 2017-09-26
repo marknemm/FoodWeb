@@ -114,24 +114,4 @@ export class CartComponent implements OnInit {
             }
         );
     }
-
-
-    // Changes status of listings in a use cart through left panel buttons or modal buttons
-    private mutateListingStatus(singleListingFlag: boolean, upgradeListingFlag: boolean): void {
-        let selectedFoodListings: FoodListing[];
-        if (singleListingFlag) {
-            // For changing the status of only one listing (via modal button)
-            selectedFoodListings = [this.foodListingsComponent.getSelectedFoodListing()];
-        }
-        else {
-            // For changing the status of all cart listings (via left panel button)
-            selectedFoodListings = this.foodListingsComponent.getDisplayedListings();
-        }
-        if (upgradeListingFlag) {
-            // Send chosen food listings to backend for status upgrade
-        }
-        else {
-            // Send chosen food listings to backend for status downgrade
-        }
-    }
 }

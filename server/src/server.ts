@@ -19,7 +19,7 @@ import { handleLoginRequest,
          handleSignupRequest,
          handleUpdateAppUserRequest,
          handleSignupVerification,
-         sendMail } from './authentication/authentication-controller';
+         handlePasswordRecovery } from './authentication/authentication-controller';
 import { handleAddFoodListing,
          handleRemoveFoodListing,
          handleGetReceiverFoodListings,
@@ -45,12 +45,13 @@ module.exports = app; // Make available for mocha testing suites.
 
 
 // Authentication Controller Routes.
-app.post('/authentication/login',           handleLoginRequest);
-app.get( '/authentication/logout',          handleLogoutRequest);
-app.get( '/authentication/reAuthenticate',  handleReAuthenticateRequest);
-app.post('/authentication/signup',          handleSignupRequest);
-app.get( '/authentication/verify',          handleSignupVerification);
-app.post('/authentication/updateAppUser',   SessionData.ensureSessionActive, handleUpdateAppUserRequest);
+app.post('/authentication/login',                   handleLoginRequest);
+app.get( '/authentication/logout',                  handleLogoutRequest);
+app.get( '/authentication/reAuthenticate',          handleReAuthenticateRequest);
+app.post('/authentication/signup',                  handleSignupRequest);
+app.get( '/authentication/verify',                  handleSignupVerification);
+app.post('/authentication/recoverPassword',         handlePasswordRecovery);
+app.post('/authentication/updateAppUser',           SessionData.ensureSessionActive, handleUpdateAppUserRequest);
 
 
 // Food Listing Controller Routes.
@@ -61,9 +62,6 @@ app.post('/foodListings/getCartFoodListings',       SessionData.ensureSessionAct
 app.post('/foodListings/claimFoodListing',          SessionData.ensureSessionActive, handleClaimFoodListing);
 app.post('/foodListings/unclaimFoodListing',        SessionData.ensureSessionActive, handleUnclaimFoodListing);
 app.get( '/foodListings/getFoodTypes',              handleGetFoodTypes);
-
-//Handle /authentication/passwordRecovery route by passing off to AuthenticationController.
-app.post('/authentication/passwordRecovery', sendMail);
 
 
 // Public Resource Route Handler (for local image hosting).
