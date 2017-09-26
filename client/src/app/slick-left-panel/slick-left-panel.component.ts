@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 
 @Component({
@@ -6,18 +6,25 @@ import { Component, OnInit, Input } from '@angular/core';
     templateUrl: './slick-left-panel.component.html',
     styleUrls: ['./slick-left-panel.component.css']
 })
-export class SlickLeftPanelComponent implements OnInit {
+export class SlickLeftPanelComponent {
 
+    /**
+     * The title of the toggle button. Will show in the tooltip tab for the button on hover.
+     */
     @Input() private buttonTitle: string = "toggle";
+    /**
+     * Set to true if clicks outside of the panel should be ignored (and the panel state will remain unchanged/open/visible).
+     */
+    @Input() private ignoreClicksOutsidePanel: boolean = false;
+    /**
+     * Set to the ID of an elemnent that when clicked, it will not count as a click outside of the panel.
+     * This means that clicking this element (or any contained children) will not result in a state chnage (closing) of the panel.
+     */
+    @Input() private ignoreOutsideClickInId: string;
 
 
     constructor() { }
 
-
-    ngOnInit() {
-        // We want to handle scroll events to determine when we should start fixing the slickLeftPanel at top of viewport!
-        //window.onscroll = this.monitorScrollForStickyTop.bind(this);
-    }
 
     /**
      * Called whenever the slickLeftPanelButton is pressed. Handles the toggling of the slickLeftPanel when in mobile mode.
@@ -55,6 +62,27 @@ export class SlickLeftPanelComponent implements OnInit {
         // The toggle-into-view css class contains the translation.
         slickLeftPanel.classList.add('toggle-into-view');
         slickLeftPanelButton.style.right = '0px';
+        window.onclick = this.handleClickOutsidePanel.bind(this, slickLeftPanel, slickLeftPanelButton);
+    }
+
+
+    /**
+     * Handles detected clicks outside of this panel by closing the panel.
+     * @param slickLeftPanel The click left panel.
+     * @param slickLeftPanelButton The toggle button for the slick left panel.
+     * @param event The click event that was detected outside of the panel.
+     */
+    private handleClickOutsidePanel(slickLeftPanel: HTMLElement, slickLeftPanelButton: HTMLElement, event): void {
+        const clickOutsidePanel: boolean = !slickLeftPanel.contains(event.target);
+        // Parent may have specified the ID of an element which we are to ignore clicks inside of.
+        const clickOutsideIgnoredElement: boolean = (   this.ignoreOutsideClickInId == null
+                                                     || document.getElementById(this.ignoreOutsideClickInId) == null 
+                                                     || !document.getElementById(this.ignoreOutsideClickInId).contains(event.target));
+
+        // If click is outside panel, it should not be ignored, and it's outside of any marked element that should be ignored.
+        if (!this.ignoreClicksOutsidePanel && clickOutsidePanel && clickOutsideIgnoredElement) {
+            this.toggleOutOfView(slickLeftPanel, slickLeftPanelButton);
+        }
     }
 
 
@@ -64,6 +92,7 @@ export class SlickLeftPanelComponent implements OnInit {
      * @param slickLeftPanelButton The slickLeftPanelButton (button) element which was pressed.
      */
     private toggleOutOfView(slickLeftPanel: HTMLElement, slickLeftPanelButton: HTMLElement): void {
+        window.onclick = null;
         slickLeftPanel.classList.remove('toggle-into-view');
         slickLeftPanelButton.style.right = '-' + slickLeftPanelButton.offsetWidth + 'px';
     }
