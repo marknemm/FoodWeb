@@ -4,7 +4,7 @@ import { Observable } from "rxjs/Observable";
 
 import { LoginComponent } from '../authentication/login/login.component';
 import { SessionDataService } from '../common-util/session-data.service';
-import { LogoutService } from '../authentication/misc/logout.service';
+import { LogoutService } from '../authentication/logout/logout.service';
 
 
 @Component({

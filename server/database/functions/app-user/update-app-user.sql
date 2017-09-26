@@ -1,23 +1,26 @@
 SELECT dropFunction ('updateAppUser');
 
--- In order update existing user, you shall need to provide the userEmail, Password, LastName, and FirstName.
+/**
+ * Updates a given App User.
+ */
 CREATE OR REPLACE FUNCTION updateAppUser
 (
-    _appUserKey         INTEGER,
-    _email              VARCHAR(128)        DEFAULT NULL, 
-    _password           CHAR(60)            DEFAULT NULL,
-    _lastName           VARCHAR(60)         DEFAULT NULL,
-    _firstName          VARCHAR(60)         DEFAULT NULL,
-    _address            VARCHAR(128)        DEFAULT NULL,
-    _addressLatitude    NUMERIC(7, 4)       DEFAULT NULL,
-    _addressLongitude   NUMERIC(7, 4)       DEFAULT NULL,
-    _city               VARCHAR(60)         DEFAULT NULL,
-    _state              CHAR(2)             DEFAULT NULL,
-    _zip                INTEGER             DEFAULT NULL,
-    _phone              CHAR(12)            DEFAULT NULL,
-    _isDonor            BOOLEAN             DEFAULT NULL,
-    _isReceiver         BOOLEAN             DEFAULT NULL,
-    _organizationName   VARCHAR(128)        DEFAULT NULL
+    _appUserKey             INTEGER,
+    _email                  VARCHAR(128)        DEFAULT NULL, 
+    _password               CHAR(60)            DEFAULT NULL,
+    _lastName               VARCHAR(60)         DEFAULT NULL,
+    _firstName              VARCHAR(60)         DEFAULT NULL,
+    _address                VARCHAR(128)        DEFAULT NULL,
+    _addressLatitude        NUMERIC(7, 4)       DEFAULT NULL,
+    _addressLongitude       NUMERIC(7, 4)       DEFAULT NULL,
+    _city                   VARCHAR(60)         DEFAULT NULL,
+    _state                  CHAR(2)             DEFAULT NULL,
+    _zip                    INTEGER             DEFAULT NULL,
+    _phone                  CHAR(12)            DEFAULT NULL,
+    _isDonor                BOOLEAN             DEFAULT NULL,
+    _isReceiver             BOOLEAN             DEFAULT NULL,
+    _availabilityTimeRanges TimeRange[]         DEFAULT NULL, -- See TimeRange type definition in app-user-availability.sql!
+    _organizationName       VARCHAR(128)        DEFAULT NULL
 )
 RETURNS VOID
 AS $$
@@ -56,6 +59,11 @@ BEGIN
     THEN
         INSERT INTO AppUserPassword (appUserKey, password)
         VALUES (_appUserKey, _password);
+    END IF;
+
+    IF (_availibilityTimeRanges IS NOT NULL)
+    THEN
+        PERFORM updateAvailability(_appUserKey, _availabilityTimeRanges);
     END IF;
     
 END;

@@ -55,7 +55,6 @@ export function signup(appUserSignupInfo: AppUserInfo, password: string, appUser
             // We should have a user friendly error here!
             throw new Error(err.message);
         });
-
 }
 
 
@@ -64,6 +63,7 @@ export function signup(appUserSignupInfo: AppUserInfo, password: string, appUser
  * @param verificationToken The verification token sent from the client which should match up against the token held in the database.
  */
 export function signupVerify(appUserKey: number, verificationToken: String): Promise<void> {
+
     let queryString: string = 'SELECT * FROM verifyAppUser($1, $2)';
     let queryArgs: Array<any> = [ appUserKey, verificationToken ];
 
@@ -86,6 +86,7 @@ export function signupVerify(appUserKey: number, verificationToken: String): Pro
  * @return An object containing the hashed password and GPS coordinates.
  */
 function genGPSCoordsAndHashPass(appUserSignupInfo: AppUserInfo, hashPass: string): Promise<{ hashPass: string, gpsCoordinates: GPSCoordinates }> {
+
     return getGPSCoordinates(appUserSignupInfo.address, appUserSignupInfo.city, appUserSignupInfo.state, appUserSignupInfo.zip)
         // Simply map the result to an aggregate of all results so far!
         .then((gpsCoordinates: GPSCoordinates) => {
@@ -108,8 +109,8 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
 
     // Generate query string based off of either signing up or updating App User.
     let queryString: string = 'SELECT * FROM ';
-    if (isUpdate)   queryString += 'updateAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)';
-    else            queryString += 'addAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
+    if (isUpdate)   queryString += 'updateAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)';
+    else            queryString += 'addAppUser($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)';
 
     // Generate query args based off of either signing up or updating App User.
     let queryArgs: Array<any> = [ appUserSignupInfo.email,
@@ -125,6 +126,7 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
                                   appUserSignupInfo.phone,
                                   appUserSignupInfo.isDonor,
                                   appUserSignupInfo.isReceiver,
+                                  null, // Availability times.
                                   appUserSignupInfo.organizationName ];
     
     // If an update, then we will need additional appUserKey argument at beginning of list.
@@ -176,7 +178,8 @@ function handleAddResult(appUserSignupInfo: AppUserInfo, addResult: QueryResult)
  * @param verificationToken The verification token to be sent via email.
  */
 function sendVerificationEmail(sessionData: SessionData, verificationToken: string): Promise<SessionData> {
-    let isOrganization: boolean = (sessionData.appUserInfo.organizationName != null);
+
+    const isOrganization: boolean = (sessionData.appUserInfo.organizationName != null);
     return (isOrganization ? sendOrganizationEmail(sessionData, verificationToken)
                            : sendUserEmail(sessionData, verificationToken));
 }
@@ -212,7 +215,6 @@ function sendOrganizationEmail(sessionData: SessionData, verificationToken: stri
             console.log(err);
             throw new Error('Sorry, unable to send signup verification email');
         });
-
 }
 
 
@@ -246,5 +248,4 @@ function sendUserEmail(sessionData: SessionData, verificationToken: string) : Pr
             console.log(err);
             throw new Error('Sorry, unable to send signup verification email');
        });
-
 }

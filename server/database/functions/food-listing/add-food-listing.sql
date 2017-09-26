@@ -53,7 +53,7 @@ BEGIN
     FOR i IN array_lower(_foodTypes, 1) .. array_upper(_foodTypes, 1)
     LOOP
         INSERT INTO FoodListingFoodTypeMap (foodListingKey, foodType)
-        VALUES (_foodListingKey, _foodTypes[i]);
+        VALUES      (_foodListingKey, _foodTypes[i]);
     END LOOP;
 
     RETURN _foodListingKey;

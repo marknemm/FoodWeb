@@ -45,25 +45,23 @@ BEGIN
             AppUser.isDonor,
             AppUser.isReceiver,
             NOT EXISTS (
-                SELECT 1
-                FROM UnverifiedAppUser
-                WHERE UnverifiedAppUser.appUserKey = AppUser.appUserKey
-                LIMIT 1
+                SELECT 1 FROM UnverifiedAppUser
+                WHERE  UnverifiedAppUser.appUserKey = AppUser.appUserKey
             )
     FROM AppUser
     INNER JOIN AppUserPassword  ON AppUser.appUserKey = AppUserPassword.appUserKey
     INNER JOIN ContactInfo      ON AppUser.appUserKey = ContactInfo.appUserKey
     LEFT JOIN  Organization     ON AppUser.appUserKey = Organization.appUserKey
-    WHERE (_appUserKey IS NULL OR AppUser.appUserKey = _appUserKey)
-      AND (_email IS NULL OR AppUser.email = _email)
-      AND (_lastName IS NULL OR AppUser.lastName = _lastName)
-      AND (_firstName IS NULL OR AppUser.firstName = _firstName)
+    WHERE (_appUserKey IS NULL       OR AppUser.appUserKey = _appUserKey)
+      AND (_email IS NULL            OR AppUser.email = _email)
+      AND (_lastName IS NULL         OR AppUser.lastName = _lastName)
+      AND (_firstName IS NULL        OR AppUser.firstName = _firstName)
       AND (_organizationName IS NULL OR Organization.name = _organizationName)
-      AND (AppUserPassword.appUserPasswordKey = ( SELECT appUserPasswordKey
-                                                  FROM AppUserPassword AppUserPasswordDate
-                                                  WHERE AppUserPasswordDate.appUserKey = AppUser.appUserKey
-                                                  ORDER BY AppUserPasswordDate.createDate DESC
-                                                  LIMIT 1 ));
+      AND (AppUserPassword.appUserPasswordKey = ( SELECT    appUserPasswordKey
+                                                  FROM      AppUserPassword AppUserPasswordDate
+                                                  WHERE     AppUserPasswordDate.appUserKey = AppUser.appUserKey
+                                                  ORDER BY  AppUserPasswordDate.createDate DESC
+                                                  LIMIT     1 ));
 
 END;
 $$ LANGUAGE plpgsql;
