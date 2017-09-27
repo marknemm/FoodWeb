@@ -1,9 +1,9 @@
 <div class="container-fluid">
-    <div id="cart-row" class="row" style="padding-top:2vh">
-        <div class="col-lg-3 col-md-0" id="filters" [style.max-width]="'280px'">
+    <div class="row">
+        <div class="col-lg-3 col-md-0 no-pad" id="food-listings-filters" [style.max-width]="'262px'">
 
             <app-food-listings-filters header="Cart Filters" [formGroup]="foodListingsFilters.filtersForm"
-             id="food-listings-filters" [defaultLatestExpireNow]="false" maxWidth="280px" #foodListingsFilters>
+             [defaultLatestExpireNow]="false" maxWidth="262px" #foodListingsFilters>
 
                 <ng-container *ngIf="isDonorAndReceiver" top>
                     <h4>Listings Status:</h4>
@@ -33,7 +33,7 @@
 
         <div id="food-listings" class="col-lg-9 col-md-12">
 
-            <app-food-listings [header]="getFoodListingsTitle()" id="food-listings" #foodListings>
+            <app-food-listings [header]="getFoodListingsTitle()" #foodListings>
                 <ng-container details-modal-footer>
 
                     <button md-raised-button color="primary" class="button-md" *ngIf="isClaimedCart()" (click)="unclaimSelectedFoodListing()">Unclaim</button>

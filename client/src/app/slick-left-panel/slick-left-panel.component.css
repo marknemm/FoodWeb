@@ -2,7 +2,7 @@
     position: relative;
     z-index: 100;
     padding-left: 10px;
-    padding-right: 25px;
+    padding-right: 10px;
     word-wrap: break-word;
     background-color: inherit;
 }
@@ -11,28 +11,26 @@
     position: absolute;
     height: 100%;
     width: 25px;
+    min-width: 0px;
     right: -25px;
     top:0;
-    background: darkgray;
-    cursor: pointer;
-    cursor: hand;
     visibility: hidden;
-    transition: background 0.5s ease, right 0.5s linear;
-    -webkit-transition: background 0.5s ease, right 0.5s linear;
-    -moz-transition: background 0.5s ease, right 0.5s linear;
-    -ms-transition: background 0.5s ease, right 0.5s linear;
-    -o-transition: background 0.5s ease, right 0.5s linear;
     z-index: 101;
-    opacity: 0.67;
-}
-
-#slick-left-panel-button:hover {
-    background: black;
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+    transition: right 0.5s linear;
+    -webkit-transition: right 0.5s linear;
+    -moz-transition: right 0.5s linear;
+    -ms-transition: right 0.5s linear;
+    -o-transition: right 0.5s linear;
+    outline: none;
 }
 
 @media only screen and (max-width: 991px) {
+
     #slick-left-panel {
         position: absolute;
+        padding-right: 25px; /* Make room for the button overlap! */
         width: calc(100vw - 20px);
         right: 100%; /* The default state in mobile mode is to be off the screen to the left */
         transition: transform 0.3s linear;
@@ -54,4 +52,5 @@
     #slick-left-panel-button {
         visibility: visible;
     }
+
 }

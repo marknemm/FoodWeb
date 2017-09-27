@@ -1,7 +1,8 @@
 <div class="container-fluid">
     <div id="receivers-row" class="row">
-        <div class="col-md-0 col-lg-3 no-pad" [style.max-width]="'280px'">
-            <app-food-listings-filters header="Search Filters" [formGroup]="foodListingsFiltersComponent.filtersForm" maxWidth="280px" #foodListingsFilters>
+
+        <div id="food-listings-filters" class="col-md-0 col-lg-3 no-pad" [style.max-width]="'262px'">
+            <app-food-listings-filters header="Search Filters" [formGroup]="foodListingsFiltersComponent.filtersForm" maxWidth="262px" #foodListingsFilters>
             </app-food-listings-filters>
         </div>
 
@@ -12,5 +13,6 @@
                 </ng-container>
             </app-food-listings>
         </div>
+        
     </div>
 </div>

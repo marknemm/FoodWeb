@@ -8,6 +8,13 @@ html, body {
     margin: 0;
 }
 
+.no-pad {
+    padding-right: 0px;
+    padding-left: 0px;
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
 .inline-error {
     display: inline-block;
     margin-left: 20px;
@@ -42,13 +49,12 @@ button:hover, a:hover {
     cursor: hand;
 }
 
+
+/* Shared styles for all modal dialogs in Food Web */
+
 .modal-header {
     background-color: #222222;
     color: white;
-}
-
-.modal-dialog {
-    min-width: 320px;
 }
 
 .modal-close {
@@ -75,4 +81,24 @@ button:hover, a:hover {
 .modal-close:hover {
     -webkit-transform: rotate(180deg);
     transform: rotate(180deg);
+}
+
+
+/* Shared styles between Receiver and Cart interfaces */
+
+/* When the screen gets small and the filters panel goes into mobile mode, then center the food listings */
+@media only screen and (max-width: 991px) {
+    #food-listings {
+        padding-left: 40px; /* Make room for filters expansion button */
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    #food-listings {
+        text-align: center;
+    }
+}
+
+#food-listings-filters {
+    border-right: 1px solid #D5D5D5;
 }
