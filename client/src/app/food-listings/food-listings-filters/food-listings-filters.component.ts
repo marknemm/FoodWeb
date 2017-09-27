@@ -18,6 +18,7 @@ export class FoodListingsFiltersComponent implements OnInit {
     private filtersForm: FormGroup;
 
     @Input() private header: string = 'Filters';
+    @Input() private maxWidth: string = null;
     @Input() private defaultLatestExpireNow: boolean = true;
 
     @ViewChild('FoodTypesComponent') private foodTypesComponent: FoodTypesComponent;

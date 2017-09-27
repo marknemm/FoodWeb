@@ -1,38 +1,47 @@
 <div class="container-fluid">
     <div id="cart-row" class="row" style="padding-top:2vh">
-        <div class="col-lg-3 col-md-0" id="filters">
+        <div class="col-lg-3 col-md-0" id="filters" [style.max-width]="'280px'">
+
             <app-food-listings-filters header="Cart Filters" [formGroup]="foodListingsFilters.filtersForm"
-             id="food-listings-filters" [defaultLatestExpireNow]="false" #foodListingsFilters>
+             id="food-listings-filters" [defaultLatestExpireNow]="false" maxWidth="280px" #foodListingsFilters>
 
                 <ng-container *ngIf="isDonorAndReceiver" top>
                     <h4>Listings Status:</h4>
                     <div class="form-group">
                         <md-radio-group formControlName="listingsStatus">
+
                             <label for="claimed" class="checkbox-compress">
                                 <md-radio-button type="radio" id="claimed" name="listingsStatus" checked="checked" [value]="LISTINGS_STATUS.myClaimedListings">
                                     Claimed
                                 </md-radio-button>
                             </label>
                             <br>
+
                             <label for="donated" class="checkbox-compress">
                                 <md-radio-button type="radio" id="donated" name="listingsStatus" [value]="LISTINGS_STATUS.myDonatedListings">
                                     Donated
                                 </md-radio-button>
                             </label>
+
                         </md-radio-group>
                     </div>
                 </ng-container>
 
             </app-food-listings-filters>
+
         </div>
 
         <div id="food-listings" class="col-lg-9 col-md-12">
+
             <app-food-listings [header]="getFoodListingsTitle()" id="food-listings" #foodListings>
                 <ng-container details-modal-footer>
+
                     <button md-raised-button color="primary" class="button-md" *ngIf="isClaimedCart()" (click)="unclaimSelectedFoodListing()">Unclaim</button>
                     <button md-raised-button color="primary" class="button-md" *ngIf="isDonatedCart()" (click)="removeSelectedFoodListing()">Remove Donation</button>
+                    
                 </ng-container>
             </app-food-listings>
+
         </div>
     </div>
 </div>

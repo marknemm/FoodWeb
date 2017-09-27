@@ -1,0 +1,40 @@
+:host {
+	flex-grow: 1;
+    display: flex;
+    text-align: center;
+	justify-content: center;
+	align-items: center;
+}
+
+.link-content {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: right;
+    float: right;
+}
+
+::ng-deep .modal-backdrop.fade.show {
+    opacity: 1 !important;
+    background-color: #444;
+}
+
+::ng-deep .food-details > .modal-dialog {
+    width: 100%;
+    max-width: 100%;
+    padding-right: 20px; /* In small screen, this will make spacing on left and right equal! */
+}
+
+/* Big screen */
+@media (min-width: 1450px) {
+    ::ng-deep .food-details > .modal-dialog {
+        max-width: 1400px;
+    }
+}
+
+/* Medium screen */
+@media (min-width: 576px) {
+    ::ng-deep .food-details > .modal-dialog {
+        padding-right: 30px;
+        padding-left: 30px;
+    }
+}

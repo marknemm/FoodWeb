@@ -38,6 +38,7 @@ import { SlickLeftPanelComponent } from './slick-left-panel/slick-left-panel.com
 import { FoodListingsFiltersComponent } from './food-listings/food-listings-filters/food-listings-filters.component';
 import { FoodListingsComponent } from './food-listings/food-listings.component';
 import { FoodTypesComponent } from './food-listings/food-types/food-types.component';
+import { FoodDetailsComponent } from './food-listings/food-details/food-details.component';
 import { BaseFoodListingInfoComponent } from './food-listings/base-food-listing-info/base-food-listing-info.component';
 import { AppUserInfoComponent } from './authentication/app-user-info/app-user-info.component';
 
@@ -118,7 +119,8 @@ const appRoutes: Routes = [
         CartComponent,
         AppUserInfoComponent,
         BaseFoodListingInfoComponent,
-        AutoFocusDirective
+        AutoFocusDirective,
+        FoodDetailsComponent
     ],
     imports: [
         NgbModule.forRoot(),

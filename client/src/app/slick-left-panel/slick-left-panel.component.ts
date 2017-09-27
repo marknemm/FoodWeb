@@ -21,6 +21,10 @@ export class SlickLeftPanelComponent {
      * This means that clicking this element (or any contained children) will not result in a state chnage (closing) of the panel.
      */
     @Input() private ignoreOutsideClickInId: string;
+    /**
+     * The maximum width of the navigation panel.
+     */
+    @Input() private maxWidth: string = "400px";
 
 
     constructor() { }

@@ -41,8 +41,6 @@ export class LoginComponent extends DialogComponent<null, boolean> implements On
             email: [null, Validators.required],
             password: null
         });
-
-        setTimeout(this.loginForm.reset, 0);
     }
 
 
@@ -59,7 +57,7 @@ export class LoginComponent extends DialogComponent<null, boolean> implements On
             // DialogOptions
             {
                 closeByClickingOutside: true,
-                backdropColor: '#444444',
+                backdropColor: '#444'
             }
         );
     }

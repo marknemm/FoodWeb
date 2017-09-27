@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { Observable } from "rxjs/Observable";
 
+import { FoodDetailsComponent } from './food-details/food-details.component';
 import { GetFoodListingsService } from "./get-food-listings.service";
 
 import { FoodListing } from '../../../../shared/food-listings/food-listing';
@@ -18,18 +19,17 @@ export class FoodListingsComponent {
 
     @Input() private header: string = 'Food Listings';
 
+    @ViewChild('FoodDetailsComponent') private foodDetails: FoodDetailsComponent;
+
     private foodListings: Array<FoodListing>;
     private selectedFoodListingIndex: number;
-    private modalFoodListingDetails: NgbModalRef;
 
 
     constructor(
-        private modalService: NgbModal,
         private getFoodListingsService: GetFoodListingsService
     ) {
         this.foodListings = new Array<FoodListing>();
         this.selectedFoodListingIndex = null;
-        this.modalFoodListingDetails = null;
     }
 
 
@@ -64,10 +64,7 @@ export class FoodListingsComponent {
      */
     public removeSelectedFoodListing(): void {
         // Close any modal details popup related to the Food Listing we are deleting.
-        if (this.modalFoodListingDetails != null) {
-            this.modalFoodListingDetails.close();
-            this.modalFoodListingDetails = null;
-        }
+        if (this.foodDetails.isOpen())  this.foodDetails.close();
         
         // Remove the Food Listing from the contained array model.
         this.foodListings.splice(this.selectedFoodListingIndex, 1);
@@ -77,17 +74,15 @@ export class FoodListingsComponent {
 
     /**
      * Displays a Food Listing details modal popup.
-     * @param detailsHTML The Food Listing detals modal HTML Element.
      * @param selectedFoodListing The selected Food Listing.
      */
-    private showDetails(detailsHTML: HTMLElement, selectedFoodListingIndex: number): void {
+    private showDetails(selectedFoodListingIndex: number): void {
         this.selectedFoodListingIndex = selectedFoodListingIndex;
-        this.modalFoodListingDetails = this.modalService.open(detailsHTML);
-        this.modalFoodListingDetails.result.then((result: string) => {
-            // Don't really need to listen for any signals from details modal popup since parent will be handling any non-close button presses!
-        })
-        .catch((err: Error) => {
-            if (err)  console.log(err);
-        });
+
+        this.foodDetails.open(this.foodListings[selectedFoodListingIndex])
+            .then(() => {}) // Don't care about successful close of dialog...
+            .catch((err: Error) => {
+                if (err)  console.log(err);
+            });
     }
 }

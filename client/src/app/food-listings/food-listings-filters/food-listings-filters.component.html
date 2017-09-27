@@ -1,4 +1,4 @@
-<app-slick-left-panel [buttonTitle]="header" [ignoreClicksOutsidePanel]="picker.opened" [ignoreOutsideClickInId]="picker.id">
+<app-slick-left-panel [buttonTitle]="header" [ignoreClicksOutsidePanel]="picker.opened" [ignoreOutsideClickInId]="picker.id" [maxWidth]="maxWidth">
     
     <h2>{{header}}</h2>
     <hr>
@@ -11,7 +11,7 @@
         <app-food-types #FoodTypesComponent></app-food-types>
         <br>
 
-        <h4>Expiration Date:</h4>
+        <h4>Available After:</h4>
         <md-input-container floatPlaceholder="never" (click)="picker.open()">
             <input mdInput [mdDatepicker]="picker" placeholder="mm/dd/yyyy" formControlName="earliestExpireDate" readonly="true">
             <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
