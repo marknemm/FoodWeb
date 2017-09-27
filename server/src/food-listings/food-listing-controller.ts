@@ -15,36 +15,13 @@ import { LISTINGS_STATUS } from "../../../shared/food-listings/food-listings-fil
 import { FoodWebResponse } from "../../../shared/message-protocol/food-web-response";
 
 
-export function handleGetReceiverFoodListings(request: Request, response: Response): void {
-    handleGetFoodListings(request.body, response);
-}
-
-
-export function handleGetCartFoodListings(request: Request, response: Response): void {
-
-    let getCartFoodListingsRequest: GetFoodListingsRequest = request.body;
-    let listingsStatus: LISTINGS_STATUS = getCartFoodListingsRequest.filters.listingsStatus;
-    let sessionData: SessionData = SessionData.loadSessionData(request);
-    let claimedByAppUserKey = null;
-    let donatedByAppUserKey = null;
+export function handleGetFoodListings(request: Request, response: Response): void {
     
-    // Grab current App User key to identify cart owner.
-    switch(listingsStatus) {
-        case LISTINGS_STATUS.myClaimedListings:     claimedByAppUserKey = sessionData.appUserKey;    break;
-        case LISTINGS_STATUS.myDonatedListings:     donatedByAppUserKey = sessionData.appUserKey;    break;
-        default:                                    throw new Error('Incorrect Listings Status: ' + listingsStatus);
-    }
-
-    handleGetFoodListings(getCartFoodListingsRequest, response, claimedByAppUserKey, donatedByAppUserKey);
-}
-
-
-function handleGetFoodListings(getFoodListingsRequest: GetFoodListingsRequest,
-                               response: Response, claimedByAppUserKey?: number, donatedByAppUserKey?: number): void
-{
     response.setHeader('Content-Type', 'application/json');
+    let getFoodListingsRequest: GetFoodListingsRequest = request.body;
+    let appUserKey: number = SessionData.loadSessionData(request).appUserKey;
 
-    getFoodListings(getFoodListingsRequest.filters, donatedByAppUserKey, claimedByAppUserKey)
+    getFoodListings(getFoodListingsRequest.filters, appUserKey)
         .then((foodListings: FoodListing[]) => {
             response.send(new GetFoodListingsResponse(foodListings, true, 'Food Listings Successfully Retrieved'));
         })
@@ -55,6 +32,7 @@ function handleGetFoodListings(getFoodListingsRequest: GetFoodListingsRequest,
 
 
 export function handleAddFoodListing(request: Request, response: Response): void {
+
     response.setHeader('Content-Type', 'application/json');
     
     let addFoodListingRequest: AddFoodListingRequest = request.body;
@@ -72,6 +50,7 @@ export function handleAddFoodListing(request: Request, response: Response): void
 
 
 export function handleRemoveFoodListing(request: Request, response: Response): void {
+
     response.setHeader('Content-Type', 'application/json');
 
     let removeFoodListingRequest: ClaimFoodListingRequest = request.body;
@@ -89,6 +68,7 @@ export function handleRemoveFoodListing(request: Request, response: Response): v
 
 
 export function handleClaimFoodListing(request: Request, response: Response): void {
+
     response.setHeader('Content-Type', 'application/json');
 
     let claimFoodListingRequest: ClaimFoodListingRequest = request.body;
@@ -105,6 +85,7 @@ export function handleClaimFoodListing(request: Request, response: Response): vo
 
 
 export function handleUnclaimFoodListing(request: Request, response: Response): void {
+
     response.setHeader('Content-Type', 'application/json');
 
     let unclaimFoodListingRequest: ClaimFoodListingRequest = request.body;
@@ -121,6 +102,7 @@ export function handleUnclaimFoodListing(request: Request, response: Response): 
 
 
 export function handleGetFoodTypes(request: Request, response: Response): void {
+    
     response.setHeader('Content-Type', 'application/json');
 
     getFoodTypes()

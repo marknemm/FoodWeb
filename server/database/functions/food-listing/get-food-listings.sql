@@ -8,15 +8,17 @@
 SELECT dropFunction('getFoodListings');
 CREATE OR REPLACE FUNCTION getFoodListings
 (
+    _appUserKey                 INTEGER,                        -- The App User Key of the current user issuing this query.
     _retrievalOffset            INTEGER,                        -- The offset of records that should be retrieved.
     _retrievalAmount            INTEGER,                        -- The number of records that should be retrieved starting at _retrievalOffset.
     _foodListingKey             INTEGER         DEFAULT NULL,   -- This is for when we are looking for a specific Food Listing.
-    _unclaimedOnly              BOOLEAN         DEFAULT FALSE,  -- to true if only unclaimed results should come back.
     _foodTypes                  FoodType[]      DEFAULT NULL,   -- This is when we may be filtering by one or many food types. Null is for all food types.
     _perishable                 BOOLEAN         DEFAULT NULL,   -- Are we looking for perishable food? Input true for perishable only, false for non-perishable, and null for both.
     _availableUntilDate         TEXT            DEFAULT NULL,   -- Do we require food that is going to be available until a given date? Must be in the format MM/DD/YYYY!
-    _DonatedByAppUserKey        INTEGER         DEFAULT NULL,   -- App User key of the logged in AppUser who is trying to view the items they donated.
-    _claimedByAppUserKey        INTEGER         DEFAULT NULL    -- App User key of the logged in AppUser who is trying to view the items they claimed.
+    _unclaimedOnly              BOOLEAN         DEFAULT FALSE,  -- to TRUE if only unclaimed results should come back (When browsing Receive tab for claimable Food Listings).
+    _myDonatedItemsOnly         BOOLEAN         DEFAULT FALSE,  -- Set to TRUE if only Donor Cart items should come back (this user's donated Food Listings only).
+    _myClaimedItemsOnly         BOOLEAN         DEFAULT FALSE,  -- Set to TRUE if only Receiver Cart items should come back (this user's claimed Food Listings only).
+    _matchAvailability          BOOLEAN         DEFAULT TRUE    -- Determines if th eitems that are viewed were donated by a Donor whose availability overlaps this user's.
 )
 RETURNS TABLE
 (
@@ -37,10 +39,48 @@ RETURNS TABLE
     imgUrl                      TEXT
 )
 AS $$
-    DECLARE queryBase           VARCHAR(2000);
-    DECLARE queryFilters        VARCHAR(2000);
-    DECLARE queryGroupAndSort   VARCHAR(2000);
+    DECLARE _currentWeekday      INTEGER; -- [0, 6] index of the current weekday.
+    DECLARE _queryBase           VARCHAR(2000);
+    DECLARE _queryFilters        VARCHAR(2000);
+    DECLARE _queryGroupAndSort   VARCHAR(2000);
 BEGIN
+
+-- ================= Preprocessing Phase - Calculate Relative Available Dates for this user ================== --
+-- =========================================================================================================== --
+
+    -- Is the user concerned with matching Donor availability with their own?
+    _matchAvailability := (     _matchAvailability
+                            -- If either of following are TRUE, then we are in cart and don't care about availability!
+                            AND _myDonatedItemsOnly <> TRUE
+                            AND _myClaimedItemsOnly <> TRUE);
+
+    IF (_matchAvailability = TRUE)
+    THEN
+
+        -- Grab [0, 6] index of current day of week.
+        _currentWeekday = (SELECT EXTRACT(DOW FROM CURRENT_TIMESTAMP));
+
+        -- This table will be filled with actual timestamps (dates) of availability over the span of the next week relative to today.
+        -- These dates are used to determine if the user has an opportunity to receive donated food before it is no longer available.
+        -- In other words, it makes their availability schedule comparable to regular date timestamps.
+        DROP TABLE IF EXISTS RelativeAvailabilityDates;
+        CREATE TEMP TABLE RelativeAvailabilityDates
+        (
+            appUserAvailabilityKey  INTEGER     PRIMARY KEY,
+            relativeAvailableDate   TIMESTAMP
+        );
+
+        INSERT INTO RelativeAvailabilityDates
+        SELECT      appUserAvailabilityKey,
+                    CURRENT_TIMESTAMP + INTERVAL '1' day * ((weekday - _currentWeekday) % 7)
+        FROM        AppUserAvailability
+        WHERE       appUserKey = _appUserKey;
+        
+    END IF;
+
+
+-- ==================================== Dynamic Query Generation Phase ======================================= --
+-- =========================================================================================================== --
 
     -- We will fill this table with our filtered food listings and associated food types (in aggregate array form).
     DROP TABLE IF EXISTS FiltFoodListing;
@@ -49,23 +89,16 @@ BEGIN
         foodListingKey  INTEGER PRIMARY KEY
     );
 
--- ==================================== Dynamic Query Generation Phase ======================================= --
--- =========================================================================================================== --
-
     -- We will pull back the filtered aggregate food listing keys. This query, without the group by aggregate,
     -- would pull back rows that have duplicate values for each member other than the food type column(s).
-    queryBase := '
+    _queryBase := '
         INSERT INTO FiltFoodListing
-        (
-            foodListingKey
-        )
-        SELECT
-            FoodListing.foodListingKey
-        FROM FoodListing
-        INNER JOIN FoodListingFoodTypeMap   ON FoodListing.foodListingKey = FoodListingFoodTypeMap.foodListingKey
+        SELECT      FoodListing.foodListingKey
+        FROM        FoodListing
+        INNER JOIN  FoodListingFoodTypeMap ON FoodListing.foodListingKey = FoodListingFoodTypeMap.foodListingKey
     ';
 
-    queryFilters := '
+    _queryFilters := '
         WHERE ($1 IS NULL   OR FoodListing.foodListingKey = $1)
           -- We will translate the list of food type descriptions into integer keys for lookup efficiency.
           AND ($2 IS NULL   OR FoodListingFoodTypeMap.foodType = ANY($2))
@@ -75,49 +108,81 @@ BEGIN
     ';
 
     -- Do we have any filter pertaining to claimer?
-    IF (_claimedByAppUserKey IS NOT NULL)
+    IF (_myClaimedItemsOnly = TRUE)
     THEN
 
-        queryBase := queryBase || '
-            INNER JOIN ClaimedFoodListing ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
+        _queryBase := _queryBase || '
+            INNER JOIN  ClaimedFoodListing ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
         ';
 
-        queryFilters := queryFilters || '
+        _queryFilters := _queryFilters || '
             AND (ClaimedFoodListing.claimedByAppUserKey = $6)
         ';
 
     END IF;
 
     -- Do we want to exclude all claimed food listings?
-    IF (_unclaimedOnly = true)
+    IF (_unclaimedOnly = TRUE)
     THEN
         -- If we have at least 1 member in ClaimedFoodListing for our FoodListing that we are examining, then it has been claimed.
-        queryFilters := queryFilters || '
+        _queryFilters := _queryFilters || '
             AND (FoodListing.availableUnitsCount > 0)
         ';
     END IF;
 
-    queryGroupAndSort := '
+    -- Should we match by Donor availability?
+    IF (_matchAvailability = TRUE)
+    THEN
+
+        _queryBase := _queryBase || '
+            INNER JOIN  AppUserAvailability ReceiverAvailability ON ReceiverAvailability.appUserKey = $7
+            INNER JOIN  RelativeAvailabilityDates ON ReceiverAvailability.appUserAvailabilityKey = RelativeAvailabilityDates.appUserAvailabilityKey
+            INNER JOIN  AppUserAvailability DonorAvailability ON FoodListing.donatedByAppUserKey = DonorAvailability.appUserKey
+        ';
+
+        -- NOTE: We may not want to simply find an overlap in time range here!
+        --       For example, it may be unrealistic to think that a single overlap of only 1/2 hour is enough to get food from Donor to Receiver!
+        _queryFilters := _queryFilters || '
+            AND DonorAvailability.weekday = ReceiverAvailability.weekday
+            AND DonorAvailability.startTime < ReceiverAvailability.endTime
+            AND DonorAvailability.endTime > ReceiverAvailability.startTime
+            AND RelativeAvailabilityDates.relativeAvailableDate <= FoodListing.availableUntilDate
+        ';
+        -- TODO: Ensure that 
+
+    END IF;
+
+    _queryGroupAndSort := '
         GROUP BY FoodListing.foodListingKey
         ORDER BY FoodListing.availableUntilDate
-        OFFSET $7
-        LIMIT $8
+        OFFSET $8
+        LIMIT $9
     ';
 
 
 -- ==================================== Dynamic Query Execution Phase ======================================== --
 -- =========================================================================================================== --
 
-    --raise notice '% % %', queryBase, queryFilters, queryGroupAndSort;
+    --RAISE NOTICE '% % %', _queryBase, _queryFilters, _queryGroupAndSort;
 
     -- Insert our filtered Food Listing Key - Food Listing Types pairs into our temporary table.
-    EXECUTE (queryBase || queryFilters || queryGroupAndSort)
+    EXECUTE (_queryBase || _queryFilters || _queryGroupAndSort)
     USING _foodListingKey,
           _foodTypes,
           _perishable,
           _availableUntilDate,
-          _DonatedByAppUserKey,
-          _claimedByAppUserKey,
+          CASE (_myDonatedItemsOnly)
+            WHEN TRUE THEN _appUserKey
+            ELSE NULL 
+          END,
+          CASE (_myClaimedItemsOnly)
+            WHEN TRUE THEN _appUserKey
+            ELSE NULL
+          END,
+          CASE (_matchAvailability)
+            WHEN TRUE THEN _appUserKey
+            ELSE NULL
+          END,
           _retrievalOffset,
           _retrievalAmount;
     
@@ -173,7 +238,7 @@ GROUP BY FoodListing.foodListingKey;
 
 --SELECT * FROM FoodListingFoodTypeMap;
 
-select * FROM getFoodListings(0, 1000, NULL, true);
+select * FROM getFoodListings(1, 0, 1000, NULL, NULL, NULL, NULL, TRUE, FALSE, FALSE, TRUE);
 
 /*
 

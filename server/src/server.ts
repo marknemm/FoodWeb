@@ -22,8 +22,7 @@ import { handleLoginRequest,
          handlePasswordRecovery } from './authentication/authentication-controller';
 import { handleAddFoodListing,
          handleRemoveFoodListing,
-         handleGetReceiverFoodListings,
-         handleGetCartFoodListings,
+         handleGetFoodListings,
          handleClaimFoodListing,
          handleUnclaimFoodListing,
          handleGetFoodTypes } from './food-listings/food-listing-controller';
@@ -57,8 +56,7 @@ app.post('/authentication/updateAppUser',           SessionData.ensureSessionAct
 // Food Listing Controller Routes.
 app.post('/foodListings/addFoodListing',            SessionData.ensureSessionActive, handleAddFoodListing);
 app.post('/foodListings/removeFoodListing',         SessionData.ensureSessionActive, handleRemoveFoodListing);
-app.post('/foodListings/getReceiverFoodListings',   handleGetReceiverFoodListings);
-app.post('/foodListings/getCartFoodListings',       SessionData.ensureSessionActive, handleGetCartFoodListings);
+app.post('/foodListings/getFoodListings',           SessionData.ensureSessionActive, handleGetFoodListings);
 app.post('/foodListings/claimFoodListing',          SessionData.ensureSessionActive, handleClaimFoodListing);
 app.post('/foodListings/unclaimFoodListing',        SessionData.ensureSessionActive, handleUnclaimFoodListing);
 app.get( '/foodListings/getFoodTypes',              handleGetFoodTypes);

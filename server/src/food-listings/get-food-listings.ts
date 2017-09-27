@@ -8,7 +8,7 @@ import { DateFormatter } from "../../../shared/common-util/date-formatter";
 let postgresArray = require('postgres-array');
 
 
-export function getFoodListings(filters: FoodListingsFilters, donatedByAppUserKey: number, claimedByAppUserKey: number): Promise<Array<FoodListing>> {
+export function getFoodListings(filters: FoodListingsFilters, appUserKey: number): Promise<Array<FoodListing>> {
 
     let perishableArg: boolean = generatePerishabilityArg(filters.perishable, filters.notPerishable);
     let foodTypesArg: string = toPostgresArray(filters.foodTypes);
@@ -16,10 +16,13 @@ export function getFoodListings(filters: FoodListingsFilters, donatedByAppUserKe
     let expireDateArg: string = generateExpireDateArg(new Date(filters.earliestExpireDate));
    
     // Build our prepared statement.
-    let queryString: string = 'SELECT * FROM getFoodListings($1, $2, null, $3, $4, $5, $6, $7, $8);';
-    let queryArgs: Array<any> = [ filters.retrievalOffset, filters.retrievalAmount,
-                                  (filters.listingsStatus === LISTINGS_STATUS.unclaimedListings), foodTypesArg,
-                                  perishableArg, expireDateArg, donatedByAppUserKey, claimedByAppUserKey ];
+    let queryString: string = 'SELECT * FROM getFoodListings($1, $2, $3, null, $4, $5, $6, $7, $8, $9, $10);';
+    let queryArgs: Array<any> = [ appUserKey, filters.retrievalOffset, filters.retrievalAmount,
+                                  foodTypesArg, perishableArg, expireDateArg,
+                                  (filters.listingsStatus === LISTINGS_STATUS.unclaimedListings),
+                                  (filters.listingsStatus === LISTINGS_STATUS.myDonatedListings),
+                                  (filters.listingsStatus === LISTINGS_STATUS.myClaimedListings),
+                                  false /* TODO: Match availability flag */ ];
 
     // Replace any NULL query arguments with literals in query string.
     queryString = fixNullQueryArgs(queryString, queryArgs);

@@ -64,13 +64,9 @@ export class GetFoodListingsService {
 
         // Determine the route based off of the requested Food Listings' status (Are we getting food listings for receive or cart interface).
         if (filters.listingsStatus == null)  filters.listingsStatus = LISTINGS_STATUS.unclaimedListings;
-        let route: string = (filters.listingsStatus === LISTINGS_STATUS.unclaimedListings)
-                            ? '/foodListings/getReceiverFoodListings'
-                            : '/foodListings/getCartFoodListings';
-        let body: GetFoodListingsRequest = new GetFoodListingsRequest(filters);
-        let observer: Observable<Response> = this.requestService.post(route, body);
+        let observer: Observable<Response> = this.requestService.post('/foodListings/getFoodListings', new GetFoodListingsRequest(filters));
 
-        // Listen for a response now.                                                 
+        // Listen for a response now.
         return observer.map((response: Response) => {
 
             let getFoodListingsResponse: GetFoodListingsResponse = response.json();

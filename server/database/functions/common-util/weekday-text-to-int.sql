@@ -12,13 +12,13 @@ RETURNS INTEGER -- Day of week 1-based index.
 AS $$
 
     SELECT CASE (LOWER(_weekdayText))
-        WHEN 'sunday'       THEN 1
-        WHEN 'monday'       THEN 2
-        WHEN 'tuesday'      THEN 3
-        WHEN 'wednesday'    THEN 4
-        WHEN 'thursday'     THEN 5
-        WHEN 'friday'       THEN 6
-        WHEN 'saturday'     THEN 7
+        WHEN 'sunday'       THEN 0
+        WHEN 'monday'       THEN 1
+        WHEN 'tuesday'      THEN 2
+        WHEN 'wednesday'    THEN 3
+        WHEN 'thursday'     THEN 4
+        WHEN 'friday'       THEN 5
+        WHEN 'saturday'     THEN 6
     END;
     
 $$ LANGUAGE sql;
