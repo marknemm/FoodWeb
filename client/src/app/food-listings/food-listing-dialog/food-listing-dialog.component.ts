@@ -2,15 +2,15 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { NgbModalRef, NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 
-import { FoodListing } from '../../../../../shared/food-listings/food-listing';
+import { FoodListing } from './../../../../../shared/food-listings/food-listing';
 
 
 @Component({
-  selector: 'food-details',
-  templateUrl: './food-details.component.html',
-  styleUrls: ['./food-details.component.css']
+  selector: 'food-listing-dialog',
+  templateUrl: './food-listing-dialog.component.html',
+  styleUrls: ['./food-listing-dialog.component.css', '../food-listings.component.css']
 })
-export class FoodDetailsComponent {
+export class FoodListingDialogComponent {
 
     @ViewChild('detailsHTML') private detailsHTML: HTMLTemplateElement;
 

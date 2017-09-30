@@ -33,6 +33,11 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
      */
     @Input() private displayOnly: boolean = false;
     /**
+     * Set to true if the display only Food Types should be a condensed list.
+     * The condensed list only includes Food Types that have been selected.
+     */
+    @Input() private condensedDisplay: boolean = false;
+    /**
      * Determines if the Food Type checkboxes should initially be checked. Default is true.
      */
     @Input() private initiallyChecked: boolean = true;
@@ -69,15 +74,23 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
 
             this.foodTypes = foodTypes;
 
-            for (let i: number = 0; i < this.foodTypes.length; i++) {
-                this.foodTypesForm.addControl(this.foodTypes[i], new FormControl(this.initiallyChecked));
-            }
+            this.setToInitialCheckedState();
 
             // Register listener for changes in the contained checkbox form's values.
             this.registerFormUpdateListener();
             this.foodTypesForm.updateValueAndValidity(); /* When finished adding all food type controls, then trigger a value update
                                                             so callback will get the selected food types. */
         });
+    }
+
+
+    /**
+     * Sets the internal check (boolean) values to the initiallyChecked state.
+     */
+    private setToInitialCheckedState(): void {
+        for (let i: number = 0; i < this.foodTypes.length; i++) {
+            this.foodTypesForm.addControl(this.foodTypes[i], new FormControl(this.initiallyChecked));
+        }
     }
 
 
@@ -123,10 +136,7 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
         }
         // Else we were given null, so set contained value back to original checked (boolean) state.
         else {
-
-            for (let i: number = 0; i < this.foodTypes.length; i++) {
-                this.foodTypesForm.controls[this.foodTypes[i]].setValue(this.initiallyChecked, { emitEvent: false});
-            }
+            this.setToInitialCheckedState();
         }
     }
 
@@ -162,9 +172,7 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
      * Resets the checkboxes to their initial checked value. Also resets any associated validation.
      */
     public reset(): void {
-        for (let i: number = 0; i < this.foodTypes.length; i++) {
-            this.foodTypesForm.controls[this.foodTypes[i]].setValue(this.initiallyChecked);
-        }
+        this.setToInitialCheckedState();
         this.foodTypesForm.markAsPristine();
         this.foodTypesForm.markAsUntouched();
     }
@@ -200,17 +208,24 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
 
         if (this.foodTypes != null) {
 
+            // The Food Types that are to be displayed depend on the displayOnly and condensedDisplay settings.
+            let displayFoodTypes: string[] = (this.displayOnly && this.condensedDisplay) ? this.getSelectedFoodTypes()
+                                                                                         : this.foodTypes;
+
             /*  Calculate the number of extra Food Types that must be added to the first column if the total number of Food TYpes is not
                 evenly divisble by the number of columns! Also, all other ranges (column begins) must be offset by this amount! */
-            let remainder: number = (this.foodTypes.length % this.numColumns);
+            let remainder: number = (displayFoodTypes.length % this.numColumns);
 
             // Base range parameters off of number of columns specified by parent component and the number of Food Types from server.
-            let rangeLength: number = Math.floor(this.foodTypes.length / this.numColumns);
+            let rangeLength: number = Math.floor(displayFoodTypes.length / this.numColumns);
             let rangeBegin: number = (column * rangeLength) + (column !== 0 ? remainder : 0);
             let rangeEnd: number = (rangeBegin + rangeLength) + (column === 0 ? remainder : 0);
 
             for (let i: number = rangeBegin; i < rangeEnd; i++) {
-                range.push(i);
+                // Get the index of the FoodType to display from the core foddTypes list (may not align if using condesnedDisplay mode).
+                const lastFoodTypeIndex: number = (range.length > 0) ? range[range.length - 1] : null;
+                const indexOfDisplayFoodType: number = this.foodTypes.indexOf(displayFoodTypes[i], lastFoodTypeIndex);
+                range.push(indexOfDisplayFoodType);
             }
         }
 

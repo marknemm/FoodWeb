@@ -2,7 +2,7 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { Observable } from "rxjs/Observable";
 
-import { FoodDetailsComponent } from './food-details/food-details.component';
+import { FoodListingDialogComponent } from './food-listing-dialog/food-listing-dialog.component';
 import { GetFoodListingsService } from "./get-food-listings.service";
 
 import { FoodListing } from '../../../../shared/food-listings/food-listing';
@@ -19,7 +19,7 @@ export class FoodListingsComponent {
 
     @Input() private header: string = 'Food Listings';
 
-    @ViewChild('FoodDetailsComponent') private foodDetails: FoodDetailsComponent;
+    @ViewChild('FoodListingDialogComponent') private foodListingDialog: FoodListingDialogComponent;
 
     private foodListings: Array<FoodListing>;
     private selectedFoodListingIndex: number;
@@ -64,7 +64,7 @@ export class FoodListingsComponent {
      */
     public removeSelectedFoodListing(): void {
         // Close any modal details popup related to the Food Listing we are deleting.
-        if (this.foodDetails.isOpen())  this.foodDetails.close();
+        if (this.foodListingDialog.isOpen())  this.foodListingDialog.close();
         
         // Remove the Food Listing from the contained array model.
         this.foodListings.splice(this.selectedFoodListingIndex, 1);
@@ -79,7 +79,7 @@ export class FoodListingsComponent {
     private showDetails(selectedFoodListingIndex: number): void {
         this.selectedFoodListingIndex = selectedFoodListingIndex;
 
-        this.foodDetails.open(this.foodListings[selectedFoodListingIndex])
+        this.foodListingDialog.open(this.foodListings[selectedFoodListingIndex])
             .then(() => {}) // Don't care about successful close of dialog...
             .catch((err: Error) => {
                 if (err)  console.log(err);

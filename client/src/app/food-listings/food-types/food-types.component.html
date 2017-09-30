@@ -2,30 +2,38 @@
 <div [formGroup]="foodTypesForm">
 
     <!-- Loop through split columns (if split mode, then columns will numColumns - must generate array of numbers from 0 ... numColumns) -->
-    <ng-container *ngFor="let column of createColumnsRange()">
-        <div [ngClass]="{
-                            'column-6': (numColumns === 2),
-                            'column-4': (numColumns === 3),
-                            'column-3': (numColumns >= 4),
-                            'warn-foreground': (required && numSelections() === 0 && extraValidation)
-                        }">
+    <div *ngFor="let column of createColumnsRange()" [ngClass]="{
+                                                                    'column-6': (numColumns === 2),
+                                                                    'column-4': (numColumns === 3),
+                                                                    'column-3': (numColumns >= 4),
+                                                                    'warn-foreground': (required && numSelections() === 0 && extraValidation)
+                                                                }">
 
-            <!-- Loop through segments of checkable Food Types based on numColumns -->
-            <ng-container *ngFor="let foodTypeInd of createFoodTypesRange(column)">
+        <!-- Loop through segments of checkable Food Types based on numColumns -->
+        <ng-container *ngFor="let foodTypeInd of createFoodTypesRange(column)">
 
-                <md-checkbox *ngIf="!displayOnly" [formControlName]="foodTypes[foodTypeInd]" class="checkbox-compress no-select">
-                    {{ foodTypes[foodTypeInd] }}
-                </md-checkbox>
+            <md-checkbox *ngIf="!displayOnly" [formControlName]="foodTypes[foodTypeInd]" class="checkbox-compress no-select">
+                {{ foodTypes[foodTypeInd] }}
+            </md-checkbox>
 
-                <!-- In display only mode only display text of Food Listings that have been selected (have associated value of true) -->
-                <div *ngIf="displayOnly && foodTypesForm.get(foodTypes[foodTypeInd]).value">
-                    {{ foodTypes[foodTypeInd] }}
-                </div>
+            <!-- In display only mode only display text of Food Listings that have been selected (have associated value of true) -->
+            <div *ngIf="displayOnly" class="display-food-listing">
+
+                <!-- Only show check and cross ('X') icons if not in condensed display mode -->
+                <ng-container *ngIf="!condensedDisplay">
+                    <i class="material-icons" *ngIf="foodTypesForm.get(foodTypes[foodTypeInd]).value" style="color:green">check</i>
+                    <i class="material-icons" *ngIf="!foodTypesForm.get(foodTypes[foodTypeInd]).value" style="color:red">clear</i>
+                </ng-container>
+
+                <span *ngIf="condensedDisplay">&bull;</span>
                 
-            </ng-container>
+                <span [ngClass]="{ 'faint': !foodTypesForm.get(foodTypes[foodTypeInd]).value }">{{ foodTypes[foodTypeInd] }}</span>
+            
+            </div>
+            
+        </ng-container>
 
-        </div>
-    </ng-container>
+    </div>
 
     <!-- <div *ngIf="required && numSelections() === 0 && extraValidation" class="warn-foreground error-message">
         * at least 1 required

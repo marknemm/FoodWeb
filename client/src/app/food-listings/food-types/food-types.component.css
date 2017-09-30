@@ -23,9 +23,12 @@
     font-size: 20px;
 }
 
-.food-type-chip {
-    width: 200px;
-    text-align: center;
+.display-food-listing, i {
+    vertical-align: middle;
+}
+
+.faint {
+    color: lightgray;
 }
 
 md-checkbox {
