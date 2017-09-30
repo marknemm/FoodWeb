@@ -22,3 +22,18 @@
 .error-message {
     font-size: 20px;
 }
+
+.food-type-chip {
+    width: 200px;
+    text-align: center;
+}
+
+md-checkbox {
+    display: block;
+    width: 100%;
+}
+
+::ng-deep md-checkbox.mat-checkbox-layout {
+    width: 100%;
+    height: 100%;
+}

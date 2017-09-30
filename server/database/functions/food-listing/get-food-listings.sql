@@ -14,7 +14,7 @@ CREATE OR REPLACE FUNCTION getFoodListings
     _foodListingKey             INTEGER         DEFAULT NULL,   -- This is for when we are looking for a specific Food Listing.
     _foodTypes                  FoodType[]      DEFAULT NULL,   -- This is when we may be filtering by one or many food types. Null is for all food types.
     _perishable                 BOOLEAN         DEFAULT NULL,   -- Are we looking for perishable food? Input true for perishable only, false for non-perishable, and null for both.
-    _availableUntilDate         TEXT            DEFAULT NULL,   -- Do we require food that is going to be available until a given date? Must be in the format MM/DD/YYYY!
+    _availableAfterDate         TEXT            DEFAULT NULL,   -- Do we require food that is going to be available on or after a given date? Must be in the format MM/DD/YYYY!
     _unclaimedOnly              BOOLEAN         DEFAULT FALSE,  -- to TRUE if only unclaimed results should come back (When browsing Receive tab for claimable Food Listings).
     _myDonatedItemsOnly         BOOLEAN         DEFAULT FALSE,  -- Set to TRUE if only Donor Cart items should come back (this user's donated Food Listings only).
     _myClaimedItemsOnly         BOOLEAN         DEFAULT FALSE,  -- Set to TRUE if only Receiver Cart items should come back (this user's claimed Food Listings only).
@@ -58,7 +58,7 @@ BEGIN
     THEN
 
         -- Grab [0, 6] index of current day of week.
-        _currentWeekday = (SELECT EXTRACT(DOW FROM CURRENT_TIMESTAMP));
+        _currentWeekday = (SELECT EXTRACT(DOW FROM CURRENT_DATE));
 
         -- This table will be filled with actual timestamps (dates) of availability over the span of the next week relative to today.
         -- These dates are used to determine if the user has an opportunity to receive donated food before it is no longer available.
@@ -72,7 +72,7 @@ BEGIN
 
         INSERT INTO RelativeAvailabilityDates
         SELECT      appUserAvailabilityKey,
-                    CURRENT_TIMESTAMP + INTERVAL '1' day * ((weekday - _currentWeekday) % 7)
+                    CURRENT_DATE + INTERVAL '1' day * ((weekday - _currentWeekday) % 7)
         FROM        AppUserAvailability
         WHERE       appUserKey = _appUserKey;
         
@@ -119,15 +119,15 @@ BEGIN
             AND (ClaimedFoodListing.claimedByAppUserKey = $6)
         ';
 
-    END IF;
-
     -- Do we want to exclude all claimed food listings?
-    IF (_unclaimedOnly = TRUE)
+    ELSIF (_unclaimedOnly = TRUE)
     THEN
+
         -- If we have at least 1 member in ClaimedFoodListing for our FoodListing that we are examining, then it has been claimed.
         _queryFilters := _queryFilters || '
             AND (FoodListing.availableUnitsCount > 0)
         ';
+
     END IF;
 
     -- Should we match by Donor availability?
@@ -170,7 +170,7 @@ BEGIN
     USING _foodListingKey,
           _foodTypes,
           _perishable,
-          _availableUntilDate,
+          _availableAfterDate,
           CASE (_myDonatedItemsOnly)
             WHEN TRUE THEN _appUserKey
             ELSE NULL 
@@ -238,7 +238,8 @@ GROUP BY FoodListing.foodListingKey;
 
 --SELECT * FROM FoodListingFoodTypeMap;
 
-select * FROM getFoodListings(1, 0, 1000, NULL, NULL, NULL, NULL, TRUE, FALSE, FALSE, TRUE);
+--SELECT * FROM getFoodListings(1, 0, 1000, NULL, NULL, NULL, NULL, TRUE, FALSE, FALSE, TRUE);
+--SELECT * FROM RelativeAvailabilityDates;
 
 /*
 

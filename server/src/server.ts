@@ -35,7 +35,7 @@ const publicDir: string = global['rootDir'] + 'public';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 let app: Application = express();
-app.use(bodyParser.json());
+app.use(bodyParser.json( { limit: '500KB' } ));
 app.use(express.static(clientBuildDir));
 app.use(express.static(publicDir));
 SessionData.sessionBootstrap(app);

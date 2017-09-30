@@ -13,16 +13,16 @@ export function getFoodListings(filters: FoodListingsFilters, appUserKey: number
     let perishableArg: boolean = generatePerishabilityArg(filters.perishable, filters.notPerishable);
     let foodTypesArg: string = toPostgresArray(filters.foodTypes);
     // Important to wrap the received JSON stringified Date object in a new Date object (one we receive will not contain Date methods)!
-    let expireDateArg: string = generateExpireDateArg(new Date(filters.earliestExpireDate));
+    let availableAfterDateArg: string = generateExpireDateArg(new Date(filters.availableAfterDate));
    
     // Build our prepared statement.
     let queryString: string = 'SELECT * FROM getFoodListings($1, $2, $3, null, $4, $5, $6, $7, $8, $9, $10);';
     let queryArgs: Array<any> = [ appUserKey, filters.retrievalOffset, filters.retrievalAmount,
-                                  foodTypesArg, perishableArg, expireDateArg,
+                                  foodTypesArg, perishableArg, availableAfterDateArg,
                                   (filters.listingsStatus === LISTINGS_STATUS.unclaimedListings),
                                   (filters.listingsStatus === LISTINGS_STATUS.myDonatedListings),
                                   (filters.listingsStatus === LISTINGS_STATUS.myClaimedListings),
-                                  false /* TODO: Match availability flag */ ];
+                                  filters.matchAvailability ];
 
     // Replace any NULL query arguments with literals in query string.
     queryString = fixNullQueryArgs(queryString, queryArgs);

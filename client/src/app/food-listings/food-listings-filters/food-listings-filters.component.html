@@ -1,37 +1,37 @@
 <app-slick-left-panel [buttonTitle]="header" [ignoreClicksOutsidePanel]="picker.opened" [ignoreOutsideClickInId]="picker.id" [maxWidth]="maxWidth">
     
-    <h2>{{header}}</h2>
+    <h3>{{header}}</h3>
     <hr>
     <div [formGroup]="filtersForm">
 
         <!-- Any additional filters will be transclused here -->
         <ng-content select="[top]"></ng-content>
 
-        <h4>Food Types:</h4>
-        <app-food-types #FoodTypesComponent></app-food-types>
+        <h5>Food Types:</h5>
+        <app-food-types formControlName="foodTypes" title="Only food falling into the checked categories will appear."></app-food-types>
         <br>
 
-        <h4>Available After:</h4>
-        <md-input-container floatPlaceholder="never" (click)="picker.open()">
-            <input mdInput [mdDatepicker]="picker" placeholder="mm/dd/yyyy" formControlName="earliestExpireDate" readonly="true">
+        <h5>Available After:</h5>
+        <md-input-container title="Only food available on or after this date will appear." floatPlaceholder="never" (click)="picker.open()">
+            <input mdInput [mdDatepicker]="picker" placeholder="mm/dd/yyyy" formControlName="availableAfterDate" readonly="true">
             <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
             <md-datepicker touchUi="true" #picker></md-datepicker>
         </md-input-container>
         <br>
 
-        <h4>Perishability:</h4>
+        <h5>Perishability:</h5>
         <div>
             <label class="checkbox-compress">
-                <md-checkbox formControlName="perishable">Perishable</md-checkbox>
+                <md-checkbox title="Check this if food that needs refrigeration should appear." formControlName="perishable">Perishable</md-checkbox>
             </label>
             <br>
             <label class="checkbox-compress">
-                <md-checkbox formControlName="notPerishable">Not Perishable</md-checkbox>
+                <md-checkbox title="Check this if food that does not need refrigeration should appear." formControlName="notPerishable">Not Perishable</md-checkbox>
             </label>
         </div>
 
         <!-- Any additional filters will be transclused here -->
-        <ng-content select="[botton]"></ng-content>
+        <ng-content select="[bottom]"></ng-content>
 
     </div>
 

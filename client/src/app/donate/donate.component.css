@@ -1,18 +1,6 @@
-label:not(.perishable-label) {
+label {
     font-weight: bold;
     font-size: 25px;
-}
-
-input[type=checkbox]
-{
-  /* Double-sized Checkboxes */
-  transform: scale(2);
-  -ms-transform: scale(2); /* IE */
-  -moz-transform: scale(2); /* FF */
-  -webkit-transform: scale(2); /* Safari and Chrome */
-  -o-transform: scale(2); /* Opera */
-  padding: 10px;
-  margin-left: 10px;
 }
 
 #perishable-yes {
@@ -29,6 +17,7 @@ md-form-field, md-input-container {
 
 :host ::ng-deep .mat-form-field-infix {
     border: none;
+    cursor: text;
 }
 
 .inline-error {
@@ -47,6 +36,15 @@ button.mat-raised-button.mat-primary.file-upload-button {
 .crop-container, .crop-sample-container {
     display: inline-block;
     vertical-align: top;
+}
+
+#donation-summary, #thankyou-text {
+    font-size: 18px;
+}
+
+::ng-deep .mat-horizontal-stepper-header-container {
+    height: 0px;
+    visibility: hidden;
 }
 
 /* Custom mobile formatting */

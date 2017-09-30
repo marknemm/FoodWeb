@@ -19,9 +19,7 @@ export class FoodListingsFiltersComponent implements OnInit {
 
     @Input() private header: string = 'Filters';
     @Input() private maxWidth: string = null;
-    @Input() private defaultLatestExpireNow: boolean = true;
-
-    @ViewChild('FoodTypesComponent') private foodTypesComponent: FoodTypesComponent;
+    @Input() private defaultAvailableAfterDateNow: boolean = true;
 
 
     constructor(private formBuilder: FormBuilder) {
@@ -32,7 +30,8 @@ export class FoodListingsFiltersComponent implements OnInit {
 
     ngOnInit() {
         // Actual form group initialization requires Input to be evaluated, so must be in init!
-        this.addControl('earliestExpireDate', new FormControl(this.defaultLatestExpireNow ? new Date() : null));
+        this.addControl('foodTypes', new FormControl(null));
+        this.addControl('availableAfterDate', new FormControl(this.defaultAvailableAfterDateNow ? new Date() : null));
         this.addControl('perishable', new FormControl(true));
         this.addControl('notPerishable', new FormControl(true));
 
@@ -63,11 +62,6 @@ export class FoodListingsFiltersComponent implements OnInit {
         this.filtersForm.valueChanges.subscribe((data: any) => {
             callback(this.genFilterValues(excludeDisabled));
         });
-
-        // Listen for changes in child Food Types component.
-        this.foodTypesComponent.onFoodTypesUpdate((foodTypes: string[]) => {
-            callback(this.genFilterValues(excludeDisabled, foodTypes));
-        });
     }
 
 
@@ -92,11 +86,6 @@ export class FoodListingsFiltersComponent implements OnInit {
      * @return The Food Listings filter values.
      */
     private genFilterValues(excludeDisabled: boolean = false, foodTypes?: string[]): FoodListingsFilters {
-
-        let foodListingsFilters = (excludeDisabled ? this.filtersForm.value : this.filtersForm.getRawValue());
-        // See if we have been passed foodTypes or if we need to retrieve them from the Food Types component.
-        foodListingsFilters.foodTypes = (foodTypes == null) ? this.foodTypesComponent.getSelectedFoodTypes()
-                                                            : foodListingsFilters.foodTypes = foodTypes;
-        return foodListingsFilters;
+        return (excludeDisabled ? this.filtersForm.value : this.filtersForm.getRawValue());
     }
 }

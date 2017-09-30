@@ -6,6 +6,11 @@
 	align-items: center;
 }
 
+#details-img {
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
 .link-content {
     margin-top: 5px;
     margin-bottom: 5px;

@@ -4,16 +4,16 @@
 SELECT dropFunction('addfoodlisting');
 CREATE OR REPLACE FUNCTION addFoodListing
 (
-    _donorAppUserKey    INTEGER,                        -- The Donor ID.
-    _foodTypes          FoodType[],                     -- What Food Types is this?
-    _foodTitle          VARCHAR(100),                   -- The title (short description) of the Food Listing.
-    _perishable         BOOLEAN,                        -- Is the food perishable?
-    _availableUntilDate TEXT,                           -- The date when the donated food will no longer be available.
-    _totalWeight        INTEGER         DEFAULT NULL,   -- The total weight of (all parts/units of) the Food Listing (in pounds).
-    _foodDescription    TEXT            DEFAULT NULL,   -- A (long) description of the Food Listing.
-    _imgURL             TEXT            DEFAULT NULL,   -- URL for the image being stored/uploaded.
-    _unitsCount         INTEGER         DEFAULT 1,      -- The total number of available parts/units that the Food Listing is split up into.
-    _unitsLabel         TEXT            DEFAULT NULL    -- The user provided label for each unit.
+    _donatedByAppUserKey    INTEGER,                        -- The Donor ID.
+    _foodTypes              FoodType[],                     -- What Food Types is this?
+    _foodTitle              VARCHAR(100),                   -- The title (short description) of the Food Listing.
+    _perishable             BOOLEAN,                        -- Is the food perishable?
+    _availableUntilDate     TEXT,                           -- The date when the donated food will no longer be available.
+    _totalWeight            INTEGER         DEFAULT NULL,   -- The total weight of (all parts/units of) the Food Listing (in pounds).
+    _foodDescription        TEXT            DEFAULT NULL,   -- A (long) description of the Food Listing.
+    _imgURL                 TEXT            DEFAULT NULL,   -- URL for the image being stored/uploaded.
+    _unitsCount             INTEGER         DEFAULT 1,      -- The total number of available parts/units that the Food Listing is split up into.
+    _unitsLabel             TEXT            DEFAULT NULL    -- The user provided label for each unit.
 )
 RETURNS INTEGER -- The food listing key of the new food listing (can be used as reference for edit).
 AS $$
@@ -38,7 +38,7 @@ BEGIN
         imgUrl
     )
     VALUES (
-        _donorAppUserKey,
+        _donatedByAppUserKey,
         _foodTitle,
         _perishable,
         _availableUntilTimeStamp,

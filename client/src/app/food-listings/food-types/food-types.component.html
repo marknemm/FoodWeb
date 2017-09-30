@@ -10,12 +10,18 @@
                             'warn-foreground': (required && numSelections() === 0 && extraValidation)
                         }">
 
-            <!-- Loop through segments of Food Types based on numColumns -->
+            <!-- Loop through segments of checkable Food Types based on numColumns -->
             <ng-container *ngFor="let foodTypeInd of createFoodTypesRange(column)">
-                <label class="checkbox-compress no-select">
-                    <md-checkbox [formControlName]="foodTypes[foodTypeInd]">{{foodTypes[foodTypeInd]}}</md-checkbox>
-                </label>
-                <br>
+
+                <md-checkbox *ngIf="!displayOnly" [formControlName]="foodTypes[foodTypeInd]" class="checkbox-compress no-select">
+                    {{ foodTypes[foodTypeInd] }}
+                </md-checkbox>
+
+                <!-- In display only mode only display text of Food Listings that have been selected (have associated value of true) -->
+                <div *ngIf="displayOnly && foodTypesForm.get(foodTypes[foodTypeInd]).value">
+                    {{ foodTypes[foodTypeInd] }}
+                </div>
+                
             </ng-container>
 
         </div>

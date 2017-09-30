@@ -1,4 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Observable } from "rxjs/Observable";
 
 import { FoodListingsComponent } from "../food-listings/food-listings.component";
@@ -15,22 +16,37 @@ import { FoodListingsFilters } from "../../../../shared/food-listings/food-listi
     styleUrls: ['./receive.component.css'],
     providers: [ClaimFoodListingService]
 })
-export class ReceiveComponent {
-    
+export class ReceiveComponent implements OnInit {
+
     @ViewChild('foodListingsFilters') private foodListingsFiltersComponent: FoodListingsFiltersComponent;
     @ViewChild('foodListings') private foodListingsComponent: FoodListingsComponent;
 
+    private minFiltersWidth: string;
+
+
     constructor(
         private claimFoodListingService: ClaimFoodListingService
-    ) { }
+    ) {
+        this.minFiltersWidth = '262px';
+    }
+
+
+    /**
+     * Executes after all input bindings have been established but before view children have been fully initialized.
+     */
+    public ngOnInit(): void {
+        this.foodListingsFiltersComponent.addControl('matchAvailability', new FormControl(true));
+    }
+
 
     /**
      * Executed after all of the view children have been initialized (so safest to interact with them now).
      */
-    ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.foodListingsComponent.refreshFoodListings(this.foodListingsFiltersComponent.getFilterValues());
         this.foodListingsFiltersComponent.onFiltersUpdate(this.foodListingsComponent.refreshFoodListings.bind(this.foodListingsComponent));
     }
+
 
     /**
      * Claims the currently selected Food Listing.

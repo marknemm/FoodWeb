@@ -11,7 +11,7 @@ import { AgmCoreModule } from '@agm/core';
 import { ImageCropperModule } from 'ng2-img-cropper';
 import { BusyModule } from 'angular2-busy';
 
-import { MdListModule,
+import { MdStepperModule,
          MdCheckboxModule,
          MdRadioModule,
          MdButtonModule,
@@ -19,6 +19,7 @@ import { MdListModule,
          MdSelectModule,
          MdDatepickerModule,
          MdNativeDateModule,
+         MdTooltipModule,
          DateAdapter,
          NativeDateAdapter,
          MD_DATE_FORMATS,
@@ -133,9 +134,10 @@ const appRoutes: Routes = [
         FormsModule,
         ReactiveFormsModule,
         BusyModule,
-        MdListModule,
+        MdStepperModule,
         MdCheckboxModule,
         MdRadioModule,
+        MdTooltipModule,
         MdInputModule,
         MdSelectModule,
         MdButtonModule,

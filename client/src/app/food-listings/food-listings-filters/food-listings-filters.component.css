@@ -8,5 +8,9 @@ md-input-container, input {
 }
 
 md-input-container, input, md-datepicker-toggle {
-    font-size: 20px;
+    font-size: 18px;
+}
+
+md-input-container {
+    margin-bottom: 5px;
 }

@@ -28,9 +28,9 @@ export class FoodListingsFilters {
          */
         public notPerishable?: boolean,
         /**
-         * Determines the minimum date that retrieved items may expire after.
+         * Determines the minimum date that retrieved items must still be available by.
          */
-        public earliestExpireDate?: Date,
+        public availableAfterDate?: Date,
         /**
          * Determines the maximum distance from the requesting entity that donations must fall within.
          */
@@ -46,6 +46,10 @@ export class FoodListingsFilters {
         /**
          * Determines what food listings we should bring back based off of their status (unclaimed, claimed, or donated relative to the current user).
          */
-        public listingsStatus: LISTINGS_STATUS = LISTINGS_STATUS.unclaimedListings
+        public listingsStatus: LISTINGS_STATUS = LISTINGS_STATUS.unclaimedListings,
+        /**
+         * Determines whether or not we should only pull back food listings where the associated Donors' availability schedules partially overlap with this user's.
+         */
+        public matchAvailability?: boolean
     ) { }
 }

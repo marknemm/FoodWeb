@@ -39,7 +39,13 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+
+--SELECT * FROM updateAvailability(2, '{"(Saturday, 12:00 PM, 2:00 PM)"}'::TimeRange[]);
 /*
-SELECT * FROM updateAvailability(1, '{"(Saturday, 9:00 AM, 1:00 PM)"}'::TimeRange[]);
-SELECT * FROM AppUserAvailability;
+SELECT  AppUser.email,
+        AppUserAvailability.weekday,
+        appUserAvailability.startTime,
+        appUserAvailability.endTime
+FROM AppUser
+INNER JOIN AppUserAvailability ON AppUser.appUserKey = AppUserAvailability.appUserKey;
 */

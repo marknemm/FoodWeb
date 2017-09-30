@@ -1,17 +1,32 @@
 <div class="container-fluid">
     <div id="receivers-row" class="row">
 
-        <div id="food-listings-filters" class="col-md-0 col-lg-3 no-pad" [style.max-width]="'262px'">
-            <app-food-listings-filters header="Search Filters" [formGroup]="foodListingsFiltersComponent.filtersForm" maxWidth="262px" #foodListingsFilters>
+        <div id="food-listings-filters" class="col-md-0 col-lg-3 no-pad" [style.max-width]="minFiltersWidth">
+            <app-food-listings-filters header="Search Filters" [formGroup]="foodListingsFiltersComponent.filtersForm" [maxWidth]="minFiltersWidth" #foodListingsFilters>
+
+                <ng-container bottom>
+                    
+                    <br>
+                    <h5>Availability Schedule:</h5>
+                    <div class="form-group">
+                        <md-checkbox formControlName="matchAvailability" title="Check this to ensure each donor is available when you are.">
+                            Match Availability
+                        </md-checkbox>
+                    </div>
+
+                </ng-container>
+
             </app-food-listings-filters>
         </div>
 
         <div id="food-listings" class="col-md-12 col-lg-9">
+
             <app-food-listings header="Available Food" #foodListings>
                 <ng-container details-modal-footer>
                     <button md-raised-button color="primary" class="button-md" (click)="claimSelectedFoodListing()">Claim</button>
                 </ng-container>
             </app-food-listings>
+            
         </div>
         
     </div>

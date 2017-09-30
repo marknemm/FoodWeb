@@ -1,113 +1,175 @@
 <div class="container">
-    <h1>Donor Form</h1>
-    <hr>
 
-    <div [hidden]="submitted" class="row">
+    <md-horizontal-stepper #stepper>
 
-        <div class="col-md-12 col-lg-5 mobile-center">
-            <div class="crop-container" [style.max-width]="cropperSettings.canvasWidth + 'px'">
-                <button md-raised-button color="primary" class="button-md file-upload-button"
-                [style.width]="cropperSettings.canvasWidth + 'px'" (click)="hiddenFileInput.click()">Upload Image</button>
-    
-                <!-- This is an invisible file input triggerd by above button -->
-                <div class="file-upload" style="display:none;">
-                    <input #hiddenFileInput id="custom-input" type="file" (change)="fileChangeListener($event)">
-                </div>
-    
-                <img-cropper #cropper [image]="this" [settings]="cropperSettings"></img-cropper>
-            </div>
+        <!-- Step 1: Donation -->
+        <md-step>
 
-            <!-- Sample of actual result cropped image -->
-            <div *ngIf="this.image != null" class="crop-sample-container" [style.width]="cropperSettings.canvasWidth + 'px'">
-                <label>Crop Result</label>
-                <img [src]="this.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
-            </div>
-        </div>
+            <h1>Donor Form</h1>
+            <hr>
 
-        <div class="col-md-12 col-lg-7">
-            <form [formGroup]="foodForm" (ngSubmit)="onSubmit(foodForm, $event)">
+            <form class="row" [formGroup]="foodForm" (ngSubmit)="ifValidProceedToReview(foodForm.value, foodForm.valid, stepper)">
 
-                <div class="form-group">
-                    <label for="foodTitle">Title</label>
-                    <md-input-container class="input-group" floatPlaceholder="never">
-                        <textarea #foodTitle mdInput mdTextareaAutosize id="foodTitle" placeholder="Short Description"
-                                    formControlName="foodTitle" [errorStateMatcher]="isInvalid.bind(this)" required [maxlength]="foodTitleMaxLength"></textarea>
-                        <md-hint align="end">{{foodTitle.value.length}} / {{foodTitleMaxLength}}</md-hint>
-                    </md-input-container>
+                <div class="col-md-12 col-lg-5 mobile-center">
+                    <div class="crop-container" [style.max-width]="cropperSettings.canvasWidth + 'px'">
+
+                        <button md-raised-button type="button" color="primary" class="button-md file-upload-button"
+                         [style.width]="cropperSettings.canvasWidth + 'px'" (click)="hiddenFileInput.click()">Upload Image</button>
+            
+                        <!-- This is an invisible file input triggerd by above button -->
+                        <div class="file-upload" style="display:none;">
+                            <input #hiddenFileInput id="custom-input" type="file" (change)="fileChangeListener($event)">
+                        </div>
+            
+                        <img-cropper #cropper [image]="this" [settings]="cropperSettings"></img-cropper>
+
+                    </div>
+
+                    <!-- Sample of actual result cropped image -->
+                    <div *ngIf="this.image != null" class="crop-sample-container" [style.width]="cropperSettings.canvasWidth + 'px'">
+                        <label>Crop Result</label>
+                        <img [src]="this.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="availableUntilDate">Available Until</label>
-                    <md-input-container class="input-group" floatPlaceholder="never">
-                        <input #availableUntilDate mdInput id="availableUntilDate" [mdDatepicker]="picker" placeholder="mm/dd/yyyy"
-                            formControlName="availableUntilDate" [errorStateMatcher]="isInvalid.bind(this)" required>
-                        <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
-                        <md-datepicker touchUi="true" #picker opened="true"></md-datepicker>
-                    </md-input-container>
+                <div class="col-md-12 col-lg-7">
+
+                    <!-- foodTitle -->
+                    <div class="form-group">
+                        <label for="foodTitle">Title</label>
+                        <md-form-field class="input-group" floatPlaceholder="never">
+                            <textarea #foodTitle mdInput mdTextareaAutosize id="foodTitle" placeholder="Short Description"
+                                formControlName="foodTitle" [errorStateMatcher]="isInvalid.bind(this)" required [maxlength]="foodTitleMaxLength"></textarea>
+                            <md-hint align="end">{{foodTitle.value.length}} / {{foodTitleMaxLength}}</md-hint>
+                        </md-form-field>
+                    </div>
+
+                    <!-- availableUntilDate -->
+                    <div class="form-group">
+                        <label for="availableUntilDate">Available Until</label>
+                        <md-input-container class="input-group" floatPlaceholder="never">
+                            <input #availableUntilDate mdInput id="availableUntilDate" [mdDatepicker]="picker" placeholder="mm/dd/yyyy"
+                                formControlName="availableUntilDate" [errorStateMatcher]="isInvalid.bind(this)" required>
+                            <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
+                            <md-datepicker touchUi="true" #picker opened="true"></md-datepicker>
+                        </md-input-container>
+                    </div>
+
+                    <!-- foodTypes -->
+                    <div class="form-group">
+                        <label>Food Types</label>
+                        <app-food-types #foodTypesInput formControlName="foodTypes" [initiallyChecked]="false" [numColumns]="2"
+                         [required]="true" [extraValidation]="forceValidation"></app-food-types>
+                    </div>
+
+                    <!-- perishable -->
+                    <div class="form-group">
+                        <label>Perishable</label><br>
+                        <md-radio-group #perishable [ngClass]="{'warn-foreground': isInvalid(foodForm.controls.perishable)}" formControlName="perishable" required>
+                            <md-radio-button name="perishable" id="perishable-yes" [value]="true">Yes</md-radio-button>
+                            <md-radio-button name="perishable" [value]="false">No</md-radio-button>
+                        </md-radio-group>
+                    </div>
+
+                    <!-- foodDescription -->
+                    <div class="form-group">
+                        <label for="foodDescription">Description</label>
+                        <md-input-container class="input-group" floatPlaceholder="never">
+                            <textarea #foodDescription mdInput mdTextareaAutosize id="foodDescription" placeholder="Long Description"
+                                formControlName="foodDescription" [errorStateMatcher]="isInvalid.bind(this)"></textarea>
+                        </md-input-container>
+                    </div>
+
+                    <!-- This button does not actually submit data to the server, but rather moves to the confirmation display -->
+                    <button md-raised-button type="submit" color="primary" class="button-md">Next</button>
+
                 </div>
-
-                <div class="form-group">
-                    <label>Food Types</label>
-                    <app-food-types [initiallyChecked]="false" [numColumns]="2" [required]="true" [extraValidation]="forceValidation" #FoodTypesComponent></app-food-types>
-                </div>
-
-                <div class="form-group">
-                    <label>Perishable</label><br>
-                    <md-radio-group [ngClass]="{'warn-foreground': isInvalid(foodForm.controls.perishable)}" formControlName="perishable" required>
-                        <label for="perishable-yes-check" id="perishable-yes" class="perishable-label no-select">
-                            <md-radio-button name="perishable" id="perishable-yes-check" [value]="true">Yes</md-radio-button>
-                        </label>
-                        <label for="perishable-no-check" class="perishable-label no-select">
-                            <md-radio-button name="perishable" id="perishable-no-check" [value]="false">No</md-radio-button>
-                        </label>
-                    </md-radio-group>
-                </div>
-
-                <div class="form-group">
-                    <label for="foodDescription">Description</label>
-                    <md-input-container class="input-group" floatPlaceholder="never">
-                        <textarea #foodDescription mdInput mdTextareaAutosize id="foodDescription" placeholder="Long Description"
-                                  formControlName="foodDescription" [errorStateMatcher]="isInvalid.bind(this)"></textarea>
-                    </md-input-container>
-                </div>
-
-                <button md-raised-button type="submit" color="primary" class="button-md">Submit</button>
-
             </form>
-        </div>
-    </div>
 
+        </md-step>
 
-    <div *ngIf="submitted">
-        <h2>Thank-you for submitting the following:</h2>
+        <!-- Step 2: Donation Review -->
+        <md-step>
 
-        <div class="row">
-            <div class="col-md-2">Title</div>
-            <div class="col-md-10 pull-left">{{ foodTitle.value }}</div>
-        </div>
+            <h1>Donation Review</h1>
+            <hr>
 
-        <div class="row">
-            <div class="col-md-2">Food Type(s)</div>
-            <div class="col-md-10 pull-left">{{ foodTypesComponent.getSelectedFoodTypes() }}</div>
-        </div>
+            <div id="donation-summary" class="row">
 
-        <div class="row">
-            <div class="col-md-2">Description</div>
-            <div class="col-md-10 pull-left">{{ foodDescription.value }}</div>
-        </div>
+                <div *ngIf="this.image != null" class="col-md-12 col-lg-5 mobile-center">
 
-        <div class="row">
-            <div class="col-md-2">Perishabe</div>
-            <div class="col-md-10 pull-left">{{ (perishable.value === true) ? 'Yes' : 'No' }}</div>
-        </div>
+                    <img [style.width]="cropperSettings.canvasWidth + 'px'" [src]="this.image"
+                    [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
 
-        <div class="row">
-            <div class="col-md-2">Available Until</div>
-            <div class="col-md-10 pull-left">{{ availableUntilDate.value | dateFormatter }}</div>
-        </div>
-        <br>
+                </div>
 
-        <button md-raised-button color="primary" class="button-md" (click)="donateAgain()">Donate Again</button>
-        <button md-raised-button color="primary" class="button-md" >Edit Donation</button>
-    </div>
+                <div class="col-lg-7">
+
+                    <div class="form-group">
+                        <h4>Title</h4>
+                        <div>{{ foodForm.get('foodTitle').value }}</div>
+                    </div>
+            
+                    <div class="form-group">
+                        <h4>Available Until</h4>
+                        <div>{{ foodForm.get('availableUntilDate').value | dateFormatter }}</div>
+                    </div>
+            
+                    <div class="form-group">
+                        <h4>Food Type(s)</h4>
+                        <app-food-types #foodTypesDisplay [displayOnly]="true" [initiallyChecked]="false"
+                            [ngModel]="foodForm.get('foodTypes').value" [numColumns]="2"></app-food-types>
+                    </div>
+
+                    <div class="form-group">
+                        <h4>Perishable</h4>
+                        <div>{{ (foodForm.get('perishable').value === true) ? 'Yes' : 'No' }}</div>
+                    </div>
+            
+                    <div class="form-group">
+                        <h4>Description</h4>
+                        <div *ngIf="!isFormControlEmpty(foodForm.get('foodDescription'))">{{ foodForm.get('foodDescription').value }}</div>
+                        <div *ngIf="isFormControlEmpty(foodForm.get('foodDescription'))">-- None --</div>
+                    </div>
+
+                    <br>
+                    <button md-raised-button color="primary" class="button-md" type="button"
+                        (click)="editDonation(stepper)">Edit Donation</button>
+                    <button md-raised-button color="primary" class="button-md" type="button"
+                        (click)="submitDonation(foodForm.value, foodForm.valid, stepper)" style="margin-left:20px;">Confirm Donation</button>
+
+                </div>
+
+            </div>
+
+        </md-step>
+
+        <!-- Step 2: Thank-you for Donating -->
+        <md-step>
+
+            <h1>Thank-you for Donating</h1>
+            <hr>
+
+            <div id="thankyou-text" class="row">
+
+                <div class="col-md-12">
+
+                    <p>
+                        Your donation is now available to be claimed by a receiver.
+                    </p>
+
+                    <p>
+                        You can view your donations by clicking on the <b>Cart</b> tab at the top of the page.<br>
+                        You can also click <a [routerLink]="['/cart']" class="link-content">here</a> to view your cart.
+                    </p>
+
+                    <button md-raised-button color="primary" class="button-md" type="button" (click)="donateAgain(stepper)">Donate Again</button>
+
+                </div>
+ 
+            </div>
+
+        </md-step>
+
+    </md-horizontal-stepper>
 </div>

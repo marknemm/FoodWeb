@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { Component, OnInit, Input, Output, forwardRef } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 // import { ActivatedRoute } from "@angular/router";
 
 import { FoodTypesService } from "./food-types.service";
@@ -8,14 +8,30 @@ import { FoodTypesService } from "./food-types.service";
 @Component({
     selector: 'app-food-types',
     templateUrl: './food-types.component.html',
-    styleUrls: ['./food-types.component.css']
+    styleUrls: ['./food-types.component.css'],
+    providers: [
+        { 
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => FoodTypesComponent),
+            multi: true
+        }
+    ]
 })
-export class FoodTypesComponent implements OnInit {
+export class FoodTypesComponent implements OnInit, ControlValueAccessor {
 
     private foodTypes: string[];
     private foodTypesForm: FormGroup;
-    private foodTypesLoaded: boolean;
 
+    /**
+     * A callback function provided by a parent component (via directive such as ngModel).
+     * ControlValueAccessor interface's registerOnChange method is used to register this callback.
+     */
+    private onChange: (selectedFoodTypes: string[]) => void;
+
+    /**
+     * If set to true, then this component will be used to merely display a list of Food Types.
+     */
+    @Input() private displayOnly: boolean = false;
     /**
      * Determines if the Food Type checkboxes should initially be checked. Default is true.
      */
@@ -34,47 +50,102 @@ export class FoodTypesComponent implements OnInit {
     @Input() private extraValidation: boolean = true;
 
     
-    constructor(// private routerSnapshot: ActivatedRoute,
-                private foodTypesService: FoodTypesService)
-    { 
-        this.foodTypes = [];
+    public constructor(
+        // private routerSnapshot: ActivatedRoute,
+        private foodTypesService: FoodTypesService
+    ) {
+        // Simply initialize empty form here. We will fill it with Food Types from server (or client cache) in ngOnInit()!
         this.foodTypesForm = new FormGroup({});
-        this.foodTypesLoaded = false;
     }
 
 
-    ngOnInit() {
+    public ngOnInit(): void {
         // this.foodTypes = this.routerSnapshot.data['value']['foodTypes'];
 
-        /* Ideally, this should resolve immediately because of a resolver used in route to parent component! The Food Types should have
-           already been fetched and cached from the server before this component was initialize and rendered, but just in case we will
-           call getFoodTypes instead of directly getting results form ActiveRoute. */
+        /*  Ideally, this should resolve immediately because of a resolver used in route to parent component! The Food Types should have
+            already been fetched and cached from the server before this component was initialize and rendered, but just in case we will
+            call getFoodTypes instead of directly getting results form ActiveRoute. */
         this.foodTypesService.getFoodTypes().subscribe((foodTypes: string[]) => {
+
             this.foodTypes = foodTypes;
 
             for (let i: number = 0; i < this.foodTypes.length; i++) {
                 this.foodTypesForm.addControl(this.foodTypes[i], new FormControl(this.initiallyChecked));
             }
 
-            this.foodTypesLoaded = true;
-            this.foodTypesForm.updateValueAndValidity(); // When finished adding all food type controls, then trigger a value update so callback will
-                                                         // get the selected food types.
+            // Register listener for changes in the contained checkbox form's values.
+            this.registerFormUpdateListener();
+            this.foodTypesForm.updateValueAndValidity(); /* When finished adding all food type controls, then trigger a value update
+                                                            so callback will get the selected food types. */
         });
     }
-    
+
 
     /**
-     * Called whenever there is an update to the Food Types form controls. Will provide the caller with a (string) list of the selected Food Types.
-     * @param callback The callback function that will be given the selected Food Types.
+     * Registers a listener with the underlying Food Types Form. This listener will be invoked
+     * whenever a Food Type checkbox is modified, will construct a Food Types string array,
+     * and will pass it to the parent component via the listener it has registered with this
+     * (child) component via directive (such as ngModel). The parent originally registers its
+     * listener via the registerOnChange function which is part of the ControlValueAccessor interface.
      */
-    public onFoodTypesUpdate(callback: (foodTypes: string[]) => void): void {
+    private registerFormUpdateListener(): void {
         this.foodTypesForm.valueChanges.subscribe(data => {
-            /* Only signal callback that food types selection(s) have updated if they have been completely loaded. Otherwise, will fire every time
-               a food type control is added in ngOnInit(). */
-            if (this.foodTypesLoaded) {
-                callback(this.getSelectedFoodTypes());
-            }
+            if (this.onChange != null)  this.onChange(this.getSelectedFoodTypes());
         });
+    }
+
+
+    /**
+     * Writes a new value to the contained view model. This function is part of the ControlValueAccessor
+     * interface and is implicitely called by directives (such as ngModel) when the data within this component
+     * should be updated by a parent component.
+     * @param foodTypes The Food Types that are to be set true to signify being present. In the display only view,
+     *                  these Food Types will be the only ones that are present. In a non-display only view,
+     *                  these Food Types will simply be checked off (and present among all others as well).
+     */
+    public writeValue(selectedFoodTypes: string[]): void {
+
+        // Ingore undefined values!
+        if (selectedFoodTypes === undefined || this.foodTypes == null) return;
+
+        // If given a non-null value, then write it.
+        if (selectedFoodTypes !== null) {
+
+            // First set all Food Types to false.
+            for (let i: number = 0; i < this.foodTypes.length; i++) {
+                this.foodTypesForm.controls[this.foodTypes[i]].setValue(false, { emitEvent: false});
+            }
+
+            // Set only selected Food Types to true now.
+            for (let i: number = 0; i < selectedFoodTypes.length; i++) {
+                this.foodTypesForm.controls[selectedFoodTypes[i]].setValue(true, { emitEvent: false });
+            }
+        }
+        // Else we were given null, so set contained value back to original checked (boolean) state.
+        else {
+
+            for (let i: number = 0; i < this.foodTypes.length; i++) {
+                this.foodTypesForm.controls[this.foodTypes[i]].setValue(this.initiallyChecked, { emitEvent: false});
+            }
+        }
+    }
+
+
+    /**
+     * Provides a callback function that shall be invoked whenever there is an update to this component's Food Types view model.
+     * @param onChange The callback function invoked on any change to contained Food Types data.
+     */
+    public registerOnChange(onChange: (selectedFoodTypes: string[]) => void): void {
+        this.onChange = onChange;
+    }
+
+
+    /**
+     * 
+     * @param onTouched 
+     */
+    public registerOnTouched(onTouched: any): void {
+        // TODO.
     }
 
 
@@ -123,20 +194,24 @@ export class FoodTypesComponent implements OnInit {
      * @param column The column that the numeric range shall be generated for (columns are zero based!).
      * @return The array or range of Food Type indexes that are to be rendered in the column.
      */
-    private createFoodTypesRange(column: number) {
+    private createFoodTypesRange(column: number): number[] {
+        
         let range: number[] = [];
 
-        /* Calculate the number of extra Food Types that must be added to the first column if the total number of Food TYpes is not
-           evenly divisble by the number of columns! Also, all other ranges (column begins) must be offset by this amount! */
-        let remainder: number = (this.foodTypes.length % this.numColumns);
+        if (this.foodTypes != null) {
 
-        // Base range parameters off of number of columns specified by parent component and the number of Food Types from server.
-        let rangeLength: number = Math.floor(this.foodTypes.length / this.numColumns);
-        let rangeBegin: number = (column * rangeLength) + (column !== 0 ? remainder : 0);
-        let rangeEnd: number = (rangeBegin + rangeLength) + (column === 0 ? remainder : 0);
+            /*  Calculate the number of extra Food Types that must be added to the first column if the total number of Food TYpes is not
+                evenly divisble by the number of columns! Also, all other ranges (column begins) must be offset by this amount! */
+            let remainder: number = (this.foodTypes.length % this.numColumns);
 
-        for (let i: number = rangeBegin; i < rangeEnd; i++) {
-            range.push(i);
+            // Base range parameters off of number of columns specified by parent component and the number of Food Types from server.
+            let rangeLength: number = Math.floor(this.foodTypes.length / this.numColumns);
+            let rangeBegin: number = (column * rangeLength) + (column !== 0 ? remainder : 0);
+            let rangeEnd: number = (rangeBegin + rangeLength) + (column === 0 ? remainder : 0);
+
+            for (let i: number = rangeBegin; i < rangeEnd; i++) {
+                range.push(i);
+            }
         }
 
         return range;

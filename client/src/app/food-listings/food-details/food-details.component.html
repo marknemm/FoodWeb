@@ -15,15 +15,15 @@
         <!-- Standard modal body -->
         <ng-container *ngIf="!showConfirmDialog">
 
-            <img *ngIf="foodListing.imgUrl != null" [src]="foodListing.imgUrl"
-                id="details-img" align="left" class="modal-img">
-            <p>
+            <img *ngIf="foodListing.imgUrl != null" [src]="foodListing.imgUrl" id="details-img" align="left" class="modal-img">
+            <span>
                 <base-food-listing-info [foodListing]="foodListing"></base-food-listing-info>
 
-                <ng-container *ngIf="foodListing.foodDescription != null">
-                    Description: <b>{{foodListing.foodDescription}}</b>
-                </ng-container>
-            </p>
+                <p *ngIf="foodListing.foodDescription != null">
+                    Description:<br>
+                    {{foodListing.foodDescription}}
+                </p>
+            </span>
 
             <ng-content select="[details-modal-body]"></ng-content>
 
