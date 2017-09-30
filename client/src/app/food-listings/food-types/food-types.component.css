@@ -23,10 +23,6 @@
     font-size: 20px;
 }
 
-.display-food-listing, i {
-    vertical-align: middle;
-}
-
 .faint {
     color: lightgray;
 }

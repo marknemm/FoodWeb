@@ -49,6 +49,11 @@ button:hover, a:hover {
     cursor: hand;
 }
 
+i {
+    vertical-align: middle;
+    margin-top: -4px;
+}
+
 
 /* Shared styles for all modal dialogs in Food Web */
 
