@@ -42,7 +42,7 @@ export function addFoodListing(foodListingUpload: FoodListingUpload, donorAppUse
                       foodListingUpload.totalWeight,
                       foodListingUpload.foodDescription,
                       imageUrl,
-                      foodListingUpload.totalUnitsCount,
+                      foodListingUpload.availableUnitsCount,
                       foodListingUpload.unitsLabel ];
 
     // Execute prepared statement.

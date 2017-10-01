@@ -15,7 +15,6 @@ AS $$
     DECLARE _donorOnHandUnitsCount          INTEGER;
     DECLARE _availableUnitsCount            INTEGER;
     DECLARE _claimedUnitsDeleteCount        INTEGER;
-    DECLARE _totalUnitsCount                INTEGER;
 BEGIN
 
     -- Make sure the food listing we are to delete exists and was donated by user issuing this command.
@@ -105,7 +104,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+/*
 SELECT * FROM FoodListing;
 SELECT removeFoodListing(3, 1);
 SELECT * FROM FoodListing;
-
+*/

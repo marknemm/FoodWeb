@@ -10,12 +10,14 @@
 #slick-left-panel-button {
     position: absolute;
     height: 100%;
-    width: 25px;
+    width: 34px;
     min-width: 0px;
-    right: -25px;
+    right: -34px;
     top:0;
     visibility: hidden;
     z-index: 101;
+    border-top-right-radius: 10%;
+    border-bottom-right-radius: 10%;
     border-top-left-radius: 0%;
     border-bottom-left-radius: 0%;
     transition: right 0.5s linear;
@@ -26,11 +28,18 @@
     outline: none;
 }
 
+.button-shadow {
+    -webkit-box-shadow: 5px 0 5px -2px #888 !important;
+    box-shadow: 5px 0 5px -2px #888 !important;
+}
+
 @media only screen and (max-width: 991px) {
 
     #slick-left-panel {
         position: absolute;
         padding-right: 25px; /* Make room for the button overlap! */
+        border-top-right-radius: 10%;
+        border-bottom-right-radius: 10%;
         width: calc(100vw - 20px);
         right: 100%; /* The default state in mobile mode is to be off the screen to the left */
         transition: transform 0.3s linear;

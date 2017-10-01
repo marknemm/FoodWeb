@@ -65,8 +65,22 @@ export class SlickLeftPanelComponent {
     private toggleIntoView(slickLeftPanel: HTMLElement, slickLeftPanelButton: HTMLElement): void {
         // The toggle-into-view css class contains the translation.
         slickLeftPanel.classList.add('toggle-into-view');
+        slickLeftPanelButton.classList.remove('button-shadow');
         slickLeftPanelButton.style.right = '0px';
         window.onclick = this.handleClickOutsidePanel.bind(this, slickLeftPanel, slickLeftPanelButton);
+    }
+
+
+    /**
+     * Toggles the slickLeftPanel out of the viewport.
+     * @param slickLeftPanel The slickLeftPanel (div) element which will be toggled out of the viewport.
+     * @param slickLeftPanelButton The slickLeftPanelButton (button) element which was pressed.
+     */
+    private toggleOutOfView(slickLeftPanel: HTMLElement, slickLeftPanelButton: HTMLElement): void {
+        window.onclick = null;
+        slickLeftPanel.classList.remove('toggle-into-view');
+        slickLeftPanelButton.classList.add('button-shadow');
+        slickLeftPanelButton.style.right = '-' + slickLeftPanelButton.offsetWidth + 'px';
     }
 
 
@@ -87,18 +101,6 @@ export class SlickLeftPanelComponent {
         if (!this.ignoreClicksOutsidePanel && clickOutsidePanel && clickOutsideIgnoredElement) {
             this.toggleOutOfView(slickLeftPanel, slickLeftPanelButton);
         }
-    }
-
-
-    /**
-     * Toggles the slickLeftPanel out of the viewport.
-     * @param slickLeftPanel The slickLeftPanel (div) element which will be toggled out of the viewport.
-     * @param slickLeftPanelButton The slickLeftPanelButton (button) element which was pressed.
-     */
-    private toggleOutOfView(slickLeftPanel: HTMLElement, slickLeftPanelButton: HTMLElement): void {
-        window.onclick = null;
-        slickLeftPanel.classList.remove('toggle-into-view');
-        slickLeftPanelButton.style.right = '-' + slickLeftPanelButton.offsetWidth + 'px';
     }
 
 

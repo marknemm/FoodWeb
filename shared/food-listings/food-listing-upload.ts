@@ -38,9 +38,9 @@ export class FoodListingUpload {
          */
         public imageUpload?: string,
         /**
-         * The total number of units (parts) contained in the Food Listing.
+         * The total number of available units (parts) contained in the Food Listing.
          */
-        public totalUnitsCount: number = 1,
+        public availableUnitsCount: number = 1,
         /**
          * The units label for the food listing.
          */

@@ -11,6 +11,7 @@
             <form class="row" [formGroup]="foodForm" (ngSubmit)="ifValidProceedToReview(foodForm.value, foodForm.valid, stepper)">
 
                 <div class="col-md-12 col-lg-5 mobile-center">
+
                     <div class="crop-container" [style.max-width]="cropperSettings.canvasWidth + 'px'">
 
                         <button md-raised-button type="button" color="primary" class="button-md file-upload-button"
@@ -27,44 +28,58 @@
 
                     <!-- Sample of actual result cropped image -->
                     <div *ngIf="this.image != null" class="crop-sample-container" [style.width]="cropperSettings.canvasWidth + 'px'">
-                        <label>Crop Result</label>
-                        <img [src]="this.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+                        <h4>Crop Result</h4>
+                        <img [src]="this.image">
                     </div>
+
                 </div>
 
                 <div class="col-md-12 col-lg-7">
 
                     <!-- foodTitle -->
                     <div class="form-group">
-                        <label for="foodTitle">Title</label>
+                        <h4 for="foodTitle">Title</h4>
                         <md-form-field class="input-group" floatPlaceholder="never">
-                            <textarea #foodTitle mdInput mdTextareaAutosize id="foodTitle" placeholder="Short Description"
+                            <textarea #foodTitle mdInput mdTextareaAutosize id="foodTitle" placeholder="Donation Title"
                                 formControlName="foodTitle" [errorStateMatcher]="isInvalid.bind(this)" required [maxlength]="foodTitleMaxLength"></textarea>
-                            <md-hint align="end">{{foodTitle.value.length}} / {{foodTitleMaxLength}}</md-hint>
+                            <md-hint align="end">{{ foodTitle.value.length }} / {{ foodTitleMaxLength }}</md-hint>
                         </md-form-field>
                     </div>
 
-                    <!-- availableUntilDate -->
-                    <div class="form-group">
-                        <label for="availableUntilDate">Available Until</label>
-                        <md-input-container class="input-group" floatPlaceholder="never">
-                            <input #availableUntilDate mdInput id="availableUntilDate" [mdDatepicker]="picker" placeholder="mm/dd/yyyy"
-                                formControlName="availableUntilDate" [errorStateMatcher]="isInvalid.bind(this)" required>
-                            <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
-                            <md-datepicker touchUi="true" #picker opened="true"></md-datepicker>
-                        </md-input-container>
+                    <div class="row">
+
+                        <!-- availableUntilDate -->
+                        <div class="form-group col-md-6">
+                            <h4 for="availableUntilDate">Available Until</h4>
+                            <md-input-container class="input-group" floatPlaceholder="never">
+                                <input #availableUntilDate mdInput id="availableUntilDate" [mdDatepicker]="picker" placeholder="mm/dd/yyyy"
+                                    formControlName="availableUntilDate" [errorStateMatcher]="isInvalid.bind(this)" required>
+                                <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
+                                <md-datepicker touchUi="true" #picker opened="true"></md-datepicker>
+                            </md-input-container>
+                        </div>
+
+                        <!-- totalWeight -->
+                        <div class="form-group col-md-6">
+                            <h4 for="totalWeight">Estimated Weight</h4>
+                            <md-input-container floatPlaceholder="never">
+                                <input mdInput id="totalWeight" placeholder="weight (lbs)" formControlName="totalWeight" type="number" min="0.5" step="0.5" required>
+                                <span mdSuffix>lbs</span>
+                            </md-input-container>
+                        </div>
+
                     </div>
 
                     <!-- foodTypes -->
-                    <div class="form-group">
-                        <label>Food Types</label>
+                    <div class="form-group extra-bottom-margin food-types-container">
+                        <h4>Food Types</h4>
                         <app-food-types #foodTypesInput formControlName="foodTypes" [initiallyChecked]="false" [numColumns]="2"
-                         [required]="true" [extraValidation]="forceValidation"></app-food-types>
+                            [required]="true" [extraValidation]="forceValidation"></app-food-types>
                     </div>
 
                     <!-- perishable -->
-                    <div class="form-group">
-                        <label>Perishable</label><br>
+                    <div class="form-group extra-bottom-margin">
+                        <h4>Perishable</h4>
                         <md-radio-group #perishable [ngClass]="{'warn-foreground': isInvalid(foodForm.controls.perishable)}" formControlName="perishable" required>
                             <md-radio-button name="perishable" id="perishable-yes" [value]="true">Yes</md-radio-button>
                             <md-radio-button name="perishable" [value]="false">No</md-radio-button>
@@ -73,11 +88,41 @@
 
                     <!-- foodDescription -->
                     <div class="form-group">
-                        <label for="foodDescription">Description</label>
+                        <h4 for="foodDescription">Description</h4>
                         <md-input-container class="input-group" floatPlaceholder="never">
-                            <textarea #foodDescription mdInput mdTextareaAutosize id="foodDescription" placeholder="Long Description"
+                            <textarea #foodDescription mdInput mdTextareaAutosize id="foodDescription" placeholder="Donation Description"
                                 formControlName="foodDescription" [errorStateMatcher]="isInvalid.bind(this)"></textarea>
                         </md-input-container>
+                    </div>
+
+                    <!-- units -->
+                    <div class="form-group">
+
+                        <ng-container *ngIf="isSplitIntoUnits()">
+                            <h4>Donation Units</h4>
+                            <div class="row">
+
+                                <!-- availableUnitsCount -->
+                                <div class="col-md-4">
+                                    <md-input-container floatPlaceholder="never">
+                                        <input mdInput placeholder="Units Count" formControlName="availableUnitsCount" type="number" min="1" required>
+                                    </md-input-container>
+                                </div>
+
+                                <!-- unitsh4 -->
+                                <div class="col-md-8">
+                                    <md-input-container floatPlaceholder="never">
+                                        <input mdInput placeholder="Units Label" formControlName="unitsLabel" required>
+                                    </md-input-container>
+                                </div>
+                                
+                            </div>
+                        </ng-container>
+
+                        <span class="link-content">
+                            <a (click)="toggleSplitIntoUnits()">{{ isSplitIntoUnits() ? 'Combine into single unit' : 'Split into multiple units' }}</a>
+                        </span>
+
                     </div>
 
                     <!-- This button does not actually submit data to the server, but rather moves to the confirmation display -->
@@ -110,12 +155,21 @@
                         <div>{{ foodForm.get('foodTitle').value }}</div>
                     </div>
             
-                    <div class="form-group">
-                        <h4>Available Until</h4>
-                        <div>{{ foodForm.get('availableUntilDate').value | dateFormatter }}</div>
+                    <div class="row">
+                    
+                        <div class="form-group col-md-6">
+                            <h4>Available Until</h4>
+                            <div>{{ foodForm.get('availableUntilDate').value | dateFormatter }}</div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <h4>Estimated Weight</h4>
+                            <div>{{ foodForm.get('totalWeight').value }} lbs</div>
+                        </div>
+
                     </div>
             
-                    <div class="form-group">
+                    <div class="form-group food-types-container">
                         <h4>Food Type(s)</h4>
                         <app-food-types #foodTypesDisplay [displayOnly]="true" [initiallyChecked]="false"
                             [ngModel]="foodForm.get('foodTypes').value" [numColumns]="2"></app-food-types>
@@ -123,13 +177,20 @@
 
                     <div class="form-group">
                         <h4>Perishable</h4>
-                        <div>{{ (foodForm.get('perishable').value === true) ? 'Yes' : 'No' }}</div>
+                        <i class="material-icons" *ngIf="foodForm.get('perishable').value" style="color:green">check</i>
+                        <i class="material-icons" *ngIf="!foodForm.get('perishable').value" style="color:red">clear</i>
+                        <span>{{ (foodForm.get('perishable').value === true) ? 'Yes' : 'No' }}</span>
                     </div>
             
                     <div class="form-group">
                         <h4>Description</h4>
                         <div *ngIf="!isFormControlEmpty(foodForm.get('foodDescription'))">{{ foodForm.get('foodDescription').value }}</div>
                         <div *ngIf="isFormControlEmpty(foodForm.get('foodDescription'))">-- None --</div>
+                    </div>
+
+                    <div class="form-group" *ngIf="isSplitIntoUnits()">
+                        <h4>Donation Units</h4>
+                        <div>{{ foodForm.get('availableUnitsCount').value }} {{ foodForm.get('unitsLabel').value }}</div>
                     </div>
 
                     <br>

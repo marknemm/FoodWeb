@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidatorFn, FormControl } from '@angular/forms';
 import { ImageCropperComponent, CropperSettings } from 'ng2-img-cropper';
 import { Observable } from 'rxjs/Observable';
 
@@ -42,28 +42,52 @@ export class DonateComponent implements OnInit {
         // Want to force validators to process on submit. Non-text fields will only validate on submit too!
         this.forceValidation = false;
 
+        // If the window size goes below this threshold, then the cropper must be initialized below the optimal size of 300px.
+        const thresholdCropperWidth: number = 367;
         this.cropperSettings = new CropperSettings();
-        this.cropperSettings.width = 300;
-        this.cropperSettings.height = 300;
+        this.cropperSettings.width = (window.innerWidth < thresholdCropperWidth ? 300 - (thresholdCropperWidth - window.innerWidth)
+                                                                                : 300);
+        this.cropperSettings.height = this.cropperSettings.width;
         this.cropperSettings.croppedWidth = 300;
         this.cropperSettings.croppedHeight = 300;
-        this.cropperSettings.canvasWidth = 320;
-        this.cropperSettings.canvasHeight = 300;
+        this.cropperSettings.canvasWidth = (this.cropperSettings.width + 20);
+        this.cropperSettings.canvasHeight = this.cropperSettings.height;
         this.cropperSettings.noFileInput = true;
         this.cropperSettings.fileType = 'image/jpeg';
 
         this.foodTitleMaxLength = 100;
+
+        this.foodForm = new FormGroup({});
     }
 
 
     public ngOnInit(): void {
-        this.foodForm = this.formBuilder.group({
-            foodTitle: [null, [Validators.required, Validators.maxLength(this.foodTitleMaxLength)]],
-            foodTypes: [null, Validators.required],
-            perishable: [null, Validators.required],
-            foodDescription: [null],
-            availableUntilDate: [null, Validators.required]
-        });
+        let foodListingUpload: FoodListingUpload = new FoodListingUpload();
+
+        // Fill the form group view model based off of the properties found in FoodListingUpload.
+        // This way, our view-model will always be in-sync with the shared object.
+        for (let property in foodListingUpload) {
+
+            if (foodListingUpload.hasOwnProperty(property)) {
+                // All of these members are not included in the form view-model at first!
+                if (    property === 'foodListingKey'
+                    ||  property === 'imageUpload'
+                    ||  property === 'availableUnitsCount'
+                    ||  property === 'unitsLabel')
+                { continue; }
+
+                let validators: ValidatorFn[] = [ Validators.required ];
+
+                // Add additional needed validators for email and password fields.
+                switch(property) {
+                    case 'foodTitle':       validators.push(Validators.maxLength(this.foodTitleMaxLength));     break;
+                    case 'foodDescription': validators = null;                                                  break;
+                }
+
+                this.foodForm.addControl(property, new FormControl(null, validators));
+            }
+
+        }
     }
 
 
@@ -108,6 +132,26 @@ export class DonateComponent implements OnInit {
 
 
     /**
+     * Toggles the display of form controls for splitting the Donation into multiple units.
+     */
+    private toggleSplitIntoUnits(): void {
+        if (this.isSplitIntoUnits()) {
+            this.foodForm.removeControl('availableUnitsCount');
+            this.foodForm.removeControl('unitsLabel');
+        }
+        else {
+            this.foodForm.addControl('availableUnitsCount', new FormControl(null, [ Validators.required, Validators.min(1) ]));
+            this.foodForm.addControl('unitsLabel', new FormControl(null, [ Validators.required ]));
+        }
+    }
+
+
+    private isSplitIntoUnits(): boolean {
+        return (this.foodForm.contains('availableUnitsCount') && this.foodForm.contains('unitsLabel'));
+    }
+
+
+    /**
      * If the form is valid, then it will proceed to the confirmation display.
      * @param stepper The horizontal stepper that will be invoked to proceed to confirmation display if form is valid.
      */
@@ -125,8 +169,6 @@ export class DonateComponent implements OnInit {
      */
     private submitDonation(value: FoodListingUpload, valid: boolean , stepper: MdHorizontalStepper): void {
         
-        event.preventDefault();
-
         let self: DonateComponent = this;
         let observer: Observable<number> = this.addRemoveFoodListingService.addFoodListing(value, this.image);
 
