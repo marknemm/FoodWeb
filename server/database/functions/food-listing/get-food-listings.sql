@@ -34,6 +34,10 @@ RETURNS TABLE
     donorPhoneNumber            CHAR(12),
     donorLastName               VARCHAR(60),
     donorFirstName              VARCHAR(60),
+    donorOnHandUnitsCount       INTEGER,
+    availableUnitsCount         INTEGER,
+    totalUnitsCount             INTEGER,
+    unitsLabel                  TEXT,
     availableUntilDate          TEXT,
     foodDescription             TEXT,
     imgUrl                      TEXT
@@ -210,6 +214,10 @@ BEGIN
             DonatedByContactInfo.phone,
             DonatedByAppUser.lastName,
             DonatedByAppUser.firstName,
+            (SELECT getDonorOnHandUnitsCount(FoodListing.foodListingKey)),
+            (SELECT getAvailableUnitsCount(FoodListing.foodListingKey)),
+            (SELECT getTotalUnitsCount(FoodListing.foodListingKey)),
+            FoodListing.unitsLabel,
             TO_CHAR(FoodListing.availableUntilDate, 'MM/DD/YYYY'),
             FoodListing.foodDescription,
             FoodListing.imgUrl
@@ -238,7 +246,7 @@ GROUP BY FoodListing.foodListingKey;
 
 --SELECT * FROM FoodListingFoodTypeMap;
 
---SELECT * FROM getFoodListings(1, 0, 1000, NULL, NULL, NULL, NULL, TRUE, FALSE, FALSE, TRUE);
+--SELECT * FROM getFoodListings(1, 0, 1000, 52, NULL, NULL, NULL, TRUE, FALSE, FALSE, TRUE);
 --SELECT * FROM RelativeAvailabilityDates;
 
 /*

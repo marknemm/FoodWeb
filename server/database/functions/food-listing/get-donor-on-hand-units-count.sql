@@ -10,9 +10,9 @@ RETURNS INTEGER -- The count of donor on hand units for a given Food Listing.
 AS $$
 
     -- Calculate the number of donor on hand units for the given Food Listing.
-    SELECT      availableUnitsCount + CAST(SUM(claimedUnitsCount) AS INTEGER)
+    SELECT      availableUnitsCount + COALESCE(CAST(SUM(claimedUnitsCount) AS INTEGER), 0)
     FROM        FoodListing
-    INNER JOIN  ClaimedFoodListing ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
+    LEFT JOIN   ClaimedFoodListing ON FoodListing.foodListingKey = ClaimedFoodListing.foodListingKey
     WHERE       FoodListing.foodListingKey = _foodListingKey
       AND       NOT EXISTS (
                     SELECT 1 FROM   DeliveryFoodListing

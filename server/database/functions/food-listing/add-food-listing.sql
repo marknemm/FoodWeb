@@ -34,6 +34,7 @@ BEGIN
         perishable,
         availableUntilDate,
         availableUnitsCount,
+        unitsLabel,
         foodDescription,
         imgUrl
     )
@@ -43,6 +44,7 @@ BEGIN
         _perishable,
         _availableUntilTimeStamp,
         _unitsCount,
+        _unitsLabel,
         _foodDescription,
         _imgURL
     )
