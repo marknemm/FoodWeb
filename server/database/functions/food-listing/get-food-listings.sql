@@ -36,6 +36,7 @@ RETURNS TABLE
     donorFirstName              VARCHAR(60),
     donorOnHandUnitsCount       INTEGER,
     availableUnitsCount         INTEGER,
+    myClaimedUnitsCount         INTEGER,
     totalUnitsCount             INTEGER,
     unitsLabel                  TEXT,
     availableUntilDate          TEXT,
@@ -216,6 +217,7 @@ BEGIN
             DonatedByAppUser.firstName,
             (SELECT getDonorOnHandUnitsCount(FoodListing.foodListingKey)),
             (SELECT getAvailableUnitsCount(FoodListing.foodListingKey)),
+            (SELECT getUserClaimedUnitsCount(FoodListing.foodListingKey, _appUserKey)),
             (SELECT getTotalUnitsCount(FoodListing.foodListingKey)),
             FoodListing.unitsLabel,
             TO_CHAR(FoodListing.availableUntilDate, 'MM/DD/YYYY'),
@@ -246,7 +248,7 @@ GROUP BY FoodListing.foodListingKey;
 
 --SELECT * FROM FoodListingFoodTypeMap;
 
---SELECT * FROM getFoodListings(1, 0, 1000, 52, NULL, NULL, NULL, TRUE, FALSE, FALSE, TRUE);
+--SELECT * FROM getFoodListings(1, 0, 1000, 52, NULL, NULL, NULL, FALSE, FALSE, FALSE, TRUE);
 --SELECT * FROM RelativeAvailabilityDates;
 
 /*

@@ -78,6 +78,10 @@ function generateResultArray(rows: Array<any>): Array<FoodListing> {
             rows[i].fooddescription,
             rows[i].perishable,
             rows[i].availableuntildate,
+            rows[i].availableunitscount,
+            rows[i].donoronhandunitscount,
+            rows[i].totalunitscount,
+            rows[i].unitslabel,
             rows[i].imgurl             
         ));
     }

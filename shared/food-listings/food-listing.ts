@@ -25,6 +25,23 @@ export class FoodListing {
          */
         public availableUntilDate?: string,
         /**
+         * The number of units of a Food Listing that are available (have not been claimed).
+         */
+        public availableUnitsCount?: number,
+        /**
+         * The number of units of a Food Listing that are still in possession of the Donor.
+         * In other words, these units have not left the Donor's facility (not in delivery phase).
+         */
+        public donorOnHandUnitsCount?: number,
+        /**
+         * The total number of units that a Food Listing has been split into.
+         */
+        public totalUnitsCount?: number,
+        /**
+         * The user given label for the units that the Food Listing has been split into (e.g. cans, bottles, lbs, etc).
+         */
+        public unitsLabel?: string,
+        /**
          * The url of a saved Food Listing that will be used to display the associated image.
          */
         public imgUrl?: string

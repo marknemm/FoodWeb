@@ -54,6 +54,23 @@
                 <div>
                     <b>Available Until:</b> {{ foodListing.availableUntilDate }}
                 </div>
+                <br>
+
+                <div>
+                    <b>Available Count:</b> {{ foodListing.availableUnitsCount }} {{ foodListing.unitsLabel }}
+                </div>
+
+                <div *ngIf="isDonorCart">
+                    <b>Donor On-Hand Count:</b> {{ foodListing.donorOnHandUnitsCount }} {{ foodListing.unitsLabel }}
+                </div>
+
+                <div *ngIf="isReceiverCart">
+                    <b>Claimed Count:</b> {{ foodListing.claimedUnitsCount }} {{ foodListing.unitsLabel }}
+                </div>
+
+                <div>
+                    <b>Total Count:</b> {{ foodListing.totalUnitsCount }} {{ foodListing.unitsLabel }}
+                </div>
     
                 <ng-content select="[food-listing-info]"></ng-content>
             </div>

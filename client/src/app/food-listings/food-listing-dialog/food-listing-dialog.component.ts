@@ -14,6 +14,15 @@ export class FoodListingDialogComponent {
 
     @ViewChild('detailsHTML') private detailsHTML: HTMLTemplateElement;
 
+    /**
+     * Determines if this dialog is displaying Food Listing info for a Receiver's Cart. Default is false.
+     */
+    @Input() private isReceiverCart: boolean = false;
+    /**
+     * Determines if this dialog is displaying Food Listing info for a Donor's Cart. Default is false.
+     */
+    @Input() private isDonorCart: boolean = false;
+
     private foodListing: FoodListing;
     private modalFoodListingDetails: NgbModalRef;
 

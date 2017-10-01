@@ -25,7 +25,7 @@ export class FoodListingsComponent {
     private selectedFoodListingIndex: number;
 
 
-    constructor(
+    public constructor(
         private getFoodListingsService: GetFoodListingsService
     ) {
         this.foodListings = new Array<FoodListing>();
