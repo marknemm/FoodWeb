@@ -48,6 +48,7 @@ import { SessionDataService } from "./common-util/session-data.service";
 import { FoodTypesService } from './food-listings/food-types/food-types.service';
 import { DateFormatterPipe } from "./common-util/date-formatter.pipe";
 import { AutoFocusDirective } from './common-util/auto-focus.directive';
+import { DeliverComponent } from './deliver/deliver.component';
 
 
 const appRoutes: Routes = [
@@ -119,7 +120,8 @@ const appRoutes: Routes = [
         CartComponent,
         AppUserInfoComponent,
         AutoFocusDirective,
-        FoodListingDialogComponent
+        FoodListingDialogComponent,
+        DeliverComponent
     ],
     imports: [
         NgbModule.forRoot(),

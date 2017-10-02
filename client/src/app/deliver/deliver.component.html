@@ -1,0 +1,65 @@
+<h3>{{header}}</h3>
+<hr>
+
+
+<!-- This is the Food Listings (generated via loop) -->
+<ng-container *ngFor="let foodListing of foodListings; let i = index">
+
+    <div class="food-listing-container">
+
+        <div class="food-listing-img-container">
+            <img *ngIf="foodListing.imgUrl != null" [src]="foodListing.imgUrl"/>
+        </div>
+
+        <div [ngClass]="{ 'food-listing-contents': (foodListing.imgUrl != null) }">
+            <h4 class="link-content food-listing-title">
+                <a (click)="showDetails(i)" title="Click for Details">{{ foodListing.foodTitle }}</a>
+            </h4>
+            <br>
+
+            <div>
+                <b>Donated By:</b>
+                <ng-container *ngIf="foodListing.donorOrganizationName != null">
+                    {{ foodListing.donorOrganizationName }}
+                </ng-container>
+                <ng-container *ngIf="foodListing.donorOrganizationName == null">
+                    {{ foodListing.donorFirstName }} {{ foodListing.donorLastName }}
+                </ng-container>
+            </div>
+            <br>
+
+            <div>
+                <b>Description:</b> {{ foodListing.foodDescription }}
+            </div>
+            <br>
+            
+            <div>
+                <b>Available Until:</b> {{ foodListing.availableUntilDate }}
+            </div>
+
+            <ng-content select="[food-listing-info]"></ng-content>
+        </div>
+
+    </div>
+    <hr>
+    
+</ng-container>
+
+
+<!-- This is our modal popup. It is separated into its own (child) component.
+     Simply pass down transcluded HTML into this child component here! -->
+<food-listing-dialog #FoodListingDialogComponent>
+
+    <ng-container confirm-modal-body>
+        <ng-content select="[confirm-modal-body]"></ng-content>
+    </ng-container>
+
+    <ng-container details-modal-footer>
+        <ng-content select="[details-modal-footer]"></ng-content>
+    </ng-container>
+    
+    <ng-container confirm-modal-footer>
+        <ng-content select="[confirm-modal-footer]"></ng-content>
+    </ng-container>
+
+</food-listing-dialog>

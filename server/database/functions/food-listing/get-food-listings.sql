@@ -31,7 +31,7 @@ RETURNS TABLE
     donorOrganizationCity       VARCHAR(60),
     donorOrganizationState      CHAR(2),
     donorOrganizationZip        INTEGER,
-    donorPhoneNumber            CHAR(12),
+    donorOrganizationPhone      CHAR(12),
     donorLastName               VARCHAR(60),
     donorFirstName              VARCHAR(60),
     donorOnHandUnitsCount       INTEGER,

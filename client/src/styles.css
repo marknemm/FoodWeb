@@ -35,6 +35,15 @@ html, body {
                             supported by Chrome and Opera */
 }
 
+.inline-block {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.no-word-wrap {
+    white-space: nowrap;
+}
+
 .center-text {
     text-align: center;
     vertical-align: middle;

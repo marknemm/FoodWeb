@@ -247,5 +247,5 @@ function sendUserEmail(sessionData: SessionData, verificationToken: string) : Pr
         .catch((err) => {
             console.log(err);
             throw new Error('Sorry, unable to send signup verification email');
-       });
+        });
 }

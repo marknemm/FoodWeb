@@ -1,6 +1,7 @@
 'use strict';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { connect, query, Client, QueryResult } from '../database-util/connection-pool';
+import { copyDatabaseOutputToSharedObject } from '../database-util/database-output-to-shared-object';
 import { checkPassword } from './password-util';
 import { SessionData, AppUserInfo } from "../common-util/session-data";
 
@@ -56,22 +57,24 @@ function analyzeGetAppUserInfoResult(email: string, password: string, getAppUser
         
         return checkPassword(password, hashPassword)
             .then((isMatch: boolean) => {
+
                 if (isMatch) {
-                    let appUserInfo: AppUserInfo = new AppUserInfo(firstRowResult.email,
-                                                                   firstRowResult.lastname, firstRowResult.firstname,
-                                                                   firstRowResult.address, firstRowResult.city,
-                                                                   firstRowResult.state, firstRowResult.zip, firstRowResult.phone,
-                                                                   firstRowResult.isdonor, firstRowResult.isreceiver,
-                                                                   firstRowResult.organizationname);
-                    return Promise.resolve(
-                        new SessionData(appUserInfo, firstRowResult.appuserkey, firstRowResult.signupverified)
-                    );
+
+                    // Fill App User Information.
+                    let appUserInfo: AppUserInfo = new AppUserInfo();
+                    copyDatabaseOutputToSharedObject(firstRowResult, appUserInfo, 'AppUserInfo');
+
+                    // Fill Session Data.
+                    let sessionData: SessionData = new SessionData(appUserInfo);
+                    copyDatabaseOutputToSharedObject(firstRowResult, sessionData, 'SessionData');
+
+                    return Promise.resolve(sessionData);
                 }
+
                 return Promise.reject(new Error('Password is incorrect'));
             });
     }
+
     // Otherwise, we could not find an AppUser with username or email in database.
-    else {
-        return Promise.reject(new Error('AppUser could not be found with email: ' + email));
-    }
+    return Promise.reject(new Error('AppUser could not be found with email: ' + email));
 }

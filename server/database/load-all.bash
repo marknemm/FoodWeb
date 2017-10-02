@@ -38,12 +38,19 @@ psql --set=sslmode=require -h $server -p $port -d $database -U $username \
     -f functions/app-user/add-app-user.sql \
     -f functions/app-user/get-app-user-info.sql \
     -f functions/app-user/update-app-user.sql \
+    -f functions/app-user/update-availability \
+ \
+    -f functions/food-listing/units-count-heuristics/get-available-units-count.sql \
+    -f functions/food-listing/units-count-heuristics/get-donor-on-hand-units-count.sql \
+    -f functions/food-listing/units-count-heuristics/get-total-units-count.sql \
+    -f functions/food-listing/units-count-heuristics/get-user-claimed-units-count.sql \
  \
     -f functions/food-listing/add-food-listing.sql \
     -f functions/food-listing/get-food-listings.sql \
     -f functions/food-listing/claim-food-listing.sql \
     -f functions/food-listing/unclaim-food-listing.sql \
     -f functions/food-listing/remove-food-listing.sql \
+    -f functions/food-listing/update-food-listing.sql \
  \
     -c "SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name;" \
     -c "SELECT routines.routine_name FROM information_schema.routines WHERE routines.specific_schema = 'public' ORDER BY routines.routine_name;"

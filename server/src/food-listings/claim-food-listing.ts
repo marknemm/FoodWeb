@@ -23,6 +23,7 @@ function claimOrUnclaimFoodListing(foodListingKey: number, claimedByAppUserKey: 
 
     return query(queryString, queryArgs)
         .then((queryResult: QueryResult) => {
+            logSqlQueryResult(queryResult.rows);
             console.log((isClaim ? 'Claim' : 'Unclaim') + ' Food Listing Successful.');
             return Promise.resolve();
         })

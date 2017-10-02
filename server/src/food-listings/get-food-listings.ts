@@ -1,11 +1,11 @@
 'use strict'
 import { connect, query, Client, QueryResult } from '../database-util/connection-pool';
 import { fixNullQueryArgs, toPostgresArray } from './../database-util/prepared-statement-util';
+import { copyDatabaseOutputToSharedObject } from './../database-util/database-output-to-shared-object';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { FoodListingsFilters, LISTINGS_STATUS } from '../../../shared/food-listings/food-listings-filters';
 import { FoodListing } from "../../../shared/food-listings/food-listing";
 import { DateFormatter } from "../../../shared/common-util/date-formatter";
-let postgresArray = require('postgres-array');
 
 
 export function getFoodListings(filters: FoodListingsFilters, appUserKey: number): Promise<Array<FoodListing>> {
@@ -63,27 +63,10 @@ function generateResultArray(rows: Array<any>): Array<FoodListing> {
     let result: Array<FoodListing> = [];
 
     for (let i: number = 0; i < rows.length; i++) {
-        result.push(new FoodListing(
-            rows[i].foodlistingkey,
-            rows[i].foodtitle,
-            rows[i].donororganizationname,
-            rows[i].donororganizationaddress,
-            rows[i].donororganizationcity,
-            rows[i].donororganizationstate,
-            rows[i].donororganizationzip,
-            rows[i].donorlastname,
-            rows[i].donorfirstname,
-            null,
-            postgresArray.parse(rows[i].foodtypes),
-            rows[i].fooddescription,
-            rows[i].perishable,
-            rows[i].availableuntildate,
-            rows[i].availableunitscount,
-            rows[i].donoronhandunitscount,
-            rows[i].totalunitscount,
-            rows[i].unitslabel,
-            rows[i].imgurl             
-        ));
+        
+        let foodListing: FoodListing = new FoodListing();
+        copyDatabaseOutputToSharedObject(rows[i], foodListing, 'FoodListing');
+        result.push(foodListing);
     }
 
     return result;

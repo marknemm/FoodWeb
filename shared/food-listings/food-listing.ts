@@ -11,12 +11,13 @@ export class FoodListing {
         public donorOrganizationCity?: string,
         public donorOrganizationState?: string,
         public donorOrganizationZip?: number,
+        /**
+         * The driving distance of the donor from the receiver that is browsing the food listings.
+         */
+        public donorDrivingDistance?: number,
+        public donorOrganizationPhone?: string,
         public donorLastName?: string,
         public donorFirstName?: string,
-        /**
-         * The distance of the donor from the receiver that is browsing the food listings.
-         */
-        public donorDistance?: number,
         public foodTypes?: string[],
         public foodDescription?: string,
         public perishable?: boolean,
