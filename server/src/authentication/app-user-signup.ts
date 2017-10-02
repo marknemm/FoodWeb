@@ -1,6 +1,7 @@
 'use strict';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
-import { connect, query } from '../database-util/connection-pool';
+import { query } from '../database-util/connection-pool';
+import { copyDatabaseOutputToSharedObject } from '../database-util/database-output-to-shared-object';
 import { Client, QueryResult } from 'pg';
 
 import { hashPassword } from './password-util';
@@ -47,8 +48,7 @@ export function signup(appUserSignupInfo: AppUserInfo, password: string, appUser
         })
         // Handle the results of the add or update (includes sending verification email).
         .then((addOrUpdateResult: QueryResult) => {
-            return (!isUpdate) ? handleAddResult(appUserSignupInfo, addOrUpdateResult)
-                               : null; // Don't care about result on update!
+            return handleResult(addOrUpdateResult, isUpdate);
         })
         .catch((err: Error) => {
             console.log(err);
@@ -126,7 +126,7 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
                                   appUserSignupInfo.phone,
                                   appUserSignupInfo.isDonor,
                                   appUserSignupInfo.isReceiver,
-                                  null, // Availability times.
+                                  null, // TODO: Availability times.
                                   appUserSignupInfo.organizationName ];
     
     // If an update, then we will need additional appUserKey argument at beginning of list.
@@ -136,10 +136,6 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
     logSqlQueryExec(queryString, queryArgs);
 
     return query(queryString, queryArgs)
-        .then((insertQueryResult: QueryResult) => {
-            console.log('Successfully ' + (isUpdate ? 'updated' : 'added') + ' user in database.');
-            return insertQueryResult;
-        })
         .catch((err: Error) => {
             console.log(err);
             if(!isUpdate)   throw new Error('Account already exists with the provided email address.');
@@ -149,24 +145,33 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
 
 
 /**
- * Analyzes and handles the result of the insert into AppUser query. Generates the final result of the signup operation.
- * @param appUserSignupInfo The .
- * @param addResult The result of the insert of the new user into the AppUser table.
+ * Analyzes and handles the result of the insert into or update AppUser query. Generates the final result of the signup operation.
+ * @param addOrUpdateResult The result of the add or update AppUser query.
+ * @param isUpdate A flag that is set true if this is the update of signup (AppUser) information. It is false by default for original signup.
+ * @return A promise containing new or updated SessionData upon success of the add or update operation.
  */
-function handleAddResult(appUserSignupInfo: AppUserInfo, addResult: QueryResult): Promise<SessionData> {
-    logSqlQueryResult(addResult.rows);
+function handleResult(addOrUpdateResult: QueryResult, isUpdate: boolean): Promise<SessionData> {
+    logSqlQueryResult(addOrUpdateResult.rows);
 
-    // Success: we got one row back when adding a new App User.
-    if (addResult.rows.length === 1) {
-        let sessionData: SessionData = new SessionData(appUserSignupInfo, addResult.rows[0].appuserkey, false);
-        let verificationToken = addResult.rows[0].verificationtoken;
+    if (addOrUpdateResult.rows.length === 1) {
 
-        console.log('The addAppUser SQL function executed successfully.');
-        // Now we must send the verification email using the verification token form the results.
-        return sendVerificationEmail(sessionData, verificationToken);
+        let appUserInfo: AppUserInfo = new AppUserInfo();
+        copyDatabaseOutputToSharedObject(addOrUpdateResult.rows[0], appUserInfo);
+
+        let sessionData: SessionData = new SessionData(appUserInfo);
+        copyDatabaseOutputToSharedObject(addOrUpdateResult.rows[0], sessionData);
+
+        console.log('Successfully ' + (isUpdate ? 'updated' : 'added') + ' user in database.');
+        // Send a signup verification email if the mode was not update. Otherwise, just resolve a promise and return sessionData.
+        let result: Promise<SessionData> = isUpdate ? Promise.resolve()
+                                                    : sendVerificationEmail(sessionData, addOrUpdateResult.rows[0].verificationToken);
+        
+        return result.then(() => {
+            return sessionData;
+        });
     }
-    
-    // Fail: we didn't get one row back when adding a new App User.
+
+    // Fail: we didn't get one row back when adding or updating a new App User.
     console.log('Incorrect result returned form addAppUser SQL function.');
     throw new Error('An unexpected error has occured.');
 }
@@ -177,7 +182,7 @@ function handleAddResult(appUserSignupInfo: AppUserInfo, addResult: QueryResult)
  * @param appUserSignupInfo The app user signup information.
  * @param verificationToken The verification token to be sent via email.
  */
-function sendVerificationEmail(sessionData: SessionData, verificationToken: string): Promise<SessionData> {
+function sendVerificationEmail(sessionData: SessionData, verificationToken: string): Promise<any> {
 
     const isOrganization: boolean = (sessionData.appUserInfo.organizationName != null);
     return (isOrganization ? sendOrganizationEmail(sessionData, verificationToken)

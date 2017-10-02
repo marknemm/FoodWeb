@@ -10,23 +10,7 @@ CREATE OR REPLACE FUNCTION getAppUserInfo
     _firstName          VARCHAR(60)     DEFAULT NULL,
     _organizationName   VARCHAR(128)    DEFAULT NULL
 )
-RETURNS TABLE
-(
-    appUserKey          INTEGER,
-    email               VARCHAR(128),
-    password            CHAR(60),
-    lastName            VARCHAR(60),
-    firstName           VARCHAR(60),
-    organizationName    VARCHAR(128),
-    address             VARCHAR(128),
-    city                VARCHAR(60),
-    state               CHAR(2),
-    zip                 INTEGER,
-    phone               CHAR(12),
-    isDonor             BOOLEAN,
-    isReceiver          BOOLEAN,
-    signupVerified      BOOLEAN
-)
+RETURNS SETOF AppUserInfoAggregate
 AS $$
 BEGIN
 
@@ -41,17 +25,18 @@ BEGIN
             ContactInfo.city,
             ContactInfo.state,
             ContactInfo.zip,
+            ContactInfo.addressLatitude,
+            ContactInfo.addressLongitude,
             ContactInfo.phone,
             AppUser.isDonor,
             AppUser.isReceiver,
-            NOT EXISTS (
-                SELECT 1 FROM UnverifiedAppUser
-                WHERE  UnverifiedAppUser.appUserKey = AppUser.appUserKey
-            )
+            (UnverifiedAppUser.appUserKey IS NULL),
+            UnverifiedAppUser.verificationToken
     FROM AppUser
-    INNER JOIN AppUserPassword  ON AppUser.appUserKey = AppUserPassword.appUserKey
-    INNER JOIN ContactInfo      ON AppUser.appUserKey = ContactInfo.appUserKey
-    LEFT JOIN  Organization     ON AppUser.appUserKey = Organization.appUserKey
+    INNER JOIN AppUserPassword      ON AppUser.appUserKey = AppUserPassword.appUserKey
+    INNER JOIN ContactInfo          ON AppUser.appUserKey = ContactInfo.appUserKey
+    LEFT JOIN  Organization         ON AppUser.appUserKey = Organization.appUserKey
+    LEFT JOIN  UnverifiedAppUser    ON AppUser.appUserKey = UnverifiedAppUser.appUserKey
     WHERE (_appUserKey IS NULL       OR AppUser.appUserKey = _appUserKey)
       AND (_email IS NULL            OR AppUser.email = _email)
       AND (_lastName IS NULL         OR AppUser.lastName = _lastName)
@@ -66,4 +51,4 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT * FROM getAppUserInfo(NULL, 'marknemm@buffalo.edu');
+--SELECT * FROM getAppUserInfo(NULL, 'marknemm@buffalo.edu');

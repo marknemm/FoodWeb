@@ -20,12 +20,8 @@ CREATE OR REPLACE FUNCTION addAppUser
                                                           -- **** TODO: Get rid of DEFAULT NULL once we fully implement signup with time ranges!!!
     _organizationName       VARCHAR(128)    DEFAULT NULL
 )
--- Returns the new App User's key and verification token (to be sent to email).
-RETURNS TABLE
-(
-    appUserKey          INTEGER,
-    verificationToken   CHAR(20)
-)
+-- Returns the new App User's information.
+RETURNS SETOF AppUserInfoAggregate
 AS $$
     DECLARE _appUserKey         INTEGER;
     DECLARE _verificationToken  CHAR(20);
@@ -79,13 +75,13 @@ BEGIN
     _verificationToken := (SELECT * FROM addUnverifiedAppUser (_appUserKey));
 
     RETURN QUERY
-    SELECT _appUserKey, _verificationToken;
+    SELECT * FROM getAppUserInfo(_appUserKey);
 
 END;
 $$ LANGUAGE plpgsql;
 
 
 /*
-SELECT addAppUser('testemail1@test.com', 'testPass', 'testLast', 'testFirst', '11 test rd.',
-                  43.123456, 83.33, 'Test City', 'NY', 12345, '777-777-7777', true, true, '{"(Monday, 11:00 AM, 3:00 PM)"}'::TimeRange[]);
+SELECT * FROM addAppUser('testemail5@test.com', 'testPass', 'testLast', 'testFirst', '11 test rd.',
+                         43.123456, 83.33, 'Test City', 'NY', 12345, '777-777-7777', true, true, '{"(Monday, 11:00 AM, 3:00 PM)"}'::TimeRange[]);
 */

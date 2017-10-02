@@ -22,7 +22,7 @@ CREATE OR REPLACE FUNCTION updateAppUser
     _availabilityTimeRanges TimeRange[]         DEFAULT NULL, -- See TimeRange type definition in app-user-availability.sql!
     _organizationName       VARCHAR(128)        DEFAULT NULL
 )
-RETURNS VOID
+RETURNS SETOF AppUserInfoAggregate
 AS $$
 BEGIN
 
@@ -61,10 +61,13 @@ BEGIN
         VALUES (_appUserKey, _password);
     END IF;
 
-    IF (_availibilityTimeRanges IS NOT NULL)
+    IF (_availabilityTimeRanges IS NOT NULL)
     THEN
         PERFORM updateAvailability(_appUserKey, _availabilityTimeRanges);
     END IF;
+
+    RETURN QUERY
+    SELECT * FROM getAppUserInfo(_appUserKey);
     
 END;
 $$ LANGUAGE plpgsql;

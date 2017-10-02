@@ -1,4 +1,5 @@
 let geocoder = require('geocoder');
+let googleDistance = require('google-distance');
 
 
 /**
@@ -26,6 +27,7 @@ export function getGPSCoordinates(address: string, city: string, state: string, 
     return new Promise<GPSCoordinates>(
 
         function(resolve: (value?: GPSCoordinates) => void, reject: (reason?: Error) => void) {
+
             let fullAddress = address + ', ' + city + ', ' + zip.toString();
 
             // Use geocoder (which basically invokes Google Maps API) to get information on address.
@@ -37,10 +39,11 @@ export function getGPSCoordinates(address: string, city: string, state: string, 
                     let latitude: number = data.results[0].geometry.location.lat;
                     let longitude: number = data.results[0].geometry.location.lng;
                     console.log('Successfully generated GPS coordinates: (' + latitude + ', ' + longitude + ')');
-                    resolve(new GPSCoordinates(latitude, longitude));
+                    return resolve(new GPSCoordinates(latitude, longitude));
                 }
                 
                 // On failure.
+                console.log(err);
                 reject(new Error('Invalid address provided.'));
             });
         }
@@ -48,4 +51,32 @@ export function getGPSCoordinates(address: string, city: string, state: string, 
 }
 
 
+export function getDrivingDistances(originLatitude: number, originLongitude: number,
+                                    destinationLatitudes: number[], destinationLongitudes: number[]): Promise<number[]>
+{
+    return new Promise<number[]>(
 
+        function (resolve: (value?: number[]) => void, reject: (reason?: Error) => void) {
+
+            let origins: string[] = [ originLatitude.toString() + ',' + originLongitude.toString() ];
+            
+            googleDistance.get(
+                {
+                    origins: origins,
+                    destinations: ['San Diego, CA','Seattle, WA'],
+                    units: 'imperial'
+                },
+                function(err, data) {
+                    
+                    if (!err) {
+                        console.log(data);
+                        return resolve();
+                    }
+
+                    console.log(err);
+                    return reject(new Error('Unexpected error encountered when calculating driving distances.'));
+                }
+            );
+        }
+    );
+}

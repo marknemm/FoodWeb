@@ -20,9 +20,11 @@ export class SessionData {
 
 
     constructor(
-        public appUserInfo?:    AppUserInfo,
-        public appUserKey?:     number,
-        public signupVerified?: boolean
+        public appUserInfo?:        AppUserInfo,
+        public appUserKey?:         number,
+        public addressLatitude?:    number,
+        public addressLongitude?:   number,
+        public signupVerified?:     boolean
     ) { }
 
 

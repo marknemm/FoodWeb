@@ -100,15 +100,8 @@ export function handleUpdateAppUserRequest(request: Request, response: Response)
     let currentPassword: string = updateAppUserRequest.currentPassword;
 
     updateAppUser(appUserUpdateInfo, newPassword, currentPassword, sessionData)
-        .then(() => {
-
-            // Iterate through appUserUpdateInfo fields and update session info for all non-null values.
-            for (let field in appUserUpdateInfo) {
-                if (appUserUpdateInfo.hasOwnProperty(field) && appUserUpdateInfo[field] != null) {
-                    sessionData.appUserInfo[field] = appUserUpdateInfo[field];
-                }
-            }
-
+        .then((sessionData: SessionData) => {
+            SessionData.saveSessionData(request, sessionData);
             response.send(new FoodWebResponse(true, 'App User Update Successful'));
         })
         .catch((err: Error) => {

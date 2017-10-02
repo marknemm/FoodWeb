@@ -15,7 +15,9 @@ import { Validation } from "../../../shared/common-util/validation";
  * @param appUserSessionData The session data for the App User. Contains the current email and address info of the App User.
  * @return A promise without a payload. If it resolves, then the update was successful.
  */
-export function updateAppUser(appUserUpdateInfo: AppUserInfo, newPassword: string, currentPasswordCheck: string, appUserSessionData: SessionData): Promise<void> {
+export function updateAppUser(appUserUpdateInfo: AppUserInfo, newPassword: string,
+                              currentPasswordCheck: string, appUserSessionData: SessionData): Promise<SessionData>
+{
     // Make sure that update information is in a correct format.
     let validationErr: Error = Validation.validateAppUserInfo(appUserUpdateInfo, newPassword);
     if (validationErr != null)  throw validationErr;
@@ -49,6 +51,7 @@ export function updateAppUser(appUserUpdateInfo: AppUserInfo, newPassword: strin
  * @return A promise that will resolve if the password is correct and reject if it is not.
  */
 function checkPassword(currentEmail: string, currentPassword: string): Promise<void> {
+
     return login(currentEmail, currentPassword)
         .then(() => {
             console.log('Password check successful.');
@@ -91,12 +94,14 @@ function fillAddressUpdateInfo(appUserUpdateInfo: AppUserInfo, appUserSessionInf
  * @param appUserUpdateInfo The app user update information.
  * @param newPassword The new password for the app user.
  * @param appUserUpdateKey The key identifier of the app user to be updated.
+ * @return A promise resolving to the updated Session Data on success.
  */
-function performDatabaseUpdate(appUserUpdateInfo: AppUserInfo, newPassword: string, appUserUpdateKey: number): Promise<void> {
+function performDatabaseUpdate(appUserUpdateInfo: AppUserInfo, newPassword: string, appUserUpdateKey: number): Promise<SessionData> {
+
     return signup(appUserUpdateInfo, newPassword, appUserUpdateKey)
-        .then(() => {
+        .then((sessionData: SessionData) => {
             console.log('App User update successful.');
-            return Promise.resolve();
+            return Promise.resolve(sessionData);
         })
         .catch((err: Error) => {
             console.log(err);
