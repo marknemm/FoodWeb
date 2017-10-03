@@ -60,12 +60,10 @@ function analyzeGetAppUserInfoResult(email: string, password: string, getAppUser
 
                 if (isMatch) {
 
-                    // Fill App User Information.
-                    let appUserInfo: AppUserInfo = new AppUserInfo();
-                    copyDatabaseOutputToSharedObject(firstRowResult, appUserInfo, 'AppUserInfo');
-
                     // Fill Session Data.
-                    let sessionData: SessionData = new SessionData(appUserInfo);
+                    let sessionData: SessionData = new SessionData();
+                    copyDatabaseOutputToSharedObject(firstRowResult, sessionData.appUserInfo, 'SessionData.AppUserInfo');
+                    copyDatabaseOutputToSharedObject(firstRowResult, sessionData.gpsCoordinates, 'SessionData.GPSCoordinates');
                     copyDatabaseOutputToSharedObject(firstRowResult, sessionData, 'SessionData');
 
                     return Promise.resolve(sessionData);

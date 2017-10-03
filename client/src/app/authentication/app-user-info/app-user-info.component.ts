@@ -23,12 +23,10 @@ export class AppUserInfoComponent {
     private stateList: string[];
     
     private isOrganization: boolean;
-    private emailLabel: string;
-    private firstNameLabel: string;
-    private lastNameLabel: string;
     
     private appUserInfoForm: FormGroup;
     private editFlags: Map<string, boolean>;
+    private errMsgs: Map<string, string>;
     private busySaveConfig: FoodWebBusyConfig;
 
 
@@ -42,19 +40,10 @@ export class AppUserInfoComponent {
 
         // Set some form labels based off of whether or not user is an organization.
         this.isOrganization = (appUserInfo.organizationName != null);
-        if (this.isOrganization) {
-            this.emailLabel = 'Organization Email';
-            this.firstNameLabel = 'Admin First Name';
-            this.lastNameLabel = 'Admin Last Name';
-        }
-        else {
-            this.emailLabel = 'Email';
-            this.firstNameLabel = 'First Name';
-            this.lastNameLabel = 'Last Name';
-        }
 
         this.appUserInfoForm = new FormGroup({});
         this.editFlags = new Map<string, boolean>();
+        this.errMsgs = new Map<string, string>();
 
         // Loader symbol with this configuration will be displayed if we are stuck saving for a noticably long period of time.
         this.busySaveConfig = new FoodWebBusyConfig('Saving');
@@ -68,6 +57,7 @@ export class AppUserInfoComponent {
                 // Add additional needed validators for email and password fields.
                 switch(property) {
                     case 'email':       validators.push(Validators.email);                                  break;
+                    case 'state':       validators.push(Validators.minLength(2));                           break;
                     case 'zip':         validators.push(Validators.pattern(Validation.ZIP_REGEX));          break;
                     case 'phone':       validators.push(Validators.pattern(Validation.PHONE_REGEX));        break;
                 }
@@ -75,6 +65,7 @@ export class AppUserInfoComponent {
                 let initValue: any = (appUserInfo[property] == null) ? '' : appUserInfo[property];
                 this.appUserInfoForm.addControl(property, new FormControl(initValue.toString(), validators));
                 this.editFlags.set(property, false);
+                this.errMsgs.set(property, null);
             }
         }
 
@@ -109,67 +100,11 @@ export class AppUserInfoComponent {
 
 
     /**
-     * Saves the new password value.
-     */
-    private savePassword(): void {
-        // Make sure we can see valid state.
-        this.forceValidation(this.controls.currentPassword);
-        this.forceValidation(this.controls.password);
-        this.forceValidation(this.controls.confirmPassword);
-
-        // First validate the current password and confirm password fields before saving the password.
-        if (   this.isValid(this.controls.currentPassword)
-            && this.isValid(this.controls.confirmPassword))
-        {
-            this.save(this.controls.password, 'password');
-        }
-    }
-
-
-    /**
-     * Saves the value of a field and disables edit mode for the given field if the value of the field is valid.
-     * @param saveFormControl The form control that the save is associated with.
-     * @param saveFormControlName The name of the form control used for switching off the associated edit flag.
-     */
-    private save(saveFormControl: AbstractControl, saveFormControlName: string): void {
-        // Make sure we can see valid state.
-        this.forceValidation(saveFormControl);
-
-        if (this.isValid(saveFormControl)) {
-            let appUserInfoUpdate: AppUserInfo = new AppUserInfo();
-
-            // Grab current password entered by user if this is a password update.
-            let newPassword: string = null;
-            let currentPassword: string = null;
-            if (saveFormControlName === 'password') {
-                newPassword = saveFormControl.value;
-                currentPassword = this.controls.currentPassword.value;
-            }
-            else {
-                // Only send entry that is being saved to the server. AppUserInfo field will have same name as corresponding view model form control!
-                appUserInfoUpdate[saveFormControlName] = saveFormControl.value;
-            }
-
-            // Send save field update to server and listen for response.
-            let observable: Observable<FoodWebResponse> = this.appUserUpdateService.updateAppUserInfo(appUserInfoUpdate, newPassword, currentPassword);
-            this.busySaveConfig.busy = observable.subscribe((response: FoodWebResponse) => {
-                if (response.success) {
-                    this.editFlags.set(saveFormControlName, false); // Set edit off for this valid field.
-                }
-                else {
-                    console.log(response.message);
-                }
-            });
-        }
-    }
-
-
-    /**
      * Validator used to check if the password and confirm password values are equal.
      * @return null if they are equal, or { passwordConfirmed: false } object if they are not.
      */
-    private passwordConfirmed(): { passwordConfirmed: boolean } 
-    {
+    private passwordConfirmed(): { passwordConfirmed: boolean } {
+
         // If the password and confirm password fields match or the fields do not yet exist.
         if (   this.controls.password == null
             || this.controls.confirmPassword == null
@@ -179,6 +114,89 @@ export class AppUserInfoComponent {
         }
 
         return { passwordConfirmed: true }; // Invalid (return passwordConfirmed error flag)
+    }
+
+
+    /**
+     * Saves the new password value.
+     * @param currentPasswordName The form control name for the current password.
+     * @param newPasswordName The form control name for the new password.
+     * @param confirmPasswordName The form control name for the confirm password.
+     */
+    private savePassword(currentPasswordName: string, newPasswordName: string, confirmPasswordName: string): void {
+
+        let currentPassword: AbstractControl = this.controls[currentPasswordName];
+        let newPassword: AbstractControl = this.controls[newPasswordName];
+        let confirmPassword: AbstractControl = this.controls[confirmPasswordName];
+
+        // Make sure we can see valid states.
+        this.forceValidation(currentPassword);
+        this.forceValidation(newPassword);
+        this.forceValidation(confirmPassword);
+
+        // First validate the password fields before saving the password.
+        if (   this.isValid(currentPassword)
+            && this.isValid(newPassword)
+            && this.isValid(confirmPassword))
+        {
+            this.saveMany([ newPasswordName ], newPassword.value, currentPassword.value);
+        }
+    }
+
+
+    /**
+     * Saves the value of a field and disables edit mode for the given field if the value of the field is valid.
+     * @param saveFormControlName The name of the form control.
+     */
+    private save(saveFormControlName: string): void {
+        this.saveMany([ saveFormControlName ]);
+    }
+
+
+    /**
+     * Saves the value of many fields and disables edit mode for the given fields if the values of the fields are valid.
+     * @param saveFormControlNames The names of the form controls (excluding special case of password).
+     * @param newPassword The new password value if this is an update of the password.
+     * @param currentPassword The current password value if this is an update of the password.
+     */
+    private saveMany(saveFormControlNames: string[], newPassword: string = null, currentPassword: string = null): void {
+
+        let appUserInfoUpdate: AppUserInfo = new AppUserInfo();
+
+        // Go through each form control checking valid state and adding value to update object.
+        for (let i: number = 0; i < saveFormControlNames.length && newPassword === null; i++) {
+
+            let saveFormControl: AbstractControl = this.controls[saveFormControlNames[i]];
+
+            // Check valid state of each control.
+            this.forceValidation(saveFormControl);
+            if (!this.isValid(saveFormControl)) {
+                return; // Invalid control, force out now!
+            }
+            
+            // Handle all non-password updates by writing to appUserInfoUpdate container. Password handled separately from shared
+            // object (AppUserInfo) due to possible security concerns (don't want to make it easy to accidentally send password to client).
+            appUserInfoUpdate[saveFormControlNames[i]] = saveFormControl.value;
+        }
+
+        // Send save field update to server and listen for response.
+        let observable: Observable<FoodWebResponse> = this.appUserUpdateService.updateAppUserInfo(appUserInfoUpdate, newPassword, currentPassword);
+        
+        this.busySaveConfig.busy = observable.subscribe((response: FoodWebResponse) => {
+            console.log(response.message);
+
+            // Update all involved form controls based off of reply from server.
+            for (let i: number = 0; i < saveFormControlNames.length; i++) {
+
+                if(response.success) {
+                    this.errMsgs.set(saveFormControlNames[i], null);
+                    this.editFlags.set(saveFormControlNames[i], false);
+                }
+                else {
+                    this.errMsgs.set(saveFormControlNames[i], response.message);
+                }
+            }
+        });
     }
 
 

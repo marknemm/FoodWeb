@@ -6,51 +6,17 @@
 
         <div class="col-md-6">
             <div class="form-group">
-                <label for="firstName">{{firstNameLabel}}:</label><br>
-                <span *ngIf="!editFlags.get('firstName')" class="link-content" (click)="setEditable('firstName')" title="edit">
-                    {{controls.firstName.value}}<i class="material-icons">&#xe254;</i>
-                </span>
-                <span *ngIf="editFlags.get('firstName')">
-                    <md-input-container class="input-infix">
-                        <input mdInput id="firstName" formControlName="firstName" (keyup.enter)="saveFirstName.click()" autocomplete="on">
-                        <md-icon #saveFirstName mdSuffix (click)="save(controls.firstName, 'firstName')">
-                            <i class="material-icons">save</i>
-                        </md-icon>
-                        <md-error>Required</md-error>
-                    </md-input-container>
-                </span>
-            </div>
-
-            <div class="form-group">
-                <label for="lastName">{{lastNameLabel}}:</label><br>
-                <span *ngIf="!editFlags.get('lastName')" class="link-content" (click)="setEditable('lastName')" title="edit">
-                    {{controls.lastName.value}}<i class="material-icons">&#xe254;</i>
-                </span>
-                <span *ngIf="editFlags.get('lastName')">
-                    <md-input-container class="input-infix">
-                        <input mdInput id="lastName" formControlName="lastName" (keyup.enter)="saveLastName.click()" autocomplete="on">
-                        <md-icon #saveLastName mdSuffix (click)="save(controls.lastName, 'lastName')">
-                            <i class="material-icons">save</i>
-                        </md-icon>
-                        <md-error>Required</md-error>
-                    </md-input-container>
-                </span>
-            </div>
-        </div><!-- col 1 -->
-
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="email">{{emailLabel}}:</label><br>
+                <label for="email">Email Address:</label><br>
                 <span *ngIf="!editFlags.get('email')" class="link-content" (click)="setEditable('email')" title="edit">
                     {{controls.email.value}}<i class="material-icons">&#xe254;</i>
                 </span>
                 <span *ngIf="editFlags.get('email')">
                     <md-input-container class="input-infix">
                         <input mdInput type="email" id="email" formControlName="email" (keyup.enter)="saveEmail.click()" autocomplete="on">
-                        <md-icon #saveEmail mdSuffix (click)="save(controls.email, 'email')">
+                        <md-icon #saveEmail mdSuffix (click)="save('email')">
                             <i class="material-icons">save</i>
                         </md-icon>
-                        <md-error>Required</md-error>
+                        <md-error>Required (must be valid email)</md-error>
                     </md-input-container>
                 </span>
             </div>
@@ -63,7 +29,7 @@
                 <span *ngIf="editFlags.get('organizationName')">
                     <md-input-container class="input-infix">
                         <input mdInput id="organizationName" formControlName="organizationName" (keyup.enter)="saveOrganizationName.click()" autocomplete="on">
-                        <md-icon #saveOrganizationName mdSuffix (click)="save(controls.organizationName, 'organizationName')">
+                        <md-icon #saveOrganizationName mdSuffix (click)="save('organizationName')">
                             <i class="material-icons">save</i>
                         </md-icon>
                         <md-error>Required</md-error>
@@ -72,6 +38,40 @@
             </div>
         </div><!-- col 2 -->
 
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="firstName">{{ isOrganization ? 'Admin First Name' : 'First Name' }}:</label><br>
+                <span *ngIf="!editFlags.get('firstName')" class="link-content" (click)="setEditable('firstName')" title="edit">
+                    {{controls.firstName.value}}<i class="material-icons">&#xe254;</i>
+                </span>
+                <span *ngIf="editFlags.get('firstName')">
+                    <md-input-container class="input-infix">
+                        <input mdInput id="firstName" formControlName="firstName" (keyup.enter)="saveFirstName.click()" autocomplete="on">
+                        <md-icon #saveFirstName mdSuffix (click)="save('firstName')">
+                            <i class="material-icons">save</i>
+                        </md-icon>
+                        <md-error>Required</md-error>
+                    </md-input-container>
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">{{ isOrganization ? 'Admin Last Name' : 'Last Name' }}:</label><br>
+                <span *ngIf="!editFlags.get('lastName')" class="link-content" (click)="setEditable('lastName')" title="edit">
+                    {{controls.lastName.value}}<i class="material-icons">&#xe254;</i>
+                </span>
+                <span *ngIf="editFlags.get('lastName')">
+                    <md-input-container class="input-infix">
+                        <input mdInput id="lastName" formControlName="lastName" (keyup.enter)="saveLastName.click()" autocomplete="on">
+                        <md-icon #saveLastName mdSuffix (click)="save('lastName')">
+                            <i class="material-icons">save</i>
+                        </md-icon>
+                        <md-error>Required</md-error>
+                    </md-input-container>
+                </span>
+            </div>
+        </div><!-- col 1 -->
+
     </div><br><br><!-- row -->
 
     <h2 class>Contact Info</h2>
@@ -79,70 +79,65 @@
     <div class="row">
 
         <div class="col-md-6">
-            <div class="form-group">
-                <label for="address">Street Address:</label><br>
-                <span *ngIf="!editFlags.get('address')" class="link-content" (click)="setEditable('address')" title="edit">
-                    {{controls.address.value}}<i class="material-icons">&#xe254;</i>
-                </span>
-                <span *ngIf="editFlags.get('address')">
-                    <md-input-container class="input-infix">
-                        <input mdInput id="address" formControlName="address" (keyup.enter)="saveAddress.click()" autocomplete="on">
-                        <md-icon #saveAddress mdSuffix (click)="save(controls.address, 'address')">
-                            <i class="material-icons">save</i>
-                        </md-icon>
-                        <md-error>Required</md-error>
-                    </md-input-container>
+            <div class="form-group" *ngIf="!editFlags.get('address')">
+                <label for="address">Address:</label><br>
+                <span class="link-content" (click)="setEditable('address')" title="edit">
+                    {{controls.address.value}}<br>
+                    {{controls.city.value}}, {{controls.state.value}} {{controls.zip.value}}<i class="material-icons">&#xe254;</i>
                 </span>
             </div>
 
-            <div class="form-group">
-                <label for="city">City:</label><br>
-                <span *ngIf="!editFlags.get('city')" class="link-content" (click)="setEditable('city')" title="edit">
-                    {{controls.city.value}}<i class="material-icons">&#xe254;</i>
-                </span>
-                <span *ngIf="editFlags.get('city')">
-                    <md-input-container class="input-infix">
-                        <input mdInput id="city" formControlName="city" (keyup.enter)="saveCity.click()" autocomplete="on">
-                        <md-icon #saveCity mdSuffix (click)="save(controls.city, 'city')">
-                            <i class="material-icons">save</i>
-                        </md-icon>
-                        <md-error>Required</md-error>
-                    </md-input-container>
-                </span>
-            </div>
+            <form [formGroup]="appUserInfoForm" (ngSubmit)="saveMany(['address', 'city', 'state', 'zip'])" *ngIf="editFlags.get('address')">
 
-            <div class="form-group">
-                <label for="state">State:</label><br>
-                <span *ngIf="!editFlags.get('state')" class="link-content" (click)="setEditable('state')" title="edit">
-                    {{controls.state.value}}<i class="material-icons">&#xe254;</i>
-                </span>
-                <span *ngIf="editFlags.get('state')" class="select-infix">
-                    <md-select id="state" formControlName="state" [value]="controls.state.value" (change)="saveState.click()">
-                        <md-option *ngFor="let stateStr of stateList" [value]="stateStr">{{stateStr}}</md-option>
-                    </md-select>
-                    <md-icon #saveState mdSuffix (click)="save(controls.state, 'state')">
-                        <i class="material-icons">save</i>
-                    </md-icon>
-                </span>
-            </div>
+                <div class="form-group">
+                    <label for="address">Address:</label><br>
+                    <span>
+                        <md-input-container class="input-infix">
+                            <input mdInput id="address" formControlName="address" autocomplete="on">
+                            <md-error>Required</md-error>
+                        </md-input-container>
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City:</label><br>
+                    <span>
+                        <md-input-container class="input-infix">
+                            <input mdInput id="city" formControlName="city" autocomplete="on">
+                            <md-error>Required</md-error>
+                        </md-input-container>
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <label for="state">State:</label><br>
+                    <span>
+                        <md-input-container class="input-infix">
+                            <input mdInput id="state" formControlName="state" autocomplete="on" maxlength="2">
+                            <md-error>Required (valid 2 letter state)</md-error>
+                        </md-input-container>
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <label for="zip">ZIP Code:</label><br>
+                    <span>
+                        <md-input-container class="input-infix">
+                            <input mdInput id="zip" formControlName="zip" autocomplete="on" maxlength="5">
+                            <md-error>Required (must be 5 digits long)</md-error>
+                        </md-input-container>
+                    </span>
+                </div>
+
+                <md-error *ngIf="errMsgs.get('address') != null">{{ errMsgs.get('address') }}</md-error>
+
+                <button md-raised-button color="primary" class="button-md" type="submit">Save</button>
+
+            </form>
+
         </div><!-- col 1 -->
 
         <div class="col-md-6">
-            <div class="form-group">
-                <label for="zip">ZIP Code:</label><br>
-                <span *ngIf="!editFlags.get('zip')" class="link-content" (click)="setEditable('zip')" title="edit">
-                    {{controls.zip.value}}<i class="material-icons">&#xe254;</i>
-                </span>
-                <span *ngIf="editFlags.get('zip')">
-                    <md-input-container class="input-infix">
-                        <input mdInput id="zip" formControlName="zip" (keyup.enter)="saveZip.click()" autocomplete="on" maxlength="5">
-                        <md-icon #saveZip mdSuffix (click)="save(controls.zip, 'zip')">
-                            <i class="material-icons">save</i>
-                        </md-icon>
-                        <md-error>Required</md-error>
-                    </md-input-container>
-                </span>
-            </div>
             
             <div class="form-group">
                 <label for="phone">Phone Number:</label><br>
@@ -152,10 +147,10 @@
                 <span *ngIf="editFlags.get('phone')">
                     <md-input-container class="input-infix">
                         <input mdInput id="phone" formControlName="phone" (keyup.enter)="savePhone.click()" autocomplete="on" maxlength="12">
-                        <md-icon #savePhone mdSuffix (click)="save(controls.phone, 'phone')">
+                        <md-icon #savePhone mdSuffix (click)="save('phone')">
                             <i class="material-icons">save</i>
                         </md-icon>
-                        <md-error>Required</md-error>
+                        <md-error>Required (format ###-###-####)</md-error>
                     </md-input-container>
                 </span>
             </div>
@@ -172,32 +167,31 @@
                 Update Password
             </button>
 
-            <ng-container *ngIf="editFlags.get('password')">
+            <form [formGroup]="appUserInfoForm" (ngSubmit)="savePassword('currentPassword', 'password', 'confirmPassword')" *ngIf="editFlags.get('password')">
                 <div class="form-group">
                     <md-input-container class="full-width">
-                        <input mdInput type="password" placeholder="Current Password" id="password"
-                         formControlName="currentPassword" (keyup.enter)="savePassword()" required>
+                        <input mdInput type="password" placeholder="Current Password" id="password" #currentPassword formControlName="currentPassword" required>
                         <md-error>Required</md-error>
                     </md-input-container>
                 </div>
                 
                 <div class="form-group">
                     <md-input-container class="full-width">
-                        <input mdInput type="password" placeholder="New Password" id="password" formControlName="password" (keyup.enter)="savePassword()" required>
-                        <md-error>Required</md-error>
+                        <input mdInput type="password" placeholder="New Password" #newPassword formControlName="password" required>
+                        <md-error>Required (at least 6 characters)</md-error>
                     </md-input-container>
                 </div>
 
                 <div class="form-group">
                     <md-input-container class="full-width">
-                        <input mdInput type="password" placeholder="Confirm Password" id="password" formControlName="confirmPassword" (keyup.enter)="savePassword()" required>
+                        <input mdInput type="password" placeholder="Confirm Password" #confirmPassword formControlName="confirmPassword" required>
                         <md-error>Required</md-error>
                     </md-input-container>
                 </div>
 
-                <button md-raised-button color="primary" class="button-md" (click)="savePassword()">Save</button>
-                <button md-raised-button color="primary" class="button-md" (click)="this.editFlags.set('password', false)">Cancel</button>
-            </ng-container>
+                <button md-raised-button color="primary" class="button-md" type="submit">Save</button>
+                <button md-raised-button color="primary" class="button-md" type="button" (click)="this.editFlags.set('password', false)">Cancel</button>
+            </form>
         </div><!-- col -->
 
     </div><!-- row -->

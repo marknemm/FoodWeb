@@ -5,6 +5,8 @@ import { SessionOptions } from 'express-session';
 let RedisStore = require('connect-redis')(session);
 import { RedisStoreOptions } from 'connect-redis';
 
+import { GPSCoordinates } from './geocode';
+
 import { FoodWebResponse } from "./../../../shared/message-protocol/food-web-response";
 import { AppUserInfo } from './../../../shared/authentication/app-user-info';
 
@@ -20,10 +22,9 @@ export class SessionData {
 
 
     constructor(
-        public appUserInfo?:        AppUserInfo,
+        public appUserInfo:         AppUserInfo = new AppUserInfo(),
         public appUserKey?:         number,
-        public addressLatitude?:    number,
-        public addressLongitude?:   number,
+        public gpsCoordinates:      GPSCoordinates = new GPSCoordinates(),
         public signupVerified?:     boolean
     ) { }
 

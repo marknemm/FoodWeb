@@ -19,9 +19,9 @@ export function handleGetFoodListings(request: Request, response: Response): voi
     
     response.setHeader('Content-Type', 'application/json');
     let getFoodListingsRequest: GetFoodListingsRequest = request.body;
-    let appUserKey: number = SessionData.loadSessionData(request).appUserKey;
+    let sessionData: SessionData = SessionData.loadSessionData(request);
 
-    getFoodListings(getFoodListingsRequest.filters, appUserKey)
+    getFoodListings(getFoodListingsRequest.filters, sessionData.appUserKey, sessionData.gpsCoordinates)
         .then((foodListings: FoodListing[]) => {
             response.send(new GetFoodListingsResponse(foodListings, true, 'Food Listings Successfully Retrieved'));
         })

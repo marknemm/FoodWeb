@@ -38,7 +38,6 @@
                             <b>Donor Address:</b>
                         </div>
                         <div class="inline-block">
-                            <span>{{ foodListing.donorOrganizationName }}</span><br>
                             <span>{{ foodListing.donorOrganizationAddress }}</span><br>
                             <span>
                                 {{ foodListing.donorOrganizationCity }}, {{ foodListing.donorOrganizationState }} {{ foodListing.donorOrganizationZip }}
@@ -48,7 +47,7 @@
 
                     <div class ="space-bottom">
                         <b>Driving Distance:</b>
-                        <span class="inline-block">{{ (foodListing.donorDrivingDistance != null) ? foodListing.donorDrivingDistnace : 'unknown' }}</span>
+                        <span class="inline-block">{{ (foodListing.donorDrivingDistance != null) ? foodListing.donorDrivingDistance + ' miles' : 'unknown' }}</span>
                     </div>
 
                     <div class="space-bottom">

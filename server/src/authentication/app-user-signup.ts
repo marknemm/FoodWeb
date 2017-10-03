@@ -155,11 +155,11 @@ function handleResult(addOrUpdateResult: QueryResult, isUpdate: boolean): Promis
 
     if (addOrUpdateResult.rows.length === 1) {
 
-        let appUserInfo: AppUserInfo = new AppUserInfo();
-        copyDatabaseOutputToSharedObject(addOrUpdateResult.rows[0], appUserInfo);
-
-        let sessionData: SessionData = new SessionData(appUserInfo);
-        copyDatabaseOutputToSharedObject(addOrUpdateResult.rows[0], sessionData);
+        // Fill Session Data.
+        let sessionData: SessionData = new SessionData();
+        copyDatabaseOutputToSharedObject(addOrUpdateResult.rows[0], sessionData.appUserInfo, 'SessionData.AppUserInfo');
+        copyDatabaseOutputToSharedObject(addOrUpdateResult.rows[0], sessionData.gpsCoordinates, 'SessionData.GPSCoordinates');
+        copyDatabaseOutputToSharedObject(addOrUpdateResult.rows[0], sessionData, 'SessionData');
 
         console.log('Successfully ' + (isUpdate ? 'updated' : 'added') + ' user in database.');
         // Send a signup verification email if the mode was not update. Otherwise, just resolve a promise and return sessionData.

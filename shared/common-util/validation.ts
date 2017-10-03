@@ -13,7 +13,7 @@ export class Validation {
     /**
      * Regular expression used for verifying password correctness.
      */
-    public static readonly PASSWORD_REGEX: RegExp = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,20}$/;
+    public static readonly PASSWORD_REGEX: RegExp = /^[a-zA-Z0-9!@#$%^&*]{6,20}$/;
 
     /**
      * Regular expression used for verifying 10 digit phone numbers with dashes.
