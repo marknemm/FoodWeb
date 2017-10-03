@@ -252,7 +252,7 @@ GROUP BY FoodListing.foodListingKey;
 
 --SELECT * FROM FoodListingFoodTypeMap;
 
---SELECT * FROM getFoodListings(1, 0, 1000, 52, NULL, NULL, NULL, FALSE, FALSE, FALSE, TRUE);
+SELECT DISTINCT * FROM getFoodListings(1, 10, 10, NULL, NULL, NULL, NULL, TRUE, FALSE, FALSE, FALSE);
 --SELECT * FROM RelativeAvailabilityDates;
 
 /*

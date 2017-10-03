@@ -35,6 +35,10 @@ export class FoodListing {
          */
         public donorOnHandUnitsCount?: number,
         /**
+         * The number of units of this Food Listing that this user has claimed.
+         */
+        public myClaimedUnitsCount?: number,
+        /**
          * The total number of units that a Food Listing has been split into.
          */
         public totalUnitsCount?: number,

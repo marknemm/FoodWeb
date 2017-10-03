@@ -34,14 +34,16 @@ import { FoodListing } from "./../../../../shared/food-listings/food-listing";
 @Injectable()
 export class GetFoodListingsService {
     
+    private static readonly RETRIEVAL_AMOUNT: number = 10;
     private retrievalOffset: number;
-    private static readonly RETRIEVAL_AMOUNT: number = 20;
+    private noMoreListingsToRetrieve: boolean;
 
     
     constructor(
         private requestService: RequestService
     ) { 
         this.retrievalOffset = 0;
+        this.noMoreListingsToRetrieve = false;
     }
 
 
@@ -53,6 +55,10 @@ export class GetFoodListingsService {
      * @return An observable object that resolves to an object that contains the array of FoodListing objects.
      */
     public getFoodListings(filters: FoodListingsFilters, getMoreListings: boolean = false): Observable<FoodListing[]> {
+
+        // Break out immediately if we are attempting to get more listings but have reached end!
+        if (getMoreListings && this.noMoreListingsToRetrieve)  return;
+        this.noMoreListingsToRetrieve = true; // We should not retrieve more listings until current request finished!
 
         // If we are simply getting more food listings, then we will set the retrievalOffset to the beginning of next segment of entries.
         (getMoreListings) ? this.retrievalOffset += GetFoodListingsService.RETRIEVAL_AMOUNT
@@ -70,14 +76,28 @@ export class GetFoodListingsService {
         return observer.map((response: Response) => {
 
             let getFoodListingsResponse: GetFoodListingsResponse = response.json();
+            let foodListings: FoodListing[] = getFoodListingsResponse.foodListings;
             console.log(getFoodListingsResponse.message);
 
+            // If no Food Listings came back, then there are no more to retrieve with current criteria.
+            console.log('Got ' + foodListings.length + ' listings out of possible ' + GetFoodListingsService.RETRIEVAL_AMOUNT);
+            this.noMoreListingsToRetrieve = (foodListings == null || foodListings.length < GetFoodListingsService.RETRIEVAL_AMOUNT);
+
             if (getFoodListingsResponse.success) {
-                return getFoodListingsResponse.foodListings;
+                return foodListings;
             }
 
             // If the response success flag is false, then we will simply send back an empty array to the calling component.
             return new Array<FoodListing>();
         });
+    }
+
+
+    /**
+     * Determines whether or not more listings can be retrieved (if we have reached end or not).
+     * @return true if more listings are available for retrieval, false if not.
+     */
+    public canGetMoreListings(): boolean {
+        return !this.noMoreListingsToRetrieve;
     }
 }

@@ -1,4 +1,3 @@
-<span id="food-details">
 <ng-template #detailsHTML let-c="close" let-d="dismss">
 
     <div class="modal-header">
@@ -15,13 +14,16 @@
         <!-- Standard modal body -->
         <div *ngIf="!showConfirmDialog" class="food-listing-container">
     
+            <!-- Image floating on left -->
             <div class="food-listing-img-container">
                 <img *ngIf="foodListing.imgUrl != null" [src]="foodListing.imgUrl"/>
             </div>
     
+            <!-- Description pushed to right of image -->
             <div [ngClass]="{ 'food-listing-contents': (foodListing.imgUrl != null) }" class="row">
     
-                <div class="col-lg-6 col-md-12">
+                <!-- Donor Description (Column 1) -->
+                <div class="col-lg-6 col-md-12" *ngIf="!isDonatedCart">
 
                     <div class="space-bottom">
                         <b>Donor Organization:</b>
@@ -45,9 +47,9 @@
                         </div>
                     </div>
 
-                    <div class ="space-bottom">
+                    <div class ="space-bottom" *ngIf="foodListing.donorDrivingDistance != null">
                         <b>Driving Distance:</b>
-                        <span class="inline-block">{{ (foodListing.donorDrivingDistance != null) ? foodListing.donorDrivingDistance + ' miles' : 'unknown' }}</span>
+                        <span class="inline-block">{{ foodListing.donorDrivingDistance + ' miles' }}</span>
                     </div>
 
                     <div class="space-bottom">
@@ -57,6 +59,7 @@
 
                 </div>
 
+                <!-- Misc Description (Column 2) -->
                 <div class="col-lg-6 col-md-12">
 
                     <div class="space-bottom">
@@ -78,24 +81,27 @@
                     <!-- Units Counts Container -->
                     <div class="space-bottom">
 
-                        <div>
+                        <div *ngIf="!isClaimedCart">
                             <b>Available Count:</b>
-                            <span class="inline-block">{{ foodListing.availableUnitsCount }} {{ foodListing.unitsLabel }}</span>
+                            <span class="inline-block">
+                                {{ foodListing.availableUnitsCount }} of {{ foodListing.totalUnitsCount }} {{ foodListing.unitsLabel }}
+                            </span>
                         </div>
 
-                        <div *ngIf="isDonorCart">
+                        <div *ngIf="isDonatedCart">
                             <b>Donor On-Hand Count:</b>
-                            <span class="inline-block">{{ foodListing.donorOnHandUnitsCount }} {{ foodListing.unitsLabel }}</span>
+                            <span class="inline-block">
+                                {{ foodListing.donorOnHandUnitsCount }} of {{ foodListing.totalUnitsCount }} {{ foodListing.unitsLabel }}
+                            </span>
                         </div>
 
-                        <div *ngIf="isReceiverCart">
+                        <div *ngIf="isClaimedCart">
                             <b>Claimed Count:</b>
-                            <span class="inline-block">{{ foodListing.claimedUnitsCount }} {{ foodListing.unitsLabel }}</span>
-                        </div>
-
-                        <div class="space-bottom">
-                            <b>Total Count:</b>
-                            <span class="inline-block">{{ foodListing.totalUnitsCount }} {{ foodListing.unitsLabel }}</span>
+                            <span class="inline-block">
+                                {{ foodListing.myClaimedUnitsCount }} of
+                                <!-- Instead of total units here, we have total units obtainable by this receiver -->
+                                {{ foodListing.availableUnitsCount + foodListing.myClaimedUnitsCount }} {{ foodListing.unitsLabel }}
+                            </span>
                         </div>
 
                     </div>
@@ -105,6 +111,7 @@
                 <ng-content select="[food-listing-info]"></ng-content>
             </div>
 
+            <!-- Bottom full width description -->
             <div *ngIf="foodListing.foodDescription != null">
                 <b>Description --</b><br>
                 <span class="inline-block">{{ foodListing.foodDescription }}</span>
@@ -137,4 +144,3 @@
     </div>
 
 </ng-template>
-</span>

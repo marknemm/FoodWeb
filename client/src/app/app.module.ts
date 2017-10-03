@@ -12,6 +12,7 @@ import { ImageCropperModule } from 'ng2-img-cropper';
 import { BusyModule } from 'angular2-busy';
 
 import { MdStepperModule,
+         MdProgressSpinnerModule,
          MdCheckboxModule,
          MdRadioModule,
          MdButtonModule,
@@ -135,6 +136,7 @@ const appRoutes: Routes = [
         ReactiveFormsModule,
         BusyModule,
         MdStepperModule,
+        MdProgressSpinnerModule,
         MdCheckboxModule,
         MdRadioModule,
         MdTooltipModule,

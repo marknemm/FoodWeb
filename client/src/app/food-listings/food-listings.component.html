@@ -18,7 +18,7 @@
 
             <div class="row small-description">
 
-                <div class="col-lg-6 col-md-12" style="max-width:300px">
+                <div class="col-lg-6 col-md-12" style="max-width:300px" *ngIf="!isDonatedCart">
                 
                     <div class="space-bottom">
                         <b>Donor Organization</b><br>
@@ -64,7 +64,7 @@
 
 <!-- This is our modal popup. It is separated into its own (child) component.
      Simply pass down transcluded HTML into this child component here! -->
-<food-listing-dialog #FoodListingDialogComponent>
+<food-listing-dialog #FoodListingDialogComponent [isClaimedCart]="isClaimedCart" [isDonatedCart]="isDonatedCart">
 
     <ng-container confirm-modal-body>
         <ng-content select="[confirm-modal-body]"></ng-content>

@@ -17,11 +17,11 @@ export class FoodListingDialogComponent {
     /**
      * Determines if this dialog is displaying Food Listing info for a Receiver's Cart. Default is false.
      */
-    @Input() private isReceiverCart: boolean = false;
+    @Input() private isClaimedCart: boolean = false;
     /**
      * Determines if this dialog is displaying Food Listing info for a Donor's Cart. Default is false.
      */
-    @Input() private isDonorCart: boolean = false;
+    @Input() private isDonatedCart: boolean = false;
 
     private foodListing: FoodListing;
     private modalFoodListingDetails: NgbModalRef;

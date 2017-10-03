@@ -35,7 +35,7 @@
 
         <div id="food-listings" class="col-lg-9 col-md-12">
 
-            <app-food-listings [header]="getFoodListingsTitle()" #foodListings>
+            <app-food-listings [header]="getFoodListingsTitle()" [isClaimedCart]="isClaimedCart()" [isDonatedCart]="isDonatedCart()" #foodListings>
                 <ng-container details-modal-footer>
 
                     <button md-raised-button color="primary" class="button-md" *ngIf="isClaimedCart()" (click)="unclaimSelectedFoodListing()">Unclaim</button>
