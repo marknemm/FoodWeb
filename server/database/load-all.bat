@@ -27,10 +27,13 @@ psql --set=sslmode=require -h %server% -p %port% -d %database% -U %username% ^
     -f tables/food-listing/food-listing.sql ^
     -f tables/food-listing/claimed-food-listing.sql ^
     -f tables/food-listing/delivery-food-listing.sql ^
+    -f tables/food-listing/cancelled-delivery-food-listing.sql ^
     -f tables/food-listing/food-type.sql ^
     -f tables/food-listing/food-listing-food-type-map.sql ^
  ^
     -f functions/common-util/drop-function.sql ^
+    -f functions/common-util/weekday-int-to-text.sql ^
+    -f functions/common-util/weekday-text-to-int.sql ^
  ^
     -f functions/app-user/add-unverified-app-user.sql ^
     -f functions/app-user/verify-app-user.sql ^
@@ -45,12 +48,16 @@ psql --set=sslmode=require -h %server% -p %port% -d %database% -U %username% ^
     -f functions/food-listing/units-count-heuristics/get-total-units-count.sql ^
     -f functions/food-listing/units-count-heuristics/get-user-claimed-units-count.sql ^
  ^
-    -f functions/food-listing/add-food-listing.sql ^
     -f functions/food-listing/get-food-listings.sql ^
-    -f functions/food-listing/claim-food-listing.sql ^
-    -f functions/food-listing/unclaim-food-listing.sql ^
-    -f functions/food-listing/remove-food-listing.sql ^
-    -f functions/food-listing/update-food-listing.sql ^
+    -f functions/food-listing/donate/add-food-listing.sql ^
+    -f functions/food-listing/donate/remove-food-listing.sql ^
+    -f functions/food-listing/donate/update-food-listing.sql ^
+    -f functions/food-listing/claim/claim-food-listing.sql ^
+    -f functions/food-listing/claim/unclaim-food-listing.sql ^
+    -f functions/food-listing/delivery/start-food-listing-delivery.sql ^
+    -f functions/food-listing/delivery/cancel-food-listing-delivery.sql ^
+    -f functions/food-listing/delivery/mark-food-listing-pick-up.sql ^
+    -f functions/food-listing/delivery/mark-food-listing-drop-off.sql ^
  ^
     -c "SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name;" ^
     -c "SELECT routines.routine_name FROM information_schema.routines WHERE routines.specific_schema = 'public' ORDER BY routines.routine_name;"

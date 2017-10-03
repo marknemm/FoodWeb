@@ -21,13 +21,6 @@ ALTER TABLE DeliveryFoodListing ADD COLUMN IF NOT EXISTS pickUpTime             
 -- Will be non-null if the Food Listing has been dropped off at the Receiver destination.
 ALTER TABLE DeliveryFoodListing ADD COLUMN IF NOT EXISTS dropOffTime            TIMESTAMP       DEFAULT NULL;
 
--- Will be non-null if a user (either deliverer or receiver) cancels the delivery when it is in process.
--- Should only be cancelled if the deliverer cannot make the drive, or if the food has gone bad / not handled properly.
-ALTER TABLE DeliveryFoodListing ADD COLUMN IF NOT EXISTS cancelledByAppUser     INTEGER         DEFAULT NULL REFERENCES AppUser (appUserKey);
-
--- The reason for the cancellation (should be required by front-end interface).
-ALTER TABLE DeliveryFoodListing ADD COLUMN IF NOT EXISTS cancelReason           TEXT            DEFAULT NULL;
-
 
 -- Add more columns here --
 
