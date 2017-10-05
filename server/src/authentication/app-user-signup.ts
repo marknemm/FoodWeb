@@ -1,7 +1,6 @@
 'use strict';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { query } from '../database-util/connection-pool';
-import { copyDatabaseOutputToSharedObject } from '../database-util/database-output-to-shared-object';
 import { Client, QueryResult } from 'pg';
 
 import { hashPassword } from './password-util';
@@ -156,14 +155,11 @@ function handleResult(addOrUpdateResult: QueryResult, isUpdate: boolean): Promis
     if (addOrUpdateResult.rows.length === 1) {
 
         // Fill Session Data.
-        let sessionData: SessionData = new SessionData();
-        copyDatabaseOutputToSharedObject(addOrUpdateResult.rows[0], sessionData.appUserInfo, 'SessionData.AppUserInfo');
-        copyDatabaseOutputToSharedObject(addOrUpdateResult.rows[0], sessionData.gpsCoordinates, 'SessionData.GPSCoordinates');
-        copyDatabaseOutputToSharedObject(addOrUpdateResult.rows[0], sessionData, 'SessionData');
+        let sessionData: SessionData = addOrUpdateResult.rows[0].sessiondata;
 
         console.log('Successfully ' + (isUpdate ? 'updated' : 'added') + ' user in database.');
         // Send a signup verification email if the mode was not update. Otherwise, just resolve a promise and return sessionData.
-        let result: Promise<SessionData> = isUpdate ? Promise.resolve()
+        let result: Promise<SessionData> = isUpdate ? Promise.resolve(sessionData)
                                                     : sendVerificationEmail(sessionData, addOrUpdateResult.rows[0].verificationToken);
         
         return result.then(() => {
@@ -182,7 +178,7 @@ function handleResult(addOrUpdateResult: QueryResult, isUpdate: boolean): Promis
  * @param appUserSignupInfo The app user signup information.
  * @param verificationToken The verification token to be sent via email.
  */
-function sendVerificationEmail(sessionData: SessionData, verificationToken: string): Promise<any> {
+function sendVerificationEmail(sessionData: SessionData, verificationToken: string): Promise<SessionData> {
 
     const isOrganization: boolean = (sessionData.appUserInfo.organizationName != null);
     return (isOrganization ? sendOrganizationEmail(sessionData, verificationToken)

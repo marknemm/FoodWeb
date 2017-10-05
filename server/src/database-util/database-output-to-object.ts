@@ -4,7 +4,7 @@ let postgresArray = require('postgres-array');
 
 
 /**
- * Copies each database output property's value that is specified in a given shared object to the shared object.
+ * Copies each database output property's value that is specified in a given object to that object.
  * In simpler terms, copies all data in the database output to a shared object.
  * If the database object's format is different than the camel-case of the shared object, then it tries to match
  * each property despite the format differences (e.g. all lowercase database output and camel-case shared object).
@@ -12,12 +12,12 @@ let postgresArray = require('postgres-array');
  * @param sharedObject The shared object that we shall copy to.
  * @param sharedObjectName The name of the shared object. Can be used for debugging output purposes.
  */
-export function copyDatabaseOutputToSharedObject(databaseOutput: any, sharedObject: any, sharedObjectName: string = ''): void {
+export function copyDatabaseOutputToObject(databaseOutput: any, object: any, sharedObjectName: string = ''): void {
     
-    for (let sharedObjectProperty in sharedObject) {
+    for (let sharedObjectProperty in object) {
 
         // Skip over object properties that are inherited from Object.
-        if (!sharedObject.hasOwnProperty(sharedObjectProperty))  continue;
+        if (!object.hasOwnProperty(sharedObjectProperty))  continue;
 
         let databaseOutputProperty: string = matchSharedAndDatabaseProperties(sharedObjectProperty, databaseOutput, sharedObjectName);
         
@@ -27,8 +27,8 @@ export function copyDatabaseOutputToSharedObject(databaseOutput: any, sharedObje
             // WARNING: This assumes there are only arrays in output and no JSONB members.
             // TODO: Differentiate between Postgres array and JSONB outputs here!
             const databasePropertyIsArr = (databaseOutput[databaseOutputProperty] != null && databaseOutput[databaseOutputProperty][0] === '{');
-            sharedObject[sharedObjectProperty] = databasePropertyIsArr ? postgresArray.parse(databaseOutput[databaseOutputProperty])
-                                                                       : databaseOutput[databaseOutputProperty];
+            object[sharedObjectProperty] = databasePropertyIsArr ? postgresArray.parse(databaseOutput[databaseOutputProperty])
+                                                                 : databaseOutput[databaseOutputProperty];
         }
     }
 }

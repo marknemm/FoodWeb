@@ -1,7 +1,6 @@
 'use strict';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { connect, query, Client, QueryResult } from '../database-util/connection-pool';
-import { copyDatabaseOutputToSharedObject } from '../database-util/database-output-to-shared-object';
 import { checkPassword } from './password-util';
 import { SessionData, AppUserInfo } from "../common-util/session-data";
 
@@ -32,7 +31,7 @@ export function login(email: string, password: string): Promise<SessionData> {
  * @return A promise with the query result. The query result should simply contain one row information pertaining to the App User.
  */
 function getAppUserInfo(email: string): Promise<QueryResult> {
-    let queryString: string = `SELECT * FROM getAppUserInfo(NULL, $1);`;
+    let queryString: string = `SELECT * FROM getAppUserSessionData(NULL, $1, TRUE);`;
     let queryArgs: Array<string> = [email];
     logSqlQueryExec(queryString, queryArgs);
     return query(queryString, queryArgs);
@@ -59,13 +58,7 @@ function analyzeGetAppUserInfoResult(email: string, password: string, getAppUser
             .then((isMatch: boolean) => {
 
                 if (isMatch) {
-
-                    // Fill Session Data.
-                    let sessionData: SessionData = new SessionData();
-                    copyDatabaseOutputToSharedObject(firstRowResult, sessionData.appUserInfo, 'SessionData.AppUserInfo');
-                    copyDatabaseOutputToSharedObject(firstRowResult, sessionData.gpsCoordinates, 'SessionData.GPSCoordinates');
-                    copyDatabaseOutputToSharedObject(firstRowResult, sessionData, 'SessionData');
-
+                    let sessionData: SessionData = firstRowResult.sessiondata;
                     return Promise.resolve(sessionData);
                 }
 

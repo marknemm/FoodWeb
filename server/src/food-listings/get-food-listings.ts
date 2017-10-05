@@ -1,7 +1,7 @@
 'use strict'
 import { query, QueryResult } from '../database-util/connection-pool';
 import { fixNullQueryArgs, toPostgresArray } from './../database-util/prepared-statement-util';
-import { copyDatabaseOutputToSharedObject } from './../database-util/database-output-to-shared-object';
+import { copyDatabaseOutputToObject } from './../database-util/database-output-to-object';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { getDrivingDistances, GPSCoordinates } from '../common-util/geocode';
 
@@ -97,7 +97,7 @@ function generateResultArray(rows: any[], gpsCoordinates: GPSCoordinates, myDona
         
         // Copy returned data from database JSON output object to shared object.
         let foodListing: FoodListing = new FoodListing();
-        copyDatabaseOutputToSharedObject(rows[i], foodListing, 'FoodListing');
+        copyDatabaseOutputToObject(rows[i], foodListing, 'FoodListing');
 
         // Insert returned data into result arrays.
         foodListings.push(foodListing);

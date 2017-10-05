@@ -5,24 +5,30 @@ SELECT dropFunction ('updateAppUser');
  */
 CREATE OR REPLACE FUNCTION updateAppUser
 (
-    _appUserKey             INTEGER,
-    _email                  VARCHAR(128)        DEFAULT NULL, 
-    _password               CHAR(60)            DEFAULT NULL,
-    _lastName               VARCHAR(60)         DEFAULT NULL,
-    _firstName              VARCHAR(60)         DEFAULT NULL,
-    _address                VARCHAR(128)        DEFAULT NULL,
-    _addressLatitude        NUMERIC(7, 4)       DEFAULT NULL,
-    _addressLongitude       NUMERIC(7, 4)       DEFAULT NULL,
-    _city                   VARCHAR(60)         DEFAULT NULL,
-    _state                  CHAR(2)             DEFAULT NULL,
-    _zip                    INTEGER             DEFAULT NULL,
-    _phone                  CHAR(12)            DEFAULT NULL,
-    _isDonor                BOOLEAN             DEFAULT NULL,
-    _isReceiver             BOOLEAN             DEFAULT NULL,
-    _availabilityTimeRanges TimeRange[]         DEFAULT NULL, -- See TimeRange type definition in app-user-availability.sql!
-    _organizationName       VARCHAR(128)        DEFAULT NULL
+    _appUserKey             AppUser.appUserKey%TYPE,
+    _email                  AppUser.email%TYPE                  DEFAULT NULL, 
+    _password               AppUserPassword.password%TYPE       DEFAULT NULL,
+    _lastName               AppUser.lastName%TYPE               DEFAULT NULL,
+    _firstName              AppUser.firstName%TYPE              DEFAULT NULL,
+    _address                ContactInfo.address%TYPE            DEFAULT NULL,
+    _addressLatitude        ContactInfo.addressLatitude%TYPE    DEFAULT NULL,
+    _addressLongitude       ContactInfo.addressLongitude%TYPE   DEFAULT NULL,
+    _city                   ContactInfo.city%TYPE               DEFAULT NULL,
+    _state                  ContactInfo.state%TYPE              DEFAULT NULL,
+    _zip                    ContactInfo.zip%TYPE                DEFAULT NULL,
+    _phone                  ContactInfo.phone%TYPE              DEFAULT NULL,
+    _isDonor                AppUser.isDonor%TYPE                DEFAULT NULL,
+    _isReceiver             AppUser.isReceiver%TYPE             DEFAULT NULL,
+    _availabilityTimeRanges TimeRange[]                         DEFAULT NULL, -- See TimeRange type definition in app-user-availability.sql!
+    _organizationName       Organization.name%TYPE              DEFAULT NULL
 )
-RETURNS SETOF AppUserInfoAggregate
+-- Returns the new App User's information.
+RETURNS TABLE
+(
+    appUserKey  AppUser.appUserKey%TYPE,
+    password    AppUserPassword.password%TYPE,
+    sessionData JSON
+)
 AS $$
 BEGIN
 
@@ -33,7 +39,7 @@ BEGIN
         firstName   = COALESCE(_firstName, firstName),
         isDonor     = COALESCE(_isDonor, isDonor),
         isReceiver  = COALESCE(_isReceiver, isReceiver)
-    WHERE appUserKey = _appUserKey;
+    WHERE AppUser.appUserKey = _appUserKey;
 
     -- Update any ContactInfo fields related to AppUser being updated.
     UPDATE ContactInfo
@@ -44,14 +50,14 @@ BEGIN
         state               = COALESCE(_state, state),
         zip                 = COALESCE(_zip, zip),
         phone               = COALESCE(_phone, phone)
-    WHERE appUserKey = _appUserKey;
+    WHERE ContactInfo.appUserKey = _appUserKey;
 
     -- Update any Organization fields related to AppUser being updated.
     IF (_organizationName IS NOT NULL)
     THEN
         UPDATE Organization
         SET name = _organizationName
-        WHERE appUserKey = _appUserKey;
+        WHERE Organization.appUserKey = _appUserKey;
     END IF;
 
     -- Update password related to AppUser being updated. We keep track of all old passwords, so this is an insert!
@@ -67,10 +73,10 @@ BEGIN
     END IF;
 
     RETURN QUERY
-    SELECT * FROM getAppUserInfo(_appUserKey);
+    SELECT * FROM getAppUserSessionData(_appUserKey);
     
 END;
 $$ LANGUAGE plpgsql;
 
---SELECT updateAppUser(4, NULL, NULL, 'Nemmer');
+SELECT updateAppUser(1, NULL, NULL, 'Nemmer');
 --SELECT * FROM appUser;

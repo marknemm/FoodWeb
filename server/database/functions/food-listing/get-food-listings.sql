@@ -1,3 +1,6 @@
+
+
+
 /**
  * A basic search function for retrieving food listings that meet specific criteria.
  * NOTE: This may need to be further optimized given that it will be dealing with a large amount of rows.
@@ -18,7 +21,7 @@ CREATE OR REPLACE FUNCTION getFoodListings
     _unclaimedOnly              BOOLEAN         DEFAULT FALSE,  -- to TRUE if only unclaimed results should come back (When browsing Receive tab for claimable Food Listings).
     _myDonatedItemsOnly         BOOLEAN         DEFAULT FALSE,  -- Set to TRUE if only Donor Cart items should come back (this user's donated Food Listings only).
     _myClaimedItemsOnly         BOOLEAN         DEFAULT FALSE,  -- Set to TRUE if only Receiver Cart items should come back (this user's claimed Food Listings only).
-    _matchAvailability          BOOLEAN         DEFAULT TRUE    -- Determines if th eitems that are viewed were donated by a Donor whose availability overlaps this user's.
+    _matchAvailability          BOOLEAN         DEFAULT TRUE    -- Determines if the items that are viewed were donated by a Donor whose availability overlaps this user's.
 )
 RETURNS TABLE
 (
@@ -89,7 +92,7 @@ BEGIN
 -- ==================================== Dynamic Query Generation Phase ======================================= --
 -- =========================================================================================================== --
 
-    -- We will fill this table with our filtered food listings and associated food types (in aggregate array form).
+    -- We will fill this table with our filtered food listings' key identifiers.
     DROP TABLE IF EXISTS FiltFoodListing;
     CREATE TEMP TABLE FiltFoodListing
     (
@@ -161,7 +164,7 @@ BEGIN
 
     _queryGroupAndSort := '
         GROUP BY FoodListing.foodListingKey
-        ORDER BY FoodListing.availableUntilDate
+        ORDER BY FoodListing.availableUntilDate ASC
         OFFSET $8
         LIMIT $9
     ';
@@ -252,7 +255,7 @@ GROUP BY FoodListing.foodListingKey;
 
 --SELECT * FROM FoodListingFoodTypeMap;
 
-SELECT DISTINCT * FROM getFoodListings(1, 10, 10, NULL, NULL, NULL, NULL, TRUE, FALSE, FALSE, FALSE);
+--SELECT * FROM getFoodListings(1, 0, 1000, 52, NULL, NULL, NULL, FALSE, FALSE, FALSE, TRUE);
 --SELECT * FROM RelativeAvailabilityDates;
 
 /*
