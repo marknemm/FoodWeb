@@ -1,5 +1,5 @@
-let geocoder = require('geocoder');
-let googleDistance = require('google-distance');
+import * as geocoder from 'geocoder';
+import * as googleDistance from 'google-distance';
 
 
 /**

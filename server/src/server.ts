@@ -23,6 +23,7 @@ import { handleLoginRequest,
 import { handleAddFoodListing,
          handleRemoveFoodListing,
          handleGetFoodListings,
+         handleGetDeliveryFoodListings,
          handleClaimFoodListing,
          handleUnclaimFoodListing,
          handleGetFoodTypes } from './food-listings/food-listing-controller';
@@ -57,6 +58,7 @@ app.post('/authentication/updateAppUser',           SessionData.ensureSessionAct
 app.post('/foodListings/addFoodListing',            SessionData.ensureSessionActive, handleAddFoodListing);
 app.post('/foodListings/removeFoodListing',         SessionData.ensureSessionActive, handleRemoveFoodListing);
 app.post('/foodListings/getFoodListings',           SessionData.ensureSessionActive, handleGetFoodListings);
+app.post('/foodListings/getDeliveryFoodListings',   SessionData.ensureSessionActive, handleGetDeliveryFoodListings);
 app.post('/foodListings/claimFoodListing',          SessionData.ensureSessionActive, handleClaimFoodListing);
 app.post('/foodListings/unclaimFoodListing',        SessionData.ensureSessionActive, handleUnclaimFoodListing);
 app.get( '/foodListings/getFoodTypes',              handleGetFoodTypes);

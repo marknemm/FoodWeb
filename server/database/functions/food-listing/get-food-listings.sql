@@ -11,42 +11,24 @@
 SELECT dropFunction('getFoodListings');
 CREATE OR REPLACE FUNCTION getFoodListings
 (
-    _appUserKey                 INTEGER,                        -- The App User Key of the current user issuing this query.
-    _retrievalOffset            INTEGER,                        -- The offset of records that should be retrieved.
-    _retrievalAmount            INTEGER,                        -- The number of records that should be retrieved starting at _retrievalOffset.
-    _foodListingKey             INTEGER         DEFAULT NULL,   -- This is for when we are looking for a specific Food Listing.
-    _foodTypes                  FoodType[]      DEFAULT NULL,   -- This is when we may be filtering by one or many food types. Null is for all food types.
-    _perishable                 BOOLEAN         DEFAULT NULL,   -- Are we looking for perishable food? Input true for perishable only, false for non-perishable, and null for both.
-    _availableAfterDate         TEXT            DEFAULT NULL,   -- Do we require food that is going to be available on or after a given date? Must be in the format MM/DD/YYYY!
-    _unclaimedOnly              BOOLEAN         DEFAULT FALSE,  -- to TRUE if only unclaimed results should come back (When browsing Receive tab for claimable Food Listings).
-    _myDonatedItemsOnly         BOOLEAN         DEFAULT FALSE,  -- Set to TRUE if only Donor Cart items should come back (this user's donated Food Listings only).
-    _myClaimedItemsOnly         BOOLEAN         DEFAULT FALSE,  -- Set to TRUE if only Receiver Cart items should come back (this user's claimed Food Listings only).
-    _matchAvailability          BOOLEAN         DEFAULT TRUE    -- Determines if the items that are viewed were donated by a Donor whose availability overlaps this user's.
+    _appUserKey                 AppUser.appUserKey%TYPE,                            -- The App User Key of the current user issuing this query.
+    _retrievalOffset            INTEGER,                                            -- The offset of records that should be retrieved.
+    _retrievalAmount            INTEGER,                                            -- The number of records that should be retrieved starting at _retrievalOffset.
+    _foodListingKey             FoodListing.foodListingKey%TYPE     DEFAULT NULL,   -- This is for when we are looking for a specific Food Listing.
+    _foodTypes                  FoodType[]                          DEFAULT NULL,   -- This is when we may be filtering by one or many food types. Null is for all food types.
+    _perishable                 FoodListing.perishable%TYPE         DEFAULT NULL,   -- Are we looking for perishable food? Input true for perishable only, false for non-perishable, and null for both.
+    _availableAfterDate         TEXT                                DEFAULT NULL,   -- Do we require food that is going to be available on or after a given date? Must be in the format MM/DD/YYYY!
+    _unclaimedOnly              BOOLEAN                             DEFAULT FALSE,  -- to TRUE if only unclaimed results should come back (When browsing Receive tab for claimable Food Listings).
+    _myDonatedItemsOnly         BOOLEAN                             DEFAULT FALSE,  -- Set to TRUE if only Donor Cart items should come back (this user's donated Food Listings only).
+    _myClaimedItemsOnly         BOOLEAN                             DEFAULT FALSE,  -- Set to TRUE if only Receiver Cart items should come back (this user's claimed Food Listings only).
+    _matchAvailability          BOOLEAN                             DEFAULT TRUE    -- Determines if the items that are viewed were donated by a Donor whose availability overlaps this user's.
 )
 RETURNS TABLE
 (
-    foodListingKey              INTEGER,
-    foodTitle                   VARCHAR(100),
-    foodTypes                   FoodType[],
-    perishable                  BOOLEAN,
-    donorOrganizationName       VARCHAR(128),
-    donorOrganizationAddress    VARCHAR(128),
-    donorOrganizationCity       VARCHAR(60),
-    donorOrganizationState      CHAR(2),
-    donorOrganizationZip        INTEGER,
-    donorOrganizationLatitude   NUMERIC(9, 6),
-    donorOrganizationLongitude  NUMERIC(9, 6),
-    donorOrganizationPhone      CHAR(12),
-    donorLastName               VARCHAR(60),
-    donorFirstName              VARCHAR(60),
-    donorOnHandUnitsCount       INTEGER,
-    availableUnitsCount         INTEGER,
-    myClaimedUnitsCount         INTEGER,
-    totalUnitsCount             INTEGER,
-    unitsLabel                  TEXT,
-    availableUntilDate          TEXT,
-    foodDescription             TEXT,
-    imgUrl                      TEXT
+    foodListingKey  FoodListing.foodListingKey%TYPE,
+    donorLatitude   ContactInfo.addressLatitude%TYPE,
+    donorLongitude  ContactInfo.addressLongitude%TYPE,
+    foodListing     JSON
 )
 AS $$
     DECLARE _currentWeekday      INTEGER; -- [0, 6] index of the current weekday.
@@ -203,33 +185,37 @@ BEGIN
     -- Here we will be doing a select using the filtered food listing keys from the dynamic query above. No grouping will be necessary.
     RETURN QUERY
     SELECT  FoodListing.foodListingKey,
-            FoodListing.foodTitle,
-            -- Concatenates the food types into an array { Type1, Type2, ..., TypeN }
-            (
-                SELECT ARRAY_AGG(FoodListingFoodTypeMap.foodType) AS foodTypes
-                FROM FoodListingFoodTypeMap
-                WHERE FoodListingFoodTypeMap.foodListingKey = FoodListing.foodListingKey
-                GROUP BY FoodListingFoodTypeMap.foodListingKey
-            ),
-            FoodListing.perishable,
-            DonatedByOrganization.name,
-            DonatedByContactInfo.address,
-            DonatedByContactInfo.city,
-            DonatedByContactInfo.state,
-            DonatedByContactInfo.zip,
             DonatedByContactInfo.addressLatitude,
             DonatedByContactInfo.addressLongitude,
-            DonatedByContactInfo.phone,
-            DonatedByAppUser.lastName,
-            DonatedByAppUser.firstName,
-            (SELECT getDonorOnHandUnitsCount(FoodListing.foodListingKey)),
-            (SELECT getAvailableUnitsCount(FoodListing.foodListingKey)),
-            (SELECT getUserClaimedUnitsCount(FoodListing.foodListingKey, _appUserKey)),
-            (SELECT getTotalUnitsCount(FoodListing.foodListingKey)),
-            FoodListing.unitsLabel,
-            TO_CHAR(FoodListing.availableUntilDate, 'MM/DD/YYYY'),
-            FoodListing.foodDescription,
-            FoodListing.imgUrl
+            -- @ts-sql class="FoodListing" file="/shared/food-listing/food-listing.ts"
+            JSON_BUILD_OBJECT (
+                'foodListingKey',           FoodListing.foodListingKey,
+                'foodTitle',                FoodListing.foodTitle,
+                -- Concatenates the food types into an array { Type1, Type2, ..., TypeN }
+                'foodTypes',                (
+                                                SELECT ARRAY_AGG(FoodListingFoodTypeMap.foodType) AS foodTypes
+                                                FROM FoodListingFoodTypeMap
+                                                WHERE FoodListingFoodTypeMap.foodListingKey = FoodListing.foodListingKey
+                                                GROUP BY FoodListingFoodTypeMap.foodListingKey
+                                            ),
+                'perishable',               FoodListing.perishable,
+                'donorOrganizationName',    DonatedByOrganization.name,
+                'donorAddress',             DonatedByContactInfo.address,
+                'donorCity',                DonatedByContactInfo.city,
+                'donorState',               DonatedByContactInfo.state,
+                'donorZip',                 DonatedByContactInfo.zip,
+                'donorPhone',               DonatedByContactInfo.phone,
+                'donorLastName',            DonatedByAppUser.lastName,
+                'donorFirstName',           DonatedByAppUser.firstName,
+                'donorOnHandUnitsCount',    (SELECT getDonorOnHandUnitsCount(FoodListing.foodListingKey)),
+                'availableUnitsCount',      (SELECT getAvailableUnitsCount(FoodListing.foodListingKey)),
+                'claimedUnitsCount',        (SELECT getUserClaimedUnitsCount(FoodListing.foodListingKey, _appUserKey)),
+                'totalUnitsCount',          (SELECT getTotalUnitsCount(FoodListing.foodListingKey)),
+                'unitsLabel',               FoodListing.unitsLabel,
+                'availableUntilDate',       TO_CHAR(FoodListing.availableUntilDate, 'MM/DD/YYYY'),
+                'foodDescription',          FoodListing.foodDescription,
+                'imgUrl',                   FoodListing.imgUrl
+            )
     FROM FiltFoodListing
     INNER JOIN FoodListing                                          ON FiltFoodListing.foodListingKey = FoodListing.foodListingKey
     INNER JOIN AppUser                  AS DonatedByAppUser         ON FoodListing.donatedByAppUserKey = DonatedByAppUser.appUserKey

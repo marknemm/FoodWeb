@@ -4,7 +4,7 @@ import { query } from '../database-util/connection-pool';
 import { Client, QueryResult } from 'pg';
 
 import { hashPassword } from './password-util';
-import { GPSCoordinates, getGPSCoordinates } from '../common-util/geocode';
+import { GPSCoordinates, getGPSCoordinates } from '../../../shared/common-util/geocode';
 import { fixNullQueryArgs } from "./../database-util/prepared-statement-util";
 
 import { Validation } from '../../../shared/common-util/validation';

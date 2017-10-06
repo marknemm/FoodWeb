@@ -1,7 +1,6 @@
 'use strict'
 import { query, QueryResult } from '../database-util/connection-pool';
 import { fixNullQueryArgs, toPostgresArray } from './../database-util/prepared-statement-util';
-import { copyDatabaseOutputToObject } from './../database-util/database-output-to-object';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from '../logging/sql-logger';
 import { getDrivingDistances, GPSCoordinates } from '../common-util/geocode';
 
@@ -90,18 +89,12 @@ function generateResultArray(rows: any[], gpsCoordinates: GPSCoordinates, myDona
 
     let foodListings: FoodListing[] = [];
     let donorGPSCoordinates: GPSCoordinates[] = [];
-    let donorDistances: number[];
 
     // Go through each row of the database output (each row corresponds to a Food Listing).
     for (let i: number = 0; i < rows.length; i++) {
-        
-        // Copy returned data from database JSON output object to shared object.
-        let foodListing: FoodListing = new FoodListing();
-        copyDatabaseOutputToObject(rows[i], foodListing, 'FoodListing');
-
         // Insert returned data into result arrays.
-        foodListings.push(foodListing);
-        donorGPSCoordinates.push(new GPSCoordinates(rows[i].donororganizationlatitude, rows[i].donororganizationlongitude));
+        foodListings.push(rows[i].foodlisting);
+        donorGPSCoordinates.push(new GPSCoordinates(rows[i].donorlatitude, rows[i].donorlongitude));
     }
 
     // If in Donor Cart, then we don't care about seeing driving distances!

@@ -7,15 +7,15 @@ export class FoodListing {
         public foodListingKey?: number,
         public foodTitle?: string,
         public donorOrganizationName?: string,
-        public donorOrganizationAddress?: string,
-        public donorOrganizationCity?: string,
-        public donorOrganizationState?: string,
-        public donorOrganizationZip?: number,
+        public donorAddress?: string,
+        public donorCity?: string,
+        public donorState?: string,
+        public donorZip?: number,
         /**
          * The driving distance of the donor from the receiver that is browsing the food listings.
          */
         public donorDrivingDistance?: number,
-        public donorOrganizationPhone?: string,
+        public donorPhone?: string,
         public donorLastName?: string,
         public donorFirstName?: string,
         public foodTypes?: string[],

@@ -4,11 +4,14 @@ import { SessionData } from "../common-util/session-data";
 import { addFoodListing } from './add-food-listing';
 import { removeFoodListing } from "./remove-food-listing";
 import { getFoodListings } from './get-food-listings';
+import { getDeliveryFoodListings } from './get-delivery-food-listings';
 import { getFoodTypes } from './get-food-types';
 import { claimFoodListing, unclaimFoodListing } from './claim-food-listing';
 
 import { AddFoodListingRequest, AddFoodListingResponse, FoodListingUpload } from '../../../shared/food-listings/add-food-listing-message'
 import { GetFoodListingsRequest, GetFoodListingsResponse, FoodListing } from '../../../shared/food-listings/get-food-listings-message';
+import { GetDeliveryFoodListingsRequest, GetDeliveryFoodListingsResponse,
+         DeliveryFoodListing } from '../../../shared/food-listings/get-delivery-food-listings-message';
 import { GetFoodTypesResponse } from '../../../shared/food-listings/get-food-types-message';
 import { ClaimFoodListingRequest } from '../../../shared/food-listings/claim-food-listing-message';
 import { LISTINGS_STATUS } from "../../../shared/food-listings/food-listings-filters";
@@ -27,6 +30,23 @@ export function handleGetFoodListings(request: Request, response: Response): voi
         })
         .catch((err: Error) => {
             response.send(new GetFoodListingsResponse(null, false, err.message));
+        });
+}
+
+
+export function handleGetDeliveryFoodListings(request: Request, response: Response): void {
+
+    response.setHeader('Content-Type', 'application/json');
+
+    let getDeliveryFoodListingsRequest: GetDeliveryFoodListingsRequest = request.body;
+    let delivererAppUserKey: number = SessionData.loadSessionData(request).appUserKey;
+
+    getDeliveryFoodListings(getDeliveryFoodListingsRequest.filters, delivererAppUserKey)
+        .then((deliveryFoodListings: DeliveryFoodListing[]) => {
+            response.send(new GetDeliveryFoodListingsResponse(deliveryFoodListings, true, 'Delivery Food Listings Successfully Retrieved'));
+        })
+        .catch((err: Error) => {
+            response.send(new GetDeliveryFoodListingsResponse(null, false, err.message));
         });
 }
 

@@ -1,43 +1,57 @@
-<h3>{{header}}</h3>
+<h3>Deliveries</h3>
 <hr>
 
 
 <!-- This is the Food Listings (generated via loop) -->
-<ng-container *ngFor="let foodListing of foodListings; let i = index">
+<ng-container *ngFor="let delivery of deliveries; let i = index">
 
-    <div class="food-listing-container">
+    <div class="deliver-container">
 
-        <div class="food-listing-img-container">
-            <img *ngIf="foodListing.imgUrl != null" [src]="foodListing.imgUrl"/>
+        <div class="deliver-img-container">
+            <img *ngIf="food-listing-delivery.imgUrl != null" [src]="food-listing-delivery.imgUrl"/>
         </div>
 
-        <div [ngClass]="{ 'food-listing-contents': (foodListing.imgUrl != null) }">
-            <h4 class="link-content food-listing-title">
+        <div [ngClass]="{ 'deliver-contents': (foodListing.imgUrl != null) }">
+            <h4 class="link-content deliver-title space-bottom">
                 <a (click)="showDetails(i)" title="Click for Details">{{ foodListing.foodTitle }}</a>
             </h4>
-            <br>
 
-            <div>
-                <b>Donated By:</b>
-                <ng-container *ngIf="foodListing.donorOrganizationName != null">
-                    {{ foodListing.donorOrganizationName }}
-                </ng-container>
-                <ng-container *ngIf="foodListing.donorOrganizationName == null">
-                    {{ foodListing.donorFirstName }} {{ foodListing.donorLastName }}
-                </ng-container>
-            </div>
-            <br>
+            <div class="row small-description">
 
-            <div>
-                <b>Description:</b> {{ foodListing.foodDescription }}
-            </div>
-            <br>
-            
-            <div>
-                <b>Available Until:</b> {{ foodListing.availableUntilDate }}
-            </div>
+                <div class="col-lg-6 col-md-12" style="max-width:300px">
+                
+                    <div class="space-bottom">
+                        <b>Donor</b><br>
+                        <span class="inline-block">{{ food-listing-delivery.donorOrganizationName }}</span><br>
+                        <span>{{ food-listing-delivery.donorOrganizationAddress }}</span><br>
+                        <span>
+                            {{ food-listing-delivery.donorOrganizationCity }}, {{ food-listing-delivery.donorOrganizationState }}
+                        </span>
+                    </div>
 
-            <ng-content select="[food-listing-info]"></ng-content>
+                    <div class="space-bottom">
+                        <b>Total Driving Distance:</b>
+                        <div class="inline-block">
+                            {{ food-listing-delivery.totalDrivingDistance }}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-6 col-md-12">
+
+                    <div class="space-bottom">
+                        <b>Receiver</b><br>
+                        <span class="inline-block">{{ food-listing-delivery.receiverOrganizationName }}</span><br>
+                        <span>{{ food-listing-delivery.receiverOrganizationAddress }}</span><br>
+                        <span>
+                            {{ food-listing-delivery.receiverOrganizationCity }}, {{ food-listing-delivery.receiverOrganizationState }}
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>            
         </div>
 
     </div>
@@ -48,7 +62,7 @@
 
 <!-- This is our modal popup. It is separated into its own (child) component.
      Simply pass down transcluded HTML into this child component here! -->
-<food-listing-dialog #FoodListingDialogComponent>
+<!--<deliver-dialog #DeliverDialogComponent>
 
     <ng-container confirm-modal-body>
         <ng-content select="[confirm-modal-body]"></ng-content>
@@ -62,4 +76,4 @@
         <ng-content select="[confirm-modal-footer]"></ng-content>
     </ng-container>
 
-</food-listing-dialog>
+</deliver-dialog>-->
