@@ -5,12 +5,13 @@ export class DeliveryFoodListing {
 
     constructor(
         public claimedFoodListingKey?: number,
+        public deliveryFoodListingKey?: number,
         public foodTitle?: string,
         public donorOrganizationName?: string,
-        public donorOrganizationAddress?: string,
-        public donorOrganizationCity?: string,
-        public donorOrganizationState?: string,
-        public donorOrganizationZip?: number,
+        public donorAddress?: string,
+        public donorCity?: string,
+        public donorState?: string,
+        public donorZip?: number,
         /**
          * The driving distance of the deliverer from the donor.
          */
@@ -19,14 +20,14 @@ export class DeliveryFoodListing {
          * The time that it will take 
          */
         public donorDrivingTime?: number,
-        public donorOrganizationPhone?: string,
+        public donorPhone?: string,
         public donorLastName?: string,
         public donorFirstName?: string,
         public receiverOrganizationName?: string,
-        public receiverOrganizationAddress?: string,
-        public receiverOrganizationCity?: string,
-        public receiverOrganizationState?: string,
-        public receiverOrganizationZip?: number,
+        public receiverAddress?: string,
+        public receiverCity?: string,
+        public receiverState?: string,
+        public receiverZip?: number,
         /**
          * The driving distance of the receiver from the donor.
          */
@@ -35,7 +36,7 @@ export class DeliveryFoodListing {
          * The time (in minutes) that it will take to get from Donor to Receiver.
          */
         public receiverDrivingTime?: number,
-        public receiverOrganizationPhone?: string,
+        public receiverPhone?: string,
         public receiverLastName?: string,
         public receiverFirstName?: string,
         public foodDescription?: string,
@@ -59,7 +60,6 @@ export class DeliveryFoodListing {
         /**
          * The total weight of the delivery (in lbs).
          */
-        public totalWeight?: number,
-        public deliveryFoodListingKey?: number
+        public totalWeight?: number
     ) { }
 }

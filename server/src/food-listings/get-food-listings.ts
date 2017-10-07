@@ -94,7 +94,7 @@ function generateResultArray(rows: any[], gpsCoordinate: GPSCoordinate, myDonate
     for (let i: number = 0; i < rows.length; i++) {
         // Insert returned data into result arrays.
         foodListings.push(rows[i].foodlisting);
-        donorgpsCoordinate.push(new GPSCoordinate(rows[i].donorlatitude, rows[i].donorlongitude));
+        donorgpsCoordinate.push(rows[i].donorgpscoordinate);
     }
 
     // If in Donor Cart, then we don't care about seeing driving distances!

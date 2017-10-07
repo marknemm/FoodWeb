@@ -1,12 +1,7 @@
-
-
-
 /**
  * A basic search function for retrieving food listings that meet specific criteria.
  * NOTE: This may need to be further optimized given that it will be dealing with a large amount of rows.
  *       -One idea is to combine the dynamic query and return query and just do the group by in one return query. The query optimizer may come through here.
- *       -Another idea is to first get all Food Listing keys that meet search criteria in a temp table using a dynamic query (no group by),
- *        and then do a group by off of the small amount of food listing keys.
  */
 SELECT dropFunction('getFoodListings');
 CREATE OR REPLACE FUNCTION getFoodListings
@@ -25,10 +20,9 @@ CREATE OR REPLACE FUNCTION getFoodListings
 )
 RETURNS TABLE
 (
-    foodListingKey  FoodListing.foodListingKey%TYPE,
-    donorLatitude   DOUBLE PRECISION,
-    donorLongitude  DOUBLE PRECISION,
-    foodListing     JSON
+    foodListingKey      FoodListing.foodListingKey%TYPE,
+    foodListing         JSON,
+    donorGPSCoordinate  JSON
 )
 AS $$
     DECLARE _currentWeekday      INTEGER; -- [0, 6] index of the current weekday.
@@ -49,7 +43,7 @@ BEGIN
     IF (_matchAvailability = TRUE)
     THEN
 
-        -- Grab [0, 6] index of current day of week.
+        -- Grab [0, 6] index of current day of week (DOW).
         _currentWeekday = (SELECT EXTRACT(DOW FROM CURRENT_DATE));
 
         -- This table will be filled with actual timestamps (dates) of availability over the span of the next week relative to today.
@@ -185,8 +179,6 @@ BEGIN
     -- Here we will be doing a select using the filtered food listing keys from the dynamic query above. No grouping will be necessary.
     RETURN QUERY
     SELECT  FoodListing.foodListingKey,
-            ST_Y(DonatedByContactInfo.gpsCoordinate::GEOMETRY),
-            ST_X(DonatedByContactInfo.gpsCoordinate::GEOMETRY),
             -- @ts-sql class="FoodListing" file="/shared/food-listing/food-listing.ts"
             JSON_BUILD_OBJECT (
                 'foodListingKey',           FoodListing.foodListingKey,
@@ -199,14 +191,14 @@ BEGIN
                                                 GROUP BY FoodListingFoodTypeMap.foodListingKey
                                             ),
                 'perishable',               FoodListing.perishable,
-                'donorOrganizationName',    DonatedByOrganization.name,
-                'donorAddress',             DonatedByContactInfo.address,
-                'donorCity',                DonatedByContactInfo.city,
-                'donorState',               DonatedByContactInfo.state,
-                'donorZip',                 DonatedByContactInfo.zip,
-                'donorPhone',               DonatedByContactInfo.phone,
-                'donorLastName',            DonatedByAppUser.lastName,
-                'donorFirstName',           DonatedByAppUser.firstName,
+                'donorOrganizationName',    DonorOrganization.name,
+                'donorAddress',             DonorContact.address,
+                'donorCity',                DonorContact.city,
+                'donorState',               DonorContact.state,
+                'donorZip',                 DonorContact.zip,
+                'donorPhone',               DonorContact.phone,
+                'donorLastName',            DonorAppUser.lastName,
+                'donorFirstName',           DonorAppUser.firstName,
                 'donorOnHandUnitsCount',    (SELECT getDonorOnHandUnitsCount(FoodListing.foodListingKey)),
                 'availableUnitsCount',      (SELECT getAvailableUnitsCount(FoodListing.foodListingKey)),
                 'claimedUnitsCount',        (SELECT getUserClaimedUnitsCount(FoodListing.foodListingKey, _appUserKey)),
@@ -215,12 +207,17 @@ BEGIN
                 'availableUntilDate',       TO_CHAR(FoodListing.availableUntilDate, 'MM/DD/YYYY'),
                 'foodDescription',          FoodListing.foodDescription,
                 'imgUrl',                   FoodListing.imgUrl
-            )
+            ) AS foodListing,
+            -- @ts-sql class="GPSCoordinate" file="/shared/common-util/geocode.ts"
+            JSON_BUILD_OBJECT (
+                'latitude',     ST_Y(DonorContact.gpsCoordinate::GEOMETRY),
+                'longitude',    ST_X(DonorContact.gpsCoordinate::GEOMETRY)
+            ) AS donorGPSCoordinate
     FROM FiltFoodListing
-    INNER JOIN FoodListing                                          ON FiltFoodListing.foodListingKey = FoodListing.foodListingKey
-    INNER JOIN AppUser                  AS DonatedByAppUser         ON FoodListing.donatedByAppUserKey = DonatedByAppUser.appUserKey
-    INNER JOIN ContactInfo              AS DonatedByContactInfo     ON DonatedByAppUser.appUserKey = DonatedByContactInfo.appUserKey
-    LEFT JOIN  Organization             AS DonatedByOrganization    ON DonatedByAppUser.appUserKey = DonatedByOrganization.appUserKey
+    INNER JOIN FoodListing                                      ON FiltFoodListing.foodListingKey = FoodListing.foodListingKey
+    INNER JOIN AppUser                  AS DonorAppUser         ON FoodListing.donatedByAppUserKey = DonorAppUser.appUserKey
+    INNER JOIN ContactInfo              AS DonorContact         ON DonorAppUser.appUserKey = DonorContact.appUserKey
+    INNER JOIN Organization             AS DonorOrganization    ON DonorAppUser.appUserKey = DonorOrganization.appUserKey
     ORDER BY FoodListing.availableUntilDate ASC;
 
 END;
@@ -241,7 +238,7 @@ GROUP BY FoodListing.foodListingKey;
 
 --SELECT * FROM FoodListingFoodTypeMap;
 
-SELECT * FROM getFoodListings(1, 0, 1000, 52, NULL, NULL, NULL, FALSE, FALSE, FALSE, TRUE);
+--SELECT * FROM getFoodListings(1, 0, 1000, 52, NULL, NULL, NULL, FALSE, FALSE, FALSE, TRUE);
 --SELECT * FROM RelativeAvailabilityDates;
 
 /*
