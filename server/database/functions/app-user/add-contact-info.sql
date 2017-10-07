@@ -2,23 +2,27 @@ SELECT dropFunction('addContactInfo');
 
 CREATE OR REPLACE FUNCTION addContactInfo
 (
-    _appUserKey         INTEGER,
-    _address            VARCHAR(128),
-    _addressLatitude    NUMERIC(7, 4),
-    _addressLongitude   NUMERIC(7, 4),
-    _city               VARCHAR(60),
-    _state              CHAR(2),
-    _zip                INTEGER,
-    _phone              CHAR(12)
+    _appUserKey ContactInfo.AppUserKey%TYPE,
+    _address    ContactInfo.address%TYPE        DEFAULT NULL,
+    _latitude   NUMERIC(9, 6)                   DEFAULT NULL,
+    _longitude  NUMERIC(9, 6)                   DEFAULT NULL,
+    _city       ContactInfo.city%TYPE           DEFAULT NULL,
+    _state      ContactInfo.state%TYPE          DEFAULT NULL,
+    _zip        ContactInfo.zip%TYPE            DEFAULT NULL,
+    _phone      ContactInfo.phone%TYPE          DEFAULT NULL
 )
-RETURNS INTEGER -- Will return the contactInfoKey
+RETURNS ContactInfo.contactInfoKey%TYPE -- Will return the contactInfoKey
 AS $$
-    DECLARE _contactInfoKey     INTEGER; 
+    DECLARE _gpsCoordinate      ContactInfo.gpsCoordinate%TYPE;
+    DECLARE _contactInfoKey     ContactInfo.contactInfoKey%TYPE; 
 BEGIN
 
-    INSERT INTO ContactInfo (appUserKey, address, addressLatitude, addressLongitude, city, state, zip, phone)
-    VALUES (_appUserKey, _address, _addressLatitude, _addressLongitude, _city, _state, _zip, _phone)
-    RETURNING ContactInfo.contactInfoKey INTO _contactInfoKey;
+    _gpsCoordinate := createGPSCoordinate(_latitude, _longitude);
+
+    INSERT INTO ContactInfo (appUserKey, address, gpsCoordinate, city, state, zip, phone)
+    VALUES      (_appUserKey, _address, _gpsCoordinate, _city, _state, _zip, _phone)
+    RETURNING   ContactInfo.contactInfoKey
+    INTO        _contactInfoKey;
 
     RETURN _contactInfoKey;
 

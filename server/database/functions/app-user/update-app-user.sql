@@ -11,8 +11,8 @@ CREATE OR REPLACE FUNCTION updateAppUser
     _lastName               AppUser.lastName%TYPE               DEFAULT NULL,
     _firstName              AppUser.firstName%TYPE              DEFAULT NULL,
     _address                ContactInfo.address%TYPE            DEFAULT NULL,
-    _addressLatitude        ContactInfo.addressLatitude%TYPE    DEFAULT NULL,
-    _addressLongitude       ContactInfo.addressLongitude%TYPE   DEFAULT NULL,
+    _latitude               NUMERIC(9, 6)                       DEFAULT NULL,
+    _longitude              NUMERIC(9, 6)                       DEFAULT NULL,
     _city                   ContactInfo.city%TYPE               DEFAULT NULL,
     _state                  ContactInfo.state%TYPE              DEFAULT NULL,
     _zip                    ContactInfo.zip%TYPE                DEFAULT NULL,
@@ -42,15 +42,7 @@ BEGIN
     WHERE AppUser.appUserKey = _appUserKey;
 
     -- Update any ContactInfo fields related to AppUser being updated.
-    UPDATE ContactInfo
-    SET address             = COALESCE(_address, address),
-        addressLatitude     = COALESCE(_addressLatitude, addressLatitude),
-        addressLongitude    = COALESCE(_addressLongitude, addressLongitude),
-        city                = COALESCE(_city, city),
-        state               = COALESCE(_state, state),
-        zip                 = COALESCE(_zip, zip),
-        phone               = COALESCE(_phone, phone)
-    WHERE ContactInfo.appUserKey = _appUserKey;
+    PERFORM updateContactInfo(_appUserKey, _address, _latitude, _longitude, _city, _state, _zip, _phone);
 
     -- Update any Organization fields related to AppUser being updated.
     IF (_organizationName IS NOT NULL)
@@ -78,5 +70,4 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT updateAppUser(1, NULL, NULL, 'Nemmer');
---SELECT * FROM appUser;
+--SELECT updateAppUser(1, NULL, NULL, 'Nemmer');

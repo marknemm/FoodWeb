@@ -4,7 +4,7 @@
 SELECT dropFunction('getAvailableUnitsCount');
 CREATE OR REPLACE FUNCTION getAvailableUnitsCount
 (
-     _foodListingKey INTEGER
+     _foodListingKey FoodListing.foodListingKey%TYPE
 )
 RETURNS INTEGER -- The count of available units for a given Food Listing.
 AS $$

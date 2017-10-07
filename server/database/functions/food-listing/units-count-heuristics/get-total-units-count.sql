@@ -4,7 +4,7 @@
 SELECT dropFunction('getTotalUnitsCount');
 CREATE OR REPLACE FUNCTION getTotalUnitsCount
 (
-     _foodListingKey INTEGER
+     _foodListingKey FoodListing.foodListingKey%TYPE
 )
 RETURNS INTEGER -- The count of total units for a given Food Listing.
 AS $$

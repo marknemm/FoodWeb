@@ -4,8 +4,8 @@
 SELECT dropFunction('getUserClaimedUnitsCount');
 CREATE OR REPLACE FUNCTION getUserClaimedUnitsCount
 (
-     _foodListingKey        INTEGER,
-     _claimedByAppUserKey   INTEGER
+     _foodListingKey        FoodListing.foodListingKey%TYPE,
+     _claimedByAppUserKey   ClaimedFoodListing.claimedByAppUserKey%TYPE
 )
 RETURNS INTEGER -- The count of claimed units for a given User and Food Listing.
 AS $$

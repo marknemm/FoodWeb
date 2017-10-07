@@ -4,11 +4,11 @@ SELECT dropFunction('addUnverifiedAppUser');
 
 CREATE OR REPLACE FUNCTION addUnverifiedAppUser
 (
-    _appUserKey INTEGER
+    _appUserKey UnverifiedAppUser.appUserKey%TYPE
 )
-RETURNS CHAR(20) -- The verification token.
+RETURNS UnverifiedAppUser.verificationToken%TYPE -- The verification token.
 AS $$
-    DECLARE _verificationToken  CHAR(20) = '';
+    DECLARE _verificationToken UnverifiedAppUser.verificationToken%TYPE = '';
 BEGIN
 
     -- First, generate a 20 character verification token consisting of upper case letters (for sake of simplicity).

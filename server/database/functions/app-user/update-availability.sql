@@ -5,14 +5,14 @@ SELECT dropFunction ('updateAvailability');
  */
 CREATE OR REPLACE FUNCTION updateAvailability
 (
-    _appUserKey     INTEGER,
+    _appUserKey     AppUserAvailability.appUserKey%TYPE,
     _timeRanges     TimeRange[] -- See TimeRange type definition in app-user-availability.sql!
 )
 RETURNS VOID
 AS $$
-    DECLARE _weekday    INTEGER;
-    DECLARE _startTime  TIME;
-    DECLARE _endTime    TIME;
+    DECLARE _weekday    AppUserAvailability.weekday%TYPE;
+    DECLARE _startTime  AppUserAvailability.startTime%TYPE;
+    DECLARE _endTime    AppUserAvailability.endTime%TYPE;
 BEGIN
 
     -- First delete all current availability entries for the given App User.

@@ -4,17 +4,17 @@
 SELECT dropFunction('removefoodlisting');
 CREATE OR REPLACE FUNCTION removeFoodListing
 (
-    _foodListingKey         INTEGER,
-    _donatedByAppUserKey    INTEGER,
-    _deleteUnitsCount       INTEGER DEFAULT NULL    -- The number of units/parts that the donor wishes to remove.
-                                                    -- NOTE: Default NULL means that all units (the whole FoodListing) shall be removed.
-                                                    --       Also, only units that have not entered a delivery phase may be removed.
+    _foodListingKey         FoodListing.foodListingKey%TYPE,
+    _donatedByAppUserKey    FoodListing.donatedByAppUserKey%TYPE,
+    _deleteUnitsCount       FoodListing.availableUnitsCount%TYPE DEFAULT NULL   -- The number of units/parts that the donor wishes to remove.
+                                                                                -- NOTE: Default NULL means that all units (the whole FoodListing) shall be removed.
+                                                                                --       Also, only units that have not entered a delivery phase may be removed.
 )
 RETURNS VOID -- TODO: Return contact info of App User who lost their claim due to this action for email notification!
 AS $$
-    DECLARE _donorOnHandUnitsCount          INTEGER;
-    DECLARE _availableUnitsCount            INTEGER;
-    DECLARE _claimedUnitsDeleteCount        INTEGER;
+    DECLARE _donorOnHandUnitsCount          FoodListing.availableUnitsCount%TYPE;
+    DECLARE _availableUnitsCount            FoodListing.availableUnitsCount%TYPE;
+    DECLARE _claimedUnitsDeleteCount        ClaimedFoodListing.claimedUnitsCount%TYPE;
 BEGIN
 
     -- Make sure the food listing we are to delete exists and was donated by user issuing this command.

@@ -5,7 +5,7 @@ import * as googleDistance from 'google-distance';
 /**
  * Container for latitude and longitude GPS Coordinates.
  */
-export class GPSCoordinates {
+export class GPSCoordinate {
     constructor(
         public latitude?: number,
         public longitude?: number
@@ -21,12 +21,12 @@ export class GPSCoordinates {
  * @param zip The 5 digit numeric ZIP code.
  * @return A promise containing the latitude and longitude GPS Coordinates wrapped in a container.
  */
-export function getGPSCoordinates(address: string, city: string, state: string, zip: number): Promise<GPSCoordinates> {
+export function getGPSCoordinate(address: string, city: string, state: string, zip: number): Promise<GPSCoordinate> {
 
     let fullAddress = address + ', ' + city + ', ' + zip.toString();
 
     // Wrap the result in a promise.
-    return new Promise<GPSCoordinates>(geocode.bind(this, fullAddress));
+    return new Promise<GPSCoordinate>(geocode.bind(this, fullAddress));
 }
 
 
@@ -36,7 +36,7 @@ export function getGPSCoordinates(address: string, city: string, state: string, 
  * @param resolve Called when the geocoding is successful.
  * @param reject Called when the geocoding fails.
  */
-function geocode(fullAddress: string, resolve: (value?: GPSCoordinates) => void, reject: (reason?: Error) => void): void {
+function geocode(fullAddress: string, resolve: (value?: GPSCoordinate) => void, reject: (reason?: Error) => void): void {
 
     // Use geocoder (which basically invokes Google Maps API) to get information on address.
     geocoder.geocode(fullAddress, function(err, data) {
@@ -47,7 +47,7 @@ function geocode(fullAddress: string, resolve: (value?: GPSCoordinates) => void,
             let latitude: number = data.results[0].geometry.location.lat;
             let longitude: number = data.results[0].geometry.location.lng;
             console.log('Successfully generated GPS coordinates: (' + latitude + ', ' + longitude + ')');
-            return resolve(new GPSCoordinates(latitude, longitude));
+            return resolve(new GPSCoordinate(latitude, longitude));
         }
         
         // On over query limit (retry).
@@ -65,26 +65,26 @@ function geocode(fullAddress: string, resolve: (value?: GPSCoordinates) => void,
 
 /**
  * Gets the driving distance from an origin GPS Coordinate to one or many destination GPS Coordinates.
- * @param originGPSCoordinates The origin GPS Coordinate.
- * @param destinationGPSCoordinates An array of one or more destination GPS Coordinates.
+ * @param origingpsCoordinate The origin GPS Coordinate.
+ * @param destinationgpsCoordinate An array of one or more destination GPS Coordinates.
  * @return A promise that resolves to an array of the computed driving distances.
  */
-export function getDrivingDistances(originGPSCoordinates: GPSCoordinates, destinationGPSCoordinates: GPSCoordinates[]): Promise<number[]> {
+export function getDrivingDistances(origingpsCoordinate: GPSCoordinate, destinationgpsCoordinate: GPSCoordinate[]): Promise<number[]> {
 
-    // Simply break out with a resolved promise if the given destinationGPSCoordinates array is empty!
-    if (destinationGPSCoordinates == null || destinationGPSCoordinates.length === 0)  return Promise.resolve([]);
+    // Simply break out with a resolved promise if the given destinationgpsCoordinate array is empty!
+    if (destinationgpsCoordinate == null || destinationgpsCoordinate.length === 0)  return Promise.resolve([]);
 
     return new Promise<number[]>(
 
         function (resolve: (value?: number[]) => void, reject: (reason?: Error) => void) {
 
-            let origins: string[] = [ originGPSCoordinates.latitude.toString() + ',' + originGPSCoordinates.longitude.toString() ];
+            let origins: string[] = [ origingpsCoordinate.latitude.toString() + ',' + origingpsCoordinate.longitude.toString() ];
             let destinations: string[] = [];
 
             // Fill destinations array with correctly formatted destination GPS Coordinates.
-            for (let i: number = 0; i < destinationGPSCoordinates.length; i++) {
-                destinations.push(destinationGPSCoordinates[i].latitude.toString() + ',' +
-                                  destinationGPSCoordinates[i].longitude.toString());
+            for (let i: number = 0; i < destinationgpsCoordinate.length; i++) {
+                destinations.push(destinationgpsCoordinate[i].latitude.toString() + ',' +
+                                  destinationgpsCoordinate[i].longitude.toString());
             }
             
             googleDistance.get(

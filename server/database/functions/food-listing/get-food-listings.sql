@@ -26,8 +26,8 @@ CREATE OR REPLACE FUNCTION getFoodListings
 RETURNS TABLE
 (
     foodListingKey  FoodListing.foodListingKey%TYPE,
-    donorLatitude   ContactInfo.addressLatitude%TYPE,
-    donorLongitude  ContactInfo.addressLongitude%TYPE,
+    donorLatitude   DOUBLE PRECISION,
+    donorLongitude  DOUBLE PRECISION,
     foodListing     JSON
 )
 AS $$
@@ -185,8 +185,8 @@ BEGIN
     -- Here we will be doing a select using the filtered food listing keys from the dynamic query above. No grouping will be necessary.
     RETURN QUERY
     SELECT  FoodListing.foodListingKey,
-            DonatedByContactInfo.addressLatitude,
-            DonatedByContactInfo.addressLongitude,
+            ST_Y(DonatedByContactInfo.gpsCoordinate::GEOMETRY),
+            ST_X(DonatedByContactInfo.gpsCoordinate::GEOMETRY),
             -- @ts-sql class="FoodListing" file="/shared/food-listing/food-listing.ts"
             JSON_BUILD_OBJECT (
                 'foodListingKey',           FoodListing.foodListingKey,
@@ -241,7 +241,7 @@ GROUP BY FoodListing.foodListingKey;
 
 --SELECT * FROM FoodListingFoodTypeMap;
 
---SELECT * FROM getFoodListings(1, 0, 1000, 52, NULL, NULL, NULL, FALSE, FALSE, FALSE, TRUE);
+SELECT * FROM getFoodListings(1, 0, 1000, 52, NULL, NULL, NULL, FALSE, FALSE, FALSE, TRUE);
 --SELECT * FROM RelativeAvailabilityDates;
 
 /*

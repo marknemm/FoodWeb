@@ -8,8 +8,8 @@ CREATE OR REPLACE FUNCTION addAppUser
     _lastName               AppUser.lastName%TYPE,
     _firstName              AppUser.firstName%TYPE,
     _address                ContactInfo.address%TYPE,
-    _addressLatitude        ContactInfo.addressLatitude%TYPE,
-    _addressLongitude       ContactInfo.addressLongitude%TYPE,
+    _latitude               NUMERIC(9, 6),
+    _longitude              NUMERIC(9, 6),
     _city                   ContactInfo.city%TYPE,
     _state                  ContactInfo.state%TYPE,
     _zip                    ContactInfo.zip%TYPE,
@@ -37,7 +37,6 @@ BEGIN
         SELECT 1
         FROM AppUser
         WHERE email = _email
-        LIMIT 1
     )
     THEN
         RAISE EXCEPTION 'Duplicate email provided';
@@ -60,7 +59,7 @@ BEGIN
     VALUES      (_appUserKey, _password);
 
     -- Add the new user's contact info.
-    PERFORM addContactInfo (_appUserKey, _address, _addressLatitude, _addressLongitude, _city, _state, _zip, _phone);
+    PERFORM addContactInfo (_appUserKey, _address, _latitude, _longitude, _city, _state, _zip, _phone);
 
     -- **** TODO: Get rid of this check once we fully implement signup with time ranges!!!
     IF (_availabilityTimeRanges IS NOT NULL)
@@ -87,6 +86,6 @@ $$ LANGUAGE plpgsql;
 
 
 /*
-SELECT * FROM addAppUser('testemail6@test.com', 'testPass', 'testLast', 'testFirst', '11 test rd.',
+SELECT * FROM addAppUser('testemail7@test.com', 'testPass', 'testLast', 'testFirst', '11 test rd.',
                          43.123456, 83.33, 'Test City', 'NY', 12345, '777-777-7777', true, true, '{"(Monday, 11:00 AM, 3:00 PM)"}'::TimeRange[]);
 */

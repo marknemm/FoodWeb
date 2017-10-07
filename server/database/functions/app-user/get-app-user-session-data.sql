@@ -41,10 +41,10 @@ AS $$
                                             'zip',              ContactInfo.zip,
                                             'phone',            ContactInfo.phone
                                         ),
-                -- @ts-sql class="GPSCoordinates" file="/server/src/common-util/geocode.ts"
-                'gpsCoordinates',       JSON_BUILD_OBJECT (
-                                            'latitude',         ContactInfo.addressLatitude,
-                                            'longitude',        ContactInfo.addressLongitude
+                -- @ts-sql class="gpsCoordinate" file="/shared/common-util/geocode.ts"
+                'gpsCoordinate',       JSON_BUILD_OBJECT (
+                                            'latitude',         ST_Y(ContactInfo.gpsCoordinate::GEOMETRY),
+                                            'longitude',        ST_X(ContactInfo.gpsCoordinate::GEOMETRY)
                                         ),
                 'isDonor',              AppUser.isDonor,
                 'isReceiver',           AppUser.isReceiver,

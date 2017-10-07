@@ -4,12 +4,12 @@
 SELECT dropFunction('markFoodListingPickUp');
 CREATE OR REPLACE FUNCTION markFoodListingPickUp
 (
-     _deliveryFoodListingKey    INTEGER,    -- This is the key of the Delivery Food Listing element that we are updating the status of.
-     _deliveryAppUserKey        INTEGER     -- This is the key of the user who is delivering the Food Listing.
+     _deliveryFoodListingKey    DeliveryFoodListing.deliveryFoodListingKey%TYPE,    -- This is the key of the Delivery Food Listing element that we are updating the status of.
+     _deliveryAppUserKey        DeliveryFoodListing.deliveryAppUserKey%TYPE         -- This is the key of the user who is delivering the Food Listing.
 )
-RETURNS INTEGER -- The deliveryFoodListing primary key.
+RETURNS DeliveryFoodListing.deliveryFoodListingKey%TYPE -- The deliveryFoodListing primary key.
 AS $$
-    DECLARE _deliveryFoodListingKey  INTEGER;
+    DECLARE _deliveryFoodListingKey  DeliveryFoodListing.deliveryFoodListingKey%TYPE;
 BEGIN
 
     -- TODO: Check that the delivery app user and delivery food listing exist!

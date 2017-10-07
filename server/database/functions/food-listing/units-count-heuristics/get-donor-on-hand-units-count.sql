@@ -4,7 +4,7 @@
 SELECT dropFunction('getDonorOnHandUnitsCount');
 CREATE OR REPLACE FUNCTION getDonorOnHandUnitsCount
 (
-     _foodListingKey INTEGER
+     _foodListingKey FoodListing.foodListingKey%TYPE
 )
 RETURNS INTEGER -- The count of donor on hand units for a given Food Listing.
 AS $$

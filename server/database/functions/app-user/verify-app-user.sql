@@ -2,8 +2,8 @@ SELECT dropFunction('verifyAppUser');
 
 CREATE OR REPLACE FUNCTION verifyAppUser
 (
-    _appUserKey         INTEGER,
-    _verificationToken  CHAR(20)
+    _appUserKey         UnverifiedAppUser.appUserKey%TYPE,
+    _verificationToken  UnverifiedAppUser.verificationToken%TYPE
 )
 RETURNS VOID
 AS $$

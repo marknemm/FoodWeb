@@ -5,22 +5,22 @@
 SELECT dropFunction('updateFoodListing');
 CREATE OR REPLACE FUNCTION updateFoodListing
 (
-    _foodListingKey         INTEGER,                        -- The key identifier of the Food Listing to update.
-    _donatedByAppUserKey    INTEGER,                        -- The Donor ID (used to check if user has rights to update Food Listing).
-    _foodTypes              FoodType[]      DEFAULT NULL,   -- What Food Types is this?
-    _foodTitle              VARCHAR(100)    DEFAULT NULL,   -- The title (short description) of the Food Listing.
-    _perishable             BOOLEAN         DEFAULT NULL,   -- Is the food perishable?
-    _availableUntilDate     TEXT            DEFAULT NULL,   -- The date when the donated food will no longer be available.
-    _totalWeight            INTEGER         DEFAULT NULL,   -- The total weight of (all parts/units of) the Food Listing (in pounds).
-    _foodDescription        TEXT            DEFAULT NULL,   -- A (long) description of the Food Listing.
-    _imgURL                 TEXT            DEFAULT NULL,   -- URL for the image being stored/uploaded.
-    _donorOnHandUnitsCount  INTEGER         DEFAULT 1,      /* The number of parts/units that the Food Listing is split up into which are currently
-                                                               in the physical possetion of the donor (both claimed and available, but not deliver state). */
-    _unitsLabel             TEXT            DEFAULT NULL    -- The user provided label for each unit.
+    _foodListingKey         FoodListing.foodListingKey%TYPE,                        -- The key identifier of the Food Listing to update.
+    _donatedByAppUserKey    FoodListing.donatedByAppUserKey%TYPE,                   -- The Donor ID (used to check if user has rights to update Food Listing).
+    _foodTypes              FoodType[]                              DEFAULT NULL,   -- What Food Types is this?
+    _foodTitle              FoodListing.foodTitle%TYPE              DEFAULT NULL,   -- The title (short description) of the Food Listing.
+    _perishable             FoodListing.perishable%TYPE             DEFAULT NULL,   -- Is the food perishable?
+    _availableUntilDate     TEXT                                    DEFAULT NULL,   -- The date when the donated food will no longer be available.
+    _totalWeight            FoodListing.totalWeight%TYPE            DEFAULT NULL,   -- The total weight of (all parts/units of) the Food Listing (in pounds).
+    _foodDescription        FoodListing.foodDescription%TYPE        DEFAULT NULL,   -- A (long) description of the Food Listing.
+    _imgURL                 FoodListing.imgUrl%TYPE                 DEFAULT NULL,   -- URL for the image being stored/uploaded.
+    _donorOnHandUnitsCount  FoodListing.availableUnitsCount%TYPE    DEFAULT 1,      /* The number of parts/units that the Food Listing is split up into which are currently
+                                                                                       in the physical possetion of the donor (both claimed and available, but not deliver state). */
+    _unitsLabel             FoodListing.unitsLabel%TYPE             DEFAULT NULL    -- The user provided label for each unit.
 )
 RETURNS VOID -- TODO: Return data pertaining to contacts of Receivers (Claimers) who are negatively effected by this update (for contacting them)!
 AS $$
-    DECLARE _deltaDonorOnHandUnitsCount     INTEGER;
+    DECLARE _deltaDonorOnHandUnitsCount     FoodListing.availableUnitsCount%TYPE;
     DECLARE _availableUntilTimeStamp        TIMESTAMP;
 BEGIN
 

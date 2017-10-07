@@ -4,21 +4,21 @@
 SELECT dropFunction('addfoodlisting');
 CREATE OR REPLACE FUNCTION addFoodListing
 (
-    _donatedByAppUserKey    INTEGER,                        -- The Donor ID.
-    _foodTypes              FoodType[],                     -- What Food Types is this?
-    _foodTitle              VARCHAR(100),                   -- The title (short description) of the Food Listing.
-    _perishable             BOOLEAN,                        -- Is the food perishable?
-    _availableUntilDate     TEXT,                           -- The date when the donated food will no longer be available.
-    _totalWeight            INTEGER         DEFAULT NULL,   -- The total weight of (all parts/units of) the Food Listing (in pounds).
-    _foodDescription        TEXT            DEFAULT NULL,   -- A (long) description of the Food Listing.
-    _imgURL                 TEXT            DEFAULT NULL,   -- URL for the image being stored/uploaded.
-    _unitsCount             INTEGER         DEFAULT 1,      -- The total number of available parts/units that the Food Listing is split up into.
-    _unitsLabel             TEXT            DEFAULT NULL    -- The user provided label for each unit.
+    _donatedByAppUserKey    FoodListing.donatedByAppUserKey%TYPE,                   -- The Donor ID.
+    _foodTypes              FoodType[],                                             -- What Food Types is this?
+    _foodTitle              FoodListing.foodTitle%TYPE,                             -- The title (short description) of the Food Listing.
+    _perishable             FoodListing.perishable%TYPE,                            -- Is the food perishable?
+    _availableUntilDate     TEXT,                                                   -- The date when the donated food will no longer be available.
+    _totalWeight            FoodListing.totalWeight%TYPE            DEFAULT NULL,   -- The total weight of (all parts/units of) the Food Listing (in pounds).
+    _foodDescription        FoodListing.foodDescription%TYPE        DEFAULT NULL,   -- A (long) description of the Food Listing.
+    _imgURL                 FoodListing.imgUrl%TYPE                 DEFAULT NULL,   -- URL for the image being stored/uploaded.
+    _unitsCount             FoodListing.availableUnitsCount%TYPE    DEFAULT 1,      -- The total number of available parts/units that the Food Listing is split up into.
+    _unitsLabel             FoodListing.unitsLabel%TYPE             DEFAULT NULL    -- The user provided label for each unit.
 )
-RETURNS INTEGER -- The food listing key of the new food listing (can be used as reference for edit).
+RETURNS FoodListing.foodListingKey%TYPE -- The food listing key of the new food listing (can be used as reference for edit).
 AS $$
     DECLARE _availableUntilTimeStamp TIMESTAMP = to_timestamp(_availableUntilDate, 'MM/DD/YYYY');
-    DECLARE _foodListingKey INTEGER;
+    DECLARE _foodListingKey FoodListing.foodListingKey%TYPE;
 BEGIN
 
     -- If NULL is explicitely passed in, then we must explicitely default to 1 for total number of units/parts!

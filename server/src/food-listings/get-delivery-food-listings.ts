@@ -2,8 +2,8 @@
 import { query, QueryResult } from './../database-util/connection-pool';
 import { fixNullQueryArgs, toPostgresArray } from './../database-util/prepared-statement-util';
 import { logSqlConnect, logSqlQueryExec, logSqlQueryResult } from './../logging/sql-logger';
-import { getDrivingDistances, GPSCoordinates } from './../common-util/geocode';
 
+import { getDrivingDistances, GPSCoordinate } from './../../../shared/common-util/geocode';
 import { DeliveryFoodListingsFilters } from './../../../shared/food-listings/delivery-food-listings-filters';
 import { DeliveryFoodListing } from "./../../../shared/food-listings/delivery-food-listing";
 import { DateFormatter } from "./../../../shared/common-util/date-formatter";

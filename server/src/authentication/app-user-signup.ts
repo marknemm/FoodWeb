@@ -4,7 +4,7 @@ import { query } from '../database-util/connection-pool';
 import { Client, QueryResult } from 'pg';
 
 import { hashPassword } from './password-util';
-import { GPSCoordinates, getGPSCoordinates } from '../../../shared/common-util/geocode';
+import { GPSCoordinate, getGPSCoordinate } from '../../../shared/common-util/geocode';
 import { fixNullQueryArgs } from "./../database-util/prepared-statement-util";
 
 import { Validation } from '../../../shared/common-util/validation';
@@ -39,11 +39,11 @@ export function signup(appUserSignupInfo: AppUserInfo, password: string, appUser
         // Generate GPS coordinates if initial signup (not an update).
         .then((hashPass: string) => {
             return (!isUpdate || appUserSignupInfo.address != null) ? genGPSCoordsAndHashPass(appUserSignupInfo, hashPass)
-                                                                    : { hashPass: hashPass, gpsCoordinates: null};
+                                                                    : { hashPass: hashPass, gpsCoordinate: null};
         })
         // Add new user into database on signup, or update information on App User update.
-        .then(({hashPass, gpsCoordinates}) => {
-            return addOrUpdateAppUser(appUserSignupInfo, hashPass, gpsCoordinates, appUserUpdateKey);
+        .then(({hashPass, gpsCoordinate}) => {
+            return addOrUpdateAppUser(appUserSignupInfo, hashPass, gpsCoordinate, appUserUpdateKey);
         })
         // Handle the results of the add or update (includes sending verification email).
         .then((addOrUpdateResult: QueryResult) => {
@@ -84,12 +84,12 @@ export function signupVerify(appUserKey: number, verificationToken: String): Pro
  * @param hashPass The previously generated hashed password.
  * @return An object containing the hashed password and GPS coordinates.
  */
-function genGPSCoordsAndHashPass(appUserSignupInfo: AppUserInfo, hashPass: string): Promise<{ hashPass: string, gpsCoordinates: GPSCoordinates }> {
+function genGPSCoordsAndHashPass(appUserSignupInfo: AppUserInfo, hashPass: string): Promise<{ hashPass: string, gpsCoordinate: GPSCoordinate }> {
 
-    return getGPSCoordinates(appUserSignupInfo.address, appUserSignupInfo.city, appUserSignupInfo.state, appUserSignupInfo.zip)
+    return getGPSCoordinate(appUserSignupInfo.address, appUserSignupInfo.city, appUserSignupInfo.state, appUserSignupInfo.zip)
         // Simply map the result to an aggregate of all results so far!
-        .then((gpsCoordinates: GPSCoordinates) => {
-            return { hashPass: hashPass, gpsCoordinates: gpsCoordinates };
+        .then((gpsCoordinate: GPSCoordinate) => {
+            return { hashPass: hashPass, gpsCoordinate: gpsCoordinate };
         });
 }
 
@@ -102,7 +102,7 @@ function genGPSCoordsAndHashPass(appUserSignupInfo: AppUserInfo, hashPass: strin
  * @param addressLongitude The longitude GPS coordinate corresponding to the address given in the signup info.
  */
 function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: string,
-                            gpsCoordinates: GPSCoordinates, appUserUpdateKey: number): Promise<QueryResult>
+                            gpsCoordinate: GPSCoordinate, appUserUpdateKey: number): Promise<QueryResult>
 {
     let isUpdate: boolean = (appUserUpdateKey != null);
 
@@ -117,8 +117,8 @@ function addOrUpdateAppUser(appUserSignupInfo: AppUserInfo, hashedPassword: stri
                                   appUserSignupInfo.lastName,
                                   appUserSignupInfo.firstName, 
                                   appUserSignupInfo.address,
-                                  (gpsCoordinates != null ? gpsCoordinates.latitude : null),
-                                  (gpsCoordinates != null ? gpsCoordinates.longitude : null),
+                                  (gpsCoordinate != null ? gpsCoordinate.latitude : null),
+                                  (gpsCoordinate != null ? gpsCoordinate.longitude : null),
                                   appUserSignupInfo.city,
                                   appUserSignupInfo.state,
                                   appUserSignupInfo.zip,

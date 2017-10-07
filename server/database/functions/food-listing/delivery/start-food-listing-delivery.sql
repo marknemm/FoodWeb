@@ -4,12 +4,12 @@
 SELECT dropFunction('startFoodListingDelivery');
 CREATE OR REPLACE FUNCTION startFoodListingDelivery
 (
-     _claimedFoodListingKey INTEGER,    -- This is the key of the Claimed Food Listing that is to be delivered.
-     _deliveryAppUserKey    INTEGER     -- This is the key of the user who is delivering the Food Listing.
+     _claimedFoodListingKey DeliveryFoodListing.deliveryFoodListingKey%TYPE,    -- This is the key of the Claimed Food Listing that is to be delivered.
+     _deliveryAppUserKey    DeliveryFoodListing.deliveryAppUserKey%TYPE         -- This is the key of the user who is delivering the Food Listing.
 )
-RETURNS INTEGER -- The deliveryFoodListing primary key.
+RETURNS DeliveryFoodListing.deliveryFoodListingKey%TYPE -- The deliveryFoodListing primary key.
 AS $$
-    DECLARE _deliveryFoodListingKey  INTEGER;
+    DECLARE _deliveryFoodListingKey  DeliveryFoodListing.deliveryFoodListingKey%TYPE;
 BEGIN
 
     -- TODO: Check that the delivery app user and claimed food listing exist!

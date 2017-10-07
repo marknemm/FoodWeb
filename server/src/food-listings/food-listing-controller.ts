@@ -24,7 +24,7 @@ export function handleGetFoodListings(request: Request, response: Response): voi
     let getFoodListingsRequest: GetFoodListingsRequest = request.body;
     let sessionData: SessionData = SessionData.loadSessionData(request);
 
-    getFoodListings(getFoodListingsRequest.filters, sessionData.appUserKey, sessionData.gpsCoordinates)
+    getFoodListings(getFoodListingsRequest.filters, sessionData.appUserKey, sessionData.gpsCoordinate)
         .then((foodListings: FoodListing[]) => {
             response.send(new GetFoodListingsResponse(foodListings, true, 'Food Listings Successfully Retrieved'));
         })
