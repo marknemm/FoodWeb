@@ -4,12 +4,12 @@ import { Observable } from "rxjs/Observable";
 
 import { AbstractSlickList } from './../slick-list/abstract-slick-list';
 import { SlickListDialogComponent } from '../slick-list/slick-list-dialog/slick-list-dialog.component';
-//import { FoodListingDialogContentsComponent } from './food-listing-dialog-contents/food-listing-dialog-contents.component';
 import { GetFoodListingsService } from './food-listing-services/get-food-listings.service';
 
 import { FoodListing } from '../../../../shared/food-listings/food-listing';
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
 import { GetFoodListingsRequest } from '../../../../shared/food-listings/get-food-listings-message';
+import { AbstractSlickListDialog } from '../slick-list/slick-list-dialog/abstract-slick-list-dialog';
 
 
 @Component({
@@ -33,7 +33,7 @@ export class FoodListingsComponent extends AbstractSlickList <FoodListing, FoodL
      */
     @Input() private isDonatedCart: boolean = false;
 
-    @ViewChild('SlickListDialogComponent') protected slickListDialog: SlickListDialogComponent;
+    @ViewChild('FoodListingDialogComponent') protected slickListDialog: AbstractSlickListDialog;
 
 
     public constructor (

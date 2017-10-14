@@ -56,13 +56,10 @@
 
 <!-- This is our modal dialog's contents. It is separated into its own (child) component.
      Simply pass down transcluded HTML into this child component here! -->
-<slick-list-dialog #SlickListDialogComponent [header]="getSelectedListing()?.foodTitle">
+<food-listing-dialog #FoodListingDialogComponent [selectedFoodListing]="getSelectedListing()" [isClaimedCart]="isClaimedCart" [isDonatedCart]="isDonatedCart">
 
-    <food-listing-dialog slick-list-dialog-body [selectedFoodListing]="getSelectedListing()"
-        [isClaimedCart]="isClaimedCart" [isDonatedCart]="isDonatedCart"></food-listing-dialog>
-
-    <ng-container slick-list-dialog-footer>
+    <ng-container food-listing-dialog-footer>
         <ng-content select="[food-listing-dialog-footer]"></ng-content>
     </ng-container>
 
-</slick-list-dialog>
+</food-listing-dialog>

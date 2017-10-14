@@ -1,103 +1,112 @@
-<!-- The contents of the dialog are in the format of a slick list item! -->
-<slick-list-item [includeDivider]="false">
+<slick-list-dialog #SlickListDialogComponent [header]="selectedFoodListing?.foodTitle">
+
+    <!-- The body of the dialog is in the format of a slick list item! -->
+    <slick-list-item slick-list-dialog-body [includeDivider]="false">
+                    
+        <ng-container slick-list-item-left>
+            <img *ngIf="selectedFoodListing?.imgUrl != null" [src]="selectedFoodListing?.imgUrl"/>
+        </ng-container>
+        
+        <div slick-list-item-right-body class="row">
+        
+            <!-- Donor Description (Column 1) -->
+            <div class="col-lg-6 col-md-12" *ngIf="!isDonatedCart">
+                    
+                <div class="space-bottom">
+                    <b>Donor Organization:</b>
+                    <span class="inline-block">{{ selectedFoodListing?.donorOrganizationName }}</span>
+                </div>
+
+                <div class="space-bottom">
+                    <b class="inline-block">Donor Administrator:</b>
+                    <span class="inline-block">{{ selectedFoodListing?.donorFirstName }} {{ selectedFoodListing?.donorLastName }}</span>
+                </div>
+
+                <div class="space-bottom">
+                    <div class="inline-block">
+                        <b>Donor Address:</b>
+                    </div>
+                    <div class="inline-block">
+                        <span>{{ selectedFoodListing?.donorAddress }}</span><br>
+                        <span>
+                            {{ selectedFoodListing?.donorCity }}, {{ selectedFoodListing?.donorState }} {{ selectedFoodListing?.donorZip }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class ="space-bottom" *ngIf="selectedFoodListing?.donorDrivingDistance != null">
+                    <b>Driving Distance:</b>
+                    <span class="inline-block">{{ selectedFoodListing?.donorDrivingDistance + ' miles' }}</span>
+                </div>
+
+                <div class="space-bottom">
+                    <b>Donor Phone:</b>
+                    <span class="inline-block">{{ selectedFoodListing?.donorPhone }}</span>
+                </div>
+
+            </div> <!-- Donor Description (Column 1) -->
+
+            <!-- Misc Description (Column 2) -->
+            <div class="col-lg-6 col-md-12">
+
+                <div class="space-bottom">
+                    <b>Available Until:</b> {{ selectedFoodListing?.availableUntilDate }}
+                </div>
+
+                <div class="space-bottom">
+                    <b>Perishable:</b>
+                    <i class="material-icons" *ngIf="selectedFoodListing?.perishable" style="color:green">check</i>
+                    <i class="material-icons" *ngIf="!selectedFoodListing?.perishable" style="color:red">clear</i>
+                    <span>{{ selectedFoodListing?.perishable ? 'Yes' : 'No'}}</span>
+                </div>
                 
-    <ng-container slick-list-item-left>
-        <img *ngIf="selectedFoodListing?.imgUrl != null" [src]="selectedFoodListing?.imgUrl"/>
-    </ng-container>
-    
-    <div slick-list-item-right-body class="row">
-    
-        <!-- Donor Description (Column 1) -->
-        <div class="col-lg-6 col-md-12" *ngIf="!isDonatedCart">
-                
-            <div class="space-bottom">
-                <b>Donor Organization:</b>
-                <span class="inline-block">{{ selectedFoodListing?.donorOrganizationName }}</span>
-            </div>
-
-            <div class="space-bottom">
-                <b class="inline-block">Donor Administrator:</b>
-                <span class="inline-block">{{ selectedFoodListing?.donorFirstName }} {{ selectedFoodListing?.donorLastName }}</span>
-            </div>
-
-            <div class="space-bottom">
-                <div class="inline-block">
-                    <b>Donor Address:</b>
-                </div>
-                <div class="inline-block">
-                    <span>{{ selectedFoodListing?.donorAddress }}</span><br>
-                    <span>
-                        {{ selectedFoodListing?.donorCity }}, {{ selectedFoodListing?.donorState }} {{ selectedFoodListing?.donorZip }}
-                    </span>
-                </div>
-            </div>
-
-            <div class ="space-bottom" *ngIf="selectedFoodListing?.donorDrivingDistance != null">
-                <b>Driving Distance:</b>
-                <span class="inline-block">{{ selectedFoodListing?.donorDrivingDistance + ' miles' }}</span>
-            </div>
-
-            <div class="space-bottom">
-                <b>Donor Phone:</b>
-                <span class="inline-block">{{ selectedFoodListing?.donorPhone }}</span>
-            </div>
-
-        </div> <!-- Donor Description (Column 1) -->
-
-        <!-- Misc Description (Column 2) -->
-        <div class="col-lg-6 col-md-12">
-
-            <div class="space-bottom">
-                <b>Available Until:</b> {{ selectedFoodListing?.availableUntilDate }}
-            </div>
-
-            <div class="space-bottom">
-                <b>Perishable:</b>
-                <i class="material-icons" *ngIf="selectedFoodListing?.perishable" style="color:green">check</i>
-                <i class="material-icons" *ngIf="!selectedFoodListing?.perishable" style="color:red">clear</i>
-                <span>{{ selectedFoodListing?.perishable ? 'Yes' : 'No'}}</span>
-            </div>
-            
-            <div id="food-types-container" class="space-bottom">
-                <b>Present Food Types:</b><br>
-                <app-food-types [ngModel]="selectedFoodListing?.foodTypes" [displayOnly]="true" [maxNumColumns]="2"></app-food-types>
-            </div>
-
-            <!-- Units Counts Container -->
-            <div class="space-bottom">
-
-                <div *ngIf="!isClaimedCart">
-                    <b>Available Count:</b>
-                    <span class="inline-block">
-                        {{ selectedFoodListing?.availableUnitsCount }} of {{ selectedFoodListing?.totalUnitsCount }} {{ selectedFoodListing?.unitsLabel }}
-                    </span>
+                <div id="food-types-container" class="space-bottom">
+                    <b>Present Food Types:</b><br>
+                    <app-food-types [ngModel]="selectedFoodListing?.foodTypes" [displayOnly]="true" [maxNumColumns]="2"></app-food-types>
                 </div>
 
-                <div *ngIf="isDonatedCart">
-                    <b>Donor On-Hand Count:</b>
-                    <span class="inline-block">
-                        {{ selectedFoodListing?.donorOnHandUnitsCount }} of {{ selectedFoodListing?.totalUnitsCount }} {{ selectedFoodListing?.unitsLabel }}
-                    </span>
-                </div>
+                <!-- Units Counts Container -->
+                <div class="space-bottom">
 
-                <div *ngIf="isClaimedCart">
-                    <b>Claimed Count:</b>
-                    <span class="inline-block">
-                        {{ selectedFoodListing?.myClaimedUnitsCount }} of
-                        <!-- Instead of total units here, we have total units obtainable by this receiver -->
-                        {{ selectedFoodListing?.availableUnitsCount + selectedFoodListing?.myClaimedUnitsCount }} {{ selectedFoodListing?.unitsLabel }}
-                    </span>
-                </div>
+                    <div *ngIf="!isClaimedCart">
+                        <b>Available Count:</b>
+                        <span class="inline-block">
+                            {{ selectedFoodListing?.availableUnitsCount }} of {{ selectedFoodListing?.totalUnitsCount }} {{ selectedFoodListing?.unitsLabel }}
+                        </span>
+                    </div>
 
-            </div> <!-- Units Counts Container -->
+                    <div *ngIf="isDonatedCart">
+                        <b>Donor On-Hand Count:</b>
+                        <span class="inline-block">
+                            {{ selectedFoodListing?.donorOnHandUnitsCount }} of {{ selectedFoodListing?.totalUnitsCount }} {{ selectedFoodListing?.unitsLabel }}
+                        </span>
+                    </div>
 
-        </div> <!-- Misc Description (Column 2) -->
-    
-    </div>
+                    <div *ngIf="isClaimedCart">
+                        <b>Claimed Count:</b>
+                        <span class="inline-block">
+                            {{ selectedFoodListing?.myClaimedUnitsCount }} of
+                            <!-- Instead of total units here, we have total units obtainable by this receiver -->
+                            {{ selectedFoodListing?.availableUnitsCount + selectedFoodListing?.myClaimedUnitsCount }} {{ selectedFoodListing?.unitsLabel }}
+                        </span>
+                    </div>
 
-    <ng-container slick-list-item-bottom>
-        <b>Description --</b><br>
-        <span class="inline-block">{{ selectedFoodListing?.foodDescription }}</span>
+                </div> <!-- Units Counts Container -->
+
+            </div> <!-- Misc Description (Column 2) -->
+        
+        </div>
+
+        <ng-container slick-list-item-bottom>
+            <b>Description --</b><br>
+            <span class="inline-block">{{ selectedFoodListing?.foodDescription }}</span>
+        </ng-container>
+
+    </slick-list-item>
+
+
+    <ng-container slick-list-dialog-footer>
+        <ng-content select="[food-listing-dialog-footer]"></ng-content>
     </ng-container>
 
-</slick-list-item>
+</slick-list-dialog>

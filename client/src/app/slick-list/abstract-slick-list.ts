@@ -2,7 +2,7 @@ import { Observable } from "rxjs/Observable";
 
 import { GetListingsService } from './get-listings.service';
 import { SlickListFilters } from './slick-list-message/slick-list-request';
-import { SlickListDialogInterface } from "./slick-list-dialog/slick-list-dialog-interface";
+import { AbstractSlickListDialog } from "./slick-list-dialog/abstract-slick-list-dialog";
 
 
 export abstract class AbstractSlickList <LIST_T, FILTERS_T extends SlickListFilters> {
@@ -10,7 +10,7 @@ export abstract class AbstractSlickList <LIST_T, FILTERS_T extends SlickListFilt
     protected listData: Array<LIST_T>;
     protected selectedListIndex: number;
 
-    protected slickListDialog: SlickListDialogInterface;
+    protected slickListDialog: AbstractSlickListDialog;
 
 
     /**

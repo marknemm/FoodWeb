@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 
 import { FoodListing } from './../../../../../shared/food-listings/food-listing';
+import { AbstractSlickListDialog } from '../../slick-list/slick-list-dialog/abstract-slick-list-dialog';
 
 
 @Component({
@@ -8,8 +9,8 @@ import { FoodListing } from './../../../../../shared/food-listings/food-listing'
   templateUrl: './food-listing-dialog.component.html',
   styleUrls: ['./food-listing-dialog.component.css', '../food-listings.component.css']
 })
-export class FoodListingDialogComponent {
-
+export class FoodListingDialogComponent extends AbstractSlickListDialog {
+    
     /**
      * The currently selected Food Listing.
      */
@@ -23,7 +24,14 @@ export class FoodListingDialogComponent {
      */
     @Input() private isDonatedCart: boolean = false;
 
+    /**
+     * This is a shadow of the slickListDialog member in AbstractSlickListDialog.
+     * It is all that is needed to make basic dialog functions work (open, close, etc).
+     */
+    @ViewChild('SlickListDialogComponent') protected slickListDialog: AbstractSlickListDialog; 
 
-    public constructor()
-    { }
+
+    public constructor() {
+        super();
+    }
 }

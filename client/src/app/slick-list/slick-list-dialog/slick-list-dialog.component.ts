@@ -2,7 +2,7 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef, NgbModalOptions } from "@ng-bootstrap/ng-bootstrap";
 import { Observable } from "rxjs/Observable";
 
-import { SlickListDialogInterface } from './slick-list-dialog-interface';
+import { AbstractSlickListDialog } from './abstract-slick-list-dialog';
 
 
 @Component({
@@ -10,7 +10,7 @@ import { SlickListDialogInterface } from './slick-list-dialog-interface';
     templateUrl: './slick-list-dialog.component.html',
     styleUrls: ['./slick-list-dialog.component.css']
 })
-export class SlickListDialogComponent implements SlickListDialogInterface {
+export class SlickListDialogComponent extends AbstractSlickListDialog {
 
     @Input() private header;
 
@@ -21,7 +21,8 @@ export class SlickListDialogComponent implements SlickListDialogInterface {
     
     public constructor (
         private modalService: NgbModal
-    ) { 
+    ) {
+        super();
         this.modalDialogContainerRef = null;
     }
 
