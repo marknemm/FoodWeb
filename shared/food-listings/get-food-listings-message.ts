@@ -5,31 +5,36 @@ import { FoodWebResponse } from '../message-protocol/food-web-response';
 import { FoodListing } from "../food-listings/food-listing";
 export { FoodListing };
 
+import { SlickListRequest } from '../../client/src/app/slick-list/slick-list-message/slick-list-request';
+import { SlickListResponse } from '../../client/src/app/slick-list/slick-list-message/slick-list-response';
+
 
 /**
  * The expected request for the get food listings operation. Should be sent from the client to the server.
  */
-export class GetFoodListingsRequest {
+export class GetFoodListingsRequest extends SlickListRequest<FoodListingsFilters> {
 
     constructor(
         /**
          * Filters to use when getting food listings.
          */
         public filters: FoodListingsFilters
-    ) { }
+    ) {
+        super(filters);
+    }
 }
 
 
 /**
  * The expected response from the get food listings operation. Should be sent form the server to the client.
  */
-export class GetFoodListingsResponse extends FoodWebResponse {
+export class GetFoodListingsResponse extends SlickListResponse<FoodListing> {
 
     constructor(
         /**
          * The food listings that were retrieved during the server operation.
          */
-        public foodListings?: FoodListing[],
+        public dataList?: Array<FoodListing>,
         /**
          * Indicates whether or not the operation on the back end was successful.
          */
@@ -48,6 +53,6 @@ export class GetFoodListingsResponse extends FoodWebResponse {
          */
         public signupConfirmRequired: boolean = false
     ) {
-        super(success, message, loginRequired, signupConfirmRequired);
+        super(dataList, success, message, loginRequired, signupConfirmRequired);
     }
 }

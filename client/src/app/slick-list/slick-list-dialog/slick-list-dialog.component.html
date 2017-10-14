@@ -1,0 +1,32 @@
+<!-- Slick List Modal Dialog -->
+<ng-template #SlickListDialogTemplate let-c="close">
+    
+    <!-- Header -->
+    <div class="modal-header">
+
+        <h5>{{ header }}</h5>
+
+        <!-- Close button -->
+        <button type="button" class="modal-close" aria-label="Close" (click)="c('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+        <ng-content select="[slick-list-dialog-body]"></ng-content>
+    </div>
+    
+    <!-- Footer -->
+    <div class="modal-footer">
+        
+        <!-- Standard modal footer -->
+        <ng-content select="[slick-list-dialog-footer]"></ng-content>
+
+        <!-- Only close button is hard coded in dialog. All others are transcluded in from parent component -->
+        <button md-raised-button color="primary" class="button-md" (click)="c('Close')">Close</button>
+
+    </div>
+
+</ng-template>

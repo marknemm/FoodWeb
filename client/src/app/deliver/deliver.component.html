@@ -8,7 +8,7 @@
     <div class="deliver-container">
 
         <div class="deliver-img-container">
-            <img *ngIf="food-listing-delivery.imgUrl != null" [src]="food-listing-delivery.imgUrl"/>
+            <img *ngIf="deliveryFoodListing.imgUrl != null" [src]="deliveryFoodListing.imgUrl"/>
         </div>
 
         <div [ngClass]="{ 'deliver-contents': (foodListing.imgUrl != null) }">
@@ -22,17 +22,17 @@
                 
                     <div class="space-bottom">
                         <b>Donor</b><br>
-                        <span class="inline-block">{{ food-listing-delivery.donorOrganizationName }}</span><br>
-                        <span>{{ food-listing-delivery.donorOrganizationAddress }}</span><br>
+                        <span class="inline-block">{{ deliveryFoodListing.donorOrganizationName }}</span><br>
+                        <span>{{ deliveryFoodListing.donorOrganizationAddress }}</span><br>
                         <span>
-                            {{ food-listing-delivery.donorOrganizationCity }}, {{ food-listing-delivery.donorOrganizationState }}
+                            {{ deliveryFoodListing.donorOrganizationCity }}, {{ deliveryFoodListing.donorOrganizationState }}
                         </span>
                     </div>
 
                     <div class="space-bottom">
                         <b>Total Driving Distance:</b>
                         <div class="inline-block">
-                            {{ food-listing-delivery.totalDrivingDistance }}
+                            {{ deliveryFoodListing.donorDrivingDistance + deliveryFoodListing.donorToReceiverDrivingDistance }}
                         </div>
                     </div>
 
@@ -42,10 +42,10 @@
 
                     <div class="space-bottom">
                         <b>Receiver</b><br>
-                        <span class="inline-block">{{ food-listing-delivery.receiverOrganizationName }}</span><br>
-                        <span>{{ food-listing-delivery.receiverOrganizationAddress }}</span><br>
+                        <span class="inline-block">{{ deliveryFoodListing.receiverOrganizationName }}</span><br>
+                        <span>{{ deliveryFoodListing.receiverOrganizationAddress }}</span><br>
                         <span>
-                            {{ food-listing-delivery.receiverOrganizationCity }}, {{ food-listing-delivery.receiverOrganizationState }}
+                            {{ deliveryFoodListing.receiverOrganizationCity }}, {{ deliveryFoodListing.receiverOrganizationState }}
                         </span>
                     </div>
 

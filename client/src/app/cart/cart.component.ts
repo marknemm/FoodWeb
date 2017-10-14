@@ -63,8 +63,8 @@ export class CartComponent implements OnInit {
      * Executed after all of the view children have been initialized (so safest to interact with them now).
      */
     ngAfterViewInit() {
-        this.foodListingsComponent.refreshFoodListings(this.foodListingsFiltersComponent.getFilterValues());
-        this.foodListingsFiltersComponent.onFiltersUpdate(this.foodListingsComponent.refreshFoodListings.bind(this.foodListingsComponent));
+        this.foodListingsComponent.refreshList(this.foodListingsFiltersComponent.getFilterValues());
+        this.foodListingsFiltersComponent.onFiltersUpdate(this.foodListingsComponent.refreshList.bind(this.foodListingsComponent));
     }
 
 
@@ -86,12 +86,12 @@ export class CartComponent implements OnInit {
 
     private unclaimSelectedFoodListing(): void {
         if (confirm('Are you sure you want to unclaim the food?\nThis cannot be undone.')) {
-            let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedFoodListing();
+            let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedListing();
             let observer: Observable<void> = this.claimFoodListingService.unclaimFoodListing(selectedFoodListing.foodListingKey);
 
             observer.subscribe(
                 () => {
-                    this.foodListingsComponent.removeSelectedFoodListing();
+                    this.foodListingsComponent.removeSelectedListing();
                 },
                 (err: Error) => {
                     console.log(err);
@@ -102,12 +102,12 @@ export class CartComponent implements OnInit {
 
 
     private removeSelectedFoodListing(): void {
-        let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedFoodListing();
+        let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedListing();
         let observer: Observable<void> = this.addRemoveFoodListingService.removeFoodListing(selectedFoodListing.foodListingKey);
 
         observer.subscribe(
             () => {
-                this.foodListingsComponent.removeSelectedFoodListing();
+                this.foodListingsComponent.removeSelectedListing();
             },
             (err: Error) => {
                 console.log(err);

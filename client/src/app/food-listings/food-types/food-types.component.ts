@@ -21,6 +21,7 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
 
     private foodTypes: string[];
     private foodTypesForm: FormGroup;
+    private numColumns: number;
 
     /**
      * A callback function provided by a parent component (via directive such as ngModel).
@@ -42,9 +43,14 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
      */
     @Input() private initiallyChecked: boolean = true;
     /**
-     * The number of columns that the Food Types checkboxes will be displayed in. Default is 1, and make is 4.
+     * The maximum number of elements per column (if reached, will generate another column). Default is 6.
+     * NOTE: Will not generate more than 4 columns, so if no more columns can be made, then this is ignored!
      */
-    @Input() private numColumns: number = 1;
+    @Input() private maxElementsPerColumn: number = 6;
+    /**
+     * The maximum number of columns that the Food Types checkboxes will be displayed in. Default is 4.
+     */
+    @Input() private maxNumColumns: number = 4;
     /**
      * Determines if at least one selection is required. Default is false.
      */
@@ -55,7 +61,7 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
     @Input() private extraValidation: boolean = true;
 
     
-    public constructor(
+    public constructor (
         // private routerSnapshot: ActivatedRoute,
         private foodTypesService: FoodTypesService
     ) {
@@ -68,8 +74,8 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
         // this.foodTypes = this.routerSnapshot.data['value']['foodTypes'];
 
         /*  Ideally, this should resolve immediately because of a resolver used in route to parent component! The Food Types should have
-            already been fetched and cached from the server before this component was initialize and rendered, but just in case we will
-            call getFoodTypes instead of directly getting results form ActiveRoute. */
+            already been fetched and cached from the server before this component was initialized and rendered, but just in case we will
+            call getFoodTypes instead of directly getting results form router snapshop (like shown above in commment). */
         this.foodTypesService.getFoodTypes().subscribe((foodTypes: string[]) => {
 
             this.foodTypes = foodTypes;
@@ -155,7 +161,7 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
      * @param onTouched 
      */
     public registerOnTouched(onTouched: any): void {
-        // TODO.
+        // TODO - not really necessary...
     }
 
 
@@ -192,6 +198,8 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
      * @return The array or range of column numbers.
      */
     private createColumnsRange(): number[] {
+        // Calculate the preferred number of columns that will be used for display.
+        this.numColumns = this.calcNumColumns();        
         return Array.from(Array(this.numColumns).keys());
     }
 
@@ -209,8 +217,8 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
         if (this.foodTypes != null) {
 
             // The Food Types that are to be displayed depend on the displayOnly and condensedDisplay settings.
-            let displayFoodTypes: string[] = (this.displayOnly && this.condensedDisplay) ? this.getSelectedFoodTypes()
-                                                                                         : this.foodTypes;
+            let displayFoodTypes: string[] = this.isCondesnedDisplayOnlyMode() ? this.getSelectedFoodTypes()
+                                                                               : this.foodTypes;
 
             /*  Calculate the number of extra Food Types that must be added to the first column if the total number of Food TYpes is not
                 evenly divisble by the number of columns! Also, all other ranges (column begins) must be offset by this amount! */
@@ -230,5 +238,28 @@ export class FoodTypesComponent implements OnInit, ControlValueAccessor {
         }
 
         return range;
+    }
+
+
+    /**
+     * Determines if this component is configured for condesned display only mode.
+     * @return true if it is, false if not.
+     */
+    private isCondesnedDisplayOnlyMode(): boolean {
+        return (this.displayOnly && this.condensedDisplay);
+    }
+
+
+    /**
+     * Determines the preferrable number of columns based on the number of display Food Types and the max number of columns configured.
+     * @return the preferred number of columns.
+     */
+    private calcNumColumns(): number {
+        const numDisplayFoodTypes: number = this.isCondesnedDisplayOnlyMode() ? this.getSelectedFoodTypes().length
+                                                                              : this.foodTypes.length;
+        const numDivisions: number = Math.ceil(numDisplayFoodTypes / this.maxElementsPerColumn);
+        // If max number of columns exceeds the number of divisions, then set it to number of divisions, otherwise max number of columns.
+        return (numDivisions < this.maxNumColumns) ? numDivisions
+                                                   : this.maxNumColumns;
     }
 }

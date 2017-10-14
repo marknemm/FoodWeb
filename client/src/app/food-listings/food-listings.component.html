@@ -1,81 +1,68 @@
-<h3>{{header}}</h3>
+<h3>{{ header }}</h3>
 <hr>
 
-
 <!-- This is the Food Listings (generated via loop) -->
-<ng-container *ngFor="let foodListing of foodListings; let i = index">
+<slick-list-item *ngFor="let foodListing of listData; let i = index">
 
-    <div class="food-listing-container">
-
-        <div class="food-listing-img-container">
-            <img *ngIf="foodListing.imgUrl != null" [src]="foodListing.imgUrl"/>
-        </div>
-
-        <div [ngClass]="{ 'food-listing-contents': (foodListing.imgUrl != null) }">
-            <h4 class="link-content food-listing-title space-bottom">
-                <a (click)="showDetails(i)" title="Click for Details">{{ foodListing.foodTitle }}</a>
-            </h4>
-
-            <div class="row small-description">
-
-                <div class="col-lg-6 col-md-12" style="max-width:300px" *ngIf="!isDonatedCart">
-                
-                    <div class="space-bottom">
-                        <b>Donor Organization</b><br>
-                        <span class="inline-block">{{ foodListing.donorOrganizationName }}</span>
-                    </div>
-
-                    <div class="space-bottom">
-                        <div>
-                            <b>Donor Address</b>
-                        </div>
-                        <div class="inline-block">
-                            <span>{{ foodListing.donorAddress }}</span><br>
-                            <span>
-                                {{ foodListing.donorCity }}, {{ foodListing.donorState }}
-                            </span>
-                        </div>
-                    </div>
-
+    <ng-container slick-list-item-left>
+        <img *ngIf="foodListing.imgUrl != null" [src]="foodListing.imgUrl"/>
+    </ng-container>
+    
+    <ng-container slick-list-item-right-header>
+        <a (click)="selectListing(i)" title="Click for Details">{{ foodListing.foodTitle }}</a>
+    </ng-container>
+    
+    <div slick-list-item-right-body class="row">
+    
+        <div id="right-body-col1" class="col-lg-6 col-md-12" *ngIf="!isDonatedCart">
+                    
+            <div class="space-bottom">
+                <b>Donor Organization</b><br>
+                <span class="inline-block">{{ foodListing.donorOrganizationName }}</span>
+            </div>
+    
+            <div class="space-bottom">
+                <div>
+                    <b>Donor Address</b>
                 </div>
-
-                <div class="col-lg-6 col-md-12">
-
-                    <div class="space-bottom">
-                        <b>Available Until</b><br>
-                        <span class="inline-block">{{ foodListing.availableUntilDate }}</span>
-                    </div>
-
-                    <div id="food-types-container" id="food-types-container" class="space-bottom ">
-                        <b>Present Food Types</b><br>
-                        <app-food-types [ngModel]="foodListing.foodTypes" [displayOnly]="true" [condensedDisplay]="true" [numColumns]="2"></app-food-types>
-                    </div>
-
+                <div class="inline-block">
+                    <span>{{ foodListing.donorAddress }}</span><br>
+                    <span>
+                        {{ foodListing.donorCity }}, {{ foodListing.donorState }}
+                    </span>
                 </div>
-
-            </div>            
+            </div>
+    
         </div>
-
+    
+        <div class="col-lg-6 col-md-12">
+    
+            <div class="space-bottom">
+                <b>Available Until</b><br>
+                <span class="inline-block">{{ foodListing.availableUntilDate }}</span>
+            </div>
+    
+            <div id="food-types-container" class="space-bottom ">
+                <b>Present Food Types</b><br>
+                <app-food-types [ngModel]="foodListing.foodTypes" [displayOnly]="true" [condensedDisplay]="true" [maxNumColumns]="2"></app-food-types>
+            </div>
+    
+        </div>
+    
     </div>
-    <hr>
-    
-</ng-container>
+
+</slick-list-item>
 
 
-<!-- This is our modal popup. It is separated into its own (child) component.
+<!-- This is our modal dialog's contents. It is separated into its own (child) component.
      Simply pass down transcluded HTML into this child component here! -->
-<food-listing-dialog #FoodListingDialogComponent [isClaimedCart]="isClaimedCart" [isDonatedCart]="isDonatedCart">
+<slick-list-dialog #SlickListDialogComponent [header]="getSelectedListing()?.foodTitle">
 
-    <ng-container confirm-modal-body>
-        <ng-content select="[confirm-modal-body]"></ng-content>
+    <food-listing-dialog-contents slick-list-dialog-body [selectedFoodListing]="getSelectedListing()"
+        [isClaimedCart]="isClaimedCart" [isDonatedCart]="isDonatedCart"></food-listing-dialog-contents>
+
+    <ng-container slick-list-dialog-footer>
+        <ng-content select="[food-listing-dialog-footer]"></ng-content>
     </ng-container>
 
-    <ng-container details-modal-footer>
-        <ng-content select="[details-modal-footer]"></ng-content>
-    </ng-container>
-    
-    <ng-container confirm-modal-footer>
-        <ng-content select="[confirm-modal-footer]"></ng-content>
-    </ng-container>
-
-</food-listing-dialog>
+</slick-list-dialog>

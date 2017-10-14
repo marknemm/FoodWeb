@@ -31,11 +31,11 @@ export class DeliveryFoodListing {
         /**
          * The driving distance of the receiver from the donor.
          */
-        public receiverDrivingDistance?: number,
+        public donorToReceiverDrivingDistance?: number,
         /**
          * The time (in minutes) that it will take to get from Donor to Receiver.
          */
-        public receiverDrivingTime?: number,
+        public donorToReceiverDrivingTime?: number,
         public receiverPhone?: string,
         public receiverLastName?: string,
         public receiverFirstName?: string,

@@ -1,0 +1,48 @@
+#slick-list-item-left {
+    max-width: 100%;
+    width: 320px;
+}
+
+#slick-list-item-right {
+    margin-left: 10px;
+    min-height: 300px;
+    text-align: left;
+    font-size: 18px;
+}
+
+#slick-list-item-right-header {
+    display: table;
+}
+
+#slick-list-item-right-body {
+    font-size: 16px;
+}
+
+#slick-list-item-bottom {
+    width: 100%;
+}
+
+.space-bottom {
+    margin-bottom: 15px;
+}
+
+.link-content {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+/* Medium to large screens only (desktop) */
+@media (min-width: 768px) {
+    
+    #slick-list-item-left {
+        float: left;
+    }
+
+    #slick-list-item-left img {
+        display: block;
+    }
+
+    #slick-list-item-right {
+        margin-left: 330px;
+    }
+}

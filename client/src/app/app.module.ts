@@ -37,10 +37,11 @@ import { CartComponent } from './cart/cart.component';
 import { SignupComponent } from './authentication/signup/signup.component';
 import { BannerComponent } from './banner/banner.component';
 import { SlickLeftPanelComponent } from './slick-left-panel/slick-left-panel.component';
+import { SlickListModule } from './slick-list/slick-list.module';
 import { FoodListingsFiltersComponent } from './food-listings/food-listings-filters/food-listings-filters.component';
 import { FoodListingsComponent } from './food-listings/food-listings.component';
 import { FoodTypesComponent } from './food-listings/food-types/food-types.component';
-import { FoodListingDialogComponent } from './food-listings/food-listing-dialog/food-listing-dialog.component';
+import { FoodListingDialogContentsComponent } from './food-listings/food-listing-dialog-contents/food-listing-dialog-contents.component';
 import { AppUserInfoComponent } from './authentication/app-user-info/app-user-info.component';
 import { DeliverComponent } from './deliver/deliver.component';
 import { DeliverDialogComponent } from './deliver/deliver-dialog/deliver-dialog.component';
@@ -122,7 +123,7 @@ const appRoutes: Routes = [
         CartComponent,
         AppUserInfoComponent,
         AutoFocusDirective,
-        FoodListingDialogComponent,
+        FoodListingDialogContentsComponent,
         DeliverComponent,
         DeliverDialogComponent
     ],
@@ -132,6 +133,7 @@ const appRoutes: Routes = [
         BrowserModule,
         BrowserAnimationsModule,
         BootstrapModalModule,
+        SlickListModule,
         ImageCropperModule,
         HttpModule,
         FormsModule,

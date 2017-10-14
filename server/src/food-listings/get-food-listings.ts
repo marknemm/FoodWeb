@@ -12,11 +12,11 @@ import { DateFormatter } from "../../../shared/common-util/date-formatter";
 /**
  * Gets the Food Listings that meet a given set of filter criteria.
  * @param filters The filter criteria.
- * @param appUserKey The key identifier for the App User that is logged in (making this call).
- * @param gpsCoordinate The GPS Coordinates of the organization associated with the App User this is logged in (making this call).
+ * @param myAppUserKey The key identifier for the App User that is logged in (making this call).
+ * @param myGPSCoordinate The GPS Coordinates of the organization associated with the App User this is logged in (making this call).
  * @return A Promise that resolves to an array of Food Listings that have been retrieved.
  */
-export function getFoodListings(filters: FoodListingsFilters, appUserKey: number, gpsCoordinate: GPSCoordinate): Promise<FoodListing[]> {
+export function getFoodListings(filters: FoodListingsFilters, myAppUserKey: number, myGPSCoordinate: GPSCoordinate): Promise<FoodListing[]> {
 
     let perishableArg: boolean = generatePerishabilityArg(filters.perishable, filters.notPerishable);
     let foodTypesArg: string = toPostgresArray(filters.foodTypes);
@@ -29,7 +29,7 @@ export function getFoodListings(filters: FoodListingsFilters, appUserKey: number
    
     // Build our prepared statement.
     let queryString: string = 'SELECT * FROM getFoodListings($1, $2, $3, null, $4, $5, $6, $7, $8, $9, $10);';
-    let queryArgs: any[] = [ appUserKey, filters.retrievalOffset, filters.retrievalAmount,
+    let queryArgs: any[] = [ myAppUserKey, filters.retrievalOffset, filters.retrievalAmount,
                              foodTypesArg, perishableArg, availableAfterDateArg,
                              unclaimedListingsOnly, myDonatedListingsOnly, myClaimedListingsOnly,
                              filters.matchAvailability ];
@@ -41,7 +41,7 @@ export function getFoodListings(filters: FoodListingsFilters, appUserKey: number
     return query(queryString, queryArgs)
         .then((queryResult: QueryResult) => {
             logSqlQueryResult(queryResult.rows);
-            return generateResultArray(queryResult.rows, gpsCoordinate, myDonatedListingsOnly);
+            return generateResultArray(queryResult.rows, myGPSCoordinate, myDonatedListingsOnly);
         })
         .catch((err: Error) => {
             console.log(err);
@@ -81,27 +81,27 @@ function generateAvailableAfterArg(availableAfterDate: Date): string {
 /**
  * Generates the result Food Listing array. All Food Listings that have met the filter criteria will be entered into this array.
  * @param rows The database function result rows.
- * @param gpsCoordinate The GPS Coordinates of the App User who is logged in and triggering the execution of this function.
+ * @param myGPSCoordinate The GPS Coordinates of the App User who is logged in and triggering the execution of this function.
  * @param myDonatedListingsOnly A flag signifying whether or not the listings that were retrieved are the logged in App User's donated items only (donor cart).
  * @return A promise that resolves the the result Food Listing array.
  */
-function generateResultArray(rows: any[], gpsCoordinate: GPSCoordinate, myDonatedListingsOnly: boolean): Promise<FoodListing[]> {
+function generateResultArray(rows: any[], myGPSCoordinate: GPSCoordinate, myDonatedListingsOnly: boolean): Promise<FoodListing[]> {
 
     let foodListings: FoodListing[] = [];
-    let donorgpsCoordinate: GPSCoordinate[] = [];
+    let donorGPSCoordinate: GPSCoordinate[] = [];
 
     // Go through each row of the database output (each row corresponds to a Food Listing).
     for (let i: number = 0; i < rows.length; i++) {
         // Insert returned data into result arrays.
         foodListings.push(rows[i].foodlisting);
-        donorgpsCoordinate.push(rows[i].donorgpscoordinate);
+        donorGPSCoordinate.push(rows[i].donorgpscoordinate);
     }
 
     // If in Donor Cart, then we don't care about seeing driving distances!
     if (myDonatedListingsOnly)  return Promise.resolve(foodListings);
 
     // In Receive tab or Receiver Cart, we do care about driving distances!
-    return getDrivingDistances(gpsCoordinate, donorgpsCoordinate)
+    return getDrivingDistances(myGPSCoordinate, donorGPSCoordinate)
         .then((distances: number[]) => {
             for (let i: number = 0; i < distances.length; i++) {
                 foodListings[i].donorDrivingDistance = distances[i];

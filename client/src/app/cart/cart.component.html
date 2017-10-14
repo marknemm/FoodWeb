@@ -36,12 +36,12 @@
         <div id="food-listings" class="col-lg-9 col-md-12">
 
             <app-food-listings [header]="getFoodListingsTitle()" [isClaimedCart]="isClaimedCart()" [isDonatedCart]="isDonatedCart()" #foodListings>
-                <ng-container details-modal-footer>
 
+                <ng-container food-listing-dialog-footer>
                     <button md-raised-button color="primary" class="button-md" *ngIf="isClaimedCart()" (click)="unclaimSelectedFoodListing()">Unclaim</button>
                     <button md-raised-button color="primary" class="button-md" *ngIf="isDonatedCart()" (click)="removeSelectedFoodListing()">Remove</button>
-                    
                 </ng-container>
+            
             </app-food-listings>
 
         </div>

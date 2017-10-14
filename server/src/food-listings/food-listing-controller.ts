@@ -39,9 +39,9 @@ export function handleGetDeliveryFoodListings(request: Request, response: Respon
     response.setHeader('Content-Type', 'application/json');
 
     let getDeliveryFoodListingsRequest: GetDeliveryFoodListingsRequest = request.body;
-    let delivererAppUserKey: number = SessionData.loadSessionData(request).appUserKey;
+    let sessionData: SessionData = SessionData.loadSessionData(request);
 
-    getDeliveryFoodListings(getDeliveryFoodListingsRequest.filters, delivererAppUserKey)
+    getDeliveryFoodListings(getDeliveryFoodListingsRequest.filters, sessionData.appUserKey, sessionData.gpsCoordinate)
         .then((deliveryFoodListings: DeliveryFoodListing[]) => {
             response.send(new GetDeliveryFoodListingsResponse(deliveryFoodListings, true, 'Delivery Food Listings Successfully Retrieved'));
         })

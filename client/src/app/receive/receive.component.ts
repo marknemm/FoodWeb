@@ -43,8 +43,8 @@ export class ReceiveComponent implements OnInit {
      * Executed after all of the view children have been initialized (so safest to interact with them now).
      */
     public ngAfterViewInit(): void {
-        this.foodListingsComponent.refreshFoodListings(this.foodListingsFiltersComponent.getFilterValues());
-        this.foodListingsFiltersComponent.onFiltersUpdate(this.foodListingsComponent.refreshFoodListings.bind(this.foodListingsComponent));
+        this.foodListingsComponent.refreshList(this.foodListingsFiltersComponent.getFilterValues());
+        this.foodListingsFiltersComponent.onFiltersUpdate(this.foodListingsComponent.refreshList.bind(this.foodListingsComponent));
     }
 
 
@@ -52,14 +52,14 @@ export class ReceiveComponent implements OnInit {
      * Claims the currently selected Food Listing.
      */
     private claimSelectedFoodListing(): void {
-        let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedFoodListing();
+        let selectedFoodListing: FoodListing = this.foodListingsComponent.getSelectedListing();
         let observer: Observable<void> = this.claimFoodListingService.claimFoodListing(selectedFoodListing.foodListingKey);
         
         // Listen for result.
         observer.subscribe(
             () => {
                 // On success, simply remove the Food Listing from the Receiver Food Listings interface.
-                this.foodListingsComponent.removeSelectedFoodListing();
+                this.foodListingsComponent.removeSelectedListing();
             },
             (err: Error) => {
                 console.log(err);

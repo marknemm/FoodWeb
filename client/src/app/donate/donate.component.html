@@ -73,7 +73,7 @@
                     <!-- foodTypes -->
                     <div class="form-group extra-bottom-margin food-types-container">
                         <h4>Food Types</h4>
-                        <app-food-types #foodTypesInput formControlName="foodTypes" [initiallyChecked]="false" [numColumns]="2"
+                        <app-food-types #foodTypesInput formControlName="foodTypes" [initiallyChecked]="false" [maxNumColumns]="2"
                             [required]="true" [extraValidation]="forceValidation"></app-food-types>
                     </div>
 
@@ -172,7 +172,7 @@
                     <div class="form-group food-types-container">
                         <h4>Food Type(s)</h4>
                         <app-food-types #foodTypesDisplay [displayOnly]="true" [initiallyChecked]="false"
-                            [ngModel]="foodForm.get('foodTypes').value" [numColumns]="2"></app-food-types>
+                            [ngModel]="foodForm.get('foodTypes').value" [maxNumColumns]="2"></app-food-types>
                     </div>
 
                     <div class="form-group">

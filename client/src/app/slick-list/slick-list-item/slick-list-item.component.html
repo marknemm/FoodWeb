@@ -1,0 +1,30 @@
+<!-- Container for each list item -->
+<div id="slick-list-item-container">
+    
+    <!-- Max-width image and associated content floating on left -->
+    <div id="slick-list-item-left">
+        <ng-content select="[slick-list-item-left]"></ng-content>
+    </div>
+
+    <!-- Right content extending remaining width after left -->
+    <div id="slick-list-item-right">
+        
+        <!-- Header -->
+        <h4 id="slick-list-item-right-header" class="link-content space-bottom">
+            <ng-content select="[slick-list-item-right-header]"></ng-content>
+        </h4>
+    
+        <!-- Body -->
+        <div id="slick-list-item-right-body">
+            <ng-content select="[slick-list-item-right-body]"></ng-content>
+        </div>
+    
+    </div>
+
+    <!-- Bottom full width content -->
+    <div id="slick-list-item-bottom">
+        <ng-content select="[slick-list-item-bottom]"></ng-content>
+    </div>
+
+</div>
+<hr *ngIf="includeDivider">
