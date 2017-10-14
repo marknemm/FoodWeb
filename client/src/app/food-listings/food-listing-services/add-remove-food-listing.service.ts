@@ -2,12 +2,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { RequestService, Response } from "../common-util/request.service";
+import { RequestService, Response } from "../../common-util/request.service";
 
-import { FoodListingUpload } from "./../../../../shared/food-listings/food-listing-upload";
-import { AddFoodListingRequest, AddFoodListingResponse } from "./../../../../shared/food-listings/add-food-listing-message";
-import { FoodWebResponse } from "./../../../../shared/message-protocol/food-web-response";
-import { ClaimFoodListingRequest } from "./../../../../shared/food-listings/claim-food-listing-message";
+import { FoodListingUpload } from "./../../../../../shared/food-listings/food-listing-upload";
+import { AddFoodListingRequest, AddFoodListingResponse } from "./../../../../../shared/food-listings/add-food-listing-message";
+import { FoodWebResponse } from "./../../../../../shared/message-protocol/food-web-response";
+import { ClaimFoodListingRequest } from "./../../../../../shared/food-listings/claim-food-listing-message";
 
 
 @Injectable()

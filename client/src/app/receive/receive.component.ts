@@ -4,7 +4,7 @@ import { Observable } from "rxjs/Observable";
 
 import { FoodListingsComponent } from "../food-listings/food-listings.component";
 import { FoodListingsFiltersComponent } from "../food-listings/food-listings-filters/food-listings-filters.component";
-import { ClaimFoodListingService } from "../food-listings/claim-unclaim-food-listing.service";
+import { ClaimFoodListingService } from "../food-listings/food-listing-services/claim-unclaim-food-listing.service";
 
 import { FoodListing } from "../../../../shared/food-listings/food-listing";
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";

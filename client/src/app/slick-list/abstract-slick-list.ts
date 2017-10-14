@@ -2,15 +2,15 @@ import { Observable } from "rxjs/Observable";
 
 import { GetListingsService } from './get-listings.service';
 import { SlickListFilters } from './slick-list-message/slick-list-request';
-import { SlickListDialogComponent } from './slick-list-dialog/slick-list-dialog.component';
+import { SlickListDialogInterface } from "./slick-list-dialog/slick-list-dialog-interface";
 
 
-export abstract class AbstractSlickListContents <LIST_T, FILTERS_T extends SlickListFilters> {
+export abstract class AbstractSlickList <LIST_T, FILTERS_T extends SlickListFilters> {
 
     protected listData: Array<LIST_T>;
     protected selectedListIndex: number;
 
-    protected slickListDialog: SlickListDialogComponent;
+    protected slickListDialog: SlickListDialogInterface;
 
 
     /**

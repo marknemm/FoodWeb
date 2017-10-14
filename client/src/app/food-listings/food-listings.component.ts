@@ -2,10 +2,10 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { Observable } from "rxjs/Observable";
 
-import { AbstractSlickListContents } from './../slick-list/abstract-slick-list-contents';
+import { AbstractSlickList } from './../slick-list/abstract-slick-list';
 import { SlickListDialogComponent } from '../slick-list/slick-list-dialog/slick-list-dialog.component';
 //import { FoodListingDialogContentsComponent } from './food-listing-dialog-contents/food-listing-dialog-contents.component';
-import { GetFoodListingsService } from './get-food-listings.service';
+import { GetFoodListingsService } from './food-listing-services/get-food-listings.service';
 
 import { FoodListing } from '../../../../shared/food-listings/food-listing';
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
@@ -18,7 +18,7 @@ import { GetFoodListingsRequest } from '../../../../shared/food-listings/get-foo
     styleUrls: ['./food-listings.component.css'],
     providers: [GetFoodListingsService]
 })
-export class FoodListingsComponent extends AbstractSlickListContents<FoodListing, FoodListingsFilters> {
+export class FoodListingsComponent extends AbstractSlickList <FoodListing, FoodListingsFilters> {
 
     /**
      * Title of the Food Listings. Default is 'Food Listings'.

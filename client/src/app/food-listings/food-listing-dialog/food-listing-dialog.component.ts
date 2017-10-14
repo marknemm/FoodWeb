@@ -1,14 +1,14 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 
 import { FoodListing } from './../../../../../shared/food-listings/food-listing';
 
 
 @Component({
-  selector: 'food-listing-dialog-contents',
-  templateUrl: './food-listing-dialog-contents.component.html',
-  styleUrls: ['./food-listing-dialog-contents.component.css', '../food-listings.component.css']
+  selector: 'food-listing-dialog',
+  templateUrl: './food-listing-dialog.component.html',
+  styleUrls: ['./food-listing-dialog.component.css', '../food-listings.component.css']
 })
-export class FoodListingDialogContentsComponent {
+export class FoodListingDialogComponent {
 
     /**
      * The currently selected Food Listing.

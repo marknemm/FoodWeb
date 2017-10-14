@@ -2,10 +2,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { RequestService, Response } from "../common-util/request.service";
+import { RequestService, Response } from "../../common-util/request.service";
 
-import { ClaimFoodListingRequest } from "./../../../../shared/food-listings/claim-food-listing-message";
-import { FoodWebResponse } from "./../../../../shared/message-protocol/food-web-response";
+import { ClaimFoodListingRequest } from "./../../../../../shared/food-listings/claim-food-listing-message";
+import { FoodWebResponse } from "./../../../../../shared/message-protocol/food-web-response";
 
 
 @Injectable()

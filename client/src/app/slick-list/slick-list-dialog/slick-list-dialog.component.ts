@@ -2,13 +2,15 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef, NgbModalOptions } from "@ng-bootstrap/ng-bootstrap";
 import { Observable } from "rxjs/Observable";
 
+import { SlickListDialogInterface } from './slick-list-dialog-interface';
+
 
 @Component({
     selector: 'slick-list-dialog',
     templateUrl: './slick-list-dialog.component.html',
     styleUrls: ['./slick-list-dialog.component.css']
 })
-export class SlickListDialogComponent {
+export class SlickListDialogComponent implements SlickListDialogInterface {
 
     @Input() private header;
 

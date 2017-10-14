@@ -41,7 +41,7 @@ import { SlickListModule } from './slick-list/slick-list.module';
 import { FoodListingsFiltersComponent } from './food-listings/food-listings-filters/food-listings-filters.component';
 import { FoodListingsComponent } from './food-listings/food-listings.component';
 import { FoodTypesComponent } from './food-listings/food-types/food-types.component';
-import { FoodListingDialogContentsComponent } from './food-listings/food-listing-dialog-contents/food-listing-dialog-contents.component';
+import { FoodListingDialogComponent } from './food-listings/food-listing-dialog/food-listing-dialog.component';
 import { AppUserInfoComponent } from './authentication/app-user-info/app-user-info.component';
 import { DeliverComponent } from './deliver/deliver.component';
 import { DeliverDialogComponent } from './deliver/deliver-dialog/deliver-dialog.component';
@@ -123,7 +123,7 @@ const appRoutes: Routes = [
         CartComponent,
         AppUserInfoComponent,
         AutoFocusDirective,
-        FoodListingDialogContentsComponent,
+        FoodListingDialogComponent,
         DeliverComponent,
         DeliverDialogComponent
     ],

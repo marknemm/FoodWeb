@@ -58,8 +58,8 @@
      Simply pass down transcluded HTML into this child component here! -->
 <slick-list-dialog #SlickListDialogComponent [header]="getSelectedListing()?.foodTitle">
 
-    <food-listing-dialog-contents slick-list-dialog-body [selectedFoodListing]="getSelectedListing()"
-        [isClaimedCart]="isClaimedCart" [isDonatedCart]="isDonatedCart"></food-listing-dialog-contents>
+    <food-listing-dialog slick-list-dialog-body [selectedFoodListing]="getSelectedListing()"
+        [isClaimedCart]="isClaimedCart" [isDonatedCart]="isDonatedCart"></food-listing-dialog>
 
     <ng-container slick-list-dialog-footer>
         <ng-content select="[food-listing-dialog-footer]"></ng-content>
