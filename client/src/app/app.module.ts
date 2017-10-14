@@ -10,21 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
 import { ImageCropperModule } from 'ng2-img-cropper';
 import { BusyModule } from 'angular2-busy';
-
-import { MdStepperModule,
-         MdProgressSpinnerModule,
-         MdCheckboxModule,
-         MdRadioModule,
-         MdButtonModule,
-         MdInputModule,
-         MdSelectModule,
-         MdDatepickerModule,
-         MdNativeDateModule,
-         MdTooltipModule,
-         DateAdapter,
-         NativeDateAdapter,
-         MD_DATE_FORMATS,
-         MD_NATIVE_DATE_FORMATS } from '@angular/material';
+import { AngularMaterialWrapperModule } from './angular-material-wrapper/angular-material-wrapper.module';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -139,16 +125,7 @@ const appRoutes: Routes = [
         FormsModule,
         ReactiveFormsModule,
         BusyModule,
-        MdStepperModule,
-        MdProgressSpinnerModule,
-        MdCheckboxModule,
-        MdRadioModule,
-        MdTooltipModule,
-        MdInputModule,
-        MdSelectModule,
-        MdButtonModule,
-        MdDatepickerModule,
-        MdNativeDateModule
+        AngularMaterialWrapperModule
     ],
     entryComponents: [
         LoginComponent
@@ -161,9 +138,7 @@ const appRoutes: Routes = [
         RequestService,
         SessionDataService,
         RoutePreprocessService,
-        FoodTypesService,
-        { provide: DateAdapter, useClass: NativeDateAdapter },
-        { provide: MD_DATE_FORMATS, useValue: MD_NATIVE_DATE_FORMATS }
+        FoodTypesService
     ]
 })
 export class AppModule { }

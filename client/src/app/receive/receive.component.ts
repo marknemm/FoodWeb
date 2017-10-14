@@ -7,7 +7,7 @@ import { FoodListingsFiltersComponent } from "../food-listings/food-listings-fil
 import { ClaimFoodListingService } from "../food-listings/food-listing-services/claim-unclaim-food-listing.service";
 
 import { FoodListing } from "../../../../shared/food-listings/food-listing";
-import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
+import { FoodListingsFilters, LISTINGS_STATUS } from "../../../../shared/food-listings/food-listings-filters";
 
 
 @Component({
@@ -43,8 +43,20 @@ export class ReceiveComponent implements OnInit {
      * Executed after all of the view children have been initialized (so safest to interact with them now).
      */
     public ngAfterViewInit(): void {
-        this.foodListingsComponent.refreshList(this.foodListingsFiltersComponent.getFilterValues());
-        this.foodListingsFiltersComponent.onFiltersUpdate(this.foodListingsComponent.refreshList.bind(this.foodListingsComponent));
+        // First, trigger a refresh by manually invoking update function.
+        this.onFiltersUpdate(this.foodListingsFiltersComponent.getFilterValues());
+        this.foodListingsFiltersComponent.onFiltersUpdate(this.onFiltersUpdate.bind(this));
+    }
+
+
+    /**
+     * Handles filters updates by refreshing the Food Listings with unclaimed listings only.
+     * @param filters The filters from the Food Listing Filters component.
+     */
+    private onFiltersUpdate(filters: FoodListingsFilters): void {
+        // Make sure we mark down that we only want unclaimed listings!
+        filters.listingsStatus = LISTINGS_STATUS.unclaimedListings;
+        this.foodListingsComponent.refreshList(filters);
     }
 
 

@@ -72,7 +72,8 @@ BEGIN
     DROP TABLE IF EXISTS FiltFoodListing;
     CREATE TEMP TABLE FiltFoodListing
     (
-        foodListingKey  INTEGER PRIMARY KEY
+        foodListingKey  INTEGER PRIMARY KEY,
+        orderNumber     SERIAL
     );
 
     -- We will pull back the filtered aggregate food listing keys. This query, without the group by aggregate,
@@ -134,13 +135,31 @@ BEGIN
             AND DonorAvailability.endTime > ReceiverAvailability.startTime
             AND RelativeAvailabilityDates.relativeAvailableDate <= FoodListing.availableUntilDate
         ';
-        -- TODO: Ensure that 
 
     END IF;
 
     _queryGroupAndSort := '
         GROUP BY FoodListing.foodListingKey
-        ORDER BY FoodListing.availableUntilDate ASC
+        ORDER BY ';
+        
+    -- Chose the sort order based on the purpose of the search (for receiver tab or cart).
+    _queryGroupAndSort := _queryGroupAndSort ||
+        CASE (_unclaimedOnly)
+
+            -- Receiver tab.
+            WHEN TRUE THEN
+                'FoodListing.availableUntilDate ASC' -- For receiver tab, show donations that will expire eariliest first.
+                
+            -- Cart.
+            ELSE
+                CASE (_myClaimedItemsOnly)
+                    WHEN TRUE THEN  'MAX(ClaimedFoodListing.claimedDate) DESC'  -- For receiver cart, show most recent claims.
+                    ELSE            'FoodListing.postDate DESC'                 -- For donor cart, show most recent donations.
+                END
+
+        END;
+
+    _queryGroupAndSort := _queryGroupAndSort || '
         OFFSET $8
         LIMIT $9
     ';
@@ -218,7 +237,7 @@ BEGIN
     INNER JOIN AppUser                  AS DonorAppUser         ON FoodListing.donatedByAppUserKey = DonorAppUser.appUserKey
     INNER JOIN ContactInfo              AS DonorContact         ON DonorAppUser.appUserKey = DonorContact.appUserKey
     INNER JOIN Organization             AS DonorOrganization    ON DonorAppUser.appUserKey = DonorOrganization.appUserKey
-    ORDER BY FoodListing.availableUntilDate ASC;
+    ORDER BY FiltFoodListing.orderNumber ASC;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -238,7 +257,7 @@ GROUP BY FoodListing.foodListingKey;
 
 --SELECT * FROM FoodListingFoodTypeMap;
 
---SELECT * FROM getFoodListings(1, 0, 1000, 52, NULL, NULL, NULL, FALSE, FALSE, FALSE, TRUE);
+SELECT * FROM getFoodListings(1, 0, 1000, NULL, NULL, NULL, NULL, TRUE, FALSE, FALSE, TRUE);
 --SELECT * FROM RelativeAvailabilityDates;
 
 /*
