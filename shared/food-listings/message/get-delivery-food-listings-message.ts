@@ -1,40 +1,35 @@
-import { FoodListingsFilters } from '../food-listings/food-listings-filters';
-export { FoodListingsFilters };
+import { DeliveryFoodListingsFilters } from '../delivery-food-listings-filters';
+export { DeliveryFoodListingsFilters };
 
-import { FoodWebResponse } from '../message-protocol/food-web-response';
-import { FoodListing } from "../food-listings/food-listing";
-export { FoodListing };
-
-import { SlickListRequest } from '../../client/src/app/slick-list/slick-list-message/slick-list-request';
-import { SlickListResponse } from '../../client/src/app/slick-list/slick-list-message/slick-list-response';
+import { FoodWebResponse } from '../../message-protocol/food-web-response';
+import { DeliveryFoodListing } from "../../food-listings/delivery-food-listing";
+export { DeliveryFoodListing };
 
 
 /**
- * The expected request for the get food listings operation. Should be sent from the client to the server.
+ * The expected request for the get delivery food listings operation. Should be sent from the client to the server.
  */
-export class GetFoodListingsRequest extends SlickListRequest<FoodListingsFilters> {
+export class GetDeliveryFoodListingsRequest {
 
     constructor(
         /**
          * Filters to use when getting food listings.
          */
-        public filters: FoodListingsFilters
-    ) {
-        super(filters);
-    }
+        public filters: DeliveryFoodListingsFilters
+    ) { }
 }
 
 
 /**
  * The expected response from the get food listings operation. Should be sent form the server to the client.
  */
-export class GetFoodListingsResponse extends SlickListResponse<FoodListing> {
+export class GetDeliveryFoodListingsResponse extends FoodWebResponse {
 
     constructor(
         /**
-         * The food listings that were retrieved during the server operation.
+         * The delivery food listings that were retrieved during the server operation.
          */
-        public dataList?: Array<FoodListing>,
+        public deliveryFoodListings?: DeliveryFoodListing[],
         /**
          * Indicates whether or not the operation on the back end was successful.
          */
@@ -53,6 +48,6 @@ export class GetFoodListingsResponse extends SlickListResponse<FoodListing> {
          */
         public signupConfirmRequired: boolean = false
     ) {
-        super(dataList, success, message, loginRequired, signupConfirmRequired);
+        super(success, message, loginRequired, signupConfirmRequired);
     }
 }

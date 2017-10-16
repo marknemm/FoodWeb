@@ -4,7 +4,7 @@ import { Observable, ObservableInput } from 'rxjs/Observable';
 
 import { RequestService, Response } from "../../common-util/request.service";
 
-import { GetFoodTypesResponse } from '../../../../../shared/food-listings/get-food-types-message';
+import { GetFoodTypesResponse } from '../../../../../shared/food-listings/message/get-food-types-message';
 
 
 /**

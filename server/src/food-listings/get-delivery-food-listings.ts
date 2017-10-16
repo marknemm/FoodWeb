@@ -96,7 +96,7 @@ function getDrivingDistancesToDonors(deliveryFoodListings: DeliveryFoodListing[]
     return getDrivingDistances(myGPSCoordinate, donorGPSCoordinates)
         .then((distances: number[]) => {
             for (let i: number = 0; i < distances.length; i++) {
-                deliveryFoodListings[i].donorDrivingDistance = distances[i];
+                deliveryFoodListings[i].donorInfo.drivingDistance = distances[i];
             }
 
             return deliveryFoodListings;
@@ -122,7 +122,7 @@ function getDrivingDistancesFromReceiversToDonors(deliveryFoodListings: Delivery
         
         getDrivingDistances(donorGPSCoordinates[i], [receiverGPSCoordinates[i]])
             .then((distances: number[]) => {
-                deliveryFoodListings[index].donorToReceiverDrivingDistance = distances[0];
+                deliveryFoodListings[index].receiverInfo.drivingDistance = distances[0];
             })
     }
 

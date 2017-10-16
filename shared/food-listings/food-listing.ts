@@ -1,30 +1,29 @@
 /**
- * A single Food Listing entry that mainly contains data that is relavent to the user when browsing food listings.
+ * Container for Food Listing Donor data.
  */
-export class FoodListing {
+export class FoodListingUser {
 
-    constructor(
-        public foodListingKey?: number,
-        public foodTitle?: string,
-        public donorOrganizationName?: string,
-        public donorAddress?: string,
-        public donorCity?: string,
-        public donorState?: string,
-        public donorZip?: number,
-        /**
-         * The driving distance of the donor from the receiver that is browsing the food listings.
-         */
-        public donorDrivingDistance?: number,
-        public donorPhone?: string,
-        public donorLastName?: string,
-        public donorFirstName?: string,
-        public foodTypes?: string[],
-        public foodDescription?: string,
-        public perishable?: boolean,
-        /**
-         * The date until the Food Listing expires of the format mm/dd/yyyy
-         */
-        public availableUntilDate?: string,
+    public constructor (
+        public organizationName?: string,
+        public address?: string,
+        public city?: string,
+        public state?: string,
+        public zip?: number,
+        public drivingDistance?: number,
+        public drivingTime?: number,
+        public phone?: string,
+        public lastName?: string,
+        public firstName?: string
+    ) { }
+}
+
+
+/**
+ * Container for Food Listing Units data.
+ */
+export class FoodListingUnits {
+
+    public constructor (
         /**
          * The number of units of a Food Listing that are available (have not been claimed).
          */
@@ -45,10 +44,31 @@ export class FoodListing {
         /**
          * The user given label for the units that the Food Listing has been split into (e.g. cans, bottles, lbs, etc).
          */
-        public unitsLabel?: string,
+        public unitsLabel?: string
+    ) { }
+}
+
+
+/**
+ * A single Food Listing entry that mainly contains data that is relavent to the user when browsing food listings.
+ */
+export class FoodListing {
+
+    public constructor (
+        public foodListingKey?: number,
+        public foodTitle?: string,
+        public foodTypes?: string[],
+        public foodDescription?: string,
+        public perishable?: boolean,
+        /**
+         * The date until the Food Listing expires of the format mm/dd/yyyy
+         */
+        public availableUntilDate?: string,
         /**
          * The url of a saved Food Listing that will be used to display the associated image.
          */
-        public imgUrl?: string
+        public imgUrl?: string,
+        public donorInfo?: FoodListingUser,
+        public unitsInfo?: FoodListingUnits
     ) { }
 }

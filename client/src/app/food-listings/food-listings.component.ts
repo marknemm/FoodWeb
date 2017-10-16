@@ -8,7 +8,7 @@ import { GetFoodListingsService } from './food-listing-services/get-food-listing
 
 import { FoodListing } from '../../../../shared/food-listings/food-listing';
 import { FoodListingsFilters } from "../../../../shared/food-listings/food-listings-filters";
-import { GetFoodListingsRequest } from '../../../../shared/food-listings/get-food-listings-message';
+import { GetFoodListingsRequest } from '../../../../shared/food-listings/message/get-food-listings-message';
 import { AbstractSlickListDialog } from '../slick-list/slick-list-dialog/abstract-slick-list-dialog';
 
 

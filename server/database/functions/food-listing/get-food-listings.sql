@@ -198,40 +198,51 @@ BEGIN
     -- Here we will be doing a select using the filtered food listing keys from the dynamic query above. No grouping will be necessary.
     RETURN QUERY
     SELECT  FoodListing.foodListingKey,
+
             -- @ts-sql class="FoodListing" file="/shared/food-listing/food-listing.ts"
             JSON_BUILD_OBJECT (
-                'foodListingKey',           FoodListing.foodListingKey,
-                'foodTitle',                FoodListing.foodTitle,
+                'foodListingKey',       FoodListing.foodListingKey,
+                'foodTitle',            FoodListing.foodTitle,
                 -- Concatenates the food types into an array { Type1, Type2, ..., TypeN }
-                'foodTypes',                (
-                                                SELECT ARRAY_AGG(FoodListingFoodTypeMap.foodType) AS foodTypes
-                                                FROM FoodListingFoodTypeMap
-                                                WHERE FoodListingFoodTypeMap.foodListingKey = FoodListing.foodListingKey
-                                                GROUP BY FoodListingFoodTypeMap.foodListingKey
-                                            ),
-                'perishable',               FoodListing.perishable,
-                'donorOrganizationName',    DonorOrganization.name,
-                'donorAddress',             DonorContact.address,
-                'donorCity',                DonorContact.city,
-                'donorState',               DonorContact.state,
-                'donorZip',                 DonorContact.zip,
-                'donorPhone',               DonorContact.phone,
-                'donorLastName',            DonorAppUser.lastName,
-                'donorFirstName',           DonorAppUser.firstName,
-                'donorOnHandUnitsCount',    (SELECT getDonorOnHandUnitsCount(FoodListing.foodListingKey)),
-                'availableUnitsCount',      (SELECT getAvailableUnitsCount(FoodListing.foodListingKey)),
-                'claimedUnitsCount',        (SELECT getUserClaimedUnitsCount(FoodListing.foodListingKey, _appUserKey)),
-                'totalUnitsCount',          (SELECT getTotalUnitsCount(FoodListing.foodListingKey)),
-                'unitsLabel',               FoodListing.unitsLabel,
-                'availableUntilDate',       TO_CHAR(FoodListing.availableUntilDate, 'MM/DD/YYYY'),
-                'foodDescription',          FoodListing.foodDescription,
-                'imgUrl',                   FoodListing.imgUrl
+                'foodTypes',            (
+                                            SELECT ARRAY_AGG(FoodListingFoodTypeMap.foodType) AS foodTypes
+                                            FROM FoodListingFoodTypeMap
+                                            WHERE FoodListingFoodTypeMap.foodListingKey = FoodListing.foodListingKey
+                                            GROUP BY FoodListingFoodTypeMap.foodListingKey
+                                        ),
+                'perishable',           FoodListing.perishable,
+                'availableUntilDate',   TO_CHAR(FoodListing.availableUntilDate, 'MM/DD/YYYY'),
+                'foodDescription',      FoodListing.foodDescription,
+                'imgUrl',               FoodListing.imgUrl,
+
+                -- @ts-sql class="FoodListingUser" file="/shared/food-listing/food-listing.ts"
+                'donorInfo',            JSON_BUILD_OBJECT (
+                                            'organizationName',    DonorOrganization.name,
+                                            'address',             DonorContact.address,
+                                            'city',                DonorContact.city,
+                                            'state',               DonorContact.state,
+                                            'zip',                 DonorContact.zip,
+                                            'phone',               DonorContact.phone,
+                                            'lastName',            DonorAppUser.lastName,
+                                            'firstName',           DonorAppUser.firstName
+                                        ),
+                
+                -- @ts-sql class="FoodListingUnits" file="/shared/food-listing/food-listing.ts"
+                'unitsInfo',            JSON_BUILD_OBJECT (
+                                            'donorOnHandUnitsCount',    (SELECT getDonorOnHandUnitsCount(FoodListing.foodListingKey)),
+                                            'availableUnitsCount',      (SELECT getAvailableUnitsCount(FoodListing.foodListingKey)),
+                                            'myClaimedUnitsCount',      (SELECT getUserClaimedUnitsCount(FoodListing.foodListingKey, _appUserKey)),
+                                            'totalUnitsCount',          (SELECT getTotalUnitsCount(FoodListing.foodListingKey)),
+                                            'unitsLabel',               FoodListing.unitsLabel
+                                        )
             ) AS foodListing,
+
             -- @ts-sql class="GPSCoordinate" file="/shared/common-util/geocode.ts"
             JSON_BUILD_OBJECT (
-                'latitude',     ST_Y(DonorContact.gpsCoordinate::GEOMETRY),
-                'longitude',    ST_X(DonorContact.gpsCoordinate::GEOMETRY)
+                'latitude',             ST_Y(DonorContact.gpsCoordinate::GEOMETRY),
+                'longitude',            ST_X(DonorContact.gpsCoordinate::GEOMETRY)
             ) AS donorGPSCoordinate
+
     FROM FiltFoodListing
     INNER JOIN FoodListing                                      ON FiltFoodListing.foodListingKey = FoodListing.foodListingKey
     INNER JOIN AppUser                  AS DonorAppUser         ON FoodListing.donatedByAppUserKey = DonorAppUser.appUserKey

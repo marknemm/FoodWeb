@@ -32,22 +32,22 @@ AS $$
                 -- @ts-sql class="AppUserInfo" file="/shared/authentication/app-user-info.ts"
                 'appUserInfo',          JSON_BUILD_OBJECT (
                                             'email',            AppUser.email,
+                                            'organizationName', Organization.name,
                                             'lastName',         AppUser.lastName,
                                             'firstName',        AppUser.firstName,
-                                            'organizationName', Organization.name,
                                             'address',          ContactInfo.address,
                                             'city',             ContactInfo.city,
                                             'state',            ContactInfo.state,
                                             'zip',              ContactInfo.zip,
-                                            'phone',            ContactInfo.phone
+                                            'phone',            ContactInfo.phone,
+                                            'isDonor',          AppUser.isDonor,
+                                            'isReceiver',       AppUser.isReceiver
                                         ),
                 -- @ts-sql class="gpsCoordinate" file="/shared/common-util/geocode.ts"
                 'gpsCoordinate',       JSON_BUILD_OBJECT (
                                             'latitude',         ST_Y(ContactInfo.gpsCoordinate::GEOMETRY),
                                             'longitude',        ST_X(ContactInfo.gpsCoordinate::GEOMETRY)
                                         ),
-                'isDonor',              AppUser.isDonor,
-                'isReceiver',           AppUser.isReceiver,
                 'signupVerified',       (UnverifiedAppUser.appUserKey IS NULL),
                 'verificationToken',    UnverifiedAppUser.verificationToken
             )

@@ -20,8 +20,6 @@ import { FoodWebResponse } from "../../../../../shared/message-protocol/food-web
 })
 export class AppUserInfoComponent {
     
-    private stateList: string[];
-    
     private isOrganization: boolean;
     
     private appUserInfoForm: FormGroup;
@@ -36,7 +34,6 @@ export class AppUserInfoComponent {
         private sessionDataService: SessionDataService
     ) {
         let appUserInfo: AppUserInfo = sessionDataService.getAppUserSessionData();
-        this.stateList = ['CA', 'NY', 'IN'];
 
         // Set some form labels based off of whether or not user is an organization.
         this.isOrganization = (appUserInfo.organizationName != null);

@@ -1,23 +1,19 @@
-import { FoodWebResponse } from '../message-protocol/food-web-response'
-import { FoodListingUpload } from './food-listing-upload';
-export { FoodListingUpload };
+import { FoodWebResponse } from '../../message-protocol/food-web-response';
 
 
-export class AddFoodListingRequest {
-
-    constructor(
-        public foodListingUpload?: FoodListingUpload
-    ) { }
-}
+// No request since this message does not require a request payload.
 
 
-export class AddFoodListingResponse extends FoodWebResponse {
-    
+/**
+ * The expected response from the server after the get food types operation.
+ */
+export class GetFoodTypesResponse extends FoodWebResponse {
+
     constructor(
         /**
-         * The key of the added food listing. Can be used to edit the added listing.
+         * A list of food types retrieved on the server.
          */
-        public foodListingKey?: number,
+        public foodTypes?: string[],
         /**
          * Indicates whether or not the operation on the back end was successful.
          */

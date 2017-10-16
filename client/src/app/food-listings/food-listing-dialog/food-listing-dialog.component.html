@@ -14,12 +14,12 @@
                     
                 <div class="space-bottom">
                     <b>Donor Organization:</b>
-                    <span class="inline-block">{{ selectedFoodListing?.donorOrganizationName }}</span>
+                    <span class="inline-block">{{ selectedFoodListing?.donorInfo.organizationName }}</span>
                 </div>
 
                 <div class="space-bottom">
                     <b class="inline-block">Donor Administrator:</b>
-                    <span class="inline-block">{{ selectedFoodListing?.donorFirstName }} {{ selectedFoodListing?.donorLastName }}</span>
+                    <span class="inline-block">{{ selectedFoodListing?.donorInfo.firstName }} {{ selectedFoodListing?.donorInfo.lastName }}</span>
                 </div>
 
                 <div class="space-bottom">
@@ -27,21 +27,21 @@
                         <b>Donor Address:</b>
                     </div>
                     <div class="inline-block">
-                        <span>{{ selectedFoodListing?.donorAddress }}</span><br>
+                        <span>{{ selectedFoodListing?.donorInfo.address }}</span><br>
                         <span>
-                            {{ selectedFoodListing?.donorCity }}, {{ selectedFoodListing?.donorState }} {{ selectedFoodListing?.donorZip }}
+                            {{ selectedFoodListing?.donorInfo.city }}, {{ selectedFoodListing?.donorInfo.state }} {{ selectedFoodListing?.donorInfo.zip }}
                         </span>
                     </div>
                 </div>
 
-                <div class ="space-bottom" *ngIf="selectedFoodListing?.donorDrivingDistance != null">
-                    <b>Driving Distance:</b>
-                    <span class="inline-block">{{ selectedFoodListing?.donorDrivingDistance + ' miles' }}</span>
-                </div>
-
                 <div class="space-bottom">
                     <b>Donor Phone:</b>
-                    <span class="inline-block">{{ selectedFoodListing?.donorPhone }}</span>
+                    <span class="inline-block">{{ selectedFoodListing?.donorInfo.phone }}</span>
+                </div>
+
+                <div class ="space-bottom" *ngIf="selectedFoodListing?.donorInfo.drivingDistance != null">
+                    <b>Driving Distance:</b>
+                    <span class="inline-block">{{ selectedFoodListing?.donorInfo.drivingDistance + ' miles' }}</span>
                 </div>
 
             </div> <!-- Donor Description (Column 1) -->
@@ -71,23 +71,26 @@
                     <div *ngIf="!isClaimedCart">
                         <b>Available Count:</b>
                         <span class="inline-block">
-                            {{ selectedFoodListing?.availableUnitsCount }} of {{ selectedFoodListing?.totalUnitsCount }} {{ selectedFoodListing?.unitsLabel }}
+                            {{ selectedFoodListing?.unitsInfo.availableUnitsCount }} of
+                            {{ selectedFoodListing?.unitsInfo.totalUnitsCount }} {{ selectedFoodListing?.unitsInfo.unitsLabel }}
                         </span>
                     </div>
 
                     <div *ngIf="isDonatedCart">
                         <b>Donor On-Hand Count:</b>
                         <span class="inline-block">
-                            {{ selectedFoodListing?.donorOnHandUnitsCount }} of {{ selectedFoodListing?.totalUnitsCount }} {{ selectedFoodListing?.unitsLabel }}
+                            {{ selectedFoodListing?.unitsInfo.donorOnHandUnitsCount }} of
+                            {{ selectedFoodListing?.unitsInfo.totalUnitsCount }} {{ selectedFoodListing?.unitsInfo.unitsLabel }}
                         </span>
                     </div>
 
                     <div *ngIf="isClaimedCart">
                         <b>Claimed Count:</b>
                         <span class="inline-block">
-                            {{ selectedFoodListing?.myClaimedUnitsCount }} of
+                            {{ selectedFoodListing?.unitsInfo.myClaimedUnitsCount }} of
                             <!-- Instead of total units here, we have total units obtainable by this receiver -->
-                            {{ selectedFoodListing?.availableUnitsCount + selectedFoodListing?.myClaimedUnitsCount }} {{ selectedFoodListing?.unitsLabel }}
+                            {{ selectedFoodListing?.unitsInfo.availableUnitsCount + selectedFoodListing?.unitsInfo.myClaimedUnitsCount }}
+                            {{ selectedFoodListing?.unitsInfo.unitsLabel }}
                         </span>
                     </div>
 

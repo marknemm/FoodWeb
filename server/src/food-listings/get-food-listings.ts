@@ -104,7 +104,7 @@ function generateResultArray(rows: any[], myGPSCoordinate: GPSCoordinate, myDona
     return getDrivingDistances(myGPSCoordinate, donorGPSCoordinate)
         .then((distances: number[]) => {
             for (let i: number = 0; i < distances.length; i++) {
-                foodListings[i].donorDrivingDistance = distances[i];
+                foodListings[i].donorInfo.drivingDistance = distances[i];
             }
 
             return foodListings;

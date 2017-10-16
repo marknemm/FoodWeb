@@ -18,7 +18,7 @@
                     
             <div class="space-bottom">
                 <b>Donor Organization</b><br>
-                <span class="inline-block">{{ foodListing.donorOrganizationName }}</span>
+                <span class="inline-block">{{ foodListing.donorInfo.organizationName }}</span>
             </div>
     
             <div class="space-bottom">
@@ -26,9 +26,9 @@
                     <b>Donor Address</b>
                 </div>
                 <div class="inline-block">
-                    <span>{{ foodListing.donorAddress }}</span><br>
+                    <span>{{ foodListing.donorInfo.address }}</span><br>
                     <span>
-                        {{ foodListing.donorCity }}, {{ foodListing.donorState }}
+                        {{ foodListing.donorInfo.city }}, {{ foodListing.donorInfo.state }}
                     </span>
                 </div>
             </div>

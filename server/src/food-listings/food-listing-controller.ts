@@ -8,12 +8,12 @@ import { getDeliveryFoodListings } from './get-delivery-food-listings';
 import { getFoodTypes } from './get-food-types';
 import { claimFoodListing, unclaimFoodListing } from './claim-food-listing';
 
-import { AddFoodListingRequest, AddFoodListingResponse, FoodListingUpload } from '../../../shared/food-listings/add-food-listing-message'
-import { GetFoodListingsRequest, GetFoodListingsResponse, FoodListing } from '../../../shared/food-listings/get-food-listings-message';
+import { AddFoodListingRequest, AddFoodListingResponse, FoodListingUpload } from '../../../shared/food-listings/message/add-food-listing-message'
+import { GetFoodListingsRequest, GetFoodListingsResponse, FoodListing } from '../../../shared/food-listings/message/get-food-listings-message';
 import { GetDeliveryFoodListingsRequest, GetDeliveryFoodListingsResponse,
-         DeliveryFoodListing } from '../../../shared/food-listings/get-delivery-food-listings-message';
-import { GetFoodTypesResponse } from '../../../shared/food-listings/get-food-types-message';
-import { ClaimFoodListingRequest } from '../../../shared/food-listings/claim-food-listing-message';
+         DeliveryFoodListing } from '../../../shared/food-listings/message/get-delivery-food-listings-message';
+import { GetFoodTypesResponse } from '../../../shared/food-listings/message/get-food-types-message';
+import { ClaimFoodListingRequest } from '../../../shared/food-listings/message/claim-food-listing-message';
 import { LISTINGS_STATUS } from "../../../shared/food-listings/food-listings-filters";
 import { FoodWebResponse } from "../../../shared/message-protocol/food-web-response";
 

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { RequestService, Response } from "../../common-util/request.service";
 
-import { ClaimFoodListingRequest } from "./../../../../../shared/food-listings/claim-food-listing-message";
+import { ClaimFoodListingRequest } from "./../../../../../shared/food-listings/message/claim-food-listing-message";
 import { FoodWebResponse } from "./../../../../../shared/message-protocol/food-web-response";
 
 

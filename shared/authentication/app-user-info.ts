@@ -3,8 +3,9 @@
  */
 export class AppUserInfo {
     
-    constructor(
+    constructor (
         public email?: string,
+        public organizationName?: string,
         public lastName?: string,
         public firstName?: string,
         public address?: string,
@@ -13,7 +14,6 @@ export class AppUserInfo {
         public zip?: number,
         public phone?: string,
         public isDonor?: boolean,
-        public isReceiver?: boolean,
-        public organizationName?: string
+        public isReceiver?: boolean
     ) { }
 }
