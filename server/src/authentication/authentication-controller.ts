@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { login } from "./app-user-login";
 import { signup, signupVerify } from './app-user-signup';
 import { updateAppUser } from './app-user-update';
+import { recoverPassword } from './password-recovery'
 import { QueryResult } from 'pg';
 
 import { FoodWebResponse } from "../../../shared/message-protocol/food-web-response";
@@ -132,12 +133,20 @@ export function handleSignupVerification(request: Request, response: Response): 
 
 
 /**
- * Handles password recovery by sending a password resent email with a generated password reset token for a given user.
+ * Handles password recovery by sending a password reset email with a generated password reset token for a given user.
  * @param request The request from the client. Should contain the email of the user that wants to recover their password.
  * @param response The response to send back to the client.
  */
 export function handlePasswordRecovery(request: Request, response: Response): void {
     response.setHeader('Content-Type', 'application/json');
-    // TODO: Handle password recovery by sending password reset email.
-    response.send(new FoodWebResponse(true, 'Password recovery not implemented yet'));
+
+    let userEmail: string = request.body.email;
+    
+    recoverPassword(userEmail)
+        .then((successMessage: string) => {
+            response.send(new FoodWebResponse(true, successMessage));
+        })
+        .catch((err: Error) => {
+            response.send(new FoodWebResponse(false, err.message));
+        });
 }
