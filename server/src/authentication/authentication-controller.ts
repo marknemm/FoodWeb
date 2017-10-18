@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { login } from "./app-user-login";
 import { signup, signupVerify } from './app-user-signup';
 import { updateAppUser } from './app-user-update';
-import { recoverPassword } from './password-recovery'
+import { recoverPassword, resetPassword } from './password-recovery'
 import { QueryResult } from 'pg';
 
 import { FoodWebResponse } from "../../../shared/message-protocol/food-web-response";
@@ -149,4 +149,19 @@ export function handlePasswordRecovery(request: Request, response: Response): vo
         .catch((err: Error) => {
             response.send(new FoodWebResponse(false, err.message));
         });
+}
+
+/**
+ * Handles the signup verification for a given user.
+ * @param request The request from the client. Should contain verification token.
+ * @param response The response to send back to the client.
+ */
+export function handlePasswordReset (request: Request, response: Response): void {
+    
+    response.setHeader('Content-Type', 'application/json');
+
+    let appUserKey: number = parseInt(request.query.appUserKey);
+    let passwordRecoveryToken: string = request.query.passwordRecoveryToken;
+
+    resetPassword(appUserKey, passwordRecoveryToken);
 }

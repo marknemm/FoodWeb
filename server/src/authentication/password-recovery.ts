@@ -15,7 +15,6 @@ export function recoverPassword(userEmail: string): Promise<string> {
             return sendUserEmail(queryResult, userEmail);
         })
         .catch((err: Error) => {
-            console.log(err);
             return Promise.reject(new Error('Sorry, failed to reset password for that account'));
         });
 
@@ -47,10 +46,27 @@ export function sendUserEmail(queryResult: QueryResult, userEmail: string): Prom
 
     return sendEmail(mailOptions)
         .then((info) => {
-            return Promise.resolve('Successful sent password reset instructions to you email!');
+            return Promise.resolve('Successful sent password reset instructions to your email!');
         })
         .catch((err) => {
             console.log(err);
             throw new Error('Sorry, unable to send signup password reset email');
         });
+}
+
+export function resetPassword (appUserKey: number, passwordRecoveryToken: string) {
+
+    let queryString: string = 'SELECT * FROM verifyPasswordResetToken($1, $2)';
+    let queryArgs: Array<any> = [ appUserKey, passwordRecoveryToken ];
+
+    logSqlQueryExec(queryString, queryArgs);
+
+    return query(queryString, queryArgs)
+        .then(() => {
+            
+        })
+        .catch((err: Error) => {
+            return Promise.reject(new Error('Sorry, unable to reset password.'));
+        });
+
 }

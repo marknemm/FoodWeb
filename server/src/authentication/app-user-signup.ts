@@ -61,7 +61,7 @@ export function signup(appUserSignupInfo: AppUserInfo, password: string, appUser
  * Verifies the signup of a user by comparing a verfication token form the client (email link) with the one held in the database.
  * @param verificationToken The verification token sent from the client which should match up against the token held in the database.
  */
-export function signupVerify(appUserKey: number, verificationToken: String): Promise<void> {
+export function signupVerify(appUserKey: number, verificationToken: string): Promise<void> {
 
     let queryString: string = 'SELECT * FROM verifyAppUser($1, $2)';
     let queryArgs: Array<any> = [ appUserKey, verificationToken ];

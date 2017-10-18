@@ -19,7 +19,8 @@ import { handleLoginRequest,
          handleSignupRequest,
          handleUpdateAppUserRequest,
          handleSignupVerification,
-         handlePasswordRecovery } from './authentication/authentication-controller';
+         handlePasswordRecovery,
+         handlePasswordReset } from './authentication/authentication-controller';
 import { handleAddFoodListing,
          handleRemoveFoodListing,
          handleGetFoodListings,
@@ -51,6 +52,7 @@ app.get( '/authentication/reAuthenticate',          handleReAuthenticateRequest)
 app.post('/authentication/signup',                  handleSignupRequest);
 app.get( '/authentication/verify',                  handleSignupVerification);
 app.post('/authentication/recoverPassword',         handlePasswordRecovery);
+app.post('/authentication/resetPassword',           handlePasswordReset);
 app.post('/authentication/updateAppUser',           SessionData.ensureSessionActive, handleUpdateAppUserRequest);
 
 
