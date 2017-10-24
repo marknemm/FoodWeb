@@ -54,7 +54,7 @@ export function sendUserEmail(queryResult: QueryResult, userEmail: string): Prom
         });
 }
 
-export function resetPassword (appUserKey: number, passwordRecoveryToken: string) {
+export function resetPassword (appUserKey: number, passwordRecoveryToken: string): Promise<string> {
 
     let queryString: string = 'SELECT * FROM verifyPasswordResetToken($1, $2)';
     let queryArgs: Array<any> = [ appUserKey, passwordRecoveryToken ];
@@ -63,7 +63,7 @@ export function resetPassword (appUserKey: number, passwordRecoveryToken: string
 
     return query(queryString, queryArgs)
         .then(() => {
-            
+            return Promise.resolve('Successful verified appUserKey and recoveryToken');            
         })
         .catch((err: Error) => {
             return Promise.reject(new Error('Sorry, unable to reset password.'));

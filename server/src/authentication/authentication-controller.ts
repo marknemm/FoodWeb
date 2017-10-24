@@ -152,8 +152,8 @@ export function handlePasswordRecovery(request: Request, response: Response): vo
 }
 
 /**
- * Handles the signup verification for a given user.
- * @param request The request from the client. Should contain verification token.
+ * Handles the passwordreset for a given user.
+ * @param request The request from the client. Should contain the user's new password.
  * @param response The response to send back to the client.
  */
 export function handlePasswordReset (request: Request, response: Response): void {
@@ -162,6 +162,21 @@ export function handlePasswordReset (request: Request, response: Response): void
 
     let appUserKey: number = parseInt(request.query.appUserKey);
     let passwordRecoveryToken: string = request.query.passwordRecoveryToken;
+    let sessionData: SessionData = SessionData.loadSessionData(request);    
+    let newPassword: string = request.body.password;
 
-    resetPassword(appUserKey, passwordRecoveryToken);
+    resetPassword(appUserKey, passwordRecoveryToken)
+    .then((successMessage: string) => {
+        updateAppUser(new AppUserInfo(), newPassword, null, sessionData)
+        .then((sessionData: SessionData) => {
+            SessionData.saveSessionData(request, sessionData);
+            response.send(new FoodWebResponse(true, 'Successfully reset your password!'));
+        })
+        .catch((err: Error) => {
+            response.send(new FoodWebResponse(false, err.message));
+        });
+    })
+    .catch((err: Error) => {
+        response.send(new FoodWebResponse(false, err.message));        
+    })
 }
