@@ -1,0 +1,524 @@
+@import "~@angular/material/theming";
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~font-awesome/css/font-awesome.css";
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@include mat-core();
+
+/* Top level document styles */
+/* ------------------------- */
+
+html {
+  overflow: auto;
+}
+
+html,
+body {
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+/* Angular Material site-wide color theme definitions */
+/* -------------------------------------------------- */
+
+/**
+ * These are the color definitions for our website's primary color theme.
+ * Changing color values here should take effect everywhere!
+ */
+$lighter-primary: 50;
+$darker-primary: 300;
+$food-web-primary: mat-palette(
+  $mat-grey,
+  50,
+  $lighter-primary,
+  $darker-primary
+);
+
+$lighter-accent: A100;
+$darker-accent: 500;
+$food-web-accent: mat-palette($mat-green, 200, $lighter-accent, $darker-accent);
+
+$food-web-warn: mat-palette($mat-red);
+
+$food-web-theme: mat-light-theme(
+  $food-web-primary,
+  $food-web-accent,
+  $food-web-warn
+);
+@include angular-material-theme($food-web-theme);
+
+/**
+ * Define an inverted color theme for convenience.
+ */
+$food-web-inverted-theme: mat-light-theme(
+  $food-web-accent,
+  $food-web-primary,
+  $food-web-warn
+);
+.food-web-inverted-theme {
+  @include angular-material-theme($food-web-inverted-theme);
+}
+
+/**
+ * Define Angular Material component specific color themes.
+ */
+@include mat-datepicker-theme($food-web-inverted-theme);
+@include mat-form-field-theme($food-web-inverted-theme);
+@include mat-input-theme($food-web-inverted-theme);
+@include mat-select-theme($food-web-inverted-theme);
+@include mat-stepper-theme($food-web-inverted-theme);
+@include mat-tabs-theme($food-web-inverted-theme);
+
+/* Define app-wide styles for Angular Material components */
+/* ------------------------------------------------------ */
+
+@-webkit-keyframes greenPulse {
+  0% {
+    -webkit-box-shadow: 0px 0px 20px 3px #d1f5d1 inset;
+  }
+  50% {
+    -webkit-box-shadow: 0px 0px 35px 6px lightgreen inset;
+  }
+  100% {
+    -webkit-box-shadow: 0px 0px 20px 3px #d1f5d1 inset;
+  }
+}
+
+@keyframes greenPulse {
+  0% {
+    box-shadow: 0px 0px 20px 3px #d1f5d1 inset;
+  }
+  50% {
+    box-shadow: 0px 0px 35px 6px lightgreen inset;
+  }
+  100% {
+    box-shadow: 0px 0px 20px 3px #d1f5d1 inset;
+  }
+}
+
+.green-glow {
+  /* Green Pulse inset shadow animation */
+  -webkit-animation: greenPulse 5s infinite !important;
+  animation: greenPulse 5s infinite !important;
+}
+
+/* Default styling for all Angular Material raised buttons */
+button.mat-raised-button.mat-primary {
+  vertical-align: middle;
+  border: 1px solid lightgray;
+  border-radius: 10%;
+  outline: none;
+  -webkit-box-shadow: 0px 0px 5px 1px #d1f5d1 inset;
+  box-shadow: 0px 0px 5px 1px #d1f5d1 inset;
+}
+
+/* Background transition between hover and unhover */
+button.mat-raised-button.mat-primary,
+button.mat-icon-button {
+  transition: background 0.5s ease;
+  -webkit-transition: background 0.5s ease;
+  -moz-transition: background 0.5s ease;
+  -ms-transition: background 0.5s ease;
+  -o-transition: background 0.5s ease;
+}
+
+/* This shows the darker primary color on hover */
+button.mat-raised-button.mat-primary:hover,
+button.mat-icon-button:hover {
+  background-color: mat-color($food-web-primary, $darker-primary);
+}
+
+/* This briefly shows the accent color on click for the ripple effect */
+button.mat-raised-button.mat-primary:active,
+button.mat-icon-button:active {
+  transition: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  box-shadow: none;
+  background-color: mat-color($food-web-accent);
+}
+
+.warn-button {
+  -webkit-box-shadow: 0px 0px 5px 0px #ffc1c1 inset !important;
+  box-shadow: 0px 0px 5px 0px #ffc1c1 inset !important;
+}
+
+.warn-button:active {
+  background-color: mat-color($food-web-warn) !important;
+}
+
+button.mat-icon-button {
+  outline: none;
+}
+
+/* Use .button-lg class for large Angular Material raised button */
+button.button-lg {
+  font-size: 30px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+/* Use .button-md class for medium Angular Material raised button */
+button.button-md {
+  font-size: 20px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+/* Use .button-sm class for small Angular Material raised button */
+button.button-sm {
+  font-size: 15px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  line-height: 20px;
+  min-height: 20px;
+  vertical-align: top;
+}
+
+/* Get rid of extra padding present with the mdHorizontalStepper */
+.mat-horizontal-content-container {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+/* Ensure that mdInput has no padding or space to the top for floating placeholder */
+.no-pad-top-input .mat-form-field-infix {
+  border-top: none;
+}
+
+/* Ensure that mdInput has no space directly around text (between text and underline) */
+.no-pad-mid-input .mat-form-field-infix {
+  padding: 0px;
+}
+
+/* Ensure mdInput placeholder is not pushed down */
+.no-pad-mid-input .mat-form-field-placeholder {
+  position: initial !important;
+}
+
+/* Get rid of the bottom space in mdInput container WARNING: DOESN'T WORK WELL IN IE... */
+.no-pad-bottom-input .mat-form-field-wrapper {
+  padding-bottom: 0px;
+}
+
+/* Fix placement of input underline after getting rid of bottom space WARNING: DOESN'T WORK WELL IN IE */
+.no-pad-bottom-input .mat-form-field-underline {
+  bottom: initial;
+}
+
+/* Angular Material site-wide color theme definitions */
+/* -------------------------------------------------- */
+
+//Basic Styles
+$fontFamily: Lucida Grande, Lucida Sans, Arial, sans-serif;
+$fontSize: 1em;
+$borderRadius: 6px;
+$disabledOpacity: 0.35;
+
+//Header
+$headerBorderWidth: 1px;
+$headerBorderColor: #aed0ea;
+$headerBgColor: #deedf7;
+$headerTextColor: #222222;
+$headerFontWeight: bold;
+$headerIconTextColor: #222222;
+
+//Content
+$contentBorderWidth: 1px;
+$contentBorderColor: #dddddd;
+$contentBgColor: #f2f5f7;
+$contentTextColor: #362b36;
+
+//Default State
+$stateDefaultBorderWidth: 1px;
+$stateDefaultBorderColor: #aed0ea;
+$stateDefaultBgColor: #d7ebf9;
+$stateDefaultTextColor: #2779aa;
+
+//Active State
+$stateActiveBorderColor: #2694e8;
+$stateActiveBgColor: #3baae3;
+$stateActiveTextColor: #ffffff;
+
+//Highlight State
+$stateHighlightBorderColor: #f9dd34;
+$stateHighlightBgColor: #ffef8f;
+$stateHighlightTextColor: #363636;
+
+//Focus State
+$stateFocusBorderColor: #74b2e2;
+$stateFocusBgColor: #e4f1fb;
+$stateFocusTextColor: #0070a3;
+
+//Error State
+$stateErrorBorderColor: #cd0a0a;
+$stateErrorBgColor: #cd0a0a;
+$stateErrorTextColor: #ffffff;
+
+//Hover State
+$stateHoverBorderColor: #74b2e2;
+$stateHoverBgColor: #e4f1fb;
+$stateHoverTextColor: #0070a3;
+
+//Forms
+$inputBgColor: #ffffff;
+$inputTextColor: #222222;
+$invalidInputBorderColor: #cd0a0a;
+$inputGroupTextColor: #2779aa;
+
+/* Grab theme colors and wrap them in classes to be used in components */
+/* ------------------------------------------------------------------- */
+
+/* Primary Background */
+.primary-background {
+  background-color: mat-color($food-web-primary);
+}
+
+.primary-background-lighter {
+  background-color: mat-color($food-web-primary, $lighter-primary);
+}
+
+.primary-background-darker {
+  background-color: mat-color($food-web-primary, $darker-primary);
+}
+
+/* Primary foreground */
+.primary-foreground {
+  color: mat-color($food-web-primary);
+}
+
+.primary-foreground-lighter {
+  color: mat-color($food-web-primary, $lighter-primary);
+}
+
+.primary-foreground-darker {
+  color: mat-color($food-web-primary, $darker-primary);
+}
+
+/* Accent Background */
+.accent-background {
+  background-color: mat-color($food-web-accent);
+}
+
+.accent-background-lighter {
+  background-color: mat-color($food-web-accent, $lighter-accent);
+}
+
+.accent-background-darker {
+  background-color: mat-color($food-web-accent, $darker-accent);
+}
+
+/* Accent Foreground */
+.accent-foreground {
+  color: mat-color($food-web-accent);
+}
+
+.accent-foreground-hover:hover {
+  color: mat-color($food-web-accent) !important;
+}
+
+.accent-foreground-lighter {
+  color: mat-color($food-web-accent, $lighter-accent);
+}
+
+.accent-foreground-darker {
+  color: mat-color($food-web-accent, $darker-accent);
+}
+
+.accent-foreground-darker-hover:hover {
+  color: mat-color($food-web-accent, $darker-accent) !important;
+}
+
+/* Warn Background & Foreground */
+.warn-background {
+  background-color: mat-color($food-web-warn);
+}
+
+.warn-foreground {
+  color: mat-color($food-web-warn);
+}
+
+/* Link Colors */
+.link-content,
+.link-content a {
+  color: green;
+}
+
+.link-content:visited,
+.link-content a:visited {
+  color: green;
+  text-decoration: none;
+}
+
+.link-content:hover,
+.link-content a:hover {
+  color: goldenrod;
+  text-decoration: none;
+}
+
+.link-content:active,
+.link-content a:active {
+  color: green;
+  text-decoration: none;
+}
+
+/* Mat Expansion Panel styles */
+/* -------------------------- */
+.mat-expansion-panel-header-title {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* NGB Typeahead styles using theme color */
+/* -------------------------------------- */
+ngb-typeahead-window {
+  margin-top: 7px !important;
+  margin-bottom: 14px !important;
+  max-height: 200px;
+  overflow-y: auto !important;
+  box-shadow: 5px 5px 18px #888888;
+}
+
+ngb-typeahead-window .dropdown-item.active,
+ngb-typeahead-window .dropdown-item:active {
+  background-color: mat-color($food-web-accent);
+}
+
+/* Shared styles for all modal dialogs in Food Web */
+/* ----------------------------------------------- */
+.modal-content {
+  width: fit-content;
+}
+
+.modal-header {
+  position: relative;
+  background-color: #222222;
+  color: white;
+}
+
+.modal-header-text {
+  text-align: center;
+  padding-right: 25px;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  color: #eee;
+  display: block;
+  border-radius: 50%;
+  font-size: 40px;
+  margin: 0px;
+  padding: 0px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  outline: none !important;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  -webkit-transition: -webkit-transform 0.8s ease-in-out;
+  transition: transform 0.8s ease-in-out;
+}
+
+.modal-close:hover {
+  color: white;
+  font-weight: bold;
+}
+
+.modal-button-group {
+  padding: 10px;
+  text-align: right;
+}
+
+.cdk-overlay-container {
+  z-index: 4000;
+}
+
+.cdk-overlay-pane {
+  max-width: 95vw !important;
+}
+
+@media only screen and (max-width: 776px) {
+  .modal-button-group button {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 0px !important;
+  }
+}
+
+/* Various other website-wide styles */
+/* --------------------------------- */
+.no-pad {
+  padding-right: 0px;
+  padding-left: 0px;
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.inline-error {
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.checkbox-compress {
+  margin: 0px;
+  padding: 0px;
+}
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+.inline-block {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.no-word-wrap {
+  white-space: nowrap;
+}
+
+.center-text {
+  text-align: center;
+  vertical-align: middle;
+}
+
+button {
+  outline: none;
+}
+
+button:hover,
+a:hover {
+  cursor: pointer;
+  cursor: hand;
+}
+
+i {
+  vertical-align: middle;
+  margin-top: -4px;
+}
+
+.space-bottom {
+  margin-bottom: 15px;
+}
+
+@media only screen and (min-width: 992px) {
+  .desktop-space-bottom {
+    margin-bottom: 15px;
+  }
+}

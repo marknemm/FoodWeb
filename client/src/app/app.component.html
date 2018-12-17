@@ -1,0 +1,10 @@
+<div id="header-body-wrapper" [style.min-height.px]="bodyHeight" [style.margin-bottom.px]="BODY_MARGIN">
+
+    <app-header></app-header>
+
+    <!-- This is replaced with each component we route to -->
+    <router-outlet></router-outlet>
+
+</div>
+
+<app-footer [height]="FOOTER_HEIGHT"></app-footer>

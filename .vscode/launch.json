@@ -1,0 +1,89 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Node",
+            "type":  "node",
+            "request": "attach",
+            "port": 9229,
+            "outFiles": [
+                "${workspaceRoot}\\server\\dist\\**\\*.js"
+            ]
+        },
+        {
+            "name": "Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "port": 9222,
+            "url": "http://localhost:5000",
+            "webRoot": "${workspaceRoot}",
+            "trace": true,
+            "sourceMaps": true,
+            "userDataDir": "${workspaceRoot}/.vscode/chrome"
+        },
+        {
+            "name": "Client-Only",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:4200",
+            "sourceMaps": true,
+            "trace": true,
+            "webRoot": "${workspaceRoot}",
+            "userDataDir": "${workspaceRoot}/.vscode/chrome",
+            "sourceMapPathOverrides": {
+                "webpack:///C:*":"C:/*"
+            }
+        },
+        {
+            "name": "Server-Test",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceRoot}\\server\\dist\\**\\*.js"
+            ],
+            "stopOnEntry": false,
+            "args": ["--no-timeouts", "--colors", "--debug-brk", "${workspaceRoot}/server/dist/server/test/**/test-*.js"],
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": null,
+            "env": {
+                "NODE_ENV": "testing"
+            }
+        },
+        {
+            "name": "Shared-Test",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceRoot}\\shared\\dist\\**\\*.js"
+            ],
+            "stopOnEntry": false,
+            "args": ["--no-timeouts", "--colors", "--debug-brk", "${workspaceRoot}/shared/dist/test/**/test-*.js"],
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": null,
+            "env": {
+                "NODE_ENV": "testing"
+            }
+        },
+        {
+            "name": "Python",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "pythonPath": "c:/python27/python.exe",
+            "args": ["../server/database/functions/app-user/get-app-user-session-data.sql"],
+            "debugOptions": [
+                "RedirectOutput"
+            ]
+        }
+    ],
+    "compounds": [
+        { 
+            "name": "Hybrid",
+            "configurations": ["Node", "Chrome"]
+        }
+    ]    
+}

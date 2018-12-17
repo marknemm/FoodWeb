@@ -1,0 +1,39 @@
+{
+  "name": "food-web-shared",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json",
+    "build:watch": "tsc -w -p ./tsconfig.json",
+    "clean": "rimraf ./dist ./coverage",
+    "clean:all": "npm run clean && rimraf ./node_modules",
+    "lint": "tslint -p ./tsconfig.json",
+    "test": "npm run lint && ts-mocha -p ./test/tsconfig.spec.json ./test/**/*.ts",
+    "test:watch": "ts-mocha -p ./test/tsconfig.spec.json ./test/**/*.ts"
+  },
+  "private": true,
+  "dependencies": {
+    "geocoder": "^0.2.3",
+    "lodash": "^4.17.11",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.23",
+    "rxjs": "^6.3.3",
+    "typescript": "~3.1.6"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.118",
+    "@types/moment-timezone": "^0.5.9",
+    "@types/node": "^10.12.12",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "concurrently": "^4.1.0",
+    "jasmine-core": "^3.3.0",
+    "jasmine-spec-reporter": "^4.2.1",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.7",
+    "rimraf": "^2.6.2",
+    "ts-mocha": "^2.0.0",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "food-web",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "server/dist/server/src/server.js",
+  "scripts": {
+    "build": "cd ./client && npm run build && cd ../server && npm run build && cd ../",
+    "clean": "cd ./client && npm run clean && cd ../server && npm run clean && cd ../shared && npm run clean && cd ../",
+    "clean:all": "cd ./client && npm run clean:all && cd ../server && npm run clean:all && cd ../shared && npm run clean:all && cd../ && rimraf ./node_modules",
+    "lint": "cd ./client && npm run lint && cd ../server && npm run lint && cd ../",
+    "postinstall": "cd ./shared && npm install && cd ../client && npm install && cd ../server && npm install && cd ../",
+    "heroku-postbuild": "npm run build",
+    "start": "concurrently \"cd ./client && npm run build:watch\" \"cd ./server && npm run start\"",
+    "test": "npm run lint && cd ./client && npm run test && cd ../server && npm run test && cd ../"
+  },
+  "private": true,
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "rimraf": "^2.6.2"
+  },
+  "engines": {
+    "node": "10.14.1",
+    "npm": "6.4.1"
+  }
+}

@@ -1,0 +1,16 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "pgsql.connection": "postgres://postgres@localhost:5432/foodweb",
+    /*"sqltools.connections": [
+        {
+            "type"    : "pgsql",
+            "host"    : "localhost",
+            "port"    :  5432,
+            "database": "foodweb",
+            "username": "postgres",
+            // for PostgreSQL "password" is optional (setup "pgpass.conf" file instead)
+            "password": "password",
+            "encoding": "utf-8"
+        }
+    ]*/
+}
