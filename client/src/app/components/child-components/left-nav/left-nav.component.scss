@@ -1,0 +1,33 @@
+@import '../../../../styles/constants.scss';
+
+.left-nav-container {
+  ul {
+    padding-top: 15px;
+    padding-left: 0px;
+    
+    a {
+      position: relative;
+      display: block;
+      padding: 5px 25px;
+      text-decoration: none;
+
+      .mat-icon {
+        font-size: 22px;
+        height: 22px;
+        vertical-align: bottom;
+        margin-right: 3px;
+      }
+
+      &:hover {
+        background-color: #EFEFEF;
+      }
+    }
+  }
+
+  .page-content {
+    height: 100%;
+    position: relative;
+    padding-top: $page-vert-pad;
+    padding-bottom: $page-vert-pad;
+  }
+}

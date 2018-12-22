@@ -1,0 +1,58 @@
+@import './constants.scss';
+@import '~@angular/material/theming';
+
+@include mat-core();
+@include angular-material-theme($light-theme);
+
+.mat-primary {
+  background-color: $primary;
+}
+
+.mat-primary-lighter {
+  background-color: $primary-lighter;
+}
+
+.mat-primary-darker {
+  background-color: $primary-darker;
+  color: white;
+}
+
+.mat-accent {
+  background-color: $accent;
+  color: white;
+}
+
+.mat-accent-lighter {
+  background-color: $accent-lighter;
+}
+
+.mat-accent-darker {
+  background-color: $accent-darker;
+  color: white;
+}
+
+.mat-warn {
+  background-color: $warn;
+}
+
+.mat-warn-lighter {
+  background-color: $warn-lighter;
+}
+
+.mat-warn-darker {
+  background-color: $warn-darker;
+}
+
+.mat-drawer-container {
+  height: calc(100% - #{$header-height});
+
+  .mat-drawer {
+    width: $left-nav-width;
+    min-height: 100%;
+    box-shadow: 1px 0px 5px 1px rgba(0, 0, 0, 0.5);
+  }
+
+  .mat-drawer-content {
+    background-color: #EFEFEF;
+  }
+}

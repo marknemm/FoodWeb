@@ -116,11 +116,11 @@
   "defaultProject": "food-web",
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "app",
+      "prefix": "food-web",
       "styleext": "scss"
     },
     "@schematics/angular:directive": {
-      "prefix": "app"
+      "prefix": "food-web"
     }
   }
 }

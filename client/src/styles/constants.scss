@@ -1,0 +1,39 @@
+/* Window width thresh consts */
+$lg: 1200px;
+$md: 991px;
+$sm: 767px;
+$xs: 600px;
+
+/* Header Consts */
+$site-title-height: 60px;
+$site-title-height-xs: 50px;
+$page-title-height: 40px;
+$header-height: ($site-title-height + $page-title-height);
+$header-height-xs: ($site-title-height-xs + $page-title-height);
+
+/* Main (Page) Content Consts */
+$page-vert-pad: 20px;
+
+/* Left Nav Consts */
+$left-nav-width: 230px;
+
+/* Define color palette constants */
+@import '~@angular/material/theming';
+
+$primary-palette: mat-palette($mat-green, 400, 300, 500);
+$accent-palette: mat-palette($mat-brown, 500);
+$warn-palette: mat-palette($mat-red);
+
+$light-theme: mat-light-theme($primary-palette, $accent-palette, $warn-palette);
+
+$primary: map-get($primary-palette, default);
+$primary-lighter: map-get($primary-palette, lighter);
+$primary-darker: map-get($primary-palette, darker);
+
+$accent: map-get($accent-palette, default);
+$accent-lighter: map-get($accent-palette, lighter);
+$accent-darker: map-get($accent-palette, darker);
+
+$warn: map-get($warn-palette, default);
+$warn-lighter: map-get($warn-palette, lighter);
+$warn-darker: map-get($warn-palette, darker);

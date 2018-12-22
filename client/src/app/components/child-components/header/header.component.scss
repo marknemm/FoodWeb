@@ -1,0 +1,50 @@
+@import '../../../../styles/constants.scss';
+
+.site-header {
+  position: relative;
+  display: block;
+  height: $header-height;
+  box-shadow: 0 1px 5px 1px rgba(0, 0, 0, 0.5);
+  z-index: 20;
+  color: #3e2723;
+
+  .site-icon {
+    height: calc(100% - 15px);
+    width: auto;
+  }
+
+  .site-title {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 42px;
+    color: #3e2723;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 5px;
+  }
+  
+  .page-title {
+    height: $page-title-height;
+    padding: 0px 8px;
+
+    .sidenav-toggle-button {
+      vertical-align: top;
+      outline: none;
+    }
+  
+    h1 {
+      display: inline-block;
+      font-size: 18px;
+      padding-top: 10px;
+      padding-left: 3px;
+    }
+  }
+
+  @media only screen and (max-width: $xs) {
+    height: $header-height-xs;
+
+    .site-title {
+      height: $site-title-height-xs;
+    }
+  }
+}

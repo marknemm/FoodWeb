@@ -1,10 +1,4 @@
-<div id="header-body-wrapper" [style.min-height.px]="bodyHeight" [style.margin-bottom.px]="BODY_MARGIN">
-
-    <app-header></app-header>
-
-    <!-- This is replaced with each component we route to -->
-    <router-outlet></router-outlet>
-
-</div>
-
-<app-footer [height]="FOOTER_HEIGHT"></app-footer>
+<food-web-header [leftNav]="leftNav"></food-web-header>
+<food-web-left-nav #leftNav>
+  <router-outlet></router-outlet>
+</food-web-left-nav>

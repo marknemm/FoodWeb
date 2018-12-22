@@ -1,0 +1,16 @@
+<mat-drawer-container class="left-nav-container">
+  <mat-drawer [mode]="mode" [opened]="isOpen">
+    <ul>
+      <li>
+        <a mat-ripple [routerLink]="['/']" (click)="_onNavClick()">
+          <span><mat-icon>home</mat-icon> Home</span>
+        </a>
+      </li>
+    </ul>
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="page-content container">
+      <ng-content></ng-content>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
