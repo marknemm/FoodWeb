@@ -44,6 +44,7 @@
     "ngx-img-cropper": "^0.11.0",
     "ngx-logger": "^3.3.6",
     "ngx-mask": "^7.0.1",
+    "ngx-material-timepicker": "^2.11.0",
     "rxjs": "^6.3.3",
     "text-mask-addons": "^3.7.1",
     "typescript": "~3.1.6",

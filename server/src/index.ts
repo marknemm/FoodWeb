@@ -4,6 +4,7 @@ import multer = require('multer');
 import path = require('path');
 import dotenv = require('dotenv');
 import 'reflect-metadata';
+import { Request, Response } from 'express';
 
 // Set important paths in global.
 const PRODUCTION: boolean = (process.env['PRODUCTION']  === 'true');
@@ -40,19 +41,21 @@ app.use(multer().any());
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 module.exports = app; // Make available for mocha testing suites.
 
+app.use('/session');
+
 // Public Resource Route Handler (for local image hosting).
-app.get('/public/*', (request, response) => {
+app.get('/public/*', (request: Request, response: Response) => {
   response.sendFile(path.resolve(global['rootDir'] + decodeURI(request.url)));
 });
 
 // Food Web's Main Asset Files Such as Icon and Banner Images.
-app.get('/assets/*', (request, response) => {
+app.get('/assets/*', (request: Request, response: Response) => {
   const assetFile: string = request.url.split('/assets/')[1];
   response.sendFile(path.resolve(global['assetsDir'], assetFile));
 });
 
 // All Remaining Routes Handler (for serving our main web page).
-app.get('*', (request, response) => {
+app.get('*', (request: Request, response: Response) => {
   response.sendFile(path.join(global['clientBuildDir'], 'index.html'));
 });
 

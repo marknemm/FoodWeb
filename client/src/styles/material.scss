@@ -4,43 +4,102 @@
 @include mat-core();
 @include angular-material-theme($light-theme);
 
-.mat-primary {
-  background-color: $primary;
+.mat-snack-bar-container {
+  &.mat-alert-info {
+    background-color: #d9edf7;
+    color: #31708f;
+  }
+  
+  &.mat-alert-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+  }
+  
+  &.mat-alert-warn {
+    background-color: #fcf8e3;
+    color: #8a6d3b;
+  }
+  
+  &.mat-alert-danger {
+    background-color: #f2dede;
+    color: #a94442;
+  }
 }
 
-.mat-primary-lighter {
-  background-color: $primary-lighter;
+.mat-dialog-container {
+  .mat-alert-info {
+    background-color: $primary;
+    color: $accent-darkest;
+  }
+  
+  .mat-alert-success {
+    background-color: $primary-lighter;
+    color: black;
+  }
+  
+  .mat-alert-warn {
+    background-color: #dfa645;
+    color: white;
+  }
+  
+  .mat-alert-danger {
+    background-color: $warn;
+    color: white;
+  }
+
+  .mat-button {
+    &.mat-alert-info {
+      background-color: transparent;
+      color: $primary-darker;
+    }
+    
+    &.mat-alert-success {
+      background-color: transparent;
+      color: $primary;
+    }
+    
+    &.mat-alert-warn {
+      background-color: transparent;
+      color: #dfa645;
+    }
+    
+    &.mat-alert-danger {
+      background-color: transparent;
+      color: $warn;
+    }
+  }
 }
 
-.mat-primary-darker {
-  background-color: $primary-darker;
-  color: white;
+.no-pad.mat-button {
+  padding: 0px;
 }
 
-.mat-accent {
-  background-color: $accent;
-  color: white;
+.no-pad {
+  &.mat-button {
+    padding: 0px;
+  }
+
+  &.mat-form-field {
+    .mat-form-field-wrapper {
+      padding-bottom: 0px;
+    }
+
+    .mat-form-field-underline {
+      bottom: 0px;
+    }
+  }
 }
 
-.mat-accent-lighter {
-  background-color: $accent-lighter;
+button {
+  outline: none !important;
 }
 
-.mat-accent-darker {
-  background-color: $accent-darker;
-  color: white;
-}
+.mat-card {
+  margin-bottom: 20px;
 
-.mat-warn {
-  background-color: $warn;
-}
-
-.mat-warn-lighter {
-  background-color: $warn-lighter;
-}
-
-.mat-warn-darker {
-  background-color: $warn-darker;
+  @media only screen and (max-width: $xs) {
+    margin-bottom: 10px;
+  }
 }
 
 .mat-drawer-container {
@@ -54,5 +113,58 @@
 
   .mat-drawer-content {
     background-color: #EFEFEF;
+  }
+}
+
+.mat-dialog-container {
+  position: relative;
+  border-radius: inherit;
+
+  form {
+    border-radius: inherit;
+  }
+
+  .mat-toolbar:first-child {
+    margin: -24px -24px 12px -24px;
+    width: calc(100% + 48px);
+    max-height: 60px;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+}
+
+.mat-dialog-container {
+  .close-button {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 26px;
+    height: 26px;
+    line-height: 24px;
+    font-size: 24px;
+    outline: none;
+  }
+}
+
+.mat-snack-bar-container {
+  .close-button {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    font-size: 18px;
+    outline: none;
+  }
+}
+
+.timepicker {
+  .timepicker__header, .clock-face__clock-hand, .clock-face__number > .active {
+    background-color: $primary !important;
+  }
+
+  .timepicker-button {
+    color: $primary !important;
   }
 }

@@ -1,0 +1,37 @@
+<div class="operation-hours-container">
+  <div *ngFor="let operationHoursForm of operationHoursArr.controls; let idx = index" [formGroup]="operationHoursForm" class="operation-hours-form">
+    <button mat-icon-button color="warn" type="button" class="delete-button" (click)="removeOperationHours(idx)">
+      <mat-icon [inline]="true">clear</mat-icon>
+    </button>
+    <div class="weekday-field">
+      <mat-form-field class="fill no-pad">
+        <mat-select placeholder="Weekday" formControlName="weekday">
+          <mat-option *ngFor="let weekday of weekdays; let i = index" [value]="i">{{ weekday }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="time-fields-container">
+      <div class="time-field">
+        <mat-form-field class="fill">
+          <input matInput placeholder="Start Time" [ngxTimepicker]="startTimePicker" formControlName="startTime" [errorStateMatcher]="opHrsValidationService">
+          <ngx-material-timepicker #startTimePicker [minutesGap]="5"></ngx-material-timepicker>
+        </mat-form-field>
+      </div>
+      <div class="time-field">
+        <mat-form-field class="fill">
+          <input matInput placeholder="End Time" [ngxTimepicker]="endTimePicker" formControlName="endTime" [errorStateMatcher]="opHrsValidationService">
+          <ngx-material-timepicker #endTimePicker [minutesGap]="5"></ngx-material-timepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-error *ngIf="operationHoursForm.hasError('operationHoursOrder')" class="operation-hours-order-error">
+      {{ operationHoursForm.getError('operationHoursOrder') }}
+    </mat-error>
+  </div>
+  <div>
+    <button mat-button type="button" color="primary" class="no-pad" [disabled]="operationHoursArr.invalid" (click)="addOperationHours()">
+      <mat-icon>add</mat-icon>
+      <span>Add</span>
+    </button>
+  </div>
+</div>

@@ -15,25 +15,31 @@ $header-height-xs: ($site-title-height-xs + $page-title-height);
 $page-vert-pad: 20px;
 
 /* Left Nav Consts */
-$left-nav-width: 230px;
+$left-nav-width: 180px;
 
 /* Define color palette constants */
 @import '~@angular/material/theming';
 
 $primary-palette: mat-palette($mat-green, 400, 300, 500);
-$accent-palette: mat-palette($mat-brown, 500);
+$accent-palette: mat-palette($mat-brown);
 $warn-palette: mat-palette($mat-red);
 
 $light-theme: mat-light-theme($primary-palette, $accent-palette, $warn-palette);
 
 $primary: map-get($primary-palette, default);
+$primary-lightest: map-get($primary-palette, 100);
 $primary-lighter: map-get($primary-palette, lighter);
 $primary-darker: map-get($primary-palette, darker);
+$primary-darkest: map-get($primary-palette, 900);
 
 $accent: map-get($accent-palette, default);
+$accent-lightest: map-get($accent-palette, 100);
 $accent-lighter: map-get($accent-palette, lighter);
 $accent-darker: map-get($accent-palette, darker);
+$accent-darkest: map-get($accent-palette, 900);
 
 $warn: map-get($warn-palette, default);
+$warn-lightest: map-get($warn-palette, 100);
 $warn-lighter: map-get($warn-palette, lighter);
 $warn-darker: map-get($warn-palette, darker);
+$warn-darkest: map-get($warn-palette, 900);

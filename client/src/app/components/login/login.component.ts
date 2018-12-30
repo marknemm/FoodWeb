@@ -1,0 +1,67 @@
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
+import { SessionService } from './../../services/session/session.service';
+import { PasswordResetService } from './../../services/password-reset/password-reset.service';
+
+@Component({
+  selector: 'food-web-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
+})
+export class LoginComponent implements OnInit {
+
+  title = 'Login';
+  loginForm: FormGroup;
+  isPasswordReset = false;
+  resetMessageSent = false;
+
+  constructor(
+    private _sessionService: SessionService,
+    private _passwordResetService: PasswordResetService,
+    private _formBuilder: FormBuilder,
+    private _matDialogRef: MatDialogRef<LoginComponent>
+  ) {}
+
+  ngOnInit() {
+    this.loginForm = this._formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
+  }
+
+  submit(): void {
+    if (this.loginForm.valid) {
+      console.log('submitting: ' + this.isPasswordReset);
+      this.isPasswordReset ? this.sendPasswordResetEmail() : this.login();
+    }
+  }
+
+  login(): void {
+    const email: string = this.loginForm.get('email').value;
+    const password: string = this.loginForm.get('password').value;
+    this._sessionService.login(email, password).subscribe(
+      () => this._matDialogRef.close()
+    );
+  }
+
+  forgotPassword(): void {
+    this.title = 'Reset Password';
+    this.loginForm.get('password').disable();
+    this.isPasswordReset = true;
+  }
+
+  returnToLogin(): void {
+    this.title = 'Login';
+    this.loginForm.get('password').enable();
+    this.isPasswordReset = false;
+  }
+
+  sendPasswordResetEmail(): void {
+    const email: string = this.loginForm.get('email').value;
+    this._passwordResetService.sendPasswordResetEmail(email).subscribe(
+      () => this.resetMessageSent = true
+    );
+  }
+
+}

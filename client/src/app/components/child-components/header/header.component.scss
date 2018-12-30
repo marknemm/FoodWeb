@@ -6,37 +6,53 @@
   height: $header-height;
   box-shadow: 0 1px 5px 1px rgba(0, 0, 0, 0.5);
   z-index: 20;
-  color: #3e2723;
 
-  .site-icon {
-    height: calc(100% - 15px);
-    width: auto;
-  }
-
-  .site-title {
-    display: inline-block;
-    font-weight: bold;
-    font-size: 42px;
-    color: #3e2723;
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-left: 5px;
+  .site-title-container {
+    .site-icon {
+      height: calc(100% - 15px);
+      width: auto;
+    }
+  
+    .site-title {
+      display: inline-block;
+      font-weight: bold;
+      font-size: 36px;
+      height: 36px;
+      line-height: 36px;
+      color: $accent-darkest;
+      margin-left: 5px;
+    }
   }
   
-  .page-title {
+  .page-title-container {
     height: $page-title-height;
     padding: 0px 8px;
+    box-sizing: border-box;
+    background-color: $primary-lighter;
+    color: $accent-darkest;
 
     .sidenav-toggle-button {
       vertical-align: top;
       outline: none;
     }
   
-    h1 {
+    .page-title {
       display: inline-block;
       font-size: 18px;
       padding-top: 10px;
       padding-left: 3px;
+    }
+
+    .session-links {
+      position: absolute;
+      display: inline-block;
+      right: 0;
+      padding-right: inherit;
+      padding-top: 6px;
+
+      a {
+        color: $accent-darkest;
+      }
     }
   }
 

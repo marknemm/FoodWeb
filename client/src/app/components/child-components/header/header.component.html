@@ -1,12 +1,22 @@
 <header class="site-header">
-  <mat-toolbar color="primary-darker">
-    <img src="/assets/IconImg.png" class="site-icon">
+  <mat-toolbar color="primary" class="site-title-container">
+    <img src="/assets/IconImg.png" alt="Food Web Icon" class="site-icon">
     <span class="site-title">Food Web</span>
   </mat-toolbar>
-  <div class="page-title mat-primary">
-    <button mat-icon-button class="sidenav-toggle-button" (click)="leftNav.toggle()">
-      <mat-icon>menu</mat-icon>
+  <div class="page-title-container">
+    <button mat-icon-button class="sidenav-toggle-button" (click)="leftNav.toggle()" [attr.aria-expanded]="leftNav.isOpen">
+      <mat-icon aria-label="Toggle Navigation Menu">menu</mat-icon>
     </button>
-    <h1>{{ title }} </h1>
+    <h1 class="page-title">{{ pageTitleService.title }}</h1>
+    <span class="session-links">
+      <ng-container *ngIf="!sessionService.loggedIn">
+        <a [routerLink]="" (click)="login()">Login</a>
+        <span> | <a [routerLink]="['signup']">Signup</a></span>
+      </ng-container>
+      <ng-container *ngIf="sessionService.loggedIn">
+        <span><a [routerLink]="['account']">Account</a> | </span>
+        <a [routerLink]="['logout']" (click)="sessionService.logout()">Logout</a>
+      </ng-container>
+    </span>
   </div>
 </header>

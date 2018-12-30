@@ -53,3 +53,7 @@ testem.log
 #System Files
 .DS_Store
 Thumbs.db
+
+#ORM Files
+**/ormconfig.json
+**/ormlogs.log
