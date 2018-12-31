@@ -11,7 +11,7 @@
     "clean:all": "npm run clean && rimraf ./node_modules",
     "debug": "concurrently \"node --nolazy --debug-brk=5858 server/dist/index.js\" \"opn http://localhost:5000\"",
     "lint": "tslint -p ./tsconfig.json",
-    "start": "nodemon ./src/index.ts",
+    "start": "nodemon",
     "test": "npm run lint && ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts",
     "test:watch": "ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts"
   },

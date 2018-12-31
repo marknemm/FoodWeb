@@ -1,19 +1,19 @@
+import { Organization } from './organization';
+import { ContactInfo } from './contact-info';
 import { OperationHours } from "./operation-hours";
-export { OperationHours };
+export { OperationHours, ContactInfo, Organization };
 
 export type AccountType = 'Donor' | 'Receiver';
-export const AccountTypes: AccountType[] = ['Donor', 'Receiver'];
 
 export interface Account {
-  accountId: number;
   accountType: AccountType;
-  email: string;
-  organizationName: string;
-  phoneNumber: string;
-  streetAddress: string;
-  city: string;
-  stateProvince: string;
-  postalCode: string;
+  /**
+   * Can be the same as email.
+   */
+  username: string;
+  contactInfo: ContactInfo;
+  organization?: Organization;
   operationHours: OperationHours[];
   additionalInfo?: string;
+  verified?: boolean;
 }

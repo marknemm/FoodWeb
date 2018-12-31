@@ -30,6 +30,7 @@ if (!PRODUCTION && !QA) {
 
 // Our session middleware and controllers that will handle requests after this router hands off the data to them.
 import { Application } from 'express';
+import { initPool } from './helpers/db-connection-pool';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
@@ -40,8 +41,6 @@ app.use(express.static(global['publicDir']));
 app.use(multer().any());
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 module.exports = app; // Make available for mocha testing suites.
-
-app.use('/session');
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {
@@ -59,7 +58,9 @@ app.get('*', (request: Request, response: Response) => {
   response.sendFile(path.join(global['clientBuildDir'], 'index.html'));
 });
 
-app.listen(app.get('port'), () => {
-  // Log Message That Says When App is Up & Running.
-  console.log(`Node app is running on port: ${app.get('port')}`);
-});
+initPool().then(() =>
+  // Only start receiving requests once the database has initialized.
+  app.listen(app.get('port'), () =>
+    console.log(`Node app is running on port: ${app.get('port')}`)
+  )
+).catch(console.error);
