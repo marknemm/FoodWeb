@@ -15,7 +15,7 @@ export class LeftNavComponent implements OnInit {
   ngOnInit() {
     this.onWindowResize();
   }
-  
+
   @HostListener('window:resize')
   onWindowResize(): void {
     if (window.innerWidth <= 991 && (!this._prevWidth || this._prevWidth > 991)) {

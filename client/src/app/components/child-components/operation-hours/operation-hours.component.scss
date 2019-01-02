@@ -2,44 +2,53 @@
 
 .operation-hours-container {
 
-  .operation-hours-form {
-    position: relative;
-    max-width: 325px;
+  .operation-hours-form-container {
+    width: 100%;
 
     &:not(:first-child) {
-      border-top: 1px solid #DDD;
+      border-top: 1px solid #EEE;
+      padding-top: 12px;
     }
 
-    .delete-button {
-      position: absolute;
-      right: 0px;
-      top: 2px;
-      width: 20px;
-      height: 20px;
-      font-size: 18px;
-      line-height: 18px;
+    &:not(:last-child) {
+      padding-bottom: 12px;
     }
 
-    .weekday-field {
-      display: inline-block;
-      width: 125px;
-      padding-right: 20px;
-      margin-bottom: 8px;
-    }
+    .operation-hours-form {
+      position: relative;
+      max-width: 325px;
 
-    .time-fields-container {
-      display: inline-block;
-
-      .time-field {
-        display: inline-block;
-        width: 100px;
-        padding-right: 20px;
+      .delete-button {
+        position: absolute;
+        right: 0px;
+        top: 2px;
+        width: 20px;
+        height: 20px;
+        font-size: 18px;
+        line-height: 18px;
       }
-    }
-  
-    .operation-hours-order-error {
-      font-size: 12px;
-      margin-top: -18px;
+
+      .weekday-field {
+        display: inline-block;
+        width: 125px;
+        padding-right: 20px;
+        margin-bottom: 8px;
+      }
+
+      .time-fields-container {
+        display: inline-block;
+
+        .time-field {
+          display: inline-block;
+          width: 100px;
+          padding-right: 20px;
+        }
+      }
+    
+      .operation-hours-order-error {
+        font-size: 12px;
+        margin-top: -18px;
+      }
     }
   }
 }

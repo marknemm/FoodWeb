@@ -10,16 +10,14 @@ import { OperationHoursValidationService } from '../../../services/operation-hou
 import { OperationHours } from './../../../../../../shared/src/interfaces/operation-hours';
 import { Constants } from '../../../../../../shared/src/constants/constants';
 
-type OnChangeCb = (operationHours: OperationHours[]) => void;
-
 @Component({
   selector: 'food-web-operation-hours',
   templateUrl: './operation-hours.component.html',
   styleUrls: ['./operation-hours.component.scss'],
   providers: [
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OperationHoursComponent), multi: true },
-    { provide: NG_VALIDATORS, useExisting: forwardRef(() => OperationHoursComponent), multi: true } 
-  ],
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => OperationHoursComponent), multi: true }
+  ]
 })
 export class OperationHoursComponent implements OnInit, OnDestroy, ControlValueAccessor, Validator {
 
@@ -58,7 +56,7 @@ export class OperationHoursComponent implements OnInit, OnDestroy, ControlValueA
     );
   }
 
-  registerOnChange(onChangeCb: OnChangeCb): void {
+  registerOnChange(onChangeCb: (operationHours: OperationHours[]) => void): void {
     this.operationHoursArr.valueChanges.pipe(
       takeUntil(this.$_destroy)
     ).subscribe(
@@ -91,8 +89,6 @@ export class OperationHoursComponent implements OnInit, OnDestroy, ControlValueA
     }
   }
 
-  registerOnTouched(fn: any): void {}
-
   private _genOperationHoursForm(operationHours: OperationHours): FormGroup {
     return this._formBuilder.group(
       {
@@ -103,5 +99,7 @@ export class OperationHoursComponent implements OnInit, OnDestroy, ControlValueA
       { validators: this.opHrsValidationService.operationHoursOrder }
     );
   }
+
+  registerOnTouched(): void {}
 
 }

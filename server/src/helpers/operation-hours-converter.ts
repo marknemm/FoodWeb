@@ -1,42 +1,26 @@
-// import { Constants } from '../constants/constants';
-// export { OperationHours };
+import { OperationHoursEntity } from './../entity/operation-hours.entity';
+export { OperationHoursEntity };
 
-// export interface Time {
-//   hour: number;
-//   minute: number;
-// }
+/**
+ * Formats the operation hours times to be in "wall-clock time format" (hh:mm [am|pm]).
+ * Internally modifies the startTime & endTime mbmers of the given operationHours argument.
+ * @param operationHours Operation hours container that will have its members formatted.
+ */
+export function formatOperationHoursTimes(operationHoursArr: OperationHoursEntity[]): void {
+  operationHoursArr.forEach((operationHours: OperationHoursEntity) => {
+    operationHours.startTime = _formatOperationHourTime(operationHours.startTime);
+    operationHours.endTime = _formatOperationHourTime(operationHours.endTime);
+  });
+}
 
-// export class OperationHoursConverter {
-  
-//   constructor() {}
+function _formatOperationHourTime(time: string): string {
+  const date = new Date(`1/1/2000 ${time}`);
+  const hours: number = date.getHours();
+  const minutes: number = date.getMinutes();
 
-//   operationHoursToString(operationHours: OperationHours): string {
-//     const weekdayStr: string = Constants.WEEKDAYS[operationHours.weekday];
-//     const startTimeStr: string = this.startTimeToString(operationHours);
-//     const endTimeStr: string = this.endTimeToString(operationHours);
-//     return `${weekdayStr}, ${startTimeStr} to ${endTimeStr}`;
-//   }
+  const amPmStr: string = (hours > 11 ? 'pm' : 'am');
+  const hourStr = `${hours % 12}`;
+  const minuteStr: string = (minutes > 9 ? `${minutes}` : `0${minutes}`);
 
-//   startTimeToString(operationHours: OperationHours): string {
-//     return this.timeToString(operationHours.startHour, operationHours.startMinute);
-//   }
-
-//   endTimeToString(operationHours: OperationHours): string {
-//     return this.timeToString(operationHours.endHour, operationHours.endMinute);
-//   }
-
-//   timeToString(hour: number, minute: number): string {
-//     const amPmStr: string = (hour > 11 ? 'pm' : 'am');
-//     const hourStr: string = `${hour % 12}`;
-//     const minuteStr: string = (minute > 9 ? `${minute}` : `0${minute}`);
-//     return `${hourStr}:${minuteStr} ${amPmStr}`;
-//   }
-
-//   timeFromString(timeStr: string): Time {
-//     const date = new Date(`1/1/2000 ${timeStr}`);
-//     return {
-//       hour: date.getHours(),
-//       minute: date.getMinutes()
-//     };
-//   }
-// }
+  return `${hourStr}:${minuteStr} ${amPmStr}`;
+}

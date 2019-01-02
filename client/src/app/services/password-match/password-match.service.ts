@@ -5,11 +5,11 @@ import { FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/for
 @Injectable({
   providedIn: 'root'
 })
-export class SignupValidationService implements ErrorStateMatcher {
+export class PasswordMatchService implements ErrorStateMatcher {
 
   constructor() {}
 
-  passwordConfirmMatch(form: FormGroup): { passwordConfirmMatch: string } {
+  validatePasswordMatch(form: FormGroup): { passwordConfirmMatch: string } {
     const password: string = form.get('password').value;
     const confirmPassword: string = form.get('confirmPassword').value;
     return (!password || !confirmPassword || password === confirmPassword) ?

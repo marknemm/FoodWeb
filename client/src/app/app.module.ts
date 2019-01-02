@@ -36,6 +36,9 @@ import { ReceiversComponent } from './components/receivers/receivers.component';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 import { AlertSnackBarComponent } from './components/alert-snack-bar/alert-snack-bar.component';
 import { OperationHoursComponent } from './components/child-components/operation-hours/operation-hours.component';
+import { ContactInfoComponent } from './components/child-components/contact-info/contact-info.component';
+import { OrganizationComponent } from './components/child-components/organization/organization.component';
+import { AccountTypeComponent } from './components/child-components/account-type/account-type.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +55,9 @@ import { OperationHoursComponent } from './components/child-components/operation
     AlertDialogComponent,
     AlertSnackBarComponent,
     OperationHoursComponent,
+    ContactInfoComponent,
+    OrganizationComponent,
+    AccountTypeComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({

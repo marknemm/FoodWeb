@@ -1,4 +1,5 @@
 import express = require('express');
+import session = require('express-session');
 import bodyParser = require('body-parser');
 import multer = require('multer');
 import path = require('path');
@@ -30,17 +31,21 @@ if (!PRODUCTION && !QA) {
 
 // Our session middleware and controllers that will handle requests after this router hands off the data to them.
 import { Application } from 'express';
-import { initPool } from './helpers/db-connection-pool';
+import { initDbConnectionPool } from './helpers/db-connection-pool';
+import { genSessionOpts } from './middlewares/session.middleware';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
 app.use(bodyParser.json({ limit: '500KB' })); // Need larger size to support cropped images (maybe change this in future to just use image bounds and media attachment).
 app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));
-// SessionData.sessionBootstrap(app);
+app.use(session(genSessionOpts()));
 app.use(multer().any());
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 module.exports = app; // Make available for mocha testing suites.
+
+app.use('/server/session', require('./controllers/session.controller'));
+app.use('/server/account', require('./controllers/account.controller'));
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {
@@ -58,7 +63,7 @@ app.get('*', (request: Request, response: Response) => {
   response.sendFile(path.join(global['clientBuildDir'], 'index.html'));
 });
 
-initPool().then(() =>
+initDbConnectionPool().then(() =>
   // Only start receiving requests once the database has initialized.
   app.listen(app.get('port'), () =>
     console.log(`Node app is running on port: ${app.get('port')}`)

@@ -7,7 +7,7 @@
   </mat-toolbar>
   <div mat-dialog-content *ngIf="!resetMessageSent">
     <mat-form-field>
-      <input matInput type="email" placeholder="Email" formControlName="email" cdkFocusInitial>
+      <input matInput type="email" placeholder="Username/Email" formControlName="usernameEmail" cdkFocusInitial>
     </mat-form-field>
     <mat-form-field *ngIf="!isPasswordReset">
       <input matInput type="password" placeholder="Password" formControlName="password">

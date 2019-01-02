@@ -25,20 +25,19 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this._formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
+      usernameEmail: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
 
   submit(): void {
     if (this.loginForm.valid) {
-      console.log('submitting: ' + this.isPasswordReset);
       this.isPasswordReset ? this.sendPasswordResetEmail() : this.login();
     }
   }
 
   login(): void {
-    const email: string = this.loginForm.get('email').value;
+    const email: string = this.loginForm.get('usernameEmail').value;
     const password: string = this.loginForm.get('password').value;
     this._sessionService.login(email, password).subscribe(
       () => this._matDialogRef.close()
@@ -58,7 +57,7 @@ export class LoginComponent implements OnInit {
   }
 
   sendPasswordResetEmail(): void {
-    const email: string = this.loginForm.get('email').value;
+    const email: string = this.loginForm.get('usernameEmail').value;
     this._passwordResetService.sendPasswordResetEmail(email).subscribe(
       () => this.resetMessageSent = true
     );

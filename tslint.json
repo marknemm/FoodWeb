@@ -3,6 +3,7 @@
     "tslint:recommended"
   ],
   "rules": {
+    "array-type": [true, "array"],
     "arrow-return-shorthand": true,
     "ban-types": [
       true,
@@ -84,6 +85,7 @@
     "no-unused-expression": true,
     "no-use-before-declare": true,
     "no-var-keyword": true,
+    "no-var-requires": false,
     "object-literal-sort-keys": false,
     "one-line": [
       true,

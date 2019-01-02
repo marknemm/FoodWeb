@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, Index } from 'typeorm';
 import { AccountEntity } from './account.entity';
 import { ContactInfo } from './../../../shared/src/interfaces/contact-info';
 
@@ -6,9 +6,10 @@ import { ContactInfo } from './../../../shared/src/interfaces/contact-info';
 export class ContactInfoEntity implements ContactInfo {
 
   @PrimaryGeneratedColumn()
-  contactInfoId: number;
+  id: number;
 
   @Column()
+  @Index()
   email: string;
 
   @Column()
@@ -26,7 +27,7 @@ export class ContactInfoEntity implements ContactInfo {
   @Column()
   postalCode: string;
 
-  @OneToOne(type => AccountEntity, account => account.contactInfo)
+  @OneToOne((type) => AccountEntity, (account) => account.contactInfo)
   @JoinColumn()
-  account: AccountEntity;
+  account?: AccountEntity;
 }

@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Entity, Column, OneToMany, OneToOne, Index } from 'typeorm';
+import { PrimaryGeneratedColumn, Entity, Column, OneToMany, OneToOne, Index, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 import { ContactInfoEntity } from './contact-info.entity';
 import { OrganizationEntity } from './organization.entity';
 import { OperationHoursEntity } from './operation-hours.entity';
@@ -8,7 +8,7 @@ import { Account, AccountType } from './../../../shared/src/interfaces/account';
 export class AccountEntity implements Account {
 
   @PrimaryGeneratedColumn()
-  accountId: number;
+  id: number;
 
   @Column()
   accountType: AccountType;
@@ -17,20 +17,20 @@ export class AccountEntity implements Account {
   @Index({ unique: true })
   username: string;
 
-  @Column({ select: false })
-  passwordHash: string;
-
-  @OneToOne(type => ContactInfoEntity, contactInfo => contactInfo.account)
+  @OneToOne((type) => ContactInfoEntity, (contactInfo) => contactInfo.account, { cascade: true })
   contactInfo: ContactInfoEntity;
 
-  @OneToOne(type => OrganizationEntity, organization => organization.account, { nullable: true })
+  @OneToOne((type) => OrganizationEntity, (organization) => organization.account, { nullable: true, cascade: true })
   organization?: OrganizationEntity;
 
-  @OneToMany(type => OperationHoursEntity, operationHours => operationHours.account)
+  @OneToMany((type) => OperationHoursEntity, (operationHours) => operationHours.account, { cascade: true })
   operationHours: OperationHoursEntity[];
 
-  @Column('text', { default: '' })
-  additionalInfo?: string;
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updateTimestamp: Date;
+
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createTimestamp: Date;
 
   verified?: boolean;
 }

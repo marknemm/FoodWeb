@@ -5,7 +5,7 @@
   "angular-cli": {},
   "main": "client/dist/index.html",
   "scripts": {
-    "build": "ng build --prod --aot --configuration=production --build-optimizer=false",
+    "build": "ng build --prod --aot --configuration=production",
     "build:watch": "ng build --watch",
     "build:e2e": "ng build --watch --configuration=e2e",
     "clean": "rimraf ./dist ./coverage",

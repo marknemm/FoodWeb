@@ -1,0 +1,12 @@
+<div class="account-type-container">
+  <mat-radio-group *ngIf="editing" class="account-type-radio-group" [formControl]="accountTypeCtrl">
+    <mat-radio-button class="account-type-radio-button" *ngFor="let accountType of accountTypes" [value]="accountType">
+      {{ accountType }}
+    </mat-radio-button>
+  </mat-radio-group>
+
+  <div *ngIf="!editing" class="account-type-display">
+    <div>Account Type:</div>
+    <div class="display-content">{{ accountTypeCtrl.value }}</div>
+  </div>
+</div>

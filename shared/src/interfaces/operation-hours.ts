@@ -1,5 +1,6 @@
 export interface OperationHours {
-  weekday: number;
+  id?: number;
+  weekday: string;
   startTime: string;
   endTime: string;
 }

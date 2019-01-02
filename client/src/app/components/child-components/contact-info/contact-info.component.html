@@ -1,0 +1,66 @@
+<div class="contact-info-container">
+  <div *ngIf="editing" class="row contact-info-form" [formGroup]="contactInfoForm">
+    <div class="col-sm-6">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Email" formControlName="email" type="email">
+        <mat-error *ngIf="contactInfoForm.get('email').hasError('email')">
+          Not a valid email address
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Phone Number" formControlName="phoneNumber" type="tel">
+        <mat-error *ngIf="contactInfoForm.get('phoneNumber').hasError('pattern')">
+          Not a valid phone number
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-12">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Street Address" formControlName="streetAddress" type="text">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6">
+      <mat-form-field class="fill">
+        <input matInput placeholder="City" formControlName="city" type="text">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-3">
+      <mat-form-field class="fill">
+        <input matInput placeholder="State/Province" formControlName="stateProvince" type="text">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-3">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Zip/Postal Code" formControlName="postalCode" type="text">
+        <mat-error *ngIf="contactInfoForm.get('postalCode').hasError('pattern')">
+          Not a valid postal code
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div *ngIf="!editing" class="contact-info-display">
+    <div class="display-content">
+      <a href="mailto:contactInfoForm.get('email').value }}">
+        {{ contactInfoForm.get('email').value }}
+      </a>
+    </div>
+    <div>Phone Number:</div>
+    <div class="display-content">
+      <a href="tel:{{ contactInfoForm.get('phoneNumber').value }}">
+        {{ contactInfoForm.get('phoneNumber').value }}
+      </a>
+    </div>
+    <div>Address:</div>
+    <div class="display-content">
+      <div>{{ contactInfoForm.get('streetAddress').value }}</div>
+      <div>
+        <span>{{ contactInfoForm.get('city').value }}</span>
+        <span>{{ contactInfoForm.get('state').value }}</span>,
+        <span>{{ contactInfoForm.get('zip').value }}</span>
+      </div>
+    </div>
+  </div>
+</div>

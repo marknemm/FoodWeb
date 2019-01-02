@@ -1,32 +1,22 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { AccountEntity } from './account.entity';
-import { OperationHours } from "../../../shared/src/interfaces/account";
+import { OperationHours } from '../../../shared/src/interfaces/account';
 
 @Entity('OperationHours')
 export class OperationHoursEntity implements OperationHours {
 
   @PrimaryGeneratedColumn()
-  operationHoursId: number;
+  id: number;
 
   @Column()
-  weekday: number;
+  weekday: string;
 
-  @Column()
-  startHour: number;
-
-  @Column()
-  startMinute: number;
-
-  @Column()
-  endHour: number;
-
-  @Column()
-  endMinute: number;
-
-  @ManyToOne(type => AccountEntity, account => account.operationHours)
-  account: AccountEntity;
-
+  @Column('time')
   startTime: string;
 
+  @Column('time')
   endTime: string;
+
+  @ManyToOne((type) => AccountEntity, (account) => account.operationHours)
+  account?: AccountEntity;
 }

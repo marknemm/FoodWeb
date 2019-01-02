@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SignupService } from '../../services/signup/signup.service';
-import { SignupValidationService } from './../../services/signup-validation/signup-validation.service';
+import { AccountService } from '../../services/account/account.service';
+import { PasswordMatchService } from './../../services/password-match/password-match.service';
 import { Validation } from './../../../../../shared/src/constants/validation';
-import { AccountType, AccountTypes } from './../../../../../shared/src/interfaces/account';
 
 @Component({
   selector: 'food-web-signup',
@@ -12,38 +11,32 @@ import { AccountType, AccountTypes } from './../../../../../shared/src/interface
 })
 export class SignupComponent implements OnInit {
 
-  readonly accountTypes: AccountType[] = AccountTypes;
   signupForm: FormGroup;
 
   constructor(
-    public signupValidationService: SignupValidationService,
+    public passwordMatchService: PasswordMatchService,
     private _formBuilder: FormBuilder,
-    private _signupService: SignupService
+    private _accountService: AccountService
   ) {}
 
   ngOnInit() {
     this.signupForm = this._formBuilder.group(
       {
         accountType: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
+        username: ['', Validators.required],
         password: ['', [Validators.required, Validators.pattern(Validation.PASSWORD_REGEX)]],
-        confirmPassword: ['', [Validators.required]],
-        organizationName: ['', [Validators.required]],
-        phoneNumber: ['', [Validators.required, Validators.pattern(Validation.PHONE_REGEX)]],
-        streetAddress: ['', [Validators.required]],
-        city: ['', [Validators.required]],
-        stateProvince: ['', [Validators.required]],
-        postalCode: ['', [Validators.required, Validators.pattern(Validation.POSTAL_CODE_REGEX)]],
-        operationHours: [],
-        organizationInfo: ''
+        confirmPassword: ['', Validators.required],
+        organization: [null, Validators.required],
+        contactInfo: [null, Validators.required],
+        operationHours: [[]]
       },
-      { validators: this.signupValidationService.passwordConfirmMatch }
+      { validators: this.passwordMatchService.validatePasswordMatch }
     );
   }
 
   signup(): void {
     if (this.signupForm.valid) {
-      this._signupService.signup(this.signupForm.getRawValue());
+      this._accountService.createAccount(this.signupForm.getRawValue(), this.signupForm.get('password').value);
     }
   }
 

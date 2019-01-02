@@ -1,11 +1,10 @@
 import { createConnection, Connection } from 'typeorm';
 import path = require('path');
 
-export function initPool(): Promise<Connection> {
+export function initDbConnectionPool(): Promise<Connection> {
   const entitiesPath: string = (process.env.DEVELOPMENT === 'true') ?
     path.join(__dirname, '..', 'entity', '*.ts') :
-    path.join(__dirname, '..', 'entity', '*.js')
-  console.log(entitiesPath);
+    path.join(__dirname, '..', 'entity', '*.js');
 
   return createConnection({
     type: 'postgres',
@@ -15,6 +14,8 @@ export function initPool(): Promise<Connection> {
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_DATABASE,
     entities: [entitiesPath],
-    synchronize: true
+    synchronize: true,
+    logging: (process.env.DATABASE_LOGGING === 'true'),
+    logger: process.env.DATABASE_LOGGER as any
   });
 }

@@ -1,17 +1,20 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { AccountEntity } from './account.entity';
-import { Organization } from "../../../shared/src/interfaces/organization";
+import { Organization } from '../../../shared/src/interfaces/organization';
 
 @Entity('Organization')
 export class OrganizationEntity implements Organization {
 
   @PrimaryGeneratedColumn()
-  organizationId: number;
+  id: number;
 
   @Column()
-  organizationName: string;  
+  organizationName: string;
 
-  @OneToOne(type => AccountEntity, accountEntity => accountEntity.organization)
+  @Column('text', { default: '' })
+  organizationInfo?: string;
+
+  @OneToOne((type) => AccountEntity, (accountEntity) => accountEntity.organization)
   @JoinColumn()
-  account: AccountEntity;
+  account?: AccountEntity;
 }

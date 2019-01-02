@@ -1,4 +1,4 @@
-import { TemplateRef } from "@angular/core";
+import { TemplateRef } from '@angular/core';
 import { MatDialogConfig, MatSnackBarConfig } from '@angular/material';
 
 export type AlertBody = string | TemplateRef<any>;
