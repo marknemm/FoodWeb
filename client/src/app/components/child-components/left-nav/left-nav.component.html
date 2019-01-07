@@ -1,5 +1,5 @@
 <mat-drawer-container class="left-nav-container">
-  <mat-drawer [mode]="mode" [opened]="isOpen">
+  <mat-drawer [mode]="leftNavService.mode" [opened]="leftNavService.opened">
     <ul>
       <li>
         <a mat-ripple [routerLink]="['/']" (click)="_onNavClick()">
@@ -19,6 +19,20 @@
     </ul>
   </mat-drawer>
   <mat-drawer-content>
+    <div *ngIf="pageProgressService.showBlockingProgress" class="blocking-page-progress-indicator" [style.width]="pageProgressService.blockingProgressWidth">
+      <food-web-progress-indicator
+        [backdropColor]="pageProgressService.backdropColor"
+        [backdropOpacity]="pageProgressService.backdropOpacity"
+        [backdropVisible]="pageProgressService.backdropVisible"
+        [blocking]="pageProgressService.blocking"
+        [color]="pageProgressService.color"
+        [diameter]="pageProgressService.diameter"
+        [mode]="pageProgressService.mode"
+        [strokeWidth]="pageProgressService.strokeWidth"
+        [trigger]="pageProgressService.trigger"
+        [value]="pageProgressService.value">
+      </food-web-progress-indicator>
+    </div>
     <div class="page-content container">
       <ng-content></ng-content>
     </div>

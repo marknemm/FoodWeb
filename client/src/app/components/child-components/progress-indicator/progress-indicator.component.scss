@@ -1,0 +1,24 @@
+@import '../../../../styles/constants.scss';
+
+.progress-indicator-container {
+  z-index: 100;
+
+  .progress-spinner-backdrop {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+  }
+
+  .progress-spinner {
+    position: absolute;
+    z-index: 101;
+    top: 50%;
+  }
+
+  .progress-bar {
+    width: 100%;
+  }
+}

@@ -1,8 +1,9 @@
 import { getRepository } from 'typeorm';
-import { AccountEntity } from './../entity/account.entity';
+import { AccountEntity } from '../entity/account.entity';
 import { Account } from '../../../shared/src/interfaces/account';
 import { checkPasswordMatch } from '../helpers/password-match';
-import { FoodWebError } from './../helpers/food-web-error';
+import { FoodWebError } from '../helpers/food-web-error';
+import { formatOperationHoursTimes } from '../helpers/operation-hours-converter';
 
 /**
  * Performs the login for a given user.
@@ -18,7 +19,7 @@ export async function login(usernameEmail: string, password: string): Promise<Ac
     throw new Error('Password match validation failed');
   } catch (err) {
     console.error(err);
-    throw new FoodWebError('Incorrect username or password', 440);
+    throw new FoodWebError('Incorrect username or password', 401);
   }
 }
 
@@ -34,5 +35,6 @@ async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> 
   if (!account) {
     throw new Error(`User could not be found with username/email: ${usernameEmail}`);
   }
+  formatOperationHoursTimes(account.operationHours);
   return account;
 }

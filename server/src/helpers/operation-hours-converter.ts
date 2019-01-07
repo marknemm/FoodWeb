@@ -19,7 +19,9 @@ function _formatOperationHourTime(time: string): string {
   const minutes: number = date.getMinutes();
 
   const amPmStr: string = (hours > 11 ? 'pm' : 'am');
-  const hourStr = `${hours % 12}`;
+  const hourStr = (hours > 12) ?
+    `${hours - 12}` :
+    `${hours !== 0 ? hours : 12}`;
   const minuteStr: string = (minutes > 9 ? `${minutes}` : `0${minutes}`);
 
   return `${hourStr}:${minuteStr} ${amPmStr}`;

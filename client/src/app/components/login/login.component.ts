@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   resetMessageSent = false;
 
   constructor(
-    private _sessionService: SessionService,
+    public sessionService: SessionService,
     private _passwordResetService: PasswordResetService,
     private _formBuilder: FormBuilder,
     private _matDialogRef: MatDialogRef<LoginComponent>
@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
   login(): void {
     const email: string = this.loginForm.get('usernameEmail').value;
     const password: string = this.loginForm.get('password').value;
-    this._sessionService.login(email, password).subscribe(
+    this.sessionService.login(email, password).subscribe(
       () => this._matDialogRef.close()
     );
   }

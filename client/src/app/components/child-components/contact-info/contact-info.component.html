@@ -41,25 +41,32 @@
     </div>
   </div>
 
-  <div *ngIf="!editing" class="contact-info-display">
-    <div class="display-content">
-      <a href="mailto:contactInfoForm.get('email').value }}">
-        {{ contactInfoForm.get('email').value }}
-      </a>
+  <div *ngIf="!editing" class="contact-info-display row">
+    <div class="col-sm-6">
+      <div class="inline-label">Email:</div>
+      <div class="d-inline-block">
+        <a href="mailto:{{ contactInfoForm.get('email').value }}">
+          {{ contactInfoForm.get('email').value }}
+        </a>
+      </div>
     </div>
-    <div>Phone Number:</div>
-    <div class="display-content">
-      <a href="tel:{{ contactInfoForm.get('phoneNumber').value }}">
-        {{ contactInfoForm.get('phoneNumber').value }}
-      </a>
+    <div class="col-sm-6">
+      <div class="inline-label">Phone Number:</div>
+      <div class="d-inline-block">
+        <a href="tel:{{ contactInfoForm.get('phoneNumber').value }}">
+          {{ contactInfoForm.get('phoneNumber').value }}
+        </a>
+      </div>
     </div>
-    <div>Address:</div>
-    <div class="display-content">
-      <div>{{ contactInfoForm.get('streetAddress').value }}</div>
-      <div>
-        <span>{{ contactInfoForm.get('city').value }}</span>
-        <span>{{ contactInfoForm.get('state').value }}</span>,
-        <span>{{ contactInfoForm.get('zip').value }}</span>
+    <div class="col-sm-12">
+      <div class="inline-label">Address:</div>
+      <div class="d-inline-block">
+        <div>{{ contactInfoForm.get('streetAddress').value }}</div>
+        <div>
+          <div class="d-inline-block">{{ contactInfoForm.get('city').value }},&nbsp;</div>
+          <div class="d-inline-block">{{ contactInfoForm.get('stateProvince').value }}&nbsp;</div>
+          <div class="d-inline-block">{{ contactInfoForm.get('postalCode').value }}</div>
+        </div>
       </div>
     </div>
   </div>

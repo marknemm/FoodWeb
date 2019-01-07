@@ -41,7 +41,7 @@ export class AccountTypeComponent implements OnInit, OnDestroy, ControlValueAcce
   }
 
   writeValue(value: AccountType): void {
-    this.accountTypeCtrl.setValue(value, { emitEvent: false });
+    this.accountTypeCtrl.patchValue(value, { emitEvent: false });
   }
 
   registerOnChange(onChangeCb: (value: AccountType) => void): void {

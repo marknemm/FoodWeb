@@ -26,46 +26,53 @@
   }
 }
 
-.mat-dialog-container {
-  .mat-alert-info {
-    background-color: $primary;
-    color: $accent-darkest;
-  }
-  
-  .mat-alert-success {
-    background-color: $primary-lighter;
-    color: black;
-  }
-  
-  .mat-alert-warn {
-    background-color: #dfa645;
-    color: white;
-  }
-  
-  .mat-alert-danger {
-    background-color: $warn;
-    color: white;
+.cdk-overlay-pane {
+
+  @media only screen and (max-width: 360px) {
+    max-width: 95vw !important;
   }
 
-  .mat-button {
-    &.mat-alert-info {
-      background-color: transparent;
-      color: $primary-darker;
+  .mat-dialog-container {
+    .mat-alert-info {
+      background-color: $primary;
+      color: $accent-darkest;
     }
     
-    &.mat-alert-success {
-      background-color: transparent;
-      color: $primary;
+    .mat-alert-success {
+      background-color: $primary-lighter;
+      color: black;
     }
     
-    &.mat-alert-warn {
-      background-color: transparent;
-      color: #dfa645;
+    .mat-alert-warn {
+      background-color: #dfa645;
+      color: white;
     }
     
-    &.mat-alert-danger {
-      background-color: transparent;
-      color: $warn;
+    .mat-alert-danger {
+      background-color: $warn;
+      color: white;
+    }
+  
+    .mat-button {
+      &.mat-alert-info {
+        background-color: transparent;
+        color: $primary-darker;
+      }
+      
+      &.mat-alert-success {
+        background-color: transparent;
+        color: $primary;
+      }
+      
+      &.mat-alert-warn {
+        background-color: transparent;
+        color: #dfa645;
+      }
+      
+      &.mat-alert-danger {
+        background-color: transparent;
+        color: $warn;
+      }
     }
   }
 }

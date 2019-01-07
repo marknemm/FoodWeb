@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { EMPTY, Observable } from 'rxjs';
+import { EMPTY, ObservableInput } from 'rxjs';
 import { AlertService, AlertMessage } from './../alert/alert.service';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class ErrorHandlerService {
     private _alertService: AlertService
   ) {}
 
-  handleError(error: Error | HttpErrorResponse, level: 'danger' | 'warn' = 'danger'): Observable<never> {
+  handleError(error: Error | HttpErrorResponse, level: 'danger' | 'warn' = 'danger'): ObservableInput<never> {
     const alertMessage: AlertMessage = { body: '', level, blocking: false };
     alertMessage.body = this._deriveMessageBody(error);
     this._alertService.displayMessage(alertMessage);

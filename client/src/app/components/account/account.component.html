@@ -1,3 +1,38 @@
-<p>
-  account works!
-</p>
+<form [formGroup]="accountForm" (submit)="updateAccount()">
+  <div class="row">
+    <div class="col-xl-12">
+      <mat-card>
+        <mat-card-title class="block-label">Account</mat-card-title>
+        <mat-card-content>
+          <food-web-account-type [editing]="false" formControlName="accountType"></food-web-account-type>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-6">
+      <mat-card>
+        <mat-card-title class="block-label">Organization</mat-card-title>
+        <mat-card-content>
+          <food-web-organization [editing]="false" formControlName="organization"></food-web-organization>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-xl-6">
+      <mat-card>
+        <mat-card-title class="block-label">Contact Info</mat-card-title>
+        <mat-card-content>
+          <food-web-contact-info [editing]="false" formControlName="contactInfo"></food-web-contact-info>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-title class="block-label">Hours of Operation</mat-card-title>
+        <mat-card-content>
+          <food-web-operation-hours [editing]="false" formControlName="operationHours"></food-web-operation-hours>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</form>

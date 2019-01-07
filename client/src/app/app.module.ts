@@ -17,7 +17,9 @@ import {
   MatSnackBarModule,
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatRadioModule,
-  MatTableModule
+  MatTableModule,
+  MatProgressSpinnerModule,
+  MatProgressBarModule
 } from '@angular/material';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AgmCoreModule } from '@agm/core';
@@ -39,6 +41,8 @@ import { OperationHoursComponent } from './components/child-components/operation
 import { ContactInfoComponent } from './components/child-components/contact-info/contact-info.component';
 import { OrganizationComponent } from './components/child-components/organization/organization.component';
 import { AccountTypeComponent } from './components/child-components/account-type/account-type.component';
+import { SignupVerificationComponent } from './components/signup-verification/signup-verification.component';
+import { ProgressIndicatorComponent } from './components/child-components/progress-indicator/progress-indicator.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +62,8 @@ import { AccountTypeComponent } from './components/child-components/account-type
     ContactInfoComponent,
     OrganizationComponent,
     AccountTypeComponent,
+    SignupVerificationComponent,
+    ProgressIndicatorComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({
@@ -82,6 +88,8 @@ import { AccountTypeComponent } from './components/child-components/account-type
     MatSnackBarModule,
     MatRadioModule,
     MatTableModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
     NgxMaterialTimepickerModule.forRoot()
   ],
   providers: [

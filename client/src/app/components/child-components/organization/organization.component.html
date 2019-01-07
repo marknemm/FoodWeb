@@ -13,10 +13,14 @@
     </div>
   </div>
 
-  <div *ngIf="!editing" class="organization-display">
-    <div>Organization:</div>
-    <div class="display-content">{{ organizationForm.get('organizationName').value }}</div>
-    <div>Organization Info:</div>
-    <div class="display-content">{{ organizationForm.get('organizationInfo').value }}</div>
+  <div *ngIf="!editing" class="organization-display row">
+    <div class="col-sm-12">
+      <div class="inline-label">Organization Name:</div>
+      <div class="d-inline-block">{{ organizationForm.get('organizationName').value }}</div>
+    </div>
+    <div *ngIf="organizationForm.get('organizationInfo').value" class="col-sm-12">
+      <div class="inline-label">Organization Info:</div>
+      <div class="d-inline-block">{{ organizationForm.get('organizationInfo').value }}</div>
+    </div>
   </div>
 </div>

@@ -8,6 +8,8 @@
   z-index: 20;
 
   .site-title-container {
+    position: relative;
+
     .site-icon {
       height: calc(100% - 15px);
       width: auto;
@@ -21,6 +23,13 @@
       line-height: 36px;
       color: $accent-darkest;
       margin-left: 5px;
+    }
+
+    .non-blocking-page-progress-indicator {
+      position: absolute;
+      width: 100%;
+      bottom: 0px;
+      left: 0px;
     }
   }
   

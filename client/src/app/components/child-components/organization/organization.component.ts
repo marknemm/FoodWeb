@@ -42,7 +42,7 @@ export class OrganizationComponent implements OnInit, OnDestroy, ControlValueAcc
 
   writeValue(value: Organization): void {
     value = (value ? value : { organizationName: '', organizationInfo: '' });
-    this.organizationForm.setValue(value, { emitEvent: false });
+    this.organizationForm.patchValue(value, { emitEvent: false });
   }
 
   registerOnChange(onChangeCb: (value: Organization) => void): void {

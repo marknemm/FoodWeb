@@ -1,4 +1,4 @@
-<form [formGroup]="signupForm" (submit)="signup()">
+<form [formGroup]="signupForm" (submit)="signup()" *ngIf="!sessionService.loggedIn">
   <div class="row">
     <div class="col-xl-12">
       <mat-card>
@@ -69,3 +69,11 @@
     </div>
   </div>
 </form>
+
+<mat-card *ngIf="sessionService.loggedIn">
+  <mat-card-title>Signup Successful</mat-card-title>
+  <mat-card-content>
+    <p>Welcome to Food Web!</p>
+    <p>Please confirm your signup by clicking on the link sent to your email.</p>
+  </mat-card-content>
+</mat-card>

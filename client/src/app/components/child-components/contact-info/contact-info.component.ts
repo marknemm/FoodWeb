@@ -47,7 +47,7 @@ export class ContactInfoComponent implements OnInit, OnDestroy, ControlValueAcce
 
   writeValue(value: ContactInfo): void {
     value = (value ? value : { email: '', streetAddress: '', city: '', stateProvince: '', postalCode: '', phoneNumber: '' });
-    this.contactInfoForm.setValue(value, { emitEvent: false });
+    this.contactInfoForm.patchValue(value, { emitEvent: false });
   }
 
   registerOnChange(onChangeCb: (value: ContactInfo) => void): void {

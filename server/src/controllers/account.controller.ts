@@ -1,11 +1,12 @@
 import express = require('express');
 import { Request, Response } from 'express';
+import { ensureSessionActive } from '../middlewares/session.middleware';
 import { AccountEntity } from './../entity/account.entity';
 import { createAccount, updateAccount, getAccounts } from '../models/account.model';
+import { verifyAccount } from '../models/account-verification.model';
 import { handleError } from '../helpers/food-web-error';
 import { AccountCreateRequest } from './../../../shared/src/interfaces/account-create-request';
 import { AccountUpdateRequest } from './../../../shared/src/interfaces/account-update-request';
-import { ensureSessionActive } from '../middlewares/session.middleware';
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ router.post('/', (req: Request, res: Response) => {
 router.put('/', ensureSessionActive, (req: Request, res: Response) => {
   const updateRequest: AccountUpdateRequest = req.body;
   updateAccount(updateRequest.account, updateRequest.password, updateRequest.oldPassword)
-    .then(_handleAccountSave.bind(req, res))
+    .then(_handleAccountSave.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });
 
@@ -29,8 +30,16 @@ router.get('/', (req: Request, res: Response) => {
     .catch(handleError.bind(this, res));
 });
 
+router.post('/verify', ensureSessionActive, (req: Request, res: Response) => {
+  const account: AccountEntity = req.session.account;
+  const verificationToken: string = req.body.verificationToken;
+  verifyAccount(account, verificationToken)
+    .then(_handleAccountSave.bind(this, req, res))
+    .catch(handleError.bind(this, res));
+});
+
 function _handleAccountSave(req: Request, res: Response, account: AccountEntity): void {
-  req.session['account'] = account;
+  req.session.account = account;
   res.send(account);
 }
 

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { SessionService } from '../../services/session/session.service';
 import { AccountService } from '../../services/account/account.service';
-import { PasswordMatchService } from './../../services/password-match/password-match.service';
-import { Validation } from './../../../../../shared/src/constants/validation';
+import { PasswordMatchService } from '../../services/password-match/password-match.service';
+import { Validation } from '../../../../../shared/src/constants/validation';
 
 @Component({
   selector: 'food-web-signup',
@@ -14,6 +15,7 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
 
   constructor(
+    public sessionService: SessionService,
     public passwordMatchService: PasswordMatchService,
     private _formBuilder: FormBuilder,
     private _accountService: AccountService

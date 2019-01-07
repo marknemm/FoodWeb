@@ -2,9 +2,12 @@
 
   .contact-info-display {
 
-    .display-content {
-      margin-top: 10px;
-      padding-left: 20px;
+    .col-sm-6 {
+      margin-bottom: 12px;
+    }
+
+    .d-inline-block {
+      vertical-align: top;
     }
   }
 }

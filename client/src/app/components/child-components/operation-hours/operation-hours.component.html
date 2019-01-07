@@ -42,8 +42,12 @@
   </ng-container>
 
   <ng-container *ngIf="!editing">
-    <div *ngFor="let operationHoursForm of operationHoursArr.controls" class="operation-hours-display">
-      {{ operationHoursForm.get('weekday') }}: {{ operationHoursForm.get('startTime') }} to {{ operationHoursForm.get('endTime') }}
+    <div *ngFor="let operationHoursForm of operationHoursArr.controls">
+      <div class="inline-label">{{ operationHoursForm.get('weekday').value }}:</div>
+      <div class="d-inline-block">
+        <div class="d-inline-block">{{ operationHoursForm.get('startTime').value }} -&nbsp;</div>
+        <div class="d-inline-block">{{ operationHoursForm.get('endTime').value }}</div>
+      </div>
     </div>
   </ng-container>
 </div>

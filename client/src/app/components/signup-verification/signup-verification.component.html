@@ -1,0 +1,16 @@
+<mat-card class="signup-verification-container">
+  <mat-card-title>Signup Verification</mat-card-title>
+  <mat-card-content>
+    <div *ngIf="accountVerificationService.loading" class="progress-spinner-container">
+      <mat-progress-spinner color="primary" mode="indeterminate" class="progress-spinner"></mat-progress-spinner>
+    </div>
+    <div *ngIf="sessionService.account.verified">
+      <p>Signup verification was successful! You can now take full advantage of the Food Web platform.</p>
+      <p>Click <a [routerLink]="['/home']">here</a> to return to the home page.</p>
+    </div>
+    <div *ngIf="accountVerificationService.errorMsg">
+      <p>{{ accountVerificationService.errorMsg }}</p>
+      <p>Feel free to contact us at <a href="mailto:{{ supportEmail }}">{{ supportEmail }}</a> for assistance.</p>
+    </div>
+  </mat-card-content>
+</mat-card>

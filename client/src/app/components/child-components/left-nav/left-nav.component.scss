@@ -31,6 +31,21 @@
     }
   }
 
+  .blocking-page-progress-indicator {
+    position: fixed;
+    z-index: 100;
+    height: calc(100vh - #{$header-height});
+    width: calc(100vw - #{$left-nav-width});
+
+    @media only screen and (max-width: $md) {
+      width: 100vw;
+    }
+
+    @media only screen and (max-width: $xs) {
+      height: calc(100vh - #{$header-height-xs});
+    }
+  }
+
   .page-content {
     min-height: 100%;
     position: relative;

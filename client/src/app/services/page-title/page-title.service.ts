@@ -21,7 +21,8 @@ export class PageTitleService {
   }
 
   private _deriveDefaultTitle(url: string): string {
-    let titleFrags: string[] = url.split('/');
+    url = url.replace(/\?(.*)/, '');
+    let titleFrags: string[] = url.split(/[\/|\-|_]/);
     titleFrags = titleFrags.map(
       (word: string) => word.substr(0, 1).toUpperCase() + word.substr(1)
     );
