@@ -1,65 +1,40 @@
-import { Component, OnInit, Input, forwardRef, OnDestroy } from '@angular/core';
-import {
-  FormGroup, FormBuilder, Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS,
-  ControlValueAccessor, Validator, ValidationErrors
-} from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormGroup, Validators, FormGroupDirective, FormControl } from '@angular/forms';
+import { FormHelperService } from '../../../services/form-helper/form-helper.service';
 import { Validation } from '../../../../../../shared/src/constants/validation';
-import { ContactInfo } from '../../../../../../shared/src/interfaces/contact-info';
 
 @Component({
   selector: 'food-web-contact-info',
   templateUrl: './contact-info.component.html',
-  styleUrls: ['./contact-info.component.scss'],
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ContactInfoComponent), multi: true },
-    { provide: NG_VALIDATORS, useExisting: forwardRef(() => ContactInfoComponent), multi: true }
-  ]
+  styleUrls: ['./contact-info.component.scss']
 })
-export class ContactInfoComponent implements OnInit, OnDestroy, ControlValueAccessor, Validator {
+export class ContactInfoComponent implements OnInit {
 
   @Input() editing = false;
-
-  contactInfoForm: FormGroup;
-
-  private $_destroy = new Subject();
+  @Input() formGroupName: string;
+  @Input() formGroup: FormGroup;
 
   constructor(
-    private _formBuilder: FormBuilder
+    private _formGroupDirective: FormGroupDirective,
+    private _formHelperService: FormHelperService
   ) {}
 
   ngOnInit() {
-    this.contactInfoForm = this._formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', [Validators.required, Validators.pattern(Validation.PHONE_REGEX)]],
-      streetAddress: ['', Validators.required],
-      city: ['', Validators.required],
-      stateProvince: ['', Validators.required],
-      postalCode: ['', [Validators.required, Validators.pattern(Validation.POSTAL_CODE_REGEX)]]
-    });
+    this.formGroup = this._formHelperService.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
+    this._formHelperService.addMissingControls(
+      this.formGroup,
+      {
+        id: undefined,
+        email: ['', [Validators.required, Validators.email]],
+        phoneNumber: ['', [Validators.required, Validators.pattern(Validation.PHONE_REGEX)]],
+        streetAddress: ['', Validators.required],
+        city: ['', Validators.required],
+        stateProvince: ['', Validators.required],
+        postalCode: ['', [Validators.required, Validators.pattern(Validation.POSTAL_CODE_REGEX)]]
+      }
+    );
+    if (this.formGroupName) {
+      this._formGroupDirective.form.setControl(this.formGroupName, this.formGroup);
+    }
   }
-
-  ngOnDestroy() {
-    this.$_destroy.next();
-    this.$_destroy.complete();
-  }
-
-  writeValue(value: ContactInfo): void {
-    value = (value ? value : { email: '', streetAddress: '', city: '', stateProvince: '', postalCode: '', phoneNumber: '' });
-    this.contactInfoForm.patchValue(value, { emitEvent: false });
-  }
-
-  registerOnChange(onChangeCb: (value: ContactInfo) => void): void {
-    this.contactInfoForm.valueChanges.pipe(
-      takeUntil(this.$_destroy)
-    ).subscribe(onChangeCb);
-  }
-
-  validate(): ValidationErrors {
-    return (this.contactInfoForm.invalid ? { invalid: true } : null);
-  }
-
-  registerOnTouched(): void {}
-
 }

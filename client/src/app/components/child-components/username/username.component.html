@@ -1,0 +1,10 @@
+<div class="username-container">
+  <mat-form-field *ngIf="editing" class="username-input fill">
+    <input matInput [formControl]="usernameCtrl" placeholder="Username" type="text">
+  </mat-form-field>
+
+  <div *ngIf="!editing" class="username-display">
+    <div class="inline-label">Username:</div>
+    <div class="d-inline-block">{{ usernameCtrl.value }}</div>
+  </div>
+</div>

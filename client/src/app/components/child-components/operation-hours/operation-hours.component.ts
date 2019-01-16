@@ -1,105 +1,69 @@
-import { Component, OnInit, OnDestroy, Input, forwardRef } from '@angular/core';
-import {
-  ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup, FormBuilder, Validators,
-  FormArray, Validator, ValidationErrors, NG_VALIDATORS
-} from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { ConfirmDialogService } from './../../../services/confirm-dialog/confirm-dialog.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
+import { ConfirmDialogService } from '../../../services/confirm-dialog/confirm-dialog.service';
 import { OperationHoursValidationService } from '../../../services/operation-hours-validation/operation-hours-validation.service';
-import { OperationHours } from './../../../../../../shared/src/interfaces/operation-hours';
+import { FormHelperService } from '../../../services/form-helper/form-helper.service';
+import { FlexFormArray } from '../../../etc/flex-form-array';
 import { Constants } from '../../../../../../shared/src/constants/constants';
 
 @Component({
   selector: 'food-web-operation-hours',
   templateUrl: './operation-hours.component.html',
-  styleUrls: ['./operation-hours.component.scss'],
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OperationHoursComponent), multi: true },
-    { provide: NG_VALIDATORS, useExisting: forwardRef(() => OperationHoursComponent), multi: true }
-  ]
+  styleUrls: ['./operation-hours.component.scss']
 })
-export class OperationHoursComponent implements OnInit, OnDestroy, ControlValueAccessor, Validator {
+export class OperationHoursComponent implements OnInit {
 
   readonly weekdays: string[] = Constants.WEEKDAYS;
 
   @Input() editing = false;
-
-  operationHoursArr: FormArray;
-
-  private $_destroy = new Subject();
+  @Input() formArray: FlexFormArray;
+  @Input() formArrayName: string;
 
   constructor(
     public opHrsValidationService: OperationHoursValidationService,
+    private _formGroupDirective: FormGroupDirective,
     private _formBuilder: FormBuilder,
+    private _formHelperService: FormHelperService,
     private _confirmDialogService: ConfirmDialogService
   ) {}
 
   ngOnInit() {
-    this.operationHoursArr = this._formBuilder.array([]);
-  }
-
-  ngOnDestroy() {
-    // Prevent memory leak from form valueChanges observable.
-    this.$_destroy.next();
-    this.$_destroy.complete();
-  }
-
-  writeValue(value: OperationHours[]): void {
-    value = (value ? value : []);
-    this.operationHoursArr.setValue([], { emitEvent: false });
-    value.forEach(
-      (operationHours: OperationHours) => {
-        const operationHoursForm: FormGroup = this._genOperationHoursForm(operationHours);
-        this.operationHoursArr.push(operationHoursForm);
-      }
-    );
-  }
-
-  registerOnChange(onChangeCb: (operationHours: OperationHours[]) => void): void {
-    this.operationHoursArr.valueChanges.pipe(
-      takeUntil(this.$_destroy)
-    ).subscribe(
-      () => onChangeCb(this.operationHoursArr.value)
-    );
-  }
-
-  validate(): ValidationErrors {
-    return (this.operationHoursArr.invalid ? { invalid: true } : null);
+    this.formArray = (this._formHelperService.deriveFormArray(this.formArray, this.formArrayName, this._formGroupDirective) as FlexFormArray);
+    if (!(this.formArray instanceof FlexFormArray)) {
+      this.formArray = new FlexFormArray([]);
+    }
+    if (!this.formArray.memberTmpl) {
+      this.formArray.memberTmpl = this._formBuilder.group(
+        {
+          id: undefined,
+          weekday: ['', Validators.required],
+          startTime: ['', Validators.required],
+          endTime: ['', Validators.required]
+        },
+        { validators: this.opHrsValidationService.operationHoursOrder }
+      );
+    }
+    if (this._formGroupDirective.form && this.formArrayName) {
+      this._formGroupDirective.form.setControl(this.formArrayName, this.formArray);
+    }
   }
 
   addOperationHours(): void {
-    this.operationHoursArr.push(
-      this._genOperationHoursForm({ weekday: null, startTime: '', endTime: '' })
-    );
+    this.formArray.push({ weekday: '', startTime: '', endTime: '' });
   }
 
   removeOperationHours(idx: number): void {
-    if (this.operationHoursArr.at(idx).valid) {
+    if (this.formArray.at(idx).valid) {
       const confirmMsg = 'Are you sure you wish to delete the operation hours?';
       this._confirmDialogService.displayConfirmDialog(confirmMsg, 'Confirm Delete').subscribe(
         (confirm: boolean) => {
           if (confirm) {
-            this.operationHoursArr.removeAt(idx);
+            this.formArray.removeAt(idx);
           }
         }
       );
     } else {
-      this.operationHoursArr.removeAt(idx);
+      this.formArray.removeAt(idx);
     }
   }
-
-  private _genOperationHoursForm(operationHours: OperationHours): FormGroup {
-    return this._formBuilder.group(
-      {
-        weekday: [operationHours.weekday, Validators.required],
-        startTime: [operationHours.startTime, Validators.required],
-        endTime: [operationHours.endTime, Validators.required]
-      },
-      { validators: this.opHrsValidationService.operationHoursOrder }
-    );
-  }
-
-  registerOnTouched(): void {}
-
 }

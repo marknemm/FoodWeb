@@ -1,0 +1,13 @@
+<div class="edit-save-button-container">
+  <button mat-icon-button *ngIf="!editing" type="button" color="primary" class="edit-button" (click)="edit.emit(true)">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <ng-container *ngIf="editing">
+    <button mat-icon-button type="button" color="warn" class="cancel-button" (click)="edit.emit(false)">
+      <mat-icon>cancel</mat-icon>
+    </button>
+    <button mat-icon-button type="button" color="primary" class="save-button" (click)="save.emit()" [disabled]="disableSave || _disableSave">
+      <mat-icon>save</mat-icon>
+    </button>
+  </ng-container>
+</div>

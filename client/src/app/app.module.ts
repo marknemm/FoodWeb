@@ -43,6 +43,9 @@ import { OrganizationComponent } from './components/child-components/organizatio
 import { AccountTypeComponent } from './components/child-components/account-type/account-type.component';
 import { SignupVerificationComponent } from './components/signup-verification/signup-verification.component';
 import { ProgressIndicatorComponent } from './components/child-components/progress-indicator/progress-indicator.component';
+import { UsernameComponent } from './components/child-components/username/username.component';
+import { PasswordComponent } from './components/child-components/password/password.component';
+import { EditSaveButtonComponent } from './components/child-components/edit-save-button/edit-save-button.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +67,9 @@ import { ProgressIndicatorComponent } from './components/child-components/progre
     AccountTypeComponent,
     SignupVerificationComponent,
     ProgressIndicatorComponent,
+    UsernameComponent,
+    PasswordComponent,
+    EditSaveButtonComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({

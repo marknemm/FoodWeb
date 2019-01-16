@@ -18,7 +18,7 @@ export class ConfirmDialogService {
     private _alertService: AlertService
   ) {}
 
-  displayConfirmDialog(message: string, title?: string, responses: AlertResponse<boolean>[] = this._defaultResponses): Observable<boolean> {
+  displayConfirmDialog(message: string, title?: string, responses: AlertResponse<any>[] = this._defaultResponses): Observable<any> {
     const alertMessage: AlertMessage<boolean> = { body: message, title, level: 'info', responses, blocking: true };
     const config: MatDialogConfig<AlertMessage<boolean>> = { disableClose: true };
     return this._alertService.displayMessage(alertMessage, config);

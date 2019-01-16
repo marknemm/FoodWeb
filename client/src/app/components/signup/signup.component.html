@@ -1,8 +1,8 @@
-<form [formGroup]="signupForm" (submit)="signup()" *ngIf="!sessionService.loggedIn">
+<form [formGroup]="accountForm" (submit)="signup()" *ngIf="!sessionService.loggedIn">
   <div class="row">
     <div class="col-xl-12">
       <mat-card>
-        <mat-card-title>Account Type</mat-card-title>
+        <mat-card-title class="block-label">Account Type</mat-card-title>
         <mat-card-content>
           <food-web-account-type [editing]="true" formControlName="accountType"></food-web-account-type>
         </mat-card-content>
@@ -13,52 +13,37 @@
   <div class="row">
     <div class="col-xl-6">
       <mat-card>
-        <mat-card-title>Login Info</mat-card-title>
+        <mat-card-title class="block-label">Login Info</mat-card-title>
         <mat-card-content>
           <div class="row">
             <div class="col-sm-12">
-              <mat-form-field class="fill">
-                <input matInput placeholder="Username" formControlName="username" type="text">
-              </mat-form-field>
+              <food-web-username [editing]="true" formControlName="username"></food-web-username>
             </div>
-            <div class="col-sm-6">
-              <mat-form-field class="fill">
-                <input matInput placeholder="Password" formControlName="password" type="password" autocomplete="new-password">
-                <mat-error *ngIf="signupForm.get('password').hasError('pattern')">
-                  At least 6 characters required
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="col-sm-6">
-              <mat-form-field class="fill">
-                <input matInput placeholder="Confirm Password" formControlName="confirmPassword" type="password" [errorStateMatcher]="passwordMatchService">
-                <mat-error *ngIf="signupForm.hasError('passwordConfirmMatch')">
-                  {{ signupForm.getError('passwordConfirmMatch') }}
-                </mat-error>
-              </mat-form-field>
+            <div class="col-sm-12">
+              <food-web-password [editing]="true" [formGroup]="passwordForm"></food-web-password>
             </div>
           </div>
         </mat-card-content>
       </mat-card>
 
       <mat-card>
-        <mat-card-title>Organization Info</mat-card-title>
+        <mat-card-title class="block-label">Organization Info</mat-card-title>
         <mat-card-content>
-          <food-web-organization [editing]="true" formControlName="organization"></food-web-organization>
+          <food-web-organization [editing]="true" formGroupName="organization"></food-web-organization>
         </mat-card-content>
       </mat-card>
     </div>
     <div class="col-xl-6">
       <mat-card>
-        <mat-card-title>Contact Info</mat-card-title>
+        <mat-card-title class="block-label">Contact Info</mat-card-title>
         <mat-card-content>
-          <food-web-contact-info [editing]="true" formControlName="contactInfo"></food-web-contact-info>
+          <food-web-contact-info [editing]="true" formGroupName="contactInfo"></food-web-contact-info>
         </mat-card-content>
       </mat-card>
 
       <mat-card>
-        <mat-card-title>Hours of Operation</mat-card-title>
-        <food-web-operation-hours [editing]="true" formControlName="operationHours"></food-web-operation-hours>
+        <mat-card-title class="block-label">Hours of Operation</mat-card-title>
+        <food-web-operation-hours [editing]="true" formArrayName="operationHours"></food-web-operation-hours>
       </mat-card>
     </div>
   </div>

@@ -1,36 +1,58 @@
-<form [formGroup]="accountForm" (submit)="updateAccount()">
-  <div class="row">
-    <div class="col-xl-12">
-      <mat-card>
-        <mat-card-title class="block-label">Account</mat-card-title>
-        <mat-card-content>
-          <food-web-account-type [editing]="false" formControlName="accountType"></food-web-account-type>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
-
+<form [formGroup]="accountForm" class="account-form">
   <div class="row">
     <div class="col-xl-6">
       <mat-card>
+        <food-web-edit-save-button [editing]="sectionEditService.editing('username')" (edit)="onEdit(['username', 'accountType'])"
+          (save)="onSave(['username', 'accountType'])" [formControlNames]="['username', 'accountType']"></food-web-edit-save-button>
+        <mat-card-title class="block-label">Account</mat-card-title>
+        <mat-card-content class="account-display-content">
+          <div class="row">
+            <div class="col-sm-6">
+              <food-web-username formControlName="username" [editing]="sectionEditService.editing('username')"></food-web-username>
+            </div>
+            <div class="col-sm-6">
+              <food-web-account-type formControlName="accountType" [editing]="sectionEditService.editing('username')"></food-web-account-type>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <food-web-edit-save-button [editing]="sectionEditService.editing('password')" (edit)="onEdit('password')"
+          (save)="onSave('password')" [formControls]="passwordForm"></food-web-edit-save-button>
+        <mat-card-title class="block-label">Password</mat-card-title>
+        <mat-card-content class="account-display-content">
+          <div class="row">
+            <div class="col-sm-12">
+              <food-web-password [formGroup]="passwordForm" formMode="account" [editing]="sectionEditService.editing('password')"></food-web-password>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <food-web-edit-save-button [editing]="sectionEditService.editing('organization')" (edit)="onEdit('organization')"
+          (save)="onSave('organization')" formControlNames="organization"></food-web-edit-save-button>
         <mat-card-title class="block-label">Organization</mat-card-title>
         <mat-card-content>
-          <food-web-organization [editing]="false" formControlName="organization"></food-web-organization>
+          <food-web-organization formGroupName="organization" [editing]="sectionEditService.editing('organization')"></food-web-organization>
         </mat-card-content>
       </mat-card>
     </div>
     <div class="col-xl-6">
       <mat-card>
+        <food-web-edit-save-button [editing]="sectionEditService.editing('contactInfo')" (edit)="onEdit('contactInfo')"
+          (save)="onSave('contactInfo')" formControlNames="contactInfo"></food-web-edit-save-button>
         <mat-card-title class="block-label">Contact Info</mat-card-title>
         <mat-card-content>
-          <food-web-contact-info [editing]="false" formControlName="contactInfo"></food-web-contact-info>
+          <food-web-contact-info formGroupName="contactInfo" [editing]="sectionEditService.editing('contactInfo')"></food-web-contact-info>
         </mat-card-content>
       </mat-card>
 
       <mat-card>
+        <food-web-edit-save-button [editing]="sectionEditService.editing('operationHours')" (edit)="onEdit('operationHours')"
+          (save)="onSave('operationHours')" formControlNames="operationHours"></food-web-edit-save-button>
         <mat-card-title class="block-label">Hours of Operation</mat-card-title>
         <mat-card-content>
-          <food-web-operation-hours [editing]="false" formControlName="operationHours"></food-web-operation-hours>
+          <food-web-operation-hours formArrayName="operationHours" [editing]="sectionEditService.editing('operationHours')"></food-web-operation-hours>
         </mat-card-content>
       </mat-card>
     </div>

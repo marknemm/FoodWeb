@@ -1,6 +1,6 @@
 <div class="operation-hours-container">
   <ng-container *ngIf="editing">
-    <div *ngFor="let operationHoursForm of operationHoursArr.controls; let idx = index" class="operation-hours-form-container">
+    <div *ngFor="let operationHoursForm of formArray.controls; let idx = index" class="operation-hours-form-container">
       <div [formGroup]="operationHoursForm" class="operation-hours-form">
         <button mat-icon-button color="warn" type="button" class="delete-button" (click)="removeOperationHours(idx)">
           <mat-icon [inline]="true">clear</mat-icon>
@@ -34,7 +34,7 @@
       </div>
     </div>
     <div>
-      <button mat-button type="button" color="primary" class="no-pad" [disabled]="operationHoursArr.invalid" (click)="addOperationHours()">
+      <button mat-button type="button" color="primary" class="no-pad" [disabled]="formArray.invalid" (click)="addOperationHours()">
         <mat-icon>add</mat-icon>
         <span>Add</span>
       </button>
@@ -42,12 +42,15 @@
   </ng-container>
 
   <ng-container *ngIf="!editing">
-    <div *ngFor="let operationHoursForm of operationHoursArr.controls">
-      <div class="inline-label">{{ operationHoursForm.get('weekday').value }}:</div>
-      <div class="d-inline-block">
-        <div class="d-inline-block">{{ operationHoursForm.get('startTime').value }} -&nbsp;</div>
-        <div class="d-inline-block">{{ operationHoursForm.get('endTime').value }}</div>
-      </div>
-    </div>
+    <table class="operation-hours-display">
+      <tr *ngFor="let operationHoursForm of formArray.controls">
+        <td>
+          <div class="inline-label">{{ operationHoursForm.get('weekday').value }}:</div>
+        </td>
+        <td>{{ operationHoursForm.get('startTime').value }}</td>
+        <td>-</td>
+        <td>{{ operationHoursForm.get('endTime').value }}</td>
+      </tr>
+    </table>
   </ng-container>
 </div>

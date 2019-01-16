@@ -1,49 +1,72 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { SessionService } from '../../services/session/session.service';
-import { AccountService } from '../../services/account/account.service';
-import { PasswordMatchService } from '../../services/password-match/password-match.service';
-import { Validation } from '../../../../../shared/src/constants/validation';
-import { Account } from '../../../../../shared/src/interfaces/account';
+import { AccountService, Account } from '../../services/account/account.service';
+import { SectionEditService } from '../../services/section-edit/section-edit.service';
+import { FlexFormArray } from '../../etc/flex-form-array';
 
 @Component({
   selector: 'food-web-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.scss']
+  styleUrls: ['./account.component.scss'],
+  providers: [SectionEditService]
 })
 export class AccountComponent implements OnInit {
 
+  accountUpdateForm: FormGroup;
   accountForm: FormGroup;
-
+  passwordForm: FormGroup;
 
   constructor(
     public sessionService: SessionService,
-    public passwordMatchService: PasswordMatchService,
+    public sectionEditService: SectionEditService,
     private _accountService: AccountService,
     private _formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
     const account: Account = this.sessionService.account;
-    this.accountForm = this._formBuilder.group(
-      {
-        accountType: ['', Validators.required],
-        username: ['', Validators.required],
-        oldPassword: ['', Validators.required],
-        password: ['', [Validators.required, Validators.pattern(Validation.PASSWORD_REGEX)]],
-        confirmPassword: ['', Validators.required],
-        organization: ['', Validators.required],
-        contactInfo: ['', Validators.required],
-        operationHours: [[]]
-      },
-      { validators: this.passwordMatchService.validatePasswordMatch }
-    );
-    this.accountForm.patchValue(account);
+    this.accountForm = this._formBuilder.group({
+      accountType: ['', Validators.required],
+      username: ['', Validators.required],
+      organization: new FormGroup({}),
+      contactInfo: new FormGroup({}),
+      operationHours: new FlexFormArray([])
+    });
+    this.passwordForm = new FormGroup({});
+    this.accountUpdateForm = this._formBuilder.group({
+      account: this.accountForm,
+      password: this.passwordForm
+    });
+    setTimeout(() => this.accountForm.patchValue(account));
   }
 
-  updateAccount(): void {
-    if (this.accountForm.valid) {
-      this._accountService.updateAccount(this.accountForm.value, this.accountForm.get('password').value, this.accountForm.get('oldPassword').value);
+  onEdit(properties: string[] | string): void {
+    properties = (typeof properties === 'string' ? [properties] : properties);
+    const editSection: string = properties[0];
+    const controls: AbstractControl[] = properties.map((property: string) =>
+      (property === 'password' ? this.passwordForm : this.accountForm.get(property))
+    );
+    this.sectionEditService.toggleEdit(editSection, controls);
+  }
+
+  onSave(properties: string[] | string): void {
+    properties = (typeof properties === 'string' ? [properties] : properties);
+    const editSection: string = properties[0];
+    const shouldSave: boolean = this.sectionEditService.shouldSaveSection(editSection);
+    if (shouldSave) {
+      properties = properties.filter((property: string) => property !== 'password');
+      this._accountService.updateAccount(properties, this.accountForm.value, this.passwordForm.value)
+        .subscribe(this._handleSaveSuccess.bind(this, editSection));
+    }
+  }
+
+  private _handleSaveSuccess(editSection: string, account: Account): void {
+    this.sectionEditService.stopEdit(editSection);
+    if (editSection === 'password') {
+      this.passwordForm.reset();
+    } else {
+      this.accountForm.get(editSection).patchValue(account[editSection]);
     }
   }
 

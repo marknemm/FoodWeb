@@ -1,9 +1,9 @@
 <div class="contact-info-container">
-  <div *ngIf="editing" class="row contact-info-form" [formGroup]="contactInfoForm">
+  <div *ngIf="editing" class="row contact-info-form" [formGroup]="formGroup">
     <div class="col-sm-6">
       <mat-form-field class="fill">
         <input matInput placeholder="Email" formControlName="email" type="email">
-        <mat-error *ngIf="contactInfoForm.get('email').hasError('email')">
+        <mat-error *ngIf="formGroup.get('email').hasError('email')">
           Not a valid email address
         </mat-error>
       </mat-form-field>
@@ -11,7 +11,7 @@
     <div class="col-sm-6">
       <mat-form-field class="fill">
         <input matInput placeholder="Phone Number" formControlName="phoneNumber" type="tel">
-        <mat-error *ngIf="contactInfoForm.get('phoneNumber').hasError('pattern')">
+        <mat-error *ngIf="formGroup.get('phoneNumber').hasError('pattern')">
           Not a valid phone number
         </mat-error>
       </mat-form-field>
@@ -34,7 +34,7 @@
     <div class="col-sm-3">
       <mat-form-field class="fill">
         <input matInput placeholder="Zip/Postal Code" formControlName="postalCode" type="text">
-        <mat-error *ngIf="contactInfoForm.get('postalCode').hasError('pattern')">
+        <mat-error *ngIf="formGroup.get('postalCode').hasError('pattern')">
           Not a valid postal code
         </mat-error>
       </mat-form-field>
@@ -45,27 +45,27 @@
     <div class="col-sm-6">
       <div class="inline-label">Email:</div>
       <div class="d-inline-block">
-        <a href="mailto:{{ contactInfoForm.get('email').value }}">
-          {{ contactInfoForm.get('email').value }}
+        <a href="mailto:{{ formGroup.get('email').value }}">
+          {{ formGroup.get('email').value }}
         </a>
       </div>
     </div>
     <div class="col-sm-6">
       <div class="inline-label">Phone Number:</div>
       <div class="d-inline-block">
-        <a href="tel:{{ contactInfoForm.get('phoneNumber').value }}">
-          {{ contactInfoForm.get('phoneNumber').value }}
+        <a href="tel:{{ formGroup.get('phoneNumber').value }}">
+          {{ formGroup.get('phoneNumber').value }}
         </a>
       </div>
     </div>
     <div class="col-sm-12">
       <div class="inline-label">Address:</div>
       <div class="d-inline-block">
-        <div>{{ contactInfoForm.get('streetAddress').value }}</div>
+        <div>{{ formGroup.get('streetAddress').value }}</div>
         <div>
-          <div class="d-inline-block">{{ contactInfoForm.get('city').value }},&nbsp;</div>
-          <div class="d-inline-block">{{ contactInfoForm.get('stateProvince').value }}&nbsp;</div>
-          <div class="d-inline-block">{{ contactInfoForm.get('postalCode').value }}</div>
+          <div class="d-inline-block">{{ formGroup.get('city').value }},&nbsp;</div>
+          <div class="d-inline-block">{{ formGroup.get('stateProvince').value }}&nbsp;</div>
+          <div class="d-inline-block">{{ formGroup.get('postalCode').value }}</div>
         </div>
       </div>
     </div>
