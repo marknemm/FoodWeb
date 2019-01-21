@@ -1,7 +1,11 @@
+<div class="list-title block-label">
+  {{ pageTitleService.title }}
+</div>
+
 <div class="row">
   <div class="col-lg-6" *ngFor="let account of accounts">
     <mat-card>
-      <mat-card-title class="block-label">
+      <mat-card-title>
         <a [routerLink]="['/account']" [queryParams]="{ id: account.id }" [state]="account">
           {{ account.organization.organizationName }}
         </a>
@@ -12,3 +16,7 @@
     </mat-card>
   </div>
 </div>
+
+<!-- <div class="food-web-paginator-container">
+  <food-web-paginator></food-web-paginator>
+</div> -->

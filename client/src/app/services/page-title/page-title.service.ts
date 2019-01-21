@@ -1,28 +1,35 @@
 import { Injectable } from '@angular/core';
-import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { AccountType } from '../../../../../shared/src/interfaces/account';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PageTitleService {
 
   title: string;
 
   constructor(
     router: Router,
+    activatedRoute: ActivatedRoute
   ) {
     router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
-        switch (event.url) {
-          // Add special URL to Title conversion(s) here.
+        const route: string = event.url.split('?')[0];
+        switch (route) {
+          case '/accounts':
+            const accountType = <AccountType>activatedRoute.snapshot.queryParamMap.get('accountType');
+            this.title = (accountType ? `${accountType}s` : this._deriveDefaultTitle(route));
+            break;
           default:
-            this.title = this._deriveDefaultTitle(event.url);
+            this.title = this._deriveDefaultTitle(route);
         }
       }
     });
   }
 
-  private _deriveDefaultTitle(url: string): string {
-    url = url.replace(/\?(.*)/, '');
-    let titleFrags: string[] = url.split(/[\/|\-|_]/);
+  private _deriveDefaultTitle(route: string): string {
+    let titleFrags: string[] = route.split(/[\/|\-|_]/);
     titleFrags = titleFrags.map(
       (word: string) => word.substr(0, 1).toUpperCase() + word.substr(1)
     );

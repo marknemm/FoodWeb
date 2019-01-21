@@ -19,7 +19,7 @@ export { Account };
 export class AccountService {
 
   readonly url = '/server/account';
-  readonly accountReadLimit = 10;
+  readonly accountReadLimit = 1000;
 
   constructor(
     private _httpClient: HttpClient,

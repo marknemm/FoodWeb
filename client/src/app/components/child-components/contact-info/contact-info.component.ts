@@ -3,6 +3,7 @@ import { FormGroup, Validators, FormGroupDirective, FormControl } from '@angular
 import { FormHelperService } from '../../../services/form-helper/form-helper.service';
 import { Validation } from '../../../../../../shared/src/constants/validation';
 import { ContactInfo } from '../../../../../../shared/src/interfaces/account';
+import { MapService } from 'src/app/services/map/map.service';
 
 @Component({
   selector: 'food-web-contact-info',
@@ -17,8 +18,9 @@ export class ContactInfoComponent implements OnInit {
   @Input() contactInfo: ContactInfo;
 
   constructor(
+    public mapService: MapService,
     @Optional() private _formGroupDirective: FormGroupDirective,
-    private _formHelperService: FormHelperService
+    private _formHelperService: FormHelperService,
   ) {}
 
   ngOnInit() {

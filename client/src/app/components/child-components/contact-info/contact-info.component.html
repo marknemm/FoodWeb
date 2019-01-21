@@ -60,14 +60,16 @@
     </div>
     <div class="col-sm-12">
       <div class="inline-label">Address:</div>
-      <div class="d-inline-block">
-        <div>{{ formGroup.get('streetAddress').value }}</div>
-        <div>
-          <div class="d-inline-block">{{ formGroup.get('city').value }},&nbsp;</div>
-          <div class="d-inline-block">{{ formGroup.get('stateProvince').value }}&nbsp;</div>
-          <div class="d-inline-block">{{ formGroup.get('postalCode').value }}</div>
+      <a [href]="mapService.genHref(formGroup.value)" target="_blank">
+        <div class="d-inline-block">
+          <div>{{ formGroup.get('streetAddress').value }}</div>
+          <div>
+            <div class="d-inline-block">{{ formGroup.get('city').value }},&nbsp;</div>
+            <div class="d-inline-block">{{ formGroup.get('stateProvince').value }}&nbsp;</div>
+            <div class="d-inline-block">{{ formGroup.get('postalCode').value }}</div>
+          </div>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </div>

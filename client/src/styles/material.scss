@@ -112,6 +112,10 @@ button {
 .mat-drawer-container {
   height: calc(100% - #{$header-height});
 
+  @media only screen and (max-width: $xs) {
+    height: calc(100% - #{$header-height-xs});
+  }
+
   .mat-drawer {
     width: $left-nav-width;
     min-height: 100%;
@@ -167,6 +171,24 @@ button {
 }
 
 .timepicker {
+
+  @media only screen and (max-height: 700px) {
+    position: fixed !important;
+    top: $header-height;
+
+    .timepicker__header {
+      padding: 10px 15px !important;
+    }
+
+    .timepicker__body {
+      padding: 10px 5px !important;
+    }
+
+    .timepicker__actions {
+      padding: 10px 15px !important;
+    }
+  }
+
   .timepicker__header, .clock-face__clock-hand, .clock-face__number > .active {
     background-color: $primary !important;
   }

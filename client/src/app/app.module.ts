@@ -19,7 +19,8 @@ import {
   MatRadioModule,
   MatTableModule,
   MatProgressSpinnerModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatPaginatorModule
 } from '@angular/material';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AgmCoreModule } from '@agm/core';
@@ -47,6 +48,7 @@ import { PasswordComponent } from './components/child-components/password/passwo
 import { EditSaveButtonComponent } from './components/child-components/edit-save-button/edit-save-button.component';
 import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
+import { PaginatorComponent } from './components/child-components/paginator/paginator.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +73,7 @@ import { PasswordResetComponent } from './components/password-reset/password-res
     PasswordComponent,
     EditSaveButtonComponent,
     PasswordResetComponent,
+    PaginatorComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({
@@ -97,6 +100,7 @@ import { PasswordResetComponent } from './components/password-reset/password-res
     MatTableModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
+    MatPaginatorModule,
     NgxMaterialTimepickerModule.forRoot()
   ],
   providers: [

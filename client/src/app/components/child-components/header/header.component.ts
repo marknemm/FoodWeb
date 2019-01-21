@@ -9,8 +9,7 @@ import { PageProgressService } from './../../../services/page-progress/page-prog
 @Component({
   selector: 'food-web-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  providers: [PageTitleService]
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
 

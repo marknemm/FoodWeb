@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AccountService, Account } from '../../services/account/account.service';
+import { PageTitleService } from '../../services/page-title/page-title.service';
 
 @Component({
   selector: 'food-web-accounts',
@@ -15,6 +16,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   private _destroy$ = new Subject();
 
   constructor(
+    public pageTitleService: PageTitleService,
     private _accountService: AccountService
   ) {}
 
