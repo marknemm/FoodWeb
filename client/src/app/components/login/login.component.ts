@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isPasswordReset = false;
   resetMessageSent = false;
+  usernamePlaceholder = 'Username/Email';
 
   constructor(
     public sessionService: SessionService,
@@ -28,6 +29,10 @@ export class LoginComponent implements OnInit {
       usernameEmail: ['', Validators.required],
       password: ['', Validators.required]
     });
+  }
+
+  get loading(): boolean {
+    return this.sessionService.loading || this._passwordResetService.loading;
   }
 
   submit(): void {
@@ -46,19 +51,22 @@ export class LoginComponent implements OnInit {
 
   forgotPassword(): void {
     this.title = 'Reset Password';
+    this.usernamePlaceholder = 'Username';
+    this.loginForm.reset();
     this.loginForm.get('password').disable();
     this.isPasswordReset = true;
   }
 
   returnToLogin(): void {
     this.title = 'Login';
+    this.usernamePlaceholder = 'Username/Email';
     this.loginForm.get('password').enable();
     this.isPasswordReset = false;
   }
 
   sendPasswordResetEmail(): void {
-    const email: string = this.loginForm.get('usernameEmail').value;
-    this._passwordResetService.sendPasswordResetEmail(email).subscribe(
+    const username: string = this.loginForm.get('usernameEmail').value;
+    this._passwordResetService.sendPasswordResetEmail(username).subscribe(
       () => this.resetMessageSent = true
     );
   }

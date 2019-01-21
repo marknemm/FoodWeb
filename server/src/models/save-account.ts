@@ -13,7 +13,7 @@ export async function createAccount(account: Account, password: string): Promise
   let createdAccount: AccountEntity;
   await getConnection().transaction(async (manager: EntityManager) => {
     createdAccount = await _saveAccount(manager, account);
-    await _savePassword(manager, createdAccount, password);
+    await savePassword(manager, createdAccount, password);
     await saveUnverifiedAccount(createdAccount, manager);
   });
 
@@ -23,12 +23,11 @@ export async function createAccount(account: Account, password: string): Promise
 }
 
 export async function updateAccount(account: Account, password: string, oldPassword: string): Promise<AccountEntity> {
-  console.log(account);
   let updatedAccount: AccountEntity;
   await getConnection().transaction(async (manager: EntityManager) => {
     updatedAccount = await _saveAccount(manager, account);
     if (password) {
-      await _savePassword(manager, updatedAccount, password, oldPassword);
+      await savePassword(manager, updatedAccount, password, oldPassword);
     }
   });
 
@@ -36,9 +35,25 @@ export async function updateAccount(account: Account, password: string, oldPassw
   return updatedAccount;
 }
 
+export async function savePassword(manager: EntityManager, account: AccountEntity, password: string, oldPassword?: string, isReset = false): Promise<void> {
+  _validatePassword(password);
+  const salt: string = await genSalt();
+  const passwordHash: string = await hash(password, salt);
+  const passwordEntity = new PasswordEntity();
+  passwordEntity.passwordHash = passwordHash;
+  passwordEntity.account = account;
+  if (oldPassword) {
+    passwordEntity.id = await _getOldPasswordId(account, oldPassword);
+  } else if (isReset) {
+    passwordEntity.id = (await manager.getRepository(PasswordEntity).findOne(
+      { where: { account } }
+    )).id;
+  }
+  await manager.getRepository(PasswordEntity).save(passwordEntity);
+}
+
 async function _saveAccount(manager: EntityManager, account: Account): Promise<AccountEntity> {
   _validateAccount(account);
-  console.log(account);
   return manager.getRepository(AccountEntity).save(account as AccountEntity);
 }
 
@@ -52,20 +67,6 @@ function _validateAccount(account: Account): void {
   if (!Validation.POSTAL_CODE_REGEX.test(account.contactInfo.postalCode)) {
     throw new FoodWebError('Invalid zip/postal code');
   }
-}
-
-async function _savePassword(manager: EntityManager, account: AccountEntity, password: string, oldPassword?: string): Promise<void> {
-  _validatePassword(password);
-  const salt: string = await genSalt();
-  const passwordHash: string = await hash(password, salt);
-  const passwordEntity = new PasswordEntity();
-  passwordEntity.passwordHash = passwordHash;
-  passwordEntity.account = account;
-  if (oldPassword) {
-    const oldPasswordId: number = await _getOldPasswordId(account, oldPassword);
-    passwordEntity.id = oldPasswordId;
-  }
-  await manager.getRepository(PasswordEntity).save(passwordEntity);
 }
 
 function _validatePassword(password: string): void {

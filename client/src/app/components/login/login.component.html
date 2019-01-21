@@ -1,4 +1,4 @@
-<food-web-progress-indicator [trigger]="sessionService.loading" [blocking]="true" [diameter]="150"></food-web-progress-indicator>
+<food-web-progress-indicator [trigger]="loading" [blocking]="true" [diameter]="150"></food-web-progress-indicator>
 <form #loginFormDirective="ngForm" [formGroup]="loginForm" (submit)="submit()" class="login-container">
   <mat-toolbar color="primary">
     <h1 mat-dialog-title>{{ title }}</h1>
@@ -8,7 +8,7 @@
   </mat-toolbar>
   <div mat-dialog-content *ngIf="!resetMessageSent">
     <mat-form-field>
-      <input matInput type="email" placeholder="Username/Email" formControlName="usernameEmail" cdkFocusInitial>
+      <input matInput type="email" [placeholder]="usernamePlaceholder" formControlName="usernameEmail" cdkFocusInitial>
     </mat-form-field>
     <mat-form-field *ngIf="!isPasswordReset">
       <input matInput type="password" placeholder="Password" formControlName="password">
@@ -16,7 +16,7 @@
     <mat-error *ngIf="sessionService.loginErr && loginFormDirective.submitted" class="login-err">{{ sessionService.loginErr }}</mat-error>
   </div>
   <div mat-dialog-content *ngIf="resetMessageSent">
-    <p>A password reset message has been sent to your email at <strong>{{ loginForm.get('usernameEmail').value }}</strong>.</p>
+    <p>A password reset message has been sent to your email.</p>
     <p>Follow the link within the email to reset your password.</p>
   </div>
   <div mat-dialog-actions>

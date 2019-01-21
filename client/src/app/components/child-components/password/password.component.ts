@@ -4,7 +4,7 @@ import { PasswordMatchService } from '../../../services/password-match/password-
 import { FormHelperService } from '../../../services/form-helper/form-helper.service';
 import { Validation } from '../../../../../../shared/src/constants/validation';
 
-export type PasswordFormMode = 'login' | 'signup' | 'account';
+export type PasswordFormMode = 'Login' | 'Signup' | 'Account';
 
 @Component({
   selector: 'food-web-password',
@@ -16,7 +16,7 @@ export class PasswordComponent implements OnInit {
   @Input() editing = false;
   @Input() formGroupName: string;
   @Input() formGroup: FormGroup;
-  @Input() formMode: PasswordFormMode = 'login';
+  @Input() formMode: PasswordFormMode = 'Login';
 
   private _passwordLabel: string;
 
@@ -27,11 +27,11 @@ export class PasswordComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const passwordValidator: ValidatorFn[] = (this.formMode !== 'login') ?
+    const passwordValidator: ValidatorFn[] = (this.formMode !== 'Login') ?
       [Validators.required, Validators.pattern(Validation.PASSWORD_REGEX)] :
       [Validators.required];
-    const confirmPasswordValidator: ValidatorFn = (this.formMode !== 'login' ? Validators.required : undefined);
-    const oldPasswordValidator: ValidatorFn = (this.formMode === 'account' ? Validators.required : undefined);
+    const confirmPasswordValidator: ValidatorFn = (this.formMode !== 'Login' ? Validators.required : undefined);
+    const oldPasswordValidator: ValidatorFn = (this.formMode === 'Account' ? Validators.required : undefined);
 
     this.formGroup = this._formHelperService.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
     this._formHelperService.addMissingControls(
@@ -44,13 +44,13 @@ export class PasswordComponent implements OnInit {
     );
 
     if (!this.formGroup.validator) {
-      const formValidator: ValidatorFn = (this.formMode !== 'login' ? this.passwordMatchService.validatePasswordMatch : undefined);
+      const formValidator: ValidatorFn = (this.formMode !== 'Login' ? this.passwordMatchService.validatePasswordMatch : undefined);
       this.formGroup.setValidators(formValidator);
     }
     if (this.formGroupName && this._formGroupDirective.form) {
       this._formGroupDirective.form.addControl(this.formGroupName, this.formGroup);
     }
-    this._passwordLabel = (this.formMode === 'account' ? 'New Password' : 'Password');
+    this._passwordLabel = (this.formMode === 'Account' ? 'New Password' : 'Password');
   }
 
   get passwordLabel(): string {

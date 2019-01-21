@@ -46,6 +46,7 @@ import { UsernameComponent } from './components/child-components/username/userna
 import { PasswordComponent } from './components/child-components/password/password.component';
 import { EditSaveButtonComponent } from './components/child-components/edit-save-button/edit-save-button.component';
 import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
+import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { SessionMonitorService } from './services/session-monitor/session-monito
     UsernameComponent,
     PasswordComponent,
     EditSaveButtonComponent,
+    PasswordResetComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({

@@ -5,6 +5,7 @@ import { map, catchError, finalize } from 'rxjs/operators';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { LoginRequest } from '../../../../../shared/src/interfaces/login-request';
 import { Account } from '../../../../../shared/src/interfaces/account';
+export { Account };
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +63,7 @@ export class SessionService {
     return this._httpClient.post<Account>(this.url, loginRequest).pipe(
       map((account: Account) => { this.account = account; }),
       catchError((err: HttpErrorResponse) => {
+        console.error(err);
         this._loginErr = err.error.message;
         return EMPTY;
       }),

@@ -6,9 +6,11 @@ import { createAccount, updateAccount } from '../models/save-account';
 import { getAccounts } from '../models/get-account';
 import { verifyAccount } from '../models/account-verification';
 import { handleError } from '../helpers/food-web-error';
+import { savePasswordResetToken, resetPassword } from '../models/password-reset';
 import { AccountCreateRequest } from '../../../shared/src/interfaces/account-create-request';
 import { AccountUpdateRequest } from '../../../shared/src/interfaces/account-update-request';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account-read-request';
+import { PasswordResetRequest } from '../../../shared/src/interfaces/password-reset-request';
 
 const router = express.Router();
 
@@ -38,6 +40,20 @@ router.post('/verify', ensureSessionActive, (req: Request, res: Response) => {
   const verificationToken: string = req.body.verificationToken;
   verifyAccount(account, verificationToken)
     .then(_handleAccountSave.bind(this, req, res))
+    .catch(handleError.bind(this, res));
+});
+
+router.get('/reset-password', (req: Request, res: Response) => {
+  const username: string = req.query.username;
+  savePasswordResetToken(username)
+    .then(() => res.send())
+    .catch(handleError.bind(this, res));
+});
+
+router.put('/reset-password/', (req: Request, res: Response) => {
+  const resetRequest: PasswordResetRequest = req.body;
+  resetPassword(resetRequest.username, resetRequest.password, resetRequest.resetToken)
+    .then((account: AccountEntity) => res.send(account))
     .catch(handleError.bind(this, res));
 });
 

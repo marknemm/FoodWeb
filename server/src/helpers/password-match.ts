@@ -4,14 +4,14 @@ import { PasswordEntity } from '../entity/password.entity';
 import { Account } from '../../../shared/src/interfaces/account';
 
 export async function checkPasswordMatch(account: Account, password: string): Promise<boolean> {
-  return (await getPasswordId(account, password)) !== -1;
+  return (await getPasswordId(account, password)) != null;
 }
 
 export async function getPasswordId(account: Account, password: string): Promise<number> {
-  const passwordWrapper: PasswordEntity = await getRepository(PasswordEntity)
+  const passwordEntity: PasswordEntity = await getRepository(PasswordEntity)
     .findOne({
       account: { id: account.id }
     });
-  const passwordMatch: boolean = await compare(password, passwordWrapper.passwordHash);
-  return (passwordMatch ? passwordWrapper.id : null);
+  const passwordMatch: boolean = await compare(password, passwordEntity.passwordHash);
+  return (passwordMatch ? passwordEntity.id : null);
 }

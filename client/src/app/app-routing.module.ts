@@ -6,6 +6,7 @@ import { SignupVerificationComponent } from './components/signup-verification/si
 import { AccountsComponent } from './components/accounts/accounts.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { AccountComponent } from './components/account/account.component';
+import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { AuthGaurdService } from './services/auth-gaurd/auth-gaurd.service';
 
 const routes: Routes = [
@@ -17,7 +18,8 @@ const routes: Routes = [
   {path: 'signup-verification', component: SignupVerificationComponent},
   {path: 'account', component: AccountComponent, canActivate: [AuthGaurdService]},
   {path: 'logout', component: LogoutComponent},
-  {path: 'accounts', component: AccountsComponent}
+  {path: 'accounts', component: AccountsComponent},
+  {path: 'password-reset', component: PasswordResetComponent}
 ];
 
 @NgModule({
