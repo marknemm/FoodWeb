@@ -7,12 +7,12 @@
         </a>
       </li>
       <li>
-        <a mat-ripple [routerLink]="['/donors']" (click)="_onNavClick()">
+        <a mat-ripple [routerLink]="['/accounts']" [queryParams]="{ accountType: 'Donor' }" (click)="_onNavClick()">
           <span><mat-icon>card_giftcard</mat-icon> Donors</span>
         </a>
       </li>
       <li>
-        <a mat-ripple [routerLink]="['/receivers']" (click)="_onNavClick()">
+        <a mat-ripple [routerLink]="['/accounts']" [queryParams]="{ accountType: 'Receiver' }" (click)="_onNavClick()">
           <span><mat-icon>location_on</mat-icon> Receivers</span>
         </a>
       </li>

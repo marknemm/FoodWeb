@@ -1,5 +1,5 @@
-import { FormArray, AbstractControl, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormGroup, FormBuilder, FormControl } from "@angular/forms";
-import { FormHelperService } from "../services/form-helper/form-helper.service";
+import { FormArray, AbstractControl, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormHelperService } from '../services/form-helper/form-helper.service';
 
 export class FlexFormArray extends FormArray {
 
@@ -28,6 +28,11 @@ export class FlexFormArray extends FormArray {
       this._addNeededMembers(this.length + 1);
       this.at(this.length - 1).patchValue(value);
     }
+  }
+
+  removeAt(index: number): void {
+    super.removeAt(index);
+    super.markAsDirty();
   }
 
   reset(value: any = [], options: { onlySelf?: boolean; emitEvent?: boolean; } = {}): void {

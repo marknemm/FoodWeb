@@ -16,7 +16,7 @@
     <mat-error *ngIf="sessionService.loginErr && loginFormDirective.submitted" class="login-err">{{ sessionService.loginErr }}</mat-error>
   </div>
   <div mat-dialog-content *ngIf="resetMessageSent">
-    <p>A password reset message has been sent to your email at <strong>{{ loginForm.get('email').value }}</strong>.</p>
+    <p>A password reset message has been sent to your email at <strong>{{ loginForm.get('usernameEmail').value }}</strong>.</p>
     <p>Follow the link within the email to reset your password.</p>
   </div>
   <div mat-dialog-actions>

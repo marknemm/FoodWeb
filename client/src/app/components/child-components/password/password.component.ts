@@ -42,7 +42,7 @@ export class PasswordComponent implements OnInit {
         oldPassword: ['', oldPasswordValidator]
       }
     );
-    
+
     if (!this.formGroup.validator) {
       const formValidator: ValidatorFn = (this.formMode !== 'login' ? this.passwordMatchService.validatePasswordMatch : undefined);
       this.formGroup.setValidators(formValidator);

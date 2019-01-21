@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { SessionService } from '../../services/session/session.service';
 import { AccountService, Account } from '../../services/account/account.service';
 import { SectionEditService } from '../../services/section-edit/section-edit.service';
@@ -11,11 +13,14 @@ import { FlexFormArray } from '../../etc/flex-form-array';
   styleUrls: ['./account.component.scss'],
   providers: [SectionEditService]
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent implements OnInit, OnDestroy {
 
   accountUpdateForm: FormGroup;
   accountForm: FormGroup;
   passwordForm: FormGroup;
+  myAccount: boolean;
+
+  private _destroy$ = new Subject();
 
   constructor(
     public sessionService: SessionService,
@@ -25,7 +30,11 @@ export class AccountComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const account: Account = this.sessionService.account;
+    this._initForm();
+    this._listenAccountChange();
+  }
+
+  private _initForm(): void {
     this.accountForm = this._formBuilder.group({
       accountType: ['', Validators.required],
       username: ['', Validators.required],
@@ -38,7 +47,20 @@ export class AccountComponent implements OnInit {
       account: this.accountForm,
       password: this.passwordForm
     });
-    setTimeout(() => this.accountForm.patchValue(account));
+  }
+
+  private _listenAccountChange(): void {
+    this._accountService.listenAccoundQueryChange().pipe(
+      takeUntil(this._destroy$)
+    ).subscribe((account: Account) => {
+      this.myAccount = (account.id === this.sessionService.accountId);
+      setTimeout(() => this.accountForm.patchValue(account));
+    });
+  }
+
+  ngOnDestroy() {
+    // Ensure we have no rxjs memory leak for queryParamMap observable above.
+    this._destroy$.next();
   }
 
   onEdit(properties: string[] | string): void {

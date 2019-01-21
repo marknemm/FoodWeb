@@ -45,8 +45,8 @@ app.use(multer().any());
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 module.exports = app; // Make available for mocha testing suites.
 
-app.use('/server/session', require('./controllers/session.controller'));
-app.use('/server/account', require('./controllers/account.controller'));
+app.use('/server/session', require('./controllers/session'));
+app.use('/server/account', require('./controllers/account'));
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {

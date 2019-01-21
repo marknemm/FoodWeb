@@ -1,13 +1,13 @@
-import { getConnection, EntityManager, getRepository } from 'typeorm';
+import { getConnection, EntityManager } from 'typeorm';
 import { hash, genSalt } from 'bcrypt';
-import { saveUnverifiedAccount } from './account-verification.model';
-import { formatOperationHoursTimes } from './../helpers/operation-hours-converter';
-import { AccountEntity } from './../entity/account.entity';
-import { PasswordEntity } from './../entity/password.entity';
-import { getPasswordId } from './../helpers/password-match';
-import { FoodWebError } from './../helpers/food-web-error';
-import { Account } from './../../../shared/src/interfaces/account';
-import { Validation } from './../../../shared/src/constants/validation';
+import { saveUnverifiedAccount } from './account-verification';
+import { formatOperationHoursTimes } from '../helpers/operation-hours-converter';
+import { AccountEntity } from '../entity/account.entity';
+import { PasswordEntity } from '../entity/password.entity';
+import { getPasswordId } from '../helpers/password-match';
+import { FoodWebError } from '../helpers/food-web-error';
+import { Account } from '../../../shared/src/interfaces/account';
+import { Validation } from '../../../shared/src/constants/validation';
 
 export async function createAccount(account: Account, password: string): Promise<AccountEntity> {
   let createdAccount: AccountEntity;
@@ -23,6 +23,7 @@ export async function createAccount(account: Account, password: string): Promise
 }
 
 export async function updateAccount(account: Account, password: string, oldPassword: string): Promise<AccountEntity> {
+  console.log(account);
   let updatedAccount: AccountEntity;
   await getConnection().transaction(async (manager: EntityManager) => {
     updatedAccount = await _saveAccount(manager, account);
@@ -35,14 +36,9 @@ export async function updateAccount(account: Account, password: string, oldPassw
   return updatedAccount;
 }
 
-export async function getAccounts(): Promise<AccountEntity[]> {
-  return getRepository(AccountEntity).find({
-    relations: ['contactInfo', 'organization', 'operationHours']
-  });
-}
-
 async function _saveAccount(manager: EntityManager, account: Account): Promise<AccountEntity> {
   _validateAccount(account);
+  console.log(account);
   return manager.getRepository(AccountEntity).save(account as AccountEntity);
 }
 
@@ -83,5 +79,5 @@ async function _getOldPasswordId(account: Account, oldPassword: string): Promise
   if (matchId == null) {
     throw new FoodWebError('Current password match failed');
   }
-  return matchId
+  return matchId;
 }

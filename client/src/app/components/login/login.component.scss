@@ -2,9 +2,7 @@
 
 .login-container {
 
-  @media only screen and (min-width: $xs) {
-    min-width: 300px;
-  }
+  min-width: 256px;
 
   mat-form-field {
     font-size: 25px;

@@ -20,7 +20,7 @@ export async function verifyAccount(account: AccountEntity, verificationToken: s
   if (!unverifiedAccount) {
     throw new FoodWebError('Signup verification was unsuccessful. Either the account does not exist or it has already been verified.');
   }
-  
+
   repo.delete(unverifiedAccount);
   account.verified = true;
   return account;

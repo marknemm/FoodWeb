@@ -37,9 +37,9 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    const email: string = this.loginForm.get('usernameEmail').value;
+    const usernameEmail: string = this.loginForm.get('usernameEmail').value;
     const password: string = this.loginForm.get('password').value;
-    this.sessionService.login(email, password).subscribe(
+    this.sessionService.login(usernameEmail, password).subscribe(
       () => this._matDialogRef.close()
     );
   }

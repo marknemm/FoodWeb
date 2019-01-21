@@ -2,14 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, EMPTY } from 'rxjs';
 import { map, catchError, finalize } from 'rxjs/operators';
-import { ErrorHandlerService } from './../error-handler/error-handler.service';
-import { LoginRequest } from './../../../../../shared/src/interfaces/login-request';
-import { Account } from './../../../../../shared/src/interfaces/account';
+import { ErrorHandlerService } from '../error-handler/error-handler.service';
+import { LoginRequest } from '../../../../../shared/src/interfaces/login-request';
+import { Account } from '../../../../../shared/src/interfaces/account';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
+
+  readonly url = 'server/session';
 
   private _account: Account;
   private _loading = false;
@@ -24,12 +26,20 @@ export class SessionService {
     this._account = (jsonAccount ? JSON.parse(jsonAccount) : null);
   }
 
+  get accountId(): number {
+    return (this._account ? this._account.id : undefined);
+  }
+
   get account(): Account {
     return this._account;
   }
 
   set account(account: Account) {
-    localStorage.setItem('account', JSON.stringify(account));
+    if (account) {
+      localStorage.setItem('account', JSON.stringify(account));
+    } else {
+      localStorage.removeItem('account');
+    }
     this._account = account;
   }
 
@@ -49,10 +59,7 @@ export class SessionService {
     const loginRequest: LoginRequest = { usernameEmail, password };
     this._loading = true;
     this._loginErr = null;
-    return this._httpClient.post<Account>(
-      '/server/session',
-      loginRequest
-    ).pipe(
+    return this._httpClient.post<Account>(this.url, loginRequest).pipe(
       map((account: Account) => { this.account = account; }),
       catchError((err: HttpErrorResponse) => {
         this._loginErr = err.error.message;
@@ -64,14 +71,11 @@ export class SessionService {
 
   logout(): void {
     this._loading = true;
-    this._httpClient.delete<void>(
-      '/server/session'
-    ).pipe(
+    this._httpClient.delete<void>(this.url).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._loading = false)
-    ).subscribe(() => {
-      localStorage.removeItem('account');
-      this.account = null;
-    });
+    ).subscribe(
+      () => this.account = null
+    );
   }
 }

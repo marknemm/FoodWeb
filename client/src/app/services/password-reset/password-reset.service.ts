@@ -8,7 +8,7 @@ export class PasswordResetService {
 
   constructor() { }
 
-  sendPasswordResetEmail(email: string): Observable<void> {
+  sendPasswordResetEmail(usernameEmail: string): Observable<void> {
     return of(null);
   }
 

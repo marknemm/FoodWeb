@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Optional } from '@angular/core';
 import { FormGroup, Validators, FormGroupDirective, FormControl } from '@angular/forms';
 import { FormHelperService } from '../../../services/form-helper/form-helper.service';
 import { Validation } from '../../../../../../shared/src/constants/validation';
+import { ContactInfo } from '../../../../../../shared/src/interfaces/account';
 
 @Component({
   selector: 'food-web-contact-info',
@@ -13,9 +14,10 @@ export class ContactInfoComponent implements OnInit {
   @Input() editing = false;
   @Input() formGroupName: string;
   @Input() formGroup: FormGroup;
+  @Input() contactInfo: ContactInfo;
 
   constructor(
-    private _formGroupDirective: FormGroupDirective,
+    @Optional() private _formGroupDirective: FormGroupDirective,
     private _formHelperService: FormHelperService
   ) {}
 
@@ -35,6 +37,9 @@ export class ContactInfoComponent implements OnInit {
     );
     if (this.formGroupName) {
       this._formGroupDirective.form.setControl(this.formGroupName, this.formGroup);
+    }
+    if (this.contactInfo) {
+      this.formGroup.patchValue(this.contactInfo);
     }
   }
 }

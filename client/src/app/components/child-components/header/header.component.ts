@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { LoginComponent } from './../../login/login.component';
 import { SessionService } from './../../../services/session/session.service';
@@ -12,7 +12,7 @@ import { PageProgressService } from './../../../services/page-progress/page-prog
   styleUrls: ['./header.component.scss'],
   providers: [PageTitleService]
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
   constructor(
     public sessionService: SessionService,

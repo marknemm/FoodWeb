@@ -2,11 +2,13 @@ import express = require('express');
 import { Request, Response } from 'express';
 import { ensureSessionActive } from '../middlewares/session.middleware';
 import { AccountEntity } from './../entity/account.entity';
-import { createAccount, updateAccount, getAccounts } from '../models/account.model';
-import { verifyAccount } from '../models/account-verification.model';
+import { createAccount, updateAccount } from '../models/save-account';
+import { getAccounts } from '../models/get-account';
+import { verifyAccount } from '../models/account-verification';
 import { handleError } from '../helpers/food-web-error';
-import { AccountCreateRequest } from './../../../shared/src/interfaces/account-create-request';
-import { AccountUpdateRequest } from './../../../shared/src/interfaces/account-update-request';
+import { AccountCreateRequest } from '../../../shared/src/interfaces/account-create-request';
+import { AccountUpdateRequest } from '../../../shared/src/interfaces/account-update-request';
+import { AccountReadRequest } from '../../../shared/src/interfaces/account-read-request';
 
 const router = express.Router();
 
@@ -25,7 +27,8 @@ router.put('/', ensureSessionActive, (req: Request, res: Response) => {
 });
 
 router.get('/', (req: Request, res: Response) => {
-  getAccounts()
+  const readRequest: AccountReadRequest = req.query;
+  getAccounts(readRequest, readRequest.page, readRequest.limit)
     .then((accounts: AccountEntity[]) => res.send(accounts))
     .catch(handleError.bind(this, res));
 });

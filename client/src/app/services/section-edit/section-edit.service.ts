@@ -40,7 +40,7 @@ export class SectionEditService {
     delete this._editSections[sectionName];
   }
 
-  cancelEdit(sectionName: string): void {    
+  cancelEdit(sectionName: string): void {
     this._getCancelEditConfirmObs(sectionName).subscribe((confirm: boolean) => {
       if (confirm) {
         this._resetControls(sectionName);
@@ -51,7 +51,7 @@ export class SectionEditService {
 
   private _getCancelEditConfirmObs(sectionName: string): Observable<boolean> {
     const controls: AbstractControl[] = this._editSections[sectionName].controls;
-    const dirty: boolean = controls.reduce((dirty: boolean, control: AbstractControl) => (dirty || control.dirty), false);
+    const dirty: boolean = controls.reduce((dirtyAcc: boolean, control: AbstractControl) => (dirtyAcc || control.dirty), false);
     return (dirty) ?
       this._confirmDialogService.displayConfirmDialog(
         'Are you sure you wish to cancel your changes? You will lose all unsaved changes.',

@@ -41,7 +41,7 @@ function _fillMissingContext(context: any, account: Account, template: string): 
 }
 
 function _getTransporter(mailTransporter: MailTransporter): any {
-  switch(mailTransporter) {
+  switch (mailTransporter) {
     case MailTransporter.NOREPLY: return noreplyTransporter;
     case MailTransporter.SUPPORT: return supportTransporter;
   }

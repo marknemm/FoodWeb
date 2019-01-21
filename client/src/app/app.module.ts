@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {
   MatToolbarModule,
   MatIconModule,
@@ -33,8 +33,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { AccountComponent } from './components/account/account.component';
-import { DonorsComponent } from './components/donors/donors.component';
-import { ReceiversComponent } from './components/receivers/receivers.component';
+import { AccountsComponent } from './components/accounts/accounts.component';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 import { AlertSnackBarComponent } from './components/alert-snack-bar/alert-snack-bar.component';
 import { OperationHoursComponent } from './components/child-components/operation-hours/operation-hours.component';
@@ -46,6 +45,7 @@ import { ProgressIndicatorComponent } from './components/child-components/progre
 import { UsernameComponent } from './components/child-components/username/username.component';
 import { PasswordComponent } from './components/child-components/password/password.component';
 import { EditSaveButtonComponent } from './components/child-components/edit-save-button/edit-save-button.component';
+import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
 
 @NgModule({
   declarations: [
@@ -57,8 +57,7 @@ import { EditSaveButtonComponent } from './components/child-components/edit-save
     SignupComponent,
     LogoutComponent,
     AccountComponent,
-    DonorsComponent,
-    ReceiversComponent,
+    AccountsComponent,
     AlertDialogComponent,
     AlertSnackBarComponent,
     OperationHoursComponent,
@@ -99,7 +98,8 @@ import { EditSaveButtonComponent } from './components/child-components/edit-save
     NgxMaterialTimepickerModule.forRoot()
   ],
   providers: [
-    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top' } }
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top' } },
+    { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true }
   ],
   entryComponents: [
     LoginComponent,
