@@ -10,6 +10,7 @@ import { AlertService } from '../alert/alert.service';
 import { AccountCreateRequest } from '../../../../../shared/src/interfaces/account-create-request';
 import { AccountUpdateRequest } from '../../../../../shared/src/interfaces/account-update-request';
 import { AccountReadRequest, AccountReadFilters } from '../../../../../shared/src/interfaces/account-read-request';
+import { ListResponse } from '../../../../../shared/src/interfaces/list-response';
 import { Account } from '../../../../../shared/src/interfaces/account';
 export { Account };
 
@@ -19,7 +20,6 @@ export { Account };
 export class AccountService {
 
   readonly url = '/server/account';
-  readonly accountReadLimit = 1000;
 
   constructor(
     private _httpClient: HttpClient,
@@ -80,12 +80,12 @@ export class AccountService {
       return of(window.history.state);
     }
     // Get account from server.
-    return this.getAccounts({ id }).pipe(
-      map((accounts: Account[]) => accounts[0])
+    return this.getAccounts({ id }, 1, 1).pipe(
+      map((response: ListResponse<Account>) => response.list[0])
     );
   }
 
-  listenAccountsQueryChange(): Observable<Account[]> {
+  listenAccountsQueryChange(): Observable<ListResponse<Account>> {
     return this._activatedRoute.queryParamMap.pipe(
       flatMap((params: ParamMap) => {
         const filters: AccountReadFilters = {};
@@ -95,18 +95,19 @@ export class AccountService {
           }
         });
         const page: number = (params.has('page') ? parseInt(params.get('page'), 10) : undefined);
-        return this.getAccounts(filters, page);
+        const limit: number = (params.has('limit') ? parseInt(params.get('limit'), 10) : undefined);
+        return this.getAccounts(filters, page, limit);
       })
     );
   }
 
-  getAccounts(filters: AccountReadFilters, page = 1): Observable<Account[]> {
+  getAccounts(filters: AccountReadFilters, page = 1, limit = 10): Observable<ListResponse<Account>> {
     const request = <AccountReadRequest>filters;
     request.page = page;
-    request.limit = this.accountReadLimit;
+    request.limit = limit;
     const params = new HttpParams({ fromObject: <any>request });
     this._pageProgressService.activate(true);
-    return this._httpClient.get<Account[]>(this.url, { params }).pipe(
+    return this._httpClient.get<ListResponse<Account>>(this.url, { params }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );

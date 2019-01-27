@@ -1,7 +1,8 @@
 <div class="paginator-container">
   <mat-paginator
     color="primary"
-    [pageSize]="10"
+    [pageIndex]="page - 1"
+    [pageSize]="limit"
     [pageSizeOptions]="[10, 20, 50]"
     [showFirstLastButtons]="true"
     [length]="length"

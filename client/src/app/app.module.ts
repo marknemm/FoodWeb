@@ -49,6 +49,7 @@ import { EditSaveButtonComponent } from './components/child-components/edit-save
 import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { PaginatorComponent } from './components/child-components/paginator/paginator.component';
+import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { PaginatorComponent } from './components/child-components/paginator/pagi
     EditSaveButtonComponent,
     PasswordResetComponent,
     PaginatorComponent,
+    ReturnLinkDirective,
   ],
   imports: [
     AgmCoreModule.forRoot({

@@ -9,7 +9,7 @@ import { savePassword } from './save-account';
 
 export async function savePasswordResetToken(username: string): Promise<void> {
   await getConnection().transaction(async (manager: EntityManager) => {
-    const account: AccountEntity = (await getAccounts({ username }, 1, 1))[0];
+    const account: AccountEntity = (await getAccounts({ username }, 1, 1))[0][0];
     if (!account) {
       throw new FoodWebError('Account not found. Be sure to enter a valid username.');
     }

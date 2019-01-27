@@ -4,9 +4,9 @@
 
 <div class="row">
   <div class="col-lg-6" *ngFor="let account of accounts">
-    <mat-card>
+    <mat-card id="account-{{ account.id }}">
       <mat-card-title>
-        <a [routerLink]="['/account']" [queryParams]="{ id: account.id }" [state]="account">
+        <a [routerLink]="['/account']" [queryParams]="{ id: account.id }" [state]="account" foodWebReturnLink="account-{{ account.id }}">
           {{ account.organization.organizationName }}
         </a>
       </mat-card-title>
@@ -17,6 +17,6 @@
   </div>
 </div>
 
-<!-- <div class="food-web-paginator-container">
-  <food-web-paginator></food-web-paginator>
-</div> -->
+<div class="food-web-paginator-container">
+  <food-web-paginator [length]="totalCount"></food-web-paginator>
+</div>

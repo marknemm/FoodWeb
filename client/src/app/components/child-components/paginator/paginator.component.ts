@@ -10,13 +10,32 @@ import { PageEvent } from '@angular/material';
 export class PaginatorComponent implements OnInit {
 
   @Input() length: number;
+  @Input() page: number;
+  @Input() limit: number;
 
   constructor(
     private _router: Router,
     private _activatedRoute: ActivatedRoute
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this._initPage();
+    this._initLimit();
+  }
+
+  private _initPage(): void {
+    if (!this.page) {
+      const pageParam: string = this._activatedRoute.snapshot.queryParamMap.get('page');
+      this.page = (pageParam ? parseInt(pageParam, 10) : 1);
+    }
+  }
+
+  private _initLimit(): void {
+    if (!this.limit) {
+      const limitParam: string = this._activatedRoute.snapshot.queryParamMap.get('limit');
+      this.limit = (limitParam ? parseInt(limitParam, 10) : 10);
+    }
+  }
 
   onPageEvent(event: PageEvent): void {
     this._router.navigate(

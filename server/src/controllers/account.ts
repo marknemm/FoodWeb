@@ -9,8 +9,9 @@ import { handleError } from '../helpers/food-web-error';
 import { savePasswordResetToken, resetPassword } from '../models/password-reset';
 import { AccountCreateRequest } from '../../../shared/src/interfaces/account-create-request';
 import { AccountUpdateRequest } from '../../../shared/src/interfaces/account-update-request';
-import { AccountReadRequest } from '../../../shared/src/interfaces/account-read-request';
+import { AccountReadRequest, AccountReadFilters } from '../../../shared/src/interfaces/account-read-request';
 import { PasswordResetRequest } from '../../../shared/src/interfaces/password-reset-request';
+import { ListResponse } from '../../../shared/src/interfaces/list-response';
 
 const router = express.Router();
 
@@ -31,7 +32,18 @@ router.put('/', ensureSessionActive, (req: Request, res: Response) => {
 router.get('/', (req: Request, res: Response) => {
   const readRequest: AccountReadRequest = req.query;
   getAccounts(readRequest, readRequest.page, readRequest.limit)
-    .then((accounts: AccountEntity[]) => res.send(accounts))
+    .then(([accounts, totalCount]: [AccountEntity[], number]) => {
+      const response: ListResponse<AccountEntity, AccountReadFilters> = {
+        list: accounts,
+        totalCount,
+        filters: readRequest,
+        page: readRequest.page,
+        limit: readRequest.limit,
+        startRank: (readRequest.page - 1) * readRequest.limit,
+        endRank: (readRequest.page - 1) * readRequest.limit + readRequest.limit - 1
+      };
+      res.send(response);
+    })
     .catch(handleError.bind(this, res));
 });
 
