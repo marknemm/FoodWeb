@@ -37,11 +37,11 @@ import { expressSession } from './middlewares/session.middleware';
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
 app.use(bodyParser.json({ limit: '500KB' })); // Need larger size to support cropped images (maybe change this in future to just use image bounds and media attachment).
+app.use(multer().any());
+app.use(forceHttps);
+app.use(expressSession);
 app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));
-app.use(expressSession);
-app.use(forceHttps);
-app.use(multer().any());
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 module.exports = app; // Make available for mocha testing suites.
 
