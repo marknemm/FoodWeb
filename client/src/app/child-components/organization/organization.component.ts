@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, Validators, FormGroupDirective } from '@angular/forms';
-import { FormHelperService } from '../../../services/form-helper/form-helper.service';
+import { FormHelperService } from '../../services/form-helper/form-helper.service';
 
 @Component({
   selector: 'food-web-organization',

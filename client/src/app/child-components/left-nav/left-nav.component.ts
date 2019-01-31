@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LeftNavService } from '../../../services/left-nav/left-nav.service';
-import { PageProgressService } from '../../../services/page-progress/page-progress.service';
+import { LeftNavService } from '../../services/left-nav/left-nav.service';
+import { PageProgressService } from '../../services/page-progress/page-progress.service';
 
 @Component({
   selector: 'food-web-left-nav',

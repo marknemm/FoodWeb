@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import { SessionService } from './../../services/session/session.service';
-import { PasswordResetService } from './../../services/password-reset/password-reset.service';
+import { SessionService } from '../../services/session/session.service';
+import { PasswordResetService } from '../../services/password-reset/password-reset.service';
 
 @Component({
   selector: 'food-web-login',

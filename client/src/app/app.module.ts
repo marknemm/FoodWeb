@@ -27,8 +27,6 @@ import { AgmCoreModule } from '@agm/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './components/child-components/header/header.component';
-import { LeftNavComponent } from './components/child-components/left-nav/left-nav.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
@@ -37,18 +35,21 @@ import { AccountComponent } from './components/account/account.component';
 import { AccountsComponent } from './components/accounts/accounts.component';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 import { AlertSnackBarComponent } from './components/alert-snack-bar/alert-snack-bar.component';
-import { OperationHoursComponent } from './components/child-components/operation-hours/operation-hours.component';
-import { ContactInfoComponent } from './components/child-components/contact-info/contact-info.component';
-import { OrganizationComponent } from './components/child-components/organization/organization.component';
-import { AccountTypeComponent } from './components/child-components/account-type/account-type.component';
-import { SignupVerificationComponent } from './components/signup-verification/signup-verification.component';
-import { ProgressIndicatorComponent } from './components/child-components/progress-indicator/progress-indicator.component';
-import { UsernameComponent } from './components/child-components/username/username.component';
-import { PasswordComponent } from './components/child-components/password/password.component';
-import { EditSaveButtonComponent } from './components/child-components/edit-save-button/edit-save-button.component';
-import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
-import { PaginatorComponent } from './components/child-components/paginator/paginator.component';
+import { SignupVerificationComponent } from './components/signup-verification/signup-verification.component';
+import { DonationComponent } from './components/donation/donation.component';
+import { LeftNavComponent } from './child-components/left-nav/left-nav.component';
+import { HeaderComponent } from './child-components/header/header.component';
+import { OperationHoursComponent } from './child-components/operation-hours/operation-hours.component';
+import { ContactInfoComponent } from './child-components/contact-info/contact-info.component';
+import { OrganizationComponent } from './child-components/organization/organization.component';
+import { AccountTypeComponent } from './child-components/account-type/account-type.component';
+import { ProgressIndicatorComponent } from './child-components/progress-indicator/progress-indicator.component';
+import { UsernameComponent } from './child-components/username/username.component';
+import { PasswordComponent } from './child-components/password/password.component';
+import { EditSaveButtonComponent } from './child-components/edit-save-button/edit-save-button.component';
+import { PaginatorComponent } from './child-components/paginator/paginator.component';
+import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
 
 @NgModule({
@@ -76,6 +77,7 @@ import { ReturnLinkDirective } from './directives/return-link/return-link.direct
     PasswordResetComponent,
     PaginatorComponent,
     ReturnLinkDirective,
+    DonationComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({

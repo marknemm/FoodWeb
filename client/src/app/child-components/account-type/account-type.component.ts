@@ -5,8 +5,8 @@ import {
 } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AccountType } from './../../../../../../shared/src/interfaces/account';
-import { Constants } from '../../../../../../shared/src/constants/constants';
+import { AccountType } from '../../../../../shared/src/interfaces/account';
+import { Constants } from '../../../../../shared/src/constants/constants';
 
 @Component({
   selector: 'food-web-account-type',

@@ -5,7 +5,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
   selector: '[foodWebReturnLink]'
 })
 export class ReturnLinkDirective {
-  
+
   @Input('foodWebReturnLink') returnFragment: string;
   @Input() routerLink: string[];
   @Input() queryParams: Params;

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Validators, FormGroup, ValidatorFn, FormControl, FormGroupDirective } from '@angular/forms';
-import { PasswordMatchService } from '../../../services/password-match/password-match.service';
-import { FormHelperService } from '../../../services/form-helper/form-helper.service';
-import { Validation } from '../../../../../../shared/src/constants/validation';
+import { Validators, FormGroup, ValidatorFn, FormGroupDirective } from '@angular/forms';
+import { PasswordMatchService } from '../../services/password-match/password-match.service';
+import { FormHelperService } from '../../services/form-helper/form-helper.service';
+import { Validation } from '../../../../../shared/src/constants/validation';
 
 export type PasswordFormMode = 'Login' | 'Signup' | 'Account';
 
