@@ -10,9 +10,7 @@ import { Request, Response } from 'express';
 // Set important paths in global.
 const PRODUCTION: boolean = (process.env['PRODUCTION']  === 'true');
 const QA: boolean = (process.env['QA'] === 'true');
-global['rootDir'] = (PRODUCTION || QA) ?
-  path.join(__dirname, '..', '..', '..', '..') :
-  path.join(__dirname, '..', '..');
+global['rootDir'] = path.join(__dirname, '..', '..', '..', '..');
 global['serverDir'] = path.join(global['rootDir'], 'server');
 global['clientDir'] = path.join(global['rootDir'], 'client');
 global['clientBuildDir'] = path.join(global['clientDir'], 'dist');

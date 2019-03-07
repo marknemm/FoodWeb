@@ -6,5 +6,6 @@
 export const environment = {
   production: false,
   e2e: false,
+  hmr: false,
   supportEmail: 'support@wnyfoodweb.com'
 };

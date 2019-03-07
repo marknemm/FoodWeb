@@ -1,6 +1,0 @@
-{
-  "watch": "src/**/*.ts",
-  "ext": "ts",
-  "ingore": ["src/**/*.spec.ts"],
-  "exec": "ts-node -P ./src/tsconfig.app.json ./src/index.ts"
-}

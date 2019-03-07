@@ -2,10 +2,7 @@ import { createConnection, Connection } from 'typeorm';
 import path = require('path');
 
 export function initDbConnectionPool(): Promise<Connection> {
-  const entitiesPath: string = (process.env.DEVELOPMENT === 'true') ?
-    path.join(__dirname, '..', 'entity', '*.ts') :
-    path.join(__dirname, '..', 'entity', '*.js');
-
+  const entitiesPath: string = path.join(__dirname, '..', 'entity', '*.js');
   return createConnection({
     type: 'postgres',
     host: process.env.DATABASE_HOST,

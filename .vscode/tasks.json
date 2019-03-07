@@ -1,15 +1,18 @@
 {
-    // View a static web page quickly.
-    "taskName": "staticWeb",
-    "command": "Chrome",
-    "windows": {
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "staticWeb",
+      "command": "Chrome",
+      "windows": {
         "command": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
-    },
-    "osx": {
+      },
+      "osx": {
         "command": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-    },
-    "args": [
+      },
+      "args": [
         "${file}"
-    ],
-    "problemMatchers": []
+      ]
+    }
+  ]
 }

@@ -5,13 +5,13 @@
   "main": "dist/server/src/index.js",
   "scripts": {
     "build": "tsc -p ./src/tsconfig.app.json && copyfiles ./.env ./dist/server/",
-    "build:watch": "tsc -w -p ./src/tsconfig.app.json",
+    "build:watch": "tsc-watch -p ./src/tsconfig.app.json",
     "build:e2e": "npm run build:watch",
     "clean": "rimraf ./dist ./coverage ./ormlogs.log",
     "clean:all": "npm run clean && rimraf ./node_modules",
-    "debug": "concurrently \"node --nolazy --debug-brk=5858 server/dist/index.js\" \"opn http://localhost:5000\"",
+    "debug": "tsc-watch -p ./src/tsconfig.app.json --onSuccess \"nodemon --inspect-brk=9229 ./dist/server/src/index.js\"",
     "lint": "tslint -p ./tsconfig.json",
-    "start": "nodemon",
+    "start": "tsc-watch -p ./src/tsconfig.app.json --onSuccess \"nodemon ./dist/server/src/index.js\"",
     "test": "npm run lint && ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts",
     "test:watch": "ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts"
   },
@@ -83,6 +83,7 @@
     "run-sequence": "^2.0.0",
     "ts-mocha": "^2.0.0",
     "ts-node": "^7.0.1",
+    "tsc-watch": "^2.1.2",
     "tslint": "^5.11.0"
   },
   "engines": {
