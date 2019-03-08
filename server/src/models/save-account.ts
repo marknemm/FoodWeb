@@ -22,11 +22,16 @@ export async function createAccount(account: Account, password: string): Promise
   return createdAccount;
 }
 
-export async function updateAccount(account: Account, password: string, oldPassword: string): Promise<AccountEntity> {
+export async function updateAccount(userId: number, account: Account, password: string, oldPassword: string): Promise<AccountEntity> {
+  if (userId !== account.id) {
+    throw new FoodWebError('User unauthorized to update account', 401);
+  }
+
   let updatedAccount: AccountEntity;
   await getConnection().transaction(async (manager: EntityManager) => {
     updatedAccount = await _saveAccount(manager, account);
     if (password) {
+      oldPassword = (oldPassword ? oldPassword : ' '); // Ensure we have an oldPassword to check against for extra security!
       await savePassword(manager, updatedAccount, password, oldPassword);
     }
   });
@@ -37,19 +42,39 @@ export async function updateAccount(account: Account, password: string, oldPassw
 
 export async function savePassword(manager: EntityManager, account: AccountEntity, password: string, oldPassword?: string, isReset = false): Promise<void> {
   _validatePassword(password);
+  const passwordHash: string = await _genPasswordHash(password);
+  const passwordEntity: PasswordEntity = _genPasswordEntity(passwordHash, account);
+  passwordEntity.id = await _getOldPasswordId(manager, account, oldPassword, isReset);
+  // If trying to update password without providing valid old password or going through password reset link, this will fail.
+  // The failure will be due to saving a password with a duplicate account reference (must be unique 1-1 relationship).
+  await manager.getRepository(PasswordEntity).save(passwordEntity);
+}
+
+async function _genPasswordHash(password: string): Promise<string> {
   const salt: string = await genSalt();
-  const passwordHash: string = await hash(password, salt);
+  return hash(password, salt);
+}
+
+function _genPasswordEntity(passwordHash: string, account: AccountEntity): PasswordEntity {
   const passwordEntity = new PasswordEntity();
   passwordEntity.passwordHash = passwordHash;
   passwordEntity.account = account;
+  return passwordEntity;
+}
+
+async function _getOldPasswordId(manager: EntityManager, account: AccountEntity, oldPassword: string, isReset: boolean): Promise<number> {
   if (oldPassword) {
-    passwordEntity.id = await _getOldPasswordId(account, oldPassword);
-  } else if (isReset) {
-    passwordEntity.id = (await manager.getRepository(PasswordEntity).findOne(
+    const matchId: number = await getPasswordId(account, oldPassword);
+    if (matchId == null)
+      throw new FoodWebError('Current password match failed', 401);
+    return matchId;
+  }
+  if (isReset) {
+    return (await manager.getRepository(PasswordEntity).findOne(
       { where: { account } }
     )).id;
   }
-  await manager.getRepository(PasswordEntity).save(passwordEntity);
+  return undefined;
 }
 
 async function _saveAccount(manager: EntityManager, account: Account): Promise<AccountEntity> {
@@ -73,12 +98,4 @@ function _validatePassword(password: string): void {
   if (!Validation.PASSWORD_REGEX.test(password)) {
     throw new FoodWebError('Password must contain at least 6 characters');
   }
-}
-
-async function _getOldPasswordId(account: Account, oldPassword: string): Promise<number> {
-  const matchId: number = await getPasswordId(account, oldPassword);
-  if (matchId == null) {
-    throw new FoodWebError('Current password match failed');
-  }
-  return matchId;
 }

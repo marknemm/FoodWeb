@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { ensureSessionActive } from '../middlewares/session.middleware';
 import { AccountEntity } from './../entity/account.entity';
 import { createAccount, updateAccount } from '../models/save-account';
-import { getAccounts } from '../models/get-account';
+import { getAccounts, AccountsQueryResult } from '../models/get-account';
 import { verifyAccount } from '../models/account-verification';
 import { handleError } from '../helpers/food-web-error';
 import { savePasswordResetToken, resetPassword } from '../models/password-reset';
@@ -24,7 +24,7 @@ router.post('/', (req: Request, res: Response) => {
 
 router.put('/', ensureSessionActive, (req: Request, res: Response) => {
   const updateRequest: AccountUpdateRequest = req.body;
-  updateAccount(updateRequest.account, updateRequest.password, updateRequest.oldPassword)
+  updateAccount(req.session.account.id, updateRequest.account, updateRequest.password, updateRequest.oldPassword)
     .then(_handleAccountSave.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });
@@ -32,8 +32,8 @@ router.put('/', ensureSessionActive, (req: Request, res: Response) => {
 router.get('/', (req: Request, res: Response) => {
   const readRequest: AccountReadRequest = req.query;
   getAccounts(readRequest, readRequest.page, readRequest.limit)
-    .then(([accounts, totalCount]: [AccountEntity[], number]) => {
-      const response: ListResponse<AccountEntity, AccountReadFilters> = {
+    .then(({ accounts, totalCount }: AccountsQueryResult) => {
+      const response: ListResponse = {
         list: accounts,
         totalCount,
         filters: readRequest,
