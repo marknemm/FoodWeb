@@ -38,7 +38,7 @@ export class SignupComponent implements OnInit {
 
   signup(): void {
     if (this.signupForm.valid) {
-      const account: Account = this.accountForm.get('account').value;
+      const account: Account = this.accountForm.value;
       const password: string = this.passwordForm.get('password').value;
       this._accountService.createAccount(account, password);
     }
