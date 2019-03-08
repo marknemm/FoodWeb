@@ -9,7 +9,7 @@ import { handleError } from '../helpers/food-web-error';
 import { savePasswordResetToken, resetPassword } from '../models/password-reset';
 import { AccountCreateRequest } from '../../../shared/src/interfaces/account-create-request';
 import { AccountUpdateRequest } from '../../../shared/src/interfaces/account-update-request';
-import { AccountReadRequest, AccountReadFilters } from '../../../shared/src/interfaces/account-read-request';
+import { AccountReadRequest } from '../../../shared/src/interfaces/account-read-request';
 import { PasswordResetRequest } from '../../../shared/src/interfaces/password-reset-request';
 import { ListResponse } from '../../../shared/src/interfaces/list-response';
 
