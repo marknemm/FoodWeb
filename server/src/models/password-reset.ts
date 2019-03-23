@@ -1,4 +1,4 @@
-import { EntityManager, getRepository, Repository, getConnection } from 'typeorm';
+import { EntityManager, getRepository, getConnection } from 'typeorm';
 import { randomBytes } from 'crypto';
 import { AccountEntity } from '../entity/account.entity';
 import { MailTransporter, sendEmail } from '../helpers/email';

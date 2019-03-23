@@ -14,7 +14,7 @@
     "lint": "ng lint",
     "start": "npm run hmr",
     "test": "npm run lint && ng test --watch=false --code-coverage --source-map",
-    "test:watch": "ng test --code-coverage --source-maps"
+    "test:watch": "ng test --code-coverage --source-map"
   },
   "private": true,
   "dependencies": {
@@ -53,6 +53,7 @@
     "zone.js": "^0.8.28"
   },
   "devDependencies": {
+    "@types/jasmine": "^3.3.12",
     "@types/lodash": "^4.14.118",
     "@types/moment-timezone": "^0.5.9",
     "@types/node": "^10.12.12",

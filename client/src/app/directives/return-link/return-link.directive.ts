@@ -26,7 +26,7 @@ export class ReturnLinkDirective {
     this._router.navigate(
       [this._activatedRoute.snapshot.url.toString()],
       {
-        fragment: `${this.returnFragment}`,
+        fragment: this.returnFragment,
         queryParams: this._activatedRoute.snapshot.queryParams,
         replaceUrl: true
       }
