@@ -51,6 +51,7 @@ import { EditSaveButtonComponent } from './child-components/edit-save-button/edi
 import { PaginatorComponent } from './child-components/paginator/paginator.component';
 import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
+import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 
 @NgModule({
   declarations: [
@@ -109,7 +110,8 @@ import { ReturnLinkDirective } from './directives/return-link/return-link.direct
   ],
   providers: [
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top' } },
-    { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
+    AccountHelper
   ],
   entryComponents: [
     LoginComponent,

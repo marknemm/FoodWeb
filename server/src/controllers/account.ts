@@ -5,9 +5,9 @@ import { AccountEntity } from './../entity/account.entity';
 import { createAccount, updateAccount } from '../models/save-account';
 import { getAccounts, AccountsQueryResult } from '../models/get-account';
 import { verifyAccount } from '../models/account-verification';
-import { handleError } from '../helpers/food-web-error';
+import { handleError } from '../middlewares/response-error.middleware';
 import { savePasswordResetToken, resetPassword } from '../models/password-reset';
-import { AccountCreateRequest } from '../../../shared/src/interfaces/account-create-request';
+import { AccountCreateRequest, Account } from '../../../shared/src/interfaces/account-create-request';
 import { AccountUpdateRequest } from '../../../shared/src/interfaces/account-update-request';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account-read-request';
 import { PasswordResetRequest } from '../../../shared/src/interfaces/password-reset-request';
@@ -18,14 +18,14 @@ const router = express.Router();
 router.post('/', (req: Request, res: Response) => {
   const createRequest: AccountCreateRequest = req.body;
   createAccount(createRequest.account, createRequest.password)
-    .then(_handleAccountSave.bind(this, req, res))
+    .then(_handleAccountSaveResult.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });
 
 router.put('/', ensureSessionActive, (req: Request, res: Response) => {
   const updateRequest: AccountUpdateRequest = req.body;
-  updateAccount(req.session.account.id, updateRequest.account, updateRequest.password, updateRequest.oldPassword)
-    .then(_handleAccountSave.bind(this, req, res))
+  updateAccount(req.session.account, updateRequest.account, updateRequest.password, updateRequest.oldPassword)
+    .then(_handleAccountSaveResult.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });
 
@@ -51,7 +51,7 @@ router.post('/verify', ensureSessionActive, (req: Request, res: Response) => {
   const account: AccountEntity = req.session.account;
   const verificationToken: string = req.body.verificationToken;
   verifyAccount(account, verificationToken)
-    .then(_handleAccountSave.bind(this, req, res))
+    .then(_handleAccountSaveResult.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });
 
@@ -69,8 +69,12 @@ router.put('/reset-password/', (req: Request, res: Response) => {
     .catch(handleError.bind(this, res));
 });
 
-function _handleAccountSave(req: Request, res: Response, account: AccountEntity): void {
-  req.session.account = account;
+function _handleAccountSaveResult(req: Request, res: Response, account: AccountEntity): void {
+  const curSessionAccount: Account = req.session.account;
+  // If the saved account is the current user's account (new or updated).
+  if (!curSessionAccount || curSessionAccount.id === account.id) {
+    req.session.account = account;
+  }
   res.send(account);
 }
 

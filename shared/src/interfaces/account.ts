@@ -3,7 +3,7 @@ import { ContactInfo } from './contact-info';
 import { OperationHours } from './operation-hours';
 export { OperationHours, ContactInfo, Organization };
 
-export type AccountType = 'Donor' | 'Receiver';
+export type AccountType = 'Donor' | 'Receiver' | 'Admin';
 
 export interface Account {
   id?: number;
