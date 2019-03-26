@@ -2,6 +2,7 @@ import { PrimaryGeneratedColumn, Entity, Column, OneToMany, OneToOne, Index, Upd
 import { ContactInfoEntity } from './contact-info.entity';
 import { OrganizationEntity } from './organization.entity';
 import { OperationHoursEntity } from './operation-hours.entity';
+import { DonationEntity } from './donation.entity';
 import { Account, AccountType } from './../../../shared/src/interfaces/account/account';
 
 @Entity('Account')
@@ -25,6 +26,9 @@ export class AccountEntity implements Account {
 
   @OneToMany((type) => OperationHoursEntity, (operationHours) => operationHours.account, { cascade: true })
   operationHours: OperationHoursEntity[];
+
+  @OneToMany((type) => DonationEntity, (donations) => donations.donorAccount, { cascade: true })
+  activeDonations: DonationEntity[];
 
   @UpdateDateColumn({ type: 'timestamp with time zone' })
   updateTimestamp: Date;

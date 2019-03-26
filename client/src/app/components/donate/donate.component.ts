@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, AbstractControl } from '@angular/forms';
 import { DonationService, Donation } from '../../services/donation/donation.service';
 
 @Component({
@@ -9,36 +9,41 @@ import { DonationService, Donation } from '../../services/donation/donation.serv
 })
 export class DonateComponent implements OnInit {
 
-  readonly donationTypes = ['Food', 'Merchandise', 'Cash', 'Service', 'Other'];
-  readonly document: Document = document;
-  donateForm: FormGroup;
+  /**
+   * The donation form. Will be initialized and filled by the Donation child component.
+   */
+  readonly donateForm: FormGroup = new FormGroup({});
+
+  /**
+   * Whether or not the donation for has been successfully submitted (completed).
+   */
+  donateComplete = false;
 
   constructor(
-    private _formBuilder: FormBuilder,
     private _donationService: DonationService
   ) {}
 
-  ngOnInit() {
-    this.donateForm = this._formBuilder.group({
-      donorFirstName: ['', Validators.required],
-      donorLastName: ['', Validators.required],
-      donationType: [null, Validators.required],
-      description: ['', Validators.required],
-      estimatedValue: [null, [Validators.required, Validators.min(0)]]
-    });
-  }
+  ngOnInit() {}
 
+  /**
+   * Submits the donation to be created on the server.
+   */
   donate(): void {
     if (this.donateForm.valid) {
-      this._donationService.createDonation(this.donateForm.getRawValue()).subscribe((donation: Donation) => {
-        console.log('Donation Saved!!!');
+      const donation: Donation = this.donateForm.getRawValue();
+      this._donationService.createDonation(donation).subscribe((savedDonation: Donation) => {
+        this.donateForm.patchValue(savedDonation);
+        this.donateComplete = true;
       });
     }
   }
 
-  canShowOtherTypeInput(): boolean {
-    const donationType: string = this.donateForm.get('donationType').value;
-    return (donationType != null && this.donationTypes.indexOf(donationType) < 0);
+  /**
+   * Resets the donation form to create another donation.
+   */
+  donateAgain(): void {
+    this.donateForm.reset();
+    this.donateComplete = false;
   }
 
 }

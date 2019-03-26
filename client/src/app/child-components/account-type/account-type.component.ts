@@ -5,8 +5,8 @@ import {
 } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ConstantsService } from '../../services/constants/constants.service';
 import { AccountType } from '../../../../../shared/src/interfaces/account/account';
-import { Constants } from '../../../../../shared/src/constants/constants';
 
 @Component({
   selector: 'food-web-account-type',
@@ -19,8 +19,6 @@ import { Constants } from '../../../../../shared/src/constants/constants';
 })
 export class AccountTypeComponent implements OnInit, OnDestroy, ControlValueAccessor, Validator {
 
-  readonly accountTypes: AccountType[] = Constants.ACCOUNT_TYPES;
-
   @Input() editing = false;
 
   accountTypeCtrl: FormControl;
@@ -28,6 +26,7 @@ export class AccountTypeComponent implements OnInit, OnDestroy, ControlValueAcce
   private $_destroy = new Subject();
 
   constructor(
+    public constantsService: ConstantsService,
     private _formBuilder: FormBuilder
   ) {}
 

@@ -52,6 +52,7 @@ import { SessionMonitorService } from './services/session-monitor/session-monito
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
 import { DonateComponent } from './components/donate/donate.component';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
+import { DonationComponent } from './child-components/donation/donation.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { AccountHelper } from '../../../shared/src/helpers/account-helper';
     PaginatorComponent,
     ReturnLinkDirective,
     DonateComponent,
+    DonationComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({
@@ -109,7 +111,7 @@ import { AccountHelper } from '../../../shared/src/helpers/account-helper';
     NgxMaterialTimepickerModule.forRoot()
   ],
   providers: [
-    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top' } },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top', duration: 5000 } },
     { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
     AccountHelper
   ],

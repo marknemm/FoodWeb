@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
+import { ConstantsService } from '../../services/constants/constants.service';
 import { ConfirmDialogService } from '../../services/confirm-dialog/confirm-dialog.service';
 import { OperationHoursValidationService } from '../../services/operation-hours-validation/operation-hours-validation.service';
 import { FormHelperService } from '../../services/form-helper/form-helper.service';
 import { FlexFormArray } from '../../etc/flex-form-array';
-import { Constants } from '../../../../../shared/src/constants/constants';
 
 @Component({
   selector: 'food-web-operation-hours',
@@ -13,13 +13,12 @@ import { Constants } from '../../../../../shared/src/constants/constants';
 })
 export class OperationHoursComponent implements OnInit {
 
-  readonly weekdays: string[] = Constants.WEEKDAYS;
-
   @Input() editing = false;
   @Input() formArray: FlexFormArray;
   @Input() formArrayName: string;
 
   constructor(
+    public constantsService: ConstantsService,
     public opHrsValidationService: OperationHoursValidationService,
     private _formGroupDirective: FormGroupDirective,
     private _formBuilder: FormBuilder,

@@ -30,7 +30,7 @@ export async function updateAccount(myAccount: Account, account: Account, passwo
 
   let updatedAccount: AccountEntity;
   await getConnection().transaction(async (manager: EntityManager) => {
-    updatedAccount = await _saveAccount(manager, myAccount, account);
+    updatedAccount = await _saveAccount(manager, account, myAccount);
     if (password) {
       oldPassword = (oldPassword ? oldPassword : ' '); // Ensure we have an oldPassword to check against for extra security!
       await savePassword(manager, updatedAccount, password, oldPassword, accountHelper.isAdmin(myAccount));
@@ -79,7 +79,8 @@ async function _getOldPasswordId(manager: EntityManager, account: AccountEntity,
   return undefined;
 }
 
-async function _saveAccount(manager: EntityManager, myAccount: Account, account: Account): Promise<AccountEntity> {
-  accountHelper.validateAccount(myAccount, account);
+async function _saveAccount(manager: EntityManager, account: Account, myAccount?: Account): Promise<AccountEntity> {
+  const allowAdminAccountType = (myAccount && myAccount.accountType === 'Admin');
+  accountHelper.validateAccount(account, allowAdminAccountType);
   return manager.getRepository(AccountEntity).save(account as AccountEntity);
 }

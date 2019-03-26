@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError, finalize, map } from 'rxjs/operators';
 import { PageProgressService } from '../page-progress/page-progress.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
+import { AlertService } from '../alert/alert.service';
 import { DonationCreateRequest, Donation } from '../../../../../shared/src/interfaces/donation/donation-create-request';
 export { Donation };
 
@@ -20,7 +21,8 @@ export class DonationService {
   constructor(
     private _httpClient: HttpClient,
     private _pageProgressService: PageProgressService,
-    private _errorHandlerService: ErrorHandlerService
+    private _errorHandlerService: ErrorHandlerService,
+    private _alertService: AlertService
   ) {}
 
   /**
@@ -33,7 +35,11 @@ export class DonationService {
     this._pageProgressService.activate(true);
     return this._httpClient.post<Donation>(this.url, request).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
-      finalize(() => this._pageProgressService.reset())
+      finalize(() => this._pageProgressService.reset()),
+      map((savedDonation: Donation) => {
+        this._alertService.displaySimpleMessage('Donation successful', 'success');
+        return savedDonation;
+      })
     );
   }
 }

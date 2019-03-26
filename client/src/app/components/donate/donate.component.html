@@ -2,49 +2,14 @@
 
   <mat-card class="donate-card">
     <mat-card-title class="donate-form-title list-title block-label">
-      Donation Form
+      {{ donateComplete ? 'Thank-You For Your Donation' : 'Donation Form' }}
     </mat-card-title>
     <mat-card-content>
-      <div class="row">
-        <div class="col-sm-6">
-          <mat-form-field class="fill">
-            <input matInput type="text" placeholder="Donor First Name" formControlName="donorFirstName" name="First Name">
-          </mat-form-field>
-        </div>
-        <div class="col-sm-6">
-          <mat-form-field class="fill">
-            <input matInput type="text" placeholder="Donor Last Name" formControlName="donorLastName" name="Last Name">
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6">
-          <mat-form-field class="fill">
-            <mat-select placeholder="Type of Donation" formControlName="donationType" name="Type of Donation">
-              <mat-option *ngFor="let donationType of donationTypes" [value]="donationType === 'Other' ? '' : donationType">
-                {{ donationType }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="fill" *ngIf="canShowOtherTypeInput()">
-            <input matInput type="text" placeholder="Enter Type of Donation" formControlName="donationType">
-          </mat-form-field>
-        </div>
-        <div class="col-sm-6">
-          <mat-form-field class="fill hide-number-spinner">
-            <span matPrefix *ngIf="estimatedValueInput.value || estimatedValueInput === document.activeElement">$</span>
-            <input matInput #estimatedValueInput type="number" min="0" placeholder="Estimated Value" formControlName="estimatedValue" name="Estimated Value">
-            <mat-error *ngIf="donateForm.get('estimatedValue').hasError('min')">Positive value required</mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <mat-form-field class="fill">
-        <textarea matInput class="donate-form-description" [matTextareaAutosize]="true" [matAutosizeMinRows]="1"
-          placeholder="Description" formControlName="description" name="Description"></textarea>
-      </mat-form-field>
+      <food-web-donation [formGroup]="donateForm" [editing]="!donateComplete"></food-web-donation>
     </mat-card-content>
     <mat-card-actions class="align-right">
-      <button mat-raised-button type="submit" color="primary" [disabled]="donateForm.invalid">Donate</button>
+      <button mat-raised-button type="submit" color="primary" *ngIf="!donateComplete" [disabled]="donateForm.invalid">Donate</button>
+      <button mat-raised-button type="button" color="primary" *ngIf="donateComplete" (click)="donateAgain()">Donate Again</button>
     </mat-card-actions>
   </mat-card>
 

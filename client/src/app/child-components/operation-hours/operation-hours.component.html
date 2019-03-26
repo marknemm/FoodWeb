@@ -8,7 +8,7 @@
         <div class="weekday-field">
           <mat-form-field class="fill no-pad" floatLabel="never">
             <mat-select placeholder="Weekday" formControlName="weekday">
-              <mat-option *ngFor="let weekday of weekdays; let i = index" [value]="weekday">{{ weekday }}</mat-option>
+              <mat-option *ngFor="let weekday of constantsService.WEEKDAYS; let i = index" [value]="weekday">{{ weekday }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
