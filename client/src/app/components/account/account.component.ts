@@ -15,10 +15,12 @@ import { FlexFormArray } from '../../etc/flex-form-array';
 })
 export class AccountComponent implements OnInit, OnDestroy {
 
+  originalAccount: Account;
   accountUpdateForm: FormGroup;
   accountForm: FormGroup;
   passwordForm: FormGroup;
   myAccount: boolean;
+  passwordFormMode = 'Account';
 
   private _destroy$ = new Subject();
 
@@ -50,10 +52,13 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   private _listenAccountChange(): void {
-    this._accountService.listenAccoundQueryChange().pipe(
+    this._accountService.listenAccountQueryChange().pipe(
       takeUntil(this._destroy$)
     ).subscribe((account: Account) => {
-      this.myAccount = (account.id === this.sessionService.accountId);
+      this.originalAccount = account;
+      this.myAccount = this.sessionService.isMyAccount(account.id);
+      // An admin account does not need to input the old password to update an account password.
+      this.passwordFormMode = (this.sessionService.isAdmin ? 'Signup' : 'Account');
       setTimeout(() => this.accountForm.patchValue(account));
     });
   }
@@ -78,12 +83,13 @@ export class AccountComponent implements OnInit, OnDestroy {
     const shouldSave: boolean = this.sectionEditService.shouldSaveSection(editSection);
     if (shouldSave) {
       properties = properties.filter((property: string) => property !== 'password');
-      this._accountService.updateAccount(properties, this.accountForm.value, this.passwordForm.value)
+      this._accountService.updateAccount(this.originalAccount, properties, this.accountForm.value, this.passwordForm.value)
         .subscribe(this._handleSaveSuccess.bind(this, editSection));
     }
   }
 
   private _handleSaveSuccess(editSection: string, account: Account): void {
+    this.originalAccount = account;
     this.sectionEditService.stopEdit(editSection);
     if (editSection === 'password') {
       this.passwordForm.reset();

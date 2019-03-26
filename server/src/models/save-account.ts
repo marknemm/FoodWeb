@@ -5,9 +5,10 @@ import { formatOperationHoursTimes } from '../helpers/operation-hours-converter'
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordEntity } from '../entity/password.entity';
 import { getPasswordId } from '../helpers/password-match';
-import { FoodWebError } from '../helpers/food-web-error';
-import { Account } from '../../../shared/src/interfaces/account';
-import { Validation } from '../../../shared/src/constants/validation';
+import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
+import { FoodWebError } from '../../../shared/src/helpers/food-web-error';
+
+const accountHelper = new AccountHelper();
 
 export async function createAccount(account: Account, password: string): Promise<AccountEntity> {
   let createdAccount: AccountEntity;
@@ -22,17 +23,17 @@ export async function createAccount(account: Account, password: string): Promise
   return createdAccount;
 }
 
-export async function updateAccount(userId: number, account: Account, password: string, oldPassword: string): Promise<AccountEntity> {
-  if (userId !== account.id) {
+export async function updateAccount(myAccount: Account, account: Account, password: string, oldPassword: string): Promise<AccountEntity> {
+  if (!accountHelper.isMyAccount(myAccount, account.id)) {
     throw new FoodWebError('User unauthorized to update account', 401);
   }
 
   let updatedAccount: AccountEntity;
   await getConnection().transaction(async (manager: EntityManager) => {
-    updatedAccount = await _saveAccount(manager, account);
+    updatedAccount = await _saveAccount(manager, account, myAccount);
     if (password) {
       oldPassword = (oldPassword ? oldPassword : ' '); // Ensure we have an oldPassword to check against for extra security!
-      await savePassword(manager, updatedAccount, password, oldPassword);
+      await savePassword(manager, updatedAccount, password, oldPassword, accountHelper.isAdmin(myAccount));
     }
   });
 
@@ -41,7 +42,7 @@ export async function updateAccount(userId: number, account: Account, password: 
 }
 
 export async function savePassword(manager: EntityManager, account: AccountEntity, password: string, oldPassword?: string, isReset = false): Promise<void> {
-  _validatePassword(password);
+  accountHelper.validatePassword(password);
   const passwordHash: string = await _genPasswordHash(password);
   const passwordEntity: PasswordEntity = _genPasswordEntity(passwordHash, account);
   passwordEntity.id = await _getOldPasswordId(manager, account, oldPassword, isReset);
@@ -63,39 +64,23 @@ function _genPasswordEntity(passwordHash: string, account: AccountEntity): Passw
 }
 
 async function _getOldPasswordId(manager: EntityManager, account: AccountEntity, oldPassword: string, isReset: boolean): Promise<number> {
-  if (oldPassword) {
-    const matchId: number = await getPasswordId(account, oldPassword);
-    if (matchId == null)
-      throw new FoodWebError('Current password match failed', 401);
-    return matchId;
-  }
   if (isReset) {
     return (await manager.getRepository(PasswordEntity).findOne(
       { where: { account } }
     )).id;
   }
+  if (oldPassword) {
+    const matchId: number = await getPasswordId(account, oldPassword);
+    if (matchId == null) {
+      throw new FoodWebError('Current password match failed', 401);
+    }
+    return matchId;
+  }
   return undefined;
 }
 
-async function _saveAccount(manager: EntityManager, account: Account): Promise<AccountEntity> {
-  _validateAccount(account);
+async function _saveAccount(manager: EntityManager, account: Account, myAccount?: Account): Promise<AccountEntity> {
+  const allowAdminAccountType = (myAccount && myAccount.accountType === 'Admin');
+  accountHelper.validateAccount(account, allowAdminAccountType);
   return manager.getRepository(AccountEntity).save(account as AccountEntity);
-}
-
-function _validateAccount(account: Account): void {
-  if (!Validation.EMAIL_REGEX.test(account.contactInfo.email)) {
-    throw new FoodWebError('Invalid email address');
-  }
-  if (!Validation.PHONE_REGEX.test(account.contactInfo.phoneNumber)) {
-    throw new FoodWebError('Invalid phone number');
-  }
-  if (!Validation.POSTAL_CODE_REGEX.test(account.contactInfo.postalCode)) {
-    throw new FoodWebError('Invalid zip/postal code');
-  }
-}
-
-function _validatePassword(password: string): void {
-  if (!Validation.PASSWORD_REGEX.test(password)) {
-    throw new FoodWebError('Password must contain at least 6 characters');
-  }
 }

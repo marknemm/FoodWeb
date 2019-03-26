@@ -3,8 +3,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, EMPTY } from 'rxjs';
 import { map, catchError, finalize } from 'rxjs/operators';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
-import { LoginRequest } from '../../../../../shared/src/interfaces/login-request';
-import { Account } from '../../../../../shared/src/interfaces/account';
+import { LoginRequest } from '../../../../../shared/src/interfaces/session/login-request';
+import { AccountHelper, Account } from '../../../../../shared/src/helpers/account-helper';
 export { Account };
 
 @Injectable({
@@ -20,7 +20,8 @@ export class SessionService {
 
   constructor(
     private _httpClient: HttpClient,
-    private _errorHandlerService: ErrorHandlerService
+    private _errorHandlerService: ErrorHandlerService,
+    private _accountHelper: AccountHelper
   ) {
     // Attempt to get account from local browser storage upon init.
     const jsonAccount: string = localStorage.getItem('account');
@@ -52,8 +53,24 @@ export class SessionService {
     return this._account != null;
   }
 
+  get isAdmin(): boolean {
+    return this._accountHelper.isAdmin(this.account);
+  }
+
+  get isDonor(): boolean {
+    return this._accountHelper.isDonor(this.account);
+  }
+
+  get isReceiver(): boolean {
+    return this._accountHelper.isReceiver(this.account);
+  }
+
   get loginErr(): string {
     return this._loginErr;
+  }
+
+  isMyAccount(accountId: number, ignoreAdmin = false): boolean {
+    return this._accountHelper.isMyAccount(this.account, accountId, ignoreAdmin);
   }
 
   login(usernameEmail: string, password: string): Observable<void> {

@@ -7,12 +7,17 @@ import { SessionService } from '../session/session.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { PageProgressService } from '../page-progress/page-progress.service';
 import { AlertService } from '../alert/alert.service';
-import { AccountCreateRequest } from '../../../../../shared/src/interfaces/account-create-request';
-import { AccountUpdateRequest } from '../../../../../shared/src/interfaces/account-update-request';
-import { AccountReadRequest, AccountReadFilters } from '../../../../../shared/src/interfaces/account-read-request';
 import { ListResponse } from '../../../../../shared/src/interfaces/list-response';
-import { Account } from '../../../../../shared/src/interfaces/account';
+import { AccountCreateRequest } from '../../../../../shared/src/interfaces/account/account-create-request';
+import { AccountUpdateRequest } from '../../../../../shared/src/interfaces/account/account-update-request';
+import { AccountReadRequest, AccountReadFilters } from '../../../../../shared/src/interfaces/account/account-read-request';
+import { Account } from '../../../../../shared/src/interfaces/account/account';
 export { Account };
+
+export interface PasswordUpdate {
+  password: string;
+  oldPassword: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -39,29 +44,31 @@ export class AccountService {
     ).subscribe((savedAccount: Account) => this._sessionService.account = savedAccount);
   }
 
-  updateAccount(accountUpdateProps: string[], accountUpdate: Account, passwordUpdate: { password: string; oldPassword: string }): Observable<Account> {
-    const request: AccountUpdateRequest = this._genAccountUpdateRequest(accountUpdateProps, accountUpdate, passwordUpdate);
-    console.log(request);
+  updateAccount(originalAccount: Account, accountUpdateProps: string[], accountUpdate: Account, passwordUpdate: PasswordUpdate): Observable<Account> {
+    const request: AccountUpdateRequest = this._genAccountUpdateRequest(originalAccount, accountUpdateProps, accountUpdate, passwordUpdate);
     this._pageProgressService.activate(true);
     return this._httpClient.put<Account>(this.url, request).pipe(
       map((savedAccount: Account) => {
-        this._sessionService.account = savedAccount;
+        // If user has updated their own account, then update client's session storage.
+        if (savedAccount.id === this._sessionService.account.id) {
+          this._sessionService.account = savedAccount;
+        }
         this._alertService.displaySimpleMessage('Account update successful', 'success');
-        return this._sessionService.account;
+        return savedAccount;
       }),
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );
   }
 
-  private _genAccountUpdateRequest(accountUpdateProps: string[], accountUpdate: Account, passwordUpdate: { password: string; oldPassword: string }): AccountUpdateRequest {
+  private _genAccountUpdateRequest(originalAccount: Account, accountUpdateProps: string[], accountUpdate: Account, passwordUpdate: PasswordUpdate): AccountUpdateRequest {
     const { password, oldPassword } = passwordUpdate;
-    const account: Account = Object.assign({}, this._sessionService.account);
+    const account: Account = Object.assign({}, originalAccount);
     accountUpdateProps.forEach((property: string) => account[property] = accountUpdate[property]);
     return { account, password, oldPassword };
   }
 
-  listenAccoundQueryChange(): Observable<Account> {
+  listenAccountQueryChange(): Observable<Account> {
     return this._activatedRoute.queryParamMap.pipe(
       flatMap((paramMap: ParamMap) => {
         const id: number = (paramMap.has('id') ? parseInt(paramMap.get('id'), 10) : undefined);

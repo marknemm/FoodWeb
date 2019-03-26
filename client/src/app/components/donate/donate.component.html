@@ -1,0 +1,16 @@
+<form [formGroup]="donateForm" class="donate-form" (submit)="donate()">
+
+  <mat-card class="donate-card">
+    <mat-card-title class="donate-form-title list-title block-label">
+      {{ donateComplete ? 'Thank-You For Your Donation' : 'Donation Form' }}
+    </mat-card-title>
+    <mat-card-content>
+      <food-web-donation [formGroup]="donateForm" [editing]="!donateComplete"></food-web-donation>
+    </mat-card-content>
+    <mat-card-actions class="align-right">
+      <button mat-raised-button type="submit" color="primary" *ngIf="!donateComplete" [disabled]="donateForm.invalid">Donate</button>
+      <button mat-raised-button type="button" color="primary" *ngIf="donateComplete" (click)="donateAgain()">Donate Again</button>
+    </mat-card-actions>
+  </mat-card>
+
+</form>

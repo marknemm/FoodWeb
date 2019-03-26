@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { AccountType } from '../../../../../shared/src/interfaces/account';
+import { AccountType } from '../../../../../shared/src/interfaces/account/account';
 
 @Injectable({
   providedIn: 'root'

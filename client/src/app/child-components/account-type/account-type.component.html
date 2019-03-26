@@ -1,6 +1,6 @@
 <div class="account-type-container">
   <mat-radio-group *ngIf="editing" class="account-type-radio-group" [formControl]="accountTypeCtrl">
-    <mat-radio-button class="account-type-radio-button" *ngFor="let accountType of accountTypes" [value]="accountType">
+    <mat-radio-button class="account-type-radio-button" *ngFor="let accountType of constantsService.ACCOUNT_TYPES" [value]="accountType">
       {{ accountType }}
     </mat-radio-button>
   </mat-radio-group>

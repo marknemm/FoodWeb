@@ -1,9 +1,10 @@
-import { getRepository } from 'typeorm';
+import { getRepository, SelectQueryBuilder } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
-import { Account } from '../../../shared/src/interfaces/account';
 import { checkPasswordMatch } from '../helpers/password-match';
 import { FoodWebError } from '../helpers/food-web-error';
 import { formatOperationHoursTimes } from '../helpers/operation-hours-converter';
+import { Account } from '../../../shared/src/interfaces/account/account';
+import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 
 /**
  * Performs the login for a given user.
@@ -35,6 +36,8 @@ async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> 
   if (!account) {
     throw new Error(`User could not be found with username/email: ${usernameEmail}`);
   }
+
+  account.verified = (await getRepository(UnverifiedAccountEntity).count({ where: { account } })) === 0;
   formatOperationHoursTimes(account.operationHours);
   return account;
 }

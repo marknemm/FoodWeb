@@ -37,7 +37,6 @@ import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.com
 import { AlertSnackBarComponent } from './components/alert-snack-bar/alert-snack-bar.component';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { SignupVerificationComponent } from './components/signup-verification/signup-verification.component';
-import { DonationComponent } from './components/donation/donation.component';
 import { LeftNavComponent } from './child-components/left-nav/left-nav.component';
 import { HeaderComponent } from './child-components/header/header.component';
 import { OperationHoursComponent } from './child-components/operation-hours/operation-hours.component';
@@ -51,6 +50,9 @@ import { EditSaveButtonComponent } from './child-components/edit-save-button/edi
 import { PaginatorComponent } from './child-components/paginator/paginator.component';
 import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
+import { DonateComponent } from './components/donate/donate.component';
+import { AccountHelper } from '../../../shared/src/helpers/account-helper';
+import { DonationComponent } from './child-components/donation/donation.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +79,7 @@ import { ReturnLinkDirective } from './directives/return-link/return-link.direct
     PasswordResetComponent,
     PaginatorComponent,
     ReturnLinkDirective,
+    DonateComponent,
     DonationComponent,
   ],
   imports: [
@@ -108,8 +111,9 @@ import { ReturnLinkDirective } from './directives/return-link/return-link.direct
     NgxMaterialTimepickerModule.forRoot()
   ],
   providers: [
-    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top' } },
-    { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true }
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top', duration: 5000 } },
+    { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
+    AccountHelper
   ],
   entryComponents: [
     LoginComponent,

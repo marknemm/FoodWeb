@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { EMPTY, ObservableInput } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { SessionService } from '../session/session.service';
-import { Account } from '../../../../../shared/src/interfaces/account';
-import { AccountVerificationRequest } from '../../../../../shared/src/interfaces/account-verification-request';
+import { Account } from '../../../../../shared/src/interfaces/account/account';
+import { AccountVerificationRequest } from '../../../../../shared/src/interfaces/account/account-verification-request';
 
 @Injectable({
   providedIn: 'root'
