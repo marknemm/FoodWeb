@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { DonationService, Donation } from '../../services/donation/donation.service';
 
 @Component({
   selector: 'food-web-donate',
@@ -13,7 +14,8 @@ export class DonateComponent implements OnInit {
   donateForm: FormGroup;
 
   constructor(
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private _donationService: DonationService
   ) {}
 
   ngOnInit() {
@@ -26,9 +28,11 @@ export class DonateComponent implements OnInit {
     });
   }
 
-  donate() {
+  donate(): void {
     if (this.donateForm.valid) {
-      console.log(this.donateForm.value);
+      this._donationService.createDonation(this.donateForm.getRawValue()).subscribe((donation: Donation) => {
+        console.log('Donation Saved!!!');
+      });
     }
   }
 

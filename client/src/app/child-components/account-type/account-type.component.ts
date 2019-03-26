@@ -5,7 +5,7 @@ import {
 } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AccountType } from '../../../../../shared/src/interfaces/account';
+import { AccountType } from '../../../../../shared/src/interfaces/account/account';
 import { Constants } from '../../../../../shared/src/constants/constants';
 
 @Component({

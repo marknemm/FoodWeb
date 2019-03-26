@@ -5,4 +5,5 @@ export interface AccountReadFilters {
   username?: string;
   accountType?: AccountType;
   email?: string;
+  organizationName?: string;
 }

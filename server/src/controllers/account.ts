@@ -1,16 +1,16 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { ensureSessionActive } from '../middlewares/session.middleware';
+import { handleError } from '../middlewares/response-error.middleware';
 import { AccountEntity } from './../entity/account.entity';
 import { createAccount, updateAccount } from '../models/save-account';
 import { getAccounts, AccountsQueryResult } from '../models/get-account';
 import { verifyAccount } from '../models/account-verification';
-import { handleError } from '../middlewares/response-error.middleware';
 import { savePasswordResetToken, resetPassword } from '../models/password-reset';
-import { AccountCreateRequest, Account } from '../../../shared/src/interfaces/account-create-request';
-import { AccountUpdateRequest } from '../../../shared/src/interfaces/account-update-request';
-import { AccountReadRequest } from '../../../shared/src/interfaces/account-read-request';
-import { PasswordResetRequest } from '../../../shared/src/interfaces/password-reset-request';
+import { AccountCreateRequest, Account } from '../../../shared/src/interfaces/account/account-create-request';
+import { AccountUpdateRequest } from '../../../shared/src/interfaces/account/account-update-request';
+import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
+import { PasswordResetRequest } from '../../../shared/src/interfaces/account/password-reset-request';
 import { ListResponse } from '../../../shared/src/interfaces/list-response';
 
 const router = express.Router();

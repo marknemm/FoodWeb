@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { AccountEntity } from './account.entity';
-import { OperationHours } from '../../../shared/src/interfaces/account';
+import { OperationHours } from '../../../shared/src/interfaces/account/account';
 
 @Entity('OperationHours')
 export class OperationHoursEntity implements OperationHours {

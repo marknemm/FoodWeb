@@ -2,7 +2,7 @@ import 'dotenv';
 import nodemailer = require('nodemailer');
 import nodemailerHandlebars = require('nodemailer-express-handlebars');
 import path = require('path');
-import { Account } from '../../../shared/src/interfaces/account';
+import { Account } from '../../../shared/src/interfaces/account/account';
 
 export enum MailTransporter {
   NOREPLY = 'NOREPLY',

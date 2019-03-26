@@ -6,7 +6,7 @@ import { catchError, finalize, map } from 'rxjs/operators';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { SessionService, Account } from '../session/session.service';
 import { PageProgressService } from '../page-progress/page-progress.service';
-import { PasswordResetRequest } from '../../../../../shared/src/interfaces/password-reset-request';
+import { PasswordResetRequest } from '../../../../../shared/src/interfaces/account/password-reset-request';
 
 @Injectable({
   providedIn: 'root'

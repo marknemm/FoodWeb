@@ -2,7 +2,7 @@ import { PrimaryGeneratedColumn, Entity, Column, OneToMany, OneToOne, Index, Upd
 import { ContactInfoEntity } from './contact-info.entity';
 import { OrganizationEntity } from './organization.entity';
 import { OperationHoursEntity } from './operation-hours.entity';
-import { Account, AccountType } from './../../../shared/src/interfaces/account';
+import { Account, AccountType } from './../../../shared/src/interfaces/account/account';
 
 @Entity('Account')
 export class AccountEntity implements Account {

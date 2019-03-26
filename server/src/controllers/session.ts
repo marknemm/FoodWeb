@@ -2,8 +2,8 @@ import express = require('express');
 import { Request, Response } from 'express';
 import { login } from '../models/login';
 import { handleError } from '../middlewares/response-error.middleware';
-import { LoginRequest } from './../../../shared/src/interfaces/login-request';
-import { Account } from './../../../shared/src/interfaces/account';
+import { LoginRequest } from './../../../shared/src/interfaces/session/login-request';
+import { Account } from './../../../shared/src/interfaces/account/account';
 
 const router = express.Router();
 

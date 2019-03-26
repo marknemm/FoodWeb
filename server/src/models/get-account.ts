@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { formatOperationHoursTimes } from '../helpers/operation-hours-converter';
-import { AccountReadFilters } from '../../../shared/src/interfaces/account-read-filters';
+import { AccountReadFilters } from '../../../shared/src/interfaces/account/account-read-filters';
 
 export interface AccountsQueryResult {
   accounts: AccountEntity[];
