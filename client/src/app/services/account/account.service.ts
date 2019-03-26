@@ -7,11 +7,11 @@ import { SessionService } from '../session/session.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { PageProgressService } from '../page-progress/page-progress.service';
 import { AlertService } from '../alert/alert.service';
-import { AccountCreateRequest } from '../../../../../shared/src/interfaces/account-create-request';
-import { AccountUpdateRequest } from '../../../../../shared/src/interfaces/account-update-request';
-import { AccountReadRequest, AccountReadFilters } from '../../../../../shared/src/interfaces/account-read-request';
 import { ListResponse } from '../../../../../shared/src/interfaces/list-response';
-import { Account } from '../../../../../shared/src/interfaces/account';
+import { AccountCreateRequest } from '../../../../../shared/src/interfaces/account/account-create-request';
+import { AccountUpdateRequest } from '../../../../../shared/src/interfaces/account/account-update-request';
+import { AccountReadRequest, AccountReadFilters } from '../../../../../shared/src/interfaces/account/account-read-request';
+import { Account } from '../../../../../shared/src/interfaces/account/account';
 export { Account };
 
 export interface PasswordUpdate {

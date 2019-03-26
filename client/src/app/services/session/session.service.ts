@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, EMPTY } from 'rxjs';
 import { map, catchError, finalize } from 'rxjs/operators';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
-import { LoginRequest } from '../../../../../shared/src/interfaces/login-request';
+import { LoginRequest } from '../../../../../shared/src/interfaces/session/login-request';
 import { AccountHelper, Account } from '../../../../../shared/src/helpers/account-helper';
 export { Account };
 

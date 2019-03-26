@@ -43,8 +43,10 @@ app.use(express.static(global['publicDir']));
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 module.exports = app; // Make available for mocha testing suites.
 
+// Connect Express sub-module controllers.
 app.use('/server/session', require('./controllers/session'));
 app.use('/server/account', require('./controllers/account'));
+app.use('/server/donation', require('./controllers/donation'));
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {

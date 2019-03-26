@@ -1,4 +1,4 @@
-import { Account } from '../interfaces/account';
+import { Account } from '../interfaces/account/account';
 import { Validation } from '../constants/validation';
 import { FoodWebError } from './food-web-error';
 export { Account };
