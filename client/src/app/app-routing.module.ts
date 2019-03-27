@@ -8,6 +8,7 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { AccountComponent } from './components/account/account.component';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { AuthGaurdService } from './services/auth-gaurd/auth-gaurd.service';
+import { DonateComponent } from './components/donate/donate.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -19,7 +20,8 @@ const routes: Routes = [
   {path: 'account', component: AccountComponent, canActivate: [AuthGaurdService]},
   {path: 'logout', component: LogoutComponent},
   {path: 'accounts', component: AccountsComponent},
-  {path: 'password-reset', component: PasswordResetComponent}
+  {path: 'password-reset', component: PasswordResetComponent},
+  {path: 'donate', component: DonateComponent}
 ];
 
 @NgModule({

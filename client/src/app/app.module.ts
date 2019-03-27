@@ -37,7 +37,6 @@ import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.com
 import { AlertSnackBarComponent } from './components/alert-snack-bar/alert-snack-bar.component';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { SignupVerificationComponent } from './components/signup-verification/signup-verification.component';
-import { DonationComponent } from './components/donation/donation.component';
 import { LeftNavComponent } from './child-components/left-nav/left-nav.component';
 import { HeaderComponent } from './child-components/header/header.component';
 import { OperationHoursComponent } from './child-components/operation-hours/operation-hours.component';
@@ -51,6 +50,7 @@ import { EditSaveButtonComponent } from './child-components/edit-save-button/edi
 import { PaginatorComponent } from './child-components/paginator/paginator.component';
 import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
+import { DonateComponent } from './components/donate/donate.component';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 
 @NgModule({
@@ -78,7 +78,7 @@ import { AccountHelper } from '../../../shared/src/helpers/account-helper';
     PasswordResetComponent,
     PaginatorComponent,
     ReturnLinkDirective,
-    DonationComponent,
+    DonateComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({

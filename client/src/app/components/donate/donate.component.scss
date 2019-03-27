@@ -1,0 +1,19 @@
+.donate-form {
+  text-align: center;
+  width: 100%;
+
+  .donate-card {
+    display: inline-block;
+    text-align: left;
+    width: 100%;
+    max-width: 900px;
+
+    .donate-form-title {
+      text-align: center;
+    }
+
+    .donate-form-description {
+      overflow-y: hidden;
+    }
+  }
+}
