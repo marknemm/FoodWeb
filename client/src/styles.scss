@@ -42,3 +42,11 @@ html, body {
     margin-left: 7px;
   }
 }
+
+.hide-number-spinner {
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none !important; 
+    margin: 0; 
+  }
+}
