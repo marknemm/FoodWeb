@@ -2,25 +2,25 @@
   <div>Thank-you for your donation!</div>
   <p>
     You can view and edit your donation at this
-    <a href="{{ env.SERVER_HOST_ADDRESS }}/">link</a>.
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
   </p>
-  <p>A summary of your donation can be found below:</p>
+  <p style="font-weight: bold; margin-bottom: 0px;">Donation Summary:</p>
   <table style="border: none">
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Donor Name:</td>
+      <td style="border: none; color: #795548; padding-right: 10px">Donor:</td>
       <td style="border: none">{{ donation.donorFirstName }} {{ donation.donorLastName }}</td>
     </tr>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Type of Donation:</td>
+      <td style="border: none; color: #795548; padding-right: 10px">Type:</td>
       <td style="border: none">{{ donation.donationType }}</td>
     </tr>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Estimated Value:</td>
+      <td style="border: none; color: #795548; padding-right: 10px">Value:</td>
       <td style="border: none">${{ donation.estimatedValue }}</td>
     </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px;">Description:</td>
+      <td style="border: none; min-width: 300px;">{{ donation.description }}</td>
+    </tr>
   </table>
-  <div style="margin-top: 10px">
-    <span style="color: #795548">Description: </span>
-    <span>{{ donation.description }}</span>
-  </div>
 </div>

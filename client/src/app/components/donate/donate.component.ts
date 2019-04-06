@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, AbstractControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { DonationService, Donation } from '../../services/donation/donation.service';
 
 @Component({
@@ -15,9 +15,10 @@ export class DonateComponent implements OnInit {
   readonly donateForm: FormGroup = new FormGroup({});
 
   /**
-   * Whether or not the donation for has been successfully submitted (completed).
+   * The newly saved donation that is only set once the donation is complete.
+   * Will be unset if the user chooses to donate again.
    */
-  donateComplete = false;
+  savedDonation: Donation = null;
 
   constructor(
     private _donationService: DonationService
@@ -32,8 +33,7 @@ export class DonateComponent implements OnInit {
     if (this.donateForm.valid) {
       const donation: Donation = this.donateForm.getRawValue();
       this._donationService.createDonation(donation).subscribe((savedDonation: Donation) => {
-        this.donateForm.patchValue(savedDonation);
-        this.donateComplete = true;
+        this.savedDonation = savedDonation;
       });
     }
   }
@@ -43,7 +43,7 @@ export class DonateComponent implements OnInit {
    */
   donateAgain(): void {
     this.donateForm.reset();
-    this.donateComplete = false;
+    this.savedDonation = null;
   }
 
 }

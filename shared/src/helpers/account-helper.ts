@@ -1,7 +1,6 @@
 import { Account, ContactInfo, Organization, OperationHours } from '../interfaces/account/account';
 import { Validation } from '../constants/validation';
 import { ValidationHelper } from './validation-helper';
-import { FoodWebError } from './food-web-error';
 export { Account };
 
 export class AccountHelper {
@@ -24,78 +23,105 @@ export class AccountHelper {
     return (myAccount && (myAccount.id === accountId || (!ignoreAdmin && this.isAdmin(myAccount))));
   }
 
-  validateAccount(account: Account, allowAdminAccountType = false): void {
-    if (!account) { return; }
-    this._validationHelper.validateRequiredFields(
+  organizationFirstChar(organization: Organization): string {
+    return organization.organizationName.substr(0, 1).toUpperCase();
+  }
+
+  validateAccount(account: Account, allowAdminAccountType = false): string {
+    if (!account) { return ''; }
+
+    const requireErr: string = this._validationHelper.validateRequiredFields(
       account,
       ['username', 'accountType', 'contactInfo', 'operationHours'],
       ['Username', 'Account type', 'Contact info', 'Operation hours']
     );
+    if (requireErr) { return requireErr; }
+
     // Organization is only required for 'Donor' and 'Receiver' type accounts.
     if (['Donor', 'Receiver'].indexOf(account.accountType) >= 0 && !account.organization) {
-      throw new FoodWebError('Organization required');
+      return 'Organization required';
     }
     if (!Validation.ACCOUNT_TYPE_REGEX.test(account.accountType) && (account.accountType !== 'Admin' || allowAdminAccountType)) {
-      throw new FoodWebError('Invalid account type');
+      return 'Invalid account type';
     }
-    this.validateContactInfo(account.contactInfo);
-    this.validateOrganization(account.organization);
-    this.validateOperationHours(account.operationHours);
+
+    const contactInfoErr: string = this.validateContactInfo(account.contactInfo);
+    if (contactInfoErr) { return contactInfoErr; }
+
+    const organizationErr: string = this.validateOrganization(account.organization);
+    if (organizationErr) { return organizationErr; }
+
+    const opHoursErr: string = this.validateOperationHours(account.operationHours);
+    if (opHoursErr) { return opHoursErr; }
+
+    return '';
   }
 
-  validateContactInfo(contactInfo: ContactInfo): void {
-    if (!contactInfo) { return; }
+  validateContactInfo(contactInfo: ContactInfo): string {
+    if (!contactInfo) { return ''; }
+    
     // Check to ensure all required fields exist.
-    this._validationHelper.validateRequiredFields(
+    const requireErr: string = this._validationHelper.validateRequiredFields(
       contactInfo,
       ['email', 'phoneNumber', 'streetAddress', 'city', 'stateProvince', 'postalCode'],
       ['Email address', 'Phone number', 'Street address', 'City', 'State or province', 'Postal code']
     );
+    if (requireErr) { return requireErr; }
+
     // Check to ensure all fields conform to validation regexs.
-    this._validationHelper.validateRegexFields(
+    const patternErr: string = this._validationHelper.validateRegexFields(
       contactInfo,
       ['email', 'phoneNumber', 'postalCode'],
       ['email address', 'phone number', 'postal code'],
       [Validation.EMAIL_REGEX, Validation.PHONE_REGEX, Validation.POSTAL_CODE_REGEX]
     );
+    if (patternErr) { return patternErr; }
+
+    return '';
   }
 
-  validateOrganization(organization: Organization): void {
-    if (!organization) { return; }
+  validateOrganization(organization: Organization): string {
+    if (!organization) { return ''; }
     if (!organization.organizationName) {
-      throw new FoodWebError('Organization name required');
+      return 'Organization name required';
     }
+    return '';
   }
 
-  validateOperationHours(operationHours: OperationHours[]): void {
-    if (!operationHours) { return; }
-    operationHours.forEach((operationHoursEntry: OperationHours) => {
+  validateOperationHours(operationHours: OperationHours[]): string {
+    if (!operationHours) { return ''; }
+    let operationHoursEntry: OperationHours;
+    for (operationHoursEntry of operationHours) {
       if (!operationHoursEntry) {
-        throw new FoodWebError('Operation hours entry missing');
+        return 'Operation hours entry missing';
       }
-      this.validateOperationHoursEntry(operationHoursEntry);
-    });
+      const opHourEntryErr: string = this.validateOperationHoursEntry(operationHoursEntry);
+      if (opHourEntryErr) { return opHourEntryErr; }
+    }
+    return '';
   }
 
-  validateOperationHoursEntry(operationHoursEntry: OperationHours): void {
-    if (!operationHoursEntry) { return; }
+  validateOperationHoursEntry(operationHoursEntry: OperationHours): string {
+    if (!operationHoursEntry) { return ''; }
     if (!operationHoursEntry.weekday) {
-      throw new FoodWebError('Weekday required in operation hours entry');
+      return 'Weekday required in operation hours entry';
     }
     if (!operationHoursEntry.startTime) {
-      throw new FoodWebError('Start time required in operation hours entry');
+      return 'Start time required in operation hours entry';
     }
     if (!operationHoursEntry.endTime) {
-      throw new FoodWebError('End time required in operation hours entry');
+      return 'End time required in operation hours entry';
     }
     if (new Date(operationHoursEntry.startTime) > new Date(operationHoursEntry.endTime)) {
-      throw new FoodWebError('Start time must be earlier than end time in operation hours entry');
+      return 'Start time must be earlier than end time in operation hours entry';
     }
+    return '';
   }
 
-  validatePassword(password: string): void {
+  validatePassword(password: string): string {
     if (!Validation.PASSWORD_REGEX.test(password)) {
-      throw new FoodWebError('Password must contain at least 6 characters');
+      return 'Password must contain at least 6 characters';
     }
+    return '';
   }
 }

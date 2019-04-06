@@ -2,14 +2,15 @@
 $lg: 1200px;
 $md: 991px;
 $sm: 767px;
-$xs: 600px;
+$mat-mobile: 600px;
+$xs: 575px;
 
 /* Header Consts */
 $site-title-height: 60px;
-$site-title-height-xs: 50px;
+$site-title-height-mobile: 50px;
 $page-title-height: 40px;
 $header-height: ($site-title-height + $page-title-height);
-$header-height-xs: ($site-title-height-xs + $page-title-height);
+$header-height-mobile: ($site-title-height-mobile + $page-title-height);
 
 /* Main (Page) Content Consts */
 $page-vert-pad: 20px;
@@ -43,3 +44,15 @@ $warn-lightest: map-get($warn-palette, 100);
 $warn-lighter: map-get($warn-palette, lighter);
 $warn-darker: map-get($warn-palette, darker);
 $warn-darkest: map-get($warn-palette, 900);
+
+$alert-info-background: #d9edf7;
+$alert-info-color: #31708f;
+
+$alert-success-background: #dff0d8;
+$alert-success-color: #3c763d;
+
+$alert-warn-background: #fcf8e3;
+$alert-warn-color: #8a6d3b;
+
+$alert-danger-background: #f2dede;
+$alert-danger-color: #a94442;

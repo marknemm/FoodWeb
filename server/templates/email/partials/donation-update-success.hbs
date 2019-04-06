@@ -1,0 +1,52 @@
+<div>
+  <div>Your donation has been updated!</div>
+  <p>
+    You can view and edit your donation at this
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ updatedDonation.id }}">link</a>.
+  </p>
+
+  <p style="font-weight: bold; margin-bottom: 0px;">Original Donation:</p>
+  <table style="border: none">
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Donor:</td>
+      <td style="border: none">{{ originalDonation.donorFirstName }} {{ originalDonation.donorLastName }}</td>
+    </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Type:</td>
+      <td style="border: none">{{ originalDonation.donationType }}</td>
+    </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Value:</td>
+      <td style="border: none">${{ originalDonation.estimatedValue }}</td>
+    </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Description:</td>
+      <td style="border: none; min-width: 300px;">{{ originalDonation.description }}</td>
+    </tr>
+  </table>
+
+  <p style="font-weight: bold; margin-bottom: 0px;">Updated Donation:</p>
+  <table style="border: none">
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Donor:</td>
+      <td style="border: none">{{ updatedDonation.donorFirstName }} {{ updatedDonation.donorLastName }}</td>
+    </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Type:</td>
+      <td style="border: none">{{ updatedDonation.donationType }}</td>
+    </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Value:</td>
+      <td style="border: none">${{ updatedDonation.estimatedValue }}</td>
+    </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Description:</td>
+      <td style="border: none; min-width: 300px;">{{ updatedDonation.description }}</td>
+    </tr>
+  </table>
+
+  <p>
+    If this change was unexpected, then contact FoodWeb at:<br>
+    <a href="mailto:{{ env.SUPPORT_EMAIL }}">{{ env.SUPPORT_EMAIL }}</a>.
+  </p>
+</div>

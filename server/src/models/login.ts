@@ -1,4 +1,4 @@
-import { getRepository, SelectQueryBuilder } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { checkPasswordMatch } from '../helpers/password-match';
 import { FoodWebError } from '../helpers/food-web-error';

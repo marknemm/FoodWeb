@@ -3,12 +3,13 @@ import { Request, Response } from 'express';
 import { ensureSessionActive } from '../middlewares/session.middleware';
 import { handleError } from '../middlewares/response-error.middleware';
 import { AccountEntity } from './../entity/account.entity';
-import { createAccount, updateAccount } from '../models/save-account';
-import { getAccounts, AccountsQueryResult } from '../models/get-account';
+import { createAccount, updateAccount, updatePassword } from '../models/save-account';
+import { readAccounts, AccountsQueryResult, readAccount } from '../models/read-accounts';
 import { verifyAccount } from '../models/account-verification';
 import { savePasswordResetToken, resetPassword } from '../models/password-reset';
 import { AccountCreateRequest, Account } from '../../../shared/src/interfaces/account/account-create-request';
 import { AccountUpdateRequest } from '../../../shared/src/interfaces/account/account-update-request';
+import { PasswordUpdateRequest } from '../../../shared/src/interfaces/account/password-update-request';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { PasswordResetRequest } from '../../../shared/src/interfaces/account/password-reset-request';
 import { ListResponse } from '../../../shared/src/interfaces/list-response';
@@ -24,14 +25,28 @@ router.post('/', (req: Request, res: Response) => {
 
 router.put('/', ensureSessionActive, (req: Request, res: Response) => {
   const updateRequest: AccountUpdateRequest = req.body;
-  updateAccount(req.session.account, updateRequest.account, updateRequest.password, updateRequest.oldPassword)
+  updateAccount(req.session.account, updateRequest.account)
     .then(_handleAccountSaveResult.bind(this, req, res))
+    .catch(handleError.bind(this, res));
+});
+
+router.put('/password', ensureSessionActive, (req: Request, res: Response) => {
+  const updateRequest: PasswordUpdateRequest = req.body;
+  updatePassword(req.session.account, updateRequest.password, updateRequest.oldPassword)
+    .then(() => res.send({}))
+    .catch(handleError.bind(this, res));
+});
+
+router.get('/:id', (req: Request, res: Response) => {
+  const id: number = parseInt(req.params.id, 10);
+  readAccount(id)
+    .then((account: AccountEntity) => res.send(account))
     .catch(handleError.bind(this, res));
 });
 
 router.get('/', (req: Request, res: Response) => {
   const readRequest: AccountReadRequest = req.query;
-  getAccounts(readRequest, readRequest.page, readRequest.limit)
+  readAccounts(readRequest)
     .then(({ accounts, totalCount }: AccountsQueryResult) => {
       const response: ListResponse = {
         list: accounts,

@@ -21,6 +21,11 @@
           <span><mat-icon>card_giftcard</mat-icon> Donate</span>
         </a>
       </li>
+      <li *ngIf="sessionService.isDonor">
+        <a mat-ripple [routerLink]="['/donations']" (click)="_onNavClick()">
+          <span><mat-icon>list_alt</mat-icon> Donations</span>
+        </a>
+      </li>
     </ul>
   </mat-drawer>
   <mat-drawer-content>

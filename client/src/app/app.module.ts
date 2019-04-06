@@ -20,7 +20,8 @@ import {
   MatTableModule,
   MatProgressSpinnerModule,
   MatProgressBarModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatTooltipModule
 } from '@angular/material';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AgmCoreModule } from '@agm/core';
@@ -31,7 +32,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { LogoutComponent } from './components/logout/logout.component';
-import { AccountComponent } from './components/account/account.component';
+import { AccountDetailsComponent } from './components/account-details/account-details.component';
 import { AccountsComponent } from './components/accounts/accounts.component';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 import { AlertSnackBarComponent } from './components/alert-snack-bar/alert-snack-bar.component';
@@ -51,8 +52,13 @@ import { PaginatorComponent } from './child-components/paginator/paginator.compo
 import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
 import { DonateComponent } from './components/donate/donate.component';
+import { DonationFormComponent } from './child-components/donation-form/donation-form.component';
+import { DonationsComponent } from './components/donations/donations.component';
+import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
+import { DonationStatusComponent } from './child-components/donation-status/donation-status.component';
+import { DeleteButtonComponent } from './child-components/delete-button/delete-button.component';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
-import { DonationComponent } from './child-components/donation/donation.component';
+import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 
 @NgModule({
   declarations: [
@@ -63,7 +69,7 @@ import { DonationComponent } from './child-components/donation/donation.componen
     LoginComponent,
     SignupComponent,
     LogoutComponent,
-    AccountComponent,
+    AccountDetailsComponent,
     AccountsComponent,
     AlertDialogComponent,
     AlertSnackBarComponent,
@@ -80,7 +86,11 @@ import { DonationComponent } from './child-components/donation/donation.componen
     PaginatorComponent,
     ReturnLinkDirective,
     DonateComponent,
-    DonationComponent,
+    DonationFormComponent,
+    DonationsComponent,
+    DonationDetailsComponent,
+    DonationStatusComponent,
+    DeleteButtonComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({
@@ -108,12 +118,14 @@ import { DonationComponent } from './child-components/donation/donation.componen
     MatProgressSpinnerModule,
     MatProgressBarModule,
     MatPaginatorModule,
+    MatTooltipModule,
     NgxMaterialTimepickerModule.forRoot()
   ],
   providers: [
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top', duration: 5000 } },
     { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
-    AccountHelper
+    AccountHelper,
+    DonationHelper
   ],
   entryComponents: [
     LoginComponent,
