@@ -27,7 +27,7 @@ export class AccountEntity implements Account {
   @OneToOne((type) => OrganizationEntity, (organization) => organization.account, { nullable: true, cascade: true, eager: true })
   organization?: OrganizationEntity;
 
-  @OneToMany((type) => OperationHoursEntity, (operationHours) => operationHours.account, { cascade: true, eager: true })
+  @OneToMany((type) => OperationHoursEntity, (operationHours) => operationHours.account, { cascade: ['remove'], eager: true })
   operationHours: OperationHoursEntity[];
 
   @OneToMany((type) => DonationEntity, (donations) => donations.donorAccount, { cascade: true })

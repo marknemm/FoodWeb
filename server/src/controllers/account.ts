@@ -23,6 +23,14 @@ router.post('/', (req: Request, res: Response) => {
     .catch(handleError.bind(this, res));
 });
 
+router.post('/verify', ensureSessionActive, (req: Request, res: Response) => {
+  const account: AccountEntity = req.session.account;
+  const verificationToken: string = req.body.verificationToken;
+  verifyAccount(account, verificationToken)
+    .then(_handleAccountSaveResult.bind(this, req, res))
+    .catch(handleError.bind(this, res));
+});
+
 router.put('/', ensureSessionActive, (req: Request, res: Response) => {
   const updateRequest: AccountUpdateRequest = req.body;
   updateAccount(req.session.account, updateRequest.account)
@@ -37,9 +45,9 @@ router.put('/password', ensureSessionActive, (req: Request, res: Response) => {
     .catch(handleError.bind(this, res));
 });
 
-router.get('/:id', (req: Request, res: Response) => {
-  const id: number = parseInt(req.params.id, 10);
-  readAccount(id)
+router.put('/reset-password/', (req: Request, res: Response) => {
+  const resetRequest: PasswordResetRequest = req.body;
+  resetPassword(resetRequest.username, resetRequest.password, resetRequest.resetToken)
     .then((account: AccountEntity) => res.send(account))
     .catch(handleError.bind(this, res));
 });
@@ -62,14 +70,6 @@ router.get('/', (req: Request, res: Response) => {
     .catch(handleError.bind(this, res));
 });
 
-router.post('/verify', ensureSessionActive, (req: Request, res: Response) => {
-  const account: AccountEntity = req.session.account;
-  const verificationToken: string = req.body.verificationToken;
-  verifyAccount(account, verificationToken)
-    .then(_handleAccountSaveResult.bind(this, req, res))
-    .catch(handleError.bind(this, res));
-});
-
 router.get('/reset-password', (req: Request, res: Response) => {
   const username: string = req.query.username;
   savePasswordResetToken(username)
@@ -77,9 +77,9 @@ router.get('/reset-password', (req: Request, res: Response) => {
     .catch(handleError.bind(this, res));
 });
 
-router.put('/reset-password/', (req: Request, res: Response) => {
-  const resetRequest: PasswordResetRequest = req.body;
-  resetPassword(resetRequest.username, resetRequest.password, resetRequest.resetToken)
+router.get('/:id', (req: Request, res: Response) => {
+  const id: number = parseInt(req.params.id, 10);
+  readAccount(id)
     .then((account: AccountEntity) => res.send(account))
     .catch(handleError.bind(this, res));
 });

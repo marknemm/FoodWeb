@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { getRepository, FindConditions } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { formatOperationHoursTimes } from '../helpers/operation-hours-converter';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
@@ -19,7 +19,7 @@ export async function readAccount(idOrUsername: number | string): Promise<Accoun
 
 export async function readAccounts(request: AccountReadRequest): Promise<AccountsQueryResult> {
   const [accounts, totalCount]: [AccountEntity[], number] = await getRepository(AccountEntity).findAndCount({
-    where: request,
+    where: _genFindOptions(request),
     skip: (request.page - 1) * request.limit,
     take: request.limit,
     order: { username: 'ASC' }
@@ -27,4 +27,11 @@ export async function readAccounts(request: AccountReadRequest): Promise<Account
 
   accounts.forEach((account: AccountEntity) => formatOperationHoursTimes(account.operationHours));
   return { accounts, totalCount };
+}
+
+function _genFindOptions(request: AccountReadRequest): FindConditions<AccountEntity> {
+  const findOptions: FindConditions<AccountEntity> = Object.assign({}, request);
+  delete findOptions['page'];
+  delete findOptions['limit'];
+  return findOptions;
 }

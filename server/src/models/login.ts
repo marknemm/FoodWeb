@@ -37,7 +37,7 @@ async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> 
     throw new Error(`User could not be found with username/email: ${usernameEmail}`);
   }
 
-  account.verified = (await getRepository(UnverifiedAccountEntity).count({ where: { account } })) === 0;
+  account.verified = (await getRepository(UnverifiedAccountEntity).count({ account: { id: account.id } })) === 0;
   formatOperationHoursTimes(account.operationHours);
   return account;
 }

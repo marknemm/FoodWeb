@@ -1,12 +1,13 @@
-import { getConnection, EntityManager } from 'typeorm';
+import { getConnection, EntityManager, Repository } from 'typeorm';
 import { hash, genSalt } from 'bcrypt';
 import { saveUnverifiedAccount } from './account-verification';
-import { formatOperationHoursTimes } from '../helpers/operation-hours-converter';
+import { formatOperationHoursTimes, OperationHoursEntity } from '../helpers/operation-hours-converter';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordEntity } from '../entity/password.entity';
 import { getPasswordId } from '../helpers/password-match';
 import { FoodWebError } from '../helpers/food-web-error';
 import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
+import { OperationHours } from '../interfaces/account/account';
 
 const accountHelper = new AccountHelper();
 
@@ -90,8 +91,16 @@ async function _getOldPasswordId(manager: EntityManager, account: AccountEntity,
 }
 
 async function _saveAccount(manager: EntityManager, account: Account, myAccount?: Account): Promise<AccountEntity> {
+  const accountRepo: Repository<AccountEntity> = manager.getRepository(AccountEntity);
+  const operationHoursRepo: Repository<OperationHoursEntity> = manager.getRepository(OperationHoursEntity);
   _validateAccount(account, myAccount);
-  return manager.getRepository(AccountEntity).save(account as AccountEntity);
+
+  if (myAccount) {
+    await operationHoursRepo.delete({ account: { id: myAccount.id } });
+  }
+  const savedAccount: AccountEntity = await accountRepo.save(account as AccountEntity);
+  await _insertOperationHours(operationHoursRepo, savedAccount.id, account.operationHours);
+  return accountRepo.findOne({ id: account.id });
 }
 
 function _validateAccount(account: Account, myAccount?: Account) {
@@ -99,5 +108,19 @@ function _validateAccount(account: Account, myAccount?: Account) {
   const accountErr: string = accountHelper.validateAccount(account, allowAdminAccountType);
   if (accountErr) {
     throw new FoodWebError(accountErr);
+  }
+}
+
+async function _insertOperationHours(repo: Repository<OperationHoursEntity>, accountId: number, operationHoursArr: OperationHours[]): Promise<void> {
+  if (operationHoursArr && operationHoursArr.length !== 0) {
+    // Make copy of array with shallow copy of members, and assign account field for insertion.
+    const operationHoursArrCopy = (<OperationHoursEntity[]>operationHoursArr).map(
+      (operationHours: OperationHoursEntity) => {
+        const operationHoursCopy: OperationHoursEntity = Object.assign({}, operationHours);
+        operationHoursCopy.account = <AccountEntity>{ id: accountId };
+        return operationHoursCopy;
+      }
+    );
+    repo.insert(operationHoursArrCopy);
   }
 }

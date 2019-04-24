@@ -2,9 +2,8 @@ import { getRepository, Repository, FindConditions } from 'typeorm';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { formatOperationHoursTimes } from '../helpers/operation-hours-converter';
-import { DonationReadFilters } from '../../../shared/src/interfaces/donation/donation-read-filters';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
-import { DonationReadRequest } from '../interfaces/donation/donation-read-request';
+import { DonationReadRequest, DonationReadFilters } from '../../../shared/src/interfaces/donation/donation-read-request';
 
 export interface DonationsQueryResult {
   donations: Donation[];
@@ -35,9 +34,11 @@ export async function readDonations(
   return { donations, totalCount };
 }
 
-function _genFindConditions(filters: DonationReadFilters, myAccount: AccountEntity): FindConditions<DonationEntity> {
-  const findConditions: FindConditions<DonationEntity> = filters;
-  _fillAccountConditions(filters, findConditions, myAccount);
+function _genFindConditions(request: DonationReadRequest, myAccount: AccountEntity): FindConditions<DonationEntity> {
+  const findConditions: FindConditions<DonationEntity> = Object.assign({}, request);
+  delete findConditions['page'];
+  delete findConditions['limit'];
+  _fillAccountConditions(request, findConditions, myAccount);
   return findConditions;
 }
 
