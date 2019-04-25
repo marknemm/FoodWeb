@@ -9,7 +9,6 @@ import { PageProgressService } from '../page-progress/page-progress.service';
 import { AlertService } from '../alert/alert.service';
 import { ListResponse } from '../../../../../shared/src/interfaces/list-response';
 import { AccountCreateRequest } from '../../../../../shared/src/interfaces/account/account-create-request';
-import { AccountUpdateRequest } from '../../../../../shared/src/interfaces/account/account-update-request';
 import { PasswordUpdateRequest } from '../../../../../shared/src/interfaces/account/password-update-request';
 import { AccountReadRequest, AccountReadFilters } from '../../../../../shared/src/interfaces/account/account-read-request';
 import { Account } from '../../../../../shared/src/interfaces/account/account';
@@ -46,20 +45,20 @@ export class AccountService {
     );
   }
 
-  updateAccount(originalAccount: Account, accountUpdate: Partial<Account>): Observable<Account> {
-    const request: AccountUpdateRequest = this._genAccountUpdateRequest(originalAccount, accountUpdate);
+  updateAccount(originalAccount: Account, accountSectionUpdate: Partial<Account>): Observable<Account> {
+    const accountUpdate: Account = this._genAccountUpdate(originalAccount, accountSectionUpdate);
     this._pageProgressService.activate(true);
-    return this._httpClient.put<Account>(this.url, request).pipe(
+    return this._httpClient.put<Account>(this.url, accountUpdate).pipe(
       map((savedAccount: Account) => this._handleAccountUpdateResponse(savedAccount)),
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );
   }
 
-  private _genAccountUpdateRequest(originalAccount: Account, accountUpdate: Partial<Account>): AccountUpdateRequest {
+  private _genAccountUpdate(originalAccount: Account, accountSectionUpdate: Partial<Account>): Account {
     const account: Account = Object.assign({}, originalAccount);
-    Object.keys(accountUpdate).forEach((property: string) => account[property] = accountUpdate[property]);
-    return { account };
+    Object.keys(accountSectionUpdate).forEach((property: string) => account[property] = accountSectionUpdate[property]);
+    return account;
   }
 
   private _handleAccountUpdateResponse(savedAccount: Account): Account {

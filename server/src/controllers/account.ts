@@ -8,7 +8,6 @@ import { readAccounts, AccountsQueryResult, readAccount } from '../models/read-a
 import { verifyAccount } from '../models/account-verification';
 import { savePasswordResetToken, resetPassword } from '../models/password-reset';
 import { AccountCreateRequest, Account } from '../../../shared/src/interfaces/account/account-create-request';
-import { AccountUpdateRequest } from '../../../shared/src/interfaces/account/account-update-request';
 import { PasswordUpdateRequest } from '../../../shared/src/interfaces/account/password-update-request';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { PasswordResetRequest } from '../../../shared/src/interfaces/account/password-reset-request';
@@ -32,8 +31,8 @@ router.post('/verify', ensureSessionActive, (req: Request, res: Response) => {
 });
 
 router.put('/', ensureSessionActive, (req: Request, res: Response) => {
-  const updateRequest: AccountUpdateRequest = req.body;
-  updateAccount(req.session.account, updateRequest.account)
+  const account: Account = req.body;
+  updateAccount(req.session.account, account)
     .then(_handleAccountSaveResult.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });

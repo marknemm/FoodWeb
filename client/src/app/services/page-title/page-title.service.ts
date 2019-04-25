@@ -23,6 +23,8 @@ export class PageTitleService {
           this.title = 'Account';
         } else if (route.indexOf('/donation-details') >= 0) {
           this.title = 'Donation';
+        } else if (route.indexOf('/donations/my') >= 0) {
+          this.title = 'My Donations';
         } else {
           this.title = this._deriveDefaultTitle(route);
         }

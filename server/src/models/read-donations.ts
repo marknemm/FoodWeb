@@ -16,6 +16,22 @@ export async function readDonation(id: number, myAccount: AccountEntity, donatio
   return queryResult.donations[0];
 }
 
+export function readMyDonations(request: DonationReadRequest, myAccount: AccountEntity): Promise<DonationsQueryResult> {
+  _fillMyAccountRequestFilter(request, myAccount);
+  return readDonations(request, myAccount);
+}
+
+function _fillMyAccountRequestFilter(request: DonationReadRequest, myAccount: AccountEntity): void {
+  if (myAccount.accountType === 'Donor') {
+    request.donorAccountId = myAccount.id;
+    delete request.receiverAccountId;
+  } else if (myAccount.accountType === 'Receiver') {
+    request.receiverAccountId = myAccount.id;
+    delete request.donorAccountId;
+  }
+  // Else, 'Admin' account type owns all accounts.
+}
+
 export async function readDonations(
   request: DonationReadRequest,
   myAccount: AccountEntity,
@@ -43,15 +59,6 @@ function _genFindConditions(request: DonationReadRequest, myAccount: AccountEnti
 }
 
 function _fillAccountConditions(filters: DonationReadFilters, findConditions: FindConditions<DonationEntity>, myAccount: AccountEntity): void {
-  // If all account filters are empty and we are not an admin account, then filter to our account.
-  if (filters.donorAccountId == null && filters.receiverAccountId == null) {
-    if (myAccount.accountType === 'Donor') {
-      filters.donorAccountId = myAccount.id;
-    } else if (myAccount.accountType === 'Receiver') {
-      filters.receiverAccountId = myAccount.id;
-    }
-  }
-
   if (filters.donorAccountId != null) {
     findConditions.donorAccount = { id: filters.donorAccountId };
   }

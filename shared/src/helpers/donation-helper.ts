@@ -52,4 +52,29 @@ export class DonationHelper {
     }
     return '';
   }
+
+  validateDonationClaimPrivilege(donation: Donation, myAccount: Account): string {
+    if (myAccount.accountType !== 'Receiver') {
+      return 'Only a Receiver account can claim a donation';
+    }
+    if (donation.donationStatus !== 'Unmatched') {
+      return 'Cannot claim a donation that has already been claimed';
+    }
+    return '';
+  }
+
+  validateDonationUnclaimPrivilege(donation: Donation, myAccount: Account): string {
+    if (donation.donationStatus === 'Unmatched') {
+      return 'You cannot unclaimed a donation that has not been claimed';
+    }
+    if (myAccount.accountType !== 'Admin') {
+      if (myAccount.id !== donation.receiverAccount.id) {
+        return 'You do not own the donation claim';
+      }
+      if (donation.donationStatus === 'Complete') {
+        return 'Cannot unclaim a completed donation';
+      }
+    }
+    return '';
+  }
 }

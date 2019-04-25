@@ -23,6 +23,8 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
   readonly donationForm = new FormGroup({});
 
   private _canEdit = false;
+  private _canClaim = false;
+  private _canUnclaim = false;
   private _myDonation = false;
   private _donationNotFound = false;
   private _originalDonation: Donation;
@@ -32,14 +34,26 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
     public sectionEditService: SectionEditService<FormGroup>,
     public accountHelper: AccountHelper,
     public donationHelper: DonationHelper,
+    private _sessionService: SessionService,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    private _donationService: DonationService,
-    private _sessionService: SessionService
+    private _donationService: DonationService
   ) {}
+
+  get hasActionButtons(): boolean {
+    return (this.canEdit || this.canClaim || this.canUnclaim);
+  }
 
   get canEdit(): boolean {
     return this._canEdit;
+  }
+
+  get canClaim(): boolean {
+    return this._canClaim;
+  }
+
+  get canUnclaim(): boolean {
+    return this._canUnclaim;
   }
 
   get editing(): boolean {
@@ -71,7 +85,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
       const donationUpdate: Partial<Donation> = this.donationFormComponent.donationUpdate;
       this._donationService.updateDonation(this._originalDonation, donationUpdate).subscribe(
         (savedDonation: Donation) => {
-          this._originalDonation = savedDonation;
+          this._updateDonation(savedDonation);
           this.sectionEditService.stopEdit(this.donationForm);
         }
       );
@@ -86,6 +100,18 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  claimDonation(): void {
+    this._donationService.claimDonation(this._originalDonation).subscribe(
+      (claimedDonation: Donation) => this._updateDonation(claimedDonation)
+    );
+  }
+
+  unclaimDonation(): void {
+    this._donationService.unclaimDonation(this._originalDonation).subscribe(
+      (unclaimedDonation: Donation) => this._updateDonation(unclaimedDonation)
+    );
+  }
+
   private _listenDonationChange(): void {
     this._donationService.listenDonationQueryChange(this._activatedRoute).pipe(
       takeUntil(this._destroy$)
@@ -93,12 +119,18 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this._donationNotFound = !donation;
         if (!this._donationNotFound) {
-          this._originalDonation = donation;
-          this._myDonation = this._sessionService.isMyAccount(donation.donorAccount.id);
-          this._canEdit = !this.donationHelper.validateDonationEditPrivilege(donation, this._sessionService.account);
+          this._updateDonation(donation);
         }
       });
     });
+  }
+
+  private _updateDonation(donation: Donation): void {
+    this._originalDonation = donation;
+    this._myDonation = this._sessionService.isMyAccount(donation.donorAccount.id);
+    this._canEdit = !this.donationHelper.validateDonationEditPrivilege(donation, this._sessionService.account);
+    this._canClaim = !this.donationHelper.validateDonationClaimPrivilege(donation, this._sessionService.account);
+    this._canUnclaim = !this.donationHelper.validateDonationUnclaimPrivilege(donation, this._sessionService.account);
   }
 
 }

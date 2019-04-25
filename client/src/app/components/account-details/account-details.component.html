@@ -1,13 +1,13 @@
 <form [formGroup]="accountUpdateForm" *ngIf="originalAccount" class="account-form">
   <div class="row">
     <div class="col-xl-6">
-      <mat-card formGroupName="account" *ngIf="isMyAccount">
+      <mat-card formGroupName="account">
         <food-web-edit-save-button *ngIf="sessionService.isAdmin" [editing]="sectionEditService.editing('account')" (edit)="onEdit('account')"
           (save)="onSave('account')" controlName="account"></food-web-edit-save-button>
         <mat-card-title class="block-label">Account</mat-card-title>
         <mat-card-content>
           <div class="account-display-content row">
-            <div class="col-sm-6">
+            <div class="col-sm-6" *ngIf="isMyAccount">
               <food-web-username formControlName="username" [editing]="sectionEditService.editing('account')"></food-web-username>
             </div>
             <div class="col-sm-6">
@@ -23,7 +23,8 @@
         <mat-card-content>
           <food-web-organization formGroupName="organization" [editing]="sectionEditService.editing('organization')"></food-web-organization>
           <div *ngIf="originalAccount && !accountHelper.isAdmin(originalAccount) && !sectionEditService.editing('organization')" class="see-donations-link">
-            <a [routerLink]="['/donations']" [queryParams]="seeDonationsParams">See Donations</a>
+            <a *ngIf="!isMyAccount" [routerLink]="['/donations']" [queryParams]="seeDonationsParams">See Donations</a>
+            <a *ngIf="isMyAccount" [routerLink]="['/donations/my']">See My Donations</a>
           </div>
         </mat-card-content>
       </mat-card>

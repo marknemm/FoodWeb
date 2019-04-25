@@ -26,28 +26,33 @@ function _ensureCanDeleteDonation(donation: Donation, myAccount: AccountEntity):
 }
 
 async function _sendDonationDeleteSuccessEmail(donation: Donation, account: AccountEntity): Promise<void> {
-  // If an 'Admin' account deleted another user's donation, then also send e-mail to admin.
-  if (account.id !== donation.donorAccount.id) {
-    await sendEmail(
+  const sendPromises: Promise<void>[] = [];
+
+  // Send email to donorAccount linked directly to the donation.
+  sendPromises.push(
+    sendEmail(
       MailTransporter.NOREPLY,
-      account.contactInfo.email,
-      '(Admin) Donation Deletion Successful',
+      donation.donorAccount.contactInfo.email,
+      'Donation Deletion Successful',
       'donation-delete-success',
-      account,
+      donation.donorAccount,
       { donation }
+    )
+  );
+
+  // Send email to receiverAccount linked directly to the donation.
+  if (donation.receiverAccount) {
+    sendPromises.push(
+      sendEmail(
+        MailTransporter.NOREPLY,
+        donation.receiverAccount.contactInfo.email,
+        `claimed Donation From ${donation.donorAccount.organization.organizationName} Deleted By Donor`,
+        'claimed-donation-deleted',
+        donation.receiverAccount,
+        { donation }
+      )
     );
   }
 
-  // Send e-mail to donorAccount linked directly to the donation.
-  await sendEmail(
-    MailTransporter.NOREPLY,
-    donation.donorAccount.contactInfo.email,
-    'Donation Deletion Successful',
-    'donation-delete-success',
-    donation.donorAccount,
-    { donation }
-  );
-
-  // TODO: Send e-mail to receiverAccount linked directly to the donation.
-  // TODO: Send e-mail to delivererAccount linked directly to the donation.
+  await Promise.all(sendPromises);
 }

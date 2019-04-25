@@ -13,20 +13,21 @@ import { DonationsComponent } from './components/donations/donations.component';
 import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
 
 const routes: Routes = [
-  {path: '', pathMatch: 'full', redirectTo: 'home'},
-  {path: 'login', pathMatch: 'full', redirectTo: 'home/login'},
-  {path: 'home', component: HomeComponent},
-  {path: 'home/:login', component: HomeComponent},
-  {path: 'signup', component: SignupComponent},
-  {path: 'signup-verification', component: SignupVerificationComponent},
-  {path: 'account-details', component: AccountDetailsComponent, canActivate: [AuthGaurdService]},
-  {path: 'account-details/:id', component: AccountDetailsComponent, canActivate: [AuthGaurdService]},
-  {path: 'logout', component: LogoutComponent},
-  {path: 'accounts', component: AccountsComponent},
-  {path: 'password-reset', component: PasswordResetComponent},
-  {path: 'donate', component: DonateComponent},
-  {path: 'donations', component: DonationsComponent},
-  {path: 'donation-details/:id', component: DonationDetailsComponent}
+  { path: '', pathMatch: 'full', redirectTo: 'home' },
+  { path: 'login', pathMatch: 'full', redirectTo: 'home/login' },
+  { path: 'home', component: HomeComponent },
+  { path: 'home/:login', component: HomeComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'signup-verification', component: SignupVerificationComponent },
+  { path: 'account-details', component: AccountDetailsComponent, canActivate: [AuthGaurdService] },
+  { path: 'account-details/:id', component: AccountDetailsComponent, canActivate: [AuthGaurdService] },
+  { path: 'logout', component: LogoutComponent },
+  { path: 'accounts', component: AccountsComponent },
+  { path: 'password-reset', component: PasswordResetComponent },
+  { path: 'donate', component: DonateComponent },
+  { path: 'donations', component: DonationsComponent },
+  { path: 'donations/my', component: DonationsComponent, canActivate: [AuthGaurdService] },
+  { path: 'donation-details/:id', component: DonationDetailsComponent }
 ];
 
 @NgModule({

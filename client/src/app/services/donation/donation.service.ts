@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { ParamMap, ActivatedRoute } from '@angular/router';
+import { ParamMap, ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, map, flatMap } from 'rxjs/operators';
 import { PageProgressService } from '../page-progress/page-progress.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { AlertService } from '../alert/alert.service';
-import { DonationCreateRequest, Donation } from '../../../../../shared/src/interfaces/donation/donation-create-request';
+import { Donation } from '../../../../../shared/src/interfaces/donation/donation';
 import { DonationReadRequest, DonationReadFilters } from '../../../../../shared/src/interfaces/donation/donation-read-request';
-import { DonationUpdateRequest } from '../../../../../shared/src/interfaces/donation/donation-update-request';
+import { DonationClaimRequest } from '../../../../../shared/src/interfaces/donation/donation-claim-request';
 import { ListResponse } from '../../../../../shared/src/interfaces/list-response';
 export { Donation };
 
@@ -24,6 +24,7 @@ export class DonationService {
 
   constructor(
     private _httpClient: HttpClient,
+    private _router: Router,
     private _pageProgressService: PageProgressService,
     private _errorHandlerService: ErrorHandlerService,
     private _alertService: AlertService
@@ -35,9 +36,8 @@ export class DonationService {
    * @return An observable that emits the newly saved donation when the server response returns.
    */
   createDonation(donation: Donation): Observable<Donation> {
-    const request: DonationCreateRequest = { donation };
     this._pageProgressService.activate(true);
-    return this._httpClient.post<Donation>(this.url, request).pipe(
+    return this._httpClient.post<Donation>(this.url, donation).pipe(
       map((savedDonation: Donation) => {
         this._alertService.displaySimpleMessage('Donation successful', 'success');
         return savedDonation;
@@ -47,10 +47,10 @@ export class DonationService {
     );
   }
 
-  updateDonation(originalDonation: Donation, donationUpdate: Partial<Donation>): Observable<Donation> {
-    const request: DonationUpdateRequest = this._genDonationUpdateRequest(originalDonation, donationUpdate);
+  updateDonation(originalDonation: Donation, donationSectionUpdate: Partial<Donation>): Observable<Donation> {
+    const donationUpdate: Donation = this._genDonationUpdate(originalDonation, donationSectionUpdate);
     this._pageProgressService.activate(true);
-    return this._httpClient.put<Donation>(this.url, request).pipe(
+    return this._httpClient.put<Donation>(this.url, donationUpdate).pipe(
       map((savedDonation: Donation) => {
         this._alertService.displaySimpleMessage('Donation update successful', 'success');
         return savedDonation;
@@ -70,10 +70,37 @@ export class DonationService {
     );
   }
 
-  private _genDonationUpdateRequest(originalDonation: Donation, donationUpdate: Partial<Donation>): DonationUpdateRequest {
+  private _genDonationUpdate(originalDonation: Donation, donationSectionUpdate: Partial<Donation>): Donation {
     const donation: Donation = Object.assign({}, originalDonation);
-    Object.keys(donationUpdate).forEach((property: string) => donation[property] = donationUpdate[property]);
-    return { donation };
+    Object.keys(donationSectionUpdate).forEach((property: string) => donation[property] = donationSectionUpdate[property]);
+    return donation;
+  }
+
+  claimDonation(donation: Donation): Observable<Donation> {
+    const claimUrl = `${this.url}/claim`;
+    const request: DonationClaimRequest = { donationId: donation.id };
+    this._pageProgressService.activate(true);
+    return this._httpClient.post<Donation>(claimUrl, request).pipe(
+      map((claimedDonation: Donation) => {
+        this._alertService.displaySimpleMessage('Donation successfully claimed', 'success');
+        return claimedDonation;
+      }),
+      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
+      finalize(() => this._pageProgressService.reset())
+    );
+  }
+
+  unclaimDonation(donation: Donation): Observable<Donation> {
+    const unclaimUrl = `${this.url}/claim/${donation.id}`;
+    this._pageProgressService.activate(true);
+    return this._httpClient.delete<Donation>(unclaimUrl).pipe(
+      map((unclaimedDonation: Donation) => {
+        this._alertService.displaySimpleMessage('Donation successfully unclaimed', 'success');
+        return unclaimedDonation;
+      }),
+      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
+      finalize(() => this._pageProgressService.reset())
+    );
   }
 
   listenDonationQueryChange(activatedRoute: ActivatedRoute): Observable<Donation> {
@@ -99,6 +126,7 @@ export class DonationService {
   }
 
   listenDonationsQueryChange(activatedRoute: ActivatedRoute): Observable<ListResponse<Donation>> {
+    const myDonations: boolean = (this._router.url.indexOf('my') >= 0);
     return activatedRoute.queryParamMap.pipe(
       flatMap((params: ParamMap) => {
         const filters: DonationReadFilters = {};
@@ -109,18 +137,31 @@ export class DonationService {
         });
         const page: number = (params.has('page') ? parseInt(params.get('page'), 10) : undefined);
         const limit: number = (params.has('limit') ? parseInt(params.get('limit'), 10) : undefined);
-        return this.getDonations(filters, page, limit);
+        return this._getDonations(filters, page, limit, myDonations);
       })
     );
   }
 
+  getMyDonations(filters: DonationReadFilters, page = 1, limit = 10): Observable<ListResponse<Donation>> {
+    return this._getDonations(filters, page, limit, true);
+  }
+
   getDonations(filters: DonationReadFilters, page = 1, limit = 10): Observable<ListResponse<Donation>> {
+    return this._getDonations(filters, page, limit, false);
+  }
+
+  private _getDonations(filters: DonationReadFilters, page: number, limit: number, myDonations: boolean): Observable<ListResponse<Donation>> {
+    const getUrl: string = this.url + (myDonations ? '/my' : '');
     const request = <DonationReadRequest>filters;
-    request.page = page;
-    request.limit = limit;
+    if (page >= 0) {
+      request.page = page;
+    }
+    if (limit >= 0) {
+      request.limit = limit;
+    }
     const params = new HttpParams({ fromObject: <any>request });
     this._pageProgressService.activate(true);
-    return this._httpClient.get<ListResponse<Donation>>(this.url, { params }).pipe(
+    return this._httpClient.get<ListResponse<Donation>>(getUrl, { params }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );

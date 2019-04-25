@@ -18,8 +18,6 @@ export async function createDonation(donation: Donation, myAccount: AccountEntit
   await getConnection().transaction(async (manager: EntityManager) => {
     createdDonation = await manager.getRepository(DonationEntity).save(donation);
     await _sendDonationCreateSuccessEmail(createdDonation, myAccount);
-    // TODO: Quick search for receiver.
-    // TODO: Email receiver that a donation will be sent to them. Driver (one of us at first) will call before performing delivery.
   });
   return createdDonation;
 }
@@ -29,11 +27,7 @@ export async function updateDonation(donation: Donation, myAccount: AccountEntit
   _validateDonation(donation);
   _ensureCanUpdateDonation(donation, myAccount);
 
-  // Remove all fields that we do not intend to update.
-  delete donation.donationStatus;
-  delete donation.lastUpdated;
-  delete donation.donorAccount;
-  delete donation.receiverAccount;
+  _removeNonUpdateFields(donation);
   const originalDonation: Donation = await readDonation(donation.id, myAccount);
 
   await getConnection().transaction(async (manager: EntityManager) => {
@@ -58,6 +52,14 @@ function _ensureCanUpdateDonation(donation: Donation, myAccount: Account): void 
   if (errMsg) {
     throw new FoodWebError(`Update failed: ${errMsg}`);
   }
+}
+
+function _removeNonUpdateFields(donation: Donation): void {
+  // Remove fields that shouldn't be updated by the current update operation for extra security.
+  delete donation.lastUpdated;
+  delete donation.donorAccount;
+  delete donation.donationStatus;
+  delete donation.receiverAccount;
 }
 
 async function _sendDonationCreateSuccessEmail(donation: Donation, account: AccountEntity): Promise<void> {
