@@ -14,20 +14,27 @@ const supportTransporter: any = _initEmailTransporter(MailTransporter.SUPPORT);
 
 export function sendEmail(mailTransporter: MailTransporter, to: string, subject: string, template: string, account: Account, context?: any): Promise<void> {
   context = _fillMissingContext(context, account, template);
+
   return new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {
     const transporter: any = _getTransporter(mailTransporter);
     const from: string = process.env[`${mailTransporter}_EMAIL`];
-    transporter.sendMail(
-      { from, to, subject, template: 'email-container', context },
-      (err: any) => {
-        if (err) {
-          console.error(err);
-          reject(new Error(`Failed to send template ${template} to ${to}`));
-        } else {
-          resolve();
+    const recipients: string[] = _getAllRecipients(to); // Can define extra 'Admin' email recipients in .env to get all messages.
+
+    recipients.forEach((recipient: string) => {
+      transporter.sendMail(
+        { from, to: recipient, subject, template: 'email-container', context },
+        (err: any) => {
+          if (err) {
+            console.error(err);
+            if (recipient === to) {
+              reject(new Error(`Failed to send template ${template} to ${to}`));
+            }
+          } else if (recipient === to) {
+            resolve();
+          }
         }
-      }
-    );
+      );
+    });
   });
 }
 
@@ -45,6 +52,15 @@ function _getTransporter(mailTransporter: MailTransporter): any {
     case MailTransporter.NOREPLY: return noreplyTransporter;
     case MailTransporter.SUPPORT: return supportTransporter;
   }
+}
+
+function _getAllRecipients(to: string): string[] {
+  let recipients: string[] = [to];
+  if (process.env.ADMIN_EMAILS) {
+    const adminEmails: string[] = process.env.ADMIN_EMAILS.trim().split(',').filter((email: string) => email !== to);
+    recipients = recipients.concat(adminEmails);
+  }
+  return recipients;
 }
 
 function _initEmailTransporter(mailTransporter: MailTransporter): any {

@@ -5,5 +5,5 @@ export class Constants {
   readonly WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   readonly ACCOUNT_TYPES: AccountType[] = ['Donor', 'Receiver'];
   readonly DONATION_TYPES = ['Food', 'Merchandise', 'Cash', 'Service', 'Other'];
-  readonly DONATION_STATUSES: DonationStatus[] = ['Complete', 'Unmatched', 'Matched'];
+  readonly DONATION_STATUSES: DonationStatus[] = ['Unmatched', 'Matched', 'Complete'];
 }
