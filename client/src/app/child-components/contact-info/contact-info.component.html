@@ -41,32 +41,32 @@
     </div>
   </div>
 
-  <div *ngIf="!editing" class="contact-info-display row">
+  <div *ngIf="!editing && contactInfo" class="contact-info-display row">
     <div class="col-sm-6">
       <div class="inline-label">Email:</div>
       <div class="d-inline-block">
-        <a href="mailto:{{ formGroup.get('email').value }}">
-          {{ formGroup.get('email').value }}
+        <a href="mailto:{{ contactInfo.email }}">
+          {{ contactInfo.email }}
         </a>
       </div>
     </div>
     <div class="col-sm-6">
       <div class="inline-label">Phone Number:</div>
       <div class="d-inline-block">
-        <a href="tel:{{ formGroup.get('phoneNumber').value }}">
-          {{ formGroup.get('phoneNumber').value }}
+        <a href="tel:{{ contactInfo.phoneNumber }}">
+          {{ contactInfo.phoneNumber }}
         </a>
       </div>
     </div>
     <div class="col-sm-12">
       <div class="inline-label">Address:</div>
-      <a [href]="mapService.genHref(formGroup.value)" target="_blank">
+      <a [href]="mapService.genHref(contactInfo)" target="_blank">
         <div class="d-inline-block">
-          <div>{{ formGroup.get('streetAddress').value }}</div>
+          <div>{{ contactInfo.streetAddress }}</div>
           <div>
-            <div class="d-inline-block">{{ formGroup.get('city').value }},&nbsp;</div>
-            <div class="d-inline-block">{{ formGroup.get('stateProvince').value }}&nbsp;</div>
-            <div class="d-inline-block">{{ formGroup.get('postalCode').value }}</div>
+            <div class="d-inline-block">{{ contactInfo.city }},&nbsp;</div>
+            <div class="d-inline-block">{{ contactInfo.stateProvince }}&nbsp;</div>
+            <div class="d-inline-block">{{ contactInfo.postalCode }}</div>
           </div>
         </div>
       </a>

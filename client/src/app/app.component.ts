@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -8,15 +9,15 @@ import { MatIconRegistry } from '@angular/material';
 })
 export class AppComponent {
 
-  sidenavOpened = true;
-
   constructor(
-    matIconReg: MatIconRegistry
+    matIconReg: MatIconRegistry,
+    domSanitizer: DomSanitizer
   ) {
     matIconReg.registerFontClassAlias('fontawesome', 'fa');
-  }
-
-  toggleSidenav(): void {
-    this.sidenavOpened = !this.sidenavOpened;
+    for (let i = 10; i < 36; i++) {
+      const char: string = i.toString(36).toUpperCase();
+      const svgUrl: SafeResourceUrl = domSanitizer.bypassSecurityTrustResourceUrl(`../assets/${char}.svg`);
+      matIconReg.addSvgIcon('letter_A', svgUrl);
+    }
   }
 }

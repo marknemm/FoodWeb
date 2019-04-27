@@ -4,55 +4,60 @@ import { Observable, of } from 'rxjs';
 import { ConfirmDialogService } from '../confirm-dialog/confirm-dialog.service';
 
 interface EditSection {
-  controls: AbstractControl[];
-  origVals: any[];
+  control: AbstractControl;
+  origValue: any;
 }
 
 @Injectable()
-export class SectionEditService {
+export class SectionEditService<K> {
 
-  private readonly _editSections: { [sectionName: string]: EditSection } = {};
+  private readonly _editSections = new Map<K, EditSection>();
 
   constructor(
     private _confirmDialogService: ConfirmDialogService
   ) {}
 
-  editing(sectionName: string): boolean {
-    return !!this._editSections[sectionName];
+  editing(sectionKey: K): boolean {
+    return !!this._editSections.get(sectionKey);
   }
 
-  toggleEdit(sectionName: string, controls: AbstractControl[]): void {
-    if (this._editSections[sectionName]) {
-      this.cancelEdit(sectionName);
-    } else {
-      this.startEdit(sectionName, controls);
-    }
+  originalValue(sectionKey: K): any {
+    return this._editSections.get(sectionKey).origValue;
   }
 
-  startEdit(sectionName: string, controls: AbstractControl[]): void {
-    this._editSections[sectionName] = {
-      controls,
-      origVals: controls.map((control: AbstractControl) => control.value)
-    };
+  toggleEdit(sectionKey: K, control: AbstractControl): void {
+    (this._editSections.has(sectionKey))
+      ? this.cancelEdit(sectionKey)
+      : this.startEdit(sectionKey, control);
   }
 
-  stopEdit(sectionName: string): void {
-    delete this._editSections[sectionName];
+  startEdit(sectionKey: K, control: AbstractControl): void {
+    this._editSections.set(sectionKey, { control, origValue: control.value });
   }
 
-  cancelEdit(sectionName: string): void {
-    this._getCancelEditConfirmObs(sectionName).subscribe((confirm: boolean) => {
-      if (confirm) {
-        this._resetControls(sectionName);
-        this.stopEdit(sectionName);
+  shouldSaveSection(sectionKey: K): boolean {
+    const control: AbstractControl = this._editSections.get(sectionKey).control;
+    return (!control.pristine && control.valid);
+  }
+
+  stopEdit(sectionKey: K): void {
+    this._editSections.delete(sectionKey);
+  }
+
+  cancelEdit(sectionKey: K): void {
+    this._getCancelEditConfirmObs(sectionKey).subscribe(
+      (confirm: boolean) => {
+        if (confirm) {
+          this._resetControls(sectionKey);
+          this.stopEdit(sectionKey);
+        }
       }
-    });
+    );
   }
 
-  private _getCancelEditConfirmObs(sectionName: string): Observable<boolean> {
-    const controls: AbstractControl[] = this._editSections[sectionName].controls;
-    const dirty: boolean = controls.reduce((dirtyAcc: boolean, control: AbstractControl) => (dirtyAcc || control.dirty), false);
-    return (dirty) ?
+  private _getCancelEditConfirmObs(sectionKey: K): Observable<boolean> {
+    const control: AbstractControl = this._editSections.get(sectionKey).control;
+    return (control.dirty) ?
       this._confirmDialogService.displayConfirmDialog(
         'Are you sure you wish to cancel your changes? You will lose all unsaved changes.',
         'Confirm Cancel',
@@ -61,27 +66,8 @@ export class SectionEditService {
       of(true);
   }
 
-  private _resetControls(sectionName: string): void {
-    this._editSections[sectionName].controls.forEach((control: AbstractControl, idx: number) => {
-      const resetValue: any = this._editSections[sectionName].origVals[idx];
-      control.reset(resetValue);
-    });
-  }
-
-  shouldSaveSection(sectionName: string): boolean {
-    const [pristine, valid]: [boolean, boolean] = this._getSectionPristineValid(sectionName);
-    if (pristine) {
-      this.stopEdit(sectionName);
-    }
-    return (valid && !pristine);
-  }
-
-  private _getSectionPristineValid(sectionName: string): [boolean, boolean] {
-    return this._editSections[sectionName].controls.reduce(
-      (pristineValid: [boolean, boolean], control: AbstractControl) => {
-        return ([pristineValid[0] && control.pristine, pristineValid[1] && control.valid] as [boolean, boolean]);
-      },
-      ([true, true] as [boolean, boolean])
-    );
+  private _resetControls(sectionKey: K): void {
+    const resetValue: any = this._editSections.get(sectionKey).origValue;
+    this._editSections.get(sectionKey).control.reset(resetValue);
   }
 }

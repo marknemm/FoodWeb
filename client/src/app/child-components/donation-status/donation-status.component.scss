@@ -1,0 +1,31 @@
+@import '../../../styles/constants.scss';
+
+.donation-status-container {
+  display: inline-block;
+  z-index: 2;
+  white-space: nowrap;
+
+  .donation-status {
+    position: relative;
+    display: inline-block;
+    max-height: 20px;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 0px 10px;
+
+    &.unmatched {
+      color: rgb(255, 240, 213);
+      background-color: rgb(224, 172, 0);
+    }
+
+    &.matched {
+      color: $alert-info-background;
+      background-color: $alert-info-color;
+    }
+
+    &.complete {
+      color: $alert-success-background;
+      background-color: $alert-success-color;
+    }
+  }
+}

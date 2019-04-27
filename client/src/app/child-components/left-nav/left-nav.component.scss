@@ -41,8 +41,8 @@
       width: 100vw;
     }
 
-    @media only screen and (max-width: $xs) {
-      height: calc(100vh - #{$header-height-xs});
+    @media only screen and (max-width: $mat-mobile) {
+      height: calc(100vh - #{$header-height-mobile});
     }
   }
 

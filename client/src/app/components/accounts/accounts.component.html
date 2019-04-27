@@ -4,16 +4,34 @@
 
 <div class="row">
   <div class="col-lg-6" *ngFor="let account of accounts">
-    <mat-card id="account-{{ account.id }}">
-      <mat-card-title>
-        <a [routerLink]="['/account']" [queryParams]="{ id: account.id }" [state]="account" foodWebReturnLink="account-{{ account.id }}">
-          {{ account.organization.organizationName }}
-        </a>
-      </mat-card-title>
-      <mat-card-content>
-        <food-web-contact-info [contactInfo]="account.contactInfo"></food-web-contact-info>
-      </mat-card-content>
-    </mat-card>
+    <a [routerLink]="['/account-details/', account.id]" [state]="account" foodWebReturnLink="account-{{ account.id }}" class="account-link">
+      <mat-card id="account-{{ account.id }}" class="account-card">
+        <mat-card-header>
+          <img mat-card-avatar src="/assets/{{ accountHelper.organizationFirstChar(account.organization) }}.svg" alt="Account Icon">
+          <mat-card-title>{{ account.organization.organizationName }}</mat-card-title>
+          <mat-card-subtitle class="account-email">{{ account.contactInfo.email }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="accounts-display row">
+            <div class="col-sm-6">
+              <div class="inline-label">Address:</div>
+              <div class="d-inline-block">
+                <div>{{ account.contactInfo.streetAddress }}</div>
+                <div>
+                  <div class="d-inline-block">{{ account.contactInfo.city }},&nbsp;</div>
+                  <div class="d-inline-block">{{ account.contactInfo.stateProvince }}&nbsp;</div>
+                  <div class="d-inline-block">{{ account.contactInfo.postalCode }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="inline-label">Phone Number:</div>
+              <div class="d-inline-block">{{ account.contactInfo.phoneNumber }}</div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </a>
   </div>
 </div>
 

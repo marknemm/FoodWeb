@@ -1,0 +1,25 @@
+<form [formGroup]="donateForm" class="donate-form" [ngClass]="{ 'submitted': !!savedDonation }" (submit)="donate()">
+
+  <mat-card class="donate-card">
+    <mat-card-title class="donate-form-title list-title block-label">
+      {{ savedDonation ? 'Thank-You For Your Donation' : 'Donation Form' }}
+    </mat-card-title>
+    <mat-card-content>
+      <food-web-donation-form [formGroup]="donateForm" *ngIf="!savedDonation"></food-web-donation-form>
+      <div *ngIf="savedDonation" class="donation-description-container">
+        <hr>
+        <span>{{ savedDonation.description }}</span>
+        <hr>
+        <p class="disclaimer align-center">You will receive an email when your donation has been matched with a receiving charity.</p>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="align-right">
+      <button mat-raised-button type="submit" color="primary" *ngIf="!savedDonation" [disabled]="donateForm.invalid">Donate</button>
+      <button mat-button type="button" color="accent" *ngIf="savedDonation" (click)="donateAgain()">Donate Again</button>
+      <a *ngIf="savedDonation" class="view-donation-link" [routerLink]="['/donation-details', savedDonation.id]">
+        <button mat-raised-button type="button" color="primary">View Donation</button>
+      </a>
+    </mat-card-actions>
+  </mat-card>
+
+</form>

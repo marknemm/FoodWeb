@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, Index } from 'typeorm';
 import { AccountEntity } from './account.entity';
-import { ContactInfo } from './../../../shared/src/interfaces/contact-info';
+import { ContactInfo } from './../../../shared/src/interfaces/account/contact-info';
 
 @Entity('ContactInfo')
 export class ContactInfoEntity implements ContactInfo {

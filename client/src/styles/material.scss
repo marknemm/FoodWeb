@@ -6,23 +6,23 @@
 
 .mat-snack-bar-container {
   &.mat-alert-info {
-    background-color: #d9edf7;
-    color: #31708f;
+    background-color: $alert-info-background;
+    color: $alert-info-color;
   }
   
   &.mat-alert-success {
-    background-color: #dff0d8;
-    color: #3c763d;
+    background-color: $alert-success-background;
+    color: $alert-success-color;
   }
   
   &.mat-alert-warn {
-    background-color: #fcf8e3;
-    color: #8a6d3b;
+    background-color: $alert-warn-background;
+    color: $alert-warn-color;
   }
   
   &.mat-alert-danger {
-    background-color: #f2dede;
-    color: #a94442;
+    background-color: $alert-danger-background;
+    color: $alert-danger-color;
   }
 }
 
@@ -104,7 +104,11 @@ button {
 .mat-card {
   margin-bottom: 20px;
 
-  @media only screen and (max-width: $xs) {
+  .mat-card-title, .mat-card-content {
+    position: relative;
+  }
+
+  @media only screen and (max-width: $mat-mobile) {
     margin-bottom: 10px;
   }
 }
@@ -112,8 +116,8 @@ button {
 .mat-drawer-container {
   height: calc(100% - #{$header-height});
 
-  @media only screen and (max-width: $xs) {
-    height: calc(100% - #{$header-height-xs});
+  @media only screen and (max-width: $mat-mobile) {
+    height: calc(100% - #{$header-height-mobile});
   }
 
   .mat-drawer {
@@ -196,4 +200,9 @@ button {
   .timepicker-button {
     color: $primary !important;
   }
+}
+
+.mat-input-element.mat-autosize {
+  overflow-y: hidden;
+  min-height: 18px;
 }

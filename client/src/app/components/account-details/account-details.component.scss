@@ -1,0 +1,23 @@
+@import '../../../styles/constants.scss';
+
+.account-display-content {
+  @media only screen and (max-width: $xs) {
+    &> div {
+      margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0px;
+      }
+    }
+  }
+}
+
+.see-donations-link {
+  margin-top: 10px;
+}
+
+.account-not-found {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}

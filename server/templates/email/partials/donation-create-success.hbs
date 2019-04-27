@@ -1,0 +1,26 @@
+<div>
+  <div>Thank-you for your donation!</div>
+  <p>
+    You can view and edit your donation at this
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
+  </p>
+  <p style="font-weight: bold; margin-bottom: 0px;">Donation Summary:</p>
+  <table style="border: none">
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Submitter:</td>
+      <td style="border: none">{{ donation.donorFirstName }} {{ donation.donorLastName }}</td>
+    </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Type:</td>
+      <td style="border: none">{{ donation.donationType }}</td>
+    </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Value:</td>
+      <td style="border: none">${{ donation.estimatedValue }}</td>
+    </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px;">Description:</td>
+      <td style="border: none; min-width: 300px;">{{ donation.description }}</td>
+    </tr>
+  </table>
+</div>

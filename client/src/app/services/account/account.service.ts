@@ -7,12 +7,17 @@ import { SessionService } from '../session/session.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { PageProgressService } from '../page-progress/page-progress.service';
 import { AlertService } from '../alert/alert.service';
-import { AccountCreateRequest } from '../../../../../shared/src/interfaces/account-create-request';
-import { AccountUpdateRequest } from '../../../../../shared/src/interfaces/account-update-request';
-import { AccountReadRequest, AccountReadFilters } from '../../../../../shared/src/interfaces/account-read-request';
 import { ListResponse } from '../../../../../shared/src/interfaces/list-response';
-import { Account } from '../../../../../shared/src/interfaces/account';
+import { AccountCreateRequest } from '../../../../../shared/src/interfaces/account/account-create-request';
+import { PasswordUpdateRequest } from '../../../../../shared/src/interfaces/account/password-update-request';
+import { AccountReadRequest, AccountReadFilters } from '../../../../../shared/src/interfaces/account/account-read-request';
+import { Account } from '../../../../../shared/src/interfaces/account/account';
 export { Account };
+
+export interface PasswordUpdate {
+  password: string;
+  oldPassword: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +31,7 @@ export class AccountService {
     private _errorHandlerService: ErrorHandlerService,
     private _sessionService: SessionService,
     private _pageProgressService: PageProgressService,
-    private _alertService: AlertService,
-    private _activatedRoute: ActivatedRoute
+    private _alertService: AlertService
   ) {}
 
   createAccount(account: Account, password: string): void {
@@ -36,33 +40,48 @@ export class AccountService {
     this._httpClient.post<Account>(this.url, request).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
-    ).subscribe((savedAccount: Account) => this._sessionService.account = savedAccount);
+    ).subscribe(
+      (savedAccount: Account) => this._sessionService.account = savedAccount
+    );
   }
 
-  updateAccount(accountUpdateProps: string[], accountUpdate: Account, passwordUpdate: { password: string; oldPassword: string }): Observable<Account> {
-    const request: AccountUpdateRequest = this._genAccountUpdateRequest(accountUpdateProps, accountUpdate, passwordUpdate);
-    console.log(request);
+  updateAccount(originalAccount: Account, accountSectionUpdate: Partial<Account>): Observable<Account> {
+    const accountUpdate: Account = this._genAccountUpdate(originalAccount, accountSectionUpdate);
     this._pageProgressService.activate(true);
-    return this._httpClient.put<Account>(this.url, request).pipe(
-      map((savedAccount: Account) => {
-        this._sessionService.account = savedAccount;
-        this._alertService.displaySimpleMessage('Account update successful', 'success');
-        return this._sessionService.account;
-      }),
+    return this._httpClient.put<Account>(this.url, accountUpdate).pipe(
+      map((savedAccount: Account) => this._handleAccountUpdateResponse(savedAccount)),
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );
   }
 
-  private _genAccountUpdateRequest(accountUpdateProps: string[], accountUpdate: Account, passwordUpdate: { password: string; oldPassword: string }): AccountUpdateRequest {
-    const { password, oldPassword } = passwordUpdate;
-    const account: Account = Object.assign({}, this._sessionService.account);
-    accountUpdateProps.forEach((property: string) => account[property] = accountUpdate[property]);
-    return { account, password, oldPassword };
+  private _genAccountUpdate(originalAccount: Account, accountSectionUpdate: Partial<Account>): Account {
+    const account: Account = Object.assign({}, originalAccount);
+    Object.keys(accountSectionUpdate).forEach((property: string) => account[property] = accountSectionUpdate[property]);
+    return account;
   }
 
-  listenAccoundQueryChange(): Observable<Account> {
-    return this._activatedRoute.queryParamMap.pipe(
+  private _handleAccountUpdateResponse(savedAccount: Account): Account {
+    // If user has updated their own account, then update client's session storage.
+    if (savedAccount.id === this._sessionService.account.id) {
+      this._sessionService.account = savedAccount;
+    }
+    this._alertService.displaySimpleMessage('Account update successful', 'success');
+    return savedAccount;
+  }
+
+  updatePassword(passwordUpdate: PasswordUpdate): Observable<void> {
+    const request: PasswordUpdateRequest = passwordUpdate;
+    this._pageProgressService.activate(true);
+    return this._httpClient.put<void>(`${this.url}/password`, request).pipe(
+      map(() => this._alertService.displaySimpleMessage('Password update successful', 'success')),
+      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
+      finalize(() => this._pageProgressService.reset())
+    );
+  }
+
+  listenAccountQueryChange(activatedRoute: ActivatedRoute): Observable<Account> {
+    return activatedRoute.paramMap.pipe(
       flatMap((paramMap: ParamMap) => {
         const id: number = (paramMap.has('id') ? parseInt(paramMap.get('id'), 10) : undefined);
         return this.getAccount(id);
@@ -80,13 +99,15 @@ export class AccountService {
       return of(window.history.state);
     }
     // Get account from server.
-    return this.getAccounts({ id }, 1, 1).pipe(
-      map((response: ListResponse<Account>) => response.list[0])
+    const url = `${this.url}/${id}`;
+    return this._httpClient.get<Account>(url).pipe(
+      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
+      finalize(() => this._pageProgressService.reset())
     );
   }
 
-  listenAccountsQueryChange(): Observable<ListResponse<Account>> {
-    return this._activatedRoute.queryParamMap.pipe(
+  listenAccountsQueryChange(activatedRoute: ActivatedRoute): Observable<ListResponse<Account>> {
+    return activatedRoute.queryParamMap.pipe(
       flatMap((params: ParamMap) => {
         const filters: AccountReadFilters = {};
         params.keys.forEach((paramKey: string) => {

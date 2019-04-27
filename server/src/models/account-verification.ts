@@ -2,8 +2,8 @@ import { EntityManager, getManager, getRepository, Repository } from 'typeorm';
 import { randomBytes } from 'crypto';
 import { AccountEntity } from '../entity/account.entity';
 import { MailTransporter, sendEmail } from '../helpers/email';
-import { FoodWebError } from '../helpers/food-web-error';
 import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
+import { FoodWebError } from '../helpers/food-web-error';
 
 export async function saveUnverifiedAccount(account: AccountEntity, manager: EntityManager = getManager()): Promise<void> {
   const unverifiedAccountEntity: UnverifiedAccountEntity = _genUnverifiedAccountEntity(account);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ContactInfo } from '../../../../../shared/src/interfaces/account';
+import { ContactInfo } from '../../../../../shared/src/interfaces/account/account';
 
 @Injectable({
   providedIn: 'root'

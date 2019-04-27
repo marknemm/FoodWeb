@@ -2,14 +2,14 @@ import { EntityManager, getRepository, getConnection } from 'typeorm';
 import { randomBytes } from 'crypto';
 import { AccountEntity } from '../entity/account.entity';
 import { MailTransporter, sendEmail } from '../helpers/email';
-import { FoodWebError } from '../helpers/food-web-error';
 import { PasswordResetEntity } from '../entity/password-reset';
-import { getAccounts } from './get-account';
+import { readAccount } from './read-accounts';
 import { savePassword } from './save-account';
+import { FoodWebError } from '../helpers/food-web-error';
 
 export async function savePasswordResetToken(username: string): Promise<void> {
   await getConnection().transaction(async (manager: EntityManager) => {
-    const account: AccountEntity = (await getAccounts({ username }, 1, 1)).accounts[0];
+    const account: AccountEntity = (await readAccount(username));
     if (!account) {
       throw new FoodWebError('Account not found. Be sure to enter a valid username.');
     }

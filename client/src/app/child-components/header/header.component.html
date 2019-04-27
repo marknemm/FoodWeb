@@ -24,11 +24,11 @@
     <h1 class="page-title">{{ pageTitleService.title }}</h1>
     <span class="session-links">
       <ng-container *ngIf="!sessionService.loggedIn">
-        <a [routerLink]="" (click)="login()">Login</a>
+        <a (click)="login()">Login</a>
         <span> | <a [routerLink]="['signup']">Signup</a></span>
       </ng-container>
       <ng-container *ngIf="sessionService.loggedIn">
-        <span><a [routerLink]="['account']">Account</a> | </span>
+        <span><a [routerLink]="['account-details']">Account</a> | </span>
         <a [routerLink]="['logout']" (click)="sessionService.logout()">Logout</a>
       </ng-container>
     </span>

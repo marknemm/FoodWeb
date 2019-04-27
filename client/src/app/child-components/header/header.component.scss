@@ -61,19 +61,24 @@
       display: inline-block;
       right: 0;
       padding-right: inherit;
-      padding-top: 6px;
+      padding-top: 8px;
 
       a {
         color: $accent-darkest;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }
 
-  @media only screen and (max-width: $xs) {
-    height: $header-height-xs;
+  @media only screen and (max-width: $mat-mobile) {
+    height: $header-height-mobile;
 
     .site-title {
-      height: $site-title-height-xs;
+      height: $site-title-height-mobile;
     }
   }
 }

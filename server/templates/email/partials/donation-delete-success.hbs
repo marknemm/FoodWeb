@@ -1,0 +1,26 @@
+<div>
+  <div>Your donation has been deleted!</div>
+  <p style="font-weight: bold; margin-bottom: 0px;">Deleted Donation Summary:</p>
+  <table style="border: none">
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Donor:</td>
+      <td style="border: none">{{ donation.donorFirstName }} {{ donation.donorLastName }}</td>
+    </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Type:</td>
+      <td style="border: none">{{ donation.donationType }}</td>
+    </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px">Value:</td>
+      <td style="border: none">${{ donation.estimatedValue }}</td>
+    </tr>
+    <tr>
+      <td style="border: none; color: #795548; padding-right: 10px;">Description:</td>
+      <td style="border: none; min-width: 300px;">{{ donation.description }}</td>
+    </tr>
+  </table>
+  <p>
+    If this change was unexpected, then contact FoodWeb at:<br>
+    <a href="mailto:{{ env.SUPPORT_EMAIL }}">{{ env.SUPPORT_EMAIL }}</a>.
+  </p>
+</div>

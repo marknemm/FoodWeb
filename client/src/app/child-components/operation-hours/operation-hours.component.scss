@@ -53,8 +53,16 @@
   }
 
   .operation-hours-display {
-    td:first-child {
-      padding-right: 5px;
+    tr {
+      padding-bottom: 5px;
+
+      &:last-child {
+        padding-bottom: 0px;
+      }
+
+      td:first-child {
+        padding-right: 5px;
+      }
     }
   }
 }

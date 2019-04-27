@@ -1,13 +1,15 @@
-import { getConnection, EntityManager } from 'typeorm';
+import { getConnection, EntityManager, Repository } from 'typeorm';
 import { hash, genSalt } from 'bcrypt';
 import { saveUnverifiedAccount } from './account-verification';
-import { formatOperationHoursTimes } from '../helpers/operation-hours-converter';
+import { formatOperationHoursTimes, OperationHoursEntity } from '../helpers/operation-hours-converter';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordEntity } from '../entity/password.entity';
 import { getPasswordId } from '../helpers/password-match';
 import { FoodWebError } from '../helpers/food-web-error';
-import { Account } from '../../../shared/src/interfaces/account';
-import { Validation } from '../../../shared/src/constants/validation';
+import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
+import { OperationHours } from '../interfaces/account/account';
+
+const accountHelper = new AccountHelper();
 
 export async function createAccount(account: Account, password: string): Promise<AccountEntity> {
   let createdAccount: AccountEntity;
@@ -22,32 +24,42 @@ export async function createAccount(account: Account, password: string): Promise
   return createdAccount;
 }
 
-export async function updateAccount(userId: number, account: Account, password: string, oldPassword: string): Promise<AccountEntity> {
-  if (userId !== account.id) {
+export async function updateAccount(myAccount: Account, account: Account): Promise<AccountEntity> {
+  if (!accountHelper.isMyAccount(myAccount, account.id)) {
     throw new FoodWebError('User unauthorized to update account', 401);
   }
 
   let updatedAccount: AccountEntity;
   await getConnection().transaction(async (manager: EntityManager) => {
-    updatedAccount = await _saveAccount(manager, account);
-    if (password) {
-      oldPassword = (oldPassword ? oldPassword : ' '); // Ensure we have an oldPassword to check against for extra security!
-      await savePassword(manager, updatedAccount, password, oldPassword);
-    }
+    updatedAccount = await _saveAccount(manager, account, myAccount);
   });
 
   formatOperationHoursTimes(updatedAccount.operationHours);
   return updatedAccount;
 }
 
-export async function savePassword(manager: EntityManager, account: AccountEntity, password: string, oldPassword?: string, isReset = false): Promise<void> {
+export async function updatePassword(myAccount: AccountEntity, password: string, oldPassword: string): Promise<void> {
+  oldPassword = (oldPassword ? oldPassword : ' '); // Ensure we have an oldPassword to check against for extra security!
+  await getConnection().transaction(async (manager: EntityManager) => {
+    await savePassword(manager, myAccount, password, oldPassword, accountHelper.isAdmin(myAccount));
+  });
+}
+
+export async function savePassword(manager: EntityManager, myAccount: AccountEntity, password: string, oldPassword?: string, isReset = false): Promise<void> {
   _validatePassword(password);
   const passwordHash: string = await _genPasswordHash(password);
-  const passwordEntity: PasswordEntity = _genPasswordEntity(passwordHash, account);
-  passwordEntity.id = await _getOldPasswordId(manager, account, oldPassword, isReset);
+  const passwordEntity: PasswordEntity = _genPasswordEntity(passwordHash, myAccount);
+  passwordEntity.id = await _getOldPasswordId(manager, myAccount, oldPassword, isReset);
   // If trying to update password without providing valid old password or going through password reset link, this will fail.
   // The failure will be due to saving a password with a duplicate account reference (must be unique 1-1 relationship).
   await manager.getRepository(PasswordEntity).save(passwordEntity);
+}
+
+function _validatePassword(password: string): void {
+  const passwordErr: string = accountHelper.validatePassword(password);
+  if (passwordErr) {
+    throw new FoodWebError(passwordErr);
+  }
 }
 
 async function _genPasswordHash(password: string): Promise<string> {
@@ -63,39 +75,52 @@ function _genPasswordEntity(passwordHash: string, account: AccountEntity): Passw
 }
 
 async function _getOldPasswordId(manager: EntityManager, account: AccountEntity, oldPassword: string, isReset: boolean): Promise<number> {
-  if (oldPassword) {
-    const matchId: number = await getPasswordId(account, oldPassword);
-    if (matchId == null)
-      throw new FoodWebError('Current password match failed', 401);
-    return matchId;
-  }
   if (isReset) {
     return (await manager.getRepository(PasswordEntity).findOne(
       { where: { account } }
     )).id;
   }
+  if (oldPassword) {
+    const matchId: number = await getPasswordId(account, oldPassword);
+    if (matchId == null) {
+      throw new FoodWebError('Current password match failed', 401);
+    }
+    return matchId;
+  }
   return undefined;
 }
 
-async function _saveAccount(manager: EntityManager, account: Account): Promise<AccountEntity> {
-  _validateAccount(account);
-  return manager.getRepository(AccountEntity).save(account as AccountEntity);
+async function _saveAccount(manager: EntityManager, account: Account, myAccount?: Account): Promise<AccountEntity> {
+  const accountRepo: Repository<AccountEntity> = manager.getRepository(AccountEntity);
+  const operationHoursRepo: Repository<OperationHoursEntity> = manager.getRepository(OperationHoursEntity);
+  _validateAccount(account, myAccount);
+
+  if (myAccount) {
+    await operationHoursRepo.delete({ account: { id: myAccount.id } });
+  }
+  const savedAccount: AccountEntity = await accountRepo.save(account as AccountEntity);
+  await _insertOperationHours(operationHoursRepo, savedAccount.id, account.operationHours);
+  return accountRepo.findOne({ id: account.id });
 }
 
-function _validateAccount(account: Account): void {
-  if (!Validation.EMAIL_REGEX.test(account.contactInfo.email)) {
-    throw new FoodWebError('Invalid email address');
-  }
-  if (!Validation.PHONE_REGEX.test(account.contactInfo.phoneNumber)) {
-    throw new FoodWebError('Invalid phone number');
-  }
-  if (!Validation.POSTAL_CODE_REGEX.test(account.contactInfo.postalCode)) {
-    throw new FoodWebError('Invalid zip/postal code');
+function _validateAccount(account: Account, myAccount?: Account) {
+  const allowAdminAccountType = (myAccount && myAccount.accountType === 'Admin');
+  const accountErr: string = accountHelper.validateAccount(account, allowAdminAccountType);
+  if (accountErr) {
+    throw new FoodWebError(accountErr);
   }
 }
 
-function _validatePassword(password: string): void {
-  if (!Validation.PASSWORD_REGEX.test(password)) {
-    throw new FoodWebError('Password must contain at least 6 characters');
+async function _insertOperationHours(repo: Repository<OperationHoursEntity>, accountId: number, operationHoursArr: OperationHours[]): Promise<void> {
+  if (operationHoursArr && operationHoursArr.length !== 0) {
+    // Make copy of array with shallow copy of members, and assign account field for insertion.
+    const operationHoursArrCopy = (<OperationHoursEntity[]>operationHoursArr).map(
+      (operationHours: OperationHoursEntity) => {
+        const operationHoursCopy: OperationHoursEntity = Object.assign({}, operationHours);
+        operationHoursCopy.account = <AccountEntity>{ id: accountId };
+        return operationHoursCopy;
+      }
+    );
+    repo.insert(operationHoursArrCopy);
   }
 }

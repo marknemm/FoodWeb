@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AccountService, Account } from '../../services/account/account.service';
 import { PageTitleService } from '../../services/page-title/page-title.service';
 import { ListResponse } from '../../../../../shared/src/interfaces/list-response';
+import { AccountHelper } from '../../../../../shared/src/helpers/account-helper';
 
 @Component({
   selector: 'food-web-accounts',
@@ -20,12 +21,13 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
   constructor(
     public pageTitleService: PageTitleService,
+    public accountHelper: AccountHelper,
     private _accountService: AccountService,
-    private _router: Router
+    private _activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this._accountService.listenAccountsQueryChange().pipe(
+    this._accountService.listenAccountsQueryChange(this._activatedRoute).pipe(
       takeUntil(this._destroy$)
     ).subscribe(
       (response: ListResponse<Account>) => {
