@@ -47,4 +47,8 @@ export interface Donation {
    * The time of the most recent update. If the donationStatus is 'Complete', then this is garunteed to be the completion/delivery time.
    */
   lastUpdated?: string;
+  /**
+   * The time when the donation was originally created.
+   */
+  created?: string;
 }

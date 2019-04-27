@@ -20,6 +20,23 @@ export class FormHelperService {
     return new FormArray([]);
   }
 
+  deriveAbstractControl(control: AbstractControl, controlName: string, formGroupDirective: FormGroupDirective): AbstractControl {
+    if (control) {
+      return control;
+    }
+    // Initialize form control via form control name if one is given.
+    if (controlName && formGroupDirective && formGroupDirective.form) {
+      control = formGroupDirective.form.get(controlName);
+      if (!control) {
+        throw new Error(`Form control cannot be found with name: ${controlName}`);
+      }
+    // Otherwise, initialize form control to surrounding form group if no control given as input.
+    } else if (!control) {
+      control = formGroupDirective.form;
+    }
+    return new FormControl();
+  }
+
   deriveFormGroup(formGroup: FormGroup, formGroupName: string, formGroupDirective: FormGroupDirective): FormGroup {
     if (formGroup) {
       return formGroup;

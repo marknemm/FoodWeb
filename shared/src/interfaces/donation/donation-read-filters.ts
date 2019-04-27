@@ -1,10 +1,11 @@
 import { Omit } from 'utility-types';
 import { AccountReadFilters } from '../account/account-read-filters';
+import { DonationStatus } from './donation';
 
 /**
  * Filter definition for a donors' accounts that are associated with donations.
  */
-export interface DonorAccountFilters extends Omit<AccountReadFilters, 'accountType'> {}
+export interface AccountFilters extends Omit<AccountReadFilters, 'accountType'> {}
 
 export interface DonationReadFilters {
   /**
@@ -12,9 +13,17 @@ export interface DonationReadFilters {
    */
   id?: number;
   /**
+   * The status of the donation.
+   */
+  donationStatus?: DonationStatus;
+  /**
    * Filters for associated donors' accounts.
    */
-  donorAccountFilters?: DonorAccountFilters;
+  donorAccountId?: number;
+  /**
+   * Filters for associated receivers' accounts.
+   */
+  receiverAccountId?: number;
   /**
    * The last name of the person who submitted the donation.
    */

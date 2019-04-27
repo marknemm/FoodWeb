@@ -27,6 +27,16 @@ html, body {
   width: 100%;
 }
 
+.list-title {
+  font-size: 28px;
+  margin-bottom: 10px;
+  text-align: center;
+
+  @media only screen and (max-width: $sm) {
+    font-size: 24px;
+  }
+}
+
 .block-label {
   display: block;
   font-weight: bold;
@@ -37,6 +47,7 @@ html, body {
   display: inline-block;
   margin-bottom: 2px;
   color: $accent;
+  vertical-align: top;
 
   & + * {
     margin-left: 7px;
@@ -48,5 +59,64 @@ html, body {
   input[type=number]::-webkit-outer-spin-button { 
     -webkit-appearance: none !important; 
     margin: 0; 
+  }
+}
+
+mat-card.mat-card {
+  & > food-web-edit-save-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+
+  mat-card-header.mat-card-header {
+    position: relative;
+    
+    .mat-card-header-text {
+      margin-top: -2px;
+
+      .mat-card-subtitle {
+        &:not(:first-child) {
+          margin-top: -14px;
+        }
+      }
+    }
+  }
+
+  mat-card-title.mat-card-title {
+    color: $accent-darkest;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 20px !important;
+    font-weight: bold !important;
+  }
+}
+
+.donation-description-container {
+  hr {
+    margin: 0.6rem 0;
+
+    &:first-child {
+      margin-top: 0px;
+    }
+  }
+
+  span {
+    text-align: center;
+    display: inline-block;
+    margin: 0px 5px;
+    width: 100%;
+    font-weight: bold;
+    font-size: 15px;
+    color: $accent-darkest;
+  }
+}
+
+.disclaimer {
+  color: #666;
+}
+
+@media only screen and (max-width: $md) {
+  .d-inline-block.desktop {
+    display: block !important;
   }
 }

@@ -15,14 +15,18 @@ export class PageTitleService {
   ) {
     router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
-        const route: string = event.url.split('?')[0];
-        switch (route) {
-          case '/accounts':
-            const accountType = <AccountType>activatedRoute.snapshot.queryParamMap.get('accountType');
-            this.title = (accountType ? `${accountType}s` : this._deriveDefaultTitle(route));
-            break;
-          default:
-            this.title = this._deriveDefaultTitle(route);
+        const route: string = event.url.split(/[#?]/)[0];
+        if (route === '/accounts') {
+          const accountType = <AccountType>activatedRoute.snapshot.queryParamMap.get('accountType');
+          this.title = (accountType ? `${accountType}s` : this._deriveDefaultTitle(route));
+        } else if (route.indexOf('/account-details') >= 0) {
+          this.title = 'Account';
+        } else if (route.indexOf('/donation-details') >= 0) {
+          this.title = 'Donation';
+        } else if (route.indexOf('/donations/my') >= 0) {
+          this.title = 'My Donations';
+        } else {
+          this.title = this._deriveDefaultTitle(route);
         }
       }
     });

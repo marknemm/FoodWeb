@@ -1,0 +1,14 @@
+<div>
+  <div>You have successfully cancelled your claim to a donation from <strong>{{ donation.donorAccount.organization.organizationName }}</strong>:</div>
+  <p style="font-weight: bold; color: #3e2723">{{ donation.description }}</p>
+  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;">
+  <p>
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
+    You may also re-claim this donation as long as no other charity has claimed it.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donation.donorAccount.organization.organizationName }}</a> or
+    <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+</div>

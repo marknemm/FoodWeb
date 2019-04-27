@@ -1,5 +1,19 @@
-.list-title {
-  font-size: 28px;
-  margin-bottom: 10px;
-  text-align: center;
+.account-link {
+  &:hover {
+    text-decoration: none;
+
+    .account-card {
+      box-shadow: 0px 3px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  .accounts-display {
+    &> div {
+      margin-bottom: 12px;
+    }
+  }
+
+  .account-email {
+    font-weight: 600;
+  }
 }

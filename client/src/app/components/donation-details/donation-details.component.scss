@@ -1,0 +1,51 @@
+@import '../../../styles/constants.scss';
+
+.donation-details-container {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+
+  .donation-details-subtitle {
+    margin-right: 5px;
+  }
+
+  .donation-details-form {
+    .donation-primary-label {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .readonly-donation {
+      .inline-label {
+        margin-bottom: 0px;
+      }
+
+      div {
+        margin-bottom: 7px;
+      }
+    }
+
+    .delete-button {
+      margin-right: 7px;
+    }
+  }
+
+  .donor-info-container,
+  .receiver-info-container {
+    .organization-name {
+      font-weight: bold;
+    }
+  }
+
+  .donation-status {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    font-size: 13px;
+
+    @media only screen and (max-width: 450px) {
+      position: relative;
+      font-size: 11px;
+    }
+  }
+}
