@@ -1,0 +1,11 @@
+<label class="profile-img" for="profile-img-input" matRipple [matRippleDisabled]="!editable"
+ [ngClass]="{ editable: editable }" [style.width]="width" [style.height]="height" [style.backgroundImage]="'url(' + imgUrl + ')'">
+  <img [src]="imgUrl" alt="Profile Image" class="sr-only">
+  <ng-container *ngIf="editable">
+    <div class="edit-background"></div>
+    <div class="edit-text">
+      <mat-icon>edit</mat-icon>Edit
+    </div>
+  </ng-container>
+</label>
+<input id="profile-img-input" type='file' (change)="onSelectFile($event)" [disabled]="!editable">

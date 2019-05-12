@@ -1,7 +1,7 @@
 <form [formGroup]="donateForm" class="donate-form" [ngClass]="{ 'submitted': !!savedDonation }" (submit)="donate()">
 
   <mat-card class="donate-card">
-    <mat-card-title class="donate-form-title list-title block-label">
+    <mat-card-title class="donate-form-title page-title block-label">
       {{ savedDonation ? 'Thank-You For Your Donation' : 'Donation Form' }}
     </mat-card-title>
     <mat-card-content>

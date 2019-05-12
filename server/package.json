@@ -13,7 +13,12 @@
     "lint": "tslint -p ./tsconfig.json",
     "start": "tsc-watch -p ./src/tsconfig.app.json --onSuccess \"nodemon ./dist/server/src/index.js\"",
     "test": "npm run lint && ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts",
-    "test:watch": "ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts"
+    "test:watch": "ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts",
+    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ormconfig.json",
+    "typeorm:migration:create": "ts-node ./node_modules/typeorm/cli migration:create -n",
+    "typeorm:migration:generate": "ts-node ./node_modules/typeorm/cli migration:generate -n",
+    "typeorm:migration:revert": "ts-node ./node_modules/typeorm/cli migration:revert",
+    "typeorm:migration:run": "ts-node ./node_modules/typeorm/cli migration:run"
   },
   "private": true,
   "dependencies": {

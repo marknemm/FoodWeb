@@ -21,7 +21,8 @@ import {
   MatProgressSpinnerModule,
   MatProgressBarModule,
   MatPaginatorModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatDividerModule
 } from '@angular/material';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AgmCoreModule } from '@agm/core';
@@ -59,6 +60,7 @@ import { DonationStatusComponent } from './child-components/donation-status/dona
 import { DeleteButtonComponent } from './child-components/delete-button/delete-button.component';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
+import { ProfileImgComponent } from './child-components/profile-img/profile-img.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +93,7 @@ import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
     DonationDetailsComponent,
     DonationStatusComponent,
     DeleteButtonComponent,
+    ProfileImgComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({
@@ -119,6 +122,7 @@ import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
     MatProgressBarModule,
     MatPaginatorModule,
     MatTooltipModule,
+    MatDividerModule,
     NgxMaterialTimepickerModule.forRoot()
   ],
   providers: [

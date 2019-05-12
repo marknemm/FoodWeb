@@ -4,6 +4,38 @@
 @include mat-core();
 @include angular-material-theme($light-theme);
 
+.mat-donor {
+  background-color: $donor-color;
+  color: black;
+}
+
+.mat-receiver {
+  background-color: $receiver-color;
+  color: black;
+}
+
+.mat-driver {
+  background-color: $driver-color;
+  color: white;
+}
+
+.mat-icon {
+  &.mat-donor {
+    background-color: inherit;
+    color: $donor-color;
+  }
+
+  &.mat-receiver {
+    background-color: inherit;
+    color: $receiver-color;
+  }
+
+  &.mat-driver {
+    background-color: inherit;
+    color: $driver-color;
+  }
+}
+
 .mat-snack-bar-container {
   &.mat-alert-info {
     background-color: $alert-info-background;
@@ -106,6 +138,19 @@ button {
 
   .mat-card-title, .mat-card-content {
     position: relative;
+  }
+
+  .mat-card-title {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+
+    .mat-toolbar:first-child {
+      margin: -16px 0px 0px -16px;
+      max-height: 50px;
+      width: calc(100% + 32px);
+      justify-content: center;
+      border-radius: inherit;
+    }
   }
 
   @media only screen and (max-width: $mat-mobile) {

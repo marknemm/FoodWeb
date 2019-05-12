@@ -64,10 +64,9 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   private _initAccountForm(): void {
     this.accountUpdateForm = this._formBuilder.group({
-      account: this._formBuilder.group({
-        accountType: ['', Validators.required],
-        username: ['', Validators.required]
-      }),
+      accountType: ['', Validators.required],
+      username: ['', Validators.required],
+      profileImgUrl: '',
       organization: new FormGroup({}),
       contactInfo: new FormGroup({}),
       operationHours: new FlexFormArray([]),
@@ -98,21 +97,15 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _refreshAccountFormValue(account: Account, force = false): void {
-    if (force || !this.sectionEditService.editing('account')) {
-      this.accountUpdateForm.get('account').patchValue(account);
-    }
-    if (force || !this.sectionEditService.editing('organization')) {
-      this.accountUpdateForm.get('organization').patchValue(account.organization);
-    }
-    if (force || !this.sectionEditService.editing('contactInfo')) {
-      this.accountUpdateForm.get('contactInfo').patchValue(account.contactInfo);
-    }
-    if (force || !this.sectionEditService.editing('operationHours')) {
-      this.accountUpdateForm.get('operationHours').patchValue(account.operationHours);
-    }
+    const accountSections = ['accountType', 'username', 'profileImgUrl', 'organization', 'contactInfo', 'operationHours'];
+    accountSections.forEach((section: string) => {
+      if (force || !this.sectionEditService.editing(section)) {
+        this.accountUpdateForm.get(section).patchValue(account[section]);
+      }
+    });
     if (force || !this.sectionEditService.editing('password')) {
       this.accountUpdateForm.get('password').reset();
-    }
+    }    
   }
 
   ngOnDestroy() {
@@ -136,10 +129,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   private _saveAccount(sectionName: string): void {
     let accountUpdate: Partial<Account> = {};
-    // If we are updating the Account's top level fields (e.g. username), then set accountUpdate to it directly.
-    (sectionName === 'account')
-      ? accountUpdate = this.accountUpdateForm.get(sectionName).value
-      : accountUpdate[sectionName] = this.accountUpdateForm.get(sectionName).value;
+    accountUpdate[sectionName] = this.accountUpdateForm.get(sectionName).value;
     this._accountService.updateAccount(this.originalAccount, accountUpdate).subscribe(
       (savedAccount: Account) => this._handleSaveSuccess(sectionName, savedAccount)
     );

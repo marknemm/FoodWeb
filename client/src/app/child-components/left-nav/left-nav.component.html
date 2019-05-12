@@ -8,17 +8,17 @@
       </li>
       <li>
         <a mat-ripple [routerLink]="['/accounts']" [queryParams]="{ accountType: 'Donor' }" (click)="_onNavClick()">
-          <span><mat-icon>business</mat-icon> Donors</span>
+          <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Donor'] }}</mat-icon> Donors</span>
         </a>
       </li>
       <li>
         <a mat-ripple [routerLink]="['/accounts']" [queryParams]="{ accountType: 'Receiver' }" (click)="_onNavClick()">
-          <span><mat-icon>location_on</mat-icon> Receivers</span>
+          <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Receiver'] }}</mat-icon> Receivers</span>
         </a>
       </li>
       <li *ngIf="sessionService.isDonor">
         <a mat-ripple [routerLink]="['/donate']" (click)="_onNavClick()">
-          <span><mat-icon>card_giftcard</mat-icon> Donate</span>
+          <span><mat-icon>send</mat-icon> Donate</span>
         </a>
       </li>
       <li *ngIf="sessionService.isDonor || sessionService.isReceiver">

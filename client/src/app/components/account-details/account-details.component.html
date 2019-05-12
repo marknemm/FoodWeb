@@ -1,21 +1,24 @@
 <form [formGroup]="accountUpdateForm" *ngIf="originalAccount" class="account-form">
+  <div class="account-main align-center">
+    <div class="page-title block-label">
+      <food-web-username *ngIf="isMyAccount" formControlName="username" [editing]="sectionEditService.editing('username')"></food-web-username>
+      <ng-container *ngIf="!isMyAccount">
+        <div *ngIf="accountUpdateForm.get('organization').value">
+          {{ accountUpdateForm.get('organization').get('organizationName').value }}
+        </div>
+      </ng-container>
+    </div>
+    <food-web-profile-img formControlName="profileImgUrl" [editable]="isMyAccount" [editing]="sectionEditService.editing('profileImgUrl')"></food-web-profile-img>
+  </div>
+
+  <div class="account-type">
+    <food-web-account-type formControlName="accountType" [editing]="sectionEditService.editing('accountType')"></food-web-account-type>
+  </div>
+
+  <mat-divider></mat-divider>
+
   <div class="row">
     <div class="col-xl-6">
-      <mat-card formGroupName="account">
-        <food-web-edit-save-button *ngIf="sessionService.isAdmin" [editing]="sectionEditService.editing('account')" (edit)="onEdit('account')"
-          (save)="onSave('account')" controlName="account"></food-web-edit-save-button>
-        <mat-card-title class="block-label">Account</mat-card-title>
-        <mat-card-content>
-          <div class="account-display-content row">
-            <div class="col-sm-6" *ngIf="isMyAccount">
-              <food-web-username formControlName="username" [editing]="sectionEditService.editing('account')"></food-web-username>
-            </div>
-            <div class="col-sm-6">
-              <food-web-account-type formControlName="accountType" [editing]="sectionEditService.editing('account')"></food-web-account-type>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
       <mat-card>
         <food-web-edit-save-button *ngIf="isMyAccount" [editing]="sectionEditService.editing('organization')" (edit)="onEdit('organization')"
           (save)="onSave('organization')" controlName="organization"></food-web-edit-save-button>

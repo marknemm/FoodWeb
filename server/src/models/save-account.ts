@@ -94,6 +94,7 @@ async function _saveAccount(manager: EntityManager, account: Account, myAccount?
   const accountRepo: Repository<AccountEntity> = manager.getRepository(AccountEntity);
   const operationHoursRepo: Repository<OperationHoursEntity> = manager.getRepository(OperationHoursEntity);
   _validateAccount(account, myAccount);
+  _ensureAccountHasProfileImg(account);
 
   if (myAccount) {
     await operationHoursRepo.delete({ account: { id: myAccount.id } });
@@ -103,11 +104,20 @@ async function _saveAccount(manager: EntityManager, account: Account, myAccount?
   return accountRepo.findOne({ id: account.id });
 }
 
-function _validateAccount(account: Account, myAccount?: Account) {
+function _validateAccount(account: Account, myAccount?: Account): void {
   const allowAdminAccountType = (myAccount && myAccount.accountType === 'Admin');
   const accountErr: string = accountHelper.validateAccount(account, allowAdminAccountType);
   if (accountErr) {
     throw new FoodWebError(accountErr);
+  }
+}
+
+function _ensureAccountHasProfileImg(account: Account): void {
+  if (!account.profileImgUrl) {
+    const firstLetter: string = (account.accountType === 'Driver')
+      ? 'A'
+      : account.organization.organizationName.charAt(0).toUpperCase();
+    account.profileImgUrl = `/assets/${firstLetter}.svg`;
   }
 }
 

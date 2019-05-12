@@ -21,6 +21,9 @@ export class AccountEntity implements Account {
   @Index({ unique: true })
   username: string;
 
+  @Column()
+  profileImgUrl: string;
+
   @OneToOne((type) => ContactInfoEntity, (contactInfo) => contactInfo.account, { cascade: true, eager: true })
   contactInfo: ContactInfoEntity;
 

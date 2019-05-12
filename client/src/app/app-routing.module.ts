@@ -18,6 +18,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'home/:login', component: HomeComponent },
   { path: 'signup', component: SignupComponent },
+  { path: 'signup/:accountType', component: SignupComponent },
   { path: 'signup-verification', component: SignupVerificationComponent },
   { path: 'account-details', component: AccountDetailsComponent, canActivate: [AuthGaurdService] },
   { path: 'account-details/:id', component: AccountDetailsComponent, canActivate: [AuthGaurdService] },
