@@ -14,6 +14,9 @@ export class OrganizationEntity implements Organization {
   @Column('text', { default: '' })
   organizationInfo?: string;
 
+  @Column('text', { default: '' })
+  deliveryInstructions?: string;
+
   @OneToOne((type) => AccountEntity, (accountEntity) => accountEntity.organization)
   @JoinColumn()
   account?: AccountEntity;
