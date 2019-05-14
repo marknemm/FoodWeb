@@ -6,8 +6,8 @@ import { AccountEntity } from '../entity/account.entity';
 import { PasswordEntity } from '../entity/password.entity';
 import { getPasswordId } from '../helpers/password-match';
 import { FoodWebError } from '../helpers/food-web-error';
-import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
 import { OperationHours } from '../interfaces/account/account';
+import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
 
 const accountHelper = new AccountHelper();
 
@@ -94,6 +94,7 @@ async function _saveAccount(manager: EntityManager, account: Account, myAccount?
   const accountRepo: Repository<AccountEntity> = manager.getRepository(AccountEntity);
   const operationHoursRepo: Repository<OperationHoursEntity> = manager.getRepository(OperationHoursEntity);
   _validateAccount(account, myAccount);
+  _ensureEitherOrganizationOrVolunteer(account);
   _ensureAccountHasProfileImg(account);
 
   if (myAccount) {
@@ -112,10 +113,16 @@ function _validateAccount(account: Account, myAccount?: Account): void {
   }
 }
 
+function _ensureEitherOrganizationOrVolunteer(account: Account): void {
+  (account.accountType === 'Volunteer')
+    ? account.organization = null
+    : account.volunteer = null;
+}
+
 function _ensureAccountHasProfileImg(account: Account): void {
   if (!account.profileImgUrl) {
-    const firstLetter: string = (account.accountType === 'Driver')
-      ? 'A'
+    const firstLetter: string = (account.accountType === 'Volunteer')
+      ? account.volunteer.lastName.charAt(0).toUpperCase()
       : account.organization.organizationName.charAt(0).toUpperCase();
     account.profileImgUrl = `/assets/${firstLetter}.svg`;
   }

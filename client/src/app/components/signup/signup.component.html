@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-xl-6">
         <mat-card>
-          <mat-card-title class="block-label">Login Info</mat-card-title>
+          <mat-card-title class="block-label">Login Credentials</mat-card-title>
           <mat-card-content>
             <div class="row">
               <div class="col-sm-12">
@@ -23,13 +23,19 @@
           </mat-card-content>
         </mat-card>
 
-        <mat-card>
-          <mat-card-title class="block-label">Organization Info</mat-card-title>
+        <mat-card *ngIf="accountForm.get('accountType').value !== 'Volunteer'">
+          <mat-card-title class="block-label">Organization</mat-card-title>
           <mat-card-content>
             <food-web-organization [accountType]="accountForm.get('accountType').value" [editing]="true" formGroupName="organization"></food-web-organization>
           </mat-card-content>
         </mat-card>
 
+        <mat-card *ngIf="accountForm.get('accountType').value === 'Volunteer'">
+          <mat-card-title>Volunteer Name</mat-card-title>
+          <mat-card-content>
+            <food-web-volunteer [editing]="true" formGroupName="volunteer"></food-web-volunteer>
+          </mat-card-content>
+        </mat-card>
       </div>
       <div class="col-xl-6">
         <mat-card>
@@ -39,7 +45,7 @@
           </mat-card-content>
         </mat-card>
 
-        <mat-card>
+        <mat-card *ngIf="accountForm.get('accountType').value !== 'Volunteer'">
           <mat-card-title class="block-label">Hours of Operation</mat-card-title>
           <food-web-operation-hours [editing]="true" formArrayName="operationHours"></food-web-operation-hours>
         </mat-card>

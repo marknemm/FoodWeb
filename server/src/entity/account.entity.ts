@@ -1,6 +1,7 @@
 import { PrimaryGeneratedColumn, Entity, Column, OneToMany, OneToOne, Index, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 import { ContactInfoEntity } from './contact-info.entity';
 import { OrganizationEntity } from './organization.entity';
+import { VolunteerEntity } from './volunteer-entity';
 import { OperationHoursEntity } from './operation-hours.entity';
 import { DonationEntity } from './donation.entity';
 import { Account, AccountType } from '../../../shared/src/interfaces/account/account';
@@ -14,7 +15,7 @@ export class AccountEntity implements Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'enum', enum: _constants.ACCOUNT_TYPES.concat(['Admin']), nullable: true })
+  @Column({ type: 'enum', enum: _constants.ACCOUNT_TYPES.concat(['Admin']) })
   accountType: AccountType;
 
   @Column()
@@ -29,6 +30,9 @@ export class AccountEntity implements Account {
 
   @OneToOne((type) => OrganizationEntity, (organization) => organization.account, { nullable: true, cascade: true, eager: true })
   organization?: OrganizationEntity;
+
+  @OneToOne((type) => VolunteerEntity, (volunteer) => volunteer.account, { nullable: true, cascade: true, eager: true })
+  volunteer?: VolunteerEntity;
 
   @OneToMany((type) => OperationHoursEntity, (operationHours) => operationHours.account, { cascade: ['remove'], eager: true })
   operationHours: OperationHoursEntity[];

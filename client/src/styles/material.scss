@@ -14,8 +14,8 @@
   color: black;
 }
 
-.mat-driver {
-  background-color: $driver-color;
+.mat-volunteer {
+  background-color: $volunteer-color;
   color: white;
 }
 
@@ -30,9 +30,9 @@
     color: $receiver-color;
   }
 
-  &.mat-driver {
+  &.mat-volunteer {
     background-color: inherit;
-    color: $driver-color;
+    color: $volunteer-color;
   }
 }
 

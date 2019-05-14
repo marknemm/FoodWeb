@@ -38,13 +38,6 @@ function _genFindOptions(request: AccountReadRequest): FindConditions<AccountEnt
 
 function _processAccounts(accounts: AccountEntity[]): void {
   accounts.forEach((account: AccountEntity) => {
-    _fillProfileImgUrlIfMissing(account);
     formatOperationHoursTimes(account.operationHours);
   });
-}
-
-function _fillProfileImgUrlIfMissing(account: AccountEntity): void {
-  if (!account.profileImgUrl) {
-    account.profileImgUrl
-  }
 }

@@ -1,4 +1,4 @@
-import { Account, ContactInfo, Organization, OperationHours } from '../interfaces/account/account';
+import { Account, ContactInfo, Organization, OperationHours, Volunteer } from '../interfaces/account/account';
 import { Validation } from '../constants/validation';
 import { ValidationHelper } from './validation-helper';
 export { Account };
@@ -17,6 +17,10 @@ export class AccountHelper {
 
   isReceiver(account: Account, ignoreAdmin = false): boolean {
     return (account && (account.accountType === 'Receiver' || (!ignoreAdmin && this.isAdmin(account))));
+  }
+
+  isVolunteer(account: Account, ignoreAdmin = false): boolean {
+    return (account && (account.accountType === 'Volunteer' || (!ignoreAdmin && this.isAdmin(account))));
   }
 
   isMyAccount(myAccount: Account, accountId: number, ignoreAdmin = false): boolean {
@@ -38,8 +42,21 @@ export class AccountHelper {
     if (requireErr) { return requireErr; }
 
     // Organization is only required for 'Donor' and 'Receiver' type accounts.
-    if (['Donor', 'Receiver'].indexOf(account.accountType) >= 0 && !account.organization) {
-      return 'Organization required';
+    if (['Donor', 'Receiver'].indexOf(account.accountType) >= 0) {
+      if (!account.organization) {
+        return 'Organization required';
+      }
+
+      const organizationErr: string = this.validateOrganization(account.organization);
+      if (organizationErr) { return organizationErr; }
+    }
+    if (account.accountType === 'Volunteer') {
+      if (!account.volunteer) {
+        return 'Volunteer info required';
+      }
+
+      const volunteerErr: string = this.validateVolunteer(account.volunteer);
+      if (volunteerErr) { return volunteerErr; }
     }
     if (!Validation.ACCOUNT_TYPE_REGEX.test(account.accountType) && (account.accountType !== 'Admin' || allowAdminAccountType)) {
       return 'Invalid account type';
@@ -47,9 +64,6 @@ export class AccountHelper {
 
     const contactInfoErr: string = this.validateContactInfo(account.contactInfo);
     if (contactInfoErr) { return contactInfoErr; }
-
-    const organizationErr: string = this.validateOrganization(account.organization);
-    if (organizationErr) { return organizationErr; }
 
     const opHoursErr: string = this.validateOperationHours(account.operationHours);
     if (opHoursErr) { return opHoursErr; }
@@ -81,9 +95,21 @@ export class AccountHelper {
   }
 
   validateOrganization(organization: Organization): string {
+    console.log(organization);
     if (!organization) { return ''; }
     if (!organization.organizationName) {
       return 'Organization name required';
+    }
+    return '';
+  }
+
+  validateVolunteer(volunteer: Volunteer): string {
+    if (!volunteer) { return ''; }
+    if (!volunteer.firstName) {
+      return 'First name required';
+    }
+    if (!volunteer.lastName) {
+      return 'Last name required';
     }
     return '';
   }

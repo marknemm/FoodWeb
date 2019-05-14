@@ -51,6 +51,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       accountType: ['', Validators.required],
       username: ['', Validators.required],
       organization: new FormGroup({}),
+      volunteer: new FormGroup({}),
       contactInfo: new FormGroup({}),
       operationHours: new FlexFormArray([])
     });

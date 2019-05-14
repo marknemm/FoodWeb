@@ -3,6 +3,8 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class CreateDatabase1557632233526 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {
+    const alreadyCreated: boolean = await queryRunner.query(`SELECT EXISTS (SELECT 1 FROM pg_tables WHERE pg_tables.tablename = 'ContactInfo')`);
+    if (alreadyCreated) { return; }
     await queryRunner.query(`CREATE TABLE "ContactInfo" ("id" SERIAL NOT NULL, "email" character varying NOT NULL, "phoneNumber" character varying NOT NULL, "streetAddress" character varying NOT NULL, "city" character varying NOT NULL, "stateProvince" character varying NOT NULL, "postalCode" character varying NOT NULL, "accountId" integer, CONSTRAINT "REL_6908e72e533a706c1d61f85dab" UNIQUE ("accountId"), CONSTRAINT "PK_6f8dde4721b91fd792e2e46588c" PRIMARY KEY ("id"))`);
     await queryRunner.query(`CREATE INDEX "IDX_50f45bd1bc452467959eb2d86d" ON "ContactInfo" ("email") `);
     await queryRunner.query(`CREATE TABLE "Organization" ("id" SERIAL NOT NULL, "organizationName" character varying NOT NULL, "organizationInfo" text NOT NULL DEFAULT '', "accountId" integer, CONSTRAINT "REL_1163449e5a53ab64ad2536b455" UNIQUE ("accountId"), CONSTRAINT "PK_67bcafc78935cd441a054c6d4ea" PRIMARY KEY ("id"))`);
@@ -11,7 +13,7 @@ export class CreateDatabase1557632233526 implements MigrationInterface {
     await queryRunner.query(`CREATE TYPE "donation_donationstatus_enum" AS ENUM('Unmatched', 'Matched', 'Complete')`);
     await queryRunner.query(`CREATE TABLE "Donation" ("id" SERIAL NOT NULL, "donorLastName" character varying NOT NULL, "donorFirstName" character varying NOT NULL, "donationType" character varying NOT NULL, "description" character varying NOT NULL, "estimatedValue" numeric NOT NULL, "donationStatus" "donation_donationstatus_enum" NOT NULL DEFAULT 'Matched', "updateTimestamp" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "createTimestamp" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "donorAccountId" integer, "receiverAccountId" integer, CONSTRAINT "PK_f3824607b80632a8619c8e93426" PRIMARY KEY ("id"))`);
     await queryRunner.query(`CREATE INDEX "IDX_770ca810f803f6d59384204d21" ON "Donation" ("donorLastName") `);
-    await queryRunner.query(`CREATE TYPE "account_accounttype_enum" AS ENUM('Donor', 'Receiver', 'Driver', 'Admin')`);
+    await queryRunner.query(`CREATE TYPE "account_accounttype_enum" AS ENUM('Donor', 'Receiver', 'Admin')`);
     await queryRunner.query(`CREATE TABLE "Account" ("id" SERIAL NOT NULL, "accountType" "account_accounttype_enum", "username" character varying NOT NULL, "updateTimestamp" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "createTimestamp" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "PK_bf68fd30f1adeede9c72a5cac09" PRIMARY KEY ("id"))`);
     await queryRunner.query(`CREATE UNIQUE INDEX "IDX_c8782447aa50983c50fa634d9c" ON "Account" ("username") `);
     await queryRunner.query(`CREATE TABLE "PasswordReset" ("id" SERIAL NOT NULL, "createTimestamp" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "resetToken" character varying NOT NULL, "accountId" integer NOT NULL, CONSTRAINT "REL_1aa875e542fc0ed2be1ceb00c9" UNIQUE ("accountId"), CONSTRAINT "PK_ef0138f2aca0a0f38b49d683442" PRIMARY KEY ("id"))`);

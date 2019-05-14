@@ -3,8 +3,8 @@
     <div class="page-title block-label">
       <food-web-username *ngIf="isMyAccount" formControlName="username" [editing]="sectionEditService.editing('username')"></food-web-username>
       <ng-container *ngIf="!isMyAccount">
-        <div *ngIf="accountUpdateForm.get('organization').value">
-          {{ accountUpdateForm.get('organization').get('organizationName').value }}
+        <div *ngIf="originalAccount.organization">
+          {{ originalAccount.organization.organizationName }}
         </div>
       </ng-container>
     </div>
@@ -19,7 +19,7 @@
 
   <div class="row">
     <div class="col-xl-6">
-      <mat-card>
+      <mat-card *ngIf="originalAccount.accountType !== 'Volunteer'">
         <food-web-edit-save-button *ngIf="isMyAccount" [editing]="sectionEditService.editing('organization')" (edit)="onEdit('organization')"
           (save)="onSave('organization')" controlName="organization"></food-web-edit-save-button>
         <mat-card-title class="block-label">Organization</mat-card-title>
@@ -28,6 +28,18 @@
           <div *ngIf="originalAccount && !accountHelper.isAdmin(originalAccount) && !sectionEditService.editing('organization')" class="see-donations-link">
             <a *ngIf="!isMyAccount" [routerLink]="['/donations']" [queryParams]="seeDonationsParams">See Donations</a>
             <a *ngIf="isMyAccount" [routerLink]="['/donations/my']">See My Donations</a>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card *ngIf="originalAccount.accountType === 'Volunteer'">
+        <food-web-edit-save-button *ngIf="isMyAccount" [editing]="sectionEditService.editing('volunteer')" (edit)="onEdit('volunteer')"
+          (save)="onSave('volunteer')" controlName="volunteer"></food-web-edit-save-button>
+        <mat-card-title class="block-label">Volunteer Name</mat-card-title>
+        <mat-card-content>
+          <food-web-volunteer formGroupName="volunteer" [editing]="sectionEditService.editing('volunteer')"></food-web-volunteer>
+          <div *ngIf="isMyAccount && originalAccount && !accountHelper.isAdmin(originalAccount) && !sectionEditService.editing('volunteer')" class="see-donations-link">
+            <a [routerLink]="['/deliveries/my']">See My Deliveries</a>
           </div>
         </mat-card-content>
       </mat-card>
@@ -43,7 +55,7 @@
       </mat-card>
     </div>
     <div class="col-xl-6">
-      <mat-card>
+      <mat-card *ngIf="originalAccount.accountType !== 'Volunteer'">
         <food-web-edit-save-button *ngIf="isMyAccount" [editing]="sectionEditService.editing('operationHours')" (edit)="onEdit('operationHours')"
           (save)="onSave('operationHours')" controlName="operationHours"></food-web-edit-save-button>
         <mat-card-title class="block-label">Hours of Operation</mat-card-title>

@@ -68,6 +68,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
       username: ['', Validators.required],
       profileImgUrl: '',
       organization: new FormGroup({}),
+      volunteer: new FormGroup({}),
       contactInfo: new FormGroup({}),
       operationHours: new FlexFormArray([]),
       password: new FormGroup({})
@@ -97,15 +98,29 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _refreshAccountFormValue(account: Account, force = false): void {
-    const accountSections = ['accountType', 'username', 'profileImgUrl', 'organization', 'contactInfo', 'operationHours'];
+    const accountSections = ['accountType', 'username', 'profileImgUrl', 'contactInfo'];
     accountSections.forEach((section: string) => {
       if (force || !this.sectionEditService.editing(section)) {
         this.accountUpdateForm.get(section).patchValue(account[section]);
       }
     });
+
+    if (this.accountUpdateForm.get('accountType').value === 'Volunteer') {
+      if (force || !this.sectionEditService.editing('volunteer')) {
+        this.accountUpdateForm.get('volunteer').patchValue(account.volunteer);
+      }
+    } else {
+      if (force || !this.sectionEditService.editing('organization')) {
+        this.accountUpdateForm.get('organization').patchValue(account.organization);
+      }
+      if (force || !this.sectionEditService.editing('operationHours')) {
+        this.accountUpdateForm.get('operationHours').patchValue(account.operationHours);
+      }
+    }
+
     if (force || !this.sectionEditService.editing('password')) {
       this.accountUpdateForm.get('password').reset();
-    }    
+    }
   }
 
   ngOnDestroy() {

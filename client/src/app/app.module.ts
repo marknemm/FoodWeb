@@ -61,6 +61,7 @@ import { DeleteButtonComponent } from './child-components/delete-button/delete-b
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { ProfileImgComponent } from './child-components/profile-img/profile-img.component';
+import { VolunteerComponent } from './child-components/volunteer/volunteer.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +95,7 @@ import { ProfileImgComponent } from './child-components/profile-img/profile-img.
     DonationStatusComponent,
     DeleteButtonComponent,
     ProfileImgComponent,
+    VolunteerComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({
