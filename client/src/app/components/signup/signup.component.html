@@ -29,9 +29,10 @@
       <mat-card>
         <mat-card-title class="block-label">Organization Info</mat-card-title>
         <mat-card-content>
-          <food-web-organization [editing]="true" formGroupName="organization"></food-web-organization>
+          <food-web-organization [accountType]="accountForm.get('accountType').value" [editing]="true" formGroupName="organization"></food-web-organization>
         </mat-card-content>
       </mat-card>
+
     </div>
     <div class="col-xl-6">
       <mat-card>
