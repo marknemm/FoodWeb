@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { AccountHelper } from '../../../../../shared/src/helpers/account-helper'
   templateUrl: './donations.component.html',
   styleUrls: ['./donations.component.scss']
 })
-export class DonationsComponent implements OnInit {
+export class DonationsComponent implements OnInit, OnDestroy {
 
   donations: Donation[] = [];
   totalCount = 0;

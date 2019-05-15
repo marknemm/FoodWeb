@@ -120,7 +120,7 @@ function _ensureEitherOrganizationOrVolunteer(account: Account): void {
 }
 
 function _ensureAccountHasProfileImg(account: Account): void {
-  if (!account.profileImgUrl) {
+  if (!account.profileImgUrl || /^\/assets\/[A-Z]\.svg$/.test(account.profileImgUrl)) {
     const firstLetter: string = (account.accountType === 'Volunteer')
       ? account.volunteer.lastName.charAt(0).toUpperCase()
       : account.organization.organizationName.charAt(0).toUpperCase();

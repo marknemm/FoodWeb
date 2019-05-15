@@ -8,6 +8,8 @@ import { PageTitleService } from '../../services/page-title/page-title.service';
 })
 export class DeliveriesComponent implements OnInit {
 
+  totalCount = 0;
+
   constructor(
     public pageTitleService: PageTitleService
   ) {}

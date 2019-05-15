@@ -9,15 +9,10 @@ export class AccountProfileImgUrl1557632757037 implements MigrationInterface {
     if (alreadyCreated) { return; }
     await queryRunner.query(`ALTER TABLE "Account" ADD "profileImgUrl" character varying`);
     await queryRunner.query(`
-      WITH "organizationNameChar" AS (
-        SELECT UPPER(LEFT("Organization"."organizationName", 1)) AS "organizationNameChar"
-        FROM "Account"
-        INNER JOIN "Organization" ON "Account"."id" = "Organization"."accountId"
-      )
       UPDATE "Account"
-      SET "profileImgUrl" = '/assets/' || "organizationNameChar"."organizationNameChar" || '.svg'
-      FROM "organizationNameChar"
-      WHERE "Account"."profileImgUrl" IS NULL
+      SET "profileImgUrl" = '/assets/' || UPPER(LEFT("Organization"."organizationName", 1)) || '.svg'
+      FROM "Organization"
+      WHERE "Account"."id" = "Organization"."accountId"
     `);
     await queryRunner.query(`ALTER TABLE "Account" ALTER COLUMN "profileImgUrl" SET NOT NULL`);
   }
