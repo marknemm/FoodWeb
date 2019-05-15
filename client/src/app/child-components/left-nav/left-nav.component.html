@@ -16,19 +16,29 @@
           <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Receiver'] }}</mat-icon> Receivers</span>
         </a>
       </li>
+      <li>
+        <a mat-ripple [routerLink]="['/accounts']" [queryParams]="{ accountType: 'Volunteer' }" (click)="_onNavClick()">
+          <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Volunteer'] }}</mat-icon> Volunteers</span>
+        </a>
+      </li>
       <li *ngIf="sessionService.isDonor">
         <a mat-ripple [routerLink]="['/donate']" (click)="_onNavClick()">
-          <span><mat-icon>send</mat-icon> Donate</span>
+          <span><mat-icon>fastfood</mat-icon> Donate</span>
         </a>
       </li>
       <li *ngIf="sessionService.isDonor || sessionService.isReceiver">
         <a mat-ripple [routerLink]="['/donations/my']" (click)="_onNavClick()">
-          <span><mat-icon>list_alt</mat-icon>My Donations</span>
+          <span><mat-icon>list</mat-icon>My Donations</span>
         </a>
       </li>
       <li>
         <a mat-ripple [routerLink]="['/donations']" (click)="_onNavClick()">
           <span><mat-icon>search</mat-icon>Find Donations</span>
+        </a>
+      </li>
+      <li *ngIf="sessionService.isVolunteer">
+        <a mat-ripple [routerLink]="['/deliveries/my']" (click)="_onNavClick()">
+          <span><mat-icon>place</mat-icon>My Deliveries</span>
         </a>
       </li>
     </ul>

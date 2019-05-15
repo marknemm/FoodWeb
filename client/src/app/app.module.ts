@@ -62,6 +62,7 @@ import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { ProfileImgComponent } from './child-components/profile-img/profile-img.component';
 import { VolunteerComponent } from './child-components/volunteer/volunteer.component';
+import { DeliveriesComponent } from './components/deliveries/deliveries.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { VolunteerComponent } from './child-components/volunteer/volunteer.compo
     DeleteButtonComponent,
     ProfileImgComponent,
     VolunteerComponent,
+    DeliveriesComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({

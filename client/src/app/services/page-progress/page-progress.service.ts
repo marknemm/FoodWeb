@@ -94,7 +94,7 @@ export class PageProgressService {
 
   private _listenForRouteChange(router: Router): void {
     router.events.subscribe((event: RouterEvent) => {
-      if (event instanceof NavigationEnd) {
+      if (event instanceof PageTransitionEvent) {
         this.trigger = false;
       }
     });

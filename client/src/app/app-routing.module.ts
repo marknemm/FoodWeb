@@ -11,6 +11,7 @@ import { AuthGaurdService } from './services/auth-gaurd/auth-gaurd.service';
 import { DonateComponent } from './components/donate/donate.component';
 import { DonationsComponent } from './components/donations/donations.component';
 import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
+import { DeliveriesComponent } from './components/deliveries/deliveries.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -28,7 +29,9 @@ const routes: Routes = [
   { path: 'donate', component: DonateComponent },
   { path: 'donations', component: DonationsComponent },
   { path: 'donations/my', component: DonationsComponent, canActivate: [AuthGaurdService] },
-  { path: 'donation-details/:id', component: DonationDetailsComponent }
+  { path: 'donation-details/:id', component: DonationDetailsComponent },
+  { path: 'deliveries', component: DeliveriesComponent },
+  { path: 'deliveries/my', component: DeliveriesComponent, canActivate: [AuthGaurdService] }
 ];
 
 @NgModule({

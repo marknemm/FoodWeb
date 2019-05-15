@@ -65,6 +65,10 @@ export class SessionService {
     return this._accountHelper.isReceiver(this.account);
   }
 
+  get isVolunteer(): boolean {
+    return this._accountHelper.isVolunteer(this.account);
+  }
+
   get loginErr(): string {
     return this._loginErr;
   }
