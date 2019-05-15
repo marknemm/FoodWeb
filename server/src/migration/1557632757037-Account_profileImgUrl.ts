@@ -1,8 +1,12 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AccountProfileImgUrl1557632757047 implements MigrationInterface {
+export class AccountProfileImgUrl1557632757037 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {
+    const alreadyCreated: boolean = (await queryRunner.query(
+      `SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'Account' AND column_name = 'profileImgUrl')`
+    ))[0].exists;
+    if (alreadyCreated) { return; }
     await queryRunner.query(`ALTER TABLE "Account" ADD "profileImgUrl" character varying`);
     await queryRunner.query(`
       WITH "organizationNameChar" AS (

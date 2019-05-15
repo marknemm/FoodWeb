@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class CreateDatabase1557632233526 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {
-    const alreadyCreated: boolean = await queryRunner.query(`SELECT EXISTS (SELECT 1 FROM pg_tables WHERE pg_tables.tablename = 'ContactInfo')`);
+    const alreadyCreated: boolean = (await queryRunner.query(`SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'ContactInfo')`))[0].exists;
     if (alreadyCreated) { return; }
     await queryRunner.query(`CREATE TABLE "ContactInfo" ("id" SERIAL NOT NULL, "email" character varying NOT NULL, "phoneNumber" character varying NOT NULL, "streetAddress" character varying NOT NULL, "city" character varying NOT NULL, "stateProvince" character varying NOT NULL, "postalCode" character varying NOT NULL, "accountId" integer, CONSTRAINT "REL_6908e72e533a706c1d61f85dab" UNIQUE ("accountId"), CONSTRAINT "PK_6f8dde4721b91fd792e2e46588c" PRIMARY KEY ("id"))`);
     await queryRunner.query(`CREATE INDEX "IDX_50f45bd1bc452467959eb2d86d" ON "ContactInfo" ("email") `);

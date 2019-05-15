@@ -37,11 +37,13 @@ export class OrganizationComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    let newAcctType = changes.accountType.currentValue;
-    this.deliveryInstructionsPlaceholderModifier =
-      'Please leave instructions for donation ' + 
-      (newAcctType === 'Donor' ? 'pickups' : 'deliveries') +
-      ' here';
-    console.log(changes.accountType.previousValue + ' --> ' + changes.accountType.currentValue);
+    if (changes.accountType) {
+      let newAcctType = changes.accountType.currentValue;
+      this.deliveryInstructionsPlaceholderModifier =
+        'Please leave instructions for donation ' + 
+        (newAcctType === 'Donor' ? 'pickups' : 'deliveries') +
+        ' here';
+      console.log(changes.accountType.previousValue + ' --> ' + changes.accountType.currentValue);
+    }
   }
 }
