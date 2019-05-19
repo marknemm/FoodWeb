@@ -59,7 +59,9 @@ export class DateTimeService {
       const weekdayOpHours: OperationHours = account.operationHours.find(
         (opHours: OperationHours) => (opHours.weekday === weekday)
       );
-      if (weekdayOpHours) {
+      const endTimeDate = new Date(`1/1/2000 ${weekdayOpHours.endTime}`);
+      const startTimeDate = new Date(`1/1/2000 ${timeRange.startTime}`);
+      if (weekdayOpHours && endTimeDate.getTime() > startTimeDate.getTime()) {
         timeRange.endTime = weekdayOpHours.endTime;
       }
     }

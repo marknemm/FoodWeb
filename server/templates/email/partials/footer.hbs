@@ -9,8 +9,14 @@
     text-align: center;
   "
 >
-  <a href="{{ env.SERVER_HOST_ADDRESS }}">
-    <img style="max-width: 50px; max-height: 50px;" src="{{ env.PRODUCTION_HOST_ADDRESS }}/assets/IconImg.png" alt="FoodWeb Icon">
-  </a>
-  <div>Food Web &copy; {{ year }}</div>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td align="center" style="text-align: center;">
+        <a href="{{ env.SERVER_HOST_ADDRESS }}">
+          <img height="50" src="{{ env.PRODUCTION_HOST_ADDRESS }}/assets/IconImgSm.png" alt="FoodWeb Icon">
+        </a>
+        <div>Food Web &copy; {{ year }}</div>
+      </td>
+    </tr>
+  </table>
 </footer>

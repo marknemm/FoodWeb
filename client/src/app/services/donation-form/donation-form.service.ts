@@ -57,6 +57,7 @@ export class DonationFormService {
   resetDonationForm(): void {
     const donationWindow: DateTimeRange = this.donationForm.get('pickupWindow').value;
     this.donationForm.reset();
+    this.donationForm.get('donationType').setValue('Food');
     this.donationForm.get('pickupWindow').setValue(donationWindow);
   }
 
