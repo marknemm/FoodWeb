@@ -41,6 +41,8 @@ export class SectionEditService<K> {
   }
 
   stopEdit(sectionKey: K): void {
+    this._editSections.get(sectionKey).control.markAsPristine();
+    this._editSections.get(sectionKey).control.markAsUntouched();
     this._editSections.delete(sectionKey);
   }
 

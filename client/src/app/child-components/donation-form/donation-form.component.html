@@ -10,9 +10,7 @@
         <input matInput type="text" placeholder="Donor Last Name" formControlName="donorLastName" name="Last Name">
       </mat-form-field>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-6">
+    <!-- <div class="col-sm-6">
       <mat-form-field class="fill">
         <mat-select placeholder="Type of Donation" formControlName="donationType" name="Type of Donation">
           <mat-option *ngFor="let donationType of constantsService.DONATION_TYPES" [value]="donationType">
@@ -22,6 +20,13 @@
       </mat-form-field>
       <mat-form-field class="fill" *ngIf="formGroup.get('otherDonationType').enabled">
         <input matInput type="text" placeholder="Enter Type of Donation" formControlName="otherDonationType">
+      </mat-form-field>
+    </div> -->
+    <div class="col-sm-6">
+      <mat-form-field class="fill hide-number-spinner">
+        <input matInput type="number" min="0" placeholder="Estimated count of people this will feed" formControlName="estimatedNumFeed">
+        <mat-error *ngIf="formGroup.get('estimatedNumFeed').hasError('min')">Positive value required</mat-error>
+        <mat-error *ngIf="formGroup.get('estimatedNumFeed').hasError('pattern')">Integer value required</mat-error>
       </mat-form-field>
     </div>
     <div class="col-sm-6">

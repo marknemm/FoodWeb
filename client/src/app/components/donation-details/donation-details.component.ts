@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { DonationService, Donation } from '../../services/donation/donation.service';
 import { SessionService } from '../../services/session/session.service';
 import { SectionEditService } from '../../services/section-edit/section-edit.service';
-import { DonationFormComponent } from '../../child-components/donation-form/donation-form.component';
+import { DonationFormService } from '../../services/donation-form/donation-form.service';
 import { AccountHelper } from '../../../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../../../shared/src/helpers/donation-helper';
 
@@ -14,13 +14,11 @@ import { DonationHelper } from '../../../../../shared/src/helpers/donation-helpe
   selector: 'food-web-donation-details',
   templateUrl: './donation-details.component.html',
   styleUrls: ['./donation-details.component.scss'],
-  providers: [SectionEditService]
+  providers: [SectionEditService, DonationFormService]
 })
 export class DonationDetailsComponent implements OnInit, OnDestroy {
 
-  @ViewChild(DonationFormComponent) donationFormComponent: DonationFormComponent;
-
-  readonly donationForm = new FormGroup({});
+  donationForm: FormGroup;
 
   private _canEdit = false;
   private _canClaim = false;
@@ -34,6 +32,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
     public sectionEditService: SectionEditService<FormGroup>,
     public accountHelper: AccountHelper,
     public donationHelper: DonationHelper,
+    private _donationFormService: DonationFormService,
     private _sessionService: SessionService,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
@@ -73,6 +72,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.donationForm = this._donationFormService.buildDonationForm();
     this._listenDonationChange();
   }
 
@@ -82,7 +82,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
 
   saveDonation(): void {
     if (this.sectionEditService.shouldSaveSection(this.donationForm)) {
-      const donationUpdate: Partial<Donation> = this.donationFormComponent.donationUpdate;
+      const donationUpdate: Partial<Donation> = this._donationFormService.getDonationFromForm();
       this._donationService.updateDonation(this._originalDonation, donationUpdate).subscribe(
         (savedDonation: Donation) => {
           this._updateDonation(savedDonation);
@@ -127,6 +127,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
 
   private _updateDonation(donation: Donation): void {
     this._originalDonation = donation;
+    this._donationFormService.updateFormValue(donation);
     this._myDonation = this._sessionService.isMyAccount(donation.donorAccount.id);
     this._canEdit = !this.donationHelper.validateDonationEditPrivilege(donation, this._sessionService.account);
     this._canClaim = !this.donationHelper.validateDonationClaimPrivilege(donation, this._sessionService.account);

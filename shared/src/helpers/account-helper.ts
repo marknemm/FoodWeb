@@ -95,7 +95,6 @@ export class AccountHelper {
   }
 
   validateOrganization(organization: Organization): string {
-    console.log(organization);
     if (!organization) { return ''; }
     if (!organization.organizationName) {
       return 'Organization name required';

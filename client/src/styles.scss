@@ -106,13 +106,23 @@ mat-card.mat-card {
     margin: 0px 5px;
     width: 100%;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 16px;
     color: $accent-darkest;
   }
 }
 
 .disclaimer {
   color: #666;
+}
+
+.action-footer {
+  button {
+    margin-right: 7px;
+
+    &:last-child {
+      margin-right: 0px;
+    }
+  }
 }
 
 @media only screen and (max-width: $md) {

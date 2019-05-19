@@ -1,7 +1,7 @@
 import { getConnection, EntityManager, Repository } from 'typeorm';
 import { hash, genSalt } from 'bcrypt';
 import { saveUnverifiedAccount } from './account-verification';
-import { formatOperationHoursTimes, OperationHoursEntity } from '../helpers/operation-hours-converter';
+import { formatOperationHoursTimes, OperationHoursEntity, sortOperationHours } from '../helpers/operation-hours-converter';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordEntity } from '../entity/password.entity';
 import { getPasswordId } from '../helpers/password-match';
@@ -129,6 +129,7 @@ function _ensureAccountHasProfileImg(account: Account): void {
 }
 
 async function _insertOperationHours(repo: Repository<OperationHoursEntity>, accountId: number, operationHoursArr: OperationHours[]): Promise<void> {
+  operationHoursArr = sortOperationHours(operationHoursArr);
   if (operationHoursArr && operationHoursArr.length !== 0) {
     // Make copy of array with shallow copy of members, and assign account field for insertion.
     const operationHoursArrCopy = (<OperationHoursEntity[]>operationHoursArr).map(

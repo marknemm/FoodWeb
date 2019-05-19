@@ -33,6 +33,15 @@ export class DonationEntity implements Donation {
   @Column({ type: 'numeric', scale: 2 })
   estimatedValue: number;
 
+  @Column({ type: 'integer' })
+  estimatedNumFeed: number;
+
+  @Column({ type: 'timestamp with time zone' })
+  pickupWindowStart: string;
+
+  @Column({ type: 'timestamp with time zone' })
+  pickupWindowEnd: string;
+
   @Column({ type: 'enum', enum: _constants.DONATION_STATUSES, default: _constants.DONATION_STATUSES[1] })
   donationStatus: DonationStatus;
 

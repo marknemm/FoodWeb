@@ -22,7 +22,9 @@ import {
   MatProgressBarModule,
   MatPaginatorModule,
   MatTooltipModule,
-  MatDividerModule
+  MatDividerModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 } from '@angular/material';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AgmCoreModule } from '@agm/core';
@@ -57,12 +59,14 @@ import { DonationFormComponent } from './child-components/donation-form/donation
 import { DonationsComponent } from './components/donations/donations.component';
 import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
 import { DonationStatusComponent } from './child-components/donation-status/donation-status.component';
-import { DeleteButtonComponent } from './child-components/delete-button/delete-button.component';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { ProfileImgComponent } from './child-components/profile-img/profile-img.component';
 import { VolunteerComponent } from './child-components/volunteer/volunteer.component';
 import { DeliveriesComponent } from './components/deliveries/deliveries.component';
+import { DateTimeComponent } from './child-components/date-time/date-time.component';
+import { DateTimeRangeComponent } from './child-components/date-time-range/date-time-range.component';
+import { ConfirmButtonDirective } from './directives/confirm-button/confirm-button.directive';
 
 @NgModule({
   declarations: [
@@ -94,10 +98,12 @@ import { DeliveriesComponent } from './components/deliveries/deliveries.componen
     DonationsComponent,
     DonationDetailsComponent,
     DonationStatusComponent,
-    DeleteButtonComponent,
     ProfileImgComponent,
     VolunteerComponent,
     DeliveriesComponent,
+    DateTimeComponent,
+    DateTimeRangeComponent,
+    ConfirmButtonDirective,
   ],
   imports: [
     AgmCoreModule.forRoot({
@@ -127,6 +133,8 @@ import { DeliveriesComponent } from './components/deliveries/deliveries.componen
     MatPaginatorModule,
     MatTooltipModule,
     MatDividerModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     NgxMaterialTimepickerModule.forRoot()
   ],
   providers: [

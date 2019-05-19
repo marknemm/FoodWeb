@@ -24,7 +24,7 @@
           (save)="onSave('organization')" controlName="organization"></food-web-edit-save-button>
         <mat-card-title class="block-label">Organization</mat-card-title>
         <mat-card-content>
-          <food-web-organization formGroupName="organization" [accountType]="accountUpdateForm.get('accountType')" [editing]="sectionEditService.editing('organization')"></food-web-organization>
+          <food-web-organization formGroupName="organization" [accountType]="accountUpdateForm.get('accountType').value" [editing]="sectionEditService.editing('organization')"></food-web-organization>
           <div *ngIf="originalAccount && !accountHelper.isAdmin(originalAccount) && !sectionEditService.editing('organization')" class="see-donations-link">
             <a *ngIf="!isMyAccount" [routerLink]="['/donations']" [queryParams]="seeDonationsParams">See Donations</a>
             <a *ngIf="isMyAccount" [routerLink]="['/donations/my']">See My Donations</a>

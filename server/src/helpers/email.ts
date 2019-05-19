@@ -44,6 +44,10 @@ function _fillMissingContext(context: any, account: Account, template: string): 
   context.year = (context.year ? context.year : new Date().getFullYear());
   context.account = (context.account ? context.account : account);
   context.emailContent = template;
+  context.isVolunteer = (account.accountType === 'Volunteer');
+  context.isDonor = (account.accountType === 'Donor');
+  context.isReceiver = (account.accountType === 'Receiver');
+  context.isAdmin = (account.accountType === 'Admin');
   return context;
 }
 

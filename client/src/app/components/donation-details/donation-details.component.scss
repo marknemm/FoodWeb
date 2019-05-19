@@ -30,6 +30,12 @@
     }
   }
 
+  .pickup-information-container {
+    .row > div {
+      margin-bottom: 12px;
+    }
+  }
+
   .donor-info-container,
   .receiver-info-container {
     .organization-name {

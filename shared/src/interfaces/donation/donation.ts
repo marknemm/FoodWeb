@@ -40,6 +40,18 @@ export interface Donation {
    */
   estimatedValue: number;
   /**
+   * The estimated number of people that the donation will feed.
+   */
+  estimatedNumFeed: number;
+  /**
+   * The start time of the donation's pickup window.
+   */
+  pickupWindowStart: string;
+  /**
+   * The end time of the donation's pickup window.
+   */
+  pickupWindowEnd: string;
+  /**
    * The current status of the donation.
    */
   donationStatus: DonationStatus;

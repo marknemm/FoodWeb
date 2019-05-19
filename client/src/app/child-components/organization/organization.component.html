@@ -31,7 +31,7 @@
       <div class="d-inline-block">{{ formGroup.get('organizationInfo').value }}</div>
     </div>
     <div *ngIf="formGroup.get('deliveryInstructions').value" class="col-sm-12">
-      <div *ngIf="accountType === 'donor'; else receiverBlock" class="inline-label">Instructions for pickup:</div>
+      <div *ngIf="accountType === 'Donor'; else receiverBlock" class="inline-label">Instructions for pickup:</div>
       <ng-template #receiverBlock>
         <div class="inline-label">Instructions for drop-off:</div>
       </ng-template>

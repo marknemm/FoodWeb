@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DeleteButtonComponent } from './delete-button.component';
+import { DateTimeRangeComponent } from './date-time-range.component';
 
-describe('DeleteButtonComponent', () => {
-  let component: DeleteButtonComponent;
-  let fixture: ComponentFixture<DeleteButtonComponent>;
+describe('DateTimeRangeComponent', () => {
+  let component: DateTimeRangeComponent;
+  let fixture: ComponentFixture<DateTimeRangeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DeleteButtonComponent ]
+      declarations: [ DateTimeRangeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DeleteButtonComponent);
+    fixture = TestBed.createComponent(DateTimeRangeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
