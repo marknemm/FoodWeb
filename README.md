@@ -100,3 +100,13 @@ Run `npm run lint` to perform linting on the source code.
 Run `npm run test` to lint and test the source code.
 
 Run `npm run test:watch` to test and watch the source code. Whenever a change is made, tests will be run against the source code.
+
+## Update Database Schema
+
+Run `npm run typeorm:migration:generate <script_name>` to auto-generate a migration script for updating the database schema. The script will be placed under server/src/migration/. The changes in the script will be based off of any differences that TypeORM detects between the current database schema and entities defined under server/src/entity/. After generating the migration script, ensure that no additional side-effects were created for the migration. Also, perform any intermediate updates required for the migration (e.g. initialize a new table column as nullable, insert the correct data, and change the column to not nullable). Finally, place a guard on the up migration to prevent any accidental double application of the migration (e.g. If adding a column, check if the column exists before adding it).
+
+Run `npm run typeorm:migration:create <script_name>` to create an empty migration script for updating the database schema. See `npm run typeorm:migration:generate` for more details.
+
+Run `npm run typeorm:migration:run` to manually apply all migrations under server/src/migration/. You can also simply start the app (server), and all migrations will automatically be applied.
+
+Run `npm run typeorm:migration:revert` to revert all migrations under server/src/migration/. Do this with care since it will end up clearing your development database.
