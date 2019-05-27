@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, Index, UpdateDateColumn, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, Index, UpdateDateColumn, CreateDateColumn, OneToOne } from 'typeorm';
+import { AccountEntity } from './account.entity';
+import { DeliveryEntity } from './delivery-entity';
 import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
 import { Constants } from '../../../shared/src/constants/constants';
-import { AccountEntity } from './account.entity';
 
 const _constants = new Constants();
 
@@ -11,11 +12,11 @@ export class DonationEntity implements Donation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => AccountEntity, (account) => account.activeDonations, { eager: true })
+  @ManyToOne((type) => AccountEntity, (account) => account.donations, { eager: true })
   donorAccount: AccountEntity;
 
-  @ManyToOne((type) => AccountEntity, (account) => account.activeDonations, { nullable: true, eager: true })
-  receiverAccount: AccountEntity;
+  @ManyToOne((type) => AccountEntity, (account) => account.claims, { nullable: true, eager: true })
+  receiverAccount?: AccountEntity;
 
   @Column()
   @Index()
@@ -30,7 +31,7 @@ export class DonationEntity implements Donation {
   @Column()
   description: string;
 
-  @Column({ type: 'numeric', scale: 2 })
+  @Column({ type: 'numeric' })
   estimatedValue: number;
 
   @Column({ type: 'integer' })
@@ -42,8 +43,11 @@ export class DonationEntity implements Donation {
   @Column({ type: 'timestamp with time zone' })
   pickupWindowEnd: string;
 
-  @Column({ type: 'enum', enum: _constants.DONATION_STATUSES, default: _constants.DONATION_STATUSES[1] })
+  @Column({ type: 'enum', enum: _constants.DONATION_STATUSES, default: _constants.DONATION_STATUSES[0] })
   donationStatus: DonationStatus;
+
+  @OneToOne((type) => DeliveryEntity, (delivery) => delivery.donation, { nullable: true, cascade: true, eager: true })
+  delivery: DeliveryEntity;
 
   @UpdateDateColumn({ type: 'timestamp with time zone' })
   updateTimestamp: Date;

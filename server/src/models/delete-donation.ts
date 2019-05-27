@@ -9,7 +9,7 @@ import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-h
 const _donationHelper = new DonationHelper();
 
 export async function deleteDonation(donationId: number, myAccount: AccountEntity): Promise<void> {
-  const donation: Donation = await readDonation(donationId, myAccount);
+  const donation: Donation = await readDonation(donationId);
   _ensureCanDeleteDonation(donation, myAccount);
 
   await getConnection().transaction(async (manager: EntityManager) => {

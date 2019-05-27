@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { DonationService, Donation } from '../../services/donation/donation.service';
 import { PageTitleService } from '../../services/page-title/page-title.service';
 import { ListResponse } from '../../../../../shared/src/interfaces/list-response';
-import { AccountHelper } from '../../../../../shared/src/helpers/account-helper';
+import { DonationHelper } from '../../../../../shared/src/helpers/donation-helper';
 
 @Component({
   selector: 'food-web-donations',
@@ -21,7 +21,7 @@ export class DonationsComponent implements OnInit, OnDestroy {
 
   constructor(
     public pageTitleService: PageTitleService,
-    public accountHelper: AccountHelper,
+    public donationHelper: DonationHelper,
     private _donationService: DonationService,
     private _activatedRoute: ActivatedRoute
   ) {}

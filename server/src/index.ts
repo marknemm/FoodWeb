@@ -47,6 +47,7 @@ module.exports = app; // Make available for mocha testing suites.
 app.use('/server/session', require('./controllers/session'));
 app.use('/server/account', require('./controllers/account'));
 app.use('/server/donation', require('./controllers/donation'));
+app.use('/server/delivery', require('./controllers/delivery'));
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {

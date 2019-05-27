@@ -55,7 +55,7 @@ function _sendMatchRequestMessage(donation: Donation, receiver: AccountEntity): 
 }
 
 export async function claimDonation(donationId: number, myAccount: AccountEntity): Promise<Donation> {
-  const donationToClaim: Donation = await readDonation(donationId, myAccount);
+  const donationToClaim: Donation = await readDonation(donationId);
   _ensureCanClaimDonation(donationToClaim, myAccount);
   donationToClaim.donationStatus = 'Matched';
   donationToClaim.receiverAccount = myAccount;
@@ -106,7 +106,7 @@ async function _sendClaimMessages(donation: Donation): Promise<void> {
 }
 
 export async function unclaimDonation(donationId: number, myAccount: AccountEntity): Promise<Donation> {
-  const donationToUnclaim: Donation = await readDonation(donationId, myAccount);
+  const donationToUnclaim: Donation = await readDonation(donationId);
   const receiver: Account = donationToUnclaim.receiverAccount;
   _ensureCanUnclaimDonation(donationToUnclaim, myAccount);
   donationToUnclaim.donationStatus = 'Unmatched';

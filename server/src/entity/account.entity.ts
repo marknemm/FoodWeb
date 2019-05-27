@@ -4,6 +4,7 @@ import { OrganizationEntity } from './organization.entity';
 import { VolunteerEntity } from './volunteer-entity';
 import { OperationHoursEntity } from './operation-hours.entity';
 import { DonationEntity } from './donation.entity';
+import { DeliveryEntity } from './delivery-entity';
 import { Account, AccountType } from '../../../shared/src/interfaces/account/account';
 import { Constants } from '../../../shared/src/constants/constants';
 
@@ -37,8 +38,14 @@ export class AccountEntity implements Account {
   @OneToMany((type) => OperationHoursEntity, (operationHours) => operationHours.account, { cascade: ['remove'], eager: true })
   operationHours: OperationHoursEntity[];
 
-  @OneToMany((type) => DonationEntity, (donations) => donations.donorAccount, { cascade: true })
-  activeDonations: DonationEntity[];
+  @OneToMany((type) => DonationEntity, (donation) => donation.donorAccount, { cascade: true })
+  donations?: DonationEntity[];
+
+  @OneToMany((type) => DonationEntity, (donation) => donation.receiverAccount, { cascade: true })
+  claims?: DonationEntity[];
+
+  @OneToMany((type) => DeliveryEntity, (delivery) => delivery.volunteerAccount, { cascade: true })
+  deliveries?: DeliveryEntity[];
 
   @UpdateDateColumn({ type: 'timestamp with time zone' })
   updateTimestamp: Date;

@@ -16,6 +16,7 @@ export class ContactInfoComponent implements OnInit {
   @Input() formGroupName: string;
   @Input() formGroup: FormGroup;
   @Input() contactInfo: ContactInfo;
+  @Input() hideAddress = false;
 
   constructor(
     public mapService: MapService,

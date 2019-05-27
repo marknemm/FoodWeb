@@ -3,6 +3,7 @@ import { LeftNavService } from '../../services/left-nav/left-nav.service';
 import { PageProgressService } from '../../services/page-progress/page-progress.service';
 import { SessionService } from '../../services/session/session.service';
 import { ConstantsService } from '../../services/constants/constants.service';
+import { DonationHelper } from '../../../../../shared/src/helpers/donation-helper';
 
 @Component({
   selector: 'food-web-left-nav',
@@ -15,7 +16,8 @@ export class LeftNavComponent implements OnInit {
     public leftNavService: LeftNavService,
     public pageProgressService: PageProgressService,
     public sessionService: SessionService,
-    public constantsService: ConstantsService
+    public constantsService: ConstantsService,
+    public donationHelper: DonationHelper
   ) {}
 
   ngOnInit() {}

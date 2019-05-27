@@ -59,14 +59,18 @@ import { DonationFormComponent } from './child-components/donation-form/donation
 import { DonationsComponent } from './components/donations/donations.component';
 import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
 import { DonationStatusComponent } from './child-components/donation-status/donation-status.component';
-import { AccountHelper } from '../../../shared/src/helpers/account-helper';
-import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { ProfileImgComponent } from './child-components/profile-img/profile-img.component';
 import { VolunteerComponent } from './child-components/volunteer/volunteer.component';
 import { DeliveriesComponent } from './components/deliveries/deliveries.component';
 import { DateTimeComponent } from './child-components/date-time/date-time.component';
 import { DateTimeRangeComponent } from './child-components/date-time-range/date-time-range.component';
 import { ConfirmButtonDirective } from './directives/confirm-button/confirm-button.directive';
+import { DonationDetailActionsComponent } from './child-components/donation-detail-actions/donation-detail-actions.component';
+
+import { AccountHelper } from '../../../shared/src/helpers/account-helper';
+import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
+import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
+import { AddressComponent } from './child-components/address/address.component';1
 
 @NgModule({
   declarations: [
@@ -104,6 +108,8 @@ import { ConfirmButtonDirective } from './directives/confirm-button/confirm-butt
     DateTimeComponent,
     DateTimeRangeComponent,
     ConfirmButtonDirective,
+    DonationDetailActionsComponent,
+    AddressComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({
@@ -141,7 +147,8 @@ import { ConfirmButtonDirective } from './directives/confirm-button/confirm-butt
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top', duration: 5000 } },
     { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
     AccountHelper,
-    DonationHelper
+    DonationHelper,
+    DeliveryHelper
   ],
   entryComponents: [
     LoginComponent,

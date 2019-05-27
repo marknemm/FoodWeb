@@ -9,7 +9,7 @@
     "build:e2e": "npm run build:watch",
     "clean": "rimraf ./dist ./coverage ./ormlogs.log",
     "clean:all": "npm run clean && rimraf ./node_modules",
-    "debug": "tsc-watch -p ./src/tsconfig.app.json --onSuccess \"nodemon --inspect-brk=9229 ./dist/server/src/index.js\"",
+    "debug": "tsc-watch -p ./src/tsconfig.app.json --onSuccess \"nodemon --inspect ./dist/server/src/index.js\"",
     "lint": "tslint -p ./tsconfig.json",
     "start": "tsc-watch -p ./src/tsconfig.app.json --onSuccess \"nodemon ./dist/server/src/index.js\"",
     "test": "npm run lint && ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts",
