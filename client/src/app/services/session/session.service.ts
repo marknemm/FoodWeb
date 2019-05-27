@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, EMPTY } from 'rxjs';
 import { map, catchError, finalize } from 'rxjs/operators';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
+import { AlertService } from '../alert/alert.service';
 import { LoginRequest } from '../../../../../shared/src/interfaces/session/login-request';
 import { AccountHelper, Account } from '../../../../../shared/src/helpers/account-helper';
 export { Account };
@@ -21,6 +22,7 @@ export class SessionService {
   constructor(
     private _httpClient: HttpClient,
     private _errorHandlerService: ErrorHandlerService,
+    private _alertService: AlertService,
     private _accountHelper: AccountHelper
   ) {
     // Attempt to get account from local browser storage upon init.
@@ -82,7 +84,10 @@ export class SessionService {
     this._loading = true;
     this._loginErr = null;
     return this._httpClient.post<Account>(this.url, loginRequest).pipe(
-      map((account: Account) => { this.account = account; }),
+      map((account: Account) => {
+        this.account = account;
+        this._alertService.displaySimpleMessage(`Welcome, ${this._accountHelper.accountName(account)}`, 'success');
+      }),
       catchError((err: HttpErrorResponse) => {
         console.error(err);
         this._loginErr = err.error.message;
@@ -97,8 +102,9 @@ export class SessionService {
     this._httpClient.delete<void>(this.url).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._loading = false)
-    ).subscribe(
-      () => this.account = null
-    );
+    ).subscribe(() => {
+      this._alertService.displaySimpleMessage('Logout Successful', 'success');
+      this.account = null;
+    });
   }
 }

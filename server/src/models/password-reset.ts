@@ -56,10 +56,9 @@ async function _sendPasswordResetEmail(account: AccountEntity, resetToken: strin
   const template: string = (resetComplete ? 'password-reset-success' : 'password-reset');
   return sendEmail(
     MailTransporter.NOREPLY,
-    account.contactInfo.email,
+    account,
     'Reset FoodWeb Password',
     template,
-    account,
     { resetToken }
   );
 }

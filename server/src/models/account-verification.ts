@@ -37,10 +37,9 @@ function _genUnverifiedAccountEntity(account: AccountEntity): UnverifiedAccountE
 async function _sendAccountVerificationEmail(account: AccountEntity, verificationToken: string): Promise<void> {
   return sendEmail(
     MailTransporter.NOREPLY,
-    account.contactInfo.email,
+    account,
     'Verify New FoodWeb Account',
     'account-verification',
-    account,
     { verificationToken }
   );
 }

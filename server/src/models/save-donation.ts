@@ -65,10 +65,9 @@ function _removeNonUpdateFields(donation: Donation): void {
 async function _sendDonationCreateSuccessEmail(donation: Donation, account: AccountEntity): Promise<void> {
   await sendEmail(
     MailTransporter.NOREPLY,
-    account.contactInfo.email,
+    account,
     'Donation Successful',
     'donation-create-success',
-    account,
     { donation }
   );
 }
@@ -78,10 +77,9 @@ async function _sendDonationUpdateSuccessEmails(originalDonation: Donation, upda
   if (account.id !== updatedDonation.donorAccount.id) {
     await sendEmail(
       MailTransporter.NOREPLY,
-      account.contactInfo.email,
+      account,
       '(Admin) Donation Update Successful',
       'donation-update-success',
-      account,
       { originalDonation, updatedDonation }
     );
   }
@@ -89,10 +87,9 @@ async function _sendDonationUpdateSuccessEmails(originalDonation: Donation, upda
   // Send e-mail to donorAccount linked directly to the donation.
   await sendEmail(
     MailTransporter.NOREPLY,
-    updatedDonation.donorAccount.contactInfo.email,
+    updatedDonation.donorAccount,
     'Donation Update Successful',
     'donation-update-success',
-    updatedDonation.donorAccount,
     { originalDonation, updatedDonation }
   );
 }

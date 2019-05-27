@@ -29,7 +29,7 @@
       </ng-container>
       <ng-container *ngIf="sessionService.loggedIn">
         <span><a [routerLink]="['account-details']">Account</a> | </span>
-        <a [routerLink]="['logout']" (click)="sessionService.logout()">Logout</a>
+        <a [routerLink]="['home']" (click)="sessionService.logout()">Logout</a>
       </ng-container>
     </span>
   </div>

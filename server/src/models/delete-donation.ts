@@ -1,20 +1,24 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { DonationEntity } from '../entity/donation.entity';
-import { AccountEntity } from '../entity/account.entity';
+import { AccountEntity, Account } from '../entity/account.entity';
+import { DeliveryEntity } from '../entity/delivery-entity';
 import { FoodWebError } from '../helpers/food-web-error';
 import { readDonation } from './read-donations';
-import { sendEmail, MailTransporter } from '../helpers/email';
+import { MailTransporter, broadcastEmail } from '../helpers/email';
 import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
 
 const _donationHelper = new DonationHelper();
 
 export async function deleteDonation(donationId: number, myAccount: AccountEntity): Promise<void> {
-  const donation: Donation = await readDonation(donationId);
+  const donation = <DonationEntity> await readDonation(donationId);
   _ensureCanDeleteDonation(donation, myAccount);
 
   await getConnection().transaction(async (manager: EntityManager) => {
-    await manager.getRepository(DonationEntity).delete(donationId);
-    await _sendDonationDeleteSuccessEmail(donation, myAccount)
+    if (donation.delivery) {
+      await manager.getRepository(DeliveryEntity).remove(donation.delivery);
+    }
+    await manager.getRepository(DonationEntity).remove(donation);
+    await _sendDonationDeleteSuccessEmail(donation)
   });
 }
 
@@ -25,34 +29,32 @@ function _ensureCanDeleteDonation(donation: Donation, myAccount: AccountEntity):
   }
 }
 
-async function _sendDonationDeleteSuccessEmail(donation: Donation, account: AccountEntity): Promise<void> {
-  const sendPromises: Promise<void>[] = [];
+async function _sendDonationDeleteSuccessEmail(donation: Donation): Promise<void> {
+  const accounts: Account[] = [donation.donorAccount];
+  const donorName: string = _donationHelper.donorName(donation);
+  let receiverName = '';
+  let delivererName = '';
+  const subjects = ['Successfully Deleted Donation'];
 
-  // Send email to donorAccount linked directly to the donation.
-  sendPromises.push(
-    sendEmail(
-      MailTransporter.NOREPLY,
-      donation.donorAccount.contactInfo.email,
-      'Donation Deletion Successful',
-      'donation-delete-success',
-      donation.donorAccount,
-      { donation }
-    )
-  );
-
-  // Send email to receiverAccount linked directly to the donation.
+  // If donation was claimed by a receiver, then we must also notify them.
   if (donation.receiverAccount) {
-    sendPromises.push(
-      sendEmail(
-        MailTransporter.NOREPLY,
-        donation.receiverAccount.contactInfo.email,
-        `claimed Donation From ${donation.donorAccount.organization.organizationName} Deleted By Donor`,
-        'claimed-donation-deleted',
-        donation.receiverAccount,
-        { donation }
-      )
-    );
+    accounts.push(donation.receiverAccount);
+    receiverName = _donationHelper.receiverName(donation);
+    subjects.push(`Claimed Donation Deleted by ${donorName}`);
   }
 
-  await Promise.all(sendPromises);
+  // If donation had a delivery lined up, we must also notify the deliverer.
+  if (donation.delivery) {
+    accounts.push(donation.delivery.volunteerAccount);
+    delivererName = _donationHelper.delivererName(donation);
+    subjects.push(`Delivery Cancelled by ${donorName}`);
+  }
+
+  await broadcastEmail(
+    MailTransporter.NOREPLY,
+    accounts,
+    subjects,
+    'donation-deleted',
+    { donation, donorName, receiverName, delivererName }
+  );
 }

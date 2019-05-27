@@ -7,6 +7,7 @@ import { DonationEntity } from './donation.entity';
 import { DeliveryEntity } from './delivery-entity';
 import { Account, AccountType } from '../../../shared/src/interfaces/account/account';
 import { Constants } from '../../../shared/src/constants/constants';
+export { Account };
 
 const _constants = new Constants();
 

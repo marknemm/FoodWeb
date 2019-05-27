@@ -52,8 +52,8 @@ export class DonationHelper {
       if (donation.donorAccount.id !== myAccount.id) {
         return 'You do not own the donation';
       }
-      if (donation.donationStatus === 'Complete') {
-        return 'Cannot edit/delete a completed donation';
+      if (this.isDonationStatusLaterThan(donation, 'Scheduled')) {
+        return 'Cannot edit/delete a donation that has been picked up';
       }
     }
     return '';
@@ -80,11 +80,23 @@ export class DonationHelper {
       if (myAccount.id !== donation.receiverAccount.id) {
         return 'You do not own the donation claim';
       }
-      if (donation.donationStatus === 'Complete') {
+      if (this.isDonationStatusLaterThan(donation, 'Scheduled')) {
         return 'Cannot unclaim a completed donation';
       }
     }
     return '';
+  }
+
+  isDonationStatusLaterThan(donation: Donation, compareStatus: DonationStatus): boolean {
+    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(donation.donationStatus);
+    const compareStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(compareStatus);
+    return (curStatusIdx > compareStatusIdx);
+  }
+
+  isDonationStatusEarlierThan(donation: Donation, compareStatus: DonationStatus): boolean {
+    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(donation.donationStatus);
+    const compareStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(compareStatus);
+    return (curStatusIdx < compareStatusIdx);
   }
 
   getNextDonationStatus(donation: Donation): DonationStatus {
@@ -113,6 +125,14 @@ export class DonationHelper {
 
   donationDetailsRouterLink(donation: Donation): string[] {
     return ['/donation-details/', `${donation.id}`];
+  }
+
+  memberNames(donation: Donation): { donorName: string, receiverName?: string, delivererName?: string } {
+    return {
+      donorName: this.donorName(donation),
+      receiverName: this.receiverName(donation),
+      delivererName: this.delivererName(donation)
+    };
   }
 
   donorName(donation: Donation): string {

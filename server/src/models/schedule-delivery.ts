@@ -1,15 +1,18 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { readAccounts, AccountsQueryResult } from './read-accounts';
-import { sendEmail, MailTransporter } from '../helpers/email';
+import { sendEmail, MailTransporter, broadcastEmail } from '../helpers/email';
 import { FoodWebError } from '../helpers/food-web-error';
 import { readDonation } from './read-donations';
 import { DonationEntity } from '../entity/donation.entity';
 import { DeliveryEntity } from '../entity/delivery-entity';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
+import { Account } from '../../../shared/src/interfaces/account/account';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
+import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
 
+const _donationHelper = new DonationHelper();
 const _deliveryHelper = new DeliveryHelper();
 
 /**
@@ -46,10 +49,9 @@ async function _findPotentialDeliverers(): Promise<AccountEntity[]> {
 function _sendDeliveryRequestMessages(donation: Donation, deliverer: AccountEntity): Promise<void> {
   return sendEmail(
     MailTransporter.NOREPLY,
-    deliverer.contactInfo.email,
+    deliverer,
     `Delivery Requested from ${donation.donorAccount.organization.organizationName} to ${donation.receiverAccount.organization.organizationName}`,
     'delivery-request',
-    deliverer,
     { donation }
   );
 }
@@ -64,7 +66,7 @@ export async function scheduleDelivery(donationId: number, myAccount: AccountEnt
   await getConnection().transaction(async (manager: EntityManager) => {
     scheduledDonation = await manager.getRepository(DonationEntity).save(donation);
     delete scheduledDonation.delivery['donation']; // Prevent circular JSON reference error.
-    // await _sendDeliveryScheduledMessages(scheduledDonation);
+    await _sendDeliveryScheduledMessages(scheduledDonation);
   });
   return scheduledDonation;
 }
@@ -81,32 +83,22 @@ function _genDelivery(myAccount: AccountEntity, donation: DonationEntity): Deliv
 }
 
 async function _sendDeliveryScheduledMessages(donation: Donation): Promise<void> {
-  const sendPromises: Promise<void>[] = [];
+  const sendAccounts: Account[] = [donation.donorAccount, donation.receiverAccount, donation.delivery.volunteerAccount];
+  const donorName: string = _donationHelper.donorName(donation);
+  const receiverName: string = _donationHelper.receiverName(donation);
+  const delivererName: string = _donationHelper.delivererName(donation);
+  const sendHeaders = [
+    `Donation Delivery Scheduled for pickup by ${delivererName}`,
+    `Donation Delivery Scheduled for drop-off by ${delivererName}`,
+    `Delivery Successfully Scheduled from ${donorName} to ${receiverName}`
+  ];
 
-  // Send receiver message.
-  sendPromises.push(
-    sendEmail(
-      MailTransporter.NOREPLY,
-      donation.receiverAccount.contactInfo.email,
-      `Claimed Donation From ${donation.donorAccount.organization.organizationName}`,
-      'donation-claim-success',
-      donation.receiverAccount,
-      { donation }
-    )
+  await broadcastEmail(
+    MailTransporter.NOREPLY,
+    sendAccounts,
+    sendHeaders,
+    'delivery-scheduled',
+    { donation, donorName, receiverName, delivererName }
   );
-
-  // Send donor message.
-  sendPromises.push(
-    sendEmail(
-      MailTransporter.NOREPLY,
-      donation.donorAccount.contactInfo.email,
-      `Donation Claimed By ${donation.receiverAccount.organization.organizationName}`,
-      'donation-claimed-by',
-      donation.donorAccount,
-      { donation }
-    )
-  );
-
-  await Promise.all(sendPromises);
 }
 

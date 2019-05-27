@@ -34,7 +34,6 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { LogoutComponent } from './components/logout/logout.component';
 import { AccountDetailsComponent } from './components/account-details/account-details.component';
 import { AccountsComponent } from './components/accounts/accounts.component';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
@@ -80,7 +79,6 @@ import { AddressComponent } from './child-components/address/address.component';
     HomeComponent,
     LoginComponent,
     SignupComponent,
-    LogoutComponent,
     AccountDetailsComponent,
     AccountsComponent,
     AlertDialogComponent,
