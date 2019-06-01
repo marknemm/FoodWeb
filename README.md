@@ -14,7 +14,7 @@ Run `npm install` to install all (client and server) dependencies. This may take
 
 Run `npm start` to build and watch the client source code, build and watch the server source code, and spin up a TS Node server that watches for changes in the source code. Navigate to `http://localhost:5000/` to view the app.
 
-## Debug (VS Code)
+## Debug Launch (VS Code)
 
 Run the `Hybrid` debug configuration to build and watch all code, start a TS Node server with a Node debugger attached, and open up a Chrome web browser with a debugger attached. If the browser does not attempt to automatically navigate you to `http://localhost:5000`, then ensure that you do not have any other chrome browser instances open and repeat. Be patient, since the build process may take some time depending on your machine. If the webpage does not load initially, attempt to periodically reload it until you can see the website. You can place breakpoints anywhere throughout the client and server source code. Any changes that are made to the client source code should cause it to be rebuilt. Any changes made to the server source code should cause it to be rebuilt, and the TS Node server should restart with the debugger attached.
 

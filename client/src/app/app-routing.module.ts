@@ -4,7 +4,6 @@ import { HomeComponent } from './components/home/home.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { SignupVerificationComponent } from './components/signup-verification/signup-verification.component';
 import { AccountsComponent } from './components/accounts/accounts.component';
-import { LogoutComponent } from './components/logout/logout.component';
 import { AccountDetailsComponent } from './components/account-details/account-details.component';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { AuthGaurdService } from './services/auth-gaurd/auth-gaurd.service';
@@ -23,7 +22,6 @@ const routes: Routes = [
   { path: 'signup-verification', component: SignupVerificationComponent },
   { path: 'account-details', component: AccountDetailsComponent, canActivate: [AuthGaurdService] },
   { path: 'account-details/:id', component: AccountDetailsComponent, canActivate: [AuthGaurdService] },
-  { path: 'logout', component: LogoutComponent },
   { path: 'accounts', component: AccountsComponent },
   { path: 'password-reset', component: PasswordResetComponent },
   { path: 'donate', component: DonateComponent },

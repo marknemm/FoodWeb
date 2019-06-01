@@ -15,7 +15,7 @@ export interface DonationReadFilters {
   /**
    * The status of the donation.
    */
-  donationStatus?: DonationStatus;
+  donationStatus?: DonationStatus | string;
   /**
    * Filters for associated donors' accounts.
    */
@@ -24,6 +24,10 @@ export interface DonationReadFilters {
    * Filters for associated receivers' accounts.
    */
   receiverAccountId?: number;
+  /**
+   * Filters for associated deliverers' accounts.
+   */
+  delivererAccountId?: number;
   /**
    * The last name of the person who submitted the donation.
    */

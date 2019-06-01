@@ -31,6 +31,16 @@ export class AccountHelper {
     return organization.organizationName.substr(0, 1).toUpperCase();
   }
 
+  accountName(account: Account): string {
+    return (account.accountType === 'Donor' || account.accountType === 'Receiver')
+      ? account.organization.organizationName
+      : `${account.volunteer.firstName} ${account.volunteer.lastName}`;
+  }
+
+  accountDetailsRouterLink(account: Account): string[] {
+    return ['/account-details/', `${account.id}`];
+  }
+
   validateAccount(account: Account, allowAdminAccountType = false): string {
     if (!account) { return ''; }
 

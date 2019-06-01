@@ -37,10 +37,16 @@
   }
 
   .donor-info-container,
-  .receiver-info-container {
-    .organization-name {
+  .receiver-info-container,
+  .deliverer-info-container {
+    .account-name {
       font-weight: bold;
     }
+  }
+
+  .deliverer-info-container {
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .donation-status {

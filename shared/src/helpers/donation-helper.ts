@@ -1,11 +1,14 @@
 import { ValidationHelper } from './validation-helper';
 import { AccountHelper, Account } from './account-helper';
+import { Constants } from '../constants/constants';
 import { Validation } from '../constants/validation';
-import { Donation } from '../interfaces/donation/donation';
+import { Donation, DonationStatus } from '../interfaces/donation/donation';
+import { DonationReadFilters } from '../interfaces/donation/donation-read-filters';
 export { Donation };
 
 export class DonationHelper {
 
+  private _constants = new Constants();
   private _validationHelper = new ValidationHelper();
   private _accountHelper = new AccountHelper();
 
@@ -42,19 +45,22 @@ export class DonationHelper {
   }
 
   validateDonationEditPrivilege(donation: Donation, myAccount: Account): string {
+    if (!myAccount) {
+      return 'You do not own the donation';
+    }
     if (myAccount.accountType !== 'Admin') {
       if (donation.donorAccount.id !== myAccount.id) {
         return 'You do not own the donation';
       }
-      if (donation.donationStatus === 'Complete') {
-        return 'Cannot edit/delete a completed donation';
+      if (this.isDonationStatusLaterThan(donation, 'Scheduled')) {
+        return 'Cannot edit/delete a donation that has been picked up';
       }
     }
     return '';
   }
 
   validateDonationClaimPrivilege(donation: Donation, myAccount: Account): string {
-    if (myAccount.accountType !== 'Receiver') {
+    if (!myAccount || myAccount.accountType !== 'Receiver') {
       return 'Only a Receiver account can claim a donation';
     }
     if (donation.donationStatus !== 'Unmatched') {
@@ -67,14 +73,97 @@ export class DonationHelper {
     if (donation.donationStatus === 'Unmatched') {
       return 'You cannot unclaimed a donation that has not been claimed';
     }
+    if (!myAccount) {
+      return 'You do not own the donation claim';
+    }
     if (myAccount.accountType !== 'Admin') {
       if (myAccount.id !== donation.receiverAccount.id) {
         return 'You do not own the donation claim';
       }
-      if (donation.donationStatus === 'Complete') {
+      if (this.isDonationStatusLaterThan(donation, 'Scheduled')) {
         return 'Cannot unclaim a completed donation';
       }
     }
     return '';
+  }
+
+  isDonationStatusLaterThan(donation: Donation, compareStatus: DonationStatus): boolean {
+    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(donation.donationStatus);
+    const compareStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(compareStatus);
+    return (curStatusIdx > compareStatusIdx);
+  }
+
+  isDonationStatusEarlierThan(donation: Donation, compareStatus: DonationStatus): boolean {
+    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(donation.donationStatus);
+    const compareStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(compareStatus);
+    return (curStatusIdx < compareStatusIdx);
+  }
+
+  getNextDonationStatus(donation: Donation): DonationStatus {
+    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(donation.donationStatus);
+    return (curStatusIdx !== this._constants.DONATION_STATUSES.length)
+      ? this._constants.DONATION_STATUSES[curStatusIdx + 1]
+      : null;
+  }
+
+  getPrevDonationStatus(donation: Donation): DonationStatus {
+    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(donation.donationStatus);
+    return (curStatusIdx > 0)
+      ? this._constants.DONATION_STATUSES[curStatusIdx - 1]
+      : null;
+  }
+
+  findDonationsQueryParams(account: Account): DonationReadFilters {
+    if (account) {
+      switch (account.accountType) {
+        case 'Receiver': return { donationStatus: 'Unmatched' };
+        case 'Volunteer': return { donationStatus: 'Matched' };
+      }
+    }
+    return {};
+  }
+
+  donationDetailsRouterLink(donation: Donation): string[] {
+    return ['/donation-details/', `${donation.id}`];
+  }
+
+  memberNames(donation: Donation): { donorName: string, receiverName?: string, delivererName?: string } {
+    return {
+      donorName: this.donorName(donation),
+      receiverName: this.receiverName(donation),
+      delivererName: this.delivererName(donation)
+    };
+  }
+
+  donorName(donation: Donation): string {
+    return this._accountHelper.accountName(donation.donorAccount);
+  }
+  
+  donorDetailsRouterLink(donation: Donation): string[] {
+    return this._accountHelper.accountDetailsRouterLink(donation.donorAccount);
+  }
+
+  receiverName(donation: Donation): string {
+    return (donation.receiverAccount)
+      ? this._accountHelper.accountName(donation.receiverAccount)
+      : '';
+  }
+
+  receiverDetailsRouterLink(donation: Donation): string[] {
+    return (donation.receiverAccount)
+      ? this._accountHelper.accountDetailsRouterLink(donation.receiverAccount)
+      : [];
+  }
+
+  delivererName(donation: Donation): string {
+    return (donation.delivery)
+      ? this._accountHelper.accountName(donation.delivery.volunteerAccount)
+      : '';
+  }
+
+  delivererDetailsRouterLink(donation: Donation): string[] {
+    return (donation.delivery)
+      ? this._accountHelper.accountDetailsRouterLink(donation.delivery.volunteerAccount)
+      : [];
   }
 }

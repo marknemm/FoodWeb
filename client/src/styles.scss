@@ -27,6 +27,12 @@ html, body {
   width: 100%;
 }
 
+a.no-hover {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
 .page-title {
   font-size: 28px;
   margin-bottom: 10px;
