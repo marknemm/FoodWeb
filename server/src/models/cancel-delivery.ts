@@ -8,20 +8,20 @@ import { DonationEntity } from '../entity/donation.entity';
 
 const _donationHelper = new DonationHelper();
 
-export function cancelDelivery(donation: Donation, myAccount: AccountEntity, manager?: EntityManager): Promise<Donation> {
+export async function cancelDelivery(donation: Donation, myAccount: AccountEntity, manager?: EntityManager): Promise<Donation> {
   if (manager) {
     // If passed an EntityManager instance, then we have external model doing donation modifications.
     return _deleteDelivery(donation, manager);
   }
 
   // Otherwise, we must do the donation modifications here.
-  return getConnection().transaction(
+  const cancelledDonation: Donation = await getConnection().transaction(
     async (localManager: EntityManager) => {
-      donation = await _deleteDeliveryAndUpdateDonation(donation, localManager);
-      await _sendDeliveryCancelledMessage(donation, myAccount);
-      return donation;
+      return _deleteDeliveryAndUpdateDonation(donation, localManager);
     }
   );
+
+  await _sendDeliveryCancelledMessage(cancelledDonation, myAccount);
 }
 
 async function _deleteDeliveryAndUpdateDonation(donation: Donation, manager: EntityManager): Promise<Donation> {
@@ -54,5 +54,5 @@ async function _sendDeliveryCancelledMessage(donation: Donation, myAccount: Acco
     sendSubjects,
     'delivery-cancelled',
     { donation, donorName, receiverName, delivererName }
-  );
+  ).catch(console.error);
 }

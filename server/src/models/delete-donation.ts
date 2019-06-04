@@ -18,8 +18,9 @@ export async function deleteDonation(donationId: number, myAccount: AccountEntit
       await manager.getRepository(DeliveryEntity).remove(donation.delivery);
     }
     await manager.getRepository(DonationEntity).remove(donation);
-    await _sendDonationDeleteSuccessEmail(donation)
   });
+
+  await _sendDonationDeleteSuccessEmail(donation);
 }
 
 function _ensureCanDeleteDonation(donation: Donation, myAccount: AccountEntity): void {
@@ -56,5 +57,5 @@ async function _sendDonationDeleteSuccessEmail(donation: Donation): Promise<void
     subjects,
     'donation-deleted',
     { donation, donorName, receiverName, delivererName }
-  );
+  ).catch(console.error);
 }

@@ -1,7 +1,7 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { readAccounts, AccountsQueryResult } from './read-accounts';
-import { sendEmail, MailTransporter, broadcastEmail } from '../helpers/email';
+import { MailTransporter, sendEmail, broadcastEmail } from '../helpers/email';
 import { FoodWebError } from '../helpers/food-web-error';
 import { readDonation } from './read-donations';
 import { DonationEntity } from '../entity/donation.entity';
@@ -25,7 +25,7 @@ export async function messagePotentialReceivers(donation: Donation): Promise<voi
     const promise: Promise<void> = _sendMatchRequestMessage(donation, receiver);
     messagePromises.push(promise);
   });
-  await Promise.all(messagePromises);
+  await Promise.all(messagePromises).catch(console.error);
 }
 
 /**
@@ -60,11 +60,11 @@ export async function claimDonation(donationId: number, myAccount: AccountEntity
   donationToClaim.donationStatus = 'Matched';
   donationToClaim.receiverAccount = myAccount;
 
-  let claimedDonation: Donation;
-  await getConnection().transaction(async (manager: EntityManager) => {
-    claimedDonation = await manager.getRepository(DonationEntity).save(donationToClaim);
-    await _sendClaimMessages(claimedDonation);
-  });
+  const claimedDonation: Donation = await getConnection().transaction(async (manager: EntityManager) =>
+    manager.getRepository(DonationEntity).save(donationToClaim)
+  );
+  await _sendClaimMessages(claimedDonation);
+
   return claimedDonation;
 }
 
@@ -89,7 +89,7 @@ async function _sendClaimMessages(donation: Donation): Promise<void> {
     subjects,
     'donation-claimed',
     { donation, donorName, receiverName }
-  )
+  ).catch(console.error);
 }
 
 export async function unclaimDonation(donationId: number, myAccount: AccountEntity): Promise<Donation> {
@@ -100,11 +100,13 @@ export async function unclaimDonation(donationId: number, myAccount: AccountEnti
   donationToUnclaim.receiverAccount = null;
 
   let unclaimedDonation: Donation;
+  let deliverer: Account;
   await getConnection().transaction(async (manager: EntityManager) => {
     unclaimedDonation = await manager.getRepository(DonationEntity).save(donationToUnclaim);
-    const deliverer: Account = await _cancelDeliveryIfExists(unclaimedDonation, myAccount, manager);
-    await _sendUnclaimMessages(unclaimedDonation, receiver, deliverer);
+    deliverer = await _cancelDeliveryIfExists(unclaimedDonation, myAccount, manager);
   });
+  await _sendUnclaimMessages(unclaimedDonation, receiver, deliverer);
+
   return unclaimedDonation;
 }
 
@@ -148,5 +150,5 @@ async function _sendUnclaimMessages(donation: Donation, receiverAccount: Account
     subjects,
     'donation-unclaimed',
     { donation, donorName, receiverName, delivererName, receiverAccount }
-  );
+  ).catch(console.error);
 }

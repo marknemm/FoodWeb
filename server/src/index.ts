@@ -17,6 +17,7 @@ global['clientBuildDir'] = path.join(global['clientDir'], 'dist');
 global['assetsDir'] = path.join(global['clientBuildDir'], 'assets');
 global['clientEmailDir'] = path.join(global['clientDir'], 'email');
 global['publicDir'] = path.join(global['rootDir'], 'public');
+global['emailTemplatesDir'] = path.join(__dirname, '..', 'templates', 'email');
 
 // Load .env into process (pre-set environment variables on machine take precedence).
 if (!PRODUCTION && !QA) {

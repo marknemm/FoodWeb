@@ -10,33 +10,33 @@ import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-h
 const _donationHelper = new DonationHelper();
 
 export async function createDonation(donation: Donation, myAccount: AccountEntity): Promise<DonationEntity> {
-  let createdDonation: DonationEntity;
   donation.donationStatus = 'Unmatched';
   donation.donorAccount = myAccount;
   _validateDonation(donation);
 
-  await getConnection().transaction(async (manager: EntityManager) => {
-    createdDonation = await manager.getRepository(DonationEntity).save(donation);
-    await _sendDonationCreateSuccessEmail(createdDonation, myAccount);
-  });
+  const createdDonation: DonationEntity = await getConnection().transaction(
+    async (manager: EntityManager) => manager.getRepository(DonationEntity).save(donation)
+  );
+  await _sendDonationCreateSuccessEmail(createdDonation, myAccount);
+
   return createdDonation;
 }
 
 export async function updateDonation(donation: Donation, myAccount: AccountEntity): Promise<Donation> {
-  let updatedDonation: Donation;
   _validateDonation(donation);
   _ensureCanUpdateDonation(donation, myAccount);
 
   _removeNonUpdateFields(donation);
   const originalDonation: Donation = await readDonation(donation.id);
 
-  await getConnection().transaction(async (manager: EntityManager) => {
+  const updatedDonation: Donation = await getConnection().transaction(async (manager: EntityManager) => {
     const donationRepo: Repository<DonationEntity> = manager.getRepository(DonationEntity);
     await donationRepo.save(donation);
     // Must do separate query b/c save method will only return updated properties in entity (partial entity).
-    updatedDonation = await readDonation(donation.id, donationRepo);
-    _sendDonationUpdateSuccessEmails(originalDonation, updatedDonation, myAccount)
+    return readDonation(donation.id, donationRepo);
   });
+  _sendDonationUpdateSuccessEmails(originalDonation, updatedDonation)
+
   return updatedDonation;
 }
 
@@ -62,34 +62,23 @@ function _removeNonUpdateFields(donation: Donation): void {
   delete donation.receiverAccount;
 }
 
-async function _sendDonationCreateSuccessEmail(donation: Donation, account: AccountEntity): Promise<void> {
-  await sendEmail(
+function _sendDonationCreateSuccessEmail(donation: Donation, account: AccountEntity): Promise<void> {
+  return sendEmail(
     MailTransporter.NOREPLY,
     account,
     'Donation Successful',
     'donation-create-success',
     { donation }
-  );
+  ).catch(console.error);
 }
 
-async function _sendDonationUpdateSuccessEmails(originalDonation: Donation, updatedDonation: Donation, account: AccountEntity): Promise<void> {
-  // If an 'Admin' account edited another user's donation, then also send e-mail to admin.
-  if (account.id !== updatedDonation.donorAccount.id) {
-    await sendEmail(
-      MailTransporter.NOREPLY,
-      account,
-      '(Admin) Donation Update Successful',
-      'donation-update-success',
-      { originalDonation, updatedDonation }
-    );
-  }
-
+function _sendDonationUpdateSuccessEmails(originalDonation: Donation, updatedDonation: Donation): Promise<void> {
   // Send e-mail to donorAccount linked directly to the donation.
-  await sendEmail(
+  return sendEmail(
     MailTransporter.NOREPLY,
     updatedDonation.donorAccount,
     'Donation Update Successful',
     'donation-update-success',
     { originalDonation, updatedDonation }
-  );
+  ).catch(console.error);
 }
