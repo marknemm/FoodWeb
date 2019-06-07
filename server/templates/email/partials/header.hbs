@@ -1,4 +1,4 @@
-<header class="email-header">
+<div class="email-header">
   <table class="fill" border="0" cellpadding="0" cellspacing="0">
     <tr>
       <td align="left">
@@ -14,5 +14,7 @@
       </td>
     </tr>
   </table>
-  <img class="header-img" width="561px" src="{{ env.PRODUCTION_HOST_ADDRESS }}/assets/HeaderImgMd.jpg" alt="Food Web Header Image">
-</header>
+  <a href="{{ env.SERVER_HOST_ADDRESS }}">
+    <img class="header-img" width="561px" src="{{ env.PRODUCTION_HOST_ADDRESS }}/assets/HeaderImgMd.jpg" alt="Food Web Header Image">
+  </a>
+</div>
