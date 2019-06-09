@@ -11,6 +11,7 @@ import { DonateComponent } from './components/donate/donate.component';
 import { DonationsComponent } from './components/donations/donations.component';
 import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
 import { DeliveriesComponent } from './components/deliveries/deliveries.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -29,7 +30,8 @@ const routes: Routes = [
   { path: 'donations/my', component: DonationsComponent, canActivate: [AuthGaurdService] },
   { path: 'donation-details/:id', component: DonationDetailsComponent },
   { path: 'deliveries', component: DeliveriesComponent },
-  { path: 'deliveries/my', component: DeliveriesComponent, canActivate: [AuthGaurdService] }
+  { path: 'deliveries/my', component: DeliveriesComponent, canActivate: [AuthGaurdService] },
+  { path: 'notifications', component: NotificationsComponent, canActivate: [AuthGaurdService] }
 ];
 
 @NgModule({

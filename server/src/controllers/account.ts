@@ -11,7 +11,7 @@ import { AccountCreateRequest, Account } from '../../../shared/src/interfaces/ac
 import { PasswordUpdateRequest } from '../../../shared/src/interfaces/account/password-update-request';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { PasswordResetRequest } from '../../../shared/src/interfaces/account/password-reset-request';
-import { ListResponse } from '../../../shared/src/interfaces/list-response';
+import { genListResponse } from '../helpers/list-response';
 
 const router = express.Router();
 
@@ -54,18 +54,9 @@ router.put('/reset-password/', (req: Request, res: Response) => {
 router.get('/', (req: Request, res: Response) => {
   const readRequest: AccountReadRequest = req.query;
   readAccounts(readRequest)
-    .then(({ accounts, totalCount }: AccountsQueryResult) => {
-      const response: ListResponse = {
-        list: accounts,
-        totalCount,
-        filters: readRequest,
-        page: readRequest.page,
-        limit: readRequest.limit,
-        startRank: (readRequest.page - 1) * readRequest.limit,
-        endRank: (readRequest.page - 1) * readRequest.limit + readRequest.limit - 1
-      };
-      res.send(response);
-    })
+    .then(({ accounts, totalCount }: AccountsQueryResult) =>
+      res.send(genListResponse(accounts, totalCount, readRequest))
+    )
     .catch(handleError.bind(this, res));
 });
 

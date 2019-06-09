@@ -13,7 +13,7 @@ export class DeliveryEntity implements Delivery {
   @JoinColumn()
   donation?: DonationEntity;
 
-  @ManyToOne((type) => AccountEntity, (account) => account.deliveries, { eager: true })
+  @ManyToOne((type) => AccountEntity, { eager: true })
   volunteerAccount: AccountEntity;
 
   @Column({ type: 'timestamp with time zone', nullable: true })

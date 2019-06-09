@@ -31,6 +31,7 @@ if (!PRODUCTION && !QA) {
 // Our session middleware and controllers that will handle requests after this router hands off the data to them.
 import { Application } from 'express';
 import { initDbConnectionPool } from './helpers/db-connection-pool';
+import { initSSE } from './helpers/server-side-event';
 import { expressSession } from './middlewares/session.middleware';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
@@ -49,6 +50,7 @@ app.use('/server/session', require('./controllers/session'));
 app.use('/server/account', require('./controllers/account'));
 app.use('/server/donation', require('./controllers/donation'));
 app.use('/server/delivery', require('./controllers/delivery'));
+app.use('/server/notification', require('./controllers/notification'));
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {
@@ -66,6 +68,7 @@ app.get('*', (request: Request, response: Response) => {
   response.sendFile(path.join(global['clientBuildDir'], 'index.html'));
 });
 
+initSSE(app);
 initDbConnectionPool().then(() =>
   // Only start receiving requests once the database has initialized.
   app.listen(app.get('port'), () =>

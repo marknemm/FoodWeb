@@ -1,0 +1,15 @@
+<div *ngIf="!hideHeader" class="donate-form-title page-title block-label">
+  Notifications
+</div>
+
+<mat-card *ngFor="let notification of notifications">
+  <mat-card-header>
+    <img mat-card-avatar *ngIf="notification.notificationIconUrl"
+      [src]="notification.notificationIconUrl" alt="{{ notification.notificationTitle }} notification icon">
+    <mat-card-title>{{ notification.notificationTitle }}</mat-card-title>
+    <mat-card-subtitle>{{ notification.notificationSubtitle }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    {{ notification.notificationBody }}
+  </mat-card-content>
+</mat-card>

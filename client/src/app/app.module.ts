@@ -69,7 +69,8 @@ import { DonationDetailActionsComponent } from './child-components/donation-deta
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
-import { AddressComponent } from './child-components/address/address.component';1
+import { AddressComponent } from './child-components/address/address.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';1
 
 @NgModule({
   declarations: [
@@ -108,6 +109,7 @@ import { AddressComponent } from './child-components/address/address.component';
     ConfirmButtonDirective,
     DonationDetailActionsComponent,
     AddressComponent,
+    NotificationsComponent,
   ],
   imports: [
     AgmCoreModule.forRoot({

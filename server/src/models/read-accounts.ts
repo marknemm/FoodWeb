@@ -19,7 +19,7 @@ export async function readAccount(idOrUsername: number | string): Promise<Accoun
 
 export async function readAccounts(request: AccountReadRequest): Promise<AccountsQueryResult> {
   const [accounts, totalCount]: [AccountEntity[], number] = await getRepository(AccountEntity).findAndCount({
-    where: _genFindOptions(request),
+    where: _genFindConditions(request),
     skip: (request.page - 1) * request.limit,
     take: request.limit,
     order: { username: 'ASC' }
@@ -29,11 +29,11 @@ export async function readAccounts(request: AccountReadRequest): Promise<Account
   return { accounts, totalCount };
 }
 
-function _genFindOptions(request: AccountReadRequest): FindConditions<AccountEntity> {
-  const findOptions: FindConditions<AccountEntity> = Object.assign({}, request);
-  delete findOptions['page'];
-  delete findOptions['limit'];
-  return findOptions;
+function _genFindConditions(request: AccountReadRequest): FindConditions<AccountEntity> {
+  const conditions: FindConditions<AccountEntity> = Object.assign({}, request);
+  delete conditions['page'];
+  delete conditions['limit'];
+  return conditions;
 }
 
 function _processAccounts(accounts: AccountEntity[]): void {

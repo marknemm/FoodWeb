@@ -12,10 +12,10 @@ export class DonationEntity implements Donation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => AccountEntity, (account) => account.donations, { eager: true })
+  @ManyToOne((type) => AccountEntity, { eager: true })
   donorAccount: AccountEntity;
 
-  @ManyToOne((type) => AccountEntity, (account) => account.claims, { nullable: true, eager: true })
+  @ManyToOne((type) => AccountEntity, { nullable: true, eager: true })
   receiverAccount?: AccountEntity;
 
   @Column()
