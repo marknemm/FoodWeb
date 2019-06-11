@@ -133,4 +133,13 @@ export class AccountService {
       finalize(() => this._pageProgressService.reset())
     );
   }
+
+  resendVerificationEmail(): void {
+    const url = `${this.url}/resend-verification-email`;
+    this._httpClient.get(url).pipe(
+      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
+    ).subscribe(
+      () => this._alertService.displaySimpleMessage('Verification Email Resent', 'success')
+    );
+  }
 }

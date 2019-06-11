@@ -65,5 +65,8 @@
   <mat-card-content>
     <p>Welcome to Food Web!</p>
     <p>Please confirm your signup by clicking on the link sent to your email.</p>
+    <button mat-raised-button *ngIf="!sessionService.account.verified" color="primary" type="button" (click)="accountService.resendVerificationEmail()">
+      Resend Verification Email
+    </button>
   </mat-card-content>
 </mat-card>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatDialog } from '@angular/material';
+import { Observable, of } from 'rxjs';
 import { SessionService } from '../../services/session/session.service';
 import { PasswordResetService } from '../../services/password-reset/password-reset.service';
 
@@ -31,6 +32,12 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  public static openIfNotLoggedIn(sessionService: SessionService, matDialog: MatDialog): Observable<boolean> {
+    return (!sessionService.loggedIn)
+      ? matDialog.open(LoginComponent).afterClosed()
+      : of(true);
+  }
+
   get loading(): boolean {
     return this.sessionService.loading || this._passwordResetService.loading;
   }
@@ -45,7 +52,7 @@ export class LoginComponent implements OnInit {
     const usernameEmail: string = this.loginForm.get('usernameEmail').value;
     const password: string = this.loginForm.get('password').value;
     this.sessionService.login(usernameEmail, password).subscribe(
-      () => this._matDialogRef.close()
+      () => this._matDialogRef.close(true)
     );
   }
 

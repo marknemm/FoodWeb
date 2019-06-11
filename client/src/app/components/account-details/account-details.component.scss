@@ -26,6 +26,17 @@
     margin-bottom: 6px;
   }
 
+  .account-not-verified {
+    text-align: center;
+    color: $warn;
+    font-weight: bold;
+
+    button {
+      color: #007BFF;
+      padding: 0 10px;
+    }
+  }
+
   mat-divider {
     margin-bottom: 20px;
   }

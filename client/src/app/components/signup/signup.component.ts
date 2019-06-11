@@ -23,8 +23,8 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   constructor(
     public sessionService: SessionService,
+    public accountService: AccountService,
     private _formBuilder: FormBuilder,
-    private _accountService: AccountService,
     private _router: Router,
     private _activatedRoute: ActivatedRoute
   ) {}
@@ -42,7 +42,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     if (this.signupForm.valid) {
       const account: Account = this.accountForm.value;
       const password: string = this.passwordForm.get('password').value;
-      this._accountService.createAccount(account, password);
+      this.accountService.createAccount(account, password);
     }
   }
 

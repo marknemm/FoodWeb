@@ -14,7 +14,9 @@ export async function savePasswordResetToken(username: string): Promise<void> {
       throw new FoodWebError('Account not found. Be sure to enter a valid username.');
     }
     // Attempt to load already created password reset entity (user may click 'Resend Email').
-    let passwordResetEntity: PasswordResetEntity = await manager.getRepository(PasswordResetEntity).findOne({ account });
+    let passwordResetEntity: PasswordResetEntity = await manager.getRepository(PasswordResetEntity).findOne({ 
+      account: { id: account.id }
+    });
     if (!passwordResetEntity) {
       passwordResetEntity = _genPasswordResetEntity(account);
       await manager.getRepository(PasswordResetEntity).save(passwordResetEntity);

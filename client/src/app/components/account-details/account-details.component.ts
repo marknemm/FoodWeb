@@ -32,7 +32,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     public sessionService: SessionService,
     public sectionEditService: SectionEditService<string>,
     public accountHelper: AccountHelper,
-    private _accountService: AccountService,
+    public accountService: AccountService,
     private _formBuilder: FormBuilder,
     private _activatedRoute: ActivatedRoute
   ) {}
@@ -76,7 +76,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _listenAccountChange(): void {
-    this._accountService.listenAccountQueryChange(this._activatedRoute).pipe(
+    this.accountService.listenAccountQueryChange(this._activatedRoute).pipe(
       takeUntil(this._destroy$)
     ).subscribe((account: Account) => {
       this._accountNotFound = !account;
@@ -145,14 +145,14 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   private _saveAccount(sectionName: string): void {
     let accountUpdate: Partial<Account> = {};
     accountUpdate[sectionName] = this.accountUpdateForm.get(sectionName).value;
-    this._accountService.updateAccount(this.originalAccount, accountUpdate).subscribe(
+    this.accountService.updateAccount(this.originalAccount, accountUpdate).subscribe(
       (savedAccount: Account) => this._handleSaveSuccess(sectionName, savedAccount)
     );
   }
 
   private _savePassword(): void {
     const passwordUpdate: PasswordUpdate = this.accountUpdateForm.get('password').value;
-    this._accountService.updatePassword(passwordUpdate).subscribe(
+    this.accountService.updatePassword(passwordUpdate).subscribe(
       () => this._handleSaveSuccess('password', this.originalAccount)
     );
   }

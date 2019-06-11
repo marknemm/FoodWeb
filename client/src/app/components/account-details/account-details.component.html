@@ -17,6 +17,11 @@
 
   <mat-divider></mat-divider>
 
+  <p *ngIf="isMyAccount && !originalAccount.verified" class="account-not-verified">
+    Account Not Verified:
+    <button mat-button type="button" (click)="accountService.resendVerificationEmail()">Resend Verification Email</button>
+  </p>
+
   <div class="row">
     <div class="col-xl-6">
       <mat-card *ngIf="originalAccount.accountType !== 'Volunteer'">

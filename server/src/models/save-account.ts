@@ -1,6 +1,6 @@
 import { getConnection, EntityManager, Repository } from 'typeorm';
 import { hash, genSalt } from 'bcrypt';
-import { saveUnverifiedAccount } from './account-verification';
+import { createUnverifiedAccount } from './account-verification';
 import { formatOperationHoursTimes, OperationHoursEntity, sortOperationHours } from '../helpers/operation-hours-converter';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordEntity } from '../entity/password.entity';
@@ -9,14 +9,14 @@ import { FoodWebError } from '../helpers/food-web-error';
 import { OperationHours } from '../interfaces/account/account';
 import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
 
-const accountHelper = new AccountHelper();
+const _accountHelper = new AccountHelper();
 
 export async function createAccount(account: Account, password: string): Promise<AccountEntity> {
   let createdAccount: AccountEntity;
   await getConnection().transaction(async (manager: EntityManager) => {
     createdAccount = await _saveAccount(manager, account);
     await savePassword(manager, createdAccount, password);
-    await saveUnverifiedAccount(createdAccount, manager);
+    await createUnverifiedAccount(createdAccount, manager);
   });
 
   formatOperationHoursTimes(createdAccount.operationHours);
@@ -25,7 +25,7 @@ export async function createAccount(account: Account, password: string): Promise
 }
 
 export async function updateAccount(myAccount: Account, account: Account): Promise<AccountEntity> {
-  if (!accountHelper.isMyAccount(myAccount, account.id)) {
+  if (!_accountHelper.isMyAccount(myAccount, account.id)) {
     throw new FoodWebError('User unauthorized to update account', 401);
   }
 
@@ -41,7 +41,7 @@ export async function updateAccount(myAccount: Account, account: Account): Promi
 export async function updatePassword(myAccount: AccountEntity, password: string, oldPassword: string): Promise<void> {
   oldPassword = (oldPassword ? oldPassword : ' '); // Ensure we have an oldPassword to check against for extra security!
   await getConnection().transaction(async (manager: EntityManager) => {
-    await savePassword(manager, myAccount, password, oldPassword, accountHelper.isAdmin(myAccount));
+    await savePassword(manager, myAccount, password, oldPassword, _accountHelper.isAdmin(myAccount));
   });
 }
 
@@ -56,7 +56,7 @@ export async function savePassword(manager: EntityManager, myAccount: AccountEnt
 }
 
 function _validatePassword(password: string): void {
-  const passwordErr: string = accountHelper.validatePassword(password);
+  const passwordErr: string = _accountHelper.validatePassword(password);
   if (passwordErr) {
     throw new FoodWebError(passwordErr);
   }
@@ -96,9 +96,10 @@ async function _saveAccount(manager: EntityManager, account: Account, myAccount?
   _validateAccount(account, myAccount);
   _ensureEitherOrganizationOrVolunteer(account);
   _ensureAccountHasProfileImg(account);
+  account.contactInfo.phoneNumber = _accountHelper.formatPhoneNumber(account.contactInfo.phoneNumber);
 
-  if (myAccount) {
-    await operationHoursRepo.delete({ account: { id: myAccount.id } });
+  if (account.id) {
+    await operationHoursRepo.delete({ account: { id: account.id } });
   }
   const savedAccount: AccountEntity = await accountRepo.save(account as AccountEntity);
   await _insertOperationHours(operationHoursRepo, savedAccount.id, account.operationHours);
@@ -107,7 +108,7 @@ async function _saveAccount(manager: EntityManager, account: Account, myAccount?
 
 function _validateAccount(account: Account, myAccount?: Account): void {
   const allowAdminAccountType = (myAccount && myAccount.accountType === 'Admin');
-  const accountErr: string = accountHelper.validateAccount(account, allowAdminAccountType);
+  const accountErr: string = _accountHelper.validateAccount(account, allowAdminAccountType);
   if (accountErr) {
     throw new FoodWebError(accountErr);
   }

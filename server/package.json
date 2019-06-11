@@ -20,7 +20,7 @@
     "test:watch": "ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts",
     "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ormconfig.json",
     "typeorm:migration:create": "ts-node ./node_modules/typeorm/cli migration:create -n",
-    "typeorm:migration:generate": "ts-node ./node_modules/typeorm/cli migration:generate -n",
+    "typeorm:migration:generate": "npm run build && ts-node ./node_modules/typeorm/cli migration:generate -n",
     "typeorm:migration:revert": "ts-node ./node_modules/typeorm/cli migration:revert",
     "typeorm:migration:run": "ts-node ./node_modules/typeorm/cli migration:run"
   },
