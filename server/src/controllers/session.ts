@@ -1,6 +1,6 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { login } from '../models/login';
+import { login } from '../services/login';
 import { handleError } from '../middlewares/response-error.middleware';
 import { LoginRequest } from './../../../shared/src/interfaces/session/login-request';
 import { Account } from './../../../shared/src/interfaces/account/account';

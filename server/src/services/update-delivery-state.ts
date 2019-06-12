@@ -4,7 +4,7 @@ import { FoodWebError } from '../helpers/food-web-error';
 import { MailTransporter, broadcastEmail } from '../helpers/email';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { cancelDelivery } from '../models/cancel-delivery';
+import { cancelDelivery } from '../services/cancel-delivery';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
 import { Account } from '../../../shared/src/interfaces/account/account';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';

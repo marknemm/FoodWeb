@@ -1,6 +1,6 @@
 export const environment = {
-  production: true,
-  qa: false,
+  production: false,
+  qa: true,
   demo: false,
   e2e: false,
   hmr: false,

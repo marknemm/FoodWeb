@@ -1,7 +1,7 @@
 export const environment = {
-  production: true,
+  production: false,
   qa: false,
-  demo: false,
+  demo: true,
   e2e: false,
   hmr: false,
   supportEmail: 'support@wnyfoodweb.com',

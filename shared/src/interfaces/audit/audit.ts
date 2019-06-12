@@ -37,6 +37,10 @@ export interface Audit<T = any> {
    */
   data: AuditData<T>;
   /**
+   * The RECAPTCHA (v3) score assigned to the client that caused the audited event.
+   */
+  recaptchaScore?: number;
+  /**
    * The timestamp of when the audit event occured.
    */
   timestamp?: string;

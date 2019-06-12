@@ -1,23 +1,25 @@
 import express = require('express');
 import { Request, Response } from 'express';
+import { genListResponse } from '../helpers/list-response';
+import { recaptcha } from '../middlewares/recaptcha';
 import { ensureSessionActive } from '../middlewares/session.middleware';
 import { handleError } from '../middlewares/response-error.middleware';
 import { AccountEntity } from './../entity/account.entity';
-import { createAccount, updateAccount, updatePassword } from '../models/save-account';
-import { readAccounts, AccountsQueryResult, readAccount } from '../models/read-accounts';
-import { verifyAccount, resendVerificationEmail } from '../models/account-verification';
-import { savePasswordResetToken, resetPassword } from '../models/password-reset';
+import { createAccount, updateAccount } from '../services/save-account';
+import { updatePassword } from '../services/save-password';
+import { readAccounts, AccountsQueryResult, readAccount } from '../services/read-accounts';
+import { verifyAccount, resendVerificationEmail } from '../services/account-verification';
+import { savePasswordResetToken, resetPassword } from '../services/password-reset';
 import { AccountCreateRequest, Account } from '../../../shared/src/interfaces/account/account-create-request';
 import { PasswordUpdateRequest } from '../../../shared/src/interfaces/account/password-update-request';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { PasswordResetRequest } from '../../../shared/src/interfaces/account/password-reset-request';
-import { genListResponse } from '../helpers/list-response';
 
 const router = express.Router();
 
-router.post('/', (req: Request, res: Response) => {
+router.post('/', recaptcha, (req: Request, res: Response) => {
   const createRequest: AccountCreateRequest = req.body;
-  createAccount(createRequest.account, createRequest.password)
+  createAccount(createRequest.account, createRequest.password, req.body.recaptchaScore)
     .then(_handleAccountSaveResult.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });

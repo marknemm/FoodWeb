@@ -4,7 +4,7 @@ import { AccountEntity } from '../entity/account.entity';
 import { MailTransporter, sendEmail } from '../helpers/email';
 import { PasswordResetEntity } from '../entity/password-reset';
 import { readAccount } from './read-accounts';
-import { savePassword } from './save-account';
+import { savePassword } from './save-password';
 import { FoodWebError } from '../helpers/food-web-error';
 
 export async function savePasswordResetToken(username: string): Promise<void> {

@@ -27,8 +27,11 @@ import {
   MatNativeDateModule
 } from '@angular/material';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { AgmCoreModule } from '@agm/core';
+import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 
+import { environment } from 'src/environments/environment';
+import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
+import { RecaptchaService } from './services/recaptcha/recaptcha.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -51,7 +54,6 @@ import { UsernameComponent } from './child-components/username/username.componen
 import { PasswordComponent } from './child-components/password/password.component';
 import { EditSaveButtonComponent } from './child-components/edit-save-button/edit-save-button.component';
 import { PaginatorComponent } from './child-components/paginator/paginator.component';
-import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
 import { DonateComponent } from './components/donate/donate.component';
 import { DonationFormComponent } from './child-components/donation-form/donation-form.component';
@@ -65,12 +67,12 @@ import { DateTimeComponent } from './child-components/date-time/date-time.compon
 import { DateTimeRangeComponent } from './child-components/date-time-range/date-time-range.component';
 import { ConfirmButtonDirective } from './directives/confirm-button/confirm-button.directive';
 import { DonationDetailActionsComponent } from './child-components/donation-detail-actions/donation-detail-actions.component';
+import { AddressComponent } from './child-components/address/address.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
 
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
-import { AddressComponent } from './child-components/address/address.component';
-import { NotificationsComponent } from './components/notifications/notifications.component';1
 
 @NgModule({
   declarations: [
@@ -112,9 +114,6 @@ import { NotificationsComponent } from './components/notifications/notifications
     NotificationsComponent,
   ],
   imports: [
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyALtc09EAL5qMDDV5UveWbxhAJqo6WV12g'
-    }),
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -141,11 +140,14 @@ import { NotificationsComponent } from './components/notifications/notifications
     MatDividerModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgxMaterialTimepickerModule.forRoot()
+    NgxMaterialTimepickerModule.forRoot(),
+    RecaptchaV3Module
   ],
   providers: [
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top', duration: 5000 } },
     { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: RecaptchaService, multi: true },
+    { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.recaptchaSiteKey },
     AccountHelper,
     DonationHelper,
     DeliveryHelper

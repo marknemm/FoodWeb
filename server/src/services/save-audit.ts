@@ -2,11 +2,11 @@ import { getConnection, EntityManager } from 'typeorm';
 import { AuditEntity } from '../entity/audit.entity';
 import { Audit, AuditEventType } from '../../../shared/src/interfaces/audit/audit';
 
-export function saveCreateAudit<T>(eventType: AuditEventType, data: T): Promise<AuditEntity<T>> {
+export function saveCreationAudit<T>(eventType: AuditEventType, data: T, recaptchaScore?: number): Promise<AuditEntity<T>> {
   return _saveAudit({ eventType, data: { new: data } });
 }
 
-export function saveUpdateAudit<T>(eventType: AuditEventType, oldData: T, newData: T): Promise<AuditEntity<T>> {
+export function saveUpdateAudit<T>(eventType: AuditEventType, oldData: T, newData: T, recaptchaScore?: number): Promise<AuditEntity<T>> {
   return _saveAudit({ eventType, data: { old: oldData, new: newData } })
 }
 

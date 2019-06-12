@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { handleError } from '../middlewares/response-error.middleware';
 import { ensureSessionActive } from '../middlewares/session.middleware';
 import { genListResponse } from '../helpers/list-response';
-import { readNotifications, NotificationsQueryResult } from '../models/read-notifications';
+import { readNotifications, NotificationsQueryResult } from '../services/read-notifications';
 import { Notification } from '../../../shared/src/interfaces/notification/notification';
 import { NotificationReadRequest } from '../../../shared/src/interfaces/notification/notification-read-request';
 
