@@ -14,8 +14,8 @@
     (clickConfirm)="action.emit('Unclaim')" confirmTitle="Confirm Unclaim" confirmMessage="Are you sure you want to unclaim the donation?">
     Unclaim Donation
   </button>
-  <button mat-raised-button *ngIf="canScheduleDelivery" type="button" color="primary" (click)="action.emit('StartDelivery')">
-    Start Delivery
+  <button mat-raised-button *ngIf="canScheduleDelivery" type="button" color="primary" (click)="action.emit('ScheduleDelivery')">
+    Schedule Delivery
   </button>
   <button mat-button foodWebConfirmButton *ngIf="canUndoDeliveryState" type="button" color="warn" (clickConfirm)="action.emit('UndoDeliveryState')"
     confirmTitle="Confirm {{ deliveryUndoTxt }}" [confirmMessage]="confirmDeliveryUndoMessage">

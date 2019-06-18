@@ -3,7 +3,7 @@ import { Donation, DonationHelper } from '../../../../../shared/src/helpers/dona
 import { DeliveryHelper } from '../../../../../shared/src/helpers/delivery-helper';
 import { Account } from '../../../../../shared/src/interfaces/account/account';
 
-export type DonationAction = 'ToggleEdit' | 'Save' | 'Delete' | 'Claim' | 'Unclaim' | 'StartDelivery' | 'AdvanceDeliveryState' | 'UndoDeliveryState';
+export type DonationAction = 'ToggleEdit' | 'Save' | 'Delete' | 'Claim' | 'Unclaim' | 'ScheduleDelivery' | 'AdvanceDeliveryState' | 'UndoDeliveryState';
 
 @Component({
   selector: 'food-web-donation-detail-actions',

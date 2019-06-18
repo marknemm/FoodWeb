@@ -113,9 +113,10 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
       if (force || !this.sectionEditService.editing('organization')) {
         this.accountUpdateForm.get('organization').patchValue(account.organization);
       }
-      if (force || !this.sectionEditService.editing('operationHours')) {
-        this.accountUpdateForm.get('operationHours').patchValue(account.operationHours);
-      }
+    }
+
+    if (force || !this.sectionEditService.editing('operationHours')) {
+      this.accountUpdateForm.get('operationHours').patchValue(account.operationHours);
     }
 
     if (force || !this.sectionEditService.editing('password')) {

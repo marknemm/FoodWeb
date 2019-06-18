@@ -24,7 +24,8 @@ import {
   MatTooltipModule,
   MatDividerModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatListModule
 } from '@angular/material';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
@@ -69,10 +70,13 @@ import { ConfirmButtonDirective } from './directives/confirm-button/confirm-butt
 import { DonationDetailActionsComponent } from './child-components/donation-detail-actions/donation-detail-actions.component';
 import { AddressComponent } from './child-components/address/address.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
+import { DateTimeSelectComponent } from './child-components/date-time-select/date-time-select.component';
+import { DateTimeSelectDialogComponent } from './components/date-time-select-dialog/date-time-select-dialog.component';
 
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
+import { DateTimeDisplayComponent } from './child-components/date-time-display/date-time-display.component';
 
 @NgModule({
   declarations: [
@@ -112,6 +116,9 @@ import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
     DonationDetailActionsComponent,
     AddressComponent,
     NotificationsComponent,
+    DateTimeSelectComponent,
+    DateTimeSelectDialogComponent,
+    DateTimeDisplayComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -139,6 +146,7 @@ import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
     MatTooltipModule,
     MatDividerModule,
     MatDatepickerModule,
+    MatListModule,
     MatNativeDateModule,
     NgxMaterialTimepickerModule.forRoot(),
     RecaptchaV3Module
@@ -155,7 +163,8 @@ import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
   entryComponents: [
     LoginComponent,
     AlertDialogComponent,
-    AlertSnackBarComponent
+    AlertSnackBarComponent,
+    DateTimeSelectDialogComponent
   ],
   bootstrap: [
     AppComponent

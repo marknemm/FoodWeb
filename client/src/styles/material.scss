@@ -258,3 +258,25 @@ button {
   overflow-y: hidden;
   min-height: 18px;
 }
+
+.mat-radio-list {
+  .mat-list-item:hover {
+    background-color: whitesmoke;
+  }
+
+  .mat-radio-button {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    .mat-radio-label {
+      width: 100%;
+      height: 100%;
+
+      .mat-radio-container,
+      .mat-radio-label-content {
+        vertical-align: middle;
+      }
+    }
+  }
+}

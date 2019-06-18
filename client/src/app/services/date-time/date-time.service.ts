@@ -5,8 +5,8 @@ import { ErrorStateMatcher } from '@angular/material';
 import { ConstantsService } from '../constants/constants.service';
 import { Account, OperationHours } from '../../../../../shared/src/interfaces/account/account';
 
-export interface DateTimeRange { startDateTime: string, endDateTime: string };
-export interface TimeRange { startTime: string, endTime: string };
+export interface DateTimeRange { startDateTime: string; endDateTime: string }
+export interface TimeRange { startTime: string; endTime: string }
 export type DateTimeRangeOrderValidator = (form: FormGroup) => { dateTimeRangeOrder: string };
 export type TimeRangeOrderValidator = (form: FormGroup) => { timeRangeOrder: string };
 
@@ -19,19 +19,44 @@ export class DateTimeService {
     private _constantsService: ConstantsService
   ) {}
 
-  getCurrentDate(): string {
-    return formatDate(new Date(), 'M/d/yyyy', 'en-US');
+  getCurrentDateStr(): string {
+    return this.dateToDateStr(new Date());
   }
 
-  getCurrentTime(): string {
-    return formatDate(new Date(), 'hh:mm aa', 'en-US');
+  getCurrentTimeStr(): string {
+    return this.dateToTimeStr(new Date());
   }
 
-  ceil5Mins(time: string): string {
-    const coeff = (1000 * 60 * 5);
-    const date = new Date(`1/1/2000 ${time}`);
-    const ceilDate = new Date(Math.ceil(date.getTime() / coeff) * coeff);
-    return formatDate(ceilDate, 'hh:mm aa', 'en-US');
+  getCurrentDateTimeStr(): string {
+    return this.dateToDateTimeStr(new Date());
+  }
+
+  dateToDateStr(date: Date): string {
+    return formatDate(date, 'M/d/yyyy', 'en-US');
+  }
+
+  dateToTimeStr(date: Date): string {
+    return formatDate(date, 'hh:mm aa', 'en-US');
+  }
+
+  dateToDateTimeStr(date: Date): string {
+    return `${this.dateToDateStr(date)} ${this.dateToTimeStr(date)}`;
+  }
+
+  offsetDateMins(date: Date, minutes: number): Date {
+    return new Date(date.getTime() + (minutes * 60000));
+  }
+
+  ceil5Mins(dateOrTimeStr: string): string {
+    const msIn5Mins = (1000 * 60 * 5);
+    const isDateStr: boolean = /[-\/]/.test(dateOrTimeStr);
+    const date: Date = (isDateStr)
+      ? new Date(dateOrTimeStr)
+      : new Date(`1/1/2000 ${dateOrTimeStr}`);
+    const ceilDate = new Date(Math.ceil(date.getTime() / msIn5Mins) * msIn5Mins);
+    return (isDateStr)
+      ? this.dateToDateTimeStr(ceilDate)
+      : this.dateToTimeStr(ceilDate);
   }
 
   getCurrentWeekday(): string {
@@ -42,18 +67,18 @@ export class DateTimeService {
 
   genDefaultDateRangeFromAvailability(account: Account): DateTimeRange {
     const dateRange: DateTimeRange = {
-      startDateTime: `${this.getCurrentDate()} ${this.ceil5Mins(this.getCurrentTime())}`,
+      startDateTime: `${this.getCurrentDateStr()} ${this.ceil5Mins(this.getCurrentTimeStr())}`,
       endDateTime: '',
     };
     const timeRange: TimeRange = this.genDefaultTimeRangeFromAvailability(account);
     if (timeRange && timeRange.endTime) {
-      dateRange.endDateTime = `${this.getCurrentDate()} ${timeRange.endTime}`;
+      dateRange.endDateTime = `${this.getCurrentDateStr()} ${timeRange.endTime}`;
     }
     return dateRange;
   }
 
   genDefaultTimeRangeFromAvailability(account: Account): TimeRange {
-    const timeRange: TimeRange = { startTime: this.ceil5Mins(this.getCurrentTime()), endTime: '' };
+    const timeRange: TimeRange = { startTime: this.ceil5Mins(this.getCurrentTimeStr()), endTime: '' };
     if (account && account.operationHours) {
       const weekday: string = this.getCurrentWeekday();
       const weekdayOpHours: OperationHours = account.operationHours.find(
@@ -68,6 +93,30 @@ export class DateTimeService {
       }
     }
     return timeRange;
+  }
+
+  genDateTimeRangeIncrements(rangeToSplit: DateTimeRange, incrementMinutes: number): DateTimeRange[] {
+    const timeRanges: DateTimeRange[] = [];
+    const curDateTimeStr: string = this.getCurrentDateTimeStr();
+    let startDate: Date = new Date(this.ceil5Mins(curDateTimeStr));
+    const endDate: Date = new Date(this.ceil5Mins(rangeToSplit.endDateTime));
+
+    // Ensure we can generate at least one full increment.
+    const endDateMinusIncrement: Date = this.offsetDateMins(endDate, -incrementMinutes);
+    while (startDate < endDateMinusIncrement) {
+      const startDateTime: string = this.dateToDateTimeStr(startDate);
+      startDate = this.offsetDateMins(startDate, incrementMinutes);
+      const endDateTime: string = this.dateToDateTimeStr(startDate);
+      timeRanges.push({ startDateTime, endDateTime });
+    }
+
+    // If we have remaining time left that doesn't produce another full increment, then add it to last increment.
+    if (startDate < endDate && timeRanges.length > 0) {
+      const lastIdx = timeRanges.length - 1;
+      timeRanges[lastIdx].endDateTime = this.dateToDateTimeStr(endDate);
+    }
+
+    return timeRanges;
   }
 
   genDateTimeRangeOrderValidator(startDateField: string, endDateField: string): DateTimeRangeOrderValidator {

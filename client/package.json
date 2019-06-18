@@ -12,7 +12,7 @@
     "clean:all": "npm run clean && rimraf ./node_modules",
     "hmr": "ng serve --configuration hmr",
     "lint": "ng lint",
-    "start": "npm run hmr",
+    "start": "ng serve",
     "test": "npm run lint && ng test --watch=false --code-coverage --source-map",
     "test:watch": "ng test --code-coverage --source-map"
   },

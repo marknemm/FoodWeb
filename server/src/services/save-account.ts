@@ -1,11 +1,12 @@
 import { getConnection, EntityManager, Repository } from 'typeorm';
 import { createUnverifiedAccount } from './account-verification';
 import { formatOperationHoursTimes, OperationHoursEntity, sortOperationHours } from '../helpers/operation-hours-converter';
-import { AccountEntity } from '../entity/account.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { OperationHours } from '../interfaces/account/account';
+import { geocode } from '../helpers/geocoder';
+import { AccountEntity } from '../entity/account.entity';
 import { saveCreationAudit, saveUpdateAudit } from './save-audit';
 import { savePassword } from './save-password';
+import { OperationHours } from '../../../shared/src/interfaces/account/account';
 import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
 
 const _accountHelper = new AccountHelper();
@@ -47,6 +48,7 @@ async function _saveAccount(manager: EntityManager, account: Account, myAccount?
   _validateAccount(account, myAccount);
   _ensureEitherOrganizationOrVolunteer(account);
   _ensureAccountHasProfileImg(account);
+  await _setGeocoordinatesIfNewAddress(account, myAccount);
   account.contactInfo.phoneNumber = _accountHelper.formatPhoneNumber(account.contactInfo.phoneNumber);
 
   if (account.id) {
@@ -77,6 +79,12 @@ function _ensureAccountHasProfileImg(account: Account): void {
       ? account.volunteer.lastName.charAt(0).toUpperCase()
       : account.organization.organizationName.charAt(0).toUpperCase();
     account.profileImgUrl = `/assets/${firstLetter}.svg`;
+  }
+}
+
+async function _setGeocoordinatesIfNewAddress(account: Account, myAccount: Account): Promise<void> {
+  if (!myAccount || account.contactInfo.streetAddress !== myAccount.contactInfo.streetAddress) {
+    account.contactInfo.location = await geocode(account.contactInfo);
   }
 }
 

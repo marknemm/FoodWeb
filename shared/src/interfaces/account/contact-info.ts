@@ -1,3 +1,8 @@
+export interface GeographyLocation {
+  type: string;
+  coordinates: [number, number];
+}
+
 export interface ContactInfo {
   id?: number;
   email: string;
@@ -6,4 +11,5 @@ export interface ContactInfo {
   city: string;
   stateProvince: string;
   postalCode: string;
+  location?: GeographyLocation;
 }

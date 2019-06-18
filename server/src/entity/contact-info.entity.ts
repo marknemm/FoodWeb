@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, Index, IndexOptions } from 'typeorm';
+import { Location } from 'node-geocoder';
 import { AccountEntity } from './account.entity';
-import { ContactInfo } from './../../../shared/src/interfaces/account/contact-info';
+import { ContactInfo, GeographyLocation } from './../../../shared/src/interfaces/account/contact-info';
 
 @Entity('ContactInfo')
 export class ContactInfoEntity implements ContactInfo {
@@ -27,6 +28,10 @@ export class ContactInfoEntity implements ContactInfo {
 
   @Column()
   postalCode: string;
+
+  @Column('geography')
+  @Index({ spatial: true })
+  location: GeographyLocation;
 
   @OneToOne((type) => AccountEntity, (account) => account.contactInfo)
   @JoinColumn()

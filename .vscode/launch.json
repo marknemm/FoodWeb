@@ -16,8 +16,8 @@
       "type": "chrome",
       "request": "attach",
       "port": 9222,
-      "urlFilter": "http://localhost:5000/*",
-      "webRoot": "${workspaceFolder}",
+      "urlFilter": "http://localhost:5000/**/*",
+      "webRoot": "${workspaceRoot}\\client",
       "trace": true,
       "sourceMaps": true,
       "sourceMapPathOverrides": {

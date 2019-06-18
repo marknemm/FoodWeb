@@ -60,7 +60,7 @@
       </mat-card>
     </div>
     <div class="col-xl-6">
-      <mat-card *ngIf="originalAccount.accountType !== 'Volunteer'">
+      <mat-card>
         <food-web-edit-save-button *ngIf="isMyAccount" [editing]="sectionEditService.editing('operationHours')" (edit)="onEdit('operationHours')"
           (save)="onSave('operationHours')" controlName="operationHours"></food-web-edit-save-button>
         <mat-card-title class="block-label">Hours of Operation</mat-card-title>
