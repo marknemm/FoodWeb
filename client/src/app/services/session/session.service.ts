@@ -99,13 +99,10 @@ export class SessionService {
   }
 
   logout(): void {
-    this._loading = true;
+    this._alertService.displaySimpleMessage('Logout Successful', 'success');
+    this.account = null;
     this._httpClient.delete<void>(this.url).pipe(
-      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
-      finalize(() => this._loading = false)
-    ).subscribe(() => {
-      this._alertService.displaySimpleMessage('Logout Successful', 'success');
-      this.account = null;
-    });
+      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
+    ).subscribe();
   }
 }
