@@ -1,6 +1,7 @@
 import 'dotenv';
 import NodeGeocoder = require('node-geocoder');
 import { Geocoder, Providers, Query, Entry, Location } from 'node-geocoder';
+import geoTz = require('geo-tz');
 import { FoodWebError } from './food-web-error';
 import { ContactInfo, GeographyLocation } from '../../../shared/src/interfaces/account/contact-info';
 export { ContactInfo, GeographyLocation };
@@ -62,4 +63,14 @@ function isErrOverQueryLimit(err: Error | string): boolean {
     (typeof err === 'string' && err.indexOf('OVER_QUERY_LIMIT') >= 0)
     || ((err instanceof Error) && err.message.indexOf('OVER_QUERY_LIMIT') >= 0)
   );
+}
+
+export function geoTimezone(location: GeographyLocation): string {
+  const timezoneMatches: string[] = geoTz(
+    location.coordinates[1],
+    location.coordinates[0]
+  );
+  return (timezoneMatches)
+    ? timezoneMatches[0]
+    : 'America/New_York';
 }

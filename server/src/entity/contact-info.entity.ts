@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, Index, IndexOptions } from 'typeorm';
-import { Location } from 'node-geocoder';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, Index } from 'typeorm';
 import { AccountEntity } from './account.entity';
 import { ContactInfo, GeographyLocation } from './../../../shared/src/interfaces/account/contact-info';
 
@@ -32,6 +31,9 @@ export class ContactInfoEntity implements ContactInfo {
   @Column('geography')
   @Index({ spatial: true })
   location: GeographyLocation;
+
+  @Column()
+  timezone: string;
 
   @OneToOne((type) => AccountEntity, (account) => account.contactInfo)
   @JoinColumn()

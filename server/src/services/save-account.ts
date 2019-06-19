@@ -2,7 +2,7 @@ import { getConnection, EntityManager, Repository } from 'typeorm';
 import { createUnverifiedAccount } from './account-verification';
 import { formatOperationHoursTimes, OperationHoursEntity, sortOperationHours } from '../helpers/operation-hours-converter';
 import { FoodWebError } from '../helpers/food-web-error';
-import { geocode } from '../helpers/geocoder';
+import { geocode, geoTimezone } from '../helpers/geocoder';
 import { AccountEntity } from '../entity/account.entity';
 import { saveCreationAudit, saveUpdateAudit } from './save-audit';
 import { savePassword } from './save-password';
@@ -85,6 +85,7 @@ function _ensureAccountHasProfileImg(account: Account): void {
 async function _setGeocoordinatesIfNewAddress(account: Account, myAccount: Account): Promise<void> {
   if (!myAccount || account.contactInfo.streetAddress !== myAccount.contactInfo.streetAddress) {
     account.contactInfo.location = await geocode(account.contactInfo);
+    account.contactInfo.timezone = geoTimezone(account.contactInfo.location);
   }
 }
 

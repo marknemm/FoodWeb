@@ -12,4 +12,5 @@ export interface ContactInfo {
   stateProvince: string;
   postalCode: string;
   location?: GeographyLocation;
+  timezone?: string;
 }
