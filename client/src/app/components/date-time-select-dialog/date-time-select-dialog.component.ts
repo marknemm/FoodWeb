@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { Observable } from 'rxjs';
 import { DateTimeRange } from '../../services/date-time/date-time.service';
 
 export interface DateTimeSelectConfig {
@@ -17,13 +18,16 @@ export interface DateTimeSelectConfig {
 })
 export class DateTimeSelectDialogComponent implements OnInit {
 
-  selectedDateTime: string;
+  selectedDateTime: DateTimeRange;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public selectConfig: DateTimeSelectConfig,
-    private _matDialogRef: MatDialogRef<DateTimeSelectDialogComponent>
+    public selectConfig: DateTimeSelectConfig
   ) {}
+
+  static open(matDialog: MatDialog, data?: DateTimeSelectConfig): Observable<DateTimeRange> {
+    return matDialog.open(DateTimeSelectDialogComponent, { data }).afterClosed();
+  }
 
   ngOnInit() {}
 

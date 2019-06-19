@@ -76,7 +76,6 @@ import { DateTimeSelectDialogComponent } from './components/date-time-select-dia
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
-import { DateTimeDisplayComponent } from './child-components/date-time-display/date-time-display.component';
 
 @NgModule({
   declarations: [
@@ -118,7 +117,6 @@ import { DateTimeDisplayComponent } from './child-components/date-time-display/d
     NotificationsComponent,
     DateTimeSelectComponent,
     DateTimeSelectDialogComponent,
-    DateTimeDisplayComponent,
   ],
   imports: [
     AppRoutingModule,

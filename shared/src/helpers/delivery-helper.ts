@@ -1,7 +1,8 @@
 import { ValidationHelper } from './validation-helper';
-import { AccountHelper, Account } from './account-helper';
-import { Delivery } from '../interfaces/donation/delivery';
-import { DonationStatus } from '../interfaces/donation/donation';
+import { Account } from './account-helper';
+import { Delivery } from '../interfaces/delivery/delivery';
+import { DonationStatus, Donation } from '../interfaces/donation/donation';
+import { DateTimeRange } from '../interfaces/misc/time';
 
 export class DeliveryHelper {
 
@@ -96,5 +97,11 @@ export class DeliveryHelper {
       case 'Complete': return 'Are you sure you want to revert the delivery status to "Picked Up"?';
     }
     return '';
+  }
+
+  getPickupWindow(donation: Donation): DateTimeRange {
+    return (donation.delivery)
+      ? { startDateTime: donation.delivery.pickupWindowStart, endDateTime: donation.delivery.pickupWindowEnd }
+      : { startDateTime: donation.pickupWindowStart, endDateTime: donation.pickupWindowEnd };
   }
 }

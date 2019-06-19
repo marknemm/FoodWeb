@@ -1,4 +1,4 @@
-<ng-container [formGroup]="formGroup">
+<div *ngIf="editing" [formGroup]="formGroup" class="date-time-form">
   <div class="date-field">
     <mat-form-field class="fill" (click)="datePicker.open()">
       <input matInput
@@ -26,4 +26,14 @@
       <ngx-material-timepicker #timePicker [minutesGap]="5" [defaultTime]="defaultTime"></ngx-material-timepicker>
     </mat-form-field>
   </div>
-</ng-container>
+</div>
+
+<div *ngIf="!editing" class="date-time-display d-inline-block">
+  <span class="date" [ngClass]="{ bold: boldDate }" [style.minWidth]="minDateWidth" [style.paddingRight]="datePadding">
+    {{ dateStr }}
+  </span>&nbsp;
+  
+  <span class="time" [ngClass]="{ bold: boldTime }">
+    {{ timeStr }}
+  </span>
+</div>

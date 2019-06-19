@@ -9,6 +9,7 @@ import { DeliveryEntity } from '../entity/delivery-entity';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
 import { Account } from '../../../shared/src/interfaces/account/account';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
+import { DeliveryScheduleRequest } from '../../../shared/src/interfaces/delivery/delivery-schedule-request';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
 
@@ -56,11 +57,11 @@ function _sendDeliveryRequestMessages(donation: Donation, deliverer: AccountEnti
   );
 }
 
-export async function scheduleDelivery(donationId: number, myAccount: AccountEntity): Promise<Donation> {
-  const donation = <DonationEntity> await readDonation(donationId);
+export async function scheduleDelivery(scheduleRequest: DeliveryScheduleRequest, myAccount: AccountEntity): Promise<Donation> {
+  const donation = <DonationEntity> await readDonation(scheduleRequest.donationId);
   _ensureCanScheduleDelivery(donation, myAccount);
   donation.donationStatus = 'Scheduled';
-  donation.delivery = _genDelivery(myAccount, donation);
+  donation.delivery = _genDelivery(myAccount, donation, scheduleRequest);
 
   const scheduledDonation: Donation = await getConnection().transaction(
     async (manager: EntityManager) => manager.getRepository(DonationEntity).save(donation)
@@ -78,8 +79,14 @@ function _ensureCanScheduleDelivery(donation: Donation, myAccount: AccountEntity
   }
 }
 
-function _genDelivery(myAccount: AccountEntity, donation: DonationEntity): DeliveryEntity {
-  return { id: undefined, volunteerAccount: myAccount, donation };
+function _genDelivery(myAccount: AccountEntity, donation: DonationEntity, scheduleRequest: DeliveryScheduleRequest): DeliveryEntity {
+  return {
+    id: undefined,
+    volunteerAccount: myAccount,
+    pickupWindowStart: scheduleRequest.pickupWindow.startDateTime,
+    pickupWindowEnd: scheduleRequest.pickupWindow.endDateTime,
+    donation
+  };
 }
 
 async function _sendDeliveryScheduledMessages(donation: Donation): Promise<void> {

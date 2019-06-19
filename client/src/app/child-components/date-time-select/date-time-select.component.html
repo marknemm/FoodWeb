@@ -1,15 +1,15 @@
-<mat-radio-group [attr.ariaLabel]="ariaLabel" class="date-time-selections">
+<mat-radio-group [attr.ariaLabel]="ariaLabel" [formControl]="dateTimeControl" class="date-time-selections">
   <mat-list class="mat-radio-list">
     <mat-divider></mat-divider>
     <mat-list-item matRipple *ngFor="let dateTimeRange of dateTimeRanges">
       <mat-radio-button #dateTimeRangeRadio [value]="dateTimeRange" [disableRipple]="true">
         <div>
           <span class="inline-label">Start:</span>
-          <food-web-date-time-display [dateTime]="dateTimeRange.startDateTime" minDateWidth="76px" [boldTime]="true"></food-web-date-time-display>
+          <food-web-date-time [dateTime]="dateTimeRange.startDateTime" minDateWidth="73px" [boldTime]="true"></food-web-date-time>
         </div>
         <div>
           <span class="inline-label">End:</span>
-          <food-web-date-time-display [dateTime]="dateTimeRange.endDateTime" minDateWidth="76px" [boldTime]="true"></food-web-date-time-display>
+          <food-web-date-time [dateTime]="dateTimeRange.endDateTime" minDateWidth="73px" [boldTime]="true"></food-web-date-time>
         </div>
       </mat-radio-button>
       <mat-divider></mat-divider>

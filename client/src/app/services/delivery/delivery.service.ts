@@ -7,6 +7,7 @@ import { PageProgressService } from '../page-progress/page-progress.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { AlertService } from '../alert/alert.service';
 import { SessionService } from '../session/session.service';
+import { DateTimeRange } from '../date-time/date-time.service';
 import { Donation, DonationStatus } from '../../../../../shared/src/interfaces/donation/donation';
 import { Account } from '../../../../../shared/src/interfaces/account/account';
 import { DeliveryHelper } from '../../../../../shared/src/helpers/delivery-helper';
@@ -35,13 +36,13 @@ export class DeliveryService {
     private _deliveryHelper: DeliveryHelper
   ) {}
 
-  scheduleDelivery(donation: Donation): Observable<Donation> {
+  scheduleDelivery(donation: Donation, pickupWindow: DateTimeRange): Observable<Donation> {
     const myAccount: Account = this._sessionService.account;
     if (!this._validateDeliverySchedulePrivilege(donation, myAccount)) {
       return of(donation);
     }
 
-    const scheduleRequest: DeliveryScheduleRequest = { donationId: donation.id };
+    const scheduleRequest: DeliveryScheduleRequest = { donationId: donation.id, pickupWindow };
     this._pageProgressService.activate(true);
     return this._httpClient.post<Donation>(this.url, scheduleRequest).pipe(
       map((scheduledDonation: Donation) => {

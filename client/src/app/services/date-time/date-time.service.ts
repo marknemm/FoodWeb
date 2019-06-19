@@ -4,9 +4,9 @@ import { FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/for
 import { ErrorStateMatcher } from '@angular/material';
 import { ConstantsService } from '../constants/constants.service';
 import { Account, OperationHours } from '../../../../../shared/src/interfaces/account/account';
+import { TimeRange, DateTimeRange } from '../../../../../shared/src/interfaces/misc/time';
+export { TimeRange, DateTimeRange };
 
-export interface DateTimeRange { startDateTime: string; endDateTime: string }
-export interface TimeRange { startTime: string; endTime: string }
 export type DateTimeRangeOrderValidator = (form: FormGroup) => { dateTimeRangeOrder: string };
 export type TimeRangeOrderValidator = (form: FormGroup) => { timeRangeOrder: string };
 

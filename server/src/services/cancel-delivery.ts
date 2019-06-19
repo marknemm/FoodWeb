@@ -2,9 +2,9 @@ import { EntityManager, getConnection } from 'typeorm';
 import { broadcastEmail, MailTransporter } from '../helpers/email';
 import { DeliveryEntity } from '../entity/delivery-entity';
 import { AccountEntity } from '../entity/account.entity';
+import { DonationEntity } from '../entity/donation.entity';
 import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
 import { Account } from '../../../shared/src/interfaces/account/account';
-import { DonationEntity } from '../entity/donation.entity';
 
 const _donationHelper = new DonationHelper();
 
@@ -22,6 +22,7 @@ export async function cancelDelivery(donation: Donation, myAccount: AccountEntit
   );
 
   await _sendDeliveryCancelledMessage(cancelledDonation, myAccount);
+  return cancelledDonation;
 }
 
 async function _deleteDeliveryAndUpdateDonation(donation: Donation, manager: EntityManager): Promise<Donation> {

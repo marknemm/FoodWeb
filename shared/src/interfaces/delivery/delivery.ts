@@ -11,6 +11,14 @@ export interface Delivery {
    */
   volunteerAccount: Account;
   /**
+   * The begin date-time of the estimated pickup window selected by the deliverer.
+   */
+  pickupWindowStart: string;
+  /**
+   * The end date-time of the estimated pickup window selected by the deliverer.
+   */
+  pickupWindowEnd: string;
+  /**
    * The time that the donation was picked-up from the donor.
    */
   pickupTime?: string;

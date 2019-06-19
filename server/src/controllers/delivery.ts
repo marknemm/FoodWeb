@@ -43,7 +43,7 @@ router.get('/', (req: Request, res: Response) => {
 
 router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const scheduleRequest: DeliveryScheduleRequest = req.body;
-  scheduleDelivery(scheduleRequest.donationId, req.session.account)
+  scheduleDelivery(scheduleRequest, req.session.account)
     .then((scheduledDonation: Donation) => res.send(scheduledDonation))
     .catch(handleError.bind(this, res));
 });

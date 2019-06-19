@@ -3,6 +3,8 @@
 
   <mat-dialog-content>
     <food-web-date-time-select
+      name="Date Time Select"
+      [(ngModel)]="selectedDateTime"
       [ariaLabel]="selectConfig.selectTitle"
       [rangeMins]="selectConfig.rangeMins"
       [rangeWindowStart]="selectConfig.rangeWindowStart"
@@ -12,8 +14,12 @@
 
   <mat-dialog-actions>
     <div class="align-right">
-      <button mat-button color="warn" type="button" mat-dialog-close>Cancel</button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="!selectedDateTime">Submit</button>
+      <button mat-button color="warn" type="button" mat-dialog-close>
+        Cancel
+      </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!selectedDateTime" [mat-dialog-close]="selectedDateTime">
+        Submit
+      </button>
     </div>
   </mat-dialog-actions>
 </form>

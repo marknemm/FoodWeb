@@ -125,13 +125,10 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
       rangeWindowStart: this.originalDonation.pickupWindowStart,
       rangeWindowEnd: this.originalDonation.pickupWindowEnd
     };
-    const pickupWindow$: Observable<DateTimeRange> = this._matDialog.open(
-      DateTimeSelectDialogComponent,
-      { data: scheduleDialogData }
-    ).afterClosed();
+    const pickupWindow$: Observable<DateTimeRange> = DateTimeSelectDialogComponent.open(this._matDialog, scheduleDialogData);
     pickupWindow$.subscribe((pickupWindow: DateTimeRange) => {
       if (pickupWindow) {
-        this._deliveryService.scheduleDelivery(this._originalDonation).subscribe(
+        this._deliveryService.scheduleDelivery(this._originalDonation, pickupWindow).subscribe(
           this._updateDonation.bind(this)
         );
       }

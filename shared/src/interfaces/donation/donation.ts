@@ -1,5 +1,5 @@
 import { Account } from '../account/account';
-import { Delivery } from './delivery';
+import { Delivery } from '../delivery/delivery';
 export { Account, Delivery };
 
 export type DonationStatus = 'Unmatched' | 'Matched' | 'Scheduled' | 'Picked Up' | 'Complete';
