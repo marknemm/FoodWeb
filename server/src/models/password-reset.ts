@@ -19,7 +19,7 @@ export async function savePasswordResetToken(username: string): Promise<void> {
       passwordResetEntity = _genPasswordResetEntity(account);
       await manager.getRepository(PasswordResetEntity).save(passwordResetEntity);
     }
-    _sendPasswordResetEmail(account, passwordResetEntity.resetToken, false);
+    await _sendPasswordResetEmail(account, passwordResetEntity.resetToken, false);
   });
 }
 

@@ -8,7 +8,7 @@ import { FoodWebError } from '../helpers/food-web-error';
 export async function saveUnverifiedAccount(account: AccountEntity, manager: EntityManager = getManager()): Promise<void> {
   const unverifiedAccountEntity: UnverifiedAccountEntity = _genUnverifiedAccountEntity(account);
   await manager.getRepository(UnverifiedAccountEntity).save(unverifiedAccountEntity);
-  _sendAccountVerificationEmail(account, unverifiedAccountEntity.verificationToken);
+  await _sendAccountVerificationEmail(account, unverifiedAccountEntity.verificationToken);
 }
 
 export async function verifyAccount(account: AccountEntity, verificationToken: string): Promise<AccountEntity> {
@@ -41,5 +41,5 @@ async function _sendAccountVerificationEmail(account: AccountEntity, verificatio
     'Verify New FoodWeb Account',
     'account-verification',
     { verificationToken }
-  );
+  ).catch(console.error);
 }

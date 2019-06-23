@@ -1,7 +1,7 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { readAccounts, AccountsQueryResult } from './read-accounts';
-import { sendEmail, MailTransporter, broadcastEmail } from '../helpers/email';
+import { MailTransporter, sendEmail, broadcastEmail } from '../helpers/email';
 import { FoodWebError } from '../helpers/food-web-error';
 import { readDonation } from './read-donations';
 import { DonationEntity } from '../entity/donation.entity';
@@ -27,7 +27,7 @@ export async function messagePotentialDeliverers(donation: Donation): Promise<vo
     const promise: Promise<void> = _sendDeliveryRequestMessages(donation, deliverer);
     messagePromises.push(promise);
   });
-  await Promise.all(messagePromises);
+  await Promise.all(messagePromises).catch(console.error);
 }
 
 /**
@@ -62,12 +62,12 @@ export async function scheduleDelivery(donationId: number, myAccount: AccountEnt
   donation.donationStatus = 'Scheduled';
   donation.delivery = _genDelivery(myAccount, donation);
 
-  let scheduledDonation: Donation;
-  await getConnection().transaction(async (manager: EntityManager) => {
-    scheduledDonation = await manager.getRepository(DonationEntity).save(donation);
-    delete scheduledDonation.delivery['donation']; // Prevent circular JSON reference error.
-    await _sendDeliveryScheduledMessages(scheduledDonation);
-  });
+  const scheduledDonation: Donation = await getConnection().transaction(
+    async (manager: EntityManager) => manager.getRepository(DonationEntity).save(donation)
+  );
+  delete scheduledDonation.delivery['donation']; // Prevent circular JSON reference error.
+  await _sendDeliveryScheduledMessages(scheduledDonation);
+
   return scheduledDonation;
 }
 
@@ -99,6 +99,6 @@ async function _sendDeliveryScheduledMessages(donation: Donation): Promise<void>
     sendHeaders,
     'delivery-scheduled',
     { donation, donorName, receiverName, delivererName }
-  );
+  ).catch(console.error);
 }
 

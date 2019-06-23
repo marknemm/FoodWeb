@@ -1,7 +1,7 @@
 {{#if isReceiver }}
   <div>You have successfully cancelled your claim to a donation from <strong>{{ donorName }}</strong>:</div>
-  <p style="font-weight: bold; color: #3e2723">{{ donation.description }}</p>
-  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;">
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
   <p>
     Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
     You may re-claim this donation as long as no other charity has claimed it.
@@ -13,8 +13,8 @@
   </p>
 {{else if isDonor }}
   <div><strong>{{ receiverName }}</strong> has cancelled their claim to your donation:</div>
-  <p style="font-weight: bold; color: #3e2723">{{ donation.description }}</p>
-  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;">
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
   <p>
     Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
   </p>
@@ -31,15 +31,15 @@
     <strong>{{ receiverName }}</strong> has cancelled their claim to the donation
     from <strong>{{ donorName }}</strong>, and therefore, your delivery has been cancelled:
   </div>
-  <p style="font-weight: bold; color: #3e2723">{{ donation.description }}</p>
-  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;">
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
 
-  <div style="display: inline-block; width: 278px; margin-bottom: 14px;">
-    <div style="display: inline-block; color: #795548; font-weight: bold; margin-bottom: 4px;">
+  <div class="col-6">
+    <div class="inline-label">
       Donor:
     </div>
-    <div style="padding-left: 7px; color: #666;">
-      <div style="color: black; font-weight: 500;">
+    <div class="indented-address">
+      <div class="emphasize">
         {{ donorName }}
       </div>
       <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
@@ -50,12 +50,12 @@
     </div>
   </div>
 
-  <div style="display: inline-block; width: 278px; margin-bottom: 1em;">
-    <div style="display: inline-block; color: #795548; font-weight: bold; margin-bottom: 4px;">
+  <div class="col-6">
+    <div class="inline-label">
       Receiver:
     </div>
-    <div style="padding-left: 7px; color: #666;">
-      <div style="color: black; font-weight: 500;">
+    <div class="indented-address">
+      <div class="emphasize">
         {{ receiverName }}
       </div>
       <div>{{ receiverAccount.contactInfo.streetAddress }}</div>
@@ -66,7 +66,7 @@
     </div>
   </div>
 
-  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 0 0 1em; padding: 0;">
+  <hr>
   <p>
     We are sorry for any inconvenience this has caused you.
   </p>

@@ -45,6 +45,8 @@ nginx-ssl-setup.sh
 npm-debug.log
 testem.log
 /typings
+stellar.yaml
+dump.*
 
 # e2e
 /e2e/*.js

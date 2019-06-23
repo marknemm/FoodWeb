@@ -1,14 +1,12 @@
 {{#if isVolunteer }}
   <div>Thank-you for completing the following delivery:</div>
-  <p style="font-weight: bold; color: #3e2723">{{ donation.description }}</p>
-  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;">
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
 
-  <div style="display: inline-block; width: 278px; margin-bottom: 14px;">
-    <div style="display: inline-block; color: #795548; font-weight: bold; margin-bottom: 4px;">
-      Donor:
-    </div>
-    <div style="padding-left: 7px; color: #666;">
-      <div style="color: black; font-weight: 500;">
+  <div class="col-6">
+    <div class="inline-label">Donor:</div>
+    <div class="indented-address">
+      <div class="emphasize">
         {{ donorName }}
       </div>
       <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
@@ -19,12 +17,10 @@
     </div>
   </div>
 
-  <div style="display: inline-block; width: 278px; margin-bottom: 1em;">
-    <div style="display: inline-block; color: #795548; font-weight: bold; margin-bottom: 4px;">
-      Receiver:
-    </div>
-    <div style="padding-left: 7px; color: #666;">
-      <div style="color: black; font-weight: 500;">
+  <div class="col-6">
+    <div class="inline-label">Receiver:</div>
+    <div class="indented-address">
+      <div class="emphasize">
         {{ receiverName }}
       </div>
       <div>{{ donation.receiverAccount.contactInfo.streetAddress }}</div>
@@ -35,7 +31,7 @@
     </div>
   </div>
 
-  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 0 0 1em; padding: 0;">
+  <hr>
   <p>
     If you did not intend to update the status of this delivery, then you can undo your change at this
     <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
@@ -51,8 +47,8 @@
     The following donation that you claimed from <strong>{{ donorName }}</strong>
     has been <strong>Dropped Off</strong> by <strong>{{ delivererName }}</strong>:
   </div>
-  <p style="font-weight: bold; color: #3e2723">{{ donation.description }}</p>
-  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;">
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
   <p>
     You can view the donation and delivery details at this
     <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
@@ -70,8 +66,8 @@
   <div>
     The delivery of the donation that you submitted has been <strong>Completed</strong> by <strong>{{ delivererName }}</strong>:
   </div>
-  <p style="font-weight: bold; color: #3e2723">{{ donation.description }}</p>
-  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;">
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
   <p>
     You can view the donation and delivery details at this
     <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.

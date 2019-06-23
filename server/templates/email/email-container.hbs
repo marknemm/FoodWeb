@@ -1,28 +1,18 @@
-<html lang="en" style="position: relative; width: 100%; height: 100%;">
+<html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   </head>
 
-  <body style="position: relative; width: 100%; height: 100%;">
-    <table border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
+  <body>
+    <table class="email-container fill" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td align="center" style="background-color: lightgray;">
-          <div
-            align="left"
-            style="
-              background-color: white;
-              text-align: left;
-              max-width: 601px;
-              font-size: 16px;
-              padding-top: 15px;
-              margin-top: 25px;
-              margin-bottom: 10px;
-            "
-          >
-            <div style="padding: 0px 20px;">
+        <td align="center">
+          <div class="email-card" align="left">
+            <div>
               {{> header }}
 
               {{> (lookup . 'emailContent') this }}
+
               <p>
                 Sincerely,<br>
                 Food Web

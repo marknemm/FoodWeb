@@ -1,22 +1,22 @@
 {{#if isDonor }}
   <div>Your donation has been deleted!</div>
-  <p style="font-weight: bold; margin-bottom: 0px;">Deleted Donation Summary:</p>
-  <table style="border: none">
+  <p class="donation-summary-header">Deleted Donation Summary:</p>
+  <table>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Donor:</td>
-      <td style="border: none">{{ donation.donorFirstName }} {{ donation.donorLastName }}</td>
+      <td class="donation-summary-label">Donor:</td>
+      <td>{{ donation.donorFirstName }} {{ donation.donorLastName }}</td>
     </tr>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Type:</td>
-      <td style="border: none">{{ donation.donationType }}</td>
+      <td class="donation-summary-label">Type:</td>
+      <td>{{ donation.donationType }}</td>
     </tr>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Value:</td>
-      <td style="border: none">${{ donation.estimatedValue }}</td>
+      <td class="donation-summary-label">Value:</td>
+      <td>${{ donation.estimatedValue }}</td>
     </tr>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px;">Description:</td>
-      <td style="border: none; min-width: 300px;">{{ donation.description }}</td>
+      <td class="donation-summary-label">Description:</td>
+      <td class="donation-summary-description">{{ donation.description }}</td>
     </tr>
   </table>
   <p>
@@ -25,8 +25,8 @@
   </p>
 {{else if isReceiver }}
   <div><strong>{{ donorName }}</strong> has deleted their donation which you claimed:</div>
-  <p style="font-weight: bold; color: #3e2723">{{ donation.description }}</p>
-  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;">
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
   <p>
     We are sorry for any inconvenience this has caused you.
   </p>
@@ -43,15 +43,15 @@
   <div>
     <strong>{{ donorName }}</strong> has deleted their donation, and therefore, your delivery has been cancelled:
   </div>
-  <p style="font-weight: bold; color: #3e2723">{{ donation.description }}</p>
-  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;">
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
 
-  <div style="display: inline-block; width: 278px; margin-bottom: 14px;">
-    <div style="display: inline-block; color: #795548; font-weight: bold; margin-bottom: 4px;">
+  <div class="col-6">
+    <div class="inline-label">
       Donor:
     </div>
-    <div style="padding-left: 7px; color: #666;">
-      <div style="color: black; font-weight: 500;">
+    <div class="indented-address">
+      <div class="emphasize">
         {{ donorName }}
       </div>
       <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
@@ -62,12 +62,12 @@
     </div>
   </div>
 
-  <div style="display: inline-block; width: 278px; margin-bottom: 1em;">
-    <div style="display: inline-block; color: #795548; font-weight: bold; margin-bottom: 4px;">
+  <div class="col-6">
+    <div class="inline-label">
       Receiver:
     </div>
-    <div style="padding-left: 7px; color: #666;">
-      <div style="color: black; font-weight: 500;">
+    <div class="indented-address">
+      <div class="emphasize">
         {{ receiverName }}
       </div>
       <div>{{ donation.receiverAccount.contactInfo.streetAddress }}</div>
@@ -78,7 +78,7 @@
     </div>
   </div>
 
-  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 0 0 1em; padding: 0;">
+  <hr>
   <p>
     We are sorry for any inconvenience this has caused you.
   </p>

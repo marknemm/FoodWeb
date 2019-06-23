@@ -1,16 +1,16 @@
 import 'dotenv';
 import nodemailer = require('nodemailer');
-import nodemailerHandlebars = require('nodemailer-express-handlebars');
-import path = require('path');
+import mailgunTransport = require('nodemailer-mailgun-transport');
 import { Account } from '../../../shared/src/interfaces/account/account';
+import { genHandlebarsTemplate } from './handlebars';
 
 export enum MailTransporter {
   NOREPLY = 'NOREPLY',
   SUPPORT = 'SUPPORT'
 }
 
-const noreplyTransporter: any = _initEmailTransporter(MailTransporter.NOREPLY);
-const supportTransporter: any = _initEmailTransporter(MailTransporter.SUPPORT);
+const noreplyTransporter: nodemailer.Transporter = _initEmailTransporter(MailTransporter.NOREPLY);
+const supportTransporter: nodemailer.Transporter = _initEmailTransporter(MailTransporter.SUPPORT);
 
 export function broadcastEmail(
   mailTransporter: MailTransporter,
@@ -44,15 +44,16 @@ export function sendEmail(
   context = _fillMissingContext(context, account, template);
 
   return new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {
-    const transporter: any = _getTransporter(mailTransporter);
+    const transporter: nodemailer.Transporter = _getTransporter(mailTransporter);
     const from: string = process.env[`${mailTransporter}_EMAIL`];
     const to: string = account.contactInfo.email;
     // Can define extra 'Admin' email recipients in .env to get all messages.
     const recipients: string[] = _getAllRecipients(to);
 
     recipients.forEach((recipient: string) => {
+      const html: string = genHandlebarsTemplate('email-container', context);
       transporter.sendMail(
-        { from, to: recipient, subject, template: 'email-container', context },
+        { from, to: recipient, subject, html },
         (err: any) => {
           if (err) {
             console.error(err);
@@ -81,7 +82,7 @@ function _fillMissingContext(context: any, account: Account, template: string): 
   return context;
 }
 
-function _getTransporter(mailTransporter: MailTransporter): any {
+function _getTransporter(mailTransporter: MailTransporter): nodemailer.Transporter {
   switch (mailTransporter) {
     case MailTransporter.NOREPLY: return noreplyTransporter;
     case MailTransporter.SUPPORT: return supportTransporter;
@@ -97,38 +98,37 @@ function _getAllRecipients(to: string): string[] {
   return recipients;
 }
 
-function _initEmailTransporter(mailTransporter: MailTransporter): any {
+function _initEmailTransporter(mailTransporter: MailTransporter): nodemailer.Transporter {
   const transporter = _createTransporter(mailTransporter);
   _verifyTransporterConnection(transporter);
-  _setupTransporterHandlebars(transporter);
   return transporter;
 }
 
-function _createTransporter(mailTransporter: MailTransporter): any {
-  return nodemailer.createTransport({
-    host: process.env[`${mailTransporter}_SERVER`],
-    port: parseInt(process.env[`${mailTransporter}_PORT`], 10),
-    secure: (process.env[`${mailTransporter}_SECURE`] === 'true'),
-    auth: {
-      user: [process.env[`${mailTransporter}_USERNAME`]],
-      pass: [process.env[`${mailTransporter}_PASSWORD`]]
-    }
-  });
+function _createTransporter(mailTransporter: MailTransporter): nodemailer.Transporter {
+  // Can use mailgun or fallback to traditional SMTP mail client for development.
+  return (process.env.MAILGUN_API_KEY)
+    ? nodemailer.createTransport(
+        mailgunTransport({
+          auth: {
+            api_key: process.env.MAILGUN_API_KEY,
+            domain: process.env.MAILGUN_DOMAIN
+          }
+        })
+      )
+    : nodemailer.createTransport({
+        host: process.env[`${mailTransporter}_SERVER`],
+        port: parseInt(process.env[`${mailTransporter}_PORT`], 10),
+        pool: true,
+        secure: (process.env[`${mailTransporter}_SECURE`] === 'true'),
+        auth: {
+          user: process.env[`${mailTransporter}_USERNAME`],
+          pass: process.env[`${mailTransporter}_PASSWORD`]
+        }
+      });
 }
 
-function _verifyTransporterConnection(transporter: any): void {
-  transporter.verify((error: any) => {
+function _verifyTransporterConnection(transporter: nodemailer.Transporter): void {
+  transporter.verify((error: any) => {  
     if (error) { throw new Error(error.message ? error.message : error); }
   });
-}
-
-function _setupTransporterHandlebars(transporter: any): void {
-  transporter.use('compile', nodemailerHandlebars({
-    viewEngine: {
-      extname: '.hbs',
-      partialsDir: path.join(global['serverDir'], 'templates', 'email', 'partials')
-    },
-    viewPath: path.join(global['serverDir'], 'templates', 'email'),
-    extName: '.hbs'
-  }));
 }

@@ -110,3 +110,13 @@ Run `npm run typeorm:migration:create <script_name>` to create an empty migratio
 Run `npm run typeorm:migration:run` to manually apply all migrations under server/src/migration/. You can also simply start the app (server), and all migrations will automatically be applied.
 
 Run `npm run typeorm:migration:revert` to revert all migrations under server/src/migration/. Do this with care since it will end up clearing your development database.
+
+## Database Automation Scripts
+
+Note that each of the following commands will only work if you have a local instance of postgreSQL running, either a pgpass.conf file with localhost connection data or no password on your local database, and a local database called 'foodweb'.
+
+Run `npm run pg:dump` to dump out a SQL script that can be used to create/restore the current state of your local foodweb database.
+
+Run `npm run pg:destory` to destroy the data and schema within your local foodweb database.
+
+Run `npm run pg:restore` to first destroy the data and schema within your local foodweb database, and then restore it with the script generated from a previous SQL dump.

@@ -19,11 +19,11 @@ export async function advanceDeliveryState(donationId: number, myAccount: Accoun
   donation.donationStatus = _donationHelper.getNextDonationStatus(donation);
   _updateDeliveryTiming(donation);
 
-  let advancedDonation: Donation;
-  await getConnection().transaction(async (manager: EntityManager) => {
-    advancedDonation = await manager.getRepository(DonationEntity).save(donation);
-    await _sendDeliveryStateAdvancedMessage(advancedDonation);
-  });
+  const advancedDonation: Donation = await getConnection().transaction(
+    async (manager: EntityManager) => manager.getRepository(DonationEntity).save(donation)
+  );
+  await _sendDeliveryStateAdvancedMessage(advancedDonation);
+
   return advancedDonation;
 }
 
@@ -66,7 +66,7 @@ async function _sendDeliveryStateAdvancedMessage(donation: Donation): Promise<vo
     sendSubjects,
     emailTmpl,
     { donation, donorName, receiverName, delivererName }
-  );
+  ).catch(console.error);
 }
 
 export async function undoDeliveryState(donationId: number, myAccount: AccountEntity): Promise<Donation> {
@@ -84,11 +84,11 @@ export async function undoDeliveryState(donationId: number, myAccount: AccountEn
 
 async function _undoDeliveryStateNonCancel(donation: DonationEntity): Promise<Donation> {
   _updateDeliveryTiming(donation);
-  return await getConnection().transaction(async (manager: EntityManager) => {
-    const undoneDonation = await manager.getRepository(DonationEntity).save(donation);
-    await _sendDeliveryStateUndoMessage(undoneDonation);
-    return undoneDonation;
-  });
+  const undoneDonation: Donation = await getConnection().transaction
+    (async (manager: EntityManager) => manager.getRepository(DonationEntity).save(donation)
+  );
+  await _sendDeliveryStateUndoMessage(undoneDonation);
+  return undoneDonation;
 }
 
 function _ensureCanUndoDeliveryState(donation: Donation, myAccount: AccountEntity): void {
@@ -115,5 +115,5 @@ async function _sendDeliveryStateUndoMessage(donation: Donation): Promise<void> 
     sendSubjects,
     'delivery-status-undo',
     { donation, donorName, receiverName, delivererName }
-  );
+  ).catch(console.error);
 }
