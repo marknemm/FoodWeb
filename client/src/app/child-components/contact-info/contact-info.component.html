@@ -58,17 +58,10 @@
         </a>
       </div>
     </div>
-    <div class="col-sm-12">
+    <div *ngIf="!hideAddress" class="col-sm-12">
       <div class="inline-label">Address:</div>
       <a [href]="mapService.genHref(contactInfo)" target="_blank">
-        <div class="d-inline-block">
-          <div>{{ contactInfo.streetAddress }}</div>
-          <div>
-            <div class="d-inline-block">{{ contactInfo.city }},&nbsp;</div>
-            <div class="d-inline-block">{{ contactInfo.stateProvince }}&nbsp;</div>
-            <div class="d-inline-block">{{ contactInfo.postalCode }}</div>
-          </div>
-        </div>
+        <food-web-address [contactInfo]="contactInfo"></food-web-address>
       </a>
     </div>
   </div>

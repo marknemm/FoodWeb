@@ -3,7 +3,7 @@ import { DonationStatus } from '../interfaces/donation/donation';
 
 export class Constants {
   readonly WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  readonly ACCOUNT_TYPES: AccountType[] = ['Donor', 'Receiver'];
+  readonly ACCOUNT_TYPES: AccountType[] = ['Donor', 'Receiver', 'Volunteer'];
   readonly DONATION_TYPES = ['Food', 'Merchandise', 'Cash', 'Service', 'Other'];
-  readonly DONATION_STATUSES: DonationStatus[] = ['Unmatched', 'Matched', 'Complete'];
+  readonly DONATION_STATUSES: DonationStatus[] = ['Unmatched', 'Matched', 'Scheduled', 'Picked Up', 'Complete'];
 }

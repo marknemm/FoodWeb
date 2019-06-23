@@ -1,7 +1,8 @@
 import { Account } from '../account/account';
-export { Account };
+import { Delivery } from './delivery';
+export { Account, Delivery };
 
-export type DonationStatus = 'Unmatched' | 'Matched' | 'Complete';
+export type DonationStatus = 'Unmatched' | 'Matched' | 'Scheduled' | 'Picked Up' | 'Complete';
 
 /**
  * A donation.
@@ -40,9 +41,25 @@ export interface Donation {
    */
   estimatedValue: number;
   /**
+   * The estimated number of people that the donation will feed.
+   */
+  estimatedNumFeed: number;
+  /**
+   * The start time of the donation's pickup window.
+   */
+  pickupWindowStart: string;
+  /**
+   * The end time of the donation's pickup window.
+   */
+  pickupWindowEnd: string;
+  /**
    * The current status of the donation.
    */
   donationStatus: DonationStatus;
+  /**
+   * Delivery data for the donation. Should be undefined/null if donation status is before scheduled state.
+   */
+  delivery?: Delivery;
   /**
    * The time of the most recent update. If the donationStatus is 'Complete', then this is garunteed to be the completion/delivery time.
    */

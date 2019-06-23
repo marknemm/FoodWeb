@@ -29,6 +29,7 @@ async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> 
     .createQueryBuilder('account')
     .innerJoinAndSelect('account.contactInfo', 'contactInfo')
     .leftJoinAndSelect('account.organization', 'organization')
+    .leftJoinAndSelect('account.volunteer', 'volunteer')
     .leftJoinAndSelect('account.operationHours', 'operationHours')
     .where('account.username=:usernameEmail OR contactInfo.email=:usernameEmail', { usernameEmail })
     .getOne();

@@ -12,13 +12,43 @@ export enum MailTransporter {
 const noreplyTransporter: any = _initEmailTransporter(MailTransporter.NOREPLY);
 const supportTransporter: any = _initEmailTransporter(MailTransporter.SUPPORT);
 
-export function sendEmail(mailTransporter: MailTransporter, to: string, subject: string, template: string, account: Account, context?: any): Promise<void> {
+export function broadcastEmail(
+  mailTransporter: MailTransporter,
+  accounts: Account[],
+  subjects: string[],
+  template: string,
+  context?: any
+): Promise<void[]> {
+  const sendPromises: Promise<void>[] = [];
+  for (let i = 0; i < accounts.length; i++) {
+    sendPromises.push(
+      sendEmail(
+        mailTransporter,
+        accounts[i],
+        subjects[i],
+        template,
+        JSON.parse(JSON.stringify(context)) // Make copy of context since it is modified for each account.
+      )
+    );
+  }
+  return Promise.all(sendPromises);
+}
+
+export function sendEmail(
+  mailTransporter: MailTransporter,
+  account: Account,
+  subject: string,
+  template: string,
+  context?: any
+): Promise<void> {
   context = _fillMissingContext(context, account, template);
 
   return new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {
     const transporter: any = _getTransporter(mailTransporter);
     const from: string = process.env[`${mailTransporter}_EMAIL`];
-    const recipients: string[] = _getAllRecipients(to); // Can define extra 'Admin' email recipients in .env to get all messages.
+    const to: string = account.contactInfo.email;
+    // Can define extra 'Admin' email recipients in .env to get all messages.
+    const recipients: string[] = _getAllRecipients(to);
 
     recipients.forEach((recipient: string) => {
       transporter.sendMail(
@@ -44,6 +74,10 @@ function _fillMissingContext(context: any, account: Account, template: string): 
   context.year = (context.year ? context.year : new Date().getFullYear());
   context.account = (context.account ? context.account : account);
   context.emailContent = template;
+  context.isVolunteer = (account.accountType === 'Volunteer');
+  context.isDonor = (account.accountType === 'Donor');
+  context.isReceiver = (account.accountType === 'Receiver');
+  context.isAdmin = (account.accountType === 'Admin');
   return context;
 }
 

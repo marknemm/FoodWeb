@@ -1,13 +1,13 @@
 import { getConnection, EntityManager, Repository } from 'typeorm';
 import { hash, genSalt } from 'bcrypt';
 import { saveUnverifiedAccount } from './account-verification';
-import { formatOperationHoursTimes, OperationHoursEntity } from '../helpers/operation-hours-converter';
+import { formatOperationHoursTimes, OperationHoursEntity, sortOperationHours } from '../helpers/operation-hours-converter';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordEntity } from '../entity/password.entity';
 import { getPasswordId } from '../helpers/password-match';
 import { FoodWebError } from '../helpers/food-web-error';
-import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
 import { OperationHours } from '../interfaces/account/account';
+import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
 
 const accountHelper = new AccountHelper();
 
@@ -94,6 +94,8 @@ async function _saveAccount(manager: EntityManager, account: Account, myAccount?
   const accountRepo: Repository<AccountEntity> = manager.getRepository(AccountEntity);
   const operationHoursRepo: Repository<OperationHoursEntity> = manager.getRepository(OperationHoursEntity);
   _validateAccount(account, myAccount);
+  _ensureEitherOrganizationOrVolunteer(account);
+  _ensureAccountHasProfileImg(account);
 
   if (myAccount) {
     await operationHoursRepo.delete({ account: { id: myAccount.id } });
@@ -103,7 +105,7 @@ async function _saveAccount(manager: EntityManager, account: Account, myAccount?
   return accountRepo.findOne({ id: account.id });
 }
 
-function _validateAccount(account: Account, myAccount?: Account) {
+function _validateAccount(account: Account, myAccount?: Account): void {
   const allowAdminAccountType = (myAccount && myAccount.accountType === 'Admin');
   const accountErr: string = accountHelper.validateAccount(account, allowAdminAccountType);
   if (accountErr) {
@@ -111,7 +113,23 @@ function _validateAccount(account: Account, myAccount?: Account) {
   }
 }
 
+function _ensureEitherOrganizationOrVolunteer(account: Account): void {
+  (account.accountType === 'Volunteer')
+    ? account.organization = null
+    : account.volunteer = null;
+}
+
+function _ensureAccountHasProfileImg(account: Account): void {
+  if (!account.profileImgUrl || /^\/assets\/[A-Z]\.svg$/.test(account.profileImgUrl)) {
+    const firstLetter: string = (account.accountType === 'Volunteer')
+      ? account.volunteer.lastName.charAt(0).toUpperCase()
+      : account.organization.organizationName.charAt(0).toUpperCase();
+    account.profileImgUrl = `/assets/${firstLetter}.svg`;
+  }
+}
+
 async function _insertOperationHours(repo: Repository<OperationHoursEntity>, accountId: number, operationHoursArr: OperationHours[]): Promise<void> {
+  operationHoursArr = sortOperationHours(operationHoursArr);
   if (operationHoursArr && operationHoursArr.length !== 0) {
     // Make copy of array with shallow copy of members, and assign account field for insertion.
     const operationHoursArrCopy = (<OperationHoursEntity[]>operationHoursArr).map(

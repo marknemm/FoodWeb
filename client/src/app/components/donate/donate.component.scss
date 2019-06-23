@@ -1,14 +1,17 @@
 @import '../../../styles/constants.scss';
 
 .donate-form {
+  position: relative;
   text-align: center;
   width: 100%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 
   .donate-card {
     display: inline-block;
     text-align: left;
     width: 100%;
-    max-width: 900px;
 
     .donate-form-title {
       text-align: center;

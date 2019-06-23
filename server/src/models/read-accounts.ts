@@ -25,7 +25,7 @@ export async function readAccounts(request: AccountReadRequest): Promise<Account
     order: { username: 'ASC' }
   });
 
-  accounts.forEach((account: AccountEntity) => formatOperationHoursTimes(account.operationHours));
+  _processAccounts(accounts);
   return { accounts, totalCount };
 }
 
@@ -34,4 +34,10 @@ function _genFindOptions(request: AccountReadRequest): FindConditions<AccountEnt
   delete findOptions['page'];
   delete findOptions['limit'];
   return findOptions;
+}
+
+function _processAccounts(accounts: AccountEntity[]): void {
+  accounts.forEach((account: AccountEntity) => {
+    formatOperationHoursTimes(account.operationHours);
+  });
 }

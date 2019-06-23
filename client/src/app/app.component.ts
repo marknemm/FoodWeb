@@ -17,7 +17,7 @@ export class AppComponent {
     for (let i = 10; i < 36; i++) {
       const char: string = i.toString(36).toUpperCase();
       const svgUrl: SafeResourceUrl = domSanitizer.bypassSecurityTrustResourceUrl(`../assets/${char}.svg`);
-      matIconReg.addSvgIcon('letter_A', svgUrl);
+      matIconReg.addSvgIcon(`letter_${char}`, svgUrl);
     }
   }
 }

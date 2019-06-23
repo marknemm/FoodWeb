@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, forwardRef, OnDestroy } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, FormControl, FormBuilder, Validators, ValidationErrors, ControlValueAccessor, Validator } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, FormControl, Validators, ValidationErrors, ControlValueAccessor, Validator } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -16,21 +16,17 @@ export class UsernameComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   @Input() editing = false;
 
-  usernameCtrl: FormControl;
+  usernameCtrl = new FormControl('', Validators.required);
 
-  private $_destroy = new Subject();
+  private _destroy$ = new Subject();
 
-  constructor(
-    private _formBuilder: FormBuilder
-  ) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.usernameCtrl = this._formBuilder.control('', Validators.required);
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
-    this.$_destroy.next();
-    this.$_destroy.complete();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   writeValue(value: string): void {
@@ -39,7 +35,7 @@ export class UsernameComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   registerOnChange(onChangeCb: (value: string) => void): void {
     this.usernameCtrl.valueChanges.pipe(
-      takeUntil(this.$_destroy)
+      takeUntil(this._destroy$)
     ).subscribe(onChangeCb);
   }
 

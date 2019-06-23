@@ -25,6 +25,8 @@ export class PageTitleService {
           this.title = 'Donation';
         } else if (route.indexOf('/donations/my') >= 0) {
           this.title = 'My Donations';
+        } else if (route.indexOf('/deliveries/my') >= 0) {
+          this.title = 'My Deliveries';
         } else {
           this.title = this._deriveDefaultTitle(route);
         }

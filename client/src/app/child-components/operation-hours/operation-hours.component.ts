@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material';
 import { ConstantsService } from '../../services/constants/constants.service';
 import { ConfirmDialogService } from '../../services/confirm-dialog/confirm-dialog.service';
-import { OperationHoursValidationService } from '../../services/operation-hours-validation/operation-hours-validation.service';
+import { DateTimeService } from '../../services/date-time/date-time.service';
 import { FormHelperService } from '../../services/form-helper/form-helper.service';
 import { FlexFormArray } from '../../etc/flex-form-array';
 
@@ -17,9 +18,11 @@ export class OperationHoursComponent implements OnInit {
   @Input() formArray: FlexFormArray;
   @Input() formArrayName: string;
 
+  timeFieldErrStateMatcher: ErrorStateMatcher;
+
   constructor(
     public constantsService: ConstantsService,
-    public opHrsValidationService: OperationHoursValidationService,
+    public dateTimeService: DateTimeService,
     private _formGroupDirective: FormGroupDirective,
     private _formBuilder: FormBuilder,
     private _formHelperService: FormHelperService,
@@ -39,12 +42,13 @@ export class OperationHoursComponent implements OnInit {
           startTime: ['', Validators.required],
           endTime: ['', Validators.required]
         },
-        { validators: this.opHrsValidationService.operationHoursOrder }
+        { validators: this.dateTimeService.genTimeRangeOrderValidator('startTime', 'endTime') }
       );
     }
     if (this._formGroupDirective.form && this.formArrayName) {
       this._formGroupDirective.form.setControl(this.formArrayName, this.formArray);
     }
+    this.timeFieldErrStateMatcher = this.dateTimeService.genTimeRangeErrStateMatcher('startTime', 'endTime');
   }
 
   addOperationHours(): void {

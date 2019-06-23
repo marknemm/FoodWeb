@@ -15,6 +15,7 @@ export class ContactInfoEntity implements ContactInfo {
   @Column()
   phoneNumber: string;
 
+  @Index()
   @Column()
   streetAddress: string;
 

@@ -41,4 +41,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
     this._destroy$.next();
   }
 
+  getAccountTitle(account: Account): string  {
+    return (account.accountType === 'Volunteer')
+      ? `${account.volunteer.firstName} ${account.volunteer.lastName}`
+      : account.organization.organizationName
+  }
+
 }

@@ -1,5 +1,28 @@
 import { OperationHoursEntity } from './../entity/operation-hours.entity';
+import { OperationHours } from '../../../shared/src/interfaces/account/operation-hours';
+import { Constants } from '../../../shared/src/constants/constants';
 export { OperationHoursEntity };
+
+const _constants = new Constants();
+
+/**
+ * Sorts a given operation hours array.
+ * @param operationHoursArr The operation hours array to sort.
+ * @return The sorted (copy) of the operation hours array.
+ */
+export function sortOperationHours(operationHoursArr: OperationHours[]): OperationHours[] {
+  return operationHoursArr.sort((lhs: OperationHours, rhs: OperationHours) => {
+    const rhsWeekdayIdx: number = _constants.WEEKDAYS.indexOf(rhs.weekday);
+    const lhsWeekdayIdx: number = _constants.WEEKDAYS.indexOf(lhs.weekday);
+    const dayMsDiff: number = (lhsWeekdayIdx - rhsWeekdayIdx) * 24 * 60 * 60 * 1000;
+
+    const rhsTimeMs: number = new Date(`1/1/2000 ${rhs.startTime}`).getTime();
+    const lhsTimeMs: number = new Date(`1/1/2000 ${lhs.startTime}`).getTime();
+    const timeMsDiff: number = (lhsTimeMs - rhsTimeMs);
+
+    return (dayMsDiff + timeMsDiff);
+  });
+}
 
 /**
  * Formats the operation hours times to be in "wall-clock time format" (hh:mm [am|pm]).

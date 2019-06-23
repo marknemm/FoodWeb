@@ -4,6 +4,38 @@
 @include mat-core();
 @include angular-material-theme($light-theme);
 
+.mat-donor {
+  background-color: $donor-color;
+  color: black;
+}
+
+.mat-receiver {
+  background-color: $receiver-color;
+  color: black;
+}
+
+.mat-volunteer {
+  background-color: $volunteer-color;
+  color: white;
+}
+
+.mat-icon {
+  &.mat-donor {
+    background-color: inherit;
+    color: $donor-color;
+  }
+
+  &.mat-receiver {
+    background-color: inherit;
+    color: $receiver-color;
+  }
+
+  &.mat-volunteer {
+    background-color: inherit;
+    color: $volunteer-color;
+  }
+}
+
 .mat-snack-bar-container {
   &.mat-alert-info {
     background-color: $alert-info-background;
@@ -104,8 +136,28 @@ button {
 .mat-card {
   margin-bottom: 20px;
 
+  &.selectable-card {
+    &:hover {
+      text-decoration: none;
+      box-shadow: 0px 3px 2px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    }
+  }
+
   .mat-card-title, .mat-card-content {
     position: relative;
+  }
+
+  .mat-card-title {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+
+    .mat-toolbar:first-child {
+      margin: -16px 0px 0px -16px;
+      max-height: 50px;
+      width: calc(100% + 32px);
+      justify-content: center;
+      border-radius: inherit;
+    }
   }
 
   @media only screen and (max-width: $mat-mobile) {

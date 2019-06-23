@@ -24,6 +24,8 @@ export class FormHelperService {
     if (control) {
       return control;
     }
+    control = new FormControl();
+
     // Initialize form control via form control name if one is given.
     if (controlName && formGroupDirective && formGroupDirective.form) {
       control = formGroupDirective.form.get(controlName);
@@ -34,7 +36,7 @@ export class FormHelperService {
     } else if (!control) {
       control = formGroupDirective.form;
     }
-    return new FormControl();
+    return control;
   }
 
   deriveFormGroup(formGroup: FormGroup, formGroupName: string, formGroupDirective: FormGroupDirective): FormGroup {

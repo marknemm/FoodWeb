@@ -119,6 +119,7 @@ export class DonationService {
     }
     // Get donation from server.
     const url = `${this.url}/${id}`;
+    this._pageProgressService.activate(true);
     return this._httpClient.get<Donation>(url).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())

@@ -1,0 +1,84 @@
+{{#if isReceiver }}
+  <div>You have successfully cancelled your claim to a donation from <strong>{{ donorName }}</strong>:</div>
+  <p style="font-weight: bold; color: #3e2723">{{ donation.description }}</p>
+  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;">
+  <p>
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
+    You may re-claim this donation as long as no other charity has claimed it.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a> or
+    <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+{{else if isDonor }}
+  <div><strong>{{ receiverName }}</strong> has cancelled their claim to your donation:</div>
+  <p style="font-weight: bold; color: #3e2723">{{ donation.description }}</p>
+  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;">
+  <p>
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
+  </p>
+  <p>
+    We are sorry for any inconvenience this has caused you. When another charity claims your donation, you will be notified.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ receiverAccount.contactInfo.email }}">{{ receiverName }}</a> or
+    <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+{{else}}
+  <div>
+    <strong>{{ receiverName }}</strong> has cancelled their claim to the donation
+    from <strong>{{ donorName }}</strong>, and therefore, your delivery has been cancelled:
+  </div>
+  <p style="font-weight: bold; color: #3e2723">{{ donation.description }}</p>
+  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;">
+
+  <div style="display: inline-block; width: 278px; margin-bottom: 14px;">
+    <div style="display: inline-block; color: #795548; font-weight: bold; margin-bottom: 4px;">
+      Donor:
+    </div>
+    <div style="padding-left: 7px; color: #666;">
+      <div style="color: black; font-weight: 500;">
+        {{ donorName }}
+      </div>
+      <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
+      <div>
+        {{ donation.donorAccount.contactInfo.city }}, {{ donation.donorAccount.contactInfo.state }}
+        {{ donation.donorAccount.contactInfo.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <div style="display: inline-block; width: 278px; margin-bottom: 1em;">
+    <div style="display: inline-block; color: #795548; font-weight: bold; margin-bottom: 4px;">
+      Receiver:
+    </div>
+    <div style="padding-left: 7px; color: #666;">
+      <div style="color: black; font-weight: 500;">
+        {{ receiverName }}
+      </div>
+      <div>{{ receiverAccount.contactInfo.streetAddress }}</div>
+      <div>
+        {{ receiverAccount.contactInfo.city }}, {{ receiverAccount.contactInfo.state }}
+        {{ receiverAccount.contactInfo.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 0 0 1em; padding: 0;">
+  <p>
+    We are sorry for any inconvenience this has caused you.
+  </p>
+  <p>
+    You can search for other unscheduled deliveries at this
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/deliveries?donationStatus=Matched">link</a>,
+    or wait to be notified about another delivery.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a>,
+    <a href="mailto:{{ receiverAccount.contactInfo.email }}">{{ receiverName }}</a>,
+    or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+{{/if}}

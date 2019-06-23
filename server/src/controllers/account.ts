@@ -26,7 +26,7 @@ router.post('/verify', ensureSessionActive, (req: Request, res: Response) => {
   const account: AccountEntity = req.session.account;
   const verificationToken: string = req.body.verificationToken;
   verifyAccount(account, verificationToken)
-    .then(_handleAccountSaveResult.bind(this, req, res))
+    .then(_handleAccountVerificationResult.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });
 
@@ -86,8 +86,17 @@ router.get('/:id', (req: Request, res: Response) => {
 function _handleAccountSaveResult(req: Request, res: Response, account: AccountEntity): void {
   const curSessionAccount: Account = req.session.account;
   // If the saved account is the current user's account (new or updated).
-  if (!curSessionAccount || curSessionAccount.id === account.id) {
-    req.session.account = account;
+  if (curSessionAccount && curSessionAccount.id === account.id) {
+    account.verified = curSessionAccount.verified; // Prevent account verification from being overwritten.
+  }
+  req.session.account = account;
+  res.send(account);
+}
+
+function _handleAccountVerificationResult(req: Request, res: Response, account: AccountEntity): void {
+  const curSessionAccount: Account = req.session.account;
+  if (curSessionAccount && curSessionAccount.id === account.id) {
+    curSessionAccount.verified = account.verified;
   }
   res.send(account);
 }

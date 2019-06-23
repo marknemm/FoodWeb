@@ -1,0 +1,27 @@
+<div class="action-footer">
+  <ng-container *ngIf="canEdit">
+    <button mat-button *ngIf="!editing" foodWebConfirmButton color="warn" class="delete-button" (clickConfirm)="action.emit('Delete')"
+      confirmTitle="Confirm Delete" confirmMessage="Are you sure you want to permanently delete the donation?">
+      Delete
+    </button>
+    <food-web-edit-save-button [useButtonText]="true" [editing]="editing"
+      (edit)="action.emit('ToggleEdit')" (save)="action.emit('Save')"></food-web-edit-save-button>
+  </ng-container>
+  <button mat-raised-button *ngIf="canClaim" type="button" color="primary" (click)="action.emit('Claim')">
+    Claim Donation
+  </button>
+  <button mat-button foodWebConfirmButton *ngIf="canUnclaim" type="button" color="warn"
+    (clickConfirm)="action.emit('Unclaim')" confirmTitle="Confirm Unclaim" confirmMessage="Are you sure you want to unclaim the donation?">
+    Unclaim Donation
+  </button>
+  <button mat-raised-button *ngIf="canScheduleDelivery" type="button" color="primary" (click)="action.emit('StartDelivery')">
+    Start Delivery
+  </button>
+  <button mat-button foodWebConfirmButton *ngIf="canUndoDeliveryState" type="button" color="warn" (clickConfirm)="action.emit('UndoDeliveryState')"
+    confirmTitle="Confirm {{ deliveryUndoTxt }}" [confirmMessage]="confirmDeliveryUndoMessage">
+    {{ deliveryUndoTxt }}
+  </button>
+  <button mat-raised-button *ngIf="canAdvanceDeliveryState" type="button" color="primary" (click)="action.emit('AdvanceDeliveryState')">
+    {{ deliveryAdvanceTxt }}
+  </button>
+</div>
