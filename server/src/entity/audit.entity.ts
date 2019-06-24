@@ -20,7 +20,7 @@ export class AuditEntity<T = any> implements Audit {
   @CreateDateColumn({ type: 'timestamp with time zone' })
   timestamp: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'float', nullable: true })
   recaptchaScore?: number;
 
   @ManyToMany((type) => AccountEntity, { eager: true })

@@ -30,14 +30,14 @@ export class RecaptchaService implements HttpInterceptor {
     const noRecaptcha: boolean = (!environment.recaptchaSiteKey || req.headers.get('no-recaptcha') != null);
     if (!noRecaptcha && req.method !== 'GET') {
       return this._recaptchaV3Service.execute(req.url).pipe(
+        catchError((err: Error) => {
+          console.error(err);
+          return next.handle(req);
+        }),
         flatMap((recaptchaScore: string) => {
           (!req.body)
             ? req = req.clone({ body: { recaptchaScore } })
-            : req.body.recaptchaScore;
-          return next.handle(req);
-        }),
-        catchError((err: Error) => {
-          console.error(err);
+            : req.body.recaptchaScore = recaptchaScore;
           return next.handle(req);
         })
       );

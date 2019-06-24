@@ -1,11 +1,13 @@
 import { EntityManager, getRepository, getConnection } from 'typeorm';
 import { randomBytes } from 'crypto';
-import { AccountEntity } from '../entity/account.entity';
-import { MailTransporter, sendEmail } from '../helpers/email';
-import { PasswordResetEntity } from '../entity/password-reset';
 import { readAccount } from './read-accounts';
 import { savePassword } from './save-password';
+import { saveAudit } from './save-audit';
+import { sendPasswordResetEmail } from './password-reset-message';
+import { AccountEntity } from '../entity/account.entity';
+import { PasswordResetEntity } from '../entity/password-reset';
 import { FoodWebError } from '../helpers/food-web-error';
+import { PasswordResetRequest } from '../../../shared/src/interfaces/account/password-reset-request';
 
 export async function savePasswordResetToken(username: string): Promise<void> {
   await getConnection().transaction(async (manager: EntityManager) => {
@@ -21,14 +23,15 @@ export async function savePasswordResetToken(username: string): Promise<void> {
       passwordResetEntity = _genPasswordResetEntity(account);
       await manager.getRepository(PasswordResetEntity).save(passwordResetEntity);
     }
-    await _sendPasswordResetEmail(account, passwordResetEntity.resetToken, false);
+    await sendPasswordResetEmail(account, passwordResetEntity.resetToken, false);
   });
 }
 
-export async function resetPassword(username: string, password: string, resetToken: string): Promise<AccountEntity> {
+export async function resetPassword(resetRequest: PasswordResetRequest): Promise<AccountEntity> {
+  const resetToken: string = resetRequest.resetToken;
   const account: AccountEntity = await getRepository(AccountEntity).findOne({
     relations: ['contactInfo', 'organization', 'operationHours'],
-    where: { username }
+    where: { username: resetRequest.username }
   });
   const passwordResetEntity: PasswordResetEntity = await getRepository(PasswordResetEntity).findOne({
     where: { resetToken, account }
@@ -40,9 +43,11 @@ export async function resetPassword(username: string, password: string, resetTok
 
   await getConnection().transaction(async (manager: EntityManager) => {
     await manager.getRepository(PasswordResetEntity).remove(passwordResetEntity);
-    await savePassword(manager, account, password, null, true);
-    await _sendPasswordResetEmail(account, resetToken, true);
+    await savePassword(manager, account, resetRequest.password, null, true);
+    await sendPasswordResetEmail(account, resetToken, true);
   });
+
+  saveAudit('Reset Password', account, 'xxxxxx', 'xxxxxx', resetRequest.recaptchaScore);
   return account;
 }
 
@@ -52,15 +57,4 @@ function _genPasswordResetEntity(account: AccountEntity): PasswordResetEntity {
   passwordResetEntity.resetToken = resetToken;
   passwordResetEntity.account = account;
   return passwordResetEntity;
-}
-
-async function _sendPasswordResetEmail(account: AccountEntity, resetToken: string, resetComplete: boolean): Promise<void> {
-  const template: string = (resetComplete ? 'password-reset-success' : 'password-reset');
-  return sendEmail(
-    MailTransporter.NOREPLY,
-    account,
-    'Reset FoodWeb Password',
-    template,
-    { resetToken }
-  );
 }

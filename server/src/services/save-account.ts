@@ -1,44 +1,44 @@
 import { getConnection, EntityManager, Repository } from 'typeorm';
 import { createUnverifiedAccount } from './account-verification';
+import { savePassword } from './save-password';
+import { saveAudit } from './save-audit';
 import { formatOperationHoursTimes, OperationHoursEntity, sortOperationHours } from '../helpers/operation-hours-converter';
 import { FoodWebError } from '../helpers/food-web-error';
 import { geocode, geoTimezone } from '../helpers/geocoder';
 import { AccountEntity } from '../entity/account.entity';
-import { saveCreationAudit, saveUpdateAudit } from './save-audit';
-import { savePassword } from './save-password';
+import { AccountUpdateRequest } from '../interfaces/account/account-update-request';
 import { OperationHours } from '../../../shared/src/interfaces/account/account';
 import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
+import { AccountCreateRequest } from '../../../shared/src/interfaces/account/account-create-request';
 
 const _accountHelper = new AccountHelper();
 
-export async function createAccount(account: Account, password: string, recaptchaScore?: number): Promise<AccountEntity> {
+export async function createAccount(request: AccountCreateRequest): Promise<AccountEntity> {
   let createdAccount: AccountEntity;
   await getConnection().transaction(async (manager: EntityManager) => {
-    createdAccount = await _saveAccount(manager, account);
-    await savePassword(manager, createdAccount, password);
+    createdAccount = await _saveAccount(manager, request.account);
+    await savePassword(manager, createdAccount, request.password);
     await createUnverifiedAccount(createdAccount, manager);
   });
 
-  saveCreationAudit('Signup', createdAccount, recaptchaScore).catch((err: Error) => console.error(err));
-
   formatOperationHoursTimes(createdAccount.operationHours);
   createdAccount.verified = false;
+  saveAudit('Signup', createdAccount, createdAccount, undefined, request.recaptchaScore);
   return createdAccount;
 }
 
-export async function updateAccount(myAccount: Account, account: Account): Promise<AccountEntity> {
-  if (!_accountHelper.isMyAccount(myAccount, account.id)) {
+export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: Account): Promise<AccountEntity> {
+  if (!_accountHelper.isMyAccount(myAccount, updateReq.account.id)) {
     throw new FoodWebError('User unauthorized to update account', 401);
   }
 
   let updatedAccount: AccountEntity;
   await getConnection().transaction(async (manager: EntityManager) => {
-    updatedAccount = await _saveAccount(manager, account, myAccount);
+    updatedAccount = await _saveAccount(manager, updateReq.account, myAccount);
   });
 
-  saveUpdateAudit('Update Account', myAccount, account);
-
   formatOperationHoursTimes(updatedAccount.operationHours);
+  saveAudit('Update Account', updatedAccount, updatedAccount, myAccount, updateReq.recaptchaScore);
   return updatedAccount;
 }
 

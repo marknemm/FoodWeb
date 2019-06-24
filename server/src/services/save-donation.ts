@@ -1,15 +1,19 @@
 import { getConnection, EntityManager, Repository } from 'typeorm';
+import { sendDonationCreateSuccessEmail, sendDonationUpdateSuccessEmails } from './save-donation-message';
+import { readDonation } from './read-donations';
+import { saveAudit, getAuditAccounts } from './save-audit';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
-import { readDonation } from './read-donations';
-import { sendEmail, MailTransporter } from '../helpers/email';
 import { FoodWebError } from '../helpers/food-web-error';
 import { Account } from '../../../shared/src/interfaces/account/account';
 import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
+import { DonationCreateRequest } from '../../../shared/src/interfaces/donation/donation-create-request';
+import { DonationUpdateRequest } from '../../../shared/src/interfaces/donation/donation-update-request';
 
 const _donationHelper = new DonationHelper();
 
-export async function createDonation(donation: Donation, myAccount: AccountEntity): Promise<DonationEntity> {
+export async function createDonation(createReq: DonationCreateRequest, myAccount: AccountEntity): Promise<DonationEntity> {
+  const donation: Donation = createReq.donation;
   donation.donationStatus = 'Unmatched';
   donation.donorAccount = myAccount;
   _validateDonation(donation);
@@ -17,12 +21,14 @@ export async function createDonation(donation: Donation, myAccount: AccountEntit
   const createdDonation: DonationEntity = await getConnection().transaction(
     async (manager: EntityManager) => manager.getRepository(DonationEntity).save(donation)
   );
-  await _sendDonationCreateSuccessEmail(createdDonation, myAccount);
+  await sendDonationCreateSuccessEmail(createdDonation, myAccount);
 
+  saveAudit('Donate', myAccount, donation, undefined, createReq.recaptchaScore);
   return createdDonation;
 }
 
-export async function updateDonation(donation: Donation, myAccount: AccountEntity): Promise<Donation> {
+export async function updateDonation(updateReq: DonationUpdateRequest, myAccount: AccountEntity): Promise<Donation> {
+  const donation: Donation = updateReq.donation;
   _validateDonation(donation);
   _ensureCanUpdateDonation(donation, myAccount);
 
@@ -35,8 +41,9 @@ export async function updateDonation(donation: Donation, myAccount: AccountEntit
     // Must do separate query b/c save method will only return updated properties in entity (partial entity).
     return readDonation(donation.id, donationRepo);
   });
-  _sendDonationUpdateSuccessEmails(originalDonation, updatedDonation)
+  sendDonationUpdateSuccessEmails(originalDonation, updatedDonation)
 
+  saveAudit('Update Donation', getAuditAccounts(donation), updatedDonation, originalDonation, updateReq.recaptchaScore);
   return updatedDonation;
 }
 
@@ -60,25 +67,4 @@ function _removeNonUpdateFields(donation: Donation): void {
   delete donation.donorAccount;
   delete donation.donationStatus;
   delete donation.receiverAccount;
-}
-
-function _sendDonationCreateSuccessEmail(donation: Donation, account: AccountEntity): Promise<void> {
-  return sendEmail(
-    MailTransporter.NOREPLY,
-    account,
-    'Donation Successful',
-    'donation-create-success',
-    { donation }
-  ).catch(console.error);
-}
-
-function _sendDonationUpdateSuccessEmails(originalDonation: Donation, updatedDonation: Donation): Promise<void> {
-  // Send e-mail to donorAccount linked directly to the donation.
-  return sendEmail(
-    MailTransporter.NOREPLY,
-    updatedDonation.donorAccount,
-    'Donation Update Successful',
-    'donation-update-success',
-    { originalDonation, updatedDonation }
-  ).catch(console.error);
 }

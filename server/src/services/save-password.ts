@@ -1,21 +1,32 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
+import { saveAudit } from './save-audit';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordEntity } from '../entity/password.entity';
 import { FoodWebError } from '../helpers/food-web-error';
 import { getPasswordId } from '../helpers/password-match';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
+import { PasswordUpdateRequest } from '../../../shared/src/interfaces/account/password-update-request';
 
 const _accountHelper = new AccountHelper();
 
-export async function updatePassword(myAccount: AccountEntity, password: string, oldPassword: string): Promise<void> {
-  oldPassword = (oldPassword ? oldPassword : ' '); // Ensure we have an oldPassword to check against for extra security!
+export async function updatePassword(updateReq: PasswordUpdateRequest, myAccount: AccountEntity): Promise<void> {
+  const password = updateReq.password;
+  // Ensure we have an oldPassword to check against for extra security!
+  const oldPassword = (updateReq.oldPassword ? updateReq.oldPassword : ' ');
   await getConnection().transaction(async (manager: EntityManager) => {
     await savePassword(manager, myAccount, password, oldPassword, _accountHelper.isAdmin(myAccount));
   });
+  saveAudit('Update Password', myAccount, 'xxxxxx', 'xxxxxx', updateReq.recaptchaScore);
 }
 
-export async function savePassword(manager: EntityManager, myAccount: AccountEntity, password: string, oldPassword?: string, isReset = false): Promise<void> {
+export async function savePassword(
+  manager: EntityManager,
+  myAccount: AccountEntity,
+  password: string,
+  oldPassword?: string,
+  isReset = false
+): Promise<void> {
   _validatePassword(password);
   const passwordHash: string = await _genPasswordHash(password);
   const passwordEntity: PasswordEntity = _genPasswordEntity(passwordHash, myAccount);

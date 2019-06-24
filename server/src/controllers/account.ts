@@ -1,54 +1,55 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { genListResponse } from '../helpers/list-response';
-import { recaptcha } from '../middlewares/recaptcha';
 import { ensureSessionActive } from '../middlewares/session.middleware';
 import { handleError } from '../middlewares/response-error.middleware';
-import { AccountEntity } from './../entity/account.entity';
+import { AccountEntity } from '../entity/account.entity';
 import { createAccount, updateAccount } from '../services/save-account';
 import { updatePassword } from '../services/save-password';
 import { readAccounts, AccountsQueryResult, readAccount } from '../services/read-accounts';
 import { verifyAccount, resendVerificationEmail } from '../services/account-verification';
 import { savePasswordResetToken, resetPassword } from '../services/password-reset';
 import { AccountCreateRequest, Account } from '../../../shared/src/interfaces/account/account-create-request';
+import { AccountUpdateRequest } from '../../../shared/src/interfaces/account/account-update-request';
 import { PasswordUpdateRequest } from '../../../shared/src/interfaces/account/password-update-request';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { PasswordResetRequest } from '../../../shared/src/interfaces/account/password-reset-request';
+import { AccountVerificationRequest } from '../../../shared/src/interfaces/account/account-verification-request';
 
 const router = express.Router();
 
-router.post('/', recaptcha, (req: Request, res: Response) => {
+router.post('/', (req: Request, res: Response) => {
   const createRequest: AccountCreateRequest = req.body;
-  createAccount(createRequest.account, createRequest.password, req.body.recaptchaScore)
+  createAccount(createRequest)
     .then(_handleAccountSaveResult.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });
 
 router.post('/verify', (req: Request, res: Response) => {
   const account: AccountEntity = (req.session ? req.session.account : null);
-  const verificationToken: string = req.body.verificationToken;
-  verifyAccount(account, verificationToken)
+  const accountVerifyReq: AccountVerificationRequest = req.body;
+  verifyAccount(account, accountVerifyReq)
     .then(_handleAccountVerificationResult.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });
 
 router.put('/', ensureSessionActive, (req: Request, res: Response) => {
-  const account: Account = req.body;
-  updateAccount(req.session.account, account)
+  const accountUpdateReq: AccountUpdateRequest = req.body;
+  updateAccount(accountUpdateReq, req.session.account)
     .then(_handleAccountSaveResult.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });
 
 router.put('/password', ensureSessionActive, (req: Request, res: Response) => {
   const updateRequest: PasswordUpdateRequest = req.body;
-  updatePassword(req.session.account, updateRequest.password, updateRequest.oldPassword)
+  updatePassword(updateRequest, req.session.account)
     .then(() => res.send({}))
     .catch(handleError.bind(this, res));
 });
 
 router.put('/reset-password/', (req: Request, res: Response) => {
   const resetRequest: PasswordResetRequest = req.body;
-  resetPassword(resetRequest.username, resetRequest.password, resetRequest.resetToken)
+  resetPassword(resetRequest)
     .then((account: AccountEntity) => res.send(account))
     .catch(handleError.bind(this, res));
 });

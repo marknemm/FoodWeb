@@ -2,7 +2,9 @@ import handlebars = require('handlebars');
 import helpers = require('handlebars-helpers');
 import fs = require('fs-extra');
 import path = require('path');
+import { DateTimeHelper } from '../../../shared/src/helpers/date-time-helper';
 
+const _dateTimeHelper = new DateTimeHelper();
 const _handlebarsTemplates: Map<string, handlebars.TemplateDelegate> = _initHandlebars();
 
 export function genHandlebarsTemplate(templateName: string, context: any): string {
@@ -23,6 +25,12 @@ function _registerHelpers(): void {
   helpers.comparison({ handlebars });
   helpers.number({ handlebars });
   helpers.collection({ handlebars });
+  const toLocalDateTimeStr: handlebars.HelperDelegate = _dateTimeHelper.toLocalDateTimeStr.bind(_dateTimeHelper);
+  handlebars.registerHelper('toLocalDateTimeStr', toLocalDateTimeStr);
+  const toLocalDateStr: handlebars.HelperDelegate = _dateTimeHelper.toLocalDateStr.bind(_dateTimeHelper);
+  handlebars.registerHelper('toLocalDateStr', toLocalDateStr);
+  const toLocalTimeStr: handlebars.HelperDelegate = _dateTimeHelper.toLocalTimeStr.bind(_dateTimeHelper);
+  handlebars.registerHelper('toLocalTimeStr', toLocalTimeStr);
 }
 
 function _registerPartials(): void {

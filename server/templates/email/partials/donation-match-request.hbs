@@ -2,6 +2,28 @@
   <div><strong>{{ donation.donorAccount.organization.organizationName }}</strong> has submitted a new donation:</div>
   <p class="donation-description">{{ donation.description }}</p>
   <hr>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Delivery Window Start:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donation.pickupWindowStart timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donation.pickupWindowStart timezone }}</strong>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Delivery Window End:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donation.pickupWindowEnd timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donation.pickupWindowEnd timezone }}</strong>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
   <p>
     Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
     You may also claim the donation at this link.

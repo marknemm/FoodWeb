@@ -76,6 +76,7 @@ import { DateTimeSelectDialogComponent } from './components/date-time-select-dia
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
+import { FoodSafetyChecklistComponent } from './child-components/food-safety-checklist/food-safety-checklist.component';
 
 @NgModule({
   declarations: [
@@ -117,6 +118,7 @@ import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
     NotificationsComponent,
     DateTimeSelectComponent,
     DateTimeSelectDialogComponent,
+    FoodSafetyChecklistComponent,
   ],
   imports: [
     AppRoutingModule,

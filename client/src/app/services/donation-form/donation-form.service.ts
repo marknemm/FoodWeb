@@ -28,7 +28,15 @@ export class DonationFormService {
     private _dateTimeService: DateTimeService
   ) {}
 
-  buildDonationForm(donorAccount?: Account): FormGroup {
+  buildCreateDonationForm(donorAccount: Account): FormGroup {
+    return this._buildDonationForm(donorAccount, false);
+  }
+
+  buildUpdateDonationForm(): FormGroup {
+    return this._buildDonationForm();
+  }
+
+  private _buildDonationForm(donorAccount?: Account, safetyChecklistInit = true): FormGroup {
     const initPickupWindow: DateTimeRange = (donorAccount)
       ? this._dateTimeService.genDefaultDateRangeFromAvailability(donorAccount)
       : null;
@@ -40,7 +48,8 @@ export class DonationFormService {
       pickupWindow: [initPickupWindow, Validators.required],
       estimatedNumFeed: [null, [Validators.required, Validators.min(0), Validators.pattern(/^\d*$/)]],
       estimatedValue: [null, [Validators.min(0), Validators.pattern(Validation.MONEY_REGEX)]],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
+      safetyChecklist: [safetyChecklistInit, Validators.requiredTrue]
     });
     this.donationForm.get('otherDonationType').disable();
     return this.donationForm;

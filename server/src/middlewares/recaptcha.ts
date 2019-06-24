@@ -1,5 +1,5 @@
 import 'dotenv';
-import { Request, Response, NextFunction, response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { RecaptchaV3 } from 'express-recaptcha';
 import { RecaptchaResponseDataV3 } from 'express-recaptcha/dist/interfaces';
 
@@ -30,11 +30,11 @@ export function recaptcha(request: Request, response: Response, next: NextFuncti
         return next();
       }
     }
-    _handleRejection(err);
+    _handleRejection(response, err);
   });
 }
 
-function _handleRejection(err?: string) {
+function _handleRejection(response: Response, err?: string) {
   if (err) { console.error(err); }
   response.status(500).send({ message: 'Request rejected due to failed reCAPTCHA test.' })
 }

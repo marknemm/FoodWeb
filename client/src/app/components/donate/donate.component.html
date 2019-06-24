@@ -25,6 +25,13 @@
         <food-web-date-time-range formControlName="pickupWindow" [initEndDateToday]="true" [required]="true"></food-web-date-time-range>
       </mat-card-content>
     </mat-card>
+
+    <mat-card class="donate-card">
+      <mat-card-title>Food Safety Checklist</mat-card-title>
+      <mat-card-content>
+        <food-web-food-safety-checklist formControlName="safetyChecklist"></food-web-food-safety-checklist>
+      </mat-card-content>
+    </mat-card>
   </ng-container>
 
   <div class="action-footer align-right">

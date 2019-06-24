@@ -61,7 +61,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.donationForm = this._donationFormService.buildDonationForm();
+    this.donationForm = this._donationFormService.buildUpdateDonationForm();
     this._listenDonationChange();
   }
 

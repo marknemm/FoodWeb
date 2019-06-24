@@ -1,15 +1,16 @@
 import { EntityManager, getManager, getRepository, Repository } from 'typeorm';
 import { randomBytes } from 'crypto';
+import { sendAccountVerificationEmail } from './account-verification-message';
 import { AccountEntity } from '../entity/account.entity';
-import { MailTransporter, sendEmail } from '../helpers/email';
 import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { Account } from '../../../shared/src/interfaces/account/account';
+import { saveAudit } from './save-audit';
+import { AccountVerificationRequest } from '../../../shared/src/interfaces/account/account-verification-request';
 
 export async function createUnverifiedAccount(account: AccountEntity, manager: EntityManager = getManager()): Promise<void> {
   const unverifiedAccount: UnverifiedAccountEntity = _genUnverifiedAccountEntity(account);
   await manager.getRepository(UnverifiedAccountEntity).save(unverifiedAccount);
-  await _sendAccountVerificationEmail(account, unverifiedAccount.verificationToken);
+  await sendAccountVerificationEmail(account, unverifiedAccount.verificationToken);
 }
 
 export async function resendVerificationEmail(myAccount: AccountEntity): Promise<void> {
@@ -20,10 +21,11 @@ export async function resendVerificationEmail(myAccount: AccountEntity): Promise
   }
   unverifiedAccount.verificationToken = _genVerificationToken();
   await repo.save(unverifiedAccount); // Simply overwrite existing entry.
-  await _sendAccountVerificationEmail(myAccount, unverifiedAccount.verificationToken) 
+  await sendAccountVerificationEmail(myAccount, unverifiedAccount.verificationToken) 
 }
 
-export async function verifyAccount(account: AccountEntity, verificationToken: string): Promise<AccountEntity> {
+export async function verifyAccount(account: AccountEntity, verificationReq: AccountVerificationRequest): Promise<AccountEntity> {
+  const verificationToken: string = verificationReq.verificationToken;
   const repo: Repository<UnverifiedAccountEntity> = getRepository(UnverifiedAccountEntity);
   const unverifiedAccount: UnverifiedAccountEntity = await repo.findOne({
     where: (account) ? { account, verificationToken } : { verificationToken }
@@ -34,9 +36,11 @@ export async function verifyAccount(account: AccountEntity, verificationToken: s
   }
 
   repo.delete(unverifiedAccount);
-  if (account && account.id === unverifiedAccount.id) {
+
+  if (account && account.id === unverifiedAccount.account.id) {
     account.verified = true;
   }
+  saveAudit('Verify Account', account, account, undefined, verificationReq.recaptchaScore);
   return account;
 }
 
@@ -50,14 +54,4 @@ function _genUnverifiedAccountEntity(account: AccountEntity): UnverifiedAccountE
 
 function _genVerificationToken(): string {
   return randomBytes(10).toString('hex'); // Gen 20 char token.
-}
-
-async function _sendAccountVerificationEmail(account: Account, verificationToken: string): Promise<void> {
-  return sendEmail(
-    MailTransporter.NOREPLY,
-    account,
-    'Verify New FoodWeb Account',
-    'account-verification',
-    { verificationToken }
-  ).catch(console.error);
 }

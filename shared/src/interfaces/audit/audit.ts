@@ -6,7 +6,7 @@ export type AuditEventType =
   | 'Verify Account'
   | 'Remove Unverified Account'
   | 'Update Account'
-  | 'Request Password Reset'
+  | 'Update Password'
   | 'Reset Password'
   | 'Donate'
   | 'Update Donation'
@@ -14,8 +14,9 @@ export type AuditEventType =
   | 'Claim Donation'
   | 'Unclaim Donation'
   | 'Schedule Delivery'
-  | 'Pickup Delivery'
-  | 'Complete Delivery';
+  | 'Cancel Delivery'
+  | 'Delivery State Advance'
+  | 'Delivery State Undo';
 
 export interface AuditData<T = any> {
   old?: T;

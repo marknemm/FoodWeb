@@ -15,6 +15,7 @@ export class DonationDetailActionsComponent implements OnInit, OnChanges {
   @Input() donation: Donation;
   @Input() myAccount: Account;
   @Input() editing = false;
+  @Input() valid = true;
 
   @Output() action = new EventEmitter<DonationAction>();
 

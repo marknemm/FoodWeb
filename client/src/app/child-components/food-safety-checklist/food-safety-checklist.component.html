@@ -1,0 +1,5 @@
+<div [formGroup]="safetyChecklistForm">
+  <div *ngFor="let checklistEntry of checklistEntries; let i=index">
+    <mat-checkbox formControlName="check{{i}}">{{ checklistEntry }}</mat-checkbox>
+  </div>
+</div>

@@ -28,11 +28,11 @@ table, tr, td {
 .col-6 {
   display: inline-block;
   width: 278px;
-  margin-bottom: 14px;
+  margin-bottom: 1em;
 }
 
-.col-6:last-child {
-  margin-bottom: 0px;
+.no-margin-top {
+  margin-top: 0px;
 }
 
 .inline-label {
@@ -41,7 +41,7 @@ table, tr, td {
   font-weight: bold;
   margin-bottom: 4px;
   vertical-align: top;
-} 
+}
 
 .emphasize {
   color: black;
@@ -94,7 +94,7 @@ table, tr, td {
   color: #3e2723;
 }
 
-.indented-address {
+.indented-data {
   padding-left: 7px;
   color: #666;
 }
@@ -111,4 +111,8 @@ table, tr, td {
 
 .donation-summary-description {
   min-width: 300px;
+}
+
+.date-time .date {
+  padding-right: 7px;
 }

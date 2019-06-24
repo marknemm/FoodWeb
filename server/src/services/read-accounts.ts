@@ -54,5 +54,6 @@ function _delVolunteerAddrIfNotMyAccount(account: AccountEntity, myAccount: Acco
     delete account.contactInfo.city;
     delete account.contactInfo.stateProvince;
     delete account.contactInfo.postalCode;
+    delete account.contactInfo.location;
   }
 }

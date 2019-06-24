@@ -1,15 +1,18 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { readAccounts, AccountsQueryResult } from './read-accounts';
-import { MailTransporter, sendEmail, broadcastEmail } from '../helpers/email';
-import { FoodWebError } from '../helpers/food-web-error';
 import { readDonation } from './read-donations';
+import { sendMatchRequestMessage, sendClaimMessages, sendUnclaimMessages } from './match-donation-message';
+import { cancelDelivery } from './cancel-delivery';
+import { saveAudit, getAuditAccounts } from './save-audit';
+import { FoodWebError } from '../helpers/food-web-error';
 import { DonationEntity } from '../entity/donation.entity';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
 import { Account } from '../../../shared/src/interfaces/account/account';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
-import { cancelDelivery } from './cancel-delivery';
+import { DonationClaimRequest } from '../../../shared/src/interfaces/donation/donation-claim-request';
+import { DonationUnclaimRequest } from '../../../shared/src/interfaces/donation/donation-unclaim-request';
 
 const _donationHelper = new DonationHelper();
 
@@ -22,7 +25,7 @@ export async function messagePotentialReceivers(donation: Donation): Promise<voi
   const potentialReceivers: AccountEntity[] = await _findPotentialReceivers();
   const messagePromises: Promise<void>[] = [];
   potentialReceivers.forEach((receiver: AccountEntity) => {
-    const promise: Promise<void> = _sendMatchRequestMessage(donation, receiver);
+    const promise: Promise<void> = sendMatchRequestMessage(donation, receiver);
     messagePromises.push(promise);
   });
   await Promise.all(messagePromises).catch(console.error);
@@ -38,33 +41,20 @@ async function _findPotentialReceivers(): Promise<AccountEntity[]> {
   return queryResult.accounts;
 }
 
-/**
- * Messages a potential receiver so that they may be aware of a new donation and potentially claim it.
- * @param donation The new donation.
- * @param receiver The receiver account.
- * @return A promise that resolves to void once the email has been sent.
- */
-function _sendMatchRequestMessage(donation: Donation, receiver: AccountEntity): Promise<void> {
-  return sendEmail(
-    MailTransporter.NOREPLY,
-    receiver,
-    `Donation Available From ${_donationHelper.donorName(donation)}`,
-    'donation-match-request',
-    { donation }
-  );
-}
-
-export async function claimDonation(donationId: number, myAccount: AccountEntity): Promise<Donation> {
-  const donationToClaim: Donation = await readDonation(donationId);
+export async function claimDonation(claimReq: DonationClaimRequest, myAccount: AccountEntity): Promise<Donation> {
+  const donationToClaim: Donation = await readDonation(claimReq.donationId);
   _ensureCanClaimDonation(donationToClaim, myAccount);
-  donationToClaim.donationStatus = 'Matched';
-  donationToClaim.receiverAccount = myAccount;
 
-  const claimedDonation: Donation = await getConnection().transaction(async (manager: EntityManager) =>
-    manager.getRepository(DonationEntity).save(donationToClaim)
+  let claimedDonation: Donation = Object.assign({}, donationToClaim);
+  claimedDonation.donationStatus = 'Matched';
+  claimedDonation.receiverAccount = myAccount;
+
+  claimedDonation = await getConnection().transaction(async (manager: EntityManager) =>
+    manager.getRepository(DonationEntity).save(claimedDonation)
   );
-  await _sendClaimMessages(claimedDonation);
+  await sendClaimMessages(claimedDonation);
 
+  saveAudit('Claim Donation', getAuditAccounts(claimedDonation), claimedDonation, donationToClaim, claimReq.recaptchaScore);
   return claimedDonation;
 }
 
@@ -75,38 +65,20 @@ function _ensureCanClaimDonation(donation: Donation, myAccount: AccountEntity): 
   }
 }
 
-async function _sendClaimMessages(donation: Donation): Promise<void> {
-  const accounts: Account[] = [donation.receiverAccount, donation.donorAccount];
-  const { donorName, receiverName } = _donationHelper.memberNames(donation);
-  const subjects = [
-    `Claimed Donation from ${donorName}`,
-    `Donation Claimed by ${receiverName}`
-  ];
-
-  await broadcastEmail(
-    MailTransporter.NOREPLY,
-    accounts,
-    subjects,
-    'donation-claimed',
-    { donation, donorName, receiverName }
-  ).catch(console.error);
-}
-
-export async function unclaimDonation(donationId: number, myAccount: AccountEntity): Promise<Donation> {
-  const donationToUnclaim: Donation = await readDonation(donationId);
-  const receiver: Account = donationToUnclaim.receiverAccount;
+export async function unclaimDonation(unclaimReq: DonationUnclaimRequest, myAccount: AccountEntity): Promise<Donation> {
+  const donationToUnclaim: Donation = await readDonation(unclaimReq.donationId);
   _ensureCanUnclaimDonation(donationToUnclaim, myAccount);
-  donationToUnclaim.donationStatus = 'Unmatched';
-  donationToUnclaim.receiverAccount = null;
 
-  let unclaimedDonation: Donation;
-  let deliverer: Account;
+  let unclaimedDonation: Donation = Object.assign({}, donationToUnclaim);
   await getConnection().transaction(async (manager: EntityManager) => {
-    unclaimedDonation = await manager.getRepository(DonationEntity).save(donationToUnclaim);
-    deliverer = await _cancelDeliveryIfExists(unclaimedDonation, myAccount, manager);
+    unclaimedDonation = await _cancelDeliveryIfExists(unclaimedDonation, myAccount, manager);
+    unclaimedDonation.donationStatus = 'Unmatched';
+    unclaimedDonation.receiverAccount = null;
+    unclaimedDonation = await manager.getRepository(DonationEntity).save(unclaimedDonation);
   });
-  await _sendUnclaimMessages(unclaimedDonation, receiver, deliverer);
+  await sendUnclaimMessages(unclaimedDonation, donationToUnclaim);
 
+  saveAudit('Unclaim Donation', getAuditAccounts(donationToUnclaim), unclaimedDonation, donationToUnclaim, unclaimReq.recaptchaScore);
   return unclaimedDonation;
 }
 
@@ -117,38 +89,9 @@ function _ensureCanUnclaimDonation(donation: Donation, myAccount: Account): void
   }
 }
 
-async function _cancelDeliveryIfExists(unclaimedDonation: Donation, myAccount: AccountEntity, manager: EntityManager): Promise<Account> {
-  let deliverer: Account;
+async function _cancelDeliveryIfExists(donation: Donation, myAccount: AccountEntity, manager: EntityManager): Promise<Donation> {
   // If delivery exists, then cancel any associated delivery (without sending cancellation message).
-  if (unclaimedDonation.delivery) {
-    deliverer = unclaimedDonation.delivery.volunteerAccount;
-    unclaimedDonation = await cancelDelivery(unclaimedDonation, myAccount, manager);
-  }
-  return deliverer;
-}
-
-async function _sendUnclaimMessages(donation: Donation, receiverAccount: Account, delivererAccount: Account): Promise<void> {
-  const accounts: Account[] = [receiverAccount, donation.donorAccount];
-  const donorName: string = _donationHelper.donorName(donation);
-  const receiverName: string = receiverAccount.organization.organizationName;
-  let delivererName = '';
-  const subjects = [
-    `Unclaimed Donation from ${donorName}`,
-    `Donation Unclaimed by ${receiverName}`
-  ];
-
-  // If donation had a delivery lined up, we must also notify the deliverer.
-  if (delivererAccount) {
-    accounts.push(delivererAccount);
-    delivererName = `${delivererAccount.volunteer.firstName} ${delivererAccount.volunteer.lastName}`;
-    subjects.push(`Delivery Cancelled by ${receiverName}`);
-  }
-
-  await broadcastEmail(
-    MailTransporter.NOREPLY,
-    accounts,
-    subjects,
-    'donation-unclaimed',
-    { donation, donorName, receiverName, delivererName, receiverAccount }
-  ).catch(console.error);
+  return (donation.delivery)
+    ? await cancelDelivery(donation, myAccount, manager)
+    : donation;
 }

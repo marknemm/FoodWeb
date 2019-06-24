@@ -1,19 +1,16 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { readAccounts, AccountsQueryResult } from './read-accounts';
-import { MailTransporter, sendEmail, broadcastEmail } from '../helpers/email';
+import { sendDeliveryRequestMessages, sendDeliveryScheduledMessages } from './schedule-delivery-message';
 import { FoodWebError } from '../helpers/food-web-error';
 import { readDonation } from './read-donations';
 import { DonationEntity } from '../entity/donation.entity';
-import { DeliveryEntity } from '../entity/delivery-entity';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
-import { Account } from '../../../shared/src/interfaces/account/account';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { DeliveryScheduleRequest } from '../../../shared/src/interfaces/delivery/delivery-schedule-request';
-import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
+import { saveAudit, getAuditAccounts } from './save-audit';
 
-const _donationHelper = new DonationHelper();
 const _deliveryHelper = new DeliveryHelper();
 
 /**
@@ -25,7 +22,7 @@ export async function messagePotentialDeliverers(donation: Donation): Promise<vo
   const potentialDeliverers: AccountEntity[] = await _findPotentialDeliverers();
   const messagePromises: Promise<void>[] = [];
   potentialDeliverers.forEach((deliverer: AccountEntity) => {
-    const promise: Promise<void> = _sendDeliveryRequestMessages(donation, deliverer);
+    const promise: Promise<void> = sendDeliveryRequestMessages(donation, deliverer);
     messagePromises.push(promise);
   });
   await Promise.all(messagePromises).catch(console.error);
@@ -41,34 +38,18 @@ async function _findPotentialDeliverers(): Promise<AccountEntity[]> {
   return queryResult.accounts;
 }
 
-/**
- * Messages a potential deliverer so that they may be aware of a newly matched donation that needs to be delivered.
- * @param donation The new donation.
- * @param receiver The deliverer account.
- * @return A promise that resolves to void once the email has been sent.
- */
-function _sendDeliveryRequestMessages(donation: Donation, deliverer: AccountEntity): Promise<void> {
-  return sendEmail(
-    MailTransporter.NOREPLY,
-    deliverer,
-    `Delivery Requested from ${donation.donorAccount.organization.organizationName} to ${donation.receiverAccount.organization.organizationName}`,
-    'delivery-request',
-    { donation }
-  );
-}
-
 export async function scheduleDelivery(scheduleRequest: DeliveryScheduleRequest, myAccount: AccountEntity): Promise<Donation> {
-  const donation = <DonationEntity> await readDonation(scheduleRequest.donationId);
-  _ensureCanScheduleDelivery(donation, myAccount);
-  donation.donationStatus = 'Scheduled';
-  donation.delivery = _genDelivery(myAccount, donation, scheduleRequest);
+  const donationToSchedule = <DonationEntity> await readDonation(scheduleRequest.donationId);
+  _ensureCanScheduleDelivery(donationToSchedule, myAccount);
 
-  const scheduledDonation: Donation = await getConnection().transaction(
-    async (manager: EntityManager) => manager.getRepository(DonationEntity).save(donation)
+  let scheduledDonation: DonationEntity = _genScheduledDonation(myAccount, donationToSchedule, scheduleRequest);
+  scheduledDonation = await getConnection().transaction(
+    async (manager: EntityManager) => manager.getRepository(DonationEntity).save(scheduledDonation)
   );
-  delete scheduledDonation.delivery['donation']; // Prevent circular JSON reference error.
-  await _sendDeliveryScheduledMessages(scheduledDonation);
+  delete scheduledDonation.delivery.donation; // Prevent circular JSON reference error.
+  await sendDeliveryScheduledMessages(scheduledDonation);
 
+  _saveScheduleAudit(scheduleRequest, donationToSchedule, scheduledDonation);
   return scheduledDonation;
 }
 
@@ -79,33 +60,25 @@ function _ensureCanScheduleDelivery(donation: Donation, myAccount: AccountEntity
   }
 }
 
-function _genDelivery(myAccount: AccountEntity, donation: DonationEntity, scheduleRequest: DeliveryScheduleRequest): DeliveryEntity {
-  return {
+function _genScheduledDonation(
+  myAccount: AccountEntity,
+  donationToSchedule: DonationEntity,
+  scheduleRequest: DeliveryScheduleRequest
+): DonationEntity {
+  // Make shallow copy to preserve original donation.
+  let scheduledDonation: DonationEntity = Object.assign({}, donationToSchedule);
+  scheduledDonation.donationStatus = 'Scheduled';
+  scheduledDonation.delivery = {
     id: undefined,
     volunteerAccount: myAccount,
     pickupWindowStart: scheduleRequest.pickupWindow.startDateTime,
     pickupWindowEnd: scheduleRequest.pickupWindow.endDateTime,
-    donation
+    donation: donationToSchedule
   };
+  return scheduledDonation;
 }
 
-async function _sendDeliveryScheduledMessages(donation: Donation): Promise<void> {
-  const sendAccounts: Account[] = [donation.donorAccount, donation.receiverAccount, donation.delivery.volunteerAccount];
-  const donorName: string = _donationHelper.donorName(donation);
-  const receiverName: string = _donationHelper.receiverName(donation);
-  const delivererName: string = _donationHelper.delivererName(donation);
-  const sendHeaders = [
-    `Donation Delivery Scheduled for pickup by ${delivererName}`,
-    `Donation Delivery Scheduled for drop-off by ${delivererName}`,
-    `Delivery Successfully Scheduled from ${donorName} to ${receiverName}`
-  ];
-
-  await broadcastEmail(
-    MailTransporter.NOREPLY,
-    sendAccounts,
-    sendHeaders,
-    'delivery-scheduled',
-    { donation, donorName, receiverName, delivererName }
-  ).catch(console.error);
+function _saveScheduleAudit(scheduleRequest: DeliveryScheduleRequest, donationToSchedule: Donation, scheduledDonation: Donation): void {
+  const auditAccounts: AccountEntity[] = getAuditAccounts(scheduledDonation);
+  saveAudit('Schedule Delivery', auditAccounts, scheduledDonation, donationToSchedule, scheduleRequest.recaptchaScore);
 }
-

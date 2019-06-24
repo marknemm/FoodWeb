@@ -56,6 +56,7 @@
           [donation]="originalDonation"
           [myAccount]="sessionService.account"
           [editing]="editing"
+          [valid]="donationForm.valid"
           (action)="onDonationAction($event)"
         ></food-web-donation-detail-actions>
       </mat-card-actions>

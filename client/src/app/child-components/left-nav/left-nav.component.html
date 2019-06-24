@@ -16,7 +16,7 @@
       <a mat-list-item *ngIf="sessionService.isDonor" [routerLink]="['/donate']" (click)="_onNavClick()">
         <span><mat-icon>fastfood</mat-icon> Donate</span>
       </a>
-      <a mat-list-item *ngIf="!sessionService.isVolunteer" [routerLink]="['/donations/my']" (click)="_onNavClick()">
+      <a mat-list-item *ngIf="sessionService.isDonor || sessionService.isReceiver" [routerLink]="['/donations/my']" (click)="_onNavClick()">
         <span><mat-icon>list</mat-icon>My Donations</span>
       </a>
       <a mat-list-item *ngIf="sessionService.isReceiver" [routerLink]="['/donations']"

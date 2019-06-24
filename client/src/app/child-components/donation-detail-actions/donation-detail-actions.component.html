@@ -4,7 +4,7 @@
       confirmTitle="Confirm Delete" confirmMessage="Are you sure you want to permanently delete the donation?">
       Delete
     </button>
-    <food-web-edit-save-button [useButtonText]="true" [editing]="editing"
+    <food-web-edit-save-button [useButtonText]="true" [editing]="editing" [disableSave]="!valid"
       (edit)="action.emit('ToggleEdit')" (save)="action.emit('Save')"></food-web-edit-save-button>
   </ng-container>
   <button mat-raised-button *ngIf="canClaim" type="button" color="primary" (click)="action.emit('Claim')">

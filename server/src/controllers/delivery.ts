@@ -50,14 +50,16 @@ router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res:
 
 router.put('/advance/:id', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const stateChangeRequest: DeliveryStateChangeRequest = req.body;
-  advanceDeliveryState(stateChangeRequest.donationId, req.session.account)
+  stateChangeRequest.deliveryId = parseInt(req.params.id, 10);
+  advanceDeliveryState(stateChangeRequest, req.session.account)
     .then((advancedDonation: Donation) => res.send(advancedDonation))
     .catch(handleError.bind(this, res));
 });
 
 router.put('/undo/:id', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const stateChangeRequest: DeliveryStateChangeRequest = req.body;
-  undoDeliveryState(stateChangeRequest.donationId, req.session.account)
+  stateChangeRequest.deliveryId = parseInt(req.params.id, 10);
+  undoDeliveryState(stateChangeRequest, req.session.account)
     .then((undoneDonation: Donation) => res.send(undoneDonation))
     .catch(handleError.bind(this, res));
 });

@@ -33,7 +33,7 @@ export class DonateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.donateForm = this._donationFormService.buildDonationForm(this.sessionService.account);
+    this.donateForm = this._donationFormService.buildCreateDonationForm(this.sessionService.account);
     this._donationFormService.listenForDonationTypeUpdate(this._destroy$.asObservable());
   }
 

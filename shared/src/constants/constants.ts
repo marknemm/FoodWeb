@@ -12,7 +12,7 @@ export class Constants {
     'Verify Account',
     'Remove Unverified Account',
     'Update Account',
-    'Request Password Reset',
+    'Update Password',
     'Reset Password',
     'Donate',
     'Update Donation',
@@ -20,7 +20,7 @@ export class Constants {
     'Claim Donation',
     'Unclaim Donation',
     'Schedule Delivery',
-    'Pickup Delivery',
-    'Complete Delivery'
+    'Delivery State Advance',
+    'Delivery State Undo'
   ];
 }

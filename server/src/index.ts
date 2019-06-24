@@ -33,6 +33,7 @@ import { Application } from 'express';
 import { initDbConnectionPool } from './helpers/db-connection-pool';
 import { initSSE } from './helpers/server-side-event';
 import { expressSession } from './middlewares/session.middleware';
+import { recaptcha } from './middlewares/recaptcha';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
@@ -40,6 +41,7 @@ app.use(forceHttps);
 app.use(bodyParser.json({ limit: '500KB' })); // Need larger size to support cropped images (maybe change this in future to just use image bounds and media attachment).
 app.use(multer().any());
 app.use(expressSession);
+app.use(recaptcha);
 app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
