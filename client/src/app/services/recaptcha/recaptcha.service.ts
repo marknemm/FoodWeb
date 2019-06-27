@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, EMPTY } from 'rxjs';
 import { flatMap, catchError } from 'rxjs/operators';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { environment } from '../../../environments/environment';
@@ -29,10 +29,13 @@ export class RecaptchaService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const noRecaptcha: boolean = (!environment.recaptchaSiteKey || req.headers.get('no-recaptcha') != null);
     if (!noRecaptcha && req.method !== 'GET') {
-      return this._recaptchaV3Service.execute(req.url).pipe(
+      const actionName = req.url.replace(/-/g, '_');
+      console.log(actionName);
+      return this._recaptchaV3Service.execute(actionName).pipe(
         catchError((err: Error) => {
           console.error(err);
-          return next.handle(req);
+          next.handle(req);
+          return EMPTY;
         }),
         flatMap((recaptchaScore: string) => {
           (!req.body)
