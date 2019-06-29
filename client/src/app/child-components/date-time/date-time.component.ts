@@ -85,7 +85,7 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   private _onValueChange(value: { date: Date, time: string }): void {
     if (value.date && value.time) {
       const dateStr: string = formatDate(value.date, 'M/d/yyyy', 'en-US')
-      this._changeCb(`${dateStr} ${value.time}`);
+      this._changeCb(new Date(`${dateStr} ${value.time}`).toISOString());
     }
   }
 

@@ -77,8 +77,8 @@ export class DonationFormService {
       if (formValueKey !== 'pickupWindow') {
         donation[formValueKey] = formValue[formValueKey];
       } else {
-        donation.pickupWindowStart = formValue.pickupWindow.startDateTime;
-        donation.pickupWindowEnd = formValue.pickupWindow.endDateTime;
+        donation.pickupWindowStart = new Date(formValue.pickupWindow.startDateTime).toISOString();
+        donation.pickupWindowEnd = new Date(formValue.pickupWindow.endDateTime).toISOString();
       }
     });
     return donation;

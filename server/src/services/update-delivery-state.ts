@@ -86,10 +86,10 @@ function _updateDeliveryTiming(donation: DonationEntity): void {
     donation.delivery.pickupTime = null;
   }
   if (donation.donationStatus === 'Picked Up') {
-    donation.delivery.pickupTime = (new Date()).toUTCString();
+    donation.delivery.pickupTime = (new Date()).toISOString();
     donation.delivery.dropOffTime = null;
   }
   if (donation.donationStatus === 'Complete') {
-    donation.delivery.dropOffTime = (new Date()).toUTCString();
+    donation.delivery.dropOffTime = (new Date()).toISOString();
   }
 }
