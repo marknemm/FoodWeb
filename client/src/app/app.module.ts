@@ -72,11 +72,16 @@ import { AddressComponent } from './child-components/address/address.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { DateTimeSelectComponent } from './child-components/date-time-select/date-time-select.component';
 import { DateTimeSelectDialogComponent } from './components/date-time-select-dialog/date-time-select-dialog.component';
+import { FoodSafetyChecklistComponent } from './child-components/food-safety-checklist/food-safety-checklist.component';
+
+import { FormatDatePipe } from './pipes/format-date/format-date.pipe';
+import { FormatTimePipe } from './pipes/format-time/format-time.pipe';
+import { FormatDateTimePipe } from './pipes/format-date-time/format-date-time.pipe';
 
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
-import { FoodSafetyChecklistComponent } from './child-components/food-safety-checklist/food-safety-checklist.component';
+import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
 
 @NgModule({
   declarations: [
@@ -119,6 +124,9 @@ import { FoodSafetyChecklistComponent } from './child-components/food-safety-che
     DateTimeSelectComponent,
     DateTimeSelectDialogComponent,
     FoodSafetyChecklistComponent,
+    FormatDatePipe,
+    FormatTimePipe,
+    FormatDateTimePipe,
   ],
   imports: [
     AppRoutingModule,
@@ -158,7 +166,8 @@ import { FoodSafetyChecklistComponent } from './child-components/food-safety-che
     { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.recaptchaSiteKey },
     AccountHelper,
     DonationHelper,
-    DeliveryHelper
+    DeliveryHelper,
+    JSONDateReviver
   ],
   entryComponents: [
     LoginComponent,

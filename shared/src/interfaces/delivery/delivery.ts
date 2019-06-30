@@ -13,17 +13,17 @@ export interface Delivery {
   /**
    * The begin date-time of the estimated pickup window selected by the deliverer.
    */
-  pickupWindowStart: string;
+  pickupWindowStart: Date;
   /**
    * The end date-time of the estimated pickup window selected by the deliverer.
    */
-  pickupWindowEnd: string;
+  pickupWindowEnd: Date;
   /**
    * The time that the donation was picked-up from the donor.
    */
-  pickupTime?: string;
+  pickupTime?: Date;
   /**
    * The time that the donation was dropped-off at the receiver.
    */
-  dropOffTime?: string;
+  dropOffTime?: Date;
 }

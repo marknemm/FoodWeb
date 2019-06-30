@@ -40,13 +40,13 @@
           <div class="col-md-4 col-sm-6">
             <div class="inline-label">Donated:</div>
             <div>
-              <food-web-date-time [dateTime]="originalDonation.created"></food-web-date-time>
+              <food-web-date-time [dateTime]="originalDonation.createTimestamp"></food-web-date-time>
             </div>
           </div>
           <div *ngIf="myDonation" class="col-md-4 col-sm-6">
             <div class="inline-label">Last Updated:</div>
             <div>
-              <food-web-date-time [dateTime]="originalDonation.lastUpdated"></food-web-date-time>
+              <food-web-date-time [dateTime]="originalDonation.updateTimestamp"></food-web-date-time>
             </div>
           </div>
         </div>

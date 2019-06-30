@@ -33,13 +33,13 @@ export async function updateDonation(updateReq: DonationUpdateRequest, myAccount
   _ensureCanUpdateDonation(donation, myAccount);
 
   _removeNonUpdateFields(donation);
-  const originalDonation: Donation = await readDonation(donation.id);
+  const originalDonation: Donation = await readDonation(donation.id, myAccount);
 
   const updatedDonation: Donation = await getConnection().transaction(async (manager: EntityManager) => {
     const donationRepo: Repository<DonationEntity> = manager.getRepository(DonationEntity);
     await donationRepo.save(donation);
     // Must do separate query b/c save method will only return updated properties in entity (partial entity).
-    return readDonation(donation.id, donationRepo);
+    return readDonation(donation.id, myAccount, donationRepo);
   });
   sendDonationUpdateSuccessEmails(originalDonation, updatedDonation)
 
@@ -63,7 +63,8 @@ function _ensureCanUpdateDonation(donation: Donation, myAccount: Account): void 
 
 function _removeNonUpdateFields(donation: Donation): void {
   // Remove fields that shouldn't be updated by the current update operation for extra security.
-  delete donation.lastUpdated;
+  delete donation.createTimestamp;
+  delete donation.updateTimestamp;
   delete donation.donorAccount;
   delete donation.donationStatus;
   delete donation.receiverAccount;

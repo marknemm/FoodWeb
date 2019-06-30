@@ -6,6 +6,7 @@ import path = require('path');
 import dotenv = require('dotenv');
 import 'reflect-metadata';
 import { Request, Response } from 'express';
+import { JSONDateReviver } from '../../shared/src/helpers/json-date-reviver';
 
 // Set important paths in global.
 const PRODUCTION: boolean = (process.env['PRODUCTION']  === 'true');
@@ -37,6 +38,7 @@ import { recaptcha } from './middlewares/recaptcha';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
+new JSONDateReviver().initJSONDateReviver();
 app.use(forceHttps);
 app.use(bodyParser.json({ limit: '500KB' })); // Need larger size to support cropped images (maybe change this in future to just use image bounds and media attachment).
 app.use(multer().any());

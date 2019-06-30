@@ -38,10 +38,10 @@ export class DonationEntity implements Donation {
   estimatedNumFeed: number;
 
   @Column({ type: 'timestamp with time zone' })
-  pickupWindowStart: string;
+  pickupWindowStart: Date;
 
   @Column({ type: 'timestamp with time zone' })
-  pickupWindowEnd: string;
+  pickupWindowEnd: Date;
 
   @Column({ type: 'enum', enum: _constants.DONATION_STATUSES, default: _constants.DONATION_STATUSES[0] })
   donationStatus: DonationStatus;

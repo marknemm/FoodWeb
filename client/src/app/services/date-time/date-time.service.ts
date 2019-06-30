@@ -19,44 +19,52 @@ export class DateTimeService {
     private _constantsService: ConstantsService
   ) {}
 
-  getCurrentDateStr(): string {
-    return this.dateToDateStr(new Date());
+  toDate(dateOrStr: Date | string): Date {
+    if (typeof dateOrStr === 'string') {
+      const isDateStr: boolean = /[-\/]/.test(dateOrStr);
+      return (isDateStr)
+        ? new Date(dateOrStr)
+        : new Date(`${this.formatCurrentDate()} ${dateOrStr}`);
+    }
+    return dateOrStr;
   }
 
-  getCurrentTimeStr(): string {
-    return this.dateToTimeStr(new Date());
+  formatCurrentDate(): string {
+    return this.formatDate(new Date());
   }
 
-  getCurrentDateTimeStr(): string {
-    return this.dateToDateTimeStr(new Date());
+  formatCurrentTime(): string {
+    return this.formatTime(new Date());
   }
 
-  dateToDateStr(date: Date): string {
+  formatCurrentDateTime(): string {
+    return this.formatDateTime(new Date());
+  }
+
+  formatDate(date: Date | string): string {
     return formatDate(date, 'M/d/yyyy', 'en-US');
   }
 
-  dateToTimeStr(date: Date): string {
+  formatTime(date: Date | string): string {
     return formatDate(date, 'hh:mm aa', 'en-US');
   }
 
-  dateToDateTimeStr(date: Date): string {
-    return `${this.dateToDateStr(date)} ${this.dateToTimeStr(date)}`;
+  formatDateTime(date: Date | string): string {
+    return `${this.formatDate(date)} ${this.formatTime(date)}`;
   }
 
   offsetDateMins(date: Date, minutes: number): Date {
     return new Date(date.getTime() + (minutes * 60000));
   }
 
-  ceil5Mins(dateOrTimeStr: string): string {
+  dateCeil5Mins(dateOrStr: Date | string): Date {
     const msIn5Mins = (1000 * 60 * 5);
-    const isDateStr: boolean = /[-\/]/.test(dateOrTimeStr);
-    const date: Date = (isDateStr)
-      ? new Date(dateOrTimeStr)
-      : new Date(`1/1/2000 ${dateOrTimeStr}`);
-    const ceilDate = new Date(Math.ceil(date.getTime() / msIn5Mins) * msIn5Mins);
-    return (isDateStr)
-      ? this.dateToDateTimeStr(ceilDate)
-      : this.dateToTimeStr(ceilDate);
+    const date: Date = this.toDate(dateOrStr);
+    return new Date(Math.ceil(date.getTime() / msIn5Mins) * msIn5Mins);
+  }
+
+  timeCeil5Mins(timeStr: string): string {
+    return this.formatTime(this.dateCeil5Mins(timeStr));
   }
 
   getCurrentWeekday(): string {
@@ -67,18 +75,18 @@ export class DateTimeService {
 
   genDefaultDateRangeFromAvailability(account: Account): DateTimeRange {
     const dateRange: DateTimeRange = {
-      startDateTime: `${this.getCurrentDateStr()} ${this.ceil5Mins(this.getCurrentTimeStr())}`,
-      endDateTime: '',
+      startDateTime: this.dateCeil5Mins(this.formatCurrentDateTime()),
+      endDateTime: null,
     };
     const timeRange: TimeRange = this.genDefaultTimeRangeFromAvailability(account);
     if (timeRange && timeRange.endTime) {
-      dateRange.endDateTime = `${this.getCurrentDateStr()} ${timeRange.endTime}`;
+      dateRange.endDateTime = new Date(`${this.formatCurrentDate()} ${timeRange.endTime}`);
     }
     return dateRange;
   }
 
   genDefaultTimeRangeFromAvailability(account: Account): TimeRange {
-    const timeRange: TimeRange = { startTime: this.ceil5Mins(this.getCurrentTimeStr()), endTime: '' };
+    const timeRange: TimeRange = { startTime: this.timeCeil5Mins(this.formatCurrentTime()), endTime: '' };
     if (account && account.operationHours) {
       const weekday: string = this.getCurrentWeekday();
       const weekdayOpHours: OperationHours = account.operationHours.find(
@@ -97,23 +105,22 @@ export class DateTimeService {
 
   genDateTimeRangeIncrements(rangeToSplit: DateTimeRange, incrementMinutes: number): DateTimeRange[] {
     const timeRanges: DateTimeRange[] = [];
-    const curDateTimeStr: string = this.getCurrentDateTimeStr();
-    let startDate: Date = new Date(this.ceil5Mins(curDateTimeStr));
-    const endDate: Date = new Date(this.ceil5Mins(rangeToSplit.endDateTime));
+    let startDate: Date = this.dateCeil5Mins(new Date());
+    const endDate: Date = this.dateCeil5Mins(rangeToSplit.endDateTime);
 
     // Ensure we can generate at least one full increment.
     const endDateMinusIncrement: Date = this.offsetDateMins(endDate, -incrementMinutes);
     while (startDate < endDateMinusIncrement) {
-      const startDateTime: string = this.dateToDateTimeStr(startDate);
-      startDate = this.offsetDateMins(startDate, incrementMinutes);
-      const endDateTime: string = this.dateToDateTimeStr(startDate);
+      const startDateTime: Date = startDate;
+      const endDateTime = this.offsetDateMins(startDate, incrementMinutes);
       timeRanges.push({ startDateTime, endDateTime });
+      startDate = endDateTime;
     }
 
     // If we have remaining time left that doesn't produce another full increment, then add it to last increment.
     if (startDate < endDate && timeRanges.length > 0) {
       const lastIdx = timeRanges.length - 1;
-      timeRanges[lastIdx].endDateTime = this.dateToDateTimeStr(endDate);
+      timeRanges[lastIdx].endDateTime = endDate;
     }
 
     return timeRanges;

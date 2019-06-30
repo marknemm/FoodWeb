@@ -44,5 +44,5 @@ export interface Audit<T = any> {
   /**
    * The timestamp of when the audit event occured.
    */
-  timestamp?: string;
+  timestamp?: Date;
 }

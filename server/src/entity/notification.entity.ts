@@ -34,7 +34,7 @@ export class NotificationEntity implements Notification {
   flagged: boolean;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
-  timestamp: string;
+  timestamp: Date;
 
   @ManyToOne((type) => AccountEntity)
   account?: AccountEntity;

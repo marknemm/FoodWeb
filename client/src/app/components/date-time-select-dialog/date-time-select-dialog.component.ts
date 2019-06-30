@@ -7,8 +7,8 @@ export interface DateTimeSelectConfig {
   selectTitle?: string;
   rangeMins?: number;
   rangeWindow?: DateTimeRange;
-  rangeWindowStart?: string;
-  rangeWindowEnd?: string;
+  rangeWindowStart?: Date;
+  rangeWindowEnd?: Date;
 }
 
 @Component({

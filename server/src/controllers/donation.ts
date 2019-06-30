@@ -40,7 +40,7 @@ router.post('/claim', ensureSessionActive, ensureAccountVerified, (req: Request,
 
 router.get('/', (req: Request, res: Response) => {
   const readRequest: DonationReadRequest = req.query;
-  readDonations(readRequest)
+  readDonations(readRequest, req.session.account)
     .then((queryResult: DonationsQueryResult) =>
       res.send(genListResponse(queryResult.donations, queryResult.totalCount, readRequest))
     )
@@ -58,7 +58,7 @@ router.get('/my', ensureSessionActive, (req: Request, res: Response) => {
 
 router.get('/:id', (req: Request, res: Response) => {
   const id: number = parseInt(req.params.id, 10);
-  readDonation(id)
+  readDonation(id, req.session.account)
     .then((donation: Donation) => res.send(donation))
     .catch(handleError.bind(this, res));
 });

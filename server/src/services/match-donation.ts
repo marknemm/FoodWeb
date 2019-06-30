@@ -42,7 +42,7 @@ async function _findPotentialReceivers(): Promise<AccountEntity[]> {
 }
 
 export async function claimDonation(claimReq: DonationClaimRequest, myAccount: AccountEntity): Promise<Donation> {
-  const donationToClaim: Donation = await readDonation(claimReq.donationId);
+  const donationToClaim: Donation = await readDonation(claimReq.donationId, myAccount);
   _ensureCanClaimDonation(donationToClaim, myAccount);
 
   let claimedDonation: Donation = Object.assign({}, donationToClaim);
@@ -66,7 +66,7 @@ function _ensureCanClaimDonation(donation: Donation, myAccount: AccountEntity): 
 }
 
 export async function unclaimDonation(unclaimReq: DonationUnclaimRequest, myAccount: AccountEntity): Promise<Donation> {
-  const donationToUnclaim: Donation = await readDonation(unclaimReq.donationId);
+  const donationToUnclaim: Donation = await readDonation(unclaimReq.donationId, myAccount);
   _ensureCanUnclaimDonation(donationToUnclaim, myAccount);
 
   let unclaimedDonation: Donation = Object.assign({}, donationToUnclaim);

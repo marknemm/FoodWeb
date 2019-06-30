@@ -62,7 +62,7 @@ export class DateTimeRangeComponent implements OnInit, OnDestroy, ControlValueAc
   writeValue(dateTimeRange: DateTimeRange): void {
     (dateTimeRange)
       ? this.formGroup.setValue(dateTimeRange)
-      : this.formGroup.setValue({ startDateTime: '', endDateTime: '' });
+      : this.formGroup.setValue({ startDateTime: null, endDateTime: null });
   }
 
   registerOnChange(changeCb: (dateTimeRange: DateTimeRange) => void): void {

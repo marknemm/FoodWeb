@@ -29,7 +29,7 @@ export async function readAccounts(request: AccountReadRequest, myAccount?: Acco
     order: { username: 'ASC' }
   });
 
-  _processAccounts(accounts, myAccount);
+  _postProcessAccounts(accounts, myAccount);
   return { accounts, totalCount };
 }
 
@@ -40,20 +40,27 @@ function _genFindConditions(request: AccountReadRequest): FindConditions<Account
   return conditions;
 }
 
-function _processAccounts(accounts: AccountEntity[], myAccount: Account): void {
+function _postProcessAccounts(accounts: AccountEntity[], myAccount: Account): void {
   accounts.forEach((account: AccountEntity) => {
+    const isMyAccount: boolean = _accountHelper.isMyAccount(myAccount, account.id);
     formatOperationHoursTimes(account.operationHours);
-    _delVolunteerAddrIfNotMyAccount(account, myAccount);    
+    _delVolunteerAddrIfNotMyAccount(account, isMyAccount);
+    _setVerifiedIfMyAccount(account, isMyAccount, myAccount);
   });
 }
 
-function _delVolunteerAddrIfNotMyAccount(account: AccountEntity, myAccount: Account): void {
-  const isMyAccount: boolean = _accountHelper.isMyAccount(myAccount, account.id);
+function _delVolunteerAddrIfNotMyAccount(account: AccountEntity, isMyAccount: boolean): void {
   if (account.accountType === 'Volunteer' && !isMyAccount) {
     delete account.contactInfo.streetAddress;
     delete account.contactInfo.city;
     delete account.contactInfo.stateProvince;
     delete account.contactInfo.postalCode;
     delete account.contactInfo.location;
+  }
+}
+
+function _setVerifiedIfMyAccount(account: AccountEntity, isMyAccount: boolean, myAccount: Account): void {
+  if (isMyAccount) {
+    account.verified = myAccount.verified;
   }
 }

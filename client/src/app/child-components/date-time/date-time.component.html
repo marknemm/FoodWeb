@@ -30,10 +30,10 @@
 
 <div *ngIf="!editing" class="date-time-display d-inline-block">
   <span class="date" [ngClass]="{ bold: boldDate }" [style.minWidth]="minDateWidth" [style.paddingRight]="datePadding">
-    {{ dateStr }}
+    {{ dateTime | foodWebFormatDate }}
   </span>&nbsp;
   
   <span class="time" [ngClass]="{ bold: boldTime }">
-    {{ timeStr }}
+    {{ dateTime | foodWebFormatTime }}
   </span>
 </div>

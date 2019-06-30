@@ -17,14 +17,14 @@ export class DeliveryEntity implements Delivery {
   volunteerAccount: AccountEntity;
 
   @Column({ type: 'timestamp with time zone' })
-  pickupWindowStart: string;
+  pickupWindowStart: Date;
 
   @Column({ type: 'timestamp with time zone' })
-  pickupWindowEnd: string;
+  pickupWindowEnd: Date;
 
   @Column({ type: 'timestamp with time zone', nullable: true })
-  pickupTime?: string;
+  pickupTime?: Date;
 
   @Column({ type: 'timestamp with time zone', nullable: true })
-  dropOffTime?: string;
+  dropOffTime?: Date;
 }

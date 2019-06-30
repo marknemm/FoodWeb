@@ -15,7 +15,7 @@ const _donationHelper = new DonationHelper();
 const _deliveryHelper = new DeliveryHelper();
 
 export async function advanceDeliveryState(stateChangeReq: DeliveryStateChangeRequest, myAccount: AccountEntity): Promise<Donation> {
-  const donation = <DonationEntity> await readDonation(stateChangeReq.donationId);
+  const donation = <DonationEntity> await readDonation(stateChangeReq.donationId, myAccount);
   _ensureCanAdvanceDeliveryState(donation, myAccount);
   
   let advancedDonation: DonationEntity = _genUpdateDonation(donation, 'next');
@@ -36,7 +36,7 @@ function _ensureCanAdvanceDeliveryState(donation: Donation, myAccount: AccountEn
 }
 
 export async function undoDeliveryState(stateChangeReq: DeliveryStateChangeRequest, myAccount: AccountEntity): Promise<Donation> {
-  const donation = <DonationEntity> await readDonation(stateChangeReq.donationId);
+  const donation = <DonationEntity> await readDonation(stateChangeReq.donationId, myAccount);
   _ensureCanUndoDeliveryState(donation, myAccount);
 
   let undoneDonation: DonationEntity = _genUpdateDonation(donation, 'prev');
@@ -86,10 +86,10 @@ function _updateDeliveryTiming(donation: DonationEntity): void {
     donation.delivery.pickupTime = null;
   }
   if (donation.donationStatus === 'Picked Up') {
-    donation.delivery.pickupTime = (new Date()).toISOString();
+    donation.delivery.pickupTime = new Date();
     donation.delivery.dropOffTime = null;
   }
   if (donation.donationStatus === 'Complete') {
-    donation.delivery.dropOffTime = (new Date()).toISOString();
+    donation.delivery.dropOffTime = new Date();
   }
 }

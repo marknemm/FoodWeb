@@ -42,5 +42,5 @@ export interface Notification {
   /**
    * The timestamp of when the notification was created.
    */
-  timestamp?: string;
+  timestamp?: Date;
 }

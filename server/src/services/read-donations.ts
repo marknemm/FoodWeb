@@ -13,15 +13,15 @@ export interface DonationsQueryResult {
   totalCount: number;
 }
 
-export async function readDonation(id: number, donationRepo?: Repository<DonationEntity>): Promise<Donation> {
+export async function readDonation(id: number, myAccount: AccountEntity, donationRepo?: Repository<DonationEntity>): Promise<Donation> {
   const readRequest: DonationReadRequest = { id, page: 1, limit: 1 };
-  const queryResult: DonationsQueryResult = await readDonations(readRequest, donationRepo);
+  const queryResult: DonationsQueryResult = await readDonations(readRequest, myAccount, donationRepo);
   return queryResult.donations[0];
 }
 
 export function readMyDonations(request: DonationReadRequest, myAccount: AccountEntity): Promise<DonationsQueryResult> {
   _fillMyAccountRequestFilter(request, myAccount);
-  return readDonations(request);
+  return readDonations(request, myAccount);
 }
 
 function _fillMyAccountRequestFilter(request: DonationReadRequest, myAccount: AccountEntity): void {
@@ -46,6 +46,7 @@ function _fillMyAccountRequestFilter(request: DonationReadRequest, myAccount: Ac
 
 export async function readDonations(
   request: DonationReadRequest,
+  myAccount: AccountEntity,
   donationRepo: Repository<DonationEntity> = getRepository(DonationEntity)
 ): Promise<DonationsQueryResult> {
   let queryBuilder: SelectQueryBuilder<DonationEntity> = donationRepo.createQueryBuilder('donation')
@@ -55,7 +56,7 @@ export async function readDonations(
   queryBuilder = _genPagination(queryBuilder, request);
 
   const [donations, totalCount]: [DonationEntity[], number] = await queryBuilder.getManyAndCount();
-  _postProcessDonations(donations);
+  _postProcessDonations(donations, myAccount);
   return { donations, totalCount };
 }
 
@@ -183,10 +184,10 @@ function _genPagination(
     .take(pagingParams.limit);
 }
 
-function _postProcessDonations(donations: DonationEntity[]): void {
+function _postProcessDonations(donations: DonationEntity[], myAccount: AccountEntity): void {
   donations.forEach((donation: DonationEntity) => {
     _formatAccountOperationHours(donation);
-    _processDonationTimestamps(donation);
+    _setVerifyFlagIfMyAccount(donation, myAccount);
   });
 }
 
@@ -195,9 +196,19 @@ function _formatAccountOperationHours(donation: DonationEntity): void {
   if (donation.receiverAccount) {
     formatOperationHoursTimes(donation.receiverAccount.operationHours);
   }
+  if (donation.delivery) {
+    formatOperationHoursTimes(donation.delivery.volunteerAccount.operationHours);
+  }
 }
 
-function _processDonationTimestamps(donation: DonationEntity): void {
-  (<Donation>donation).lastUpdated = donation.updateTimestamp.toJSON();
-  (<Donation>donation).created = donation.createTimestamp.toJSON();
+function _setVerifyFlagIfMyAccount(donation: DonationEntity, myAccount: AccountEntity): void {
+  if (myAccount) {
+    if (donation.donorAccount.id === myAccount.id) {
+      donation.donorAccount.verified = myAccount.verified;
+    } else if (donation.receiverAccount && donation.receiverAccount.id === myAccount.id) {
+      donation.receiverAccount.verified = myAccount.verified;
+    } else if (donation.delivery && donation.delivery.volunteerAccount.id === myAccount.id) {
+      donation.delivery.volunteerAccount.verified = myAccount.verified;
+    }
+  }
 }

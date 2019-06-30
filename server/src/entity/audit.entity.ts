@@ -18,7 +18,7 @@ export class AuditEntity<T = any> implements Audit {
   data: AuditData<T>;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
-  timestamp: string;
+  timestamp: Date;
 
   @Column({ type: 'float', nullable: true })
   recaptchaScore?: number;

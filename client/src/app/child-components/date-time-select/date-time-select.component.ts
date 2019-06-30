@@ -15,8 +15,8 @@ import { DateTimeRange, DateTimeService } from '../../services/date-time/date-ti
 export class DateTimeSelectComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Input() rangeWindow: DateTimeRange;
-  @Input() rangeWindowStart: string;
-  @Input() rangeWindowEnd: string;
+  @Input() rangeWindowStart: Date;
+  @Input() rangeWindowEnd: Date;
   @Input() rangeMins: number;
   @Input() ariaLabel: string;
 

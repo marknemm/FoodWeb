@@ -65,9 +65,13 @@ export class DonationFormService {
 
   resetDonationForm(): void {
     const donationWindow: DateTimeRange = this.donationForm.get('pickupWindow').value;
+    const donorFirstName: string = this.donationForm.get('donorFirstName').value;
+    const donorLastName: string = this.donationForm.get('donorLastName').value;
     this.donationForm.reset();
     this.donationForm.get('donationType').setValue('Food');
     this.donationForm.get('pickupWindow').setValue(donationWindow);
+    this.donationForm.get('donorFirstName').setValue(donorFirstName);
+    this.donationForm.get('donorLastName').setValue(donorLastName);
   }
 
   getDonationFromForm(): Donation {
@@ -77,8 +81,8 @@ export class DonationFormService {
       if (formValueKey !== 'pickupWindow') {
         donation[formValueKey] = formValue[formValueKey];
       } else {
-        donation.pickupWindowStart = new Date(formValue.pickupWindow.startDateTime).toISOString();
-        donation.pickupWindowEnd = new Date(formValue.pickupWindow.endDateTime).toISOString();
+        donation.pickupWindowStart = formValue.pickupWindow.startDateTime;
+        donation.pickupWindowEnd = formValue.pickupWindow.endDateTime;
       }
     });
     return donation;

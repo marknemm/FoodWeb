@@ -102,7 +102,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
 
   deleteDonation(): void {
     this._donationService.deleteDonation(this._originalDonation).subscribe(() =>
-      this._router.navigate(['/donations'])
+      this._router.navigate(['/donations/my'])
     );
   }
 

@@ -30,7 +30,6 @@ export class RecaptchaService implements HttpInterceptor {
     const noRecaptcha: boolean = (!environment.recaptchaSiteKey || req.headers.get('no-recaptcha') != null);
     if (!noRecaptcha && req.method !== 'GET') {
       const actionName = req.url.replace(/-/g, '_');
-      console.log(actionName);
       return this._recaptchaV3Service.execute(actionName).pipe(
         catchError((err: Error) => {
           console.error(err);

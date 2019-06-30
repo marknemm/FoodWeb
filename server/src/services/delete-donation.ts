@@ -12,7 +12,7 @@ import { DonationDeleteRequest } from '../../../shared/src/interfaces/donation/d
 const _donationHelper = new DonationHelper();
 
 export async function deleteDonation(deleteReq: DonationDeleteRequest, myAccount: AccountEntity): Promise<void> {
-  const donation = <DonationEntity> await readDonation(deleteReq.donationId);
+  const donation = <DonationEntity> await readDonation(deleteReq.donationId, myAccount);
   _ensureCanDeleteDonation(donation, myAccount);
 
   await getConnection().transaction(async (manager: EntityManager) => {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, forwardRef, OnDestroy, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, forwardRef, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup, FormBuilder, NG_VALIDATORS, Validator, ValidationErrors, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
@@ -29,29 +29,19 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() minDateWidth: string;
   @Input() datePadding = '4px';
-  @Input() dateTime: string | Date;
+  @Input() dateTime: Date;
   @Input() boldDate = false;
   @Input() boldTime = false;
 
   formGroup: FormGroup;
 
-  private _dateStr = '';
-  private _timeStr = '';
-  private _changeCb: (dateStr: string) => void = () => {};
+  private _changeCb: (date: Date) => void = () => {};
   private _destroy$ = new Subject();
 
   constructor(
     private _formBuilder: FormBuilder,
     private _dateTimeService: DateTimeService
   ) {}
-
-  get dateStr(): string {
-    return this._dateStr;
-  }
-
-  get timeStr(): string {
-    return this._timeStr;
-  }
 
   ngOnInit() {
     this.formGroup = this._formBuilder.group({ date: null, time: '' });
@@ -85,42 +75,31 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   private _onValueChange(value: { date: Date, time: string }): void {
     if (value.date && value.time) {
       const dateStr: string = formatDate(value.date, 'M/d/yyyy', 'en-US')
-      this._changeCb(new Date(`${dateStr} ${value.time}`).toISOString());
+      this._changeCb(new Date(`${dateStr} ${value.time}`));
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.dateTime) {
-      setTimeout(() => this._handleDateTimeUpdt());
+      setTimeout(() => this.writeValue(this.dateTime));
     }
-  }
-
-  private _handleDateTimeUpdt(): void {
-    const dateTimeStr: string = (this.dateTime == null || typeof this.dateTime === 'string')
-      ? <string>this.dateTime
-      : this._dateTimeService.dateToDateTimeStr(this.dateTime);
-    this.writeValue(dateTimeStr);
   }
 
   ngOnDestroy() {
     this._destroy$.next();
   }
 
-  writeValue(dateTimeStr: string): void {
-    if (dateTimeStr) {
-      const date: Date = new Date(dateTimeStr);
-      const time: string = this._dateTimeService.dateToTimeStr(date);
+  writeValue(date: Date): void {
+    if (date) {
+      const time: string = this._dateTimeService.formatTime(date);
       this.defaultTime = time;
       this.formGroup.setValue({ date, time });
-      this._dateStr = this._dateTimeService.dateToDateStr(date);
-      this._timeStr = time;
     } else {
       this.formGroup.setValue({ date: null, time: '' });
-      this._dateStr = this._timeStr = '';
     }
   }
 
-  registerOnChange(changeCb: (dateStr: string) => void): void {
+  registerOnChange(changeCb: (date: Date) => void): void {
     this._changeCb = changeCb;
   }
 
@@ -129,5 +108,4 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   }
 
   registerOnTouched(_): void {}
-
 }

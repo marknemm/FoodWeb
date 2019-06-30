@@ -39,7 +39,7 @@ async function _findPotentialDeliverers(): Promise<AccountEntity[]> {
 }
 
 export async function scheduleDelivery(scheduleRequest: DeliveryScheduleRequest, myAccount: AccountEntity): Promise<Donation> {
-  const donationToSchedule = <DonationEntity> await readDonation(scheduleRequest.donationId);
+  const donationToSchedule = <DonationEntity> await readDonation(scheduleRequest.donationId, myAccount);
   _ensureCanScheduleDelivery(donationToSchedule, myAccount);
 
   let scheduledDonation: DonationEntity = _genScheduledDonation(myAccount, donationToSchedule, scheduleRequest);
