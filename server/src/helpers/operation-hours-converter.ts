@@ -11,17 +11,20 @@ const _constants = new Constants();
  * @return The sorted (copy) of the operation hours array.
  */
 export function sortOperationHours(operationHoursArr: OperationHours[]): OperationHours[] {
-  return operationHoursArr.sort((lhs: OperationHours, rhs: OperationHours) => {
-    const rhsWeekdayIdx: number = _constants.WEEKDAYS.indexOf(rhs.weekday);
-    const lhsWeekdayIdx: number = _constants.WEEKDAYS.indexOf(lhs.weekday);
-    const dayMsDiff: number = (lhsWeekdayIdx - rhsWeekdayIdx) * 24 * 60 * 60 * 1000;
+  if (operationHoursArr) {
+    operationHoursArr = operationHoursArr.sort((lhs: OperationHours, rhs: OperationHours) => {
+      const rhsWeekdayIdx: number = _constants.WEEKDAYS.indexOf(rhs.weekday);
+      const lhsWeekdayIdx: number = _constants.WEEKDAYS.indexOf(lhs.weekday);
+      const dayMsDiff: number = (lhsWeekdayIdx - rhsWeekdayIdx) * 24 * 60 * 60 * 1000;
 
-    const rhsTimeMs: number = new Date(`1/1/2000 ${rhs.startTime}`).getTime();
-    const lhsTimeMs: number = new Date(`1/1/2000 ${lhs.startTime}`).getTime();
-    const timeMsDiff: number = (lhsTimeMs - rhsTimeMs);
+      const rhsTimeMs: number = new Date(`1/1/2000 ${rhs.startTime}`).getTime();
+      const lhsTimeMs: number = new Date(`1/1/2000 ${lhs.startTime}`).getTime();
+      const timeMsDiff: number = (lhsTimeMs - rhsTimeMs);
 
-    return (dayMsDiff + timeMsDiff);
-  });
+      return (dayMsDiff + timeMsDiff);
+    });
+  }
+  return operationHoursArr;
 }
 
 /**
@@ -30,10 +33,12 @@ export function sortOperationHours(operationHoursArr: OperationHours[]): Operati
  * @param operationHours Operation hours container that will have its members formatted.
  */
 export function formatOperationHoursTimes(operationHoursArr: OperationHoursEntity[]): void {
-  operationHoursArr.forEach((operationHours: OperationHoursEntity) => {
-    operationHours.startTime = _formatOperationHourTime(operationHours.startTime);
-    operationHours.endTime = _formatOperationHourTime(operationHours.endTime);
-  });
+  if (operationHoursArr) {
+    operationHoursArr.forEach((operationHours: OperationHoursEntity) => {
+      operationHours.startTime = _formatOperationHourTime(operationHours.startTime);
+      operationHours.endTime = _formatOperationHourTime(operationHours.endTime);
+    });
+  }
 }
 
 function _formatOperationHourTime(time: string): string {
