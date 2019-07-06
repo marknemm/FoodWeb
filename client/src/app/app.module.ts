@@ -3,30 +3,26 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import {
-  MatToolbarModule,
-  MatIconModule,
-  MatButtonModule,
-  MatInputModule,
-  MatSelectModule,
-  MatCardModule,
-  MatSidenavModule,
-  MatCheckboxModule,
-  MatRippleModule,
-  MatDialogModule,
-  MatSnackBarModule,
-  MAT_SNACK_BAR_DEFAULT_OPTIONS,
-  MatRadioModule,
-  MatTableModule,
-  MatProgressSpinnerModule,
-  MatProgressBarModule,
-  MatPaginatorModule,
-  MatTooltipModule,
-  MatDividerModule,
-  MatDatepickerModule,
-  MatNativeDateModule,
-  MatListModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRippleModule, MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 
@@ -79,6 +75,7 @@ import { FormatTimePipe } from './pipes/format-time/format-time.pipe';
 import { FormatDateTimePipe } from './pipes/format-date-time/format-date-time.pipe';
 
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
+import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
 import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
@@ -156,7 +153,7 @@ import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
     MatDatepickerModule,
     MatListModule,
     MatNativeDateModule,
-    NgxMaterialTimepickerModule.forRoot(),
+    NgxMaterialTimepickerModule,
     RecaptchaV3Module
   ],
   providers: [
@@ -165,6 +162,7 @@ import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
     { provide: HTTP_INTERCEPTORS, useClass: RecaptchaService, multi: true },
     { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.recaptchaSiteKey },
     AccountHelper,
+    OperationHoursHelper,
     DonationHelper,
     DeliveryHelper,
     JSONDateReviver

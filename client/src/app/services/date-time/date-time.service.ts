@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { ConstantsService } from '../constants/constants.service';
 import { Account, OperationHours } from '../../../../../shared/src/interfaces/account/account';
 import { TimeRange, DateTimeRange } from '../../../../../shared/src/interfaces/misc/time';
@@ -46,6 +46,7 @@ export class DateTimeService {
   }
 
   formatTime(date: Date | string): string {
+    date = this.toDate(date);
     return formatDate(date, 'hh:mm aa', 'en-US');
   }
 

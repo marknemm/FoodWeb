@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, forwardRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ControlValueAccessor, Validator, ValidationErrors, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DateTimeRange, DateTimeService } from '../../services/date-time/date-time.service';

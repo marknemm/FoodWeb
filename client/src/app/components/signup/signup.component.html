@@ -1,12 +1,12 @@
 <form [formGroup]="accountForm" *ngIf="!sessionService.loggedIn" (submit)="signup()">
   <div class="align-center">
-    <div *ngIf="!accountForm.get('accountType').value" class="page-title block-label account-type-header">
+    <div *ngIf="!accountType" class="page-title block-label account-type-header">
       Select Your Account Type
     </div>
-    <food-web-account-type [editing]="!accountForm.get('accountType').value" formControlName="accountType" class="account-type"></food-web-account-type>
+    <food-web-account-type [editing]="!accountType" formControlName="accountType" class="account-type"></food-web-account-type>
   </div>
 
-  <div *ngIf="accountForm.get('accountType').value">
+  <div *ngIf="accountType">
     <div class="row">
       <div class="col-xl-6">
         <mat-card>
@@ -23,31 +23,37 @@
           </mat-card-content>
         </mat-card>
 
-        <mat-card *ngIf="accountForm.get('accountType').value !== 'Volunteer'">
+        <mat-card *ngIf="accountType !== 'Volunteer'">
           <mat-card-title class="block-label">Organization</mat-card-title>
           <mat-card-content>
-            <food-web-organization [accountType]="accountForm.get('accountType').value" [editing]="true" formGroupName="organization"></food-web-organization>
+            <food-web-organization [accountType]="accountType" [editing]="true" formGroupName="organization"></food-web-organization>
           </mat-card-content>
         </mat-card>
 
-        <mat-card *ngIf="accountForm.get('accountType').value === 'Volunteer'">
+        <mat-card *ngIf="accountType === 'Volunteer'">
           <mat-card-title>Volunteer Name</mat-card-title>
           <mat-card-content>
             <food-web-volunteer [editing]="true" formGroupName="volunteer"></food-web-volunteer>
           </mat-card-content>
         </mat-card>
-      </div>
-      <div class="col-xl-6">
+
         <mat-card>
           <mat-card-title class="block-label">Contact Info</mat-card-title>
           <mat-card-content>
             <food-web-contact-info [editing]="true" formGroupName="contactInfo"></food-web-contact-info>
           </mat-card-content>
         </mat-card>
-
+      </div>
+      <div class="col-xl-6">
         <mat-card>
-          <mat-card-title class="block-label">Hours of Operation</mat-card-title>
-          <food-web-operation-hours [editing]="true" formArrayName="operationHours"></food-web-operation-hours>
+          <mat-card-title class="block-label" *ngIf="accountType !== 'Volunteer'">Hours of Operation</mat-card-title>
+          <mat-card-title class="block-label" *ngIf="accountType === 'Volunteer'">Hours of Availability</mat-card-title>
+          <ng-container [ngSwitch]="accountType">
+            <mat-card-subtitle *ngSwitchCase="'Donor'">Fill in any times you are regularly available for donation pickup</mat-card-subtitle>
+            <mat-card-subtitle *ngSwitchCase="'Receiver'">Fill in any times you are regularly available for donation drop-off</mat-card-subtitle>
+            <mat-card-subtitle *ngSwitchCase="'Volunteer'">Fill in any times you would like to regularly receive delivery requests</mat-card-subtitle>
+          </ng-container>
+          <food-web-operation-hours [editing]="true" [fillMissingWeekdays]="true" formControlName="operationHours"></food-web-operation-hours>
         </mat-card>
       </div>
     </div>

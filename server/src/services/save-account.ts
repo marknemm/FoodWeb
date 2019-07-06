@@ -2,16 +2,17 @@ import { getConnection, EntityManager, Repository } from 'typeorm';
 import { createUnverifiedAccount } from './account-verification';
 import { savePassword } from './save-password';
 import { saveAudit } from './save-audit';
-import { formatOperationHoursTimes, OperationHoursEntity, sortOperationHours } from '../helpers/operation-hours-converter';
 import { FoodWebError } from '../helpers/food-web-error';
 import { geocode, geoTimezone } from '../helpers/geocoder';
 import { AccountEntity } from '../entity/account.entity';
+import { OperationHoursEntity } from '../entity/operation-hours.entity';
 import { AccountUpdateRequest } from '../interfaces/account/account-update-request';
-import { OperationHours } from '../../../shared/src/interfaces/account/account';
 import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
+import { OperationHoursHelper, OperationHours } from '../../../shared/src/helpers/operation-hours-helper';
 import { AccountCreateRequest } from '../../../shared/src/interfaces/account/account-create-request';
 
 const _accountHelper = new AccountHelper();
+const _opHoursHelper = new OperationHoursHelper();
 
 export async function createAccount(request: AccountCreateRequest): Promise<AccountEntity> {
   let createdAccount: AccountEntity;
@@ -21,7 +22,7 @@ export async function createAccount(request: AccountCreateRequest): Promise<Acco
     await createUnverifiedAccount(createdAccount, manager);
   });
 
-  formatOperationHoursTimes(createdAccount.operationHours);
+  _opHoursHelper.formatOperationHoursTimes(createdAccount.operationHours);
   createdAccount.verified = false;
   saveAudit('Signup', createdAccount, createdAccount, undefined, request.recaptchaScore);
   return createdAccount;
@@ -37,7 +38,7 @@ export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: 
     updatedAccount = await _saveAccount(manager, updateReq.account, myAccount);
   });
 
-  formatOperationHoursTimes(updatedAccount.operationHours);
+  _opHoursHelper.formatOperationHoursTimes(updatedAccount.operationHours);
   saveAudit('Update Account', updatedAccount, updatedAccount, myAccount, updateReq.recaptchaScore);
   return updatedAccount;
 }
@@ -90,7 +91,7 @@ async function _setGeocoordinatesIfNewAddress(account: Account, myAccount: Accou
 }
 
 async function _insertOperationHours(repo: Repository<OperationHoursEntity>, accountId: number, operationHoursArr: OperationHours[]): Promise<void> {
-  operationHoursArr = sortOperationHours(operationHoursArr);
+  operationHoursArr = _opHoursHelper.sortOperationHours(operationHoursArr);
   if (operationHoursArr && operationHoursArr.length !== 0) {
     // Make copy of array with shallow copy of members, and assign account field for insertion.
     const operationHoursArrCopy = (<OperationHoursEntity[]>operationHoursArr).map(

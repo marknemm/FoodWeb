@@ -1,7 +1,7 @@
 import { getRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
-import { formatOperationHoursTimes } from '../helpers/operation-hours-converter';
+import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
 import { DonationReadRequest, DonationReadFilters } from '../../../shared/src/interfaces/donation/donation-read-request';
 import { PagingParams } from '../../../shared/src/interfaces/paging-params';
@@ -12,6 +12,8 @@ export interface DonationsQueryResult {
   donations: Donation[];
   totalCount: number;
 }
+
+const _opHoursHelper = new OperationHoursHelper();
 
 export async function readDonation(id: number, myAccount: AccountEntity, donationRepo?: Repository<DonationEntity>): Promise<Donation> {
   const readRequest: DonationReadRequest = { id, page: 1, limit: 1 };
@@ -192,12 +194,12 @@ function _postProcessDonations(donations: DonationEntity[], myAccount: AccountEn
 }
 
 function _formatAccountOperationHours(donation: DonationEntity): void {
-  formatOperationHoursTimes(donation.donorAccount.operationHours);
+  _opHoursHelper.formatOperationHoursTimes(donation.donorAccount.operationHours);
   if (donation.receiverAccount) {
-    formatOperationHoursTimes(donation.receiverAccount.operationHours);
+    _opHoursHelper.formatOperationHoursTimes(donation.receiverAccount.operationHours);
   }
   if (donation.delivery) {
-    formatOperationHoursTimes(donation.delivery.volunteerAccount.operationHours);
+    _opHoursHelper.formatOperationHoursTimes(donation.delivery.volunteerAccount.operationHours);
   }
 }
 

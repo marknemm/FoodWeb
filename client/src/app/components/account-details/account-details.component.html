@@ -63,9 +63,15 @@
       <mat-card>
         <food-web-edit-save-button *ngIf="isMyAccount" [editing]="sectionEditService.editing('operationHours')" (edit)="onEdit('operationHours')"
           (save)="onSave('operationHours')" controlName="operationHours"></food-web-edit-save-button>
-        <mat-card-title class="block-label">Hours of Operation</mat-card-title>
+        <mat-card-title class="block-label" *ngIf="originalAccount.accountType !== 'Volunteer'">Hours of Operation</mat-card-title>
+        <mat-card-title class="block-label" *ngIf="originalAccount.accountType === 'Volunteer'">Hours of Availability</mat-card-title>
+        <ng-container [ngSwitch]="originalAccount.accountType" *ngIf="sectionEditService.editing('operationHours')">
+          <mat-card-subtitle *ngSwitchCase="'Donor'">Fill in any times you are regularly available for donation pickup</mat-card-subtitle>
+          <mat-card-subtitle *ngSwitchCase="'Receiver'">Fill in any times you are regularly available for donation drop-off</mat-card-subtitle>
+          <mat-card-subtitle *ngSwitchCase="'Volunteer'">Fill in any times you would like to regularly receive delivery requests</mat-card-subtitle>
+        </ng-container>
         <mat-card-content>
-          <food-web-operation-hours formArrayName="operationHours" [editing]="sectionEditService.editing('operationHours')"></food-web-operation-hours>
+          <food-web-operation-hours formControlName="operationHours" [editing]="sectionEditService.editing('operationHours')"></food-web-operation-hours>
         </mat-card-content>
       </mat-card>
 

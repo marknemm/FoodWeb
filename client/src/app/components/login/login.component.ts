@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef, MatDialog } from '@angular/material';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { SessionService } from '../../services/session/session.service';
 import { PasswordResetService } from '../../services/password-reset/password-reset.service';

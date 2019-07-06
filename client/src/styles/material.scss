@@ -135,6 +135,14 @@
   }
 }
 
+.mat-select {
+  &.accent {
+    .mat-select-value {
+      color: $accent;
+    }
+  }
+}
+
 button {
   outline: none !important;
 }
@@ -255,9 +263,18 @@ button {
     background-color: $primary !important;
   }
 
-  .timepicker-button {
-    color: $primary !important;
+  .timepicker__actions {
+    div {
+      ngx-material-timepicker-button button.timepicker-button {
+        color: $primary;
+      }
+
+      &:first-child ngx-material-timepicker-button button.timepicker-button {
+        color: $warn;
+      }
+    }
   }
+
 }
 
 .mat-input-element.mat-autosize {

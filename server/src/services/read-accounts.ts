@@ -1,6 +1,6 @@
 import { getRepository, FindConditions } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
-import { formatOperationHoursTimes } from '../helpers/operation-hours-converter';
+import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
 import { Account } from '../../../shared/src/interfaces/account/account';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
@@ -11,6 +11,7 @@ export interface AccountsQueryResult {
 }
 
 const _accountHelper = new AccountHelper();
+const _opHoursHelper = new OperationHoursHelper();
 
 export async function readAccount(idOrUsername: number | string, myAccount?: Account): Promise<AccountEntity> {
   let readRequest: AccountReadRequest = { page: 1, limit: 1 };
@@ -43,7 +44,7 @@ function _genFindConditions(request: AccountReadRequest): FindConditions<Account
 function _postProcessAccounts(accounts: AccountEntity[], myAccount: Account): void {
   accounts.forEach((account: AccountEntity) => {
     const isMyAccount: boolean = _accountHelper.isMyAccount(myAccount, account.id);
-    formatOperationHoursTimes(account.operationHours);
+    _opHoursHelper.formatOperationHoursTimes(account.operationHours);
     _delVolunteerAddrIfNotMyAccount(account, isMyAccount);
     _setVerifiedIfMyAccount(account, isMyAccount, myAccount);
   });

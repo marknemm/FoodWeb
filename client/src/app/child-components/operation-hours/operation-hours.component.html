@@ -7,7 +7,7 @@
         </button>
         <div class="weekday-field">
           <mat-form-field class="fill no-pad" floatLabel="never">
-            <mat-select placeholder="Weekday" formControlName="weekday">
+            <mat-select placeholder="Weekday" class="accent" formControlName="weekday">
               <mat-option *ngFor="let weekday of constantsService.WEEKDAYS; let i = index" [value]="weekday">{{ weekday }}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -17,24 +17,27 @@
             <mat-form-field class="fill" floatLabel="never">
               <input matInput placeholder="Start Time" [ngxTimepicker]="startTimePicker" autocomplete="off"
                 formControlName="startTime" [errorStateMatcher]="timeFieldErrStateMatcher">
-              <ngx-material-timepicker #startTimePicker [minutesGap]="5" [defaultTime]="'9:00 AM'"></ngx-material-timepicker>
+              <ngx-material-timepicker #startTimePicker [minutesGap]="5" [defaultTime]="'9:00 AM'" [preventOverlayClick]="true"></ngx-material-timepicker>
             </mat-form-field>
           </div>
           <div class="time-field">
             <mat-form-field class="fill" floatLabel="never">
               <input matInput placeholder="End Time" [ngxTimepicker]="endTimePicker" autocomplete="off"
                 formControlName="endTime" [errorStateMatcher]="timeFieldErrStateMatcher">
-              <ngx-material-timepicker #endTimePicker [minutesGap]="5" [defaultTime]="'5:00 PM'"></ngx-material-timepicker>
+              <ngx-material-timepicker #endTimePicker [minutesGap]="5" [defaultTime]="'5:00 PM'" [preventOverlayClick]="true"></ngx-material-timepicker>
             </mat-form-field>
           </div>
         </div>
-        <mat-error *ngIf="operationHoursForm.hasError('operationHoursOrder')" class="operation-hours-order-error">
-          {{ operationHoursForm.getError('operationHoursOrder') }}
+        <mat-error *ngIf="operationHoursForm.hasError('timeRangeOrder')" class="operation-hours-error">
+          {{ operationHoursForm.getError('timeRangeOrder') }}
+        </mat-error>
+        <mat-error *ngIf="operationHoursForm.hasError('allOrNothing')" class="operation-hours-error">
+          {{ operationHoursForm.getError('allOrNothing') }}
         </mat-error>
       </div>
     </div>
-    <div>
-      <button mat-button type="button" color="primary" class="no-pad" [disabled]="formArray.invalid" (click)="addOperationHours()">
+    <div class="add-button-container">
+      <button mat-button type="button" color="primary" class="no-pad" (click)="addOperationHours()" [disabled]="formArray.invalid">
         <mat-icon>add</mat-icon>
         <span>Add</span>
       </button>
@@ -43,13 +46,13 @@
 
   <ng-container *ngIf="!editing">
     <table class="operation-hours-display">
-      <tr *ngFor="let operationHoursForm of formArray.controls">
+      <tr *ngFor="let operationHours of operationHoursArr">
         <td>
-          <div class="inline-label">{{ operationHoursForm.get('weekday').value }}:</div>
+          <div class="inline-label">{{ operationHours.weekday }}:</div>
         </td>
-        <td>{{ operationHoursForm.get('startTime').value }}</td>
-        <td>-</td>
-        <td>{{ operationHoursForm.get('endTime').value }}</td>
+        <td>{{ operationHours.startTime | foodWebFormatTime }}</td>
+        <td>&nbsp;-&nbsp;</td>
+        <td>{{ operationHours.endTime | foodWebFormatTime }}</td>
       </tr>
     </table>
   </ng-container>

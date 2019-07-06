@@ -4,15 +4,9 @@
 
   .operation-hours-form-container {
     width: 100%;
-
-    &:not(:first-child) {
-      border-top: 1px solid #EEE;
-      padding-top: 12px;
-    }
-
-    &:not(:last-child) {
-      padding-bottom: 12px;
-    }
+    border-top: 1px solid #EEE;
+    padding-top: 12px;
+    padding-bottom: 12px;
 
     .operation-hours-form {
       position: relative;
@@ -45,11 +39,16 @@
         }
       }
     
-      .operation-hours-order-error {
+      .operation-hours-error {
         font-size: 12px;
         margin-top: -18px;
       }
     }
+  }
+
+  .add-button-container {
+    border-top: 1px solid #EEE;
+    padding-top: 10px;
   }
 
   .operation-hours-display {

@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SessionService } from '../../services/session/session.service';
 import { AccountService, Account, PasswordUpdate } from '../../services/account/account.service';
 import { SectionEditService } from '../../services/section-edit/section-edit.service';
-import { FlexFormArray } from '../../etc/flex-form-array';
 import { PasswordFormMode } from '../../child-components/password/password.component';
 import { DonationReadFilters } from '../../../../../shared/src/interfaces/donation/donation-read-filters';
 import { AccountHelper } from '../../../../../shared/src/helpers/account-helper';
@@ -70,7 +69,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
       organization: new FormGroup({}),
       volunteer: new FormGroup({}),
       contactInfo: new FormGroup({}),
-      operationHours: new FlexFormArray([]),
+      operationHours: new FormControl([]),
       password: new FormGroup({})
     });
   }

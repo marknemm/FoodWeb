@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SessionService } from '../../services/session/session.service';
 import { AccountService, Account } from '../../services/account/account.service';
-import { FlexFormArray } from '../../etc/flex-form-array';
 import { AccountType } from '../../../../../shared/src/interfaces/account/account';
 
 @Component({
@@ -28,6 +27,10 @@ export class SignupComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _activatedRoute: ActivatedRoute
   ) {}
+
+  get accountType(): AccountType {
+    return this.accountForm.get('accountType').value;
+  }
 
   ngOnInit() {
     this._initForm();
@@ -53,7 +56,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       organization: new FormGroup({}),
       volunteer: new FormGroup({}),
       contactInfo: new FormGroup({}),
-      operationHours: new FlexFormArray([])
+      operationHours: new FormControl([])
     });
     this.passwordForm = new FormGroup({});
     this.signupForm = this._formBuilder.group({

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { ConstantsService } from '../../services/constants/constants.service';
 

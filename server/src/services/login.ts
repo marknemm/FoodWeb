@@ -1,10 +1,12 @@
 import { getRepository } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
+import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { checkPasswordMatch } from '../helpers/password-match';
 import { FoodWebError } from '../helpers/food-web-error';
-import { formatOperationHoursTimes } from '../helpers/operation-hours-converter';
 import { Account } from '../../../shared/src/interfaces/account/account';
-import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
+import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
+
+const _opHoursHelper = new OperationHoursHelper();
 
 /**
  * Performs the login for a given user.
@@ -39,6 +41,6 @@ async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> 
   }
 
   account.verified = (await getRepository(UnverifiedAccountEntity).count({ account: { id: account.id } })) === 0;
-  formatOperationHoursTimes(account.operationHours);
+  _opHoursHelper.formatOperationHoursTimes(account.operationHours);
   return account;
 }
