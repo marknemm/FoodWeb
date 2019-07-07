@@ -3,3 +3,9 @@
     <mat-checkbox formControlName="check{{i}}">{{ checklistEntry }}</mat-checkbox>
   </div>
 </div>
+
+<hr>
+
+<mat-checkbox [checked]="safetyChecklistForm.valid" (change)="toggleSelectAll($event.checked)">
+  <strong>All food safety requirements are met</strong>
+</mat-checkbox>

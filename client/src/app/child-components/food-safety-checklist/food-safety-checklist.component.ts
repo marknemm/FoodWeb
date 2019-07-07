@@ -52,5 +52,11 @@ export class FoodSafetyChecklistComponent implements OnInit, OnDestroy, ControlV
     ).subscribe(() => cbFunction(this.safetyChecklistForm.valid));
   }
 
+  toggleSelectAll(selectAll: boolean): void {
+    Object.keys(this.safetyChecklistForm.controls).forEach((controlName: string) =>
+      this.safetyChecklistForm.get(controlName).setValue(selectAll)
+    );
+  }
+
   registerOnTouched(_: any): void {}
 }

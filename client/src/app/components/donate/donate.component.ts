@@ -4,7 +4,6 @@ import { Subject } from 'rxjs';
 import { SessionService } from '../../services/session/session.service';
 import { DonationService, Donation } from '../../services/donation/donation.service';
 import { DonationFormService } from '../../services/donation-form/donation-form.service';
-import { DateTimeRange } from 'src/app/services/date-time/date-time.service';
 
 @Component({
   selector: 'food-web-donate',

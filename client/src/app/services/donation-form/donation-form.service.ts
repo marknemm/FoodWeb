@@ -72,6 +72,7 @@ export class DonationFormService {
     this.donationForm.get('pickupWindow').setValue(donationWindow);
     this.donationForm.get('donorFirstName').setValue(donorFirstName);
     this.donationForm.get('donorLastName').setValue(donorLastName);
+    this.donationForm.get('safetyChecklist').setValue(true);
   }
 
   getDonationFromForm(): Donation {
