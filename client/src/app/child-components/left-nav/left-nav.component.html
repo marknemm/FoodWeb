@@ -10,9 +10,6 @@
       <a mat-list-item [routerLink]="['/accounts']" [queryParams]="{ accountType: 'Receiver' }" (click)="_onNavClick()">
         <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Receiver'] }}</mat-icon> Receivers</span>
       </a>
-      <a mat-list-item [routerLink]="['/accounts']" [queryParams]="{ accountType: 'Volunteer' }" (click)="_onNavClick()">
-        <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Volunteer'] }}</mat-icon> Volunteers</span>
-      </a>
       <a mat-list-item *ngIf="sessionService.isDonor" [routerLink]="['/donate']" (click)="_onNavClick()">
         <span><mat-icon>fastfood</mat-icon> Donate</span>
       </a>
