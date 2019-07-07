@@ -16,7 +16,6 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isPasswordReset = false;
   resetMessageSent = false;
-  usernamePlaceholder = 'Username/Email';
 
   constructor(
     public sessionService: SessionService,
@@ -27,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this._formBuilder.group({
-      usernameEmail: ['', Validators.required],
+      username: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
@@ -49,16 +48,15 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    const usernameEmail: string = this.loginForm.get('usernameEmail').value;
+    const username: string = this.loginForm.get('username').value;
     const password: string = this.loginForm.get('password').value;
-    this.sessionService.login(usernameEmail, password).subscribe(
+    this.sessionService.login(username, password).subscribe(
       () => this._matDialogRef.close(true)
     );
   }
 
   forgotPassword(): void {
     this.title = 'Reset Password';
-    this.usernamePlaceholder = 'Username';
     this.loginForm.reset();
     this.loginForm.get('password').disable();
     this.isPasswordReset = true;
@@ -66,13 +64,12 @@ export class LoginComponent implements OnInit {
 
   returnToLogin(): void {
     this.title = 'Login';
-    this.usernamePlaceholder = 'Username/Email';
     this.loginForm.get('password').enable();
     this.isPasswordReset = false;
   }
 
   sendPasswordResetEmail(): void {
-    const username: string = this.loginForm.get('usernameEmail').value;
+    const username: string = this.loginForm.get('username').value;
     this._passwordResetService.sendPasswordResetEmail(username).subscribe(
       () => this.resetMessageSent = true
     );

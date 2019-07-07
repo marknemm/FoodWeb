@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post('/', (req: Request, res: Response) => {
   const loginRequest: LoginRequest = req.body;
-  login(loginRequest.usernameEmail, loginRequest.password)
+  login(loginRequest.username, loginRequest.password)
     .then((account: Account) => {
       // Set session on request object.
       req.session['account'] = account;

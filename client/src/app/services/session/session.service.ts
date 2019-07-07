@@ -80,8 +80,8 @@ export class SessionService {
     return this._accountHelper.isMyAccount(this.account, accountId, ignoreAdmin);
   }
 
-  login(usernameEmail: string, password: string): Observable<void> {
-    const loginRequest: LoginRequest = { usernameEmail, password };
+  login(username: string, password: string): Observable<void> {
+    const loginRequest: LoginRequest = { username, password };
     this._loading = true;
     this._loginErr = null;
     return this._httpClient.post<Account>(this.url, loginRequest).pipe(

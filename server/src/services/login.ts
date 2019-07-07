@@ -10,13 +10,13 @@ const _opHoursHelper = new OperationHoursHelper();
 
 /**
  * Performs the login for a given user.
- * @param usernameEmail The username or email of the user.
+ * @param username The username of the user.
  * @param password The (plain text) password of the user.
  * @return A promise where on success it will provide the Account of the newly logged in user.
  */
-export async function login(usernameEmail: string, password: string): Promise<Account> {
+export async function login(username: string, password: string): Promise<Account> {
   try {
-    const account: AccountEntity = await _getAccountEntity(usernameEmail);
+    const account: AccountEntity = await _getAccountEntity(username);
     const validated: boolean = await checkPasswordMatch(account, password);
     if (validated) { return account; }
     throw new Error('Password match validation failed');
@@ -26,18 +26,10 @@ export async function login(usernameEmail: string, password: string): Promise<Ac
   }
 }
 
-async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> {
-  const account: AccountEntity = await getRepository(AccountEntity)
-    .createQueryBuilder('account')
-    .innerJoinAndSelect('account.contactInfo', 'contactInfo')
-    .leftJoinAndSelect('account.organization', 'organization')
-    .leftJoinAndSelect('account.volunteer', 'volunteer')
-    .leftJoinAndSelect('account.operationHours', 'operationHours')
-    .where('account.username=:usernameEmail OR contactInfo.email=:usernameEmail', { usernameEmail })
-    .getOne();
-
+async function _getAccountEntity(username: string): Promise<AccountEntity> {
+  const account: AccountEntity = await getRepository(AccountEntity).findOne({ username });
   if (!account) {
-    throw new Error(`User could not be found with username/email: ${usernameEmail}`);
+    throw new Error(`User could not be found with username: ${username}`);
   }
 
   account.verified = (await getRepository(UnverifiedAccountEntity).count({ account: { id: account.id } })) === 0;
