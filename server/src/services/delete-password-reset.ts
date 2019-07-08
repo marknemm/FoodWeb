@@ -10,14 +10,14 @@ export function scheduleExpiredPasswordResetTokDel(): void {
 }
 
 /**
- * Deletes all password reset tokens that were created at least 15 minutes ago.
+ * Deletes all password reset tokens that were created at least 10 minutes ago.
  */
 export async function delExpiredPasswordResetToks(): Promise<void> {
   const nowMs = new Date().getTime();
-  const fifteenMinsAgo = new Date(nowMs - 900000);
+  const tenMinsAgo = new Date(nowMs - 600000);
   await getConnection().transaction(async (manager: EntityManager) => {
     await manager.getRepository(PasswordResetEntity).delete({
-      createTimestamp: LessThanOrEqual(fifteenMinsAgo)
+      createTimestamp: LessThanOrEqual(tenMinsAgo)
     });
   });
 }

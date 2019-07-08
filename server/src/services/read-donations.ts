@@ -87,6 +87,7 @@ function _genWhereCondition(
   queryBuilder = _genDonationStatusCondition(queryBuilder, filters);
   queryBuilder = _genAccountConditions(queryBuilder, filters);
   queryBuilder = _genDonorNameConditions(queryBuilder, filters);
+  queryBuilder = _genDonationExpiredCondition(queryBuilder, filters);
   return queryBuilder;
 }
 
@@ -149,6 +150,21 @@ function _genDonorNameConditions(
   }
   if (filters.donorFirstName) {
     queryBuilder = queryBuilder.andWhere('donation.donorFirstName = :firstName', { firstName: filters.donorFirstName });
+  }
+  return queryBuilder;
+}
+
+function _genDonationExpiredCondition(
+  queryBuilder: SelectQueryBuilder<DonationEntity>,
+  filters: DonationReadFilters
+): SelectQueryBuilder<DonationEntity> {
+  const expired: boolean = (filters.expired === 'true');
+  // If not looking for a specific donation, then filter out all donations that have expired (pickup window has passed).
+  if (!expired && filters.id == null) {
+    queryBuilder = queryBuilder.andWhere(`(donation.pickupWindowEnd > NOW() OR donation.donationStatus >= 'Picked Up')`);
+  } else if (expired) {
+    queryBuilder = queryBuilder.andWhere('donation.pickupWindowEnd <= NOW()');
+    queryBuilder = queryBuilder.andWhere(`donation.donationStatus < 'Picked Up'`);
   }
   return queryBuilder;
 }
