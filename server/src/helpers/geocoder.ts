@@ -43,7 +43,7 @@ async function _geocode(query: string | Query, retryCnt = 0): Promise<Location> 
   if (entries && entries[0]) {
     return { lat: entries[0].latitude, lon: entries[0].longitude };
   } else {
-    throw new FoodWebError('Could not find the given address. Please double check it to see if it is correct.');
+    throw new FoodWebError('Could not find the given address. Please ensure it is correct.');
   }
 }
 

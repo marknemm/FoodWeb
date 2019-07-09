@@ -1,4 +1,4 @@
-import { getConnection, EntityManager, Repository } from 'typeorm';
+import { getConnection, EntityManager, Repository, QueryFailedError } from 'typeorm';
 import { createUnverifiedAccount } from './account-verification';
 import { savePassword } from './save-password';
 import { saveAudit } from './save-audit';
@@ -55,7 +55,9 @@ async function _saveAccount(manager: EntityManager, account: Account, myAccount?
   if (account.id) {
     await operationHoursRepo.delete({ account: { id: account.id } });
   }
-  const savedAccount: AccountEntity = await accountRepo.save(account as AccountEntity);
+  const savedAccount: AccountEntity = await accountRepo.save(account as AccountEntity).catch(
+    (err: QueryFailedError) => { throw _handleSaveQueryFailError(err); }
+  );
   await _insertOperationHours(operationHoursRepo, savedAccount.id, account.operationHours);
   return accountRepo.findOne({ id: account.id });
 }
@@ -88,6 +90,12 @@ async function _setGeocoordinatesIfNewAddress(account: Account, myAccount: Accou
     account.contactInfo.location = await geocode(account.contactInfo);
     account.contactInfo.timezone = geoTimezone(account.contactInfo.location);
   }
+}
+
+function _handleSaveQueryFailError(err: QueryFailedError): Error {
+  return (err.message.indexOf('duplicate key') >= 0)
+    ? new FoodWebError('Username already registered, please choose a different one', 400)
+    : err;
 }
 
 async function _insertOperationHours(repo: Repository<OperationHoursEntity>, accountId: number, operationHoursArr: OperationHours[]): Promise<void> {
