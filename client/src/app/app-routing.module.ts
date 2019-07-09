@@ -12,12 +12,14 @@ import { DonationsComponent } from './components/donations/donations.component';
 import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
 import { DeliveriesComponent } from './components/deliveries/deliveries.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
+import { AboutComponent } from './components/about/about.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
   { path: 'login', pathMatch: 'full', redirectTo: 'home/login' },
   { path: 'home', component: HomeComponent },
   { path: 'home/:login', component: HomeComponent },
+  { path: 'about', component: AboutComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'signup/:accountType', component: SignupComponent },
   { path: 'signup-verification', component: SignupVerificationComponent },

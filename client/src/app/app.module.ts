@@ -27,10 +27,12 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 
 import { environment } from 'src/environments/environment';
-import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
-import { RecaptchaService } from './services/recaptcha/recaptcha.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
+import { LeftNavComponent } from './domain-components/left-nav/left-nav.component';
+import { HeaderComponent } from './domain-components/header/header.component';
+
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
@@ -40,8 +42,14 @@ import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.com
 import { AlertSnackBarComponent } from './components/alert-snack-bar/alert-snack-bar.component';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { SignupVerificationComponent } from './components/signup-verification/signup-verification.component';
-import { LeftNavComponent } from './child-components/left-nav/left-nav.component';
-import { HeaderComponent } from './child-components/header/header.component';
+import { DonateComponent } from './components/donate/donate.component';
+import { DonationsComponent } from './components/donations/donations.component';
+import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
+import { DeliveriesComponent } from './components/deliveries/deliveries.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
+import { DateTimeSelectDialogComponent } from './components/date-time-select-dialog/date-time-select-dialog.component';
+import { AboutComponent } from './components/about/about.component';
+
 import { OperationHoursComponent } from './child-components/operation-hours/operation-hours.component';
 import { ContactInfoComponent } from './child-components/contact-info/contact-info.component';
 import { OrganizationComponent } from './child-components/organization/organization.component';
@@ -52,28 +60,25 @@ import { PasswordComponent } from './child-components/password/password.componen
 import { EditSaveButtonComponent } from './child-components/edit-save-button/edit-save-button.component';
 import { PaginatorComponent } from './child-components/paginator/paginator.component';
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
-import { DonateComponent } from './components/donate/donate.component';
 import { DonationFormComponent } from './child-components/donation-form/donation-form.component';
-import { DonationsComponent } from './components/donations/donations.component';
-import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
 import { DonationStatusComponent } from './child-components/donation-status/donation-status.component';
 import { ProfileImgComponent } from './child-components/profile-img/profile-img.component';
 import { VolunteerComponent } from './child-components/volunteer/volunteer.component';
-import { DeliveriesComponent } from './components/deliveries/deliveries.component';
 import { DateTimeComponent } from './child-components/date-time/date-time.component';
 import { DateTimeRangeComponent } from './child-components/date-time-range/date-time-range.component';
-import { ConfirmButtonDirective } from './directives/confirm-button/confirm-button.directive';
 import { DonationDetailActionsComponent } from './child-components/donation-detail-actions/donation-detail-actions.component';
 import { AddressComponent } from './child-components/address/address.component';
-import { NotificationsComponent } from './components/notifications/notifications.component';
 import { DateTimeSelectComponent } from './child-components/date-time-select/date-time-select.component';
-import { DateTimeSelectDialogComponent } from './components/date-time-select-dialog/date-time-select-dialog.component';
 import { FoodSafetyChecklistComponent } from './child-components/food-safety-checklist/food-safety-checklist.component';
+
+import { ConfirmButtonDirective } from './directives/confirm-button/confirm-button.directive';
 
 import { FormatDatePipe } from './pipes/format-date/format-date.pipe';
 import { FormatTimePipe } from './pipes/format-time/format-time.pipe';
 import { FormatDateTimePipe } from './pipes/format-date-time/format-date-time.pipe';
 
+import { SessionMonitorService } from './services/session-monitor/session-monitor.service';
+import { RecaptchaService } from './services/recaptcha/recaptcha.service';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
@@ -124,6 +129,7 @@ import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
     FormatDatePipe,
     FormatTimePipe,
     FormatDateTimePipe,
+    AboutComponent,
   ],
   imports: [
     AppRoutingModule,
