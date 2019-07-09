@@ -269,8 +269,9 @@ button {
         color: $primary;
       }
 
-      &:first-child ngx-material-timepicker-button button.timepicker-button {
+      &:first-child ngx-material-timepicker-button button.timepicker-button span {
         color: $warn;
+        font-weight: 500;
       }
     }
   }

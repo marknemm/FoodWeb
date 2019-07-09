@@ -71,7 +71,8 @@
           <mat-card-subtitle *ngSwitchCase="'Volunteer'">Fill in any times you would like to regularly receive delivery requests</mat-card-subtitle>
         </ng-container>
         <mat-card-content>
-          <food-web-operation-hours formControlName="operationHours" [editing]="sectionEditService.editing('operationHours')"></food-web-operation-hours>
+          <food-web-operation-hours formControlName="operationHours" [editing]="sectionEditService.editing('operationHours')"
+           [fillMissingWeekdays]="!originalAccount.operationHours?.length"></food-web-operation-hours>
         </mat-card-content>
       </mat-card>
 
