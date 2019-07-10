@@ -44,4 +44,8 @@ export interface DonationReadFilters {
    * If true, then only expired donations will come back. If false, then no expired donations will come back.
    */
   expired?: string;
+  /**
+   * Set to true if filtering donations belonging to current user.
+   */
+  myDonations?: boolean;
 }

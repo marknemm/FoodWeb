@@ -5,7 +5,6 @@ import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hour
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
 import { DonationReadRequest, DonationReadFilters } from '../../../shared/src/interfaces/donation/donation-read-request';
 import { PagingParams } from '../../../shared/src/interfaces/paging-params';
-import { DonationReadSort } from '../../../shared/src/interfaces/donation/donation-read-sort';
 import { Validation } from '../../../shared/src/constants/validation';
 
 export interface DonationsQueryResult {
@@ -32,6 +31,7 @@ function _fillMyAccountRequestFilter(request: DonationReadRequest, myAccount: Ac
   delete request.receiverAccountId;
   delete request.delivererAccountId;
 
+  request.myDonations = true;
   switch (myAccount.accountType) {
     case 'Donor':
       request.donorAccountId = myAccount.id;
@@ -87,7 +87,9 @@ function _genWhereCondition(
   queryBuilder = _genDonationStatusCondition(queryBuilder, filters);
   queryBuilder = _genAccountConditions(queryBuilder, filters);
   queryBuilder = _genDonorNameConditions(queryBuilder, filters);
+  console.log('here...');
   queryBuilder = _genDonationExpiredCondition(queryBuilder, filters);
+  console.log('and here...');
   return queryBuilder;
 }
 
@@ -160,7 +162,10 @@ function _genDonationExpiredCondition(
 ): SelectQueryBuilder<DonationEntity> {
   const expired: boolean = (filters.expired === 'true');
   // If not looking for a specific donation, then filter out all donations that have expired (pickup window has passed).
-  if (!expired && filters.id == null) {
+  console.log('Expired: ' + expired);
+  console.log('filters.id: ' + filters.id);
+  console.log('filters.myDonations: ' + filters.myDonations);
+  if (!expired && filters.id == null && !filters.myDonations) {
     queryBuilder = queryBuilder.andWhere(`(donation.pickupWindowEnd > NOW() OR donation.donationStatus >= 'Picked Up')`);
   } else if (expired) {
     queryBuilder = queryBuilder.andWhere('donation.pickupWindowEnd <= NOW()');
@@ -171,20 +176,23 @@ function _genDonationExpiredCondition(
 
 function _genOrdering(
   queryBuilder: SelectQueryBuilder<DonationEntity>,
-  sortOrder: DonationReadSort
+  request: DonationReadRequest
 ): SelectQueryBuilder<DonationEntity> {
-  if (sortOrder.sortDonorOrganization && Validation.SORT_REGEX.test(sortOrder.sortDonorOrganization)) {
-    const order = <'ASC' | 'DESC'> sortOrder.sortDonorOrganization.toUpperCase();
+  if (request.sortDonorOrganization && Validation.SORT_REGEX.test(request.sortDonorOrganization)) {
+    const order = <'ASC' | 'DESC'> request.sortDonorOrganization.toUpperCase();
     queryBuilder = queryBuilder.addOrderBy('donorOrganization.organizationName', order);
   }
-  if (sortOrder.sortDonationStatus && Validation.SORT_REGEX.test(sortOrder.sortDonationStatus)) {
-    const order = <'ASC' | 'DESC'> sortOrder.sortDonationStatus.toUpperCase();
+  if (request.sortDonationStatus && Validation.SORT_REGEX.test(request.sortDonationStatus)) {
+    const order = <'ASC' | 'DESC'> request.sortDonationStatus.toUpperCase();
     queryBuilder = queryBuilder.addOrderBy('donation.donationStatus', order);
   }
-  // Always include donated date (ID) ordering. Default to ASC to view oldest donations first.
-  if (sortOrder.sortDonatedDate && Validation.SORT_REGEX.test(sortOrder.sortDonatedDate)) {
-    const order = <'ASC' | 'DESC'> sortOrder.sortDonatedDate.toUpperCase();
+  // Always include donated date (ID) ordering. Default to ASC to view oldest donations first in donation/delivery search.
+  // Default to DESC to view latest donations first in 'my donations/deliveries' search.
+  if (request.sortDonatedDate && Validation.SORT_REGEX.test(request.sortDonatedDate)) {
+    const order = <'ASC' | 'DESC'> request.sortDonatedDate.toUpperCase();
     queryBuilder.addOrderBy('donation.id', order);
+  } else if (request.donorAccountId != null || request.receiverAccountId != null || request.delivererAccountId != null) {
+    queryBuilder.addOrderBy('donation.id', 'DESC');
   } else {
     queryBuilder.addOrderBy('donation.id', 'ASC');
   }
