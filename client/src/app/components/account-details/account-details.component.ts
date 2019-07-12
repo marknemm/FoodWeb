@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SessionService } from '../../services/session/session.service';
 import { AccountService, Account, PasswordUpdate } from '../../services/account/account.service';
 import { SectionEditService } from '../../services/section-edit/section-edit.service';
-import { FlexFormArray } from '../../etc/flex-form-array';
 import { PasswordFormMode } from '../../child-components/password/password.component';
 import { DonationReadFilters } from '../../../../../shared/src/interfaces/donation/donation-read-filters';
 import { AccountHelper } from '../../../../../shared/src/helpers/account-helper';
@@ -32,7 +31,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     public sessionService: SessionService,
     public sectionEditService: SectionEditService<string>,
     public accountHelper: AccountHelper,
-    private _accountService: AccountService,
+    public accountService: AccountService,
     private _formBuilder: FormBuilder,
     private _activatedRoute: ActivatedRoute
   ) {}
@@ -64,19 +63,19 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   private _initAccountForm(): void {
     this.accountUpdateForm = this._formBuilder.group({
-      account: this._formBuilder.group({
-        accountType: ['', Validators.required],
-        username: ['', Validators.required]
-      }),
+      accountType: ['', Validators.required],
+      username: ['', Validators.required],
+      profileImgUrl: '',
       organization: new FormGroup({}),
+      volunteer: new FormGroup({}),
       contactInfo: new FormGroup({}),
-      operationHours: new FlexFormArray([]),
+      operationHours: new FormControl([]),
       password: new FormGroup({})
     });
   }
 
   private _listenAccountChange(): void {
-    this._accountService.listenAccountQueryChange(this._activatedRoute).pipe(
+    this.accountService.listenAccountQueryChange(this._activatedRoute).pipe(
       takeUntil(this._destroy$)
     ).subscribe((account: Account) => {
       this._accountNotFound = !account;
@@ -98,18 +97,27 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _refreshAccountFormValue(account: Account, force = false): void {
-    if (force || !this.sectionEditService.editing('account')) {
-      this.accountUpdateForm.get('account').patchValue(account);
+    const accountSections = ['accountType', 'username', 'profileImgUrl', 'contactInfo'];
+    accountSections.forEach((section: string) => {
+      if (force || !this.sectionEditService.editing(section)) {
+        this.accountUpdateForm.get(section).patchValue(account[section]);
+      }
+    });
+
+    if (this.accountUpdateForm.get('accountType').value === 'Volunteer') {
+      if (force || !this.sectionEditService.editing('volunteer')) {
+        this.accountUpdateForm.get('volunteer').patchValue(account.volunteer);
+      }
+    } else {
+      if (force || !this.sectionEditService.editing('organization')) {
+        this.accountUpdateForm.get('organization').patchValue(account.organization);
+      }
     }
-    if (force || !this.sectionEditService.editing('organization')) {
-      this.accountUpdateForm.get('organization').patchValue(account.organization);
-    }
-    if (force || !this.sectionEditService.editing('contactInfo')) {
-      this.accountUpdateForm.get('contactInfo').patchValue(account.contactInfo);
-    }
+
     if (force || !this.sectionEditService.editing('operationHours')) {
       this.accountUpdateForm.get('operationHours').patchValue(account.operationHours);
     }
+
     if (force || !this.sectionEditService.editing('password')) {
       this.accountUpdateForm.get('password').reset();
     }
@@ -136,18 +144,15 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   private _saveAccount(sectionName: string): void {
     let accountUpdate: Partial<Account> = {};
-    // If we are updating the Account's top level fields (e.g. username), then set accountUpdate to it directly.
-    (sectionName === 'account')
-      ? accountUpdate = this.accountUpdateForm.get(sectionName).value
-      : accountUpdate[sectionName] = this.accountUpdateForm.get(sectionName).value;
-    this._accountService.updateAccount(this.originalAccount, accountUpdate).subscribe(
+    accountUpdate[sectionName] = this.accountUpdateForm.get(sectionName).value;
+    this.accountService.updateAccount(this.originalAccount, accountUpdate).subscribe(
       (savedAccount: Account) => this._handleSaveSuccess(sectionName, savedAccount)
     );
   }
 
   private _savePassword(): void {
     const passwordUpdate: PasswordUpdate = this.accountUpdateForm.get('password').value;
-    this._accountService.updatePassword(passwordUpdate).subscribe(
+    this.accountService.updatePassword(passwordUpdate).subscribe(
       () => this._handleSaveSuccess('password', this.originalAccount)
     );
   }

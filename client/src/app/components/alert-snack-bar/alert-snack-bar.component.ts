@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, TemplateRef } from '@angular/core';
-import { MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material';
+import { MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material/snack-bar';
 import { AlertMessage, AlertResponse } from './../../services/alert/alert-message';
 import { AlertResponseService } from './../../services/alert/alert-response.service';
 

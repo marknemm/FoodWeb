@@ -1,0 +1,65 @@
+<div>
+  <div>The following donation is ready for delivery:</div>
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Donor:
+    </div>
+    <div class="indented-data">
+      <div class="emphasize">
+        {{ donation.donorAccount.organization.organizationName }}
+      </div>
+      <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
+      <div>
+        {{ donation.donorAccount.contactInfo.city }}, {{ donation.donorAccount.contactInfo.state }}
+        {{ donation.donorAccount.contactInfo.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Receiver:
+    </div>
+    <div class="indented-data">
+      <div class="emphasize">
+        {{ donation.receiverAccount.organization.organizationName }}
+      </div>
+      <div>{{ donation.receiverAccount.contactInfo.streetAddress }}</div>
+      <div>
+        {{ donation.receiverAccount.contactInfo.city }}, {{ donation.receiverAccount.contactInfo.state }}
+        {{ donation.receiverAccount.contactInfo.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
+  <p>You may choose to pickup the donation at any time within the following pickup window:</p>
+  <div class="col-6">
+    <div class="inline-label">
+      Pickup Window Start:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donation.pickupWindowStart timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donation.pickupWindowStart timezone }}</strong>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Pickup Window End:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donation.pickupWindowEnd timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donation.pickupWindowEnd timezone }}</strong>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
+  <p>
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
+    <br>You may start/schedule the delivery at this link.
+  </p>
+</div>

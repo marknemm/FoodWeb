@@ -14,7 +14,7 @@ Run `npm install` to install all (client and server) dependencies. This may take
 
 Run `npm start` to build and watch the client source code, build and watch the server source code, and spin up a TS Node server that watches for changes in the source code. Navigate to `http://localhost:5000/` to view the app.
 
-## Debug (VS Code)
+## Debug Launch (VS Code)
 
 Run the `Hybrid` debug configuration to build and watch all code, start a TS Node server with a Node debugger attached, and open up a Chrome web browser with a debugger attached. If the browser does not attempt to automatically navigate you to `http://localhost:5000`, then ensure that you do not have any other chrome browser instances open and repeat. Be patient, since the build process may take some time depending on your machine. If the webpage does not load initially, attempt to periodically reload it until you can see the website. You can place breakpoints anywhere throughout the client and server source code. Any changes that are made to the client source code should cause it to be rebuilt. Any changes made to the server source code should cause it to be rebuilt, and the TS Node server should restart with the debugger attached.
 
@@ -100,3 +100,23 @@ Run `npm run lint` to perform linting on the source code.
 Run `npm run test` to lint and test the source code.
 
 Run `npm run test:watch` to test and watch the source code. Whenever a change is made, tests will be run against the source code.
+
+## Update Database Schema
+
+Run `npm run typeorm:migration:generate <script_name>` to auto-generate a migration script for updating the database schema. The script will be placed under server/src/migration/. The changes in the script will be based off of any differences that TypeORM detects between the current database schema and entities defined under server/src/entity/. After generating the migration script, ensure that no additional side-effects were created for the migration. Also, perform any intermediate updates required for the migration (e.g. initialize a new table column as nullable, insert the correct data, and change the column to not nullable). Finally, place a guard on the up migration to prevent any accidental double application of the migration (e.g. If adding a column, check if the column exists before adding it).
+
+Run `npm run typeorm:migration:create <script_name>` to create an empty migration script for updating the database schema. See `npm run typeorm:migration:generate` for more details.
+
+Run `npm run typeorm:migration:run` to manually apply all migrations under server/src/migration/. You can also simply start the app (server), and all migrations will automatically be applied.
+
+Run `npm run typeorm:migration:revert` to revert all migrations under server/src/migration/. Do this with care since it will end up clearing your development database.
+
+## Database Automation Scripts
+
+Note that each of the following commands will only work if you have a local instance of postgreSQL running, either a pgpass.conf file with localhost connection data or no password on your local database, and a local database called 'foodweb'.
+
+Run `npm run pg:dump` to dump out a SQL script that can be used to create/restore the current state of your local foodweb database.
+
+Run `npm run pg:destory` to destroy the data and schema within your local foodweb database.
+
+Run `npm run pg:restore` to first destroy the data and schema within your local foodweb database, and then restore it with the script generated from a previous SQL dump.

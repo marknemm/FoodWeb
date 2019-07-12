@@ -1,0 +1,96 @@
+{{#if isDonor }}
+  <div>Your donation has been deleted!</div>
+  <p class="donation-summary-header">Deleted Donation Summary:</p>
+  <table>
+    <tr>
+      <td class="donation-summary-label">Donor:</td>
+      <td>{{ donation.donorFirstName }} {{ donation.donorLastName }}</td>
+    </tr>
+    <tr>
+      <td class="donation-summary-label">Type:</td>
+      <td>{{ donation.donationType }}</td>
+    </tr>
+    <tr>
+      <td class="donation-summary-label">Value:</td>
+      <td>${{ donation.estimatedValue }}</td>
+    </tr>
+    <tr>
+      <td class="donation-summary-label">Description:</td>
+      <td class="donation-summary-description">{{ donation.description }}</td>
+    </tr>
+  </table>
+  <p>
+    If this change was unexpected, then contact FoodWeb at:<br>
+    <a href="mailto:{{ env.SUPPORT_EMAIL }}">{{ env.SUPPORT_EMAIL }}</a>.
+  </p>
+{{else if isReceiver }}
+  <div><strong>{{ donorName }}</strong> has deleted their donation which you claimed:</div>
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
+  <p>
+    We are sorry for any inconvenience this has caused you.
+  </p>
+  <p>
+    Feel free to browse donations <a href="{{ env.SERVER_HOST_ADDRESS }}/donations">here</a>
+    or simply wait for another message containing a new donation.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a> or
+    <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+{{else}}
+  <div>
+    <strong>{{ donorName }}</strong> has deleted their donation, and therefore, your delivery has been cancelled:
+  </div>
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Donor:
+    </div>
+    <div class="indented-data">
+      <div class="emphasize">
+        {{ donorName }}
+      </div>
+      <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
+      <div>
+        {{ donation.donorAccount.contactInfo.city }}, {{ donation.donorAccount.contactInfo.state }}
+        {{ donation.donorAccount.contactInfo.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Receiver:
+    </div>
+    <div class="indented-data">
+      <div class="emphasize">
+        {{ receiverName }}
+      </div>
+      <div>{{ donation.receiverAccount.contactInfo.streetAddress }}</div>
+      <div>
+        {{ donation.receiverAccount.contactInfo.city }}, {{ donation.receiverAccount.contactInfo.state }}
+        {{ donation.receiverAccount.contactInfo.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <p>
+    We are sorry for any inconvenience this has caused you.
+  </p>
+  <p>
+    You can search for other unscheduled deliveries at this
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/deliveries?donationStatus=Matched">link</a>,
+    or wait to be notified about another delivery.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a>,
+    <a href="mailto:{{ donation.receiverAccount.contactInfo.email }}">{{ receiverName }}</a>,
+    or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+{{/if}}

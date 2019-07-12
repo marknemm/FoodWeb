@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { FormGroup, Validators, FormGroupDirective } from '@angular/forms';
 import { FormHelperService } from '../../services/form-helper/form-helper.service';
 
@@ -10,12 +10,14 @@ import { FormHelperService } from '../../services/form-helper/form-helper.servic
 export class OrganizationComponent implements OnInit {
 
   @Input() editing = false;
+  @Input() accountType: string = '';
   @Input() formGroup: FormGroup;
   @Input() formGroupName: string;
+  deliveryInstructionsPlaceholderModifier: string = '';
 
   constructor(
     private _formGroupDirective: FormGroupDirective,
-    private _formHelper: FormHelperService
+    private _formHelper: FormHelperService,
   ) {}
 
   ngOnInit() {
@@ -25,11 +27,22 @@ export class OrganizationComponent implements OnInit {
       {
         id: undefined,
         organizationName: ['', Validators.required],
+        deliveryInstructions: '',
         organizationInfo: ''
       }
     );
     if (this.formGroupName && this._formGroupDirective.form) {
       this._formGroupDirective.form.setControl(this.formGroupName, this.formGroup);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.accountType) {
+      let newAcctType = changes.accountType.currentValue;
+      this.deliveryInstructionsPlaceholderModifier =
+        'Please leave instructions for donation ' + 
+        (newAcctType === 'Donor' ? 'pickups' : 'deliveries') +
+        ' here';
     }
   }
 }

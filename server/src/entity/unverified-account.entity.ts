@@ -7,7 +7,7 @@ export class UnverifiedAccountEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne((type) => AccountEntity)
+  @OneToOne((type) => AccountEntity, { eager: true })
   @JoinColumn()
   account?: AccountEntity;
 

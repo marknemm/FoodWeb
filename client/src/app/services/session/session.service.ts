@@ -3,6 +3,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, EMPTY } from 'rxjs';
 import { map, catchError, finalize } from 'rxjs/operators';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
+import { AlertService } from '../alert/alert.service';
+import { LoginComponent } from '../../components/login/login.component';
 import { LoginRequest } from '../../../../../shared/src/interfaces/session/login-request';
 import { AccountHelper, Account } from '../../../../../shared/src/helpers/account-helper';
 export { Account };
@@ -21,6 +23,7 @@ export class SessionService {
   constructor(
     private _httpClient: HttpClient,
     private _errorHandlerService: ErrorHandlerService,
+    private _alertService: AlertService,
     private _accountHelper: AccountHelper
   ) {
     // Attempt to get account from local browser storage upon init.
@@ -65,6 +68,10 @@ export class SessionService {
     return this._accountHelper.isReceiver(this.account);
   }
 
+  get isVolunteer(): boolean {
+    return this._accountHelper.isVolunteer(this.account);
+  }
+
   get loginErr(): string {
     return this._loginErr;
   }
@@ -73,12 +80,15 @@ export class SessionService {
     return this._accountHelper.isMyAccount(this.account, accountId, ignoreAdmin);
   }
 
-  login(usernameEmail: string, password: string): Observable<void> {
-    const loginRequest: LoginRequest = { usernameEmail, password };
+  login(username: string, password: string): Observable<void> {
+    const loginRequest: LoginRequest = { username, password };
     this._loading = true;
     this._loginErr = null;
     return this._httpClient.post<Account>(this.url, loginRequest).pipe(
-      map((account: Account) => { this.account = account; }),
+      map((account: Account) => {
+        this.account = account;
+        this._alertService.displaySimpleMessage(`Welcome, ${this._accountHelper.accountName(account)}`, 'success');
+      }),
       catchError((err: HttpErrorResponse) => {
         console.error(err);
         this._loginErr = err.error.message;
@@ -89,12 +99,10 @@ export class SessionService {
   }
 
   logout(): void {
-    this._loading = true;
+    this._alertService.displaySimpleMessage('Logout Successful', 'success');
+    this.account = null;
     this._httpClient.delete<void>(this.url).pipe(
-      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
-      finalize(() => this._loading = false)
-    ).subscribe(
-      () => this.account = null
-    );
+      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
+    ).subscribe();
   }
 }

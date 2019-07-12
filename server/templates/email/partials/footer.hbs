@@ -1,16 +1,12 @@
-<footer
-  align="center"
-  style="
-    background-color: rgb(236, 235, 235);
-    border-top: 1px solid darkgray;
-    margin-top: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    text-align: center;
-  "
->
-  <a href="{{ env.SERVER_HOST_ADDRESS }}">
-    <img style="max-width: 50px; max-height: 50px;" src="{{ env.PRODUCTION_HOST_ADDRESS }}/assets/IconImg.png" alt="FoodWeb Icon">
-  </a>
-  <div>Food Web &copy; {{ year }}</div>
-</footer>
+<div class="email-footer" align="center">
+  <table class="fill" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td class="center" align="center">
+        <a href="{{ env.SERVER_HOST_ADDRESS }}">
+          <img height="50" src="{{ env.PRODUCTION_HOST_ADDRESS }}/assets/IconImgSm.png" alt="FoodWeb Icon">
+        </a>
+        <div>Food Web &copy; {{ year }}</div>
+      </td>
+    </tr>
+  </table>
+</div>

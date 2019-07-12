@@ -1,4 +1,4 @@
-<div class="donation-details-container">
+<div *ngIf="originalDonation" class="donation-details-container">
   <form [formGroup]="donationForm" class="donation-details-form">
     <mat-card>
       <mat-card-header>
@@ -8,30 +8,30 @@
           <ng-container *ngIf="editing">Donation Update</ng-container>
         </mat-card-title>
         <mat-card-subtitle>
-          <ng-container *ngIf="originalDonation">
-            <strong class="donation-details-subtitle">{{ originalDonation?.donorAccount.organization.organizationName }}</strong>
-            <food-web-donation-status [donationStatus]="originalDonation?.donationStatus" class="donation-status"></food-web-donation-status>
-          </ng-container>
-          <strong *ngIf="donationNotFound">Donation not found</strong>
+          <strong class="donation-details-subtitle">{{ originalDonation?.donorAccount.organization.organizationName }}</strong>
+          <food-web-donation-status [donationStatus]="originalDonation?.donationStatus" class="donation-status"></food-web-donation-status>
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="donation-primary-label"></div>
-        <food-web-donation-form *ngIf="sectionEditService.editing(donationForm)" [donation]="originalDonation"
-          [formGroup]="donationForm" class="donation-form"></food-web-donation-form>
-        <div *ngIf="originalDonation && !sectionEditService.editing(donationForm)" class="readonly-donation row">
+        <food-web-donation-form *ngIf="editing" [formGroup]="donationForm" class="donation-form"></food-web-donation-form>
+        <div *ngIf="!editing" class="readonly-donation row">
           <div class="col-sm-12 donation-description-container">
             <hr>
             <span>{{ originalDonation.description }}</span>
             <hr>
           </div>
-          <div *ngIf="myDonation" class="col-md-4 col-sm-6">
+          <div class="col-md-4 col-sm-6">
             <div class="inline-label">Submitter Name:</div>
             <div>{{ originalDonation.donorFirstName }} {{ originalDonation.donorLastName }}</div>
           </div>
-          <div class="col-md-4 col-sm-6">
+          <!-- <div class="col-md-4 col-sm-6">
             <div class="inline-label">Donation Type:</div>
             <div>{{ originalDonation.donationType }}</div>
+          </div> -->
+          <div class="col-md-4 col-sm-6">
+            <div class="inline-label">Estimated Meal Count:</div>
+            <div>{{ originalDonation.estimatedNumFeed }}</div>
           </div>
           <div *ngIf="myDonation" class="col-md-4 col-sm-6">
             <div class="inline-label">Estimated Value:</div>
@@ -39,64 +39,172 @@
           </div>
           <div class="col-md-4 col-sm-6">
             <div class="inline-label">Donated:</div>
-            <div>{{ originalDonation.created | date:'short' }}</div>
+            <div>
+              <food-web-date-time [dateTime]="originalDonation.createTimestamp"></food-web-date-time>
+            </div>
+          </div>
+          <div *ngIf="originalDonation.delivery?.pickupTime" class="col-md-4 col-sm-6">
+            <div class="inline-label">Picked Up</div>
+            <div>
+              <food-web-date-time [dateTime]="originalDonation.delivery.pickupTime"></food-web-date-time>
+            </div>
+          </div>
+          <div *ngIf="originalDonation.delivery?.dropOffTime" class="col-md-4 col-sm-6">
+            <div class="inline-label">Completed</div>
+            <div>
+              <food-web-date-time [dateTime]="originalDonation.delivery.dropOffTime"></food-web-date-time>
+            </div>
           </div>
           <div *ngIf="myDonation" class="col-md-4 col-sm-6">
             <div class="inline-label">Last Updated:</div>
-            <div>{{ originalDonation.lastUpdated | date:'short' }}</div>
+            <div>
+              <food-web-date-time [dateTime]="originalDonation.updateTimestamp"></food-web-date-time>
+            </div>
           </div>
         </div>
       </mat-card-content>
-      <mat-card-actions *ngIf="hasActionButtons" class="align-right">
-        <ng-container *ngIf="canEdit">
-          <food-web-delete-button *ngIf="!sectionEditService.editing(donationForm)" [useButtonText]="true" class="delete-button"
-            confirmMessage="Are you sure you want to permanently delete the donation?" (delete)="deleteDonation()"></food-web-delete-button>
-          <food-web-edit-save-button [useButtonText]="true" [editing]="sectionEditService.editing(donationForm)"
-            (edit)="sectionEditService.toggleEdit(donationForm, donationForm)" (save)="saveDonation()"></food-web-edit-save-button>
-        </ng-container>
-        <button mat-raised-button *ngIf="canClaim" type="button" color="primary" (click)="claimDonation()">Claim Donation</button>
-        <button mat-button *ngIf="canUnclaim" type="button" color="warn" (click)="unclaimDonation()">Unclaim Donation</button>
+      <mat-card-actions *ngIf="!editing" [hidden]="!actions.hasActionButtons" class="align-right">
+        <food-web-donation-detail-actions #actions
+          [donation]="originalDonation"
+          [myAccount]="sessionService.account"
+          [editing]="editing"
+          [valid]="donationForm.valid"
+          (action)="onDonationAction($event)"
+        ></food-web-donation-detail-actions>
       </mat-card-actions>
     </mat-card>
-  </form>
 
-  <div class="row">
-    <div *ngIf="originalDonation" class="donor-info-container" [ngClass]="{
-      'col-lg-6': !!originalDonation.receiverAccount,
-      'col-lg-12': !originalDonation.receiverAccount
-    }">
-      <mat-card>
-        <mat-card-header>
-          <img mat-card-avatar src="/assets/{{ accountHelper.organizationFirstChar(originalDonation.donorAccount.organization) }}.svg" alt="Donor Icon">
-          <mat-card-title>Donor</mat-card-title>
-          <mat-card-subtitle class="organization-name">{{ originalDonation.donorAccount.organization.organizationName }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <food-web-contact-info [contactInfo]="originalDonation.donorAccount.contactInfo"></food-web-contact-info>
-        </mat-card-content>
-        <div mat-card-actions class="align-right">
-          <a [routerLink]="['/account-details/', originalDonation.donorAccount.id]">
-            <button mat-raised-button type="button" color="primary">View Account</button>
-          </a>
-        </div>
-      </mat-card>
+    <mat-card *ngIf="editing">
+      <mat-card-title>Pickup Window</mat-card-title>
+      <mat-card-content>
+        <food-web-date-time-range formControlName="pickupWindow" [initEndDateToday]="true" [required]="true"></food-web-date-time-range>
+      </mat-card-content>
+    </mat-card>
+
+    <div *ngIf="editing" class="action-footer align-right">
+      <food-web-donation-detail-actions
+        [donation]="originalDonation"
+        [myAccount]="sessionService.account"
+        [editing]="editing"
+        (action)="onDonationAction($event)"
+      ></food-web-donation-detail-actions>
     </div>
-    <div *ngIf="originalDonation?.receiverAccount" class="receiver-info-container col-lg-6">
-      <mat-card>
-        <mat-card-header>
-          <img mat-card-avatar src="/assets/{{ accountHelper.organizationFirstChar(originalDonation.receiverAccount.organization) }}.svg" alt="Receiver Icon">
-          <mat-card-title>Receiver</mat-card-title>
-          <mat-card-subtitle class="organization-name">{{ originalDonation.receiverAccount.organization.organizationName }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <food-web-contact-info [contactInfo]="originalDonation.receiverAccount.contactInfo"></food-web-contact-info>
-        </mat-card-content>
-        <div mat-card-actions class="align-right">
-          <a [routerLink]="['/account-details/', originalDonation.receiverAccount.id]">
-            <button mat-raised-button type="button" color="primary">View Account</button>
-          </a>
-        </div>
-      </mat-card>
+  </form>
+  
+  <ng-container *ngIf="!editing">
+    <div class="row">
+      <div class="pickup-information-container" [ngClass]="{
+        'col-lg-6': !!originalDonation.receiverAccount,
+        'col-lg-12': !originalDonation.receiverAccount
+      }">
+        <mat-card>
+          <mat-card-title>Pickup Info</mat-card-title>
+          <mat-card-content>
+            <div class="row">
+              <div *ngIf="originalDonation.donorAccount.organization.deliveryInstructions" class="col-sm-12">
+                <div class="inline-label">Instructions:</div>
+                <div class="d-inline-block">{{ originalDonation.donorAccount.organization.deliveryInstructions }}</div>
+              </div>
+              <div class="col-sm-6">
+                <div class="inline-label">Pickup Window Start:</div>
+                <food-web-date-time [dateTime]="deliveryHelper.getPickupWindow(originalDonation).startDateTime" [boldTime]="true">
+                </food-web-date-time>
+              </div>
+              <div class="col-sm-6">
+                <div class="inline-label">Pickup Window End:</div>
+                <food-web-date-time [dateTime]="deliveryHelper.getPickupWindow(originalDonation).endDateTime" [boldTime]="true">
+                  </food-web-date-time>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div *ngIf="originalDonation.receiverAccount" class="col-lg-6">
+        <mat-card class="drop-off-information-container">
+          <mat-card-title>Drop-Off Info</mat-card-title>
+          <mat-card-content>
+            <div class="row">
+              <div *ngIf="originalDonation.receiverAccount.organization.deliveryInstructions" class="col-sm-12">
+                <div class="inline-label">Instructions:</div>
+                <div class="d-inline-block">{{ originalDonation.receiverAccount.organization.deliveryInstructions }}</div>
+              </div>
+              <!-- <div class="col-sm-6">
+                <div class="inline-label">Window Start:</div>
+                <div class="d-inline-block">{{ originalDonation.dropOffWindowStart | date:'short' }}</div>
+              </div>
+              <div class="col-sm-6">
+                <div class="inline-label">Window End:</div>
+                <div class="d-inline-block">{{ originalDonation.dropOffWindowEnd | date:'short' }}</div>
+              </div> -->
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="donor-info-container" [ngClass]="{
+        'col-lg-6': !!originalDonation.receiverAccount,
+        'col-lg-12': !originalDonation.receiverAccount
+      }">
+        <mat-card>
+          <mat-card-header>
+            <img mat-card-avatar src="/assets/{{ accountHelper.organizationFirstChar(originalDonation.donorAccount.organization) }}.svg" alt="Donor Icon">
+            <mat-card-title>Donor</mat-card-title>
+            <mat-card-subtitle class="account-name">{{ donationHelper.donorName(originalDonation) }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <food-web-contact-info [contactInfo]="originalDonation.donorAccount.contactInfo"></food-web-contact-info>
+          </mat-card-content>
+          <mat-card-actions class="align-right">
+            <div class="align-right">
+              <a [routerLink]="donationHelper.donorDetailsRouterLink(originalDonation)">
+                <button mat-raised-button type="button" color="primary">View Account</button>
+              </a>
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div *ngIf="originalDonation.receiverAccount" class="receiver-info-container col-lg-6">
+        <mat-card>
+          <mat-card-header>
+            <img mat-card-avatar src="/assets/{{ accountHelper.organizationFirstChar(originalDonation.receiverAccount.organization) }}.svg" alt="Receiver Icon">
+            <mat-card-title>Receiver</mat-card-title>
+            <mat-card-subtitle class="account-name">{{ donationHelper.receiverName(originalDonation) }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <food-web-contact-info [contactInfo]="originalDonation.receiverAccount.contactInfo"></food-web-contact-info>
+          </mat-card-content>
+          <mat-card-actions>
+            <div class="align-right">
+              <a [routerLink]="donationHelper.receiverDetailsRouterLink(originalDonation)">
+                <button mat-raised-button type="button" color="primary">View Account</button>
+              </a>
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+
+      <div *ngIf="originalDonation.delivery" class="deliverer-info-container col-lg-6">
+        <mat-card>
+          <mat-card-header>
+            <img mat-card-avatar src="/assets/{{ accountHelper.organizationFirstChar(originalDonation.receiverAccount.organization) }}.svg" alt="Receiver Icon">
+            <mat-card-title>Deliverer</mat-card-title>
+            <mat-card-subtitle class="account-name">{{ donationHelper.delivererName(originalDonation) }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <food-web-contact-info [contactInfo]="originalDonation.receiverAccount.contactInfo" [hideAddress]="true"></food-web-contact-info>
+          </mat-card-content>
+          <mat-card-actions>
+            <div class="align-right">
+              <a [routerLink]="donationHelper.delivererDetailsRouterLink(originalDonation)">
+                <button mat-raised-button type="button" color="primary">View Account</button>
+              </a>
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      </div>
     </div>
-  </div>
+  </ng-container>
+</div>
+
+<div *ngIf="donationNotFound" class="page-title block-header">
+  <strong>Donation not found</strong>
 </div>

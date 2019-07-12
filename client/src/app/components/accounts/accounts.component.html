@@ -1,4 +1,4 @@
-<div class="list-title block-label">
+<div class="page-title block-label">
   {{ pageTitleService.title }}
 </div>
 
@@ -7,13 +7,13 @@
     <a [routerLink]="['/account-details/', account.id]" [state]="account" foodWebReturnLink="account-{{ account.id }}" class="account-link">
       <mat-card id="account-{{ account.id }}" class="account-card">
         <mat-card-header>
-          <img mat-card-avatar src="/assets/{{ accountHelper.organizationFirstChar(account.organization) }}.svg" alt="Account Icon">
-          <mat-card-title>{{ account.organization.organizationName }}</mat-card-title>
+          <img mat-card-avatar [src]="account.profileImgUrl" alt="Account Icon">
+          <mat-card-title>{{ getAccountTitle(account) }}</mat-card-title>
           <mat-card-subtitle class="account-email">{{ account.contactInfo.email }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="accounts-display row">
-            <div class="col-sm-6">
+            <div *ngIf="account.contactInfo.streetAddress" class="col-sm-6">
               <div class="inline-label">Address:</div>
               <div class="d-inline-block">
                 <div>{{ account.contactInfo.streetAddress }}</div>

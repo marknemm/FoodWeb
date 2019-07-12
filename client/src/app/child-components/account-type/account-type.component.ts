@@ -23,7 +23,7 @@ export class AccountTypeComponent implements OnInit, OnDestroy, ControlValueAcce
 
   accountTypeCtrl: FormControl;
 
-  private $_destroy = new Subject();
+  private _destroy$ = new Subject();
 
   constructor(
     public constantsService: ConstantsService,
@@ -35,8 +35,7 @@ export class AccountTypeComponent implements OnInit, OnDestroy, ControlValueAcce
   }
 
   ngOnDestroy() {
-    this.$_destroy.next();
-    this.$_destroy.complete();
+    this._destroy$.next();
   }
 
   writeValue(value: AccountType): void {
@@ -45,12 +44,18 @@ export class AccountTypeComponent implements OnInit, OnDestroy, ControlValueAcce
 
   registerOnChange(onChangeCb: (value: AccountType) => void): void {
     this.accountTypeCtrl.valueChanges.pipe(
-      takeUntil(this.$_destroy)
+      takeUntil(this._destroy$)
     ).subscribe(onChangeCb);
   }
 
   validate(): ValidationErrors {
     return (this.accountTypeCtrl.invalid ? { invalid: true } : null);
+  }
+
+  accountTypeClick(accountType: AccountType): void {
+    if (this.editing) {
+      this.accountTypeCtrl.setValue(accountType);
+    }
   }
 
   registerOnTouched(): void {}

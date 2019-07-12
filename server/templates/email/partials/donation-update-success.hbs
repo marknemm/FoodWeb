@@ -5,43 +5,43 @@
     <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ updatedDonation.id }}">link</a>.
   </p>
 
-  <p style="font-weight: bold; margin-bottom: 0px;">Original Donation:</p>
-  <table style="border: none">
+  <p class="donation-summary-header">Original Donation:</p>
+  <table>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Donor:</td>
-      <td style="border: none">{{ originalDonation.donorFirstName }} {{ originalDonation.donorLastName }}</td>
+      <td class="donation-summary-label">Donor:</td>
+      <td>{{ originalDonation.donorFirstName }} {{ originalDonation.donorLastName }}</td>
     </tr>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Type:</td>
-      <td style="border: none">{{ originalDonation.donationType }}</td>
+      <td class="donation-summary-label">Type:</td>
+      <td>{{ originalDonation.donationType }}</td>
     </tr>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Value:</td>
-      <td style="border: none">${{ originalDonation.estimatedValue }}</td>
+      <td class="donation-summary-label">Value:</td>
+      <td>${{ originalDonation.estimatedValue }}</td>
     </tr>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Description:</td>
-      <td style="border: none; min-width: 300px;">{{ originalDonation.description }}</td>
+      <td class="donation-summary-label">Description:</td>
+      <td class="donation-summary-description">{{ originalDonation.description }}</td>
     </tr>
   </table>
 
-  <p style="font-weight: bold; margin-bottom: 0px;">Updated Donation:</p>
-  <table style="border: none">
+  <p class="donation-summary-header">Updated Donation:</p>
+  <table>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Donor:</td>
-      <td style="border: none">{{ updatedDonation.donorFirstName }} {{ updatedDonation.donorLastName }}</td>
+      <td class="donation-summary-label">Donor:</td>
+      <td>{{ updatedDonation.donorFirstName }} {{ updatedDonation.donorLastName }}</td>
     </tr>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Type:</td>
-      <td style="border: none">{{ updatedDonation.donationType }}</td>
+      <td class="donation-summary-label">Type:</td>
+      <td>{{ updatedDonation.donationType }}</td>
     </tr>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Value:</td>
-      <td style="border: none">${{ updatedDonation.estimatedValue }}</td>
+      <td class="donation-summary-label">Value:</td>
+      <td>${{ updatedDonation.estimatedValue }}</td>
     </tr>
     <tr>
-      <td style="border: none; color: #795548; padding-right: 10px">Description:</td>
-      <td style="border: none; min-width: 300px;">{{ updatedDonation.description }}</td>
+      <td class="donation-summary-label">Description:</td>
+      <td class="donation-summary-description">{{ updatedDonation.description }}</td>
     </tr>
   </table>
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Observable, EMPTY, of } from 'rxjs';
 import { catchError, map, flatMap } from 'rxjs/operators';
 import { LoginComponent } from '../../components/login/login.component';

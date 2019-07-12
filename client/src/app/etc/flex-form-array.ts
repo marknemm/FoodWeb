@@ -1,9 +1,11 @@
 import { FormArray, AbstractControl, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
 import { FormHelperService } from '../services/form-helper/form-helper.service';
 
-export class FlexFormArray extends FormArray {
+export class FlexFormArray<T = any> extends FormArray {
 
   private readonly _formHelper = new FormHelperService(new FormBuilder());
+  private _deepValueChanges = new Subject<T[]>();
 
   constructor(
     controls: AbstractControl[],
@@ -12,22 +14,28 @@ export class FlexFormArray extends FormArray {
     asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[]
   ) {
     super(controls, validatorOrOpts, asyncValidator);
+    this.valueChanges.subscribe(() => this._deepValueChanges.next(this.value));
   }
 
-  patchValue(value: any[], options: { onlySelf?: boolean; emitEvent?: boolean; } = {}): void {
+  get deepValueChanges(): Observable<T[]> {
+    return this._deepValueChanges.asObservable();
+  }
+
+  patchValue(value: T[], options: { onlySelf?: boolean; emitEvent?: boolean; } = {}): void {
     this._restructureFormArray(value.length);
     super.patchValue(value, options);
   }
 
-  push(value: any): void;
+  push(value: T): void;
   push(control: AbstractControl): void;
-  push(value: AbstractControl | any): void {
+  push(value: AbstractControl | T): void {
     if (value instanceof FormControl || value instanceof FormArray || value instanceof FormGroup) {
       super.push(value);
     } else {
       this._addNeededMembers(this.length + 1);
       this.at(this.length - 1).patchValue(value);
     }
+    this.at(this.length - 1).valueChanges.subscribe(this._onElementValueChanges.bind(this));
   }
 
   removeAt(index: number): void {
@@ -35,14 +43,14 @@ export class FlexFormArray extends FormArray {
     super.markAsDirty();
   }
 
-  reset(value: any = [], options: { onlySelf?: boolean; emitEvent?: boolean; } = {}): void {
+  reset(value: T[] = [], options: { onlySelf?: boolean; emitEvent?: boolean; } = {}): void {
     if (value instanceof Array) {
       this._restructureFormArray(value.length);
     }
     super.reset(value, options);
   }
 
-  setValue(value: any[], options: { onlySelf?: boolean; emitEvent?: boolean; } = {}): void {
+  setValue(value: T[], options: { onlySelf?: boolean; emitEvent?: boolean; } = {}): void {
     this._restructureFormArray(value.length);
     super.setValue(value, options);
   }
@@ -54,7 +62,7 @@ export class FlexFormArray extends FormArray {
 
   private _removeExcessMembers(length: number): void {
     while (this.length > length) {
-      this.removeAt(this.length - 1);
+      this.controls.pop();
     }
   }
 
@@ -65,7 +73,13 @@ export class FlexFormArray extends FormArray {
       if (memberTmplCopy instanceof FlexFormArray) {
         memberTmplCopy.memberTmpl = this.memberTmpl;
       }
-      super.push(memberTmplCopy);
+      this.controls.push(memberTmplCopy);
+      this.at(this.length - 1).valueChanges.subscribe(this._onElementValueChanges.bind(this));
     }
+  }
+
+  private _onElementValueChanges(): void {
+    this.updateValueAndValidity();
+    this._deepValueChanges.next(this.value);
   }
 }

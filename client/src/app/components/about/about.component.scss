@@ -1,0 +1,75 @@
+@import "../../../styles/constants.scss";
+
+.about-container {
+  position: relative;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+
+  .mission-statement {
+    font-size: 22px;
+    color: $accent-darker;
+    text-align: center;
+    margin: -5px 0 40px;
+
+    @media only screen and (max-width: $sm) {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+  }
+
+  .origin-story-container {
+    .desktop-origin-story-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: $accent-darkest;
+    }
+
+    .mobile-origin-story-title {
+      display: none;
+
+      span {
+        display: block;
+        font-size: 24px;
+        font-weight: 600;
+        text-align: center;
+      }
+    }
+
+    hr {
+      display: none;
+      opacity: 0.3;
+    }
+
+    .origin-story-img {
+      display: block;
+      float: left;
+      margin-left: -3px;
+      margin-right: 10px;
+    }
+
+    @media only screen and (max-width: $md) {
+      .desktop-origin-story-title {
+        display: none;
+      }
+
+      .mobile-origin-story-title {
+        display: block;
+      }
+
+      hr {
+        display: block;
+      }
+
+      .origin-story-img {
+        float: none;
+        width: 100%;
+        max-width: 270px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 12px;
+      }
+    }
+  }
+}

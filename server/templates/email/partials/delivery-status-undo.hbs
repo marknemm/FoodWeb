@@ -1,0 +1,88 @@
+{{#if isVolunteer }}
+  <div>You have successfully reverted the status of the following delivery to <strong>{{ donation.donationStatus }}</strong>:</div>
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Donor:
+    </div>
+    <div class="indented-data">
+      <div class="emphasize">
+        {{ donorName }}
+      </div>
+      <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
+      <div>
+        {{ donation.donorAccount.contactInfo.city }}, {{ donation.donorAccount.contactInfo.state }}
+        {{ donation.donorAccount.contactInfo.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Receiver:
+    </div>
+    <div class="indented-data">
+      <div class="emphasize">
+        {{ receiverName }}
+      </div>
+      <div>{{ donation.receiverAccount.contactInfo.streetAddress }}</div>
+      <div>
+        {{ donation.receiverAccount.contactInfo.city }}, {{ donation.receiverAccount.contactInfo.state }}
+        {{ donation.receiverAccount.contactInfo.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <p>
+    If you did not intend to revert the status of this delivery, then you can redo your status advancement at this
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a>,
+    <a href="mailto:{{ donation.receiverAccount.contactInfo.email }}">{{ receiverName }}</a>,
+    or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions or comments.
+  </p>
+{{else if isReceiver }}
+  <div>
+    The following donation that you claimed from <strong>{{ donorName }}</strong>
+    has had its status reverted to <strong>{{ donation.donationStatus }}</strong> by <strong>{{ delivererName }}</strong>:
+  </div>
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
+  <p>
+    You can view the donation and delivery details at this
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
+  </p>
+  <p>
+    If you believe that this is a mistake, then please bring this to the deliverer's attention.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>,
+    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a>,
+    or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+{{else}}
+  <div>
+    The following donation that you submitted has had its status reverted to
+    <strong>{{ donation.donationStatus }}</strong> by <strong>{{ delivererName }}</strong>:
+  </div>
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
+  <p>
+    You can view the donation and delivery details at this
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
+  </p>
+  <p>
+    If you believe that this is a mistake, then please bring this to the deliverer's attention.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>
+    or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions or comments.
+  </p>
+{{/if}}

@@ -8,6 +8,8 @@ import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { AlertService } from '../alert/alert.service';
 import { Donation } from '../../../../../shared/src/interfaces/donation/donation';
 import { DonationReadRequest, DonationReadFilters } from '../../../../../shared/src/interfaces/donation/donation-read-request';
+import { DonationCreateRequest } from '../../../../../shared/src/interfaces/donation/donation-create-request';
+import { DonationUpdateRequest } from '../../../../../shared/src/interfaces/donation/donation-update-request';
 import { DonationClaimRequest } from '../../../../../shared/src/interfaces/donation/donation-claim-request';
 import { ListResponse } from '../../../../../shared/src/interfaces/list-response';
 export { Donation };
@@ -36,8 +38,9 @@ export class DonationService {
    * @return An observable that emits the newly saved donation when the server response returns.
    */
   createDonation(donation: Donation): Observable<Donation> {
+    const createRequest: DonationCreateRequest = { donation };
     this._pageProgressService.activate(true);
-    return this._httpClient.post<Donation>(this.url, donation).pipe(
+    return this._httpClient.post<Donation>(this.url, createRequest).pipe(
       map((savedDonation: Donation) => {
         this._alertService.displaySimpleMessage('Donation successful', 'success');
         return savedDonation;
@@ -48,9 +51,9 @@ export class DonationService {
   }
 
   updateDonation(originalDonation: Donation, donationSectionUpdate: Partial<Donation>): Observable<Donation> {
-    const donationUpdate: Donation = this._genDonationUpdate(originalDonation, donationSectionUpdate);
+    const updateRequest: DonationUpdateRequest = this._genDonationUpdateRequest(originalDonation, donationSectionUpdate);
     this._pageProgressService.activate(true);
-    return this._httpClient.put<Donation>(this.url, donationUpdate).pipe(
+    return this._httpClient.put<Donation>(this.url, updateRequest).pipe(
       map((savedDonation: Donation) => {
         this._alertService.displaySimpleMessage('Donation update successful', 'success');
         return savedDonation;
@@ -58,6 +61,12 @@ export class DonationService {
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );
+  }
+
+  private _genDonationUpdateRequest(originalDonation: Donation, donationSectionUpdate: Partial<Donation>): DonationUpdateRequest {
+    const donation: Donation = Object.assign({}, originalDonation);
+    Object.keys(donationSectionUpdate).forEach((property: string) => donation[property] = donationSectionUpdate[property]);
+    return { donation };
   }
 
   deleteDonation(donation: Donation): Observable<void> {
@@ -68,12 +77,6 @@ export class DonationService {
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );
-  }
-
-  private _genDonationUpdate(originalDonation: Donation, donationSectionUpdate: Partial<Donation>): Donation {
-    const donation: Donation = Object.assign({}, originalDonation);
-    Object.keys(donationSectionUpdate).forEach((property: string) => donation[property] = donationSectionUpdate[property]);
-    return donation;
   }
 
   claimDonation(donation: Donation): Observable<Donation> {
@@ -119,6 +122,7 @@ export class DonationService {
     }
     // Get donation from server.
     const url = `${this.url}/${id}`;
+    this._pageProgressService.activate(true);
     return this._httpClient.get<Donation>(url).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())

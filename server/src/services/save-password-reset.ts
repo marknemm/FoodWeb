@@ -1,0 +1,60 @@
+import { EntityManager, getRepository, getConnection } from 'typeorm';
+import { randomBytes } from 'crypto';
+import { readAccount } from './read-accounts';
+import { savePassword } from './save-password';
+import { saveAudit } from './save-audit';
+import { sendPasswordResetEmail } from './password-reset-message';
+import { AccountEntity } from '../entity/account.entity';
+import { PasswordResetEntity } from '../entity/password-reset';
+import { FoodWebError } from '../helpers/food-web-error';
+import { PasswordResetRequest } from '../../../shared/src/interfaces/account/password-reset-request';
+
+export async function savePasswordResetToken(username: string): Promise<void> {
+  await getConnection().transaction(async (manager: EntityManager) => {
+    const account: AccountEntity = (await readAccount(username));
+    if (!account) {
+      throw new FoodWebError('Account not found. Be sure to enter a valid username.');
+    }
+    // Attempt to load already created password reset entity (user may click 'Resend Email').
+    let passwordResetEntity: PasswordResetEntity = await manager.getRepository(PasswordResetEntity).findOne({ 
+      account: { id: account.id }
+    });
+    if (!passwordResetEntity) {
+      passwordResetEntity = _genPasswordResetEntity(account);
+      await manager.getRepository(PasswordResetEntity).save(passwordResetEntity);
+    }
+    await sendPasswordResetEmail(account, passwordResetEntity.resetToken, false);
+  });
+}
+
+export async function resetPassword(resetRequest: PasswordResetRequest): Promise<AccountEntity> {
+  const resetToken: string = resetRequest.resetToken;
+  const account: AccountEntity = await getRepository(AccountEntity).findOne({
+    relations: ['contactInfo', 'organization', 'operationHours'],
+    where: { username: resetRequest.username }
+  });
+  const passwordResetEntity: PasswordResetEntity = await getRepository(PasswordResetEntity).findOne({
+    where: { resetToken, account }
+  });
+
+  if (!passwordResetEntity) {
+    throw new FoodWebError('Password reset was unsuccessful. Please request another password reset email.');
+  }
+
+  await getConnection().transaction(async (manager: EntityManager) => {
+    await manager.getRepository(PasswordResetEntity).remove(passwordResetEntity);
+    await savePassword(manager, account, resetRequest.password, null, true);
+    await sendPasswordResetEmail(account, resetToken, true);
+  });
+
+  saveAudit('Reset Password', account, 'xxxxxx', 'xxxxxx', resetRequest.recaptchaScore);
+  return account;
+}
+
+function _genPasswordResetEntity(account: AccountEntity): PasswordResetEntity {
+  const resetToken: string = randomBytes(10).toString('hex'); // Gen 20 char token.
+  const passwordResetEntity = new PasswordResetEntity();
+  passwordResetEntity.resetToken = resetToken;
+  passwordResetEntity.account = account;
+  return passwordResetEntity;
+}
