@@ -12,10 +12,10 @@ export class DonationEntity implements Donation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => AccountEntity, (account) => account.donations, { eager: true })
+  @ManyToOne((type) => AccountEntity, { eager: true })
   donorAccount: AccountEntity;
 
-  @ManyToOne((type) => AccountEntity, (account) => account.claims, { nullable: true, eager: true })
+  @ManyToOne((type) => AccountEntity, { nullable: true, eager: true })
   receiverAccount?: AccountEntity;
 
   @Column()
@@ -38,10 +38,10 @@ export class DonationEntity implements Donation {
   estimatedNumFeed: number;
 
   @Column({ type: 'timestamp with time zone' })
-  pickupWindowStart: string;
+  pickupWindowStart: Date;
 
   @Column({ type: 'timestamp with time zone' })
-  pickupWindowEnd: string;
+  pickupWindowEnd: Date;
 
   @Column({ type: 'enum', enum: _constants.DONATION_STATUSES, default: _constants.DONATION_STATUSES[0] })
   donationStatus: DonationStatus;

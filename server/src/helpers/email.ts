@@ -1,8 +1,8 @@
 import 'dotenv';
 import nodemailer = require('nodemailer');
 import mailgunTransport = require('nodemailer-mailgun-transport');
-import { Account } from '../../../shared/src/interfaces/account/account';
 import { genHandlebarsTemplate } from './handlebars';
+import { Account } from '../../../shared/src/interfaces/account/account';
 
 export enum MailTransporter {
   NOREPLY = 'NOREPLY',
@@ -79,6 +79,7 @@ function _fillMissingContext(context: any, account: Account, template: string): 
   context.isDonor = (account.accountType === 'Donor');
   context.isReceiver = (account.accountType === 'Receiver');
   context.isAdmin = (account.accountType === 'Admin');
+  context.timezone = (context.account.contactInfo.timezone);
   return context;
 }
 

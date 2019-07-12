@@ -16,6 +16,17 @@
     .donate-form-title {
       text-align: center;
     }
+
+    .safety-checklist-err {
+      font-size: 12px;
+      margin-top: -7px;
+    }
+  }
+
+  .action-footer {
+    button {
+      min-width: 100px;
+    }
   }
 
   &.submitted {

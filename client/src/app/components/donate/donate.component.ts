@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { SessionService } from '../../services/session/session.service';
 import { DonationService, Donation } from '../../services/donation/donation.service';
 import { DonationFormService } from '../../services/donation-form/donation-form.service';
-import { DateTimeRange } from 'src/app/services/date-time/date-time.service';
+import { DateTimeRangeComponent } from '../../child-components/date-time-range/date-time-range.component';
 
 @Component({
   selector: 'food-web-donate',
@@ -24,6 +24,8 @@ export class DonateComponent implements OnInit {
    */
   savedDonation: Donation = null;
 
+  @ViewChild('pickupWindowRange', { static: false }) pickupWindowRange: DateTimeRangeComponent;
+
   private _destroy$ = new Subject();
 
   constructor(
@@ -33,7 +35,7 @@ export class DonateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.donateForm = this._donationFormService.buildDonationForm(this.sessionService.account);
+    this.donateForm = this._donationFormService.buildCreateDonationForm(this.sessionService.account);
     this._donationFormService.listenForDonationTypeUpdate(this._destroy$.asObservable());
   }
 
@@ -45,6 +47,8 @@ export class DonateComponent implements OnInit {
    * Submits the donation to be created on the server.
    */
   donate(): void {
+    this.donateForm.markAllAsTouched();
+    this.pickupWindowRange.markAsTouched();
     if (this.donateForm.valid) {
       const donation: Donation = this._donationFormService.getDonationFromForm();
       this._donationService.createDonation(donation).subscribe((savedDonation: Donation) => {

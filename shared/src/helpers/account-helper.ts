@@ -41,6 +41,54 @@ export class AccountHelper {
     return ['/account-details/', `${account.id}`];
   }
 
+  formatPhoneNumber(phoneNumber: string): string {
+    phoneNumber = phoneNumber.trim();
+    let basePhoneNumber: string = phoneNumber;
+
+    // Remove country code for America
+    basePhoneNumber = basePhoneNumber.replace(/^\+\s*1\s*/, '');
+
+    let countryCode: string = this._extractRegex(basePhoneNumber, /^\+\s*\d+\s+/);
+    basePhoneNumber = basePhoneNumber.replace(countryCode, '');
+    const countryCodeNumber: string = this._extractRegex(countryCode, /\d+/);
+    countryCode = (countryCodeNumber ? `+${countryCodeNumber}` : countryCode);
+
+    let extension: string = this._extractRegex(basePhoneNumber, /[a-zA-Z].*/);
+    basePhoneNumber = basePhoneNumber.replace(extension, '');
+    const extensionNumber: string = this._extractRegex(extension, /\d+/);
+    extension = (extensionNumber ? `ext. ${extensionNumber}` : extension);
+
+    // By this point, basePhoneNumber should be full phone number minus any country code and/or extension.
+    const baseDigits: string[] = basePhoneNumber.match(/\d/g);
+
+    // Only continue with formatting if we can isolate a phone number with 7 or 10 base digits; if continue, we may ruin the number.
+    if (baseDigits && (baseDigits.length == 10 || baseDigits.length == 7)) {
+      const areaCodeNumber: string = (baseDigits.length == 10)
+        ? `(${baseDigits.slice(0, 3).join('')})`
+        : '';
+
+      // Now we can finally extract the actual basePhoneNumber (no country/area code or extension).
+      basePhoneNumber = (baseDigits.length == 10)
+        ? baseDigits.slice(3, 10).join('')
+        : baseDigits.join('');
+
+      const basePhoneNumberBegin: string = basePhoneNumber.substring(0, 3);
+      const basePhoneNumberEnd: string = basePhoneNumber.substring(3);
+      phoneNumber = `${countryCode} ${areaCodeNumber} ${basePhoneNumberBegin}-${basePhoneNumberEnd} ${extension}`.trim();
+    }
+
+    return phoneNumber;
+  }
+
+  private _extractRegex(target: string, regex: RegExp): string {
+    let matchSubstr = '';
+    const matchResult: string[] = target.match(regex);
+    if (matchResult) {
+      matchSubstr = matchResult[0];
+    }
+    return matchSubstr;
+  }
+
   validateAccount(account: Account, allowAdminAccountType = false): string {
     if (!account) { return ''; }
 

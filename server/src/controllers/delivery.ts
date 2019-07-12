@@ -3,10 +3,10 @@ import { Request, Response } from 'express';
 import { ensureSessionActive, ensureAccountVerified } from '../middlewares/session.middleware';
 import { handleError } from '../middlewares/response-error.middleware';
 import { genListResponse } from '../helpers/list-response';
-import { DonationsQueryResult } from '../models/read-donations';
-import { readUnscheduledDeliveries, readMyDeliveries, readDeliveries } from '../models/read-deliveries';
-import { scheduleDelivery } from '../models/schedule-delivery';
-import { advanceDeliveryState, undoDeliveryState } from '../models/update-delivery-state';
+import { DonationsQueryResult } from '../services/read-donations';
+import { readUnscheduledDeliveries, readMyDeliveries, readDeliveries } from '../services/read-deliveries';
+import { scheduleDelivery } from '../services/schedule-delivery';
+import { advanceDeliveryState, undoDeliveryState } from '../services/update-delivery-state';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
 import { DeliveryReadRequest } from '../../../shared/src/interfaces/delivery/delivery-read-request';
 import { DeliveryScheduleRequest } from '../../../shared/src/interfaces/delivery/delivery-schedule-request';
@@ -34,7 +34,7 @@ router.get('/my', ensureSessionActive, ensureAccountVerified, (req: Request, res
 
 router.get('/', (req: Request, res: Response) => {
   const readRequest: DeliveryReadRequest = req.query;
-  readDeliveries(readRequest)
+  readDeliveries(readRequest, req.session.account)
     .then((queryResult: DonationsQueryResult) =>
       res.send(genListResponse(queryResult.donations, queryResult.totalCount, readRequest))
     )
@@ -43,21 +43,23 @@ router.get('/', (req: Request, res: Response) => {
 
 router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const scheduleRequest: DeliveryScheduleRequest = req.body;
-  scheduleDelivery(scheduleRequest.donationId, req.session.account)
+  scheduleDelivery(scheduleRequest, req.session.account)
     .then((scheduledDonation: Donation) => res.send(scheduledDonation))
     .catch(handleError.bind(this, res));
 });
 
 router.put('/advance/:id', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const stateChangeRequest: DeliveryStateChangeRequest = req.body;
-  advanceDeliveryState(stateChangeRequest.donationId, req.session.account)
+  stateChangeRequest.deliveryId = parseInt(req.params.id, 10);
+  advanceDeliveryState(stateChangeRequest, req.session.account)
     .then((advancedDonation: Donation) => res.send(advancedDonation))
     .catch(handleError.bind(this, res));
 });
 
 router.put('/undo/:id', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const stateChangeRequest: DeliveryStateChangeRequest = req.body;
-  undoDeliveryState(stateChangeRequest.donationId, req.session.account)
+  stateChangeRequest.deliveryId = parseInt(req.params.id, 10);
+  undoDeliveryState(stateChangeRequest, req.session.account)
     .then((undoneDonation: Donation) => res.send(undoneDonation))
     .catch(handleError.bind(this, res));
 });

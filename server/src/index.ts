@@ -6,6 +6,7 @@ import path = require('path');
 import dotenv = require('dotenv');
 import 'reflect-metadata';
 import { Request, Response } from 'express';
+import { JSONDateReviver } from '../../shared/src/helpers/json-date-reviver';
 
 // Set important paths in global.
 const PRODUCTION: boolean = (process.env['PRODUCTION']  === 'true');
@@ -31,14 +32,18 @@ if (!PRODUCTION && !QA) {
 // Our session middleware and controllers that will handle requests after this router hands off the data to them.
 import { Application } from 'express';
 import { initDbConnectionPool } from './helpers/db-connection-pool';
+import { initSSE } from './helpers/server-side-event';
 import { expressSession } from './middlewares/session.middleware';
+import { recaptcha } from './middlewares/recaptcha';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
+new JSONDateReviver().initJSONDateReviver();
 app.use(forceHttps);
 app.use(bodyParser.json({ limit: '500KB' })); // Need larger size to support cropped images (maybe change this in future to just use image bounds and media attachment).
 app.use(multer().any());
 app.use(expressSession);
+app.use(recaptcha);
 app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
@@ -49,6 +54,7 @@ app.use('/server/session', require('./controllers/session'));
 app.use('/server/account', require('./controllers/account'));
 app.use('/server/donation', require('./controllers/donation'));
 app.use('/server/delivery', require('./controllers/delivery'));
+app.use('/server/notification', require('./controllers/notification'));
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {
@@ -66,6 +72,7 @@ app.get('*', (request: Request, response: Response) => {
   response.sendFile(path.join(global['clientBuildDir'], 'index.html'));
 });
 
+initSSE(app);
 initDbConnectionPool().then(() =>
   // Only start receiving requests once the database has initialized.
   app.listen(app.get('port'), () =>

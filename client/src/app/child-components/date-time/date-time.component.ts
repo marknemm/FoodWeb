@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, forwardRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, forwardRef, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup, FormBuilder, NG_VALIDATORS, Validator, ValidationErrors, Validators } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DateTimeService } from '../../services/date-time/date-time.service';
 
 @Component({
   selector: 'food-web-date-time',
@@ -14,8 +15,9 @@ import { takeUntil } from 'rxjs/operators';
     { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeComponent), multi: true }
   ]
 })
-export class DateTimeComponent implements OnInit, OnDestroy, ControlValueAccessor, Validator {
+export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor, Validator {
 
+  @Input() editing = false;
   @Input() defaultTime = '12:00 pm';
   @Input() datePlaceholder = 'Date';
   @Input() timePlaceholder = 'Time';
@@ -25,14 +27,20 @@ export class DateTimeComponent implements OnInit, OnDestroy, ControlValueAccesso
   @Input() initDateToday = false;
   @Input() required = false;
   @Input() errorStateMatcher: ErrorStateMatcher;
+  @Input() minDateWidth: string;
+  @Input() datePadding = '4px';
+  @Input() dateTime: Date;
+  @Input() boldDate = false;
+  @Input() boldTime = false;
 
   formGroup: FormGroup;
 
-  private _changeCb: (dateStr: string) => void = () => {};
+  private _changeCb: (date: Date) => void = () => {};
   private _destroy$ = new Subject();
 
   constructor(
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private _dateTimeService: DateTimeService
   ) {}
 
   ngOnInit() {
@@ -67,7 +75,13 @@ export class DateTimeComponent implements OnInit, OnDestroy, ControlValueAccesso
   private _onValueChange(value: { date: Date, time: string }): void {
     if (value.date && value.time) {
       const dateStr: string = formatDate(value.date, 'M/d/yyyy', 'en-US')
-      this._changeCb(`${dateStr} ${value.time}`);
+      this._changeCb(new Date(`${dateStr} ${value.time}`));
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.dateTime) {
+      setTimeout(() => this.writeValue(this.dateTime));
     }
   }
 
@@ -75,10 +89,9 @@ export class DateTimeComponent implements OnInit, OnDestroy, ControlValueAccesso
     this._destroy$.next();
   }
 
-  writeValue(dateTimeStr: string): void {
-    if (dateTimeStr) {
-      const date: Date = new Date(dateTimeStr);
-      const time: string = formatDate(dateTimeStr, 'hh:mm aa', 'en-US');
+  writeValue(date: Date): void {
+    if (date) {
+      const time: string = this._dateTimeService.formatTime(date);
       this.defaultTime = time;
       this.formGroup.setValue({ date, time });
     } else {
@@ -86,7 +99,7 @@ export class DateTimeComponent implements OnInit, OnDestroy, ControlValueAccesso
     }
   }
 
-  registerOnChange(changeCb: (dateStr: string) => void): void {
+  registerOnChange(changeCb: (date: Date) => void): void {
     this._changeCb = changeCb;
   }
 
@@ -94,6 +107,13 @@ export class DateTimeComponent implements OnInit, OnDestroy, ControlValueAccesso
     return (this.formGroup.invalid ? { invalid: true } : null);
   }
 
-  registerOnTouched(_): void {}
+  markAsTouched(): void {
+    this.formGroup.markAllAsTouched();
+  }
 
+  markAsPristine(): void {
+    this.formGroup.markAsPristine();
+  }
+
+  registerOnTouched(_): void {}
 }

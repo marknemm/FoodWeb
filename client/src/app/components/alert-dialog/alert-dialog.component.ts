@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, TemplateRef } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AlertResponseService } from './../../services/alert/alert-response.service';
 import { AlertMessage } from './../../services/alert/alert-message';
 

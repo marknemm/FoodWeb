@@ -24,7 +24,7 @@
     </div> -->
     <div class="col-sm-6">
       <mat-form-field class="fill hide-number-spinner">
-        <input matInput type="number" min="0" placeholder="Estimated count of people this will feed" formControlName="estimatedNumFeed">
+        <input matInput type="number" min="0" placeholder="Estimated count of people this will feed" formControlName="estimatedNumFeed" autocomplete="off">
         <mat-error *ngIf="formGroup.get('estimatedNumFeed').hasError('min')">Positive value required</mat-error>
         <mat-error *ngIf="formGroup.get('estimatedNumFeed').hasError('pattern') && !formGroup.get('estimatedNumFeed').hasError('min')">Integer value required</mat-error>
       </mat-form-field>
@@ -32,7 +32,7 @@
     <div class="col-sm-6">
       <mat-form-field class="fill hide-number-spinner">
         <span matPrefix *ngIf="!!formGroup.get('estimatedValue').value || estimatedValueInput === document.activeElement">$</span>
-        <input matInput #estimatedValueInput type="number" min="0" placeholder="Estimated Value" formControlName="estimatedValue" name="Estimated Value">
+        <input matInput #estimatedValueInput type="number" min="0" placeholder="Estimated Value" formControlName="estimatedValue" name="Estimated Value" autocomplete="off">
         <mat-error *ngIf="formGroup.get('estimatedValue').hasError('min')">Positive value required</mat-error>
         <mat-error *ngIf="formGroup.get('estimatedValue').hasError('pattern') && !formGroup.get('estimatedValue').hasError('min')">Monetary value required</mat-error>
       </mat-form-field>
@@ -40,6 +40,6 @@
   </div>
   <mat-form-field class="fill">
     <textarea matInput class="donate-form-description" [matTextareaAutosize]="true" [matAutosizeMinRows]="1"
-      placeholder="Description" formControlName="description" name="Description"></textarea>
+      placeholder="Description" formControlName="description" name="Description" autocomplete="off"></textarea>
   </mat-form-field>
 </div>

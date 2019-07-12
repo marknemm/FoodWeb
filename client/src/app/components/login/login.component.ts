@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { Observable, of } from 'rxjs';
 import { SessionService } from '../../services/session/session.service';
 import { PasswordResetService } from '../../services/password-reset/password-reset.service';
 
@@ -15,7 +16,6 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isPasswordReset = false;
   resetMessageSent = false;
-  usernamePlaceholder = 'Username/Email';
 
   constructor(
     public sessionService: SessionService,
@@ -26,9 +26,15 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this._formBuilder.group({
-      usernameEmail: ['', Validators.required],
+      username: ['', Validators.required],
       password: ['', Validators.required]
     });
+  }
+
+  public static openIfNotLoggedIn(sessionService: SessionService, matDialog: MatDialog): Observable<boolean> {
+    return (!sessionService.loggedIn)
+      ? matDialog.open(LoginComponent).afterClosed()
+      : of(true);
   }
 
   get loading(): boolean {
@@ -42,16 +48,15 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    const usernameEmail: string = this.loginForm.get('usernameEmail').value;
+    const username: string = this.loginForm.get('username').value;
     const password: string = this.loginForm.get('password').value;
-    this.sessionService.login(usernameEmail, password).subscribe(
-      () => this._matDialogRef.close()
+    this.sessionService.login(username, password).subscribe(
+      () => this._matDialogRef.close(true)
     );
   }
 
   forgotPassword(): void {
     this.title = 'Reset Password';
-    this.usernamePlaceholder = 'Username';
     this.loginForm.reset();
     this.loginForm.get('password').disable();
     this.isPasswordReset = true;
@@ -59,13 +64,12 @@ export class LoginComponent implements OnInit {
 
   returnToLogin(): void {
     this.title = 'Login';
-    this.usernamePlaceholder = 'Username/Email';
     this.loginForm.get('password').enable();
     this.isPasswordReset = false;
   }
 
   sendPasswordResetEmail(): void {
-    const username: string = this.loginForm.get('usernameEmail').value;
+    const username: string = this.loginForm.get('username').value;
     this._passwordResetService.sendPasswordResetEmail(username).subscribe(
       () => this.resetMessageSent = true
     );

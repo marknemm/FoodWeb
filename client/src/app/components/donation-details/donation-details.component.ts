@@ -1,12 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DateTimeSelectDialogComponent, DateTimeSelectConfig } from '../date-time-select-dialog/date-time-select-dialog.component';
 import { DonationAction } from '../../child-components/donation-detail-actions/donation-detail-actions.component';
 import { DonationService, Donation } from '../../services/donation/donation.service';
 import { DeliveryService } from '../../services/delivery/delivery.service';
 import { SessionService } from '../../services/session/session.service';
+import { DateTimeRange } from '../../services/date-time/date-time.service';
 import { DonationFormService } from '../../services/donation-form/donation-form.service';
 import { AccountHelper } from '../../../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../../../shared/src/helpers/donation-helper';
@@ -37,7 +40,8 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _donationService: DonationService,
-    private _deliveryService: DeliveryService
+    private _deliveryService: DeliveryService,
+    private _matDialog: MatDialog
   ) {}
 
   get editing(): boolean {
@@ -57,7 +61,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.donationForm = this._donationFormService.buildDonationForm();
+    this.donationForm = this._donationFormService.buildUpdateDonationForm();
     this._listenDonationChange();
   }
 
@@ -67,30 +71,14 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
 
   onDonationAction(action: DonationAction): void {
     switch (action) {
-      case 'ToggleEdit':
-        this.toggleEdit();
-        break;
-      case 'Save':
-        this.saveDonation();
-        break;
-      case 'Delete':
-        this.deleteDonation();
-        break;
-      case 'Claim':
-        this.claimDonation();
-        break;
-      case 'Unclaim':
-        this.unclaimDonation();
-        break;
-      case 'StartDelivery':
-        this.startDelivery();
-        break;
-      case 'AdvanceDeliveryState':
-        this.advanceDeliveryState();
-        break;
-      case 'UndoDeliveryState':
-        this.undoDeliveryState();
-        break;
+      case 'ToggleEdit':            return this.toggleEdit();
+      case 'Save':                  return this.saveDonation();
+      case 'Delete':                return this.deleteDonation();
+      case 'Claim':                 return this.claimDonation();
+      case 'Unclaim':               return this.unclaimDonation();
+      case 'ScheduleDelivery':      return this.scheduleDelivery();
+      case 'AdvanceDeliveryState':  return this.advanceDeliveryState();
+      case 'UndoDeliveryState':     return this.undoDeliveryState();
     }
   }
 
@@ -114,7 +102,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
 
   deleteDonation(): void {
     this._donationService.deleteDonation(this._originalDonation).subscribe(() =>
-      this._router.navigate(['/donations'])
+      this._router.navigate(['/donations/my'])
     );
   }
 
@@ -130,10 +118,21 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  startDelivery(): void {
-    this._deliveryService.scheduleDelivery(this._originalDonation).subscribe(
-      this._updateDonation.bind(this)
-    );
+  scheduleDelivery(): void {
+    const scheduleDialogData: DateTimeSelectConfig = {
+      selectTitle: 'Estimate Your Pickup Window',
+      rangeMins: 15,
+      rangeWindowStart: this.originalDonation.pickupWindowStart,
+      rangeWindowEnd: this.originalDonation.pickupWindowEnd
+    };
+    const pickupWindow$: Observable<DateTimeRange> = DateTimeSelectDialogComponent.open(this._matDialog, scheduleDialogData);
+    pickupWindow$.subscribe((pickupWindow: DateTimeRange) => {
+      if (pickupWindow) {
+        this._deliveryService.scheduleDelivery(this._originalDonation, pickupWindow).subscribe(
+          this._updateDonation.bind(this)
+        );
+      }
+    });
   }
 
   advanceDeliveryState(): void {

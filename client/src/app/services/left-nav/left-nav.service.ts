@@ -24,6 +24,10 @@ export class LeftNavService {
     return this._opened;
   }
 
+  set opened(open: boolean) {
+    this._setOpened(open);
+  }
+
   get openedChanged(): Observable<boolean> {
     return this._openedChanged.asObservable();
   }

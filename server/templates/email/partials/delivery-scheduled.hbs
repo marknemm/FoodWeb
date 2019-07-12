@@ -7,7 +7,7 @@
     <div class="inline-label">
       Donor:
     </div>
-    <div class="indented-address">
+    <div class="indented-data">
       <div class="emphasize">
         {{ donorName }}
       </div>
@@ -23,7 +23,7 @@
     <div class="inline-label">
       Receiver:
     </div>
-    <div class="indented-address">
+    <div class="indented-data">
       <div class="emphasize">
         {{ receiverName }}
       </div>
@@ -35,7 +35,29 @@
     </div>
   </div>
 
-  <hr>
+  <hr class="no-margin-top">
+
+  <div class="col-6">
+    <div class="inline-label">
+      Pickup Window Start:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donation.delivery.pickupWindowStart timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donation.delivery.pickupWindowStart timezone }}</strong>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Pickup Window End:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donation.delivery.pickupWindowEnd timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donation.delivery.pickupWindowEnd timezone }}</strong>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
   <p>
     You can view the delivery and donation details at this
     <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
@@ -53,6 +75,28 @@
   </div>
   <p class="donation-description">{{ donation.description }}</p>
   <hr>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Pickup Window Start:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donation.delivery.pickupWindowStart timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donation.delivery.pickupWindowStart timezone }}</strong>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Pickup Window End:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donation.delivery.pickupWindowEnd timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donation.delivery.pickupWindowEnd timezone }}</strong>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
   <p>
     You can view the donation and delivery details at this
     <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
@@ -69,6 +113,28 @@
   </div>
   <p class="donation-description">{{ donation.description }}</p>
   <hr>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Pickup Window Start:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donation.delivery.pickupWindowStart timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donation.delivery.pickupWindowStart timezone }}</strong>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Pickup Window End:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donation.delivery.pickupWindowEnd timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donation.delivery.pickupWindowEnd timezone }}</strong>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
   <p>
     You can view the donation and delivery details at this
     <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.

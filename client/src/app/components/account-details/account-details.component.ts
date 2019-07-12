@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SessionService } from '../../services/session/session.service';
 import { AccountService, Account, PasswordUpdate } from '../../services/account/account.service';
 import { SectionEditService } from '../../services/section-edit/section-edit.service';
-import { FlexFormArray } from '../../etc/flex-form-array';
 import { PasswordFormMode } from '../../child-components/password/password.component';
 import { DonationReadFilters } from '../../../../../shared/src/interfaces/donation/donation-read-filters';
 import { AccountHelper } from '../../../../../shared/src/helpers/account-helper';
@@ -32,7 +31,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     public sessionService: SessionService,
     public sectionEditService: SectionEditService<string>,
     public accountHelper: AccountHelper,
-    private _accountService: AccountService,
+    public accountService: AccountService,
     private _formBuilder: FormBuilder,
     private _activatedRoute: ActivatedRoute
   ) {}
@@ -70,13 +69,13 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
       organization: new FormGroup({}),
       volunteer: new FormGroup({}),
       contactInfo: new FormGroup({}),
-      operationHours: new FlexFormArray([]),
+      operationHours: new FormControl([]),
       password: new FormGroup({})
     });
   }
 
   private _listenAccountChange(): void {
-    this._accountService.listenAccountQueryChange(this._activatedRoute).pipe(
+    this.accountService.listenAccountQueryChange(this._activatedRoute).pipe(
       takeUntil(this._destroy$)
     ).subscribe((account: Account) => {
       this._accountNotFound = !account;
@@ -113,9 +112,10 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
       if (force || !this.sectionEditService.editing('organization')) {
         this.accountUpdateForm.get('organization').patchValue(account.organization);
       }
-      if (force || !this.sectionEditService.editing('operationHours')) {
-        this.accountUpdateForm.get('operationHours').patchValue(account.operationHours);
-      }
+    }
+
+    if (force || !this.sectionEditService.editing('operationHours')) {
+      this.accountUpdateForm.get('operationHours').patchValue(account.operationHours);
     }
 
     if (force || !this.sectionEditService.editing('password')) {
@@ -145,14 +145,14 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   private _saveAccount(sectionName: string): void {
     let accountUpdate: Partial<Account> = {};
     accountUpdate[sectionName] = this.accountUpdateForm.get(sectionName).value;
-    this._accountService.updateAccount(this.originalAccount, accountUpdate).subscribe(
+    this.accountService.updateAccount(this.originalAccount, accountUpdate).subscribe(
       (savedAccount: Account) => this._handleSaveSuccess(sectionName, savedAccount)
     );
   }
 
   private _savePassword(): void {
     const passwordUpdate: PasswordUpdate = this.accountUpdateForm.get('password').value;
-    this._accountService.updatePassword(passwordUpdate).subscribe(
+    this.accountService.updatePassword(passwordUpdate).subscribe(
       () => this._handleSaveSuccess('password', this.originalAccount)
     );
   }

@@ -4,6 +4,7 @@ import { Observable, EMPTY } from 'rxjs';
 import { map, catchError, finalize } from 'rxjs/operators';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { AlertService } from '../alert/alert.service';
+import { LoginComponent } from '../../components/login/login.component';
 import { LoginRequest } from '../../../../../shared/src/interfaces/session/login-request';
 import { AccountHelper, Account } from '../../../../../shared/src/helpers/account-helper';
 export { Account };
@@ -79,8 +80,8 @@ export class SessionService {
     return this._accountHelper.isMyAccount(this.account, accountId, ignoreAdmin);
   }
 
-  login(usernameEmail: string, password: string): Observable<void> {
-    const loginRequest: LoginRequest = { usernameEmail, password };
+  login(username: string, password: string): Observable<void> {
+    const loginRequest: LoginRequest = { username, password };
     this._loading = true;
     this._loginErr = null;
     return this._httpClient.post<Account>(this.url, loginRequest).pipe(
@@ -98,13 +99,10 @@ export class SessionService {
   }
 
   logout(): void {
-    this._loading = true;
+    this._alertService.displaySimpleMessage('Logout Successful', 'success');
+    this.account = null;
     this._httpClient.delete<void>(this.url).pipe(
-      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
-      finalize(() => this._loading = false)
-    ).subscribe(() => {
-      this._alertService.displaySimpleMessage('Logout Successful', 'success');
-      this.account = null;
-    });
+      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
+    ).subscribe();
   }
 }

@@ -1,5 +1,5 @@
 import { Account } from '../account/account';
-import { Delivery } from './delivery';
+import { Delivery } from '../delivery/delivery';
 export { Account, Delivery };
 
 export type DonationStatus = 'Unmatched' | 'Matched' | 'Scheduled' | 'Picked Up' | 'Complete';
@@ -47,11 +47,11 @@ export interface Donation {
   /**
    * The start time of the donation's pickup window.
    */
-  pickupWindowStart: string;
+  pickupWindowStart: Date;
   /**
    * The end time of the donation's pickup window.
    */
-  pickupWindowEnd: string;
+  pickupWindowEnd: Date;
   /**
    * The current status of the donation.
    */
@@ -63,9 +63,9 @@ export interface Donation {
   /**
    * The time of the most recent update. If the donationStatus is 'Complete', then this is garunteed to be the completion/delivery time.
    */
-  lastUpdated?: string;
+  updateTimestamp?: Date;
   /**
    * The time when the donation was originally created.
    */
-  created?: string;
+  createTimestamp?: Date;
 }

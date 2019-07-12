@@ -107,6 +107,20 @@
       }
     }
   }
+
+  &.no-pad-top .mat-dialog-container {
+    padding-top: 0;
+  }
+
+  &.no-pad-bottom .mat-dialog-container {
+    padding-bottom: 0;
+  }
+}
+
+.mat-form-field {
+  .mat-form-field-subscript-wrapper {
+    margin-top: 0.15em;
+  }
 }
 
 .no-pad.mat-button {
@@ -125,6 +139,14 @@
 
     .mat-form-field-underline {
       bottom: 0px;
+    }
+  }
+}
+
+.mat-select {
+  &.accent {
+    .mat-select-value {
+      color: $accent;
     }
   }
 }
@@ -249,12 +271,50 @@ button {
     background-color: $primary !important;
   }
 
-  .timepicker-button {
-    color: $primary !important;
+  .timepicker__actions {
+    div {
+      ngx-material-timepicker-button button.timepicker-button {
+        color: $primary;
+      }
+
+      &:first-child ngx-material-timepicker-button button.timepicker-button span {
+        color: $warn;
+        font-weight: 500;
+      }
+    }
   }
+
 }
 
 .mat-input-element.mat-autosize {
   overflow-y: hidden;
   min-height: 18px;
+}
+
+.mat-radio-list {
+  .mat-list-item:hover {
+    background-color: whitesmoke;
+  }
+
+  .mat-radio-button {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    .mat-radio-label {
+      width: 100%;
+      height: 100%;
+
+      .mat-radio-container,
+      .mat-radio-label-content {
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+.mat-checkbox {
+  .mat-checkbox-layout {
+    white-space: normal;
+  }
 }

@@ -39,11 +39,27 @@
           </div>
           <div class="col-md-4 col-sm-6">
             <div class="inline-label">Donated:</div>
-            <div>{{ originalDonation.created | date:'short' }}</div>
+            <div>
+              <food-web-date-time [dateTime]="originalDonation.createTimestamp"></food-web-date-time>
+            </div>
+          </div>
+          <div *ngIf="originalDonation.delivery?.pickupTime" class="col-md-4 col-sm-6">
+            <div class="inline-label">Picked Up</div>
+            <div>
+              <food-web-date-time [dateTime]="originalDonation.delivery.pickupTime"></food-web-date-time>
+            </div>
+          </div>
+          <div *ngIf="originalDonation.delivery?.dropOffTime" class="col-md-4 col-sm-6">
+            <div class="inline-label">Completed</div>
+            <div>
+              <food-web-date-time [dateTime]="originalDonation.delivery.dropOffTime"></food-web-date-time>
+            </div>
           </div>
           <div *ngIf="myDonation" class="col-md-4 col-sm-6">
             <div class="inline-label">Last Updated:</div>
-            <div>{{ originalDonation.lastUpdated | date:'short' }}</div>
+            <div>
+              <food-web-date-time [dateTime]="originalDonation.updateTimestamp"></food-web-date-time>
+            </div>
           </div>
         </div>
       </mat-card-content>
@@ -52,6 +68,7 @@
           [donation]="originalDonation"
           [myAccount]="sessionService.account"
           [editing]="editing"
+          [valid]="donationForm.valid"
           (action)="onDonationAction($event)"
         ></food-web-donation-detail-actions>
       </mat-card-actions>
@@ -90,11 +107,13 @@
               </div>
               <div class="col-sm-6">
                 <div class="inline-label">Pickup Window Start:</div>
-                <div class="d-inline-block">{{ originalDonation.pickupWindowStart | date:'short' }}</div>
+                <food-web-date-time [dateTime]="deliveryHelper.getPickupWindow(originalDonation).startDateTime" [boldTime]="true">
+                </food-web-date-time>
               </div>
               <div class="col-sm-6">
                 <div class="inline-label">Pickup Window End:</div>
-                <div class="d-inline-block">{{ originalDonation.pickupWindowEnd | date:'short' }}</div>
+                <food-web-date-time [dateTime]="deliveryHelper.getPickupWindow(originalDonation).endDateTime" [boldTime]="true">
+                  </food-web-date-time>
               </div>
             </div>
           </mat-card-content>

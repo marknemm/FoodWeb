@@ -13,7 +13,7 @@
         </mat-card-header>
         <mat-card-content>
           <div class="accounts-display row">
-            <div class="col-sm-6">
+            <div *ngIf="account.contactInfo.streetAddress" class="col-sm-6">
               <div class="inline-label">Address:</div>
               <div class="d-inline-block">
                 <div>{{ account.contactInfo.streetAddress }}</div>
