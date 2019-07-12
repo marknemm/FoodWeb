@@ -107,6 +107,14 @@
       }
     }
   }
+
+  &.no-pad-top .mat-dialog-container {
+    padding-top: 0;
+  }
+
+  &.no-pad-bottom .mat-dialog-container {
+    padding-bottom: 0;
+  }
 }
 
 .mat-form-field {

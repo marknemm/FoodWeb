@@ -49,6 +49,7 @@ import { DeliveriesComponent } from './components/deliveries/deliveries.componen
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { DateTimeSelectDialogComponent } from './components/date-time-select-dialog/date-time-select-dialog.component';
 import { AboutComponent } from './components/about/about.component';
+import { TermsConditionsDialogComponent } from './components/terms-conditions-dialog/terms-conditions-dialog.component';
 
 import { OperationHoursComponent } from './child-components/operation-hours/operation-hours.component';
 import { ContactInfoComponent } from './child-components/contact-info/contact-info.component';
@@ -70,6 +71,7 @@ import { DonationDetailActionsComponent } from './child-components/donation-deta
 import { AddressComponent } from './child-components/address/address.component';
 import { DateTimeSelectComponent } from './child-components/date-time-select/date-time-select.component';
 import { FoodSafetyChecklistComponent } from './child-components/food-safety-checklist/food-safety-checklist.component';
+import { AgreementBulletPointsComponent } from './child-components/agreement-bullet-points/agreement-bullet-points.component';
 
 import { ConfirmButtonDirective } from './directives/confirm-button/confirm-button.directive';
 
@@ -130,6 +132,8 @@ import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
     FormatTimePipe,
     FormatDateTimePipe,
     AboutComponent,
+    AgreementBulletPointsComponent,
+    TermsConditionsDialogComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -177,7 +181,8 @@ import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
     LoginComponent,
     AlertDialogComponent,
     AlertSnackBarComponent,
-    DateTimeSelectDialogComponent
+    DateTimeSelectDialogComponent,
+    TermsConditionsDialogComponent
   ],
   bootstrap: [
     AppComponent

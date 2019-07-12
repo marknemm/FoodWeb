@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { Subject, Observable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TermsConditionsDialogComponent } from '../terms-conditions-dialog/terms-conditions-dialog.component';
+import { AlertService } from '../../services/alert/alert.service';
 import { SessionService } from '../../services/session/session.service';
 import { AccountService, Account } from '../../services/account/account.service';
 import { AccountType } from '../../../../../shared/src/interfaces/account/account';
@@ -25,7 +28,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     public accountService: AccountService,
     private _formBuilder: FormBuilder,
     private _router: Router,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    private _matDialog: MatDialog,
+    private _alertService: AlertService
   ) {}
 
   get accountType(): AccountType {
@@ -35,18 +40,6 @@ export class SignupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._initForm();
     this._listenAccountTypeRoute();
-  }
-
-  ngOnDestroy() {
-    this._destroy$.next();
-  }
-
-  signup(): void {
-    if (this.signupForm.valid) {
-      const account: Account = this.accountForm.value;
-      const password: string = this.passwordForm.get('password').value;
-      this.accountService.createAccount(account, password);
-    }
   }
 
   private _initForm(): void {
@@ -81,6 +74,33 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.accountForm.get('accountType').setValue(accountTypeParam);
       }
     });
+  }
+
+  ngOnDestroy() {
+    this._destroy$.next();
+  }
+
+  signup(): void {
+    this.signupForm.markAllAsTouched();
+    if (this.signupForm.valid) {
+      const agreement$: Observable<boolean> = this._genAgreementObs();
+      agreement$.subscribe((agreed: boolean) => {
+        if (agreed) {
+          const account: Account = this.accountForm.value;
+          const password: string = this.passwordForm.get('password').value;
+          this.accountService.createAccount(account, password);
+        } else {
+          this._alertService.displaySimpleMessage('You must accept the terms and conditions to complete signup', 'danger');
+        }
+      });
+    }
+  }
+
+  private _genAgreementObs(): Observable<boolean> {
+    if (this.accountType === 'Receiver') {
+      return of(true);
+    }
+    return TermsConditionsDialogComponent.open(this._matDialog, { accountType: this.accountType });
   }
 
 }

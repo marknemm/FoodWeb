@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { SessionService } from '../../services/session/session.service';
 import { DonationService, Donation } from '../../services/donation/donation.service';
 import { DonationFormService } from '../../services/donation-form/donation-form.service';
+import { DateTimeRangeComponent } from '../../child-components/date-time-range/date-time-range.component';
 
 @Component({
   selector: 'food-web-donate',
@@ -22,6 +23,8 @@ export class DonateComponent implements OnInit {
    * Will be unset if the user chooses to donate again.
    */
   savedDonation: Donation = null;
+
+  @ViewChild('pickupWindowRange', { static: false }) pickupWindowRange: DateTimeRangeComponent;
 
   private _destroy$ = new Subject();
 
@@ -44,6 +47,8 @@ export class DonateComponent implements OnInit {
    * Submits the donation to be created on the server.
    */
   donate(): void {
+    this.donateForm.markAllAsTouched();
+    this.pickupWindowRange.markAsTouched();
     if (this.donateForm.valid) {
       const donation: Donation = this._donationFormService.getDonationFromForm();
       this._donationService.createDonation(donation).subscribe((savedDonation: Donation) => {

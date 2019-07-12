@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, OnDestroy, forwardRef } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, forwardRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ControlValueAccessor, Validator, ValidationErrors, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DateTimeComponent } from '../date-time/date-time.component';
 import { DateTimeRange, DateTimeService } from '../../services/date-time/date-time.service';
 
 @Component({
@@ -28,6 +29,9 @@ export class DateTimeRangeComponent implements OnInit, OnDestroy, ControlValueAc
   @Input() maxDate: Date;
   @Input() floatLabels = true;
   @Input() required = false;
+
+  @ViewChild('startDateTime', { static: false }) startDateTime: DateTimeComponent;
+  @ViewChild('endDateTime', { static: false }) endDateTime: DateTimeComponent;  
 
   formGroup: FormGroup;
   rangeErrStateMatcher: ErrorStateMatcher;
@@ -72,6 +76,18 @@ export class DateTimeRangeComponent implements OnInit, OnDestroy, ControlValueAc
 
   validate(): ValidationErrors {
     return (this.formGroup.invalid ? { invalid: true } : null);
+  }
+
+  markAsTouched(): void {
+    this.formGroup.markAsTouched();
+    this.startDateTime.markAsTouched();
+    this.endDateTime.markAsTouched();
+  }
+
+  markAsPristine(): void {
+    this.formGroup.markAsPristine();
+    this.startDateTime.markAsPristine();
+    this.endDateTime.markAsPristine();
   }
 
   registerOnTouched(_): void {}

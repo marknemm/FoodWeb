@@ -1,6 +1,7 @@
 <div [formGroup]="formGroup" class="row">
   <div class="date-time-field col-sm-6">
     <food-web-date-time
+     #startDateTime
      formControlName="startDateTime"
      [editing]="true"
      [datePlaceholder]="startDatePlaceholder"
@@ -16,6 +17,7 @@
   </div>
   <div class="date-time-field col-sm-6">
     <food-web-date-time
+     #endDateTime
      formControlName="endDateTime"
      [editing]="true"
      [datePlaceholder]="endDatePlaceholder"

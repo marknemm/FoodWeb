@@ -107,5 +107,13 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
     return (this.formGroup.invalid ? { invalid: true } : null);
   }
 
+  markAsTouched(): void {
+    this.formGroup.markAllAsTouched();
+  }
+
+  markAsPristine(): void {
+    this.formGroup.markAsPristine();
+  }
+
   registerOnTouched(_): void {}
 }

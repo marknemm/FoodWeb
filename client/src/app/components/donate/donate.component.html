@@ -22,7 +22,7 @@
     <mat-card class="donate-card">
       <mat-card-title>Pickup Window</mat-card-title>
       <mat-card-content>
-        <food-web-date-time-range formControlName="pickupWindow" [initEndDateToday]="true" [required]="true"></food-web-date-time-range>
+        <food-web-date-time-range #pickupWindowRange formControlName="pickupWindow" [initEndDateToday]="true" [required]="true"></food-web-date-time-range>
       </mat-card-content>
     </mat-card>
 
@@ -30,12 +30,15 @@
       <mat-card-title>Food Safety Checklist</mat-card-title>
       <mat-card-content>
         <food-web-food-safety-checklist formControlName="safetyChecklist"></food-web-food-safety-checklist>
+        <mat-error class="safety-checklist-err" *ngIf="donateForm.get('safetyChecklist').touched && donateForm.get('safetyChecklist').hasError('required')">
+          Safety Checklist Required
+        </mat-error>
       </mat-card-content>
     </mat-card>
   </ng-container>
 
   <div class="action-footer align-right">
-    <button mat-raised-button type="submit" color="primary" *ngIf="!savedDonation" [disabled]="donateForm.invalid">Donate</button>
+    <button mat-raised-button type="submit" color="primary" *ngIf="!savedDonation">Donate</button>
     <button mat-button type="button" color="accent" *ngIf="savedDonation" (click)="donateAgain()">Donate Again</button>
     <a *ngIf="savedDonation" class="view-donation-link" [routerLink]="['/donation-details', savedDonation.id]">
       <button mat-raised-button type="button" color="primary">View Donation</button>
