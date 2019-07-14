@@ -1,9 +1,10 @@
 import { AccountType } from './../interfaces/account/account';
 import { DonationStatus } from '../interfaces/donation/donation';
 import { AuditEventType } from '../interfaces/audit/audit';
+import { Weekday } from '../interfaces/account/operation-hours';
 
 export class Constants {
-  readonly WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  readonly WEEKDAYS: Weekday[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   readonly ACCOUNT_TYPES: AccountType[] = ['Donor', 'Receiver', 'Volunteer'];
   readonly DONATION_TYPES = ['Food', 'Merchandise', 'Cash', 'Service', 'Other'];
   readonly DONATION_STATUSES: DonationStatus[] = ['Unmatched', 'Matched', 'Scheduled', 'Picked Up', 'Complete'];
