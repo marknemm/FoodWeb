@@ -13,6 +13,7 @@ import { AccountReadRequest } from '../../../shared/src/interfaces/account/accou
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DonationClaimRequest } from '../../../shared/src/interfaces/donation/donation-claim-request';
 import { DonationUnclaimRequest } from '../../../shared/src/interfaces/donation/donation-unclaim-request';
+import { DateTimeRange } from '../../../shared/src/interfaces/misc/time';
 
 const _donationHelper = new DonationHelper();
 
@@ -22,7 +23,7 @@ const _donationHelper = new DonationHelper();
  * @return A promise that resolves to void when the operation is finished.
  */
 export async function messagePotentialReceivers(donation: Donation): Promise<void> {
-  const potentialReceivers: AccountEntity[] = await _findPotentialReceivers();
+  const potentialReceivers: AccountEntity[] = await _findPotentialReceivers(donation);
   const messagePromises: Promise<void>[] = [];
   potentialReceivers.forEach((receiver: AccountEntity) => {
     const promise: Promise<void> = sendMatchRequestMessage(donation, receiver);
@@ -35,12 +36,22 @@ export async function messagePotentialReceivers(donation: Donation): Promise<voi
  * Gets all potential receivers for a donation so that they can be messaged for a chance to claim the donation.
  * @return A promise that resolves to the list of potential receiver accounts.
  */
-async function _findPotentialReceivers(): Promise<AccountEntity[]> {
-  const readRequest: AccountReadRequest = { page: 1, limit: 300, accountType: 'Receiver' };
-  const queryResult: AccountsQueryResult = await readAccounts(readRequest);
+async function _findPotentialReceivers(donation: Donation): Promise<AccountEntity[]> {
+  const operationHoursRange: DateTimeRange = {
+    startDateTime: donation.pickupWindowStart,
+    endDateTime: donation.pickupWindowEnd
+  };
+  const readRequest: AccountReadRequest = { page: 1, limit: 300, accountType: 'Receiver', operationHoursRange };
+  const queryResult: AccountsQueryResult = await readAccounts(readRequest, donation.donorAccount);
   return queryResult.accounts;
 }
 
+/**
+ * Claims a donation.
+ * @param claimReq The donation claim request.
+ * @param myAccount The account of the current user submitting the request.
+ * @return A promise that resolves to the donation after it has been claimed.
+ */
 export async function claimDonation(claimReq: DonationClaimRequest, myAccount: AccountEntity): Promise<Donation> {
   const donationToClaim: Donation = await readDonation(claimReq.donationId, myAccount);
   _ensureCanClaimDonation(donationToClaim, myAccount);
@@ -65,6 +76,12 @@ function _ensureCanClaimDonation(donation: Donation, myAccount: AccountEntity): 
   }
 }
 
+/**
+ * Unclaims a donation.
+ * @param unclaimReq The unclaim donation request.
+ * @param myAccount The account of the current user submitting the request.
+ * @return A promise resolving to the donation after it has been unclaimed.
+ */
 export async function unclaimDonation(unclaimReq: DonationUnclaimRequest, myAccount: AccountEntity): Promise<Donation> {
   const donationToUnclaim: Donation = await readDonation(unclaimReq.donationId, myAccount);
   _ensureCanUnclaimDonation(donationToUnclaim, myAccount);

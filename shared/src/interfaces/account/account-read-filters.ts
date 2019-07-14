@@ -1,4 +1,5 @@
 import { AccountType } from './account';
+import { DateTimeRange } from '../misc/time';
 
 export interface AccountReadFilters {
   id?: number;
@@ -6,4 +7,5 @@ export interface AccountReadFilters {
   accountType?: AccountType;
   email?: string;
   organizationName?: string;
+  operationHoursRange?: DateTimeRange;
 }
