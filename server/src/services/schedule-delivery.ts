@@ -1,15 +1,16 @@
 import { getConnection, EntityManager } from 'typeorm';
-import { AccountEntity } from '../entity/account.entity';
 import { readAccounts, AccountsQueryResult } from './read-accounts';
 import { sendDeliveryRequestMessages, sendDeliveryScheduledMessages } from './schedule-delivery-message';
-import { FoodWebError } from '../helpers/food-web-error';
+import { saveAudit, getAuditAccounts } from './save-audit';
 import { readDonation } from './read-donations';
+import { FoodWebError } from '../helpers/food-web-error';
+import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { DeliveryScheduleRequest } from '../../../shared/src/interfaces/delivery/delivery-schedule-request';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
-import { saveAudit, getAuditAccounts } from './save-audit';
+import { DateTimeRange } from '../../../shared/src/interfaces/misc/time';
 
 const _deliveryHelper = new DeliveryHelper();
 
@@ -19,7 +20,7 @@ const _deliveryHelper = new DeliveryHelper();
  * @return A promise that resolves to void when the operation is finished.
  */
 export async function messagePotentialDeliverers(donation: Donation): Promise<void> {
-  const potentialDeliverers: AccountEntity[] = await _findPotentialDeliverers();
+  const potentialDeliverers: AccountEntity[] = await _findPotentialDeliverers(donation);
   const messagePromises: Promise<void>[] = [];
   potentialDeliverers.forEach((deliverer: AccountEntity) => {
     const promise: Promise<void> = sendDeliveryRequestMessages(donation, deliverer);
@@ -32,12 +33,22 @@ export async function messagePotentialDeliverers(donation: Donation): Promise<vo
  * Gets all potential deliverers for a donation so that they can be messaged for a chance to begin/schedule the delivery.
  * @return A promise that resolves to the list of potential receiver accounts.
  */
-async function _findPotentialDeliverers(): Promise<AccountEntity[]> {
-  const readRequest: AccountReadRequest = { page: 1, limit: 300, accountType: 'Volunteer' };
+async function _findPotentialDeliverers(donation: Donation): Promise<AccountEntity[]> {
+  const operationHoursRange: DateTimeRange = {
+    startDateTime: donation.pickupWindowStart,
+    endDateTime: donation.pickupWindowEnd
+  };
+  const readRequest: AccountReadRequest = { page: 1, limit: 300, accountType: 'Volunteer', operationHoursRange };
   const queryResult: AccountsQueryResult = await readAccounts(readRequest);
   return queryResult.accounts;
 }
 
+/**
+ * Schedules the delivery of a donation.
+ * @param scheduleRequest The delivery schedule request.
+ * @param myAccount The account of the current user that is submitting the schedule request.
+ * @return A promise that resolves to the donation that has had its delivery scheduled.
+ */
 export async function scheduleDelivery(scheduleRequest: DeliveryScheduleRequest, myAccount: AccountEntity): Promise<Donation> {
   const donationToSchedule = <DonationEntity> await readDonation(scheduleRequest.donationId, myAccount);
   _ensureCanScheduleDelivery(donationToSchedule, myAccount);

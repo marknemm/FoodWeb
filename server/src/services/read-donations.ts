@@ -1,10 +1,10 @@
 import { getRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
+import { genSimpleWhereConditions, genPagination } from '../helpers/query-builder-helper';
 import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
 import { DonationReadRequest, DonationReadFilters } from '../../../shared/src/interfaces/donation/donation-read-request';
-import { PagingParams } from '../../../shared/src/interfaces/paging-params';
 import { Validation } from '../../../shared/src/constants/validation';
 
 export interface DonationsQueryResult {
@@ -51,15 +51,19 @@ export async function readDonations(
   myAccount: AccountEntity,
   donationRepo: Repository<DonationEntity> = getRepository(DonationEntity)
 ): Promise<DonationsQueryResult> {
+  const queryBuilder: SelectQueryBuilder<DonationEntity> = _buildQuery(donationRepo, request);
+  const [donations, totalCount]: [DonationEntity[], number] = await queryBuilder.getManyAndCount();
+  _postProcessDonations(donations, myAccount);
+  return { donations, totalCount };
+}
+
+function _buildQuery(donationRepo: Repository<DonationEntity>, request: DonationReadRequest): SelectQueryBuilder<DonationEntity> {
   let queryBuilder: SelectQueryBuilder<DonationEntity> = donationRepo.createQueryBuilder('donation')
   queryBuilder = _genJoins(queryBuilder);
   queryBuilder = _genWhereCondition(queryBuilder, request);
   queryBuilder = _genOrdering(queryBuilder, request);
-  queryBuilder = _genPagination(queryBuilder, request);
-
-  const [donations, totalCount]: [DonationEntity[], number] = await queryBuilder.getManyAndCount();
-  _postProcessDonations(donations, myAccount);
-  return { donations, totalCount };
+  queryBuilder = genPagination(queryBuilder, request);
+  return queryBuilder;
 }
 
 function _genJoins(queryBuilder: SelectQueryBuilder<DonationEntity>): SelectQueryBuilder<DonationEntity> {
@@ -67,7 +71,7 @@ function _genJoins(queryBuilder: SelectQueryBuilder<DonationEntity>): SelectQuer
     .innerJoinAndSelect('donation.donorAccount', 'donorAccount')
     .innerJoinAndSelect('donorAccount.organization', 'donorOrganization')
     .innerJoinAndSelect('donorAccount.contactInfo', 'donorContactInfo')
-    .innerJoinAndMapMany('donorAccount.operationHours', 'donorAccount.operationHours', 'donorOpHours')
+    .leftJoinAndMapMany('donorAccount.operationHours', 'donorAccount.operationHours', 'donorOpHours')
     .leftJoinAndSelect('donation.receiverAccount', 'receiverAccount')
     .leftJoinAndSelect('receiverAccount.organization', 'receiverOrganization')
     .leftJoinAndSelect('receiverAccount.contactInfo', 'receiverContactInfo')
@@ -82,48 +86,10 @@ function _genWhereCondition(
   queryBuilder: SelectQueryBuilder<DonationEntity>,
   filters: DonationReadFilters
 ): SelectQueryBuilder<DonationEntity> {
-  queryBuilder = _genDonationIdCondition(queryBuilder, filters);
-  queryBuilder = _genDonationTypeCondition(queryBuilder, filters);
-  queryBuilder = _genDonationStatusCondition(queryBuilder, filters);
+  const simpleDonationWhereProps = ['id', 'donationType', 'donationStatus', 'donorLastName', 'donorFirstName'];
+  queryBuilder = genSimpleWhereConditions(queryBuilder, 'donation', filters, simpleDonationWhereProps);
   queryBuilder = _genAccountConditions(queryBuilder, filters);
-  queryBuilder = _genDonorNameConditions(queryBuilder, filters);
-  console.log('here...');
   queryBuilder = _genDonationExpiredCondition(queryBuilder, filters);
-  console.log('and here...');
-  return queryBuilder;
-}
-
-function _genDonationIdCondition(
-  queryBuilder: SelectQueryBuilder<DonationEntity>,
-  filters: DonationReadFilters
-): SelectQueryBuilder<DonationEntity> {
-  if (filters.id) {
-    queryBuilder = queryBuilder.andWhere('donation.id = :id', { id: filters.id });
-  }
-  return queryBuilder;
-}
-
-function _genDonationTypeCondition(
-  queryBuilder: SelectQueryBuilder<DonationEntity>,
-  filters: DonationReadFilters
-): SelectQueryBuilder<DonationEntity> {
-  if (filters.donationType) {
-    queryBuilder = (filters.donationType.indexOf(',') >= 0)
-      ? queryBuilder.andWhere('donation.donationType IN (:...donationTypes)', { donationTypes: filters.donationType.split(',') })
-      : queryBuilder.andWhere('donation.donationType = :donationType', { donationType: filters.donationType });
-  }
-  return queryBuilder;
-}
-
-function _genDonationStatusCondition(
-  queryBuilder: SelectQueryBuilder<DonationEntity>,
-  filters: DonationReadFilters
-): SelectQueryBuilder<DonationEntity> {
-  if (filters.donationStatus) {
-    queryBuilder = (filters.donationStatus.indexOf(',') >= 0)
-      ? queryBuilder.andWhere('donation.donationStatus IN (:...donationStatuses)', { donationStatuses: filters.donationStatus.split(',') })
-      : queryBuilder.andWhere('donation.donationStatus = :donationStatus', { donationStatus: filters.donationStatus });
-  }
   return queryBuilder;
 }
 
@@ -143,28 +109,12 @@ function _genAccountConditions(
   return queryBuilder;
 }
 
-function _genDonorNameConditions(
-  queryBuilder: SelectQueryBuilder<DonationEntity>,
-  filters: DonationReadFilters
-): SelectQueryBuilder<DonationEntity> {
-  if (filters.donorLastName) {
-    queryBuilder = queryBuilder.andWhere('donation.donorLastName = :lastName', { lastName: filters.donorLastName });
-  }
-  if (filters.donorFirstName) {
-    queryBuilder = queryBuilder.andWhere('donation.donorFirstName = :firstName', { firstName: filters.donorFirstName });
-  }
-  return queryBuilder;
-}
-
 function _genDonationExpiredCondition(
   queryBuilder: SelectQueryBuilder<DonationEntity>,
   filters: DonationReadFilters
 ): SelectQueryBuilder<DonationEntity> {
   const expired: boolean = (filters.expired === 'true');
   // If not looking for a specific donation, then filter out all donations that have expired (pickup window has passed).
-  console.log('Expired: ' + expired);
-  console.log('filters.id: ' + filters.id);
-  console.log('filters.myDonations: ' + filters.myDonations);
   if (!expired && filters.id == null && !filters.myDonations) {
     queryBuilder = queryBuilder.andWhere(`(donation.pickupWindowEnd > NOW() OR donation.donationStatus >= 'Picked Up')`);
   } else if (expired) {
@@ -197,17 +147,6 @@ function _genOrdering(
     queryBuilder.addOrderBy('donation.id', 'ASC');
   }
   return queryBuilder;
-}
-
-function _genPagination(
-  queryBuilder: SelectQueryBuilder<DonationEntity>,
-  pagingParams: PagingParams
-): SelectQueryBuilder<DonationEntity> {
-  if (!pagingParams.page) { pagingParams.page = 1 };
-  if (!pagingParams.limit) { pagingParams.limit = 10 };
-  return queryBuilder
-    .skip((pagingParams.page - 1) * pagingParams.limit)
-    .take(pagingParams.limit);
 }
 
 function _postProcessDonations(donations: DonationEntity[], myAccount: AccountEntity): void {
