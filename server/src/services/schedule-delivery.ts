@@ -10,7 +10,6 @@ import { Donation } from '../../../shared/src/interfaces/donation/donation';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { DeliveryScheduleRequest } from '../../../shared/src/interfaces/delivery/delivery-schedule-request';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
-import { DateTimeRange } from '../../../shared/src/interfaces/misc/time';
 
 const _deliveryHelper = new DeliveryHelper();
 
@@ -34,11 +33,16 @@ export async function messagePotentialDeliverers(donation: Donation): Promise<vo
  * @return A promise that resolves to the list of potential receiver accounts.
  */
 async function _findPotentialDeliverers(donation: Donation): Promise<AccountEntity[]> {
-  const operationHoursRange: DateTimeRange = {
-    startDateTime: donation.pickupWindowStart,
-    endDateTime: donation.pickupWindowEnd
+  const readRequest: AccountReadRequest = {
+    page: 1,
+    limit: 300,
+    accountType: 'Volunteer',
+    distanceRangeMi: 20,
+    operationHoursRange: {
+      startDateTime: donation.pickupWindowStart,
+      endDateTime: donation.pickupWindowEnd
+    }
   };
-  const readRequest: AccountReadRequest = { page: 1, limit: 300, accountType: 'Volunteer', operationHoursRange };
   const queryResult: AccountsQueryResult = await readAccounts(readRequest);
   return queryResult.accounts;
 }

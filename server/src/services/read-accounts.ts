@@ -5,6 +5,7 @@ import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hour
 import { Account, OperationHours } from '../../../shared/src/interfaces/account/account';
 import { AccountReadRequest, AccountReadFilters } from '../../../shared/src/interfaces/account/account-read-request';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
+import { FoodWebError, LoginRequiredError } from '../helpers/food-web-error';
 
 export interface AccountsQueryResult {
   accounts: AccountEntity[];
@@ -56,6 +57,7 @@ function _genWhereCondition(
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'contactInfo', filters, ['email']);
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'organization', filters, ['organizationName']);
   queryBuilder = _genOperationHoursCondition(queryBuilder, filters, myAccount);
+  queryBuilder = _genDistanceCondition(queryBuilder, filters, myAccount);
   return queryBuilder;
 }
 
@@ -65,6 +67,7 @@ function _genOperationHoursCondition(
   myAccount: Account
 ): SelectQueryBuilder<AccountEntity> {
   if (filters.operationHoursRange) {
+    if (!myAccount) { throw new LoginRequiredError(); }
     const operationHours: OperationHours = _opHoursHelper.dateTimeRangeToOperationHours(
       filters.operationHoursRange,
       myAccount.contactInfo.timezone
@@ -77,6 +80,25 @@ function _genOperationHoursCondition(
         'OR operationHours.endTime <= :startTime' +
       ')',
       operationHours
+    );
+  }
+  return queryBuilder;
+}
+
+function _genDistanceCondition(
+  queryBuilder: SelectQueryBuilder<AccountEntity>,
+  filters: AccountReadFilters,
+  myAccount: Account
+): SelectQueryBuilder<AccountEntity> {
+  if (filters.distanceRangeMi != null) {
+    if (!myAccount) { throw new LoginRequiredError(); }
+    queryBuilder = queryBuilder.andWhere(
+      'ST_DWithin(ST_MakePoint(:lon, :lat), contactInfo.location, :dist)',
+      {
+        lon: myAccount.contactInfo.location.coordinates[0],
+        lat: myAccount.contactInfo.location.coordinates[1],
+        dist: (filters.distanceRangeMi * 1609.34)
+      }
     );
   }
   return queryBuilder;

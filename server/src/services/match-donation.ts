@@ -13,7 +13,6 @@ import { AccountReadRequest } from '../../../shared/src/interfaces/account/accou
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DonationClaimRequest } from '../../../shared/src/interfaces/donation/donation-claim-request';
 import { DonationUnclaimRequest } from '../../../shared/src/interfaces/donation/donation-unclaim-request';
-import { DateTimeRange } from '../../../shared/src/interfaces/misc/time';
 
 const _donationHelper = new DonationHelper();
 
@@ -37,11 +36,16 @@ export async function messagePotentialReceivers(donation: Donation): Promise<voi
  * @return A promise that resolves to the list of potential receiver accounts.
  */
 async function _findPotentialReceivers(donation: Donation): Promise<AccountEntity[]> {
-  const operationHoursRange: DateTimeRange = {
-    startDateTime: donation.pickupWindowStart,
-    endDateTime: donation.pickupWindowEnd
+  const readRequest: AccountReadRequest = {
+    page: 1,
+    limit: 300,
+    accountType: 'Receiver',
+    distanceRangeMi: 20,
+    operationHoursRange: {
+      startDateTime: donation.pickupWindowStart,
+      endDateTime: donation.pickupWindowEnd
+    }
   };
-  const readRequest: AccountReadRequest = { page: 1, limit: 300, accountType: 'Receiver', operationHoursRange };
   const queryResult: AccountsQueryResult = await readAccounts(readRequest, donation.donorAccount);
   return queryResult.accounts;
 }

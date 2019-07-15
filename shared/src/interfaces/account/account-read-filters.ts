@@ -8,4 +8,5 @@ export interface AccountReadFilters {
   email?: string;
   organizationName?: string;
   operationHoursRange?: DateTimeRange;
+  distanceRangeMi?: number;
 }

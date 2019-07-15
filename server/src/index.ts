@@ -34,7 +34,7 @@ import { Application } from 'express';
 import { initDbConnectionPool } from './helpers/db-connection-pool';
 import { initSSE } from './helpers/server-side-event';
 import { expressSession } from './middlewares/session.middleware';
-import { recaptcha } from './middlewares/recaptcha';
+import { recaptcha } from './middlewares/recaptcha.middleware';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
