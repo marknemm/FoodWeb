@@ -1,5 +1,6 @@
 /**
  * Custom FoodWebError which adds status code to standard error.
+ * @extends Error
  */
 export class FoodWebError extends Error {
   /**
@@ -11,5 +12,15 @@ export class FoodWebError extends Error {
     public status = 500
   ) {
     super(message);
+  }
+}
+
+/**
+ * Custom login required error
+ * @extends FoodWebError
+ */
+export class LoginRequiredError extends FoodWebError {
+  constructor() {
+    super('Login required', 302);
   }
 }
