@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
+import { SessionService } from './services/session/session.service';
 
 @Component({
   selector: 'app-root',
@@ -13,11 +14,13 @@ export class AppComponent {
   constructor(
     private _matIconReg: MatIconRegistry,
     private _domSanitizer: DomSanitizer,
-    jsonDateReviver: JSONDateReviver
+    jsonDateReviver: JSONDateReviver,
+    sessionService: SessionService
   ) {
     this._matIconReg.registerFontClassAlias('fontawesome', 'fa');
     this._initLetterIcons();
     jsonDateReviver.initJSONDateReviver();
+    sessionService.refreshSessionStatus().subscribe();
   }
 
   private _initLetterIcons(): void {

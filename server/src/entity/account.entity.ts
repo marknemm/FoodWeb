@@ -24,7 +24,7 @@ export class AccountEntity implements Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'enum', enum: _constants.ACCOUNT_TYPES.concat(['Admin']) })
+  @Column({ type: 'enum', enum: _constants.ACCOUNT_TYPES.concat([AccountType.Admin]) })
   accountType: AccountType;
 
   @Column()

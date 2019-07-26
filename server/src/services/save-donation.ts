@@ -1,12 +1,13 @@
 import { getConnection, EntityManager, Repository } from 'typeorm';
 import { sendDonationCreateSuccessEmail, sendDonationUpdateSuccessEmails } from './save-donation-message';
 import { readDonation } from './read-donations';
-import { saveAudit, getAuditAccounts } from './save-audit';
+import { saveAudit, getAuditAccounts, AuditEventType } from './save-audit';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { FoodWebError } from '../helpers/food-web-error';
 import { Account } from '../../../shared/src/interfaces/account/account';
-import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
+import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
+import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DonationCreateRequest } from '../../../shared/src/interfaces/donation/donation-create-request';
 import { DonationUpdateRequest } from '../../../shared/src/interfaces/donation/donation-update-request';
 
@@ -14,7 +15,7 @@ const _donationHelper = new DonationHelper();
 
 export async function createDonation(createReq: DonationCreateRequest, myAccount: AccountEntity): Promise<DonationEntity> {
   const donation: Donation = createReq.donation;
-  donation.donationStatus = 'Unmatched';
+  donation.donationStatus = DonationStatus.Unmatched;
   donation.donorAccount = myAccount;
   _validateDonation(donation);
 
@@ -23,7 +24,7 @@ export async function createDonation(createReq: DonationCreateRequest, myAccount
   );
   await sendDonationCreateSuccessEmail(createdDonation, myAccount);
 
-  saveAudit('Donate', myAccount, donation, undefined, createReq.recaptchaScore);
+  saveAudit(AuditEventType.Donate, myAccount, donation, undefined, createReq.recaptchaScore);
   return createdDonation;
 }
 
@@ -43,7 +44,7 @@ export async function updateDonation(updateReq: DonationUpdateRequest, myAccount
   });
   sendDonationUpdateSuccessEmails(originalDonation, updatedDonation)
 
-  saveAudit('Update Donation', getAuditAccounts(donation), updatedDonation, originalDonation, updateReq.recaptchaScore);
+  saveAudit(AuditEventType.UpdateDonation, getAuditAccounts(donation), updatedDonation, originalDonation, updateReq.recaptchaScore);
   return updatedDonation;
 }
 

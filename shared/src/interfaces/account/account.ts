@@ -4,7 +4,12 @@ import { Organization } from './organization';
 import { Volunteer } from './volunteer';
 export { ContactInfo, OperationHours, Organization, Volunteer };
 
-export type AccountType = 'Donor' | 'Receiver' | 'Volunteer' | 'Admin';
+export enum AccountType {
+  Donor = 'Donor',
+  Receiver = 'Receiver',
+  Volunteer = 'Volunteer',
+  Admin = 'Admin'
+};
 
 export interface Account {
   id?: number;

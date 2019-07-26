@@ -4,7 +4,7 @@ import { sendAccountVerificationEmail } from './account-verification-message';
 import { AccountEntity } from '../entity/account.entity';
 import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { saveAudit } from './save-audit';
+import { saveAudit, AuditEventType } from './save-audit';
 import { AccountVerificationRequest } from '../../../shared/src/interfaces/account/account-verification-request';
 
 export async function createUnverifiedAccount(account: AccountEntity, manager: EntityManager = getManager()): Promise<void> {
@@ -40,7 +40,7 @@ export async function verifyAccount(account: AccountEntity, verificationReq: Acc
   if (account && account.id === unverifiedAccount.account.id) {
     account.verified = true;
   }
-  saveAudit('Verify Account', account, account, undefined, verificationReq.recaptchaScore);
+  saveAudit(AuditEventType.VerifyAccount, account, account, undefined, verificationReq.recaptchaScore);
   return account;
 }
 

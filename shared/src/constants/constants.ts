@@ -4,24 +4,46 @@ import { AuditEventType } from '../interfaces/audit/audit';
 import { Weekday } from '../interfaces/account/operation-hours';
 
 export class Constants {
-  readonly WEEKDAYS: Weekday[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  readonly ACCOUNT_TYPES: AccountType[] = ['Donor', 'Receiver', 'Volunteer'];
+  readonly WEEKDAYS: Weekday[] = [
+    Weekday.Sunday,
+    Weekday.Monday,
+    Weekday.Tuesday,
+    Weekday.Wednesday,
+    Weekday.Thursday,
+    Weekday.Friday,
+    Weekday.Saturday
+  ];
+
+  readonly ACCOUNT_TYPES: AccountType[] = [
+    AccountType.Donor,
+    AccountType.Receiver,
+    AccountType.Volunteer
+  ];
+
   readonly DONATION_TYPES = ['Food', 'Merchandise', 'Cash', 'Service', 'Other'];
-  readonly DONATION_STATUSES: DonationStatus[] = ['Unmatched', 'Matched', 'Scheduled', 'Picked Up', 'Complete'];
+
+  readonly DONATION_STATUSES: DonationStatus[] = [
+    DonationStatus.Unmatched,
+    DonationStatus.Matched,
+    DonationStatus.Scheduled,
+    DonationStatus.PickedUp,
+    DonationStatus.Complete
+  ];
+
   readonly AUDIT_EVENT_TYPES: AuditEventType[] = [
-    'Signup',
-    'Verify Account',
-    'Remove Unverified Account',
-    'Update Account',
-    'Update Password',
-    'Reset Password',
-    'Donate',
-    'Update Donation',
-    'Remove Donation',
-    'Claim Donation',
-    'Unclaim Donation',
-    'Schedule Delivery',
-    'Delivery State Advance',
-    'Delivery State Undo'
+    AuditEventType.Signup,
+    AuditEventType.VerifyAccount,
+    AuditEventType.RemoveUnverifiedAccount,
+    AuditEventType.UpdateAccount,
+    AuditEventType.UpdatePassword,
+    AuditEventType.ResetPassword,
+    AuditEventType.Donate,
+    AuditEventType.UpdateDonation,
+    AuditEventType.RemoveDonation,
+    AuditEventType.ClaimDonation,
+    AuditEventType.UnclaimDonation,
+    AuditEventType.ScheduleDelivery,
+    AuditEventType.DeliveryStateAdvance,
+    AuditEventType.DeliveryStateUndo
   ];
 }

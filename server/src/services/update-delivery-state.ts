@@ -1,7 +1,7 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { readDonation } from './read-donations';
 import { sendDeliveryStateAdvancedMessage, sendDeliveryStateUndoMessage } from './update-delivery-state-message';
-import { saveAudit, getAuditAccounts } from './save-audit';
+import { saveAudit, getAuditAccounts, AuditEventType } from './save-audit';
 import { FoodWebError } from '../helpers/food-web-error';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
@@ -24,7 +24,7 @@ export async function advanceDeliveryState(stateChangeReq: DeliveryStateChangeRe
   );
   await sendDeliveryStateAdvancedMessage(advancedDonation);
 
-  saveAudit('Delivery State Advance', getAuditAccounts(advancedDonation), advancedDonation, donation, stateChangeReq.recaptchaScore);
+  saveAudit(AuditEventType.DeliveryStateAdvance, getAuditAccounts(advancedDonation), advancedDonation, donation, stateChangeReq.recaptchaScore);
   return advancedDonation;
 }
 
@@ -58,7 +58,7 @@ async function _undoDeliveryStateNonCancel(
     (async (manager: EntityManager) => manager.getRepository(DonationEntity).save(undoneDonation)
   );
   await sendDeliveryStateUndoMessage(undoneDonation);
-  saveAudit('Delivery State Undo', getAuditAccounts(donation), undoneDonation, donation, stateChangeReq.recaptchaScore);
+  saveAudit(AuditEventType.DeliveryStateUndo, getAuditAccounts(donation), undoneDonation, donation, stateChangeReq.recaptchaScore);
   return undoneDonation;
 }
 

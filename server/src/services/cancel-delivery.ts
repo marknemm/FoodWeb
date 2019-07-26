@@ -1,10 +1,10 @@
 import { EntityManager, getConnection } from 'typeorm';
 import { sendDeliveryCancelledMessage } from './cancel-delivery-message';
-import { saveAudit, getAuditAccounts } from './save-audit';
+import { saveAudit, getAuditAccounts, AuditEventType } from './save-audit';
 import { DeliveryEntity } from '../entity/delivery-entity';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { Donation } from '../../../shared/src/helpers/donation-helper';
+import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
 
 export async function cancelDelivery(donation: Donation, myAccount: AccountEntity, manager?: EntityManager): Promise<Donation> {
   if (manager) {
@@ -20,14 +20,14 @@ export async function cancelDelivery(donation: Donation, myAccount: AccountEntit
   );
 
   await sendDeliveryCancelledMessage(cancelledDonation, myAccount);
-  saveAudit('Cancel Delivery', getAuditAccounts(donation), cancelledDonation, donation);
+  saveAudit(AuditEventType.CancelDelivery, getAuditAccounts(donation), cancelledDonation, donation);
   return cancelledDonation;
 }
 
 async function _deleteDelivery(donation: Donation, manager: EntityManager): Promise<Donation> {
   let cancelledDonation: Donation = Object.assign({}, donation);
   await manager.getRepository(DeliveryEntity).delete(cancelledDonation.delivery.id);
-  cancelledDonation.donationStatus = 'Matched';
+  cancelledDonation.donationStatus = DonationStatus.Matched;
   cancelledDonation.delivery = null;
   cancelledDonation = await manager.getRepository(DonationEntity).save(cancelledDonation);
   return cancelledDonation;

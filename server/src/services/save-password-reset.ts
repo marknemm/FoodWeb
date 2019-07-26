@@ -2,7 +2,7 @@ import { EntityManager, getRepository, getConnection } from 'typeorm';
 import { randomBytes } from 'crypto';
 import { readAccount } from './read-accounts';
 import { savePassword } from './save-password';
-import { saveAudit } from './save-audit';
+import { saveAudit, AuditEventType } from './save-audit';
 import { sendPasswordResetEmail } from './password-reset-message';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordResetEntity } from '../entity/password-reset';
@@ -47,7 +47,7 @@ export async function resetPassword(resetRequest: PasswordResetRequest): Promise
     await sendPasswordResetEmail(account, resetToken, true);
   });
 
-  saveAudit('Reset Password', account, 'xxxxxx', 'xxxxxx', resetRequest.recaptchaScore);
+  saveAudit(AuditEventType.ResetPassword, account, 'xxxxxx', 'xxxxxx', resetRequest.recaptchaScore);
   return account;
 }
 

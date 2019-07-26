@@ -52,7 +52,7 @@ export class DonationHelper {
       if (donation.donorAccount.id !== myAccount.id) {
         return 'You do not own the donation';
       }
-      if (this.isDonationStatusLaterThan(donation, 'Scheduled')) {
+      if (this.isDonationStatusLaterThan(donation, DonationStatus.Scheduled)) {
         return 'Cannot edit/delete a donation that has been picked up';
       }
     }
@@ -80,7 +80,7 @@ export class DonationHelper {
       if (myAccount.id !== donation.receiverAccount.id) {
         return 'You do not own the donation claim';
       }
-      if (this.isDonationStatusLaterThan(donation, 'Scheduled')) {
+      if (this.isDonationStatusLaterThan(donation, DonationStatus.Scheduled)) {
         return 'Cannot unclaim a completed donation';
       }
     }
