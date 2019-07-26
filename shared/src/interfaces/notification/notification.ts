@@ -1,6 +1,7 @@
 import { AuditEventType } from '../audit/audit';
 
-export type NotificationType = AuditEventType;
+export type InfoNotification = AuditEventType | 'Donation Available' | 'Delivery Available';
+export type NotificationType = InfoNotification;
 
 /**
  * A notification that can serve as an SMS Message, SSE Notification, Push Notification, or Web Notification.
@@ -26,7 +27,7 @@ export interface Notification {
   /**
    * The subtitle of the notification.
    */
-  notificationSubtitle: string;
+  notificationSubtitle?: string;
   /**
    * The body of the notification.
    */

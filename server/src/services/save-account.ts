@@ -1,7 +1,7 @@
 import { getConnection, EntityManager, Repository, QueryFailedError } from 'typeorm';
 import { createUnverifiedAccount } from './account-verification';
 import { savePassword } from './save-password';
-import { saveAudit } from './save-audit';
+import { saveAudit, AuditEventType } from './save-audit';
 import { FoodWebError } from '../helpers/food-web-error';
 import { geocode, geoTimezone } from '../helpers/geocoder';
 import { AccountEntity } from '../entity/account.entity';
@@ -24,7 +24,7 @@ export async function createAccount(request: AccountCreateRequest): Promise<Acco
 
   _opHoursHelper.formatOperationHoursTimes(createdAccount.operationHours);
   createdAccount.verified = false;
-  saveAudit('Signup', createdAccount, createdAccount, undefined, request.recaptchaScore);
+  saveAudit(AuditEventType.Signup, createdAccount, createdAccount, undefined, request.recaptchaScore);
   return createdAccount;
 }
 
@@ -39,7 +39,7 @@ export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: 
   });
 
   _opHoursHelper.formatOperationHoursTimes(updatedAccount.operationHours);
-  saveAudit('Update Account', updatedAccount, updatedAccount, myAccount, updateReq.recaptchaScore);
+  saveAudit(AuditEventType.UpdateAccount, updatedAccount, updatedAccount, myAccount, updateReq.recaptchaScore);
   return updatedAccount;
 }
 

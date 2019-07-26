@@ -1,7 +1,8 @@
 import SSE = require('sse');
-import { SSEManager, SSEOptions, SSEClient, SSEEvent } from 'server-side-events';
-import { Application, Request } from 'express';
+import { SSEManager, SSEClient, SSEEvent, SSEOptions } from 'server-side-events';
+import { Server } from 'http';
 import { Account } from '../../../shared/src/interfaces/account/account';
+import { sessionReqHandler } from './session';
 
 /**
  * Mappings of account IDs to SSEClient connections.
@@ -12,13 +13,9 @@ const clients = new Map<number, SSEClient>();
  * Initializes the SSE (Server Side Event) Manager that listens for & establishes new client connections.
  * @param app The main express application.
  */
-export function initSSE(app: Application): void {
-  const opts: SSEOptions = {
-    path: '/server/sse',
-    // Ensure that only clients that are logged in can create an SSE connection.
-    verifyRequest: (req: Request) => (req.session && req.session.account)
-  };
-  const sse: SSEManager = new SSE(app, opts);
+export function initSSE(server: Server): void {
+  const opts: SSEOptions = { path: '/server/sse' };
+  const sse: SSEManager = new SSE(server, opts);
   sse.on('connection', _establishSSEConnection);
 }
 
@@ -27,13 +24,21 @@ export function initSSE(app: Application): void {
  * Adds the new client connection to contained Account -> SSEClient mappings.
  * @param client The new client connection.
  */
-function _establishSSEConnection(client: SSEClient): void {
-  const account: Account = client.req.session.account;
-  // Close any old hanging connections associated with an account (prevent memory leaks).
-  if (clients.has(account.id)) {
-    clients.get(account.id).close();
-  }
-  clients.set(account.id, client);
+async function _establishSSEConnection(client: SSEClient): Promise<void> {
+  sessionReqHandler(client.req, client.res, (err: Error) => {
+    const session: Express.Session = client.req.session;
+    if (!err && session && session.account) {
+      const account: Account = session.account;
+      // Close any old hanging connections associated with an account (prevent memory leaks).
+      if (clients.has(account.id)) {
+        clients.get(account.id).close();
+      }
+      clients.set(account.id, client);
+    } else {
+      // If user not logged in, then immediately close & discard the connection.
+      client.close();
+    }
+  });
 }
 
 /**

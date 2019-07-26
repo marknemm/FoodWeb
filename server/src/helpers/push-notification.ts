@@ -3,7 +3,7 @@ import { Notification } from '../../../shared/src/interfaces/notification/notifi
 import { sendEvent } from './server-side-event';
 import { SSEEvent } from 'server-side-events';
 
-export function pushNotification(account: Account, notification: Notification) {
+export function pushNotification(account: Account, notification: Notification): void {
   const sseEvent: SSEEvent = {
     event: notification.notificationType,
     data: notification,

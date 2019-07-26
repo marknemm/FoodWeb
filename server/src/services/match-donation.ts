@@ -4,11 +4,11 @@ import { readAccounts, AccountsQueryResult } from './read-accounts';
 import { readDonation } from './read-donations';
 import { sendMatchRequestMessage, sendClaimMessages, sendUnclaimMessages } from './match-donation-message';
 import { cancelDelivery } from './cancel-delivery';
-import { saveAudit, getAuditAccounts } from './save-audit';
+import { saveAudit, getAuditAccounts, AuditEventType } from './save-audit';
 import { FoodWebError } from '../helpers/food-web-error';
 import { DonationEntity } from '../entity/donation.entity';
-import { Donation } from '../../../shared/src/interfaces/donation/donation';
-import { Account } from '../../../shared/src/interfaces/account/account';
+import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
+import { Account, AccountType } from '../../../shared/src/interfaces/account/account';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DonationClaimRequest } from '../../../shared/src/interfaces/donation/donation-claim-request';
@@ -39,7 +39,7 @@ async function _findPotentialReceivers(donation: Donation): Promise<AccountEntit
   const readRequest: AccountReadRequest = {
     page: 1,
     limit: 300,
-    accountType: 'Receiver',
+    accountType: AccountType.Receiver,
     distanceRangeMi: 20,
     operationHoursRange: {
       startDateTime: donation.pickupWindowStart,
@@ -61,7 +61,7 @@ export async function claimDonation(claimReq: DonationClaimRequest, myAccount: A
   _ensureCanClaimDonation(donationToClaim, myAccount);
 
   let claimedDonation: Donation = Object.assign({}, donationToClaim);
-  claimedDonation.donationStatus = 'Matched';
+  claimedDonation.donationStatus = DonationStatus.Matched;
   claimedDonation.receiverAccount = myAccount;
 
   claimedDonation = await getConnection().transaction(async (manager: EntityManager) =>
@@ -69,7 +69,7 @@ export async function claimDonation(claimReq: DonationClaimRequest, myAccount: A
   );
   await sendClaimMessages(claimedDonation);
 
-  saveAudit('Claim Donation', getAuditAccounts(claimedDonation), claimedDonation, donationToClaim, claimReq.recaptchaScore);
+  saveAudit(AuditEventType.ClaimDonation, getAuditAccounts(claimedDonation), claimedDonation, donationToClaim, claimReq.recaptchaScore);
   return claimedDonation;
 }
 
@@ -93,13 +93,13 @@ export async function unclaimDonation(unclaimReq: DonationUnclaimRequest, myAcco
   let unclaimedDonation: Donation = Object.assign({}, donationToUnclaim);
   await getConnection().transaction(async (manager: EntityManager) => {
     unclaimedDonation = await _cancelDeliveryIfExists(unclaimedDonation, myAccount, manager);
-    unclaimedDonation.donationStatus = 'Unmatched';
+    unclaimedDonation.donationStatus = DonationStatus.Unmatched;
     unclaimedDonation.receiverAccount = null;
     unclaimedDonation = await manager.getRepository(DonationEntity).save(unclaimedDonation);
   });
   await sendUnclaimMessages(unclaimedDonation, donationToUnclaim);
 
-  saveAudit('Unclaim Donation', getAuditAccounts(donationToUnclaim), unclaimedDonation, donationToUnclaim, unclaimReq.recaptchaScore);
+  saveAudit(AuditEventType.UnclaimDonation, getAuditAccounts(donationToUnclaim), unclaimedDonation, donationToUnclaim, unclaimReq.recaptchaScore);
   return unclaimedDonation;
 }
 

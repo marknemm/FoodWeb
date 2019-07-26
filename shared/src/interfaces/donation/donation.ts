@@ -2,7 +2,13 @@ import { Account } from '../account/account';
 import { Delivery } from '../delivery/delivery';
 export { Account, Delivery };
 
-export type DonationStatus = 'Unmatched' | 'Matched' | 'Scheduled' | 'Picked Up' | 'Complete';
+export enum DonationStatus {
+  Unmatched = 'Unmatched',
+  Matched = 'Matched',
+  Scheduled = 'Scheduled',
+  PickedUp = 'Picked Up',
+  Complete = 'Complete'
+}
 
 /**
  * A donation.

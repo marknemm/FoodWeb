@@ -32,6 +32,7 @@
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "connect-redis": "^3.4.0",
+    "cookie-parser": "^1.4.4",
     "cron": "^1.7.1",
     "crypto": "^1.0.1",
     "dotenv": "^6.2.0",

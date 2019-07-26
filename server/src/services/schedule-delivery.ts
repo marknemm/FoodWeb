@@ -1,14 +1,15 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { readAccounts, AccountsQueryResult } from './read-accounts';
 import { sendDeliveryRequestMessages, sendDeliveryScheduledMessages } from './schedule-delivery-message';
-import { saveAudit, getAuditAccounts } from './save-audit';
+import { saveAudit, getAuditAccounts, AuditEventType } from './save-audit';
 import { readDonation } from './read-donations';
 import { FoodWebError } from '../helpers/food-web-error';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { Donation } from '../../../shared/src/interfaces/donation/donation';
+import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { DeliveryScheduleRequest } from '../../../shared/src/interfaces/delivery/delivery-schedule-request';
+import { AccountType } from '../../../shared/src/interfaces/account/account';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
 
 const _deliveryHelper = new DeliveryHelper();
@@ -36,7 +37,7 @@ async function _findPotentialDeliverers(donation: Donation): Promise<AccountEnti
   const readRequest: AccountReadRequest = {
     page: 1,
     limit: 300,
-    accountType: 'Volunteer',
+    accountType: AccountType.Volunteer,
     distanceRangeMi: 20,
     operationHoursRange: {
       startDateTime: donation.pickupWindowStart,
@@ -82,7 +83,7 @@ function _genScheduledDonation(
 ): DonationEntity {
   // Make shallow copy to preserve original donation.
   let scheduledDonation: DonationEntity = Object.assign({}, donationToSchedule);
-  scheduledDonation.donationStatus = 'Scheduled';
+  scheduledDonation.donationStatus = DonationStatus.Scheduled;
   scheduledDonation.delivery = {
     id: undefined,
     volunteerAccount: myAccount,
@@ -95,5 +96,5 @@ function _genScheduledDonation(
 
 function _saveScheduleAudit(scheduleRequest: DeliveryScheduleRequest, donationToSchedule: Donation, scheduledDonation: Donation): void {
   const auditAccounts: AccountEntity[] = getAuditAccounts(scheduledDonation);
-  saveAudit('Schedule Delivery', auditAccounts, scheduledDonation, donationToSchedule, scheduleRequest.recaptchaScore);
+  saveAudit(AuditEventType.ScheduleDelivery, auditAccounts, scheduledDonation, donationToSchedule, scheduleRequest.recaptchaScore);
 }
