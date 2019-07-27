@@ -6,11 +6,12 @@ $mat-mobile: 600px;
 $xs: 575px;
 
 /* Header Consts */
-$site-title-height: 60px;
-$site-title-height-mobile: 50px;
-$page-title-height: 40px;
-$header-height: ($site-title-height + $page-title-height);
-$header-height-mobile: ($site-title-height-mobile + $page-title-height);
+$main-header-height: 60px;
+$main-header-height-mobile: 45px;
+$sub-header-height: 40px;
+$sub-header-height-mobile: 35px;
+$header-height: ($main-header-height + $sub-header-height);
+$header-height-mobile: ($main-header-height-mobile + $sub-header-height-mobile);
 
 /* Main (Page) Content Consts */
 $page-vert-pad: 20px;

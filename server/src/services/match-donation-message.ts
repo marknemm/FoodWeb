@@ -2,6 +2,7 @@ import { broadcastEmail, MailTransporter, sendEmail } from '../helpers/email';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
 import { Account } from '../../../shared/src/interfaces/account/account';
+import { NotificationType } from '../../../shared/src/interfaces/notification/notification';
 import { pushNotification } from '../helpers/push-notification';
 
 const _donationHelper = new DonationHelper();
@@ -25,7 +26,7 @@ export async function sendMatchRequestMessage(donation: Donation, receiver: Acco
   pushNotification(
     receiver,
     {
-      notificationType: 'Donation Available',
+      notificationType: NotificationType.Donate,
       notificationDetailId: donation.id,
       notificationTitle: `Donation Available from ${_donationHelper.donorName(donation)}`,
       notificationBody: 'Select this notification to see more about the available donation'
