@@ -2,6 +2,7 @@ import { AccountType } from './../interfaces/account/account';
 import { DonationStatus } from '../interfaces/donation/donation';
 import { AuditEventType } from '../interfaces/audit/audit';
 import { Weekday } from '../interfaces/account/operation-hours';
+import { NotificationType } from '../interfaces/notification/notification';
 
 export class Constants {
   readonly WEEKDAYS: Weekday[] = [
@@ -46,4 +47,15 @@ export class Constants {
     AuditEventType.DeliveryStateAdvance,
     AuditEventType.DeliveryStateUndo
   ];
+
+  readonly NOTIFICATION_TYPES: NotificationType[] = [
+    NotificationType.Donate,
+    NotificationType.UpdateDonation,
+    NotificationType.RemoveDonation,
+    NotificationType.ClaimDonation,
+    NotificationType.UnclaimDonation,
+    NotificationType.ScheduleDelivery,
+    NotificationType.DeliveryStateAdvance,
+    NotificationType.DeliveryStateUndo
+  ]
 }

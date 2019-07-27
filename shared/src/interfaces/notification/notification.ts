@@ -1,7 +1,15 @@
 import { AuditEventType } from '../audit/audit';
 
-export type InfoNotification = AuditEventType | 'Donation Available' | 'Delivery Available';
-export type NotificationType = InfoNotification;
+export enum NotificationType {
+  Donate = AuditEventType.Donate,
+  UpdateDonation = AuditEventType.UpdateDonation,
+  RemoveDonation = AuditEventType.RemoveDonation,
+  ClaimDonation = AuditEventType.ClaimDonation,
+  UnclaimDonation = AuditEventType.UnclaimDonation,
+  ScheduleDelivery = AuditEventType.ScheduleDelivery,
+  DeliveryStateAdvance = AuditEventType.DeliveryStateAdvance,
+  DeliveryStateUndo = AuditEventType.DeliveryStateUndo
+}
 
 /**
  * A notification that can serve as an SMS Message, SSE Notification, Push Notification, or Web Notification.

@@ -1,7 +1,7 @@
 <header class="site-header">
   <mat-toolbar color="primary" class="site-title-container">
     <img src="/assets/IconImgSm.png" alt="Food Web Icon" class="site-icon">
-    <span class="site-title">Food Web</span>
+    <a [routerLink]="['home']" class="site-title">Food Web</a>
     <div class="non-blocking-page-progress-indicator" *ngIf="pageProgressService.showNonBlockingProgress">
       <food-web-progress-indicator
         [backdropColor]="pageProgressService.backdropColor"
@@ -22,12 +22,21 @@
       <mat-icon aria-label="Toggle Navigation Menu">menu</mat-icon>
     </button>
     <h1 class="page-title">{{ pageTitleService.title }}</h1>
-    <span class="session-links">
+    <span class="header-right">
       <ng-container *ngIf="!sessionService.loggedIn">
         <a (click)="login()">Login</a>
         <span> | <a [routerLink]="['signup']">Signup</a></span>
       </ng-container>
       <ng-container *ngIf="sessionService.loggedIn">
+        <button mat-icon-button class="notifications-button" aria-label="Notifications menu">
+          <mat-icon
+           [matBadge]="numNotifications"
+           [matBadgeHidden]="!numNotifications"
+           matBadgeSize="small"
+           matBadgeColor="warn"
+           matBadgeDescription="{{ numNotifications }} unread"
+          >notifications</mat-icon>
+        </button>
         <span><a [routerLink]="['account-details']">Account</a> | </span>
         <a [routerLink]="['home']" (click)="sessionService.logout()">Logout</a>
       </ng-container>

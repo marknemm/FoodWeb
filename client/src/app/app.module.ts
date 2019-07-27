@@ -24,6 +24,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatBadgeModule } from '@angular/material/badge';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 
@@ -169,6 +170,7 @@ import { EventRegistrationsComponent } from './components/event-registrations/ev
     MatListModule,
     MatNativeDateModule,
     MatExpansionModule,
+    MatBadgeModule,
     NgxMaterialTimepickerModule,
     RecaptchaV3Module
   ],

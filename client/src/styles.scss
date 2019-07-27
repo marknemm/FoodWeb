@@ -149,6 +149,16 @@ mat-card.mat-card {
   animation: greenPulse 5s infinite !important;
 }
 
+.notifications-button {
+  .mat-badge-small.mat-badge-overlap.mat-badge-after .mat-badge-content {
+    right: -5px;
+  }
+
+  .mat-badge-small.mat-badge-above .mat-badge-content {
+    top: -5px;
+  }
+}
+
 @media only screen and (max-width: $md) {
   .d-inline-block.desktop {
     display: block !important;

@@ -1,8 +1,9 @@
 import SSE = require('sse');
 import { SSEManager, SSEClient, SSEEvent, SSEOptions } from 'server-side-events';
 import { Server } from 'http';
-import { Account } from '../../../shared/src/interfaces/account/account';
 import { sessionReqHandler } from './session';
+import { Account } from '../../../shared/src/interfaces/account/account';
+import { ServerSideEventType } from '../../../shared/src/interfaces/server-side-event/server-side-event';
 
 /**
  * Mappings of account IDs to SSEClient connections.
@@ -34,6 +35,10 @@ async function _establishSSEConnection(client: SSEClient): Promise<void> {
         clients.get(account.id).close();
       }
       clients.set(account.id, client);
+      client.send({
+        id: ServerSideEventType.NotificationsAvailable,
+        data: JSON.stringify({ unreadNotificationsCount: 1 })
+      })
     } else {
       // If user not logged in, then immediately close & discard the connection.
       client.close();

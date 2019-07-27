@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { Notification, NotificationType } from '../../../../../shared/src/interfaces/notification/notification';
+import { filter, map } from 'rxjs/operators';
+import { ServerSideEventType } from '../../../../../shared/src/interfaces/server-side-event/server-side-event';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +41,9 @@ export class ServerSideEventSourceService {
   open(): void {
     if (!this.isOpen) {
       this._eventSource = new EventSource('/server/sse', { withCredentials: true });
-      this._eventSource.onmessage = (event: MessageEvent) => this._onMessage.next(event);
+      this._eventSource.onmessage = (event: MessageEvent) => {
+        this._onMessage.next(event);
+      }
       this._eventSource.onerror = (event: MessageEvent) => {
         console.error(event);
         this._onError.next(event);
@@ -52,13 +54,13 @@ export class ServerSideEventSourceService {
   /**
    * Gets an observable that emits received server side events that match a entry in a given list of notification types.
    * @param notificationTypes The notification types to filter.
-   * @return An observable that emits filtered server side event messages.
+   * @return An observable that emits filtered server side event data.
    */
-  onMessageType(notificationTypes: NotificationType[]): Observable<MessageEvent> {
+  onMessageType<T>(eventTypes: ServerSideEventType | ServerSideEventType[]): Observable<T> {
+    eventTypes = (eventTypes instanceof Array) ? eventTypes : [eventTypes];
     return this.onMessage.pipe(
-      filter((message: MessageEvent) => {
-        return notificationTypes.indexOf((<Notification>message.data).notificationType) >= 0;
-      })
+      filter((message: MessageEvent) => (<string[]>eventTypes).indexOf(message.lastEventId) >= 0),
+      map((message: MessageEvent) => JSON.parse(message.data))
     );
   }
 

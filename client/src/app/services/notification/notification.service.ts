@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpParams, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { flatMap, catchError, finalize } from 'rxjs/operators';
+import { flatMap, catchError, finalize, map } from 'rxjs/operators';
 import { PageProgressService } from '../page-progress/page-progress.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
+import { ServerSideEventSourceService } from '../server-side-event-source/server-side-event-source.service';
 import { Notification } from '../../../../../shared/src/interfaces/notification/notification';
 import { ListResponse } from '../../../../../shared/src/interfaces/list-response';
 import { NotificationReadRequest, NotificationReadFilters } from '../../../../../shared/src/interfaces/notification/notification-read-request';
+import { ServerSideEventType, NotificationsAvailableEvent } from '../../../../../shared/src/interfaces/server-side-event/server-side-event';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +21,17 @@ export class NotificationService {
   constructor(
     private _httpClient: HttpClient,
     private _pageProgressService: PageProgressService,
-    private _errorHandlerService: ErrorHandlerService
+    private _errorHandlerService: ErrorHandlerService,
+    private _serverSideEventSourceService: ServerSideEventSourceService
   ) {}
+
+  onNotificationsAvailable(): Observable<number> {
+    return this._serverSideEventSourceService.onMessageType<NotificationsAvailableEvent>(
+      ServerSideEventType.NotificationsAvailable
+    ).pipe(
+      map((notificationsAvailableEvent) => notificationsAvailableEvent.unreadNotificationsCount)
+    );
+  }
 
   listenNotificationsQueryChange(activatedRoute: ActivatedRoute): Observable<ListResponse<Notification>> {
     return activatedRoute.queryParamMap.pipe(
