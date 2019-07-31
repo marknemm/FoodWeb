@@ -121,6 +121,14 @@ $site-title-font-size-mobile: 30px;
           height: $sub-header-height-mobile;
           line-height: $sub-header-height-mobile;
         }
+
+        mat-icon {
+          top: -1px;
+
+          @media only screen and (max-width: $mat-mobile) {
+            top: 0;
+          }
+        }
       }
 
       > span, > a {

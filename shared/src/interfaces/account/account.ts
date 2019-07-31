@@ -16,6 +16,7 @@ export interface Account {
   accountType: AccountType;
   username: string;
   profileImgUrl: string;
+  lastSeenNotificationId?: number;
   contactInfo: ContactInfo;
   operationHours?: OperationHours[];
   organization?: Organization;

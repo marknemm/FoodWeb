@@ -29,7 +29,7 @@ export class NotificationService {
     return this._serverSideEventSourceService.onMessageType<NotificationsAvailableEvent>(
       ServerSideEventType.NotificationsAvailable
     ).pipe(
-      map((notificationsAvailableEvent) => notificationsAvailableEvent.unreadNotificationsCount)
+      map((notificationsAvailableEvent) => notificationsAvailableEvent.unseenNotificationsCount)
     );
   }
 
@@ -51,8 +51,8 @@ export class NotificationService {
 
   getNotifications(filters: NotificationReadFilters, page: number, limit: number): Observable<ListResponse<Notification>> {
     const request = <NotificationReadRequest>filters;
-    request.page = (page >= 0 ? page : request.page);
-    request.limit = (limit >= 0 ? limit : request.limit);
+    request.page = (page >= 0 ? page : 1);
+    request.limit = (limit >= 0 ? limit : 10);
     const params = new HttpParams({ fromObject: <any>request });
     this._pageProgressService.activate(true);
     return this._httpClient.get<ListResponse<Notification>>(this.url, { params }).pipe(

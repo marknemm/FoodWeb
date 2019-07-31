@@ -13,7 +13,7 @@ import { ListResponse } from '../../../../../shared/src/interfaces/list-response
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
 
-  @Input() hideHeader = false;
+  @Input() notificationsMenu = false;
 
   notifications: Notification[];
   totalCount = 0;
@@ -26,12 +26,15 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this._notificationService.listenNotificationsQueryChange(this._activatedRoute).pipe(
-      takeUntil(this._destroy$)
-    ).subscribe((response: ListResponse<Notification>) => {
-      this.notifications = response.list;
-      this.totalCount = response.totalCount;
-    });
+    // Only listen for query parameter changes if we are on notifications page (not a menu off of header).
+    if (!this.notificationsMenu) {
+      this._notificationService.listenNotificationsQueryChange(this._activatedRoute).pipe(
+        takeUntil(this._destroy$)
+      ).subscribe((response: ListResponse<Notification>) => {
+        this.notifications = response.list;
+        this.totalCount = response.totalCount;
+      });
+    }
   }
 
   ngOnDestroy() {

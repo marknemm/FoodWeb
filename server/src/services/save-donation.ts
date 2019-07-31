@@ -1,10 +1,10 @@
 import { getConnection, EntityManager, Repository } from 'typeorm';
-import { sendDonationCreateSuccessEmail, sendDonationUpdateSuccessEmails } from './save-donation-message';
 import { readDonation } from './read-donations';
 import { saveAudit, getAuditAccounts, AuditEventType } from './save-audit';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { FoodWebError } from '../helpers/food-web-error';
+import { UpdateDiff } from '../interfaces/update-diff';
 import { Account } from '../../../shared/src/interfaces/account/account';
 import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
@@ -22,13 +22,12 @@ export async function createDonation(createReq: DonationCreateRequest, myAccount
   const createdDonation: DonationEntity = await getConnection().transaction(
     async (manager: EntityManager) => manager.getRepository(DonationEntity).save(donation)
   );
-  await sendDonationCreateSuccessEmail(createdDonation, myAccount);
 
   saveAudit(AuditEventType.Donate, myAccount, donation, undefined, createReq.recaptchaScore);
   return createdDonation;
 }
 
-export async function updateDonation(updateReq: DonationUpdateRequest, myAccount: AccountEntity): Promise<Donation> {
+export async function updateDonation(updateReq: DonationUpdateRequest, myAccount: AccountEntity): Promise<UpdateDiff<Donation>> {
   const donation: Donation = updateReq.donation;
   _validateDonation(donation);
   _ensureCanUpdateDonation(donation, myAccount);
@@ -42,10 +41,9 @@ export async function updateDonation(updateReq: DonationUpdateRequest, myAccount
     // Must do separate query b/c save method will only return updated properties in entity (partial entity).
     return readDonation(donation.id, myAccount, donationRepo);
   });
-  sendDonationUpdateSuccessEmails(originalDonation, updatedDonation)
 
   saveAudit(AuditEventType.UpdateDonation, getAuditAccounts(donation), updatedDonation, originalDonation, updateReq.recaptchaScore);
-  return updatedDonation;
+  return { old: originalDonation, new: updatedDonation };
 }
 
 function _validateDonation(donation: Donation): void {

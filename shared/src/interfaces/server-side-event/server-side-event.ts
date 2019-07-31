@@ -3,5 +3,5 @@ export enum ServerSideEventType {
 }
 
 export interface NotificationsAvailableEvent {
-  unreadNotificationsCount: number;
+  unseenNotificationsCount: number;
 }

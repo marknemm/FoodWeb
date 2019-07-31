@@ -16,6 +16,8 @@ import { PasswordUpdateRequest } from '../../../shared/src/interfaces/account/pa
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { PasswordResetRequest } from '../../../shared/src/interfaces/account/password-reset-request';
 import { AccountVerificationRequest } from '../../../shared/src/interfaces/account/account-verification-request';
+import { PasswordResetEntity } from '../entity/password-reset';
+import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '../services/password-reset-message';
 
 const router = express.Router();
 
@@ -54,6 +56,7 @@ router.put('/password', ensureSessionActive, (req: Request, res: Response) => {
 router.put('/reset-password/', (req: Request, res: Response) => {
   const resetRequest: PasswordResetRequest = req.body;
   resetPassword(resetRequest)
+    .then((account: AccountEntity) => sendPasswordResetSuccessEmail(account))
     .then((account: AccountEntity) => res.send(account))
     .catch(handleError.bind(this, res));
 });
@@ -71,6 +74,9 @@ router.get('/', (req: Request, res: Response) => {
 router.get('/reset-password', (req: Request, res: Response) => {
   const username: string = req.query.username;
   savePasswordResetToken(username)
+    .then((passwordResetEntity: PasswordResetEntity) =>
+      sendPasswordResetEmail(passwordResetEntity.account, passwordResetEntity.resetToken)
+    )
     .then(() => res.send())
     .catch(handleError.bind(this, res));
 });

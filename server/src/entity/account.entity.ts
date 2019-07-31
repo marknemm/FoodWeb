@@ -34,6 +34,9 @@ export class AccountEntity implements Account {
   @Column()
   profileImgUrl: string;
 
+  @Column({ default: -1 })
+  lastSeenNotificationId: number;
+
   @OneToOne((type) => ContactInfoEntity, (contactInfo) => contactInfo.account, { cascade: true, eager: true })
   contactInfo: ContactInfoEntity;
 

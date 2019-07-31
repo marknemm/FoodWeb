@@ -1,9 +1,10 @@
+import { UpdateDiff } from '../interfaces/update-diff';
 import { broadcastEmail, MailTransporter, sendEmail } from '../helpers/email';
 import { AccountEntity } from '../entity/account.entity';
+import { pushNotification } from '../helpers/push-notification';
 import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
 import { Account } from '../../../shared/src/interfaces/account/account';
 import { NotificationType } from '../../../shared/src/interfaces/notification/notification';
-import { pushNotification } from '../helpers/push-notification';
 
 const _donationHelper = new DonationHelper();
 
@@ -36,7 +37,12 @@ export async function sendMatchRequestMessage(donation: Donation, receiver: Acco
   await Promise.all(messagePromises);
 }
 
-export async function sendClaimMessages(donation: Donation): Promise<void> {
+/**
+ * Sends donation claimed messages to the donor and receiver users that are associated with the claimed donation.
+ * @param donation The donation that has been claimed.
+ * @return A promise that resolves to the newly claimed donation.
+ */
+export async function sendClaimMessages(donation: Donation): Promise<Donation> {
   const accounts: Account[] = [donation.receiverAccount, donation.donorAccount];
   const { donorName, receiverName } = _donationHelper.memberNames(donation);
   const subjects = [
@@ -51,12 +57,18 @@ export async function sendClaimMessages(donation: Donation): Promise<void> {
     'donation-claimed',
     { donation, donorName, receiverName }
   ).catch(console.error);
+  return donation;
 }
 
-export async function sendUnclaimMessages(unclaimedDonation: Donation, donationToUnclaim: Donation): Promise<void> {
-  const accounts: Account[] = [donationToUnclaim.receiverAccount, unclaimedDonation.donorAccount];
-  const donorName: string = _donationHelper.donorName(unclaimedDonation);
-  const receiverName: string = _donationHelper.receiverName(donationToUnclaim);
+/**
+ * Sends donation claimed messages to all accounts associated with the unclaimed donation (donor, receiver, & possibly volunteer).
+ * @param unclaimDiff The diff of the unclaimed (new) and claimed (old) donation.
+ * @return A promise that resolves to the (new) donation that has been unclaimed.
+ */
+export async function sendUnclaimMessages(unclaimDiff: UpdateDiff<Donation>): Promise<Donation> {
+  const accounts: Account[] = [unclaimDiff.old.receiverAccount, unclaimDiff.new.donorAccount];
+  const donorName: string = _donationHelper.donorName(unclaimDiff.new);
+  const receiverName: string = _donationHelper.receiverName(unclaimDiff.old);
   let delivererName = '';
   const subjects = [
     `Unclaimed Donation from ${donorName}`,
@@ -64,9 +76,9 @@ export async function sendUnclaimMessages(unclaimedDonation: Donation, donationT
   ];
 
   // If donation had a delivery lined up, we must also notify the deliverer.
-  if (donationToUnclaim.delivery) {
-    accounts.push(donationToUnclaim.delivery.volunteerAccount);
-    delivererName = _donationHelper.delivererName(donationToUnclaim);
+  if (unclaimDiff.old.delivery) {
+    accounts.push(unclaimDiff.old.delivery.volunteerAccount);
+    delivererName = _donationHelper.delivererName(unclaimDiff.old);
     subjects.push(`Delivery Cancelled by ${receiverName}`);
   }
 
@@ -75,6 +87,14 @@ export async function sendUnclaimMessages(unclaimedDonation: Donation, donationT
     accounts,
     subjects,
     'donation-unclaimed',
-    { donation: unclaimedDonation, donorName, receiverName, delivererName, receiverAccount: donationToUnclaim.receiverAccount }
+    {
+      donation: unclaimDiff.new,
+      donorName,
+      receiverName,
+      delivererName,
+      receiverAccount: unclaimDiff.old.receiverAccount
+    }
   ).catch(console.error);
+
+  return unclaimDiff.new;
 }

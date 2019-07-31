@@ -33,7 +33,7 @@ if (!PRODUCTION && !QA) {
 import { Application } from 'express';
 import { Server } from 'http';
 import { initDbConnectionPool } from './helpers/db-connection-pool';
-import { initSSE } from './helpers/server-side-event';
+import { foodWebSSEManager } from './helpers/server-side-event';
 import { recaptcha } from './middlewares/recaptcha.middleware';
 import { sessionReqHandler } from './helpers/session';
 
@@ -80,5 +80,5 @@ initDbConnectionPool().then(() =>
     console.log(`Node app is running on port: ${app.get('port')}`)
   )
 )
-.then((server: Server) => initSSE(server))
+.then((server: Server) => foodWebSSEManager.init(server))
 .catch(console.error);
