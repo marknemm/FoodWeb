@@ -1,0 +1,18 @@
+@import "../../../styles/constants.scss";
+
+.notifications-menu-container {
+  width: 280px;
+
+  .title {
+    color: $accent-darkest;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: -5px;
+    padding: 0 4px;
+    text-align: center;
+  }
+
+  .mat-divider {
+    margin: 3px 0;
+  }
+}

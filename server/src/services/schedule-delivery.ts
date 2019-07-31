@@ -17,9 +17,9 @@ const _deliveryHelper = new DeliveryHelper();
 /**
  * Sends messages to potential volunteer deliverers so that they are notified about the need for donation delivery.
  * @param donation The donation that has been matched and needs to be delivered.
- * @return A promise that resolves to void when the operation is finished.
+ * @return A promise that resolves to the input donation when complete.
  */
-export async function messagePotentialDeliverers(donation: Donation): Promise<void> {
+export async function messagePotentialDeliverers(donation: Donation): Promise<Donation> {
   const potentialDeliverers: AccountEntity[] = await _findPotentialDeliverers(donation);
   const messagePromises: Promise<void>[] = [];
   potentialDeliverers.forEach((deliverer: AccountEntity) => {
@@ -27,6 +27,7 @@ export async function messagePotentialDeliverers(donation: Donation): Promise<vo
     messagePromises.push(promise);
   });
   await Promise.all(messagePromises).catch(console.error);
+  return donation;
 }
 
 /**
@@ -53,6 +54,7 @@ async function _findPotentialDeliverers(donation: Donation): Promise<AccountEnti
  * @param scheduleRequest The delivery schedule request.
  * @param myAccount The account of the current user that is submitting the schedule request.
  * @return A promise that resolves to the donation that has had its delivery scheduled.
+ * @throws FoodWebError if the user that submitted the request is not authroized to schedule the delivery.
  */
 export async function scheduleDelivery(scheduleRequest: DeliveryScheduleRequest, myAccount: AccountEntity): Promise<Donation> {
   const donationToSchedule = <DonationEntity> await readDonation(scheduleRequest.donationId, myAccount);
@@ -63,7 +65,6 @@ export async function scheduleDelivery(scheduleRequest: DeliveryScheduleRequest,
     async (manager: EntityManager) => manager.getRepository(DonationEntity).save(scheduledDonation)
   );
   delete scheduledDonation.delivery.donation; // Prevent circular JSON reference error.
-  await sendDeliveryScheduledMessages(scheduledDonation);
 
   _saveScheduleAudit(scheduleRequest, donationToSchedule, scheduledDonation);
   return scheduledDonation;

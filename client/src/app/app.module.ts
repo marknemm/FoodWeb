@@ -25,6 +25,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatMenuModule } from '@angular/material/menu';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 
@@ -52,6 +53,7 @@ import { NotificationsComponent } from './components/notifications/notifications
 import { DateTimeSelectDialogComponent } from './components/date-time-select-dialog/date-time-select-dialog.component';
 import { AboutComponent } from './components/about/about.component';
 import { TermsConditionsDialogComponent } from './components/terms-conditions-dialog/terms-conditions-dialog.component';
+import { EventRegistrationsComponent } from './components/event-registrations/event-registrations.component';
 
 import { OperationHoursComponent } from './child-components/operation-hours/operation-hours.component';
 import { ContactInfoComponent } from './child-components/contact-info/contact-info.component';
@@ -74,6 +76,8 @@ import { AddressComponent } from './child-components/address/address.component';
 import { DateTimeSelectComponent } from './child-components/date-time-select/date-time-select.component';
 import { FoodSafetyChecklistComponent } from './child-components/food-safety-checklist/food-safety-checklist.component';
 import { AgreementBulletPointsComponent } from './child-components/agreement-bullet-points/agreement-bullet-points.component';
+import { EventCardComponent } from './child-components/event-card/event-card.component';
+import { NotificationsMenuComponent } from './child-components/notifications-menu/notifications-menu.component';
 
 import { ConfirmButtonDirective } from './directives/confirm-button/confirm-button.directive';
 
@@ -88,8 +92,6 @@ import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hour
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
 import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
-import { EventCardComponent } from './child-components/event-card/event-card.component';
-import { EventRegistrationsComponent } from './components/event-registrations/event-registrations.component';
 
 @NgModule({
   declarations: [
@@ -140,6 +142,7 @@ import { EventRegistrationsComponent } from './components/event-registrations/ev
     TermsConditionsDialogComponent,
     EventCardComponent,
     EventRegistrationsComponent,
+    NotificationsMenuComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -171,6 +174,7 @@ import { EventRegistrationsComponent } from './components/event-registrations/ev
     MatNativeDateModule,
     MatExpansionModule,
     MatBadgeModule,
+    MatMenuModule,
     NgxMaterialTimepickerModule,
     RecaptchaV3Module
   ],

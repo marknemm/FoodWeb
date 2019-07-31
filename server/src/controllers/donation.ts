@@ -1,5 +1,6 @@
 import express = require('express');
 import { Request, Response } from 'express';
+import { UpdateDiff } from '../interfaces/update-diff';
 import { ensureSessionActive, ensureAccountVerified } from '../middlewares/session.middleware';
 import { handleError } from '../middlewares/response-error.middleware';
 import { genListResponse } from '../helpers/list-response';
@@ -8,6 +9,9 @@ import { messagePotentialReceivers, claimDonation, unclaimDonation } from '../se
 import { readDonations, DonationsQueryResult, readDonation, readMyDonations } from '../services/read-donations';
 import { deleteDonation } from '../services/delete-donation';
 import { messagePotentialDeliverers } from '../services/schedule-delivery';
+import { sendDonationUpdateMessages, sendDonationCreateMessages } from '../services/save-donation-message';
+import { sendDonationDeleteSuccessEmail } from '../services/delete-donation-message';
+import { sendUnclaimMessages, sendClaimMessages } from '../services/match-donation-message';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
 import { DonationReadRequest } from '../../../shared/src/interfaces/donation/donation-read-request';
 import { DonationCreateRequest } from '../../../shared/src/interfaces/donation/donation-create-request';
@@ -21,20 +25,18 @@ const router = express.Router();
 router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const createReq: DonationCreateRequest = req.body;
   createDonation(createReq, req.session.account)
-    .then((donation: Donation) => {
-      messagePotentialReceivers(donation);
-      res.send(donation);
-    })
+    .then((donation: Donation) => sendDonationCreateMessages(donation))
+    .then((donation: Donation) => messagePotentialReceivers(donation))
+    .then((donation: Donation) => res.send(donation))
     .catch(handleError.bind(this, res));
 });
 
 router.post('/claim', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const claimRequest: DonationClaimRequest = req.body;
   claimDonation(claimRequest, req.session.account)
-    .then((claimedDonation: Donation) => {
-      messagePotentialDeliverers(claimedDonation);
-      res.send(claimedDonation);
-    })
+    .then((claimedDonation: Donation) => sendClaimMessages(claimedDonation))
+    .then((claimedDonation: Donation) => messagePotentialDeliverers(claimedDonation))
+    .then((claimedDonation: Donation) => res.send(claimedDonation))
     .catch(handleError.bind(this, res));
 });
 
@@ -66,6 +68,7 @@ router.get('/:id', (req: Request, res: Response) => {
 router.put('/', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const updateReq: DonationUpdateRequest = req.body;
   updateDonation(updateReq, req.session.account)
+    .then((donationDiff: UpdateDiff<Donation>) => sendDonationUpdateMessages(donationDiff))
     .then((donation: Donation) => res.send(donation))
     .catch(handleError.bind(this, res));
 });
@@ -74,6 +77,7 @@ router.delete('/:id', ensureSessionActive, ensureAccountVerified, (req: Request,
   const deleteReq: DonationDeleteRequest = req.body;
   deleteReq.donationId = parseInt(req.params.id, 10);
   deleteDonation(deleteReq, req.session.account)
+    .then((deletedDonation: Donation) => sendDonationDeleteSuccessEmail(deletedDonation))
     .then(() => res.send())
     .catch(handleError.bind(this, res));
 });
@@ -82,6 +86,7 @@ router.delete('/claim/:id', ensureSessionActive, ensureAccountVerified, (req: Re
   const unclaimReq: DonationUnclaimRequest = req.body;
   unclaimReq.donationId = parseInt(req.params.id, 10);
   unclaimDonation(unclaimReq, req.session.account)
+    .then((unclaimDonationDiff: UpdateDiff<Donation>) => sendUnclaimMessages(unclaimDonationDiff))
     .then((unclaimedDonation: Donation) => res.send(unclaimedDonation))
     .catch(handleError.bind(this, res));
 });

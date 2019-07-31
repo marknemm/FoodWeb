@@ -4,6 +4,7 @@ import { Constants } from '../constants/constants';
 import { Validation } from '../constants/validation';
 import { Donation, DonationStatus } from '../interfaces/donation/donation';
 import { DonationReadFilters } from '../interfaces/donation/donation-read-filters';
+import { AccountType } from '../interfaces/account/account';
 export { Donation };
 
 export class DonationHelper {
@@ -48,7 +49,7 @@ export class DonationHelper {
     if (!myAccount) {
       return 'You do not own the donation';
     }
-    if (myAccount.accountType !== 'Admin') {
+    if (myAccount.accountType !== AccountType.Admin) {
       if (donation.donorAccount.id !== myAccount.id) {
         return 'You do not own the donation';
       }
@@ -60,23 +61,23 @@ export class DonationHelper {
   }
 
   validateDonationClaimPrivilege(donation: Donation, myAccount: Account): string {
-    if (!myAccount || myAccount.accountType !== 'Receiver') {
+    if (!myAccount || myAccount.accountType !== AccountType.Receiver) {
       return 'Only a Receiver account can claim a donation';
     }
-    if (donation.donationStatus !== 'Unmatched') {
+    if (donation.donationStatus !== DonationStatus.Unmatched) {
       return 'Cannot claim a donation that has already been claimed';
     }
     return '';
   }
 
   validateDonationUnclaimPrivilege(donation: Donation, myAccount: Account): string {
-    if (donation.donationStatus === 'Unmatched') {
+    if (donation.donationStatus === DonationStatus.Unmatched) {
       return 'You cannot unclaimed a donation that has not been claimed';
     }
     if (!myAccount) {
       return 'You do not own the donation claim';
     }
-    if (myAccount.accountType !== 'Admin') {
+    if (myAccount.accountType !== AccountType.Admin) {
       if (myAccount.id !== donation.receiverAccount.id) {
         return 'You do not own the donation claim';
       }
@@ -85,6 +86,15 @@ export class DonationHelper {
       }
     }
     return '';
+  }
+
+  validateDeliveryCancelPrivilege(donation: Donation, myAccount: Account): string {
+    if (donation.donationStatus !== DonationStatus.Scheduled) {
+      return 'You cannot cancel a delivery that is not in a scheduled state';
+    }
+    if (!myAccount || (myAccount.accountType !== AccountType.Admin && myAccount.id !== donation.delivery.volunteerAccount.id)) {
+      return 'You did not schedule the delivery';
+    }
   }
 
   isDonationStatusLaterThan(donation: Donation, compareStatus: DonationStatus): boolean {
@@ -116,8 +126,8 @@ export class DonationHelper {
   findDonationsQueryParams(account: Account): DonationReadFilters {
     if (account) {
       switch (account.accountType) {
-        case 'Receiver': return { donationStatus: 'Unmatched' };
-        case 'Volunteer': return { donationStatus: 'Matched' };
+        case AccountType.Receiver: return { donationStatus: DonationStatus.Unmatched };
+        case AccountType.Volunteer: return { donationStatus: DonationStatus.Matched };
       }
     }
     return {};

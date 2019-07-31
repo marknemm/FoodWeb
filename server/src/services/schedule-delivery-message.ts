@@ -21,7 +21,7 @@ export function sendDeliveryRequestMessages(donation: Donation, deliverer: Accou
   );
 }
 
-export async function sendDeliveryScheduledMessages(donation: Donation): Promise<void> {
+export async function sendDeliveryScheduledMessages(donation: Donation): Promise<Donation> {
   const sendAccounts: Account[] = [donation.donorAccount, donation.receiverAccount, donation.delivery.volunteerAccount];
   const donorName: string = _donationHelper.donorName(donation);
   const receiverName: string = _donationHelper.receiverName(donation);
@@ -39,4 +39,6 @@ export async function sendDeliveryScheduledMessages(donation: Donation): Promise
     'delivery-scheduled',
     { donation, donorName, receiverName, delivererName }
   ).catch(console.error);
+
+  return donation;
 }

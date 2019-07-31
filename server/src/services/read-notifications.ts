@@ -1,4 +1,4 @@
-import { getRepository, FindConditions, In } from 'typeorm';
+import { getRepository, FindConditions, In, MoreThan } from 'typeorm';
 import { NotificationEntity } from '../entity/notification.entity';
 import { Account } from '../../../shared/src/interfaces/account/account';
 import { Notification, NotificationType } from '../../../shared/src/interfaces/notification/notification';
@@ -22,8 +22,8 @@ export interface NotificationsQueryResult {
 export async function readNotifications(request: NotificationReadRequest, myAccount: Account): Promise<NotificationsQueryResult> {
   const [notifications, totalCount]: [NotificationEntity[], number] = await getRepository(NotificationEntity).findAndCount({
     where: _genFindConditions(request, myAccount),
-    skip: (request.page - 1) * request.limit,
-    take: request.limit,
+    skip: request.page && request.limit ? (request.page - 1) * request.limit : 0,
+    take: request.limit ? request.limit : 10,
     order: { id: 'DESC' } // Get latest notifications first.
   });
   return { notifications, totalCount };
@@ -44,4 +44,19 @@ function _genFindConditions(request: NotificationReadRequest, myAccount: Account
     ? In((<string>request.notificationType).split(','))
     : <NotificationType>request.notificationType;
   return conditions;
+}
+
+/**
+ * Reads the count of unseen notifications for a given account.
+ * @param account The account to read the count of unseen notifications for.
+ * @return A promise that resolves to the number of unseen notifications.
+ */
+export async function readUnseenNotificationsCount(account: Account): Promise<number> {
+  return await getRepository(NotificationEntity).count({
+    where: {
+      id: MoreThan(account.lastSeenNotificationId),
+      account
+    },
+    order: { id: 'DESC' }
+  });
 }

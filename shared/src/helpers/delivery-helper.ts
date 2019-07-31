@@ -3,6 +3,7 @@ import { Account } from './account-helper';
 import { Delivery } from '../interfaces/delivery/delivery';
 import { DonationStatus, Donation } from '../interfaces/donation/donation';
 import { DateTimeRange } from '../interfaces/misc/time';
+import { AccountType } from '../interfaces/account/account';
 
 export class DeliveryHelper {
 
@@ -14,10 +15,10 @@ export class DeliveryHelper {
     // See what properties are required based off of the donationStatus.
     const requireProps: string[] = ['volunteerAccount'];
     const requireNames: string[] = ['Volunteer account'];
-    if (donationStatus === 'Complete') {
+    if (donationStatus === DonationStatus.Complete) {
       requireProps.push('pickupTime', 'dropOffTime');
       requireNames.push('Pickup time', 'Drop-off time');
-    } else if (donationStatus === 'Picked Up') {
+    } else if (donationStatus === DonationStatus.PickedUp) {
       requireProps.push('pickupTime');
       requireNames.push('Pickup time');
     }
@@ -29,7 +30,7 @@ export class DeliveryHelper {
   }
 
   validateDeliverySchedulePrivilege(donationStatus: DonationStatus, myAccount: Account): string {
-    if (!myAccount || myAccount.accountType !== 'Volunteer') {
+    if (!myAccount || myAccount.accountType !== AccountType.Volunteer) {
       return 'Only a volunteer account can start/schedule a donation delivery';
     }
     if (this.hasDeliveryBeenScheduled(donationStatus)) {
@@ -62,39 +63,39 @@ export class DeliveryHelper {
   }
 
   hasDeliveryBeenScheduled(donationStatus: DonationStatus): boolean {
-    return (['Scheduled', 'Picked Up', 'Complete'].indexOf(donationStatus) >= 0);
+    return ([DonationStatus.Scheduled, DonationStatus.PickedUp, DonationStatus.Complete].indexOf(donationStatus) >= 0);
   }
 
   hasDeliveryBeenPickedUp(donationStatus: DonationStatus): boolean {
-    return (['Picked Up', 'Complete'].indexOf(donationStatus) >= 0);
+    return ([DonationStatus.PickedUp, DonationStatus.Complete].indexOf(donationStatus) >= 0);
   }
 
   hasDeliveryBeenCompleted(donationStatus: DonationStatus): boolean {
-    return (donationStatus === 'Complete');
+    return (donationStatus === DonationStatus.Complete);
   }
 
   genDeliveryAdvanceTxt(donationStatus: DonationStatus): string {
     switch (donationStatus) {
-      case 'Scheduled': return 'Set Picked Up';
-      case 'Picked Up': return 'Set Complete';
+      case DonationStatus.Scheduled: return 'Set Picked Up';
+      case DonationStatus.PickedUp: return 'Set Complete';
     }
     return '';
   }
 
   genDeliveryUndoTxt(donationStatus: DonationStatus): string {
     switch (donationStatus) {
-      case 'Scheduled': return 'Cancel Delivery';
-      case 'Picked Up': return 'Undo Delivery Pickup';
-      case 'Complete': return 'Undo Delivery Completion';
+      case DonationStatus.Scheduled: return 'Cancel Delivery';
+      case DonationStatus.PickedUp: return 'Undo Delivery Pickup';
+      case DonationStatus.Complete: return 'Undo Delivery Completion';
     }
     return '';
   }
 
   genConfirmDeliveryUndoMessage(donationStatus: DonationStatus): string {
     switch (donationStatus) {
-      case 'Scheduled': return 'Are you sure you want to cancel your delivery?';
-      case 'Picked Up': return 'Are you sure you want to revert the delivery status to "Scheduled"?';
-      case 'Complete': return 'Are you sure you want to revert the delivery status to "Picked Up"?';
+      case DonationStatus.Scheduled: return 'Are you sure you want to cancel your delivery?';
+      case DonationStatus.PickedUp: return 'Are you sure you want to revert the delivery status to "Scheduled"?';
+      case DonationStatus.Complete: return 'Are you sure you want to revert the delivery status to "Picked Up"?';
     }
     return '';
   }

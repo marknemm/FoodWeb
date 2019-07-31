@@ -30,6 +30,7 @@
       <ng-container *ngIf="sessionService.loggedIn">
         <button mat-icon-button class="notifications-button" aria-label="Notifications menu">
           <mat-icon
+           [matMenuTriggerFor]="notificationsMenu"
            [matBadge]="numNotifications"
            [matBadgeHidden]="!numNotifications"
            matBadgeSize="small"
@@ -37,6 +38,9 @@
            matBadgeDescription="{{ numNotifications }} unread"
           >notifications</mat-icon>
         </button>
+        <mat-menu #notificationsMenu="matMenu" backdropClass="notifications-menu-backdrop">
+          <food-web-notifications-menu></food-web-notifications-menu>
+        </mat-menu>
         <span><a [routerLink]="['account-details']">Account</a> | </span>
         <a [routerLink]="['home']" (click)="sessionService.logout()">Logout</a>
       </ng-container>

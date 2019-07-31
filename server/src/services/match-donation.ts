@@ -13,15 +13,16 @@ import { AccountReadRequest } from '../../../shared/src/interfaces/account/accou
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DonationClaimRequest } from '../../../shared/src/interfaces/donation/donation-claim-request';
 import { DonationUnclaimRequest } from '../../../shared/src/interfaces/donation/donation-unclaim-request';
+import { UpdateDiff } from '../interfaces/update-diff';
 
 const _donationHelper = new DonationHelper();
 
 /**
  * Sends messages to potential receiver charities so that they are given a chance to claim the donation.
  * @param donation The donation that is up for claim.
- * @return A promise that resolves to void when the operation is finished.
+ * @return A promise that resolves to the input donation when the operation completes.
  */
-export async function messagePotentialReceivers(donation: Donation): Promise<void> {
+export async function messagePotentialReceivers(donation: Donation): Promise<Donation> {
   const potentialReceivers: AccountEntity[] = await _findPotentialReceivers(donation);
   const messagePromises: Promise<void>[] = [];
   potentialReceivers.forEach((receiver: AccountEntity) => {
@@ -29,6 +30,7 @@ export async function messagePotentialReceivers(donation: Donation): Promise<voi
     messagePromises.push(promise);
   });
   await Promise.all(messagePromises).catch(console.error);
+  return donation;
 }
 
 /**
@@ -55,6 +57,7 @@ async function _findPotentialReceivers(donation: Donation): Promise<AccountEntit
  * @param claimReq The donation claim request.
  * @param myAccount The account of the current user submitting the request.
  * @return A promise that resolves to the donation after it has been claimed.
+ * @throws FoodWebError if the user is not authorized to claim the donation.
  */
 export async function claimDonation(claimReq: DonationClaimRequest, myAccount: AccountEntity): Promise<Donation> {
   const donationToClaim: Donation = await readDonation(claimReq.donationId, myAccount);
@@ -73,6 +76,12 @@ export async function claimDonation(claimReq: DonationClaimRequest, myAccount: A
   return claimedDonation;
 }
 
+/**
+ * Ensures that the current user can claim a given donation.
+ * @param donation The donation that is to be claimed.
+ * @param myAccount The account of the user to check for claim authorization.
+ * @throws FoodWebError if the user is not authorized to claim the donation.
+ */
 function _ensureCanClaimDonation(donation: Donation, myAccount: AccountEntity): void {
   const errMsg: string = _donationHelper.validateDonationClaimPrivilege(donation, myAccount);
   if (errMsg) {
@@ -85,8 +94,9 @@ function _ensureCanClaimDonation(donation: Donation, myAccount: AccountEntity): 
  * @param unclaimReq The unclaim donation request.
  * @param myAccount The account of the current user submitting the request.
  * @return A promise resolving to the donation after it has been unclaimed.
+ * @throws FoodWebError if the user is not authorized to unclaim the donation.
  */
-export async function unclaimDonation(unclaimReq: DonationUnclaimRequest, myAccount: AccountEntity): Promise<Donation> {
+export async function unclaimDonation(unclaimReq: DonationUnclaimRequest, myAccount: AccountEntity): Promise<UpdateDiff<Donation>> {
   const donationToUnclaim: Donation = await readDonation(unclaimReq.donationId, myAccount);
   _ensureCanUnclaimDonation(donationToUnclaim, myAccount);
 
@@ -97,12 +107,17 @@ export async function unclaimDonation(unclaimReq: DonationUnclaimRequest, myAcco
     unclaimedDonation.receiverAccount = null;
     unclaimedDonation = await manager.getRepository(DonationEntity).save(unclaimedDonation);
   });
-  await sendUnclaimMessages(unclaimedDonation, donationToUnclaim);
 
   saveAudit(AuditEventType.UnclaimDonation, getAuditAccounts(donationToUnclaim), unclaimedDonation, donationToUnclaim, unclaimReq.recaptchaScore);
-  return unclaimedDonation;
+  return { new: unclaimedDonation, old: donationToUnclaim };
 }
 
+/**
+ * Ensures that the current user has privileges to unclaim a given donation.
+ * @param donation The donation that is to be unclaimed.
+ * @param myAccount The account of the user to check for unclaim privileges.
+ * @throws FoodWebError if the user is not authorized to unclaim the donation.
+ */
 function _ensureCanUnclaimDonation(donation: Donation, myAccount: Account): void {
   const errMsg: string = _donationHelper.validateDonationUnclaimPrivilege(donation, myAccount);
   if (errMsg) {

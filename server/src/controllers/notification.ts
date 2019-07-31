@@ -3,8 +3,11 @@ import { Request, Response } from 'express';
 import { handleError } from '../middlewares/response-error.middleware';
 import { ensureSessionActive } from '../middlewares/session.middleware';
 import { genListResponse } from '../helpers/list-response';
-import { readNotifications, NotificationsQueryResult } from '../services/read-notifications';
+import { foodWebSSEManager } from '../helpers/server-side-event';
+import { readNotifications, NotificationsQueryResult, readUnseenNotificationsCount } from '../services/read-notifications';
 import { NotificationReadRequest } from '../../../shared/src/interfaces/notification/notification-read-request';
+import { Account } from '../../../shared/src/interfaces/account/account';
+import { ServerSideEventType } from '../../../shared/src/interfaces/server-side-event/server-side-event';
 
 const router = express.Router();
 
@@ -19,6 +22,14 @@ router.get('/', ensureSessionActive, (req: Request, res: Response) => {
 
 router.put('/', ensureSessionActive, (req: Request, res: Response) => {
   // TODO: Allow user to un/mark notification as read or flagged.
+});
+
+foodWebSSEManager.onConnect(async (account: Account) => {
+  const unseenNotificationsCount: number = await readUnseenNotificationsCount(account);
+  foodWebSSEManager.sendEvent(account, {
+    id: ServerSideEventType.NotificationsAvailable,
+    data: { unseenNotificationsCount }
+  });
 });
 
 module.exports = router;
