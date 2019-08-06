@@ -1,5 +1,20 @@
 <div class="notifications-menu-container">
-  <div class="title">Notifications</div>
-  <mat-divider></mat-divider>
-  <food-web-notifications [notificationsMenu]="true"></food-web-notifications>
+  <div class="header">
+    <span class="title">Notifications</span>
+    <mat-divider></mat-divider>
+  </div>
+  <mat-action-list>
+    <button mat-list-item class="notification" *ngFor="let notification of notificationService.unseenNotificationsPreview">
+      <img mat-list-icon class="icon" *ngIf="notification.notificationIconUrl"
+        [src]="notification.notificationIconUrl" alt="{{ notification.notificationTitle }} notification icon">
+      <div mat-line class="title" *ngIf="notification.notificationTitle" [innerHTML]="notification.notificationTitle"></div>
+      <div mat-line class="subtitle" *ngIf="notification.notificationSubtitle" [innerHTML]="notification.notificationSubtitle"></div>
+      <p #body mat-line class="body" [ngClass]="{ 'fade-bottom': shouldFadeBottom(body) }"
+        [innerHTML]="notification.notificationBody" *ngIf="notification.notificationBody"></p>
+    </button>
+  </mat-action-list>
+  <div class="footer">
+    <mat-divider></mat-divider>
+    <a [routerLink]="['/notifications']">See More</a>
+  </div>
 </div>

@@ -3,24 +3,43 @@ import { AuditEntity } from '../entity/audit.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { Audit, AuditEventType } from '../../../shared/src/interfaces/audit/audit';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
+import { UpdateDiff } from '../interfaces/update-diff';
 export { Audit, AuditEventType };
 
-export function saveAudit<T>(
+export async function saveAudit<T>(
   eventType: AuditEventType,
   accounts: AccountEntity[] | AccountEntity,
   newData: T,
-  oldData?: T,
   recaptchaScore?: number
-): Promise<AuditEntity<T>> {
+): Promise<T> {
   accounts = (accounts instanceof Array) ? accounts :  [accounts];
-  return _saveAudit({
+  await _saveAudit({
     id: undefined,
     timestamp: undefined,
     eventType,
     accounts,
-    data: { old: oldData, new: newData },
+    data: { new: newData },
     recaptchaScore
   }).catch(_handleErr.bind(this)); // Log and swallow any Audit errors so that related requests still succeed.
+  return newData;
+}
+
+export async function saveUpdateAudit<T>(
+  eventType: AuditEventType,
+  accounts: AccountEntity[] | AccountEntity,
+  updateDiff: UpdateDiff<T>,
+  recaptchaScore?: number
+): Promise<UpdateDiff<T>> {
+  accounts = (accounts instanceof Array) ? accounts :  [accounts];
+  await _saveAudit({
+    id: undefined,
+    timestamp: undefined,
+    eventType,
+    accounts,
+    data: updateDiff,
+    recaptchaScore
+  }).catch(_handleErr.bind(this)); // Log and swallow any Audit errors so that related requests still succeed.
+  return updateDiff;
 }
 
 function _saveAudit<T>(audit: AuditEntity<T>): Promise<AuditEntity<T>> {

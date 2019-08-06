@@ -1,6 +1,5 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { readDonation } from './read-donations';
-import { saveAudit, getAuditAccounts, AuditEventType } from './save-audit';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { DeliveryEntity } from '../entity/delivery-entity';
@@ -28,7 +27,6 @@ export async function deleteDonation(deleteReq: DonationDeleteRequest, myAccount
     await manager.getRepository(DonationEntity).remove(donation);
   });
 
-  saveAudit(AuditEventType.RemoveDonation, getAuditAccounts(donation), {}, donation, deleteReq.recaptchaScore);
   return donation;
 }
 

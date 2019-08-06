@@ -1,15 +1,17 @@
-<div *ngIf="!notificationsMenu" class="donate-form-title page-title block-label">
-  Notifications
-</div>
+<div class="notifications-container">
+  <div *ngIf="!notificationsMenu" class="notifications-title page-title block-label">
+    Notifications
+  </div>
 
-<mat-card *ngFor="let notification of notifications">
-  <mat-card-header>
-    <img mat-card-avatar *ngIf="notification.notificationIconUrl"
-      [src]="notification.notificationIconUrl" alt="{{ notification.notificationTitle }} notification icon">
-    <mat-card-title>{{ notification.notificationTitle }}</mat-card-title>
-    <mat-card-subtitle>{{ notification.notificationSubtitle }}</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    {{ notification.notificationBody }}
-  </mat-card-content>
-</mat-card>
+  <mat-action-list>
+    <button mat-list-item class="notification" *ngFor="let notification of notifications">
+      <img mat-list-icon class="icon" *ngIf="notification.notificationIconUrl"
+        [src]="notification.notificationIconUrl" alt="{{ notification.notificationTitle }} notification icon">
+      <div mat-line class="title" *ngIf="notification.notificationTitle" [innerHTML]="notification.notificationTitle"></div>
+      <div mat-line class="subtitle" *ngIf="notification.notificationSubtitle" [innerHTML]="notification.notificationSubtitle"></div>
+      <p #body mat-line class="body" [ngClass]="{ 'fade-bottom': shouldFadeBottom(body) }"
+        [innerHTML]="notification.notificationBody" *ngIf="notification.notificationBody"></p>
+      <mat-divider></mat-divider>
+    </button>
+  </mat-action-list>
+</div>

@@ -1,6 +1,5 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { readDonation } from './read-donations';
-import { saveAudit, getAuditAccounts, AuditEventType } from './save-audit';
 import { UpdateDiff } from '../interfaces/update-diff';
 import { FoodWebError } from '../helpers/food-web-error';
 import { AccountEntity } from '../entity/account.entity';
@@ -30,8 +29,6 @@ export async function advanceDeliveryState(stateChangeReq: DeliveryStateChangeRe
     async (manager: EntityManager) => manager.getRepository(DonationEntity).save(advancedDonation)
   );
 
-  const auditAccounts: AccountEntity[] = getAuditAccounts(advancedDonation);
-  saveAudit(AuditEventType.DeliveryStateAdvance, auditAccounts, advancedDonation, donation, stateChangeReq.recaptchaScore);
   return advancedDonation;
 }
 
@@ -66,7 +63,7 @@ export async function undoDeliveryState(
   const donationUpdate: DonationEntity = _genUpdateDonation(donation, 'prev');
   const undoneDonation: DonationEntity = (donationUpdate.donationStatus === 'Matched')
     ? await cancelDelivery(donation, myAccount)
-    : await _undoDeliveryStateNonCancel(stateChangeReq, donation, donationUpdate);
+    : await _undoDeliveryStateNonCancel(donationUpdate);
 
   return { old: donation, new: undoneDonation };
 }
@@ -79,14 +76,11 @@ export async function undoDeliveryState(
  * @return A promise that resolves to the donation with its delivery state advancement undone. 
  */
 async function _undoDeliveryStateNonCancel(
-  stateChangeReq: DeliveryStateChangeRequest,
-  donation: DonationEntity,
   donationUpdate: DonationEntity
 ): Promise<DonationEntity> {
   const undoneDonation: DonationEntity = await getConnection().transaction
     (async (manager: EntityManager) => manager.getRepository(DonationEntity).save(donationUpdate)
   );
-  saveAudit(AuditEventType.DeliveryStateUndo, getAuditAccounts(donation), undoneDonation, donation, stateChangeReq.recaptchaScore);
   return undoneDonation;
 }
 

@@ -1,56 +1,17 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
-import { readAccounts, AccountsQueryResult } from './read-accounts';
 import { readDonation } from './read-donations';
-import { sendMatchRequestMessage, sendClaimMessages, sendUnclaimMessages } from './match-donation-message';
 import { cancelDelivery } from './cancel-delivery';
-import { saveAudit, getAuditAccounts, AuditEventType } from './save-audit';
-import { FoodWebError } from '../helpers/food-web-error';
+import { UpdateDiff } from '../interfaces/update-diff';
 import { DonationEntity } from '../entity/donation.entity';
+import { FoodWebError } from '../helpers/food-web-error';
 import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
-import { Account, AccountType } from '../../../shared/src/interfaces/account/account';
-import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
+import { Account } from '../../../shared/src/interfaces/account/account';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DonationClaimRequest } from '../../../shared/src/interfaces/donation/donation-claim-request';
 import { DonationUnclaimRequest } from '../../../shared/src/interfaces/donation/donation-unclaim-request';
-import { UpdateDiff } from '../interfaces/update-diff';
 
 const _donationHelper = new DonationHelper();
-
-/**
- * Sends messages to potential receiver charities so that they are given a chance to claim the donation.
- * @param donation The donation that is up for claim.
- * @return A promise that resolves to the input donation when the operation completes.
- */
-export async function messagePotentialReceivers(donation: Donation): Promise<Donation> {
-  const potentialReceivers: AccountEntity[] = await _findPotentialReceivers(donation);
-  const messagePromises: Promise<void>[] = [];
-  potentialReceivers.forEach((receiver: AccountEntity) => {
-    const promise: Promise<void> = sendMatchRequestMessage(donation, receiver);
-    messagePromises.push(promise);
-  });
-  await Promise.all(messagePromises).catch(console.error);
-  return donation;
-}
-
-/**
- * Gets all potential receivers for a donation so that they can be messaged for a chance to claim the donation.
- * @return A promise that resolves to the list of potential receiver accounts.
- */
-async function _findPotentialReceivers(donation: Donation): Promise<AccountEntity[]> {
-  const readRequest: AccountReadRequest = {
-    page: 1,
-    limit: 300,
-    accountType: AccountType.Receiver,
-    distanceRangeMi: 20,
-    operationHoursRange: {
-      startDateTime: donation.pickupWindowStart,
-      endDateTime: donation.pickupWindowEnd
-    }
-  };
-  const queryResult: AccountsQueryResult = await readAccounts(readRequest, donation.donorAccount);
-  return queryResult.accounts;
-}
 
 /**
  * Claims a donation.
@@ -67,13 +28,9 @@ export async function claimDonation(claimReq: DonationClaimRequest, myAccount: A
   claimedDonation.donationStatus = DonationStatus.Matched;
   claimedDonation.receiverAccount = myAccount;
 
-  claimedDonation = await getConnection().transaction(async (manager: EntityManager) =>
+  return getConnection().transaction(async (manager: EntityManager) =>
     manager.getRepository(DonationEntity).save(claimedDonation)
   );
-  await sendClaimMessages(claimedDonation);
-
-  saveAudit(AuditEventType.ClaimDonation, getAuditAccounts(claimedDonation), claimedDonation, donationToClaim, claimReq.recaptchaScore);
-  return claimedDonation;
 }
 
 /**
@@ -108,7 +65,6 @@ export async function unclaimDonation(unclaimReq: DonationUnclaimRequest, myAcco
     unclaimedDonation = await manager.getRepository(DonationEntity).save(unclaimedDonation);
   });
 
-  saveAudit(AuditEventType.UnclaimDonation, getAuditAccounts(donationToUnclaim), unclaimedDonation, donationToUnclaim, unclaimReq.recaptchaScore);
   return { new: unclaimedDonation, old: donationToUnclaim };
 }
 

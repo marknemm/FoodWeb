@@ -1,6 +1,5 @@
 import { getConnection, EntityManager, Repository } from 'typeorm';
 import { readDonation } from './read-donations';
-import { saveAudit, getAuditAccounts, AuditEventType } from './save-audit';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { FoodWebError } from '../helpers/food-web-error';
@@ -19,12 +18,9 @@ export async function createDonation(createReq: DonationCreateRequest, myAccount
   donation.donorAccount = myAccount;
   _validateDonation(donation);
 
-  const createdDonation: DonationEntity = await getConnection().transaction(
+  return getConnection().transaction(
     async (manager: EntityManager) => manager.getRepository(DonationEntity).save(donation)
   );
-
-  saveAudit(AuditEventType.Donate, myAccount, donation, undefined, createReq.recaptchaScore);
-  return createdDonation;
 }
 
 export async function updateDonation(updateReq: DonationUpdateRequest, myAccount: AccountEntity): Promise<UpdateDiff<Donation>> {
@@ -42,7 +38,6 @@ export async function updateDonation(updateReq: DonationUpdateRequest, myAccount
     return readDonation(donation.id, myAccount, donationRepo);
   });
 
-  saveAudit(AuditEventType.UpdateDonation, getAuditAccounts(donation), updatedDonation, originalDonation, updateReq.recaptchaScore);
   return { old: originalDonation, new: updatedDonation };
 }
 

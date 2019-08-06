@@ -1,6 +1,5 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
-import { saveAudit, AuditEventType } from './save-audit';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordEntity } from '../entity/password.entity';
 import { FoodWebError } from '../helpers/food-web-error';
@@ -17,7 +16,6 @@ export async function updatePassword(updateReq: PasswordUpdateRequest, myAccount
   await getConnection().transaction(async (manager: EntityManager) => {
     await savePassword(manager, myAccount, password, oldPassword, _accountHelper.isAdmin(myAccount));
   });
-  saveAudit(AuditEventType.UpdatePassword, myAccount, 'xxxxxx', 'xxxxxx', updateReq.recaptchaScore);
 }
 
 export async function savePassword(

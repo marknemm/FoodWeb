@@ -1,18 +1,108 @@
 @import "../../../styles/constants.scss";
 
-.notifications-menu-container {
-  width: 280px;
+$title-font-size: 16px;
+$icon-size: 38px;
 
-  .title {
+.notifications-menu-container {
+  width: 100%;
+
+  > .header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 10;
     color: $accent-darkest;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 500;
     margin-top: -5px;
-    padding: 0 4px;
+    padding: 4px 5px 0;
     text-align: center;
+    background-color: white;
+
+    > .mat-divider {
+      margin: 3px 0 0;
+    }
   }
 
-  .mat-divider {
-    margin: 3px 0;
+  > .mat-list {
+    padding-top: 0;
+
+    .mat-line {
+      margin-left: -8px;
+    }
+
+    .notification {
+      @media only screen and (max-width: $sm) {
+        margin-left: -8px;
+        width: calc(100% + 16px);
+      }
+
+      .icon {
+        width: $icon-size;
+        height: $icon-size;
+        font-size: $icon-size;
+      }
+
+      .title {
+        font-size: $title-font-size;
+        font-weight: bold;
+        color: $accent-darkest;
+
+        @media only screen and (max-width: 400px) {
+          font-size: $title-font-size - 2px;
+        }
+      }
+
+      .subtitle {
+        font-size: $title-font-size - 3px;
+        color: #666;
+        margin-top: -6px;
+        margin-bottom: 3px;
+
+        @media only screen and (max-width: 400px) {
+          font-size: $title-font-size - 4px;
+        }
+      }
+
+      .body {
+        position: relative;
+        font-size: $title-font-size - 3px;
+        line-height: $title-font-size - 1px;
+        height: ($title-font-size - 1px) * 2;
+        overflow: hidden;
+        white-space: normal;
+
+        &.fade-bottom:after {
+          height: $title-font-size;
+        }
+
+        @media only screen and (max-width: 400px) {
+          font-size: $title-font-size - 4px;
+          line-height: $title-font-size - 2px;
+        }
+      }
+
+      &:hover, &:focus {
+        .body.fade-bottom:after {
+          background-image: none;
+        }
+      }
+    }
+  }
+
+  > .footer {
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    color: $accent-darkest;
+    font-size: 14px;
+    padding: 0 5px 4px;
+    text-align: center;
+    background-color: white;
+
+    > .mat-divider {
+      margin: 0 0 3px;
+    }
   }
 }

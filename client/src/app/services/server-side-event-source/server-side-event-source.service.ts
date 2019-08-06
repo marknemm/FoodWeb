@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ApplicationRef } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { ServerSideEventType } from '../../../../../shared/src/interfaces/server-side-event/server-side-event';
@@ -12,7 +12,9 @@ export class ServerSideEventSourceService {
   private _onMessage = new ReplaySubject<MessageEvent>();
   private _onError = new ReplaySubject<MessageEvent>();
 
-  constructor() {}
+  constructor(
+    private _applicationRef: ApplicationRef
+  ) {}
 
   /**
    * Whether or not a server side event source connection is open.
@@ -25,7 +27,12 @@ export class ServerSideEventSourceService {
    * Observable that emits an event message whenever the server side event client receives a message from the server.
    */
   get onMessage(): Observable<MessageEvent> {
-    return this._onMessage.asObservable();
+    return this._onMessage.asObservable().pipe(
+      map((event: MessageEvent) => {
+        setTimeout(() => this._applicationRef.tick()); // Angular does not monkeypatch SSE, so must run change detection manually!
+        return event;
+      })
+    );
   }
 
   /**

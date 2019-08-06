@@ -41,6 +41,7 @@
     "keycode": "^2.2.0",
     "lodash": "^4.17.15",
     "ng-recaptcha": "^4.3.0",
+    "ngx-ellipsis": "^2.0.5",
     "ngx-gallery": "^5.10.0",
     "ngx-img-cropper": "^8.0.1",
     "ngx-mask": "^8.0.1",

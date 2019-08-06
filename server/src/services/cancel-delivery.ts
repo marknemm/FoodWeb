@@ -1,5 +1,4 @@
 import { EntityManager, getConnection } from 'typeorm';
-import { saveAudit, getAuditAccounts, AuditEventType } from './save-audit';
 import { DeliveryEntity } from '../entity/delivery-entity';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
@@ -30,7 +29,6 @@ export async function cancelDelivery(donation: Donation, myAccount: AccountEntit
     }
   );
 
-  saveAudit(AuditEventType.CancelDelivery, getAuditAccounts(donation), cancelledDonation, donation);
   return cancelledDonation;
 }
 

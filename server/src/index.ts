@@ -1,9 +1,9 @@
 import express = require('express');
+import dotenv = require('dotenv');
 import forceHttps = require('express-force-https');
 import bodyParser = require('body-parser');
 import multer = require('multer');
 import path = require('path');
-import dotenv = require('dotenv');
 import 'reflect-metadata';
 import { Request, Response } from 'express';
 import { JSONDateReviver } from '../../shared/src/helpers/json-date-reviver';
@@ -31,9 +31,7 @@ if (!PRODUCTION && !QA) {
 
 // Our session middleware and controllers that will handle requests after this router hands off the data to them.
 import { Application } from 'express';
-import { Server } from 'http';
 import { initDbConnectionPool } from './helpers/db-connection-pool';
-import { foodWebSSEManager } from './helpers/server-side-event';
 import { recaptcha } from './middlewares/recaptcha.middleware';
 import { sessionReqHandler } from './helpers/session';
 
@@ -51,6 +49,7 @@ app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 module.exports = app; // Make available for mocha testing suites.
 
 // Connect Express sub-module controllers.
+app.use('/server/sse', require('./controllers/sse'));
 app.use('/server/session', require('./controllers/session'));
 app.use('/server/account', require('./controllers/account'));
 app.use('/server/donation', require('./controllers/donation'));
@@ -80,5 +79,4 @@ initDbConnectionPool().then(() =>
     console.log(`Node app is running on port: ${app.get('port')}`)
   )
 )
-.then((server: Server) => foodWebSSEManager.init(server))
 .catch(console.error);
