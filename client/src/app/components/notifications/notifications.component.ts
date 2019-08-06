@@ -41,4 +41,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     this._destroy$.next();
   }
 
+  shouldFadeBottom(elem: HTMLElement): boolean {
+    return (elem.scrollHeight > elem.clientHeight);
+  }
+
 }

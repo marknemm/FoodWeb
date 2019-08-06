@@ -14,26 +14,16 @@ import { NotificationService } from '../../services/notification/notification.se
 })
 export class HeaderComponent implements OnInit {
 
-  private _numNotifications = 0;
-
   constructor(
     public sessionService: SessionService,
     public pageTitleService: PageTitleService,
     public pageProgressService: PageProgressService,
     public leftNavService: LeftNavService,
-    private _matDialog: MatDialog,
-    private _notificationService: NotificationService
+    public notificationService: NotificationService,
+    private _matDialog: MatDialog
   ) {}
 
-  get numNotifications(): number {
-    return this._numNotifications;
-  }
-
-  ngOnInit() {
-    this._notificationService.onNotificationsAvailable().subscribe(
-      (numNotifications) => (this._numNotifications = numNotifications)
-    );
-  }
+  ngOnInit() {}
 
   login(): void {
     this._matDialog.open(LoginComponent);

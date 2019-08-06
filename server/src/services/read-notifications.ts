@@ -2,7 +2,7 @@ import { getRepository, FindConditions, In, MoreThan } from 'typeorm';
 import { NotificationEntity } from '../entity/notification.entity';
 import { Account } from '../../../shared/src/interfaces/account/account';
 import { Notification, NotificationType } from '../../../shared/src/interfaces/notification/notification';
-import { NotificationReadRequest } from '../../../shared/src/interfaces/notification/notification-read-request';
+import { NotificationReadRequest, NotificationReadFilters } from '../../../shared/src/interfaces/notification/notification-read-request';
 
 /**
  * The result of a query for notifications.
@@ -35,14 +35,27 @@ export async function readNotifications(request: NotificationReadRequest, myAcco
  * @param myAccount The account of the user to fetch the notifications for.
  * @return The generated find conditions.
  */
-function _genFindConditions(request: NotificationReadRequest, myAccount: Account): FindConditions<NotificationEntity> {
+function _genFindConditions(filters: NotificationReadFilters, myAccount: Account): FindConditions<NotificationEntity> {
   const conditions: FindConditions<NotificationEntity> = {};
   conditions.account = myAccount;
-  conditions.id = request.id;
-  // notificationType query param can either be a single NotificationType or comma separated list.
-  conditions.notificationType = (request.notificationType && (<string>request.notificationType).indexOf(',') >= 0)
-    ? In((<string>request.notificationType).split(','))
-    : <NotificationType>request.notificationType;
+  if (filters.id != null) {
+    conditions.id = filters.id;
+  }
+  if (filters.flagged != null) {
+    conditions.flagged = filters.flagged;
+  }
+  if (filters.read != null) {
+    conditions.read = filters.read;
+  }
+  if (filters.unseen && filters.id == null) {
+    conditions.id = MoreThan(myAccount.lastSeenNotificationId);
+  }
+  if (filters.notificationType != null) {
+    // notificationType query param can either be a single NotificationType or comma separated list.
+    conditions.notificationType = (filters.notificationType && (<string>filters.notificationType).indexOf(',') >= 0)
+      ? In((<string>filters.notificationType).split(','))
+      : <NotificationType>filters.notificationType;
+  }
   return conditions;
 }
 
@@ -56,7 +69,6 @@ export async function readUnseenNotificationsCount(account: Account): Promise<nu
     where: {
       id: MoreThan(account.lastSeenNotificationId),
       account
-    },
-    order: { id: 'DESC' }
+    }
   });
 }

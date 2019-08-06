@@ -2,7 +2,6 @@ import { EntityManager, getRepository, getConnection } from 'typeorm';
 import { randomBytes } from 'crypto';
 import { readAccount } from './read-accounts';
 import { savePassword } from './save-password';
-import { saveAudit, AuditEventType } from './save-audit';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordResetEntity } from '../entity/password-reset';
 import { FoodWebError } from '../helpers/food-web-error';
@@ -36,10 +35,10 @@ export async function savePasswordResetToken(username: string): Promise<Password
 /**
  * Resets a user's password.
  * @param resetRequest The password reset request containing the reset token and username.
- * @return A promise that resolves to the account of the user whose password was reset.
+ * @return A promise that resolves when the reset operation is complete.
  * @throws FoodWebError if the password reset failed (due to username - token mismatch or expired/missing token).
  */
-export async function resetPassword(resetRequest: PasswordResetRequest): Promise<AccountEntity> {
+export async function resetPassword(resetRequest: PasswordResetRequest): Promise<void> {
   const resetToken: string = resetRequest.resetToken;
   const account: AccountEntity = await getRepository(AccountEntity).findOne({
     relations: ['contactInfo', 'organization', 'operationHours'],
@@ -57,9 +56,6 @@ export async function resetPassword(resetRequest: PasswordResetRequest): Promise
     await manager.getRepository(PasswordResetEntity).remove(passwordResetEntity);
     await savePassword(manager, account, resetRequest.password, null, true);
   });
-
-  saveAudit(AuditEventType.ResetPassword, account, 'xxxxxx', 'xxxxxx', resetRequest.recaptchaScore);
-  return account;
 }
 
 /**

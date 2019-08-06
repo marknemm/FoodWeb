@@ -1,7 +1,7 @@
 import { getConnection, EntityManager, Repository, QueryFailedError } from 'typeorm';
 import { createUnverifiedAccount } from './account-verification';
 import { savePassword } from './save-password';
-import { saveAudit, AuditEventType } from './save-audit';
+import { UpdateDiff } from '../interfaces/update-diff';
 import { FoodWebError } from '../helpers/food-web-error';
 import { geocode, geoTimezone } from '../helpers/geocoder';
 import { AccountEntity } from '../entity/account.entity';
@@ -24,23 +24,20 @@ export async function createAccount(request: AccountCreateRequest): Promise<Acco
 
   _opHoursHelper.formatOperationHoursTimes(createdAccount.operationHours);
   createdAccount.verified = false;
-  saveAudit(AuditEventType.Signup, createdAccount, createdAccount, undefined, request.recaptchaScore);
   return createdAccount;
 }
 
-export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: Account): Promise<AccountEntity> {
+export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: Account): Promise<UpdateDiff<AccountEntity>> {
   if (!_accountHelper.isMyAccount(myAccount, updateReq.account.id)) {
     throw new FoodWebError('User unauthorized to update account', 401);
   }
 
-  let updatedAccount: AccountEntity;
-  await getConnection().transaction(async (manager: EntityManager) => {
-    updatedAccount = await _saveAccount(manager, updateReq.account, myAccount);
-  });
+  const updatedAccount: AccountEntity = await getConnection().transaction((manager: EntityManager) =>
+    _saveAccount(manager, updateReq.account, myAccount)
+  );
 
   _opHoursHelper.formatOperationHoursTimes(updatedAccount.operationHours);
-  saveAudit(AuditEventType.UpdateAccount, updatedAccount, updatedAccount, myAccount, updateReq.recaptchaScore);
-  return updatedAccount;
+  return { old: <AccountEntity>myAccount, new: updatedAccount };
 }
 
 async function _saveAccount(manager: EntityManager, account: Account, myAccount?: Account): Promise<AccountEntity> {

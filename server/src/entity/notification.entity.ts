@@ -2,6 +2,9 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } f
 import { AccountEntity } from './account.entity';
 import { AuditEntity } from './audit.entity';
 import { Notification, NotificationType } from '../../../shared/src/interfaces/notification/notification';
+import { Constants } from '../../../shared/src/constants/constants';
+
+const _constants = new Constants();
 
 @Entity('Notification')
 export class NotificationEntity implements Notification {
@@ -9,22 +12,22 @@ export class NotificationEntity implements Notification {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'enum', enum: _constants.NOTIFICATION_TYPES })
   notificationType: NotificationType;
 
   @Column()
   notificationDetailId: number;
 
-  @Column()
+  @Column({ nullable: true })
   notificationIconUrl?: string;
 
   @Column()
   notificationTitle: string;
 
-  @Column()
-  notificationSubtitle: string;
+  @Column({ nullable: true })
+  notificationSubtitle?: string;
 
-  @Column()
+  @Column({ nullable: true })
   notificationBody: string;
 
   @Column({ default: false })

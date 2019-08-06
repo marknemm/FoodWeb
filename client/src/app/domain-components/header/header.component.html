@@ -31,11 +31,11 @@
         <button mat-icon-button class="notifications-button" aria-label="Notifications menu">
           <mat-icon
            [matMenuTriggerFor]="notificationsMenu"
-           [matBadge]="numNotifications"
-           [matBadgeHidden]="!numNotifications"
+           [matBadge]="notificationService.unseenNotificationsCount"
+           [matBadgeHidden]="!(notificationService.unseenNotificationsCount)"
            matBadgeSize="small"
            matBadgeColor="warn"
-           matBadgeDescription="{{ numNotifications }} unread"
+           matBadgeDescription="{{ notificationService.unseenNotificationsCount }} unread"
           >notifications</mat-icon>
         </button>
         <mat-menu #notificationsMenu="matMenu" backdropClass="notifications-menu-backdrop">

@@ -8,6 +8,7 @@ import { DonationsQueryResult } from '../services/read-donations';
 import { readUnscheduledDeliveries, readMyDeliveries, readDeliveries } from '../services/read-deliveries';
 import { scheduleDelivery } from '../services/schedule-delivery';
 import { advanceDeliveryState, undoDeliveryState } from '../services/update-delivery-state';
+import { saveDeliveryScheduleAudit, saveDeliveryAdvanceAudit, saveDeliveryUndoAudit } from '../services/save-delivery-audit';
 import { sendDeliveryStateUndoMessages, sendDeliveryStateAdvancedMessages } from '../services/update-delivery-state-message';
 import { sendDeliveryScheduledMessages } from '../services/schedule-delivery-message';
 import { Donation } from '../../../shared/src/interfaces/donation/donation';
@@ -45,26 +46,29 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
-  const scheduleRequest: DeliveryScheduleRequest = req.body;
-  scheduleDelivery(scheduleRequest, req.session.account)
+  const scheduleReq: DeliveryScheduleRequest = req.body;
+  scheduleDelivery(scheduleReq, req.session.account)
+    .then((scheduledDelivery: Donation) => saveDeliveryScheduleAudit(scheduleReq, scheduledDelivery))
     .then((scheduledDelivery: Donation) => sendDeliveryScheduledMessages(scheduledDelivery))
     .then((scheduledDelivery: Donation) => res.send(scheduledDelivery))
     .catch(handleError.bind(this, res));
 });
 
 router.put('/advance/:id', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
-  const stateChangeRequest: DeliveryStateChangeRequest = req.body;
-  stateChangeRequest.deliveryId = parseInt(req.params.id, 10);
-  advanceDeliveryState(stateChangeRequest, req.session.account)
+  const stateChangeReq: DeliveryStateChangeRequest = req.body;
+  stateChangeReq.deliveryId = parseInt(req.params.id, 10);
+  advanceDeliveryState(stateChangeReq, req.session.account)
+    .then((advancedDelivery: Donation) => saveDeliveryAdvanceAudit(stateChangeReq, advancedDelivery))
     .then((advancedDelivery: Donation) => sendDeliveryStateAdvancedMessages(advancedDelivery))
     .then((advancedDelivery: Donation) => res.send(advancedDelivery))
     .catch(handleError.bind(this, res));
 });
 
 router.put('/undo/:id', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
-  const stateChangeRequest: DeliveryStateChangeRequest = req.body;
-  stateChangeRequest.deliveryId = parseInt(req.params.id, 10);
-  undoDeliveryState(stateChangeRequest, req.session.account)
+  const stateChangeReq: DeliveryStateChangeRequest = req.body;
+  stateChangeReq.deliveryId = parseInt(req.params.id, 10);
+  undoDeliveryState(stateChangeReq, req.session.account)
+    .then((undoDiff: UpdateDiff<Donation>) => saveDeliveryUndoAudit(stateChangeReq, undoDiff))
     .then((undoDiff: UpdateDiff<Donation>) => sendDeliveryStateUndoMessages(undoDiff))
     .then((undoneDelivery: Donation) => res.send(undoneDelivery))
     .catch(handleError.bind(this, res));

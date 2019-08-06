@@ -1,7 +1,6 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { readAccounts, AccountsQueryResult } from './read-accounts';
-import { sendDeliveryRequestMessages, sendDeliveryScheduledMessages } from './schedule-delivery-message';
-import { saveAudit, getAuditAccounts, AuditEventType } from './save-audit';
+import { sendDeliveryRequestMessages } from './schedule-delivery-message';
 import { readDonation } from './read-donations';
 import { FoodWebError } from '../helpers/food-web-error';
 import { AccountEntity } from '../entity/account.entity';
@@ -66,7 +65,6 @@ export async function scheduleDelivery(scheduleRequest: DeliveryScheduleRequest,
   );
   delete scheduledDonation.delivery.donation; // Prevent circular JSON reference error.
 
-  _saveScheduleAudit(scheduleRequest, donationToSchedule, scheduledDonation);
   return scheduledDonation;
 }
 
@@ -93,9 +91,4 @@ function _genScheduledDonation(
     donation: donationToSchedule
   };
   return scheduledDonation;
-}
-
-function _saveScheduleAudit(scheduleRequest: DeliveryScheduleRequest, donationToSchedule: Donation, scheduledDonation: Donation): void {
-  const auditAccounts: AccountEntity[] = getAuditAccounts(scheduledDonation);
-  saveAudit(AuditEventType.ScheduleDelivery, auditAccounts, scheduledDonation, donationToSchedule, scheduleRequest.recaptchaScore);
 }
