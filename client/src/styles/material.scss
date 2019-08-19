@@ -235,7 +235,9 @@ button {
   }
 }
 
-.mat-snack-bar-container {
+body .mat-snack-bar-container {
+  margin: 8px;
+
   .close-button {
     position: absolute;
     top: 1px;

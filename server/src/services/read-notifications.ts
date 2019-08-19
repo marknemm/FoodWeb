@@ -24,7 +24,7 @@ export async function readNotifications(request: NotificationReadRequest, myAcco
     where: _genFindConditions(request, myAccount),
     skip: request.page && request.limit ? (request.page - 1) * request.limit : 0,
     take: request.limit ? request.limit : 10,
-    order: { id: 'DESC' } // Get latest notifications first.
+    order: { flagged: 'DESC', id: 'DESC' } // Get flagged & latest notifications first.
   });
   return { notifications, totalCount };
 }

@@ -1,0 +1,17 @@
+<div class="notification-container">
+  <button mat-list-item
+    (click)="handleNotificationClick()"
+    [ngClass]="{ 'unread': !notification.read }"
+    class="notification"
+  >
+    <img mat-list-icon class="icon" *ngIf="notification.notificationIconUrl"
+      [src]="notification.notificationIconUrl" alt="{{ notification.notificationTitle }} notification icon">
+    <div mat-line class="title" *ngIf="notification.notificationTitle" [innerHTML]="notification.notificationTitle"></div>
+    <div mat-line class="subtitle" *ngIf="notification.notificationSubtitle" [innerHTML]="notification.notificationSubtitle"></div>
+    <p #body mat-line class="body" [ngClass]="{ 'fade-bottom': shouldFadeBottom(body) }"
+      [innerHTML]="notification.notificationBody" *ngIf="notification.notificationBody"></p>
+  </button>
+  <button mat-icon-button [disableRipple]="true" class="flagged-indicator" (click)="handleFlaggedIndicatorClick($event)">
+    <mat-icon>{{ notification.flagged ? 'star' : 'star_border' }}</mat-icon>
+  </button>
+</div>

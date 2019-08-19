@@ -79,6 +79,7 @@ import { FoodSafetyChecklistComponent } from './child-components/food-safety-che
 import { AgreementBulletPointsComponent } from './child-components/agreement-bullet-points/agreement-bullet-points.component';
 import { EventCardComponent } from './child-components/event-card/event-card.component';
 import { NotificationsMenuComponent } from './child-components/notifications-menu/notifications-menu.component';
+import { NotificationComponent } from './child-components/notification/notification.component';
 
 import { ConfirmButtonDirective } from './directives/confirm-button/confirm-button.directive';
 
@@ -144,6 +145,7 @@ import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
     EventCardComponent,
     EventRegistrationsComponent,
     NotificationsMenuComponent,
+    NotificationComponent,
   ],
   imports: [
     AppRoutingModule,

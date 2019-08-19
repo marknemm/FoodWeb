@@ -9,7 +9,10 @@ import { ServerSideEventSourceService } from '../server-side-event-source/server
 import { Notification } from '../../../../../shared/src/interfaces/notification/notification';
 import { ListResponse } from '../../../../../shared/src/interfaces/list-response';
 import { NotificationReadRequest, NotificationReadFilters } from '../../../../../shared/src/interfaces/notification/notification-read-request';
+import { NotificationUpdateRequest } from '../../../../../shared/src/interfaces/notification/notification-update-request';
+import { LastSeenNotificationUpdateRequest } from '../../../../../shared/src/interfaces/notification/last-seen-notification-update-request';
 import { ServerSideEventType, NotificationsAvailableEvent } from '../../../../../shared/src/interfaces/server-side-event/server-side-event';
+import { SessionService } from '../session/session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,32 +22,46 @@ export class NotificationService {
   readonly url = '/server/notification'
 
   private _unseenNotificationsCount = 0;
-  private _unseenNotificationsPreview: Notification[] = [];
+  private _notificationsPreview: Notification[] = [];
 
   constructor(
     private _httpClient: HttpClient,
     private _pageProgressService: PageProgressService,
     private _errorHandlerService: ErrorHandlerService,
-    sseSourceService: ServerSideEventSourceService
+    private _sseSourceService: ServerSideEventSourceService,
+    private _sessionService: SessionService
   ) {
-    this._listenForUnseenNotifications(sseSourceService);
+    this._listenForUnseenNotifications();
+    this._sessionService.login$.subscribe(() => this._getNotificationsPreview());
+    this._sessionService.logout$.subscribe(() => this._clearNotificationsData());
   }
 
   get unseenNotificationsCount(): number {
     return this._unseenNotificationsCount;
   }
 
-  get unseenNotificationsPreview(): Notification[] {
-    return this._unseenNotificationsPreview;
+  get notificationsPreview(): Notification[] {
+    return this._notificationsPreview;
   }
 
-  private _listenForUnseenNotifications(sseSourceService: ServerSideEventSourceService): void {
-    sseSourceService.onMessageType<NotificationsAvailableEvent>(
+  private _getNotificationsPreview(): void {
+    this._getNotifications({}, 1, 10).subscribe((notificationsResponse: ListResponse<Notification>) =>
+      this._notificationsPreview = notificationsResponse.list
+    );
+  }
+
+  private _clearNotificationsData(): void {
+    this._notificationsPreview = [];
+    this._unseenNotificationsCount = 0;
+  }
+
+  private _listenForUnseenNotifications(): void {
+    this._sseSourceService.onMessageType<NotificationsAvailableEvent>(
       ServerSideEventType.NotificationsAvailable
     ).subscribe((notificationsAvailableEvent) => {
       this._unseenNotificationsCount = notificationsAvailableEvent.unseenNotificationsCount;
-      this._getNotifications({ unseen: true }, 1, 10).subscribe((notificationsResponse: ListResponse<Notification>) => {
-        this._unseenNotificationsPreview = notificationsResponse.list
+      this._getNotifications({}, 1, 10).subscribe((notificationsResponse: ListResponse<Notification>) => {
+        this._notificationsPreview = notificationsResponse.list
       });
     });
   }
@@ -79,5 +96,38 @@ export class NotificationService {
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );
+  }
+
+  updateSeenNotifications(): void {
+    if (this._unseenNotificationsCount > 0) {
+      this._unseenNotificationsCount = 0;
+      const lastSeenNotificationUpdateReq: LastSeenNotificationUpdateRequest = {
+        lastSeenNotificationId: this._notificationsPreview[0].id
+      };
+      this._httpClient.put(`${this.url}/lastSeenNotification`, lastSeenNotificationUpdateReq).pipe(
+        catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
+      ).subscribe();
+    }
+  }
+
+  updateNotificationReadState(notification: Notification, read: boolean): void {
+    if (notification.read !== read) {
+      notification.read = read;
+      this._updateNotification(notification);
+    }
+  }
+
+  updateNotificationFlaggedState(notification: Notification, flagged: boolean): void {
+    if (notification.flagged !== flagged) {
+      notification.flagged = flagged;
+      this._updateNotification(notification);
+    }
+  }
+
+  private _updateNotification(notification: Notification): void {
+    const notificationUpdateRequest: NotificationUpdateRequest = { notification };
+      this._httpClient.put(this.url, notificationUpdateRequest).pipe(
+        catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
+      ).subscribe();
   }
 }

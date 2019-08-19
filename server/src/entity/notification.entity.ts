@@ -19,6 +19,9 @@ export class NotificationEntity implements Notification {
   notificationDetailId: number;
 
   @Column({ nullable: true })
+  notificationLink?: string;
+
+  @Column({ nullable: true })
   notificationIconUrl?: string;
 
   @Column()

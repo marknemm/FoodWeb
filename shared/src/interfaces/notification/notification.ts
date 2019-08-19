@@ -1,6 +1,7 @@
 import { AuditEventType } from '../audit/audit';
 
 export enum NotificationType {
+  Signup = AuditEventType.Signup,
   Donate = AuditEventType.Donate,
   UpdateDonation = AuditEventType.UpdateDonation,
   RemoveDonation = AuditEventType.RemoveDonation,
@@ -24,6 +25,10 @@ export interface Notification {
    * ID that helps direct the user to a page in the app for more information.
    */
   notificationDetailId: number;
+  /**
+   * (Deep) Link used for the notification.
+   */
+  notificationLink?: string;
   /**
    * A URL for the icon that should be used for the notification.
    */
