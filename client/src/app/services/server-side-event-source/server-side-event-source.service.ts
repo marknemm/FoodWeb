@@ -1,6 +1,7 @@
 import { Injectable, ApplicationRef } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { SessionService } from '../session/session.service';
 import { ServerSideEventType } from '../../../../../shared/src/interfaces/server-side-event/server-side-event';
 
 @Injectable({
@@ -13,8 +14,13 @@ export class ServerSideEventSourceService {
   private _onError = new ReplaySubject<MessageEvent>();
 
   constructor(
-    private _applicationRef: ApplicationRef
-  ) {}
+    private _applicationRef: ApplicationRef,
+    private _sessionService: SessionService
+  ) {
+    this._sessionService.login$.subscribe(() => this.open());
+    this._sessionService.logout$.subscribe(() => this.close());
+    if (this._sessionService.loggedIn) { this.open(); }
+  }
 
   /**
    * Whether or not a server side event source connection is open.
@@ -77,6 +83,7 @@ export class ServerSideEventSourceService {
   close(): void {
     if (this.isOpen) {
       this._eventSource.close();
+      this._eventSource = null;
     }
   }
 }

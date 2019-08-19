@@ -4,7 +4,6 @@ $title-font-size: 16px;
 $icon-size: 38px;
 
 .notifications-container {
-
   position: relative;
   max-width: 960px;
   margin-left: auto;
@@ -13,17 +12,17 @@ $icon-size: 38px;
   @media only screen and (max-width: $sm) {
     position: absolute;
     width: 100vw;
+    height: 100%;
     left: calc(50% - 50vw);
     margin: -20px 0 0;
     overflow-x: hidden;
+    background-color: white;
   }
 
   .notifications-title {
     @media only screen and (max-width: $sm) {
-      width: 100%;
       margin: 0;
       padding-top: 7px;
-      background-color: white;
     }
   }
 
@@ -31,101 +30,17 @@ $icon-size: 38px;
     padding-top: 0;
     width: 100%;
     border-radius: 5px;
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+                0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+                0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 
     @media only screen and (max-width: $sm) {
       border-radius: 0;
+      box-shadow: none;
     }
 
-    .mat-line {
-      margin-left: -8px;
-    }
-
-    .notification {
-      background-color: white;
-
-      @media only screen and (max-width: $sm) {
-        margin-left: -8px;
-        width: calc(100% + 16px);
-      }
-
-      &:first-child {
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-
-        @media only screen and (max-width: $sm) {
-          border-radius: 0;
-        }
-      }
-
-      &:last-child {
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-
-        .mat-divider {
-          display: none;
-        }
-
-        @media only screen and (max-width: $sm) {
-          border-radius: 0;
-        }
-      }
-
-      .icon {
-        width: $icon-size;
-        height: $icon-size;
-        font-size: $icon-size;
-      }
-
-      .title {
-        font-size: $title-font-size;
-        font-weight: bold;
-        color: $accent-darkest;
-
-        @media only screen and (max-width: 400px) {
-          font-size: $title-font-size - 2px;
-        }
-      }
-
-      .subtitle {
-        font-size: $title-font-size - 3px;
-        color: #666;
-        margin-top: -6px;
-        margin-bottom: 3px;
-
-        @media only screen and (max-width: 400px) {
-          font-size: $title-font-size - 4px;
-        }
-      }
-
-      .body {
-        position: relative;
-        font-size: $title-font-size - 3px;
-        line-height: $title-font-size - 1px;
-        height: ($title-font-size - 1px) * 2;
-        overflow: hidden;
-        white-space: normal;
-
-        &.fade-bottom:after {
-          height: $title-font-size;
-        }
-
-        @media only screen and (max-width: 400px) {
-          font-size: $title-font-size - 4px;
-          line-height: $title-font-size - 2px;
-        }
-      }
-
-      .mat-divider {
-        @media only screen and (max-width: $sm) {
-          display: none;
-        }
-      }
-
-      &:hover, &:focus {
-        .body.fade-bottom:after {
-          background-image: none;
-        }
-      }
+    .mat-divider:last-child {
+      display: none;
     }
   }
 

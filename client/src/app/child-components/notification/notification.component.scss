@@ -1,0 +1,85 @@
+@import "../../../styles/constants.scss";
+
+$title-font-size: 16px;
+$icon-size: 38px;
+
+.notification-container {
+  position: relative;
+
+  .notification {
+    display: block;
+    background-color: white;
+
+    &.unread {
+      background-color: rgba(0, 0, 0, 0.01);
+    }
+
+    &:hover, &:focus {
+      .body.fade-bottom:after {
+        background-image: none;
+      }
+    }
+
+    &:hover {
+      text-decoration: none;
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    @media only screen and (max-width: $sm) {
+      margin-left: -8px;
+      width: calc(100% + 16px);
+    }
+
+    .icon {
+      width: $icon-size;
+      height: $icon-size;
+      font-size: $icon-size;
+    }
+
+    .title {
+      font-size: $title-font-size;
+      font-weight: bold;
+      color: $accent-darkest;
+
+      @media only screen and (max-width: 400px) {
+        font-size: $title-font-size - 2px;
+      }
+    }
+
+    .subtitle {
+      font-size: $title-font-size - 3px;
+      color: #666;
+      margin-top: -6px;
+      margin-bottom: 3px;
+
+      @media only screen and (max-width: 400px) {
+        font-size: $title-font-size - 4px;
+      }
+    }
+
+    .body {
+      position: relative;
+      font-size: $title-font-size - 3px;
+      line-height: $title-font-size - 1px;
+      height: ($title-font-size - 1px) * 2;
+      overflow: hidden;
+      white-space: normal;
+
+      &.fade-bottom:after {
+        height: $title-font-size;
+      }
+
+      @media only screen and (max-width: 400px) {
+        font-size: $title-font-size - 4px;
+        line-height: $title-font-size - 2px;
+      }
+    }
+  }
+
+  .flagged-indicator {
+    color: $accent-darker;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}

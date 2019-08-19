@@ -31,6 +31,7 @@
         <button mat-icon-button class="notifications-button" aria-label="Notifications menu">
           <mat-icon
            [matMenuTriggerFor]="notificationsMenu"
+           (menuOpened)="notificationService.updateSeenNotifications()"
            [matBadge]="notificationService.unseenNotificationsCount"
            [matBadgeHidden]="!(notificationService.unseenNotificationsCount)"
            matBadgeSize="small"

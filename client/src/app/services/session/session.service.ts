@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map, catchError, finalize } from 'rxjs/operators';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { AlertService } from '../alert/alert.service';
 import { LoginRequest } from '../../../../../shared/src/interfaces/session/login-request';
 import { AccountHelper, Account } from '../../../../../shared/src/helpers/account-helper';
-import { ServerSideEventSourceService } from '../server-side-event-source/server-side-event-source.service';
 export { Account };
 
 @Injectable({
@@ -18,12 +17,13 @@ export class SessionService {
 
   private _account: Account;
   private _loading = false;
+  private _login$ = new Subject<Account>();
+  private _logout$ = new Subject<void>();
 
   constructor(
     private _httpClient: HttpClient,
     private _errorHandlerService: ErrorHandlerService,
     private _alertService: AlertService,
-    private _serverSideEventService: ServerSideEventSourceService,
     private _accountHelper: AccountHelper
   ) {
     // Attempt to get account from local browser storage upon init.
@@ -97,6 +97,20 @@ export class SessionService {
   }
 
   /**
+   * An observalbe that emits the newly logged in user's account upon login.
+   */
+  get login$(): Observable<Account> {
+    return this._login$.asObservable();
+  }
+
+  /**
+   * An observable that emits void whenever logout occurs.
+   */
+  get logout$(): Observable<void> {
+    return this._logout$.asObservable();
+  }
+
+  /**
    * Checks if an account is the current user's account.
    * @param accountId The ID of the account to check.
    * @param ignoreAdmin Set to true to ignore admin privileges; admins technically own all accounts (default is false).
@@ -129,10 +143,10 @@ export class SessionService {
    */
   private _handleLoginSuccess(account: Account, isSessionRefresh = false): Account {
     this.account = account;
-    this._serverSideEventService.open();
     if (!isSessionRefresh) {
       this._alertService.displaySimpleMessage(`Welcome, ${this._accountHelper.accountName(account)}`, 'success');
     }
+    this._login$.next(account);
     return account;
   }
 
@@ -164,8 +178,8 @@ export class SessionService {
         ? this._alertService.displaySimpleMessage('You have been logged out due to inactivity', 'warn')
         : ''
       : this._alertService.displaySimpleMessage('Logout successful', 'success');
-    this._serverSideEventService.close();
     this.account = null;
+    this._logout$.next();
     this._httpClient.delete<void>(this.url).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
     ).subscribe();
