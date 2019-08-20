@@ -14,7 +14,7 @@
   "private": true,
   "dependencies": {
     "geocoder": "^0.2.3",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.23",
     "rxjs": "^6.3.3",

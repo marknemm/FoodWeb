@@ -131,6 +131,24 @@ mat-card.mat-card {
   }
 }
 
+@-webkit-keyframes greenPulse {
+  0% { -webkit-box-shadow: 0px 0px 20px 3px #D1F5D1 inset; }
+  50% { -webkit-box-shadow: 0px 0px 35px 6px lightgreen inset; }
+  100% { -webkit-box-shadow: 0px 0px 20px 3px #D1F5D1 inset; }
+}
+
+@keyframes greenPulse {
+  0% { box-shadow: 0px 0px 20px 3px #D1F5D1 inset; }
+  50% { box-shadow: 0px 0px 35px 6px lightgreen inset; }
+  100% { box-shadow: 0px 0px 20px 3px #D1F5D1 inset; }
+}
+
+.green-glow {
+  /* Green Pulse inset shadow animation */
+  -webkit-animation: greenPulse 5s infinite !important;
+  animation: greenPulse 5s infinite !important;
+}
+
 @media only screen and (max-width: $md) {
   .d-inline-block.desktop {
     display: block !important;

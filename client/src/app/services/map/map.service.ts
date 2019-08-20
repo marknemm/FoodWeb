@@ -8,7 +8,15 @@ export class MapService {
 
   constructor() {}
 
-  genHref(contactInfo: ContactInfo): string {
-    return `https://maps.google.com/?q=${contactInfo.streetAddress}, ${contactInfo.stateProvince}, ${contactInfo.city}, ${contactInfo.postalCode}`;
+  genLocationHref(addressInfo: ContactInfo | string): string {
+    return (typeof addressInfo === 'string')
+      ? `https://maps.google.com/?q=${addressInfo}`
+      : `https://maps.google.com/?q=${addressInfo.streetAddress}, ${addressInfo.stateProvince}, ${addressInfo.city}, ${addressInfo.postalCode}`;
+  }
+
+  genDirectionHref(addressInfo: ContactInfo | string): string {
+    return (typeof addressInfo === 'string')
+      ? `https://www.google.com/maps?saddr=My+Location&daddr=${addressInfo}`
+      : `https://www.google.com/maps?saddr=My+Location&daddr=${addressInfo.streetAddress}, ${addressInfo.stateProvince}, ${addressInfo.city}, ${addressInfo.postalCode}`;
   }
 }
