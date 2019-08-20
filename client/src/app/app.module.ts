@@ -23,6 +23,7 @@ import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/mater
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 
@@ -86,6 +87,8 @@ import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hour
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
 import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
+import { EventCardComponent } from './child-components/event-card/event-card.component';
+import { EventRegistrationsComponent } from './components/event-registrations/event-registrations.component';
 
 @NgModule({
   declarations: [
@@ -134,6 +137,8 @@ import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
     AboutComponent,
     AgreementBulletPointsComponent,
     TermsConditionsDialogComponent,
+    EventCardComponent,
+    EventRegistrationsComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -163,6 +168,7 @@ import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
     MatDatepickerModule,
     MatListModule,
     MatNativeDateModule,
+    MatExpansionModule,
     NgxMaterialTimepickerModule,
     RecaptchaV3Module
   ],

@@ -45,7 +45,7 @@
     <div class="col-sm-6">
       <div class="inline-label">Email:</div>
       <div class="d-inline-block">
-        <a href="mailto:{{ contactInfo.email }}">
+        <a class="email" href="mailto:{{ contactInfo.email }}">
           {{ contactInfo.email }}
         </a>
       </div>
@@ -53,14 +53,14 @@
     <div class="col-sm-6">
       <div class="inline-label">Phone Number:</div>
       <div class="d-inline-block">
-        <a href="tel:{{ contactInfo.phoneNumber }}">
+        <a class="phone-number" href="tel:{{ contactInfo.phoneNumber }}">
           {{ contactInfo.phoneNumber }}
         </a>
       </div>
     </div>
     <div *ngIf="!hideAddress && contactInfo.streetAddress" class="col-sm-12">
       <div class="inline-label">Address:</div>
-      <a [href]="mapService.genHref(contactInfo)" target="_blank">
+      <a class="address" [href]="mapService.genDirectionHref(contactInfo)" target="_blank">
         <food-web-address [contactInfo]="contactInfo"></food-web-address>
       </a>
     </div>
