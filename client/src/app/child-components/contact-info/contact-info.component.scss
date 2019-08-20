@@ -9,5 +9,10 @@
     .d-inline-block {
       vertical-align: top;
     }
+
+    .email {
+      word-break: break-all;
+      word-break: break-word;
+    }
   }
 }
