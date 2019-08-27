@@ -1,7 +1,10 @@
 <div class="notification-container">
   <button mat-list-item
     (click)="handleNotificationClick()"
-    [ngClass]="{ 'unread': !notification.read }"
+    [ngClass]="{
+      'unread': !notification.read,
+      'auto-height': !max2Lines
+    }"
     class="notification"
   >
     <img mat-list-icon class="icon" *ngIf="notification.notificationIconUrl"

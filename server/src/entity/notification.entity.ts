@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
 import { AccountEntity } from './account.entity';
-import { AuditEntity } from './audit.entity';
 import { Notification, NotificationType } from '../../../shared/src/interfaces/notification/notification';
 import { Constants } from '../../../shared/src/constants/constants';
 
@@ -44,7 +43,4 @@ export class NotificationEntity implements Notification {
 
   @ManyToOne((type) => AccountEntity)
   account?: AccountEntity;
-
-  @ManyToOne((type) => AuditEntity)
-  audit?: AuditEntity;
 }

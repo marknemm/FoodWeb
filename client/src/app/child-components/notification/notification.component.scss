@@ -5,13 +5,19 @@ $icon-size: 38px;
 
 .notification-container {
   position: relative;
+  background-color: white;
 
   .notification {
     display: block;
     background-color: white;
 
+    .mat-list-item-content {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
     &.unread {
-      background-color: rgba(0, 0, 0, 0.01);
+      background-color: rgba(0, 0, 0, 0.04);
     }
 
     &:hover, &:focus {
@@ -22,7 +28,7 @@ $icon-size: 38px;
 
     &:hover {
       text-decoration: none;
-      background: rgba(0, 0, 0, 0.04);
+      background: rgba(0, 0, 0, 0.06);
     }
 
     @media only screen and (max-width: $sm) {
@@ -61,6 +67,7 @@ $icon-size: 38px;
       position: relative;
       font-size: $title-font-size - 3px;
       line-height: $title-font-size - 1px;
+      min-height: ($title-font-size - 1px) * 2;
       height: ($title-font-size - 1px) * 2;
       overflow: hidden;
       white-space: normal;
@@ -74,12 +81,16 @@ $icon-size: 38px;
         line-height: $title-font-size - 2px;
       }
     }
+
+    &.auto-height .body {
+      height: auto;
+    }
   }
 
   .flagged-indicator {
     color: $accent-darker;
     position: absolute;
-    top: 0;
+    top: -1px;
     right: 0;
   }
 }

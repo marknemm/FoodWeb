@@ -6,14 +6,16 @@ import { ensureSessionActive } from '../middlewares/session.middleware';
 import { handleError } from '../middlewares/response-error.middleware';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordResetEntity } from '../entity/password-reset';
-import { createAccount, updateAccount } from '../services/save-account';
+import { createAccount, updateAccount, NewAccountData } from '../services/save-account';
+import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { updatePassword } from '../services/save-password';
 import { readAccounts, AccountsQueryResult, readAccount } from '../services/read-accounts';
-import { verifyAccount, resendVerificationEmail } from '../services/account-verification';
+import { verifyAccount, recreateUnverifiedAccount } from '../services/account-verification';
 import { savePasswordResetToken, resetPassword } from '../services/save-password-reset';
 import { scheduleExpiredPasswordResetTokDel } from '../services/delete-password-reset';
 import { saveAudit, AuditEventType, saveUpdateAudit } from '../services/save-audit';
 import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '../services/password-reset-message';
+import { sendAccountVerificationMessage, sendAccountVerificationEmail } from '../services/account-verification-message';
 import { AccountCreateRequest, Account } from '../../../shared/src/interfaces/account/account-create-request';
 import { AccountUpdateRequest } from '../../../shared/src/interfaces/account/account-update-request';
 import { PasswordUpdateRequest } from '../../../shared/src/interfaces/account/password-update-request';
@@ -29,6 +31,7 @@ scheduleExpiredPasswordResetTokDel();
 router.post('/', (req: Request, res: Response) => {
   const createRequest: AccountCreateRequest = req.body;
   createAccount(createRequest)
+    .then((newAccountData: NewAccountData) => sendAccountVerificationMessage(newAccountData))
     .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, createRequest.recaptchaScore))
     .then(_handleAccountSaveResult.bind(this, req, res))
     .catch(handleError.bind(this, res));
@@ -93,7 +96,9 @@ router.get('/reset-password', (req: Request, res: Response) => {
 });
 
 router.get('/resend-verification-email', ensureSessionActive, (req: Request, res: Response) => {
-  resendVerificationEmail(req.session.account)
+  const account: AccountEntity = req.session.account;
+  recreateUnverifiedAccount(account)
+    .then((unverifiedAccount: UnverifiedAccountEntity) => sendAccountVerificationEmail(account, unverifiedAccount))
     .then(() => res.send())
     .catch(handleError.bind(this, res));
 });

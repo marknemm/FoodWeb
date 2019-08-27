@@ -8,6 +8,7 @@ export enum NotificationType {
   ClaimDonation = AuditEventType.ClaimDonation,
   UnclaimDonation = AuditEventType.UnclaimDonation,
   ScheduleDelivery = AuditEventType.ScheduleDelivery,
+  CancelDelivery = AuditEventType.CancelDelivery,
   DeliveryStateAdvance = AuditEventType.DeliveryStateAdvance,
   DeliveryStateUndo = AuditEventType.DeliveryStateUndo
 }

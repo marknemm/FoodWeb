@@ -28,7 +28,6 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { EllipsisModule } from 'ngx-ellipsis';
 
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -179,8 +178,7 @@ import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
     MatBadgeModule,
     MatMenuModule,
     NgxMaterialTimepickerModule,
-    RecaptchaV3Module,
-    EllipsisModule
+    RecaptchaV3Module
   ],
   providers: [
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top', duration: 5000 } },

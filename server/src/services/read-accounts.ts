@@ -1,11 +1,11 @@
 import { getRepository, SelectQueryBuilder } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
+import { LoginRequiredError } from '../helpers/food-web-error';
 import { genSimpleWhereConditions, genPagination } from '../helpers/query-builder-helper';
 import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
 import { Account, OperationHours } from '../../../shared/src/interfaces/account/account';
 import { AccountReadRequest, AccountReadFilters } from '../../../shared/src/interfaces/account/account-read-request';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
-import { FoodWebError, LoginRequiredError } from '../helpers/food-web-error';
 
 export interface AccountsQueryResult {
   accounts: AccountEntity[];
@@ -24,7 +24,7 @@ export async function readAccount(idOrUsername: number | string, myAccount?: Acc
   return queryResult.accounts[0];
 }
 
-export async function readAccounts(request: AccountReadRequest, myAccount?: Account): Promise<AccountsQueryResult> {
+export async function readAccounts(request: AccountReadRequest, myAccount: Account): Promise<AccountsQueryResult> {
   const queryBuilder: SelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
   const [accounts, totalCount]: [AccountEntity[], number] = await queryBuilder.getManyAndCount();
   _postProcessAccounts(accounts, myAccount);

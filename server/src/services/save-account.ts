@@ -5,26 +5,36 @@ import { UpdateDiff } from '../interfaces/update-diff';
 import { FoodWebError } from '../helpers/food-web-error';
 import { geocode, geoTimezone } from '../helpers/geocoder';
 import { AccountEntity } from '../entity/account.entity';
+import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { OperationHoursEntity } from '../entity/operation-hours.entity';
 import { AccountUpdateRequest } from '../interfaces/account/account-update-request';
 import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
 import { OperationHoursHelper, OperationHours } from '../../../shared/src/helpers/operation-hours-helper';
 import { AccountCreateRequest } from '../../../shared/src/interfaces/account/account-create-request';
 
+/**
+ * Data generated when creating a new account.
+ */
+export interface NewAccountData {
+  account: AccountEntity;
+  unverifiedAccount: UnverifiedAccountEntity;
+}
+
 const _accountHelper = new AccountHelper();
 const _opHoursHelper = new OperationHoursHelper();
 
-export async function createAccount(request: AccountCreateRequest): Promise<AccountEntity> {
+export async function createAccount(request: AccountCreateRequest): Promise<NewAccountData> {
   let createdAccount: AccountEntity;
+  let unverifiedAccount: UnverifiedAccountEntity;
   await getConnection().transaction(async (manager: EntityManager) => {
     createdAccount = await _saveAccount(manager, request.account);
     await savePassword(manager, createdAccount, request.password);
-    await createUnverifiedAccount(createdAccount, manager);
+    unverifiedAccount = await createUnverifiedAccount(createdAccount, manager);
   });
 
   _opHoursHelper.formatOperationHoursTimes(createdAccount.operationHours);
   createdAccount.verified = false;
-  return createdAccount;
+  return { account: createdAccount, unverifiedAccount };
 }
 
 export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: Account): Promise<UpdateDiff<AccountEntity>> {

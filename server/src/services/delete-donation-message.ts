@@ -1,35 +1,81 @@
 import { broadcastEmail, MailTransporter } from '../helpers/email';
-import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
-import { Account } from '../../../shared/src/interfaces/account/account';
+import { AccountEntity } from '../entity/account.entity';
+import { DonationEntity } from '../entity/donation.entity';
+import { sendNotification, NotificationType } from '../helpers/push-notification';
+import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 
 const _donationHelper = new DonationHelper();
 
-export async function sendDonationDeleteSuccessEmail(donation: Donation): Promise<void> {
-  const accounts: Account[] = [donation.donorAccount];
+export async function sendDonationDeleteSuccessEmail(donation: DonationEntity): Promise<void> {
+  const messagePromises: Promise<any>[] = [];
+  const emailAccounts: AccountEntity[] = [donation.donorAccount];
+  const notificationAccounts: AccountEntity[] = [];
   const donorName: string = _donationHelper.donorName(donation);
   let receiverName = '';
   let delivererName = '';
-  const subjects = ['Successfully Deleted Donation'];
+  const emailSubjects = ['Successfully Deleted Donation'];
 
   // If donation was claimed by a receiver, then we must also notify them.
   if (donation.receiverAccount) {
-    accounts.push(donation.receiverAccount);
+    emailAccounts.push(donation.receiverAccount);
+    notificationAccounts.push(donation.receiverAccount);
     receiverName = _donationHelper.receiverName(donation);
-    subjects.push(`Claimed Donation Deleted by ${donorName}`);
+    emailSubjects.push(`Claimed Donation Deleted by ${donorName}`);
   }
 
   // If donation had a delivery lined up, we must also notify the deliverer.
   if (donation.delivery) {
-    accounts.push(donation.delivery.volunteerAccount);
+    emailAccounts.push(donation.delivery.volunteerAccount);
+    notificationAccounts.push(donation.delivery.volunteerAccount);
     delivererName = _donationHelper.delivererName(donation);
-    subjects.push(`Delivery Cancelled by ${donorName}`);
+    emailSubjects.push(`Delivery Cancelled by ${donorName}`);
   }
 
-  await broadcastEmail(
-    MailTransporter.NOREPLY,
-    accounts,
-    subjects,
-    'donation-deleted',
-    { donation, donorName, receiverName, delivererName }
-  ).catch(console.error);
+  messagePromises.push(
+    broadcastEmail(
+      MailTransporter.NOREPLY,
+      emailAccounts,
+      emailSubjects,
+      'donation-deleted',
+      { donation, donorName, receiverName, delivererName }
+    ).catch(console.error)
+  );
+
+  if (notificationAccounts.length > 0) {
+    messagePromises.push(
+      sendNotification(
+        notificationAccounts[0],
+        {
+          notificationType: NotificationType.RemoveDonation,
+          notificationDetailId: donation.id,
+          notificationTitle: `Donation Deleted`,
+          notificationIconUrl: donation.donorAccount.profileImgUrl,
+          notificationBody: `
+            Claimed Donation Deleted by <strong>${donorName}</strong>.<br>
+            <i>${donation.description}</i>
+          `
+        }
+      ).catch(console.error)
+    );
+  }
+
+  if (notificationAccounts.length > 1) {
+    messagePromises.push(
+      sendNotification(
+        notificationAccounts[1],
+        {
+          notificationType: NotificationType.RemoveDonation,
+          notificationDetailId: donation.id,
+          notificationTitle: `Donation Deleted`,
+          notificationIconUrl: donation.donorAccount.profileImgUrl,
+          notificationBody: `
+            Delivery Cancelled by <strong>${donorName}</strong>.<br>
+            <i>${donation.description}</i>
+          `
+        }
+      ).catch(console.error)
+    );
+  }
+
+  await Promise.all(messagePromises);
 }
