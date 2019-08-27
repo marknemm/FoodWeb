@@ -13,30 +13,37 @@ const _donationHelper = new DonationHelper();
  * @return A promise that resolves to void once all messages/notifications have been sent.
  */
 export async function messagePotentialReceivers(foundPotentialReceivers: FoundPotentialReceivers): Promise<void> {
+  const messagePromises: Promise<any>[] = [];
   const donation: Donation = foundPotentialReceivers.donation;
   const potentialReceivers: AccountEntity[] = foundPotentialReceivers.potentialReceivers;
   const donorName: string = _donationHelper.donorName(donation);
 
-  await broadcastEmail(
-    MailTransporter.NOREPLY,
-    potentialReceivers,
-    `Donation Available From ${donorName}`,
-    'donation-match-request',
-    { donation }
+  messagePromises.push(
+    broadcastEmail(
+      MailTransporter.NOREPLY,
+      potentialReceivers,
+      `Donation Available From ${donorName}`,
+      'donation-match-request',
+      { donation }
+    )
   );
 
-  await broadcastNotification(
-    potentialReceivers,
-    {
-      notificationType: NotificationType.Donate,
-      notificationDetailId: donation.id,
-      notificationLink: `/donation-details/${donation.id}`,
-      notificationTitle: 'Donation Available',
-      notificationIconUrl: donation.donorAccount.profileImgUrl,
-      notificationBody: `
-        New donation from <strong>${donorName}</strong>.<br>
-        <i>${donation.description}</i>
-      `
-    }
+  messagePromises.push(
+    broadcastNotification(
+      potentialReceivers,
+      {
+        notificationType: NotificationType.Donate,
+        notificationDetailId: donation.id,
+        notificationLink: `/donation-details/${donation.id}`,
+        notificationTitle: 'Donation Available',
+        notificationIconUrl: donation.donorAccount.profileImgUrl,
+        notificationBody: `
+          New donation from <strong>${donorName}</strong>.<br>
+          <i>${donation.description}</i>
+        `
+      }
+    )
   );
+
+  await Promise.all(messagePromises);
 }

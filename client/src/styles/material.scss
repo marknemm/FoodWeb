@@ -294,8 +294,10 @@ body .mat-snack-bar-container {
 }
 
 .mat-radio-list {
-  .mat-list-item:hover {
-    background-color: whitesmoke;
+  .mat-list-item {
+    &:hover {
+      background-color: whitesmoke;
+    }
   }
 
   .mat-radio-button {
@@ -318,5 +320,19 @@ body .mat-snack-bar-container {
 .mat-checkbox {
   .mat-checkbox-layout {
     white-space: normal;
+  }
+}
+
+.mat-list {
+  .mat-list-item, .mat-list-item.mat-2-line {
+    &.auto-height {
+      height: auto;
+      box-sizing: border-box;
+
+      .mat-list-item-content {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+    }
   }
 }

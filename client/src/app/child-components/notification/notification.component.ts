@@ -11,6 +11,7 @@ import { Notification } from '../../../../../shared/src/interfaces/notification/
 export class NotificationComponent implements OnInit {
 
   @Input() notification: Notification;
+  @Input() max2Lines = false;
 
   constructor(
     private _router: Router,
@@ -32,7 +33,7 @@ export class NotificationComponent implements OnInit {
   }
 
   shouldFadeBottom(elem: HTMLElement): boolean {
-    return (elem.scrollHeight > elem.clientHeight);
+    return (this.max2Lines && elem.scrollHeight > elem.clientHeight);
   }
 
 }

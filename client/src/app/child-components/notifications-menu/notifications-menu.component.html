@@ -4,7 +4,11 @@
     <mat-divider></mat-divider>
   </div>
   <mat-action-list>
-    <food-web-notification *ngFor="let notification of notificationService.notificationsPreview" [notification]="notification"></food-web-notification>
+    <food-web-notification
+      *ngFor="let notification of notificationService.notificationsPreview"
+      [notification]="notification"
+      [max2Lines]="true">
+    </food-web-notification>
   </mat-action-list>
   <div class="footer">
     <mat-divider></mat-divider>

@@ -1,44 +1,67 @@
-import { MailTransporter, sendEmail, broadcastEmail } from '../helpers/email';
+import { MailTransporter, broadcastEmail } from '../helpers/email';
+import { sendNotification, NotificationType } from '../helpers/push-notification';
+import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
-import { Account } from '../../../shared/src/interfaces/account/account';
 
 const _donationHelper = new DonationHelper();
 
-/**
- * Messages a potential deliverer so that they may be aware of a newly matched donation that needs to be delivered.
- * @param donation The new donation.
- * @param receiver The deliverer account.
- * @return A promise that resolves to void once the email has been sent.
- */
-export function sendDeliveryRequestMessages(donation: Donation, deliverer: AccountEntity): Promise<void> {
-  return sendEmail(
-    MailTransporter.NOREPLY,
-    deliverer,
-    `Delivery Requested from ${donation.donorAccount.organization.organizationName} to ${donation.receiverAccount.organization.organizationName}`,
-    'delivery-request',
-    { donation }
-  );
-}
-
-export async function sendDeliveryScheduledMessages(donation: Donation): Promise<Donation> {
-  const sendAccounts: Account[] = [donation.donorAccount, donation.receiverAccount, donation.delivery.volunteerAccount];
+export async function sendDeliveryScheduledMessages(donation: DonationEntity): Promise<Donation> {
+  const messagePromises: Promise<any>[] = [];
+  const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.receiverAccount, donation.delivery.volunteerAccount];
   const donorName: string = _donationHelper.donorName(donation);
   const receiverName: string = _donationHelper.receiverName(donation);
   const delivererName: string = _donationHelper.delivererName(donation);
-  const sendHeaders = [
+  const emailHeaders = [
     `Donation Delivery Scheduled for pickup by ${delivererName}`,
     `Donation Delivery Scheduled for drop-off by ${delivererName}`,
     `Delivery Successfully Scheduled from ${donorName} to ${receiverName}`
   ];
 
-  await broadcastEmail(
-    MailTransporter.NOREPLY,
-    sendAccounts,
-    sendHeaders,
-    'delivery-scheduled',
-    { donation, donorName, receiverName, delivererName }
-  ).catch(console.error);
+  messagePromises.push(
+    broadcastEmail(
+      MailTransporter.NOREPLY,
+      emailAccounts,
+      emailHeaders,
+      'delivery-scheduled',
+      { donation, donorName, receiverName, delivererName }
+    ).catch(console.error)
+  );
 
+  messagePromises.push(
+    sendNotification(
+      donation.donorAccount,
+      {
+        notificationType: NotificationType.ScheduleDelivery,
+        notificationDetailId: donation.id,
+        notificationLink: `/donation-details/${donation.id}`,
+        notificationTitle: 'Delivery Scheduled',
+        notificationIconUrl: donation.delivery.volunteerAccount.profileImgUrl,
+        notificationBody: `
+          Donation pickup scheduled by <strong>${delivererName}</strong>.<br>
+          <i>${donation.description}</i>
+        `
+      }
+    ).catch(console.error)
+  );
+
+  messagePromises.push(
+    sendNotification(
+      donation.receiverAccount,
+      {
+        notificationType: NotificationType.ScheduleDelivery,
+        notificationDetailId: donation.id,
+        notificationLink: `/donation-details/${donation.id}`,
+        notificationTitle: 'Delivery Scheduled',
+        notificationIconUrl: donation.delivery.volunteerAccount.profileImgUrl,
+        notificationBody: `
+          Donation delivery scheduled by <strong>${delivererName}</strong>.<br>
+          <i>${donation.description}</i>
+        `
+      }
+    ).catch(console.error)
+  );
+
+  await Promise.all(messagePromises);
   return donation;
 }

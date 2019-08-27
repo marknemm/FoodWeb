@@ -20,7 +20,7 @@ const _donationHelper = new DonationHelper();
  * @return A promise that resolves to the donation after it has been claimed.
  * @throws FoodWebError if the user is not authorized to claim the donation.
  */
-export async function claimDonation(claimReq: DonationClaimRequest, myAccount: AccountEntity): Promise<Donation> {
+export async function claimDonation(claimReq: DonationClaimRequest, myAccount: AccountEntity): Promise<DonationEntity> {
   const donationToClaim: Donation = await readDonation(claimReq.donationId, myAccount);
   _ensureCanClaimDonation(donationToClaim, myAccount);
 

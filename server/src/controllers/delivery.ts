@@ -1,6 +1,7 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { UpdateDiff } from '../interfaces/update-diff';
+import { DonationEntity } from '../entity/donation.entity';
 import { ensureSessionActive, ensureAccountVerified } from '../middlewares/session.middleware';
 import { handleError } from '../middlewares/response-error.middleware';
 import { genListResponse } from '../helpers/list-response';
@@ -11,7 +12,6 @@ import { advanceDeliveryState, undoDeliveryState } from '../services/update-deli
 import { saveDeliveryScheduleAudit, saveDeliveryAdvanceAudit, saveDeliveryUndoAudit } from '../services/save-delivery-audit';
 import { sendDeliveryStateUndoMessages, sendDeliveryStateAdvancedMessages } from '../services/update-delivery-state-message';
 import { sendDeliveryScheduledMessages } from '../services/schedule-delivery-message';
-import { Donation } from '../../../shared/src/interfaces/donation/donation';
 import { DeliveryReadRequest } from '../../../shared/src/interfaces/delivery/delivery-read-request';
 import { DeliveryScheduleRequest } from '../../../shared/src/interfaces/delivery/delivery-schedule-request';
 import { DeliveryStateChangeRequest } from '../../../shared/src/interfaces/delivery/delivery-state-change-request';
@@ -48,9 +48,9 @@ router.get('/', (req: Request, res: Response) => {
 router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const scheduleReq: DeliveryScheduleRequest = req.body;
   scheduleDelivery(scheduleReq, req.session.account)
-    .then((scheduledDelivery: Donation) => saveDeliveryScheduleAudit(scheduleReq, scheduledDelivery))
-    .then((scheduledDelivery: Donation) => sendDeliveryScheduledMessages(scheduledDelivery))
-    .then((scheduledDelivery: Donation) => res.send(scheduledDelivery))
+    .then((scheduledDelivery: DonationEntity) => saveDeliveryScheduleAudit(scheduleReq, scheduledDelivery))
+    .then((scheduledDelivery: DonationEntity) => sendDeliveryScheduledMessages(scheduledDelivery))
+    .then((scheduledDelivery: DonationEntity) => res.send(scheduledDelivery))
     .catch(handleError.bind(this, res));
 });
 
@@ -58,9 +58,9 @@ router.put('/advance/:id', ensureSessionActive, ensureAccountVerified, (req: Req
   const stateChangeReq: DeliveryStateChangeRequest = req.body;
   stateChangeReq.deliveryId = parseInt(req.params.id, 10);
   advanceDeliveryState(stateChangeReq, req.session.account)
-    .then((advancedDelivery: Donation) => saveDeliveryAdvanceAudit(stateChangeReq, advancedDelivery))
-    .then((advancedDelivery: Donation) => sendDeliveryStateAdvancedMessages(advancedDelivery))
-    .then((advancedDelivery: Donation) => res.send(advancedDelivery))
+    .then((advancedDelivery: DonationEntity) => saveDeliveryAdvanceAudit(stateChangeReq, advancedDelivery))
+    .then((advancedDelivery: DonationEntity) => sendDeliveryStateAdvancedMessages(advancedDelivery))
+    .then((advancedDelivery: DonationEntity) => res.send(advancedDelivery))
     .catch(handleError.bind(this, res));
 });
 
@@ -68,9 +68,9 @@ router.put('/undo/:id', ensureSessionActive, ensureAccountVerified, (req: Reques
   const stateChangeReq: DeliveryStateChangeRequest = req.body;
   stateChangeReq.deliveryId = parseInt(req.params.id, 10);
   undoDeliveryState(stateChangeReq, req.session.account)
-    .then((undoDiff: UpdateDiff<Donation>) => saveDeliveryUndoAudit(stateChangeReq, undoDiff))
-    .then((undoDiff: UpdateDiff<Donation>) => sendDeliveryStateUndoMessages(undoDiff))
-    .then((undoneDelivery: Donation) => res.send(undoneDelivery))
+    .then((undoDiff: UpdateDiff<DonationEntity>) => saveDeliveryUndoAudit(stateChangeReq, undoDiff))
+    .then((undoDiff: UpdateDiff<DonationEntity>) => sendDeliveryStateUndoMessages(undoDiff))
+    .then((undoneDelivery: DonationEntity) => res.send(undoneDelivery))
     .catch(handleError.bind(this, res));
 });
 
