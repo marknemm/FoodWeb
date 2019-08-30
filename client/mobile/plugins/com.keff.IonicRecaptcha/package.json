@@ -1,0 +1,37 @@
+{
+  "_from": "cordova-plugin-recaptcha",
+  "_id": "cordova-plugin-recaptcha@1.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-s0dnUZq2561Ect2GjG4NKesvkvlK+9kwRNxl6ypYWwY31L/XzsPf/gXajABv21BMFqyaGCfLDWXqfF7BqhzlFA==",
+  "_location": "/cordova-plugin-recaptcha",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-recaptcha",
+    "name": "cordova-plugin-recaptcha",
+    "escapedName": "cordova-plugin-recaptcha",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-recaptcha/-/cordova-plugin-recaptcha-1.0.0.tgz",
+  "_shasum": "a70b3bea25bd6928f3d5ff932f792f28dc6f2a4d",
+  "_spec": "cordova-plugin-recaptcha",
+  "_where": "C:\\Users\\markn\\Documents\\FoodWeb\\client\\mobile",
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "com.keff.IonicRecaptcha",
+    "platforms": [
+      "android"
+    ]
+  },
+  "deprecated": false,
+  "description": "Plantilla base para crear un Plugin personalizado",
+  "name": "cordova-plugin-recaptcha",
+  "version": "1.0.0"
+}

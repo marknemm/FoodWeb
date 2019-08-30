@@ -1,18 +1,23 @@
 {
-  "name": "food-web-client",
+  "name": "foodweb",
+  "displayName": "FoodWeb",
   "version": "1.0.0",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "angular-cli": {},
   "main": "client/dist/index.html",
   "scripts": {
     "build": "ng build --prod --aot",
+    "build:all": "npm run build && npm run build:mobile",
+    "build:mobile": "ng build --configuration=mobile --baseHref=./ --prod --aot && cd ./mobile && npm run build",
+    "build:mobile:debug": "ng build --configuration=mobile-debug --baseHref=./ && cd ./mobile && npm run build:debug",
     "build:watch": "ng build --watch",
     "build:e2e": "ng build --watch --configuration=e2e",
     "clean": "rimraf ./dist ./coverage",
     "clean:all": "npm run clean && rimraf ./node_modules",
     "hmr": "ng serve --configuration hmr",
     "lint": "ng lint",
-    "start": "ng serve",
+    "postinstall": "cd ./mobile && npm install",
+    "start": "ng serve --proxy-config proxy.conf.json",
     "test": "npm run lint && ng test --watch=false --code-coverage --source-map",
     "test:watch": "ng test --code-coverage --source-map"
   },
@@ -52,6 +57,8 @@
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
+    "@types/cordova": "0.0.34",
+    "@types/cordova-plugin-device": "^1.1.5",
     "@types/eventsource": "^1.1.2",
     "@types/hammerjs": "^2.0.36",
     "@types/jasmine": "^3.3.12",
@@ -70,6 +77,7 @@
     "karma-jasmine-html-reporter": "^1.4.2",
     "karma-spec-reporter": "0.0.32",
     "protractor": "^5.4.1",
+    "symlink-dir": "^3.1.0",
     "ts-node": "^7.0.1",
     "tslint": "^5.16.0"
   }

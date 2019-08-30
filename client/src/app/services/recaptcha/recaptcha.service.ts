@@ -20,7 +20,7 @@ export class RecaptchaService implements HttpInterceptor {
   ) {}
 
   /**
-   * Examines outgoing Http Requests in order to ascertain whether or not to capture RECAPTCHA scroe data.
+   * Examines outgoing Http Requests in order to ascertain whether or not to capture RECAPTCHA score data.
    * Should only gather updated RECAPTCHA score data to send to the server if the request supports a JSON body.
    * If the custom no-recaptcha header is set on the outgoing request, then RECAPTCHA score generation is skipped on the client.
    * @param req The outgoing Http Request.

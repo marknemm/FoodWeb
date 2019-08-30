@@ -1,6 +1,7 @@
 import { Injectable, ApplicationRef } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { SessionService } from '../session/session.service';
 import { ServerSideEventType } from '../../../../../shared/src/interfaces/server-side-event/server-side-event';
 
@@ -8,6 +9,8 @@ import { ServerSideEventType } from '../../../../../shared/src/interfaces/server
   providedIn: 'root'
 })
 export class ServerSideEventSourceService {
+
+  readonly url = `${environment.server}/sse`;
 
   private _eventSource: EventSource;
   private _onMessage = new ReplaySubject<MessageEvent>();
@@ -53,7 +56,7 @@ export class ServerSideEventSourceService {
    */
   open(): void {
     if (!this.isOpen) {
-      this._eventSource = new EventSource('/server/sse', { withCredentials: true });
+      this._eventSource = new EventSource(this.url, { withCredentials: true });
       this._eventSource.onmessage = (event: MessageEvent) => {
         this._onMessage.next(event);
       }

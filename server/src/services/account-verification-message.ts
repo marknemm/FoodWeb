@@ -21,7 +21,7 @@ export async function sendAccountVerificationMessage(newAccountData: NewAccountD
         notificationDetailId: account.id,
         notificationLink: `/account-details/${account.id}`,
         notificationTitle: 'Welcome to FoodWeb!',
-        notificationIconUrl: '/assets/IconImgSm.png',
+        notificationIconUrl: './assets/IconImgSm.png',
         notificationBody: `
           Please check your email for an account verification link.
         `

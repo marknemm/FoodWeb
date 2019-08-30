@@ -2,7 +2,7 @@
   <form [formGroup]="donationForm" class="donation-details-form">
     <mat-card>
       <mat-card-header>
-        <img mat-card-avatar src="/assets/IconImg.png" alt="FoodWeb Icon">
+        <img mat-card-avatar src="./assets/IconImg.png" alt="FoodWeb Icon">
         <mat-card-title>
           <ng-container *ngIf="!editing">Donation Details</ng-container>
           <ng-container *ngIf="editing">Donation Update</ng-container>
@@ -146,7 +146,7 @@
       }">
         <mat-card>
           <mat-card-header>
-            <img mat-card-avatar src="/assets/{{ accountHelper.organizationFirstChar(originalDonation.donorAccount.organization) }}.svg" alt="Donor Icon">
+            <img mat-card-avatar src="./assets/{{ accountHelper.organizationFirstChar(originalDonation.donorAccount.organization) }}.svg" alt="Donor Icon">
             <mat-card-title>Donor</mat-card-title>
             <mat-card-subtitle class="account-name">{{ donationHelper.donorName(originalDonation) }}</mat-card-subtitle>
           </mat-card-header>
@@ -165,7 +165,7 @@
       <div *ngIf="originalDonation.receiverAccount" class="receiver-info-container col-lg-6">
         <mat-card>
           <mat-card-header>
-            <img mat-card-avatar src="/assets/{{ accountHelper.organizationFirstChar(originalDonation.receiverAccount.organization) }}.svg" alt="Receiver Icon">
+            <img mat-card-avatar src="./assets/{{ accountHelper.organizationFirstChar(originalDonation.receiverAccount.organization) }}.svg" alt="Receiver Icon">
             <mat-card-title>Receiver</mat-card-title>
             <mat-card-subtitle class="account-name">{{ donationHelper.receiverName(originalDonation) }}</mat-card-subtitle>
           </mat-card-header>

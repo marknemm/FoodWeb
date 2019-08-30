@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, catchError, finalize, flatMap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { PageProgressService } from '../page-progress/page-progress.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { AlertService } from '../alert/alert.service';
@@ -24,7 +25,7 @@ export class DeliveryService {
   /**
    * The REST endpoint URL for a delivery resource.
    */
-  readonly url = '/server/delivery';
+  readonly url = `${environment.server}/delivery`;
 
   constructor(
     private _httpClient: HttpClient,

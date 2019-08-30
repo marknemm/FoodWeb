@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, map, flatMap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { SessionService } from '../session/session.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { PageProgressService } from '../page-progress/page-progress.service';
@@ -25,7 +26,7 @@ export interface PasswordUpdate {
 })
 export class AccountService {
 
-  readonly url = '/server/account';
+  readonly url = `${environment.server}/account`;
 
   constructor(
     private _httpClient: HttpClient,
@@ -129,7 +130,7 @@ export class AccountService {
     request.limit = limit;
     const params = new HttpParams({ fromObject: <any>request });
     this._pageProgressService.activate(true);
-    return this._httpClient.get<ListResponse<Account>>(this.url, { params }).pipe(
+    return this._httpClient.get<ListResponse<Account>>(this.url, { params, withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );

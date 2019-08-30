@@ -4,5 +4,6 @@ export const environment = {
   demo: true,
   e2e: false,
   hmr: false,
-  supportEmail: 'support@wnyfoodweb.com'
+  supportEmail: 'support@wnyfoodweb.com',
+  server: 'https://food-web-demo.herokuapp.com/server'
 };

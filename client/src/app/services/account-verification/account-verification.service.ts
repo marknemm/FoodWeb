@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { EMPTY, ObservableInput, Observable } from 'rxjs';
-import { catchError, finalize, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { SessionService } from '../session/session.service';
 import { Account } from '../../../../../shared/src/interfaces/account/account';
 import { AccountVerificationRequest } from '../../../../../shared/src/interfaces/account/account-verification-request';
@@ -11,6 +12,8 @@ import { AccountVerificationRequest } from '../../../../../shared/src/interfaces
   providedIn: 'root'
 })
 export class AccountVerificationService {
+
+  readonly url = `${environment.server}/account/verify/`;
 
   private _loading = false;
 
@@ -28,7 +31,7 @@ export class AccountVerificationService {
     this._loading = true;
     const verificationToken: string = this._getVerificationToken();
     const request: AccountVerificationRequest = { verificationToken };
-    return this._httpClient.post<Account>('/server/account/verify/', request).pipe(
+    return this._httpClient.post<Account>(this.url, request).pipe(
       finalize(() => this._loading = false)
     ).pipe(
       map((account: Account) => this._sessionService.account = account)

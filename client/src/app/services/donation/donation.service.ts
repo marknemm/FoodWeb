@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { ParamMap, ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, map, flatMap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { PageProgressService } from '../page-progress/page-progress.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { AlertService } from '../alert/alert.service';
@@ -22,7 +23,7 @@ export class DonationService {
   /**
    * The REST endpoint URL for a donation resource.
    */
-  readonly url = '/server/donation';
+  readonly url = `${environment.server}/donation`;
 
   constructor(
     private _httpClient: HttpClient,

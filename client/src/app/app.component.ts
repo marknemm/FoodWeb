@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
 import { SessionService } from './services/session/session.service';
+
+declare const device;
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   constructor(
     private _matIconReg: MatIconRegistry,
@@ -29,5 +31,9 @@ export class AppComponent {
       const svgUrl: SafeResourceUrl = this._domSanitizer.bypassSecurityTrustResourceUrl(`../assets/${char}.svg`);
       this._matIconReg.addSvgIcon(`letter_${char}`, svgUrl);
     }
+  }
+
+  ngOnInit() {
+    document.addEventListener('deviceready', () => console.log(`Platform: ${device.platform}`), false); 
   }
 }
