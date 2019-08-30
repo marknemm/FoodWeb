@@ -3,6 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpParams, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { flatMap, catchError, finalize } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { PageProgressService } from '../page-progress/page-progress.service';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { ServerSideEventSourceService } from '../server-side-event-source/server-side-event-source.service';
@@ -19,7 +20,7 @@ import { SessionService } from '../session/session.service';
 })
 export class NotificationService {
 
-  readonly url = '/server/notification'
+  readonly url = `${environment.server}/notification`;
 
   private _unseenNotificationsCount = 0;
   private _notificationsPreview: Notification[] = [];

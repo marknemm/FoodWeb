@@ -1,0 +1,38 @@
+{
+  "name": "com.wnyfoodweb.foodweb",
+  "displayName": "FoodWeb",
+  "version": "1.0.0",
+  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "main": "index.js",
+  "scripts": {
+    "build": "cordova build android --release",
+    "build:debug": "cordova build android",
+    "start:browser": "cordova run browser"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Apache Cordova Team",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "cordova-android": "^8.0.0",
+    "cordova-browser": "^6.0.0",
+    "cordova-plugin-device": "^2.0.3",
+    "cordova-plugin-recaptcha": "^1.0.0"
+  },
+  "devDependencies": {
+    "cordova": "^9.0.0",
+    "cordova-plugin-whitelist": "1"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-device": {},
+      "com.keff.IonicRecaptcha": {}
+    },
+    "platforms": [
+      "android",
+      "browser"
+    ]
+  }
+}

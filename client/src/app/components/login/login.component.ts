@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
-import { Observable, of } from 'rxjs';
+import { Observable, of, never, ObservableInput } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { SessionService } from '../../services/session/session.service';
 import { PasswordResetService } from '../../services/password-reset/password-reset.service';
 
@@ -12,10 +13,12 @@ import { PasswordResetService } from '../../services/password-reset/password-res
 })
 export class LoginComponent implements OnInit {
 
-  title = 'Login';
   loginForm: FormGroup;
-  isPasswordReset = false;
-  resetMessageSent = false;
+
+  private _title = 'Login';
+  private _loginErr = '';
+  private _isPasswordReset = false;
+  private _resetMessageSent = false;
 
   constructor(
     public sessionService: SessionService,
@@ -23,6 +26,22 @@ export class LoginComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _matDialogRef: MatDialogRef<LoginComponent>
   ) {}
+
+  get title(): string {
+    return this._title;
+  }
+
+  get loginErr(): string {
+    return this._loginErr;
+  }
+
+  get isPasswordReset(): boolean {
+    return this._isPasswordReset;
+  }
+
+  get resetMessageSent(): boolean {
+    return this._resetMessageSent;
+  }
 
   ngOnInit() {
     this.loginForm = this._formBuilder.group({
@@ -50,28 +69,39 @@ export class LoginComponent implements OnInit {
   login(): void {
     const username: string = this.loginForm.get('username').value;
     const password: string = this.loginForm.get('password').value;
-    this.sessionService.login(username, password).subscribe(
-      () => this._matDialogRef.close(true)
-    );
+    this.sessionService.login(username, password)
+      .pipe(catchError(this._handleLoginErr.bind(this)))
+      .subscribe(this._handleLoginSuccess.bind(this));
+  }
+
+  private _handleLoginErr(err: Error): ObservableInput<any> {
+    console.error(err);
+    this._loginErr = 'Incorrect username or password';
+    return never;
+  }
+
+  private _handleLoginSuccess(): void {
+    this._loginErr = '';
+    this._matDialogRef.close(true);
   }
 
   forgotPassword(): void {
-    this.title = 'Reset Password';
+    this._title = 'Reset Password';
     this.loginForm.reset();
     this.loginForm.get('password').disable();
-    this.isPasswordReset = true;
+    this._isPasswordReset = true;
   }
 
   returnToLogin(): void {
-    this.title = 'Login';
+    this._title = 'Login';
     this.loginForm.get('password').enable();
-    this.isPasswordReset = false;
+    this._isPasswordReset = false;
   }
 
   sendPasswordResetEmail(): void {
     const username: string = this.loginForm.get('username').value;
     this._passwordResetService.sendPasswordResetEmail(username).subscribe(
-      () => this.resetMessageSent = true
+      () => this._resetMessageSent = true
     );
   }
 

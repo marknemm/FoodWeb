@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, catchError, finalize } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { EventRegistration, EventRegistrationRequest } from '../../../../../shared/src/interfaces/event/event-registration-request';
 import { ListResponse } from '../../../../../shared/src/interfaces/list-response';
@@ -11,7 +12,7 @@ import { ListResponse } from '../../../../../shared/src/interfaces/list-response
 })
 export class EventRegistrationService {
 
-  readonly url = '/server/event/registration';
+  readonly url = `${environment.server}/event/registration`;
 
   private _loading = false;
 

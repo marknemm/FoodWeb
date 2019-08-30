@@ -1,0 +1,21 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.wnyfoodweb.foodweb"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.wnyfoodweb.foodweb"
+    },
+    "com.keff.IonicRecaptcha": {
+      "PACKAGE_NAME": "com.wnyfoodweb.foodweb"
+    }
+  },
+  "dependent_plugins": {}
+}

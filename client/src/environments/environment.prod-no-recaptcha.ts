@@ -4,5 +4,6 @@ export const environment = {
   demo: false,
   e2e: false,
   hmr: false,
-  supportEmail: 'support@wnyfoodweb.com'
+  supportEmail: 'support@wnyfoodweb.com',
+  server: 'https://www.wnyfoodweb.com/server'
 };

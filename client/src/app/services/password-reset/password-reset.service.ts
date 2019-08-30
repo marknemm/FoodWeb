@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { SessionService, Account } from '../session/session.service';
 import { PageProgressService } from '../page-progress/page-progress.service';
@@ -13,7 +14,7 @@ import { PasswordResetRequest } from '../../../../../shared/src/interfaces/accou
 })
 export class PasswordResetService {
 
-  readonly url = 'server/account/reset-password';
+  readonly url = `${environment.server}/account/reset-password`;
 
   private _loading = false;
 

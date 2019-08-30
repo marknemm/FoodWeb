@@ -3,9 +3,6 @@
   "types": [
     "node"
   ],
-  "compilerOptions": {
-    "outDir": "../out-tsc/app",
-  },
   "exclude": [
     "test.ts",
     "**/*.spec.ts"

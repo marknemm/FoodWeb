@@ -15,7 +15,7 @@
     <mat-form-field *ngIf="!isPasswordReset">
       <input matInput type="password" placeholder="Password" formControlName="password">
     </mat-form-field>
-    <mat-error *ngIf="sessionService.loginErr && loginFormDirective.submitted" class="login-err">{{ sessionService.loginErr }}</mat-error>
+    <mat-error *ngIf="loginErr && loginFormDirective.submitted" class="login-err">{{ loginErr }}</mat-error>
   </div>
   <div mat-dialog-content *ngIf="resetMessageSent">
     <p>A password reset message has been sent to your email.</p>

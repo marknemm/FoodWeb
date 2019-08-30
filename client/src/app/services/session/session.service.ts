@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { map, catchError, finalize } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { AlertService } from '../alert/alert.service';
 import { LoginRequest } from '../../../../../shared/src/interfaces/session/login-request';
@@ -13,7 +14,7 @@ export { Account };
 })
 export class SessionService {
 
-  readonly url = 'server/session';
+  readonly url = `${environment.server}/session`;
 
   private _account: Account;
   private _loading = false;
@@ -129,7 +130,7 @@ export class SessionService {
   login(username: string, password: string): Observable<Account> {
     const loginRequest: LoginRequest = { username, password };
     this._loading = true;
-    return this._httpClient.post<Account>(this.url, loginRequest).pipe(
+    return this._httpClient.post<Account>(this.url, loginRequest, { withCredentials: true }).pipe(
       map((account: Account) => this._handleLoginSuccess(account)),
       finalize(() => this._loading = false)
     );
