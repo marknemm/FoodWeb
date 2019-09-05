@@ -1,5 +1,6 @@
 import { ValidationHelper } from './validation-helper';
 import { Account } from './account-helper';
+import { DonationHelper } from './donation-helper';
 import { Delivery } from '../interfaces/delivery/delivery';
 import { DonationStatus, Donation } from '../interfaces/donation/donation';
 import { DateTimeRange } from '../interfaces/misc/time';
@@ -7,6 +8,7 @@ import { AccountType } from '../interfaces/account/account';
 
 export class DeliveryHelper {
 
+  private _donationHelper = new DonationHelper();
   private _validationHelper = new ValidationHelper();
 
   validateDelivery(delivery: Delivery, donationStatus: DonationStatus): string {
@@ -36,6 +38,9 @@ export class DeliveryHelper {
     if (this.hasDeliveryBeenScheduled(donationStatus)) {
       return 'The donation has already been scheduled for delivery';
     }
+    if (donationStatus !== DonationStatus.Matched) {
+      return 'Cannot schedule the delivery of a donation that has not been matched with a receiver';
+    }
     return '';
   }
 
@@ -63,7 +68,7 @@ export class DeliveryHelper {
   }
 
   hasDeliveryBeenScheduled(donationStatus: DonationStatus): boolean {
-    return ([DonationStatus.Scheduled, DonationStatus.PickedUp, DonationStatus.Complete].indexOf(donationStatus) >= 0);
+    return this._donationHelper.isDonationStatusLaterThan(donationStatus, DonationStatus.Matched);
   }
 
   hasDeliveryBeenPickedUp(donationStatus: DonationStatus): boolean {

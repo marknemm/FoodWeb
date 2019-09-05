@@ -14,7 +14,7 @@
     "lint": "tslint -p ./tsconfig.json",
     "pg:destroy": "psql -U postgres -d foodweb -a -f database/destroy-db.sql",
     "pg:dump": "pg_dump -U postgres foodweb > database/dump.pgsql",
-    "pg:restore": "npm run pg:destroy && psql -f database/dump.pgsql foodweb",
+    "pg:restore": "npm run pg:destroy && psql -U postgres -f database/dump.pgsql foodweb",
     "start": "tsc-watch -p ./src/tsconfig.app.json --onSuccess \"nodemon -e .js,.hbs,.css --watch ./dist/server/src/ --watch ./dist/shared/ --watch ./templates/ ./dist/server/src/index.js\"",
     "test": "npm run lint && ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts",
     "test:watch": "ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts",

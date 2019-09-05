@@ -47,12 +47,14 @@ export class SessionService {
   }
 
   set account(account: Account) {
+    this._account = account;
     if (account) {
       localStorage.setItem('account', JSON.stringify(account));
+      this._login$.next(account);
     } else {
       localStorage.removeItem('account');
+      this._logout$.next();
     }
-    this._account = account;
   }
 
   /**

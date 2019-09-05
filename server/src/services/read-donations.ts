@@ -3,18 +3,17 @@ import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { genSimpleWhereConditions, genPagination } from '../helpers/query-builder-helper';
 import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
-import { Donation } from '../../../shared/src/interfaces/donation/donation';
 import { DonationReadRequest, DonationReadFilters } from '../../../shared/src/interfaces/donation/donation-read-request';
 import { Validation } from '../../../shared/src/constants/validation';
 
 export interface DonationsQueryResult {
-  donations: Donation[];
+  donations: DonationEntity[];
   totalCount: number;
 }
 
 const _opHoursHelper = new OperationHoursHelper();
 
-export async function readDonation(id: number, myAccount: AccountEntity, donationRepo?: Repository<DonationEntity>): Promise<Donation> {
+export async function readDonation(id: number, myAccount: AccountEntity, donationRepo?: Repository<DonationEntity>): Promise<DonationEntity> {
   const readRequest: DonationReadRequest = { id, page: 1, limit: 1 };
   const queryResult: DonationsQueryResult = await readDonations(readRequest, myAccount, donationRepo);
   return queryResult.donations[0];
