@@ -44,6 +44,57 @@
                 }
               ]
             },
+            "production-no-recaptcha": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src//environments/environment.ts",
+                  "with": "src//environments/environment.prod-no-recaptcha.ts"
+                }
+              ]
+            },
+            "demo": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src//environments/environment.ts",
+                  "with": "src//environments/environment.demo.ts"
+                }
+              ]
+            },
+            "demo-no-recaptcha": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src//environments/environment.ts",
+                  "with": "src//environments/environment.demo-no-recaptcha.ts"
+                }
+              ]
+            },
             "hmr": {
               "fileReplacements": [
                 {
@@ -80,6 +131,23 @@
                 {
                   "replace": "src//environments/environment.ts",
                   "with": "src//environments/environment.qa.ts"
+                }
+              ]
+            },
+            "qa-no-recaptcha": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src//environments/environment.ts",
+                  "with": "src//environments/environment.qa-no-recaptcha.ts"
                 }
               ]
             }
