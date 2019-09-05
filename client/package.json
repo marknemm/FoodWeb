@@ -8,10 +8,11 @@
   "scripts": {
     "build": "ng build --prod --aot",
     "build:all": "npm run build && npm run build:mobile",
+    "build:e2e": "ng build --watch --configuration=e2e",
+    "build:env": "ng build --prod --aot --configuration=${environment}",
     "build:mobile": "ng build --configuration=mobile --baseHref=./ --prod --aot && cd ./mobile && npm run build",
     "build:mobile:debug": "ng build --configuration=mobile-debug --baseHref=./ && cd ./mobile && npm run build:debug",
     "build:watch": "ng build --watch",
-    "build:e2e": "ng build --watch --configuration=e2e",
     "clean": "rimraf ./dist ./coverage",
     "clean:all": "npm run clean && rimraf ./node_modules",
     "hmr": "ng serve --configuration hmr",
