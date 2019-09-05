@@ -25,6 +25,10 @@ export class DateTimeHelper {
     hour12: true
   };
 
+  readonly weekdayFormatOpts: DeepReadonly<Intl.DateTimeFormatOptions> = {
+    weekday: 'long'
+  };
+
   toLocalDateTimeStr(date: string | Date, timezone?: string): string {
     date = this.toDate(date);
     const customOpts: Intl.DateTimeFormatOptions = timezone ? { timeZone: timezone } : {};
@@ -43,6 +47,13 @@ export class DateTimeHelper {
     date = this.toDate(date);
     const customOpts: Intl.DateTimeFormatOptions = timezone ? { timeZone: timezone } : {};
     const formatterOpts: Intl.DateTimeFormatOptions = Object.assign(customOpts, this.timeFormatOpts);
+    return new Intl.DateTimeFormat(this.locale, formatterOpts).format(date);
+  }
+
+  toLocalWeekdayStr(date: string | Date, timezone?: string): string {
+    date = this.toDate(date);
+    const customOpts: Intl.DateTimeFormatOptions = timezone ? { timeZone: timezone } : {};
+    const formatterOpts: Intl.DateTimeFormatOptions = Object.assign(customOpts, this.weekdayFormatOpts);
     return new Intl.DateTimeFormat(this.locale, formatterOpts).format(date);
   }
 
