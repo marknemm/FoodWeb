@@ -1,7 +1,7 @@
 import { DateTimeHelper } from './date-time-helper'
 import { Constants } from '../constants/constants';
 import { DateTimeRange } from '../interfaces/misc/time';
-import { OperationHours } from '../interfaces/account/operation-hours';
+import { OperationHours, Weekday } from '../interfaces/account/operation-hours';
 export { OperationHours };
 
 export class OperationHoursHelper {
@@ -66,11 +66,9 @@ export class OperationHoursHelper {
    * @return The operation hours.
    */
   dateTimeRangeToOperationHours(dateTimeRange: DateTimeRange, timezone = 'UTC'): OperationHours {
-    const startWeekdayIdx: number = dateTimeRange.startDateTime.getDay();
-    // const endWeekdayIdx: number = dateTimeRange.endDateTime.getDay();
     // TODO: If dateTimeRange spans multiple days, then generate operation hours for each of those days.
     const operationHours: OperationHours = {
-      weekday: this._constants.WEEKDAYS[startWeekdayIdx],
+      weekday: <Weekday>this._dateTimeHelper.toLocalWeekdayStr(dateTimeRange.startDateTime),
       startTime: this._dateTimeHelper.toLocalTimeStr(dateTimeRange.startDateTime, timezone),
       endTime: this._dateTimeHelper.toLocalTimeStr(dateTimeRange.endDateTime, timezone)
     }

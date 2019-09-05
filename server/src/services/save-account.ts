@@ -42,6 +42,9 @@ export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: 
     throw new FoodWebError('User unauthorized to update account', 401);
   }
 
+  // Ensure we do not overwrite last seen notification ID.
+  updateReq.account.lastSeenNotificationId = myAccount.lastSeenNotificationId;
+
   const updatedAccount: AccountEntity = await getConnection().transaction((manager: EntityManager) =>
     _saveAccount(manager, updateReq.account, myAccount)
   );

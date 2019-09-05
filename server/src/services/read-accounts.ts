@@ -72,6 +72,7 @@ function _genOperationHoursCondition(
       filters.operationHoursRange,
       myAccount.contactInfo.timezone
     );
+    console.log(operationHours.weekday);
     // Check for any overlap (invert condition where op hours are completely after or before donation window).
     queryBuilder = queryBuilder.andWhere(
       'operationHours.weekday = :weekday ' +
