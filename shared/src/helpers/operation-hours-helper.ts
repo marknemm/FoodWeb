@@ -68,7 +68,7 @@ export class OperationHoursHelper {
   dateTimeRangeToOperationHours(dateTimeRange: DateTimeRange, timezone = 'UTC'): OperationHours {
     // TODO: If dateTimeRange spans multiple days, then generate operation hours for each of those days.
     const operationHours: OperationHours = {
-      weekday: <Weekday>this._dateTimeHelper.toLocalWeekdayStr(dateTimeRange.startDateTime),
+      weekday: <Weekday>this._dateTimeHelper.toLocalWeekdayStr(dateTimeRange.startDateTime, timezone),
       startTime: this._dateTimeHelper.toLocalTimeStr(dateTimeRange.startDateTime, timezone),
       endTime: this._dateTimeHelper.toLocalTimeStr(dateTimeRange.endDateTime, timezone)
     }
