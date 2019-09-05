@@ -10,9 +10,11 @@ export class ErrorHandlerService {
 
   constructor(
     private _alertService: AlertService
-  ) {}
+  ) {
+    this.handleError = this.handleError.bind(this);
+  }
 
-  handleError(error: Error | HttpErrorResponse, level: 'danger' | 'warn' = 'danger'): ObservableInput<never> {
+  handleError(error: Error | HttpErrorResponse, level: 'danger' | 'warn' = 'danger'): ObservableInput<any> {
     const alertMessage: AlertMessage = { body: '', level, blocking: false };
     alertMessage.body = this._deriveMessageBody(error);
     this._alertService.displayMessage(alertMessage);

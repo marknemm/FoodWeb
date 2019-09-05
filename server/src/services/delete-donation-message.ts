@@ -6,7 +6,7 @@ import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 
 const _donationHelper = new DonationHelper();
 
-export async function sendDonationDeleteSuccessEmail(donation: DonationEntity): Promise<void> {
+export async function sendDonationDeleteMessages(donation: DonationEntity): Promise<void> {
   const messagePromises: Promise<any>[] = [];
   const emailAccounts: AccountEntity[] = [donation.donorAccount];
   const notificationAccounts: AccountEntity[] = [];

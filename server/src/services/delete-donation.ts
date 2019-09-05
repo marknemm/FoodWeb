@@ -1,8 +1,8 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { readDonation } from './read-donations';
+import { cancelDelivery } from './cancel-delivery';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
-import { DeliveryEntity } from '../entity/delivery-entity';
 import { FoodWebError } from '../helpers/food-web-error';
 import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
 import { DonationDeleteRequest } from '../../../shared/src/interfaces/donation/donation-delete-request';
@@ -17,12 +17,12 @@ const _donationHelper = new DonationHelper();
  * @throws FoodWebError if the current user is not authorized to delete the donation.
  */
 export async function deleteDonation(deleteReq: DonationDeleteRequest, myAccount: AccountEntity): Promise<Donation> {
-  const donation = <DonationEntity> await readDonation(deleteReq.donationId, myAccount);
+  const donation: DonationEntity = await readDonation(deleteReq.donationId, myAccount);
   _ensureCanDeleteDonation(donation, myAccount);
 
   await getConnection().transaction(async (manager: EntityManager) => {
     if (donation.delivery) {
-      await manager.getRepository(DeliveryEntity).remove(donation.delivery);
+      await cancelDelivery(donation, myAccount, manager);
     }
     await manager.getRepository(DonationEntity).remove(donation);
   });

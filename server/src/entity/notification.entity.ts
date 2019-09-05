@@ -14,7 +14,7 @@ export class NotificationEntity implements Notification {
   @Column({ type: 'enum', enum: _constants.NOTIFICATION_TYPES })
   notificationType: NotificationType;
 
-  @Column()
+  @Column({ nullable: true })
   notificationDetailId: number;
 
   @Column({ nullable: true })

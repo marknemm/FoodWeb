@@ -92,32 +92,44 @@ export class DonationHelper {
     if (donation.donationStatus !== DonationStatus.Scheduled) {
       return 'You cannot cancel a delivery that is not in a scheduled state';
     }
-    if (!myAccount || (myAccount.accountType !== AccountType.Admin && myAccount.id !== donation.delivery.volunteerAccount.id)) {
+    if (
+      !myAccount 
+      || (
+        myAccount.accountType !== AccountType.Admin
+        && myAccount.id !== donation.delivery.volunteerAccount.id
+        && myAccount.id !== donation.receiverAccount.id
+        && myAccount.id !== donation.donorAccount.id
+      )
+    ) {
       return 'You did not schedule the delivery';
     }
   }
 
-  isDonationStatusLaterThan(donation: Donation, compareStatus: DonationStatus): boolean {
-    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(donation.donationStatus);
+  isDonationStatusLaterThan(toCheck: Donation | DonationStatus, compareStatus: DonationStatus): boolean {
+    const toCheckStatus: DonationStatus = (typeof toCheck === 'object') ? toCheck.donationStatus : toCheck;
+    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(toCheckStatus);
     const compareStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(compareStatus);
     return (curStatusIdx > compareStatusIdx);
   }
 
-  isDonationStatusEarlierThan(donation: Donation, compareStatus: DonationStatus): boolean {
-    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(donation.donationStatus);
+  isDonationStatusEarlierThan(toCheck: Donation | DonationStatus, compareStatus: DonationStatus): boolean {
+    const toCheckStatus: DonationStatus = (typeof toCheck === 'object') ? toCheck.donationStatus : toCheck;
+    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(toCheckStatus);
     const compareStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(compareStatus);
     return (curStatusIdx < compareStatusIdx);
   }
 
-  getNextDonationStatus(donation: Donation): DonationStatus {
-    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(donation.donationStatus);
+  getNextDonationStatus(nextOf: Donation | DonationStatus): DonationStatus {
+    const nextOfStatus: DonationStatus = (typeof nextOf === 'object') ? nextOf.donationStatus : nextOf;
+    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(nextOfStatus);
     return (curStatusIdx !== this._constants.DONATION_STATUSES.length)
       ? this._constants.DONATION_STATUSES[curStatusIdx + 1]
       : null;
   }
 
-  getPrevDonationStatus(donation: Donation): DonationStatus {
-    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(donation.donationStatus);
+  getPrevDonationStatus(prevOf: Donation | DonationStatus): DonationStatus {
+    const prevOfStatus: DonationStatus = (typeof prevOf === 'object') ? prevOf.donationStatus : prevOf;
+    const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(prevOfStatus);
     return (curStatusIdx > 0)
       ? this._constants.DONATION_STATUSES[curStatusIdx - 1]
       : null;

@@ -21,7 +21,7 @@ import {
   saveDonationUnclaimAudit
 } from '../services/save-donation-audit';
 import { sendDonationUpdateMessages, sendDonationCreateMessages } from '../services/save-donation-message';
-import { sendDonationDeleteSuccessEmail } from '../services/delete-donation-message';
+import { sendDonationDeleteMessages } from '../services/delete-donation-message';
 import { sendUnclaimMessages, sendClaimMessages } from '../services/match-donation-message';
 import { messagePotentialReceivers } from '../services/message-potential-receivers';
 import { DonationReadRequest } from '../../../shared/src/interfaces/donation/donation-read-request';
@@ -99,7 +99,7 @@ router.delete('/:id', ensureSessionActive, ensureAccountVerified, (req: Request,
   deleteReq.donationId = parseInt(req.params.id, 10);
   deleteDonation(deleteReq, req.session.account)
     .then((deletedDonation: DonationEntity) => saveDonationDeleteAudit(deleteReq, deletedDonation))
-    .then((deletedDonation: DonationEntity) => sendDonationDeleteSuccessEmail(deletedDonation))
+    .then((deletedDonation: DonationEntity) => sendDonationDeleteMessages(deletedDonation))
     .then(() => res.send())
     .catch(handleError.bind(this, res));
 });
