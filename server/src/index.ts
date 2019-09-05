@@ -32,7 +32,6 @@ if (!PRODUCTION && !QA) {
 // Our session middleware and controllers that will handle requests after this router hands off the data to them.
 import { Application } from 'express';
 import { recaptcha } from './middlewares/recaptcha.middleware';
-import { foodWebCors } from './middlewares/cors.middleware';
 import { sessionReqHandler } from './helpers/session';
 import { initDbConnectionPool } from './helpers/db-connection-pool';
 
@@ -48,7 +47,6 @@ app.use(sessionReqHandler);
 app.use(recaptcha);
 app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));
-app.use(foodWebCors);
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 module.exports = app; // Make available for mocha testing suites.
 
