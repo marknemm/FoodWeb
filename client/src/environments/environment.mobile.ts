@@ -5,6 +5,6 @@ export const environment = {
   e2e: false,
   hmr: false,
   supportEmail: 'support@wnyfoodweb.com',
-  recaptchaSiteKey: '6LdJXagUAAAAAIWSTEbvcU1-HxB1WHrp3pcMS0Qj',
-  server: 'http://localhost:5000/server'
+  recaptchaSiteKey: '',
+  server: 'https://www.wnyfoodweb.com/server'
 };

@@ -266,7 +266,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
     // SUB-PROJECT DEPENDENCIES START
     implementation(project(path: ":CordovaLib"))
-    implementation "com.google.android.gms:play-services-safetynet:+"
     // SUB-PROJECT DEPENDENCIES END
 }
 

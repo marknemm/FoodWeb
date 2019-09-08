@@ -27,8 +27,7 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-device": {},
-      "com.keff.IonicRecaptcha": {}
+      "cordova-plugin-device": {}
     },
     "platforms": [
       "android",

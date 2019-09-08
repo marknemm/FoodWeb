@@ -23,9 +23,6 @@
     },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.wnyfoodweb.foodweb"
-    },
-    "com.keff.IonicRecaptcha": {
-      "PACKAGE_NAME": "com.wnyfoodweb.foodweb"
     }
   },
   "dependent_plugins": {},
@@ -43,19 +40,10 @@
       "id": "cordova-plugin-device.DeviceProxy",
       "pluginId": "cordova-plugin-device",
       "runs": true
-    },
-    {
-      "file": "plugins/com.keff.IonicRecaptcha/www/plugin.js",
-      "id": "com.keff.IonicRecaptcha.recaptcha",
-      "pluginId": "com.keff.IonicRecaptcha",
-      "clobbers": [
-        "IonicRecaptcha"
-      ]
     }
   ],
   "plugin_metadata": {
     "cordova-plugin-whitelist": "1.3.4",
-    "cordova-plugin-device": "2.0.3",
-    "com.keff.IonicRecaptcha": "1.0.0"
+    "cordova-plugin-device": "2.0.3"
   }
 }
