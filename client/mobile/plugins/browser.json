@@ -12,9 +12,6 @@
     },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.wnyfoodweb.foodweb"
-    },
-    "com.keff.IonicRecaptcha": {
-      "PACKAGE_NAME": "com.wnyfoodweb.foodweb"
     }
   },
   "dependent_plugins": {}

@@ -8,6 +8,6 @@ export const environment = {
   e2e: false,
   hmr: false,
   supportEmail: 'support@wnyfoodweb.com',
-  recaptchaSiteKey: '6LdJXagUAAAAAIWSTEbvcU1-HxB1WHrp3pcMS0Qj',
+  recaptchaSiteKey: '',
   server: 'http://10.0.2.2:5000/server'
 };

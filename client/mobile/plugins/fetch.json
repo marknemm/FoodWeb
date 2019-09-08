@@ -14,13 +14,5 @@
     },
     "is_top_level": true,
     "variables": {}
-  },
-  "com.keff.IonicRecaptcha": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-recaptcha"
-    },
-    "is_top_level": true,
-    "variables": {}
   }
 }

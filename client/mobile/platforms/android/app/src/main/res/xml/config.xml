@@ -7,9 +7,6 @@
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
     </feature>
-    <feature name="IonicRecaptcha">
-        <param name="android-package" value="com.keff.IonicRecaptcha" />
-    </feature>
     <name>FoodWeb</name>
     <description>
         Our mission is to help alleviate hunger and prevent the waste of food.
