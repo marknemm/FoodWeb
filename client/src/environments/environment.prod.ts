@@ -4,7 +4,8 @@ export const environment = {
   demo: false,
   e2e: false,
   hmr: false,
+  mobile: false,
   supportEmail: 'support@wnyfoodweb.com',
   recaptchaSiteKey: '6LdJXagUAAAAAIWSTEbvcU1-HxB1WHrp3pcMS0Qj',
-  server: 'http://localhost:5000/server'
+  server: 'https://wnyfoodweb.com/server'
 };

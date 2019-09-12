@@ -1,0 +1,40 @@
+<div class="page-title block-label">
+  {{ pageTitleService.title }}
+</div>
+
+<div class="row">
+  <div class="col-lg-6" *ngFor="let account of accounts">
+    <a [routerLink]="['/account/details/', account.id]" [state]="account" foodWebReturnLink="account-{{ account.id }}" class="account-link">
+      <mat-card id="account-{{ account.id }}" class="account-card">
+        <mat-card-header>
+          <img mat-card-avatar [src]="account.profileImgUrl" alt="Account Icon">
+          <mat-card-title>{{ getAccountTitle(account) }}</mat-card-title>
+          <mat-card-subtitle class="account-email">{{ account.contactInfo.email }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="accounts-display row">
+            <div *ngIf="account.contactInfo.streetAddress" class="col-sm-6">
+              <div class="inline-label">Address:</div>
+              <div class="d-inline-block">
+                <div>{{ account.contactInfo.streetAddress }}</div>
+                <div>
+                  <div class="d-inline-block">{{ account.contactInfo.city }},&nbsp;</div>
+                  <div class="d-inline-block">{{ account.contactInfo.stateProvince }}&nbsp;</div>
+                  <div class="d-inline-block">{{ account.contactInfo.postalCode }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="inline-label">Phone Number:</div>
+              <div class="d-inline-block">{{ account.contactInfo.phoneNumber }}</div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </a>
+  </div>
+</div>
+
+<div class="food-web-paginator-container">
+  <food-web-paginator [length]="totalCount"></food-web-paginator>
+</div>

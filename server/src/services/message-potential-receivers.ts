@@ -34,7 +34,7 @@ export async function messagePotentialReceivers(foundPotentialReceivers: FoundPo
       {
         notificationType: NotificationType.Donate,
         notificationDetailId: donation.id,
-        notificationLink: `/donation-details/${donation.id}`,
+        notificationLink: `/donation/details/${donation.id}`,
         notificationTitle: 'Donation Available',
         notificationIconUrl: donation.donorAccount.profileImgUrl,
         notificationBody: `

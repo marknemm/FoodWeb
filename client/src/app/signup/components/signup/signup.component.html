@@ -1,0 +1,78 @@
+<form [formGroup]="accountForm" *ngIf="!sessionService.loggedIn" (submit)="signup()">
+  <div class="align-center">
+    <div *ngIf="!accountType" class="page-title block-label account-type-header">
+      Select Your Account Type
+    </div>
+    <food-web-account-type [editing]="!accountType" formControlName="accountType" class="account-type"></food-web-account-type>
+  </div>
+
+  <div *ngIf="accountType">
+    <div class="row">
+      <div class="col-xl-6">
+        <mat-card>
+          <mat-card-title class="block-label">Login Credentials</mat-card-title>
+          <mat-card-content>
+            <div class="row">
+              <div class="col-sm-12">
+                <food-web-username [editing]="true" formControlName="username"></food-web-username>
+              </div>
+              <div class="col-sm-12">
+                <food-web-password [editing]="true" formMode="Signup" [formGroup]="passwordForm"></food-web-password>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card *ngIf="accountType !== 'Volunteer'">
+          <mat-card-title class="block-label">Organization</mat-card-title>
+          <mat-card-content>
+            <food-web-organization [accountType]="accountType" [editing]="true" formGroupName="organization"></food-web-organization>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card *ngIf="accountType === 'Volunteer'">
+          <mat-card-title>Volunteer Name</mat-card-title>
+          <mat-card-content>
+            <food-web-volunteer [editing]="true" formGroupName="volunteer"></food-web-volunteer>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-title class="block-label">Contact Info</mat-card-title>
+          <mat-card-content>
+            <food-web-contact-info [editing]="true" formGroupName="contactInfo"></food-web-contact-info>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xl-6">
+        <mat-card>
+          <mat-card-title class="block-label" *ngIf="accountType !== 'Volunteer'">Hours of Operation</mat-card-title>
+          <mat-card-title class="block-label" *ngIf="accountType === 'Volunteer'">Hours of Availability</mat-card-title>
+          <ng-container [ngSwitch]="accountType">
+            <mat-card-subtitle *ngSwitchCase="'Donor'">Fill in any times you are regularly available for donation pickup</mat-card-subtitle>
+            <mat-card-subtitle *ngSwitchCase="'Receiver'">Fill in any times you are regularly available for donation drop-off</mat-card-subtitle>
+            <mat-card-subtitle *ngSwitchCase="'Volunteer'">Fill in any times you would like to regularly receive delivery requests</mat-card-subtitle>
+          </ng-container>
+          <food-web-operation-hours [editing]="true" [fillMissingWeekdays]="true" formControlName="operationHours"></food-web-operation-hours>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row submit-button-container">
+      <div class="col-xl-12 align-right">
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<mat-card *ngIf="sessionService.loggedIn">
+  <mat-card-title>Signup Successful</mat-card-title>
+  <mat-card-content>
+    <p>Welcome to Food Web!</p>
+    <p>Please confirm your signup by clicking on the link sent to your email.</p>
+    <button mat-raised-button *ngIf="!sessionService.account.verified" color="primary" type="button" (click)="signupVerificationService.resendVerificationEmail()">
+      Resend Verification Email
+    </button>
+  </mat-card-content>
+</mat-card>

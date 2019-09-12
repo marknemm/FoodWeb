@@ -19,7 +19,7 @@ export async function sendAccountVerificationMessage(newAccountData: NewAccountD
       {
         notificationType: NotificationType.Signup,
         notificationDetailId: account.id,
-        notificationLink: `/account-details/${account.id}`,
+        notificationLink: `/account/my`,
         notificationTitle: 'Welcome to FoodWeb!',
         notificationIconUrl: './assets/IconImgSm.png',
         notificationBody: `

@@ -34,7 +34,7 @@ export async function sendDeliveryScheduledMessages(donation: DonationEntity): P
       {
         notificationType: NotificationType.ScheduleDelivery,
         notificationDetailId: donation.id,
-        notificationLink: `/donation-details/${donation.id}`,
+        notificationLink: `/donation/details/${donation.id}`,
         notificationTitle: 'Delivery Scheduled',
         notificationIconUrl: donation.delivery.volunteerAccount.profileImgUrl,
         notificationBody: `
@@ -51,7 +51,7 @@ export async function sendDeliveryScheduledMessages(donation: DonationEntity): P
       {
         notificationType: NotificationType.ScheduleDelivery,
         notificationDetailId: donation.id,
-        notificationLink: `/donation-details/${donation.id}`,
+        notificationLink: `/donation/details/${donation.id}`,
         notificationTitle: 'Delivery Scheduled',
         notificationIconUrl: donation.delivery.volunteerAccount.profileImgUrl,
         notificationBody: `

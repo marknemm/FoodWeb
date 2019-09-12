@@ -18,7 +18,7 @@ export function recaptcha(request: Request, response: Response, next: NextFuncti
   const reqBody: any = request.body; // Save actual request body to forward and process later.
 
   // If RECAPTCHA is not enabled in server environment configs, then simply go to next handler.
-  if (request.method === 'GET' || !_recaptchaEnabled || !(reqBody.recaptchaScore == null && !_recaptchaRequired)) {
+  if (request.method === 'GET' || !_recaptchaEnabled || (reqBody.recaptchaScore == null && !_recaptchaRequired)) {
     return next();
   }
 

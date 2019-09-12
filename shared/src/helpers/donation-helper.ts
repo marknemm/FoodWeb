@@ -146,7 +146,7 @@ export class DonationHelper {
   }
 
   donationDetailsRouterLink(donation: Donation): string[] {
-    return ['/donation-details/', `${donation.id}`];
+    return ['/donation/details/', `${donation.id}`];
   }
 
   memberNames(donation: Donation): { donorName: string, receiverName?: string, delivererName?: string } {

@@ -37,7 +37,7 @@ export async function messagePotentialDeliverers(foundPotentialDeliverers: Found
       {
         notificationType: NotificationType.ClaimDonation,
         notificationDetailId: donation.id,
-        notificationLink: `/donation-details/${donation.id}`,
+        notificationLink: `/donation/details/${donation.id}`,
         notificationTitle: 'Delivery Requested',
         notificationIconUrl: donation.donorAccount.profileImgUrl,
         notificationBody: `

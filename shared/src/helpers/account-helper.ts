@@ -38,7 +38,7 @@ export class AccountHelper {
   }
 
   accountDetailsRouterLink(account: Account): string[] {
-    return ['/account-details/', `${account.id}`];
+    return ['/account/details/', `${account.id}`];
   }
 
   formatPhoneNumber(phoneNumber: string): string {

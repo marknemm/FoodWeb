@@ -37,7 +37,7 @@ export async function sendClaimMessages(donation: DonationEntity): Promise<Donat
       {
         notificationType: NotificationType.Signup,
         notificationDetailId: donation.id,
-        notificationLink: `/donation-details/${donation.id}`,
+        notificationLink: `/donation/details/${donation.id}`,
         notificationTitle: `Donation Claimed`,
         notificationIconUrl: donation.receiverAccount.profileImgUrl,
         notificationBody: `
@@ -94,7 +94,7 @@ export async function sendUnclaimMessages(unclaimDiff: UpdateDiff<DonationEntity
       {
         notificationType: NotificationType.UnclaimDonation,
         notificationDetailId: unclaimDiff.new.id,
-        notificationLink: `/donation-details/${unclaimDiff.new.id}`,
+        notificationLink: `/donation/details/${unclaimDiff.new.id}`,
         notificationTitle: `Donation Unclaimed`,
         notificationIconUrl: unclaimDiff.old.receiverAccount.profileImgUrl,
         notificationBody: `
@@ -112,7 +112,7 @@ export async function sendUnclaimMessages(unclaimDiff: UpdateDiff<DonationEntity
         {
           notificationType: NotificationType.UnclaimDonation,
           notificationDetailId: unclaimDiff.new.id,
-          notificationLink: `/donation-details/${unclaimDiff.new.id}`,
+          notificationLink: `/donation/details/${unclaimDiff.new.id}`,
           notificationTitle: `Donation Unclaimed`,
           notificationIconUrl: unclaimDiff.old.receiverAccount.profileImgUrl,
           notificationBody: `

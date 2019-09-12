@@ -1,0 +1,53 @@
+@import '../../../../styles/constants.scss';
+
+:host {
+  .account-main {
+    margin-bottom: 20px;
+
+    .username-title {
+      font-weight: bold;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .profile-img-card {
+      display: inline-block;
+      text-align: center;
+      margin-bottom: 0px;
+      padding: 0px;
+      vertical-align: top;
+      width: 150px;
+      height: 150px;
+    }
+  }
+
+  .account-type {
+    text-align: center;
+    margin-bottom: 6px;
+  }
+
+  .account-not-verified {
+    text-align: center;
+    color: $warn;
+    font-weight: bold;
+
+    button {
+      color: #007BFF;
+      padding: 0 10px;
+    }
+  }
+
+  mat-divider {
+    margin-bottom: 20px;
+  }
+
+  .see-donations-link {
+    margin-top: 10px;
+  }
+
+  .account-not-found {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+  }
+}
