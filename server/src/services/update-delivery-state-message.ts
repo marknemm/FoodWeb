@@ -47,7 +47,7 @@ export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity
       {
         notificationType: NotificationType.DeliveryStateAdvance,
         notificationDetailId: donation.id,
-        notificationLink: `/donation-details/${donation.id}`,
+        notificationLink: `/donation/details/${donation.id}`,
         notificationTitle: `Delivery ${advanceAction}`,
         notificationIconUrl: volunteerAccount.profileImgUrl,
         notificationBody: `
@@ -110,7 +110,7 @@ async function _sendDeliveryStateUndoMessages(donation: DonationEntity): Promise
       {
         notificationType: NotificationType.DeliveryStateUndo,
         notificationDetailId: donation.id,
-        notificationLink: `/donation-details/${donation.id}`,
+        notificationLink: `/donation/details/${donation.id}`,
         notificationTitle: `Delivery Reverted to ${donation.donationStatus}`,
         notificationIconUrl: volunteerAccount.profileImgUrl,
         notificationBody: `

@@ -3,7 +3,7 @@
   <p class="donation-description">{{ donation.description }}</p>
   <hr>
   <p>
-    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a> to view the donation.
     You may re-claim this donation as long as no other charity has claimed it.
   </p>
   <p>
@@ -16,7 +16,7 @@
   <p class="donation-description">{{ donation.description }}</p>
   <hr>
   <p>
-    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a> to view the donation.
   </p>
   <p>
     We are sorry for any inconvenience this has caused you. When another charity claims your donation, you will be notified.
@@ -72,7 +72,7 @@
   </p>
   <p>
     You can search for other unscheduled deliveries at this
-    <a href="{{ env.SERVER_HOST_ADDRESS }}/deliveries?donationStatus=Matched">link</a>,
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/delivery/list?donationStatus=Matched">link</a>,
     or wait to be notified about another delivery.
   </p>
   <p>

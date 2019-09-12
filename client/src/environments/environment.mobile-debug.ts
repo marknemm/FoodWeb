@@ -5,8 +5,11 @@
 
 export const environment = {
   production: false,
+  qa: false,
+  demo: false,
   e2e: false,
   hmr: false,
+  mobile: true,
   supportEmail: 'support@wnyfoodweb.com',
   recaptchaSiteKey: '',
   server: 'http://10.0.2.2:5000/server'

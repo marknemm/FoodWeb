@@ -1,0 +1,44 @@
+<food-web-progress-indicator [trigger]="loading" [blocking]="true" [diameter]="150"></food-web-progress-indicator>
+
+<form #loginFormDirective="ngForm" [formGroup]="loginForm" (submit)="submit()" class="login-container">
+  <mat-toolbar color="primary" *ngIf="!deviceInfoService.isMobileApplication">
+    <h1 mat-dialog-title>{{ title }}</h1>
+    <button mat-icon-button type="button" class="close-button" mat-dialog-close>
+      <mat-icon aria-label="Close">close</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <img src="./assets/IconImgMd.png" class="food-web-img" *ngIf="deviceInfoService.isMobileApplication">
+
+  <div mat-dialog-content *ngIf="!resetMessageSent">
+    <mat-form-field>
+      <input matInput type="text" placeholder="Username" formControlName="username" cdkFocusInitial>
+    </mat-form-field>
+    <mat-form-field *ngIf="!isPasswordReset">
+      <input matInput type="password" placeholder="Password" formControlName="password">
+    </mat-form-field>
+    <mat-error *ngIf="loginErr && loginFormDirective.submitted" class="login-err">{{ loginErr }}</mat-error>
+  </div>
+  <div mat-dialog-content *ngIf="resetMessageSent">
+    <p>A password reset message has been sent to your email.</p>
+    <p>Follow the link within the email to reset your password.</p>
+  </div>
+
+  <div mat-dialog-actions>
+    <div class="align-right" *ngIf="!isPasswordReset">
+      <button mat-button type="button" color="accent" (click)="forgotPassword()">Forgot Password</button>
+      <button mat-raised-button type="submit" color="primary" [disabled]="loginForm.invalid">Login</button>
+      <div class="signup-container">
+        Don't have an account: <a [routerLink]="['/signup']" (click)="matDialogRef.close()">Signup</a>
+      </div>
+    </div>
+    <div class="align-right" *ngIf="isPasswordReset && !resetMessageSent">
+      <button mat-button type="button" color="accent" (click)="returnToLogin()">Login</button>
+      <button mat-raised-button type="submit" color="primary" [disabled]="loginForm.invalid">Send Email</button>
+    </div>
+    <div class="align-right" *ngIf="resetMessageSent">
+      <button mat-button type="submit" color="accent">Resend Email</button>
+      <button mat-raised-button type="button" color="primary" mat-dialog-close>Ok</button>
+    </div>
+  </div>
+</form>

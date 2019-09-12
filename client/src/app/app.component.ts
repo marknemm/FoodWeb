@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
-import { SessionService } from './services/session/session.service';
-
-declare const device;
+import { SessionService } from './session/services/session/session.service';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +31,5 @@ export class AppComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    document.addEventListener('deviceready', () => console.log(`Platform: ${device.platform}`), false); 
-  }
+  ngOnInit() {}
 }
