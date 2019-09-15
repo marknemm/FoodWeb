@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, Index } from 'typeorm';
 import { AccountEntity } from './account.entity';
 import { ContactInfo, GeographyLocation } from './../../../shared/src/interfaces/account/contact-info';
+import { DonationEntity } from './donation.entity';
 
 @Entity('ContactInfo')
 export class ContactInfoEntity implements ContactInfo {
@@ -36,6 +37,8 @@ export class ContactInfoEntity implements ContactInfo {
   timezone: string;
 
   @OneToOne((type) => AccountEntity, (account) => account.contactInfo)
-  @JoinColumn()
   account?: AccountEntity;
+
+  @OneToOne((type) => DonationEntity, (donation) => donation.donorContactOverride)
+  donation?: DonationEntity;
 }

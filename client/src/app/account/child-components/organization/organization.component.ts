@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
-import { FormGroup, Validators, FormGroupDirective } from '@angular/forms';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { FormGroupDirective } from '@angular/forms';
+import { OrganizationForm } from '../../forms/organization.form';
 import { FormHelperService } from '../../../shared/services/form-helper/form-helper.service';
 
 @Component({
@@ -11,7 +12,7 @@ export class OrganizationComponent implements OnInit {
 
   @Input() editing = false;
   @Input() accountType: string = '';
-  @Input() formGroup: FormGroup;
+  @Input() formGroup: OrganizationForm;
   @Input() formGroupName: string;
   deliveryInstructionsPlaceholderModifier: string = '';
 
@@ -22,18 +23,6 @@ export class OrganizationComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = this._formHelper.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
-    this._formHelper.addMissingControls(
-      this.formGroup,
-      {
-        id: undefined,
-        organizationName: ['', Validators.required],
-        deliveryInstructions: '',
-        organizationInfo: ''
-      }
-    );
-    if (this.formGroupName && this._formGroupDirective.form) {
-      this._formGroupDirective.form.setControl(this.formGroupName, this.formGroup);
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { AccountForm, AccountFormT, PasswordUpdate } from '../../forms/account.form';
 import { SessionService } from '../../../session/services/session/session.service';
-import { AccountService, Account, PasswordUpdate } from '../../services/account/account.service';
+import { AccountService, Account } from '../../services/account/account.service';
 import { SectionEditService } from '../../../shared/services/section-edit/section-edit.service';
 import { SignupVerificationService } from '../../../signup/services/signup-verification/signup-verification.service';
 import { PasswordFormMode } from '../../../password/child-components/password/password.component';
@@ -17,7 +17,7 @@ import { AccountHelper } from '../../../../../../shared/src/helpers/account-help
 })
 export class AccountDetailsComponent implements OnInit {
 
-  accountUpdateForm: FormGroup;
+  accountUpdateForm: AccountForm;
 
   private _originalAccount: Account;
   private _accountNotFound = false;
@@ -31,7 +31,6 @@ export class AccountDetailsComponent implements OnInit {
     public accountHelper: AccountHelper,
     public signupVerificationService: SignupVerificationService,
     private _accountService: AccountService,
-    private _formBuilder: FormBuilder,
     private _activatedRoute: ActivatedRoute
   ) {}
 
@@ -61,16 +60,7 @@ export class AccountDetailsComponent implements OnInit {
   }
 
   private _initAccountForm(): void {
-    this.accountUpdateForm = this._formBuilder.group({
-      accountType: ['', Validators.required],
-      username: ['', Validators.required],
-      profileImgUrl: '',
-      organization: new FormGroup({}),
-      volunteer: new FormGroup({}),
-      contactInfo: new FormGroup({}),
-      operationHours: new FormControl([]),
-      password: new FormGroup({})
-    });
+    this.accountUpdateForm = new AccountForm();
   }
 
   private _listenAccountChange(): void {
@@ -94,8 +84,8 @@ export class AccountDetailsComponent implements OnInit {
   }
 
   private _refreshAccountFormValue(account: Account, force = false): void {
-    const accountSections = ['accountType', 'username', 'profileImgUrl', 'contactInfo'];
-    accountSections.forEach((section: string) => {
+    const accountSections: (keyof Account)[] = ['accountType', 'username', 'profileImgUrl', 'contactInfo'];
+    accountSections.forEach((section: keyof Account) => {
       if (force || !this.sectionEditService.editing(section)) {
         this.accountUpdateForm.get(section).patchValue(account[section]);
       }
@@ -120,11 +110,11 @@ export class AccountDetailsComponent implements OnInit {
     }
   }
 
-  onEdit(sectionName: string): void {
+  onEdit(sectionName: keyof Account): void {
     this.sectionEditService.toggleEdit(sectionName, this.accountUpdateForm.get(sectionName));
   }
 
-  onSave(sectionName: string): void {
+  onSave(sectionName: keyof AccountFormT): void {
     if (this.sectionEditService.shouldSaveSection(sectionName)) {
       (sectionName !== 'password')
         ? this._saveAccount(sectionName)
@@ -134,7 +124,7 @@ export class AccountDetailsComponent implements OnInit {
     }
   }
 
-  private _saveAccount(sectionName: string): void {
+  private _saveAccount(sectionName: keyof AccountFormT): void {
     let accountUpdate: Partial<Account> = {};
     accountUpdate[sectionName] = this.accountUpdateForm.get(sectionName).value;
     this._accountService.updateAccount(this.originalAccount, accountUpdate).subscribe(

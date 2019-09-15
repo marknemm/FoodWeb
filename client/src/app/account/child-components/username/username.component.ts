@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, forwardRef, OnDestroy } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, FormControl, Validators, ValidationErrors, ControlValueAccessor, Validator } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, Validators, ValidationErrors, ControlValueAccessor, Validator } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TypedFormControl } from '../../../data-structure/typed-form-control';
 
 @Component({
   selector: 'food-web-username',
@@ -16,7 +17,7 @@ export class UsernameComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   @Input() editing = false;
 
-  usernameCtrl = new FormControl('', Validators.required);
+  usernameCtrl = new TypedFormControl<string>('', Validators.required);
 
   private _destroy$ = new Subject();
 
@@ -26,7 +27,6 @@ export class UsernameComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   ngOnDestroy() {
     this._destroy$.next();
-    this._destroy$.complete();
   }
 
   writeValue(value: string): void {

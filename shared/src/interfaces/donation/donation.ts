@@ -1,4 +1,4 @@
-import { Account } from '../account/account';
+import { Account, ContactInfo } from '../account/account';
 import { Delivery } from '../delivery/delivery';
 export { Account, Delivery };
 
@@ -23,6 +23,11 @@ export interface Donation {
    */
   donorAccount: Account;
   /**
+   * Contact information overrides for the donor.
+   * May or may not be equivalent to donor's original contact info.
+   */
+  donorContactOverride: ContactInfo;
+  /**
    * The account of the receiving organization.
    */
   receiverAccount?: Account;
@@ -45,7 +50,7 @@ export interface Donation {
   /**
    * The estimated monetary value of the donation.
    */
-  estimatedValue: number;
+  estimatedValue?: number;
   /**
    * The estimated number of people that the donation will feed.
    */

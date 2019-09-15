@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, Index, UpdateDateColumn, CreateDateColumn, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, Index, UpdateDateColumn, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
 import { AccountEntity } from './account.entity';
 import { DeliveryEntity } from './delivery-entity';
 import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
 import { Constants } from '../../../shared/src/constants/constants';
+import { ContactInfoEntity } from './contact-info.entity';
 
 const _constants = new Constants();
 
@@ -14,6 +15,10 @@ export class DonationEntity implements Donation {
 
   @ManyToOne((type) => AccountEntity, { eager: true })
   donorAccount: AccountEntity;
+
+  @OneToOne((type) => ContactInfoEntity, (contactInfo) => contactInfo.donation, { eager: true, cascade: true })
+  @JoinColumn()
+  donorContactOverride: ContactInfoEntity;
 
   @ManyToOne((type) => AccountEntity, { nullable: true, eager: true })
   receiverAccount?: AccountEntity;
@@ -31,8 +36,8 @@ export class DonationEntity implements Donation {
   @Column()
   description: string;
 
-  @Column({ type: 'numeric' })
-  estimatedValue: number;
+  @Column({ type: 'numeric', nullable: true })
+  estimatedValue?: number;
 
   @Column({ type: 'integer' })
   estimatedNumFeed: number;

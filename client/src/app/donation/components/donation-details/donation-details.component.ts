@@ -1,16 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { DonateForm } from '../../../donor/forms/donate.form';
 import { DateTimeSelectDialogComponent, DateTimeSelectConfig } from '../../../date-time/components/date-time-select-dialog/date-time-select-dialog.component';
 import { DonationAction } from '../../child-components/donation-detail-actions/donation-detail-actions.component';
 import { DonationService, Donation } from '../../services/donation/donation.service';
 import { DeliveryService } from '../../../delivery/services/delivery/delivery.service';
 import { SessionService } from '../../../session/services/session/session.service';
 import { DateTimeRange } from '../../../date-time/services/date-time/date-time.service';
-import { DonationFormService } from '../../../donor/services/donation-form/donation-form.service';
 import { AccountHelper } from '../../../../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../../../../shared/src/helpers/delivery-helper';
@@ -18,25 +16,22 @@ import { DeliveryHelper } from '../../../../../../shared/src/helpers/delivery-he
 @Component({
   selector: 'food-web-donation-details',
   templateUrl: './donation-details.component.html',
-  styleUrls: ['./donation-details.component.scss'],
-  providers: [DonationFormService]
+  styleUrls: ['./donation-details.component.scss']
 })
-export class DonationDetailsComponent implements OnInit, OnDestroy {
+export class DonationDetailsComponent implements OnInit {
 
-  donationForm: FormGroup;
+  donationForm: DonateForm;
 
   private _myDonation = false;
   private _donationNotFound = false;
   private _originalDonation: Donation;
   private _editing = false;
-  private _destroy$ = new Subject();
 
   constructor(
     public accountHelper: AccountHelper,
     public donationHelper: DonationHelper,
     public deliveryHelper: DeliveryHelper,
     public sessionService: SessionService,
-    private _donationFormService: DonationFormService,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _donationService: DonationService,
@@ -61,12 +56,8 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.donationForm = this._donationFormService.buildUpdateDonationForm();
+    this.donationForm = new DonateForm();
     this._listenDonationChange();
-  }
-
-  ngOnDestroy() {
-    this._destroy$.next();
   }
 
   onDonationAction(action: DonationAction): void {
@@ -88,14 +79,14 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
 
   saveDonation(): void {
     if (this.donationForm.valid && this.donationForm.dirty) {
-      const donationUpdate: Partial<Donation> = this._donationFormService.getDonationFromForm();
+      const donationUpdate: Donation = this.donationForm.toDonation();
       this._donationService.updateDonation(this._originalDonation, donationUpdate).subscribe(
         (savedDonation: Donation) => {
           this._updateDonation(savedDonation);
           this.toggleEdit();
         }
       );
-    } else {
+    } else if (!this.donationForm.dirty) {
       this.toggleEdit();
     }
   }
@@ -148,9 +139,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _listenDonationChange(): void {
-    this._donationService.listenDonationQueryChange(this._activatedRoute).pipe(
-      takeUntil(this._destroy$)
-    ).subscribe((donation: Donation) => {
+    this._donationService.listenDonationQueryChange(this._activatedRoute).subscribe((donation: Donation) => {
       setTimeout(() => {
         this._donationNotFound = !donation;
         if (!this._donationNotFound) {
@@ -162,7 +151,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
 
   private _updateDonation(donation: Donation): void {
     this._originalDonation = donation;
-    this._donationFormService.updateFormValue(donation);
+    this.donationForm.patchFromDonation(donation);
     this._myDonation = this.sessionService.isMyAccount(donation.donorAccount.id);
   }
 

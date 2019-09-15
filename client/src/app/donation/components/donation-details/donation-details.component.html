@@ -33,7 +33,7 @@
             <div class="inline-label">Estimated Meal Count:</div>
             <div>{{ originalDonation.estimatedNumFeed }}</div>
           </div>
-          <div *ngIf="myDonation" class="col-md-4 col-sm-6">
+          <div *ngIf="myDonation && originalDonation.estimatedValue" class="col-md-4 col-sm-6">
             <div class="inline-label">Estimated Value:</div>
             <div>${{ originalDonation.estimatedValue | number:'1.2-2' }}</div>
           </div>
@@ -78,6 +78,13 @@
       <mat-card-title>Pickup Window</mat-card-title>
       <mat-card-content>
         <food-web-date-time-range formControlName="pickupWindow" [initEndDateToday]="true" [required]="true"></food-web-date-time-range>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngIf="editing">
+      <mat-card-title>Contact Info</mat-card-title>
+      <mat-card-content>
+        <food-web-contact-info formGroupName="donorContactOverride" [editing]="true"></food-web-contact-info>
       </mat-card-content>
     </mat-card>
 
@@ -151,7 +158,7 @@
             <mat-card-subtitle class="account-name">{{ donationHelper.donorName(originalDonation) }}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <food-web-contact-info [contactInfo]="originalDonation.donorAccount.contactInfo"></food-web-contact-info>
+            <food-web-contact-info [contactInfo]="originalDonation.donorContactOverride"></food-web-contact-info>
           </mat-card-content>
           <mat-card-actions class="align-right">
             <div class="align-right">
