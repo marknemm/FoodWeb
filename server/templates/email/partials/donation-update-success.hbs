@@ -15,10 +15,12 @@
       <td class="donation-summary-label">Type:</td>
       <td>{{ originalDonation.donationType }}</td>
     </tr>
-    <tr>
-      <td class="donation-summary-label">Value:</td>
-      <td>${{ originalDonation.estimatedValue }}</td>
-    </tr>
+    {{#if donation.estimatedValue }}
+      <tr>
+        <td class="donation-summary-label">Value:</td>
+        <td>${{ originalDonation.estimatedValue }}</td>
+      </tr>
+    {{/if}}
     <tr>
       <td class="donation-summary-label">Description:</td>
       <td class="donation-summary-description">{{ originalDonation.description }}</td>
@@ -35,10 +37,12 @@
       <td class="donation-summary-label">Type:</td>
       <td>{{ updatedDonation.donationType }}</td>
     </tr>
-    <tr>
-      <td class="donation-summary-label">Value:</td>
-      <td>${{ updatedDonation.estimatedValue }}</td>
-    </tr>
+    {{#if donation.estimatedValue }}
+      <tr>
+        <td class="donation-summary-label">Value:</td>
+        <td>${{ updatedDonation.estimatedValue }}</td>
+      </tr>
+    {{/if}}
     <tr>
       <td class="donation-summary-label">Description:</td>
       <td class="donation-summary-description">{{ updatedDonation.description }}</td>

@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { TypedFormGroup } from '../../../data-structure/typed-form-group';
 import { ConstantsService } from '../../../shared/services/constants/constants.service';
-import { Account, OperationHours } from '../../../../../../shared/src/interfaces/account/account';
+import { Account, OperationHours, ContactInfo } from '../../../../../../shared/src/interfaces/account/account';
+import { Weekday } from '../../../../../../shared/src/interfaces/account/operation-hours';
 import { TimeRange, DateTimeRange } from '../../../../../../shared/src/interfaces/misc/time';
 export { TimeRange, DateTimeRange };
 
@@ -131,9 +133,10 @@ export class DateTimeService {
     return (form: FormGroup) => {
       const startDate: string = form.get(startDateField).value;
       const endDate: string = form.get(endDateField).value;
-      return (!startDate || !endDate || new Date(startDate) < new Date(endDate))
-        ? null
-        : { dateTimeRangeOrder: 'Start date must be earlier than end date' };
+      if (!startDate || !endDate || new Date(startDate) < new Date(endDate)) {
+        return null;
+      }
+      return { dateTimeRangeOrder: 'Start date must be earlier than end date' };
     }
   }
 
@@ -145,6 +148,16 @@ export class DateTimeService {
         ? null
         : { timeRangeOrder: 'Start time must be earlier than end time' };
     }
+  }
+
+  allOrNothingOpHoursValidator(form: TypedFormGroup<OperationHours>): { allOrNothing: string } {
+    const weekday: Weekday = form.get('weekday').value;
+    const startTime = form.get('startTime').value;
+    const endTime = form.get('endTime').value;
+    if ((startTime && (!endTime || !weekday)) || (endTime && (!startTime || !weekday))) {
+      return { allOrNothing: 'Must fill in all fields' };
+    }
+    return null;
   }
 
   genDateTimeRangeErrStateMatcher(formGroup: FormGroup): ErrorStateMatcher {

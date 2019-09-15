@@ -6,7 +6,8 @@ import {
   OneToOne,
   Index,
   UpdateDateColumn,
-  CreateDateColumn
+  CreateDateColumn,
+  JoinColumn
 } from 'typeorm';
 import { ContactInfoEntity } from './contact-info.entity';
 import { OrganizationEntity } from './organization.entity';
@@ -38,6 +39,7 @@ export class AccountEntity implements Account {
   lastSeenNotificationId: number;
 
   @OneToOne((type) => ContactInfoEntity, (contactInfo) => contactInfo.account, { cascade: true, eager: true })
+  @JoinColumn()
   contactInfo: ContactInfoEntity;
 
   @OneToOne((type) => OrganizationEntity, (organization) => organization.account, { nullable: true, cascade: true, eager: true })

@@ -14,10 +14,12 @@
       <td class="donation-summary-label">Number of Meals:</td>
       <td>{{ donation.estimatedNumFeed }}</td>
     </tr>
-    <tr>
-      <td class="donation-summary-label">Value:</td>
-      <td>${{ donation.estimatedValue }}</td>
-    </tr>
+    {{#if donation.estimatedValue }}
+      <tr>
+        <td class="donation-summary-label">Value:</td>
+        <td>${{ donation.estimatedValue }}</td>
+      </tr>
+    {{/if}}
     <tr>
       <td class="donation-summary-label">Description:</td>
       <td class="donation-summary-description">{{ donation.description }}</td>

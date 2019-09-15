@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, forwardRef, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
-import { FormBuilder, NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, Validator, ValidationErrors, FormGroup } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, Validator, ValidationErrors } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Subject, of, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FlexFormArray } from '../../../data-structure/flex-form-array';
+import { TypedFormArray } from '../../../data-structure/typed-form-array';
+import { OperationHoursForm } from '../../forms/operation-hours.form';
 import { ConstantsService } from '../../../shared/services/constants/constants.service';
 import { ConfirmDialogService } from '../../../shared/services/confirm-dialog/confirm-dialog.service';
 import { DateTimeService } from '../../../date-time/services/date-time/date-time.service';
@@ -26,35 +27,19 @@ export class OperationHoursComponent implements OnInit, OnChanges, OnDestroy, Co
   @Input() fillMissingWeekdays = false;
 
   timeFieldErrStateMatcher: ErrorStateMatcher;
-  formArray: FlexFormArray;
+  formArray: TypedFormArray<OperationHours>;
 
   private _destroy$ = new Subject();
 
   constructor(
     public constantsService: ConstantsService,
     public dateTimeService: DateTimeService,
-    private _formBuilder: FormBuilder,
     private _confirmDialogService: ConfirmDialogService,
     private _weekdayFillerService: WeekdayFillerService
   ) {}
 
   ngOnInit() {
-    this.formArray = new FlexFormArray([],
-      this._formBuilder.group(
-        {
-          id: undefined,
-          weekday: '',
-          startTime: '',
-          endTime: ''
-        },
-        { 
-          validators: [
-            this.dateTimeService.genTimeRangeOrderValidator('startTime', 'endTime'),
-            this._allOrNothingTimeValidator.bind(this)
-          ]
-        }
-      )
-    );
+    this.formArray = new TypedFormArray<OperationHours>([], new OperationHoursForm(this.dateTimeService));
     this.timeFieldErrStateMatcher = this.dateTimeService.genTimeRangeErrStateMatcher('startTime', 'endTime');
   }
 
@@ -70,7 +55,7 @@ export class OperationHoursComponent implements OnInit, OnChanges, OnDestroy, Co
   }
 
   addOperationHours(): void {
-    this.formArray.push({ weekday: '', startTime: '', endTime: '' });
+    this.formArray.push({ weekday: <any>'', startTime: '', endTime: '' });
   }
 
   removeOperationHours(idx: number): void {
@@ -116,15 +101,5 @@ export class OperationHoursComponent implements OnInit, OnChanges, OnDestroy, Co
     return (this.formArray.invalid ? { invalid: true } : null);
   }
 
-  private _allOrNothingTimeValidator(form: FormGroup): { allOrNothing: string } {
-    const weekday = form.get('weekday').value;
-    const startTime = form.get('startTime').value;
-    const endTime = form.get('endTime').value;
-    if ((startTime && (!endTime || !weekday)) || (endTime && (!startTime || !weekday))) {
-      return { allOrNothing: 'Must fill in all fields' };
-    }
-    return null;
-  }
-
-  registerOnTouched(_: any): void {}
+  registerOnTouched(): void {}
 }

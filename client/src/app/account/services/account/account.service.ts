@@ -4,6 +4,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, map, flatMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { PasswordUpdate } from '../../forms/account.form';
 import { SessionService } from '../../../session/services/session/session.service';
 import { ErrorHandlerService } from '../../../shared/services/error-handler/error-handler.service';
 import { PageProgressService } from '../../../shared/services/page-progress/page-progress.service';
@@ -14,11 +15,6 @@ import { PasswordUpdateRequest } from '../../../../../../shared/src/interfaces/a
 import { AccountReadRequest, AccountReadFilters } from '../../../../../../shared/src/interfaces/account/account-read-request';
 import { Account } from '../../../../../../shared/src/interfaces/account/account';
 export { Account };
-
-export interface PasswordUpdate {
-  password: string;
-  oldPassword: string;
-}
 
 @Injectable({
   providedIn: 'root'

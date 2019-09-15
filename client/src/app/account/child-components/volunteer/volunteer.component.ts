@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { FormGroupDirective } from '@angular/forms';
+import { VolunteerForm } from '../../forms/volunteer.form';
 import { FormHelperService } from '../../../shared/services/form-helper/form-helper.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { FormHelperService } from '../../../shared/services/form-helper/form-hel
 export class VolunteerComponent implements OnInit {
 
   @Input() editing = false;
-  @Input() formGroup: FormGroup;
+  @Input() formGroup: VolunteerForm;
   @Input() formGroupName: string;
 
   constructor(
@@ -20,16 +21,5 @@ export class VolunteerComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = this._formHelper.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
-    this._formHelper.addMissingControls(
-      this.formGroup,
-      {
-        id: undefined,
-        lastName: ['', Validators.required],
-        firstName: ['', Validators.required]
-      }
-    );
-    if (this.formGroupName && this._formGroupDirective.form) {
-      this._formGroupDirective.form.setControl(this.formGroupName, this.formGroup);
-    }
   }
 }

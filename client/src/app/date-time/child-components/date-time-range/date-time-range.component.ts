@@ -75,7 +75,7 @@ export class DateTimeRangeComponent implements OnInit, OnDestroy, ControlValueAc
   }
 
   validate(): ValidationErrors {
-    return (this.formGroup.invalid ? { invalid: true } : null);
+    return (this.formGroup.invalid ? this.formGroup.errors : null);
   }
 
   markAsTouched(): void {
@@ -90,6 +90,5 @@ export class DateTimeRangeComponent implements OnInit, OnDestroy, ControlValueAc
     this.endDateTime.markAsPristine();
   }
 
-  registerOnTouched(_): void {}
-
+  registerOnTouched(): void {}
 }

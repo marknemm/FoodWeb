@@ -70,6 +70,7 @@ function _genJoins(queryBuilder: SelectQueryBuilder<DonationEntity>): SelectQuer
     .innerJoinAndSelect('donation.donorAccount', 'donorAccount')
     .innerJoinAndSelect('donorAccount.organization', 'donorOrganization')
     .innerJoinAndSelect('donorAccount.contactInfo', 'donorContactInfo')
+    .innerJoinAndSelect('donation.donorContactOverride', 'donorContactOverride')
     .leftJoinAndMapMany('donorAccount.operationHours', 'donorAccount.operationHours', 'donorOpHours')
     .leftJoinAndSelect('donation.receiverAccount', 'receiverAccount')
     .leftJoinAndSelect('receiverAccount.organization', 'receiverOrganization')

@@ -4,6 +4,9 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, Observable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ContactInfoForm } from '../../../account/forms/contact-info.form';
+import { OrganizationForm } from '../../../account/forms/organization.form';
+import { VolunteerForm } from '../../../account/forms/volunteer.form';
 import { TermsConditionsDialogComponent } from '../terms-conditions-dialog/terms-conditions-dialog.component';
 import { SignupService } from '../../services/signup/signup.service';
 import { SignupVerificationService } from '../../services/signup-verification/signup-verification.service';
@@ -47,9 +50,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.accountForm = this._formBuilder.group({
       accountType: ['', Validators.required],
       username: ['', Validators.required],
-      organization: new FormGroup({}),
-      volunteer: new FormGroup({}),
-      contactInfo: new FormGroup({}),
+      organization: new OrganizationForm(),
+      volunteer: new VolunteerForm(),
+      contactInfo: new ContactInfoForm(),
       operationHours: new FormControl([])
     });
     this.passwordForm = new FormGroup({});

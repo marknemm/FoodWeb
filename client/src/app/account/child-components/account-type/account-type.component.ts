@@ -1,10 +1,8 @@
 import { Component, OnInit, Input, forwardRef, OnDestroy } from '@angular/core';
-import {
-  FormBuilder, Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS,
-  ControlValueAccessor, Validator, ValidationErrors, FormControl
-} from '@angular/forms';
+import { Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, Validator, ValidationErrors } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TypedFormControl } from '../../../data-structure/typed-form-control';
 import { ConstantsService } from '../../../shared/services/constants/constants.service';
 import { AccountType } from '../../../../../../shared/src/interfaces/account/account';
 
@@ -21,18 +19,15 @@ export class AccountTypeComponent implements OnInit, OnDestroy, ControlValueAcce
 
   @Input() editing = false;
 
-  accountTypeCtrl: FormControl;
+  accountTypeCtrl = new TypedFormControl<AccountType>(null, Validators.required);
 
   private _destroy$ = new Subject();
 
   constructor(
-    public constantsService: ConstantsService,
-    private _formBuilder: FormBuilder
+    public constantsService: ConstantsService
   ) {}
 
-  ngOnInit() {
-    this.accountTypeCtrl = this._formBuilder.control('', Validators.required);
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this._destroy$.next();
@@ -59,5 +54,4 @@ export class AccountTypeComponent implements OnInit, OnDestroy, ControlValueAcce
   }
 
   registerOnTouched(): void {}
-
 }

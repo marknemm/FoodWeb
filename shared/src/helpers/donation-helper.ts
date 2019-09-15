@@ -4,7 +4,7 @@ import { Constants } from '../constants/constants';
 import { Validation } from '../constants/validation';
 import { Donation, DonationStatus } from '../interfaces/donation/donation';
 import { DonationReadFilters } from '../interfaces/donation/donation-read-filters';
-import { AccountType } from '../interfaces/account/account';
+import { AccountType, ContactInfo } from '../interfaces/account/account';
 export { Donation };
 
 export class DonationHelper {
@@ -16,10 +16,32 @@ export class DonationHelper {
   validateDonation(donation: Donation): string {
     if (!donation) { return ''; }
 
+    const baseDonationErr: string = this._validateBaseDonation(donation);
+    if (baseDonationErr) { return baseDonationErr; }
+    
+    const pickupWindowErr: string = this._validatePickupWindow(donation.pickupWindowStart, donation.pickupWindowEnd);
+    if (pickupWindowErr) { return pickupWindowErr; }
+
+    const donorAccountErr: string = this._accountHelper.validateAccount(donation.donorAccount, true);
+    if (donorAccountErr) { return donorAccountErr; }
+
+    const donorContactOverrideErr: string = this._accountHelper.validateContactInfo(donation.donorContactOverride);
+    if (donorContactOverrideErr) { return donorContactOverrideErr; }
+
+    const receiverAccountErr: string = this._accountHelper.validateAccount(donation.receiverAccount, true);
+    if (receiverAccountErr) { return receiverAccountErr; }
+
+    return '';
+  }
+
+  private _validateBaseDonation(donation: Donation): string {
     const requireErr: string = this._validationHelper.validateRequiredFields(
       donation,
-      ['donorAccount', 'donorLastName', 'donorFirstName', 'donationType', 'description', 'estimatedValue', 'donationStatus'],
-      ['Donor account', 'Donor last name', 'Donor first name', 'Donation type', 'Donation description', 'Estimated value', 'Donation status']
+      ['donorAccount', 'donorLastName', 'donorFirstName', 'donationType', 'description', 'donationStatus'],
+      [
+        'Donor account', 'Donor last name', 'Donor first name', 'Donation type',
+        'Donation description', 'Estimated value', 'Donation status'
+      ]
     );
     if (requireErr) { return requireErr; }
 
@@ -29,19 +51,28 @@ export class DonationHelper {
     if (!Validation.DONATION_STATUS_REGEX.test(donation.donationStatus)) {
       return 'Invalid donation status';
     }
-    if (donation.estimatedValue < 0) {
-      return 'Estimated value must be positive';
+    if (donation.estimatedValue) {
+      if (donation.estimatedValue < 0) {
+        return 'Estimated value must be positive';
+      }
+      if (!Validation.MONEY_REGEX.test(donation.estimatedValue.toString())) {
+        return 'Estimated value must not contain more than 2 decimal places';
+      }
     }
-    if (!Validation.MONEY_REGEX.test(donation.estimatedValue.toString())) {
-      return 'Estimated value must not contain more than 2 decimal places';
+
+    return '';
+  }
+
+  private _validatePickupWindow(pickupWindowStart: Date, pickupWindowEnd: Date): string {
+    if (!pickupWindowStart) {
+      return 'Pickup window start is required';
     }
-
-    const donorAccountErr: string = this._accountHelper.validateAccount(donation.donorAccount, true);
-    if (donorAccountErr) { return donorAccountErr; }
-
-    const receiverAccountErr: string = this._accountHelper.validateAccount(donation.receiverAccount, true);
-    if (receiverAccountErr) { return receiverAccountErr; }
-
+    if (!pickupWindowEnd) {
+      return 'Pickup window end is required'
+    }
+    if (pickupWindowStart >= pickupWindowEnd) {
+      return 'Pickup window start time must be later than end time';
+    }
     return '';
   }
 

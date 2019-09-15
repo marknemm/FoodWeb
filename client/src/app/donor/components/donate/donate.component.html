@@ -27,6 +27,13 @@
     </mat-card>
 
     <mat-card class="donate-card">
+      <mat-card-title>Contact Info</mat-card-title>
+      <mat-card-content>
+        <food-web-contact-info [editing]="true" formGroupName="donorContactOverride"></food-web-contact-info>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="donate-card">
       <mat-card-title>Food Safety Checklist</mat-card-title>
       <mat-card-content>
         <food-web-food-safety-checklist formControlName="safetyChecklist"></food-web-food-safety-checklist>

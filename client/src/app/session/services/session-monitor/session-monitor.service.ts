@@ -27,6 +27,7 @@ export class SessionMonitorService implements HttpInterceptor {
 
   private _handleError(error: any): Observable<any> {
     if (error instanceof HttpErrorResponse && error.status === 302) {
+      this._sessionService.logout(true);
       return this._attemptLogin().pipe(
         map((loggedIn: boolean) => {
           if (!loggedIn) {
