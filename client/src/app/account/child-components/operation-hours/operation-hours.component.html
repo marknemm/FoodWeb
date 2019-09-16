@@ -2,7 +2,7 @@
   <ng-container *ngIf="editing">
     <div *ngFor="let operationHoursForm of formArray.controls; let idx = index" class="operation-hours-form-container">
       <div [formGroup]="operationHoursForm" class="operation-hours-form">
-        <button mat-icon-button color="warn" type="button" class="delete-button" (click)="removeOperationHours(idx)">
+        <button mat-icon-button color="warn" type="button" class="delete-button" (click)="formArray.removeOperationHours(idx, confirmDialogService)">
           <mat-icon [inline]="true">clear</mat-icon>
         </button>
         <div class="weekday-field">
@@ -16,14 +16,14 @@
           <div class="time-field">
             <mat-form-field class="fill" floatLabel="never">
               <input matInput placeholder="Start Time" [ngxTimepicker]="startTimePicker" autocomplete="off"
-                formControlName="startTime" [errorStateMatcher]="timeFieldErrStateMatcher">
+                formControlName="startTime" [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher">
               <ngx-material-timepicker #startTimePicker [minutesGap]="5" [defaultTime]="'9:00 AM'" [preventOverlayClick]="true"></ngx-material-timepicker>
             </mat-form-field>
           </div>
           <div class="time-field">
             <mat-form-field class="fill" floatLabel="never">
               <input matInput placeholder="End Time" [ngxTimepicker]="endTimePicker" autocomplete="off"
-                formControlName="endTime" [errorStateMatcher]="timeFieldErrStateMatcher">
+                formControlName="endTime" [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher">
               <ngx-material-timepicker #endTimePicker [minutesGap]="5" [defaultTime]="'5:00 PM'" [preventOverlayClick]="true"></ngx-material-timepicker>
             </mat-form-field>
           </div>
@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="add-button-container">
-      <button mat-button type="button" color="primary" class="no-pad" (click)="addOperationHours()" [disabled]="formArray.invalid">
+      <button mat-button type="button" color="primary" class="no-pad" (click)="formArray.addBlankEntry()" [disabled]="formArray.invalid">
         <mat-icon>add</mat-icon>
         <span>Add</span>
       </button>

@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, OnDestroy, forwardRef, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ControlValueAccessor, Validator, ValidationErrors, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
+import { ControlValueAccessor, Validator, ValidationErrors, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DateTimeComponent } from '../date-time/date-time.component';
-import { DateTimeRange, DateTimeService } from '../../services/date-time/date-time.service';
+import { DateTimeRangeForm, DateTimeRange } from '../../forms/date-time-range.form';
 
 @Component({
   selector: 'food-web-date-time-range',
@@ -33,30 +32,14 @@ export class DateTimeRangeComponent implements OnInit, OnDestroy, ControlValueAc
   @ViewChild('startDateTime', { static: false }) startDateTime: DateTimeComponent;
   @ViewChild('endDateTime', { static: false }) endDateTime: DateTimeComponent;  
 
-  formGroup: FormGroup;
-  rangeErrStateMatcher: ErrorStateMatcher;
+  dateTimeRangeForm: DateTimeRangeForm;
 
   private _destroy$ = new Subject();
 
-  constructor(
-    private _formBuilder: FormBuilder,
-    private _dateTimeService: DateTimeService
-  ) {}
+  constructor() {}
 
   ngOnInit() {
-    this.formGroup = this._formBuilder.group(
-      { startDateTime: '', endDateTime: '' },
-      { validators: this._dateTimeService.genDateTimeRangeOrderValidator('startDateTime', 'endDateTime') }
-    );
-    if (this.required) {
-      this._initRequiredValidation();
-    }
-    this.rangeErrStateMatcher = this._dateTimeService.genDateTimeRangeErrStateMatcher(this.formGroup);
-  }
-
-  private _initRequiredValidation(): void {
-    this.formGroup.get('startDateTime').setValidators(Validators.required);
-    this.formGroup.get('endDateTime').setValidators(Validators.required);
+    this.dateTimeRangeForm = new DateTimeRangeForm(undefined, true);
   }
 
   ngOnDestroy() {
@@ -65,27 +48,27 @@ export class DateTimeRangeComponent implements OnInit, OnDestroy, ControlValueAc
 
   writeValue(dateTimeRange: DateTimeRange): void {
     (dateTimeRange)
-      ? this.formGroup.setValue(dateTimeRange)
-      : this.formGroup.setValue({ startDateTime: null, endDateTime: null });
+      ? this.dateTimeRangeForm.setValue(dateTimeRange)
+      : this.dateTimeRangeForm.setValue({ startDateTime: null, endDateTime: null });
   }
 
   registerOnChange(changeCb: (dateTimeRange: DateTimeRange) => void): void {
     this._destroy$.next();
-    this.formGroup.valueChanges.pipe(takeUntil(this._destroy$)).subscribe(changeCb);
+    this.dateTimeRangeForm.valueChanges.pipe(takeUntil(this._destroy$)).subscribe(changeCb);
   }
 
   validate(): ValidationErrors {
-    return (this.formGroup.invalid ? this.formGroup.errors : null);
+    return (this.dateTimeRangeForm.invalid ? this.dateTimeRangeForm.errors : null);
   }
 
   markAsTouched(): void {
-    this.formGroup.markAsTouched();
+    this.dateTimeRangeForm.markAsTouched();
     this.startDateTime.markAsTouched();
     this.endDateTime.markAsTouched();
   }
 
   markAsPristine(): void {
-    this.formGroup.markAsPristine();
+    this.dateTimeRangeForm.markAsPristine();
     this.startDateTime.markAsPristine();
     this.endDateTime.markAsPristine();
   }

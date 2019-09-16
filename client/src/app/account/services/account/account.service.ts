@@ -4,7 +4,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, map, flatMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { PasswordUpdate } from '../../forms/account.form';
+import { PasswordFormT } from '../../../password/forms/password.form';
 import { SessionService } from '../../../session/services/session/session.service';
 import { ErrorHandlerService } from '../../../shared/services/error-handler/error-handler.service';
 import { PageProgressService } from '../../../shared/services/page-progress/page-progress.service';
@@ -56,7 +56,7 @@ export class AccountService {
     return savedAccount;
   }
 
-  updatePassword(passwordUpdate: PasswordUpdate): Observable<void> {
+  updatePassword(passwordUpdate: PasswordFormT): Observable<void> {
     const request: PasswordUpdateRequest = passwordUpdate;
     this._pageProgressService.activate(true);
     return this._httpClient.put<void>(`${this.url}/password`, request).pipe(

@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { EventRegistrationForm } from '../../forms/event-registration.form';
 import { SessionService } from '../../../session/services/session/session.service';
 import { EventRegistrationService } from '../../../event/services/event-registration/event-registration.service';
 import { MapService } from '../../../shared/services/map/map.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Validation } from '../../../../../../shared/src/constants/validation';
 import { Account } from '../../../../../../shared/src/interfaces/account/account';
 import { AccountHelper } from '../../../../../../shared/src/helpers/account-helper';
 
@@ -25,17 +24,15 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   readonly window: Window = window;
 
-  formGroup: FormGroup;
+  formGroup: EventRegistrationForm;
 
   private _locationHref: string;
   private _signupComplete = false;
 
   constructor(
     public eventRegistrationService: EventRegistrationService,
-    private _formBuilder: FormBuilder,
     private _sessionService: SessionService,
-    private _mapService: MapService,
-    private _accountHelper: AccountHelper
+    private _mapService: MapService
   ) {}
 
   get locationHref(): string {
@@ -47,25 +44,7 @@ export class EventCardComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this._initForm();
-    this._setFormValuesIfCan();
-  }
-
-  private _initForm(): void {
-    this.formGroup = this._formBuilder.group({
-      fullName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', [Validators.required, Validators.pattern(Validation.PHONE_REGEX)]]
-    });
-  }
-
-  private _setFormValuesIfCan(): void {
-    if (this._sessionService.loggedIn && this._sessionService.isVolunteer) {
-      const account: Account = this._sessionService.account;
-      this.formGroup.get('fullName').setValue(this._accountHelper.accountName(account));
-      this.formGroup.get('email').setValue(account.contactInfo.email);
-      this.formGroup.get('phoneNumber').setValue(account.contactInfo.phoneNumber);
-    }
+    this.formGroup = new EventRegistrationForm(this._sessionService);
   }
 
   ngOnChanges(changes: SimpleChanges) {

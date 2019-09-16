@@ -1,16 +1,9 @@
 import { Injectable } from '@angular/core';
 import { formatDate } from '@angular/common';
-import { FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { TypedFormGroup } from '../../../data-structure/typed-form-group';
 import { ConstantsService } from '../../../shared/services/constants/constants.service';
-import { Account, OperationHours, ContactInfo } from '../../../../../../shared/src/interfaces/account/account';
-import { Weekday } from '../../../../../../shared/src/interfaces/account/operation-hours';
+import { Account, OperationHours } from '../../../../../../shared/src/interfaces/account/account';
 import { TimeRange, DateTimeRange } from '../../../../../../shared/src/interfaces/misc/time';
 export { TimeRange, DateTimeRange };
-
-export type DateTimeRangeOrderValidator = (form: FormGroup) => { dateTimeRangeOrder: string };
-export type TimeRangeOrderValidator = (form: FormGroup) => { timeRangeOrder: string };
 
 @Injectable({
   providedIn: 'root'
@@ -127,60 +120,5 @@ export class DateTimeService {
     }
 
     return timeRanges;
-  }
-
-  genDateTimeRangeOrderValidator(startDateField: string, endDateField: string): DateTimeRangeOrderValidator {
-    return (form: FormGroup) => {
-      const startDate: string = form.get(startDateField).value;
-      const endDate: string = form.get(endDateField).value;
-      if (!startDate || !endDate || new Date(startDate) < new Date(endDate)) {
-        return null;
-      }
-      return { dateTimeRangeOrder: 'Start date must be earlier than end date' };
-    }
-  }
-
-  genTimeRangeOrderValidator(startField: string, endField: string): TimeRangeOrderValidator {
-    return (form: FormGroup) => {
-      const startTime: string = form.get(startField).value;
-      const endTime: string = form.get(endField).value;
-      return (!startTime || !endTime || new Date(`1/1/2000 ${startTime}`) < new Date(`1/1/2000 ${endTime}`))
-        ? null
-        : { timeRangeOrder: 'Start time must be earlier than end time' };
-    }
-  }
-
-  allOrNothingOpHoursValidator(form: TypedFormGroup<OperationHours>): { allOrNothing: string } {
-    const weekday: Weekday = form.get('weekday').value;
-    const startTime = form.get('startTime').value;
-    const endTime = form.get('endTime').value;
-    if ((startTime && (!endTime || !weekday)) || (endTime && (!startTime || !weekday))) {
-      return { allOrNothing: 'Must fill in all fields' };
-    }
-    return null;
-  }
-
-  genDateTimeRangeErrStateMatcher(formGroup: FormGroup): ErrorStateMatcher {
-    return {
-      isErrorState: (control: FormControl) => {
-        if (formGroup.hasError('dateTimeRangeOrder')) {
-          return true;
-        }
-        return (control && control.invalid && control.touched);
-      }
-    }
-  }
-
-  genTimeRangeErrStateMatcher(startField: string, endField: string): ErrorStateMatcher {
-    return {
-      isErrorState: (control: FormControl, form: FormGroupDirective | NgForm) => {
-        if (control === form.control.get(startField) || control === form.control.get(endField)) {
-          if (form.hasError('timeRangeOrder')) {
-            return true;
-          }
-        }
-        return (control && control.invalid && control.touched);
-      }
-    }
   }
 }

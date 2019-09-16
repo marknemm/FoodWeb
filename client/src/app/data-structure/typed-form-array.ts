@@ -1,16 +1,14 @@
-import { FormArray, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormArray, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormGroup, FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { TypedAbstractControl } from './typed-abstract-control';
-import { FormHelperService } from '../shared/services/form-helper/form-helper.service';
 
 export class TypedFormArray<T> extends FormArray {
 
-  private readonly _formHelper = new FormHelperService(new FormBuilder());
   private _deepValueChanges = new Subject<Partial<T>[]>();
 
   constructor(
-    controls: TypedAbstractControl<T>[],
-    public memberTmpl?: TypedAbstractControl<T>,
+    public controls: TypedAbstractControl<T>[],
+    public memberInit?: () => TypedAbstractControl<T>,
     validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions,
     asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[]
   ) {
@@ -36,6 +34,7 @@ export class TypedFormArray<T> extends FormArray {
       this._addNeededMembers(this.length + 1);
       this.at(this.length - 1).patchValue(value);
     }
+    this.markAsDirty();
     this.at(this.length - 1).valueChanges.subscribe(this._onElementValueChanges.bind(this));
   }
 
@@ -68,13 +67,10 @@ export class TypedFormArray<T> extends FormArray {
   }
 
   private _addNeededMembers(length: number): void {
-    this.memberTmpl = (this.memberTmpl ? this.memberTmpl : new FormControl());
+    this.memberInit = (this.memberInit ? this.memberInit : () => new FormControl());
     while (this.length < length) {
-      const memberTmplCopy: TypedAbstractControl<T> = this._formHelper.copyAbstractControl(this.memberTmpl);
-      if (memberTmplCopy instanceof TypedFormArray) {
-        memberTmplCopy.memberTmpl = this.memberTmpl;
-      }
-      this.controls.push(memberTmplCopy);
+      const memberCopy: TypedAbstractControl<T> = this.memberInit();
+      this.controls.push(memberCopy);
       this.at(this.length - 1).valueChanges.subscribe(this._onElementValueChanges.bind(this));
     }
   }

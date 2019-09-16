@@ -26,9 +26,6 @@ export class ContactInfoComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = <ContactInfoForm>this._formHelperService.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
-    if (this.formGroupName) {
-      this._formGroupDirective.form.setControl(this.formGroupName, this.formGroup);
-    }
     if (this.contactInfo) {
       this.formGroup.patchValue(this.contactInfo);
     }

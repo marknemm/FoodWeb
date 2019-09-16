@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AccountForm, AccountFormT, PasswordUpdate } from '../../forms/account.form';
+import { AccountForm, AccountFormT, PasswordFormT } from '../../forms/account.form';
+import { PasswordFormMode } from '../../../password/forms/password.form';
 import { SessionService } from '../../../session/services/session/session.service';
 import { AccountService, Account } from '../../services/account/account.service';
 import { SectionEditService } from '../../../shared/services/section-edit/section-edit.service';
 import { SignupVerificationService } from '../../../signup/services/signup-verification/signup-verification.service';
-import { PasswordFormMode } from '../../../password/child-components/password/password.component';
 import { DonationReadFilters } from '../../../../../../shared/src/interfaces/donation/donation-read-filters';
 import { AccountHelper } from '../../../../../../shared/src/helpers/account-helper';
 
@@ -60,7 +60,7 @@ export class AccountDetailsComponent implements OnInit {
   }
 
   private _initAccountForm(): void {
-    this.accountUpdateForm = new AccountForm();
+    this.accountUpdateForm = new AccountForm('Account');
   }
 
   private _listenAccountChange(): void {
@@ -84,30 +84,9 @@ export class AccountDetailsComponent implements OnInit {
   }
 
   private _refreshAccountFormValue(account: Account, force = false): void {
-    const accountSections: (keyof Account)[] = ['accountType', 'username', 'profileImgUrl', 'contactInfo'];
-    accountSections.forEach((section: keyof Account) => {
-      if (force || !this.sectionEditService.editing(section)) {
-        this.accountUpdateForm.get(section).patchValue(account[section]);
-      }
-    });
-
-    if (this.accountUpdateForm.get('accountType').value === 'Volunteer') {
-      if (force || !this.sectionEditService.editing('volunteer')) {
-        this.accountUpdateForm.get('volunteer').patchValue(account.volunteer);
-      }
-    } else {
-      if (force || !this.sectionEditService.editing('organization')) {
-        this.accountUpdateForm.get('organization').patchValue(account.organization);
-      }
-    }
-
-    if (force || !this.sectionEditService.editing('operationHours')) {
-      this.accountUpdateForm.get('operationHours').patchValue(account.operationHours);
-    }
-
-    if (force || !this.sectionEditService.editing('password')) {
-      this.accountUpdateForm.get('password').reset();
-    }
+    (force)
+      ? this.accountUpdateForm.patchValue(account)
+      : this.accountUpdateForm.patchSections(account, this.sectionEditService);
   }
 
   onEdit(sectionName: keyof Account): void {
@@ -133,7 +112,7 @@ export class AccountDetailsComponent implements OnInit {
   }
 
   private _savePassword(): void {
-    const passwordUpdate: PasswordUpdate = this.accountUpdateForm.get('password').value;
+    const passwordUpdate: PasswordFormT = this.accountUpdateForm.get('password').value;
     this._accountService.updatePassword(passwordUpdate).subscribe(
       () => this._handleSaveSuccess('password', this.originalAccount)
     );
