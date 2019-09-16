@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Subject } from 'rxjs';
+import { DonateForm } from '../../forms/donate.form';
 import { SessionService } from '../../../session/services/session/session.service';
 import { DonationService, Donation } from '../../../donation/services/donation/donation.service';
 import { DateTimeRangeComponent } from '../../../date-time/child-components/date-time-range/date-time-range.component';
-import { DonateForm } from '../../forms/donate.form';
 import { DateTimeService } from '../../../date-time/services/date-time/date-time.service';
 
 @Component({
@@ -14,7 +13,7 @@ import { DateTimeService } from '../../../date-time/services/date-time/date-time
 export class DonateComponent implements OnInit {
 
   /**
-   * The donation form.
+   * Reactive form model used for donation.
    */
   donateForm: DonateForm;
   /**
@@ -25,8 +24,6 @@ export class DonateComponent implements OnInit {
 
   @ViewChild('pickupWindowRange', { static: false }) pickupWindowRange: DateTimeRangeComponent;
 
-  private _destroy$ = new Subject();
-
   constructor(
     public sessionService: SessionService,
     private _donationService: DonationService,
@@ -34,11 +31,10 @@ export class DonateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.donateForm = new DonateForm(this.sessionService.account, this._dateTimeService, false);
-  }
-
-  ngOnDestroy() {
-    this._destroy$.next();
+    this.donateForm = new DonateForm(
+      this._dateTimeService,
+      { donorAccount: this.sessionService.account, safetyChecklistInit: false }
+    );
   }
 
   /**

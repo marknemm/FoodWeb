@@ -17,10 +17,6 @@ export class DateTimeRangeComponent implements OnInit {
   @Input() startTimePlaceholder = 'Start Time';
   @Input() endDatePlaceholder = 'End Date';
   @Input() endTimePlaceholder = 'End Time';
-  @Input() initStartDateToday = false;
-  @Input() initEndDateToday = false;
-  @Input() defaultStartTime = '9:00 am';
-  @Input() defaultEndTime = '5:00 pm';
   @Input() minDate = new Date();
   @Input() maxDate: Date;
   @Input() floatLabels = true;

@@ -19,7 +19,6 @@ export class OperationHoursComponent implements OnInit {
   @Input() operationHoursArr: OperationHours[] = [];
   @Input() formArrayName: string;
   @Input() formArray: OperationHoursArray;
-  @Input() fillMissingWeekdays = false;
 
   constructor(
     public constantsService: ConstantsService,

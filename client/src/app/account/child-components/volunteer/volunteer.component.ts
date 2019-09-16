@@ -20,6 +20,6 @@ export class VolunteerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.formGroup = this._formHelper.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
+    this.formGroup = <VolunteerForm>this._formHelper.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
   }
 }

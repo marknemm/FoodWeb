@@ -1,31 +1,28 @@
-import { Validators, ValidatorFn, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { TypedFormGroup } from '../../data-structure/typed-form-group';
 import { Validation } from '../../../../../shared/src/constants/validation';
 
-export interface PasswordFormT {
-  password: string;
-  confirmPassword: string;
-  oldPassword: string;
-}
-
-export type PasswordFormMode = 'Signup' | 'Account';
-
 export class PasswordForm extends TypedFormGroup<PasswordFormT> {
 
-  readonly formMode: PasswordFormMode;
   readonly passwordMatchErrStateMatcher: ErrorStateMatcher;
+  readonly formMode: PasswordFormMode;
 
-  constructor(formMode: PasswordFormMode, passwordFormVal: Partial<PasswordFormT> = {}) {
+  constructor(config: PasswordFormConfig = {}) {
     super({
       password: ['', [Validators.required, Validators.pattern(Validation.PASSWORD_REGEX)]],
       confirmPassword: ['', Validators.required],
-      oldPassword: ['', (formMode === 'Account' ? Validators.required : undefined)]
+      oldPassword: ''
     });
-    this.patchValue(passwordFormVal);
     this.setValidators(this._validatePasswordMatch);
-    this.formMode = formMode;
     this.passwordMatchErrStateMatcher = this._genPasswordMatchErrStateMatcher();
+    this.formMode = (config.formMode ? config.formMode : 'Account');
+    if (this.formMode === 'Account') {
+      this.get('oldPassword').setValidators(Validators.required);
+    }
+    if (config.value) {
+      this.patchValue(config.value);
+    }
   }
 
   private _validatePasswordMatch(form: PasswordForm): { passwordConfirmMatch: string } {
@@ -46,4 +43,17 @@ export class PasswordForm extends TypedFormGroup<PasswordFormT> {
       }
     }
   }
+}
+
+export type PasswordFormMode = 'Signup' | 'Account';
+
+export interface PasswordFormConfig {
+  value?: Partial<PasswordFormT>;
+  formMode?: PasswordFormMode;
+}
+
+export interface PasswordFormT {
+  password: string;
+  confirmPassword: string;
+  oldPassword: string;
 }
