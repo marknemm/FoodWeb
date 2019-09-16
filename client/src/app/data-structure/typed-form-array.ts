@@ -1,4 +1,4 @@
-import { FormArray, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormGroup, FormControl } from '@angular/forms';
+import { FormArray, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { TypedAbstractControl } from './typed-abstract-control';
 
@@ -30,12 +30,12 @@ export class TypedFormArray<T> extends FormArray {
   push(value: TypedAbstractControl<T> | Partial<T>): void {
     if (value instanceof FormControl || value instanceof FormArray || value instanceof FormGroup) {
       super.push(value);
+      this.at(this.length - 1).valueChanges.subscribe(this._onElementValueChanges.bind(this, this.at(this.length - 1)));
     } else {
       this._addNeededMembers(this.length + 1);
       this.at(this.length - 1).patchValue(value);
     }
     this.markAsDirty();
-    this.at(this.length - 1).valueChanges.subscribe(this._onElementValueChanges.bind(this));
   }
 
   removeAt(index: number): void {
@@ -71,12 +71,15 @@ export class TypedFormArray<T> extends FormArray {
     while (this.length < length) {
       const memberCopy: TypedAbstractControl<T> = this.memberInit();
       this.controls.push(memberCopy);
-      this.at(this.length - 1).valueChanges.subscribe(this._onElementValueChanges.bind(this));
+      this.at(this.length - 1).valueChanges.subscribe(this._onElementValueChanges.bind(this, this.at(this.length - 1)));
     }
   }
 
-  private _onElementValueChanges(): void {
+  private _onElementValueChanges(source: AbstractControl): void {
     this.updateValueAndValidity();
+    if (source.dirty) {
+      this.markAsDirty();
+    }
     this._deepValueChanges.next(this.value);
   }
 }

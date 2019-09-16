@@ -1,21 +1,18 @@
-import { Component, OnInit, Input, OnDestroy, forwardRef, ViewChild } from '@angular/core';
-import { ControlValueAccessor, Validator, ValidationErrors, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit, Input, ViewChild, Optional } from '@angular/core';
+import { FormGroupDirective } from '@angular/forms';
 import { DateTimeComponent } from '../date-time/date-time.component';
-import { DateTimeRangeForm, DateTimeRange } from '../../forms/date-time-range.form';
+import { DateTimeRangeForm } from '../../forms/date-time-range.form';
+import { FormHelperService } from '../../../shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'food-web-date-time-range',
   templateUrl: './date-time-range.component.html',
-  styleUrls: ['./date-time-range.component.scss'],
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateTimeRangeComponent), multi: true },
-    { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeRangeComponent), multi: true }
-  ]
+  styleUrls: ['./date-time-range.component.scss']
 })
-export class DateTimeRangeComponent implements OnInit, OnDestroy, ControlValueAccessor, Validator {
+export class DateTimeRangeComponent implements OnInit {
 
+  @Input() formGroupName: string;
+  @Input() formGroup: DateTimeRangeForm;
   @Input() startDatePlaceholder = 'Start Date';
   @Input() startTimePlaceholder = 'Start Time';
   @Input() endDatePlaceholder = 'End Date';
@@ -27,51 +24,28 @@ export class DateTimeRangeComponent implements OnInit, OnDestroy, ControlValueAc
   @Input() minDate = new Date();
   @Input() maxDate: Date;
   @Input() floatLabels = true;
-  @Input() required = false;
 
   @ViewChild('startDateTime', { static: false }) startDateTime: DateTimeComponent;
   @ViewChild('endDateTime', { static: false }) endDateTime: DateTimeComponent;  
 
-  dateTimeRangeForm: DateTimeRangeForm;
-
-  private _destroy$ = new Subject();
-
-  constructor() {}
+  constructor(
+    @Optional() private _formGroupDirective: FormGroupDirective,
+    private _formHelper: FormHelperService
+  ) {}
 
   ngOnInit() {
-    this.dateTimeRangeForm = new DateTimeRangeForm(undefined, true);
-  }
-
-  ngOnDestroy() {
-    this._destroy$.next();
-  }
-
-  writeValue(dateTimeRange: DateTimeRange): void {
-    (dateTimeRange)
-      ? this.dateTimeRangeForm.setValue(dateTimeRange)
-      : this.dateTimeRangeForm.setValue({ startDateTime: null, endDateTime: null });
-  }
-
-  registerOnChange(changeCb: (dateTimeRange: DateTimeRange) => void): void {
-    this._destroy$.next();
-    this.dateTimeRangeForm.valueChanges.pipe(takeUntil(this._destroy$)).subscribe(changeCb);
-  }
-
-  validate(): ValidationErrors {
-    return (this.dateTimeRangeForm.invalid ? this.dateTimeRangeForm.errors : null);
+    this.formGroup = <DateTimeRangeForm>this._formHelper.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
   }
 
   markAsTouched(): void {
-    this.dateTimeRangeForm.markAsTouched();
+    this.formGroup.markAsTouched();
     this.startDateTime.markAsTouched();
     this.endDateTime.markAsTouched();
   }
 
   markAsPristine(): void {
-    this.dateTimeRangeForm.markAsPristine();
+    this.formGroup.markAsPristine();
     this.startDateTime.markAsPristine();
     this.endDateTime.markAsPristine();
   }
-
-  registerOnTouched(): void {}
 }
