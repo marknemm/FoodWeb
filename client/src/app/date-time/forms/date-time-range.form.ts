@@ -8,23 +8,18 @@ export type DateTimeRangeOrderValidator = (form: DateTimeRangeForm) => { dateTim
 
 export class DateTimeRangeForm extends TypedFormGroup<DateTimeRange> {
 
-  private _rangeErrStateMatcher: ErrorStateMatcher;
+  readonly required: boolean;
+  readonly rangeErrStateMatcher: ErrorStateMatcher;
 
-  constructor(
-    dateTimeRange?: DateTimeRange,
-    required = false
-  ) {
+  constructor(dateTimeRange?: DateTimeRange, required = false) {
     super({
       startDateTime: [null, required ? [Validators.required] : []],
       endDateTime: [null, required ? [Validators.required] : []]
     });
     this.setValidators(this._dateTimeRangeOrderValidator.bind(this));
     this.patchValue(dateTimeRange);
-    this._rangeErrStateMatcher = this._genDateTimeRangeErrStateMatcher();
-  }
-
-  get rangeErrStateMatcher(): ErrorStateMatcher {
-    return this._rangeErrStateMatcher;
+    this.required = required;
+    this.rangeErrStateMatcher = this._genDateTimeRangeErrStateMatcher();
   }
 
   private _dateTimeRangeOrderValidator(): { dateTimeRangeOrder: string } {

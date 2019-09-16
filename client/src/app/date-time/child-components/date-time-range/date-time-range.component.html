@@ -1,4 +1,4 @@
-<div [formGroup]="dateTimeRangeForm" class="row">
+<div [formGroup]="formGroup" class="row">
   <div class="date-time-field col-sm-6">
     <food-web-date-time
      #startDateTime
@@ -11,8 +11,8 @@
      [minDate]="minDate"
      [maxDate]="maxDate"
      [floatLabels]="floatLabels"
-     [required]="required"
-     [errorStateMatcher]="dateTimeRangeForm.rangeErrStateMatcher">
+     [required]="formGroup.required"
+     [errorStateMatcher]="formGroup.rangeErrStateMatcher">
     </food-web-date-time>
   </div>
   <div class="date-time-field col-sm-6">
@@ -27,10 +27,10 @@
      [minDate]="minDate"
      [maxDate]="maxDate"
      [floatLabels]="floatLabels"
-     [required]="required"
-     [errorStateMatcher]="dateTimeRangeForm.rangeErrStateMatcher">
+     [required]="formGroup.required"
+     [errorStateMatcher]="formGroup.rangeErrStateMatcher">
     </food-web-date-time>
-    <mat-error *ngIf="dateTimeRangeForm.hasError('dateTimeRangeOrder')" class="range-order-err">
+    <mat-error *ngIf="formGroup.hasError('dateTimeRangeOrder')" class="range-order-err">
       End date-time must be later than start date-time
     </mat-error>
   </div>

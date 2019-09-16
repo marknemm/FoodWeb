@@ -6,6 +6,7 @@ import { Account, ContactInfo } from '../../../../../shared/src/interfaces/accou
 import { DateTimeRange } from '../../../../../shared/src/interfaces/misc/time';
 import { Validation } from '../../../../../shared/src/constants/validation';
 import { Donation } from '../../../../../shared/src/interfaces/donation/donation';
+import { DateTimeRangeForm } from 'src/app/date-time/forms/date-time-range.form';
 
 export interface DonationFormT {
   donorFirstName: string;
@@ -31,11 +32,11 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
       estimatedNumFeed: [null, [Validators.required, Validators.min(0), Validators.pattern(/^\d*$/)]],
       estimatedValue: [null, [Validators.min(0), Validators.pattern(Validation.MONEY_REGEX)]],
       description: ['', Validators.required],
-      pickupWindow: [null, Validators.required],
+      pickupWindow: new DateTimeRangeForm(undefined, true),
       donorContactOverride: new ContactInfoForm(),
       safetyChecklist: [safetyChecklistInit, Validators.requiredTrue]
     });
-    this.get('pickupWindow').setValue(
+    this.get('pickupWindow').patchValue(
       this._genInitPickupWindow(donorAccount, dateTimeService)
     );
     this.get('donorContactOverride').patchValue(
