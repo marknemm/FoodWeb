@@ -14,7 +14,7 @@ export class FormHelperService {
     if (formArray) {
       return formArray;
     }
-    if (formGroupDirective && formGroupDirective.form && formGroupDirective.form.get(formArrayName) instanceof FormGroup) {
+    if (formGroupDirective && formGroupDirective.form && formGroupDirective.form.get(formArrayName) instanceof FormArray) {
       return (formGroupDirective.form.get(formArrayName) as FormArray);
     }
     return new FormArray([]);

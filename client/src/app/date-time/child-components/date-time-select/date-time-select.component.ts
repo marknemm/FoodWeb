@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, OnDestroy, forwardRef } from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TypedFormControl } from '../../../data-structure/typed-form-control';
 import { DateTimeRange, DateTimeService } from '../../services/date-time/date-time.service';
 
 @Component({
@@ -21,7 +22,7 @@ export class DateTimeSelectComponent implements OnInit, OnDestroy, ControlValueA
   @Input() ariaLabel: string;
 
   dateTimeRanges: DateTimeRange[] = [];
-  dateTimeControl = new FormControl();
+  dateTimeControl = new TypedFormControl<DateTimeRange>();
 
   private _destroy$ = new Subject();
 

@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, forwardRef, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
-import { formatDate } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup, FormBuilder, NG_VALIDATORS, Validator, ValidationErrors, Validators } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator, ValidationErrors } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DateTimeForm } from '../../forms/date-time.form';
 import { DateTimeService } from '../../services/date-time/date-time.service';
 
 @Component({
@@ -33,49 +33,28 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   @Input() boldDate = false;
   @Input() boldTime = false;
 
-  formGroup: FormGroup;
+  dateTimeForm: DateTimeForm;
 
   private _changeCb: (date: Date) => void = () => {};
   private _destroy$ = new Subject();
 
   constructor(
-    private _formBuilder: FormBuilder,
     private _dateTimeService: DateTimeService
   ) {}
 
   ngOnInit() {
-    this.formGroup = this._formBuilder.group({ date: null, time: '' });
-    if (this.required) {
-      this._initRequiredValidation();
-    }
-    this.formGroup.valueChanges.pipe(
+    this.dateTimeForm = new DateTimeForm(this._dateTimeService, undefined, this.initDateToday, this.required);
+    this.dateTimeForm.valueChanges.pipe(
       takeUntil(this._destroy$)
     ).subscribe(
       this._onValueChange.bind(this)
     );
-    if (this.initDateToday) {
-      this._initDateToday();
-    }
   }
 
-  private _initRequiredValidation(): void {
-    this.formGroup.get('date').setValidators(Validators.required);
-    this.formGroup.get('time').setValidators(Validators.required);
-  }
-
-  private _initDateToday(): void {
-    // Must do timeout to allow first change detection (writeValue) to be called.
-    setTimeout(() => {
-      if (!this.formGroup.get('date').value) {
-        this.formGroup.get('date').setValue(new Date());
-      }
-    });
-  }
-
-  private _onValueChange(value: { date: Date, time: string }): void {
-    if (value.date && value.time) {
-      const dateStr: string = formatDate(value.date, 'M/d/yyyy', 'en-US')
-      this._changeCb(new Date(`${dateStr} ${value.time}`));
+  private _onValueChange(): void {
+    const curDateVal: Date = this.dateTimeForm.toDate();
+    if (curDateVal) {
+      this._changeCb(curDateVal);
     }
   }
 
@@ -90,13 +69,8 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   }
 
   writeValue(date: Date): void {
-    if (date) {
-      const time: string = this._dateTimeService.formatTime(date);
-      this.defaultTime = time;
-      this.formGroup.setValue({ date, time });
-    } else {
-      this.formGroup.setValue({ date: null, time: '' });
-    }
+    this.dateTimeForm.patchFromDate(date);
+    this.defaultTime = this.dateTimeForm.get('time').value;
   }
 
   registerOnChange(changeCb: (date: Date) => void): void {
@@ -104,16 +78,16 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   }
 
   validate(): ValidationErrors {
-    return (this.formGroup.invalid ? this.formGroup.errors : null);
+    return (this.dateTimeForm.invalid ? this.dateTimeForm.errors : null);
   }
 
   markAsTouched(): void {
-    this.formGroup.markAllAsTouched();
+    this.dateTimeForm.markAllAsTouched();
   }
 
   markAsPristine(): void {
-    this.formGroup.markAsPristine();
+    this.dateTimeForm.markAsPristine();
   }
 
-  registerOnTouched(_): void {}
+  registerOnTouched(): void {}
 }

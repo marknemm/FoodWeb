@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Observable, of, never, ObservableInput } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { LoginForm } from '../../forms/login.form';
 import { SessionService } from '../../services/session/session.service';
 import { DeviceInfoService } from '../../../mobile/services/device-info/device-info.service';
 import { PasswordResetService } from '../../../password/services/password-reset/password-reset.service';
@@ -14,7 +14,7 @@ import { PasswordResetService } from '../../../password/services/password-reset/
 })
 export class LoginDialogComponent implements OnInit {
 
-  loginForm: FormGroup;
+  loginForm: LoginForm;
 
   private _title = 'Login';
   private _loginErr = '';
@@ -25,8 +25,7 @@ export class LoginDialogComponent implements OnInit {
     public sessionService: SessionService,
     public deviceInfoService: DeviceInfoService,
     public matDialogRef: MatDialogRef<LoginDialogComponent>,
-    private _passwordResetService: PasswordResetService,
-    private _formBuilder: FormBuilder,
+    private _passwordResetService: PasswordResetService
   ) {}
 
   get title(): string {
@@ -46,10 +45,7 @@ export class LoginDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loginForm = this._formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
-    });
+    this.loginForm = new LoginForm();
   }
 
   public static openIfNotLoggedIn(sessionService: SessionService, matDialog: MatDialog, config: MatDialogConfig = {}): Observable<boolean> {
