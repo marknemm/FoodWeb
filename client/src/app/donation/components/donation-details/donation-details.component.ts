@@ -8,7 +8,7 @@ import { DonationAction } from '../../child-components/donation-detail-actions/d
 import { DonationService, Donation } from '../../services/donation/donation.service';
 import { DeliveryService } from '../../../delivery/services/delivery/delivery.service';
 import { SessionService } from '../../../session/services/session/session.service';
-import { DateTimeRange } from '../../../date-time/services/date-time/date-time.service';
+import { DateTimeRange, DateTimeService } from '../../../date-time/services/date-time/date-time.service';
 import { AccountHelper } from '../../../../../../shared/src/helpers/account-helper';
 import { DonationHelper } from '../../../../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../../../../shared/src/helpers/delivery-helper';
@@ -34,9 +34,10 @@ export class DonationDetailsComponent implements OnInit {
     public sessionService: SessionService,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
+    private _matDialog: MatDialog,
     private _donationService: DonationService,
     private _deliveryService: DeliveryService,
-    private _matDialog: MatDialog
+    private _dateTimeService: DateTimeService
   ) {}
 
   get editing(): boolean {
@@ -56,7 +57,7 @@ export class DonationDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.donationForm = new DonateForm();
+    this.donationForm = new DonateForm(this._dateTimeService);
     this._listenDonationChange();
   }
 

@@ -22,7 +22,7 @@ export class OrganizationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.formGroup = this._formHelper.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
+    this.formGroup = <OrganizationForm>this._formHelper.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
   }
 
   ngOnChanges(changes: SimpleChanges) {

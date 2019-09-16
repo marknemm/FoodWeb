@@ -5,7 +5,7 @@ import { Validation } from '../../../../../shared/src/constants/validation';
 
 export class ContactInfoForm extends TypedFormGroup<ContactInfo> {
 
-  constructor(contactInfo: Partial<ContactInfo> = {}) {
+  constructor(contactInfo?: Partial<ContactInfo>) {
     super({
       id: undefined,
       email: ['', [Validators.required, Validators.email]],
@@ -15,6 +15,8 @@ export class ContactInfoForm extends TypedFormGroup<ContactInfo> {
       stateProvince: ['', Validators.required],
       postalCode: ['', [Validators.required, Validators.pattern(Validation.POSTAL_CODE_REGEX)]]
     });
-    this.patchValue(contactInfo);
-  }  
+    if (contactInfo) {
+      this.patchValue(contactInfo);
+    }
+  }
 }

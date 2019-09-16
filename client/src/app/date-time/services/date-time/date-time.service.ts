@@ -63,6 +63,17 @@ export class DateTimeService {
     return this.formatTime(this.dateCeil5Mins(timeStr));
   }
 
+  dateAddHour(dateOrStr: Date | string): Date {
+    const date: Date = this.toDate(dateOrStr);
+    const hourLaterDate: Date = new Date(date);
+    hourLaterDate.setHours(hourLaterDate.getHours() + 1);
+    return hourLaterDate;
+  }
+
+  timeAddHour(timeStr: string): string {
+    return this.formatTime(this.dateAddHour(timeStr));
+  }
+
   getCurrentWeekday(): string {
     const date = new Date();
     const weekdayIdx: number = date.getDay();

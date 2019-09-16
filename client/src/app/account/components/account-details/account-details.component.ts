@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AccountForm, AccountFormT, PasswordFormT } from '../../forms/account.form';
+import { AccountForm, PasswordFormT, AccountFormKey } from '../../forms/account.form';
 import { PasswordFormMode } from '../../../password/forms/password.form';
 import { SessionService } from '../../../session/services/session/session.service';
 import { AccountService, Account } from '../../services/account/account.service';
@@ -27,9 +27,9 @@ export class AccountDetailsComponent implements OnInit {
 
   constructor(
     public sessionService: SessionService,
-    public sectionEditService: SectionEditService<string>,
     public accountHelper: AccountHelper,
     public signupVerificationService: SignupVerificationService,
+    public sectionEditService: SectionEditService<AccountFormKey>,
     private _accountService: AccountService,
     private _activatedRoute: ActivatedRoute
   ) {}
@@ -55,12 +55,8 @@ export class AccountDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._initAccountForm();
+    this.accountUpdateForm = new AccountForm({ formMode: 'Account' });
     this._listenAccountChange();
-  }
-
-  private _initAccountForm(): void {
-    this.accountUpdateForm = new AccountForm('Account');
   }
 
   private _listenAccountChange(): void {
@@ -86,14 +82,14 @@ export class AccountDetailsComponent implements OnInit {
   private _refreshAccountFormValue(account: Account, force = false): void {
     (force)
       ? this.accountUpdateForm.patchValue(account)
-      : this.accountUpdateForm.patchSections(account, this.sectionEditService);
+      : this.accountUpdateForm.patchSections(account);
   }
 
-  onEdit(sectionName: keyof Account): void {
+  onEdit(sectionName: AccountFormKey): void {
     this.sectionEditService.toggleEdit(sectionName, this.accountUpdateForm.get(sectionName));
   }
 
-  onSave(sectionName: keyof AccountFormT): void {
+  onSave(sectionName: AccountFormKey): void {
     if (this.sectionEditService.shouldSaveSection(sectionName)) {
       (sectionName !== 'password')
         ? this._saveAccount(sectionName)
@@ -103,7 +99,7 @@ export class AccountDetailsComponent implements OnInit {
     }
   }
 
-  private _saveAccount(sectionName: keyof AccountFormT): void {
+  private _saveAccount(sectionName: AccountFormKey): void {
     let accountUpdate: Partial<Account> = {};
     accountUpdate[sectionName] = this.accountUpdateForm.get(sectionName).value;
     this._accountService.updateAccount(this.originalAccount, accountUpdate).subscribe(
@@ -112,13 +108,13 @@ export class AccountDetailsComponent implements OnInit {
   }
 
   private _savePassword(): void {
-    const passwordUpdate: PasswordFormT = this.accountUpdateForm.get('password').value;
+    const passwordUpdate: PasswordFormT = this.accountUpdateForm.toPassword();
     this._accountService.updatePassword(passwordUpdate).subscribe(
       () => this._handleSaveSuccess('password', this.originalAccount)
     );
   }
 
-  private _handleSaveSuccess(sectionName: string, savedAccount: Account): void {
+  private _handleSaveSuccess(sectionName: AccountFormKey, savedAccount: Account): void {
     this._originalAccount = savedAccount;
     this.sectionEditService.stopEdit(sectionName);
     this._refreshAccountFormValue(savedAccount);

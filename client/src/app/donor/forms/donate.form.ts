@@ -1,29 +1,23 @@
 import { Validators } from '@angular/forms';
 import { TypedFormGroup } from '../../data-structure/typed-form-group';
 import { ContactInfoForm } from '../../account/forms/contact-info.form';
+import { DateTimeRangeForm } from '../../date-time/forms/date-time-range.form';
 import { DateTimeService } from '../../date-time/services/date-time/date-time.service';
 import { Account, ContactInfo } from '../../../../../shared/src/interfaces/account/account';
 import { DateTimeRange } from '../../../../../shared/src/interfaces/misc/time';
 import { Validation } from '../../../../../shared/src/constants/validation';
 import { Donation } from '../../../../../shared/src/interfaces/donation/donation';
-import { DateTimeRangeForm } from 'src/app/date-time/forms/date-time-range.form';
-
-export interface DonationFormT {
-  donorFirstName: string;
-  donorLastName: string;
-  donationType: string;
-  otherDonationType?: string;
-  estimatedNumFeed: number;
-  estimatedValue?: number;
-  description: string;
-  pickupWindow: DateTimeRange;
-  donorContactOverride: ContactInfo;
-  safetyChecklist: boolean;
-}
 
 export class DonateForm extends TypedFormGroup<DonationFormT> {
-  
-  constructor(donorAccount?: Account, dateTimeService?: DateTimeService, safetyChecklistInit = true) {
+
+  private _dateTimeService: DateTimeService;
+
+  constructor(
+    dateTimeService: DateTimeService,
+    config: DonateFormConfig = {}
+  ) {
+    const defaultStartDateTime: Date = dateTimeService.dateCeil5Mins(new Date());
+    const defaultEndDateTime: Date = dateTimeService.dateAddHour(defaultStartDateTime);
     super({
       donorFirstName: ['', Validators.required],
       donorLastName: ['', Validators.required],
@@ -32,22 +26,34 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
       estimatedNumFeed: [null, [Validators.required, Validators.min(0), Validators.pattern(/^\d*$/)]],
       estimatedValue: [null, [Validators.min(0), Validators.pattern(Validation.MONEY_REGEX)]],
       description: ['', Validators.required],
-      pickupWindow: new DateTimeRangeForm(undefined, true),
+      pickupWindow: new DateTimeRangeForm({
+        required: true,
+        defaultStartDateTime,
+        defaultEndDateTime
+      }),
       donorContactOverride: new ContactInfoForm(),
-      safetyChecklist: [safetyChecklistInit, Validators.requiredTrue]
+      safetyChecklist: [false, Validators.requiredTrue]
     });
-    this.get('pickupWindow').patchValue(
-      this._genInitPickupWindow(donorAccount, dateTimeService)
-    );
-    this.get('donorContactOverride').patchValue(
-      this._genInitDonorContactOverride(donorAccount)
-    );
+    this._dateTimeService = dateTimeService;
+    this._initValidationAndValues(config);
+  }
+
+  private _initValidationAndValues(config: DonateFormConfig): void {
+    if (config.donorAccount) {
+      this.get('pickupWindow').patchValue(
+        this._genInitPickupWindow(config.donorAccount)
+      );
+      this.get('donorContactOverride').patchValue(
+        this._genInitDonorContactOverride(config.donorAccount)
+      );
+    }
+    this.get('safetyChecklist').patchValue(config.safetyChecklistInit);
     this.get('otherDonationType').disable();
   }
 
-  private _genInitPickupWindow(donorAccount: Account, dateTimeService: DateTimeService): DateTimeRange {
+  private _genInitPickupWindow(donorAccount: Account): DateTimeRange {
     return (donorAccount)
-      ? dateTimeService.genDefaultDateRangeFromAvailability(donorAccount)
+      ? this._dateTimeService.genDefaultDateRangeFromAvailability(donorAccount)
       : null;
   }
 
@@ -62,7 +68,7 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
 
   patchFromDonation(donation: Donation): void {
     super.patchValue(donation);
-    this.get('pickupWindow').setValue({
+    this.get('pickupWindow').patchValue({
       startDateTime: donation.pickupWindowStart,
       endDateTime: donation.pickupWindowEnd
     });
@@ -101,4 +107,22 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
     });
     return donation;
   }
+}
+
+export interface DonateFormConfig {
+  donorAccount?: Account;
+  safetyChecklistInit?: boolean;
+}
+
+export interface DonationFormT {
+  donorFirstName: string;
+  donorLastName: string;
+  donationType: string;
+  otherDonationType?: string;
+  estimatedNumFeed: number;
+  estimatedValue?: number;
+  description: string;
+  pickupWindow: DateTimeRange;
+  donorContactOverride: ContactInfo;
+  safetyChecklist: boolean;
 }

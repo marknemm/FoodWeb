@@ -35,7 +35,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.accountForm = new AccountForm('Signup');
+    this.accountForm = new AccountForm({ formMode: 'Signup', initEmptyOpHourWeekdays: true });
     this._listenAccountTypeSelect();
     this._listenAccountTypeRoute();
   }
@@ -67,8 +67,8 @@ export class SignupComponent implements OnInit, OnDestroy {
     if (this.accountForm.valid) {
       const agreement$: Observable<boolean> = this._genAgreementObs();
       agreement$.subscribe((agreed: boolean) => {
-        const account: Account = this.accountForm.value;
-        const password: string = this.accountForm.get('password').value.password;
+        const account: Account = this.accountForm.toAccount();
+        const password: string = this.accountForm.getPasswordValue();
         this._signupService.createAccount(account, password, agreed);
       });
     }

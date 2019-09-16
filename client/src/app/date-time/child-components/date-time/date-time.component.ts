@@ -4,7 +4,6 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DateTimeForm } from '../../forms/date-time.form';
-import { DateTimeService } from '../../services/date-time/date-time.service';
 
 @Component({
   selector: 'food-web-date-time',
@@ -12,7 +11,8 @@ import { DateTimeService } from '../../services/date-time/date-time.service';
   styleUrls: ['./date-time.component.scss'],
   providers: [
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateTimeComponent), multi: true },
-    { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeComponent), multi: true }
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeComponent), multi: true },
+    DateTimeForm
   ]
 })
 export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor, Validator {
@@ -24,7 +24,7 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   @Input() floatLabels = true;
   @Input() minDate = new Date();
   @Input() maxDate: Date;
-  @Input() initDateToday = false;
+  @Input() defaultDate: 'Now' | Date;
   @Input() required = false;
   @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() minDateWidth: string;
@@ -33,17 +33,15 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   @Input() boldDate = false;
   @Input() boldTime = false;
 
-  dateTimeForm: DateTimeForm;
-
   private _changeCb: (date: Date) => void = () => {};
   private _destroy$ = new Subject();
 
   constructor(
-    private _dateTimeService: DateTimeService
+    public dateTimeForm: DateTimeForm
   ) {}
 
   ngOnInit() {
-    this.dateTimeForm = new DateTimeForm(this._dateTimeService, undefined, this.initDateToday, this.required);
+    this.dateTimeForm.init({ defaultDate: this.defaultDate, required: this.required });
     this.dateTimeForm.valueChanges.pipe(
       takeUntil(this._destroy$)
     ).subscribe(

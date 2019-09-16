@@ -5,9 +5,9 @@ import { OperationHours, Weekday } from '../../../../../shared/src/interfaces/ac
 
 export class OperationHoursForm extends TypedFormGroup<OperationHours> {
 
-  private _timeRangeErrStateMatcher: ErrorStateMatcher;
+  readonly timeRangeErrStateMatcher: ErrorStateMatcher;
 
-  constructor(operationHours: Partial<OperationHours> = {}) {
+  constructor(operationHours?: Partial<OperationHours>) {
     super({
       id: undefined,
       weekday: null,
@@ -18,12 +18,10 @@ export class OperationHoursForm extends TypedFormGroup<OperationHours> {
       this._timeRangeOrderValidator,
       this._allOrNothingOpHoursValidator
     ]);
-    this._timeRangeErrStateMatcher = this._genTimeRangeErrStateMatcher();
-    this.patchValue(operationHours);
-  }
-
-  get timeRangeErrStateMatcher(): ErrorStateMatcher {
-    return this._timeRangeErrStateMatcher;
+    this.timeRangeErrStateMatcher = this._genTimeRangeErrStateMatcher();
+    if (operationHours) {
+      this.patchValue(operationHours);
+    }
   }
 
   private _timeRangeOrderValidator(form: OperationHoursForm): { timeRangeOrder: string } {
