@@ -22,6 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatNativeDateModule,
     MatExpansionModule,
     MatBadgeModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSlideToggleModule
   ],
   exports: [
     MatToolbarModule,
@@ -74,7 +76,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatNativeDateModule,
     MatExpansionModule,
     MatBadgeModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSlideToggleModule
   ],
   providers: [
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top', duration: 5000 } }

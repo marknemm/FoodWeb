@@ -1,51 +1,67 @@
-<div class="operation-hours-container">
+<div class="operation-hours-container" [ngClass]="{ 'limited': operationHoursLimited }" [formGroup]="formGroup">
   <ng-container *ngIf="editing">
-    <div *ngFor="let operationHoursForm of formArray.controls; let idx = index" class="operation-hours-form-container">
-      <div [formGroup]="operationHoursForm" class="operation-hours-form">
-        <button mat-icon-button color="warn" type="button" class="delete-button" (click)="formArray.removeOperationHours(idx, confirmDialogService)">
-          <mat-icon [inline]="true">clear</mat-icon>
-        </button>
-        <div class="weekday-field">
-          <mat-form-field class="fill no-pad" floatLabel="never">
-            <mat-select placeholder="Weekday" class="accent" formControlName="weekday">
-              <mat-option *ngFor="let weekday of constantsService.WEEKDAYS; let i = index" [value]="weekday">{{ weekday }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="time-fields-container">
-          <div class="time-field">
-            <mat-form-field class="fill" floatLabel="never">
-              <input matInput placeholder="Start Time" [ngxTimepicker]="startTimePicker" autocomplete="off"
-                formControlName="startTime" [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher">
-              <ngx-material-timepicker #startTimePicker [minutesGap]="5" [defaultTime]="'9:00 AM'" [preventOverlayClick]="true"></ngx-material-timepicker>
-            </mat-form-field>
+    <mat-slide-toggle class="fill" formControlName="limitOperationHours" class="limit-availability-toggle">
+      Limit Availability
+    </mat-slide-toggle>
+    <ng-container *ngIf="operationHoursLimited">
+      <div class="row">
+        <div *ngFor="let operationHoursForm of operationHoursFormArr.controls; let idx = index" class="operation-hours-form-container col-lg-6">
+          <div [formGroup]="operationHoursForm" class="operation-hours-form">
+            <button mat-icon-button color="warn" type="button" class="delete-button" (click)="operationHoursFormArr.removeOperationHours(idx, confirmDialogService)">
+              <mat-icon [inline]="true">clear</mat-icon>
+            </button>
+            <div class="weekday-field">
+              <mat-form-field class="fill no-pad" floatLabel="never">
+                <mat-select placeholder="Weekday" class="accent" formControlName="weekday">
+                  <mat-option *ngFor="let weekday of constantsService.WEEKDAYS; let i = index" [value]="weekday">{{ weekday }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="time-fields-container">
+              <div class="time-field">
+                <mat-form-field class="fill" floatLabel="never">
+                  <input matInput placeholder="Start Time" [ngxTimepicker]="startTimePicker" autocomplete="off"
+                    formControlName="startTime" [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher">
+                  <ngx-material-timepicker #startTimePicker
+                    [minutesGap]="5"
+                    [defaultTime]="getDefaultStartTime(operationHoursForm)"
+                    [preventOverlayClick]="true"
+                  ></ngx-material-timepicker>
+                </mat-form-field>
+              </div>
+              <div class="time-field">
+                <mat-form-field class="fill" floatLabel="never">
+                  <input matInput placeholder="End Time" [ngxTimepicker]="endTimePicker" autocomplete="off"
+                    formControlName="endTime" [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher">
+                  <ngx-material-timepicker #endTimePicker
+                    [minutesGap]="5"
+                    [defaultTime]="getDefaultEndTime(operationHoursForm)"
+                    [preventOverlayClick]="true"
+                  ></ngx-material-timepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <mat-error *ngIf="operationHoursForm.hasError('timeRangeOrder')" class="operation-hours-error">
+              {{ operationHoursForm.getError('timeRangeOrder') }}
+            </mat-error>
+            <mat-error *ngIf="operationHoursForm.hasError('allOrNothing')" class="operation-hours-error">
+              {{ operationHoursForm.getError('allOrNothing') }}
+            </mat-error>
           </div>
-          <div class="time-field">
-            <mat-form-field class="fill" floatLabel="never">
-              <input matInput placeholder="End Time" [ngxTimepicker]="endTimePicker" autocomplete="off"
-                formControlName="endTime" [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher">
-              <ngx-material-timepicker #endTimePicker [minutesGap]="5" [defaultTime]="'5:00 PM'" [preventOverlayClick]="true"></ngx-material-timepicker>
-            </mat-form-field>
-          </div>
         </div>
-        <mat-error *ngIf="operationHoursForm.hasError('timeRangeOrder')" class="operation-hours-error">
-          {{ operationHoursForm.getError('timeRangeOrder') }}
-        </mat-error>
-        <mat-error *ngIf="operationHoursForm.hasError('allOrNothing')" class="operation-hours-error">
-          {{ operationHoursForm.getError('allOrNothing') }}
-        </mat-error>
       </div>
-    </div>
-    <div class="add-button-container">
-      <button mat-button type="button" color="primary" class="no-pad" (click)="formArray.addBlankEntry()" [disabled]="formArray.invalid">
-        <mat-icon>add</mat-icon>
-        <span>Add</span>
-      </button>
-    </div>
+      <div class="add-button-container">
+        <button mat-button type="button" color="primary" class="no-pad" (click)="operationHoursFormArr.addBlankEntry()" [disabled]="formGroup.invalid">
+          <mat-icon>add</mat-icon>
+          <span>Add</span>
+        </button>
+      </div>
+    </ng-container>
   </ng-container>
 
   <ng-container *ngIf="!editing">
-    <table class="operation-hours-display">
+    <div *ngIf="operationHoursArr.length === 0">Availability Not Limited</div>
+    <table class="operation-hours-display" *ngIf="operationHoursArr.length > 0">
       <tr *ngFor="let operationHours of operationHoursArr">
         <td>
           <div class="inline-label">{{ operationHours.weekday }}:</div>

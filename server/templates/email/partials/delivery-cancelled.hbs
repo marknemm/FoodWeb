@@ -10,10 +10,10 @@
       </div>
       <div class="indented-data">
         <div class="emphasize">{{ donorName }}</div>
-        <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
+        <div>{{ donation.donorContactOverride.streetAddress }}</div>
         <div>
-          {{ donation.donorAccount.contactInfo.city }}, {{ donation.donorAccount.contactInfo.state }}
-          {{ donation.donorAccount.contactInfo.postalCode }}
+          {{ donation.donorContactOverride.city }}, {{ donation.donorContactOverride.state }}
+          {{ donation.donorContactOverride.postalCode }}
         </div>
       </div>
     </div>

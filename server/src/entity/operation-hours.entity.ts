@@ -6,7 +6,16 @@ import { Weekday } from '../../../shared/src/interfaces/account/operation-hours'
 
 const _constants = new Constants();
 
-@Entity('OperationHours')
+@Entity(
+  'OperationHours',
+  {
+    // Default order by.
+    orderBy: {
+      weekday: 'ASC',
+      startTime: 'ASC'
+    }
+  }
+)
 @Index(['weekday', 'startTime', 'endTime'])
 export class OperationHoursEntity implements OperationHours {
 

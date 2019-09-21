@@ -8,6 +8,7 @@ import { SectionEditService } from '../../../shared/services/section-edit/sectio
 import { SignupVerificationService } from '../../../signup/services/signup-verification/signup-verification.service';
 import { DonationReadFilters } from '../../../../../../shared/src/interfaces/donation/donation-read-filters';
 import { AccountHelper } from '../../../../../../shared/src/helpers/account-helper';
+import { AccountType } from '../../../../../../shared/src/interfaces/account/account';
 
 @Component({
   selector: 'food-web-account-details',
@@ -38,6 +39,18 @@ export class AccountDetailsComponent implements OnInit {
     return this._originalAccount;
   }
 
+  get accountType(): AccountType {
+    return this.accountUpdateForm.get('accountType').value;
+  }
+
+  get limitOperationHours(): boolean {
+    return this.accountUpdateForm.get('operationHours').value.limitOperationHours;
+  }
+
+  get operationHoursFullWidth(): boolean {
+    return (this.sectionEditService.editing('operationHours') && this.limitOperationHours);
+  }
+
   get accountNotFound(): boolean {
     return this._accountNotFound;
   }
@@ -55,7 +68,7 @@ export class AccountDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.accountUpdateForm = new AccountForm({ formMode: 'Account' });
+    this.accountUpdateForm = new AccountForm({ formMode: 'Account' }, this.sectionEditService);
     this._listenAccountChange();
   }
 
@@ -101,7 +114,7 @@ export class AccountDetailsComponent implements OnInit {
 
   private _saveAccount(sectionName: AccountFormKey): void {
     let accountUpdate: Partial<Account> = {};
-    accountUpdate[sectionName] = this.accountUpdateForm.get(sectionName).value;
+    accountUpdate[sectionName] = this.accountUpdateForm.toAccount()[sectionName];
     this._accountService.updateAccount(this.originalAccount, accountUpdate).subscribe(
       (savedAccount: Account) => this._handleSaveSuccess(sectionName, savedAccount)
     );
