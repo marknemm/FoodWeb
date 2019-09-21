@@ -26,12 +26,12 @@
                 <div class="donation-description">{{ donation.description }}</div>
               </div>
               <div class="col-sm-6">
-                <div class="inline-label">Donation Type:</div>
-                <div>{{ donation.donationType }}</div>
+                <div class="inline-label">Donation Window Start:</div>
+                <div><food-web-date-time [dateTime]="donation.pickupWindowStart" [boldTime]="true"></food-web-date-time></div>
               </div>
               <div class="col-sm-6">
-                <div class="inline-label">Donated:</div>
-                <div>{{ donation.createTimestamp | date }}</div>
+                <div class="inline-label">Donation Window End:</div>
+                <div><food-web-date-time [dateTime]="donation.pickupWindowEnd" [boldTime]="true"></food-web-date-time></div>
               </div>
             </div>
           </mat-card-content>
