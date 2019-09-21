@@ -11,10 +11,10 @@
       <div class="emphasize">
         {{ donation.donorAccount.organization.organizationName }}
       </div>
-      <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
+      <div>{{ donation.donorContactOverride.streetAddress }}</div>
       <div>
-        {{ donation.donorAccount.contactInfo.city }}, {{ donation.donorAccount.contactInfo.state }}
-        {{ donation.donorAccount.contactInfo.postalCode }}
+        {{ donation.donorContactOverride.city }}, {{ donation.donorContactOverride.state }}
+        {{ donation.donorContactOverride.postalCode }}
       </div>
     </div>
   </div>

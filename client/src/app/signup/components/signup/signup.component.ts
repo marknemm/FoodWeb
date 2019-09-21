@@ -34,6 +34,10 @@ export class SignupComponent implements OnInit, OnDestroy {
     return this.accountForm.get('accountType').value;
   }
 
+  get operationHoursFullWidth(): boolean {
+    return this.accountForm.get('operationHours').value.limitOperationHours;
+  }
+
   ngOnInit() {
     this.accountForm = new AccountForm({ formMode: 'Signup', initEmptyOpHourWeekdays: true });
     this._listenAccountTypeSelect();

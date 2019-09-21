@@ -20,6 +20,8 @@ export async function findPotentialReceivers(donation: Donation): Promise<FoundP
     limit: 300,
     accountType: AccountType.Receiver,
     distanceRangeMi: 20,
+    lon: donation.donorContactOverride.location.coordinates[0],
+    lat: donation.donorContactOverride.location.coordinates[1],
     operationHoursRange: {
       startDateTime: donation.pickupWindowStart,
       endDateTime: donation.pickupWindowEnd

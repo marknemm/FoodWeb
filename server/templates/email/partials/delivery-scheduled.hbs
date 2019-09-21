@@ -11,10 +11,10 @@
       <div class="emphasize">
         {{ donorName }}
       </div>
-      <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
+      <div>{{ donation.donorContactOverride.streetAddress }}</div>
       <div>
-        {{ donation.donorAccount.contactInfo.city }}, {{ donation.donorAccount.contactInfo.state }}
-        {{ donation.donorAccount.contactInfo.postalCode }}
+        {{ donation.donorContactOverride.city }}, {{ donation.donorContactOverride.state }}
+        {{ donation.donorContactOverride.postalCode }}
       </div>
     </div>
   </div>
@@ -64,7 +64,7 @@
   </p>
   <p>
     Feel free to contact
-    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a>,
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a>,
     <a href="mailto:{{ donation.receiverAccount.contactInfo.email }}">{{ receiverName }}</a>,
     or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>
@@ -104,7 +104,7 @@
   <p>
     Feel free to contact
     <a href="mailto:{{ donation.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>,
-    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a>,
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a>,
     or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>
 {{else}}

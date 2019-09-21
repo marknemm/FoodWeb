@@ -1,12 +1,13 @@
 import { Validators } from '@angular/forms';
+import { Omit } from 'utility-types';
 import { TypedFormGroup } from '../../data-structure/typed-form-group';
 import { OrganizationForm } from './organization.form';
 import { VolunteerForm } from './volunteer.form';
 import { ContactInfoForm } from './contact-info.form';
-import { OperationHoursArray } from './operation-hours.array';
+import { OperationHoursInfoForm } from './operation-hours-info.form';
 import { PasswordForm, PasswordFormT } from '../../password/forms/password.form';
 import { SectionEditService } from '../../shared/services/section-edit/section-edit.service';
-import { Account } from '../../../../../shared/src/interfaces/account/account';
+import { Account, OperationHours } from '../../../../../shared/src/interfaces/account/account';
 export { PasswordFormT };
 
 export class AccountForm extends TypedFormGroup<AccountFormT> {
@@ -22,7 +23,7 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
       organization: new OrganizationForm(),
       volunteer: new VolunteerForm(),
       contactInfo: new ContactInfoForm(),
-      operationHours: new OperationHoursArray({ initEmptyWeekdays: config.initEmptyOpHourWeekdays }),
+      operationHours: new OperationHoursInfoForm({ initEmptyWeekdays: config.initEmptyOpHourWeekdays }),
       password: new PasswordForm({ formMode: config.formMode })
     });
     if (config.value) {
@@ -30,29 +31,41 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
     }
   }
 
-  patchSections(account: Account): void {
+  patchValue(value: Partial<AccountFormT | Account>): void {
+    super.patchValue(<Partial<AccountFormT>>value);
+  }
+
+  setValue(value: Partial<AccountFormT>): void {
+    super.setValue(value);
+  }
+
+  patchSections(value: Partial<AccountFormT | Account>): void {
     const accountSections: (AccountFormKey)[] = [
       'accountType', 'username', 'profileImgUrl', 'contactInfo', 'operationHours', 'password'
     ];
-    accountSections.forEach((section: keyof Account) => {
+    accountSections.forEach((section: keyof AccountFormT) => {
       if (!this._sectionEditService.editing(section)) {
-        this.get(section).patchValue(account[section]);
+        this.get(section).patchValue(value[section]);
       }
     });
 
     if (this.get('accountType').value === 'Volunteer') {
       if (!this._sectionEditService.editing('volunteer')) {
-        this.get('volunteer').patchValue(account.volunteer);
+        this.get('volunteer').patchValue(value.volunteer);
       }
     } else if (!this._sectionEditService.editing('organization')) {
-      this.get('organization').patchValue(account.organization);
+      this.get('organization').patchValue(value.organization);
     }
   }
 
   toAccount(): Account {
-    const accountFormVal: AccountFormT = this.getRawValue();
+    const accountFormVal: AccountFormT & Account = <any>this.getRawValue();
     delete accountFormVal.password;
-    return accountFormVal;
+    if (!this.get('operationHours').value.limitOperationHours) {
+      accountFormVal.operationHours.operationHours = [];
+    }
+    (<Account>accountFormVal).operationHours = accountFormVal.operationHours.operationHours;
+    return <Account>accountFormVal;
   }
 
   toPassword(): PasswordFormT {
@@ -67,13 +80,19 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
 export type AccountFormMode = 'Account' | 'Signup';
 
 export interface AccountFormConfig {
-  value?: Partial<AccountFormT>;
+  value?: Partial<AccountFormT & Account>;
   formMode?: AccountFormMode;
   initEmptyOpHourWeekdays?: boolean;
 }
 
-export interface AccountFormT extends Account {
+export interface AccountFormT extends Omit<Account, 'operationHours'> {
+  operationHours: OperationHoursInfo;
   password: PasswordFormT;
+}
+
+export interface OperationHoursInfo {
+  limitOperationHours: boolean;
+  operationHours: OperationHours[];
 }
 
 export type AccountFormKey = keyof AccountFormT;

@@ -1,12 +1,31 @@
 @import '../../../../styles/constants.scss';
 
 .operation-hours-container {
+  &.limited {
+    .limit-availability-toggle {
+      margin-bottom: 18px;
+    }
+  }
 
   .operation-hours-form-container {
     width: 100%;
-    border-top: 1px solid #EEE;
+    border: 1px solid #EEE;
     padding-top: 12px;
     padding-bottom: 12px;
+    margin-top: -1px;
+
+    @media only screen and (max-width: $md) {
+      border-right: none;
+    }
+
+    &:nth-child(odd) {
+      border-left: none;
+    }
+
+    &:nth-child(even) {
+      border-left: none;
+      border-right: none;
+    }
 
     .operation-hours-form {
       position: relative;
@@ -47,7 +66,6 @@
   }
 
   .add-button-container {
-    border-top: 1px solid #EEE;
     padding-top: 10px;
   }
 

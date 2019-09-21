@@ -96,8 +96,9 @@ function _genDistanceCondition(
     queryBuilder = queryBuilder.andWhere(
       'ST_DWithin(ST_MakePoint(:lon, :lat), contactInfo.location, :dist)',
       {
-        lon: myAccount.contactInfo.location.coordinates[0],
-        lat: myAccount.contactInfo.location.coordinates[1],
+        // Either take explicit lon, lat coordinates from supplied filters, or derive from invoking user's account.
+        lon: (filters.lon ? filters.lon : myAccount.contactInfo.location.coordinates[0]),
+        lat: (filters.lat ? filters.lat : myAccount.contactInfo.location.coordinates[1]),
         dist: (filters.distanceRangeMi * 1609.34)
       }
     );

@@ -112,22 +112,21 @@ export class DateTimeService {
 
   genDateTimeRangeIncrements(rangeToSplit: DateTimeRange, incrementMinutes: number): DateTimeRange[] {
     const timeRanges: DateTimeRange[] = [];
-    let startDate: Date = this.dateCeil5Mins(new Date());
-    const endDate: Date = this.dateCeil5Mins(rangeToSplit.endDateTime);
+    let startDateTime: Date = this.dateCeil5Mins(rangeToSplit.startDateTime);
+    const totalEndDate: Date = this.dateCeil5Mins(rangeToSplit.endDateTime);
 
     // Ensure we can generate at least one full increment.
-    const endDateMinusIncrement: Date = this.offsetDateMins(endDate, -incrementMinutes);
-    while (startDate < endDateMinusIncrement) {
-      const startDateTime: Date = startDate;
-      const endDateTime = this.offsetDateMins(startDate, incrementMinutes);
+    const endDateMinusIncrement: Date = this.offsetDateMins(totalEndDate, -incrementMinutes);
+    while (startDateTime < endDateMinusIncrement) {
+      const endDateTime = this.offsetDateMins(startDateTime, incrementMinutes);
       timeRanges.push({ startDateTime, endDateTime });
-      startDate = endDateTime;
+      startDateTime = endDateTime;
     }
 
     // If we have remaining time left that doesn't produce another full increment, then add it to last increment.
-    if (startDate < endDate && timeRanges.length > 0) {
+    if (startDateTime < totalEndDate && timeRanges.length > 0) {
       const lastIdx = timeRanges.length - 1;
-      timeRanges[lastIdx].endDateTime = endDate;
+      timeRanges[lastIdx].endDateTime = totalEndDate;
     }
 
     return timeRanges;
