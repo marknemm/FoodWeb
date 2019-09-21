@@ -77,28 +77,26 @@
 
   <ng-container *ngIf="accountType !== 'Donor'">
     <mat-divider></mat-divider>
-    <div class="row">
-      <div class="operation-hours-seciton col-lg-6" [ngClass]="{ 'col-lg-12': operationHoursFullWidth }">
-        <mat-card>
-          <food-web-edit-save-button *ngIf="isMyAccount" [editing]="sectionEditService.editing('operationHours')" (edit)="onEdit('operationHours')"
-            (save)="onSave('operationHours')" controlName="operationHours"></food-web-edit-save-button>
-          <mat-card-title class="block-label">
-            <span *ngIf="accountType !== 'Volunteer'">Donation Delivery Availability</span>
-            <span *ngIf="accountType === 'Volunteer'">Delivery Availability</span>
-          </mat-card-title>
-          <mat-card-subtitle *ngIf="sectionEditService.editing('operationHours')">
-            <span *ngIf="accountType === 'Receiver'">Optionally limit the times you will be considered available to receive deliveries.</span>
-            <span *ngIf="accountType === 'Volunteer'">Optionally limit the times you will be considered available to perform deliveries.</span>
-          </mat-card-subtitle>
-          <mat-card-content>
-            <food-web-operation-hours
-              [editing]="sectionEditService.editing('operationHours')"
-              [operationHoursArr]="originalAccount.operationHours"
-              formGroupName="operationHours"
-            ></food-web-operation-hours>
-          </mat-card-content>
-        </mat-card>
-      </div>
+    <div class="operation-hours-section" [ngClass]="{ 'full-width': operationHoursFullWidth }">
+      <mat-card>
+        <food-web-edit-save-button *ngIf="isMyAccount" [editing]="sectionEditService.editing('operationHours')" (edit)="onEdit('operationHours')"
+          (save)="onSave('operationHours')" controlName="operationHours"></food-web-edit-save-button>
+        <mat-card-title class="block-label">
+          <span *ngIf="accountType !== 'Volunteer'">Donation Delivery Availability</span>
+          <span *ngIf="accountType === 'Volunteer'">Delivery Availability</span>
+        </mat-card-title>
+        <mat-card-subtitle *ngIf="sectionEditService.editing('operationHours')">
+          <span *ngIf="accountType === 'Receiver'">Optionally limit the times you will be considered available to receive deliveries.</span>
+          <span *ngIf="accountType === 'Volunteer'">Optionally limit the times you will be considered available to perform deliveries.</span>
+        </mat-card-subtitle>
+        <mat-card-content>
+          <food-web-operation-hours
+            [editing]="sectionEditService.editing('operationHours')"
+            [operationHoursArr]="originalAccount.operationHours"
+            formGroupName="operationHours"
+          ></food-web-operation-hours>
+        </mat-card-content>
+      </mat-card>
     </div>
   </ng-container>
 </form>
