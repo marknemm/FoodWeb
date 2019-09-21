@@ -7,6 +7,12 @@
     }
   }
 
+  .operation-hours-grid {
+    overflow: hidden;
+    transition: height 0.5s ease-in-out,
+                opacity 0.35s ease-in-out;
+  }
+
   .operation-hours-form-container {
     width: 100%;
     border: 1px solid #EEE;
@@ -14,8 +20,16 @@
     padding-bottom: 12px;
     margin-top: -1px;
 
+    &:first-child, &:nth-child(2) {
+      margin-top: 0;
+    }
+
     @media only screen and (max-width: $md) {
       border-right: none;
+
+      &:nth-child(even) {
+        border-top: none;
+      }
     }
 
     &:nth-child(odd) {
@@ -51,6 +65,10 @@
       .time-fields-container {
         display: inline-block;
 
+        @media only screen and (max-width: 410px) {
+          display: block;
+        }
+
         .time-field {
           display: inline-block;
           width: 100px;
@@ -70,15 +88,25 @@
   }
 
   .operation-hours-display {
-    tr {
-      padding-bottom: 5px;
+    transition: opacity 0.5s ease-in-out;
 
-      &:last-child {
-        padding-bottom: 0px;
-      }
+    &.hide {
+      overflow: hidden;
+      height: 0;
+      opacity: 0;
+    }
 
-      td:first-child {
-        padding-right: 5px;
+    table {
+      tr {
+        padding-bottom: 5px;
+
+        &:last-child {
+          padding-bottom: 0px;
+        }
+
+        td:first-child {
+          padding-right: 5px;
+        }
       }
     }
   }

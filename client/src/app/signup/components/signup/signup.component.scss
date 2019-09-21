@@ -1,3 +1,5 @@
+@import '../../../../styles/constants.scss';
+
 :host {
   .account-type-header {
     margin-bottom: 30px;
@@ -8,8 +10,20 @@
     font-weight: 500;
   }
 
-  .mat-slide-toggle {
-    margin-bottom: 18px;
+  .operation-hours-section {
+    max-width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    transition: max-width 0.5s ease-in-out;
+
+    &.full-width {
+      max-width: 100%;
+    }
+
+    @media only screen and (max-width: $lg) {
+      max-width: 100%;
+    }
   }
 
   hr {

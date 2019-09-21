@@ -38,8 +38,18 @@
   }
 
   .operation-hours-section {
-    .mat-slide-toggle {
-      margin-bottom: 18px;
+    max-width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    transition: max-width 0.5s ease-in-out;
+
+    &.full-width {
+      max-width: 100%;
+    }
+
+    @media only screen and (max-width: $lg) {
+      max-width: 100%;
     }
   }
 

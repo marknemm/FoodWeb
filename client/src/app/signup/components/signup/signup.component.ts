@@ -19,6 +19,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   accountForm: AccountForm;
 
+  private _operationHoursHeight: number;
   private _destroy$ = new Subject();
 
   constructor(
@@ -36,6 +37,10 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   get operationHoursFullWidth(): boolean {
     return this.accountForm.get('operationHours').value.limitOperationHours;
+  }
+
+  get operationHoursHeight(): number {
+    return this._operationHoursHeight;
   }
 
   ngOnInit() {
