@@ -42,7 +42,7 @@
     margin-left: auto;
     margin-right: auto;
     overflow: hidden;
-    transition: max-width 0.5s ease-in-out;
+    transition: max-width 0.25s ease-in-out;
 
     &.full-width {
       max-width: 100%;
@@ -55,6 +55,10 @@
 
   mat-divider {
     margin-bottom: 20px;
+
+    @media only screen and (max-width: $sm) {
+      margin-top: 12px;
+    }
   }
 
   .see-donations-link {

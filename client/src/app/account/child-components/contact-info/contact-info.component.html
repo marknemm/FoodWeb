@@ -1,5 +1,5 @@
-<div class="contact-info-container">
-  <div *ngIf="editing" class="row contact-info-form" [formGroup]="formGroup">
+<div class="contact-info-container" [foodWebDisplayEditTransition]="editing" [form]="contactInfoForm" [display]="contactInfoDisplay">
+  <div #contactInfoForm class="row contact-info-form" [formGroup]="formGroup">
     <div class="col-sm-6">
       <mat-form-field class="fill">
         <input matInput placeholder="Email" formControlName="email" type="email">
@@ -41,28 +41,30 @@
     </div>
   </div>
 
-  <div *ngIf="!editing && contactInfo" class="contact-info-display row">
-    <div class="col-sm-6">
-      <div class="inline-label">Email:</div>
-      <div class="d-inline-block">
-        <a class="email" href="mailto:{{ contactInfo.email }}">
-          {{ contactInfo.email }}
+  <div #contactInfoDisplay class="contact-info-display row">
+    <ng-container *ngIf="contactInfo">
+      <div class="col-sm-6">
+        <div class="inline-label">Email:</div>
+        <div class="d-inline-block">
+          <a class="email" href="mailto:{{ contactInfo.email }}">
+            {{ contactInfo.email }}
+          </a>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="inline-label">Phone Number:</div>
+        <div class="d-inline-block">
+          <a class="phone-number" href="tel:{{ contactInfo.phoneNumber }}">
+            {{ contactInfo.phoneNumber }}
+          </a>
+        </div>
+      </div>
+      <div *ngIf="!hideAddress && contactInfo.streetAddress" class="col-sm-12">
+        <div class="inline-label">Address:</div>
+        <a class="address" [href]="mapService.genDirectionHref(contactInfo)" target="_blank">
+          <food-web-address [contactInfo]="contactInfo"></food-web-address>
         </a>
       </div>
-    </div>
-    <div class="col-sm-6">
-      <div class="inline-label">Phone Number:</div>
-      <div class="d-inline-block">
-        <a class="phone-number" href="tel:{{ contactInfo.phoneNumber }}">
-          {{ contactInfo.phoneNumber }}
-        </a>
-      </div>
-    </div>
-    <div *ngIf="!hideAddress && contactInfo.streetAddress" class="col-sm-12">
-      <div class="inline-label">Address:</div>
-      <a class="address" [href]="mapService.genDirectionHref(contactInfo)" target="_blank">
-        <food-web-address [contactInfo]="contactInfo"></food-web-address>
-      </a>
-    </div>
+    </ng-container>
   </div>
 </div>

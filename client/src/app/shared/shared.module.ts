@@ -14,6 +14,7 @@ import { PaginatorComponent } from './child-components/paginator/paginator.compo
 
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
 import { ConfirmButtonDirective } from './directives/confirm-button/confirm-button.directive';
+import { DisplayEditTransitionDirective } from './directives/display-edit-transition/display-edit-transition.directive';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ConfirmButtonDirective } from './directives/confirm-button/confirm-butt
     EditSaveButtonComponent,
     PaginatorComponent,
     ReturnLinkDirective,
-    ConfirmButtonDirective
+    ConfirmButtonDirective,
+    DisplayEditTransitionDirective
   ],
   imports: [
     RouterModule.forChild([]),
@@ -40,7 +42,8 @@ import { ConfirmButtonDirective } from './directives/confirm-button/confirm-butt
     EditSaveButtonComponent,
     PaginatorComponent,
     ReturnLinkDirective,
-    ConfirmButtonDirective
+    ConfirmButtonDirective,
+    DisplayEditTransitionDirective
   ],
   entryComponents: [
     AlertDialogComponent,
