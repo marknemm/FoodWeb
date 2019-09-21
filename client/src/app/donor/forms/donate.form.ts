@@ -32,7 +32,7 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
         defaultEndDateTime
       }),
       donorContactOverride: new ContactInfoForm(),
-      safetyChecklist: [false, Validators.requiredTrue]
+      safetyChecklist: [config.safetyChecklistInit, Validators.requiredTrue]
     });
     this._dateTimeService = dateTimeService;
     this._initValidationAndValues(config);

@@ -1,6 +1,6 @@
 <div class="contact-info-container" [foodWebDisplayEditTransition]="editing" [form]="contactInfoForm" [display]="contactInfoDisplay">
   <div #contactInfoForm class="row contact-info-form" [formGroup]="formGroup">
-    <div class="col-sm-6">
+    <div class="col-sm-6" *ngIf="formGroup.get('email')">
       <mat-form-field class="fill">
         <input matInput placeholder="Email" formControlName="email" type="email">
         <mat-error *ngIf="formGroup.get('email').hasError('email')">
@@ -8,7 +8,7 @@
         </mat-error>
       </mat-form-field>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6" *ngIf="formGroup.get('phoneNumber')">
       <mat-form-field class="fill">
         <input matInput placeholder="Phone Number" formControlName="phoneNumber" type="tel">
         <mat-error *ngIf="formGroup.get('phoneNumber').hasError('pattern')">
@@ -16,22 +16,22 @@
         </mat-error>
       </mat-form-field>
     </div>
-    <div class="col-sm-12">
+    <div class="col-sm-12" *ngIf="formGroup.get('streetAddress')">
       <mat-form-field class="fill">
         <input matInput placeholder="Street Address" formControlName="streetAddress" type="text">
       </mat-form-field>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6" *ngIf="formGroup.get('city')">
       <mat-form-field class="fill">
         <input matInput placeholder="City" formControlName="city" type="text">
       </mat-form-field>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-3" *ngIf="formGroup.get('stateProvince')">
       <mat-form-field class="fill">
         <input matInput placeholder="State/Province" formControlName="stateProvince" type="text">
       </mat-form-field>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-3"  *ngIf="formGroup.get('postalCode')">
       <mat-form-field class="fill">
         <input matInput placeholder="Zip/Postal Code" formControlName="postalCode" type="text">
         <mat-error *ngIf="formGroup.get('postalCode').hasError('pattern')">
@@ -43,7 +43,7 @@
 
   <div #contactInfoDisplay class="contact-info-display row">
     <ng-container *ngIf="contactInfo">
-      <div class="col-sm-6">
+      <div class="col-sm-6" *ngIf="contactInfo.email">
         <div class="inline-label">Email:</div>
         <div class="d-inline-block">
           <a class="email" href="mailto:{{ contactInfo.email }}">
@@ -51,7 +51,7 @@
           </a>
         </div>
       </div>
-      <div class="col-sm-6">
+      <div class="col-sm-6" *ngIf="contactInfo.phoneNumber">
         <div class="inline-label">Phone Number:</div>
         <div class="d-inline-block">
           <a class="phone-number" href="tel:{{ contactInfo.phoneNumber }}">

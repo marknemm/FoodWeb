@@ -1,8 +1,8 @@
 <div class="address d-inline-block">
-  <div>{{ contactInfo.streetAddress }}</div>
+  <div *ngIf="contactInfo.streetAddress">{{ contactInfo.streetAddress }}</div>
   <div>
-    <div class="d-inline-block">{{ contactInfo.city }},&nbsp;</div>
-    <div class="d-inline-block">{{ contactInfo.stateProvince }}&nbsp;</div>
-    <div class="d-inline-block">{{ contactInfo.postalCode }}</div>
+    <div class="d-inline-block" *ngIf="contactInfo.city">{{ contactInfo.city }},&nbsp;</div>
+    <div class="d-inline-block" *ngIf="contactInfo.stateProvince">{{ contactInfo.stateProvince }}&nbsp;</div>
+    <div class="d-inline-block" *ngIf="contactInfo.postalCode">{{ contactInfo.postalCode }}</div>
   </div>
 </div>

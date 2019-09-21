@@ -57,7 +57,7 @@ export class DonationDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.donationForm = new DonateForm(this._dateTimeService);
+    this.donationForm = new DonateForm(this._dateTimeService, { safetyChecklistInit: true });
     this._listenDonationChange();
   }
 
@@ -79,7 +79,9 @@ export class DonationDetailsComponent implements OnInit {
   }
 
   saveDonation(): void {
-    if (this.donationForm.valid && this.donationForm.dirty) {
+    if (!this.donationForm.valid) {
+      window.scrollTo(0, 0);
+    } else if (this.donationForm.dirty) {
       const donationUpdate: Donation = this.donationForm.toDonation();
       this._donationService.updateDonation(this._originalDonation, donationUpdate).subscribe(
         (savedDonation: Donation) => {
@@ -87,7 +89,7 @@ export class DonationDetailsComponent implements OnInit {
           this.toggleEdit();
         }
       );
-    } else if (!this.donationForm.dirty) {
+    } else {
       this.toggleEdit();
     }
   }
