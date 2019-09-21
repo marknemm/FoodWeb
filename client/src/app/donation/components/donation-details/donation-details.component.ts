@@ -79,9 +79,7 @@ export class DonationDetailsComponent implements OnInit {
   }
 
   saveDonation(): void {
-    if (!this.donationForm.valid) {
-      window.scrollTo(0, 0);
-    } else if (this.donationForm.dirty) {
+    if (this.donationForm.dirty) {
       const donationUpdate: Donation = this.donationForm.toDonation();
       this._donationService.updateDonation(this._originalDonation, donationUpdate).subscribe(
         (savedDonation: Donation) => {
@@ -89,7 +87,7 @@ export class DonationDetailsComponent implements OnInit {
           this.toggleEdit();
         }
       );
-    } else {
+    } else if (this.donationForm.valid) {
       this.toggleEdit();
     }
   }
