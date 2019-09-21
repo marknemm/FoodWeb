@@ -5,12 +5,15 @@
     .limit-availability-toggle {
       margin-bottom: 18px;
     }
+
+    .operation-hours-grid {
+      height: auto;
+    }
   }
 
   .operation-hours-grid {
     overflow: hidden;
-    transition: height 0.5s ease-in-out,
-                opacity 0.35s ease-in-out;
+    height: 0;
   }
 
   .operation-hours-form-container {
@@ -88,14 +91,6 @@
   }
 
   .operation-hours-display {
-    transition: opacity 0.5s ease-in-out;
-
-    &.hide {
-      overflow: hidden;
-      height: 0;
-      opacity: 0;
-    }
-
     table {
       tr {
         padding-bottom: 5px;
