@@ -55,7 +55,9 @@ export class LoginDialogComponent implements OnInit {
         ? [config.panelClass]
         : config.panelClass
       : [];
-    config.panelClass.push('full-screen-mobile');
+    if (deviceInfoService.isMobileApplication) {
+      config.panelClass.push('full-screen-mobile');
+    }
     config.autoFocus = !deviceInfoService.isMobileApplication;
     return (!sessionService.loggedIn)
       ? matDialog.open(LoginDialogComponent, config).afterClosed()

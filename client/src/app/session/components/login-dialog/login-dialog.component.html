@@ -28,7 +28,7 @@
     <div class="align-right" *ngIf="!isPasswordReset">
       <button mat-button type="button" color="accent" (click)="forgotPassword()">Forgot Password</button>
       <button mat-raised-button type="submit" color="primary" [disabled]="loginForm.invalid">Login</button>
-      <div class="signup-container">
+      <div *ngIf="deviceInfoService.isMobileApplication" class="signup-container">
         Don't have an account: <a [routerLink]="['/signup']" (click)="matDialogRef.close()">Signup</a>
       </div>
     </div>
