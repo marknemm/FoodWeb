@@ -1,9 +1,12 @@
 import { Injectable, ApplicationRef } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { environment } from '../../../../environments/environment';
 import { SessionService } from '../../../session/services/session/session.service';
 import { ServerSideEventType } from '../../../../../../shared/src/interfaces/server-side-event/server-side-event';
+
+const EventSource = NativeEventSource || EventSourcePolyfill;
 
 @Injectable({
   providedIn: 'root'
@@ -60,10 +63,7 @@ export class ServerSideEventSourceService {
       this._eventSource.onmessage = (event: MessageEvent) => {
         this._onMessage.next(event);
       }
-      this._eventSource.onerror = (event: MessageEvent) => {
-        console.error(event);
-        this._onError.next(event);
-      };
+      this._eventSource.onerror = (event: MessageEvent) => this._onError.next(event);
     }
   }
 
