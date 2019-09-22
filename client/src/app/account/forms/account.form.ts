@@ -77,10 +77,7 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
   toAccount(): Account {
     const accountFormVal: AccountFormT & Account = <any>this.getRawValue();
     delete accountFormVal.password;
-    if (!this.get('operationHours').value.limitOperationHours) {
-      accountFormVal.operationHours.operationHours = [];
-    }
-    (<Account>accountFormVal).operationHours = accountFormVal.operationHours.operationHours;
+    (<Account>accountFormVal).operationHours = (<OperationHoursInfoForm>this.get('operationHours')).toOperationHours();
     return <Account>accountFormVal;
   }
 

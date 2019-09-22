@@ -35,4 +35,10 @@ export class OperationHoursInfoForm extends TypedFormGroup<OperationHoursInfo> {
       this.get('limitOperationHours').setValue(true);
     }
   }
+
+  toOperationHours(): OperationHours[] {
+    return (this.get('limitOperationHours').value)
+      ? this.get('operationHours').value.filter((opHours: OperationHours) => opHours.startTime || opHours.endTime)
+      : [];
+  }
 }
