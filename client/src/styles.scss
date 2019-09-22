@@ -162,6 +162,7 @@ mat-card.mat-card {
 .notifications-menu-backdrop + div {
   .mat-menu-panel {
     max-width: 432px;
+    max-height: 70vh;
     width: 100vw;
     overflow-x: hidden;
 

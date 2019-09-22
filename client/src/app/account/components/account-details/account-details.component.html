@@ -82,8 +82,7 @@
         <food-web-edit-save-button *ngIf="isMyAccount" [editing]="sectionEditService.editing('operationHours')" (edit)="onEdit('operationHours')"
           (save)="onSave('operationHours')" controlName="operationHours"></food-web-edit-save-button>
         <mat-card-title class="block-label">
-          <span *ngIf="accountType !== 'Volunteer'">Donation Delivery Availability</span>
-          <span *ngIf="accountType === 'Volunteer'">Delivery Availability</span>
+          Delivery Availability
         </mat-card-title>
         <mat-card-subtitle *ngIf="sectionEditService.editing('operationHours')">
           <span *ngIf="accountType === 'Receiver'">Optionally limit the times you will be considered available to receive deliveries.</span>
