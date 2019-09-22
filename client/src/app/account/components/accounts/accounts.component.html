@@ -4,7 +4,7 @@
 
 <div class="row">
   <div class="col-lg-6" *ngFor="let account of accounts">
-    <a [routerLink]="['/account/details/', account.id]" [state]="account" foodWebReturnLink="account-{{ account.id }}" class="account-link">
+    <a [routerLink]="['/account/details/', account.id]" [state]="account" class="account-link">
       <mat-card id="account-{{ account.id }}" class="account-card">
         <mat-card-header>
           <img mat-card-avatar [src]="account.profileImgUrl" alt="Account Icon">

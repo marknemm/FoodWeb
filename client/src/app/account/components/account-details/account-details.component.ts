@@ -81,7 +81,7 @@ export class AccountDetailsComponent implements OnInit {
         this._seeDonationsParams = this._genSeeDonationParams(account);
         // An admin account does not need to input the old password to update an account password.
         this._passwordFormMode = (this.sessionService.isAdmin ? 'Signup' : 'Account');
-        setTimeout(() => this._refreshAccountFormValue(account, true));
+        this._refreshAccountFormValue(account, true);
       }
     });
   }

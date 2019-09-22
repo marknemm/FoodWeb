@@ -47,4 +47,6 @@ $icon-size: 38px;
       margin: 0 0 3px;
     }
   }
+
+  _:-ms-lang(x), > .header, > .footer { position: relative; }
 }
