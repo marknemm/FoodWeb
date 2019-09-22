@@ -44,7 +44,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.accountForm = new AccountForm({ formMode: 'Signup', initEmptyOpHourWeekdays: true });
+    this.accountForm = new AccountForm({ formMode: 'Signup', initEmptyOpHourWeekdays: true }, this._destroy$.asObservable());
     this._listenAccountTypeSelect();
     this._listenAccountTypeRoute();
   }

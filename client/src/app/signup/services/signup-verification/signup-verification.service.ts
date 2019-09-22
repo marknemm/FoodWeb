@@ -15,7 +15,7 @@ import { AccountVerificationRequest } from '../../../../../../shared/src/interfa
 })
 export class SignupVerificationService {
 
-  readonly url = `${environment.server}/account/verify/`;
+  readonly url = `${environment.server}/account`;
 
   private _loading = false;
 
@@ -44,7 +44,7 @@ export class SignupVerificationService {
     this._loading = true;
     const verificationToken: string = this._getVerificationToken();
     const request: AccountVerificationRequest = { verificationToken };
-    return this._httpClient.post<Account>(this.url, request).pipe(
+    return this._httpClient.post<Account>(`${this.url}/verify`, request).pipe(
       finalize(() => this._loading = false)
     ).pipe(
       map((account: Account) => this._sessionService.account = account)

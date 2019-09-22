@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
 import { AccountForm, PasswordFormT, AccountFormKey } from '../../forms/account.form';
 import { PasswordFormMode } from '../../../password/forms/password.form';
 import { SessionService } from '../../../session/services/session/session.service';
@@ -16,7 +17,7 @@ import { AccountType } from '../../../../../../shared/src/interfaces/account/acc
   styleUrls: ['./account-details.component.scss'],
   providers: [SectionEditService]
 })
-export class AccountDetailsComponent implements OnInit {
+export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   accountUpdateForm: AccountForm;
 
@@ -25,6 +26,7 @@ export class AccountDetailsComponent implements OnInit {
   private _isMyAccount = false;
   private _passwordFormMode: PasswordFormMode = 'Account';
   private _seeDonationsParams: DonationReadFilters;
+  private _destroy$ = new Subject();
 
   constructor(
     public sessionService: SessionService,
@@ -68,7 +70,7 @@ export class AccountDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.accountUpdateForm = new AccountForm({ formMode: 'Account' }, this.sectionEditService);
+    this.accountUpdateForm = new AccountForm({ formMode: 'Account' }, this._destroy$, this.sectionEditService);
     this._listenAccountChange();
   }
 
@@ -96,6 +98,10 @@ export class AccountDetailsComponent implements OnInit {
     (force)
       ? this.accountUpdateForm.patchValue(account)
       : this.accountUpdateForm.patchSections(account);
+  }
+
+  ngOnDestroy() {
+    this._destroy$.next();
   }
 
   onEdit(sectionName: AccountFormKey): void {

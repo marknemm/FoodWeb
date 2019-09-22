@@ -1,4 +1,6 @@
 import { Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Omit } from 'utility-types';
 import { TypedFormGroup } from '../../data-structure/typed-form-group';
 import { OrganizationForm } from './organization.form';
@@ -7,13 +9,14 @@ import { ContactInfoForm } from './contact-info.form';
 import { OperationHoursInfoForm } from './operation-hours-info.form';
 import { PasswordForm, PasswordFormT } from '../../password/forms/password.form';
 import { SectionEditService } from '../../shared/services/section-edit/section-edit.service';
-import { Account, OperationHours } from '../../../../../shared/src/interfaces/account/account';
+import { Account, OperationHours, AccountType } from '../../../../../shared/src/interfaces/account/account';
 export { PasswordFormT };
 
 export class AccountForm extends TypedFormGroup<AccountFormT> {
 
   constructor(
     config: AccountFormConfig = {},
+    destory$: Observable<any>,
     private _sectionEditService?: SectionEditService<AccountFormKey>,
   ) {
     super({
@@ -26,6 +29,9 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
       operationHours: new OperationHoursInfoForm({ initEmptyWeekdays: config.initEmptyOpHourWeekdays }),
       password: new PasswordForm({ formMode: config.formMode })
     });
+    this.get('accountType').valueChanges.pipe(
+      takeUntil(destory$)
+    ).subscribe(this._onAccountTypeUpdate.bind(this));
     if (config.value) {
       this.patchValue(config.value);
     }
@@ -33,6 +39,16 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
 
   patchValue(value: Partial<AccountFormT | Account>): void {
     super.patchValue(<Partial<AccountFormT>>value);
+  }
+
+  private _onAccountTypeUpdate(accountType: AccountType): void {
+    if (accountType === AccountType.Volunteer) {
+      this.get('volunteer').enable();
+      this.get('organization').disable();
+    } else {
+      this.get('volunteer').disable();
+      this.get('organization').enable();
+    }
   }
 
   setValue(value: Partial<AccountFormT>): void {
