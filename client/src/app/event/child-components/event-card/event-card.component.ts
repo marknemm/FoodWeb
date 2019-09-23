@@ -2,9 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 import { EventRegistrationForm } from '../../forms/event-registration.form';
 import { SessionService } from '../../../session/services/session/session.service';
 import { EventRegistrationService } from '../../../event/services/event-registration/event-registration.service';
-import { MapService } from '../../../shared/services/map/map.service';
-import { Account } from '../../../../../../shared/src/interfaces/account/account';
-import { AccountHelper } from '../../../../../../shared/src/helpers/account-helper';
+import { MapService } from '../../../map/services/map/map.service';
 
 @Component({
   selector: 'food-web-event-card',
@@ -26,7 +24,7 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   formGroup: EventRegistrationForm;
 
-  private _locationHref: string;
+  private _directionsHref: string;
   private _signupComplete = false;
 
   constructor(
@@ -35,8 +33,8 @@ export class EventCardComponent implements OnInit, OnChanges {
     private _mapService: MapService
   ) {}
 
-  get locationHref(): string {
-    return this._locationHref;
+  get directionsHref(): string {
+    return this._directionsHref;
   }
 
   get signupComplete(): boolean {
@@ -49,7 +47,10 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.location) {
-      this._locationHref = this._mapService.genDirectionHref(this.location);
+      this._directionsHref = this._mapService.genDirectionHrefEstimate(this.location);
+      this._mapService.genDirectionHref(this.location).subscribe(
+        (directionsHref: string) => this._directionsHref = directionsHref
+      )
       this.location = this.location.replace(/<[^>]*>/g, '').replace(',', '<br>');
     }
   }

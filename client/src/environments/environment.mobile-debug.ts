@@ -12,5 +12,6 @@ export const environment = {
   mobile: true,
   supportEmail: 'support@wnyfoodweb.com',
   recaptchaSiteKey: '',
+  googleMapsJSApiKey: 'AIzaSyDQdydkED1Z-nZvQXQQHlOYXnrmdqdFedA',
   server: 'http://10.0.2.2:5000/server'
 };

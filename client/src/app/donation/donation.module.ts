@@ -23,7 +23,7 @@ import { DateTimeModule } from '../date-time/date-time.module';
     DonationRoutingModule,
     CommonModule,
     ReactiveFormsModule,
-    MaterialModule, 
+    MaterialModule,
     SharedModule,
     AccountModule,
     DonorModule,

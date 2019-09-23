@@ -7,5 +7,6 @@ export const environment = {
   mobile: true,
   supportEmail: 'support@wnyfoodweb.com',
   recaptchaSiteKey: '',
+  googleMapsJSApiKey: 'AIzaSyDQdydkED1Z-nZvQXQQHlOYXnrmdqdFedA',
   server: 'https://www.wnyfoodweb.com/server'
 };

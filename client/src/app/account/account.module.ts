@@ -6,6 +6,8 @@ import { AccountRoutingModule } from './account-routing.module';
 import { MaterialModule } from '../material.module';
 import { SharedModule } from '../shared/shared.module';
 import { PasswordModule } from '../password/password.module';
+import { DateTimeModule } from '../date-time/date-time.module';
+import { MapModule } from '../map/map.module';
 
 import { AccountDetailsComponent } from './components/account-details/account-details.component';
 import { AccountsComponent } from './components/accounts/accounts.component';
@@ -18,7 +20,6 @@ import { VolunteerComponent } from './child-components/volunteer/volunteer.compo
 import { OperationHoursComponent } from './child-components/operation-hours/operation-hours.component';
 import { AddressComponent } from './child-components/address/address.component';
 import { ProfileImgComponent } from './child-components/profile-img/profile-img.component';
-import { DateTimeModule } from '../date-time/date-time.module';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { DateTimeModule } from '../date-time/date-time.module';
     MaterialModule,
     SharedModule,
     PasswordModule,
-    DateTimeModule
+    DateTimeModule,
+    MapModule
   ],
   exports: [
     PasswordModule,
