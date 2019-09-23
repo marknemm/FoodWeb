@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatDrawerContent } from '@angular/material/sidenav';
 import { Subject, Observable } from 'rxjs';
 
 @Injectable({
@@ -10,6 +11,7 @@ export class LeftNavService {
   private _mode: 'side' | 'over';
   private _openedChanged = new Subject<boolean>();
   private _prevWidth: number;
+  private _drawerContent: MatDrawerContent;
 
   constructor() {
     window.addEventListener('resize', this._onWindowResize.bind(this));
@@ -32,6 +34,10 @@ export class LeftNavService {
     return this._openedChanged.asObservable();
   }
 
+  initDrawerContent(drawerContent: MatDrawerContent): void {
+    this._drawerContent = drawerContent;
+  }
+
   toggle(): void {
     this._setOpened(!this._opened);
   }
@@ -50,5 +56,11 @@ export class LeftNavService {
   private _setOpened(opened: boolean): void {
     this._opened = opened;
     this._openedChanged.next(this._opened);
+  }
+
+  scrollContentToTop(scrollBehavior: ScrollBehavior = 'smooth'): void {
+    if (this._drawerContent) {
+      this._drawerContent.getElementRef().nativeElement.scrollTo({ top: 0, behavior: scrollBehavior });
+    }
   }
 }

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDrawerContent } from '@angular/material/sidenav';
 import { LeftNavService } from '../../services/left-nav/left-nav.service';
 import { PageProgressService } from '../../../shared/services/page-progress/page-progress.service';
 import { SessionService } from '../../../session/services/session/session.service';
@@ -12,6 +13,8 @@ import { DonationHelper } from '../../../../../../shared/src/helpers/donation-he
 })
 export class LeftNavComponent implements OnInit {
 
+  @ViewChild('drawerContent', { static: true }) drawerContent: MatDrawerContent;
+
   constructor(
     public leftNavService: LeftNavService,
     public pageProgressService: PageProgressService,
@@ -20,7 +23,9 @@ export class LeftNavComponent implements OnInit {
     public donationHelper: DonationHelper
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.leftNavService.initDrawerContent(this.drawerContent);
+  }
 
   _onNavClick(): void {
     if (this.leftNavService.mode === 'over') {

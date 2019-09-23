@@ -32,7 +32,7 @@
       </a>
     </mat-nav-list>
   </mat-drawer>
-  <mat-drawer-content>
+  <mat-drawer-content #drawerContent>
     <div *ngIf="pageProgressService.showBlockingProgress" class="blocking-page-progress-indicator" [style.width]="pageProgressService.blockingProgressWidth">
       <food-web-progress-indicator
         [backdropColor]="pageProgressService.backdropColor"
