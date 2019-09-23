@@ -14,7 +14,7 @@
     </p>
     <p class="event-location">
       <mat-icon>location_on</mat-icon>
-      <a [href]="locationHref" target="_blank" [innerHTML]="location"></a>
+      <a [href]="directionsHref" target="_blank" [innerHTML]="location"></a>
     </p>
     <div class="event-action-container" *ngIf="signupTitle && !signupComplete">
       <food-web-progress-indicator [trigger]="eventRegistrationService.loading" [blocking]="true"></food-web-progress-indicator>

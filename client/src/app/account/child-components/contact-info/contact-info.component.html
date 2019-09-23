@@ -61,9 +61,12 @@
       </div>
       <div *ngIf="!hideAddress && contactInfo.streetAddress" class="col-sm-12">
         <div class="inline-label">Address:</div>
-        <a class="address" [href]="mapService.genDirectionHref(contactInfo)" target="_blank">
+        <a class="address" [href]="directionsHref" target="_blank">
           <food-web-address [contactInfo]="contactInfo"></food-web-address>
         </a>
+        <div class="map-container">
+          <food-web-map *ngIf="includeMap" [waypoints]="contactInfo"></food-web-map>
+        </div>
       </div>
     </ng-container>
   </div>
