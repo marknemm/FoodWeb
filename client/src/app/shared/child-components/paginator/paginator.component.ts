@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
+import { LeftNavService } from '../../../app-shell/services/left-nav/left-nav.service';
 
 @Component({
   selector: 'food-web-paginator',
@@ -15,7 +16,8 @@ export class PaginatorComponent implements OnInit {
 
   constructor(
     private _router: Router,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    private _leftNavService: LeftNavService
   ) {}
 
   ngOnInit() {
@@ -45,7 +47,7 @@ export class PaginatorComponent implements OnInit {
         queryParams: { page: (event.pageIndex + 1), limit: event.pageSize },
         queryParamsHandling: 'merge'
       }
-    );
+    ).then(() => this._leftNavService.scrollContentToTop());
   }
 
 }
