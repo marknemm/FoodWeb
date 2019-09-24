@@ -17,7 +17,8 @@ $side-container-max-width: 270px;
     }
   
     .side-content {
-      max-width: $side-container-max-width;
+      position: relative;
+      width: $side-container-max-width;
       float: right;
     }
   
@@ -29,7 +30,7 @@ $side-container-max-width: 270px;
       }
   
       .side-content {
-        max-width: 100%;
+        width: 100%;
         float: none;
         margin-left: auto;
         margin-right: auto;

@@ -1,0 +1,15 @@
+.general-stats-card {
+  width: 100%;
+
+  td {
+    font-size: 15px;
+
+    &.stat-value {
+      position: relative;
+      display: inline-block;
+      min-width: 18px;
+      min-height: 18px;
+      font-weight: bold;
+    }
+  }
+}
