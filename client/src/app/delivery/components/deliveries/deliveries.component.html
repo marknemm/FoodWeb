@@ -16,9 +16,13 @@
           </mat-card-header>
           <mat-card-content>
             <div class="delivery-display row">
-              <div class="col-sm-12">
-                <div class="inline-label">Description:</div>
-                <div class="donation-description">{{ donation.description }}</div>
+              <div class="col-sm-6">
+                <div class="inline-label">Delivery Window Start:</div>
+                <div><food-web-date-time [dateTime]="donation.pickupWindowStart" [boldTime]="true"></food-web-date-time></div>
+              </div>
+              <div class="col-sm-6">
+                <div class="inline-label">Delivery Window End:</div>
+                <div><food-web-date-time [dateTime]="donation.pickupWindowEnd" [boldTime]="true"></food-web-date-time></div>
               </div>
               <div class="col-sm-6">
                 <div class="inline-label">Pick-up:</div>
