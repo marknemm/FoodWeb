@@ -58,6 +58,7 @@ app.use('/server/donation', require('./controllers/donation'));
 app.use('/server/delivery', require('./controllers/delivery'));
 app.use('/server/notification', require('./controllers/notification'));
 app.use('/server/event', require('./controllers/event'));
+app.use('/server/heuristics', require('./controllers/heuristics'));
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {

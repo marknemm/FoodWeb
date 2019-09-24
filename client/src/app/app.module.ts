@@ -14,6 +14,7 @@ import { AppShellModule } from './app-shell/app-shell.module';
 import { AppComponent } from './app.component';
 import { SessionModule } from './session/session.module';
 import { EventModule } from './event/event.module';
+import { HeuristicsModule } from './heuristics/heuristics.module';
 
 import { HomeComponent } from './components/home/home.component';
 import { AboutComponent } from './components/about/about.component';
@@ -45,7 +46,8 @@ import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
     SharedModule,
     AppShellModule,
     SessionModule,
-    EventModule
+    EventModule,
+    HeuristicsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
