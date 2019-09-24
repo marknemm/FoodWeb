@@ -145,6 +145,7 @@ $site-title-font-size-mobile: 30px;
       a {
         color: $accent-darkest;
         cursor: pointer;
+        font-weight: 500;
 
         &:hover {
           text-decoration: underline;

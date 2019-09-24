@@ -6,6 +6,7 @@ import { MaterialModule } from '../material.module';
 import { SharedModule } from '../shared/shared.module';
 import { AccountModule } from '../account/account.module';
 import { DonationModule } from '../donation/donation.module';
+import { DateTimeModule } from '../date-time/date-time.module';
 import { DeliveriesComponent } from './components/deliveries/deliveries.component';
 
 @NgModule({
@@ -19,7 +20,8 @@ import { DeliveriesComponent } from './components/deliveries/deliveries.componen
     MaterialModule,
     SharedModule,
     AccountModule,
-    DonationModule
+    DonationModule,
+    DateTimeModule
   ]
 })
 export class DeliveryModule {}
