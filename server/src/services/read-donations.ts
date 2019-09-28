@@ -13,15 +13,15 @@ export interface DonationsQueryResult {
 
 const _opHoursHelper = new OperationHoursHelper();
 
-export async function readDonation(id: number, myAccount: AccountEntity, donationRepo?: Repository<DonationEntity>): Promise<DonationEntity> {
+export async function readDonation(id: number, donationRepo?: Repository<DonationEntity>): Promise<DonationEntity> {
   const readRequest: DonationReadRequest = { id, page: 1, limit: 1 };
-  const queryResult: DonationsQueryResult = await readDonations(readRequest, myAccount, donationRepo);
+  const queryResult: DonationsQueryResult = await readDonations(readRequest, donationRepo);
   return queryResult.donations[0];
 }
 
 export function readMyDonations(request: DonationReadRequest, myAccount: AccountEntity): Promise<DonationsQueryResult> {
   _fillMyAccountRequestFilter(request, myAccount);
-  return readDonations(request, myAccount);
+  return readDonations(request);
 }
 
 function _fillMyAccountRequestFilter(request: DonationReadRequest, myAccount: AccountEntity): void {
@@ -47,12 +47,11 @@ function _fillMyAccountRequestFilter(request: DonationReadRequest, myAccount: Ac
 
 export async function readDonations(
   request: DonationReadRequest,
-  myAccount: AccountEntity,
   donationRepo: Repository<DonationEntity> = getRepository(DonationEntity)
 ): Promise<DonationsQueryResult> {
   const queryBuilder: SelectQueryBuilder<DonationEntity> = _buildQuery(donationRepo, request);
   const [donations, totalCount]: [DonationEntity[], number] = await queryBuilder.getManyAndCount();
-  _postProcessDonations(donations, myAccount);
+  _postProcessDonations(donations);
   return { donations, totalCount };
 }
 
@@ -89,6 +88,7 @@ function _genWhereCondition(
   const simpleDonationWhereProps = ['id', 'donationType', 'donationStatus', 'donorLastName', 'donorFirstName'];
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'donation', filters, simpleDonationWhereProps);
   queryBuilder = _genAccountConditions(queryBuilder, filters);
+  queryBuilder = _genDeliveryWindowConditions(queryBuilder, filters);
   queryBuilder = _genDonationExpiredCondition(queryBuilder, filters);
   return queryBuilder;
 }
@@ -105,6 +105,37 @@ function _genAccountConditions(
   }
   if (filters.delivererAccountId != null) {
     queryBuilder = queryBuilder.andWhere('delivererAccount.id = :delivererId', { delivererId: filters.delivererAccountId });
+  }
+  return queryBuilder;
+}
+
+function _genDeliveryWindowConditions(
+  queryBuilder: SelectQueryBuilder<DonationEntity>,
+  filters: DonationReadFilters
+): SelectQueryBuilder<DonationEntity> {
+  if (filters.deliveryWindowOverlapStart) {
+    queryBuilder = queryBuilder.andWhere(
+      'delivery.pickupWindowEnd >= :deliveryWindowOverlapStart',
+      { deliveryWindowOverlapStart: filters.deliveryWindowOverlapStart }
+    );
+  }
+  if (filters.deliveryWindowOverlapEnd) {
+    queryBuilder = queryBuilder.andWhere(
+      'delivery.pickupWindowStart <= :deliveryWindowOverlapEnd',
+      { deliveryWindowOverlapEnd: filters.deliveryWindowOverlapEnd }
+    );
+  }
+  if (filters.earliestDeliveryWindowStart) {
+    queryBuilder = queryBuilder.andWhere(
+      'delivery.pickupWindowStart >= :earliestDeliveryWindowStart',
+      { earliestDeliveryWindowStart: filters.earliestDeliveryWindowStart }
+    );
+  }
+  if (filters.latestDeliveryWindowStart) {
+    queryBuilder = queryBuilder.andWhere(
+      'delivery.pickupWindowStart <= :latestDeliveryWindowStart',
+      { latestDeliveryWindowStart: filters.latestDeliveryWindowStart }
+    );
   }
   return queryBuilder;
 }
@@ -149,10 +180,9 @@ function _genOrdering(
   return queryBuilder;
 }
 
-function _postProcessDonations(donations: DonationEntity[], myAccount: AccountEntity): void {
+function _postProcessDonations(donations: DonationEntity[]): void {
   donations.forEach((donation: DonationEntity) => {
     _formatAccountOperationHours(donation);
-    _setVerifyFlagIfMyAccount(donation, myAccount);
   });
 }
 
@@ -163,17 +193,5 @@ function _formatAccountOperationHours(donation: DonationEntity): void {
   }
   if (donation.delivery) {
     _opHoursHelper.formatOperationHoursTimes(donation.delivery.volunteerAccount.operationHours);
-  }
-}
-
-function _setVerifyFlagIfMyAccount(donation: DonationEntity, myAccount: AccountEntity): void {
-  if (myAccount) {
-    if (donation.donorAccount.id === myAccount.id) {
-      donation.donorAccount.verified = myAccount.verified;
-    } else if (donation.receiverAccount && donation.receiverAccount.id === myAccount.id) {
-      donation.receiverAccount.verified = myAccount.verified;
-    } else if (donation.delivery && donation.delivery.volunteerAccount.id === myAccount.id) {
-      donation.delivery.volunteerAccount.verified = myAccount.verified;
-    }
   }
 }

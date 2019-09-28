@@ -17,7 +17,7 @@ const _deliveryHelper = new DeliveryHelper();
  * @throws FoodWebError if the user that submitted the request is not authroized to schedule the delivery.
  */
 export async function scheduleDelivery(scheduleRequest: DeliveryScheduleRequest, myAccount: AccountEntity): Promise<Donation> {
-  const donationToSchedule = <DonationEntity> await readDonation(scheduleRequest.donationId, myAccount);
+  const donationToSchedule = <DonationEntity> await readDonation(scheduleRequest.donationId);
   _ensureCanScheduleDelivery(donationToSchedule, myAccount);
 
   let scheduledDonation: DonationEntity = _genScheduledDonation(myAccount, donationToSchedule, scheduleRequest);

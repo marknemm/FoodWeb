@@ -10,7 +10,8 @@ export enum NotificationType {
   ScheduleDelivery = AuditEventType.ScheduleDelivery,
   CancelDelivery = AuditEventType.CancelDelivery,
   DeliveryStateAdvance = AuditEventType.DeliveryStateAdvance,
-  DeliveryStateUndo = AuditEventType.DeliveryStateUndo
+  DeliveryStateUndo = AuditEventType.DeliveryStateUndo,
+  DeliveryReminder = ('Delivery Reminder')
 }
 
 /**

@@ -21,7 +21,7 @@ const _deliveryHelper = new DeliveryHelper();
  * @throws FoodWebError if the user submitting the request is not authroized to advance the delivery state.
  */
 export async function advanceDeliveryState(stateChangeReq: DeliveryStateChangeRequest, myAccount: AccountEntity): Promise<Donation> {
-  const donation = <DonationEntity> await readDonation(stateChangeReq.donationId, myAccount);
+  const donation = <DonationEntity> await readDonation(stateChangeReq.donationId);
   _ensureCanAdvanceDeliveryState(donation, myAccount);
   
   let advancedDonation: DonationEntity = _genUpdateDonation(donation, 'next');
@@ -56,7 +56,7 @@ export async function undoDeliveryState(
   stateChangeReq: DeliveryStateChangeRequest,
   myAccount: AccountEntity
 ): Promise<UpdateDiff<Donation>> {
-  const donation = <DonationEntity> await readDonation(stateChangeReq.donationId, myAccount);
+  const donation = <DonationEntity> await readDonation(stateChangeReq.donationId);
   _ensureCanUndoDeliveryState(donation, myAccount);
 
   // If moving from 'Scheduled' to 'Matched', then perform delivery cancellation process, otherwise perform undo.
