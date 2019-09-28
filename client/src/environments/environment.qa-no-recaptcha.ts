@@ -4,5 +4,9 @@ export const environment = {
   demo: false,
   e2e: false,
   hmr: false,
-  supportEmail: 'support@wnyfoodweb.com'
+  mobile: false,
+  supportEmail: 'support@wnyfoodweb.com',
+  recaptchaSiteKey: null,
+  googleMapsJSApiKey: 'AIzaSyDQdydkED1Z-nZvQXQQHlOYXnrmdqdFedA',
+  server: 'https://food-web-qa.herokuapp.com/server'
 };

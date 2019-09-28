@@ -1,50 +1,48 @@
 import { getConnection, EntityManager, Repository } from 'typeorm';
-import { sendDonationCreateSuccessEmail, sendDonationUpdateSuccessEmails } from './save-donation-message';
 import { readDonation } from './read-donations';
-import { saveAudit, getAuditAccounts } from './save-audit';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { Account } from '../../../shared/src/interfaces/account/account';
-import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
+import { geocode, geoTimezone } from '../helpers/geocoder';
+import { UpdateDiff } from '../interfaces/update-diff';
+import { Account, ContactInfo } from '../../../shared/src/interfaces/account/account';
+import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
+import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
+import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 import { DonationCreateRequest } from '../../../shared/src/interfaces/donation/donation-create-request';
 import { DonationUpdateRequest } from '../../../shared/src/interfaces/donation/donation-update-request';
 
 const _donationHelper = new DonationHelper();
+const _accountHelper = new AccountHelper();
 
 export async function createDonation(createReq: DonationCreateRequest, myAccount: AccountEntity): Promise<DonationEntity> {
   const donation: Donation = createReq.donation;
-  donation.donationStatus = 'Unmatched';
+  donation.donationStatus = DonationStatus.Unmatched;
   donation.donorAccount = myAccount;
   _validateDonation(donation);
+  await _preprocessDonorContactOverride(donation.donorContactOverride, myAccount);
 
-  const createdDonation: DonationEntity = await getConnection().transaction(
+  return getConnection().transaction(
     async (manager: EntityManager) => manager.getRepository(DonationEntity).save(donation)
   );
-  await sendDonationCreateSuccessEmail(createdDonation, myAccount);
-
-  saveAudit('Donate', myAccount, donation, undefined, createReq.recaptchaScore);
-  return createdDonation;
 }
 
-export async function updateDonation(updateReq: DonationUpdateRequest, myAccount: AccountEntity): Promise<Donation> {
+export async function updateDonation(updateReq: DonationUpdateRequest, myAccount: AccountEntity): Promise<UpdateDiff<Donation>> {
   const donation: Donation = updateReq.donation;
   _validateDonation(donation);
   _ensureCanUpdateDonation(donation, myAccount);
-
+  await _preprocessDonorContactOverride(donation.donorContactOverride, myAccount);
   _removeNonUpdateFields(donation);
-  const originalDonation: Donation = await readDonation(donation.id, myAccount);
+  const originalDonation: Donation = await readDonation(donation.id);
 
   const updatedDonation: Donation = await getConnection().transaction(async (manager: EntityManager) => {
     const donationRepo: Repository<DonationEntity> = manager.getRepository(DonationEntity);
     await donationRepo.save(donation);
     // Must do separate query b/c save method will only return updated properties in entity (partial entity).
-    return readDonation(donation.id, myAccount, donationRepo);
+    return readDonation(donation.id, donationRepo);
   });
-  sendDonationUpdateSuccessEmails(originalDonation, updatedDonation)
 
-  saveAudit('Update Donation', getAuditAccounts(donation), updatedDonation, originalDonation, updateReq.recaptchaScore);
-  return updatedDonation;
+  return { old: originalDonation, new: updatedDonation };
 }
 
 function _validateDonation(donation: Donation): void {
@@ -59,6 +57,17 @@ function _ensureCanUpdateDonation(donation: Donation, myAccount: Account): void 
   if (errMsg) {
     throw new FoodWebError(`Update failed: ${errMsg}`);
   }
+}
+
+async function _preprocessDonorContactOverride(donorContactOverride: ContactInfo, myAccount: AccountEntity): Promise<void> {
+  if (donorContactOverride.streetAddress !== myAccount.contactInfo.streetAddress || donorContactOverride.city !== myAccount.contactInfo.city) {
+    donorContactOverride.location = await geocode(donorContactOverride);
+    donorContactOverride.timezone = geoTimezone(donorContactOverride.location);
+  } else {
+    donorContactOverride.location = myAccount.contactInfo.location;
+    donorContactOverride.timezone = myAccount.contactInfo.timezone;
+  }
+  donorContactOverride.phoneNumber = _accountHelper.formatPhoneNumber(donorContactOverride.phoneNumber);
 }
 
 function _removeNonUpdateFields(donation: Donation): void {

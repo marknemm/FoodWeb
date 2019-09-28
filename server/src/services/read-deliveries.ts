@@ -12,7 +12,7 @@ export function readDeliveries(
   if (!request.donationStatus || request.donationStatus.indexOf('Unmatched') >= 0) {
     request.donationStatus = 'Matched,Scheduled,Picked Up,Complete';
   }
-  return readDonations(request, myAccount, donationRepo);
+  return readDonations(request, donationRepo);
 }
 
 export function readUnscheduledDeliveries(
@@ -21,7 +21,7 @@ export function readUnscheduledDeliveries(
   donationRepo?: Repository<DonationEntity>
 ): Promise<DonationsQueryResult> {
   request.donationStatus = 'Matched';
-  return readDonations(request, myAccount, donationRepo);
+  return readDonations(request, donationRepo);
 }
 
 export function readMyDeliveries(request: DeliveryReadRequest, myAccount: AccountEntity): Promise<DonationsQueryResult> {

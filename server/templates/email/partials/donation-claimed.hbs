@@ -3,7 +3,7 @@
   <p class="donation-description">{{ donation.description }}</p>
   <hr>
   <p>
-    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a> to view the donation.
     You may also cancel your claim while viewing the donation.
   </p>
   <p>
@@ -11,7 +11,7 @@
   </p>
   <p>
     Feel free to contact
-    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a> or
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a> or
     <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>
 {{else}}
@@ -19,7 +19,7 @@
   <p class="donation-description">{{ donation.description }}</p>
   <hr>
   <p>
-    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a> to view the donation.
   </p>
   <p>
     You will receive a message once the donation is scheduled for pickup.<br>

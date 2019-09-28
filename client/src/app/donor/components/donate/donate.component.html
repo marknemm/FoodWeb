@@ -1,0 +1,55 @@
+<form [formGroup]="donateForm" class="donate-form" [ngClass]="{ 'submitted': !!savedDonation }" (submit)="donate()">
+
+  <div class="donate-form-title page-title block-label">
+    {{ !savedDonation ? 'Donation Form' : 'Thank-you For Your Donation' }}
+  </div>
+
+  <div *ngIf="savedDonation" class="align-center">
+    <hr>
+    <div>{{ savedDonation.description }}</div>
+    <hr>
+    <p>You will receive an email when your donation has been matched with a receiving charity.</p>
+  </div>
+
+  <ng-container *ngIf="!savedDonation">
+    <mat-card class="donate-card">
+      <mat-card-title>Donation Information</mat-card-title>
+      <mat-card-content>
+        <food-web-donation-form [formGroup]="donateForm" *ngIf="!savedDonation"></food-web-donation-form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="donate-card">
+      <mat-card-title>Pickup Window</mat-card-title>
+      <mat-card-content>
+        <food-web-date-time-range #pickupWindowRange formGroupName="pickupWindow"></food-web-date-time-range>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="donate-card">
+      <mat-card-title>Contact Info</mat-card-title>
+      <mat-card-content>
+        <food-web-contact-info [editing]="true" formGroupName="donorContactOverride"></food-web-contact-info>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="donate-card">
+      <mat-card-title>Food Safety Checklist</mat-card-title>
+      <mat-card-content>
+        <food-web-food-safety-checklist formControlName="safetyChecklist"></food-web-food-safety-checklist>
+        <mat-error class="safety-checklist-err" *ngIf="donateForm.get('safetyChecklist').touched && donateForm.get('safetyChecklist').hasError('required')">
+          Safety Checklist Required
+        </mat-error>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+
+  <div class="action-footer align-right">
+    <button mat-raised-button type="submit" color="primary" *ngIf="!savedDonation">Donate</button>
+    <button mat-button type="button" color="accent" *ngIf="savedDonation" (click)="donateAgain()">Donate Again</button>
+    <a *ngIf="savedDonation" class="view-donation-link" [routerLink]="['/donation/details', savedDonation.id]">
+      <button mat-raised-button type="button" color="primary">View Donation</button>
+    </a>
+  </div>
+
+</form>

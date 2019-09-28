@@ -1,10 +1,13 @@
-import { OperationHours } from '..//interfaces/account/operation-hours';
+import { DateTimeHelper } from './date-time-helper'
 import { Constants } from '../constants/constants';
+import { DateTimeRange } from '../interfaces/misc/time';
+import { OperationHours, Weekday } from '../interfaces/account/operation-hours';
 export { OperationHours };
 
 export class OperationHoursHelper {
 
-  readonly _constants = new Constants();
+  private readonly _dateTimeHelper = new DateTimeHelper()
+  private readonly _constants = new Constants();
 
   /**
    * Sorts a given operation hours array.
@@ -54,5 +57,21 @@ export class OperationHoursHelper {
     const minuteStr: string = (minutes > 9 ? `${minutes}` : `0${minutes}`);
 
     return `${hourStr}:${minuteStr} ${amPmStr}`;
+  }
+
+  /**
+   * Converts a date-time range to operation hours.
+   * @param dateTimeRange The date-time range.
+   * @param timezone The optional timezone of the operation hours output. Defaults to 'UTC'.
+   * @return The operation hours.
+   */
+  dateTimeRangeToOperationHours(dateTimeRange: DateTimeRange, timezone = 'UTC'): OperationHours {
+    // TODO: If dateTimeRange spans multiple days, then generate operation hours for each of those days.
+    const operationHours: OperationHours = {
+      weekday: <Weekday>this._dateTimeHelper.toLocalWeekdayStr(dateTimeRange.startDateTime, timezone),
+      startTime: this._dateTimeHelper.toLocalTimeStr(dateTimeRange.startDateTime, timezone),
+      endTime: this._dateTimeHelper.toLocalTimeStr(dateTimeRange.endDateTime, timezone)
+    }
+    return operationHours;
   }
 }

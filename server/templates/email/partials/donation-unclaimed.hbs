@@ -3,12 +3,12 @@
   <p class="donation-description">{{ donation.description }}</p>
   <hr>
   <p>
-    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a> to view the donation.
     You may re-claim this donation as long as no other charity has claimed it.
   </p>
   <p>
     Feel free to contact
-    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a> or
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a> or
     <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>
 {{else if isDonor }}
@@ -16,7 +16,7 @@
   <p class="donation-description">{{ donation.description }}</p>
   <hr>
   <p>
-    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a> to view the donation.
   </p>
   <p>
     We are sorry for any inconvenience this has caused you. When another charity claims your donation, you will be notified.
@@ -42,10 +42,10 @@
       <div class="emphasize">
         {{ donorName }}
       </div>
-      <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
+      <div>{{ donation.donorContactOverride.streetAddress }}</div>
       <div>
-        {{ donation.donorAccount.contactInfo.city }}, {{ donation.donorAccount.contactInfo.state }}
-        {{ donation.donorAccount.contactInfo.postalCode }}
+        {{ donation.donorContactOverride.city }}, {{ donation.donorContactOverride.state }}
+        {{ donation.donorContactOverride.postalCode }}
       </div>
     </div>
   </div>
@@ -72,12 +72,12 @@
   </p>
   <p>
     You can search for other unscheduled deliveries at this
-    <a href="{{ env.SERVER_HOST_ADDRESS }}/deliveries?donationStatus=Matched">link</a>,
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/delivery/list?donationStatus=Matched">link</a>,
     or wait to be notified about another delivery.
   </p>
   <p>
     Feel free to contact
-    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a>,
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a>,
     <a href="mailto:{{ receiverAccount.contactInfo.email }}">{{ receiverName }}</a>,
     or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>

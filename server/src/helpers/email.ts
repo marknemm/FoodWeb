@@ -15,7 +15,7 @@ const supportTransporter: nodemailer.Transporter = _initEmailTransporter(MailTra
 export function broadcastEmail(
   mailTransporter: MailTransporter,
   accounts: Account[],
-  subjects: string[],
+  subjects: string | string[],
   template: string,
   context?: any
 ): Promise<void[]> {
@@ -25,7 +25,7 @@ export function broadcastEmail(
       sendEmail(
         mailTransporter,
         accounts[i],
-        subjects[i],
+        (subjects instanceof Array) ? subjects[i] : subjects,
         template,
         JSON.parse(JSON.stringify(context)) // Make copy of context since it is modified for each account.
       )

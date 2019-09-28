@@ -10,7 +10,6 @@ if (environment.production) {
 }
 
 const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
-
 if (environment.hmr) {
   if (module['hot']) {
     hmrBootstrap(module, bootstrap);
@@ -19,5 +18,7 @@ if (environment.hmr) {
     console.log('Are you using the --hmr flag for ng serve?');
   }
 } else {
-  bootstrap().catch((err) => console.log(err));
+  (document.URL.indexOf('http://') === 0 || document.URL.indexOf('https://') === 0)
+    ? bootstrap().catch((err) => console.log(err))
+    : document.addEventListener('deviceready', bootstrap, false);
 }

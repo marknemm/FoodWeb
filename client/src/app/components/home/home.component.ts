@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { LoginComponent } from '../login/login.component';
-import { SessionService } from '../../services/session/session.service';
+import { LoginDialogComponent } from '../../session/components/login-dialog/login-dialog.component';
+import { SessionService } from '../../session/services/session/session.service';
 
 @Component({
   selector: 'app-home',
@@ -18,9 +18,8 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const showLogin: boolean = !!this._activatedRoute.snapshot.params['login'];
-    if (showLogin && !this._sessionService.loggedIn) {
-      this._matDialog.open(LoginComponent);
+    if (!!this._activatedRoute.snapshot.params['login']) {
+      LoginDialogComponent.openIfNotLoggedIn(this._sessionService, this._matDialog);
     }
   }
 

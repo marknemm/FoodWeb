@@ -11,10 +11,10 @@
       <div class="emphasize">
         {{ donation.donorAccount.organization.organizationName }}
       </div>
-      <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
+      <div>{{ donation.donorContactOverride.streetAddress }}</div>
       <div>
-        {{ donation.donorAccount.contactInfo.city }}, {{ donation.donorAccount.contactInfo.state }}
-        {{ donation.donorAccount.contactInfo.postalCode }}
+        {{ donation.donorContactOverride.city }}, {{ donation.donorContactOverride.state }}
+        {{ donation.donorContactOverride.postalCode }}
       </div>
     </div>
   </div>
@@ -59,7 +59,7 @@
 
   <hr class="no-margin-top">
   <p>
-    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a> to view the donation.
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a> to view the donation.
     <br>You may start/schedule the delivery at this link.
   </p>
 </div>

@@ -1,46 +1,56 @@
 import { getConnection, EntityManager, Repository, QueryFailedError } from 'typeorm';
 import { createUnverifiedAccount } from './account-verification';
 import { savePassword } from './save-password';
-import { saveAudit } from './save-audit';
+import { UpdateDiff } from '../interfaces/update-diff';
 import { FoodWebError } from '../helpers/food-web-error';
 import { geocode, geoTimezone } from '../helpers/geocoder';
 import { AccountEntity } from '../entity/account.entity';
+import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { OperationHoursEntity } from '../entity/operation-hours.entity';
 import { AccountUpdateRequest } from '../interfaces/account/account-update-request';
 import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
 import { OperationHoursHelper, OperationHours } from '../../../shared/src/helpers/operation-hours-helper';
 import { AccountCreateRequest } from '../../../shared/src/interfaces/account/account-create-request';
 
+/**
+ * Data generated when creating a new account.
+ */
+export interface NewAccountData {
+  account: AccountEntity;
+  unverifiedAccount: UnverifiedAccountEntity;
+}
+
 const _accountHelper = new AccountHelper();
 const _opHoursHelper = new OperationHoursHelper();
 
-export async function createAccount(request: AccountCreateRequest): Promise<AccountEntity> {
+export async function createAccount(request: AccountCreateRequest): Promise<NewAccountData> {
   let createdAccount: AccountEntity;
+  let unverifiedAccount: UnverifiedAccountEntity;
   await getConnection().transaction(async (manager: EntityManager) => {
     createdAccount = await _saveAccount(manager, request.account);
     await savePassword(manager, createdAccount, request.password);
-    await createUnverifiedAccount(createdAccount, manager);
+    unverifiedAccount = await createUnverifiedAccount(createdAccount, manager);
   });
 
   _opHoursHelper.formatOperationHoursTimes(createdAccount.operationHours);
   createdAccount.verified = false;
-  saveAudit('Signup', createdAccount, createdAccount, undefined, request.recaptchaScore);
-  return createdAccount;
+  return { account: createdAccount, unverifiedAccount };
 }
 
-export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: Account): Promise<AccountEntity> {
+export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: Account): Promise<UpdateDiff<AccountEntity>> {
   if (!_accountHelper.isMyAccount(myAccount, updateReq.account.id)) {
     throw new FoodWebError('User unauthorized to update account', 401);
   }
 
-  let updatedAccount: AccountEntity;
-  await getConnection().transaction(async (manager: EntityManager) => {
-    updatedAccount = await _saveAccount(manager, updateReq.account, myAccount);
-  });
+  // Ensure we do not overwrite last seen notification ID.
+  updateReq.account.lastSeenNotificationId = myAccount.lastSeenNotificationId;
+
+  const updatedAccount: AccountEntity = await getConnection().transaction((manager: EntityManager) =>
+    _saveAccount(manager, updateReq.account, myAccount)
+  );
 
   _opHoursHelper.formatOperationHoursTimes(updatedAccount.operationHours);
-  saveAudit('Update Account', updatedAccount, updatedAccount, myAccount, updateReq.recaptchaScore);
-  return updatedAccount;
+  return { old: <AccountEntity>myAccount, new: updatedAccount };
 }
 
 async function _saveAccount(manager: EntityManager, account: Account, myAccount?: Account): Promise<AccountEntity> {
@@ -77,11 +87,11 @@ function _ensureEitherOrganizationOrVolunteer(account: Account): void {
 }
 
 function _ensureAccountHasProfileImg(account: Account): void {
-  if (!account.profileImgUrl || /^\/assets\/[A-Z]\.svg$/.test(account.profileImgUrl)) {
+  if (!account.profileImgUrl || /^\.?\/assets\/[A-Z]\.svg$/.test(account.profileImgUrl)) {
     const firstLetter: string = (account.accountType === 'Volunteer')
       ? account.volunteer.lastName.charAt(0).toUpperCase()
       : account.organization.organizationName.charAt(0).toUpperCase();
-    account.profileImgUrl = `/assets/${firstLetter}.svg`;
+    account.profileImgUrl = `./assets/${firstLetter}.svg`;
   }
 }
 

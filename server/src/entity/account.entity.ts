@@ -6,7 +6,8 @@ import {
   OneToOne,
   Index,
   UpdateDateColumn,
-  CreateDateColumn
+  CreateDateColumn,
+  JoinColumn
 } from 'typeorm';
 import { ContactInfoEntity } from './contact-info.entity';
 import { OrganizationEntity } from './organization.entity';
@@ -24,7 +25,7 @@ export class AccountEntity implements Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'enum', enum: _constants.ACCOUNT_TYPES.concat(['Admin']) })
+  @Column({ type: 'enum', enum: _constants.ACCOUNT_TYPES.concat([AccountType.Admin]) })
   accountType: AccountType;
 
   @Column()
@@ -34,7 +35,11 @@ export class AccountEntity implements Account {
   @Column()
   profileImgUrl: string;
 
+  @Column({ default: -1 })
+  lastSeenNotificationId: number;
+
   @OneToOne((type) => ContactInfoEntity, (contactInfo) => contactInfo.account, { cascade: true, eager: true })
+  @JoinColumn()
   contactInfo: ContactInfoEntity;
 
   @OneToOne((type) => OrganizationEntity, (organization) => organization.account, { nullable: true, cascade: true, eager: true })

@@ -1,6 +1,42 @@
+@import "../../../styles/constants.scss";
+
+$side-container-max-width: 270px;
+
 .home-container {
-  max-width: 900px;
+  max-width: 960px;
   margin: auto;
+
+  &.has-side-content {
+    max-width: 1100px;
+
+    .main-content {
+      max-width: calc(100% - #{$side-container-max-width});
+      padding-right: 20px;
+      box-sizing: border-box;
+      float: left;
+    }
+  
+    .side-content {
+      position: relative;
+      width: $side-container-max-width;
+      float: right;
+    }
+  
+    @media only screen and (max-width: 1060px) {
+      .main-content {
+        max-width: 100%;
+        padding-right: 0;
+        float: none;
+      }
+  
+      .side-content {
+        width: 100%;
+        float: none;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+  }
 
   mat-card-title {
     font-size: 20px;

@@ -1,0 +1,21 @@
+<div class="volunteer-container" [foodWebDisplayEditTransition]="editing" [form]="volunteerForm" [display]="volunteerDisplay">
+  <div #volunteerForm class="row volunteer-form" [formGroup]="formGroup" [attr.aria-hidden]="!editing">
+    <div class="col-sm-6">
+      <mat-form-field class="fill">
+        <input matInput placeholder="First Name" formControlName="firstName" type="text" autocomplete="off">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Last Name" formControlName="lastName" type="text" autocomplete="off">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div #volunteerDisplay class="volunteer-display row" [attr.aria-hidden]="editing">
+    <div class="col-sm-12">
+      <div class="inline-label">Name:</div>
+      <div class="d-inline-block">{{ formGroup.get('firstName').value }} {{ formGroup.get('lastName').value }}</div>
+    </div>
+  </div>
+</div>

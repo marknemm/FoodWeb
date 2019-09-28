@@ -1,8 +1,10 @@
-import { getRepository, FindConditions } from 'typeorm';
+import { getRepository, SelectQueryBuilder } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
+import { LoginRequiredError } from '../helpers/food-web-error';
+import { genSimpleWhereConditions, genPagination } from '../helpers/query-builder-helper';
 import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
-import { Account } from '../../../shared/src/interfaces/account/account';
-import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
+import { Account, OperationHours } from '../../../shared/src/interfaces/account/account';
+import { AccountReadRequest, AccountReadFilters } from '../../../shared/src/interfaces/account/account-read-request';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
 
 export interface AccountsQueryResult {
@@ -22,23 +24,95 @@ export async function readAccount(idOrUsername: number | string, myAccount?: Acc
   return queryResult.accounts[0];
 }
 
-export async function readAccounts(request: AccountReadRequest, myAccount?: Account): Promise<AccountsQueryResult> {
-  const [accounts, totalCount]: [AccountEntity[], number] = await getRepository(AccountEntity).findAndCount({
-    where: _genFindConditions(request),
-    skip: (request.page - 1) * request.limit,
-    take: request.limit,
-    order: { username: 'ASC' }
-  });
-
+export async function readAccounts(request: AccountReadRequest, myAccount: Account): Promise<AccountsQueryResult> {
+  const queryBuilder: SelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
+  const [accounts, totalCount]: [AccountEntity[], number] = await queryBuilder.getManyAndCount();
   _postProcessAccounts(accounts, myAccount);
   return { accounts, totalCount };
 }
 
-function _genFindConditions(request: AccountReadRequest): FindConditions<AccountEntity> {
-  const conditions: FindConditions<AccountEntity> = Object.assign({}, request);
-  delete conditions['page'];
-  delete conditions['limit'];
-  return conditions;
+function _buildQuery(request: AccountReadRequest, myAccount: Account): SelectQueryBuilder<AccountEntity> {
+  let queryBuilder: SelectQueryBuilder<AccountEntity> = getRepository(AccountEntity).createQueryBuilder('account');
+  queryBuilder = _genJoins(queryBuilder);
+  queryBuilder = _genWhereCondition(queryBuilder, request, myAccount);
+  queryBuilder = _genOrdering(queryBuilder);
+  queryBuilder = genPagination(queryBuilder, request);
+  return queryBuilder;
+}
+
+function _genJoins(queryBuilder: SelectQueryBuilder<AccountEntity>): SelectQueryBuilder<AccountEntity> {
+  return queryBuilder
+    .innerJoinAndSelect('account.contactInfo', 'contactInfo')
+    .leftJoinAndSelect('account.organization', 'organization')
+    .leftJoinAndSelect('account.volunteer', 'volunteer')
+    .leftJoinAndMapMany('account.operationHours', 'account.operationHours', 'operationHours');
+}
+
+function _genWhereCondition(
+  queryBuilder: SelectQueryBuilder<AccountEntity>,
+  filters: AccountReadFilters,
+  myAccount: Account
+): SelectQueryBuilder<AccountEntity> {
+  queryBuilder = genSimpleWhereConditions(queryBuilder, 'account', filters, ['id', 'username', 'accountType']);
+  queryBuilder = genSimpleWhereConditions(queryBuilder, 'contactInfo', filters, ['email']);
+  queryBuilder = genSimpleWhereConditions(queryBuilder, 'organization', filters, ['organizationName']);
+  queryBuilder = _genOperationHoursCondition(queryBuilder, filters, myAccount);
+  queryBuilder = _genDistanceCondition(queryBuilder, filters, myAccount);
+  return queryBuilder;
+}
+
+function _genOperationHoursCondition(
+  queryBuilder: SelectQueryBuilder<AccountEntity>,
+  filters: AccountReadFilters,
+  myAccount: Account
+): SelectQueryBuilder<AccountEntity> {
+  if (filters.operationHoursRange) {
+    if (!myAccount) { throw new LoginRequiredError(); }
+    const operationHours: OperationHours = _opHoursHelper.dateTimeRangeToOperationHours(
+      filters.operationHoursRange,
+      myAccount.contactInfo.timezone
+    );
+    console.log(operationHours.weekday);
+    // Check for any overlap (invert condition where op hours are completely after or before donation window).
+    queryBuilder = queryBuilder.andWhere(
+      'operationHours.weekday = :weekday ' +
+      'AND NOT (' +
+        'operationHours.startTime >= :endTime ' +
+        'OR operationHours.endTime <= :startTime' +
+      ')',
+      operationHours
+    );
+  }
+  return queryBuilder;
+}
+
+function _genDistanceCondition(
+  queryBuilder: SelectQueryBuilder<AccountEntity>,
+  filters: AccountReadFilters,
+  myAccount: Account
+): SelectQueryBuilder<AccountEntity> {
+  if (filters.distanceRangeMi != null) {
+    if (!myAccount) { throw new LoginRequiredError(); }
+    queryBuilder = queryBuilder.andWhere(
+      'ST_DWithin(ST_MakePoint(:lon, :lat), contactInfo.location, :dist)',
+      {
+        // Either take explicit lon, lat coordinates from supplied filters, or derive from invoking user's account.
+        lon: (filters.lon ? filters.lon : myAccount.contactInfo.location.coordinates[0]),
+        lat: (filters.lat ? filters.lat : myAccount.contactInfo.location.coordinates[1]),
+        dist: (filters.distanceRangeMi * 1609.34)
+      }
+    );
+  }
+  return queryBuilder;
+}
+
+function _genOrdering(
+  queryBuilder: SelectQueryBuilder<AccountEntity>
+): SelectQueryBuilder<AccountEntity> {
+  return queryBuilder
+    .addOrderBy('organization.organizationName', 'ASC')
+    .addOrderBy('volunteer.lastName', 'ASC')
+    .addOrderBy('volunteer.firstName', 'ASC')
 }
 
 function _postProcessAccounts(accounts: AccountEntity[], myAccount: Account): void {

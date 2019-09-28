@@ -1,6 +1,18 @@
 import { AuditEventType } from '../audit/audit';
 
-export type NotificationType = AuditEventType;
+export enum NotificationType {
+  Signup = AuditEventType.Signup,
+  Donate = AuditEventType.Donate,
+  UpdateDonation = AuditEventType.UpdateDonation,
+  RemoveDonation = AuditEventType.RemoveDonation,
+  ClaimDonation = AuditEventType.ClaimDonation,
+  UnclaimDonation = AuditEventType.UnclaimDonation,
+  ScheduleDelivery = AuditEventType.ScheduleDelivery,
+  CancelDelivery = AuditEventType.CancelDelivery,
+  DeliveryStateAdvance = AuditEventType.DeliveryStateAdvance,
+  DeliveryStateUndo = AuditEventType.DeliveryStateUndo,
+  DeliveryReminder = ('Delivery Reminder')
+}
 
 /**
  * A notification that can serve as an SMS Message, SSE Notification, Push Notification, or Web Notification.
@@ -16,6 +28,10 @@ export interface Notification {
    */
   notificationDetailId: number;
   /**
+   * (Deep) Link used for the notification.
+   */
+  notificationLink?: string;
+  /**
    * A URL for the icon that should be used for the notification.
    */
   notificationIconUrl?: string;
@@ -26,7 +42,7 @@ export interface Notification {
   /**
    * The subtitle of the notification.
    */
-  notificationSubtitle: string;
+  notificationSubtitle?: string;
   /**
    * The body of the notification.
    */

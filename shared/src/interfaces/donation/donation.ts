@@ -1,8 +1,14 @@
-import { Account } from '../account/account';
+import { Account, ContactInfo } from '../account/account';
 import { Delivery } from '../delivery/delivery';
 export { Account, Delivery };
 
-export type DonationStatus = 'Unmatched' | 'Matched' | 'Scheduled' | 'Picked Up' | 'Complete';
+export enum DonationStatus {
+  Unmatched = 'Unmatched',
+  Matched = 'Matched',
+  Scheduled = 'Scheduled',
+  PickedUp = 'Picked Up',
+  Complete = 'Complete'
+}
 
 /**
  * A donation.
@@ -16,6 +22,11 @@ export interface Donation {
    * The account of the donor.
    */
   donorAccount: Account;
+  /**
+   * Contact information overrides for the donor.
+   * May or may not be equivalent to donor's original contact info.
+   */
+  donorContactOverride: ContactInfo;
   /**
    * The account of the receiving organization.
    */
@@ -39,7 +50,7 @@ export interface Donation {
   /**
    * The estimated monetary value of the donation.
    */
-  estimatedValue: number;
+  estimatedValue?: number;
   /**
    * The estimated number of people that the donation will feed.
    */

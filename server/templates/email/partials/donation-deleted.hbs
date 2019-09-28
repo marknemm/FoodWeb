@@ -10,10 +10,12 @@
       <td class="donation-summary-label">Type:</td>
       <td>{{ donation.donationType }}</td>
     </tr>
-    <tr>
-      <td class="donation-summary-label">Value:</td>
-      <td>${{ donation.estimatedValue }}</td>
-    </tr>
+    {{#if donation.estimatedValue }}
+      <tr>
+        <td class="donation-summary-label">Value:</td>
+        <td>${{ donation.estimatedValue }}</td>
+      </tr>
+    {{/if}}
     <tr>
       <td class="donation-summary-label">Description:</td>
       <td class="donation-summary-description">{{ donation.description }}</td>
@@ -31,12 +33,12 @@
     We are sorry for any inconvenience this has caused you.
   </p>
   <p>
-    Feel free to browse donations <a href="{{ env.SERVER_HOST_ADDRESS }}/donations">here</a>
+    Feel free to browse donations <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/list">here</a>
     or simply wait for another message containing a new donation.
   </p>
   <p>
     Feel free to contact
-    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a> or
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a> or
     <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>
 {{else}}
@@ -54,10 +56,10 @@
       <div class="emphasize">
         {{ donorName }}
       </div>
-      <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
+      <div>{{ donation.donorContactOverride.streetAddress }}</div>
       <div>
-        {{ donation.donorAccount.contactInfo.city }}, {{ donation.donorAccount.contactInfo.state }}
-        {{ donation.donorAccount.contactInfo.postalCode }}
+        {{ donation.donorContactOverride.city }}, {{ donation.donorContactOverride.state }}
+        {{ donation.donorContactOverride.postalCode }}
       </div>
     </div>
   </div>
@@ -84,12 +86,12 @@
   </p>
   <p>
     You can search for other unscheduled deliveries at this
-    <a href="{{ env.SERVER_HOST_ADDRESS }}/deliveries?donationStatus=Matched">link</a>,
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/delivery/list?donationStatus=Matched">link</a>,
     or wait to be notified about another delivery.
   </p>
   <p>
     Feel free to contact
-    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a>,
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a>,
     <a href="mailto:{{ donation.receiverAccount.contactInfo.email }}">{{ receiverName }}</a>,
     or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>

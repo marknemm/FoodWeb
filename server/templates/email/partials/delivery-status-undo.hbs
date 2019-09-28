@@ -11,10 +11,10 @@
       <div class="emphasize">
         {{ donorName }}
       </div>
-      <div>{{ donation.donorAccount.contactInfo.streetAddress }}</div>
+      <div>{{ donation.donorContactOverride.streetAddress }}</div>
       <div>
-        {{ donation.donorAccount.contactInfo.city }}, {{ donation.donorAccount.contactInfo.state }}
-        {{ donation.donorAccount.contactInfo.postalCode }}
+        {{ donation.donorContactOverride.city }}, {{ donation.donorContactOverride.state }}
+        {{ donation.donorContactOverride.postalCode }}
       </div>
     </div>
   </div>
@@ -38,11 +38,11 @@
   <hr>
   <p>
     If you did not intend to revert the status of this delivery, then you can redo your status advancement at this
-    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a>.
   </p>
   <p>
     Feel free to contact
-    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a>,
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a>,
     <a href="mailto:{{ donation.receiverAccount.contactInfo.email }}">{{ receiverName }}</a>,
     or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions or comments.
   </p>
@@ -55,7 +55,7 @@
   <hr>
   <p>
     You can view the donation and delivery details at this
-    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a>.
   </p>
   <p>
     If you believe that this is a mistake, then please bring this to the deliverer's attention.
@@ -63,7 +63,7 @@
   <p>
     Feel free to contact
     <a href="mailto:{{ donation.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>,
-    <a href="mailto:{{ donation.donorAccount.contactInfo.email }}">{{ donorName }}</a>,
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a>,
     or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>
 {{else}}
@@ -75,7 +75,7 @@
   <hr>
   <p>
     You can view the donation and delivery details at this
-    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a>.
   </p>
   <p>
     If you believe that this is a mistake, then please bring this to the deliverer's attention.
