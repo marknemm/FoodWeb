@@ -57,6 +57,30 @@ export class DateTimeHelper {
     return new Intl.DateTimeFormat(this.locale, formatterOpts).format(date);
   }
 
+  addHours(date: string | Date, hours: number): Date {
+    const hoursInMs = (hours * 60 * 60 * 1000);
+    date = this.toDate(date);
+    return new Date(date.getTime() + hoursInMs);
+  }
+
+  addMinutes(date: string | Date, minutes: number): Date {
+    const minutesInMs = (minutes * 60 * 1000);
+    date = this.toDate(date);
+    return new Date(date.getTime() + minutesInMs);
+  }
+
+  roundNearestHours(date: string | Date, hours: number): Date {
+    const hoursMs = (1000 * 60 * 60 * hours);
+    date = this.toDate(date);
+    return new Date(Math.round(date.getTime() / hoursMs) * hoursMs);
+  }
+
+  roundNearestMinutes(date: string | Date, minutes: number): Date {
+    const minMs = (1000 * 60 * minutes);
+    date = this.toDate(date);
+    return new Date(Math.round(date.getTime() / minMs) * minMs);
+  }
+
   toDate(date: string | Date): Date {
     if (typeof date === 'string') {
       return /[\/-]/.test(date)

@@ -17,7 +17,7 @@ const _donationHelper = new DonationHelper();
  * @throws FoodWebError if the current user is not authorized to delete the donation.
  */
 export async function deleteDonation(deleteReq: DonationDeleteRequest, myAccount: AccountEntity): Promise<Donation> {
-  const donation: DonationEntity = await readDonation(deleteReq.donationId, myAccount);
+  const donation: DonationEntity = await readDonation(deleteReq.donationId);
   _ensureCanDeleteDonation(donation, myAccount);
 
   await getConnection().transaction(async (manager: EntityManager) => {

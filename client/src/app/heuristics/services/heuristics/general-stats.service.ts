@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, timer } from 'rxjs';
+import { Observable, timer, never } from 'rxjs';
 import { finalize, catchError, flatMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { ErrorHandlerService } from '../../../shared/services/error-handler/error-handler.service';
 import { GeneralStats } from '../../../../../../shared/src/interfaces/heuristics/general-stats';
 export { GeneralStats };
 
@@ -17,8 +16,7 @@ export class GeneralStatsService {
   private _loadingGeneralStats = false;
 
   constructor(
-    private _httpClient: HttpClient,
-    private _errorHandlerService: ErrorHandlerService
+    private _httpClient: HttpClient
   ) {}
 
   get loading(): boolean {
@@ -34,8 +32,11 @@ export class GeneralStatsService {
   getGeneralStats(): Observable<GeneralStats> {
     this._loadingGeneralStats = true;
     return this._httpClient.get<GeneralStats>(`${this.url}/general-stats`).pipe(
-      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
-      finalize(() => this._loadingGeneralStats = false)
+      finalize(() => this._loadingGeneralStats = false),
+      catchError((err: HttpErrorResponse) => {
+        console.error(err);
+        return never();
+      })
     )
   }
 }

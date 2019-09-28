@@ -21,7 +21,7 @@ const _donationHelper = new DonationHelper();
  * @throws FoodWebError if the user is not authorized to claim the donation.
  */
 export async function claimDonation(claimReq: DonationClaimRequest, myAccount: AccountEntity): Promise<DonationEntity> {
-  const donationToClaim: Donation = await readDonation(claimReq.donationId, myAccount);
+  const donationToClaim: Donation = await readDonation(claimReq.donationId);
   _ensureCanClaimDonation(donationToClaim, myAccount);
 
   let claimedDonation: Donation = Object.assign({}, donationToClaim);
@@ -54,7 +54,7 @@ function _ensureCanClaimDonation(donation: Donation, myAccount: AccountEntity): 
  * @throws FoodWebError if the user is not authorized to unclaim the donation.
  */
 export async function unclaimDonation(unclaimReq: DonationUnclaimRequest, myAccount: AccountEntity): Promise<UpdateDiff<Donation>> {
-  const donationToUnclaim: Donation = await readDonation(unclaimReq.donationId, myAccount);
+  const donationToUnclaim: Donation = await readDonation(unclaimReq.donationId);
   _ensureCanUnclaimDonation(donationToUnclaim, myAccount);
 
   let unclaimedDonation: Donation = Object.assign({}, donationToUnclaim);

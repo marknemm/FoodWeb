@@ -17,7 +17,7 @@
 
   <mat-divider></mat-divider>
 
-  <p *ngIf="isMyAccount && !originalAccount.verified" class="account-not-verified">
+  <p *ngIf="isMyAccount && originalAccount.verified === false" class="account-not-verified">
     Account Not Verified:
     <button mat-button type="button" (click)="signupVerificationService.resendVerificationEmail()">Resend Verification Email</button>
   </p>

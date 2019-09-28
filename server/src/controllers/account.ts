@@ -12,7 +12,6 @@ import { updatePassword } from '../services/save-password';
 import { readAccounts, AccountsQueryResult, readAccount } from '../services/read-accounts';
 import { verifyAccount, recreateUnverifiedAccount } from '../services/account-verification';
 import { savePasswordResetToken, resetPassword } from '../services/save-password-reset';
-import { scheduleExpiredPasswordResetTokDel } from '../services/delete-password-reset';
 import { saveAudit, AuditEventType, saveUpdateAudit } from '../services/save-audit';
 import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '../services/password-reset-message';
 import { sendAccountVerificationMessage, sendAccountVerificationEmail } from '../services/account-verification-message';
@@ -24,9 +23,6 @@ import { PasswordResetRequest } from '../../../shared/src/interfaces/account/pas
 import { AccountVerificationRequest } from '../../../shared/src/interfaces/account/account-verification-request';
 
 const router = express.Router();
-
-// Account specific cron tasks go here.
-scheduleExpiredPasswordResetTokDel();
 
 router.post('/', (req: Request, res: Response) => {
   const createRequest: AccountCreateRequest = req.body;

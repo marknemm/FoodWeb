@@ -3,25 +3,18 @@ import { formatDate } from '@angular/common';
 import { ConstantsService } from '../../../shared/services/constants/constants.service';
 import { Account, OperationHours } from '../../../../../../shared/src/interfaces/account/account';
 import { TimeRange, DateTimeRange } from '../../../../../../shared/src/interfaces/misc/time';
+import { DateTimeHelper } from '../../../../../../shared/src/helpers/date-time-helper';
 export { TimeRange, DateTimeRange };
 
 @Injectable({
   providedIn: 'root'
 })
-export class DateTimeService {
+export class DateTimeService extends DateTimeHelper {
 
   constructor(
     private _constantsService: ConstantsService
-  ) {}
-
-  toDate(dateOrStr: Date | string): Date {
-    if (typeof dateOrStr === 'string') {
-      const isDateStr: boolean = /[-\/]/.test(dateOrStr);
-      return (isDateStr)
-        ? new Date(dateOrStr)
-        : new Date(`${this.formatCurrentDate()} ${dateOrStr}`);
-    }
-    return dateOrStr;
+  ) {
+    super();
   }
 
   formatCurrentDate(): string {
@@ -63,15 +56,9 @@ export class DateTimeService {
     return this.formatTime(this.dateCeil5Mins(timeStr));
   }
 
-  dateAddHour(dateOrStr: Date | string): Date {
-    const date: Date = this.toDate(dateOrStr);
-    const hourLaterDate: Date = new Date(date);
-    hourLaterDate.setHours(hourLaterDate.getHours() + 1);
-    return hourLaterDate;
-  }
-
-  timeAddHour(timeStr: string): string {
-    return this.formatTime(this.dateAddHour(timeStr));
+  timeAddHours(timeStr: string, hours: number): string {
+    const date: Date = this.toDate(timeStr);
+    return this.formatTime(this.addHours(date, hours));
   }
 
   getCurrentWeekday(): string {

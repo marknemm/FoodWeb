@@ -37,6 +37,24 @@ export interface DonationReadFilters {
    */
   donorFirstName?: string;
   /**
+   * The delivery window start date-time for donation overlap.
+   * Filters for all donations with a deliveryWindowEnd value that is at or later than the filter value.
+   */
+  deliveryWindowOverlapStart?: Date;
+  /**
+   * The delivery window end time for donation overlap.
+   * Filters for all donations with a deliveryWindowStart value that is at or earlier than the filter value.
+   */
+  deliveryWindowOverlapEnd?: Date;
+  /**
+   * The earliest date-time that a filtered donation's deliveryWindowStart can be.
+   */
+  earliestDeliveryWindowStart?: Date;
+  /**
+   * The latest date-time that a filtered donation's deliveryWindowStart can be.
+   */
+  latestDeliveryWindowStart?: Date;
+  /**
    * The type of the donation.
    */
   donationType?: string;

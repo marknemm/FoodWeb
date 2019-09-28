@@ -17,7 +17,7 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
     config: DonateFormConfig = {}
   ) {
     const defaultStartDateTime: Date = dateTimeService.dateCeil5Mins(new Date());
-    const defaultEndDateTime: Date = dateTimeService.dateAddHour(defaultStartDateTime);
+    const defaultEndDateTime: Date = dateTimeService.addHours(defaultStartDateTime, 1);
     super({
       donorFirstName: ['', Validators.required],
       donorLastName: ['', Validators.required],

@@ -33,13 +33,13 @@ export async function updateDonation(updateReq: DonationUpdateRequest, myAccount
   _ensureCanUpdateDonation(donation, myAccount);
   await _preprocessDonorContactOverride(donation.donorContactOverride, myAccount);
   _removeNonUpdateFields(donation);
-  const originalDonation: Donation = await readDonation(donation.id, myAccount);
+  const originalDonation: Donation = await readDonation(donation.id);
 
   const updatedDonation: Donation = await getConnection().transaction(async (manager: EntityManager) => {
     const donationRepo: Repository<DonationEntity> = manager.getRepository(DonationEntity);
     await donationRepo.save(donation);
     // Must do separate query b/c save method will only return updated properties in entity (partial entity).
-    return readDonation(donation.id, myAccount, donationRepo);
+    return readDonation(donation.id, donationRepo);
   });
 
   return { old: originalDonation, new: updatedDonation };
