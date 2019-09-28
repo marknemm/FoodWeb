@@ -25,6 +25,10 @@ export class DateTimeHelper {
     hour12: true
   };
 
+  readonly weekdayFormatOpts: DeepReadonly<Intl.DateTimeFormatOptions> = {
+    weekday: 'long'
+  };
+
   toLocalDateTimeStr(date: string | Date, timezone?: string): string {
     date = this.toDate(date);
     const customOpts: Intl.DateTimeFormatOptions = timezone ? { timeZone: timezone } : {};
@@ -44,6 +48,37 @@ export class DateTimeHelper {
     const customOpts: Intl.DateTimeFormatOptions = timezone ? { timeZone: timezone } : {};
     const formatterOpts: Intl.DateTimeFormatOptions = Object.assign(customOpts, this.timeFormatOpts);
     return new Intl.DateTimeFormat(this.locale, formatterOpts).format(date);
+  }
+
+  toLocalWeekdayStr(date: string | Date, timezone?: string): string {
+    date = this.toDate(date);
+    const customOpts: Intl.DateTimeFormatOptions = timezone ? { timeZone: timezone } : {};
+    const formatterOpts: Intl.DateTimeFormatOptions = Object.assign(customOpts, this.weekdayFormatOpts);
+    return new Intl.DateTimeFormat(this.locale, formatterOpts).format(date);
+  }
+
+  addHours(date: string | Date, hours: number): Date {
+    const hoursInMs = (hours * 60 * 60 * 1000);
+    date = this.toDate(date);
+    return new Date(date.getTime() + hoursInMs);
+  }
+
+  addMinutes(date: string | Date, minutes: number): Date {
+    const minutesInMs = (minutes * 60 * 1000);
+    date = this.toDate(date);
+    return new Date(date.getTime() + minutesInMs);
+  }
+
+  roundNearestHours(date: string | Date, hours: number): Date {
+    const hoursMs = (1000 * 60 * 60 * hours);
+    date = this.toDate(date);
+    return new Date(Math.round(date.getTime() / hoursMs) * hoursMs);
+  }
+
+  roundNearestMinutes(date: string | Date, minutes: number): Date {
+    const minMs = (1000 * 60 * minutes);
+    date = this.toDate(date);
+    return new Date(Math.round(date.getTime() / minMs) * minMs);
   }
 
   toDate(date: string | Date): Date {

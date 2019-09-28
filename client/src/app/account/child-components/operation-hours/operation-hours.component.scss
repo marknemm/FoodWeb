@@ -1,0 +1,108 @@
+@import '../../../../styles/constants.scss';
+
+.operation-hours-container {
+  &.limited {
+    .limit-availability-toggle {
+      margin-bottom: 18px;
+    }
+
+    .operation-hours-grid {
+      height: auto;
+    }
+  }
+
+  .operation-hours-grid {
+    overflow: hidden;
+    height: 0;
+  }
+
+  .operation-hours-form-container {
+    width: 100%;
+    border: 1px solid #EEE;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin-top: -1px;
+
+    &:first-child, &:nth-child(2) {
+      margin-top: 0;
+    }
+
+    @media only screen and (max-width: $md) {
+      border-right: none;
+
+      &:nth-child(even) {
+        border-top: none;
+      }
+    }
+
+    &:nth-child(odd) {
+      border-left: none;
+    }
+
+    &:nth-child(even) {
+      border-left: none;
+      border-right: none;
+    }
+
+    .operation-hours-form {
+      position: relative;
+      max-width: 325px;
+
+      .delete-button {
+        position: absolute;
+        right: 0px;
+        top: 2px;
+        width: 20px;
+        height: 20px;
+        font-size: 18px;
+        line-height: 18px;
+      }
+
+      .weekday-field {
+        display: inline-block;
+        width: 125px;
+        padding-right: 20px;
+        margin-bottom: 8px;
+      }
+
+      .time-fields-container {
+        display: inline-block;
+
+        @media only screen and (max-width: 410px) {
+          display: block;
+        }
+
+        .time-field {
+          display: inline-block;
+          width: 100px;
+          padding-right: 20px;
+        }
+      }
+    
+      .operation-hours-error {
+        font-size: 12px;
+        margin-top: -18px;
+      }
+    }
+  }
+
+  .add-button-container {
+    padding-top: 10px;
+  }
+
+  .operation-hours-display {
+    table {
+      tr {
+        padding-bottom: 5px;
+
+        &:last-child {
+          padding-bottom: 0px;
+        }
+
+        td:first-child {
+          padding-right: 5px;
+        }
+      }
+    }
+  }
+}

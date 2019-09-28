@@ -1,23 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
+import { SessionService } from './session/services/session/session.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   constructor(
     private _matIconReg: MatIconRegistry,
     private _domSanitizer: DomSanitizer,
-    jsonDateReviver: JSONDateReviver
+    jsonDateReviver: JSONDateReviver,
+    sessionService: SessionService
   ) {
     this._matIconReg.registerFontClassAlias('fontawesome', 'fa');
     this._initLetterIcons();
     jsonDateReviver.initJSONDateReviver();
+    sessionService.refreshSessionStatus().subscribe();
   }
 
   private _initLetterIcons(): void {
@@ -27,4 +30,6 @@ export class AppComponent {
       this._matIconReg.addSvgIcon(`letter_${char}`, svgUrl);
     }
   }
+
+  ngOnInit() {}
 }

@@ -1,22 +1,23 @@
 /**
  * An audit event type. Gives context to an Audit entry.
  */
-export type AuditEventType =
-  'Signup'
-  | 'Verify Account'
-  | 'Remove Unverified Account'
-  | 'Update Account'
-  | 'Update Password'
-  | 'Reset Password'
-  | 'Donate'
-  | 'Update Donation'
-  | 'Remove Donation'
-  | 'Claim Donation'
-  | 'Unclaim Donation'
-  | 'Schedule Delivery'
-  | 'Cancel Delivery'
-  | 'Delivery State Advance'
-  | 'Delivery State Undo';
+export enum AuditEventType {
+  Signup = 'Signup',
+  VerifyAccount = 'Verify Account',
+  RemoveUnverifiedAccount = 'Remove Unverified Account',
+  UpdateAccount = 'Update Account',
+  UpdatePassword = 'Update Password',
+  ResetPassword = 'Reset Password',
+  Donate = 'Donate',
+  UpdateDonation = 'Update Donation',
+  RemoveDonation = 'Remove Donation',
+  ClaimDonation = 'Claim Donation',
+  UnclaimDonation = 'Unclaim Donation',
+  ScheduleDelivery = 'Schedule Delivery',
+  CancelDelivery = 'Cancel Delivery',
+  DeliveryStateAdvance = 'Delivery State Advance',
+  DeliveryStateUndo = 'Delivery State Undo'
+}
 
 export interface AuditData<T = any> {
   old?: T;

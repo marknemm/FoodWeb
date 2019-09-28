@@ -2,7 +2,7 @@
   <div>Thank-you for your donation!</div>
   <p>
     You can view and edit your donation at this
-    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-details/{{ donation.id }}">link</a>.
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a>.
   </p>
   <p class="donation-summary-header">Donation Summary:</p>
   <table>
@@ -14,10 +14,12 @@
       <td class="donation-summary-label">Number of Meals:</td>
       <td>{{ donation.estimatedNumFeed }}</td>
     </tr>
-    <tr>
-      <td class="donation-summary-label">Value:</td>
-      <td>${{ donation.estimatedValue }}</td>
-    </tr>
+    {{#if donation.estimatedValue }}
+      <tr>
+        <td class="donation-summary-label">Value:</td>
+        <td>${{ donation.estimatedValue }}</td>
+      </tr>
+    {{/if}}
     <tr>
       <td class="donation-summary-label">Description:</td>
       <td class="donation-summary-description">{{ donation.description }}</td>

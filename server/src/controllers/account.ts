@@ -1,15 +1,20 @@
 import express = require('express');
 import { Request, Response } from 'express';
+import { UpdateDiff } from '../interfaces/update-diff';
 import { genListResponse } from '../helpers/list-response';
 import { ensureSessionActive } from '../middlewares/session.middleware';
 import { handleError } from '../middlewares/response-error.middleware';
 import { AccountEntity } from '../entity/account.entity';
-import { createAccount, updateAccount } from '../services/save-account';
+import { PasswordResetEntity } from '../entity/password-reset';
+import { createAccount, updateAccount, NewAccountData } from '../services/save-account';
+import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { updatePassword } from '../services/save-password';
 import { readAccounts, AccountsQueryResult, readAccount } from '../services/read-accounts';
-import { verifyAccount, resendVerificationEmail } from '../services/account-verification';
+import { verifyAccount, recreateUnverifiedAccount } from '../services/account-verification';
 import { savePasswordResetToken, resetPassword } from '../services/save-password-reset';
-import { scheduleExpiredPasswordResetTokDel } from '../services/delete-password-reset';
+import { saveAudit, AuditEventType, saveUpdateAudit } from '../services/save-audit';
+import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '../services/password-reset-message';
+import { sendAccountVerificationMessage, sendAccountVerificationEmail } from '../services/account-verification-message';
 import { AccountCreateRequest, Account } from '../../../shared/src/interfaces/account/account-create-request';
 import { AccountUpdateRequest } from '../../../shared/src/interfaces/account/account-update-request';
 import { PasswordUpdateRequest } from '../../../shared/src/interfaces/account/password-update-request';
@@ -19,42 +24,50 @@ import { AccountVerificationRequest } from '../../../shared/src/interfaces/accou
 
 const router = express.Router();
 
-// Account specific cron tasks go here.
-scheduleExpiredPasswordResetTokDel();
-
 router.post('/', (req: Request, res: Response) => {
   const createRequest: AccountCreateRequest = req.body;
   createAccount(createRequest)
+    .then((newAccountData: NewAccountData) => sendAccountVerificationMessage(newAccountData))
+    .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, createRequest.recaptchaScore))
     .then(_handleAccountSaveResult.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });
 
 router.post('/verify', (req: Request, res: Response) => {
   const account: AccountEntity = (req.session ? req.session.account : null);
-  const accountVerifyReq: AccountVerificationRequest = req.body;
-  verifyAccount(account, accountVerifyReq)
+  const verificationReq: AccountVerificationRequest = req.body;
+  verifyAccount(account, verificationReq)
+    .then((account: AccountEntity) => saveAudit(AuditEventType.VerifyAccount, account, account, verificationReq.recaptchaScore))
     .then(_handleAccountVerificationResult.bind(this, req, res))
     .catch(handleError.bind(this, res));
 });
 
 router.put('/', ensureSessionActive, (req: Request, res: Response) => {
-  const accountUpdateReq: AccountUpdateRequest = req.body;
-  updateAccount(accountUpdateReq, req.session.account)
-    .then(_handleAccountSaveResult.bind(this, req, res))
+  const updateReq: AccountUpdateRequest = req.body;
+  updateAccount(updateReq, req.session.account)
+    .then((accountDiff: UpdateDiff<AccountEntity>) =>
+      saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff, updateReq.recaptchaScore)
+    )
+    .then((accountDiff: UpdateDiff<AccountEntity>) => _handleAccountSaveResult(req, res, accountDiff.new))
     .catch(handleError.bind(this, res));
 });
 
 router.put('/password', ensureSessionActive, (req: Request, res: Response) => {
-  const updateRequest: PasswordUpdateRequest = req.body;
-  updatePassword(updateRequest, req.session.account)
+  const myAccount: AccountEntity = req.session.account;
+  const updateReq: PasswordUpdateRequest = req.body;
+  updatePassword(updateReq, myAccount)
+    .then(() => saveUpdateAudit(AuditEventType.UpdatePassword, myAccount, { old: 'xxx', new: 'xxx' }, updateReq.recaptchaScore))
     .then(() => res.send({}))
     .catch(handleError.bind(this, res));
 });
 
 router.put('/reset-password/', (req: Request, res: Response) => {
-  const resetRequest: PasswordResetRequest = req.body;
-  resetPassword(resetRequest)
-    .then((account: AccountEntity) => res.send(account))
+  const myAccount: AccountEntity = req.session.account;
+  const resetReq: PasswordResetRequest = req.body;
+  resetPassword(resetReq)
+    .then(() => saveUpdateAudit(AuditEventType.ResetPassword, myAccount, { old: 'xxx', new: 'xxx' }, resetReq.recaptchaScore))
+    .then(() => sendPasswordResetSuccessEmail(myAccount))
+    .then(() => res.send(myAccount))
     .catch(handleError.bind(this, res));
 });
 
@@ -71,12 +84,17 @@ router.get('/', (req: Request, res: Response) => {
 router.get('/reset-password', (req: Request, res: Response) => {
   const username: string = req.query.username;
   savePasswordResetToken(username)
+    .then((passwordResetEntity: PasswordResetEntity) =>
+      sendPasswordResetEmail(passwordResetEntity.account, passwordResetEntity.resetToken)
+    )
     .then(() => res.send())
     .catch(handleError.bind(this, res));
 });
 
 router.get('/resend-verification-email', ensureSessionActive, (req: Request, res: Response) => {
-  resendVerificationEmail(req.session.account)
+  const account: AccountEntity = req.session.account;
+  recreateUnverifiedAccount(account)
+    .then((unverifiedAccount: UnverifiedAccountEntity) => sendAccountVerificationEmail(account, unverifiedAccount))
     .then(() => res.send())
     .catch(handleError.bind(this, res));
 });

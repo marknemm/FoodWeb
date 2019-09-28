@@ -9,4 +9,6 @@ export interface AccountReadFilters {
   organizationName?: string;
   operationHoursRange?: DateTimeRange;
   distanceRangeMi?: number;
+  lat?: number;
+  lon?: number;
 }

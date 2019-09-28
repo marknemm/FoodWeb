@@ -1,4 +1,4 @@
-import { Account, ContactInfo, Organization, OperationHours, Volunteer } from '../interfaces/account/account';
+import { Account, ContactInfo, Organization, OperationHours, Volunteer, AccountType } from '../interfaces/account/account';
 import { Validation } from '../constants/validation';
 import { ValidationHelper } from './validation-helper';
 export { Account };
@@ -8,19 +8,19 @@ export class AccountHelper {
   private _validationHelper = new ValidationHelper();
 
   isAdmin(account: Account): boolean {
-    return (account && account.accountType === 'Admin');
+    return (account && account.accountType === AccountType.Admin);
   }
 
   isDonor(account: Account, ignoreAdmin = false): boolean {
-    return (account && (account.accountType === 'Donor' || (!ignoreAdmin && this.isAdmin(account))));
+    return (account && (account.accountType === AccountType.Donor || (!ignoreAdmin && this.isAdmin(account))));
   }
 
   isReceiver(account: Account, ignoreAdmin = false): boolean {
-    return (account && (account.accountType === 'Receiver' || (!ignoreAdmin && this.isAdmin(account))));
+    return (account && (account.accountType === AccountType.Receiver || (!ignoreAdmin && this.isAdmin(account))));
   }
 
   isVolunteer(account: Account, ignoreAdmin = false): boolean {
-    return (account && (account.accountType === 'Volunteer' || (!ignoreAdmin && this.isAdmin(account))));
+    return (account && (account.accountType === AccountType.Volunteer || (!ignoreAdmin && this.isAdmin(account))));
   }
 
   isMyAccount(myAccount: Account, accountId: number, ignoreAdmin = false): boolean {
@@ -32,13 +32,13 @@ export class AccountHelper {
   }
 
   accountName(account: Account): string {
-    return (account.accountType === 'Donor' || account.accountType === 'Receiver')
+    return (account.accountType === AccountType.Donor || account.accountType === AccountType.Receiver)
       ? account.organization.organizationName
       : `${account.volunteer.firstName} ${account.volunteer.lastName}`;
   }
 
   accountDetailsRouterLink(account: Account): string[] {
-    return ['/account-details/', `${account.id}`];
+    return ['/account/details/', `${account.id}`];
   }
 
   formatPhoneNumber(phoneNumber: string): string {
@@ -100,7 +100,7 @@ export class AccountHelper {
     if (requireErr) { return requireErr; }
 
     // Organization is only required for 'Donor' and 'Receiver' type accounts.
-    if (['Donor', 'Receiver'].indexOf(account.accountType) >= 0) {
+    if ([AccountType.Donor, AccountType.Receiver].indexOf(account.accountType) >= 0) {
       if (!account.organization) {
         return 'Organization required';
       }
@@ -108,7 +108,7 @@ export class AccountHelper {
       const organizationErr: string = this.validateOrganization(account.organization);
       if (organizationErr) { return organizationErr; }
     }
-    if (account.accountType === 'Volunteer') {
+    if (account.accountType === AccountType.Volunteer) {
       if (!account.volunteer) {
         return 'Volunteer info required';
       }
@@ -116,7 +116,7 @@ export class AccountHelper {
       const volunteerErr: string = this.validateVolunteer(account.volunteer);
       if (volunteerErr) { return volunteerErr; }
     }
-    if (!Validation.ACCOUNT_TYPE_REGEX.test(account.accountType) && (account.accountType !== 'Admin' || allowAdminAccountType)) {
+    if (!Validation.ACCOUNT_TYPE_REGEX.test(account.accountType) && (account.accountType !== AccountType.Admin || allowAdminAccountType)) {
       return 'Invalid account type';
     }
 

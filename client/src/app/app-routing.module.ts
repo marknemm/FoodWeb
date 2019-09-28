@@ -1,41 +1,34 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { environment } from '../environments/environment';
+import { AppShellComponent } from './app-shell/domain-components/app-shell/app-shell.component';
 import { HomeComponent } from './components/home/home.component';
-import { SignupComponent } from './components/signup/signup.component';
-import { SignupVerificationComponent } from './components/signup-verification/signup-verification.component';
-import { AccountsComponent } from './components/accounts/accounts.component';
-import { AccountDetailsComponent } from './components/account-details/account-details.component';
-import { PasswordResetComponent } from './components/password-reset/password-reset.component';
-import { AuthGaurdService } from './services/auth-gaurd/auth-gaurd.service';
-import { DonateComponent } from './components/donate/donate.component';
-import { DonationsComponent } from './components/donations/donations.component';
-import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
-import { DeliveriesComponent } from './components/deliveries/deliveries.component';
-import { NotificationsComponent } from './components/notifications/notifications.component';
 import { AboutComponent } from './components/about/about.component';
-import { EventRegistrationsComponent } from './components/event-registrations/event-registrations.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'home' },
-  { path: 'login', pathMatch: 'full', redirectTo: 'home/login' },
-  { path: 'home', component: HomeComponent },
-  { path: 'home/:login', component: HomeComponent },
-  { path: 'about', component: AboutComponent },
-  { path: 'signup', component: SignupComponent },
-  { path: 'signup/:accountType', component: SignupComponent },
-  { path: 'signup-verification', component: SignupVerificationComponent },
-  { path: 'account-details', component: AccountDetailsComponent, canActivate: [AuthGaurdService] },
-  { path: 'account-details/:id', component: AccountDetailsComponent, canActivate: [AuthGaurdService] },
-  { path: 'accounts', component: AccountsComponent },
-  { path: 'password-reset', component: PasswordResetComponent },
-  { path: 'donate', component: DonateComponent },
-  { path: 'donations', component: DonationsComponent },
-  { path: 'donations/my', component: DonationsComponent, canActivate: [AuthGaurdService] },
-  { path: 'donation-details/:id', component: DonationDetailsComponent },
-  { path: 'deliveries', component: DeliveriesComponent },
-  { path: 'deliveries/my', component: DeliveriesComponent, canActivate: [AuthGaurdService] },
-  { path: 'notifications', component: NotificationsComponent, canActivate: [AuthGaurdService] },
-  { path: 'event-registrations', component: EventRegistrationsComponent }
+  { path: '', pathMatch: 'full', redirectTo: (environment.mobile ? 'mobile/home' : 'home') },
+  // Redirects from old app structure.
+  { path: 'notifications', pathMatch: 'full', redirectTo: 'notification/list/my' },
+  { path: 'signup-verification', pathMatch: 'full', redirectTo: 'signup/verification' },
+  { path: 'donation-details/:id', pathMatch: 'full', redirectTo: 'donation/details/:id' },
+  {
+    path: '',
+    component: AppShellComponent,
+    children: [
+      { path: 'home', component: HomeComponent },
+      { path: 'home/:login', component: HomeComponent },
+      { path: 'about', component: AboutComponent },
+      { path: 'signup', loadChildren: () => import('./signup/signup.module').then(mod => mod.SignupModule) },
+      { path: 'account', loadChildren: () => import('./account/account.module').then(mod => mod.AccountModule) },
+      { path: 'password', loadChildren: () => import('./password/password.module').then(mod => mod.PasswordModule) },
+      { path: 'donation', loadChildren: () => import('./donation/donation.module').then(mod => mod.DonationModule) },
+      { path: 'donor', loadChildren: () => import('./donor/donor.module').then(mod => mod.DonorModule) },
+      { path: 'delivery', loadChildren: () => import('./delivery/delivery.module').then(mod => mod.DeliveryModule) },
+      { path: 'notification', loadChildren: () => import('./notification/notification.module').then(mod => mod.NotificationModule) },
+      { path: 'event', loadChildren: () => import('./event/event.module').then(mod => mod.EventModule) },
+      { path: 'mobile', loadChildren: () => import('./mobile/mobile.module').then(mod => mod.MobileModule) }
+    ]
+  },
 ];
 
 @NgModule({

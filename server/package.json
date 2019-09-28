@@ -9,13 +9,13 @@
     "build:e2e": "npm run build:watch",
     "clean": "rimraf ./dist ./coverage ./ormlogs.log",
     "clean:all": "npm run clean && rimraf ./node_modules",
-    "debug": "tsc-watch -p ./src/tsconfig.app.json --onSuccess \"nodemon -e .js,.hbs,.css --watch ./dist/server/src/ --watch ./dist/shared/ --watch ./templates/ --inspect ./dist/server/src/index.js\"",
+    "debug": "rimraf ./dist && tsc-watch -p ./src/tsconfig.app.json --onSuccess \"nodemon -e .js,.hbs,.css --watch ./dist/server/src/ --watch ./dist/shared/ --watch ./templates/ --inspect ./dist/server/src/index.js\"",
     "inline-css": "node ./templates/inline-css.js",
     "lint": "tslint -p ./tsconfig.json",
     "pg:destroy": "psql -U postgres -d foodweb -a -f database/destroy-db.sql",
     "pg:dump": "pg_dump -U postgres foodweb > database/dump.pgsql",
-    "pg:restore": "npm run pg:destroy && psql -f database/dump.pgsql foodweb",
-    "start": "tsc-watch -p ./src/tsconfig.app.json --onSuccess \"nodemon -e .js,.hbs,.css --watch ./dist/server/src/ --watch ./dist/shared/ --watch ./templates/ ./dist/server/src/index.js\"",
+    "pg:restore": "npm run pg:destroy && psql -U postgres -f database/dump.pgsql foodweb",
+    "start": "rimraf ./dist && tsc-watch -p ./src/tsconfig.app.json --onSuccess \"nodemon -e .js,.hbs,.css --watch ./dist/server/src/ --watch ./dist/shared/ --watch ./templates/ ./dist/server/src/index.js\"",
     "test": "npm run lint && ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts",
     "test:watch": "ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts",
     "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ormconfig.json",
@@ -32,6 +32,8 @@
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "connect-redis": "^3.4.0",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
     "cron": "^1.7.1",
     "crypto": "^1.0.1",
     "dotenv": "^6.2.0",
@@ -53,7 +55,6 @@
     "pg": "^7.7.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.3.3",
-    "sse": "0.0.8",
     "typeorm": "^0.2.16",
     "typescript": "^3.4.1"
   },
@@ -63,6 +64,7 @@
     "@types/chai": "^4.1.7",
     "@types/chai-http": "^3.0.5",
     "@types/connect-redis": "0.0.8",
+    "@types/cors": "^2.8.6",
     "@types/cron": "^1.7.1",
     "@types/expect": "^1.20.3",
     "@types/fs-extra": "^7.0.0",
@@ -91,7 +93,7 @@
     "tslint": "^5.11.0"
   },
   "engines": {
-    "node": "10.14.1",
+    "node": "10.16.1",
     "npm": "6.4.1"
   }
 }

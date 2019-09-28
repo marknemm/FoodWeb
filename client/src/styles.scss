@@ -54,6 +54,7 @@ a.no-hover {
   margin-bottom: 2px;
   color: $accent;
   vertical-align: top;
+  font-weight: bold;
 
   & + * {
     margin-left: 7px;
@@ -147,6 +148,44 @@ mat-card.mat-card {
   /* Green Pulse inset shadow animation */
   -webkit-animation: greenPulse 5s infinite !important;
   animation: greenPulse 5s infinite !important;
+}
+
+.notifications-button {
+  .mat-badge-small.mat-badge-overlap.mat-badge-after .mat-badge-content {
+    right: -5px;
+  }
+
+  .mat-badge-small.mat-badge-above .mat-badge-content {
+    top: -5px;
+  }
+}
+
+.notifications-menu-backdrop + div {
+  .mat-menu-panel {
+    max-width: 432px;
+    max-height: 70vh;
+    width: 100vw;
+    overflow-x: hidden;
+
+    .mat-menu-content {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+}
+
+.fade-bottom {
+  &:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.67) 90%);
+    width: 100%;
+    height: 100%;
+  }
 }
 
 @media only screen and (max-width: $md) {

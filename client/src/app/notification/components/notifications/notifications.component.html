@@ -1,0 +1,15 @@
+<div class="notifications-container">
+  <div *ngIf="!notificationsMenu" class="notifications-title page-title block-label">
+    Notifications
+  </div>
+
+  <mat-action-list>
+    <mat-divider></mat-divider>
+    <ng-container *ngFor="let notification of notifications">
+      <food-web-notification [notification]="notification"></food-web-notification>
+      <mat-divider></mat-divider>
+    </ng-container>
+  </mat-action-list>
+
+  <food-web-paginator [length]="totalCount"></food-web-paginator>
+</div>
