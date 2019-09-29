@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { PasswordResetService } from '../../services/password-reset/password-reset.service';
+import { PasswordForm } from '../../forms/password.form';
 
 @Component({
   selector: 'food-web-password-reset',
@@ -9,7 +9,7 @@ import { PasswordResetService } from '../../services/password-reset/password-res
 })
 export class PasswordResetComponent implements OnInit {
 
-  passwordResetForm = new FormGroup({});
+  passwordResetForm = new PasswordForm({ formMode: 'Signup' });
   passwordResetComplete = false;
 
   constructor(
