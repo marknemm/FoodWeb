@@ -62,12 +62,14 @@ router.put('/password', ensureSessionActive, (req: Request, res: Response) => {
 });
 
 router.put('/reset-password/', (req: Request, res: Response) => {
-  const myAccount: AccountEntity = req.session.account;
   const resetReq: PasswordResetRequest = req.body;
   resetPassword(resetReq)
-    .then(() => saveUpdateAudit(AuditEventType.ResetPassword, myAccount, { old: 'xxx', new: 'xxx' }, resetReq.recaptchaScore))
-    .then(() => sendPasswordResetSuccessEmail(myAccount))
-    .then(() => res.send(myAccount))
+    .then(async (account: AccountEntity) => {
+      await saveUpdateAudit(AuditEventType.ResetPassword, account, { old: 'xxx', new: 'xxx' }, resetReq.recaptchaScore);
+      return account;
+    })
+    .then((account: AccountEntity) => sendPasswordResetSuccessEmail(account))
+    .then((account: AccountEntity) => _handleAccountSaveResult(req, res, account))
     .catch(handleError.bind(this, res));
 });
 

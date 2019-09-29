@@ -38,12 +38,9 @@ export async function savePasswordResetToken(username: string): Promise<Password
  * @return A promise that resolves when the reset operation is complete.
  * @throws FoodWebError if the password reset failed (due to username - token mismatch or expired/missing token).
  */
-export async function resetPassword(resetRequest: PasswordResetRequest): Promise<void> {
+export async function resetPassword(resetRequest: PasswordResetRequest): Promise<AccountEntity> {
   const resetToken: string = resetRequest.resetToken;
-  const account: AccountEntity = await getRepository(AccountEntity).findOne({
-    relations: ['contactInfo', 'organization', 'operationHours'],
-    where: { username: resetRequest.username }
-  });
+  const account: AccountEntity = await readAccount(resetRequest.username);
   const passwordResetEntity: PasswordResetEntity = await getRepository(PasswordResetEntity).findOne({
     where: { resetToken, account }
   });
@@ -56,6 +53,8 @@ export async function resetPassword(resetRequest: PasswordResetRequest): Promise
     await manager.getRepository(PasswordResetEntity).remove(passwordResetEntity);
     await savePassword(manager, account, resetRequest.password, null, true);
   });
+
+  return account;
 }
 
 /**
