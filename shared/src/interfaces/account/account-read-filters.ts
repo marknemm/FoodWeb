@@ -11,4 +11,5 @@ export interface AccountReadFilters {
   distanceRangeMi?: number;
   lat?: number;
   lon?: number;
+  autoReceiver?: boolean;
 }

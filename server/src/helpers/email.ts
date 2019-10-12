@@ -9,6 +9,7 @@ export enum MailTransporter {
   SUPPORT = 'SUPPORT'
 }
 
+const offlineMode: boolean = (process.env.OFFLINE_MODE === 'true');
 const noreplyTransporter: nodemailer.Transporter = _initEmailTransporter(MailTransporter.NOREPLY);
 const supportTransporter: nodemailer.Transporter = _initEmailTransporter(MailTransporter.SUPPORT);
 
@@ -19,6 +20,7 @@ export function broadcastEmail(
   template: string,
   context?: any
 ): Promise<void[]> {
+  if (offlineMode) { return; }
   const sendPromises: Promise<void>[] = [];
   for (let i = 0; i < accounts.length; i++) {
     sendPromises.push(
@@ -41,6 +43,7 @@ export function sendEmail(
   template: string,
   context?: any
 ): Promise<void> {
+  if (offlineMode) { return; }
   context = _fillMissingContext(context, account, template);
 
   return new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {
@@ -70,7 +73,7 @@ export function sendEmail(
 }
 
 function _fillMissingContext(context: any, account: Account, template: string): any {
-  context = (context ? context : {});
+  context = (context ? Object.assign({}, context) : {});
   context.env = (context.env ? context.env : process.env);
   context.year = (context.year ? context.year : new Date().getFullYear());
   context.account = (context.account ? context.account : account);
@@ -100,6 +103,7 @@ function _getAllRecipients(to: string): string[] {
 }
 
 function _initEmailTransporter(mailTransporter: MailTransporter): nodemailer.Transporter {
+  if (offlineMode) { return null; }
   const transporter = _createTransporter(mailTransporter);
   _verifyTransporterConnection(transporter);
   return transporter;

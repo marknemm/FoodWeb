@@ -15,7 +15,7 @@ import { VolunteerEntity } from './volunteer-entity';
 import { OperationHoursEntity } from './operation-hours.entity';
 import { Account, AccountType } from '../../../shared/src/interfaces/account/account';
 import { Constants } from '../../../shared/src/constants/constants';
-export { Account };
+export { Account, AccountType };
 
 const _constants = new Constants();
 

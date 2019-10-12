@@ -53,6 +53,10 @@ export class MapService {
     if (typeof destination === 'string') {
       return destination;
     }
+    if ((<ContactInfo>destination).streetAddress) {
+      destination = <ContactInfo>destination;
+      return `${destination.streetAddress}+${destination.city}+${destination.stateProvince}+${destination.postalCode}`;
+    }
     const destinationGPS: GPSCoordinate = this._waypointToGPSCoordinate(destination);
     return `${destinationGPS.lat},${destinationGPS.lon}`;
   }

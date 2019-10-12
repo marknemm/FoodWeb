@@ -55,6 +55,10 @@ export interface DonationReadFilters {
    */
   latestDeliveryWindowStart?: Date;
   /**
+   * The ratio of time remaining for the duration of time between donation creation and pickup/delivery window start.
+   */
+  remainingTimeRatioUntilDelivery?: number;
+  /**
    * The type of the donation.
    */
   donationType?: string;

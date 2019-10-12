@@ -4,6 +4,7 @@ import { DeliveryEntity } from './delivery-entity';
 import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
 import { Constants } from '../../../shared/src/constants/constants';
 import { ContactInfoEntity } from './contact-info.entity';
+export { Donation, DonationStatus };
 
 const _constants = new Constants();
 

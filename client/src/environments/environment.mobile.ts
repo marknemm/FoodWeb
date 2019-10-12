@@ -5,6 +5,7 @@ export const environment = {
   e2e: false,
   hmr: false,
   mobile: true,
+  offline: false,
   supportEmail: 'support@wnyfoodweb.com',
   recaptchaSiteKey: '',
   googleMapsJSApiKey: 'AIzaSyDQdydkED1Z-nZvQXQQHlOYXnrmdqdFedA',

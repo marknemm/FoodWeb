@@ -4,8 +4,9 @@ import { LoginRequiredError } from '../helpers/food-web-error';
 import { genSimpleWhereConditions, genPagination } from '../helpers/query-builder-helper';
 import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
 import { Account, OperationHours } from '../../../shared/src/interfaces/account/account';
-import { AccountReadRequest, AccountReadFilters } from '../../../shared/src/interfaces/account/account-read-request';
+import { AccountReadRequest, AccountReadFilters, AccountReadSort } from '../../../shared/src/interfaces/account/account-read-request';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
+import { DonationEntity } from '../entity/donation.entity';
 
 export interface AccountsQueryResult {
   accounts: AccountEntity[];
@@ -35,7 +36,7 @@ function _buildQuery(request: AccountReadRequest, myAccount: Account): SelectQue
   let queryBuilder: SelectQueryBuilder<AccountEntity> = getRepository(AccountEntity).createQueryBuilder('account');
   queryBuilder = _genJoins(queryBuilder);
   queryBuilder = _genWhereCondition(queryBuilder, request, myAccount);
-  queryBuilder = _genOrdering(queryBuilder);
+  queryBuilder = _genOrdering(queryBuilder, request);
   queryBuilder = genPagination(queryBuilder, request);
   return queryBuilder;
 }
@@ -44,8 +45,10 @@ function _genJoins(queryBuilder: SelectQueryBuilder<AccountEntity>): SelectQuery
   return queryBuilder
     .innerJoinAndSelect('account.contactInfo', 'contactInfo')
     .leftJoinAndSelect('account.organization', 'organization')
+    .leftJoinAndSelect('organization.receiver', 'receiver')
+    .leftJoinAndSelect('organization.donor', 'donor')
     .leftJoinAndSelect('account.volunteer', 'volunteer')
-    .leftJoinAndMapMany('account.operationHours', 'account.operationHours', 'operationHours');
+    .leftJoinAndMapMany('account.operationHours', 'account.operationHours', 'operationHours')
 }
 
 function _genWhereCondition(
@@ -56,6 +59,7 @@ function _genWhereCondition(
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'account', filters, ['id', 'username', 'accountType']);
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'contactInfo', filters, ['email']);
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'organization', filters, ['organizationName']);
+  queryBuilder = genSimpleWhereConditions(queryBuilder, 'receiver', filters, ['autoReceiver']);
   queryBuilder = _genOperationHoursCondition(queryBuilder, filters, myAccount);
   queryBuilder = _genDistanceCondition(queryBuilder, filters, myAccount);
   return queryBuilder;
@@ -72,14 +76,18 @@ function _genOperationHoursCondition(
       filters.operationHoursRange,
       myAccount.contactInfo.timezone
     );
-    console.log(operationHours.weekday);
     // Check for any overlap (invert condition where op hours are completely after or before donation window).
-    queryBuilder = queryBuilder.andWhere(
-      'operationHours.weekday = :weekday ' +
-      'AND NOT (' +
-        'operationHours.startTime >= :endTime ' +
-        'OR operationHours.endTime <= :startTime' +
-      ')',
+    queryBuilder = queryBuilder.andWhere(`
+      (
+        operationHours.weekday IS NULL
+        OR (
+          operationHours.weekday = :weekday
+          AND NOT (
+            operationHours.startTime >= :endTime
+            OR operationHours.endTime <= :startTime
+          )
+        )
+      )`,
       operationHours
     );
   }
@@ -107,8 +115,11 @@ function _genDistanceCondition(
 }
 
 function _genOrdering(
-  queryBuilder: SelectQueryBuilder<AccountEntity>
+  queryBuilder: SelectQueryBuilder<AccountEntity>,
+  sort: AccountReadSort
 ): SelectQueryBuilder<AccountEntity> {
+
+
   return queryBuilder
     .addOrderBy('organization.organizationName', 'ASC')
     .addOrderBy('volunteer.lastName', 'ASC')
