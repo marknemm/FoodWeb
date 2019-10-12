@@ -11,7 +11,7 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
   @Input('foodWebDisplayEditTransition') editing = false;
   @Input() form: HTMLElement;
   @Input() display: HTMLElement;
-  @Input() duration = '0.25s';
+  @Input() duration = 0.25;
   @Input() heightRecalcAtMs: number[];
   @Input() recalcTrigger: Observable<any>;
 
@@ -31,10 +31,9 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
 
   private _initStyles(): void {
     const containerStyles: CSSStyleDeclaration = this.container.style
-    containerStyles.transition = `height ${this.duration} ease-in-out`;
-    containerStyles.overflow = 'hidden';
-    this.form.style.transition = `opacity ${this.duration} ease-in-out`;
-    this.display.style.transition = `opacity ${this.duration} ease-in-out`;
+    containerStyles.transition = `height ${this.duration}s ease-in-out`;
+    this.form.style.transition = `opacity ${this.duration}s ease-in-out`;
+    this.display.style.transition = `opacity ${this.duration}s ease-in-out`;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -47,6 +46,9 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
   }
 
   recalcStyles(): void {
+    const initContainerOverflow = this.container.style.overflow;
+    this.container.style.overflow = 'hidden';
+    setTimeout(() => this.container.style.overflow = initContainerOverflow, this.duration * 1000);
     this._recalcStylesFor(this.form.style, this.editing);
     this._recalcStylesFor(this.display.style, !this.editing);
     const heightRecalcAtMs = this.heightRecalcAtMs ? this.heightRecalcAtMs : [0];

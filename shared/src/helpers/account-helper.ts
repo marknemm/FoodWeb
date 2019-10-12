@@ -105,7 +105,7 @@ export class AccountHelper {
         return 'Organization required';
       }
 
-      const organizationErr: string = this.validateOrganization(account.organization);
+      const organizationErr: string = this.validateOrganization(account.organization, account.accountType);
       if (organizationErr) { return organizationErr; }
     }
     if (account.accountType === AccountType.Volunteer) {
@@ -152,10 +152,25 @@ export class AccountHelper {
     return '';
   }
 
-  validateOrganization(organization: Organization): string {
+  validateOrganization(organization: Organization, accountType: AccountType): string {
     if (!organization) { return ''; }
     if (!organization.organizationName) {
       return 'Organization name required';
+    }
+    if (accountType === AccountType.Donor) {
+      if (!organization.donor) {
+        return 'Donor organization field required for Donor account type';
+      }
+      if (organization.receiver) {
+        return 'Receiver organization field should not be present for Donor account type';
+      }
+    } else if (accountType === AccountType.Receiver) {
+      if (!organization.receiver) {
+        return 'Receiver organization field required for Receiver account type';
+      }
+      if (organization.donor) {
+        return 'Donor organization field should not be present for Receiver account type';
+      }
     }
     return '';
   }

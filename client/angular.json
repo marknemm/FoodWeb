@@ -156,6 +156,14 @@
                   "with": "src//environments/environment.qa-no-recaptcha.ts"
                 }
               ]
+            },
+            "offline": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.offline.ts"
+                }
+              ]
             }
           }
         },
@@ -174,6 +182,9 @@
             },
             "qa": {
               "browserTarget": "food-web:build:qa"
+            },
+            "offline": {
+              "browserTarget": "food-web:build:offline"
             }
           }
         },

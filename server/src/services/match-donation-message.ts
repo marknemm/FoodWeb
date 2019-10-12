@@ -35,7 +35,7 @@ export async function sendClaimMessages(donation: DonationEntity): Promise<Donat
     sendNotification(
       donation.donorAccount,
       {
-        notificationType: NotificationType.Signup,
+        notificationType: NotificationType.ClaimDonation,
         notificationDetailId: donation.id,
         notificationLink: `/donation/details/${donation.id}`,
         notificationTitle: `Donation Claimed`,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Optional } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 import { OrganizationForm } from '../../forms/organization.form';
 import { FormHelperService } from '../../../shared/services/form-helper/form-helper.service';
@@ -18,7 +18,7 @@ export class OrganizationComponent implements OnInit {
   deliveryInstructionsPlaceholderModifier: string = '';
 
   constructor(
-    private _formGroupDirective: FormGroupDirective,
+    @Optional() private _formGroupDirective: FormGroupDirective,
     private _formHelper: FormHelperService,
   ) {}
 

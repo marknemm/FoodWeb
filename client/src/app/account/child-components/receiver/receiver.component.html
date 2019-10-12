@@ -1,0 +1,23 @@
+<div [formGroup]="formGroup" class="receiver-container">
+  <div *ngIf="editing" class="receiver-form row">
+    <div class="col-md-12">
+      <mat-slide-toggle formControlName="autoReceiver" class="auto-receiver fill">
+        Automatically Accept Donations
+      </mat-slide-toggle>
+    </div>
+  </div>
+
+  <div *ngIf="!editing" class="receiver-display row">
+    <div class="col-sm-12">
+      <div class="inline-label">Automatically Accept Donations:</div>
+      <div class="d-inline-block">
+        <span *ngIf="formGroup.get('autoReceiver').value" class="check-yes">
+          <mat-icon>check</mat-icon> <span>Yes</span>
+        </span>
+        <span *ngIf="!formGroup.get('autoReceiver').value" class="cross-no">
+          <mat-icon>close</mat-icon> <span>No</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

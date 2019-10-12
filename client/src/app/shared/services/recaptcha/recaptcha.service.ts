@@ -27,7 +27,11 @@ export class RecaptchaService implements HttpInterceptor {
    * @param next The next handler for outgoing requests.
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const noRecaptcha: boolean = (!environment.recaptchaSiteKey || req.headers.get('no-recaptcha') != null);
+    const noRecaptcha: boolean = (
+      !environment.recaptchaSiteKey
+      || environment.offline
+      || req.headers.get('no-recaptcha') != null
+    );
     if (!noRecaptcha && req.method !== 'GET') {
       const actionName = req.url.replace(environment.server, '').replace(/-/g, '_');
       return this._recaptchaV3Service.execute(actionName).pipe(

@@ -4,6 +4,7 @@ import { RecaptchaV3 } from 'express-recaptcha';
 import { RecaptchaResponseDataV3 } from 'express-recaptcha/dist/interfaces';
 
 const _recaptchaEnabled = (process.env.RECAPTCHA_ENABLED === 'true');
+const _offlineMode = (process.env.OFFLINE_MODE === 'true');
 const _recaptchaRequired = (process.env.RECAPTCHA_REQUIRED === 'true');
 const _recaptchaScoreMin = parseFloat(process.env.RECAPTCHA_SCORE_MIN);
 const _recpatchaV3 = new RecaptchaV3(process.env.RECAPTCHA_SITE_KEY, process.env.RECAPTCHA_SECRET_KEY);
@@ -18,7 +19,8 @@ export function recaptcha(request: Request, response: Response, next: NextFuncti
   const reqBody: any = request.body; // Save actual request body to forward and process later.
 
   // If RECAPTCHA is not enabled in server environment configs, then simply go to next handler.
-  if (request.method === 'GET' || !_recaptchaEnabled || (reqBody.recaptchaScore == null && !_recaptchaRequired)) {
+  if (request.method === 'GET' || !_recaptchaEnabled || _offlineMode || (reqBody.recaptchaScore == null && !_recaptchaRequired)) {
+    delete reqBody.recaptchaScore; // Make sure we don't have unprocessed recaptcha score.
     return next();
   }
 

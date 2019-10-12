@@ -68,12 +68,14 @@ function _genJoins(queryBuilder: SelectQueryBuilder<DonationEntity>): SelectQuer
   return queryBuilder
     .innerJoinAndSelect('donation.donorAccount', 'donorAccount')
     .innerJoinAndSelect('donorAccount.organization', 'donorOrganization')
+    .innerJoinAndSelect('donorOrganization.donor', 'donor')
     .innerJoinAndSelect('donorAccount.contactInfo', 'donorContactInfo')
     .innerJoinAndSelect('donation.donorContactOverride', 'donorContactOverride')
     .leftJoinAndMapMany('donorAccount.operationHours', 'donorAccount.operationHours', 'donorOpHours')
     .leftJoinAndSelect('donation.receiverAccount', 'receiverAccount')
     .leftJoinAndSelect('receiverAccount.organization', 'receiverOrganization')
     .leftJoinAndSelect('receiverAccount.contactInfo', 'receiverContactInfo')
+    .leftJoinAndSelect('receiverOrganization.receiver', 'receiver')
     .leftJoinAndMapMany('receiverAccount.operationHours', 'receiverAccount.operationHours', 'receiverOpHours')
     .leftJoinAndSelect('donation.delivery', 'delivery')
     .leftJoinAndSelect('delivery.volunteerAccount', 'delivererAccount')
@@ -136,6 +138,14 @@ function _genDeliveryWindowConditions(
       'delivery.pickupWindowStart <= :latestDeliveryWindowStart',
       { latestDeliveryWindowStart: filters.latestDeliveryWindowStart }
     );
+  }
+  if (filters.remainingTimeRatioUntilDelivery) {
+    queryBuilder = queryBuilder.andWhere(`
+      (
+        EXTRACT(EPOCH FROM (now() - donation.createTimestamp))::DECIMAL
+        / ABS(EXTRACT(EPOCH FROM (donation.pickupWindowStart - donation.createTimestamp)))::DECIMAL
+      ) >= :elapsedTimeRatio
+    `, { elapsedTimeRatio: (1 - filters.remainingTimeRatioUntilDelivery) });
   }
   return queryBuilder;
 }

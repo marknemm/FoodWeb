@@ -6,6 +6,7 @@ import { FoodWebError } from './food-web-error';
 import { ContactInfo, GeographyLocation } from '../../../shared/src/interfaces/account/contact-info';
 export { ContactInfo, GeographyLocation };
 
+const offlineMode = (process.env.OFFLINE_MODE === 'true');
 const _geocoder: Geocoder = NodeGeocoder({
   provider: <Providers>process.env.GEOCODER_PROVIDER, 
   apiKey: process.env.GEOCODER_API_KEY,
@@ -33,6 +34,7 @@ function _contactInfoToQuery(contactInfo: ContactInfo | string): Query | string 
 }
 
 async function _geocode(query: string | Query, retryCnt = 0): Promise<Location> {
+  if (offlineMode) { return { lat: 43, lon: 73 }; }
   let entries: Entry[] = [];
   try {
     entries = await _geocoder.geocode(query);

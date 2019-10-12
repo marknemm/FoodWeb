@@ -20,6 +20,8 @@ import { VolunteerComponent } from './child-components/volunteer/volunteer.compo
 import { OperationHoursComponent } from './child-components/operation-hours/operation-hours.component';
 import { AddressComponent } from './child-components/address/address.component';
 import { ProfileImgComponent } from './child-components/profile-img/profile-img.component';
+import { ReceiverComponent } from './child-components/receiver/receiver.component';
+import { DonorComponent } from './child-components/donor/donor.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { ProfileImgComponent } from './child-components/profile-img/profile-img.
     VolunteerComponent,
     OperationHoursComponent,
     AddressComponent,
-    ProfileImgComponent
+    ProfileImgComponent,
+    ReceiverComponent,
+    DonorComponent
   ],
   imports: [
     AccountRoutingModule,
