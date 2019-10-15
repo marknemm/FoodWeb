@@ -5,6 +5,8 @@ import { AccountEntity, AccountType } from '../entity/account.entity';
 import { AccountsQueryResult, readAccounts } from '../services/read-accounts';
 import { readDonations, DonationsQueryResult } from '../services/read-donations';
 import { claimDonation } from '../services/match-donation';
+import { findPotentialDeliverers, FoundPotentialDeliverers } from '../services/find-potential-deliverers';
+import { messagePotentialDeliverers } from '../services/message-potential-deliverers';
 import { initDbConnectionPool } from '../helpers/db-connection-pool';
 import { MailTransporter, sendEmail } from '../helpers/email';
 import { NotificationType, sendNotification } from '../helpers/push-notification';
@@ -56,6 +58,8 @@ async function _autoAssignReceivers(donations: DonationEntity[]): Promise<void> 
     const receiverAccount: AccountEntity = await _findAutoReceiver(donation);
     if (receiverAccount) {
       donation = await claimDonation({ donationId: donation.id }, receiverAccount);
+      const foundDeliverers: FoundPotentialDeliverers = await findPotentialDeliverers(donation);
+      messagePromises.push(messagePotentialDeliverers(foundDeliverers));
       messagePromises.push(_sendDonationAutoAssignMessages(donation));
     }
   }
