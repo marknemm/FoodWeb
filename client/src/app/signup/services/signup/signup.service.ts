@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError, finalize, mergeMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { SessionService } from '../../../session/services/session/session.service';
 import { ErrorHandlerService } from '../../../shared/services/error-handler/error-handler.service';
@@ -35,11 +35,10 @@ export class SignupService {
       const request: AccountCreateRequest = { account, password };
       this._pageProgressService.activate(true);
       this._httpClient.post<Account>(this.url, request).pipe(
+        mergeMap((account: Account) => this._sessionService.login(account.username, password)),
         catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
         finalize(() => this._pageProgressService.reset())
-      ).subscribe(
-        (savedAccount: Account) => this._sessionService.account = savedAccount
-      );
+      ).subscribe();
     } else {
       this._alertService.displaySimpleMessage('You must accept the terms and conditions to complete signup', 'danger');
     }

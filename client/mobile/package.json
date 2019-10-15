@@ -7,6 +7,10 @@
   "scripts": {
     "build": "cordova build android --release",
     "build:debug": "cordova build android",
+    "clean": "rimraf ./platforms",
+    "clean:all": "npm run clean && rimraf ./plugins && rimraf ./node_modules",
+    "postinstall": "npm run prepare",
+    "prepare": "cordova prepare",
     "start:browser": "cordova run browser"
   },
   "keywords": [

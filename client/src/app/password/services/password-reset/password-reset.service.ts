@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, finalize, map } from 'rxjs/operators';
+import { catchError, finalize, mergeMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { ErrorHandlerService } from '../../../shared/services/error-handler/error-handler.service';
 import { SessionService, Account } from '../../../session/services/session/session.service';
@@ -46,7 +46,7 @@ export class PasswordResetService {
     this._loading = true;
     this._pageProgressSerivce.activate(true);
     return this._httpClient.put<Account>(this.url, request).pipe(
-      map((account: Account) => this._sessionService.account = account),
+      mergeMap((account: Account) => this._sessionService.login(account.username, password)),
       catchError((err: any) => this._errorHandlerService.handleError(err)),
       finalize(() => {
         this._loading = false;

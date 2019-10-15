@@ -1,18 +1,16 @@
-import { Component, OnInit, Optional } from '@angular/core';
-import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { Observable, of, never, ObservableInput } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { never, ObservableInput } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoginForm } from '../../forms/login.form';
 import { SessionService } from '../../services/session/session.service';
-import { DeviceInfoService } from '../../../mobile-boot/services/device-info/device-info.service';
 import { PasswordResetService } from '../../../password/services/password-reset/password-reset.service';
 
 @Component({
-  selector: 'food-web-login-dialog',
-  templateUrl: './login-dialog.component.html',
-  styleUrls: ['./login-dialog.component.scss']
+  selector: 'food-web-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
-export class LoginDialogComponent implements OnInit {
+export class LoginComponent implements OnInit {
 
   loginForm: LoginForm;
 
@@ -23,8 +21,6 @@ export class LoginDialogComponent implements OnInit {
 
   constructor(
     public sessionService: SessionService,
-    public deviceInfoService: DeviceInfoService,
-    @Optional() public matDialogRef: MatDialogRef<LoginDialogComponent>,
     private _passwordResetService: PasswordResetService
   ) {}
 
@@ -46,22 +42,6 @@ export class LoginDialogComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = new LoginForm();
-  }
-
-  public static openIfNotLoggedIn(sessionService: SessionService, matDialog: MatDialog, config: MatDialogConfig = {}): Observable<boolean> {
-    const deviceInfoService = new DeviceInfoService();
-    config.panelClass = (config.panelClass)
-      ? (typeof config.panelClass === 'string')
-        ? [config.panelClass]
-        : config.panelClass
-      : [];
-    if (deviceInfoService.isMobileApplication) {
-      config.panelClass.push('full-screen-mobile');
-    }
-    config.autoFocus = !deviceInfoService.isMobileApplication;
-    return (!sessionService.loggedIn)
-      ? matDialog.open(LoginDialogComponent, config).afterClosed()
-      : of(true);
   }
 
   get loading(): boolean {
@@ -90,7 +70,6 @@ export class LoginDialogComponent implements OnInit {
 
   private _handleLoginSuccess(): void {
     this._loginErr = '';
-    this.matDialogRef.close(true);
   }
 
   forgotPassword(): void {

@@ -53,10 +53,14 @@ dump.*
 /e2e/*.js
 /e2e/*.map
 
-#System Files
+# System Files
 .DS_Store
 Thumbs.db
 
-#ORM Files
+# ORM Files
 **/ormconfig.json
 **/ormlogs.log
+
+# Mobile build artifacts
+**/mobile/platforms
+**/mobile/plugins

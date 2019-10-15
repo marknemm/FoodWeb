@@ -29,7 +29,7 @@ router.post('/', (req: Request, res: Response) => {
   createAccount(createRequest)
     .then((newAccountData: NewAccountData) => sendAccountVerificationMessage(newAccountData))
     .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, createRequest.recaptchaScore))
-    .then(_handleAccountSaveResult.bind(this, req, res))
+    .then((account: AccountEntity) => res.send(account))
     .catch(handleError.bind(this, res));
 });
 
@@ -69,7 +69,7 @@ router.put('/reset-password/', (req: Request, res: Response) => {
       return account;
     })
     .then((account: AccountEntity) => sendPasswordResetSuccessEmail(account))
-    .then((account: AccountEntity) => _handleAccountSaveResult(req, res, account))
+    .then((account: AccountEntity) => res.send(account))
     .catch(handleError.bind(this, res));
 });
 
