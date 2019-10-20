@@ -9,7 +9,6 @@
     "build:debug": "cordova build android",
     "clean": "rimraf ./platforms",
     "clean:all": "npm run clean && rimraf ./plugins && rimraf ./node_modules",
-    "postinstall": "npm run prepare",
     "prepare": "cordova prepare",
     "start:browser": "cordova run browser"
   },
@@ -23,11 +22,11 @@
     "cordova-browser": "^6.0.0",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-geolocation": "^4.0.2",
-    "cordova-plugin-splashscreen": "^5.0.3"
+    "cordova-plugin-splashscreen": "^5.0.3",
+    "cordova-plugin-whitelist": "1"
   },
   "devDependencies": {
-    "cordova": "^9.0.0",
-    "cordova-plugin-whitelist": "1"
+    "cordova": "^9.0.0"
   },
   "cordova": {
     "plugins": {
