@@ -1,14 +1,14 @@
 import { TypedFormGroup } from '../../data-structure/typed-form-group';
 import { OperationHoursInfo } from './account.form';
-import { OperationHoursArrayConfig, OperationHoursArray } from './operation-hours.array';
+import { OperationHoursArray } from './operation-hours.array';
 import { OperationHours } from '../../../../../shared/src/interfaces/account/account';
 
 export class OperationHoursInfoForm extends TypedFormGroup<OperationHoursInfo> {
 
-  constructor(config?: OperationHoursArrayConfig) {
+  constructor(value?: OperationHours[]) {
     super({
       limitOperationHours: false,
-      operationHours: new OperationHoursArray(config)
+      operationHours: new OperationHoursArray(value)
     });
   }
 

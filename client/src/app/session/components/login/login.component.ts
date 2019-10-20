@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import { never, ObservableInput } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoginForm } from '../../forms/login.form';
@@ -74,7 +75,7 @@ export class LoginComponent implements OnInit {
 
   forgotPassword(): void {
     this._title = 'Reset Password';
-    this.loginForm.reset();
+    this.loginForm.reset({ username: this.loginForm.value.username });
     this.loginForm.get('password').disable();
     this._isPasswordReset = true;
   }
@@ -82,7 +83,9 @@ export class LoginComponent implements OnInit {
   returnToLogin(): void {
     this._title = 'Login';
     this.loginForm.get('password').enable();
+    this.loginForm.reset({ username: this.loginForm.value.username });
     this._isPasswordReset = false;
+    this._resetMessageSent = false;
   }
 
   sendPasswordResetEmail(): void {

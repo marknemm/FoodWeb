@@ -7,6 +7,7 @@ import { AccountForm } from '../../../account/forms/account.form';
 import { TermsConditionsDialogComponent } from '../terms-conditions-dialog/terms-conditions-dialog.component';
 import { SignupService } from '../../services/signup/signup.service';
 import { SignupVerificationService } from '../../services/signup-verification/signup-verification.service';
+import { DeviceInfoService } from '../../../mobile/services/device-info/device-info.service';
 import { SessionService } from '../../../session/services/session/session.service';
 import { Account, AccountType } from '../../../../../../shared/src/interfaces/account/account';
 
@@ -25,10 +26,11 @@ export class SignupComponent implements OnInit, OnDestroy {
   constructor(
     public sessionService: SessionService,
     public signupVerificationService: SignupVerificationService,
+    public deviceInfoService: DeviceInfoService,
     private _signupService: SignupService,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    private _matDialog: MatDialog
+    private _matDialog: MatDialog,
   ) {}
 
   get accountType(): AccountType {
@@ -43,8 +45,12 @@ export class SignupComponent implements OnInit, OnDestroy {
     return this._operationHoursHeight;
   }
 
+  get loading(): boolean {
+    return this._signupService.loading;
+  }
+
   ngOnInit() {
-    this.accountForm = new AccountForm({ formMode: 'Signup', initEmptyOpHourWeekdays: true }, this._destroy$.asObservable());
+    this.accountForm = new AccountForm({ formMode: 'Signup' }, this._destroy$.asObservable());
     this._listenAccountTypeSelect();
     this._listenAccountTypeRoute();
   }
@@ -53,9 +59,10 @@ export class SignupComponent implements OnInit, OnDestroy {
     // When accountType form field is updated, we must update route so user can rely on back button / link directly to correct signup.
     this.accountForm.get('accountType').valueChanges.pipe(
       takeUntil(this._destroy$)
-    ).subscribe((accountType: AccountType) =>
-      this._router.navigate(['/signup', accountType])
-    );
+    ).subscribe((accountType: AccountType) => {
+      const baseUrl: string = this.deviceInfoService.isMobileApp ? '/mobile-boot/signup' : '/signup';
+      this._router.navigate([baseUrl, accountType]);
+    });
   }
 
   private _listenAccountTypeRoute(): void {

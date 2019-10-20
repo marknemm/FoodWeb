@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, Subject, of } from 'rxjs';
 import { map, catchError, finalize, mergeMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { ErrorHandlerService } from '../../../shared/services/error-handler/error-handler.service';
 import { AlertService } from '../../../shared/services/alert/alert.service';
-import { DeviceInfoService } from '../../../mobile-boot/services/device-info/device-info.service';
+import { DeviceInfoService } from '../../../mobile/services/device-info/device-info.service';
 import { LoginRequest } from '../../../../../../shared/src/interfaces/session/login-request';
 import { LoginResponse } from '../../../../../../shared/src/interfaces/session/login-response';
 import { AppTokenLoginRequest } from '../../../../../../shared/src/interfaces/session/app-token-login-request';
@@ -26,6 +27,7 @@ export class SessionService {
 
   constructor(
     private _httpClient: HttpClient,
+    private _router: Router,
     private _errorHandlerService: ErrorHandlerService,
     private _alertService: AlertService,
     private _accountHelper: AccountHelper,
@@ -124,13 +126,16 @@ export class SessionService {
    * Attempts to log the user in. Implicitly opens a server side event connection on login success.
    * @param username The username of the user.
    * @param password The passwsord of the user.
+   * @param silent Whether or not the login operation should be done silently.
+   * A silent login operation will not display a message on success or redirect the user to any other page.
+   * Default value is false.
    * @return An observable that emits the user's account when login is successful, and throws error on failure.
    */
-  login(username: string, password: string): Observable<Account> {
-    const loginRequest: LoginRequest = { username, password, isApp: this._deviceInfoService.isMobileApplication };
+  login(username: string, password: string, silent = false): Observable<Account> {
+    const loginRequest: LoginRequest = { username, password, isApp: this._deviceInfoService.isMobileApp };
     this._loading = true;
     return this._httpClient.post<LoginResponse>(this.url, loginRequest, { withCredentials: true }).pipe(
-      map((response: LoginResponse) => this._handleLoginSuccess(response)),
+      map((response: LoginResponse) => this._handleLoginSuccess(response, silent)),
       finalize(() => this._loading = false)
     );
   }
@@ -138,16 +143,20 @@ export class SessionService {
   /**
    * Handles the successful login of a user by setting up session data in the browser and opening a server side event client connection.
    * @param response The login response.
-   * @param isSessionRefresh Set to true if the logout is from a session refresh operation. Default is false.
+   * @param silent Set to true if the login success handler should silently record the user session on the client.
+   * In silent mode, it will not display a login message or redirect a phone app to the home page.
    * @return The logged in user's account.
    */
-  private _handleLoginSuccess(response: LoginResponse, isSessionRefresh = false): Account {
+  private _handleLoginSuccess(response: LoginResponse, silent: boolean): Account {
     this.account = response.account;
-    if (!isSessionRefresh) {
-      this._alertService.displaySimpleMessage(`Welcome, ${this._accountHelper.accountName(response.account)}`, 'success');
-    }
-    if (response.appSessionToken) {
+    if (this._deviceInfoService.isMobileApp) {
       localStorage.setItem('appSessionToken', response.appSessionToken);
+      if (!silent) {
+        this._router.navigate(['/home']);
+      }
+    }
+    if (!silent) {
+      this._alertService.displaySimpleMessage(`Welcome, ${this._accountHelper.accountName(response.account)}`, 'success');
     }
     this._login$.next(response.account);
     return response.account;
@@ -160,15 +169,16 @@ export class SessionService {
    */
   refreshSessionStatus(): Observable<Account> {
     this._loading = true;
-    return this._httpClient.get<LoginResponse>(this.url).pipe(
+    const params = new HttpParams().append('isApp', `${this._deviceInfoService.isMobileApp}`);
+    return this._httpClient.get<LoginResponse>(this.url, { params }).pipe(
       mergeMap((response: LoginResponse) => {
         // Sync client session with existing session on server.
-        if (response) {
+        if (response.account) {
           return of(this._handleLoginSuccess(response, true));
         }
         // Attempt to re-establish session via mobile app session token.
         const appSessionToken: string = localStorage.getItem('appSessionToken');
-        if (this._deviceInfoService.isMobileApplication && appSessionToken) {
+        if (this._deviceInfoService.isMobileApp && appSessionToken) {
           return this._appTokenLogin(appSessionToken);
         }
         // Logout to sync client session with lost session on server.
@@ -201,16 +211,23 @@ export class SessionService {
    * @param isSessionRefresh Set to true if the logout is from a session refresh operation. Default is false.
    */
   logout(isSessionRefresh = false): void {
-    (isSessionRefresh)
-      ? (this.loggedIn)
-        ? this._alertService.displaySimpleMessage('You have been logged out due to inactivity', 'warn')
-        : ''
-      : this._alertService.displaySimpleMessage('Logout successful', 'success');
+    // NOTE: Important that mobile app navigation to login happens first to not show change in app header before navigation!
+    (this._deviceInfoService.isMobileApp)
+      ? this._router.navigate(['/mobile-boot/login'])
+      : this._displayLogoutAlert(isSessionRefresh);
     this.account = null;
-    this._logout$.next();
-    const params = new HttpParams().append('isApp', `${this._deviceInfoService.isMobileApplication}`);
+    const params = new HttpParams().append('isApp', `${this._deviceInfoService.isMobileApp}`);
     this._httpClient.delete<void>(this.url, { params }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
     ).subscribe();
+    this._logout$.next();    
+  }
+
+  private _displayLogoutAlert(isSessionRefresh: boolean): void {
+    if (isSessionRefresh && this.loggedIn) {
+      this._alertService.displaySimpleMessage('You have been logged out due to inactivity', 'warn');
+    } else if (!isSessionRefresh) {
+      this._alertService.displaySimpleMessage('Logout successful', 'success');
+    }
   }
 }

@@ -46,6 +46,8 @@ $warn-lighter: map-get($warn-palette, lighter);
 $warn-darker: map-get($warn-palette, darker);
 $warn-darkest: map-get($warn-palette, 900);
 
+$content-background: #efefef;
+
 $alert-info-background: #d9edf7;
 $alert-info-color: #31708f;
 

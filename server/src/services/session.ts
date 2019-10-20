@@ -54,7 +54,7 @@ async function _getAccountEntity(username: string): Promise<AccountEntity> {
  * @param account The account that to token is associated with.
  * @return A promise that resolves to the saved long-lived mobile app session token.
  */
-async function _saveAppSessionToken(account: AccountEntity): Promise<string> {
+export async function saveAppSessionToken(account: AccountEntity): Promise<string> {
   const repository: Repository<AppSessionEntity> = getRepository(AppSessionEntity);
   await repository.delete({ account });
   let appSessionEntity: AppSessionEntity;
@@ -87,7 +87,7 @@ function _genAppSessionEntity(account: AccountEntity): AppSessionEntity {
  */
 async function _handleValidationSuccess(account: AccountEntity, isApp: boolean): Promise<LoginResponse> {
   const appSessionToken: string = (isApp)
-    ? await _saveAppSessionToken(account)
+    ? await saveAppSessionToken(account)
     : null;
   return { account, appSessionToken };
 }

@@ -4,7 +4,7 @@ import { Observable, of, never, ObservableInput } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoginForm } from '../../forms/login.form';
 import { SessionService } from '../../services/session/session.service';
-import { DeviceInfoService } from '../../../mobile-boot/services/device-info/device-info.service';
+import { DeviceInfoService } from '../../../mobile/services/device-info/device-info.service';
 import { PasswordResetService } from '../../../password/services/password-reset/password-reset.service';
 
 @Component({
@@ -55,10 +55,10 @@ export class LoginDialogComponent implements OnInit {
         ? [config.panelClass]
         : config.panelClass
       : [];
-    if (deviceInfoService.isMobileApplication) {
+    if (deviceInfoService.isMobileApp) {
       config.panelClass.push('full-screen-mobile');
     }
-    config.autoFocus = !deviceInfoService.isMobileApplication;
+    config.autoFocus = !deviceInfoService.isMobileApp;
     return (!sessionService.loggedIn)
       ? matDialog.open(LoginDialogComponent, config).afterClosed()
       : of(true);
@@ -95,7 +95,7 @@ export class LoginDialogComponent implements OnInit {
 
   forgotPassword(): void {
     this._title = 'Reset Password';
-    this.loginForm.reset();
+    this.loginForm.reset({ username: this.loginForm.value.username });
     this.loginForm.get('password').disable();
     this._isPasswordReset = true;
   }
@@ -103,7 +103,9 @@ export class LoginDialogComponent implements OnInit {
   returnToLogin(): void {
     this._title = 'Login';
     this.loginForm.get('password').enable();
+    this.loginForm.reset({ username: this.loginForm.value.username });
     this._isPasswordReset = false;
+    this._resetMessageSent = false;
   }
 
   sendPasswordResetEmail(): void {

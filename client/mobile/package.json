@@ -22,7 +22,8 @@
     "cordova-android": "^8.0.0",
     "cordova-browser": "^6.0.0",
     "cordova-plugin-device": "^2.0.3",
-    "cordova-plugin-recaptcha": "^1.0.0"
+    "cordova-plugin-geolocation": "^4.0.2",
+    "cordova-plugin-splashscreen": "^5.0.3"
   },
   "devDependencies": {
     "cordova": "^9.0.0",
@@ -31,7 +32,9 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-device": {}
+      "cordova-plugin-device": {},
+      "cordova-plugin-geolocation": {},
+      "cordova-plugin-splashscreen": {}
     },
     "platforms": [
       "android",

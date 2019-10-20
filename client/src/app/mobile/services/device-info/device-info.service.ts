@@ -17,7 +17,7 @@ export class DeviceInfoService {
     return this._deviceLoaded;
   }
 
-  get isMobileApplication(): boolean {
+  get isMobileApp(): boolean {
     return (this.platform !== 'Web');
   }
 

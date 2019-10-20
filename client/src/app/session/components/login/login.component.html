@@ -21,9 +21,6 @@
     <ng-container *ngIf="!isPasswordReset">
       <button mat-button type="button" color="accent" (click)="forgotPassword()">Forgot Password</button>
       <button mat-raised-button type="submit" color="primary" [disabled]="loginForm.invalid">Login</button>
-      <div class="signup-container">
-        Don't have an account: <a [routerLink]="['/mobile/signup']">Signup</a>
-      </div>
     </ng-container>
     <ng-container *ngIf="isPasswordReset && !resetMessageSent">
       <button mat-button type="button" color="accent" (click)="returnToLogin()">Login</button>
@@ -31,7 +28,10 @@
     </ng-container>
     <ng-container *ngIf="resetMessageSent">
       <button mat-button type="submit" color="accent">Resend Email</button>
-      <button mat-raised-button type="button" color="primary" mat-dialog-close>Ok</button>
+      <button mat-raised-button type="button" color="primary" (click)="returnToLogin()">Login</button>
     </ng-container>
+    <div class="signup-link-container">
+      Don't have an account: <a [routerLink]="['/mobile-boot/signup']">Signup</a>
+    </div>
   </div>
 </form>

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Optional } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
-import { Subject } from 'rxjs';
 import { TypedFormControl } from '../../../data-structure/typed-form-control';
 import { OperationHoursInfoForm } from '../../forms/operation-hours-info.form';
 import { OperationHoursArray } from '../../forms/operation-hours.array';
@@ -22,8 +21,6 @@ export class OperationHoursComponent implements OnInit {
   @Input() operationHoursArr: OperationHours[] = [];
   @Input() formGroupName: string;
   @Input() formGroup: OperationHoursInfoForm;
-
-  private _destroy$ = new Subject();
 
   constructor(
     public constantsService: ConstantsService,
@@ -47,10 +44,6 @@ export class OperationHoursComponent implements OnInit {
     if (this.operationHoursArr && this.operationHoursArr.length > 0) {
       this.formGroup.patchValue(this.operationHoursArr);
     }
-  }
-
-  ngOnDestroy() {
-    this._destroy$.next();
   }
 
   getDefaultStartTime(operationHoursForm: OperationHoursForm): string {

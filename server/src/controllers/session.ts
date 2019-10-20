@@ -1,6 +1,7 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { login, appTokenLogin, logout } from '../services/session';
+import { AccountEntity } from '../entity/account.entity';
+import { login, appTokenLogin, logout, saveAppSessionToken } from '../services/session';
 import { handleError } from '../middlewares/response-error.middleware';
 import { LoginRequest } from '../../../shared/src/interfaces/session/login-request';
 import { LoginResponse } from '../../../shared/src/interfaces/session/login-response';
@@ -29,7 +30,14 @@ router.post('/', (req: Request, res: Response) => {
 });
 
 router.get('/', (req: Request, res: Response) => {
-  res.send(req.session['account']);
+  const account: AccountEntity = req.session['account'];
+  const loginResponse: LoginResponse = { account };
+  if (account && req.query.isApp === 'true') {
+    saveAppSessionToken(account)
+      .then((appSessionToken: string) => loginResponse.appSessionToken = appSessionToken)
+      .catch(handleError.bind(this, res))
+  }
+  res.send(loginResponse);
 });
 
 router.delete('/', (req: Request, res: Response) => {

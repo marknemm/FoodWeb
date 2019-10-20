@@ -54,4 +54,8 @@ export class TypedFormGroup<T> extends FormGroup {
   setControl<K extends Extract<keyof T, string>>(name: K, control: TypedAbstractControl<T[K]>): void {
     super.setControl(name, control);
   }
+
+  reset(value?: Partial<T>, options?: { onlySelf?: boolean; emitEvent?: boolean; }): void {
+    super.reset(value, options);
+  }
 }
