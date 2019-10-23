@@ -124,17 +124,17 @@ export class SessionService {
 
   /**
    * Attempts to log the user in. Implicitly opens a server side event connection on login success.
-   * @param username The username of the user.
+   * @param usernameEmail The username or email of the user.
    * @param password The passwsord of the user.
    * @param silent Whether or not the login operation should be done silently.
    * A silent login operation will not display a message on success or redirect the user to any other page.
    * Default value is false.
    * @return An observable that emits the user's account when login is successful, and throws error on failure.
    */
-  login(username: string, password: string, silent = false): Observable<Account> {
-    const loginRequest: LoginRequest = { username, password, isApp: this._deviceInfoService.isMobileApp };
+  login(usernameEmail: string, password: string, silent = false): Observable<Account> {
+    const loginRequest: LoginRequest = { usernameEmail, password, isApp: this._deviceInfoService.isMobileApp };
     this._loading = true;
-    return this._httpClient.post<LoginResponse>(this.url, loginRequest, { withCredentials: true }).pipe(
+    return this._httpClient.post<LoginResponse>(this.url, loginRequest).pipe(
       map((response: LoginResponse) => this._handleLoginSuccess(response, silent)),
       finalize(() => this._loading = false)
     );

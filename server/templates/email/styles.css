@@ -116,3 +116,8 @@ table, tr, td {
 .date-time .date {
   padding-right: 7px;
 }
+
+.list-no-bullets {
+  list-style-type: none;
+  padding-left: 10px;
+}

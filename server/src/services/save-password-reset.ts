@@ -1,6 +1,6 @@
 import { EntityManager, getRepository, getConnection } from 'typeorm';
 import { randomBytes } from 'crypto';
-import { readAccount } from './read-accounts';
+import { readAccount, AccountsQueryResult, readAccounts } from './read-accounts';
 import { savePassword } from './save-password';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordResetEntity } from '../entity/password-reset';
@@ -9,20 +9,53 @@ import { PasswordResetRequest } from '../../../shared/src/interfaces/account/pas
 
 /**
  * Creates and saves a password reset (token) entry for a specified user.
- * @param username The username of the user to reset the password of.
+ * @param usernameEmail The username or email of the user to reset the password of.
  * @return A promise that resolves to the newly created password reset (token) entry.
- * @throws FoodWebError if the given username cannot be found.
+ * @throws FoodWebError if more than one account is found for a given email, or no accounts are found for either email or username.
  */
-export async function savePasswordResetToken(username: string): Promise<PasswordResetEntity> {
+export async function savePasswordResetToken(usernameEmail: string): Promise<PasswordResetEntity> {
+  const account: AccountEntity = await _findAccount(usernameEmail);
+  const passwordResetEntity: PasswordResetEntity = await _findOrGenPasswordResetEntity(account);
+  passwordResetEntity.account = account;
+  return passwordResetEntity;
+}
+
+/**
+ * Attempts to find an account via given username or email.
+ * @param usernameEmail The username or email to search by.
+ * @return A promise that resolves to the found account.
+ * @throws FoodWebError if more than one account is found for a given email, or no accounts are found for either email or username.
+ */
+async function _findAccount(usernameEmail: string): Promise<AccountEntity> {
+  // Try to get account via email match.
+  const queryResult: AccountsQueryResult = await readAccounts({ email: usernameEmail, page: 1, limit: 2 }, null);
+  if (queryResult.totalCount > 1) {
+    throw new FoodWebError('Cannot get a unique account with the given email. Try a username instead.');
+  }
+
+  // If email match didn't work, then try to get account via username match.
+  const account: AccountEntity = (queryResult.totalCount === 1)
+    ? queryResult.accounts[0]
+    : await readAccount(usernameEmail);
+  if (!account) {
+    throw new FoodWebError('Account not found. Be sure to enter a valid username.');
+  }
+  return account;
+}
+
+/**
+ * Attempts to find an already created password reset entity (such as in case where user resends email).
+ * If one cannot be found, then it creates and saves a new one.
+ * @param account The account associated with the password reset entity.
+ * @return A promise that resolves to the found or generated password reset entity.
+ */
+async function _findOrGenPasswordResetEntity(account: AccountEntity): Promise<PasswordResetEntity> {
   return getConnection().transaction(async (manager: EntityManager) => {
-    const account: AccountEntity = (await readAccount(username));
-    if (!account) {
-      throw new FoodWebError('Account not found. Be sure to enter a valid username.');
-    }
     // Attempt to load already created password reset entity (user may click 'Resend Email').
     let passwordResetEntity: PasswordResetEntity = await manager.getRepository(PasswordResetEntity).findOne({ 
       account: { id: account.id }
     });
+    // If we cannot load password reset entity, then generate a new one.
     if (!passwordResetEntity) {
       passwordResetEntity = _genPasswordResetEntity(account);
       await manager.getRepository(PasswordResetEntity).save(passwordResetEntity);

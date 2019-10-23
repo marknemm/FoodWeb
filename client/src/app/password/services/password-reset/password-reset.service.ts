@@ -30,8 +30,8 @@ export class PasswordResetService {
     return this._loading;
   }
 
-  sendPasswordResetEmail(username: string): Observable<void> {
-    const params = (new HttpParams()).set('username', username);
+  sendPasswordResetEmail(usernameEmail: string): Observable<void> {
+    const params = (new HttpParams()).set('usernameEmail', usernameEmail);
     this._loading = true;
     return this._httpClient.get<void>(this.url, { params }).pipe(
       catchError((err: any) => this._errorHandlerService.handleError(err)),

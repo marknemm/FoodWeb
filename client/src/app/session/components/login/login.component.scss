@@ -1,8 +1,11 @@
 @import '../../../../styles/constants.scss';
 
 .login-container {
-  padding-top: 10px;
-  padding-bottom: 10px;
+
+  &.container {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
 
   .food-web-img {
     display: block;
@@ -16,6 +19,18 @@
     font-size: 25px;
     width: 100%;
   }
+
+  .recovery-links {
+    margin-top: 10px;
+    
+    a {
+      font-size: 14px;
+      color: $accent-darker;
+      cursor: pointer;
+      margin-left: 17px;
+      outline: none;
+    }
+  }
   
   .align-right {
     text-align: right;
@@ -28,11 +43,6 @@
     .signup-link-container {
       margin-top: 30px;
       text-align: center;
-      display: none;
-
-      @media only screen and (max-width: $sm) {
-        display: block;
-      }
     }
   }
 

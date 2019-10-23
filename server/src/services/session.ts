@@ -1,5 +1,6 @@
 import { getRepository, Repository } from 'typeorm';
 import { randomBytes } from 'crypto';
+import { readAccount, readAccounts, AccountsQueryResult } from './read-accounts';
 import { AccountEntity } from '../entity/account.entity';
 import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { AppSessionEntity } from '../entity/app-session.entity';
@@ -7,20 +8,16 @@ import { checkPasswordMatch } from '../helpers/password-match';
 import { FoodWebError } from '../helpers/food-web-error';
 import { LoginRequest } from '../../../shared/src/interfaces/session/login-request';
 import { LoginResponse } from '../../../shared/src/interfaces/session/login-response';
-import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
-
-const _opHoursHelper = new OperationHoursHelper();
 
 /**
  * Performs the login for a given user.
- * @param username The username of the user.
- * @param password The (plain text) password of the user.
+ * @param loginRequest The login request containing the username/email and password.
  * @return A promise where on success it will provide the Account of the newly logged in user.
  * @throws A FoodWebError with status 401 when the login fails.
  */
 export async function login(loginRequest: LoginRequest): Promise<LoginResponse> {
   try {
-    const account: AccountEntity = await _getAccountEntity(loginRequest.username);
+    const account: AccountEntity = await _getAccountEntity(loginRequest.usernameEmail);
     const validated: boolean = await checkPasswordMatch(account, loginRequest.password);
     if (validated) {
       return _handleValidationSuccess(account, loginRequest.isApp);
@@ -28,24 +25,33 @@ export async function login(loginRequest: LoginRequest): Promise<LoginResponse> 
     throw new Error('Password match validation failed');
   } catch (err) {
     console.error(err);
-    throw new FoodWebError('Incorrect username or password', 401);
+    throw (err.status === 401)
+      ? err
+      : new FoodWebError('Incorrect username or password', 401);
   }
 }
 
 /**
  * Gets an account entity via username match.
- * @param username The username of the account entity to retrieve.
+ * @param usernameEmail The username or email of the account entity to retrieve.
  * @return A promise that resolves to the matched account entity.
  * @throws An error when an account entity match cannot be found.
  */
-async function _getAccountEntity(username: string): Promise<AccountEntity> {
-  const account: AccountEntity = await getRepository(AccountEntity).findOne({ username });
-  if (!account) {
-    throw new Error(`User could not be found with username: ${username}`);
+async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> {
+  // Try to get account via email address.
+  let queryResult: AccountsQueryResult = await readAccounts({ email: usernameEmail, page: 1, limit: 2 }, null);
+  if (queryResult.totalCount > 1) {
+    throw new FoodWebError('More than one account shares the given email. Please provide a username instead.', 401);
   }
 
+  const account: AccountEntity = (queryResult.totalCount === 0)
+    ? await readAccount(usernameEmail) // Try to get account via username.
+    : queryResult.accounts[0];
+  if (!account) {
+    throw new Error(`User could not be found with username/email: ${usernameEmail}`);
+  }
+  
   account.verified = (await getRepository(UnverifiedAccountEntity).count({ account: { id: account.id } })) === 0;
-  _opHoursHelper.formatOperationHoursTimes(account.operationHours);
   return account;
 }
 
