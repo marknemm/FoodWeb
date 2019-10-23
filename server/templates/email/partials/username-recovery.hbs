@@ -1,0 +1,15 @@
+<p>
+  We have received a username recovery request from you.<br>
+  {{#if multipleUsernames }}
+    Here is a list of the usernames associated with your email address:
+  {{else}}
+    Your username is:
+  {{/if}}
+</p>
+<ul class="list-no-bullets">
+  {{#iterate usernames }}
+    <li>
+      <strong>{{username}}</strong>
+    </li>
+  {{/iterate}}
+</ul>

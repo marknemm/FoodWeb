@@ -1,6 +1,14 @@
 @import '../../../../styles/constants.scss';
 
-:host {
+.signup-container {
+  &.mobile-app {
+    background-color: $content-background;
+    padding-top: 10px;
+    padding-bottom: 30px;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
   .account-type-header {
     margin-bottom: 30px;
   }
@@ -33,6 +41,12 @@
   .submit-button-container {
     button {
       min-width: 100px;
+    }
+  }
+
+  .signup-success-button-container {
+    button {
+      margin-right: 5px;
     }
   }
 }

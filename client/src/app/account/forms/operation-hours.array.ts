@@ -11,17 +11,27 @@ export class OperationHoursArray extends TypedFormArray<OperationHours> {
 
   private _constants = new Constants();
 
-  constructor(config: OperationHoursArrayConfig = {}) {
+  constructor(value?: OperationHours[]) {
     super([], () => new OperationHoursForm());
-    if (config.value) {
-      this.patchValue(config.value);
-    }
-    if (config.initEmptyWeekdays) {
-      this._initEmptyWeekdays();
-    }
+    (value && value.length > 0)
+      ? this.patchValue(value)
+      : this.fillEmptyWeekdays();
   }
 
-  private _initEmptyWeekdays(): void {
+  patchValue(value: OperationHours[], options?: { onlySelf?: boolean; emitEvent?: boolean; }): void {
+    (!value || value.length === 0)
+      ? this.fillEmptyWeekdays()
+      : super.patchValue(value, options);
+  }
+
+  setValue(value: OperationHours[], options?: { onlySelf?: boolean; emitEvent?: boolean; }): void {
+    (!value || value.length === 0)
+      ? this.fillEmptyWeekdays()
+      : super.setValue(value, options);
+  }
+
+  fillEmptyWeekdays(): void {
+    this.reset();
     this._constants.WEEKDAYS.forEach((weekday: Weekday) => this.push({ weekday, startTime: '', endTime: '' }));
   }
 
@@ -47,9 +57,4 @@ export class OperationHoursArray extends TypedFormArray<OperationHours> {
     }
     return deleteConfirmation$;
   }
-}
-
-export interface OperationHoursArrayConfig {
-  value?: OperationHours[];
-  initEmptyWeekdays?: boolean;
 }

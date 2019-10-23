@@ -20,7 +20,7 @@
           <div class="time-fields-container">
             <div class="time-field">
               <mat-form-field class="fill" floatLabel="never">
-                <input matInput placeholder="Start Time" [ngxTimepicker]="startTimePicker" autocomplete="off"
+                <input matInput placeholder="Start Time" [ngxTimepicker]="startTimePicker" autocomplete="off" readonly="true"
                   formControlName="startTime" [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher">
                 <ngx-material-timepicker #startTimePicker
                   [minutesGap]="5"
@@ -31,7 +31,7 @@
             </div>
             <div class="time-field">
               <mat-form-field class="fill" floatLabel="never">
-                <input matInput placeholder="End Time" [ngxTimepicker]="endTimePicker" autocomplete="off"
+                <input matInput placeholder="End Time" [ngxTimepicker]="endTimePicker" autocomplete="off" readonly="true"
                   formControlName="endTime" [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher">
                 <ngx-material-timepicker #endTimePicker
                   [minutesGap]="5"

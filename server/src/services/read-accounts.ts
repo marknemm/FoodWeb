@@ -6,7 +6,6 @@ import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hour
 import { Account, OperationHours } from '../../../shared/src/interfaces/account/account';
 import { AccountReadRequest, AccountReadFilters, AccountReadSort } from '../../../shared/src/interfaces/account/account-read-request';
 import { AccountHelper } from '../../../shared/src/helpers/account-helper';
-import { DonationEntity } from '../entity/donation.entity';
 
 export interface AccountsQueryResult {
   accounts: AccountEntity[];
@@ -118,8 +117,6 @@ function _genOrdering(
   queryBuilder: SelectQueryBuilder<AccountEntity>,
   sort: AccountReadSort
 ): SelectQueryBuilder<AccountEntity> {
-
-
   return queryBuilder
     .addOrderBy('organization.organizationName', 'ASC')
     .addOrderBy('volunteer.lastName', 'ASC')

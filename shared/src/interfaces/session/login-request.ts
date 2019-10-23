@@ -1,6 +1,7 @@
 import { WriteRequest } from '../write-request';
 
 export interface LoginRequest extends WriteRequest {
-  username: string;
+  usernameEmail: string;
   password: string;
+  isApp?: boolean;
 }

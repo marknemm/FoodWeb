@@ -26,7 +26,7 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
       organization: new OrganizationForm(),
       volunteer: new VolunteerForm(),
       contactInfo: new ContactInfoForm(),
-      operationHours: new OperationHoursInfoForm({ initEmptyWeekdays: config.initEmptyOpHourWeekdays }),
+      operationHours: new OperationHoursInfoForm(),
       password: new PasswordForm({ formMode: config.formMode })
     });
     this.get('accountType').valueChanges.pipe(
@@ -98,7 +98,6 @@ export type AccountFormMode = 'Account' | 'Signup';
 export interface AccountFormConfig {
   value?: Partial<AccountFormT & Account>;
   formMode?: AccountFormMode;
-  initEmptyOpHourWeekdays?: boolean;
 }
 
 export interface AccountFormT extends Omit<Account, 'operationHours'> {

@@ -13,6 +13,7 @@ import { readAccounts, AccountsQueryResult, readAccount } from '../services/read
 import { verifyAccount, recreateUnverifiedAccount } from '../services/account-verification';
 import { savePasswordResetToken, resetPassword } from '../services/save-password-reset';
 import { saveAudit, AuditEventType, saveUpdateAudit } from '../services/save-audit';
+import { sendUsernameRecoveryEmail } from '../services/username-recovery-message';
 import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '../services/password-reset-message';
 import { sendAccountVerificationMessage, sendAccountVerificationEmail } from '../services/account-verification-message';
 import { AccountCreateRequest, Account } from '../../../shared/src/interfaces/account/account-create-request';
@@ -29,7 +30,7 @@ router.post('/', (req: Request, res: Response) => {
   createAccount(createRequest)
     .then((newAccountData: NewAccountData) => sendAccountVerificationMessage(newAccountData))
     .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, createRequest.recaptchaScore))
-    .then(_handleAccountSaveResult.bind(this, req, res))
+    .then((account: AccountEntity) => res.send(account))
     .catch(handleError.bind(this, res));
 });
 
@@ -69,23 +70,21 @@ router.put('/reset-password/', (req: Request, res: Response) => {
       return account;
     })
     .then((account: AccountEntity) => sendPasswordResetSuccessEmail(account))
-    .then((account: AccountEntity) => _handleAccountSaveResult(req, res, account))
+    .then((account: AccountEntity) => res.send(account))
     .catch(handleError.bind(this, res));
 });
 
-router.get('/', (req: Request, res: Response) => {
-  const readRequest: AccountReadRequest = req.query;
-  const myAccount: Account = (req.session ? req.session.account : null);
-  readAccounts(readRequest, myAccount)
-    .then(({ accounts, totalCount }: AccountsQueryResult) =>
-      res.send(genListResponse(accounts, totalCount, readRequest))
-    )
+router.get('/recover-username', (req: Request, res: Response) => {
+  const email: string = req.query.email;
+  readAccounts({ email, page: 0, limit: 1000 }, null)
+    .then((queryResult: AccountsQueryResult) => sendUsernameRecoveryEmail(queryResult.accounts))
+    .then(() => res.send())
     .catch(handleError.bind(this, res));
 });
 
 router.get('/reset-password', (req: Request, res: Response) => {
-  const username: string = req.query.username;
-  savePasswordResetToken(username)
+  const usernameEmail: string = req.query.usernameEmail;
+  savePasswordResetToken(usernameEmail)
     .then((passwordResetEntity: PasswordResetEntity) =>
       sendPasswordResetEmail(passwordResetEntity.account, passwordResetEntity.resetToken)
     )
@@ -106,6 +105,16 @@ router.get('/:id', (req: Request, res: Response) => {
   const myAccount: Account = (req.session ? req.session.account : null);
   readAccount(id, myAccount)
     .then((account: AccountEntity) => res.send(account))
+    .catch(handleError.bind(this, res));
+});
+
+router.get('/', (req: Request, res: Response) => {
+  const readRequest: AccountReadRequest = req.query;
+  const myAccount: Account = (req.session ? req.session.account : null);
+  readAccounts(readRequest, myAccount)
+    .then(({ accounts, totalCount }: AccountsQueryResult) =>
+      res.send(genListResponse(accounts, totalCount, readRequest))
+    )
     .catch(handleError.bind(this, res));
 });
 

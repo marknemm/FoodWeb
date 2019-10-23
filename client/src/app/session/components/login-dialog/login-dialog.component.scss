@@ -1,41 +1,6 @@
 @import '../../../../styles/constants.scss';
 
-.login-container {
+.login-dialog-container {
   min-width: 240px;
-
-  .food-web-img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 320px;
-    margin-bottom: 10px;
-  }
-
-  mat-form-field {
-    font-size: 25px;
-    width: 100%;
-  }
-  
-  .align-right {
-    text-align: right;
-    width: 100%;
-
-    .signup-container {
-      margin-top: 30px;
-      text-align: center;
-      display: none;
-
-      @media only screen and (max-width: $sm) {
-        display: block;
-      }
-    }
-  }
-
-  .login-err {
-    margin-top: -24px;
-  }
-  
-  button {
-    outline: none;
-  }
+  margin-bottom: -10px;
 }

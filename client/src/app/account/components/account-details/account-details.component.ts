@@ -82,7 +82,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
         this._isMyAccount = this.sessionService.isMyAccount(account.id);
         this._seeDonationsParams = this._genSeeDonationParams(account);
         // An admin account does not need to input the old password to update an account password.
-        this._passwordFormMode = (this.sessionService.isAdmin ? 'Signup' : 'Account');
+        this._passwordFormMode = 'Account';
         this._refreshAccountFormValue(account, true);
       }
     });
