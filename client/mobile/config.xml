@@ -25,6 +25,8 @@
             <application android:usesCleartextTraffic="true" />
         </edit-config>
 
+        <resource-file src="google-services.json" target="app/google-services.json" />
+
         <splash src="res/splash/splash.png" />
         <preference name="ShowSplashScreenSpinner" value="false"/>
         <preference name="AutoHideSplashScreen" value="false" />

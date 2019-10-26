@@ -1,8 +1,5 @@
 {
   "extends": "../tsconfig.json",
-  "types": [
-    "node"
-  ],
   "exclude": [
     "test.ts",
     "**/*.spec.ts"

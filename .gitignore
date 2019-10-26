@@ -19,6 +19,7 @@
 
 # sensitive data
 **/.env
+**/google-services.json
 app.yaml
 startup.sh
 nginx-ssl-setup.sh
