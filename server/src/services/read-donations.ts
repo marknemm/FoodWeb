@@ -1,5 +1,5 @@
-import { getRepository, Repository, SelectQueryBuilder } from 'typeorm';
-import { DonationEntity } from '../entity/donation.entity';
+import { getRepository, Repository, SelectQueryBuilder, QueryBuilder } from 'typeorm';
+import { DonationEntity, Donation } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { genSimpleWhereConditions, genPagination } from '../helpers/query-builder-helper';
 import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
@@ -177,16 +177,34 @@ function _genOrdering(
     const order = <'ASC' | 'DESC'> request.sortDonationStatus.toUpperCase();
     queryBuilder = queryBuilder.addOrderBy('donation.donationStatus', order);
   }
-  // Always include donated date (ID) ordering. Default to ASC to view oldest donations first in donation/delivery search.
-  // Default to DESC to view latest donations first in 'my donations/deliveries' search.
-  if (request.sortDonatedDate && Validation.SORT_REGEX.test(request.sortDonatedDate)) {
-    const order = <'ASC' | 'DESC'> request.sortDonatedDate.toUpperCase();
-    queryBuilder.addOrderBy('donation.id', order);
-  } else if (request.donorAccountId != null || request.receiverAccountId != null || request.delivererAccountId != null) {
-    queryBuilder.addOrderBy('donation.id', 'DESC');
-  } else {
-    queryBuilder.addOrderBy('donation.id', 'ASC');
+
+  // Sort by created date (equivalent to donation ID). If querying an account's donations, automatically sort in DESC order by default.
+  const isMyDonations: boolean =
+    (request.donorAccountId != null || request.receiverAccountId != null || request.delivererAccountId != null);
+  if (isMyDonations && (!request.sortCreatedDate || !Validation.SORT_REGEX.test(request.sortCreatedDate))) {
+    request.sortCreatedDate = 'DESC';
   }
+  if (request.sortCreatedDate && Validation.SORT_REGEX.test(request.sortCreatedDate)) {
+    const order = <'ASC' | 'DESC'> request.sortCreatedDate.toUpperCase();
+    queryBuilder = queryBuilder.addOrderBy('donation.id', order);
+  }
+
+  // Always include donation pickup/delivery window ordering. Default to ASC to view oldest donations first in donation/delivery search.
+  if (!request.sortPickupWindow || !Validation.SORT_REGEX.test(request.sortPickupWindow)) {
+    request.sortPickupWindow = 'ASC';
+  }
+  const order = <'ASC' | 'DESC'> request.sortPickupWindow.toUpperCase();
+  queryBuilder = _addOrderByPickupWindow(queryBuilder, order);
+
+  return queryBuilder;
+}
+
+function _addOrderByPickupWindow(
+  queryBuilder: SelectQueryBuilder<DonationEntity>,
+  sortOrder: 'ASC' | 'DESC'
+): SelectQueryBuilder<DonationEntity> {
+  queryBuilder = queryBuilder.addOrderBy('delivery.pickupWindowStart', sortOrder);
+  queryBuilder = queryBuilder.addOrderBy('donation.pickupWindowStart', sortOrder);
   return queryBuilder;
 }
 
