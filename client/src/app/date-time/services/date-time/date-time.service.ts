@@ -105,10 +105,10 @@ export class DateTimeService extends DateTimeHelper {
       : this.dateCeil5Mins(curDateTime);
     const totalEndDate: Date = rangeToSplit.endDateTime;
 
-    // Ensure we can generate at least one full increment.
-    const endDateMinusIncrement: Date = this.offsetDateMins(totalEndDate, -incrementMinutes + 1);
-    while (startDateTime < endDateMinusIncrement) {
-      const endDateTime = this.offsetDateMins(startDateTime, incrementMinutes);
+    // Ensure we can generate another increment before the pickup window (total) end date.
+    while (startDateTime < totalEndDate) {
+      const remainingMinutes: number = (totalEndDate.getTime() - startDateTime.getTime()) / 1000 / 60;
+      const endDateTime = this.offsetDateMins(startDateTime, Math.min(incrementMinutes, remainingMinutes));
       timeRanges.push({ startDateTime, endDateTime });
       startDateTime = endDateTime;
     }
