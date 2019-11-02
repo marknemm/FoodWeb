@@ -9,7 +9,7 @@ import { findPotentialDeliverers, FoundPotentialDeliverers } from '../services/f
 import { messagePotentialDeliverers } from '../services/message-potential-deliverers';
 import { initDbConnectionPool } from '../helpers/db-connection-pool';
 import { MailTransporter, sendEmail } from '../helpers/email';
-import { NotificationType, sendNotification } from '../helpers/push-notification';
+import { NotificationType, sendNotification } from '../helpers/notification';
 import { DonationReadRequest } from '../../../shared/src/interfaces/donation/donation-read-request';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';

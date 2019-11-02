@@ -1,4 +1,4 @@
-export enum ServerSideEventType {
+export enum ServerSentEventType {
   NotificationsAvailable = 'Notifications Available'
 }
 

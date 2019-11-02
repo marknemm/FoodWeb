@@ -10,7 +10,9 @@
     "clean": "rimraf ./platforms",
     "clean:all": "npm run clean && rimraf ./plugins && rimraf ./node_modules",
     "prepare": "cordova prepare",
-    "start:browser": "cordova run browser"
+    "start:android": "cordova run android",
+    "start:browser": "cordova run browser",
+    "start:ios": "cordova run ios"
   },
   "keywords": [
     "ecosystem:cordova"
@@ -20,6 +22,7 @@
   "dependencies": {
     "cordova-android": "^8.1.0",
     "cordova-browser": "^6.0.0",
+    "cordova-plugin-deeplinks": "^1.1.1",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-splashscreen": "^5.0.3",
@@ -40,7 +43,8 @@
       "phonegap-plugin-push": {
         "ANDROID_SUPPORT_V13_VERSION": "27.+",
         "FCM_VERSION": "17.0.+"
-      }
+      },
+      "cordova-plugin-deeplinks": {}
     },
     "platforms": [
       "browser",

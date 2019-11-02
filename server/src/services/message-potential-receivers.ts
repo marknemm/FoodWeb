@@ -1,7 +1,7 @@
 import { FoundPotentialReceivers } from './find-potential-receivers';
 import { AccountEntity } from '../entity/account.entity';
 import { broadcastEmail, MailTransporter } from '../helpers/email';
-import { broadcastNotification } from '../helpers/push-notification';
+import { broadcastNotification } from '../helpers/notification';
 import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
 import { NotificationType } from '../../../shared/src/interfaces/notification/notification';
 

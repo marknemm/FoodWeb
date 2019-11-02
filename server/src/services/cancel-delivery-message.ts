@@ -1,7 +1,7 @@
 import { broadcastEmail, MailTransporter } from '../helpers/email';
-import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
+import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { UpdateDiff } from '../interfaces/update-diff';
-import { broadcastNotification, NotificationType } from '../helpers/push-notification';
+import { broadcastNotification, NotificationType } from '../helpers/notification';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
 

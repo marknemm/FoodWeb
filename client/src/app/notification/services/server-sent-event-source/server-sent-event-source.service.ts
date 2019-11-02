@@ -4,14 +4,14 @@ import { filter, map } from 'rxjs/operators';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { environment } from '../../../../environments/environment';
 import { SessionService } from '../../../session/services/session/session.service';
-import { ServerSideEventType } from '../../../../../../shared/src/interfaces/server-side-event/server-side-event';
+import { ServerSentEventType } from '../../../../../../shared/src/interfaces/server-sent-event/server-sent-event';
 
 const EventSource = NativeEventSource || EventSourcePolyfill;
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServerSideEventSourceService {
+export class ServerSentEventSourceService {
 
   readonly url = `${environment.server}/sse`;
 
@@ -68,11 +68,11 @@ export class ServerSideEventSourceService {
   }
 
   /**
-   * Gets an observable that emits received server side events that match a entry in a given list of notification types.
-   * @param notificationTypes The notification types to filter.
+   * Gets an observable that emits received server side events that match a entry in a given list of server-sent event types.
+   * @param eventTypes The event types to filter.
    * @return An observable that emits filtered server side event data.
    */
-  onMessageType<T>(eventTypes: ServerSideEventType | ServerSideEventType[]): Observable<T> {
+  onMessageType<T>(eventTypes: ServerSentEventType | ServerSentEventType[]): Observable<T> {
     eventTypes = (eventTypes instanceof Array) ? eventTypes : [eventTypes];
     return this.onMessage.pipe(
       filter((message: MessageEvent) => (<string[]>eventTypes).indexOf(message.lastEventId) >= 0),

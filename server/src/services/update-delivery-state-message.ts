@@ -3,7 +3,7 @@ import { UpdateDiff } from '../interfaces/update-diff';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { MailTransporter, broadcastEmail } from '../helpers/email';
-import { broadcastNotification, NotificationType } from '../helpers/push-notification';
+import { broadcastNotification, NotificationType } from '../helpers/notification';
 import { DonationStatus } from '../../../shared/src/interfaces/donation/donation';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 

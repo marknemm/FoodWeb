@@ -32,7 +32,7 @@
         <preference name="AutoHideSplashScreen" value="false" />
         <preference name="SplashMaintainAspectRatio" value="true" />
 
-        <preference name="AndroidLaunchMode" value="singleTask" />
+        <preference name="AndroidLaunchMode" value="singleInstance" />
 
         <hook type="before_build" src="scripts/fix-google-services-dependency.js" />
     </platform>
@@ -40,4 +40,10 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
+    <universal-links>
+        <host name="www.wnyfoodweb.com" scheme="https"></host>
+        <host name="www.wnyfoodweb.com" scheme="http"></host>
+        <host name="10.0.0.2" scheme="https"></host>
+        <host name="10.0.0.2" scheme="http"></host>
+    </universal-links>
 </widget>

@@ -23,7 +23,7 @@ export class SessionService {
   private _account: Account;
   private _loading = false;
   private _login$ = new Subject<Account>();
-  private _logout$ = new Subject<void>();
+  private _logout$ = new Subject<Account>();
 
   constructor(
     private _httpClient: HttpClient,
@@ -53,13 +53,14 @@ export class SessionService {
   }
 
   set account(account: Account) {
+    const oldAccount: Account = this._account;
     this._account = account;
     if (account) {
       localStorage.setItem('account', JSON.stringify(account));
       this._login$.next(account);
     } else {
       localStorage.removeItem('account');
-      this._logout$.next();
+      this._logout$.next(oldAccount);
     }
   }
 
@@ -108,7 +109,7 @@ export class SessionService {
   /**
    * An observable that emits void whenever logout occurs.
    */
-  get logout$(): Observable<void> {
+  get logout$(): Observable<Account> {
     return this._logout$.asObservable();
   }
 
@@ -158,7 +159,6 @@ export class SessionService {
     if (!silent) {
       this._alertService.displaySimpleMessage(`Welcome, ${this._accountHelper.accountName(response.account)}`, 'success');
     }
-    this._login$.next(response.account);
     return response.account;
   }
 
@@ -182,7 +182,9 @@ export class SessionService {
           return this._appTokenLogin(appSessionToken);
         }
         // Logout to sync client session with lost session on server.
-        this.logout(true);
+        if (this.account) {
+          this.logout(true);
+        }
         return of(null);
       }),
       finalize(() => this._loading = false)
@@ -211,16 +213,16 @@ export class SessionService {
    * @param isSessionRefresh Set to true if the logout is from a session refresh operation. Default is false.
    */
   logout(isSessionRefresh = false): void {
+    localStorage.removeItem('appSessionToken');
     // NOTE: Important that mobile app navigation to login happens first to not show change in app header before navigation!
     (this._deviceInfoService.isMobileApp)
       ? this._router.navigate(['/mobile-boot/login'])
       : this._displayLogoutAlert(isSessionRefresh);
-    this.account = null;
     const params = new HttpParams().append('isApp', `${this._deviceInfoService.isMobileApp}`);
     this._httpClient.delete<void>(this.url, { params }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
     ).subscribe();
-    this._logout$.next();    
+    this.account = null;
   }
 
   private _displayLogoutAlert(isSessionRefresh: boolean): void {

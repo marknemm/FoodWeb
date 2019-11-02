@@ -1,5 +1,5 @@
 import { MailTransporter, broadcastEmail } from '../helpers/email';
-import { sendNotification, NotificationType } from '../helpers/push-notification';
+import { sendNotification, NotificationType } from '../helpers/notification';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';

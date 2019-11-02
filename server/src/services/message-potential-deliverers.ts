@@ -1,7 +1,7 @@
 import { FoundPotentialDeliverers } from './find-potential-deliverers';
 import { MailTransporter, broadcastEmail } from '../helpers/email';
 import { AccountEntity } from '../entity/account.entity';
-import { broadcastNotification, NotificationType } from '../helpers/push-notification';
+import { broadcastNotification, NotificationType } from '../helpers/notification';
 import { Donation, DonationHelper } from '../../../shared/src/helpers/donation-helper';
 
 const _donationHelper = new DonationHelper();

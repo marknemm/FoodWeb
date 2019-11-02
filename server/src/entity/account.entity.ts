@@ -15,6 +15,7 @@ import { VolunteerEntity } from './volunteer-entity';
 import { OperationHoursEntity } from './operation-hours.entity';
 import { Account, AccountType } from '../../../shared/src/interfaces/account/account';
 import { Constants } from '../../../shared/src/constants/constants';
+import { AppDataEntity } from './app-data.entity';
 export { Account, AccountType };
 
 const _constants = new Constants();
@@ -50,6 +51,9 @@ export class AccountEntity implements Account {
 
   @OneToMany((type) => OperationHoursEntity, (operationHours) => operationHours.account, { cascade: ['remove'], eager: true })
   operationHours: OperationHoursEntity[];
+
+  @OneToMany((type) => AppDataEntity, (appData) => appData.accountId, { cascade: ['remove'] })
+  appData: AppDataEntity;
 
   @UpdateDateColumn({ type: 'timestamp with time zone' })
   updateTimestamp: Date;

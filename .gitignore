@@ -9,7 +9,13 @@
 # compiled output
 /**/dist
 /**/www
+
+# temp space
 /tmp
+.tmp
+*.tmp
+*.tmp.*
+$RECYCLE.BIN/
 
 # resources
 /public
@@ -49,12 +55,17 @@ testem.log
 /typings
 stellar.yaml
 dump.*
+*.log
+log.txt
+/.sourcemaps
+/.versions
 
 # e2e
 /e2e/*.js
 /e2e/*.map
 
 # System Files
+*.sw[mnpcod]
 .DS_Store
 Thumbs.db
 
@@ -65,3 +76,7 @@ Thumbs.db
 # Mobile build artifacts
 **/mobile/platforms
 **/mobile/plugins
+
+# ionic data
+UserInterfaceState.xcuserstate
+/.ionic

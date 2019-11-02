@@ -16,7 +16,9 @@ export enum AuditEventType {
   ScheduleDelivery = 'Schedule Delivery',
   CancelDelivery = 'Cancel Delivery',
   DeliveryStateAdvance = 'Delivery State Advance',
-  DeliveryStateUndo = 'Delivery State Undo'
+  DeliveryStateUndo = 'Delivery State Undo',
+  SaveAppData = 'Save App Data',
+  RemoveAppData = 'Remove App Data'
 }
 
 export interface AuditData<T = any> {

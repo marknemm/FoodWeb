@@ -1,6 +1,6 @@
 import { NewAccountData } from './save-account';
 import { sendEmail, MailTransporter } from '../helpers/email';
-import { sendNotification, NotificationType } from '../helpers/push-notification';
+import { sendNotification, NotificationType } from '../helpers/notification';
 import { AccountEntity } from '../entity/account.entity';
 import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 

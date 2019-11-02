@@ -1,6 +1,6 @@
 import { UpdateDiff } from '../interfaces/update-diff';
 import { broadcastEmail, MailTransporter } from '../helpers/email';
-import { sendNotification, NotificationType } from '../helpers/push-notification';
+import { sendNotification, NotificationType } from '../helpers/notification';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
