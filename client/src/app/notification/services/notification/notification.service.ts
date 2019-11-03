@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { HttpParams, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { flatMap, catchError, finalize } from 'rxjs/operators';
@@ -26,6 +26,7 @@ export class NotificationService {
   private _notificationsPreview: Notification[] = [];
 
   constructor(
+    private _router: Router,
     private _httpClient: HttpClient,
     private _pageProgressService: PageProgressService,
     private _errorHandlerService: ErrorHandlerService,
@@ -97,6 +98,13 @@ export class NotificationService {
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );
+  }
+
+  handleNotificationSelect(notification: Notification): void {
+    this.updateNotificationReadState(notification, true);
+    if (notification.notificationLink) {
+      this._router.navigateByUrl(notification.notificationLink);
+    }
   }
 
   updateSeenNotifications(): void {

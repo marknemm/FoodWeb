@@ -46,11 +46,10 @@ export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity
       notificationAccounts,
       {
         notificationType: NotificationType.DeliveryStateAdvance,
-        notificationDetailId: donation.id,
         notificationLink: `/donation/details/${donation.id}`,
-        notificationTitle: `Delivery ${advanceAction}`,
-        notificationIconUrl: volunteerAccount.profileImgUrl,
-        notificationBody: `
+        title: `Delivery ${advanceAction}`,
+        icon: volunteerAccount.profileImgUrl,
+        body: `
           Delivery Has Been <strong>${advanceAction}</strong> by <strong>${delivererName}</strong>.<br>
           <i>${donation.description}</i>
         `
@@ -109,11 +108,10 @@ async function _sendDeliveryStateUndoMessages(donation: DonationEntity): Promise
       notificationAccounts,
       {
         notificationType: NotificationType.DeliveryStateUndo,
-        notificationDetailId: donation.id,
         notificationLink: `/donation/details/${donation.id}`,
-        notificationTitle: `Delivery Reverted to ${donation.donationStatus}`,
-        notificationIconUrl: volunteerAccount.profileImgUrl,
-        notificationBody: `
+        title: `Delivery Reverted to ${donation.donationStatus}`,
+        icon: volunteerAccount.profileImgUrl,
+        body: `
           Delivery Status has been reverted to ${donation.donationStatus} by ${delivererName}.<br>
           <i>${donation.description}</i>
         `

@@ -1,6 +1,6 @@
-<food-web-progress-indicator *ngIf="deviceInfoService.isMobileApp" [trigger]="loading" [blocking]="true" [diameter]="150"></food-web-progress-indicator>
+<food-web-progress-indicator *ngIf="appDataService.isMobileApp" [trigger]="loading" [blocking]="true" [diameter]="150"></food-web-progress-indicator>
 
-<div class="signup-container" [ngClass]="{ 'mobile-app': deviceInfoService.isMobileApp, 'container': deviceInfoService.isMobileApp }">
+<div class="signup-container" [ngClass]="{ 'mobile-app': appDataService.isMobileApp, 'container': appDataService.isMobileApp }">
   <form [formGroup]="accountForm" *ngIf="!sessionService.loggedIn" (submit)="signup()">
     <div class="align-center">
       <div class="page-title block-label signup-header">
@@ -9,7 +9,7 @@
       <food-web-account-type [editing]="!accountType" formControlName="accountType" class="account-type"></food-web-account-type>
     </div>
 
-    <div *ngIf="deviceInfoService.isMobileApp" class="login-link-container align-center">
+    <div *ngIf="appDataService.isMobileApp" class="login-link-container align-center">
       Already have an account: <a [routerLink]="['/mobile-boot/login']">Login</a>
     </div>
 
@@ -95,7 +95,7 @@
         </button>
         <a [routerLink]="['/home']">
           <button mat-raised-button color="primary" type="button">
-            {{ (deviceInfoService.isMobileApp) ? 'Enter FoodWeb' : 'Home' }}
+            {{ (appDataService.isMobileApp) ? 'Enter FoodWeb' : 'Home' }}
           </button>
         </a>
       </div>

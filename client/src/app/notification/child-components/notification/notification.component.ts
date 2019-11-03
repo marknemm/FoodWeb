@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { NotificationService } from '../../services/notification/notification.service';
 import { Notification } from '../../../../../../shared/src/interfaces/notification/notification';
 
@@ -14,22 +13,14 @@ export class NotificationComponent implements OnInit {
   @Input() max2Lines = false;
 
   constructor(
-    private _router: Router,
-    private _notificationService: NotificationService
+    public notificationService: NotificationService
   ) {}
 
   ngOnInit() {}
 
-  handleNotificationClick(): void {
-    this._notificationService.updateNotificationReadState(this.notification, true);
-    if (this.notification.notificationLink) {
-      this._router.navigateByUrl(this.notification.notificationLink);
-    }
-  }
-
   handleFlaggedIndicatorClick(event: MouseEvent): void {
     event.stopPropagation();
-    this._notificationService.updateNotificationFlaggedState(this.notification, !this.notification.flagged);
+    this.notificationService.updateNotificationFlaggedState(this.notification, !this.notification.flagged);
   }
 
   shouldFadeBottom(elem: HTMLElement): boolean {

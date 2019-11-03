@@ -97,11 +97,10 @@ async function _sendDeliveryReminderMessages(donation: DonationEntity, hour: num
       notificationAccounts,
       {
         notificationType: NotificationType.DeliveryReminder,
-        notificationDetailId: donation.id,
         notificationLink: `donation/details/${donation.id}`,
-        notificationTitle: 'Delivery Reminder',
-        notificationIconUrl: volunteerAccount.profileImgUrl,
-        notificationBody: `
+        title: 'Delivery Reminder',
+        icon: volunteerAccount.profileImgUrl,
+        body: `
           Delivery will occur ${hour === 24 ? 'tomorrow': 'today'} between:
           <br><strong>${deliveryTimeStartStr}</strong> - <strong>${deliveryTimeEndStr}</strong>
         `

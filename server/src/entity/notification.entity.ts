@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } f
 import { AccountEntity } from './account.entity';
 import { Notification, NotificationType } from '../../../shared/src/interfaces/notification/notification';
 import { Constants } from '../../../shared/src/constants/constants';
+export { Notification, NotificationType };
 
 const _constants = new Constants();
 
@@ -15,22 +16,34 @@ export class NotificationEntity implements Notification {
   notificationType: NotificationType;
 
   @Column({ nullable: true })
-  notificationDetailId: number;
-
-  @Column({ nullable: true })
   notificationLink?: string;
 
-  @Column({ nullable: true })
-  notificationIconUrl?: string;
-
   @Column()
-  notificationTitle: string;
+  title: string;
 
   @Column({ nullable: true })
-  notificationSubtitle?: string;
+  subtitle?: string;
 
   @Column({ nullable: true })
-  notificationBody: string;
+  body: string;
+
+  @Column({ nullable: true })
+  icon?: string;
+
+  @Column({ nullable: true })  
+  image?: string;
+
+  @Column({ nullable: true })  
+  priority?: 'high' | 'normal';
+
+  @Column({ nullable: true })  
+  action?: string;
+
+  @Column({ nullable: true })  
+  tag?: string;
+
+  @Column({ type: 'json', nullable: true })  
+  custom?: any;
 
   @Column({ default: false })
   read: boolean;

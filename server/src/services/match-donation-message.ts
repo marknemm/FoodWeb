@@ -36,11 +36,10 @@ export async function sendClaimMessages(donation: DonationEntity): Promise<Donat
       donation.donorAccount,
       {
         notificationType: NotificationType.ClaimDonation,
-        notificationDetailId: donation.id,
         notificationLink: `/donation/details/${donation.id}`,
-        notificationTitle: `Donation Claimed`,
-        notificationIconUrl: donation.receiverAccount.profileImgUrl,
-        notificationBody: `
+        title: `Donation Claimed`,
+        icon: donation.receiverAccount.profileImgUrl,
+        body: `
           Donation claimed by <strong>${receiverName}</strong>.<br>
           <i>${donation.description}</i>
         `
@@ -93,11 +92,10 @@ export async function sendUnclaimMessages(unclaimDiff: UpdateDiff<DonationEntity
       unclaimDiff.new.donorAccount,
       {
         notificationType: NotificationType.UnclaimDonation,
-        notificationDetailId: unclaimDiff.new.id,
         notificationLink: `/donation/details/${unclaimDiff.new.id}`,
-        notificationTitle: `Donation Unclaimed`,
-        notificationIconUrl: unclaimDiff.old.receiverAccount.profileImgUrl,
-        notificationBody: `
+        title: `Donation Unclaimed`,
+        icon: unclaimDiff.old.receiverAccount.profileImgUrl,
+        body: `
           Donation unclaimed by <strong>${receiverName}</strong>.<br>
           <i>${unclaimDiff.new.description}</i>
         `
@@ -111,11 +109,10 @@ export async function sendUnclaimMessages(unclaimDiff: UpdateDiff<DonationEntity
         unclaimDiff.old.delivery.volunteerAccount,
         {
           notificationType: NotificationType.UnclaimDonation,
-          notificationDetailId: unclaimDiff.new.id,
           notificationLink: `/donation/details/${unclaimDiff.new.id}`,
-          notificationTitle: `Donation Unclaimed`,
-          notificationIconUrl: unclaimDiff.old.receiverAccount.profileImgUrl,
-          notificationBody: `
+          title: `Donation Unclaimed`,
+          icon: unclaimDiff.old.receiverAccount.profileImgUrl,
+          body: `
             Delivery Cancelled by <strong>${receiverName}</strong>.<br>
             <i>${unclaimDiff.new.description}</i>
           `

@@ -7,4 +7,5 @@ export interface AppData {
   deviceSerial?: string;
   deviceIsVirtual?: boolean;
   pushRegistrationId?: string;
+  accountId?: number;
 }

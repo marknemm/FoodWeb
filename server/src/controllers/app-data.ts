@@ -17,7 +17,7 @@ router.post('/', ensureSessionActive, (req: Request, res: Response) => {
   const account: AccountEntity = req.session.account;
   saveAppData(saveReq.appData, account)
     .then((appData: AppDataEntity) => saveAudit(AuditEventType.SaveAppData, account, appData, saveReq.recaptchaScore))
-    .then(() => res.send())
+    .then((appData: AppDataEntity) => res.send(appData))
     .catch(handleError.bind(this, res));
 });
 
