@@ -77,6 +77,18 @@ export class AppDataService extends Device {
     return this._isMobileApp;
   }
 
+  get isAndroid(): boolean {
+    return this._platform === 'Android'
+  }
+
+  get isIos(): boolean {
+    return this._platform === 'iOS';
+  }
+
+  get isBrowser(): boolean {
+    return this._platform === 'Browser';
+  }
+
   get platform(): string {
     return this._platform;
   }

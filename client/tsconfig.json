@@ -15,6 +15,7 @@
     ],
     "types": [
       "node",
+      "cordova",
       "cordova-plugin-device/types",
       "phonegap-plugin-push/types"
     ],
