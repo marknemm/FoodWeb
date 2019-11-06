@@ -34,7 +34,7 @@ export class AccountService {
   updateAccount(originalAccount: Account, accountSectionUpdate: Partial<Account>): Observable<Account> {
     const accountUpdtReq: AccountUpdateRequest = this._genAccountUpdateRequest(originalAccount, accountSectionUpdate);
     this._pageProgressService.activate(true);
-    return this._httpClient.put<Account>(this.url, accountUpdtReq).pipe(
+    return this._httpClient.put<Account>(this.url, accountUpdtReq, { withCredentials: true }).pipe(
       map((savedAccount: Account) => this._handleAccountUpdateResponse(savedAccount)),
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
@@ -59,7 +59,7 @@ export class AccountService {
   updatePassword(passwordUpdate: PasswordFormT): Observable<void> {
     const request: PasswordUpdateRequest = passwordUpdate;
     this._pageProgressService.activate(true);
-    return this._httpClient.put<void>(`${this.url}/password`, request).pipe(
+    return this._httpClient.put<void>(`${this.url}/password`, request, { withCredentials: true }).pipe(
       map(() => this._alertService.displaySimpleMessage('Password update successful', 'success')),
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
@@ -86,7 +86,7 @@ export class AccountService {
     }
     // Get account from server.
     const url = `${this.url}/${id}`;
-    return this._httpClient.get<Account>(url).pipe(
+    return this._httpClient.get<Account>(url, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );

@@ -41,7 +41,7 @@ export class SignupService {
       const request: AccountCreateRequest = { account, password };
       this._pageProgressService.activate(true);
       this._loading = true;
-      this._httpClient.post<Account>(this.url, request).pipe(
+      this._httpClient.post<Account>(this.url, request, { withCredentials: true }).pipe(
         mergeMap((account: Account) => this._sessionService.login(account.username, password, true)),
         catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
         finalize(() => {

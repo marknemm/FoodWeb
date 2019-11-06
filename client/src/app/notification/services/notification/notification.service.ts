@@ -94,7 +94,7 @@ export class NotificationService {
     request.page = (page >= 0 ? page : 1);
     request.limit = (limit >= 0 ? limit : 10);
     const params = new HttpParams({ fromObject: <any>request });
-    return this._httpClient.get<ListResponse<Notification>>(this.url, { params }).pipe(
+    return this._httpClient.get<ListResponse<Notification>>(this.url, { params, withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );
@@ -113,7 +113,7 @@ export class NotificationService {
       const lastSeenNotificationUpdateReq: LastSeenNotificationUpdateRequest = {
         lastSeenNotificationId: this._notificationsPreview[0].id
       };
-      this._httpClient.put(`${this.url}/last-seen-notification`, lastSeenNotificationUpdateReq).pipe(
+      this._httpClient.put(`${this.url}/last-seen-notification`, lastSeenNotificationUpdateReq, { withCredentials: true }).pipe(
         catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
       ).subscribe();
     }
@@ -135,7 +135,7 @@ export class NotificationService {
 
   private _updateNotification(notification: Notification): void {
     const notificationUpdateRequest: NotificationUpdateRequest = { notification };
-      this._httpClient.put(this.url, notificationUpdateRequest).pipe(
+      this._httpClient.put(this.url, notificationUpdateRequest, { withCredentials: true }).pipe(
         catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
       ).subscribe();
   }

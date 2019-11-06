@@ -31,8 +31,9 @@ if (!PRODUCTION && !QA) {
 
 // Our session middleware and controllers that will handle requests after this router hands off the data to them.
 import { Application } from 'express';
+import { cors } from './middlewares/cors.middleware';
 import { recaptcha } from './middlewares/recaptcha.middleware';
-import { sessionReqHandler } from './helpers/session';
+import { session } from './middlewares/session.middleware';
 import { initDbConnectionPool } from './helpers/db-connection-pool';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
@@ -41,9 +42,10 @@ new JSONDateReviver().initJSONDateReviver();
 if (PRODUCTION || QA) {
   app.use(forceHttps);
 }
+app.use(cors);
 app.use(bodyParser.json());
 app.use(multer().any());
-app.use(sessionReqHandler);
+app.use(session);
 app.use(recaptcha);
 app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));
@@ -82,5 +84,4 @@ initDbConnectionPool().then(() =>
   app.listen(app.get('port'), () =>
     console.log(`Node app is running on port: ${app.get('port')}`)
   )
-)
-.catch(console.error);
+).catch(console.error);

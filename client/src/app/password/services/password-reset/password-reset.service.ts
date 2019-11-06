@@ -33,7 +33,7 @@ export class PasswordResetService {
   sendPasswordResetEmail(usernameEmail: string): Observable<void> {
     const params = (new HttpParams()).set('usernameEmail', usernameEmail);
     this._loading = true;
-    return this._httpClient.get<void>(this.url, { params }).pipe(
+    return this._httpClient.get<void>(this.url, { params, withCredentials: true }).pipe(
       catchError((err: any) => this._errorHandlerService.handleError(err)),
       finalize(() => this._loading = false)
     );
@@ -45,7 +45,7 @@ export class PasswordResetService {
     const request: PasswordResetRequest = { username, password, resetToken };
     this._loading = true;
     this._pageProgressSerivce.activate(true);
-    return this._httpClient.put<Account>(this.url, request).pipe(
+    return this._httpClient.put<Account>(this.url, request, { withCredentials: true }).pipe(
       mergeMap((account: Account) => this._sessionService.login(account.username, password)),
       catchError((err: any) => this._errorHandlerService.handleError(err)),
       finalize(() => {

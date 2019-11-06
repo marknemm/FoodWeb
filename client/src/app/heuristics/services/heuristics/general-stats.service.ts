@@ -31,7 +31,7 @@ export class GeneralStatsService {
 
   getGeneralStats(): Observable<GeneralStats> {
     this._loadingGeneralStats = true;
-    return this._httpClient.get<GeneralStats>(`${this.url}/general-stats`).pipe(
+    return this._httpClient.get<GeneralStats>(`${this.url}/general-stats`, { withCredentials: true }).pipe(
       finalize(() => this._loadingGeneralStats = false),
       catchError((err: HttpErrorResponse) => {
         console.error(err);

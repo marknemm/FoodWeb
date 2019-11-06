@@ -104,7 +104,7 @@ export class AppDataService extends Device {
   saveAppData(appDataMerge: Partial<AppData>): Observable<AppData> {
     const appData: AppData = this._mergeAppData(appDataMerge);
     const saveReq: AppDataSaveRequest = { appData };
-    return this._httpClient.post<AppData>(this.url, saveReq).pipe(
+    return this._httpClient.post<AppData>(this.url, saveReq, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errHandlerService.handleError(err)),
       map((appData: AppData) => {
         this._accountId = appData.accountId;
@@ -138,7 +138,7 @@ export class AppDataService extends Device {
     const accountId: number = this.accountId;
     this._accountId = null;
     this._pushRegistrationId = null;
-    return this._httpClient.delete(`${this.url}/${accountId}/${this.uuid}`).pipe(
+    return this._httpClient.delete(`${this.url}/${accountId}/${this.uuid}`, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errHandlerService.handleError(err))
     );
   }

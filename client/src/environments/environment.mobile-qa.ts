@@ -7,7 +7,7 @@ export const environment = {
   mobile: true,
   offline: false,
   supportEmail: 'support@wnyfoodweb.com',
-  recaptchaSiteKey: '6LdJXagUAAAAAIWSTEbvcU1-HxB1WHrp3pcMS0Qj',
+  recaptchaSiteKey: '',
   googleMapsJSApiKey: 'AIzaSyDQdydkED1Z-nZvQXQQHlOYXnrmdqdFedA',
   server: 'https://food-web-qa.herokuapp.com/server'
 };

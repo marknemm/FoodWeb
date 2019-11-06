@@ -135,7 +135,7 @@ export class SessionService {
   login(usernameEmail: string, password: string, silent = false): Observable<Account> {
     const loginRequest: LoginRequest = { usernameEmail, password, isApp: this._appDataService.isMobileApp };
     this._loading = true;
-    return this._httpClient.post<LoginResponse>(this.url, loginRequest).pipe(
+    return this._httpClient.post<LoginResponse>(this.url, loginRequest, { withCredentials: true }).pipe(
       map((response: LoginResponse) => this._handleLoginSuccess(response, silent)),
       finalize(() => this._loading = false)
     );
@@ -170,7 +170,7 @@ export class SessionService {
   refreshSessionStatus(): Observable<Account> {
     this._loading = true;
     const params = new HttpParams().append('isApp', `${this._appDataService.isMobileApp}`);
-    return this._httpClient.get<LoginResponse>(this.url, { params }).pipe(
+    return this._httpClient.get<LoginResponse>(this.url, { params, withCredentials: true }).pipe(
       mergeMap((response: LoginResponse) => {
         // Sync client session with existing session on server.
         if (response.account) {
@@ -219,7 +219,7 @@ export class SessionService {
       ? this._router.navigate(['/mobile-boot/login'])
       : this._displayLogoutAlert(isSessionRefresh);
     const params = new HttpParams().append('isApp', `${this._appDataService.isMobileApp}`);
-    this._httpClient.delete<void>(this.url, { params }).pipe(
+    this._httpClient.delete<void>(this.url, { params, withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
     ).subscribe();
     this.account = null;
