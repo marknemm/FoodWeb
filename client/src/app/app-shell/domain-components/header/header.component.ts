@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../../../session/components/login-dialog/login-dialog.component';
 import { SessionService } from '../../../session/services/session/session.service';
@@ -20,6 +21,7 @@ export class HeaderComponent implements OnInit {
     public pageProgressService: PageProgressService,
     public leftNavService: LeftNavService,
     public notificationService: NotificationService,
+    private _router: Router,
     private _matDialog: MatDialog
   ) {}
 

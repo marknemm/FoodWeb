@@ -108,29 +108,6 @@ $site-title-font-size-mobile: 30px;
       right: 0;
       padding-right: inherit;
 
-      button.mat-icon-button.notifications-button {
-        margin: 0 7px 0 0;
-        width: $sub-header-height;
-        height: $sub-header-height;
-        line-height: $sub-header-height;
-        vertical-align: top;
-        outline: none;
-
-        @media only screen and (max-width: $mat-mobile) {
-          width: $sub-header-height-mobile;
-          height: $sub-header-height-mobile;
-          line-height: $sub-header-height-mobile;
-        }
-
-        mat-icon {
-          top: -1px;
-
-          @media only screen and (max-width: $mat-mobile) {
-            top: 0;
-          }
-        }
-      }
-
       > span, > a {
         position: relative;
         vertical-align: middle;

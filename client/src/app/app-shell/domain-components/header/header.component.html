@@ -28,20 +28,7 @@
         <span> | <a [routerLink]="['/signup']">Signup</a></span>
       </ng-container>
       <ng-container *ngIf="sessionService.loggedIn">
-        <button mat-icon-button class="notifications-button" aria-label="Notifications menu">
-          <mat-icon
-           [matMenuTriggerFor]="notificationsMenu"
-           (menuOpened)="notificationService.updateSeenNotifications()"
-           [matBadge]="notificationService.unseenNotificationsCount"
-           [matBadgeHidden]="!(notificationService.unseenNotificationsCount)"
-           matBadgeSize="small"
-           matBadgeColor="warn"
-           matBadgeDescription="{{ notificationService.unseenNotificationsCount }} unread"
-          >notifications</mat-icon>
-        </button>
-        <mat-menu #notificationsMenu="matMenu" backdropClass="notifications-menu-backdrop">
-          <food-web-notifications-menu></food-web-notifications-menu>
-        </mat-menu>
+        <food-web-notifications-menu></food-web-notifications-menu>
         <span><a [routerLink]="['/account/my']">Account</a> | </span>
         <a [routerLink]="['/home']" (click)="sessionService.logout()">Logout</a>
       </ng-container>

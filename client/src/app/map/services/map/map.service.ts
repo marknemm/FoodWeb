@@ -58,7 +58,7 @@ export class MapService {
       return `${destination.streetAddress}+${destination.city}+${destination.stateProvince}+${destination.postalCode}`;
     }
     const destinationGPS: GPSCoordinate = this._waypointToGPSCoordinate(destination);
-    return `${destinationGPS.lat},${destinationGPS.lon}`;
+    return destinationGPS ? `${destinationGPS.lat},${destinationGPS.lon}` : '';
   }
 
   calcMapCenter(gpsCoordinates: GPSCoordinate[]): GPSCoordinate {
@@ -85,7 +85,10 @@ export class MapService {
             currentPositionIdx = idx;
             currentPosition$ = this.refreshCurrentPosition();
           } else {
-            gpsCoordinates.push(this._waypointToGPSCoordinate(waypoint));
+            const gpsCoord: GPSCoordinate = this._waypointToGPSCoordinate(waypoint);
+            if (gpsCoord) {
+              gpsCoordinates.push(gpsCoord);
+            }
           }
         });
       }
@@ -109,7 +112,7 @@ export class MapService {
     } else if ((<GPSCoordinate>waypoint).lat) {
       return <GPSCoordinate>waypoint;
     }
-    throw new Error('Cannot convert waypoint to GPS coordinate');
+    return null;
   }
 
   private _positionToGPSCoordinate(position: Position): GPSCoordinate {

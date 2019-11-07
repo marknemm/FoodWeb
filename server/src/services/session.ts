@@ -1,6 +1,6 @@
 import { getRepository, Repository } from 'typeorm';
 import { randomBytes } from 'crypto';
-import { readAccount, readAccounts, AccountsQueryResult } from './read-accounts';
+import { readFullAccounts, readFullAccount, AccountsQueryResult } from './read-accounts';
 import { AccountEntity } from '../entity/account.entity';
 import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { AppSessionEntity } from '../entity/app-session.entity';
@@ -39,13 +39,13 @@ export async function login(loginRequest: LoginRequest): Promise<LoginResponse> 
  */
 async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> {
   // Try to get account via email address.
-  let queryResult: AccountsQueryResult = await readAccounts({ email: usernameEmail, page: 1, limit: 2 }, null);
+  let queryResult: AccountsQueryResult = await readFullAccounts({ email: usernameEmail, page: 1, limit: 2 }, null);
   if (queryResult.totalCount > 1) {
     throw new FoodWebError('More than one account shares the given email. Please provide a username instead.', 401);
   }
 
   const account: AccountEntity = (queryResult.totalCount === 0)
-    ? await readAccount(usernameEmail) // Try to get account via username.
+    ? await readFullAccount(usernameEmail) // Try to get account via username.
     : queryResult.accounts[0];
   if (!account) {
     throw new Error(`User could not be found with username/email: ${usernameEmail}`);

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Inject } from '@angular/core';
 import { EventRegistrationForm } from '../../forms/event-registration.form';
 import { SessionService } from '../../../session/services/session/session.service';
 import { EventRegistrationService } from '../../../event/services/event-registration/event-registration.service';
@@ -20,8 +20,6 @@ export class EventCardComponent implements OnInit, OnChanges {
   @Input() signupTitle: string;
   @Input() glowLocalStorageVar: string;
 
-  readonly window: Window = window;
-
   formGroup: EventRegistrationForm;
 
   private _directionsHref: string;
@@ -29,6 +27,7 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   constructor(
     public eventRegistrationService: EventRegistrationService,
+    @Inject('Window') public window: Window,
     private _sessionService: SessionService,
     private _mapService: MapService
   ) {}

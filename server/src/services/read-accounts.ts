@@ -15,19 +15,35 @@ export interface AccountsQueryResult {
 const _accountHelper = new AccountHelper();
 const _opHoursHelper = new OperationHoursHelper();
 
-export async function readAccount(idOrUsername: number | string, myAccount?: Account): Promise<AccountEntity> {
+export function readAccount(idOrUsername: number | string, myAccount?: Account): Promise<AccountEntity> {
+  return _readAccount(idOrUsername, myAccount, false);
+}
+
+export function readAccounts(request: AccountReadRequest, myAccount: Account): Promise<AccountsQueryResult> {
+  return _readAccounts(request, myAccount, false);
+}
+
+export function readFullAccount(idOrUsername: number | string, myAccount?: Account): Promise<AccountEntity> {
+  return _readAccount(idOrUsername, myAccount, true);
+}
+
+export function readFullAccounts(request: AccountReadRequest, myAccount: Account): Promise<AccountsQueryResult> {
+  return _readAccounts(request, myAccount, true);
+}
+
+async function _readAccount(idOrUsername: number | string, myAccount: Account, fullAccount: boolean): Promise<AccountEntity> {
   let readRequest: AccountReadRequest = { page: 1, limit: 1 };
   (typeof idOrUsername === 'number')
     ? readRequest.id = idOrUsername
     : readRequest.username = idOrUsername;
-  const queryResult: AccountsQueryResult = await readAccounts(readRequest, myAccount);
+  const queryResult: AccountsQueryResult = await _readAccounts(readRequest, myAccount, fullAccount);
   return queryResult.accounts[0];
 }
 
-export async function readAccounts(request: AccountReadRequest, myAccount: Account): Promise<AccountsQueryResult> {
+async function _readAccounts(request: AccountReadRequest, myAccount: Account, fullAccount: boolean): Promise<AccountsQueryResult> {
   const queryBuilder: SelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
   const [accounts, totalCount]: [AccountEntity[], number] = await queryBuilder.getManyAndCount();
-  _postProcessAccounts(accounts, myAccount);
+  _postProcessAccounts(accounts, myAccount, fullAccount);
   return { accounts, totalCount };
 }
 
@@ -123,17 +139,18 @@ function _genOrdering(
     .addOrderBy('volunteer.firstName', 'ASC')
 }
 
-function _postProcessAccounts(accounts: AccountEntity[], myAccount: Account): void {
+function _postProcessAccounts(accounts: AccountEntity[], myAccount: Account, fullAccount?: boolean): void {
   accounts.forEach((account: AccountEntity) => {
     const isMyAccount: boolean = _accountHelper.isMyAccount(myAccount, account.id);
+    fullAccount = (fullAccount || isMyAccount);
     _opHoursHelper.formatOperationHoursTimes(account.operationHours);
-    _delVolunteerAddrIfNotMyAccount(account, isMyAccount);
+    _delVolunteerAddrIfNotMyAccount(account, fullAccount);
     _setVerifiedIfMyAccount(account, isMyAccount, myAccount);
   });
 }
 
-function _delVolunteerAddrIfNotMyAccount(account: AccountEntity, isMyAccount: boolean): void {
-  if (account.accountType === 'Volunteer' && !isMyAccount) {
+function _delVolunteerAddrIfNotMyAccount(account: AccountEntity, fullAccount: boolean): void {
+  if (account.accountType === 'Volunteer' && !fullAccount) {
     delete account.contactInfo.streetAddress;
     delete account.contactInfo.city;
     delete account.contactInfo.stateProvince;

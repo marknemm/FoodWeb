@@ -150,13 +150,15 @@ mat-card.mat-card {
   animation: greenPulse 5s infinite !important;
 }
 
-.notifications-button {
-  .mat-badge-small.mat-badge-overlap.mat-badge-after .mat-badge-content {
-    right: -5px;
-  }
+header.site-header .notifications-button-container {
+  .mat-badge-content.mat-badge-active {
+    right: 10px;
+    top: 4px;
 
-  .mat-badge-small.mat-badge-above .mat-badge-content {
-    top: -5px;
+    @media screen and (max-width: $mat-mobile) {
+      right: 8px;
+      top: 1px;
+    }
   }
 }
 
