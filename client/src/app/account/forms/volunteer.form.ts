@@ -8,7 +8,8 @@ export class VolunteerForm extends TypedFormGroup<Volunteer> {
     super({
       id: undefined,
       lastName: ['', Validators.required],
-      firstName: ['', Validators.required]
+      firstName: ['', Validators.required],
+      hasEquipment: [false, Validators.required]
     });
     if (volunteer) {
       this.patchValue(volunteer);

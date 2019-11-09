@@ -30,7 +30,7 @@ export class LoginDialogComponent implements OnInit {
 
   public static openIfNotLoggedIn(sessionService: SessionService, matDialog: MatDialog, config: MatDialogConfig = {}): Observable<boolean> {
     const device = new Device();
-    const isMobileApp: boolean = (!device.platform || device.platform === 'Browser');
+    const isMobileApp: boolean = (device.platform && device.platform === 'Browser');
     config.panelClass = (config.panelClass)
       ? (typeof config.panelClass === 'string')
         ? [config.panelClass]
