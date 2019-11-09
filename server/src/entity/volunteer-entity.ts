@@ -15,6 +15,9 @@ export class VolunteerEntity implements Volunteer {
   @Column()
   firstName: string;
 
+  @Column({ default: false })
+  hasEquipment: boolean;
+
   @OneToOne((type) => AccountEntity, (accountEntity) => accountEntity.organization)
   @JoinColumn()
   account?: AccountEntity;
