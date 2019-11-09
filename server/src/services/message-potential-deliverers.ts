@@ -1,7 +1,7 @@
 import { FoundPotentialDeliverers } from './find-potential-deliverers';
 import { MailTransporter, broadcastEmail } from '../helpers/email';
 import { AccountEntity } from '../entity/account.entity';
-import { broadcastNotification, NotificationType } from '../helpers/push-notification';
+import { broadcastNotification, NotificationType } from '../helpers/notification';
 import { Donation, DonationHelper } from '../../../shared/src/helpers/donation-helper';
 
 const _donationHelper = new DonationHelper();
@@ -36,11 +36,10 @@ export async function messagePotentialDeliverers(foundPotentialDeliverers: Found
       potentialDeliverers,
       {
         notificationType: NotificationType.ClaimDonation,
-        notificationDetailId: donation.id,
         notificationLink: `/donation/details/${donation.id}`,
-        notificationTitle: 'Delivery Requested',
-        notificationIconUrl: donation.donorAccount.profileImgUrl,
-        notificationBody: `
+        title: 'Delivery Requested',
+        icon: donation.donorAccount.profileImgUrl,
+        body: `
           Delivery requested from <strong>${donorName}</strong> to <strong>${receiverName}</strong>.
         `
       }

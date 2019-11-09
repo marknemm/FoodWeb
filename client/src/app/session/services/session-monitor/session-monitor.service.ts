@@ -6,6 +6,7 @@ import { catchError, map, flatMap } from 'rxjs/operators';
 import { SessionService } from '../session/session.service';
 import { ErrorHandlerService } from '../../../shared/services/error-handler/error-handler.service';
 import { LoginDialogComponent } from '../../components/login-dialog/login-dialog.component';
+import { Account } from '../../../../../../shared/src/interfaces/account/account';
 
 @Injectable({
   providedIn: 'root'
@@ -25,24 +26,29 @@ export class SessionMonitorService implements HttpInterceptor {
     );
   }
 
-  private _handleError(error: any): Observable<any> {
+  private _handleError(error: any): Observable<ReAuthAttempt> {
     if (error instanceof HttpErrorResponse && error.status === 302) {
-      this._sessionService.logout(true);
-      return this._attemptLogin().pipe(
-        map((loggedIn: boolean) => {
-          if (!loggedIn) {
-            this._errorHandlerService.handleError(error);
-          }
-          return { reAuthSucc: loggedIn };
+      // Refresh session status (sync with session status on server, and if mobile app, try to auto re-auth with token).
+      return this._sessionService.refreshSessionStatus().pipe(
+        flatMap((account: Account) => {
+          return (account)
+            ? of({ reAuthSucc: true })
+            : this._promptLogin(error);
         })
       );
     }
     throw error;
   }
 
-  private _attemptLogin(): Observable<boolean> {
+  private _promptLogin(error: any): Observable<ReAuthAttempt> {
     return LoginDialogComponent.openIfNotLoggedIn(this._sessionService, this._matDialog, { disableClose: true }).pipe(
-      map(() => this._sessionService.loggedIn)
+      map(() => {
+        const loggedIn: boolean = this._sessionService.loggedIn;
+        if (!loggedIn) {
+          this._errorHandlerService.handleError(error);
+        }
+        return { reAuthSucc: loggedIn };
+      })
     );
   }
 
@@ -55,4 +61,8 @@ export class SessionMonitorService implements HttpInterceptor {
     }
     return of(response);
   }
+}
+
+interface ReAuthAttempt {
+  reAuthSucc: boolean;
 }

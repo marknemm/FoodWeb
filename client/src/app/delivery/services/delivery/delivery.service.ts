@@ -45,7 +45,7 @@ export class DeliveryService {
 
     const scheduleRequest: DeliveryScheduleRequest = { donationId: donation.id, pickupWindow };
     this._pageProgressService.activate(true);
-    return this._httpClient.post<Donation>(this.url, scheduleRequest).pipe(
+    return this._httpClient.post<Donation>(this.url, scheduleRequest, { withCredentials: true }).pipe(
       map((scheduledDonation: Donation) => {
         this._alertService.displaySimpleMessage('Successfully started delivery', 'success');
         return scheduledDonation;
@@ -63,7 +63,11 @@ export class DeliveryService {
 
     const stateChangeRequest: DeliveryStateChangeRequest = { donationId: donation.id };
     this._pageProgressService.activate(true);
-    return this._httpClient.put<Donation>(`${this.url}/advance/${ donation.delivery.id }`, stateChangeRequest).pipe(
+    return this._httpClient.put<Donation>(
+      `${this.url}/advance/${ donation.delivery.id }`,
+      stateChangeRequest,
+      { withCredentials: true }
+    ).pipe(
       map((advancedDonation: Donation) => {
         this._displayDeliveryAdvanceSuccessMsg(advancedDonation.donationStatus);
         return advancedDonation;
@@ -81,7 +85,7 @@ export class DeliveryService {
 
     const stateChangeRequest: DeliveryStateChangeRequest = { donationId: donation.id };
     this._pageProgressService.activate(true);
-    return this._httpClient.put<Donation>(`${this.url}/undo/${donation.delivery.id}`, stateChangeRequest).pipe(
+    return this._httpClient.put<Donation>(`${this.url}/undo/${donation.delivery.id}`, stateChangeRequest, { withCredentials: true }).pipe(
       map((revertedDonation: Donation) => {
         this._displayDeliveryUndoSuccessMsg(revertedDonation.donationStatus);
         return revertedDonation;
@@ -130,7 +134,7 @@ export class DeliveryService {
     }
     const params = new HttpParams({ fromObject: <any>request });
     this._pageProgressService.activate(true);
-    return this._httpClient.get<ListResponse<Donation>>(getUrl, { params }).pipe(
+    return this._httpClient.get<ListResponse<Donation>>(getUrl, { params, withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );

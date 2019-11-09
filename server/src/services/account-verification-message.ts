@@ -1,6 +1,6 @@
 import { NewAccountData } from './save-account';
 import { sendEmail, MailTransporter } from '../helpers/email';
-import { sendNotification, NotificationType } from '../helpers/push-notification';
+import { sendNotification, NotificationType } from '../helpers/notification';
 import { AccountEntity } from '../entity/account.entity';
 import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 
@@ -18,11 +18,10 @@ export async function sendAccountVerificationMessage(newAccountData: NewAccountD
       account,
       {
         notificationType: NotificationType.Signup,
-        notificationDetailId: account.id,
         notificationLink: `/account/my`,
-        notificationTitle: 'Welcome to FoodWeb!',
-        notificationIconUrl: './assets/IconImgSm.png',
-        notificationBody: `
+        title: 'Welcome to FoodWeb!',
+        icon: './assets/IconImgSm.png',
+        body: `
           Please check your email for an account verification link.
         `
       }

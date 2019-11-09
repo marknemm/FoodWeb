@@ -1,7 +1,7 @@
 import { FoundPotentialReceivers } from './find-potential-receivers';
 import { AccountEntity } from '../entity/account.entity';
 import { broadcastEmail, MailTransporter } from '../helpers/email';
-import { broadcastNotification } from '../helpers/push-notification';
+import { broadcastNotification } from '../helpers/notification';
 import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
 import { NotificationType } from '../../../shared/src/interfaces/notification/notification';
 
@@ -33,11 +33,10 @@ export async function messagePotentialReceivers(foundPotentialReceivers: FoundPo
       potentialReceivers,
       {
         notificationType: NotificationType.Donate,
-        notificationDetailId: donation.id,
         notificationLink: `/donation/details/${donation.id}`,
-        notificationTitle: 'Donation Available',
-        notificationIconUrl: donation.donorAccount.profileImgUrl,
-        notificationBody: `
+        title: 'Donation Available',
+        icon: donation.donorAccount.profileImgUrl,
+        body: `
           New donation from <strong>${donorName}</strong>.<br>
           <i>${donation.description}</i>
         `

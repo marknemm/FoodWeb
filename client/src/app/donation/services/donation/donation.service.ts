@@ -41,7 +41,7 @@ export class DonationService {
   createDonation(donation: Donation): Observable<Donation> {
     const createRequest: DonationCreateRequest = { donation };
     this._pageProgressService.activate(true);
-    return this._httpClient.post<Donation>(this.url, createRequest).pipe(
+    return this._httpClient.post<Donation>(this.url, createRequest, { withCredentials: true }).pipe(
       map((savedDonation: Donation) => {
         this._alertService.displaySimpleMessage('Donation successful', 'success');
         return savedDonation;
@@ -54,7 +54,7 @@ export class DonationService {
   updateDonation(originalDonation: Donation, donationSectionUpdate: Partial<Donation>): Observable<Donation> {
     const updateRequest: DonationUpdateRequest = this._genDonationUpdateRequest(originalDonation, donationSectionUpdate);
     this._pageProgressService.activate(true);
-    return this._httpClient.put<Donation>(this.url, updateRequest).pipe(
+    return this._httpClient.put<Donation>(this.url, updateRequest, { withCredentials: true }).pipe(
       map((savedDonation: Donation) => {
         this._alertService.displaySimpleMessage('Donation update successful', 'success');
         return savedDonation;
@@ -73,7 +73,7 @@ export class DonationService {
   deleteDonation(donation: Donation): Observable<void> {
     const deleteUrl = `${this.url}/${donation.id}`;
     this._pageProgressService.activate(true);
-    return this._httpClient.delete(deleteUrl).pipe(
+    return this._httpClient.delete(deleteUrl, { withCredentials: true }).pipe(
       map(() => this._alertService.displaySimpleMessage('Donation deletion successful', 'success')),
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
@@ -84,7 +84,7 @@ export class DonationService {
     const claimUrl = `${this.url}/claim`;
     const request: DonationClaimRequest = { donationId: donation.id };
     this._pageProgressService.activate(true);
-    return this._httpClient.post<Donation>(claimUrl, request).pipe(
+    return this._httpClient.post<Donation>(claimUrl, request, { withCredentials: true }).pipe(
       map((claimedDonation: Donation) => {
         this._alertService.displaySimpleMessage('Donation successfully claimed', 'success');
         return claimedDonation;
@@ -97,7 +97,7 @@ export class DonationService {
   unclaimDonation(donation: Donation): Observable<Donation> {
     const unclaimUrl = `${this.url}/claim/${donation.id}`;
     this._pageProgressService.activate(true);
-    return this._httpClient.delete<Donation>(unclaimUrl).pipe(
+    return this._httpClient.delete<Donation>(unclaimUrl, { withCredentials: true }).pipe(
       map((unclaimedDonation: Donation) => {
         this._alertService.displaySimpleMessage('Donation successfully unclaimed', 'success');
         return unclaimedDonation;
@@ -124,7 +124,7 @@ export class DonationService {
     // Get donation from server.
     const url = `${this.url}/${id}`;
     this._pageProgressService.activate(true);
-    return this._httpClient.get<Donation>(url).pipe(
+    return this._httpClient.get<Donation>(url, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );
@@ -166,7 +166,7 @@ export class DonationService {
     }
     const params = new HttpParams({ fromObject: <any>request });
     this._pageProgressService.activate(true);
-    return this._httpClient.get<ListResponse<Donation>>(getUrl, { params }).pipe(
+    return this._httpClient.get<ListResponse<Donation>>(getUrl, { params, withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );

@@ -1,5 +1,5 @@
 import { MailTransporter, broadcastEmail } from '../helpers/email';
-import { sendNotification, NotificationType } from '../helpers/push-notification';
+import { sendNotification, NotificationType } from '../helpers/notification';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
@@ -33,11 +33,10 @@ export async function sendDeliveryScheduledMessages(donation: DonationEntity): P
       donation.donorAccount,
       {
         notificationType: NotificationType.ScheduleDelivery,
-        notificationDetailId: donation.id,
         notificationLink: `/donation/details/${donation.id}`,
-        notificationTitle: 'Delivery Scheduled',
-        notificationIconUrl: donation.delivery.volunteerAccount.profileImgUrl,
-        notificationBody: `
+        title: 'Delivery Scheduled',
+        icon: donation.delivery.volunteerAccount.profileImgUrl,
+        body: `
           Donation pickup scheduled by <strong>${delivererName}</strong>.<br>
           <i>${donation.description}</i>
         `
@@ -50,11 +49,10 @@ export async function sendDeliveryScheduledMessages(donation: DonationEntity): P
       donation.receiverAccount,
       {
         notificationType: NotificationType.ScheduleDelivery,
-        notificationDetailId: donation.id,
         notificationLink: `/donation/details/${donation.id}`,
-        notificationTitle: 'Delivery Scheduled',
-        notificationIconUrl: donation.delivery.volunteerAccount.profileImgUrl,
-        notificationBody: `
+        title: 'Delivery Scheduled',
+        icon: donation.delivery.volunteerAccount.profileImgUrl,
+        body: `
           Donation delivery scheduled by <strong>${delivererName}</strong>.<br>
           <i>${donation.description}</i>
         `

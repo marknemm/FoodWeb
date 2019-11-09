@@ -5,7 +5,7 @@ import { AccountEntity } from '../entity/account.entity';
 import { readDonations, DonationsQueryResult } from '../services/read-donations';
 import { initDbConnectionPool } from '../helpers/db-connection-pool';
 import { broadcastEmail, MailTransporter } from '../helpers/email';
-import { broadcastNotification, NotificationType } from '../helpers/push-notification';
+import { broadcastNotification, NotificationType } from '../helpers/notification';
 import { DonationReadRequest } from '../../../shared/src/interfaces/donation/donation-read-request';
 import { DateTimeHelper } from '../../../shared/src/helpers/date-time-helper';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
@@ -97,11 +97,10 @@ async function _sendDeliveryReminderMessages(donation: DonationEntity, hour: num
       notificationAccounts,
       {
         notificationType: NotificationType.DeliveryReminder,
-        notificationDetailId: donation.id,
         notificationLink: `donation/details/${donation.id}`,
-        notificationTitle: 'Delivery Reminder',
-        notificationIconUrl: volunteerAccount.profileImgUrl,
-        notificationBody: `
+        title: 'Delivery Reminder',
+        icon: volunteerAccount.profileImgUrl,
+        body: `
           Delivery will occur ${hour === 24 ? 'tomorrow': 'today'} between:
           <br><strong>${deliveryTimeStartStr}</strong> - <strong>${deliveryTimeEndStr}</strong>
         `

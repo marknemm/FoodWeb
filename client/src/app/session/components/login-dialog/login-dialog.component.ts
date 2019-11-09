@@ -3,7 +3,8 @@ import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material/dial
 import { Observable, of } from 'rxjs';
 import { LoginFormChange } from '../login/login.component';
 import { SessionService } from '../../services/session/session.service';
-import { DeviceInfoService } from '../../../mobile/services/device-info/device-info.service';
+import { AppDataService } from '../../../mobile/services/app-data/app-data.service';
+import { Device } from '@ionic-native/device/ngx';
 
 @Component({
   selector: 'food-web-login-dialog',
@@ -16,8 +17,7 @@ export class LoginDialogComponent implements OnInit {
 
   constructor(
     public sessionService: SessionService,
-    public deviceInfoService: DeviceInfoService,
-    @Optional() public matDialogRef: MatDialogRef<LoginDialogComponent>,
+    @Optional() public matDialogRef: MatDialogRef<LoginDialogComponent>
   ) {}
 
   get title(): string {
@@ -29,16 +29,17 @@ export class LoginDialogComponent implements OnInit {
   }
 
   public static openIfNotLoggedIn(sessionService: SessionService, matDialog: MatDialog, config: MatDialogConfig = {}): Observable<boolean> {
-    const deviceInfoService = new DeviceInfoService();
+    const device = new Device();
+    const isMobileApp: boolean = (device.platform && device.platform === 'Browser');
     config.panelClass = (config.panelClass)
       ? (typeof config.panelClass === 'string')
         ? [config.panelClass]
         : config.panelClass
       : [];
-    if (deviceInfoService.isMobileApp) {
+    if (isMobileApp) {
       config.panelClass.push('full-screen-mobile');
     }
-    config.autoFocus = !deviceInfoService.isMobileApp;
+    config.autoFocus = !isMobileApp;
     config.maxWidth = '400px';
     return (!sessionService.loggedIn)
       ? matDialog.open(LoginDialogComponent, config).afterClosed()

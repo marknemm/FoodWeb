@@ -16,8 +16,8 @@ export class AppSessionEntity {
   account: AccountEntity;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
-  createTimestamp: Date;
+  createTimestamp?: Date;
 
   @UpdateDateColumn({ type: 'timestamp with time zone' })
-  updateTimestamp: Date;
+  updateTimestamp?: Date;
 }

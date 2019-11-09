@@ -9,7 +9,7 @@ import { findPotentialDeliverers, FoundPotentialDeliverers } from '../services/f
 import { messagePotentialDeliverers } from '../services/message-potential-deliverers';
 import { initDbConnectionPool } from '../helpers/db-connection-pool';
 import { MailTransporter, sendEmail } from '../helpers/email';
-import { NotificationType, sendNotification } from '../helpers/push-notification';
+import { NotificationType, sendNotification } from '../helpers/notification';
 import { DonationReadRequest } from '../../../shared/src/interfaces/donation/donation-read-request';
 import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
@@ -125,11 +125,10 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
       donation.donorAccount,
       {
         notificationType: NotificationType.ClaimDonation,
-        notificationDetailId: donation.id,
         notificationLink: `/donation/details/${donation.id}`,
-        notificationTitle: `Donation Claimed`,
-        notificationIconUrl: donation.receiverAccount.profileImgUrl,
-        notificationBody: `
+        title: `Donation Claimed`,
+        icon: donation.receiverAccount.profileImgUrl,
+        body: `
           Donation claimed by <strong>${receiverName}</strong>.<br>
           <i>${donation.description}</i>
         `
@@ -142,11 +141,10 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
       donation.receiverAccount,
       {
         notificationType: NotificationType.ClaimDonation,
-        notificationDetailId: donation.id,
         notificationLink: `/donation/details/${donation.id}`,
-        notificationTitle: `Auto-Assigned Donation`,
-        notificationIconUrl: donation.donorAccount.profileImgUrl,
-        notificationBody: `
+        title: `Auto-Assigned Donation`,
+        icon: donation.donorAccount.profileImgUrl,
+        body: `
           Auto-Assigned Donation from <strong>${donorName}</strong>.<br>
           <i>${donation.description}</i>
         `

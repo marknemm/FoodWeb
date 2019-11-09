@@ -102,10 +102,14 @@
       "type": "python",
       "request": "launch",
       "program": "${file}",
-      "pythonPath": "c:/python27/python.exe",
-      "args": [
-        "../server/database/functions/app-user/get-app-user-session-data.sql"
-      ]
+      "pythonPath": "c:/python27/python.exe"
+    },
+    {
+      "type": "android-webview",
+      "request": "attach",
+      "name": "Attach to Android WebView",
+      "application": "com.wnyfoodweb.foodweb",
+      "webRoot": "${workspaceRoot}\\client"
     }
   ],
   "compounds": [

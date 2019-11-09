@@ -6,7 +6,7 @@ import { map, catchError, finalize, mergeMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { ErrorHandlerService } from '../../../shared/services/error-handler/error-handler.service';
 import { AlertService } from '../../../shared/services/alert/alert.service';
-import { DeviceInfoService } from '../../../mobile/services/device-info/device-info.service';
+import { AppDataService } from '../../../mobile/services/app-data/app-data.service';
 import { LoginRequest } from '../../../../../../shared/src/interfaces/session/login-request';
 import { LoginResponse } from '../../../../../../shared/src/interfaces/session/login-response';
 import { AppTokenLoginRequest } from '../../../../../../shared/src/interfaces/session/app-token-login-request';
@@ -23,7 +23,7 @@ export class SessionService {
   private _account: Account;
   private _loading = false;
   private _login$ = new Subject<Account>();
-  private _logout$ = new Subject<void>();
+  private _logout$ = new Subject<Account>();
 
   constructor(
     private _httpClient: HttpClient,
@@ -31,7 +31,7 @@ export class SessionService {
     private _errorHandlerService: ErrorHandlerService,
     private _alertService: AlertService,
     private _accountHelper: AccountHelper,
-    private _deviceInfoService: DeviceInfoService
+    private _appDataService: AppDataService
   ) {
     // Attempt to get account from local browser storage upon init.
     const jsonAccount: string = localStorage.getItem('account');
@@ -53,13 +53,14 @@ export class SessionService {
   }
 
   set account(account: Account) {
+    const oldAccount: Account = this._account;
     this._account = account;
     if (account) {
       localStorage.setItem('account', JSON.stringify(account));
       this._login$.next(account);
     } else {
       localStorage.removeItem('account');
-      this._logout$.next();
+      this._logout$.next(oldAccount);
     }
   }
 
@@ -108,7 +109,7 @@ export class SessionService {
   /**
    * An observable that emits void whenever logout occurs.
    */
-  get logout$(): Observable<void> {
+  get logout$(): Observable<Account> {
     return this._logout$.asObservable();
   }
 
@@ -132,9 +133,9 @@ export class SessionService {
    * @return An observable that emits the user's account when login is successful, and throws error on failure.
    */
   login(usernameEmail: string, password: string, silent = false): Observable<Account> {
-    const loginRequest: LoginRequest = { usernameEmail, password, isApp: this._deviceInfoService.isMobileApp };
+    const loginRequest: LoginRequest = { usernameEmail, password, isApp: this._appDataService.isMobileApp };
     this._loading = true;
-    return this._httpClient.post<LoginResponse>(this.url, loginRequest).pipe(
+    return this._httpClient.post<LoginResponse>(this.url, loginRequest, { withCredentials: true }).pipe(
       map((response: LoginResponse) => this._handleLoginSuccess(response, silent)),
       finalize(() => this._loading = false)
     );
@@ -149,7 +150,7 @@ export class SessionService {
    */
   private _handleLoginSuccess(response: LoginResponse, silent: boolean): Account {
     this.account = response.account;
-    if (this._deviceInfoService.isMobileApp) {
+    if (this._appDataService.isMobileApp) {
       localStorage.setItem('appSessionToken', response.appSessionToken);
       if (!silent) {
         this._router.navigate(['/home']);
@@ -158,7 +159,6 @@ export class SessionService {
     if (!silent) {
       this._alertService.displaySimpleMessage(`Welcome, ${this._accountHelper.accountName(response.account)}`, 'success');
     }
-    this._login$.next(response.account);
     return response.account;
   }
 
@@ -169,8 +169,8 @@ export class SessionService {
    */
   refreshSessionStatus(): Observable<Account> {
     this._loading = true;
-    const params = new HttpParams().append('isApp', `${this._deviceInfoService.isMobileApp}`);
-    return this._httpClient.get<LoginResponse>(this.url, { params }).pipe(
+    const params = new HttpParams().append('isApp', `${this._appDataService.isMobileApp}`);
+    return this._httpClient.get<LoginResponse>(this.url, { params, withCredentials: true }).pipe(
       mergeMap((response: LoginResponse) => {
         // Sync client session with existing session on server.
         if (response.account) {
@@ -178,11 +178,13 @@ export class SessionService {
         }
         // Attempt to re-establish session via mobile app session token.
         const appSessionToken: string = localStorage.getItem('appSessionToken');
-        if (this._deviceInfoService.isMobileApp && appSessionToken) {
+        if (this._appDataService.isMobileApp && appSessionToken) {
           return this._appTokenLogin(appSessionToken);
         }
         // Logout to sync client session with lost session on server.
-        this.logout(true);
+        if (this.account) {
+          this.logout(true);
+        }
         return of(null);
       }),
       finalize(() => this._loading = false)
@@ -211,16 +213,16 @@ export class SessionService {
    * @param isSessionRefresh Set to true if the logout is from a session refresh operation. Default is false.
    */
   logout(isSessionRefresh = false): void {
+    localStorage.removeItem('appSessionToken');
     // NOTE: Important that mobile app navigation to login happens first to not show change in app header before navigation!
-    (this._deviceInfoService.isMobileApp)
+    (this._appDataService.isMobileApp)
       ? this._router.navigate(['/mobile-boot/login'])
       : this._displayLogoutAlert(isSessionRefresh);
-    this.account = null;
-    const params = new HttpParams().append('isApp', `${this._deviceInfoService.isMobileApp}`);
-    this._httpClient.delete<void>(this.url, { params }).pipe(
+    const params = new HttpParams().append('isApp', `${this._appDataService.isMobileApp}`);
+    this._httpClient.delete<void>(this.url, { params, withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
     ).subscribe();
-    this._logout$.next();    
+    this.account = null;
   }
 
   private _displayLogoutAlert(isSessionRefresh: boolean): void {

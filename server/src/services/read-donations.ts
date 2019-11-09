@@ -1,5 +1,5 @@
-import { getRepository, Repository, SelectQueryBuilder, QueryBuilder } from 'typeorm';
-import { DonationEntity, Donation } from '../entity/donation.entity';
+import { getRepository, Repository, SelectQueryBuilder } from 'typeorm';
+import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { genSimpleWhereConditions, genPagination } from '../helpers/query-builder-helper';
 import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';

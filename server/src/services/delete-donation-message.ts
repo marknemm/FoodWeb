@@ -1,7 +1,7 @@
 import { broadcastEmail, MailTransporter } from '../helpers/email';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { sendNotification, NotificationType } from '../helpers/push-notification';
+import { sendNotification, NotificationType } from '../helpers/notification';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 
 const _donationHelper = new DonationHelper();
@@ -47,10 +47,9 @@ export async function sendDonationDeleteMessages(donation: DonationEntity): Prom
         notificationAccounts[0],
         {
           notificationType: NotificationType.RemoveDonation,
-          notificationDetailId: donation.id,
-          notificationTitle: `Donation Deleted`,
-          notificationIconUrl: donation.donorAccount.profileImgUrl,
-          notificationBody: `
+          title: `Donation Deleted`,
+          icon: donation.donorAccount.profileImgUrl,
+          body: `
             Claimed Donation Deleted by <strong>${donorName}</strong>.<br>
             <i>${donation.description}</i>
           `
@@ -65,10 +64,9 @@ export async function sendDonationDeleteMessages(donation: DonationEntity): Prom
         notificationAccounts[1],
         {
           notificationType: NotificationType.RemoveDonation,
-          notificationDetailId: donation.id,
-          notificationTitle: `Donation Deleted`,
-          notificationIconUrl: donation.donorAccount.profileImgUrl,
-          notificationBody: `
+          title: `Donation Deleted`,
+          icon: donation.donorAccount.profileImgUrl,
+          body: `
             Delivery Cancelled by <strong>${donorName}</strong>.<br>
             <i>${donation.description}</i>
           `

@@ -26,6 +26,7 @@ import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hour
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
 import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
+import { MobileModule } from './mobile/mobile.module';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MobileModule,
     MaterialModule,
     NgxMaterialTimepickerModule,
     RecaptchaV3Module,
@@ -50,6 +52,7 @@ import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
     HeuristicsModule
   ],
   providers: [
+    { provide: 'Window', useValue: window },
     { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: RecaptchaService, multi: true },
     { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.recaptchaSiteKey },

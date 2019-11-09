@@ -7,7 +7,7 @@ import { AccountForm } from '../../../account/forms/account.form';
 import { TermsConditionsDialogComponent } from '../terms-conditions-dialog/terms-conditions-dialog.component';
 import { SignupService } from '../../services/signup/signup.service';
 import { SignupVerificationService } from '../../services/signup-verification/signup-verification.service';
-import { DeviceInfoService } from '../../../mobile/services/device-info/device-info.service';
+import { AppDataService } from '../../../mobile/services/app-data/app-data.service';
 import { SessionService } from '../../../session/services/session/session.service';
 import { Account, AccountType } from '../../../../../../shared/src/interfaces/account/account';
 
@@ -26,7 +26,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   constructor(
     public sessionService: SessionService,
     public signupVerificationService: SignupVerificationService,
-    public deviceInfoService: DeviceInfoService,
+    public appDataService: AppDataService,
     private _signupService: SignupService,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
@@ -60,7 +60,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.accountForm.get('accountType').valueChanges.pipe(
       takeUntil(this._destroy$)
     ).subscribe((accountType: AccountType) => {
-      const baseUrl: string = this.deviceInfoService.isMobileApp ? '/mobile-boot/signup' : '/signup';
+      const baseUrl: string = this.appDataService.isMobileApp ? '/mobile-boot/signup' : '/signup';
       this._router.navigate([baseUrl, accountType]);
     });
   }

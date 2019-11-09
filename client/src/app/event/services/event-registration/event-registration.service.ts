@@ -29,14 +29,14 @@ export class EventRegistrationService {
     eventRegistration.eventTitleDate = `${eventTitle} - ${eventDateTime}`;
     const eventRegistrationReq: EventRegistrationRequest = { eventRegistration: <EventRegistration>eventRegistration };
     this._loading = true;
-    return this._httpClient.post(this.url, eventRegistrationReq).pipe(
+    return this._httpClient.post(this.url, eventRegistrationReq, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._loading = false)
     );
   }
 
   getEventRegistrations(): Observable<ListResponse<EventRegistration>> {
-    return this._httpClient.get<ListResponse<EventRegistration>>(this.url).pipe(
+    return this._httpClient.get<ListResponse<EventRegistration>>(this.url, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._loading = false)
     );

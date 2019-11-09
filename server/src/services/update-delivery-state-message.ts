@@ -3,7 +3,7 @@ import { UpdateDiff } from '../interfaces/update-diff';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { MailTransporter, broadcastEmail } from '../helpers/email';
-import { broadcastNotification, NotificationType } from '../helpers/push-notification';
+import { broadcastNotification, NotificationType } from '../helpers/notification';
 import { DonationStatus } from '../../../shared/src/interfaces/donation/donation';
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 
@@ -46,11 +46,10 @@ export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity
       notificationAccounts,
       {
         notificationType: NotificationType.DeliveryStateAdvance,
-        notificationDetailId: donation.id,
         notificationLink: `/donation/details/${donation.id}`,
-        notificationTitle: `Delivery ${advanceAction}`,
-        notificationIconUrl: volunteerAccount.profileImgUrl,
-        notificationBody: `
+        title: `Delivery ${advanceAction}`,
+        icon: volunteerAccount.profileImgUrl,
+        body: `
           Delivery Has Been <strong>${advanceAction}</strong> by <strong>${delivererName}</strong>.<br>
           <i>${donation.description}</i>
         `
@@ -109,11 +108,10 @@ async function _sendDeliveryStateUndoMessages(donation: DonationEntity): Promise
       notificationAccounts,
       {
         notificationType: NotificationType.DeliveryStateUndo,
-        notificationDetailId: donation.id,
         notificationLink: `/donation/details/${donation.id}`,
-        notificationTitle: `Delivery Reverted to ${donation.donationStatus}`,
-        notificationIconUrl: volunteerAccount.profileImgUrl,
-        notificationBody: `
+        title: `Delivery Reverted to ${donation.donationStatus}`,
+        icon: volunteerAccount.profileImgUrl,
+        body: `
           Delivery Status has been reverted to ${donation.donationStatus} by ${delivererName}.<br>
           <i>${donation.description}</i>
         `

@@ -1,12 +1,11 @@
 import { TestBed } from '@angular/core/testing';
+import { AppDataService } from './app-data.service';
 
-import { SplashscreenService } from './splashscreen.service';
-
-describe('SplashscreenService', () => {
+describe('AppDataService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: SplashscreenService = TestBed.get(SplashscreenService);
+    const service: AppDataService = TestBed.get(AppDataService);
     expect(service).toBeTruthy();
   });
 });
