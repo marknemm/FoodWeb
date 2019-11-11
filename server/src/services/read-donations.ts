@@ -2,9 +2,9 @@ import { getRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { genSimpleWhereConditions, genPagination } from '../helpers/query-builder-helper';
-import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
-import { DonationReadRequest, DonationReadFilters } from '../../../shared/src/interfaces/donation/donation-read-request';
-import { Validation } from '../../../shared/src/constants/validation';
+import { OperationHoursHelper } from '../shared';
+import { DonationReadRequest, DonationReadFilters } from '../shared';
+import { Validation } from '../shared';
 
 export interface DonationsQueryResult {
   donations: DonationEntity[];

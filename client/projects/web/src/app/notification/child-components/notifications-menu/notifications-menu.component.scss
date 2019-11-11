@@ -1,0 +1,99 @@
+@import "constants.scss";
+
+$title-font-size: 16px;
+$icon-size: 38px;
+
+.notifications-button-container {
+  display: inline-block;
+  vertical-align: top;
+  top: -1px;
+
+  @media screen and (max-width: $mat-mobile) {
+    top: 0;
+  }
+
+  button.mat-icon-button.notifications-button {
+    margin: 0 7px 0 0;
+    width: $sub-header-height;
+    height: $sub-header-height;
+    line-height: $sub-header-height;
+    vertical-align: top;
+    outline: none;
+
+    &.mobile {
+      display: none;
+    }
+
+    @media only screen and (max-width: $sm) {
+      &.desktop {
+        display: none;
+      }
+
+      &.mobile {
+        display: inline;
+      }
+    }
+
+    @media only screen and (max-width: $mat-mobile) {
+      width: $sub-header-height-mobile;
+      height: $sub-header-height-mobile;
+      line-height: $sub-header-height-mobile;
+    }
+
+    mat-icon {
+      top: -1px;
+
+      @media only screen and (max-width: $mat-mobile) {
+        top: 0;
+      }
+    }
+  }
+}
+
+.notifications-menu-content {
+  width: 100%;
+
+  > .header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    color: $accent-darkest;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: -5px;
+    padding: 4px 5px 0;
+    text-align: center;
+    background-color: white;
+
+    > .mat-divider {
+      margin: 3px 0 0;
+    }
+  }
+
+  > .mat-list {
+    padding-top: 0;
+
+    .mat-line {
+      margin-left: -8px;
+    }
+  }
+
+  > .footer {
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    color: $accent-darkest;
+    font-size: 14px;
+    padding: 0 5px 4px;
+    text-align: center;
+    background-color: white;
+
+    > .mat-divider {
+      margin: 0 0 3px;
+    }
+  }
+
+  _:-ms-lang(x), > .header, > .footer { position: relative; }
+}

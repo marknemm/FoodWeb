@@ -1,0 +1,34 @@
+<span class="notifications-button-container"
+  [matBadge]="notificationService.unseenNotificationsCount"
+  [matBadgeHidden]="!(notificationService.unseenNotificationsCount)"
+  matBadgeSize="small"
+  matBadgeColor="warn"
+  matBadgeDescription="{{ notificationService.unseenNotificationsCount }} unread"
+>
+  <button mat-icon-button class="notifications-button desktop" aria-label="Notifications menu">
+    <mat-icon [matMenuTriggerFor]="notificationsMenu" (menuOpened)="onNotificationButtonClick('desktop')">notifications</mat-icon>
+  </button>
+  <button mat-icon-button class="notifications-button mobile" aria-label="Notifications menu">
+    <mat-icon (click)="onNotificationButtonClick('mobile')">notifications</mat-icon>
+  </button>
+</span>
+
+<mat-menu #notificationsMenu="matMenu" class="notifications-menu" backdropClass="notifications-menu-backdrop">
+  <div class="notifications-menu-content">
+    <div class="header">
+      <span class="title">Notifications</span>
+      <mat-divider></mat-divider>
+    </div>
+    <mat-action-list>
+      <food-web-notification
+        *ngFor="let notification of notificationService.notificationsPreview"
+        [notification]="notification"
+        [max2Lines]="true">
+      </food-web-notification>
+    </mat-action-list>
+    <div class="footer">
+      <mat-divider></mat-divider>
+      <a [routerLink]="['/notification/list/my']">See More</a>
+    </div>
+  </div>
+</mat-menu>

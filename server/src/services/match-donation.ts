@@ -5,11 +5,11 @@ import { cancelDelivery } from './cancel-delivery';
 import { UpdateDiff } from '../interfaces/update-diff';
 import { DonationEntity } from '../entity/donation.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
-import { Account } from '../../../shared/src/interfaces/account/account';
-import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
-import { DonationClaimRequest } from '../../../shared/src/interfaces/donation/donation-claim-request';
-import { DonationUnclaimRequest } from '../../../shared/src/interfaces/donation/donation-unclaim-request';
+import { Donation, DonationStatus } from '../shared';
+import { Account } from '../shared';
+import { DonationHelper } from '../shared';
+import { DonationClaimRequest } from '../shared';
+import { DonationUnclaimRequest } from '../shared';
 
 const _donationHelper = new DonationHelper();
 

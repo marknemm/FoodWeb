@@ -10,6 +10,16 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es2015",
+    "paths": {
+      "~web/*": ["./projects/web/src/app/*"],
+      "~web-env/*": ["./projects/web/src/environments/*"],
+      "~app/*": ["./projects/app/src/app/*"],
+      "~app-env/*": ["./projects/app/src/environments/*"],
+      "~admin/*": ["./projects/admin/src/app/*"],
+      "~admin-env/*": ["./projects/admin/src/environments/*"],
+      "~hmr": ["./src/hmr"],
+      "~shared": ["./src/shared"]
+    },
     "typeRoots": [
       "node_modules/@types"
     ],

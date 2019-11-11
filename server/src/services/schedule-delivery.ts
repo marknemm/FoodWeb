@@ -3,9 +3,9 @@ import { readDonation } from './read-donations';
 import { FoodWebError } from '../helpers/food-web-error';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
-import { DeliveryScheduleRequest } from '../../../shared/src/interfaces/delivery/delivery-schedule-request';
-import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
+import { Donation, DonationStatus } from '../shared';
+import { DeliveryScheduleRequest } from '../shared';
+import { DeliveryHelper } from '../shared';
 
 const _deliveryHelper = new DeliveryHelper();
 

@@ -1,0 +1,98 @@
+<div class="signup-container">
+  <form [formGroup]="accountForm" *ngIf="!sessionService.loggedIn" (submit)="signup()">
+    <div class="align-center">
+      <div class="page-title block-label signup-header">
+        {{ accountType ? 'Signup' : 'Select Your Account Type' }}
+      </div>
+      <food-web-account-type [editing]="!accountType" formControlName="accountType" class="account-type"></food-web-account-type>
+    </div>
+
+    <hr *ngIf="accountType">
+
+    <div *ngIf="accountType">
+      <div class="row">
+        <div class="col-xl-6">
+          <mat-card>
+            <mat-card-title class="block-label">Login Credentials</mat-card-title>
+            <mat-card-content>
+              <div class="row">
+                <div class="col-sm-12">
+                  <food-web-username [editing]="true" formControlName="username"></food-web-username>
+                </div>
+                <div class="col-sm-12">
+                  <food-web-password [editing]="true" formGroupName="password"></food-web-password>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card *ngIf="accountType !== 'Volunteer'">
+            <mat-card-title class="block-label">Organization</mat-card-title>
+            <mat-card-content>
+              <food-web-organization [accountType]="accountType" [editing]="true" formGroupName="organization"></food-web-organization>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card *ngIf="accountType === 'Volunteer'">
+            <mat-card-title>Volunteer Name</mat-card-title>
+            <mat-card-content>
+              <food-web-volunteer [editing]="true" formGroupName="volunteer"></food-web-volunteer>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-xl-6">
+          <mat-card>
+            <mat-card-title class="block-label">Contact Info</mat-card-title>
+            <mat-card-content>
+              <food-web-contact-info [editing]="true" formGroupName="contactInfo"></food-web-contact-info>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+      <hr *ngIf="accountType != 'Donor'">
+
+      <div class="operation-hours-section" [ngClass]="{ 'full-width': operationHoursFullWidth }">
+        <mat-card *ngIf="accountType !== 'Donor'">
+          <mat-card-title class="block-label">
+            <span *ngIf="accountType !== 'Volunteer'">Donation Delivery Availability</span>
+            <span *ngIf="accountType === 'Volunteer'">Delivery Availability</span>
+          </mat-card-title>
+          <mat-card-subtitle>
+            <span *ngIf="accountType === 'Receiver'">Optionally limit the times you will be considered available to receive deliveries.</span>
+            <span *ngIf="accountType === 'Volunteer'">Optionally limit the times you will be considered available to perform deliveries.</span>
+            <br><span> You can update this setting any time under your account.</span>
+          </mat-card-subtitle>
+          <mat-card-content>
+            <food-web-operation-hours [editing]="true" formGroupName="operationHours"></food-web-operation-hours>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <hr>
+
+      <div class="row submit-button-container">
+        <div class="col-xl-12 align-right">
+          <button mat-raised-button color="primary" type="submit">Signup</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <mat-card *ngIf="sessionService.loggedIn">
+    <mat-card-title>Welcome to FoodWeb!</mat-card-title>
+    <mat-card-content>
+      <p>Please confirm your signup by following the link sent to your email.</p>
+      <div class="signup-success-button-container align-right">
+        <button mat-button *ngIf="!sessionService.account.verified" color="accent" type="button" (click)="signupVerificationService.resendVerificationEmail()">
+          Resend Verification Email
+        </button>
+        <a [routerLink]="['/home']">
+          <button mat-raised-button color="primary" type="button">
+            Home
+          </button>
+        </a>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

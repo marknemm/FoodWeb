@@ -1,7 +1,7 @@
 import { getRepository, In } from 'typeorm';
 import { AppDataEntity } from '../entity/app-data.entity';
 import { genSkip, genTake } from '../helpers/query-builder-helper';
-import { AppDataReadRequest } from '../../../shared/src/interfaces/app-data/app-data-read-request';
+import { AppDataReadRequest } from '../shared';
 
 export interface AppDataQueryResult {
   appDataArr: AppDataEntity[];

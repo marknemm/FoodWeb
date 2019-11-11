@@ -6,7 +6,7 @@ import multer = require('multer');
 import path = require('path');
 import 'reflect-metadata';
 import { Request, Response } from 'express';
-import { JSONDateReviver } from '../../shared/src/helpers/json-date-reviver';
+import { JSONDateReviver } from './shared';
 
 // Set important paths in global.
 const PRODUCTION: boolean = (process.env['PRODUCTION']  === 'true');
@@ -14,7 +14,7 @@ const QA: boolean = (process.env['QA'] === 'true');
 global['rootDir'] = path.join(__dirname, '..', '..', '..', '..');
 global['serverDir'] = path.join(global['rootDir'], 'server');
 global['clientDir'] = path.join(global['rootDir'], 'client');
-global['clientBuildDir'] = path.join(global['clientDir'], 'dist');
+global['clientBuildDir'] = path.join(global['clientDir'], 'dist', 'web');
 global['assetsDir'] = path.join(global['clientBuildDir'], 'assets');
 global['clientEmailDir'] = path.join(global['clientDir'], 'email');
 global['publicDir'] = path.join(global['rootDir'], 'public');

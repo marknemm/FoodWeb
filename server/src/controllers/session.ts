@@ -3,9 +3,9 @@ import { Request, Response } from 'express';
 import { AccountEntity } from '../entity/account.entity';
 import { login, appTokenLogin, logout, saveAppSessionToken } from '../services/session';
 import { handleError } from '../middlewares/response-error.middleware';
-import { LoginRequest } from '../../../shared/src/interfaces/session/login-request';
-import { LoginResponse } from '../../../shared/src/interfaces/session/login-response';
-import { AppTokenLoginRequest } from '../../../shared/src/interfaces/session/app-token-login-request';
+import { LoginRequest } from '../shared';
+import { LoginResponse } from '../shared';
+import { AppTokenLoginRequest } from '../shared';
 
 const router = express.Router();
 

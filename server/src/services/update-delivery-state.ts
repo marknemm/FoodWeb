@@ -5,10 +5,10 @@ import { FoodWebError } from '../helpers/food-web-error';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
 import { cancelDelivery } from '../services/cancel-delivery';
-import { Donation } from '../../../shared/src/interfaces/donation/donation';
-import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
-import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
-import { DeliveryStateChangeRequest } from '../../../shared/src/interfaces/delivery/delivery-state-change-request';
+import { Donation } from '../shared';
+import { DonationHelper } from '../shared';
+import { DeliveryHelper } from '../shared';
+import { DeliveryStateChangeRequest } from '../shared';
 
 const _donationHelper = new DonationHelper();
 const _deliveryHelper = new DeliveryHelper();

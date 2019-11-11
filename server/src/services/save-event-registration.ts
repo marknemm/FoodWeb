@@ -1,7 +1,7 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { EventRegistrationEntity } from '../entity/event-registration.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { EventRegistration } from '../../../shared/src/interfaces/event/event-registration';
+import { EventRegistration } from '../shared';
 
 export async function saveEventRegistration(registration: EventRegistration): Promise<EventRegistrationEntity> {
   await _ensureNotAlreadyRegistered(registration);

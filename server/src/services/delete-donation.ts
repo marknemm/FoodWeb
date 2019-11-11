@@ -4,8 +4,8 @@ import { cancelDelivery } from './cancel-delivery';
 import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { DonationHelper, Donation } from '../../../shared/src/helpers/donation-helper';
-import { DonationDeleteRequest } from '../../../shared/src/interfaces/donation/donation-delete-request';
+import { DonationHelper, Donation } from '../shared';
+import { DonationDeleteRequest } from '../shared';
 
 const _donationHelper = new DonationHelper();
 

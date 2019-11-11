@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AppShellComponent } from './app-shell/domain-components/app-shell/app-shell.component';
 import { HomeComponent } from './components/home/home.component';
 import { AboutComponent } from './components/about/about.component';
-import { MobileBootGuardService } from './mobile-boot/services/mobile-boot-guard/mobile-boot-guard.service';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -11,12 +10,11 @@ const routes: Routes = [
   { path: 'notifications', pathMatch: 'full', redirectTo: 'notification/list/my' },
   { path: 'signup-verification', pathMatch: 'full', redirectTo: 'signup/verification' },
   { path: 'donation-details/:id', pathMatch: 'full', redirectTo: 'donation/details/:id' },
-  { path: 'mobile-boot', loadChildren: () => import('./mobile-boot/mobile-boot.module').then(mod => mod.MobileBootModule) },
   {
     path: '',
     component: AppShellComponent,
     children: [
-      { path: 'home', component: HomeComponent, canActivate: [MobileBootGuardService] },
+      { path: 'home', component: HomeComponent },
       { path: 'home/:login', component: HomeComponent },
       { path: 'about', component: AboutComponent },
       { path: 'signup', loadChildren: () => import('./signup/signup.module').then(mod => mod.SignupModule) },

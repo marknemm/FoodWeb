@@ -8,9 +8,9 @@ import { AccountEntity } from '../entity/account.entity';
 import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { OperationHoursEntity } from '../entity/operation-hours.entity';
 import { AccountUpdateRequest } from '../interfaces/account/account-update-request';
-import { AccountHelper, Account } from '../../../shared/src/helpers/account-helper';
-import { OperationHoursHelper, OperationHours } from '../../../shared/src/helpers/operation-hours-helper';
-import { AccountCreateRequest } from '../../../shared/src/interfaces/account/account-create-request';
+import { AccountHelper, Account } from '../shared';
+import { OperationHoursHelper, OperationHours } from '../shared';
+import { AccountCreateRequest } from '../shared';
 
 /**
  * Data generated when creating a new account.

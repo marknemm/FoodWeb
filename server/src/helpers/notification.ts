@@ -6,7 +6,7 @@ import { NotificationEntity, Notification, NotificationType } from '../entity/no
 import { readUnseenNotificationsCount } from '../services/read-notifications';
 import { createNotification } from '../services/save-notification';
 import { readAppData } from '../services/read-app-data';
-import { ServerSentEventType } from '../../../shared/src/interfaces/server-sent-event/server-sent-event';
+import { ServerSentEventType } from '../shared';
 export { Notification, NotificationType };
 
 export async function broadcastNotification(accounts: AccountEntity[], notification: Notification): Promise<NotificationEntity[]> {

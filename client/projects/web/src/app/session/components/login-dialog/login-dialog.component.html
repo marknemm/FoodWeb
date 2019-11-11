@@ -1,0 +1,12 @@
+<div class="login-dialog-container">
+  <mat-toolbar color="primary">
+    <h1 mat-dialog-title>{{ title }}</h1>
+    <button mat-icon-button type="button" class="close-button" mat-dialog-close>
+      <mat-icon aria-label="Close">close</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-dialog-content>
+    <food-web-login [insideDialog]="true" (formChanged)="loginFormChanged($event)" (loggedIn)="matDialogRef.close()"></food-web-login>
+  </mat-dialog-content>
+</div>

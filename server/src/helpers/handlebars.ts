@@ -2,7 +2,7 @@ import handlebars = require('handlebars');
 import helpers = require('handlebars-helpers');
 import fs = require('fs-extra');
 import path = require('path');
-import { DateTimeHelper } from '../../../shared/src/helpers/date-time-helper';
+import { DateTimeHelper } from '../shared';
 
 const _dateTimeHelper = new DateTimeHelper();
 const _handlebarsTemplates: Map<string, handlebars.TemplateDelegate> = _initHandlebars();

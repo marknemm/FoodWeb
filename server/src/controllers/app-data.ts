@@ -8,7 +8,7 @@ import { saveAppData } from '../services/save-app-data';
 import { deleteAppData } from '../services/delete-app-data';
 import { readAccount } from '../services/read-accounts';
 import { saveAudit, AuditEventType } from '../services/save-audit';
-import { AppDataSaveRequest } from '../../../shared/src/interfaces/app-data/app-data-save-request';
+import { AppDataSaveRequest } from '../shared';
 
 const router = express.Router();
 

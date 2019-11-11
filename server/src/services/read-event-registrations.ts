@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import { EventRegistrationEntity } from '../entity/event-registration.entity';
-import { EventRegistrationReadRequest } from '../../../shared/src/interfaces/event/event-registration-read-request';
+import { EventRegistrationReadRequest } from '../shared';
 
 export interface EventRegistrationsQueryResult {
   registrations: EventRegistrationEntity[];

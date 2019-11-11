@@ -16,12 +16,12 @@ import { saveAudit, AuditEventType, saveUpdateAudit } from '../services/save-aud
 import { sendUsernameRecoveryEmail } from '../services/username-recovery-message';
 import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '../services/password-reset-message';
 import { sendAccountVerificationMessage, sendAccountVerificationEmail } from '../services/account-verification-message';
-import { AccountCreateRequest, Account } from '../../../shared/src/interfaces/account/account-create-request';
-import { AccountUpdateRequest } from '../../../shared/src/interfaces/account/account-update-request';
-import { PasswordUpdateRequest } from '../../../shared/src/interfaces/account/password-update-request';
-import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
-import { PasswordResetRequest } from '../../../shared/src/interfaces/account/password-reset-request';
-import { AccountVerificationRequest } from '../../../shared/src/interfaces/account/account-verification-request';
+import { AccountCreateRequest, Account } from '../shared';
+import { AccountUpdateRequest } from '../shared';
+import { PasswordUpdateRequest } from '../shared';
+import { AccountReadRequest } from '../shared';
+import { PasswordResetRequest } from '../shared';
+import { AccountVerificationRequest } from '../shared';
 
 const router = express.Router();
 

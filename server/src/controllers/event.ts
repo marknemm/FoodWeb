@@ -4,7 +4,7 @@ import { handleError } from '../middlewares/response-error.middleware';
 import { saveEventRegistration } from '../services/save-event-registration';
 import { readEventRegistrations, EventRegistrationsQueryResult } from '../services/read-event-registrations';
 import { genListResponse } from '../helpers/list-response';
-import { EventRegistrationRequest } from './../../../shared/src/interfaces/event/event-registration-request';
+import { EventRegistrationRequest } from '../shared';
 
 const router = express.Router();
 

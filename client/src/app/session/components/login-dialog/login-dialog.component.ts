@@ -3,7 +3,6 @@ import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material/dial
 import { Observable, of } from 'rxjs';
 import { LoginFormChange } from '../login/login.component';
 import { SessionService } from '../../services/session/session.service';
-import { AppDataService } from '../../../mobile/services/app-data/app-data.service';
 import { Device } from '@ionic-native/device/ngx';
 
 @Component({

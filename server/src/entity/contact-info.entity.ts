@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, Index } from 'typeorm';
 import { AccountEntity } from './account.entity';
-import { ContactInfo, GeographyLocation } from './../../../shared/src/interfaces/account/contact-info';
+import { ContactInfo, GeographyLocation } from '../shared';
 import { DonationEntity } from './donation.entity';
 
 @Entity('ContactInfo')

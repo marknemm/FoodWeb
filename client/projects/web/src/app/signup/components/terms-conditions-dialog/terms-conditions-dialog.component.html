@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Terms and Conditions</h1>
+
+<div mat-dialog-content>
+  <p>
+    By clicking "Accept" (below), you are agreeing that you have read and will attempt to comply with these guidelines in
+    good faith whenever making a {{ userAction }} coordinated by FoodWeb.  If you have any questions about a {{ userAction }} and whether the
+    guidelines are being met, please contact a member of <a href="mailto:support@wnyfoodweb.com">FoodWeb's executive team</a>
+    for further guidance.
+  </p>
+
+  <food-web-agreement-bullet-points [accountType]="config.accountType"></food-web-agreement-bullet-points>
+
+  <div class="submit-buttons">
+    <button mat-button type="button" color="warn" [mat-dialog-close]="false">Decline</button>
+    <button mat-raised-button type="button" color="primary" [mat-dialog-close]="true">Accept</button>
+  </div>
+</div>

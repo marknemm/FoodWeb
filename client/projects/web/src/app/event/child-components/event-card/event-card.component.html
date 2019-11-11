@@ -1,0 +1,53 @@
+<mat-card class="event-card">
+  <mat-card-header>
+    <div mat-card-avatar class="event-avatar">
+      <mat-icon class="event-icon">event</mat-icon>
+      <div *ngIf="eventDay" class="event-day">{{ eventDay }}</div>
+    </div>
+    <mat-card-title>{{ eventTitle }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-content></ng-content>
+    <p class="event-time">
+      <mat-icon>access_time</mat-icon>
+      <span>{{ date }}<br>{{ time }}</span>
+    </p>
+    <p class="event-location">
+      <mat-icon>location_on</mat-icon>
+      <a [href]="directionsHref" target="_blank" [innerHTML]="location"></a>
+    </p>
+    <div class="event-action-container" *ngIf="signupTitle && !signupComplete">
+      <food-web-progress-indicator [trigger]="eventRegistrationService.loading" [blocking]="true"></food-web-progress-indicator>
+      <mat-expansion-panel (afterExpand)="(glowLocalStorageVar) ? window.localStorage[glowLocalStorageVar] = true : null">
+        <mat-expansion-panel-header #expansionHeader [ngClass]="{ 'green-glow': !!glowLocalStorageVar && !window.localStorage[glowLocalStorageVar] }">
+          {{ signupTitle }}
+        </mat-expansion-panel-header>
+        <form [formGroup]="formGroup" (ngSubmit)="submitSignup()">
+          <div class="fill">
+            <mat-form-field>
+              <input matInput formControlName="fullName" placeholder="Full Name" type="text">
+            </mat-form-field>
+          </div>
+          <div class="fill">
+            <mat-form-field>
+              <input matInput formControlName="email" placeholder="Email" type="email">
+              <mat-error *ngIf="formGroup.get('email').hasError('email')">Invalid email address</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="fill">
+            <mat-form-field>
+              <input matInput formControlName="phoneNumber" placeholder="Phone Number" type="text">
+              <mat-error *ngIf="formGroup.get('phoneNumber').hasError('pattern')">Invalid phone number</mat-error>
+            </mat-form-field>
+          </div>
+          <button mat-raised-button type="submit" color="primary" class="event-button">
+            Submit Signup
+          </button>
+        </form>
+      </mat-expansion-panel>
+    </div>
+    <div class="signup-complete-message" *ngIf="signupComplete">
+      <ng-content select=".event-signup-complete-message"></ng-content>
+    </div>
+  </mat-card-content>
+</mat-card>

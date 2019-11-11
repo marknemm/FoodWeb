@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, Column, CreateDateColumn } from 'typeorm';
-import { AppData } from '../../../shared/src/interfaces/app-data/app-data';
+import { AppData } from '../shared';
 export { AppData };
 
 @Entity('AppData')
