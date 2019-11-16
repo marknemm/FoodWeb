@@ -33,7 +33,7 @@
     "app:prepare": "cd ./mobile && npm run prepare && cd ../",
     "app:prepare:watch": "watch \"npm run app:prepare\" ./mobile/www --interval=5",
     "app:prepare:build": "npm run app:prepare && npm run app:build",
-    "app:start": "ionic cordova run browser --livereload --debug --consolelogs --source-map --configuration browser",
+    "app:start": "ionic cordova run browser --livereload --debug --source-map --configuration browser",
     "app:start:android": "cd ./mobile && npm run start:android && cd ../",
     "app:start:browser": "cd ./mobile && npm run start:browser && cd ../",
     "app:start:ios": "cd ./mobile && npm run start:ios && cd ../",

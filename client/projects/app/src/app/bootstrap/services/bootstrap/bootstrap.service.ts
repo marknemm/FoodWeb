@@ -3,33 +3,36 @@ import { CanActivate, Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SessionService } from '~web/session';
-import { AppDataService } from '~app/shared';
+
+import { AppSessionService } from '~app/app-session/services/app-session/app-session.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AppEnterGuardService implements CanActivate {
+export class BootstrapService implements CanActivate {
 
   constructor(
-    private _sessionService: SessionService,
-    private _appDataService: AppDataService,
+    private _sessionService: AppSessionService,
     private _splashScreen: SplashScreen,
     private _router: Router
   ) {}
 
+  /**
+   * Determines whether or not the user can enter the app (activate any non app-bootstrap route).
+   * @return true if the user can enter the app, false if not.
+   */
   canActivate(): boolean | Observable<boolean> {
-    if (!this._appDataService.isMobileApp || this._sessionService.loggedIn) {
-      if (this._appDataService.isMobileApp) {
-        this._splashScreen.hide();
-      }
+    // Check if logged in, meaning we don't need to refresh session status via server request.
+    if (this._sessionService.loggedIn) {
+      this._splashScreen.hide();
       return true;
     }
 
+    // Contact server via session refresh request to see if user is logged in.
     return this._sessionService.refreshSessionStatus().pipe(
       map(() => {
         if (!this._sessionService.loggedIn) {
-          this._router.navigate(['/bootstrap/login']);
+          this._router.navigate(['/login']);
         }
         this._splashScreen.hide();
         return this._sessionService.loggedIn;

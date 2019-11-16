@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit {
   login(): void {
     const username: string = this.loginForm.get('usernameEmail').value;
     const password: string = this.loginForm.get('password').value;
-    this.sessionService.login(username, password)
+    this.sessionService.login(username, password, true)
       .pipe(catchError(this._handleLoginErr.bind(this)))
       .subscribe(this._handleLoginSuccess.bind(this));
   }

@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AppShellComponent } from '~web/app-shell';
 import { HomeComponent, AboutComponent } from '~web/components';
 
-import { AppEnterGuardService } from '~app/bootstrap/services/app-enter-guard/app-enter-guard.service';
+import { BootstrapService } from '~app/bootstrap/services/bootstrap/bootstrap.service';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -14,12 +14,12 @@ const routes: Routes = [
   // Redirect web login/signup to app routes.
   { path: 'login', pathMatch: 'full', redirectTo: 'bootstrap/login' },
   { path: 'signup', pathMatch: 'full', redirectTo: 'bootstrap/signup' },
-  { path: 'signup:accountType', pathMatch: 'full', redirectTo: 'bootstrap/signup/:accountType' },
+  { path: 'signup/:accountType', redirectTo: 'bootstrap/signup/:accountType' },
   { path: 'bootstrap', loadChildren: () => import('./bootstrap/bootstrap.module').then(mod => mod.BootstrapModule) },
   {
     path: '',
     component: AppShellComponent,
-    canActivate: [AppEnterGuardService],
+    canActivate: [BootstrapService],
     children: [
       { path: 'home', component: HomeComponent },
       { path: 'home/:login', component: HomeComponent },

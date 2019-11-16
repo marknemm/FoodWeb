@@ -32,6 +32,9 @@ import {
   ],
   entryComponents: [
     TermsConditionsDialogComponent
+  ],
+  exports: [
+    SignupComponent
   ]
 })
 export class SignupModule {}

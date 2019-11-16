@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { AppEnterGuardService } from './app-enter-guard.service';
 
-describe('AppEnterGuardService', () => {
+import { AppSessionService } from './app-session.service';
+
+describe('AppSessionService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: AppEnterGuardService = TestBed.get(AppEnterGuardService);
+    const service: AppSessionService = TestBed.get(AppSessionService);
     expect(service).toBeTruthy();
   });
 });

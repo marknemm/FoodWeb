@@ -148,7 +148,7 @@ export class SessionService {
    * In silent mode, it will not display a login message or redirect a phone app to the home page.
    * @return The logged in user's account.
    */
-  private _handleLoginSuccess(response: LoginResponse, silent: boolean): Account {
+  protected _handleLoginSuccess(response: LoginResponse, silent: boolean): Account {
     this.account = response.account;
     if (this._appDataService.isMobileApp) {
       localStorage.setItem('appSessionToken', response.appSessionToken);
@@ -174,7 +174,7 @@ export class SessionService {
       mergeMap((response: LoginResponse) => {
         // Sync client session with existing session on server.
         if (response.account) {
-          return of(this._handleLoginSuccess(response, true));
+          return of(this._handleLoginSuccess(response, false));
         }
         // Attempt to re-establish session via mobile app session token.
         const appSessionToken: string = localStorage.getItem('appSessionToken');

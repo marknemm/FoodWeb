@@ -14,16 +14,16 @@ export class SessionService {
 
   readonly url = `${environment.server}/session`;
 
-  private _account: Account;
-  private _loading = false;
-  private _login$ = new Subject<Account>();
-  private _logout$ = new Subject<Account>();
+  protected _account: Account;
+  protected _loading = false;
+  protected _login$ = new Subject<Account>();
+  protected _logout$ = new Subject<Account>();
 
   constructor(
-    private _httpClient: HttpClient,
-    private _errorHandlerService: ErrorHandlerService,
-    private _alertService: AlertService,
-    private _accountHelper: AccountHelper
+    protected _httpClient: HttpClient,
+    protected _errorHandlerService: ErrorHandlerService,
+    protected _alertService: AlertService,
+    protected _accountHelper: AccountHelper
   ) {
     // Attempt to get account from local browser storage upon init.
     const jsonAccount: string = localStorage.getItem('account');
@@ -116,33 +116,40 @@ export class SessionService {
   }
 
   /**
-   * Attempts to log the user in. Implicitly opens a server side event connection on login success.
+   * Attempts to log the user in.
    * @param usernameEmail The username or email of the user.
    * @param password The passwsord of the user.
-   * @param silent Whether or not the login operation should be done silently.
-   * A silent login operation will not display a message on success or redirect the user to any other page.
-   * Default value is false.
+   * @param notifyUser Whether or not to display a login success notification to the user upon successful login. Defaults to false.
    * @return An observable that emits the user's account when login is successful, and throws error on failure.
    */
-  login(usernameEmail: string, password: string, silent = false): Observable<Account> {
+  login(usernameEmail: string, password: string, notifyUser = false): Observable<Account> {
     const loginRequest: LoginRequest = { usernameEmail, password };
+    return this._sendLoginRequest(loginRequest).pipe(
+      map((response: LoginResponse) => this._handleLoginSuccess(response, notifyUser))
+    );
+  }
+
+  /**
+   * Sends the login request to the server.
+   * @param loginRequest The login request to send to the server.
+   * @return An observable that emits the login response on success, and throws an error on failure.
+   */
+  protected _sendLoginRequest(loginRequest: LoginRequest): Observable<LoginResponse> {
     this._loading = true;
     return this._httpClient.post<LoginResponse>(this.url, loginRequest, { withCredentials: true }).pipe(
-      map((response: LoginResponse) => this._handleLoginSuccess(response, silent)),
       finalize(() => this._loading = false)
     );
   }
 
   /**
-   * Handles the successful login of a user by setting up session data in the browser and opening a server side event client connection.
+   * Handles the successful login of a user.
    * @param response The login response.
-   * @param silent Set to true if the login success handler should silently record the user session on the client.
-   * In silent mode, it will not display a login message or redirect a phone app to the home page.
+   * @param notifyUser Whether or not to display a login success notification to the user upon successful login. Defaults to false.
    * @return The logged in user's account.
    */
-  private _handleLoginSuccess(response: LoginResponse, silent: boolean): Account {
+  protected _handleLoginSuccess(response: LoginResponse, notifyUser = false): Account {
     this.account = response.account;
-    if (!silent) {
+    if (notifyUser) {
       this._alertService.displaySimpleMessage(`Welcome, ${this._accountHelper.accountName(response.account)}`, 'success');
     }
     return response.account;
@@ -156,38 +163,47 @@ export class SessionService {
   refreshSessionStatus(): Observable<Account> {
     this._loading = true;
     return this._httpClient.get<LoginResponse>(this.url, { withCredentials: true }).pipe(
-      mergeMap((response: LoginResponse) => {
-        // Sync client session with existing session on server.
-        if (response.account) {
-          return of(this._handleLoginSuccess(response, true));
-        }
-        // Logout to sync client session with lost session on server.
-        if (this.account) {
-          this.logout(true);
-        }
-        return of(null);
-      }),
+      mergeMap((response: LoginResponse) => this._handleSessionRefreshResponse(response)),
       finalize(() => this._loading = false)
     );
   }
 
   /**
-   * Logs the user out and implicitly closes any server side event connection.
-   * @param isSessionRefresh Set to true if the logout is from a session refresh operation. Default is false.
+   * Handles a session refresh response.
+   * @param response The session refresh (login) response.
+   * @return An observable that resolves to the account after syncing the session state with the server.
+   * If the user has been logged out on the server, then it emits null.
    */
-  logout(isSessionRefresh = false): void {
-    localStorage.removeItem('appSessionToken');
-    this._displayLogoutAlert(isSessionRefresh);
+  protected _handleSessionRefreshResponse(response: LoginResponse): Observable<Account> {
+    // Sync client session with existing session on server.
+    return (response.account)
+      ? of(this._handleLoginSuccess(response))
+      : of(this._sessionRefreshLogout());
+  }
+
+  /**
+   * Logs the user out as a result of a session refresh (sync with server logged out state),
+   * and alerts them of the logout.
+   * @return null, repressenting the new value for the client account session.
+   */
+  protected _sessionRefreshLogout(): null {
+    if (this.account) {
+      this.logout();
+      this._alertService.displaySimpleMessage('You have been logged out due to inactivity', 'warn');
+    }
+    return null;
+  }
+
+  /**
+   * Logs the user out and alerts them of a successful logout.
+   * @param notifyUser Whether or not to notify the user of the successful logout via snackbar notification. Defaults to false.
+   */
+  logout(notifyUser = false): void {
     this._httpClient.delete<void>(this.url, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
     ).subscribe();
     this.account = null;
-  }
-
-  private _displayLogoutAlert(isSessionRefresh: boolean): void {
-    if (isSessionRefresh && this.loggedIn) {
-      this._alertService.displaySimpleMessage('You have been logged out due to inactivity', 'warn');
-    } else if (!isSessionRefresh) {
+    if (notifyUser) {
       this._alertService.displaySimpleMessage('Logout successful', 'success');
     }
   }

@@ -16,8 +16,8 @@ import { AppShellModule } from '~web/app-shell/app-shell.module';
 import { HomeComponent, AboutComponent } from '~web/components';
 import { HeuristicsModule } from '~web/heuristics/heuristics.module';
 import { SharedModule } from '~web/shared/shared.module';
-import { SessionModule } from '~web/session/session.module';
 import { EventModule } from '~web/event/event.module';
+import { AppSessionModule } from '~app/app-session/app-session.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import { EventModule } from '~web/event/event.module';
     NgxMaterialTimepickerModule,
     SharedModule,
     AppShellModule,
-    SessionModule,
+    AppSessionModule.forRoot(),
     EventModule,
     HeuristicsModule
   ],

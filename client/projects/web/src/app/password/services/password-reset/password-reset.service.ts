@@ -46,7 +46,7 @@ export class PasswordResetService {
     this._loading = true;
     this._pageProgressSerivce.activate(true);
     return this._httpClient.put<Account>(this.url, request, { withCredentials: true }).pipe(
-      mergeMap((account: Account) => this._sessionService.login(account.username, password)),
+      mergeMap((account: Account) => this._sessionService.login(account.username, password, true)),
       catchError((err: any) => this._errorHandlerService.handleError(err)),
       finalize(() => {
         this._loading = false;
