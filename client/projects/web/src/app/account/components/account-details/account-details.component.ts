@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
-import { SectionEditService } from '~web/shared';
+import { SectionEditService } from '~web/section-edit/section-edit.service';
 import { DonationReadFilters, AccountHelper, AccountType } from '~shared';
 
-import { SessionService } from '~web/session/services/session/session.service';
-import { PasswordFormMode } from '~web/password/forms/password.form';
-import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
-import { AccountForm, PasswordFormT, AccountFormKey } from '~web/account/forms/account.form';
-import { AccountService, Account } from '~web/account/services/account/account.service';
+import { SessionService } from '~web/session/session.service';
+import { PasswordFormMode } from '~web/password.form';
+import { SignupVerificationService } from '~web/signup-verification/signup-verification.service';
+import { AccountForm, PasswordFormT, AccountFormKey } from '~web/account.form';
+import { AccountService, Account } from '~web/account/account.service';
 
 @Component({
   selector: 'food-web-account-details',

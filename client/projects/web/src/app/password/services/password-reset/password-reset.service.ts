@@ -3,11 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, finalize, mergeMap } from 'rxjs/operators';
-import { environment } from '~web-env/environment';
-import { ErrorHandlerService, PageProgressService } from '~web/shared';
+import { environment } from '~web/environment';
+import { PageProgressService } from '~web/page-progress/page-progress.service';
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
 import { PasswordResetRequest } from '~shared';
 
-import { SessionService, Account } from '~web/session/services/session/session.service';
+import { SessionService, Account } from '~web/session/session.service';
 
 @Injectable({
   providedIn: 'root'

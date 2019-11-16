@@ -1,9 +1,9 @@
 import { Observable, of } from 'rxjs';
-import { TypedFormArray } from '~web/data-structure';
-import { ConfirmDialogService } from '~web/shared';
+import { TypedFormArray } from '~web/typed-form-array';
+import { ConfirmDialogService } from '~web/confirm-dialog/confirm-dialog.service';
 import { OperationHours, Weekday, Constants } from '~shared';
 
-import { OperationHoursForm } from '~web/account/forms/operation-hours.form';
+import { OperationHoursForm } from '~web/operation-hours.form';
 
 export class OperationHoursArray extends TypedFormArray<OperationHours> {
 

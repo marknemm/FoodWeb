@@ -3,10 +3,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { never, ObservableInput } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { LoginForm } from '~web/session/forms/login.form';
-import { SessionService } from '~web/session/services/session/session.service';
-import { UsernameRecoveryService } from '~web/account/services/username-recovery/username-recovery.service';
-import { PasswordResetService } from '~web/password/services/password-reset/password-reset.service';
+import { LoginForm } from '~web/login.form';
+import { SessionService } from '~web/session/session.service';
+import { UsernameRecoveryService } from '~web/username-recovery/username-recovery.service';
+import { PasswordResetService } from '~web/password-reset/password-reset.service';
 
 @Component({
   selector: 'food-web-login',

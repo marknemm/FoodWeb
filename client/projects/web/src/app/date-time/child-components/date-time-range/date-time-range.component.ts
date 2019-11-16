@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewChild, Optional } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
-import { FormHelperService } from '~web/shared';
+import { FormHelperService } from '~web/form-helper/form-helper.service';
 
-import { DateTimeComponent } from '~web/date-time/child-components/date-time/date-time.component';
-import { DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
+import { DateTimeComponent } from '~web/date-time/date-time.component';
+import { DateTimeRangeForm } from '~web/date-time-range.form';
 
 @Component({
   selector: 'food-web-date-time-range',

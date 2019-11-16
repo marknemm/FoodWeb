@@ -6,7 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 
-import { environment } from '~web-env/environment';
+import { environment } from '~web/environment';
 import { AppRoutingModule } from '~web/app-routing.module';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
@@ -16,10 +16,11 @@ import { SessionModule } from '~web/session/session.module';
 import { EventModule } from '~web/event/event.module';
 import { HeuristicsModule } from '~web/heuristics/heuristics.module';
 
-import { HomeComponent, AboutComponent } from '~web/components';
+import { HomeComponent } from '~web/home/home.component';
+import { AboutComponent } from '~web/about/about.component';
 
-import { SessionMonitorService } from '~web/session';
-import { RecaptchaService } from '~web/shared';
+import { SessionMonitorService } from '~web/session-monitor/session-monitor.service';
+import { RecaptchaService } from '~web/recaptcha/recaptcha.service';
 
 @NgModule({
   declarations: [

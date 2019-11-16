@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject, TemplateRef } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { AlertResponseService } from '~web/shared/services/alert/alert-response.service';
-import { AlertMessage } from '~web/shared/services/alert/alert-message';
+import { AlertResponseService } from '~web/alert/alert-response.service';
+import { AlertMessage } from '~web/alert/alert-message';
 
 @Component({
   selector: 'food-web-alert-dialog',

@@ -3,8 +3,10 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, catchError, finalize, flatMap } from 'rxjs/operators';
-import { environment } from '~web-env/environment';
-import { AlertService, PageProgressService, ErrorHandlerService } from '~web/shared';
+import { environment } from '~web/environment';
+import { PageProgressService } from '~web/page-progress/page-progress.service';
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
+import { AlertService } from '~web/alert/alert.service';
 import {
   Donation,
   Account,
@@ -18,7 +20,7 @@ import {
   DateTimeRange
 } from '~shared';
 
-import { SessionService } from '~web/session/services/session/session.service';
+import { SessionService } from '~web/session/session.service';
 
 @Injectable({
   providedIn: 'root'

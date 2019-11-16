@@ -4,7 +4,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { AppSessionService } from '~app/app-session/services/app-session/app-session.service';
+import { AppSessionService } from '~app/app-session/app-session.service';
 
 @Injectable({
   providedIn: 'root'

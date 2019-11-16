@@ -1,4 +1,4 @@
-import { TypedFormGroup } from '~web/data-structure';
+import { TypedFormGroup } from '~web/typed-form-group';
 import { Donor } from '~shared';
 
 export class DonorForm extends TypedFormGroup<Donor> {

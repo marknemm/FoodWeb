@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawerContent } from '@angular/material/sidenav';
-import { ConstantsService, PageProgressService } from '~web/shared';
+import { PageProgressService } from '~web/page-progress/page-progress.service';
+import { ConstantsService } from '~web/constants/constants.service';
 import { DonationHelper } from '~shared';
 
-import { SessionService } from '~web/session/services/session/session.service';
-import { LeftNavService } from '~web/app-shell/services/left-nav/left-nav.service';
+import { SessionService } from '~web/session/session.service';
+import { LeftNavService } from '~web/left-nav/left-nav.service';
 
 @Component({
   selector: 'food-web-left-nav',

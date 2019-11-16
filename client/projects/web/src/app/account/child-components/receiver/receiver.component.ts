@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Optional } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
-import { FormHelperService } from '~web/shared';
+import { FormHelperService } from '~web/form-helper/form-helper.service';
 
-import { ReceiverForm } from '~web/account/forms/receiver.form';
+import { ReceiverForm } from '~web/receiver.form';
 
 @Component({
   selector: 'food-web-receiver',

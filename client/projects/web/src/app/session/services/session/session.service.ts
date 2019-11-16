@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subject, of } from 'rxjs';
 import { map, catchError, finalize, mergeMap } from 'rxjs/operators';
-import { environment } from '~web-env/environment';
-import { ErrorHandlerService, AlertService } from '~web/shared';
+import { environment } from '~web/environment';
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
+import { AlertService } from '~web/alert/alert.service';
 import { Account, LoginRequest, AccountHelper, LoginResponse } from '~shared';
 export { Account };
 

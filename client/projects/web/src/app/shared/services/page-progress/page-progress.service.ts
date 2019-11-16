@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { Router, RouterEvent } from '@angular/router';
 
-import { LeftNavService } from '~web/app-shell/services/left-nav/left-nav.service';
+import { LeftNavService } from '~web/left-nav/left-nav.service';
 
 @Injectable({
   providedIn: 'root'

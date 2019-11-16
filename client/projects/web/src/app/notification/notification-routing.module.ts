@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { NotificationsComponent } from '~web/notification';
+import { NotificationsComponent } from '~web/notifications/notifications.component';
 
 const routes: Routes = [
   { path: 'list/my', component: NotificationsComponent }

@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, Optional } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
-import { FormHelperService } from '~web/shared';
+import { FormHelperService } from '~web/form-helper/form-helper.service';
 import { ContactInfo } from '~shared';
 
-import { MapService } from '~web/map/services/map/map.service';
-import { ContactInfoForm } from '~web/account/forms/contact-info.form';
+import { MapService } from '~web/map/map.service';
+import { ContactInfoForm } from '~web/contact-info.form';
 
 @Component({
   selector: 'food-web-contact-info',

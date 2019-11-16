@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 
-import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
+import { ConfirmDialogService } from '~web/confirm-dialog/confirm-dialog.service';
 
 interface EditSection {
   control: AbstractControl;

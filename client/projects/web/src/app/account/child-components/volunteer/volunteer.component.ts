@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
-import { FormHelperService } from '~web/shared';
+import { FormHelperService } from '~web/form-helper/form-helper.service';
 
-import { VolunteerForm } from '~web/account/forms/volunteer.form';
+import { VolunteerForm } from '~web/volunteer.form';
 
 @Component({
   selector: 'food-web-volunteer',

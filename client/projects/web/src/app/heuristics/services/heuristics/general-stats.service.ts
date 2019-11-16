@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, timer, never } from 'rxjs';
 import { finalize, catchError, flatMap } from 'rxjs/operators';
-import { environment } from '~web-env/environment';
+import { environment } from '~web/environment';
 import { GeneralStats } from '~shared';
 export { GeneralStats };
 

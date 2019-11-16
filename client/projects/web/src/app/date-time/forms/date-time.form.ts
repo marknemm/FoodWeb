@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { Validators } from '@angular/forms';
-import { TypedFormGroup } from '~web/data-structure';
+import { TypedFormGroup } from '~web/typed-form-group';
 
-import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { DateTimeService } from '~web/date-time/date-time.service';
 
 export interface DateTimeFormConfig {
   dateTime?: DateTimeFormT;

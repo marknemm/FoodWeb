@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, Optional } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
-import { FormHelperService } from '~web/shared';
+import { FormHelperService } from '~web/form-helper/form-helper.service';
 
-import { OrganizationForm } from '~web/account/forms/organization.form';
+import { OrganizationForm } from '~web/organization.form';
 
 @Component({
   selector: 'food-web-organization',

@@ -3,8 +3,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { SessionService } from '~web/session';
-import { ErrorHandlerService, AlertService } from '~web/shared';
+import { SessionService } from '~web/session/session.service';
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
+import { AlertService } from '~web/alert/alert.service';
 import { Account, AccountHelper, LoginRequest, LoginResponse, AppTokenLoginRequest } from '~shared';
 
 @Injectable({

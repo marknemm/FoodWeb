@@ -4,7 +4,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { DateTimeForm } from '~web/date-time/forms/date-time.form';
+import { DateTimeForm } from '~web/date-time.form';
 
 @Component({
   selector: 'food-web-date-time',

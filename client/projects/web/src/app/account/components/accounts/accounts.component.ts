@@ -2,10 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { PageTitleService } from '~web/shared';
+import { PageTitleService } from '~web/page-title/page-title.service';
 import { AccountHelper, ListResponse } from '~shared';
 
-import { AccountService, Account } from '~web/account/services/account/account.service';
+import { AccountService, Account } from '~web/account/account.service';
 
 @Component({
   selector: 'food-web-accounts',

@@ -12,12 +12,13 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AppRoutingModule } from '~app/app-routing.module';
 import { AppComponent } from '~app/app.component';
 import { MaterialModule } from '~web/material.module';
-import { AppShellModule } from '~web/app-shell/app-shell.module';
-import { HomeComponent, AboutComponent } from '~web/components';
-import { HeuristicsModule } from '~web/heuristics/heuristics.module';
-import { SharedModule } from '~web/shared/shared.module';
-import { EventModule } from '~web/event/event.module';
-import { AppSessionModule } from '~app/app-session/app-session.module';
+import { AppShellModule } from '~web/app-shell.module';
+import { HomeComponent } from '~web/home/home.component';
+import { AboutComponent } from '~web/about/about.component';
+import { HeuristicsModule } from '~web/heuristics.module';
+import { SharedModule } from '~web/shared.module';
+import { EventModule } from '~web/event.module';
+import { AppSessionModule } from '~app/app-session.module';
 
 @NgModule({
   declarations: [

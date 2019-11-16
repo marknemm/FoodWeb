@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { SessionService } from '~web/session';
+import { SessionService } from '~web/session/session.service';
 import { JSONDateReviver } from '~shared';
 
 @Component({

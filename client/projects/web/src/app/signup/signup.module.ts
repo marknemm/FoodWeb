@@ -2,17 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { SignupRoutingModule } from '~web/signup/singup-routing.module';
+import { SignupRoutingModule } from '~web/signup-routing.module';
 import { MaterialModule } from '~web/material.module';
-import { SharedModule } from '~web/shared/shared.module';
-import { AccountModule } from '~web/account/account.module';
+import { SharedModule } from '~web/shared.module';
+import { AccountModule } from '~web/account.module';
 
-import {
-  SignupComponent,
-  SignupVerificationComponent,
-  TermsConditionsDialogComponent,
-  AgreementBulletPointsComponent
-} from '~web/signup';
+import { SignupComponent } from '~web/signup/signup.component';
+import { SignupVerificationComponent } from '~web/signup-verification/signup-verification.component';
+import { TermsConditionsDialogComponent } from '~web/terms-conditions-dialog/terms-conditions-dialog.component';
+import { AgreementBulletPointsComponent } from '~web/agreement-bullet-points/agreement-bullet-points.component';
 
 @NgModule({
   declarations: [

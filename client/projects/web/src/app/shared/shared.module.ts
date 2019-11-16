@@ -8,17 +8,14 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MaterialModule } from '~web/material.module';
 import { AccountHelper, OperationHoursHelper, DonationHelper, DeliveryHelper, JSONDateReviver } from '~shared';
 
-import {
-  AlertDialogComponent,
-  AlertSnackBarComponent,
-  ProgressIndicatorComponent,
-  EditSaveButtonComponent,
-  PaginatorComponent,
-  ReturnLinkDirective,
-  ConfirmButtonDirective,
-  DisplayEditTransitionDirective
-} from '~web/shared';
-
+import { AlertDialogComponent } from '~web/alert-dialog/alert-dialog.component';
+import { AlertSnackBarComponent } from '~web/alert-snack-bar/alert-snack-bar.component';
+import { ProgressIndicatorComponent } from '~web/progress-indicator/progress-indicator.component';
+import { EditSaveButtonComponent } from '~web/edit-save-button/edit-save-button.component';
+import { PaginatorComponent } from '~web/paginator/paginator.component';
+import { ReturnLinkDirective } from '~web/return-link/return-link.directive';
+import { ConfirmButtonDirective } from '~web/confirm-button/confirm-button.directive';
+import { DisplayEditTransitionDirective } from '~web/display-edit-transition/display-edit-transition.directive';
 
 @NgModule({
   declarations: [

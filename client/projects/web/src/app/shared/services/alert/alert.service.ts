@@ -4,10 +4,10 @@ import { MatSnackBar, MatSnackBarConfig, MatSnackBarDismiss } from '@angular/mat
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { AlertSnackBarComponent } from '~web/shared/components/alert-snack-bar/alert-snack-bar.component';
-import { AlertDialogComponent } from '~web/shared/components/alert-dialog/alert-dialog.component';
-import { AlertResponseService } from '~web/shared/services/alert/alert-response.service';
-import { AlertMessage, AlertConfig, AlertResponse, AlertLevel } from '~web/shared/services/alert/alert-message';
+import { AlertSnackBarComponent } from '~web/alert-snack-bar/alert-snack-bar.component';
+import { AlertDialogComponent } from '~web/alert-dialog/alert-dialog.component';
+import { AlertResponseService } from '~web/alert/alert-response.service';
+import { AlertMessage, AlertConfig, AlertResponse, AlertLevel } from '~web/alert/alert-message';
 
 export * from './alert-message';
 

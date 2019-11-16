@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
-import { MapService, Waypoint, GPSCoordinate } from '~web/map/services/map/map.service';
+import { MapService, Waypoint, GPSCoordinate } from '~web/map/map.service';
 
 @Component({
   selector: 'food-web-map',

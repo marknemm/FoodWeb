@@ -3,8 +3,8 @@ import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material/dial
 import { Device } from '@ionic-native/device/ngx';
 import { Observable, of } from 'rxjs';
 
-import { LoginFormChange } from '~web/session/components/login/login.component';
-import { SessionService } from '~web/session/services/session/session.service';
+import { LoginFormChange } from '~web/login/login.component';
+import { SessionService } from '~web/session/session.service';
 
 @Component({
   selector: 'food-web-login-dialog',

@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { SessionService } from '~web/session/services/session/session.service';
-import { DonationService, Donation } from '~web/donation/services/donation/donation.service';
-import { DateTimeRangeComponent } from '~web/date-time/child-components/date-time-range/date-time-range.component';
-import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { DonateForm } from '~web/donor/forms/donate.form';
+import { SessionService } from '~web/session/session.service';
+import { DonationService, Donation } from '~web/donation/donation.service';
+import { DateTimeRangeComponent } from '~web/date-time-range/date-time-range.component';
+import { DateTimeService } from '~web/date-time/date-time.service';
+import { DonateForm } from '~web/donate.form';
 
 @Component({
   selector: 'food-web-donate',

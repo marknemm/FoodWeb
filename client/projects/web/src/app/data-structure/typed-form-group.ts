@@ -1,7 +1,7 @@
 import { FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { TypedAbstractControl } from '~web/data-structure/typed-abstract-control';
+import { TypedAbstractControl } from '~web/typed-abstract-control';
 
 export class TypedFormGroup<T> extends FormGroup {
 

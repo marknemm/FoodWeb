@@ -3,8 +3,10 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { ParamMap, ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, map, flatMap } from 'rxjs/operators';
-import { environment } from '~web-env/environment';
-import { PageProgressService, ErrorHandlerService, AlertService } from '~web/shared';
+import { environment } from '~web/environment';
+import { PageProgressService } from '~web/page-progress/page-progress.service';
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
+import { AlertService } from '~web/alert/alert.service';
 import {
   Donation,
   DonationCreateRequest,

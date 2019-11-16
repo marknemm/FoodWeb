@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { SessionService } from '~web/session/services/session/session.service';
-import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
+import { SessionService } from '~web/session/session.service';
+import { LoginDialogComponent } from '~web/login-dialog/login-dialog.component';
 
 @Component({
   selector: 'app-home',

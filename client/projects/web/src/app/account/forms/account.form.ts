@@ -2,15 +2,15 @@ import { Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Omit } from 'utility-types';
-import { TypedFormGroup } from '~web/data-structure';
-import { SectionEditService } from '~web/shared';
+import { TypedFormGroup } from '~web/typed-form-group';
+import { SectionEditService } from '~web/section-edit/section-edit.service';
 import { Account, OperationHours, AccountType } from '~shared';
 
-import { PasswordForm, PasswordFormT } from '~web/password/forms/password.form';
-import { OrganizationForm } from '~web/account/forms/organization.form';
-import { VolunteerForm } from '~web/account/forms/volunteer.form';
-import { ContactInfoForm } from '~web/account/forms/contact-info.form';
-import { OperationHoursInfoForm } from '~web/account/forms/operation-hours-info.form';
+import { PasswordForm, PasswordFormT } from '~web//password.form';
+import { OrganizationForm } from '~web/organization.form';
+import { VolunteerForm } from '~web/volunteer.form';
+import { ContactInfoForm } from '~web/contact-info.form';
+import { OperationHoursInfoForm } from '~web/operation-hours-info.form';
 
 export { PasswordFormT };
 

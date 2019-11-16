@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { EventRegistrationsComponent } from '~web/event';
+import { EventRegistrationsComponent } from '~web/event-registrations/event-registrations.component';
 
 const routes: Routes = [
   { path: 'registrations', component: EventRegistrationsComponent }

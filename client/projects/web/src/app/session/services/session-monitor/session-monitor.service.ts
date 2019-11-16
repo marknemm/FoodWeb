@@ -3,11 +3,11 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, EMPTY, of } from 'rxjs';
 import { catchError, map, flatMap } from 'rxjs/operators';
-import { ErrorHandlerService } from '~web/shared';
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
 import { Account } from '~shared';
 
-import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
-import { SessionService } from '~web/session/services/session/session.service';
+import { LoginDialogComponent } from '~web/login-dialog/login-dialog.component';
+import { SessionService } from '~web/session/session.service';
 
 @Injectable({
   providedIn: 'root'

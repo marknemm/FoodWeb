@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { BootstrapRoutingModule } from '~app/bootstrap/bootstrap-routing.module';
+import { BootstrapRoutingModule } from '~app/bootstrap-routing.module';
 import { SignupModule } from '~web/signup/signup.module';
 
 import { AppSessionModule } from '~app/app-session/app-session.module';
-import { AppSignupComponent } from '~app/bootstrap/components/app-signup/app-signup.component';
+import { AppSignupComponent } from '~app/app-signup/app-signup.component';
 
 @NgModule({
   imports: [

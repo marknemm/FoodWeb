@@ -3,11 +3,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map, catchError } from 'rxjs/operators';
-import { environment } from '~web-env/environment';
-import { ErrorHandlerService, AlertService } from '~web/shared';
+import { environment } from '~web/environment';
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
+import { AlertService } from '~web/alert/alert.service';
 import { Account, AccountVerificationRequest } from '~shared';
 
-import { SessionService } from '~web/session/services/session/session.service';
+import { SessionService } from '~web/session/session.service';
 
 @Injectable({
   providedIn: 'root'

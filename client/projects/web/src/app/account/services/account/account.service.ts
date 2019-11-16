@@ -3,12 +3,14 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, map, flatMap } from 'rxjs/operators';
-import { environment } from '~web-env/environment';
-import { ErrorHandlerService, PageProgressService, AlertService } from '~web/shared';
+import { environment } from '~web/environment';
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
+import { PageProgressService } from '~web/page-progress/page-progress.service';
+import { AlertService } from '~web/alert/alert.service';
 import { Account, ListResponse, AccountUpdateRequest, PasswordUpdateRequest, AccountReadFilters, AccountReadRequest } from '~shared';
 
 import { PasswordFormT } from '~web/password/forms/password.form';
-import { SessionService } from '~web/session/services/session/session.service';
+import { SessionService } from '~web/session/session.service';
 
 export { Account };
 

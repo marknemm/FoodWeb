@@ -2,7 +2,7 @@ import { Component, OnInit, Input, forwardRef, OnDestroy } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, Validators, ValidationErrors, ControlValueAccessor, Validator } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TypedFormControl } from '~web/data-structure';
+import { TypedFormControl } from '~web/typed-form-control';
 
 @Component({
   selector: 'food-web-username',

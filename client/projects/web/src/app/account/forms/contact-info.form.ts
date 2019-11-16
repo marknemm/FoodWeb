@@ -1,5 +1,5 @@
 import { Validators } from '@angular/forms';
-import { TypedFormGroup } from '~web/data-structure';
+import { TypedFormGroup } from '~web/typed-form-group';
 import { ContactInfo, Validation } from '~shared';
 
 export class ContactInfoForm extends TypedFormGroup<ContactInfo> {

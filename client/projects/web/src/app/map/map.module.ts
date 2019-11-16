@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgmCoreModule } from '@agm/core';
-import { environment } from '~web-env/environment';
+import { environment } from '~web/environment';
 
-import { MapComponent } from '~web/map';
+import { MapComponent } from '~web/map/map.component';
 
 @NgModule({
   declarations: [

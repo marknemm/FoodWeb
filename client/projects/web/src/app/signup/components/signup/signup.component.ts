@@ -5,11 +5,11 @@ import { Subject, Observable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Account, AccountType } from '~shared';
 
-import { SessionService } from '~web/session/services/session/session.service';
-import { AccountForm } from '~web/account/forms/account.form';
-import { TermsConditionsDialogComponent } from '~web/signup/components/terms-conditions-dialog/terms-conditions-dialog.component';
-import { SignupService } from '~web/signup/services/signup/signup.service';
-import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
+import { SessionService } from '~web/session/session.service';
+import { AccountForm } from '~web/account.form';
+import { TermsConditionsDialogComponent } from '~web/terms-conditions-dialog/terms-conditions-dialog.component';
+import { SignupService } from '~web/signup/signup.service';
+import { SignupVerificationService } from '~web/signup-verification/signup-verification.service';
 
 @Component({
   selector: 'food-web-signup',

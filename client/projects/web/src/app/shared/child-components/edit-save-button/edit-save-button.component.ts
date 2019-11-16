@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { AbstractControl, FormGroupDirective } from '@angular/forms';
 
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormHelperService } from '~web/form-helper/form-helper.service';
 
 @Component({
   selector: 'food-web-edit-save-button',

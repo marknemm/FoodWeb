@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { SharedModule } from '~web/shared/shared.module';
+import { SharedModule } from '~web/shared.module';
 
 @NgModule({
   declarations: [],

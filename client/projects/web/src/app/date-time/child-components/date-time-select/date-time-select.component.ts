@@ -2,9 +2,9 @@ import { Component, OnInit, Input, OnDestroy, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TypedFormControl } from '~web/data-structure';
+import { TypedFormControl } from '~web/typed-form-control';
 
-import { DateTimeRange, DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { DateTimeRange, DateTimeService } from '~web/date-time/date-time.service';
 
 @Component({
   selector: 'food-web-date-time-select',

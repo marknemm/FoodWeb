@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Optional } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
-import { FormHelperService } from '~web/shared';
+import { FormHelperService } from '~web/form-helper/form-helper.service';
 
-import { PasswordForm } from '~web/password/forms/password.form';
+import { PasswordForm } from '~web/password.form';
 
 @Component({
   selector: 'food-web-password',

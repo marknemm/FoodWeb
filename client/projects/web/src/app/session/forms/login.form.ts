@@ -1,5 +1,5 @@
 import { Validators } from '@angular/forms';
-import { TypedFormGroup } from '~web/data-structure';
+import { TypedFormGroup } from '~web/typed-form-group';
 
 export interface LoginFormT {
   usernameEmail: string;

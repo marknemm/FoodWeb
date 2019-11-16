@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Inject } from '@angular/core';
 
-import { SessionService } from '~web/session/services/session/session.service';
-import { MapService } from '~web/map/services/map/map.service';
-import { EventRegistrationForm } from '~web/event/forms/event-registration.form';
-import { EventRegistrationService } from '~web/event/services/event-registration/event-registration.service';
+import { SessionService } from '~web/session/session.service';
+import { MapService } from '~web/map/map.service';
+import { EventRegistrationForm } from '~web/event-registration.form';
+import { EventRegistrationService } from '~web/event-registration/event-registration.service';
 
 @Component({
   selector: 'food-web-event-card',

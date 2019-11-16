@@ -1,8 +1,8 @@
 import { Validators } from '@angular/forms';
-import { TypedFormGroup } from '~web/data-structure';
+import { TypedFormGroup } from '~web/typed-form-group';
 import { Validation, Account, EventRegistration, AccountHelper } from '~shared';
 
-import { SessionService } from '~web/session/services/session/session.service';
+import { SessionService } from '~web/session/session.service';
 
 export class EventRegistrationForm extends TypedFormGroup<EventRegistration> {
 

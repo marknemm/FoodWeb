@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { environment } from '~web-env/environment';
-import { ErrorHandlerService } from '~web/shared';
+import { environment } from '~web/environment';
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
 import { EventRegistration, EventRegistrationRequest, ListResponse } from '~shared';
 
 @Injectable({

@@ -2,10 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { PageTitleService } from '~web/shared';
+import { PageTitleService } from '~web/page-title/page-title.service';
 import { ListResponse, DonationHelper } from '~shared';
 
-import { DonationService, Donation } from '~web/donation/services/donation/donation.service';
+import { DonationService, Donation } from '~web/donation/donation.service';
 
 @Component({
   selector: 'food-web-donations',

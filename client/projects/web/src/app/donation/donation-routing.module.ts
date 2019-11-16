@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGaurdService } from '~web/auth-gaurd/auth-gaurd.service';
 
-import { AuthGaurdService } from '~web/session/services/auth-gaurd/auth-gaurd.service';
-import { DonationsComponent, DonationDetailsComponent } from '~web/donation';
+import { DonationsComponent } from '~web/donations/donations.component';
+import { DonationDetailsComponent } from '~web/donation-details/donation-details.component';
 
 const routes: Routes = [
   { path: 'list', component: DonationsComponent },

@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 
-import { DateTimeRange } from '~web/date-time/services/date-time/date-time.service';
+import { DateTimeRange } from '~web/date-time/date-time.service';
 
 export interface DateTimeSelectConfig {
   selectTitle?: string;

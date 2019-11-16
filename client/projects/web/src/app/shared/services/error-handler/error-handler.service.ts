@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EMPTY, ObservableInput } from 'rxjs';
 
-import { AlertService, AlertMessage } from '~web/shared/services/alert/alert.service';
+import { AlertService, AlertMessage } from '~web/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'

@@ -4,13 +4,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { AccountHelper, DonationHelper, DeliveryHelper, DateTimeRange } from '~shared';
 
-import { SessionService } from '~web/session/services/session/session.service';
-import { DonateForm } from '~web/donor/forms/donate.form';
-import { DeliveryService } from '~web/delivery/services/delivery/delivery.service';
-import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { DateTimeSelectDialogComponent, DateTimeSelectConfig } from '~web/date-time/components/date-time-select-dialog/date-time-select-dialog.component';
-import { DonationAction } from '~web/donation/child-components/donation-detail-actions/donation-detail-actions.component';
-import { DonationService, Donation } from '~web/donation/services/donation/donation.service';
+import { SessionService } from '~web/session/session.service';
+import { DonateForm } from '~web/donate.form';
+import { DeliveryService } from '~web/delivery/delivery.service';
+import { DateTimeService } from '~web/date-time/date-time.service';
+import { DateTimeSelectDialogComponent, DateTimeSelectConfig } from '~web/date-time-select-dialog/date-time-select-dialog.component';
+import { DonationAction } from '~web/donation-detail-actions/donation-detail-actions.component';
+import { DonationService, Donation } from '~web/donation/donation.service';
 
 @Component({
   selector: 'food-web-donation-details',

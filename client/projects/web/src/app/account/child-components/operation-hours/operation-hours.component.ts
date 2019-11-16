@@ -1,13 +1,15 @@
 import { Component, OnInit, Input, Optional } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
-import { TypedFormControl } from '~web/data-structure';
-import { ConstantsService, ConfirmDialogService, FormHelperService } from '~web/shared';
+import { TypedFormControl } from '~web/typed-form-control';
+import { ConstantsService } from '~web/constants/constants.service';
+import { ConfirmDialogService } from '~web/confirm-dialog/confirm-dialog.service';
+import { FormHelperService } from '~web/form-helper/form-helper.service';
 import { OperationHours } from '~shared';
 
-import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { OperationHoursInfoForm } from '~web/account/forms/operation-hours-info.form';
-import { OperationHoursArray } from '~web/account/forms/operation-hours.array';
-import { OperationHoursForm } from '~web/account/forms/operation-hours.form';
+import { DateTimeService } from '~web/date-time/date-time.service';
+import { OperationHoursInfoForm } from '~web/operation-hours-info.form';
+import { OperationHoursArray } from '~web/operation-hours.array';
+import { OperationHoursForm } from '~web/operation-hours.form';
 
 @Component({
   selector: 'food-web-operation-hours',

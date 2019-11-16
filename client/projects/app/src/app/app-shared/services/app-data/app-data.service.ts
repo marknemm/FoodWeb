@@ -3,8 +3,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Device } from '@ionic-native/device/ngx';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { environment } from '~app-env/environment';
-import { ErrorHandlerService } from '~web/shared';
+import { environment } from '~app/environment';
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
 import { AppData, AppDataSaveRequest } from '~shared';
 
 @Injectable({

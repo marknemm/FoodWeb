@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { GeneralStatsService, GeneralStats } from '~web/heuristics/services/heuristics/general-stats.service';
+import { GeneralStatsService, GeneralStats } from '~web/heuristics/general-stats.service';
 
 @Component({
   selector: 'food-web-general-stats-card',
