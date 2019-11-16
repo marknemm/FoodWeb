@@ -97,7 +97,7 @@ export function genSkip(pagingParams: PagingParams, defaultLimit = 10): number {
  */
 export function genTake(pagingParams: PagingParams, defaultLimit = 10): number {
   pagingParams = _refinePagingParams(pagingParams, defaultLimit);
-  return (pagingParams.page - 1) * pagingParams.limit;
+  return pagingParams.limit;
 }
 
 /**
