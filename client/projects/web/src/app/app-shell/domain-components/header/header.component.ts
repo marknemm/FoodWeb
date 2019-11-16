@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PageTitleService } from '~web/page-title/page-title.service';
 import { PageProgressService } from '~web/page-progress/page-progress.service';
-
 import { SessionService } from '~web/session/session.service';
 import { LoginDialogComponent } from '~web/login-dialog/login-dialog.component';
 import { LeftNavService } from '~web/left-nav/left-nav.service';
@@ -22,7 +20,6 @@ export class HeaderComponent implements OnInit {
     public pageProgressService: PageProgressService,
     public leftNavService: LeftNavService,
     public notificationService: NotificationService,
-    private _router: Router,
     private _matDialog: MatDialog
   ) {}
 
@@ -31,5 +28,4 @@ export class HeaderComponent implements OnInit {
   login(): void {
     LoginDialogComponent.openIfNotLoggedIn(this.sessionService, this._matDialog);
   }
-
 }

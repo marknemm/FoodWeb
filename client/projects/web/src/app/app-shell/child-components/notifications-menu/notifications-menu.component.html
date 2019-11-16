@@ -4,11 +4,12 @@
   matBadgeSize="small"
   matBadgeColor="warn"
   matBadgeDescription="{{ notificationService.unseenNotificationsCount }} unread"
+  matTooltip="Notifications"
 >
-  <button mat-icon-button class="notifications-button desktop" aria-label="Notifications menu">
+  <button mat-button class="notifications-button desktop" aria-label="Notifications menu">
     <mat-icon [matMenuTriggerFor]="notificationsMenu" (menuOpened)="onNotificationButtonClick('desktop')">notifications</mat-icon>
   </button>
-  <button mat-icon-button class="notifications-button mobile" aria-label="Notifications menu">
+  <button mat-button class="notifications-button mobile" aria-label="Notifications menu">
     <mat-icon (click)="onNotificationButtonClick('mobile')">notifications</mat-icon>
   </button>
 </span>

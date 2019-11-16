@@ -64,6 +64,7 @@ $site-title-font-size-mobile: 30px;
   }
   
   .page-title-container {
+    position: relative;
     height: $sub-header-height;
     padding: 0px 8px;
     box-sizing: border-box;
@@ -106,6 +107,7 @@ $site-title-font-size-mobile: 30px;
       position: absolute;
       display: inline-block;
       right: 0;
+      height: 100%;
       padding-right: inherit;
 
       > span, > a {

@@ -44,6 +44,9 @@ export class AppDataService extends Device {
     return this._cordova;
   }
 
+  /**
+   * Whether or not the device app data is currently available.
+   */
   get available(): boolean {
     return this._available;
   }
@@ -72,34 +75,58 @@ export class AppDataService extends Device {
     return this._serial;
   }
 
+  /**
+   * Whether or not the platform is that of a mobile device: 'Android' or 'iOS'.
+   */
   get isMobileApp(): boolean {
     return this._isMobileApp;
   }
 
+  /**
+   * Whether or not the device platform is 'Android'.
+   */
   get isAndroid(): boolean {
-    return this._platform === 'Android'
+    return this.platform === 'Android'
   }
 
+  /**
+   * Whether or not the device platform is 'iOS'.
+   */
   get isIos(): boolean {
-    return this._platform === 'iOS';
+    return this.platform === 'iOS';
   }
 
+  /**
+   * Whether or not device platform is 'Browser'.
+   */
   get isBrowser(): boolean {
-    return this._platform === 'Browser';
+    return this.platform === 'Browser';
   }
 
   get platform(): string {
     return this._platform;
   }
 
+  /**
+   * The push notification client registration ID for the mobile device.
+   */
   get pushRegistrationId(): string {
     return this._pushRegistrationId;
   }
 
+  /**
+   * The ID of the user Account associated with the app data.
+   */
   get accountId(): number {
     return this._accountId;
   }
 
+  /**
+   * Saves app data on the server, and associates it with the user's account.
+   * @param appDataMerge The app data that is to be merged with the contained app data in this class before saving.
+   * NOTE: only mutable app data fields may be merged in (pushRegistrationId).
+   * @return An observable that resolves to the saved app data.
+   */
   saveAppData(appDataMerge: Partial<AppData>): Observable<AppData> {
     const appData: AppData = this._mergeAppData(appDataMerge);
     const saveReq: AppDataSaveRequest = { appData };
@@ -112,6 +139,11 @@ export class AppDataService extends Device {
     );
   }
 
+  /**
+   * Merges given app data with this service's contained data.
+   * @param appDataMerge The app data to merge with this service's contained data.
+   * @return The merged app data.
+   */
   private _mergeAppData(appDataMerge: Partial<AppData>): AppData {
     if (appDataMerge.pushRegistrationId) {
       this._pushRegistrationId = appDataMerge.pushRegistrationId;
@@ -119,6 +151,9 @@ export class AppDataService extends Device {
     return this.genAppData();
   }
 
+  /**
+   * Generates app data based on the data contained within this service.
+   */
   genAppData(): AppData {
     return {
       deviceUuid: this.uuid,
@@ -133,6 +168,10 @@ export class AppDataService extends Device {
     };
   }
 
+  /**
+   * Deletes the app data record on the server.
+   * @return An observable that resolves once the operation completes.
+   */
   deleteAppData(): Observable<void> {
     const accountId: number = this.accountId;
     this._accountId = null;

@@ -1,0 +1,9 @@
+<span class="settings-button-container" matTooltip="Settings">
+  <button mat-button type="button" [matMenuTriggerFor]="settingsMenu" class="settings-button" aria-label="Settings Menu">
+    <fa-icon [icon]="faCog"></fa-icon>
+  </button>
+</span>
+
+<mat-menu #settingsMenu="matMenu" panelClass="settings-menu">
+  <food-web-settings-menu-content></food-web-settings-menu-content>
+</mat-menu>

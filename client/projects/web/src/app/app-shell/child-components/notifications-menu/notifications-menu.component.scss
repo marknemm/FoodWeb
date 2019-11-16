@@ -6,19 +6,18 @@ $icon-size: 38px;
 .notifications-button-container {
   display: inline-block;
   vertical-align: top;
-  top: -1px;
+  height: 100%;
 
   @media screen and (max-width: $mat-mobile) {
     top: 0;
   }
 
-  button.mat-icon-button.notifications-button {
-    margin: 0 7px 0 0;
-    width: $sub-header-height;
-    height: $sub-header-height;
-    line-height: $sub-header-height;
-    vertical-align: top;
-    outline: none;
+  button.mat-button.notifications-button {
+    $button-width: 35px;
+    min-width: $button-width;
+    width: $button-width;
+    padding: 0;
+    height: 100%;
 
     &.mobile {
       display: none;
@@ -34,18 +33,12 @@ $icon-size: 38px;
       }
     }
 
-    @media only screen and (max-width: $mat-mobile) {
-      width: $sub-header-height-mobile;
-      height: $sub-header-height-mobile;
-      line-height: $sub-header-height-mobile;
-    }
-
     mat-icon {
-      top: -1px;
-
-      @media only screen and (max-width: $mat-mobile) {
-        top: 0;
-      }
+      $icon-size: 24px;
+      font-size: $icon-size;
+      width: $icon-size;
+      height: $icon-size;
+      margin-top: -2px;
     }
   }
 }

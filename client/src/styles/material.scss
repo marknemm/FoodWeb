@@ -333,6 +333,16 @@ body .mat-snack-bar-container {
   }
 }
 
+.mat-action-list {
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
 .mat-checkbox {
   .mat-checkbox-layout {
     white-space: normal;

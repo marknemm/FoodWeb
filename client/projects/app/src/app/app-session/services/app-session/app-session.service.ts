@@ -23,6 +23,9 @@ export class AppSessionService extends SessionService {
     super(_httpClient, _errorHandlerService, _alertService, _accountHelper);
   }
 
+  /**
+   * The app's long lived session token.
+   */
   private get _appSessionToken(): string {
     return localStorage.getItem('appSessionToken');
   }

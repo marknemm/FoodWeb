@@ -16,6 +16,10 @@ export class BootstrapGuardService implements CanActivate, CanDeactivate<any> {
     private _sessionService: AppSessionService
   ) {}
 
+  /**
+   * Determines whether or not the user can enter the bootstrap (login/signup) portion of the app.
+   * @return true if the user can enter the bootstrap module, false if not.
+   */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const canActivate: boolean = (!this._sessionService.loggedIn && this._appData.isMobileApp);
     if (!canActivate && this._appData.isAndroid) {
@@ -24,6 +28,10 @@ export class BootstrapGuardService implements CanActivate, CanDeactivate<any> {
     return canActivate;
   }
 
+  /**
+   * Determines whether or not the user can exit the bootstrap (login/signup) portion of the app.
+   * @return true if the user can exit the bootstrap module, false if not.
+   */
   canDeactivate(component: any, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): boolean {
     const canDeactivate: boolean = (this._sessionService.loggedIn || nextState.url.indexOf('bootstrap') >= 0);
     if (!canDeactivate && this._appData.isAndroid) {

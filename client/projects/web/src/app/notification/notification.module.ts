@@ -7,13 +7,11 @@ import { SharedModule } from '~web/shared.module';
 
 import { NotificationsComponent } from '~web/notifications/notifications.component';
 import { NotificationComponent } from '~web/notification/notification.component';
-import { NotificationsMenuComponent } from '~web/notifications-menu/notifications-menu.component';
 
 @NgModule({
   declarations: [
     NotificationsComponent,
-    NotificationComponent,
-    NotificationsMenuComponent
+    NotificationComponent
   ],
   imports: [
     NotificationRoutingModule,
@@ -23,7 +21,7 @@ import { NotificationsMenuComponent } from '~web/notifications-menu/notification
     SharedModule
   ],
   exports: [
-    NotificationsMenuComponent
+    NotificationComponent
   ]
 })
 export class NotificationModule {}

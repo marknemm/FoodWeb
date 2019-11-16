@@ -25,12 +25,12 @@
     <span class="header-right">
       <ng-container *ngIf="!sessionService.loggedIn">
         <a (click)="login()">Login</a>
-        <span> | <a [routerLink]="['/signup']">Signup</a></span>
+        <span> | </span>
+        <a [routerLink]="['/signup']">Signup</a>
       </ng-container>
       <ng-container *ngIf="sessionService.loggedIn">
+        <food-web-settings-menu></food-web-settings-menu>
         <food-web-notifications-menu></food-web-notifications-menu>
-        <span><a [routerLink]="['/account/my']">Account</a> | </span>
-        <a [routerLink]="['/home']" (click)="sessionService.logout()">Logout</a>
       </ng-container>
     </span>
   </div>

@@ -1,0 +1,22 @@
+.settings-button-container {
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+
+  button {
+    $button-width: 35px;
+    min-width: $button-width;
+    width: $button-width;
+    padding: 0;
+    height: 100%;
+
+    .ng-fa-icon {
+      display: inline-block;
+      $icon-size: 20px;
+      font-size: $icon-size;
+      width: $icon-size;
+      height: $icon-size;
+      vertical-align: top;
+    }
+  }
+}

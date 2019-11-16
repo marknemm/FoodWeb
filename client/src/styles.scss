@@ -1,7 +1,6 @@
 @import './styles/constants.scss';
 @import './styles/material.scss';
 @import '~bootstrap-css-only/css/bootstrap.min.css';
-@import '~font-awesome/css/font-awesome.min.css';
 
 html, body {
   margin: 0px;
@@ -152,11 +151,11 @@ mat-card.mat-card {
 
 header.site-header .notifications-button-container {
   .mat-badge-content.mat-badge-active {
-    right: 10px;
-    top: 4px;
+    right: 4px;
+    top: 3px;
 
     @media screen and (max-width: $mat-mobile) {
-      right: 8px;
+      right: 4px;
       top: 1px;
     }
   }

@@ -2,33 +2,33 @@
   <mat-drawer [mode]="leftNavService.mode" [opened]="leftNavService.opened" (openedChange)="leftNavService.opened = $event">
     <mat-nav-list>
       <a mat-list-item [routerLink]="['/']" (click)="_onNavClick()">
-        <span><mat-icon>home</mat-icon> Home</span>
-      </a>
-      <a mat-list-item [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Donor' }" (click)="_onNavClick()">
-        <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Donor'] }}</mat-icon> Donors</span>
-      </a>
-      <a mat-list-item [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Receiver' }" (click)="_onNavClick()">
-        <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Receiver'] }}</mat-icon> Receivers</span>
+        <span><mat-icon>home</mat-icon> <span>Home</span></span>
       </a>
       <a mat-list-item *ngIf="sessionService.isDonor" [routerLink]="['/donor/donate']" (click)="_onNavClick()">
-        <span><mat-icon>fastfood</mat-icon> Donate</span>
+        <span><fa-icon [icon]="faHandHoldingHeart"></fa-icon> <span>Donate</span></span>
       </a>
       <a mat-list-item *ngIf="sessionService.isDonor || sessionService.isReceiver" [routerLink]="['/donation/list/my']" (click)="_onNavClick()">
-        <span><mat-icon>list</mat-icon>My Donations</span>
+        <span><fa-icon [icon]="faGifts"></fa-icon> <span>My Donations</span></span>
+      </a>
+      <a mat-list-item *ngIf="sessionService.isVolunteer" [routerLink]="['/delivery/list/my']" (click)="_onNavClick()">
+        <span><mat-icon>place</mat-icon> <span>My Deliveries</span></span>
       </a>
       <a mat-list-item *ngIf="sessionService.isReceiver" [routerLink]="['/donation/list']"
         [queryParams]="donationHelper.findDonationsQueryParams(sessionService.account)" (click)="_onNavClick()">
-        <span><mat-icon>search</mat-icon>Find Donations</span>
+        <span><mat-icon>search</mat-icon> <span>Find Donations</span></span>
       </a>
       <a mat-list-item *ngIf="sessionService.isVolunteer" [routerLink]="['/delivery/list']"
         [queryParams]="donationHelper.findDonationsQueryParams(sessionService.account)" (click)="_onNavClick()">
-        <span><mat-icon>search</mat-icon>Find Deliveries</span>
+        <span><mat-icon>search</mat-icon> <span>Find Deliveries</span></span>
       </a>
-      <a mat-list-item *ngIf="sessionService.isVolunteer" [routerLink]="['/delivery/list/my']" (click)="_onNavClick()">
-        <span><mat-icon>place</mat-icon>My Deliveries</span>
+      <a mat-list-item [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Donor' }" (click)="_onNavClick()">
+        <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Donor'] }}</mat-icon> <span>Donors</span></span>
+      </a>
+      <a mat-list-item [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Receiver' }" (click)="_onNavClick()">
+        <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Receiver'] }}</mat-icon> <span>Receivers</span></span>
       </a>
       <a mat-list-item [routerLink]="['/about']" (click)="_onNavClick()">
-        <span><mat-icon>info</mat-icon>About Us</span>
+        <span><mat-icon>info</mat-icon> <span>About Us</span></span>
       </a>
     </mat-nav-list>
   </mat-drawer>
