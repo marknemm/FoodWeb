@@ -1,8 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Push, PushObject, EventResponse } from '@ionic-native/push/ngx';
-import { SessionService } from '../../../session/services/session/session.service';
-import { AppDataService } from '../../../mobile/services/app-data/app-data.service';
+import { AppSessionService } from '~app/app-session/app-session.service'
+import { AppDataService } from '~app/app-data/app-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class PushNotificationService {
   constructor(
     private _zone: NgZone,
     private _router: Router,
-    private _sessionService: SessionService,
+    private _sessionService: AppSessionService,
     private _appDataService: AppDataService,
     private _push: Push
   ) {}

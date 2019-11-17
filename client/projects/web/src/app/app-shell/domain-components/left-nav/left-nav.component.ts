@@ -26,9 +26,7 @@ export class LeftNavComponent implements OnInit {
     public sessionService: SessionService,
     public constantsService: ConstantsService,
     public donationHelper: DonationHelper
-  ) {
-    console.log(faHandHoldingHeart);
-  }
+  ) {}
 
   ngOnInit() {
     this.leftNavService.initDrawerContent(this.drawerContent);

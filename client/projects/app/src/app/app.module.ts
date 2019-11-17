@@ -18,7 +18,12 @@ import { AboutComponent } from '~web/about/about.component';
 import { HeuristicsModule } from '~web/heuristics.module';
 import { SharedModule } from '~web/shared.module';
 import { EventModule } from '~web/event.module';
+import { IconService } from '~web/icon/icon.service';
+
 import { AppSessionModule } from '~app/app-session.module';
+import { PushNotificationService } from '~app/push-notification/push-notification.service';
+
+import { JSONDateReviver } from '~shared';
 
 @NgModule({
   declarations: [
@@ -49,4 +54,15 @@ import { AppSessionModule } from '~app/app-session.module';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+
+  constructor(
+    iconService: IconService,
+    jsonDateReviver: JSONDateReviver,
+    pushNotificationService: PushNotificationService
+  ) {
+    iconService.init();
+    jsonDateReviver.initJSONDateReviver();
+    pushNotificationService.init();
+  }
+}

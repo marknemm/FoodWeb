@@ -26,7 +26,6 @@ import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hour
 import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
 import { DeliveryHelper } from '../../../shared/src/helpers/delivery-helper';
 import { JSONDateReviver } from '../../../shared/src/helpers/json-date-reviver';
-import { MobileModule } from './mobile/mobile.module';
 
 @NgModule({
   declarations: [

@@ -21,6 +21,9 @@ import { AboutComponent } from '~web/about/about.component';
 
 import { SessionMonitorService } from '~web/session-monitor/session-monitor.service';
 import { RecaptchaService } from '~web/recaptcha/recaptcha.service';
+import { IconService } from '~web/icon/icon.service';
+
+import { JSONDateReviver } from '~shared';
 
 @NgModule({
   declarations: [
@@ -54,4 +57,13 @@ import { RecaptchaService } from '~web/recaptcha/recaptcha.service';
     AppComponent
   ]
 })
-export class AppModule {}
+export class AppModule {
+
+  constructor(
+    iconService: IconService,
+    jsonDateReviver: JSONDateReviver
+  ) {
+    iconService.init();
+    jsonDateReviver.initJSONDateReviver();
+  }
+}

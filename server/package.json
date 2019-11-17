@@ -44,7 +44,7 @@
     "fs-extra": "^8.0.1",
     "geo-tz": "^5.0.4",
     "google-distance-matrix": "^1.1.1",
-    "handlebars": "^4.3.4",
+    "handlebars": "^4.5.2",
     "handlebars-helpers": "^0.10.0",
     "juice": "^5.2.0",
     "lodash": "^4.17.15",
@@ -58,7 +58,8 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.3.3",
     "typeorm": "^0.2.16",
-    "typescript": "^3.4.1"
+    "typescript": "^3.4.1",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
