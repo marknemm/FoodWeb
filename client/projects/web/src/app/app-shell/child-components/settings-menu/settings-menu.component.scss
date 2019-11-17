@@ -1,3 +1,5 @@
+@import "constants.scss";
+
 .settings-button-container {
   display: inline-block;
   vertical-align: top;
@@ -17,6 +19,21 @@
       width: $icon-size;
       height: $icon-size;
       vertical-align: top;
+    }
+  }
+}
+
+.settings-menu-content {
+  padding: 0;
+  margin-top: -8px;
+  margin-bottom: -8px;
+
+  button {
+    color: $accent-darkest;
+
+    .mat-icon {
+      margin-top: -2px;
+      margin-right: 7px;
     }
   }
 }

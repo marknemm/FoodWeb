@@ -7,6 +7,8 @@ import { Subject, Observable } from 'rxjs';
 })
 export class LeftNavService {
 
+  sticky = false;
+
   private _opened: boolean;
   private _mode: 'side' | 'over';
   private _openedChanged = new Subject<boolean>();

@@ -134,7 +134,7 @@ export class AppDataService extends Device {
       catchError((err: HttpErrorResponse) => this._errHandlerService.handleError(err)),
       map((appData: AppData) => {
         this._accountId = appData.accountId;
-        this._uuid = appData.uuid;
+        this._uuid = appData.deviceUuid;
         return appData;
       })
     );

@@ -99,8 +99,8 @@ export class AppSessionService extends SessionService {
    * Logs the user out and returns the user to the login page.
    */
   logout(): void {
+    this._router.navigate(['/login']);
     super.logout();
     this._appSessionToken = null;
-    this._router.navigate(['/login']);
   }
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { NotificationService } from '~web/notification/notification.service';
 
@@ -11,21 +10,8 @@ import { NotificationService } from '~web/notification/notification.service';
 export class NotificationsMenuComponent implements OnInit {
 
   constructor(
-    public notificationService: NotificationService,
-    private _router: Router
+    public notificationService: NotificationService
   ) {}
 
   ngOnInit() {}
-
-  shouldFadeBottom(elem: HTMLElement): boolean {
-    return (elem.scrollHeight > elem.clientHeight);
-  }
-
-  onNotificationButtonClick(screenSize: 'desktop' | 'mobile') {
-    this.notificationService.updateSeenNotifications();
-    if (screenSize === 'mobile') {
-      this._router.navigate(['/notification/list/my']);
-    }
-  }
-
 }

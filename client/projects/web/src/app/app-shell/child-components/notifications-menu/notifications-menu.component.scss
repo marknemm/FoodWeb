@@ -19,20 +19,6 @@ $icon-size: 38px;
     padding: 0;
     height: 100%;
 
-    &.mobile {
-      display: none;
-    }
-
-    @media only screen and (max-width: $sm) {
-      &.desktop {
-        display: none;
-      }
-
-      &.mobile {
-        display: inline;
-      }
-    }
-
     mat-icon {
       $icon-size: 24px;
       font-size: $icon-size;

@@ -8,6 +8,11 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  @media only screen and (max-width: $sm) {
+    overflow-y: auto;
+    height: auto;
+  }
 }
 
 .align-left {

@@ -10,8 +10,8 @@ import { AppShellComponent } from '~web/app-shell/app-shell.component';
 import { HeaderComponent } from '~web/header/header.component';
 import { LeftNavComponent } from '~web/left-nav/left-nav.component';
 import { SettingsMenuComponent } from '~web/settings-menu/settings-menu.component';
-import { SettingsMenuContentComponent } from '~web/settings-menu-content/settings-menu-content.component';
 import { NotificationsMenuComponent } from '~web/notifications-menu/notifications-menu.component';
+import { StickyHeaderDirective } from '~web/sticky-header/sticky-header.directive';
 
 @NgModule({
   declarations: [
@@ -19,8 +19,8 @@ import { NotificationsMenuComponent } from '~web/notifications-menu/notification
     HeaderComponent,
     LeftNavComponent,
     SettingsMenuComponent,
-    SettingsMenuContentComponent,
-    NotificationsMenuComponent
+    NotificationsMenuComponent,
+    StickyHeaderDirective
   ],
   imports: [
     CommonModule,

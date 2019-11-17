@@ -1,5 +1,5 @@
 <mat-drawer-container class="left-nav-container">
-  <mat-drawer [mode]="leftNavService.mode" [opened]="leftNavService.opened" (openedChange)="leftNavService.opened = $event">
+  <mat-drawer [mode]="leftNavService.mode" [opened]="leftNavService.opened" (openedChange)="leftNavService.opened = $event" [ngClass]="{ sticky: leftNavService.sticky }">
     <mat-nav-list>
       <a mat-list-item [routerLink]="['/']" (click)="_onNavClick()">
         <span><mat-icon>home</mat-icon> <span>Home</span></span>
