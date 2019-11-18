@@ -53,7 +53,6 @@
         "./projects/web/src/app/account/services/*",
         "./projects/web/src/app/app-shell/*",
         "./projects/web/src/app/app-shell/child-components/*",
-        "./projects/web/src/app/app-shell/domain-components/*",
         "./projects/web/src/app/app-shell/components/*",
         "./projects/web/src/app/app-shell/directives/*",
         "./projects/web/src/app/app-shell/forms/*",
