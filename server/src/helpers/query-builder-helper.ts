@@ -1,5 +1,5 @@
 import { SelectQueryBuilder } from 'typeorm';
-import { PagingParams } from '../../../shared/src/interfaces/paging-params';
+import { PagingParams } from '../shared';
 
 /**
  * Generates simple where clause conditions of the SQL query. Simple conditions have a 1-1 mapping between the given filter parameter names

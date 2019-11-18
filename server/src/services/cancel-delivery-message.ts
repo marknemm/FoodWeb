@@ -1,5 +1,5 @@
 import { broadcastEmail, MailTransporter } from '../helpers/email';
-import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
+import { DonationHelper } from '../shared';
 import { UpdateDiff } from '../interfaces/update-diff';
 import { broadcastNotification, NotificationType } from '../helpers/notification';
 import { AccountEntity } from '../entity/account.entity';

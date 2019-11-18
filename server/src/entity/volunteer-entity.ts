@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Index } from 'typeorm';
 import { AccountEntity } from './account.entity';
-import { Volunteer } from '../../../shared/src/interfaces/account/volunteer';
+import { Volunteer } from '../shared';
 
 @Entity('Volunteer')
 export class VolunteerEntity implements Volunteer {

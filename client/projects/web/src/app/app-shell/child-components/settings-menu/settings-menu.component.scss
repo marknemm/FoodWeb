@@ -1,0 +1,46 @@
+@import "constants.scss";
+
+.settings-button-container {
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+
+  button {
+    $button-width: 40px;
+    min-width: $button-width;
+    width: $button-width;
+    padding: 0;
+    height: 100%;
+
+    food-web-profile-img {
+      display: inline-block;
+      margin-top: 5px;
+      cursor: pointer;
+
+      @media only screen and (max-width: $mat-mobile) {
+        margin-top: 3px;
+      }
+    }
+  }
+}
+
+.settings-menu-content {
+  padding: 0;
+  margin-top: -8px;
+  margin-bottom: -8px;
+
+  button {
+    color: $accent-darkest;
+
+    .ng-fa-icon,
+    .mat-icon {
+      margin-top: -2px;
+      margin-right: 7px;
+    }
+
+    .ng-fa-icon {
+      padding-left: 2px;
+      width: 24px;
+    }
+  }
+}

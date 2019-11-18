@@ -4,7 +4,7 @@ import expressSession = require('express-session');
 import { SessionOptions, MemoryStore, Store } from 'express-session';
 import { RedisStoreOptions } from 'connect-redis';
 import connectRedis = require('connect-redis');
-import { Account } from '../../../shared/src/interfaces/account/account';
+import { Account } from '../shared';
 export { Account };
 
 /**

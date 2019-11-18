@@ -5,7 +5,7 @@ import { savePassword } from './save-password';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordResetEntity } from '../entity/password-reset';
 import { FoodWebError } from '../helpers/food-web-error';
-import { PasswordResetRequest } from '../../../shared/src/interfaces/account/password-reset-request';
+import { PasswordResetRequest } from '../shared';
 
 /**
  * Creates and saves a password reset (token) entry for a specified user.

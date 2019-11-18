@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'ty
 import { AccountEntity } from './account.entity';
 import { ReceiverEntity } from './receiver.entity';
 import { DonorEntity } from './donor.entity';
-import { Organization } from '../../../shared/src/interfaces/account/organization';
+import { Organization } from '../shared';
 
 @Entity('Organization')
 export class OrganizationEntity implements Organization {

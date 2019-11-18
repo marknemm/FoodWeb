@@ -1,0 +1,30 @@
+<span class="settings-button-container" matTooltip="Settings">
+  <button mat-button type="button" class="settings-button" [matMenuTriggerFor]="settingsMenu">
+    <food-web-profile-img width="29px" height="100%" [imgUrl]="sessionService.account.profileImgUrl"></food-web-profile-img>
+  </button>
+</span>
+
+<mat-menu #settingsMenu="matMenu" panelClass="settings-menu">
+  <mat-action-list class="settings-menu-content">
+    <a [routerLink]="['/account/my']" class="account">
+      <button mat-list-item type="button">
+        <mat-icon>supervisor_account</mat-icon> Account
+      </button>
+    </a>
+    <a [routerLink]="['/donation/list/my']" *ngIf="!sessionService.isVolunteer">
+      <button mat-list-item type="button">
+        <fa-icon [icon]="faGifts"></fa-icon> My Donations
+      </button>
+    </a>
+    <a [routerLink]="['/delivery/list/my']" *ngIf="sessionService.isVolunteer">
+      <button mat-list-item type="button">
+        <mat-icon>place</mat-icon> My Deliveries
+      </button>
+    </a>
+    <a [routerLink]="['/home']" (click)="sessionService.logout()" class="logout">
+      <button mat-list-item type="button">
+        <mat-icon>power_settings_new</mat-icon> Logout
+      </button>
+    </a>
+  </mat-action-list>
+</mat-menu>

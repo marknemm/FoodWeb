@@ -1,8 +1,8 @@
 import { getConnection, EntityManager } from 'typeorm';
 import { AuditEntity } from '../entity/audit.entity';
 import { AccountEntity } from '../entity/account.entity';
-import { Audit, AuditEventType } from '../../../shared/src/interfaces/audit/audit';
-import { Donation } from '../../../shared/src/interfaces/donation/donation';
+import { Audit, AuditEventType } from '../shared';
+import { Donation } from '../shared';
 import { UpdateDiff } from '../interfaces/update-diff';
 export { Audit, AuditEventType };
 

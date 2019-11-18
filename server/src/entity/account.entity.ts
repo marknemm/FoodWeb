@@ -13,8 +13,8 @@ import { ContactInfoEntity } from './contact-info.entity';
 import { OrganizationEntity } from './organization.entity';
 import { VolunteerEntity } from './volunteer-entity';
 import { OperationHoursEntity } from './operation-hours.entity';
-import { Account, AccountType } from '../../../shared/src/interfaces/account/account';
-import { Constants } from '../../../shared/src/constants/constants';
+import { Account, AccountType } from '../shared';
+import { Constants } from '../shared';
 import { AppDataEntity } from './app-data.entity';
 export { Account, AccountType };
 

@@ -2,10 +2,10 @@ import { getRepository, SelectQueryBuilder } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { LoginRequiredError } from '../helpers/food-web-error';
 import { genSimpleWhereConditions, genPagination } from '../helpers/query-builder-helper';
-import { OperationHoursHelper } from '../../../shared/src/helpers/operation-hours-helper';
-import { Account, OperationHours } from '../../../shared/src/interfaces/account/account';
-import { AccountReadRequest, AccountReadFilters, AccountReadSort } from '../../../shared/src/interfaces/account/account-read-request';
-import { AccountHelper } from '../../../shared/src/helpers/account-helper';
+import { OperationHoursHelper } from '../shared';
+import { Account, OperationHours } from '../shared';
+import { AccountReadRequest, AccountReadFilters, AccountReadSort } from '../shared';
+import { AccountHelper } from '../shared';
 
 export interface AccountsQueryResult {
   accounts: AccountEntity[];

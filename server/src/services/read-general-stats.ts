@@ -1,7 +1,7 @@
 import 'dotenv';
 import { getRepository } from 'typeorm';
 import { DonationEntity } from '../entity/donation.entity';
-import { GeneralStats } from '../../../shared/src/interfaces/heuristics/general-stats';
+import { GeneralStats } from '../shared';
 
 /**
  * Reads event registrations from the database.

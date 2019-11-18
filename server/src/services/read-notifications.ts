@@ -1,8 +1,8 @@
 import { getRepository, FindConditions, In, MoreThan } from 'typeorm';
 import { NotificationEntity } from '../entity/notification.entity';
-import { Account } from '../../../shared/src/interfaces/account/account';
-import { Notification, NotificationType } from '../../../shared/src/interfaces/notification/notification';
-import { NotificationReadRequest, NotificationReadFilters } from '../../../shared/src/interfaces/notification/notification-read-request';
+import { Account } from '../shared';
+import { Notification, NotificationType } from '../shared';
+import { NotificationReadRequest, NotificationReadFilters } from '../shared';
 
 /**
  * The result of a query for notifications.

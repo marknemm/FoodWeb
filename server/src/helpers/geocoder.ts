@@ -3,7 +3,7 @@ import NodeGeocoder = require('node-geocoder');
 import { Geocoder, Providers, Query, Entry, Location } from 'node-geocoder';
 import geoTz = require('geo-tz');
 import { FoodWebError } from './food-web-error';
-import { ContactInfo, GeographyLocation } from '../../../shared/src/interfaces/account/contact-info';
+import { ContactInfo, GeographyLocation } from '../shared';
 export { ContactInfo, GeographyLocation };
 
 const offlineMode = (process.env.OFFLINE_MODE === 'true');

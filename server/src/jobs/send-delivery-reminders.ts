@@ -6,9 +6,9 @@ import { readDonations, DonationsQueryResult } from '../services/read-donations'
 import { initDbConnectionPool } from '../helpers/db-connection-pool';
 import { broadcastEmail, MailTransporter } from '../helpers/email';
 import { broadcastNotification, NotificationType } from '../helpers/notification';
-import { DonationReadRequest } from '../../../shared/src/interfaces/donation/donation-read-request';
-import { DateTimeHelper } from '../../../shared/src/helpers/date-time-helper';
-import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
+import { DonationReadRequest } from '../shared';
+import { DateTimeHelper } from '../shared';
+import { DonationHelper } from '../shared';
 
 const _reminderIntervalMins = 10; // Job will be scheduled to run every 10 minutes.
 const _dateTimeHelper = new DateTimeHelper();

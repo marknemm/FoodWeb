@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinTable } from 'typeorm';
 import { AccountEntity } from './account.entity';
-import { Constants } from '../../../shared/src/constants/constants';
-import { Audit, AuditEventType, AuditData } from '../../../shared/src/interfaces/audit/audit';
+import { Constants } from '../shared';
+import { Audit, AuditEventType, AuditData } from '../shared';
 
 const _constants = new Constants();
 

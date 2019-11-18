@@ -5,12 +5,12 @@ import { AccountEntity } from '../entity/account.entity';
 import { FoodWebError } from '../helpers/food-web-error';
 import { geocode, geoTimezone } from '../helpers/geocoder';
 import { UpdateDiff } from '../interfaces/update-diff';
-import { Account, ContactInfo } from '../../../shared/src/interfaces/account/account';
-import { Donation, DonationStatus } from '../../../shared/src/interfaces/donation/donation';
-import { DonationHelper } from '../../../shared/src/helpers/donation-helper';
-import { AccountHelper } from '../../../shared/src/helpers/account-helper';
-import { DonationCreateRequest } from '../../../shared/src/interfaces/donation/donation-create-request';
-import { DonationUpdateRequest } from '../../../shared/src/interfaces/donation/donation-update-request';
+import { Account, ContactInfo } from '../shared';
+import { Donation, DonationStatus } from '../shared';
+import { DonationHelper } from '../shared';
+import { AccountHelper } from '../shared';
+import { DonationCreateRequest } from '../shared';
+import { DonationUpdateRequest } from '../shared';
 
 const _donationHelper = new DonationHelper();
 const _accountHelper = new AccountHelper();

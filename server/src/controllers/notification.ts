@@ -7,9 +7,9 @@ import { ensureSessionActive } from '../middlewares/session.middleware';
 import { genListResponse } from '../helpers/list-response';
 import { readNotifications, NotificationsQueryResult } from '../services/read-notifications';
 import { updateSeenNotifications, updateNotification } from '../services/save-notification';
-import { NotificationReadRequest } from '../../../shared/src/interfaces/notification/notification-read-request';
-import { NotificationUpdateRequest } from '../../../shared/src/interfaces/notification/notification-update-request';
-import { LastSeenNotificationUpdateRequest } from '../../../shared/src/interfaces/notification/last-seen-notification-update-request';
+import { NotificationReadRequest } from '../shared';
+import { NotificationUpdateRequest } from '../shared';
+import { LastSeenNotificationUpdateRequest } from '../shared';
 
 const router = express.Router();
 

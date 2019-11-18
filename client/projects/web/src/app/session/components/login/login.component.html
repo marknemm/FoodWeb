@@ -1,0 +1,48 @@
+<food-web-progress-indicator [trigger]="loading" [blocking]="true" [diameter]="150"></food-web-progress-indicator>
+
+<form #loginFormDirective="ngForm" [formGroup]="loginForm" (submit)="submit()" class="login-container" [ngClass]="{ container: !insideDialog }">
+  <img src="./assets/IconImgMd.png" *ngIf="!insideDialog" class="food-web-img">
+
+  <div *ngIf="!messageSent">
+    <mat-form-field>
+      <input matInput *ngIf="!insideDialog" type="text" [placeholder]="usernameEmailPlaceholder" formControlName="usernameEmail">
+      <input matInput *ngIf="insideDialog" type="text" [placeholder]="usernameEmailPlaceholder" formControlName="usernameEmail" cdkFocusInitial>
+    </mat-form-field>
+    <mat-form-field *ngIf="isLogin">
+      <input matInput type="password" placeholder="Password" formControlName="password">
+    </mat-form-field>
+    <mat-error *ngIf="loginErr && loginFormDirective.submitted" class="login-err">{{ loginErr }}</mat-error>
+  </div>
+  <div *ngIf="resetMessageSent">
+    <p>A password reset message has been sent to your email.</p>
+    <p>Follow the link within the email to reset your password.</p>
+  </div>
+  <div *ngIf="recoveryMessageSent">
+    <p>Please check your email for a username recovery message.</p>
+    <p>
+      If you did not receive an email, then ensure that the given email is correct:<br>
+      <strong>{{ loginForm.get('usernameEmail').value }}</strong>
+    </p>
+  </div>
+
+  <div class="align-right">
+    <div *ngIf="isLogin">
+      <button mat-raised-button type="submit" color="primary" [disabled]="loginForm.invalid">Login</button>
+      <div class="recovery-links">
+        <a role="button" (click)="forgotUsername()" tabindex="0">Forgot Username</a>
+        <a role="button" (click)="forgotPassword()" tabindex="0">Forgot Password</a>
+      </div>
+    </div>
+    <div *ngIf="!isLogin && !messageSent">
+      <button mat-button type="button" color="accent" (click)="returnToLogin()">Login</button>
+      <button mat-raised-button type="submit" color="primary" [disabled]="loginForm.invalid">Send Email</button>
+    </div>
+    <div *ngIf="messageSent">
+      <button mat-button type="submit" color="accent">Resend Email</button>
+      <button mat-raised-button type="button" color="primary" mat-dialog-close>Ok</button>
+    </div>
+    <div *ngIf="!insideDialog" class="signup-link-container">
+      Don't have an account: <a [routerLink]="['/signup']">Signup</a>
+    </div>
+  </div>
+</form>

@@ -24,12 +24,12 @@ import { sendDonationUpdateMessages, sendDonationCreateMessages } from '../servi
 import { sendDonationDeleteMessages } from '../services/delete-donation-message';
 import { sendUnclaimMessages, sendClaimMessages } from '../services/match-donation-message';
 import { messagePotentialReceivers } from '../services/message-potential-receivers';
-import { DonationReadRequest } from '../../../shared/src/interfaces/donation/donation-read-request';
-import { DonationCreateRequest } from '../../../shared/src/interfaces/donation/donation-create-request';
-import { DonationUpdateRequest } from '../../../shared/src/interfaces/donation/donation-update-request';
-import { DonationClaimRequest } from '../../../shared/src/interfaces/donation/donation-claim-request';
-import { DonationUnclaimRequest } from '../../../shared/src/interfaces/donation/donation-unclaim-request';
-import { DonationDeleteRequest } from '../../../shared/src/interfaces/donation/donation-delete-request';
+import { DonationReadRequest } from '../shared';
+import { DonationCreateRequest } from '../shared';
+import { DonationUpdateRequest } from '../shared';
+import { DonationClaimRequest } from '../shared';
+import { DonationUnclaimRequest } from '../shared';
+import { DonationDeleteRequest } from '../shared';
 
 const router = express.Router();
 

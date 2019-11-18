@@ -3,7 +3,7 @@ import { randomBytes } from 'crypto';
 import { AccountEntity } from '../entity/account.entity';
 import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { AccountVerificationRequest } from '../../../shared/src/interfaces/account/account-verification-request';
+import { AccountVerificationRequest } from '../shared';
 
 export function createUnverifiedAccount(account: AccountEntity, manager: EntityManager = getManager()): Promise<UnverifiedAccountEntity> {
   const unverifiedAccount: UnverifiedAccountEntity = _genUnverifiedAccountEntity(account);

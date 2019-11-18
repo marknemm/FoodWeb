@@ -4,8 +4,8 @@ import { AccountEntity } from '../entity/account.entity';
 import { PasswordEntity } from '../entity/password.entity';
 import { FoodWebError } from '../helpers/food-web-error';
 import { getPasswordId } from '../helpers/password-match';
-import { AccountHelper } from '../../../shared/src/helpers/account-helper';
-import { PasswordUpdateRequest } from '../../../shared/src/interfaces/account/password-update-request';
+import { AccountHelper } from '../shared';
+import { PasswordUpdateRequest } from '../shared';
 
 const _accountHelper = new AccountHelper();
 

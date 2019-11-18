@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { DonationsQueryResult, readDonations, readMyDonations } from './read-donations';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { DeliveryReadRequest } from '../../../shared/src/interfaces/delivery/delivery-read-request';
+import { DeliveryReadRequest } from '../shared';
 
 export function readDeliveries(
   request: DeliveryReadRequest,

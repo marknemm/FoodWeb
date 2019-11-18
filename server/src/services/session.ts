@@ -6,8 +6,8 @@ import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { AppSessionEntity } from '../entity/app-session.entity';
 import { checkPasswordMatch } from '../helpers/password-match';
 import { FoodWebError } from '../helpers/food-web-error';
-import { LoginRequest } from '../../../shared/src/interfaces/session/login-request';
-import { LoginResponse } from '../../../shared/src/interfaces/session/login-response';
+import { LoginRequest } from '../shared';
+import { LoginResponse } from '../shared';
 
 /**
  * Performs the login for a given user.

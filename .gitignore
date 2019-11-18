@@ -74,8 +74,8 @@ Thumbs.db
 **/ormlogs.log
 
 # Mobile build artifacts
-**/mobile/platforms
-**/mobile/plugins
+**/platforms
+**/plugins
 
 # ionic data
 UserInterfaceState.xcuserstate

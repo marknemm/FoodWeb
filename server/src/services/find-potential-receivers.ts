@@ -1,8 +1,8 @@
 import { readAccounts, AccountsQueryResult } from './read-accounts';
 import { AccountEntity } from '../entity/account.entity';
-import { AccountType } from '../../../shared/src/interfaces/account/account';
-import { Donation } from '../../../shared/src/interfaces/donation/donation';
-import { AccountReadRequest } from '../../../shared/src/interfaces/account/account-read-request';
+import { AccountType } from '../shared';
+import { Donation } from '../shared';
+import { AccountReadRequest } from '../shared';
 
 export interface FoundPotentialReceivers {
   donation: Donation;

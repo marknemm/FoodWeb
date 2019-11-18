@@ -12,9 +12,9 @@ import { advanceDeliveryState, undoDeliveryState } from '../services/update-deli
 import { saveDeliveryScheduleAudit, saveDeliveryAdvanceAudit, saveDeliveryUndoAudit } from '../services/save-delivery-audit';
 import { sendDeliveryStateUndoMessages, sendDeliveryStateAdvancedMessages } from '../services/update-delivery-state-message';
 import { sendDeliveryScheduledMessages } from '../services/schedule-delivery-message';
-import { DeliveryReadRequest } from '../../../shared/src/interfaces/delivery/delivery-read-request';
-import { DeliveryScheduleRequest } from '../../../shared/src/interfaces/delivery/delivery-schedule-request';
-import { DeliveryStateChangeRequest } from '../../../shared/src/interfaces/delivery/delivery-state-change-request';
+import { DeliveryReadRequest } from '../shared';
+import { DeliveryScheduleRequest } from '../shared';
+import { DeliveryStateChangeRequest } from '../shared';
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 import { UpdateDiff } from '../interfaces/update-diff';
 import { MailTransporter, sendEmail } from '../helpers/email';
-import { Donation } from '../../../shared/src/helpers/donation-helper';
+import { Donation } from '../shared';
 
 /**
  * Sends donation created message(s) to the donor.

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AccountEntity } from '../entity/account.entity';
-import { Account } from '../../../shared/src/interfaces/account/account';
+import { Account } from '../shared';
 
 /**
  * A Server Sent Event connection.

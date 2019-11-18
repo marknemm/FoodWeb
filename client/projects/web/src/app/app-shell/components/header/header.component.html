@@ -1,0 +1,42 @@
+<header foodWebStickyHeader [mainHeader]="mainHeader" [subHeader]="subHeader">
+  <div class="inner-header">
+    <mat-toolbar color="primary" class="main-header-section" #mainHeader>
+      <img src="./assets/IconImgSm.png" alt="Food Web Icon" class="site-icon">
+      <a [routerLink]="['/home']" class="site-title">Food Web</a>
+      <div class="non-blocking-page-progress-indicator" *ngIf="pageProgressService.showNonBlockingProgress">
+        <food-web-progress-indicator
+          [backdropColor]="pageProgressService.backdropColor"
+          [backdropOpacity]="pageProgressService.backdropOpacity"
+          [backdropVisible]="pageProgressService.backdropVisible"
+          [blocking]="pageProgressService.blocking"
+          [color]="pageProgressService.color"
+          [diameter]="pageProgressService.diameter"
+          [mode]="pageProgressService.mode"
+          [strokeWidth]="pageProgressService.strokeWidth"
+          [trigger]="pageProgressService.trigger"
+          [value]="pageProgressService.value">
+        </food-web-progress-indicator>
+      </div>
+    </mat-toolbar>
+    <div class="sub-header-section" #subHeader>
+      <img src="./assets/IconImgSm.png" alt="Food Web Icon" class="site-icon">
+      <button mat-icon-button class="sidenav-toggle-button" (click)="leftNavService.toggle()" [attr.aria-expanded]="leftNavService.opened">
+        <mat-icon aria-label="Toggle Navigation Menu">menu</mat-icon>
+      </button>
+      <h1 class="page-title">{{ pageTitleService.title }}</h1>
+      <span class="header-right">
+        <ng-container *ngIf="!sessionService.loggedIn">
+          <a (click)="login()">Login</a>
+          <span> | </span>
+          <a [routerLink]="['/signup']">Signup</a>
+        </ng-container>
+        <ng-container *ngIf="sessionService.loggedIn">
+          <food-web-settings-menu></food-web-settings-menu>
+          <food-web-donate-menu *ngIf="sessionService.isDonor"></food-web-donate-menu>
+          <food-web-search-menu *ngIf="!sessionService.isDonor" [accountType]="sessionService.account.accountType"></food-web-search-menu>
+          <food-web-notifications-menu></food-web-notifications-menu>
+        </ng-container>
+      </span>
+    </div>
+  </div>
+</header>

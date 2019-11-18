@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, Index } from 'typeorm';
 import { AccountEntity } from './account.entity';
-import { OperationHours } from '../../../shared/src/interfaces/account/account';
-import { Constants } from '../../../shared/src/constants/constants';
-import { Weekday } from '../../../shared/src/interfaces/account/operation-hours';
+import { OperationHours } from '../shared';
+import { Constants } from '../shared';
+import { Weekday } from '../shared';
 
 const _constants = new Constants();
 

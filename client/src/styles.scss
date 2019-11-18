@@ -1,7 +1,6 @@
 @import './styles/constants.scss';
 @import './styles/material.scss';
 @import '~bootstrap-css-only/css/bootstrap.min.css';
-@import '~font-awesome/css/font-awesome.min.css';
 
 html, body {
   margin: 0px;
@@ -9,6 +8,11 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  @media only screen and (max-width: $sm) {
+    overflow-y: auto;
+    height: auto;
+  }
 }
 
 .align-left {
@@ -152,26 +156,71 @@ mat-card.mat-card {
 
 header.site-header .notifications-button-container {
   .mat-badge-content.mat-badge-active {
-    right: 10px;
-    top: 4px;
+    right: 4px;
+    top: 3px;
 
     @media screen and (max-width: $mat-mobile) {
-      right: 8px;
+      right: 4px;
       top: 1px;
     }
   }
 }
 
+/* Targets the actual notifications menu container... lots of confusing javascript overrides via !important */
 .notifications-menu-backdrop + div {
-  .mat-menu-panel {
-    max-width: 432px;
-    max-height: 70vh;
-    width: 100vw;
-    overflow-x: hidden;
+  margin-top: 8px;
 
-    .mat-menu-content {
-      padding-top: 0;
-      padding-bottom: 0;
+  .cdk-overlay-pane {
+    .mat-menu-panel {
+      max-width: 432px;
+      max-height: 70vh;
+      width: 100vw;
+      overflow-x: hidden;
+
+      .mat-menu-content {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      @media only screen and (max-width: 462px) {
+        max-width: 100vw;
+        max-height: calc(100vh - #{$header-height-mobile});
+        border-radius: 0;
+      }
+    }
+
+    @media only screen and (max-width: $sm) {
+      top: $header-height !important;
+    }
+
+    @media only screen and (max-width: 462px) {
+      top: $header-height-mobile !important;
+      right: 0 !important;
+      max-width: 100vw !important;
+    }
+  }
+
+  @media only screen and (max-width: $mat-mobile) {
+    margin-top: 5px;
+  }
+
+  @media only screen and (max-width: 462px) {
+    margin-top: 0;
+  }
+}
+
+body.sticky-header {
+  .notifications-menu-backdrop + div {  
+    .cdk-overlay-pane {
+      .mat-menu-panel {
+        @media only screen and (max-width: $sm) {
+          max-height: calc(100vh - #{$sub-header-height-mobile});
+        }
+      }
+
+      @media only screen and (max-width: $sm) {
+        top: $sub-header-height-mobile !important;
+      }
     }
   }
 }
