@@ -49,6 +49,7 @@ import { DisplayEditTransitionDirective } from '~web/display-edit-transition/dis
     AlertSnackBarComponent
   ],
   providers: [
+    { provide: 'Window', useValue: window },
     AccountHelper,
     OperationHoursHelper,
     DonationHelper,

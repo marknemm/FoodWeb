@@ -48,7 +48,6 @@ import { JSONDateReviver } from '~shared';
     HeuristicsModule
   ],
   providers: [
-    { provide: 'Window', useValue: window },
     { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: RecaptchaService, multi: true },
     { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.recaptchaSiteKey }
