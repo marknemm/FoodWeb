@@ -124,7 +124,8 @@ header {
         height: 100%;
         padding-right: inherit;
   
-        > span, > a {
+        > span,
+        > a {
           position: relative;
           vertical-align: middle;
           top: 5px;
@@ -133,6 +134,11 @@ header {
           @media only screen and (max-width: $mat-mobile) {
             top: 4px;
           }
+        }
+
+        food-web-profile-img {
+          margin-left: 7px;
+          margin-right: 7px;
         }
   
         a {

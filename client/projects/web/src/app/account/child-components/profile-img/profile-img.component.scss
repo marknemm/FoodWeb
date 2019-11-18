@@ -2,6 +2,7 @@
   .profile-img {
     border-radius: 50%;
     margin-bottom: 0;
+    cursor: inherit;
 
     &.editable {
       cursor: pointer;
@@ -13,7 +14,7 @@
       vertical-align: top;
       border-radius: 50%;
       margin: 0px;
-      border: 1px solid #e4e4e4;
+      border: 2px solid #e4e4e4;
     }
 
     $edit-transition-time: 0.5s;

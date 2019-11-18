@@ -12,13 +12,14 @@
     padding: 0;
     height: 100%;
 
-    .ng-fa-icon {
+    food-web-profile-img {
       display: inline-block;
-      $icon-size: 20px;
-      font-size: $icon-size;
-      width: $icon-size;
-      height: $icon-size;
-      vertical-align: top;
+      margin-top: 5px;
+      cursor: pointer;
+
+      @media only screen and (max-width: $mat-mobile) {
+        margin-top: 3px;
+      }
     }
   }
 }

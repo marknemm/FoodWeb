@@ -5,7 +5,7 @@ import { map, catchError, finalize, mergeMap } from 'rxjs/operators';
 import { environment } from '~web/environment';
 import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
 import { AlertService } from '~web/alert/alert.service';
-import { Account, LoginRequest, AccountHelper, LoginResponse } from '~shared';
+import { Account, LoginRequest, AccountHelper, LoginResponse, AccountType } from '~shared';
 export { Account };
 
 @Injectable({
@@ -16,6 +16,7 @@ export class SessionService {
   readonly url = `${environment.server}/session`;
 
   protected _account: Account;
+  protected _accountName = '';
   protected _loading = false;
   protected _login$ = new Subject<Account>();
   protected _logout$ = new Subject<Account>();
@@ -50,11 +51,20 @@ export class SessionService {
     this._account = account;
     if (account) {
       localStorage.setItem('account', JSON.stringify(account));
+      this._accountName = this._accountHelper.accountName(account);
       this._login$.next(account);
     } else {
       localStorage.removeItem('account');
+      this._accountName = '';
       this._logout$.next(oldAccount);
     }
+  }
+
+  /**
+   * The name of the user account.
+   */
+  get accountName(): string {
+    return this._accountName;
   }
 
   /**

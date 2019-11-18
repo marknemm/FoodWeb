@@ -58,7 +58,8 @@ import { DonorComponent } from '~web/donor/donor.component';
     OrganizationComponent,
     VolunteerComponent,
     AddressComponent,
-    OperationHoursComponent
+    OperationHoursComponent,
+    ProfileImgComponent
   ]
 })
 export class AccountModule {}

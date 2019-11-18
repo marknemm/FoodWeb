@@ -5,6 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared.module';
 import { NotificationModule } from '~web/notification.module';
+import { AccountModule } from '~web/account.module';
 
 import { AppShellComponent } from '~web/app-shell/app-shell.component';
 import { HeaderComponent } from '~web/header/header.component';
@@ -32,7 +33,8 @@ import { SearchMenuComponent } from '~web/search-menu/search-menu.component';
     MaterialModule,
     SharedModule,
     NotificationModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    AccountModule
   ],
   exports: [
     AppShellComponent,
