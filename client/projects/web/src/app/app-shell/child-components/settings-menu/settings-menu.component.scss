@@ -6,7 +6,7 @@
   height: 100%;
 
   button {
-    $button-width: 35px;
+    $button-width: 40px;
     min-width: $button-width;
     width: $button-width;
     padding: 0;
@@ -32,9 +32,15 @@
   button {
     color: $accent-darkest;
 
+    .ng-fa-icon,
     .mat-icon {
       margin-top: -2px;
       margin-right: 7px;
+    }
+
+    .ng-fa-icon {
+      padding-left: 2px;
+      width: 24px;
     }
   }
 }

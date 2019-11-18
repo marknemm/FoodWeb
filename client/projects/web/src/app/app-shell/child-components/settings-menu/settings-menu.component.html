@@ -11,6 +11,16 @@
         <mat-icon>supervisor_account</mat-icon> Account
       </button>
     </a>
+    <a [routerLink]="['/donation/list/my']" *ngIf="!sessionService.isVolunteer">
+      <button mat-list-item type="button">
+        <fa-icon [icon]="faGifts"></fa-icon> My Donations
+      </button>
+    </a>
+    <a [routerLink]="['/delivery/list/my']" *ngIf="sessionService.isVolunteer">
+      <button mat-list-item type="button">
+        <mat-icon>place</mat-icon> My Deliveries
+      </button>
+    </a>
     <a [routerLink]="['/home']" (click)="sessionService.logout()" class="logout">
       <button mat-list-item type="button">
         <mat-icon>power_settings_new</mat-icon> Logout
