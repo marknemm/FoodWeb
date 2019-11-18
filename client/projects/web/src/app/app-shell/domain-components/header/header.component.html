@@ -31,6 +31,8 @@
           <a [routerLink]="['/signup']">Signup</a>
         </ng-container>
         <ng-container *ngIf="sessionService.loggedIn">
+          <food-web-donate-menu *ngIf="sessionService.isDonor"></food-web-donate-menu>
+          <food-web-search-menu *ngIf="!sessionService.isDonor" [accountType]="sessionService.account.accountType"></food-web-search-menu>
           <food-web-settings-menu></food-web-settings-menu>
           <food-web-notifications-menu></food-web-notifications-menu>
         </ng-container>

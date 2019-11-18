@@ -12,6 +12,8 @@ import { LeftNavComponent } from '~web/left-nav/left-nav.component';
 import { SettingsMenuComponent } from '~web/settings-menu/settings-menu.component';
 import { NotificationsMenuComponent } from '~web/notifications-menu/notifications-menu.component';
 import { StickyHeaderDirective } from '~web/sticky-header/sticky-header.directive';
+import { DonateMenuComponent } from '~web/donate-menu/donate-menu.component';
+import { SearchMenuComponent } from '~web/search-menu/search-menu.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { StickyHeaderDirective } from '~web/sticky-header/sticky-header.directiv
     LeftNavComponent,
     SettingsMenuComponent,
     NotificationsMenuComponent,
-    StickyHeaderDirective
+    StickyHeaderDirective,
+    DonateMenuComponent,
+    SearchMenuComponent
   ],
   imports: [
     CommonModule,

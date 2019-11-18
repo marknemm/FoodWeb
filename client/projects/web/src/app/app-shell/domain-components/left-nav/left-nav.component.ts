@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawerContent } from '@angular/material/sidenav';
-import { faHandHoldingHeart, faGifts } from '@fortawesome/free-solid-svg-icons'
+import { faHandHoldingHeart, faGifts } from '@fortawesome/free-solid-svg-icons';
 import { PageProgressService } from '~web/page-progress/page-progress.service';
 import { ConstantsService } from '~web/constants/constants.service';
 import { DonationHelper } from '~shared';
