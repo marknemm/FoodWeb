@@ -12,6 +12,7 @@ html, body {
   @media only screen and (max-width: $sm) {
     overflow-y: auto;
     height: auto;
+    min-height: 100%;
   }
 }
 
