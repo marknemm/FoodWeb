@@ -19,8 +19,8 @@
       </div>
     </mat-toolbar>
     <div class="sub-header-section" #subHeader>
-      <img src="./assets/IconImgSm.png" alt="Food Web Icon" class="site-icon">
-      <button mat-icon-button class="sidenav-toggle-button" (click)="leftNavService.toggle()" [attr.aria-expanded]="leftNavService.opened">
+      <button mat-button class="sidenav-toggle-button" (click)="leftNavService.toggle()" [attr.aria-expanded]="leftNavService.opened">
+        <img src="./assets/IconImgSm.png" alt="Food Web Icon" class="site-icon">
         <mat-icon aria-label="Toggle Navigation Menu">menu</mat-icon>
       </button>
       <h1 class="page-title">{{ pageTitleService.title }}</h1>

@@ -155,13 +155,12 @@ mat-card.mat-card {
   animation: greenPulse 5s infinite !important;
 }
 
-header.site-header .notifications-button-container {
+header .notifications-button-container {
   .mat-badge-content.mat-badge-active {
-    right: 4px;
+    margin-right: 8px;
     top: 3px;
 
     @media screen and (max-width: $mat-mobile) {
-      right: 4px;
       top: 1px;
     }
   }
@@ -185,7 +184,7 @@ header.site-header .notifications-button-container {
 
       @media only screen and (max-width: 462px) {
         max-width: 100vw;
-        max-height: calc(100vh - #{$header-height-mobile});
+        max-height: calc(100vh - #{$header-height-mobile + 60px});
         border-radius: 0;
       }
     }
@@ -213,12 +212,6 @@ header.site-header .notifications-button-container {
 body.sticky-header {
   .notifications-menu-backdrop + div {  
     .cdk-overlay-pane {
-      .mat-menu-panel {
-        @media only screen and (max-width: $sm) {
-          max-height: calc(100vh - #{$sub-header-height-mobile});
-        }
-      }
-
       @media only screen and (max-width: $sm) {
         top: $sub-header-height-mobile !important;
       }

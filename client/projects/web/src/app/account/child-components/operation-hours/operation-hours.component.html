@@ -22,6 +22,9 @@
               <mat-form-field class="fill" floatLabel="never">
                 <input matInput placeholder="Start Time" [ngxTimepicker]="startTimePicker" autocomplete="off" readonly="true"
                   formControlName="startTime" [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher">
+                <button mat-icon-button matSuffix aria-label="Open Time Dialog" (click)="startTimePicker.open()">
+                  <mat-icon>alarm</mat-icon>
+                </button>
                 <ngx-material-timepicker #startTimePicker
                   [minutesGap]="5"
                   [defaultTime]="getDefaultStartTime(operationHoursForm)"
@@ -33,6 +36,9 @@
               <mat-form-field class="fill" floatLabel="never">
                 <input matInput placeholder="End Time" [ngxTimepicker]="endTimePicker" autocomplete="off" readonly="true"
                   formControlName="endTime" [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher">
+                <button mat-icon-button matSuffix aria-label="Open Time Dialog" (click)="endTimePicker.open()">
+                  <mat-icon>alarm</mat-icon>
+                </button>
                 <ngx-material-timepicker #endTimePicker
                   [minutesGap]="5"
                   [defaultTime]="getDefaultEndTime(operationHoursForm)"

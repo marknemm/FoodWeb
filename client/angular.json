@@ -164,6 +164,30 @@
             "scripts": []
           },
           "configurations": {
+            "app": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/app/src/environments/environment.ts",
+                  "with": "projects/app/src/environments/environment.app.ts"
+                },
+                {
+                  "replace": "projects/web/src/environments/environment.ts",
+                  "with": "projects/app/src/environments/environment.app.ts"
+                }
+              ]
+            },
+            "browser": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/app/src/environments/environment.ts",
+                  "with": "projects/app/src/environments/environment.browser.ts"
+                },
+                {
+                  "replace": "projects/web/src/environments/environment.ts",
+                  "with": "projects/app/src/environments/environment.browser.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -191,18 +215,6 @@
                   "maximumError": "5mb"
                 }
               ]
-            },
-            "browser": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/app/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.browser.ts"
-                },
-                {
-                  "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.browser.ts"
-                }
-              ]
             }
           }
         },
@@ -212,11 +224,14 @@
             "browserTarget": "app:build"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "app:build:production"
+            "app": {
+              "browserTarget": "app:build:app"
             },
             "browser": {
               "browserTarget": "app:build:browser"
+            },
+            "production": {
+              "browserTarget": "app:build:production"
             }
           }
         },
@@ -274,11 +289,14 @@
             "browserTarget": "app:build"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "app:build:production"
+            "app": {
+              "browserTarget": "app:build:app"
             },
             "browser": {
               "browserTarget": "app:build:browser"
+            },
+            "production": {
+              "browserTarget": "app:build:production"
             }
           }
         },
@@ -289,13 +307,17 @@
             "devServerTarget": "app:serve"
           },
           "configurations": {
-            "production": {
-              "cordovaBuildTarget": "app:ionic-cordova-build:production",
-              "devServerTarget": "app:serve:production"
+            "app": {
+              "cordovaBuildTarget": "app:ionic-cordova-build:app",
+              "devServerTarget": "app:serve:app"
             },
             "browser": {
               "cordovaBuildTarget": "app:ionic-cordova-build:browser",
               "devServerTarget": "app:serve:browser"
+            },
+            "production": {
+              "cordovaBuildTarget": "app:ionic-cordova-build:production",
+              "devServerTarget": "app:serve:production"
             }
           }
         }

@@ -81,23 +81,26 @@ header {
       box-sizing: border-box;
       background-color: $primary-lighter;
       color: $accent-darkest;
-
-      .site-icon {
-        display: none;
-        height: calc(100% - 15px);
-        margin-top: 8px;
-        padding-left: 7px;
-      }
   
       .sidenav-toggle-button {
         width: $sub-header-height;
+        min-width: $sub-header-height;
         height: $sub-header-height;
         line-height: $sub-header-height;
         vertical-align: top;
         outline: none;
+        padding: 0;
+
+        .site-icon {
+          display: none;
+          height: calc(100% - 13px);
+          margin-top: 2px;
+          margin-right: 7px;
+        }
   
         @media only screen and (max-width: $mat-mobile) {
           width: $sub-header-height-mobile;
+          min-width: $sub-header-height-mobile;
           height: $sub-header-height-mobile;
           line-height: $sub-header-height-mobile;
         }
@@ -166,8 +169,12 @@ header {
             top: 0;
           }
 
-          .site-icon {
-            display: inline-block;
+          .sidenav-toggle-button {
+            width: 70px;
+
+            .site-icon {
+              display: inline-block;
+            }
           }
         }
       }

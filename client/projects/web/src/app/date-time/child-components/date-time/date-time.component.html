@@ -23,6 +23,9 @@
        readonly="true"
        formControlName="time"
        [errorStateMatcher]="errorStateMatcher">
+      <button mat-icon-button matSuffix aria-label="Open Time Dialog" (click)="timePicker.open()">
+        <mat-icon>alarm</mat-icon>
+      </button>
       <ngx-material-timepicker #timePicker [minutesGap]="5" [defaultTime]="defaultTime"></ngx-material-timepicker>
     </mat-form-field>
   </div>
