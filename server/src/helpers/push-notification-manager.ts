@@ -1,5 +1,5 @@
 import 'dotenv';
-import { Sender, Message } from 'node-gcm';
+import { Message, Sender } from 'node-gcm';
 import { AppData } from '../entity/app-data.entity';
 import { Notification } from '../entity/notification.entity';
 import { toExternalUrl } from '../helpers/resource-resolver';

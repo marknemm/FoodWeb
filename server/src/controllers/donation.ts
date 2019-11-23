@@ -6,9 +6,10 @@ import { DonationEntity } from '../entity/donation.entity';
 import { ensureSessionActive, ensureAccountVerified } from '../middlewares/session.middleware';
 import { handleError } from '../middlewares/response-error.middleware';
 import { genListResponse } from '../helpers/list-response';
+import { QueryResult } from '../helpers/query-builder-helper';
 import { createDonation, updateDonation } from '../services/save-donation';
 import { claimDonation, unclaimDonation } from '../services/match-donation';
-import { readDonations, DonationsQueryResult, readDonation, readMyDonations } from '../services/read-donations';
+import { readDonations, readDonation, readMyDonations } from '../services/read-donations';
 import { deleteDonation } from '../services/delete-donation';
 import { messagePotentialDeliverers } from '../services/message-potential-deliverers';
 import { findPotentialReceivers, FoundPotentialReceivers } from '../services/find-potential-receivers';
@@ -24,12 +25,14 @@ import { sendDonationUpdateMessages, sendDonationCreateMessages } from '../servi
 import { sendDonationDeleteMessages } from '../services/delete-donation-message';
 import { sendUnclaimMessages, sendClaimMessages } from '../services/match-donation-message';
 import { messagePotentialReceivers } from '../services/message-potential-receivers';
-import { DonationReadRequest } from '../shared';
-import { DonationCreateRequest } from '../shared';
-import { DonationUpdateRequest } from '../shared';
-import { DonationClaimRequest } from '../shared';
-import { DonationUnclaimRequest } from '../shared';
-import { DonationDeleteRequest } from '../shared';
+import {
+  DonationReadRequest,
+  DonationCreateRequest,
+  DonationUpdateRequest,
+  DonationClaimRequest,
+  DonationUnclaimRequest,
+  DonationDeleteRequest
+} from '../shared';
 
 const router = express.Router();
 
@@ -63,8 +66,8 @@ router.post('/claim', ensureSessionActive, ensureAccountVerified, (req: Request,
 router.get('/', (req: Request, res: Response) => {
   const readRequest: DonationReadRequest = req.query;
   readDonations(readRequest)
-    .then((queryResult: DonationsQueryResult) =>
-      res.send(genListResponse(queryResult.donations, queryResult.totalCount, readRequest))
+    .then((queryResult: QueryResult<DonationEntity>) =>
+      res.send(genListResponse(queryResult, readRequest))
     )
     .catch(handleError.bind(this, res));
 });
@@ -72,8 +75,8 @@ router.get('/', (req: Request, res: Response) => {
 router.get('/my', ensureSessionActive, (req: Request, res: Response) => {
   const readRequest: DonationReadRequest = req.query;
   readMyDonations(readRequest, req.session.account)
-    .then((queryResult: DonationsQueryResult) =>
-      res.send(genListResponse(queryResult.donations, queryResult.totalCount, readRequest))
+    .then((queryResult: QueryResult<DonationEntity>) =>
+      res.send(genListResponse(queryResult, readRequest))
     )
     .catch(handleError.bind(this, res));
 });

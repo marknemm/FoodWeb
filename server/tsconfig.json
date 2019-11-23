@@ -7,18 +7,18 @@
       "es6",
       "dom"
     ],
-    "typeRoots": [
-      "./node_modules/@types",
-      "./@types"
-    ],
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es5",
+    "outDir": "./dist/",
     "rootDirs": [
       "./src/",
       "../shared/src/"
     ],
-    "outDir": "./dist/",
-    "sourceMap": true
+    "sourceMap": true,
+    "target": "es5",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./@types"
+    ]
   }
 }

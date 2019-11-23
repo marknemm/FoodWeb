@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
-import { SessionService } from '~web/session/session.service';
-import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
+import { catchError, map } from 'rxjs/operators';
+import { Account, AccountHelper, AppTokenLoginRequest, LoginRequest, LoginResponse } from '~shared';
 import { AlertService } from '~web/alert/alert.service';
-import { Account, AccountHelper, LoginRequest, LoginResponse, AppTokenLoginRequest } from '~shared';
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
+import { SessionService } from '~web/session/session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +46,9 @@ export class AppSessionService extends SessionService {
   login(usernameEmail: string, password: string, goHomeOnSuccess = false): Observable<Account> {
     const loginRequest: LoginRequest = { usernameEmail, password, isApp: true };
     return super._sendLoginRequest(loginRequest).pipe(
-      map((response: LoginResponse) => this._handleLoginSuccess(response, goHomeOnSuccess))
+      map((response: LoginResponse) =>
+        this._handleLoginSuccess(response, goHomeOnSuccess)
+      )
     );
   }
 
@@ -72,10 +74,16 @@ export class AppSessionService extends SessionService {
    * If the user has been logged out on the server, then it emits null.
    */
   protected _handleSessionRefreshResponse(response: LoginResponse): Observable<Account> {
+    if (response.account) {
+      return of(this._handleLoginSuccess(response));
+    }
+
     // Attempt to re-establish session via mobile app session token if logged out on server.
-    return (!response.account && this._appSessionToken)
-      ? this._appTokenLogin(this._appSessionToken)
-      : super._handleSessionRefreshResponse(response);
+    if (this._appSessionToken) {
+      return this._appTokenLogin(this._appSessionToken);
+    }
+    this.logout();
+    return of(null);
   }
 
   /**
@@ -87,7 +95,9 @@ export class AppSessionService extends SessionService {
   private _appTokenLogin(appSessionToken: string): Observable<Account> {
     const loginRequest: AppTokenLoginRequest = { appSessionToken };
     return this._httpClient.post<LoginResponse>(`${this.url}/session-token`, loginRequest, { withCredentials: true }).pipe(
-      map((response: LoginResponse) => this._handleLoginSuccess(response)),
+      map((response: LoginResponse) =>
+        this._handleLoginSuccess(response)
+      ),
       catchError((err: HttpErrorResponse) => {
         console.error(err);
         return of(null);

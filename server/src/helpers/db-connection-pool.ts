@@ -1,4 +1,4 @@
-import { createConnection, Connection } from 'typeorm';
+import { Connection, createConnection } from 'typeorm';
 import path = require('path');
 
 export function initDbConnectionPool(): Promise<Connection> {

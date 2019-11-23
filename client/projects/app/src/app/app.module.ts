@@ -1,29 +1,26 @@
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Device } from '@ionic-native/device/ngx';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { Push } from '@ionic-native/push/ngx';
 import { AppMinimize } from '@ionic-native/app-minimize/ngx';
+import { Device } from '@ionic-native/device/ngx';
+import { Push } from '@ionic-native/push/ngx';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-
+import { AppDataService } from '~app/app-data/app-data.service';
 import { AppRoutingModule } from '~app/app-routing.module';
-import { AppComponent } from '~app/app.component';
-import { MaterialModule } from '~web/material.module';
-import { AppShellModule } from '~web/app-shell.module';
-import { HomeComponent } from '~web/home/home.component';
-import { AboutComponent } from '~web/about/about.component';
-import { HeuristicsModule } from '~web/heuristics.module';
-import { SharedModule } from '~web/shared.module';
-import { EventModule } from '~web/event.module';
-import { IconService } from '~web/icon/icon.service';
-
 import { AppSessionModule } from '~app/app-session.module';
-import { PushNotificationService } from '~app/push-notification/push-notification.service';
-
+import { AppComponent } from '~app/app.component';
 import { JSONDateReviver } from '~shared';
+import { AboutComponent } from '~web/about/about.component';
+import { AppShellModule } from '~web/app-shell.module';
+import { EventModule } from '~web/event.module';
+import { HeuristicsModule } from '~web/heuristics.module';
+import { HomeComponent } from '~web/home/home.component';
+import { IconService } from '~web/icon/icon.service';
+import { MaterialModule } from '~web/material.module';
+import { SharedModule } from '~web/shared.module';
 
 @NgModule({
   declarations: [
@@ -57,12 +54,12 @@ import { JSONDateReviver } from '~shared';
 export class AppModule {
 
   constructor(
+    appDataService: AppDataService,
     iconService: IconService,
-    jsonDateReviver: JSONDateReviver,
-    pushNotificationService: PushNotificationService
+    jsonDateReviver: JSONDateReviver
   ) {
+    appDataService.init();
     iconService.init();
     jsonDateReviver.initJSONDateReviver();
-    pushNotificationService.init();
   }
 }

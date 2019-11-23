@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Device } from '@ionic-native/device/ngx';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { AppSessionService } from '~app/app-session/app-session.service';
 import { environment } from '~app/environment';
-import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
+import { PushNotificationService } from '~app/push-notification/push-notification.service';
 import { AppData, AppDataSaveRequest } from '~shared';
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,20 +26,15 @@ export class AppDataService extends Device {
   private _isVirtual: boolean;
   private _serial: string;
   private _isMobileApp = false;
-  private _pushRegistrationId: string;
   private _accountId: number;
 
   constructor(
     private _httpClient: HttpClient,
-    private _errHandlerService: ErrorHandlerService
+    private _errHandlerService: ErrorHandlerService,
+    private _sessionService: AppSessionService,
+    private _pushNotificationService: PushNotificationService
   ) {
     super();
-    document.addEventListener('deviceready', () => {
-      Object.keys(device).forEach((deviceKey: string) => {
-        this[`_${deviceKey}`] = device[deviceKey];
-      });
-      this._isMobileApp = (this.platform && this.platform !== 'Browser');
-    }, false);
   }
 
   get cordova(): string {
@@ -111,7 +108,7 @@ export class AppDataService extends Device {
    * The push notification client registration ID for the mobile device.
    */
   get pushRegistrationId(): string {
-    return this._pushRegistrationId;
+    return this._pushNotificationService.pushRegistrationId;
   }
 
   /**
@@ -121,35 +118,56 @@ export class AppDataService extends Device {
     return this._accountId;
   }
 
+  init(): void {
+    this._initDeviceProperties();
+    this._setupPushNotifications();
+  }
+
+  private _initDeviceProperties(): void {
+    Object.keys(device).forEach((deviceKey: string) => {
+      this[`_${deviceKey}`] = device[deviceKey];
+    });
+    this._isMobileApp = (this.platform && this.platform !== 'Browser');
+  }
+
+  private _setupPushNotifications(): void {
+    // Only init push notifications if this is a mobile app.
+    if (this.isMobileApp) {
+      this._sessionService.login$.subscribe(() => this._registerPushNotifications());
+      this._sessionService.logout$.subscribe(() => this._unregisterPushNotifications());
+      if (this._sessionService.loggedIn) {
+        this._registerPushNotifications();
+      }
+    }
+  }
+
+  private _registerPushNotifications(): void {
+    this._pushNotificationService.register().subscribe(
+      () => this.saveAppData()
+    );
+  }
+
+  private _unregisterPushNotifications(): void {
+    this._pushNotificationService.unregister();
+    this.deleteAppData();
+  }
+
   /**
    * Saves app data on the server, and associates it with the user's account.
-   * @param appDataMerge The app data that is to be merged with the contained app data in this class before saving.
-   * NOTE: only mutable app data fields may be merged in (pushRegistrationId).
-   * @return An observable that resolves to the saved app data.
+   * @return An observable that emits the saved app data.
    */
-  saveAppData(appDataMerge: Partial<AppData>): Observable<AppData> {
-    const appData: AppData = this._mergeAppData(appDataMerge);
+  saveAppData(): Observable<AppData> {
+    const appData: AppData = this.genAppData();
     const saveReq: AppDataSaveRequest = { appData };
     return this._httpClient.post<AppData>(this.url, saveReq, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errHandlerService.handleError(err)),
       map((appData: AppData) => {
         this._accountId = appData.accountId;
+        // Set this property since we may be in a browser, and the server may have had to generate UUID.
         this._uuid = appData.deviceUuid;
         return appData;
       })
     );
-  }
-
-  /**
-   * Merges given app data with this service's contained data.
-   * @param appDataMerge The app data to merge with this service's contained data.
-   * @return The merged app data.
-   */
-  private _mergeAppData(appDataMerge: Partial<AppData>): AppData {
-    if (appDataMerge.pushRegistrationId) {
-      this._pushRegistrationId = appDataMerge.pushRegistrationId;
-    }
-    return this.genAppData();
   }
 
   /**
@@ -176,7 +194,6 @@ export class AppDataService extends Device {
   deleteAppData(): Observable<void> {
     const accountId: number = this.accountId;
     this._accountId = null;
-    this._pushRegistrationId = null;
     return this._httpClient.delete(`${this.url}/${accountId}/${this.uuid}`, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errHandlerService.handleError(err))
     );

@@ -1,9 +1,8 @@
-import { FoundPotentialReceivers } from './find-potential-receivers';
 import { AccountEntity } from '../entity/account.entity';
 import { broadcastEmail, MailTransporter } from '../helpers/email';
 import { broadcastNotification } from '../helpers/notification';
-import { DonationHelper, Donation } from '../shared';
-import { NotificationType } from '../shared';
+import { Donation, DonationHelper, NotificationType } from '../shared';
+import { FoundPotentialReceivers } from './find-potential-receivers';
 
 const _donationHelper = new DonationHelper();
 

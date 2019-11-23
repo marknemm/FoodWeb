@@ -1,4 +1,4 @@
-import { getConnection, EntityManager } from 'typeorm';
+import { EntityManager, getConnection } from 'typeorm';
 import { EventRegistrationEntity } from '../entity/event-registration.entity';
 import { FoodWebError } from '../helpers/food-web-error';
 import { EventRegistration } from '../shared';

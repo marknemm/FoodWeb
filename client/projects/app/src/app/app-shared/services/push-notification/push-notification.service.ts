@@ -1,21 +1,36 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
-import { Push, PushObject, EventResponse } from '@ionic-native/push/ngx';
-import { AppSessionService } from '~app/app-session/app-session.service'
-import { AppDataService } from '~app/app-data/app-data.service';
+import { Push, PushObject, EventResponse, PushOptions } from '@ionic-native/push/ngx';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PushNotificationService {
 
+  private readonly _pushOpts: PushOptions = {
+    android: {
+      icon: 'notification',
+      iconColor: '#3e2723'
+    },
+    browser: {
+      pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+    },
+    ios: {
+      alert: "true",
+      badge: true,
+      sound: 'false'
+    },
+    windows: {}
+  };
+
   private _pushNotificationClient: PushObject;
+  private _pushRegistrationId: string;
 
   constructor(
     private _zone: NgZone,
     private _router: Router,
-    private _sessionService: AppSessionService,
-    private _appDataService: AppDataService,
     private _push: Push
   ) {}
 
@@ -24,46 +39,20 @@ export class PushNotificationService {
   }
 
   get pushRegistrationId(): string {
-    return this._appDataService.pushRegistrationId;
+    return this._pushRegistrationId;
   }
 
-  init(): void {
-    // Only init if this is a mobile app.
-    if (this._appDataService.isMobileApp) {
-      this._sessionService.login$.subscribe(this._register.bind(this));
-      this._sessionService.logout$.subscribe(this._unregister.bind(this));
-      if (this._sessionService.loggedIn) { this._register(); }
-    }
-  }
-
-  private _register(): void {
+  register(): Observable<string> {
     if (this.isRegistered) return;
-    this._pushNotificationClient = this._push.init({
-      android: {
-        icon: 'notification',
-        iconColor: '#3e2723'
-      },
-      browser: {
-        pushServiceURL: 'http://push.api.phonegap.com/v1/push'
-      },
-      ios: {
-        alert: "true",
-        badge: true,
-        sound: 'false'
-      },
-      windows: {}
-    });
-    this._listenForRegistrationResponse();
+    this._pushNotificationClient = this._push.init(this._pushOpts);
     this._listenForNotifications();
     this._pushNotificationClient.on('error').subscribe(console.error);
-  }
-
-  private _listenForRegistrationResponse(): void {
-    this._pushNotificationClient.on('registration').subscribe((response: EventResponse) =>
-      this._appDataService.saveAppData({
-        pushRegistrationId: response.registrationId
-      }).subscribe()
-    );
+    return this._pushNotificationClient.on('registration').pipe(
+      map((response: EventResponse) => {
+        this._pushRegistrationId = response.registrationId;
+        return response.registrationId;
+      })
+    )
   }
 
   private _listenForNotifications(): void {
@@ -74,12 +63,12 @@ export class PushNotificationService {
     });
   }
 
-  private _unregister(): void {
+  unregister(): void {
     if (this._pushNotificationClient) {
       this._pushNotificationClient.unregister()
         .catch(console.error);
       this._pushNotificationClient = null;
-      this._appDataService.deleteAppData().subscribe();
+      this._pushRegistrationId = null;
     }
   }
 }

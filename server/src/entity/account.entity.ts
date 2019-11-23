@@ -1,21 +1,10 @@
-import {
-  PrimaryGeneratedColumn,
-  Entity,
-  Column,
-  OneToMany,
-  OneToOne,
-  Index,
-  UpdateDateColumn,
-  CreateDateColumn,
-  JoinColumn
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Account, AccountType, Constants } from '../shared';
+import { AppDataEntity } from './app-data.entity';
 import { ContactInfoEntity } from './contact-info.entity';
+import { OperationHoursEntity } from './operation-hours.entity';
 import { OrganizationEntity } from './organization.entity';
 import { VolunteerEntity } from './volunteer-entity';
-import { OperationHoursEntity } from './operation-hours.entity';
-import { Account, AccountType } from '../shared';
-import { Constants } from '../shared';
-import { AppDataEntity } from './app-data.entity';
 export { Account, AccountType };
 
 const _constants = new Constants();

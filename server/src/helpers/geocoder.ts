@@ -1,9 +1,9 @@
 import 'dotenv';
-import NodeGeocoder = require('node-geocoder');
-import { Geocoder, Providers, Query, Entry, Location } from 'node-geocoder';
-import geoTz = require('geo-tz');
-import { FoodWebError } from './food-web-error';
+import { Entry, Geocoder, Location, Providers, Query } from 'node-geocoder';
 import { ContactInfo, GeographyLocation } from '../shared';
+import { FoodWebError } from './food-web-error';
+import NodeGeocoder = require('node-geocoder');
+import geoTz = require('geo-tz');
 export { ContactInfo, GeographyLocation };
 
 const offlineMode = (process.env.OFFLINE_MODE === 'true');

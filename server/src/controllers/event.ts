@@ -1,9 +1,11 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { handleError } from '../middlewares/response-error.middleware';
-import { saveEventRegistration } from '../services/save-event-registration';
-import { readEventRegistrations, EventRegistrationsQueryResult } from '../services/read-event-registrations';
+import { EventRegistrationEntity } from '../entity/event-registration.entity';
 import { genListResponse } from '../helpers/list-response';
+import { QueryResult } from '../helpers/query-builder-helper';
+import { handleError } from '../middlewares/response-error.middleware';
+import { readEventRegistrations } from '../services/read-event-registrations';
+import { saveEventRegistration } from '../services/save-event-registration';
 import { EventRegistrationRequest } from '../shared';
 
 const router = express.Router();
@@ -17,8 +19,8 @@ router.post('/registration', (req: Request, res: Response) => {
 
 router.get('/registration', (req: Request, res: Response) => {
   readEventRegistrations(null) // TODO: Implement filters for event title-date.
-    .then((queryResult: EventRegistrationsQueryResult) =>
-      res.send(genListResponse(queryResult.registrations, queryResult.totalCount, {}))
+    .then((queryResult: QueryResult<EventRegistrationEntity>) =>
+      res.send(genListResponse(queryResult, {}))
     ).catch((err: Error) => handleError(res, err));
 });
 

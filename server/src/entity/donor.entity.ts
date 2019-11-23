@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
-import { OrganizationEntity } from './organization.entity';
+import { Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Donor } from '../shared';
+import { OrganizationEntity } from './organization.entity';
 export { Donor };
 
 @Entity('Donor')

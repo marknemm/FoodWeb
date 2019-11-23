@@ -2,6 +2,34 @@ import { SelectQueryBuilder } from 'typeorm';
 import { PagingParams } from '../shared';
 
 /**
+ * Generic interface used by a model to expose its select query for further modification by an external model.
+ * @param T The type of the entity being queried.
+ * @param R The optional return type of the completed query.
+ */
+export class QueryMod<T, R = QueryResult<T>> {
+
+  constructor(
+    private _queryBuilder: SelectQueryBuilder<T>,
+    private _execFn: (queryBuilder: SelectQueryBuilder<T>) => Promise<R>
+  ) {}
+
+  /**
+   * Uses a given select query mod function to modify a base query that has been exposed by its origin service.
+   * @param modFn The select query mod function.
+   * @return A promise that resolves to the result of executing the modified query.
+   */
+  modQuery(modFn: (queryBuilder: SelectQueryBuilder<T>) => void): Promise<R> {
+    modFn(this._queryBuilder);
+    return this._execFn(this._queryBuilder);
+  }
+}
+
+export interface QueryResult<T> {
+  entities: T[];
+  totalCount: number;
+}
+
+/**
  * Generates simple where clause conditions of the SQL query. Simple conditions have a 1-1 mapping between the given filter parameter names
  * and the given SQL table's properties. If the filter properties are undefined, then they are ignored.
  * @param queryBuilder The query builder to add where clause conditions to.
@@ -107,18 +135,22 @@ export function genTake(pagingParams: PagingParams, defaultLimit = 10): number {
  */
 function _refinePagingParams(pagingParams: PagingParams, defaultLimit: number): PagingParams {
   const pagingParamsCopy = Object.assign({}, pagingParams); // Make copy so we don't modify original.
+
   pagingParamsCopy.limit = (pagingParamsCopy.limit)
     ? _ensureIsNumber(pagingParamsCopy.limit)
     : defaultLimit;
+
   pagingParamsCopy.page = (pagingParamsCopy.page)
     ? _ensureIsNumber(pagingParamsCopy.page)
     : 1;
+
   return pagingParamsCopy;
 }
 
 /**
  * Ensures a given value is of type 'number'. If it is a string, then it is converted to a number.
- * @param value The value.
+ * @param value The value to be converted to a number if not already a number.
+ * @return The numeric value. If it could not be converted to a number, then NaN.
  */
 function _ensureIsNumber(value: string | number): number {
   return (typeof value === 'number') ? value : parseInt(value, 10);

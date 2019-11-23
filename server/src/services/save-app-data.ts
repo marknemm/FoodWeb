@@ -1,7 +1,7 @@
-import { getConnection, EntityManager } from 'typeorm';
-import uuidv5 = require('uuid/v5');
-import { AppDataEntity, AppData } from '../entity/app-data.entity';
+import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
+import { AppData, AppDataEntity } from '../entity/app-data.entity';
+import uuidv5 = require('uuid/v5');
 
 export function saveAppData(appData: AppData, account: AccountEntity): Promise<AppDataEntity> {
   (<AppDataEntity>appData).accountId = account.id;

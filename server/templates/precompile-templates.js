@@ -12,7 +12,7 @@ const distEmailTemplatesPath = path.join(distTemplatesPath, 'email');
 const distEmailPartialsPath = path.join(distEmailTemplatesPath, 'partials');
 
 createTemplatesDistIfNotExist();
-inlineTemplatesCss();
+precompileTemplates();
 
 function createTemplatesDistIfNotExist() {
   mkdirIfNotExist(distTemplatesPath);
@@ -26,7 +26,7 @@ function mkdirIfNotExist(path) {
   }
 }
 
-function inlineTemplatesCss() {
+function precompileTemplates() {
   const inlinesToPerform = genInlinesToPerform();
   inlinesToPerform.forEach(
     (inline) => inlineFileCss(inline.inTmplPath, inline.inCssPath, inline.outTmplPath)

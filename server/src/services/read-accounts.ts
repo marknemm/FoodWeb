@@ -1,16 +1,8 @@
 import { getRepository, SelectQueryBuilder } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { LoginRequiredError } from '../helpers/food-web-error';
-import { genSimpleWhereConditions, genPagination } from '../helpers/query-builder-helper';
-import { OperationHoursHelper } from '../shared';
-import { Account, OperationHours } from '../shared';
-import { AccountReadRequest, AccountReadFilters, AccountReadSort } from '../shared';
-import { AccountHelper } from '../shared';
-
-export interface AccountsQueryResult {
-  accounts: AccountEntity[];
-  totalCount: number;
-}
+import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '../helpers/query-builder-helper';
+import { Account, AccountHelper, AccountReadFilters, AccountReadRequest, OperationHours, OperationHoursHelper } from '../shared';
 
 const _accountHelper = new AccountHelper();
 const _opHoursHelper = new OperationHoursHelper();
@@ -19,7 +11,7 @@ export function readAccount(idOrUsername: number | string, myAccount?: Account):
   return _readAccount(idOrUsername, myAccount, false);
 }
 
-export function readAccounts(request: AccountReadRequest, myAccount: Account): Promise<AccountsQueryResult> {
+export function readAccounts(request: AccountReadRequest, myAccount: Account): Promise<QueryResult<AccountEntity>> {
   return _readAccounts(request, myAccount, false);
 }
 
@@ -27,8 +19,16 @@ export function readFullAccount(idOrUsername: number | string, myAccount?: Accou
   return _readAccount(idOrUsername, myAccount, true);
 }
 
-export function readFullAccounts(request: AccountReadRequest, myAccount: Account): Promise<AccountsQueryResult> {
+export function readFullAccounts(request: AccountReadRequest, myAccount: Account): Promise<QueryResult<AccountEntity>> {
   return _readAccounts(request, myAccount, true);
+}
+
+export function queryAccounts(request: AccountReadRequest, myAccount?: Account): QueryMod<AccountEntity, QueryResult<AccountEntity>> {
+  const queryBuilder: SelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
+  return new QueryMod<AccountEntity, QueryResult<AccountEntity>>(
+    queryBuilder,
+    () => _execAccountQuery(queryBuilder, myAccount, false)
+  );
 }
 
 async function _readAccount(idOrUsername: number | string, myAccount: Account, fullAccount: boolean): Promise<AccountEntity> {
@@ -36,22 +36,30 @@ async function _readAccount(idOrUsername: number | string, myAccount: Account, f
   (typeof idOrUsername === 'number')
     ? readRequest.id = idOrUsername
     : readRequest.username = idOrUsername;
-  const queryResult: AccountsQueryResult = await _readAccounts(readRequest, myAccount, fullAccount);
-  return queryResult.accounts[0];
+  const queryResult: QueryResult<AccountEntity> = await _readAccounts(readRequest, myAccount, fullAccount);
+  return queryResult.entities[0];
 }
 
-async function _readAccounts(request: AccountReadRequest, myAccount: Account, fullAccount: boolean): Promise<AccountsQueryResult> {
+function _readAccounts(request: AccountReadRequest, myAccount: Account, fullAccount: boolean): Promise<QueryResult<AccountEntity>> {
   const queryBuilder: SelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
+  return _execAccountQuery(queryBuilder, myAccount, fullAccount);
+}
+
+async function _execAccountQuery(
+  queryBuilder: SelectQueryBuilder<AccountEntity>,
+  myAccount: Account,
+  fullAccount: boolean
+): Promise<QueryResult<AccountEntity>> {
   const [accounts, totalCount]: [AccountEntity[], number] = await queryBuilder.getManyAndCount();
   _postProcessAccounts(accounts, myAccount, fullAccount);
-  return { accounts, totalCount };
+  return { entities: accounts, totalCount };
 }
 
 function _buildQuery(request: AccountReadRequest, myAccount: Account): SelectQueryBuilder<AccountEntity> {
   let queryBuilder: SelectQueryBuilder<AccountEntity> = getRepository(AccountEntity).createQueryBuilder('account');
   queryBuilder = _genJoins(queryBuilder);
   queryBuilder = _genWhereCondition(queryBuilder, request, myAccount);
-  queryBuilder = _genOrdering(queryBuilder, request);
+  queryBuilder = _genOrdering(queryBuilder);
   queryBuilder = genPagination(queryBuilder, request);
   return queryBuilder;
 }
@@ -130,8 +138,7 @@ function _genDistanceCondition(
 }
 
 function _genOrdering(
-  queryBuilder: SelectQueryBuilder<AccountEntity>,
-  sort: AccountReadSort
+  queryBuilder: SelectQueryBuilder<AccountEntity>
 ): SelectQueryBuilder<AccountEntity> {
   return queryBuilder
     .addOrderBy('organization.organizationName', 'ASC')

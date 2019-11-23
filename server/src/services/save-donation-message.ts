@@ -1,5 +1,5 @@
-import { UpdateDiff } from '../interfaces/update-diff';
 import { MailTransporter, sendEmail } from '../helpers/email';
+import { UpdateDiff } from '../interfaces/update-diff';
 import { Donation } from '../shared';
 
 /**

@@ -1,25 +1,18 @@
 import { getRepository, Repository, SelectQueryBuilder } from 'typeorm';
-import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
-import { genSimpleWhereConditions, genPagination } from '../helpers/query-builder-helper';
-import { OperationHoursHelper } from '../shared';
-import { DonationReadRequest, DonationReadFilters } from '../shared';
-import { Validation } from '../shared';
-
-export interface DonationsQueryResult {
-  donations: DonationEntity[];
-  totalCount: number;
-}
+import { DonationEntity } from '../entity/donation.entity';
+import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '../helpers/query-builder-helper';
+import { DonationReadFilters, DonationReadRequest, OperationHoursHelper, Validation } from '../shared';
 
 const _opHoursHelper = new OperationHoursHelper();
 
 export async function readDonation(id: number, donationRepo?: Repository<DonationEntity>): Promise<DonationEntity> {
   const readRequest: DonationReadRequest = { id, page: 1, limit: 1 };
-  const queryResult: DonationsQueryResult = await readDonations(readRequest, donationRepo);
-  return queryResult.donations[0];
+  const queryResult: QueryResult<DonationEntity> = await readDonations(readRequest, donationRepo);
+  return queryResult.entities[0];
 }
 
-export function readMyDonations(request: DonationReadRequest, myAccount: AccountEntity): Promise<DonationsQueryResult> {
+export function readMyDonations(request: DonationReadRequest, myAccount: AccountEntity): Promise<QueryResult<DonationEntity>> {
   _fillMyAccountRequestFilter(request, myAccount);
   return readDonations(request);
 }
@@ -45,14 +38,27 @@ function _fillMyAccountRequestFilter(request: DonationReadRequest, myAccount: Ac
   // Else, 'Admin' account type owns all accounts.
 }
 
-export async function readDonations(
+export function readDonations(
   request: DonationReadRequest,
   donationRepo: Repository<DonationEntity> = getRepository(DonationEntity)
-): Promise<DonationsQueryResult> {
+): Promise<QueryResult<DonationEntity>> {
   const queryBuilder: SelectQueryBuilder<DonationEntity> = _buildQuery(donationRepo, request);
+  return _execDonationQuery(queryBuilder);
+}
+
+export function queryDonations(request: DonationReadRequest): QueryMod<DonationEntity> {
+  const donationRepo: Repository<DonationEntity> = getRepository(DonationEntity);
+  const queryBuilder: SelectQueryBuilder<DonationEntity> = _buildQuery(donationRepo, request);
+  return new QueryMod<DonationEntity>(
+    queryBuilder,
+    () => _execDonationQuery(queryBuilder)
+  );
+}
+
+async function _execDonationQuery(queryBuilder: SelectQueryBuilder<DonationEntity>): Promise<QueryResult<DonationEntity>> {
   const [donations, totalCount]: [DonationEntity[], number] = await queryBuilder.getManyAndCount();
   _postProcessDonations(donations);
-  return { donations, totalCount };
+  return { entities: donations, totalCount };
 }
 
 function _buildQuery(donationRepo: Repository<DonationEntity>, request: DonationReadRequest): SelectQueryBuilder<DonationEntity> {
@@ -138,14 +144,6 @@ function _genDeliveryWindowConditions(
       'delivery.pickupWindowStart <= :latestDeliveryWindowStart',
       { latestDeliveryWindowStart: filters.latestDeliveryWindowStart }
     );
-  }
-  if (filters.remainingTimeRatioUntilDelivery) {
-    queryBuilder = queryBuilder.andWhere(`
-      (
-        EXTRACT(EPOCH FROM (now() - donation.createTimestamp))::DECIMAL
-        / ABS(EXTRACT(EPOCH FROM (donation.pickupWindowStart - donation.createTimestamp)))::DECIMAL
-      ) >= :elapsedTimeRatio
-    `, { elapsedTimeRatio: (1 - filters.remainingTimeRatioUntilDelivery) });
   }
   return queryBuilder;
 }

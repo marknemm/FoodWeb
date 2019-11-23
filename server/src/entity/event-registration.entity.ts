@@ -1,7 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, Index, UpdateDateColumn, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
-import { AccountEntity } from './account.entity';
-import { DeliveryEntity } from './delivery-entity';
+import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { EventRegistration } from '../shared';
+import { AccountEntity } from './account.entity';
 
 @Entity('EventRegistration')
 export class EventRegistrationEntity implements EventRegistration {

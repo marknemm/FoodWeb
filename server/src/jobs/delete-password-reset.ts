@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 require('./jobs-config');
-import { EntityManager, LessThanOrEqual, Connection } from 'typeorm';
-import { initDbConnectionPool } from '../helpers/db-connection-pool';
+import { Connection, EntityManager, LessThanOrEqual } from 'typeorm';
 import { PasswordResetEntity } from '../entity/password-reset';
+import { initDbConnectionPool } from '../helpers/db-connection-pool';
 
 _deletePasswordReset()
   .then(() => process.exit())

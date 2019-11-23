@@ -1,9 +1,9 @@
-import { getConnection, EntityManager } from 'typeorm';
-import { UpdateDiff } from '../interfaces/update-diff';
-import { NotificationEntity } from '../entity/notification.entity';
+import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
-import { Notification } from '../shared';
+import { NotificationEntity } from '../entity/notification.entity';
 import { FoodWebError } from '../helpers/food-web-error';
+import { UpdateDiff } from '../interfaces/update-diff';
+import { Notification } from '../shared';
 
 /**
  * Creates a NotificationEntity and saves it in the database.

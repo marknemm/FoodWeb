@@ -1,16 +1,14 @@
-import { getConnection, EntityManager, Repository, QueryFailedError } from 'typeorm';
-import { createUnverifiedAccount } from './account-verification';
-import { savePassword } from './save-password';
-import { UpdateDiff } from '../interfaces/update-diff';
+import { EntityManager, getConnection, QueryFailedError, Repository } from 'typeorm';
+import { AccountEntity } from '../entity/account.entity';
+import { OperationHoursEntity } from '../entity/operation-hours.entity';
+import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { FoodWebError } from '../helpers/food-web-error';
 import { geocode, geoTimezone } from '../helpers/geocoder';
-import { AccountEntity } from '../entity/account.entity';
-import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
-import { OperationHoursEntity } from '../entity/operation-hours.entity';
 import { AccountUpdateRequest } from '../interfaces/account/account-update-request';
-import { AccountHelper, Account } from '../shared';
-import { OperationHoursHelper, OperationHours } from '../shared';
-import { AccountCreateRequest } from '../shared';
+import { UpdateDiff } from '../interfaces/update-diff';
+import { Account, AccountCreateRequest, AccountHelper, OperationHours, OperationHoursHelper } from '../shared';
+import { createUnverifiedAccount } from './account-verification';
+import { savePassword } from './save-password';
 
 /**
  * Data generated when creating a new account.

@@ -1,11 +1,9 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { AccountEntity } from '../entity/account.entity';
-import { login, appTokenLogin, logout, saveAppSessionToken } from '../services/session';
 import { handleError } from '../middlewares/response-error.middleware';
-import { LoginRequest } from '../shared';
-import { LoginResponse } from '../shared';
-import { AppTokenLoginRequest } from '../shared';
+import { appTokenLogin, login, logout, saveAppSessionToken } from '../services/session';
+import { AppTokenLoginRequest, LoginRequest, LoginResponse } from '../shared';
 
 const router = express.Router();
 

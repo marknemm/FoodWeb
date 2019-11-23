@@ -1,5 +1,5 @@
-import { MailTransporter, sendEmail } from '../helpers/email';
 import { AccountEntity } from '../entity/account.entity';
+import { MailTransporter, sendEmail } from '../helpers/email';
 
 export async function sendPasswordResetEmail(account: AccountEntity, resetToken: string): Promise<AccountEntity> {
   return _sendPasswordResetEmail(account, resetToken);

@@ -1,9 +1,9 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { AppSessionService } from '~app/app-session/app-session.service';
 import { SessionModule } from '~web/session.module';
 import { SessionService } from '~web/session/session.service';
 
-import { AppSessionService } from '~app/app-session/app-session.service';
 
 @NgModule({
   declarations: [],

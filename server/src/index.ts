@@ -4,8 +4,9 @@ import forceHttps = require('express-force-https');
 import bodyParser = require('body-parser');
 import multer = require('multer');
 import path = require('path');
+
+import { Application, Request, Response } from 'express';
 import 'reflect-metadata';
-import { Request, Response } from 'express';
 import { JSONDateReviver } from './shared';
 
 // Set important paths in global.
@@ -29,12 +30,11 @@ if (!PRODUCTION && !QA) {
   }
 }
 
-// Our session middleware and controllers that will handle requests after this router hands off the data to them.
-import { Application } from 'express';
+// These must be imported after loading .env into process since they require access to environment variables.
+import { initDbConnectionPool } from './helpers/db-connection-pool';
 import { cors } from './middlewares/cors.middleware';
 import { recaptcha } from './middlewares/recaptcha.middleware';
 import { session } from './middlewares/session.middleware';
-import { initDbConnectionPool } from './helpers/db-connection-pool';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();

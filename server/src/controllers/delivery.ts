@@ -1,28 +1,26 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { UpdateDiff } from '../interfaces/update-diff';
 import { DonationEntity } from '../entity/donation.entity';
-import { ensureSessionActive, ensureAccountVerified } from '../middlewares/session.middleware';
-import { handleError } from '../middlewares/response-error.middleware';
 import { genListResponse } from '../helpers/list-response';
-import { DonationsQueryResult } from '../services/read-donations';
-import { readUnscheduledDeliveries, readMyDeliveries, readDeliveries } from '../services/read-deliveries';
+import { QueryResult } from '../helpers/query-builder-helper';
+import { UpdateDiff } from '../interfaces/update-diff';
+import { handleError } from '../middlewares/response-error.middleware';
+import { ensureAccountVerified, ensureSessionActive } from '../middlewares/session.middleware';
+import { readDeliveries, readMyDeliveries, readUnscheduledDeliveries } from '../services/read-deliveries';
+import { saveDeliveryAdvanceAudit, saveDeliveryScheduleAudit, saveDeliveryUndoAudit } from '../services/save-delivery-audit';
 import { scheduleDelivery } from '../services/schedule-delivery';
-import { advanceDeliveryState, undoDeliveryState } from '../services/update-delivery-state';
-import { saveDeliveryScheduleAudit, saveDeliveryAdvanceAudit, saveDeliveryUndoAudit } from '../services/save-delivery-audit';
-import { sendDeliveryStateUndoMessages, sendDeliveryStateAdvancedMessages } from '../services/update-delivery-state-message';
 import { sendDeliveryScheduledMessages } from '../services/schedule-delivery-message';
-import { DeliveryReadRequest } from '../shared';
-import { DeliveryScheduleRequest } from '../shared';
-import { DeliveryStateChangeRequest } from '../shared';
+import { advanceDeliveryState, undoDeliveryState } from '../services/update-delivery-state';
+import { sendDeliveryStateAdvancedMessages, sendDeliveryStateUndoMessages } from '../services/update-delivery-state-message';
+import { DeliveryReadRequest, DeliveryScheduleRequest, DeliveryStateChangeRequest } from '../shared';
 
 const router = express.Router();
 
 router.get('/unscheduled', (req: Request, res: Response) => {
   const readRequest: DeliveryReadRequest = req.query;
   readUnscheduledDeliveries(readRequest, req.session.account)
-    .then((queryResult: DonationsQueryResult) =>
-      res.send(genListResponse(queryResult.donations, queryResult.totalCount, readRequest))
+    .then((queryResult: QueryResult<DonationEntity>) =>
+      res.send(genListResponse(queryResult, readRequest))
     )
     .catch(handleError.bind(this, res));
 });
@@ -30,8 +28,8 @@ router.get('/unscheduled', (req: Request, res: Response) => {
 router.get('/my', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const readRequest: DeliveryReadRequest = req.query;
   readMyDeliveries(readRequest, req.session.account)
-    .then((queryResult: DonationsQueryResult) =>
-      res.send(genListResponse(queryResult.donations, queryResult.totalCount, readRequest))
+    .then((queryResult: QueryResult<DonationEntity>) =>
+      res.send(genListResponse(queryResult, readRequest))
     )
     .catch(handleError.bind(this, res));
 });
@@ -39,8 +37,8 @@ router.get('/my', ensureSessionActive, ensureAccountVerified, (req: Request, res
 router.get('/', (req: Request, res: Response) => {
   const readRequest: DeliveryReadRequest = req.query;
   readDeliveries(readRequest, req.session.account)
-    .then((queryResult: DonationsQueryResult) =>
-      res.send(genListResponse(queryResult.donations, queryResult.totalCount, readRequest))
+    .then((queryResult: QueryResult<DonationEntity>) =>
+      res.send(genListResponse(queryResult, readRequest))
     )
     .catch(handleError.bind(this, res));
 });

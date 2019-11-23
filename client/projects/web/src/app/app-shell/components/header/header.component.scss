@@ -34,6 +34,7 @@ header {
       .site-icon {
         height: calc(100% - 15px);
         width: auto;
+        margin-left: -1px;
         image-rendering: -moz-crisp-edges;
         image-rendering: -o-crisp-edges;
         image-rendering: -webkit-optimize-contrast;
@@ -125,6 +126,8 @@ header {
         display: inline-block;
         right: 0;
         height: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
         padding-right: inherit;
   
         > span,

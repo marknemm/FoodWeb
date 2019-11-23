@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 require('./jobs-config');
-import { DonationEntity, DonationStatus } from '../entity/donation.entity';
+import { SelectQueryBuilder } from 'typeorm';
 import { AccountEntity, AccountType } from '../entity/account.entity';
-import { AccountsQueryResult, readAccounts } from '../services/read-accounts';
-import { readDonations, DonationsQueryResult } from '../services/read-donations';
-import { claimDonation } from '../services/match-donation';
-import { findPotentialDeliverers, FoundPotentialDeliverers } from '../services/find-potential-deliverers';
-import { messagePotentialDeliverers } from '../services/message-potential-deliverers';
+import { DonationEntity, DonationStatus } from '../entity/donation.entity';
 import { initDbConnectionPool } from '../helpers/db-connection-pool';
 import { MailTransporter, sendEmail } from '../helpers/email';
 import { NotificationType, sendNotification } from '../helpers/notification';
-import { DonationReadRequest } from '../shared';
-import { AccountReadRequest } from '../shared';
-import { DonationHelper } from '../shared';
+import { QueryResult } from '../helpers/query-builder-helper';
+import { findPotentialDeliverers, FoundPotentialDeliverers } from '../services/find-potential-deliverers';
+import { claimDonation } from '../services/match-donation';
+import { messagePotentialDeliverers } from '../services/message-potential-deliverers';
+import { queryAccounts } from '../services/read-accounts';
+import { queryDonations } from '../services/read-donations';
+import { AccountReadRequest, DonationHelper, DonationReadRequest } from '../shared';
 
 const _donationHelper = new DonationHelper();
 
@@ -38,13 +38,30 @@ async function _autoAssignDonations(): Promise<void> {
     const readRequest: DonationReadRequest = {
       page: page++,
       limit,
-      donationStatus: DonationStatus.Unmatched,
-      remainingTimeRatioUntilDelivery: 0.2
+      donationStatus: DonationStatus.Unmatched
     };
-    const queryResult: DonationsQueryResult = await readDonations(readRequest);
-    await _autoAssignReceivers(queryResult.donations);
+    const queryResult: QueryResult<DonationEntity> = await queryDonations(readRequest)
+      .modQuery(_addElapsedTimeFilter);
+    await _autoAssignReceivers(queryResult.entities);
     totalDonations = queryResult.totalCount;
   }
+}
+
+/**
+ * Adds an elapsed time filter to a given DonationEntity select query builder.
+ * The filter will only select donations that have a pickup window start time within one hour of the current time,
+ * or have had 80% of the duration of time between donation creation and pickup window start elapsed.
+ * @param queryBuilder The select query builder to add the filter to.
+ */
+function _addElapsedTimeFilter(queryBuilder: SelectQueryBuilder<DonationEntity>): void {
+  queryBuilder = queryBuilder.andWhere(`(
+    EXTRACT(EPOCH FROM (donation.pickupWindowStart - now()))::DECIMAL <= 3600000
+    OR (
+      EXTRACT(EPOCH FROM (now() - donation.createTimestamp))::DECIMAL
+      / ABS(EXTRACT(EPOCH FROM (donation.pickupWindowStart - donation.createTimestamp)))::DECIMAL
+      >= 0.8
+    )
+  )`);
 }
 
 /**
@@ -83,11 +100,16 @@ async function _findAutoReceiver(donation: DonationEntity): Promise<AccountEntit
     operationHoursRange: {
       startDateTime: donation.pickupWindowStart,
       endDateTime: donation.pickupWindowEnd
-    },
-    sortNumAssociatedDonations: 'ASC'
+    }
   };
-  const queryResult: AccountsQueryResult = await readAccounts(readRequest, donation.donorAccount);
-  return queryResult.accounts[0];
+  const queryResult: QueryResult<AccountEntity> = await queryAccounts(readRequest, donation.donorAccount)
+    .modQuery((queryBuilder: SelectQueryBuilder<AccountEntity>) => {
+      // Override ORDER BY clause to sort receivers by the number of donations that they have received (in ASC order).
+      // We want to auto-assign donations to receivers that have gotten the fewest donations thus-far.
+      queryBuilder.loadRelationCountAndMap('count', 'donation.receiverAccount', 'receivedDonations');
+      queryBuilder.orderBy('receivedDonations.count', 'ASC');
+    });
+  return queryResult.entities[0];
 }
 
 /**

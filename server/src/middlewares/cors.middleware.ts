@@ -1,6 +1,6 @@
+import { CorsOptions } from 'cors';
 import 'dotenv';
 import { RequestHandler } from 'express';
-import { CorsOptions } from 'cors';
 import { FoodWebError } from '../helpers/food-web-error';
 import corsInit = require('cors');
 

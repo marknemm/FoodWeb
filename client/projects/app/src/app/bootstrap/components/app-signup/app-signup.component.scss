@@ -2,10 +2,17 @@
 
 .app-signup-container {
   background-color: $content-background;
-  height: 100%;
-  overflow-y: auto;
+  min-height: 100vh;
 
   .app-signup-content {
     padding: 10px 10px 30px;
+
+    .login-link {
+      margin-top: 10px;
+
+      &.align-right {
+        margin-top: 20px;
+      }
+    }
   }
 }

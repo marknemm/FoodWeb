@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, OneToOne, Column, JoinColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { AccountEntity } from './account.entity';
 
 @Entity('UnverifiedAccount')

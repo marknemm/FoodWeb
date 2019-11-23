@@ -1,8 +1,7 @@
-import { readAccounts, AccountsQueryResult } from './read-accounts';
 import { AccountEntity } from '../entity/account.entity';
-import { AccountType } from '../shared';
-import { Donation } from '../shared';
-import { AccountReadRequest } from '../shared';
+import { QueryResult } from '../helpers/query-builder-helper';
+import { AccountReadRequest, AccountType, Donation } from '../shared';
+import { readAccounts } from './read-accounts';
 
 export interface FoundPotentialReceivers {
   donation: Donation;
@@ -27,6 +26,6 @@ export async function findPotentialReceivers(donation: Donation): Promise<FoundP
       endDateTime: donation.pickupWindowEnd
     }
   };
-  const queryResult: AccountsQueryResult = await readAccounts(readRequest, donation.donorAccount);
-  return { donation, potentialReceivers: queryResult.accounts };
+  const queryResult: QueryResult<AccountEntity> = await readAccounts(readRequest, donation.donorAccount);
+  return { donation, potentialReceivers: queryResult.entities };
 }

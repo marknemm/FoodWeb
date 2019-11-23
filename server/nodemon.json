@@ -1,5 +1,5 @@
 {
   "events": {
-    "start": "npm run inline-css"
+    "start": "npm run precompile-templates"
   }
 }

@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 require('./jobs-config');
-import { DonationEntity } from '../entity/donation.entity';
 import { AccountEntity } from '../entity/account.entity';
-import { readDonations, DonationsQueryResult } from '../services/read-donations';
+import { DonationEntity } from '../entity/donation.entity';
 import { initDbConnectionPool } from '../helpers/db-connection-pool';
 import { broadcastEmail, MailTransporter } from '../helpers/email';
 import { broadcastNotification, NotificationType } from '../helpers/notification';
-import { DonationReadRequest } from '../shared';
-import { DateTimeHelper } from '../shared';
-import { DonationHelper } from '../shared';
+import { QueryResult } from '../helpers/query-builder-helper';
+import { readDonations } from '../services/read-donations';
+import { DateTimeHelper, DonationHelper, DonationReadRequest } from '../shared';
 
 const _reminderIntervalMins = 10; // Job will be scheduled to run every 10 minutes.
 const _dateTimeHelper = new DateTimeHelper();
@@ -41,8 +40,8 @@ async function _sendDeliveryReminders(): Promise<void> {
         earliestDeliveryWindowStart,
         latestDeliveryWindowStart
       };
-      const queryResult: DonationsQueryResult = await readDonations(readRequest);
-      await _sendAllDeliveryReminderMessages(queryResult.donations, hour);
+      const queryResult: QueryResult<DonationEntity> = await readDonations(readRequest);
+      await _sendAllDeliveryReminderMessages(queryResult.entities, hour);
       totalDonations = queryResult.totalCount;
     }
   }

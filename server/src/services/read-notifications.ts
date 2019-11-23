@@ -1,17 +1,7 @@
-import { getRepository, FindConditions, In, MoreThan } from 'typeorm';
+import { FindConditions, getRepository, In, MoreThan } from 'typeorm';
 import { NotificationEntity } from '../entity/notification.entity';
-import { Account } from '../shared';
-import { Notification, NotificationType } from '../shared';
-import { NotificationReadRequest, NotificationReadFilters } from '../shared';
-
-/**
- * The result of a query for notifications.
- * Contains the retrieved notifications & the total count of all notifications available for the user.
- */
-export interface NotificationsQueryResult {
-  notifications: Notification[];
-  totalCount: number;
-}
+import { QueryResult } from '../helpers/query-builder-helper';
+import { Account, NotificationReadFilters, NotificationReadRequest, NotificationType } from '../shared';
 
 /**
  * Reads notifications from the database.
@@ -19,14 +9,14 @@ export interface NotificationsQueryResult {
  * @param myAccount The account of the current user.
  * @return A promise that resolves to the notifications query result.
  */
-export async function readNotifications(request: NotificationReadRequest, myAccount: Account): Promise<NotificationsQueryResult> {
+export async function readNotifications(request: NotificationReadRequest, myAccount: Account): Promise<QueryResult<NotificationEntity>> {
   const [notifications, totalCount]: [NotificationEntity[], number] = await getRepository(NotificationEntity).findAndCount({
     where: _genFindConditions(request, myAccount),
     skip: request.page && request.limit ? (request.page - 1) * request.limit : 0,
     take: request.limit ? request.limit : 10,
     order: { flagged: 'DESC', id: 'DESC' } // Get flagged & latest notifications first.
   });
-  return { notifications, totalCount };
+  return { entities: notifications, totalCount };
 }
 
 /**

@@ -1,8 +1,8 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { readGeneralStats } from '../services/read-general-stats';
 import { GeneralStats } from '../interfaces/heuristics/general-stats';
 import { handleError } from '../middlewares/response-error.middleware';
+import { readGeneralStats } from '../services/read-general-stats';
 
 const router = express.Router();
 

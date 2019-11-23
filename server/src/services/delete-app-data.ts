@@ -1,4 +1,4 @@
-import { getConnection, EntityManager } from 'typeorm';
+import { EntityManager, getConnection } from 'typeorm';
 import { AppDataEntity } from '../entity/app-data.entity';
 
 export function deleteAppData(accountId: number, deviceUuid: string): Promise<AppDataEntity> {

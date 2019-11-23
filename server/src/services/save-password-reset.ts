@@ -1,11 +1,12 @@
-import { EntityManager, getRepository, getConnection } from 'typeorm';
 import { randomBytes } from 'crypto';
-import { readAccount, AccountsQueryResult, readAccounts } from './read-accounts';
-import { savePassword } from './save-password';
+import { EntityManager, getConnection, getRepository } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordResetEntity } from '../entity/password-reset';
 import { FoodWebError } from '../helpers/food-web-error';
+import { QueryResult } from '../helpers/query-builder-helper';
 import { PasswordResetRequest } from '../shared';
+import { readAccount, readAccounts } from './read-accounts';
+import { savePassword } from './save-password';
 
 /**
  * Creates and saves a password reset (token) entry for a specified user.
@@ -28,14 +29,14 @@ export async function savePasswordResetToken(usernameEmail: string): Promise<Pas
  */
 async function _findAccount(usernameEmail: string): Promise<AccountEntity> {
   // Try to get account via email match.
-  const queryResult: AccountsQueryResult = await readAccounts({ email: usernameEmail, page: 1, limit: 2 }, null);
+  const queryResult: QueryResult<AccountEntity> = await readAccounts({ email: usernameEmail, page: 1, limit: 2 }, null);
   if (queryResult.totalCount > 1) {
     throw new FoodWebError('Cannot get a unique account with the given email. Try a username instead.');
   }
 
   // If email match didn't work, then try to get account via username match.
   const account: AccountEntity = (queryResult.totalCount === 1)
-    ? queryResult.accounts[0]
+    ? queryResult.entities[0]
     : await readAccount(usernameEmail);
   if (!account) {
     throw new FoodWebError('Account not found. Be sure to enter a valid username.');

@@ -1,7 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
-import { DonationEntity } from './donation.entity';
-import { AccountEntity } from './account.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Delivery } from '../shared';
+import { AccountEntity } from './account.entity';
+import { DonationEntity } from './donation.entity';
 
 @Entity('Delivery')
 export class DeliveryEntity implements Delivery {

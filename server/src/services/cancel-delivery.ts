@@ -1,10 +1,9 @@
 import { EntityManager, getConnection } from 'typeorm';
-import { DeliveryEntity } from '../entity/delivery-entity';
 import { AccountEntity } from '../entity/account.entity';
+import { DeliveryEntity } from '../entity/delivery-entity';
 import { DonationEntity } from '../entity/donation.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { Donation, DonationStatus } from '../shared';
-import { DonationHelper } from '../shared';
+import { Donation, DonationHelper, DonationStatus } from '../shared';
 
 const _donationHelper = new DonationHelper();
 

@@ -1,7 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Constants, Notification, NotificationType } from '../shared';
 import { AccountEntity } from './account.entity';
-import { Notification, NotificationType } from '../shared';
-import { Constants } from '../shared';
 export { Notification, NotificationType };
 
 const _constants = new Constants();

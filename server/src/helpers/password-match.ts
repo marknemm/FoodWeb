@@ -1,5 +1,5 @@
-import { getRepository } from 'typeorm';
 import { compare } from 'bcrypt';
+import { getRepository } from 'typeorm';
 import { PasswordEntity } from '../entity/password.entity';
 import { Account } from '../shared';
 

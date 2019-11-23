@@ -1,9 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, Index, UpdateDateColumn, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Constants, Donation, DonationStatus } from '../shared';
 import { AccountEntity } from './account.entity';
 import { ContactInfoEntity } from './contact-info.entity';
 import { DeliveryEntity } from './delivery-entity';
-import { Donation, DonationStatus } from '../shared';
-import { Constants } from '../shared';
 export { Donation, DonationStatus };
 
 const _constants = new Constants();

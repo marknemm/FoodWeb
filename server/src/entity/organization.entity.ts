@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
-import { AccountEntity } from './account.entity';
-import { ReceiverEntity } from './receiver.entity';
-import { DonorEntity } from './donor.entity';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Organization } from '../shared';
+import { AccountEntity } from './account.entity';
+import { DonorEntity } from './donor.entity';
+import { ReceiverEntity } from './receiver.entity';
 
 @Entity('Organization')
 export class OrganizationEntity implements Organization {

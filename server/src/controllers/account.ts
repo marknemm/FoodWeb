@@ -1,27 +1,23 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { UpdateDiff } from '../interfaces/update-diff';
-import { genListResponse } from '../helpers/list-response';
-import { ensureSessionActive } from '../middlewares/session.middleware';
-import { handleError } from '../middlewares/response-error.middleware';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordResetEntity } from '../entity/password-reset';
-import { createAccount, updateAccount, NewAccountData } from '../services/save-account';
 import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
-import { updatePassword } from '../services/save-password';
-import { readAccounts, AccountsQueryResult, readAccount } from '../services/read-accounts';
-import { verifyAccount, recreateUnverifiedAccount } from '../services/account-verification';
-import { savePasswordResetToken, resetPassword } from '../services/save-password-reset';
-import { saveAudit, AuditEventType, saveUpdateAudit } from '../services/save-audit';
-import { sendUsernameRecoveryEmail } from '../services/username-recovery-message';
+import { genListResponse } from '../helpers/list-response';
+import { QueryResult } from '../helpers/query-builder-helper';
+import { UpdateDiff } from '../interfaces/update-diff';
+import { handleError } from '../middlewares/response-error.middleware';
+import { ensureSessionActive } from '../middlewares/session.middleware';
+import { recreateUnverifiedAccount, verifyAccount } from '../services/account-verification';
+import { sendAccountVerificationEmail, sendAccountVerificationMessage } from '../services/account-verification-message';
 import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '../services/password-reset-message';
-import { sendAccountVerificationMessage, sendAccountVerificationEmail } from '../services/account-verification-message';
-import { AccountCreateRequest, Account } from '../shared';
-import { AccountUpdateRequest } from '../shared';
-import { PasswordUpdateRequest } from '../shared';
-import { AccountReadRequest } from '../shared';
-import { PasswordResetRequest } from '../shared';
-import { AccountVerificationRequest } from '../shared';
+import { readAccount, readAccounts } from '../services/read-accounts';
+import { createAccount, NewAccountData, updateAccount } from '../services/save-account';
+import { AuditEventType, saveAudit, saveUpdateAudit } from '../services/save-audit';
+import { updatePassword } from '../services/save-password';
+import { resetPassword, savePasswordResetToken } from '../services/save-password-reset';
+import { sendUsernameRecoveryEmail } from '../services/username-recovery-message';
+import { Account, AccountCreateRequest, AccountReadRequest, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest } from '../shared';
 
 const router = express.Router();
 
@@ -77,7 +73,7 @@ router.put('/reset-password/', (req: Request, res: Response) => {
 router.get('/recover-username', (req: Request, res: Response) => {
   const email: string = req.query.email;
   readAccounts({ email, page: 0, limit: 1000 }, null)
-    .then((queryResult: AccountsQueryResult) => sendUsernameRecoveryEmail(queryResult.accounts))
+    .then((queryResult: QueryResult<AccountEntity>) => sendUsernameRecoveryEmail(queryResult.entities))
     .then(() => res.send())
     .catch(handleError.bind(this, res));
 });
@@ -112,8 +108,8 @@ router.get('/', (req: Request, res: Response) => {
   const readRequest: AccountReadRequest = req.query;
   const myAccount: Account = (req.session ? req.session.account : null);
   readAccounts(readRequest, myAccount)
-    .then(({ accounts, totalCount }: AccountsQueryResult) =>
-      res.send(genListResponse(accounts, totalCount, readRequest))
+    .then((queryResult: QueryResult<AccountEntity>) =>
+      res.send(genListResponse(queryResult, readRequest))
     )
     .catch(handleError.bind(this, res));
 });

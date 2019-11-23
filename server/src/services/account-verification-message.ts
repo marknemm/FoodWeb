@@ -1,8 +1,8 @@
-import { NewAccountData } from './save-account';
-import { sendEmail, MailTransporter } from '../helpers/email';
-import { sendNotification, NotificationType } from '../helpers/notification';
 import { AccountEntity } from '../entity/account.entity';
 import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
+import { MailTransporter, sendEmail } from '../helpers/email';
+import { NotificationType, sendNotification } from '../helpers/notification';
+import { NewAccountData } from './save-account';
 
 export async function sendAccountVerificationMessage(newAccountData: NewAccountData): Promise<AccountEntity> {
   const messagePromises: Promise<any>[] = [];

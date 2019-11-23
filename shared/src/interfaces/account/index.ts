@@ -1,7 +1,6 @@
 export * from './account-create-request';
 export * from './account-read-filters';
 export * from './account-read-request';
-export * from './account-read-sort';
 export * from './account-update-request';
 export * from './account-verification-request';
 export * from './account';

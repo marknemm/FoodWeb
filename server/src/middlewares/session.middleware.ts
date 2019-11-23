@@ -1,10 +1,10 @@
-import 'dotenv';
-import { RequestHandler, NextFunction, Request, Response } from 'express';
-import expressSession = require('express-session');
-import { SessionOptions, MemoryStore, Store } from 'express-session';
 import { RedisStoreOptions } from 'connect-redis';
-import connectRedis = require('connect-redis');
+import 'dotenv';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
+import { MemoryStore, SessionOptions, Store } from 'express-session';
 import { Account } from '../shared';
+import expressSession = require('express-session');
+import connectRedis = require('connect-redis');
 export { Account };
 
 /**

@@ -1,11 +1,10 @@
-import { getConnection, EntityManager } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
+import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordEntity } from '../entity/password.entity';
 import { FoodWebError } from '../helpers/food-web-error';
 import { getPasswordId } from '../helpers/password-match';
-import { AccountHelper } from '../shared';
-import { PasswordUpdateRequest } from '../shared';
+import { AccountHelper, PasswordUpdateRequest } from '../shared';
 
 const _accountHelper = new AccountHelper();
 

@@ -1,23 +1,22 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { UpdateDiff } from '../interfaces/update-diff';
 import { NotificationEntity } from '../entity/notification.entity';
+import { genListResponse } from '../helpers/list-response';
+import { QueryResult } from '../helpers/query-builder-helper';
+import { UpdateDiff } from '../interfaces/update-diff';
 import { handleError } from '../middlewares/response-error.middleware';
 import { ensureSessionActive } from '../middlewares/session.middleware';
-import { genListResponse } from '../helpers/list-response';
-import { readNotifications, NotificationsQueryResult } from '../services/read-notifications';
-import { updateSeenNotifications, updateNotification } from '../services/save-notification';
-import { NotificationReadRequest } from '../shared';
-import { NotificationUpdateRequest } from '../shared';
-import { LastSeenNotificationUpdateRequest } from '../shared';
+import { readNotifications } from '../services/read-notifications';
+import { updateNotification, updateSeenNotifications } from '../services/save-notification';
+import { LastSeenNotificationUpdateRequest, NotificationReadRequest, NotificationUpdateRequest } from '../shared';
 
 const router = express.Router();
 
 router.get('/', ensureSessionActive, (req: Request, res: Response) => {
   const readRequest: NotificationReadRequest = req.query;
   readNotifications(readRequest, req.session.account)
-    .then(({ notifications, totalCount }: NotificationsQueryResult) =>
-      res.send(genListResponse(notifications, totalCount, readRequest))
+    .then((queryResult: QueryResult<NotificationEntity>) =>
+      res.send(genListResponse(queryResult, readRequest))
     )
     .catch(handleError.bind(this, res));
 });

@@ -1,10 +1,9 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { ensureSessionActive } from '../middlewares/session.middleware';
 import { sseManager } from '../helpers/sse-manager';
+import { ensureSessionActive } from '../middlewares/session.middleware';
 import { readUnseenNotificationsCount } from '../services/read-notifications';
-import { ServerSentEventType } from '../shared';
-import { Account } from '../shared';
+import { Account, ServerSentEventType } from '../shared';
 
 const router = express.Router();
 

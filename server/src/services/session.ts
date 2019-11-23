@@ -1,13 +1,13 @@
-import { getRepository, Repository } from 'typeorm';
 import { randomBytes } from 'crypto';
-import { readFullAccounts, readFullAccount, AccountsQueryResult } from './read-accounts';
+import { getRepository, Repository } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
-import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { AppSessionEntity } from '../entity/app-session.entity';
-import { checkPasswordMatch } from '../helpers/password-match';
+import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { LoginRequest } from '../shared';
-import { LoginResponse } from '../shared';
+import { checkPasswordMatch } from '../helpers/password-match';
+import { QueryResult } from '../helpers/query-builder-helper';
+import { LoginRequest, LoginResponse } from '../shared';
+import { readFullAccount, readFullAccounts } from './read-accounts';
 
 /**
  * Performs the login for a given user.
@@ -39,14 +39,14 @@ export async function login(loginRequest: LoginRequest): Promise<LoginResponse> 
  */
 async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> {
   // Try to get account via email address.
-  let queryResult: AccountsQueryResult = await readFullAccounts({ email: usernameEmail, page: 1, limit: 2 }, null);
+  let queryResult: QueryResult<AccountEntity> = await readFullAccounts({ email: usernameEmail, page: 1, limit: 2 }, null);
   if (queryResult.totalCount > 1) {
     throw new FoodWebError('More than one account shares the given email. Please provide a username instead.', 401);
   }
 
   const account: AccountEntity = (queryResult.totalCount === 0)
     ? await readFullAccount(usernameEmail) // Try to get account via username.
-    : queryResult.accounts[0];
+    : queryResult.entities[0];
   if (!account) {
     throw new Error(`User could not be found with username/email: ${usernameEmail}`);
   }

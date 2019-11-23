@@ -1,5 +1,5 @@
 import 'dotenv';
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { RecaptchaV3 } from 'express-recaptcha';
 import { RecaptchaResponseDataV3 } from 'express-recaptcha/dist/interfaces';
 

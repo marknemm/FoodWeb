@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, Subject, of } from 'rxjs';
-import { map, catchError, finalize, mergeMap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Observable, of, Subject } from 'rxjs';
+import { catchError, finalize, map, mergeMap } from 'rxjs/operators';
+import { Account, AccountHelper, LoginRequest, LoginResponse } from '~shared';
+import { AlertService } from '~web/alert/alert.service';
 import { environment } from '~web/environment';
 import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
-import { AlertService } from '~web/alert/alert.service';
-import { Account, LoginRequest, AccountHelper, LoginResponse, AccountType } from '~shared';
 export { Account };
 
 @Injectable({
@@ -136,7 +136,9 @@ export class SessionService {
   login(usernameEmail: string, password: string, notifyUser = false): Observable<Account> {
     const loginRequest: LoginRequest = { usernameEmail, password };
     return this._sendLoginRequest(loginRequest).pipe(
-      map((response: LoginResponse) => this._handleLoginSuccess(response, notifyUser))
+      map((response: LoginResponse) =>
+        this._handleLoginSuccess(response, notifyUser)
+      )
     );
   }
 
@@ -174,7 +176,9 @@ export class SessionService {
   refreshSessionStatus(): Observable<Account> {
     this._loading = true;
     return this._httpClient.get<LoginResponse>(this.url, { withCredentials: true }).pipe(
-      mergeMap((response: LoginResponse) => this._handleSessionRefreshResponse(response)),
+      mergeMap((response: LoginResponse) =>
+        this._handleSessionRefreshResponse(response)
+      ),
       finalize(() => this._loading = false)
     );
   }
@@ -211,7 +215,9 @@ export class SessionService {
    */
   logout(notifyUser = false): void {
     this._httpClient.delete<void>(this.url, { withCredentials: true }).pipe(
-      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
+      catchError((err: HttpErrorResponse) =>
+        this._errorHandlerService.handleError(err)
+      )
     ).subscribe();
     this.account = null;
     if (notifyUser) {
