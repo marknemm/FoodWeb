@@ -106,8 +106,13 @@ async function _findAutoReceiver(donation: DonationEntity): Promise<AccountEntit
     .modQuery((queryBuilder: SelectQueryBuilder<AccountEntity>) => {
       // Override ORDER BY clause to sort receivers by the number of donations that they have received (in ASC order).
       // We want to auto-assign donations to receivers that have gotten the fewest donations thus-far.
-      queryBuilder.loadRelationCountAndMap('count', 'donation.receiverAccount', 'receivedDonations');
-      queryBuilder.orderBy('receivedDonations.count', 'ASC');
+      queryBuilder.addSelect((subQueryBuilder: SelectQueryBuilder<DonationEntity>) => {
+          subQueryBuilder.select('COUNT(donation.id)', 'received_donations_count')
+            .from(DonationEntity, 'donation')
+            .where('donation.receiverAccount = account.id');
+          return subQueryBuilder;
+        }, 'received_donations_count')
+        .orderBy('received_donations_count', 'ASC');
     });
   return queryResult.entities[0];
 }

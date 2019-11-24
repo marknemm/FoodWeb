@@ -1,11 +1,10 @@
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, EMPTY, of } from 'rxjs';
-import { catchError, map, flatMap } from 'rxjs/operators';
-import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
+import { EMPTY, Observable, of } from 'rxjs';
+import { catchError, flatMap, map } from 'rxjs/operators';
 import { Account } from '~shared';
-
+import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
 import { LoginDialogComponent } from '~web/login-dialog/login-dialog.component';
 import { SessionService } from '~web/session/session.service';
 
