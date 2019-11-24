@@ -36,7 +36,7 @@ router.get('/my', ensureSessionActive, ensureAccountVerified, (req: Request, res
 
 router.get('/', (req: Request, res: Response) => {
   const readRequest: DeliveryReadRequest = req.query;
-  readDeliveries(readRequest, req.session.account)
+  readDeliveries(readRequest)
     .then((queryResult: QueryResult<DonationEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
     )
