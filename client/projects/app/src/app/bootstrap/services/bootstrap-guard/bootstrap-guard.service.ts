@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, RouterStateSnapshot } from '@angular/router';
 import { AppMinimize } from '@ionic-native/app-minimize/ngx';
-
-import { AppSessionService } from '~app/app-session/app-session.service';
-import { AppDataService } from '~app/app-data/app-data.service';
+import { AppSessionService } from '~app/app-session/app-session/app-session.service';
+import { AppDataService } from '~app/app-shared/app-data/app-data.service';
 
 @Injectable({
   providedIn: 'root'

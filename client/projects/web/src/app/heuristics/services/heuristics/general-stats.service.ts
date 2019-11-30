@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, timer, never } from 'rxjs';
-import { finalize, catchError, flatMap } from 'rxjs/operators';
-import { environment } from '~web/environment';
+import { Injectable } from '@angular/core';
+import { never, Observable, timer } from 'rxjs';
+import { catchError, finalize, flatMap } from 'rxjs/operators';
 import { GeneralStats } from '~shared';
+import { environment } from '~web/environments/environment';
 export { GeneralStats };
 
 @Injectable({

@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { SessionService } from '~web/session/session.service';
-import { DonationService, Donation } from '~web/donation/donation.service';
-import { DateTimeRangeComponent } from '~web/date-time-range/date-time-range.component';
-import { DateTimeService } from '~web/date-time/date-time.service';
-import { DonateForm } from '~web/donate.form';
+import { DateTimeRangeComponent } from '~web/date-time/date-time-range/date-time-range.component';
+import { DateTimeService } from '~web/date-time/date-time/date-time.service';
+import { Donation, DonationService } from '~web/donation/donation/donation.service';
+import { DonateForm } from '~web/donor/donate.form';
+import { SessionService } from '~web/session/session/session.service';
 
 @Component({
   selector: 'food-web-donate',
@@ -16,7 +15,7 @@ export class DonateComponent implements OnInit {
   /**
    * Reactive form model used for donation.
    */
-  donateForm: DonateForm;
+  formGroup: DonateForm;
   /**
    * The newly saved donation that is only set once the donation is complete.
    * Will be unset if the user chooses to donate again.
@@ -32,7 +31,7 @@ export class DonateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.donateForm = new DonateForm(
+    this.formGroup = new DonateForm(
       this._dateTimeService,
       { donorAccount: this.sessionService.account, safetyChecklistInit: false }
     );
@@ -42,10 +41,10 @@ export class DonateComponent implements OnInit {
    * Submits the donation to be created on the server.
    */
   donate(): void {
-    this.donateForm.markAllAsTouched();
+    this.formGroup.markAllAsTouched();
     this.pickupWindowRange.markAsTouched();
-    if (this.donateForm.valid) {
-      const donation: Donation = this.donateForm.toDonation();
+    if (this.formGroup.valid) {
+      const donation: Donation = this.formGroup.toDonation();
       this._donationService.createDonation(donation).subscribe((savedDonation: Donation) => {
         this.savedDonation = savedDonation;
       });
@@ -56,7 +55,7 @@ export class DonateComponent implements OnInit {
    * Resets the donation form to create another donation.
    */
   donateAgain(): void {
-    this.donateForm.reset();
+    this.formGroup.reset();
     this.savedDonation = null;
   }
 

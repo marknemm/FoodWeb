@@ -1,7 +1,7 @@
-import { Directive, Inject, HostListener, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { Directive, HostListener, Inject, Input } from '@angular/core';
 import { MatToolbar } from '@angular/material/toolbar';
-import { LeftNavService } from '~web/left-nav/left-nav.service';
+import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
 
 @Directive({
   selector: '[foodWebStickyHeader]'

@@ -12,23 +12,23 @@ import { recreateUnverifiedAccount, verifyAccount } from '../services/account-ve
 import { sendAccountVerificationEmail, sendAccountVerificationMessage } from '../services/account-verification-message';
 import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '../services/password-reset-message';
 import { readAccount, readAccounts } from '../services/read-accounts';
-import { createAccount, NewAccountData, updateAccount } from '../services/save-account';
+import { createAccount, NewAccountData, updateAccount, updateAccountSection } from '../services/save-account';
 import { AuditEventType, saveAudit, saveUpdateAudit } from '../services/save-audit';
 import { updatePassword } from '../services/save-password';
 import { resetPassword, savePasswordResetToken } from '../services/save-password-reset';
 import { sendUsernameRecoveryEmail } from '../services/username-recovery-message';
-import { Account, AccountCreateRequest, AccountReadRequest, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest } from '../shared';
+import {
+  Account,
+  AccountCreateRequest,
+  AccountReadRequest,
+  AccountSectionUpdateReqeust,
+  AccountUpdateRequest,
+  AccountVerificationRequest,
+  PasswordResetRequest,
+  PasswordUpdateRequest
+} from '../shared';
 
 const router = express.Router();
-
-router.post('/', (req: Request, res: Response) => {
-  const createRequest: AccountCreateRequest = req.body;
-  createAccount(createRequest)
-    .then((newAccountData: NewAccountData) => sendAccountVerificationMessage(newAccountData))
-    .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, createRequest.recaptchaScore))
-    .then((account: AccountEntity) => res.send(account))
-    .catch(handleError.bind(this, res));
-});
 
 router.post('/verify', (req: Request, res: Response) => {
   const account: AccountEntity = (req.session ? req.session.account : null);
@@ -39,9 +39,18 @@ router.post('/verify', (req: Request, res: Response) => {
     .catch(handleError.bind(this, res));
 });
 
-router.put('/', ensureSessionActive, (req: Request, res: Response) => {
-  const updateReq: AccountUpdateRequest = req.body;
-  updateAccount(updateReq, req.session.account)
+router.post('/', (req: Request, res: Response) => {
+  const createRequest: AccountCreateRequest = req.body;
+  createAccount(createRequest)
+    .then((newAccountData: NewAccountData) => sendAccountVerificationMessage(newAccountData))
+    .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, createRequest.recaptchaScore))
+    .then((account: AccountEntity) => res.send(account))
+    .catch(handleError.bind(this, res));
+});
+
+router.put('/section', ensureSessionActive, (req: Request, res: Response) => {
+  const updateReq: AccountSectionUpdateReqeust = req.body;
+  updateAccountSection(updateReq, req.session.account)
     .then((accountDiff: UpdateDiff<AccountEntity>) =>
       saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff, updateReq.recaptchaScore)
     )
@@ -67,6 +76,16 @@ router.put('/reset-password/', (req: Request, res: Response) => {
     })
     .then((account: AccountEntity) => sendPasswordResetSuccessEmail(account))
     .then((account: AccountEntity) => res.send(account))
+    .catch(handleError.bind(this, res));
+});
+
+router.put('/', ensureSessionActive, (req: Request, res: Response) => {
+  const updateReq: AccountUpdateRequest = req.body;
+  updateAccount(updateReq, req.session.account)
+    .then((accountDiff: UpdateDiff<AccountEntity>) =>
+      saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff, updateReq.recaptchaScore)
+    )
+    .then((accountDiff: UpdateDiff<AccountEntity>) => _handleAccountSaveResult(req, res, accountDiff.new))
     .catch(handleError.bind(this, res));
 });
 

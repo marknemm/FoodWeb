@@ -1,8 +1,5 @@
-import { Component, OnInit, Input, Optional } from '@angular/core';
-import { FormGroupDirective } from '@angular/forms';
-import { FormHelperService } from '~web/form-helper/form-helper.service';
-
-import { ReceiverForm } from '~web/receiver.form';
+import { Component, Input, OnInit } from '@angular/core';
+import { ReceiverForm } from '~web/account/receiver.form';
 
 @Component({
   selector: 'food-web-receiver',
@@ -13,15 +10,11 @@ export class ReceiverComponent implements OnInit {
 
   @Input() editing = false;
   @Input() formGroup: ReceiverForm;
-  @Input() formGroupName: string;
 
-  constructor(
-    @Optional() private _formGroupDirective: FormGroupDirective,
-    private _formHelper: FormHelperService
-  ) {}
+  constructor() {}
 
   ngOnInit() {
-    this.formGroup = <ReceiverForm>this._formHelper.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
+    this.formGroup = this.formGroup ? this.formGroup : new ReceiverForm();
   }
 
 }

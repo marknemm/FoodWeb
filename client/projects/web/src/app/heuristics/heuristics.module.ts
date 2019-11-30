@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { GeneralStatsCardComponent } from '~web/heuristics/general-stats-card/general-stats-card.component';
 import { MaterialModule } from '~web/material.module';
-import { SharedModule } from '~web/shared.module';
-
-import { GeneralStatsCardComponent } from '~web/general-stats-card/general-stats-card.component';
+import { SharedModule } from '~web/shared/shared.module';
 
 @NgModule({
   declarations: [

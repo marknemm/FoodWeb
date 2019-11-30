@@ -1,12 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { never, ObservableInput } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
-import { LoginForm } from '~web/login.form';
-import { SessionService } from '~web/session/session.service';
-import { UsernameRecoveryService } from '~web/username-recovery/username-recovery.service';
-import { PasswordResetService } from '~web/password-reset/password-reset.service';
+import { UsernameRecoveryService } from '~web/account/username-recovery/username-recovery.service';
+import { PasswordResetService } from '~web/password/password-reset/password-reset.service';
+import { LoginForm } from '~web/session/login.form';
+import { SessionService } from '~web/session/session/session.service';
 
 @Component({
   selector: 'food-web-login',

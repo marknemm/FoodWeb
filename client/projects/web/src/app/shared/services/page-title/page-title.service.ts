@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { AccountType } from '~shared';
 
 @Injectable({

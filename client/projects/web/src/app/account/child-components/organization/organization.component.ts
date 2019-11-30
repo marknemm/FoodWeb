@@ -1,33 +1,26 @@
-import { Component, OnInit, Input, SimpleChanges, Optional } from '@angular/core';
-import { FormGroupDirective } from '@angular/forms';
-import { FormHelperService } from '~web/form-helper/form-helper.service';
-
-import { OrganizationForm } from '~web/organization.form';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { OrganizationForm } from '~web/account/organization.form';
+import { Editable } from '~web/shared/editable';
 
 @Component({
   selector: 'food-web-organization',
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })
-export class OrganizationComponent implements OnInit {
+export class OrganizationComponent implements OnInit, Editable {
 
   @Input() editing = false;
   @Input() accountType: string = '';
   @Input() formGroup: OrganizationForm;
-  @Input() formGroupName: string;
 
   deliveryInstructionsPlaceholderModifier: string = '';
 
-  constructor(
-    @Optional() private _formGroupDirective: FormGroupDirective,
-    private _formHelper: FormHelperService,
-  ) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.formGroup = <OrganizationForm>this._formHelper.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
-  }
+  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
+    this.formGroup = this.formGroup ? this.formGroup : new OrganizationForm();
     if (changes.accountType) {
       let newAcctType = changes.accountType.currentValue;
       this.deliveryInstructionsPlaceholderModifier =

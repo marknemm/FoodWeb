@@ -1,5 +1,5 @@
 <div *ngIf="originalDonation" class="donation-details-container">
-  <form [formGroup]="donationForm" class="donation-details-form">
+  <form [formGroup]="formGroup" class="donation-details-form">
     <mat-card>
       <mat-card-header>
         <img mat-card-avatar src="./assets/IconImg.png" alt="FoodWeb Icon">
@@ -14,7 +14,7 @@
       </mat-card-header>
       <mat-card-content>
         <div class="donation-primary-label"></div>
-        <food-web-donation-form *ngIf="editing" [formGroup]="donationForm" class="donation-form"></food-web-donation-form>
+        <food-web-donation-form *ngIf="editing" [formGroup]="formGroup" class="donation-form"></food-web-donation-form>
         <div *ngIf="!editing" class="readonly-donation row">
           <div class="col-sm-12 donation-description-container">
             <hr>
@@ -66,9 +66,10 @@
       <mat-card-actions *ngIf="!editing" [hidden]="!actions.hasActionButtons" class="align-right">
         <food-web-donation-detail-actions #actions
           [donation]="originalDonation"
+          [formGroup]="formGroup"
           [myAccount]="sessionService.account"
           [editing]="editing"
-          [valid]="donationForm.valid"
+          [valid]="formGroup.valid"
           (action)="onDonationAction($event)"
         ></food-web-donation-detail-actions>
       </mat-card-actions>
@@ -77,20 +78,21 @@
     <mat-card *ngIf="editing">
       <mat-card-title>Pickup Window</mat-card-title>
       <mat-card-content>
-        <food-web-date-time-range formGroupName="pickupWindow"></food-web-date-time-range>
+        <food-web-date-time-range [formGroup]="formGroup.get('pickupWindow')"></food-web-date-time-range>
       </mat-card-content>
     </mat-card>
 
     <mat-card *ngIf="editing">
       <mat-card-title>Contact Info</mat-card-title>
       <mat-card-content>
-        <food-web-contact-info formGroupName="donorContactOverride" [editing]="true"></food-web-contact-info>
+        <food-web-contact-info [formGroup]="formGroup.get('donorContactOverride')" [editing]="true"></food-web-contact-info>
       </mat-card-content>
     </mat-card>
 
     <div *ngIf="editing" class="action-footer align-right">
       <food-web-donation-detail-actions
         [donation]="originalDonation"
+        [formGroup]="formGroup"
         [myAccount]="sessionService.account"
         [editing]="editing"
         (action)="onDonationAction($event)"

@@ -17,7 +17,7 @@
       </mat-form-field>
 
       <ng-container *ngIf="accountType === 'Receiver'">
-        <food-web-receiver formGroupName="receiver" [editing]="editing"></food-web-receiver>
+        <food-web-receiver [formGroup]="formGroup.get('receiver')" [editing]="editing"></food-web-receiver>
       </ng-container>
     </div>
   </div>
@@ -39,7 +39,7 @@
       <div class="d-inline-block">{{ formGroup.get('deliveryInstructions').value }}</div>
     </div>
     <div *ngIf="accountType === 'Receiver'" class="col-sm-12">
-      <food-web-receiver formGroupName="receiver"></food-web-receiver>
+      <food-web-receiver [formGroup]="formGroup.get('receiver')"></food-web-receiver>
     </div>
   </div>
 </div>

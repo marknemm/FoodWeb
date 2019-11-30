@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Account, AccountHelper, AppTokenLoginRequest, LoginRequest, LoginResponse } from '~shared';
-import { AlertService } from '~web/alert/alert.service';
-import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
-import { SessionService } from '~web/session/session.service';
+import { SessionService } from '~web/session/session/session.service';
+import { AlertService } from '~web/shared/alert/alert.service';
+import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
 
 @Injectable({
   providedIn: 'root'

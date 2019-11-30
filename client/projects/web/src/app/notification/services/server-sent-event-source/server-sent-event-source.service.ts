@@ -2,10 +2,10 @@ import { Injectable, ApplicationRef } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
-import { environment } from '~web/environment';
+import { environment } from '~web/environments/environment';
 import { ServerSentEventType } from '~shared';
 
-import { SessionService } from '~web/session/session.service';
+import { SessionService } from '~web/session/session/session.service';
 
 const EventSource = NativeEventSource || EventSourcePolyfill;
 

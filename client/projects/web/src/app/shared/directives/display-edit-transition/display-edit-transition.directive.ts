@@ -1,4 +1,4 @@
-import { Directive, Input, ElementRef, OnInit, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

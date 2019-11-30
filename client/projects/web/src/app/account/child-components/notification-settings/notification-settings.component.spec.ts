@@ -1,0 +1,26 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NotificationSettingsComponent } from './notification-settings.component';
+
+describe('NotificationSettingsComponent', () => {
+  let component: NotificationSettingsComponent;
+  let fixture: ComponentFixture<NotificationSettingsComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ NotificationSettingsComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(NotificationSettingsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

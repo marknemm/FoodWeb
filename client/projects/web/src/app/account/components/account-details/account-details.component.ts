@@ -1,24 +1,23 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
-import { SectionEditService } from '~web/section-edit/section-edit.service';
-import { DonationReadFilters, AccountHelper, AccountType } from '~shared';
-
-import { SessionService } from '~web/session/session.service';
-import { PasswordFormMode } from '~web/password.form';
-import { SignupVerificationService } from '~web/signup-verification/signup-verification.service';
-import { AccountForm, PasswordFormT, AccountFormKey } from '~web/account.form';
-import { AccountService, Account } from '~web/account/account.service';
+import { Observable, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AccountHelper, AccountType, DonationReadFilters } from '~shared';
+import { AccountForm, AccountFormKey } from '~web/account/account.form';
+import { Account, AccountService } from '~web/account/account/account.service';
+import { PasswordFormMode, PasswordFormT } from '~web/password/password.form';
+import { SessionService } from '~web/session/session/session.service';
+import { SaveCb } from '~web/shared/child-components/edit-save-button/edit-save-button.component';
+import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
 
 @Component({
   selector: 'food-web-account-details',
   templateUrl: './account-details.component.html',
-  styleUrls: ['./account-details.component.scss'],
-  providers: [SectionEditService]
+  styleUrls: ['./account-details.component.scss']
 })
 export class AccountDetailsComponent implements OnInit, OnDestroy {
 
-  accountUpdateForm: AccountForm;
+  formGroup: AccountForm;
 
   private _originalAccount: Account;
   private _accountNotFound = false;
@@ -31,25 +30,18 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     public sessionService: SessionService,
     public accountHelper: AccountHelper,
     public signupVerificationService: SignupVerificationService,
-    public sectionEditService: SectionEditService<AccountFormKey>,
     private _accountService: AccountService,
     private _activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+    this.savePassword = this.savePassword.bind(this);
+  }
 
   get originalAccount(): Account{
     return this._originalAccount;
   }
 
   get accountType(): AccountType {
-    return this.accountUpdateForm.get('accountType').value;
-  }
-
-  get limitOperationHours(): boolean {
-    return this.accountUpdateForm.get('operationHours').value.limitOperationHours;
-  }
-
-  get operationHoursFullWidth(): boolean {
-    return (this.sectionEditService.editing('operationHours') && this.limitOperationHours);
+    return this.formGroup.get('accountType').value;
   }
 
   get accountNotFound(): boolean {
@@ -69,7 +61,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.accountUpdateForm = new AccountForm({ formMode: 'Account' }, this._destroy$, this.sectionEditService);
+    this.formGroup = new AccountForm({ formMode: 'Account' }, this._destroy$);
     this._listenAccountChange();
   }
 
@@ -82,7 +74,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
         this._seeDonationsParams = this._genSeeDonationParams(account);
         // An admin account does not need to input the old password to update an account password.
         this._passwordFormMode = 'Account';
-        this._refreshAccountFormValue(account, true);
+        this.formGroup.patchValue(account);
       }
     });
   }
@@ -93,49 +85,38 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
       : { receiverAccountId: account.id };
   }
 
-  private _refreshAccountFormValue(account: Account, force = false): void {
-    (force)
-      ? this.accountUpdateForm.patchValue(account)
-      : this.accountUpdateForm.patchSections(account);
-  }
-
   ngOnDestroy() {
     this._destroy$.next();
   }
 
-  onEdit(sectionName: AccountFormKey): void {
-    this.sectionEditService.toggleEdit(sectionName, this.accountUpdateForm.get(sectionName));
+  genSectionSaveCb(sectionName: AccountFormKey): SaveCb {
+    return () => this._saveAccountSection(sectionName);
   }
 
-  onSave(sectionName: AccountFormKey): void {
-    if (this.sectionEditService.shouldSaveSection(sectionName)) {
-      (sectionName !== 'password')
-        ? this._saveAccount(sectionName)
-        : this._savePassword();
-    } else {
-      this.sectionEditService.stopEdit(sectionName);
-    }
-  }
-
-  private _saveAccount(sectionName: AccountFormKey): void {
-    let accountUpdate: Partial<Account> = {};
-    accountUpdate[sectionName] = this.accountUpdateForm.toAccount()[sectionName];
-    this._accountService.updateAccount(this.originalAccount, accountUpdate).subscribe(
-      (savedAccount: Account) => this._handleSaveSuccess(sectionName, savedAccount)
+  private _saveAccountSection(sectionName: AccountFormKey): Observable<boolean> {
+    const sectionValue: any = this.formGroup.get(sectionName).value;
+    return this._accountService.updateAccountSection(sectionName, sectionValue).pipe(
+      map((savedAccount: Account) =>
+        this._handleSaveSuccess(sectionName, savedAccount) // Implicit return true.
+      )
     );
   }
 
-  private _savePassword(): void {
-    const passwordUpdate: PasswordFormT = this.accountUpdateForm.toPassword();
-    this._accountService.updatePassword(passwordUpdate).subscribe(
-      () => this._handleSaveSuccess('password', this.originalAccount)
+  savePassword(): Observable<boolean> {
+    const passwordUpdate: PasswordFormT = this.formGroup.toPassword();
+    return this._accountService.updatePassword(passwordUpdate).pipe(
+      map(() => this._handleSaveSuccess('password', this.originalAccount)) // Implicit return true.
     );
   }
 
-  private _handleSaveSuccess(sectionName: AccountFormKey, savedAccount: Account): void {
+  private _handleSaveSuccess(sectionName: AccountFormKey, savedAccount: Account): true {
     this._originalAccount = savedAccount;
-    this.sectionEditService.stopEdit(sectionName);
-    this._refreshAccountFormValue(savedAccount);
+    const accountSectionPatch: Partial<Account> = {};
+    accountSectionPatch[sectionName] = savedAccount[sectionName];
+    this.formGroup.patchValue(accountSectionPatch);
+    return true;
   }
 
 }
+
+export type AccountPanel = 'availability' | 'notifications' | 'password' | 'primary';

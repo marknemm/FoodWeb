@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
-import { Push, PushObject, EventResponse, PushOptions } from '@ionic-native/push/ngx';
+import { EventResponse, Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 

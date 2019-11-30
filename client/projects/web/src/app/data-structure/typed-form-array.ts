@@ -1,7 +1,7 @@
-import { FormArray, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormGroup, FormControl, AbstractControl } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
-
 import { TypedAbstractControl } from '~web/data-structure/typed-abstract-control';
+
 
 export class TypedFormArray<T> extends FormArray {
 

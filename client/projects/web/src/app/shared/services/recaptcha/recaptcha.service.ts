@@ -1,9 +1,9 @@
+import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpHeaders } from '@angular/common/http';
-import { Observable, EMPTY } from 'rxjs';
-import { flatMap, catchError } from 'rxjs/operators';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
-import { environment } from '~web/environment';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, flatMap } from 'rxjs/operators';
+import { environment } from '~web/environments/environment';
 
 /**
  * Http Headers used for a request that shouldn't have client-side RECAPTCHA processing done on it.

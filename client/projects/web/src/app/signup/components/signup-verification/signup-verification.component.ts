@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, ObservableInput, NEVER } from 'rxjs';
+import { NEVER, Observable, ObservableInput } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from '~web/environment';
-
-import { SessionService } from '~web/session/session.service';
-import { LoginDialogComponent } from '~web/login-dialog/login-dialog.component';
-import { SignupVerificationService } from '~web/signup-verification/signup-verification.service';
+import { environment } from '~web/environments/environment';
+import { LoginDialogComponent } from '~web/session/login-dialog/login-dialog.component';
+import { SessionService } from '~web/session/session/session.service';
+import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
 
 @Component({
   selector: 'food-web-signup-verification',

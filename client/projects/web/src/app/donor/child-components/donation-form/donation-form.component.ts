@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ConstantsService } from '~web/constants/constants.service';
+import { ConstantsService } from '~web/shared/constants/constants.service';
 
 @Component({
   selector: 'food-web-donation-form',

@@ -1,10 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import { LeftNavService } from '~web/left-nav/left-nav.service';
+import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
 
 @Component({
   selector: 'food-web-paginator',

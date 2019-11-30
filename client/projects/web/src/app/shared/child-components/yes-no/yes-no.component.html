@@ -1,0 +1,11 @@
+<div class="inline-label">
+  <ng-content></ng-content>
+</div>
+<div class="d-inline-block">
+  <span *ngIf="yes" class="check-yes">
+    <mat-icon>check</mat-icon> <span>{{ yesTxt }}</span>
+  </span>
+  <span *ngIf="!yes" class="cross-no">
+    <mat-icon>close</mat-icon> <span>{{ noTxt }}</span>
+  </span>
+</div>

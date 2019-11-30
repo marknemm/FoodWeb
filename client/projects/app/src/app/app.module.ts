@@ -8,19 +8,19 @@ import { Device } from '@ionic-native/device/ngx';
 import { Push } from '@ionic-native/push/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { AppDataService } from '~app/app-data/app-data.service';
 import { AppRoutingModule } from '~app/app-routing.module';
-import { AppSessionModule } from '~app/app-session.module';
+import { AppSessionModule } from '~app/app-session/app-session.module';
+import { AppDataService } from '~app/app-shared/app-data/app-data.service';
 import { AppComponent } from '~app/app.component';
 import { JSONDateReviver } from '~shared';
-import { AboutComponent } from '~web/about/about.component';
-import { AppShellModule } from '~web/app-shell.module';
-import { EventModule } from '~web/event.module';
-import { HeuristicsModule } from '~web/heuristics.module';
-import { HomeComponent } from '~web/home/home.component';
-import { IconService } from '~web/icon/icon.service';
+import { AppShellModule } from '~web/app-shell/app-shell.module';
+import { AboutComponent } from '~web/components/about/about.component';
+import { HomeComponent } from '~web/components/home/home.component';
+import { EventModule } from '~web/event/event.module';
+import { HeuristicsModule } from '~web/heuristics/heuristics.module';
 import { MaterialModule } from '~web/material.module';
-import { SharedModule } from '~web/shared.module';
+import { IconService } from '~web/shared/icon/icon.service';
+import { SharedModule } from '~web/shared/shared.module';
 
 @NgModule({
   declarations: [

@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { MaterialModule } from '~web/material.module';
-import { SharedModule } from '~web/shared.module';
-
-import { LoginDialogComponent } from '~web/login-dialog/login-dialog.component';
-import { LoginComponent } from '~web/login/login.component';
+import { LoginDialogComponent } from '~web/session/login-dialog/login-dialog.component';
+import { LoginComponent } from '~web/session/login/login.component';
+import { SharedModule } from '~web/shared/shared.module';
 
 @NgModule({
   declarations: [

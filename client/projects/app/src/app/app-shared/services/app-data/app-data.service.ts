@@ -3,11 +3,11 @@ import { Injectable } from '@angular/core';
 import { Device } from '@ionic-native/device/ngx';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { AppSessionService } from '~app/app-session/app-session.service';
-import { environment } from '~app/environment';
-import { PushNotificationService } from '~app/push-notification/push-notification.service';
+import { AppSessionService } from '~app/app-session/app-session/app-session.service';
+import { PushNotificationService } from '~app/app-shared/push-notification/push-notification.service';
+import { environment } from '~app/environments/environment';
 import { AppData, AppDataSaveRequest } from '~shared';
-import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
+import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
 
 @Injectable({
   providedIn: 'root'

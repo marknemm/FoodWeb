@@ -1,26 +1,26 @@
 <div class="edit-save-button-container">
   <ng-container *ngIf="!editing">
-    <button mat-icon-button *ngIf="!useButtonText" type="button" color="primary" class="edit-button" matTooltip="Edit" (click)="edit.emit(true)">
+    <button mat-icon-button *ngIf="!useButtonText" type="button" color="primary" class="edit-button" matTooltip="Edit" (click)="setEditing(true)">
       <mat-icon>edit</mat-icon>
     </button>
-    <button mat-raised-button *ngIf="useButtonText" type="button" color="primary" class="edit-button" (click)="edit.emit(true)">
+    <button mat-raised-button *ngIf="useButtonText" type="button" color="primary" class="edit-button" (click)="setEditing(true)">
       Edit
     </button>
   </ng-container>
   <ng-container *ngIf="editing">
     <ng-container *ngIf="!useButtonText">
-      <button mat-icon-button type="button" color="warn" class="cancel-button" matTooltip="Cancel Edit" (click)="edit.emit(false)">
+      <button mat-icon-button type="button" *ngIf="!noCancelEdit" color="warn" class="cancel-button" matTooltip="Cancel Edit" (click)="setEditing(false)">
         <mat-icon>cancel</mat-icon>
       </button>
-      <button mat-icon-button type="submit" color="primary" class="save-button" (click)="save.emit()" matTooltip="Save Edit" [disabled]="isSaveDisabled">
+      <button mat-icon-button type="submit" color="primary" class="save-button" (click)="saveValue()" matTooltip="Save Edit" [disabled]="isSaveDisabled">
         <mat-icon>save</mat-icon>
       </button>
     </ng-container>
     <ng-container *ngIf="useButtonText">
-      <button mat-button type="button" color="warn" class="cancel-button" (click)="edit.emit(false)">
+      <button mat-button type="button" *ngIf="!noCancelEdit" color="warn" class="cancel-button" (click)="setEditing(false)">
         Cancel
       </button>
-      <button mat-raised-button type="submit" color="primary" class="save-button" (click)="save.emit()" [disabled]="isSaveDisabled">
+      <button mat-raised-button type="submit" color="primary" class="save-button" (click)="saveValue()" [disabled]="isSaveDisabled">
         Save
       </button>
     </ng-container>

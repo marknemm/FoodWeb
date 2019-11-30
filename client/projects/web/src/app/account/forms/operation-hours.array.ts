@@ -1,9 +1,8 @@
 import { Observable, of } from 'rxjs';
-import { TypedFormArray } from '~web/typed-form-array';
-import { ConfirmDialogService } from '~web/confirm-dialog/confirm-dialog.service';
-import { OperationHours, Weekday, Constants } from '~shared';
-
-import { OperationHoursForm } from '~web/operation-hours.form';
+import { Constants, OperationHours, Weekday } from '~shared';
+import { OperationHoursForm } from '~web/account/operation-hours.form';
+import { TypedFormArray } from '~web/data-structure/typed-form-array';
+import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.service';
 
 export class OperationHoursArray extends TypedFormArray<OperationHours> {
 
@@ -39,14 +38,17 @@ export class OperationHoursArray extends TypedFormArray<OperationHours> {
     this.push({ weekday: <any>'', startTime: '', endTime: '' });
   }
 
-  removeOperationHours(idx: number, confirmDialogService?: ConfirmDialogService): void {
-    this._getDeleteConfirmation(idx, confirmDialogService).subscribe(
-      (confirm: boolean) => {
-        if (confirm) {
-          this.removeAt(idx);
+  remove(operationHoursForm: OperationHoursForm, confirmDialogService?: ConfirmDialogService): void {
+    const idx: number = this.controls.indexOf(operationHoursForm);
+    if (idx >= 0) {
+      this._getDeleteConfirmation(idx, confirmDialogService).subscribe(
+        (confirm: boolean) => {
+          if (confirm) {
+            this.removeAt(idx);
+          }
         }
-      }
-    );
+      );
+    }
   }
 
   private _getDeleteConfirmation(idx: number, confirmDialogService: ConfirmDialogService): Observable<boolean> {

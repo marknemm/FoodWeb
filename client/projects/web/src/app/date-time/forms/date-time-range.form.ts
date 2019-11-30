@@ -1,8 +1,7 @@
-import { Validators, FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { TypedFormGroup } from '~web/typed-form-group';
-
-import { DateTimeRange } from '~web/date-time/date-time.service';
+import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { DateTimeRange } from '~web/date-time/date-time/date-time.service';
 export { DateTimeRange };
 
 export interface DateTimeRangeFormConfig {

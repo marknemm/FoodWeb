@@ -1,4 +1,4 @@
-import { FormControl, ValidatorFn, AbstractControlOptions, AsyncValidatorFn } from '@angular/forms';
+import { AbstractControlOptions, AsyncValidatorFn, FormControl, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 export interface UpdateValueOptions {

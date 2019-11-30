@@ -1,9 +1,6 @@
-import { Component, OnInit, Input, ViewChild, Optional } from '@angular/core';
-import { FormGroupDirective } from '@angular/forms';
-import { FormHelperService } from '~web/form-helper/form-helper.service';
-
-import { DateTimeComponent } from '~web/date-time/date-time.component';
-import { DateTimeRangeForm } from '~web/date-time-range.form';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { DateTimeRangeForm } from '~web/date-time/date-time-range.form';
+import { DateTimeComponent } from '~web/date-time/date-time/date-time.component';
 
 @Component({
   selector: 'food-web-date-time-range',
@@ -12,7 +9,6 @@ import { DateTimeRangeForm } from '~web/date-time-range.form';
 })
 export class DateTimeRangeComponent implements OnInit {
 
-  @Input() formGroupName: string;
   @Input() formGroup: DateTimeRangeForm;
   @Input() startDatePlaceholder = 'Start Date';
   @Input() startTimePlaceholder = 'Start Time';
@@ -25,14 +21,9 @@ export class DateTimeRangeComponent implements OnInit {
   @ViewChild('startDateTime', { static: false }) startDateTime: DateTimeComponent;
   @ViewChild('endDateTime', { static: false }) endDateTime: DateTimeComponent;  
 
-  constructor(
-    @Optional() private _formGroupDirective: FormGroupDirective,
-    private _formHelper: FormHelperService
-  ) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.formGroup = <DateTimeRangeForm>this._formHelper.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
-  }
+  ngOnInit() {}
 
   markAsTouched(): void {
     this.formGroup.markAsTouched();

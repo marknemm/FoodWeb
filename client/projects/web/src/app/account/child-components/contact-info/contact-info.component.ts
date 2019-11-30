@@ -1,20 +1,17 @@
-import { Component, OnInit, Input, Optional } from '@angular/core';
-import { FormGroupDirective } from '@angular/forms';
-import { FormHelperService } from '~web/form-helper/form-helper.service';
+import { Component, Input, OnInit } from '@angular/core';
 import { ContactInfo } from '~shared';
-
-import { MapService } from '~web/map/map.service';
-import { ContactInfoForm } from '~web/contact-info.form';
+import { ContactInfoForm } from '~web/account/contact-info.form';
+import { MapService } from '~web/map/map/map.service';
+import { Editable } from '~web/shared/editable';
 
 @Component({
   selector: 'food-web-contact-info',
   templateUrl: './contact-info.component.html',
   styleUrls: ['./contact-info.component.scss']
 })
-export class ContactInfoComponent implements OnInit {
+export class ContactInfoComponent implements OnInit, Editable {
 
   @Input() editing = false;
-  @Input() formGroupName: string;
   @Input() formGroup: ContactInfoForm;
   @Input() contactInfo: ContactInfo;
   @Input() hideAddress = false;
@@ -23,9 +20,7 @@ export class ContactInfoComponent implements OnInit {
   private _directionsHref: string;
 
   constructor(
-    public mapService: MapService,
-    @Optional() private _formGroupDirective: FormGroupDirective,
-    private _formHelperService: FormHelperService,
+    public mapService: MapService
   ) {}
 
   get directionsHref(): string {
@@ -33,7 +28,7 @@ export class ContactInfoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.formGroup = <ContactInfoForm>this._formHelperService.deriveFormGroup(this.formGroup, this.formGroupName, this._formGroupDirective);
+    this.formGroup = this.formGroup ? this.formGroup : new ContactInfoForm();
     if (this.contactInfo) {
       this.formGroup.patchValue(this.contactInfo);
       this._directionsHref = this.mapService.genDirectionHrefEstimate(this.contactInfo);

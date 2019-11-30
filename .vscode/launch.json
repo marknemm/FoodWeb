@@ -21,6 +21,7 @@
       "trace": true,
       "sourceMaps": true,
       "sourceMapPathOverrides": {
+        "webpack:///.*": "${workspaceRoot}\\client\\projects\\web\\*",
         "webpack:///C:*": "C:/*"
       }
     },
@@ -32,8 +33,7 @@
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
-        "run",
-        "debug"
+        "start"
       ],
       "restart": true,
       "timeout": 1000000

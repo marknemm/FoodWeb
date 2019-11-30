@@ -7,9 +7,8 @@ import { initDbConnectionPool } from '../helpers/db-connection-pool';
 import { MailTransporter, sendEmail } from '../helpers/email';
 import { NotificationType, sendNotification } from '../helpers/notification';
 import { QueryResult } from '../helpers/query-builder-helper';
-import { findPotentialDeliverers, FoundPotentialDeliverers } from '../services/find-potential-deliverers';
+import { findMessagePotentialDeliverers } from '../services/find-message-potential-deliverers';
 import { claimDonation } from '../services/match-donation';
-import { messagePotentialDeliverers } from '../services/message-potential-deliverers';
 import { queryAccounts } from '../services/read-accounts';
 import { queryDonations } from '../services/read-donations';
 import { AccountReadRequest, DonationHelper, DonationReadRequest } from '../shared';
@@ -25,8 +24,8 @@ _autoAssignDonations()
 
 /**
  * Automatically claims all donations that are to occur within 1/6 of the duration of time between donation creation
- * and the start of the pickup window.
- * @return A promise that resolves to void once the operation is finished.
+ * and the start of the pickup window, or donations that have less than 1 hour left until the start of the pickup window.
+ * @return A promise that resolves once the operation is finished.
  */
 async function _autoAssignDonations(): Promise<void> {
   await initDbConnectionPool();
@@ -75,8 +74,7 @@ async function _autoAssignReceivers(donations: DonationEntity[]): Promise<void> 
     const receiverAccount: AccountEntity = await _findAutoReceiver(donation);
     if (receiverAccount) {
       donation = await claimDonation({ donationId: donation.id }, receiverAccount);
-      const foundDeliverers: FoundPotentialDeliverers = await findPotentialDeliverers(donation);
-      messagePromises.push(messagePotentialDeliverers(foundDeliverers));
+      messagePromises.push(findMessagePotentialDeliverers(donation));
       messagePromises.push(_sendDonationAutoAssignMessages(donation));
     }
   }

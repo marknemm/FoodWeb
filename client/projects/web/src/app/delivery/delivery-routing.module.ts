@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { AuthGaurdService } from '~web/auth-gaurd/auth-gaurd.service';
-
-import { DeliveriesComponent } from '~web/deliveries/deliveries.component';
+import { RouterModule, Routes } from '@angular/router';
+import { DeliveriesComponent } from '~web/delivery/deliveries/deliveries.component';
+import { AuthGaurdService } from '~web/session/auth-gaurd/auth-gaurd.service';
 
 const routes: Routes = [
   { path: 'list', component: DeliveriesComponent },

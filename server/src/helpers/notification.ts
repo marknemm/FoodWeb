@@ -10,16 +10,23 @@ import { SSE, sseManager } from './sse-manager';
 export { Notification, NotificationType };
 
 export async function broadcastNotification(accounts: AccountEntity[], notification: Notification): Promise<NotificationEntity[]> {
-  const pushTargets: AppDataEntity[] = await _getPushTargets(accounts);
+  // Only send push notifications to accounts that have it enabled.
+  const pushAccounts: AccountEntity[] = accounts.filter((account: AccountEntity) => account.contactInfo.enablePushNotification);
+  const pushTargets: AppDataEntity[] = await _getPushTargets(pushAccounts);
   await broadcastPushNotifications(pushTargets, notification);
+  // Send Server Sent Event notifications to all accounts (will show up within in-app/website notifications menu).
   return (!notification.pushOnly)
     ? Promise.all(accounts.map((account: AccountEntity) => _sendSSE(account, notification)))
     : [];
 }
 
 export async function sendNotification(account: AccountEntity, notification: Notification): Promise<NotificationEntity> {
-  const pushTargets: AppDataEntity[] = await _getPushTargets(account);
-  await broadcastPushNotifications(pushTargets, notification);
+  // If the user has disabled push notifications, then do not send.
+  if (!account.contactInfo.enablePushNotification) {
+    const pushTargets: AppDataEntity[] = await _getPushTargets(account);
+    await broadcastPushNotifications(pushTargets, notification);
+  }
+  // Send Server Sent Event notification (will show up within in-app/website notifications menu).
   return (!notification.pushOnly)
     ? _sendSSE(account, notification)
     : null;

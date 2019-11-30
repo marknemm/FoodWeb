@@ -1,6 +1,6 @@
 import { Validators } from '@angular/forms';
-import { TypedFormGroup } from '~web/typed-form-group';
 import { Volunteer } from '~shared';
+import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 
 export class VolunteerForm extends TypedFormGroup<Volunteer> {
 

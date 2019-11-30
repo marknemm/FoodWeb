@@ -2,24 +2,21 @@ import { Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Omit } from 'utility-types';
-import { TypedFormGroup } from '~web/typed-form-group';
-import { SectionEditService } from '~web/section-edit/section-edit.service';
-import { Account, OperationHours, AccountType } from '~shared';
-
-import { PasswordForm, PasswordFormT } from '~web//password.form';
-import { OrganizationForm } from '~web/organization.form';
-import { VolunteerForm } from '~web/volunteer.form';
-import { ContactInfoForm } from '~web/contact-info.form';
-import { OperationHoursInfoForm } from '~web/operation-hours-info.form';
-
+import { Account, AccountType, OperationHours, NotificationSettings } from '~shared';
+import { ContactInfoForm } from '~web/account/contact-info.form';
+import { OperationHoursInfoForm } from '~web/account/operation-hours-info.form';
+import { OrganizationForm } from '~web/account/organization.form';
+import { VolunteerForm } from '~web/account/volunteer.form';
+import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { PasswordForm, PasswordFormT } from '~web/password/password.form';
+import { NotificationSettingsForm } from './notification-settings.form';
 export { PasswordFormT };
 
 export class AccountForm extends TypedFormGroup<AccountFormT> {
 
   constructor(
     config: AccountFormConfig = {},
-    destory$: Observable<any>,
-    private _sectionEditService?: SectionEditService<AccountFormKey>,
+    destory$: Observable<any>
   ) {
     super({
       accountType: [null, Validators.required],
@@ -28,6 +25,7 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
       organization: new OrganizationForm(),
       volunteer: new VolunteerForm(),
       contactInfo: new ContactInfoForm(),
+      notificationSettings: new NotificationSettingsForm(),
       operationHours: new OperationHoursInfoForm(),
       password: new PasswordForm({ formMode: config.formMode })
     });
@@ -37,10 +35,6 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
     if (config.value) {
       this.patchValue(config.value);
     }
-  }
-
-  patchValue(value: Partial<AccountFormT | Account>): void {
-    super.patchValue(<Partial<AccountFormT>>value);
   }
 
   private _onAccountTypeUpdate(accountType: AccountType): void {
@@ -53,33 +47,28 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
     }
   }
 
-  setValue(value: Partial<AccountFormT>): void {
-    super.setValue(value);
+  patchValue(value: Partial<AccountFormT | Account>): void {
+    if (!value['notificationSettings']) {
+     (<NotificationSettingsForm>this.get('notificationSettings')).patchValue(value.contactInfo);
+    }
+    super.patchValue(<Partial<AccountFormT>>value);
   }
 
-  patchSections(value: Partial<AccountFormT | Account>): void {
-    const accountSections: (AccountFormKey)[] = [
-      'accountType', 'username', 'profileImgUrl', 'contactInfo', 'operationHours', 'password'
-    ];
-    accountSections.forEach((section: keyof AccountFormT) => {
-      if (!this._sectionEditService.editing(section)) {
-        this.get(section).patchValue(value[section]);
-      }
-    });
-
-    if (this.get('accountType').value === 'Volunteer') {
-      if (!this._sectionEditService.editing('volunteer')) {
-        this.get('volunteer').patchValue(value.volunteer);
-      }
-    } else if (!this._sectionEditService.editing('organization')) {
-      this.get('organization').patchValue(value.organization);
+  setValue(value: Partial<AccountFormT>): void {
+    if (!value['notificationSettings'] && value.contactInfo) {
+      this.get('notificationSettings').setValue(<NotificationSettings>value.contactInfo);
     }
+    super.setValue(value);
   }
 
   toAccount(): Account {
     const accountFormVal: AccountFormT & Account = <any>this.getRawValue();
     delete accountFormVal.password;
     (<Account>accountFormVal).operationHours = (<OperationHoursInfoForm>this.get('operationHours')).toOperationHours();
+    Object.keys(accountFormVal.notificationSettings).forEach((notificationSettingKey: string) => {
+      accountFormVal.contactInfo[notificationSettingKey] = accountFormVal.notificationSettings[notificationSettingKey];
+    });
+    delete accountFormVal.notificationSettings;
     (accountFormVal.accountType === AccountType.Donor)
       ? delete accountFormVal.organization.receiver
       : delete accountFormVal.organization.donor;
@@ -103,6 +92,7 @@ export interface AccountFormConfig {
 }
 
 export interface AccountFormT extends Omit<Account, 'operationHours'> {
+  notificationSettings: NotificationSettings;
   operationHours: OperationHoursInfo;
   password: PasswordFormT;
 }

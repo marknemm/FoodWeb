@@ -11,9 +11,8 @@ import { createDonation, updateDonation } from '../services/save-donation';
 import { claimDonation, unclaimDonation } from '../services/match-donation';
 import { readDonations, readDonation, readMyDonations } from '../services/read-donations';
 import { deleteDonation } from '../services/delete-donation';
-import { messagePotentialDeliverers } from '../services/message-potential-deliverers';
-import { findPotentialReceivers, FoundPotentialReceivers } from '../services/find-potential-receivers';
-import { findPotentialDeliverers, FoundPotentialDeliverers } from '../services/find-potential-deliverers';
+import { findMessagePotentialDeliverers } from '../services/find-message-potential-deliverers';
+import { findMessagePotentialReceivers } from '../services/find-message-potential-receivers';
 import {
   saveDonationClaimAudit,
   saveDonationCreateAudit,
@@ -24,7 +23,6 @@ import {
 import { sendDonationUpdateMessages, sendDonationCreateMessages } from '../services/save-donation-message';
 import { sendDonationDeleteMessages } from '../services/delete-donation-message';
 import { sendUnclaimMessages, sendClaimMessages } from '../services/match-donation-message';
-import { messagePotentialReceivers } from '../services/message-potential-receivers';
 import {
   DonationReadRequest,
   DonationCreateRequest,
@@ -45,8 +43,7 @@ router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res:
     .then((donation: DonationEntity) => { res.send(donation); return donation; })
     .catch(handleError.bind(this, res))
     // Perform this task after responding with donation success (might take a long time).
-    .then((donation: DonationEntity) => findPotentialReceivers(donation))
-    .then((potentialReceivers: FoundPotentialReceivers) => messagePotentialReceivers(potentialReceivers))
+    .then((donation: DonationEntity) => findMessagePotentialReceivers(donation))
     .catch((err: Error) => console.error(err));
 });
 
@@ -58,8 +55,7 @@ router.post('/claim', ensureSessionActive, ensureAccountVerified, (req: Request,
     .then((claimedDonation: DonationEntity) => { res.send(claimedDonation); return claimedDonation; })
     .catch(handleError.bind(this, res))
     // Perform this task after responding with donation claim success (might take a long time).
-    .then((claimedDonation: DonationEntity) => findPotentialDeliverers(claimedDonation))
-    .then((potentialDeliverers: FoundPotentialDeliverers) => messagePotentialDeliverers(potentialDeliverers))
+    .then((claimedDonation: DonationEntity) => findMessagePotentialDeliverers(claimedDonation))
     .catch((err: Error) => console.error(err));
 });
 

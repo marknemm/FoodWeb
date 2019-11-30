@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawerContent } from '@angular/material/sidenav';
-import { faHandHoldingHeart, faGifts } from '@fortawesome/free-solid-svg-icons';
-import { PageProgressService } from '~web/page-progress/page-progress.service';
-import { ConstantsService } from '~web/constants/constants.service';
+import { faGifts, faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons';
 import { DonationHelper } from '~shared';
-
-import { SessionService } from '~web/session/session.service';
-import { LeftNavService } from '~web/left-nav/left-nav.service';
+import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
+import { SessionService } from '~web/session/session/session.service';
+import { ConstantsService } from '~web/shared/constants/constants.service';
+import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
 
 @Component({
   selector: 'food-web-left-nav',

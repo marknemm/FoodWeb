@@ -1,15 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, Observable, of } from 'rxjs';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Account, AccountType } from '~shared';
-
-import { SessionService } from '~web/session/session.service';
-import { AccountForm } from '~web/account.form';
-import { TermsConditionsDialogComponent } from '~web/terms-conditions-dialog/terms-conditions-dialog.component';
-import { SignupService } from '~web/signup/signup.service';
-import { SignupVerificationService } from '~web/signup-verification/signup-verification.service';
+import { AccountForm } from '~web/account/account.form';
+import { SessionService } from '~web/session/session/session.service';
+import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
+import { SignupService } from '~web/signup/signup/signup.service';
+import { TermsConditionsDialogComponent } from '~web/signup/terms-conditions-dialog/terms-conditions-dialog.component';
 
 @Component({
   selector: 'food-web-signup',
@@ -18,7 +17,7 @@ import { SignupVerificationService } from '~web/signup-verification/signup-verif
 })
 export class SignupComponent implements OnInit, OnDestroy {
 
-  accountForm: AccountForm;
+  formGroup: AccountForm;
 
   private _operationHoursHeight: number;
   private _destroy$ = new Subject();
@@ -33,11 +32,11 @@ export class SignupComponent implements OnInit, OnDestroy {
   ) {}
 
   get accountType(): AccountType {
-    return this.accountForm.get('accountType').value;
+    return this.formGroup.get('accountType').value;
   }
 
   get operationHoursFullWidth(): boolean {
-    return this.accountForm.get('operationHours').value.limitOperationHours;
+    return this.formGroup.get('operationHours').value.limitOperationHours;
   }
 
   get operationHoursHeight(): number {
@@ -49,14 +48,14 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.accountForm = new AccountForm({ formMode: 'Signup' }, this._destroy$.asObservable());
+    this.formGroup = new AccountForm({ formMode: 'Signup' }, this._destroy$.asObservable());
     this._listenAccountTypeSelect();
     this._listenAccountTypeRoute();
   }
 
   private _listenAccountTypeSelect(): void {
     // When accountType form field is updated, we must update route so user can rely on back button / link directly to correct signup.
-    this.accountForm.get('accountType').valueChanges.pipe(
+    this.formGroup.get('accountType').valueChanges.pipe(
       takeUntil(this._destroy$)
     ).subscribe((accountType: AccountType) =>
       this._router.navigate(['/signup', accountType])
@@ -67,7 +66,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     this._activatedRoute.paramMap.subscribe((routeParams: ParamMap) => {
       const accountTypeParam = <AccountType>routeParams.get('accountType');
       if (accountTypeParam) {
-        this.accountForm.get('accountType').setValue(accountTypeParam);
+        this.formGroup.get('accountType').setValue(accountTypeParam);
       }
     });
   }
@@ -77,12 +76,12 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   signup(): void {
-    this.accountForm.markAllAsTouched();
-    if (this.accountForm.valid) {
+    this.formGroup.markAllAsTouched();
+    if (this.formGroup.valid) {
       const agreement$: Observable<boolean> = this._genAgreementObs();
       agreement$.subscribe((agreed: boolean) => {
-        const account: Account = this.accountForm.toAccount();
-        const password: string = this.accountForm.getPasswordValue();
+        const account: Account = this.formGroup.toAccount();
+        const password: string = this.formGroup.getPasswordValue();
         this._signupService.createAccount(account, password, agreed);
       });
     }

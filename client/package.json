@@ -38,7 +38,7 @@
     "web:build": "ng build --project web --prod --aot",
     "web:build:watch": "ng build --project web --watch",
     "web:lint": "ng lint --project web",
-    "web:start": "ng serve --configuration hmr --project web --proxy-config proxy.conf.json",
+    "web:start": "ng serve --configuration hmr --project web --proxy-config proxy.conf.json --sourceMap=true",
     "web:test": "npm run web:lint && ng test --project web --watch=false --code-coverage --source-map",
     "web:test:watch": "ng test --project web --code-coverage --source-map"
   },

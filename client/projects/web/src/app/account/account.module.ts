@@ -1,26 +1,27 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { AccountRoutingModule } from '~web/account-routing.module';
+import { AccountDetailsComponent } from '~web/account/account-details/account-details.component';
+import { AccountRoutingModule } from '~web/account/account-routing.module';
+import { AccountTypeComponent } from '~web/account/account-type/account-type.component';
+import { AccountsComponent } from '~web/account/accounts/accounts.component';
+import { AddressComponent } from '~web/account/address/address.component';
+import { ContactInfoComponent } from '~web/account/contact-info/contact-info.component';
+import { DonorComponent } from '~web/account/donor/donor.component';
+import { NotificationSettingsComponent } from '~web/account/child-components/notification-settings/notification-settings.component';
+import { OperationHoursInfoComponent } from '~web/account/operation-hours-info/operation-hours-info.component';
+import { OperationHoursComponent } from '~web/account/operation-hours/operation-hours.component';
+import { OrganizationComponent } from '~web/account/organization/organization.component';
+import { ProfileImgComponent } from '~web/account/profile-img/profile-img.component';
+import { ReceiverComponent } from '~web/account/receiver/receiver.component';
+import { UsernameComponent } from '~web/account/username/username.component';
+import { VolunteerComponent } from '~web/account/volunteer/volunteer.component';
+import { DateTimeModule } from '~web/date-time/date-time.module';
+import { MapModule } from '~web/map/map.module';
 import { MaterialModule } from '~web/material.module';
-import { SharedModule } from '~web/shared.module';
-import { PasswordModule } from '~web/password.module';
-import { DateTimeModule } from '~web/date-time.module';
-import { MapModule } from '~web/map.module';
-
-import { AccountDetailsComponent } from '~web/account-details/account-details.component';
-import { AccountsComponent } from '~web/accounts/accounts.component';
-import { AccountTypeComponent } from '~web/account-type/account-type.component';
-import { UsernameComponent } from '~web/username/username.component';
-import { ContactInfoComponent } from '~web/contact-info/contact-info.component';
-import { OrganizationComponent } from '~web/organization/organization.component';
-import { VolunteerComponent } from '~web/volunteer/volunteer.component';
-import { OperationHoursComponent } from '~web/operation-hours/operation-hours.component';
-import { AddressComponent } from '~web/address/address.component';
-import { ProfileImgComponent } from '~web/profile-img/profile-img.component';
-import { ReceiverComponent } from '~web/receiver/receiver.component';
-import { DonorComponent } from '~web/donor/donor.component';
+import { PasswordModule } from '~web/password/password.module';
+import { SharedModule } from '~web/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -31,11 +32,13 @@ import { DonorComponent } from '~web/donor/donor.component';
     ContactInfoComponent,
     OrganizationComponent,
     VolunteerComponent,
+    OperationHoursInfoComponent,
     OperationHoursComponent,
     AddressComponent,
     ProfileImgComponent,
     ReceiverComponent,
-    DonorComponent
+    DonorComponent,
+    NotificationSettingsComponent
   ],
   imports: [
     AccountRoutingModule,
@@ -58,6 +61,7 @@ import { DonorComponent } from '~web/donor/donor.component';
     OrganizationComponent,
     VolunteerComponent,
     AddressComponent,
+    OperationHoursInfoComponent,
     OperationHoursComponent,
     ProfileImgComponent
   ]

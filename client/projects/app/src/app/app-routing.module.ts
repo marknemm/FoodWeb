@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { AppShellComponent } from '~web/app-shell/app-shell.component';
-import { HomeComponent } from '~web/home/home.component';
-import { AboutComponent } from '~web/about/about.component';
-
-import { BootstrapService } from '~app/bootstrap/bootstrap.service';
+import { RouterModule, Routes } from '@angular/router';
+import { BootstrapService } from '~app/bootstrap/bootstrap/bootstrap.service';
+import { AppShellComponent } from '~web/app-shell/app-shell/app-shell.component';
+import { AboutComponent } from '~web/components/about/about.component';
+import { HomeComponent } from '~web/components/home/home.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -37,7 +36,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

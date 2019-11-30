@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, forwardRef, OnDestroy } from '@angular/core';
-import { Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, Validator, ValidationErrors } from '@angular/forms';
+import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TypedFormControl } from '~web/typed-form-control';
-import { ConstantsService } from '~web/constants/constants.service';
 import { AccountType } from '~shared';
+import { TypedFormControl } from '~web/data-structure/typed-form-control';
+import { ConstantsService } from '~web/shared/constants/constants.service';
 
 @Component({
   selector: 'food-web-account-type',

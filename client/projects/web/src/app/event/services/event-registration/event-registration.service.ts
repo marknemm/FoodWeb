@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { environment } from '~web/environment';
-import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
 import { EventRegistration, EventRegistrationRequest, ListResponse } from '~shared';
+import { environment } from '~web/environments/environment';
+import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
 
 @Injectable({
   providedIn: 'root'

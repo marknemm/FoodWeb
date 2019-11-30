@@ -1,10 +1,9 @@
 import { Component, OnInit, Optional } from '@angular/core';
-import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Device } from '@ionic-native/device/ngx';
 import { Observable, of } from 'rxjs';
-
-import { LoginFormChange } from '~web/login/login.component';
-import { SessionService } from '~web/session/session.service';
+import { LoginFormChange } from '~web/session/login/login.component';
+import { SessionService } from '~web/session/session/session.service';
 
 @Component({
   selector: 'food-web-login-dialog',

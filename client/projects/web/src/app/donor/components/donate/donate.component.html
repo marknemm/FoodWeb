@@ -1,4 +1,4 @@
-<form [formGroup]="donateForm" class="donate-form" [ngClass]="{ 'submitted': !!savedDonation }" (submit)="donate()">
+<form [formGroup]="formGroup" class="donate-form" [ngClass]="{ 'submitted': !!savedDonation }" (submit)="donate()">
 
   <div class="donate-form-title page-title block-label">
     {{ !savedDonation ? 'Donation Form' : 'Thank-you For Your Donation' }}
@@ -15,21 +15,21 @@
     <mat-card class="donate-card">
       <mat-card-title>Donation Information</mat-card-title>
       <mat-card-content>
-        <food-web-donation-form [formGroup]="donateForm" *ngIf="!savedDonation"></food-web-donation-form>
+        <food-web-donation-form [formGroup]="formGroup" *ngIf="!savedDonation"></food-web-donation-form>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="donate-card">
       <mat-card-title>Pickup Window</mat-card-title>
       <mat-card-content>
-        <food-web-date-time-range #pickupWindowRange formGroupName="pickupWindow"></food-web-date-time-range>
+        <food-web-date-time-range #pickupWindowRange [formGroup]="formGroup.get('pickupWindow')"></food-web-date-time-range>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="donate-card">
       <mat-card-title>Contact Info</mat-card-title>
       <mat-card-content>
-        <food-web-contact-info [editing]="true" formGroupName="donorContactOverride"></food-web-contact-info>
+        <food-web-contact-info [editing]="true" [formGroup]="formGroup.get('donorContactOverride')"></food-web-contact-info>
       </mat-card-content>
     </mat-card>
 
@@ -37,7 +37,7 @@
       <mat-card-title>Food Safety Checklist</mat-card-title>
       <mat-card-content>
         <food-web-food-safety-checklist formControlName="safetyChecklist"></food-web-food-safety-checklist>
-        <mat-error class="safety-checklist-err" *ngIf="donateForm.get('safetyChecklist').touched && donateForm.get('safetyChecklist').hasError('required')">
+        <mat-error class="safety-checklist-err" *ngIf="formGroup.get('safetyChecklist').touched && formGroup.get('safetyChecklist').hasError('required')">
           Safety Checklist Required
         </mat-error>
       </mat-card-content>

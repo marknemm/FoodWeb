@@ -1,19 +1,21 @@
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { AccountHelper, DeliveryHelper, DonationHelper, JSONDateReviver, OperationHoursHelper } from '~shared';
 import { MaterialModule } from '~web/material.module';
-import { AccountHelper, OperationHoursHelper, DonationHelper, DeliveryHelper, JSONDateReviver } from '~shared';
-
-import { AlertDialogComponent } from '~web/alert-dialog/alert-dialog.component';
-import { AlertSnackBarComponent } from '~web/alert-snack-bar/alert-snack-bar.component';
-import { ProgressIndicatorComponent } from '~web/progress-indicator/progress-indicator.component';
-import { EditSaveButtonComponent } from '~web/edit-save-button/edit-save-button.component';
-import { PaginatorComponent } from '~web/paginator/paginator.component';
-import { ReturnLinkDirective } from '~web/return-link/return-link.directive';
-import { ConfirmButtonDirective } from '~web/confirm-button/confirm-button.directive';
-import { DisplayEditTransitionDirective } from '~web/display-edit-transition/display-edit-transition.directive';
+import { AlertDialogComponent } from '~web/shared/alert-dialog/alert-dialog.component';
+import { AlertSnackBarComponent } from '~web/shared/alert-snack-bar/alert-snack-bar.component';
+import { ConfirmButtonDirective } from '~web/shared/confirm-button/confirm-button.directive';
+import { ControlNameDirective } from '~web/shared/directives/control-name/control-name.directive';
+import { DisplayEditTransitionDirective } from '~web/shared/display-edit-transition/display-edit-transition.directive';
+import { EditSaveButtonComponent } from '~web/shared/edit-save-button/edit-save-button.component';
+import { FragmentAccordianDirective } from '~web/shared/fragment-accordian/fragment-accordian.directive';
+import { PaginatorComponent } from '~web/shared/paginator/paginator.component';
+import { ProgressIndicatorComponent } from '~web/shared/progress-indicator/progress-indicator.component';
+import { ReturnLinkDirective } from '~web/shared/return-link/return-link.directive';
+import { YesNoComponent } from '~web/shared/yes-no/yes-no.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,10 @@ import { DisplayEditTransitionDirective } from '~web/display-edit-transition/dis
     PaginatorComponent,
     ReturnLinkDirective,
     ConfirmButtonDirective,
-    DisplayEditTransitionDirective
+    DisplayEditTransitionDirective,
+    FragmentAccordianDirective,
+    YesNoComponent,
+    ControlNameDirective
   ],
   imports: [
     RouterModule.forChild([]),
@@ -42,7 +47,10 @@ import { DisplayEditTransitionDirective } from '~web/display-edit-transition/dis
     PaginatorComponent,
     ReturnLinkDirective,
     ConfirmButtonDirective,
-    DisplayEditTransitionDirective
+    DisplayEditTransitionDirective,
+    FragmentAccordianDirective,
+    YesNoComponent,
+    ControlNameDirective
   ],
   entryComponents: [
     AlertDialogComponent,

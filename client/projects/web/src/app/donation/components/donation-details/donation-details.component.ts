@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AccountHelper, DonationHelper, DeliveryHelper, DateTimeRange } from '~shared';
-
-import { SessionService } from '~web/session/session.service';
-import { DonateForm } from '~web/donate.form';
-import { DeliveryService } from '~web/delivery/delivery.service';
-import { DateTimeService } from '~web/date-time/date-time.service';
-import { DateTimeSelectDialogComponent, DateTimeSelectConfig } from '~web/date-time-select-dialog/date-time-select-dialog.component';
-import { DonationAction } from '~web/donation-detail-actions/donation-detail-actions.component';
-import { DonationService, Donation } from '~web/donation/donation.service';
+import { AccountHelper, DateTimeRange, DeliveryHelper, DonationHelper } from '~shared';
+import { DateTimeSelectConfig, DateTimeSelectDialogComponent } from '~web/date-time/date-time-select-dialog/date-time-select-dialog.component';
+import { DateTimeService } from '~web/date-time/date-time/date-time.service';
+import { DeliveryService } from '~web/delivery/delivery/delivery.service';
+import { DonationAction } from '~web/donation/donation-detail-actions/donation-detail-actions.component';
+import { Donation, DonationService } from '~web/donation/donation/donation.service';
+import { DonateForm } from '~web/donor/donate.form';
+import { SessionService } from '~web/session/session/session.service';
 
 @Component({
   selector: 'food-web-donation-details',
@@ -19,7 +18,7 @@ import { DonationService, Donation } from '~web/donation/donation.service';
 })
 export class DonationDetailsComponent implements OnInit {
 
-  donationForm: DonateForm;
+  formGroup: DonateForm;
 
   private _myDonation = false;
   private _donationNotFound = false;
@@ -56,7 +55,7 @@ export class DonationDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.donationForm = new DonateForm(this._dateTimeService, { safetyChecklistInit: true });
+    this.formGroup = new DonateForm(this._dateTimeService, { safetyChecklistInit: true });
     this._listenDonationChange();
   }
 
@@ -78,17 +77,15 @@ export class DonationDetailsComponent implements OnInit {
   }
 
   saveDonation(): void {
-    if (this.donationForm.dirty) {
-      const donationUpdate: Donation = this.donationForm.toDonation();
-      this._donationService.updateDonation(this._originalDonation, donationUpdate).subscribe(
-        (savedDonation: Donation) => {
-          this._updateDonation(savedDonation);
-          this.toggleEdit();
-        }
-      );
-    } else if (this.donationForm.valid) {
-      this.toggleEdit();
-    }
+    const donationUpdate: Donation = this.formGroup.toDonation();
+    this._donationService.updateDonation(this._originalDonation, donationUpdate).subscribe(
+      (savedDonation: Donation) => {
+        this._updateDonation(savedDonation);
+        this.formGroup.markAsUntouched();
+        this.formGroup.markAsPristine();
+        this.toggleEdit();
+      }
+    );
   }
 
   deleteDonation(): void {
@@ -151,7 +148,7 @@ export class DonationDetailsComponent implements OnInit {
 
   private _updateDonation(donation: Donation): void {
     this._originalDonation = donation;
-    this.donationForm.patchFromDonation(donation);
+    this.formGroup.patchFromDonation(donation);
     this._myDonation = this.sessionService.isMyAccount(donation.donorAccount.id);
   }
 

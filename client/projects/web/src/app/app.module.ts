@@ -1,29 +1,25 @@
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-
-import { environment } from '~web/environment';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { JSONDateReviver } from '~shared';
 import { AppRoutingModule } from '~web/app-routing.module';
-import { MaterialModule } from '~web/material.module';
-import { SharedModule } from '~web/shared/shared.module';
 import { AppShellModule } from '~web/app-shell/app-shell.module';
 import { AppComponent } from '~web/app.component';
-import { SessionModule } from '~web/session/session.module';
+import { AboutComponent } from '~web/components/about/about.component';
+import { HomeComponent } from '~web/components/home/home.component';
+import { environment } from '~web/environments/environment';
 import { EventModule } from '~web/event/event.module';
 import { HeuristicsModule } from '~web/heuristics/heuristics.module';
-
-import { HomeComponent } from '~web/home/home.component';
-import { AboutComponent } from '~web/about/about.component';
-
-import { SessionMonitorService } from '~web/session-monitor/session-monitor.service';
-import { RecaptchaService } from '~web/recaptcha/recaptcha.service';
-import { IconService } from '~web/icon/icon.service';
-
-import { JSONDateReviver } from '~shared';
+import { MaterialModule } from '~web/material.module';
+import { SessionMonitorService } from '~web/session/session-monitor/session-monitor.service';
+import { SessionModule } from '~web/session/session.module';
+import { IconService } from '~web/shared/icon/icon.service';
+import { RecaptchaService } from '~web/shared/recaptcha/recaptcha.service';
+import { SharedModule } from '~web/shared/shared.module';
 
 @NgModule({
   declarations: [

@@ -45,6 +45,21 @@ $icon-size: 38px;
     text-align: center;
     background-color: white;
 
+    .notification-settings-link {
+      position: absolute;
+      color: $accent-darkest;
+      right: 6px;
+      top: 0;
+
+      button {
+        position: relative;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 18px;
+      }
+    }
+
     > .mat-divider {
       margin: 3px 0 0;
     }

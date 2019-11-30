@@ -1,7 +1,7 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from '~web/app.module';
-import { environment } from '~web/environment';
+import { environment } from '~web/environments/environment';
 import { hmrBootstrap } from '~hmr';
 
 if (environment.production) {

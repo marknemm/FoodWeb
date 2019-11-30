@@ -1,5 +1,5 @@
-import { TypedFormGroup } from '~web/typed-form-group';
 import { Receiver } from '~shared';
+import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 
 export class ReceiverForm extends TypedFormGroup<Receiver> {
 

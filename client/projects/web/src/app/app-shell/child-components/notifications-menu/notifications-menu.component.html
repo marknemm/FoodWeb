@@ -15,6 +15,11 @@
   <div class="notifications-menu-content">
     <div class="header">
       <span class="title">Notifications</span>
+      <a [routerLink]="['/account/my']" fragment="notifications" class="notification-settings-link" matTooltip="Notification Settings">
+        <button mat-icon-button type="button">
+          <fa-icon [icon]="faCog"></fa-icon>
+        </button>
+      </a>
       <mat-divider></mat-divider>
     </div>
     <mat-action-list>

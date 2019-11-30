@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subscriber, of } from 'rxjs';
+import { Observable, of, Subscriber } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ContactInfo, GeographyLocation } from '~shared';
 

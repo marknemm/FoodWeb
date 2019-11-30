@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from '~web/login/login.component';
-
-import { BootstrapGuardService } from '~app/bootstrap-guard/bootstrap-guard.service';
-import { AppSignupComponent } from '~app/app-signup/app-signup.component';
+import { RouterModule, Routes } from '@angular/router';
+import { AppSignupComponent } from '~app/bootstrap/app-signup/app-signup.component';
+import { BootstrapGuardService } from '~app/bootstrap/bootstrap-guard/bootstrap-guard.service';
+import { LoginComponent } from '~web/session/login/login.component';
 
 const routes: Routes = [
   { path: '', canActivate: [BootstrapGuardService], canDeactivate: [BootstrapGuardService],

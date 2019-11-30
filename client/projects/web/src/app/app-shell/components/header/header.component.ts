@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PageTitleService } from '~web/page-title/page-title.service';
-import { PageProgressService } from '~web/page-progress/page-progress.service';
-import { SessionService } from '~web/session/session.service';
-import { LoginDialogComponent } from '~web/login-dialog/login-dialog.component';
-import { LeftNavService } from '~web/left-nav/left-nav.service';
-import { NotificationService } from '~web/notification/notification.service';
+import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
+import { NotificationService } from '~web/notification/notification/notification.service';
+import { LoginDialogComponent } from '~web/session/login-dialog/login-dialog.component';
+import { SessionService } from '~web/session/session/session.service';
+import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
+import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
   selector: 'food-web-header',

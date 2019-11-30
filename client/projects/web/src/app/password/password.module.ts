@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { PasswordRoutingModule } from '~web/password-routing.module';
 import { MaterialModule } from '~web/material.module';
-import { SharedModule } from '~web/shared.module';
-
-import { PasswordResetComponent } from '~web/password-reset/password-reset.component';
-import { PasswordComponent } from '~web/password/password.component';
+import { PasswordResetComponent } from '~web/password/password-reset/password-reset.component';
+import { PasswordRoutingModule } from '~web/password/password-routing.module';
+import { PasswordComponent } from '~web/password/password/password.component';
+import { SharedModule } from '~web/shared/shared.module';
 
 @NgModule({
   declarations: [

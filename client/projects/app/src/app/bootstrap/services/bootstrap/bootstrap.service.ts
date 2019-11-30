@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { map } from 'rxjs/operators';
-import { AppSessionService } from '~app/app-session/app-session.service';
+import { AppSessionService } from '~app/app-session/app-session/app-session.service';
 
 @Injectable({
   providedIn: 'root'

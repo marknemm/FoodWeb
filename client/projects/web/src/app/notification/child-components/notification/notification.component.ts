@@ -1,7 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Notification } from '~shared';
-
-import { NotificationService } from '~web/notification/notification.service';
+import { NotificationService } from '~web/notification/notification/notification.service';
 
 @Component({
   selector: 'food-web-notification',

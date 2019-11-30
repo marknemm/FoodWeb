@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { AuthGaurdService } from '~web/auth-gaurd/auth-gaurd.service';
-
-import { DonateComponent } from '~web/donate/donate.component';
+import { RouterModule, Routes } from '@angular/router';
+import { DonateComponent } from '~web/donor/donate/donate.component';
+import { AuthGaurdService } from '~web/session/auth-gaurd/auth-gaurd.service';
 
 const routes: Routes = [
   { path: 'donate', component: DonateComponent, canActivate: [AuthGaurdService] }

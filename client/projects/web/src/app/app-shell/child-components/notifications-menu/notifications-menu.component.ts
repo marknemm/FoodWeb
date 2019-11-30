@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
-import { NotificationService } from '~web/notification/notification.service';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { NotificationService } from '~web/notification/services/notification/notification.service';
 
 @Component({
   selector: 'food-web-notifications-menu',
@@ -8,6 +8,8 @@ import { NotificationService } from '~web/notification/notification.service';
   styleUrls: ['./notifications-menu.component.scss'],
 })
 export class NotificationsMenuComponent implements OnInit {
+
+  readonly faCog = faCog;
 
   constructor(
     public notificationService: NotificationService

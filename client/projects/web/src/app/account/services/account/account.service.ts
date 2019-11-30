@@ -1,17 +1,15 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError, finalize, map, flatMap } from 'rxjs/operators';
-import { environment } from '~web/environment';
-import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
-import { PageProgressService } from '~web/page-progress/page-progress.service';
-import { AlertService } from '~web/alert/alert.service';
-import { Account, ListResponse, AccountUpdateRequest, PasswordUpdateRequest, AccountReadFilters, AccountReadRequest } from '~shared';
-
+import { catchError, finalize, flatMap, map } from 'rxjs/operators';
+import { Account, AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, ListResponse, PasswordUpdateRequest } from '~shared';
+import { environment } from '~web/environments/environment';
 import { PasswordFormT } from '~web/password/forms/password.form';
-import { SessionService } from '~web/session/session.service';
-
+import { SessionService } from '~web/session/session/session.service';
+import { AlertService } from '~web/shared/alert/alert.service';
+import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
+import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
 export { Account };
 
 @Injectable({
@@ -29,20 +27,14 @@ export class AccountService {
     private _alertService: AlertService
   ) {}
 
-  updateAccount(originalAccount: Account, accountSectionUpdate: Partial<Account>): Observable<Account> {
-    const accountUpdtReq: AccountUpdateRequest = this._genAccountUpdateRequest(originalAccount, accountSectionUpdate);
+  updateAccountSection<T>(secitonName: string, sectionValue: T): Observable<Account> {
+    const accountSectionUpdtReq: AccountSectionUpdateReqeust<T> = { accountSectionName: secitonName, accountSection: sectionValue };
     this._pageProgressService.activate(true);
-    return this._httpClient.put<Account>(this.url, accountUpdtReq, { withCredentials: true }).pipe(
+    return this._httpClient.put<Account>(`${this.url}/section`, accountSectionUpdtReq, { withCredentials: true }).pipe(
       map((savedAccount: Account) => this._handleAccountUpdateResponse(savedAccount)),
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     );
-  }
-
-  private _genAccountUpdateRequest(originalAccount: Account, accountSectionUpdate: Partial<Account>): AccountUpdateRequest {
-    const account: Account = Object.assign({}, originalAccount);
-    Object.keys(accountSectionUpdate).forEach((property: string) => account[property] = accountSectionUpdate[property]);
-    return { account };
   }
 
   private _handleAccountUpdateResponse(savedAccount: Account): Account {

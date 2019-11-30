@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-
-import { AlertService } from '~web/alert/alert.service';
-import { AlertResponse, AlertMessage } from '~web/alert/alert-message';
+import { AlertMessage, AlertResponse } from '~web/shared/alert/alert-message';
+import { AlertService } from '~web/shared/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,5 @@
 <div class="signup-container">
-  <form [formGroup]="accountForm" *ngIf="!sessionService.loggedIn" (submit)="signup()">
+  <form [formGroup]="formGroup" *ngIf="!sessionService.loggedIn" (submit)="signup()">
     <div class="align-center">
       <div class="page-title block-label signup-header">
         {{ accountType ? 'Signup' : 'Select Your Account Type' }}
@@ -17,10 +17,10 @@
             <mat-card-content>
               <div class="row">
                 <div class="col-sm-12">
-                  <food-web-username [editing]="true" formControlName="username"></food-web-username>
+                  <food-web-username [editing]="true" [formGroup]="formGroup.get('username')"></food-web-username>
                 </div>
                 <div class="col-sm-12">
-                  <food-web-password [editing]="true" formGroupName="password"></food-web-password>
+                  <food-web-password [editing]="true" [formGroup]="formGroup.get('password')"></food-web-password>
                 </div>
               </div>
             </mat-card-content>
@@ -29,14 +29,14 @@
           <mat-card *ngIf="accountType !== 'Volunteer'">
             <mat-card-title class="block-label">Organization</mat-card-title>
             <mat-card-content>
-              <food-web-organization [accountType]="accountType" [editing]="true" formGroupName="organization"></food-web-organization>
+              <food-web-organization [accountType]="accountType" [editing]="true" [formGroup]="formGroup.get('organization')"></food-web-organization>
             </mat-card-content>
           </mat-card>
 
           <mat-card *ngIf="accountType === 'Volunteer'">
             <mat-card-title>Volunteer Name</mat-card-title>
             <mat-card-content>
-              <food-web-volunteer [editing]="true" formGroupName="volunteer"></food-web-volunteer>
+              <food-web-volunteer [editing]="true" [formGroup]="formGroup.get('volunteer')"></food-web-volunteer>
             </mat-card-content>
           </mat-card>
         </div>
@@ -44,7 +44,7 @@
           <mat-card>
             <mat-card-title class="block-label">Contact Info</mat-card-title>
             <mat-card-content>
-              <food-web-contact-info [editing]="true" formGroupName="contactInfo"></food-web-contact-info>
+              <food-web-contact-info [editing]="true" [formGroup]="formGroup.get'contactInfo')"></food-web-contact-info>
             </mat-card-content>
           </mat-card>
         </div>
@@ -64,7 +64,7 @@
             <br><span> You can update this setting any time under your account.</span>
           </mat-card-subtitle>
           <mat-card-content>
-            <food-web-operation-hours [editing]="true" formGroupName="operationHours"></food-web-operation-hours>
+            <food-web-operation-hours-info [editing]="true" [formGroup]="formGroup.get('operationHours')"></food-web-operation-hours-info>
           </mat-card-content>
         </mat-card>
       </div>

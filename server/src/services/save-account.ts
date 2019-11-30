@@ -6,17 +6,17 @@ import { FoodWebError } from '../helpers/food-web-error';
 import { geocode, geoTimezone } from '../helpers/geocoder';
 import { AccountUpdateRequest } from '../interfaces/account/account-update-request';
 import { UpdateDiff } from '../interfaces/update-diff';
-import { Account, AccountCreateRequest, AccountHelper, OperationHours, OperationHoursHelper } from '../shared';
+import {
+  Account,
+  AccountCreateRequest,
+  AccountHelper,
+  AccountSectionUpdateReqeust,
+  NotificationSettings,
+  OperationHours,
+  OperationHoursHelper
+} from '../shared';
 import { createUnverifiedAccount } from './account-verification';
 import { savePassword } from './save-password';
-
-/**
- * Data generated when creating a new account.
- */
-export interface NewAccountData {
-  account: AccountEntity;
-  unverifiedAccount: UnverifiedAccountEntity;
-}
 
 const _accountHelper = new AccountHelper();
 const _opHoursHelper = new OperationHoursHelper();
@@ -33,6 +33,30 @@ export async function createAccount(request: AccountCreateRequest): Promise<NewA
   _opHoursHelper.formatOperationHoursTimes(createdAccount.operationHours);
   createdAccount.verified = false;
   return { account: createdAccount, unverifiedAccount };
+}
+
+export function updateAccountSection(
+  updateReq: AccountSectionUpdateReqeust,
+  myAccount: Account
+): Promise<UpdateDiff<AccountEntity>> {
+  if (updateReq.accountSectionName === 'notificationSettings') {
+    return _updateNotificationsSettings(updateReq, myAccount);
+  }
+  const account: Account = Object.assign({}, myAccount); // Clone orignal account to set update field(s).
+  account[updateReq.accountSectionName] = updateReq.accountSection;
+  return updateAccount({ account }, myAccount);
+}
+
+function _updateNotificationsSettings(
+  updateReq: AccountSectionUpdateReqeust<NotificationSettings>,
+  myAccount: Account
+): Promise<UpdateDiff<AccountEntity>> {
+  const account: Account = Object.assign({}, myAccount); // Clone orignal account to set update field(s).
+  account.contactInfo = Object.assign({}, account.contactInfo);
+  account.contactInfo.enableEmail = updateReq.accountSection.enableEmail;
+  account.contactInfo.enablePushNotification = updateReq.accountSection.enablePushNotification;
+  account.contactInfo.notifyForEachDonation = updateReq.accountSection.notifyForEachDonation;
+  return updateAccount({ account }, myAccount);
 }
 
 export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: Account): Promise<UpdateDiff<AccountEntity>> {
@@ -54,13 +78,14 @@ export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: 
 async function _saveAccount(manager: EntityManager, account: Account, myAccount?: Account): Promise<AccountEntity> {
   const accountRepo: Repository<AccountEntity> = manager.getRepository(AccountEntity);
   const operationHoursRepo: Repository<OperationHoursEntity> = manager.getRepository(OperationHoursEntity);
-  _validateAccount(account, myAccount);
   _ensureEitherOrganizationOrVolunteer(account);
   _ensureAccountHasProfileImg(account);
+  _validateAccount(account, myAccount);
   await _setGeocoordinatesIfNewAddress(account, myAccount);
   account.contactInfo.phoneNumber = _accountHelper.formatPhoneNumber(account.contactInfo.phoneNumber);
 
   if (account.id) {
+    // Must delete all operation hours associated with account because they are re-inserted upon update.
     await operationHoursRepo.delete({ account: { id: account.id } });
   }
   const savedAccount: AccountEntity = await accountRepo.save(account as AccountEntity).catch(
@@ -79,9 +104,20 @@ function _validateAccount(account: Account, myAccount?: Account): void {
 }
 
 function _ensureEitherOrganizationOrVolunteer(account: Account): void {
-  (account.accountType === 'Volunteer')
-    ? account.organization = null
-    : account.volunteer = null;
+  if (account.accountType === 'Volunteer') {
+    account.organization = null;
+  } else {
+    account.volunteer = null;
+    _ensureEitherDonorOrReceiver(account);
+  }
+}
+
+function _ensureEitherDonorOrReceiver(account: Account): void {
+  if (account.organization) {
+    (account.accountType === 'Donor')
+      ? account.organization.receiver = null
+      : account.organization.donor = null;
+  }
 }
 
 function _ensureAccountHasProfileImg(account: Account): void {
@@ -106,7 +142,11 @@ function _handleSaveQueryFailError(err: QueryFailedError): Error {
     : err;
 }
 
-async function _insertOperationHours(repo: Repository<OperationHoursEntity>, accountId: number, operationHoursArr: OperationHours[]): Promise<void> {
+async function _insertOperationHours(
+  repo: Repository<OperationHoursEntity>,
+  accountId: number,
+  operationHoursArr: OperationHours[]
+): Promise<void> {
   operationHoursArr = _opHoursHelper.sortOperationHours(operationHoursArr);
   if (operationHoursArr && operationHoursArr.length !== 0) {
     // Make copy of array with shallow copy of members, and assign account field for insertion.
@@ -119,4 +159,12 @@ async function _insertOperationHours(repo: Repository<OperationHoursEntity>, acc
     );
     repo.insert(operationHoursArrCopy);
   }
+}
+
+/**
+ * Data generated when creating a new account.
+ */
+export interface NewAccountData {
+  account: AccountEntity;
+  unverifiedAccount: UnverifiedAccountEntity;
 }

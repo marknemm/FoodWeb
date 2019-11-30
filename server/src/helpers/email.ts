@@ -43,7 +43,8 @@ export function sendEmail(
   template: string,
   context?: any
 ): Promise<void> {
-  if (offlineMode) { return; }
+  // If offline, or the target account has disabled email notifications, then return immediately.
+  if (offlineMode || !account.contactInfo.enableEmail) { return; }
   context = _fillMissingContext(context, account, template);
 
   return new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {

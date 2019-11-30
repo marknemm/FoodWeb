@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { PageTitleService } from '~web/page-title/page-title.service';
 import { EventRegistration, ListResponse } from '~shared';
-
-import { EventRegistrationService } from '~web/event-registration/event-registration.service';
+import { EventRegistrationService } from '~web/event/event-registration/event-registration.service';
+import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
   selector: 'food-web-event-registrations',

@@ -1,9 +1,11 @@
+import { NotificationSettings } from './notification-settings';
+
 export interface GeographyLocation {
   type: string;
   coordinates: [number, number];
 }
 
-export interface ContactInfo {
+export interface ContactInfo extends Partial<NotificationSettings> {
   id?: number;
   email: string;
   phoneNumber: string;
@@ -13,4 +15,7 @@ export interface ContactInfo {
   postalCode?: string;
   location?: GeographyLocation;
   timezone?: string;
+  enableEmail?: boolean;
+  enablePushNotification?: boolean;
+  notifyForEachDonation?: boolean;
 }

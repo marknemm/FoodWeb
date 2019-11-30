@@ -36,6 +36,15 @@ export class ContactInfoEntity implements ContactInfo {
   @Column()
   timezone: string;
 
+  @Column({ default: true })
+  enableEmail: boolean;
+
+  @Column({ default: true })
+  enablePushNotification: boolean;
+
+  @Column({ default: true }) // TODO: Change to false in the future when we have a lot more activity!!!
+  notifyForEachDonation: boolean;
+
   @OneToOne((type) => AccountEntity, (account) => account.contactInfo)
   account?: AccountEntity;
 

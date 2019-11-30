@@ -1,7 +1,7 @@
 import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { TypedFormGroup } from '~web/typed-form-group';
 import { OperationHours, Weekday } from '~shared';
+import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 
 export class OperationHoursForm extends TypedFormGroup<OperationHours> {
 

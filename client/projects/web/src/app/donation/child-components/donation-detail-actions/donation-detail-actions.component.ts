@@ -1,5 +1,6 @@
-import { Component, OnInit, OnChanges, SimpleChanges, Input, EventEmitter, Output } from '@angular/core';
-import { Donation, DonationHelper, DeliveryHelper, Account } from '~shared';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { Account, DeliveryHelper, Donation, DonationHelper } from '~shared';
 
 export type DonationAction = 'ToggleEdit' | 'Save' | 'Delete' | 'Claim' | 'Unclaim' | 'ScheduleDelivery' | 'AdvanceDeliveryState' | 'UndoDeliveryState';
 
@@ -10,6 +11,7 @@ export type DonationAction = 'ToggleEdit' | 'Save' | 'Delete' | 'Claim' | 'Uncla
 })
 export class DonationDetailActionsComponent implements OnInit, OnChanges {
 
+  @Input() formGroup: FormGroup;
   @Input() donation: Donation;
   @Input() myAccount: Account;
   @Input() editing = false;

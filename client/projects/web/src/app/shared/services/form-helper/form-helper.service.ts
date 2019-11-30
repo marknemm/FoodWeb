@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormGroupDirective, FormArray, FormBuilder, FormControl, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -9,16 +9,6 @@ export class FormHelperService {
   constructor(
     private _formBuilder: FormBuilder
   ) {}
-
-  deriveFormArray(formArray: FormArray, formArrayName: string, formGroupDirective: FormGroupDirective): FormArray {
-    if (formArray) {
-      return formArray;
-    }
-    if (formGroupDirective && formGroupDirective.form && formGroupDirective.form.get(formArrayName) instanceof FormArray) {
-      return (formGroupDirective.form.get(formArrayName) as FormArray);
-    }
-    return new FormArray([]);
-  }
 
   deriveAbstractControl(control: AbstractControl, controlName: string, formGroupDirective: FormGroupDirective): AbstractControl {
     if (control) {
@@ -37,6 +27,26 @@ export class FormHelperService {
       control = formGroupDirective.form;
     }
     return control;
+  }
+
+  deriveFormArray(formArray: FormArray, formArrayName: string, formGroupDirective: FormGroupDirective): FormArray {
+    if (formArray) {
+      return formArray;
+    }
+    if (formGroupDirective && formGroupDirective.form && formGroupDirective.form.get(formArrayName) instanceof FormArray) {
+      return (formGroupDirective.form.get(formArrayName) as FormArray);
+    }
+    return new FormArray([]);
+  }
+
+  deriveFormControl(formControl: FormControl, formControlName: string, formGroupDirective: FormGroupDirective): FormControl {
+    if (formControl) {
+      return formControl;
+    }
+    if (formGroupDirective && formGroupDirective.form && formGroupDirective.form.get(formControlName) instanceof FormControl) {
+      return (formGroupDirective.form.get(formControlName) as FormControl);
+    }
+    return new FormControl(null);
   }
 
   deriveFormGroup(formGroup: FormGroup, formGroupName: string, formGroupDirective: FormGroupDirective): FormGroup {

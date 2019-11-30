@@ -4,9 +4,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, flatMap, map } from 'rxjs/operators';
 import { Account } from '~shared';
-import { ErrorHandlerService } from '~web/error-handler/error-handler.service';
-import { LoginDialogComponent } from '~web/login-dialog/login-dialog.component';
-import { SessionService } from '~web/session/session.service';
+import { LoginDialogComponent } from '~web/session/login-dialog/login-dialog.component';
+import { SessionService } from '~web/session/session/session.service';
+import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
 
 @Injectable({
   providedIn: 'root'
