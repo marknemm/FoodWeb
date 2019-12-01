@@ -4,14 +4,13 @@ import { OperationHoursInfoForm } from '~web/account/operation-hours-info.form';
 import { OperationHoursArray } from '~web/account/operation-hours.array';
 import { TypedFormControl } from '~web/data-structure/typed-form-control';
 import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.service';
-import { Editable } from '~web/shared/editable';
 
 @Component({
   selector: 'food-web-operation-hours-info',
   templateUrl: './operation-hours-info.component.html',
   styleUrls: ['./operation-hours-info.component.scss']
 })
-export class OperationHoursInfoComponent implements OnChanges, Editable {
+export class OperationHoursInfoComponent implements OnChanges {
 
   @Input() editing = false;
   @Input() operationHoursArr: OperationHours[] = [];

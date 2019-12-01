@@ -1,13 +1,12 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { OrganizationForm } from '~web/account/organization.form';
-import { Editable } from '~web/shared/editable';
 
 @Component({
   selector: 'food-web-organization',
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })
-export class OrganizationComponent implements OnInit, Editable {
+export class OrganizationComponent implements OnInit {
 
   @Input() editing = false;
   @Input() accountType: string = '';

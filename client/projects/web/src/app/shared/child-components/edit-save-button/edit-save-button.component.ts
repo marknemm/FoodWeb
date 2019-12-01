@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { AbstractControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.service';
-import { Editable } from '~web/shared/editable';
 
 @Component({
   selector: 'food-web-edit-save-button',
@@ -13,7 +12,6 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
 
   @Input() control: AbstractControl;
   @Input() disableSave = false;
-  @Input() editable: Editable;
   @Input() editing = false;
   @Input() noCancelEdit = false;
   @Input() useButtonText = false;
@@ -21,7 +19,7 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
   /**
    * A callback function that will be called whenever the associated data should be saved.
    */
-  @Input() saveCb: SaveCb<T> = () => of(false);
+  @Input() saveCb: SaveCb<T> = null;
 
   /**
    * Emits the edit state whenever a change is made to it.
@@ -46,52 +44,8 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.control || this.editable) {
-      this._handleAbstractControlUpdate();
-    }
-    if (changes.editing) {
-      this._updateEditingProps(this.editing);
-    }
-  }
-
-  /**
-   * Handles the update of the abstract control associated with the save-edit buttons.
-   */
-  private _handleAbstractControlUpdate(): void {
-    this.control = (this.editable)
-      ? this.control = this._deriveFormControlFromEditable()
-      : this.control;
-    this._lastSaveValue = (this.control ? this.control.value : null);
-  }
-
-  /**
-   * Attempts to derive the abstract form control (group, array, or simple control)
-   * used for editing from the input Editable value.
-   * @return The derived abstract form control if one exists. Otherwise, null.
-   */
-  private _deriveFormControlFromEditable(): AbstractControl {
-    if (this.editable) {
-      if (this.editable.formGroup) {
-        return this.editable.formGroup;
-      }
-      if (this.editable.formArray) {
-        return this.editable.formArray;
-      }
-      if (this.editable.formControl) {
-        return this.editable.formControl;
-      }
-    }
-    return null;
-  }
-
-  /**
-   * Updates the editing properties in this component and an input Editable object if it exists.
-   * @param editing The editing state to set.
-   */
-  private _updateEditingProps(editing: boolean): void {
-    this.editing = editing;
-    if (this.editable) {
-      this.editable.editing = editing;
+    if (changes.control) {
+      this._lastSaveValue = (this.control ? this.control.value : null);
     }
   }
 
@@ -113,12 +67,14 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
     if (this.control.invalid) { return; }
     if (this.control.dirty) {
       this.save.emit();
-      this.saveCb(this.control.value).subscribe((success: boolean) => {
-        if (success) {
-          this._lastSaveValue = this.control.value;
-          this.setEditing(false, true);
-        }
-      });
+      if (this.saveCb) {
+        this.saveCb(this.control.value).subscribe((success: boolean) => {
+          if (success) {
+            this._lastSaveValue = this.control.value;
+            this.setEditing(false, true);
+          }
+        });
+      }
     } else {
       // Simply set editing to false if there have been no updates.
       this.setEditing(false);
@@ -130,11 +86,13 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
    */
   private _saveNoFormControl(): void {
     this.save.emit();
-    this.saveCb(undefined).subscribe((success: boolean) => {
-      if (success) {
-        this.setEditing(false, true);
-      }
-    });
+    if (this.saveCb) {
+      this.saveCb(undefined).subscribe((success: boolean) => {
+        if (success) {
+          this.setEditing(false, true);
+        }
+      });
+    }
   }
 
   /**
@@ -150,8 +108,8 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
     // Wait for user to confirm cancel of edit if the associated form is dirty.
     confirm$.subscribe((confirm: boolean) => {
       if (confirm) {
-        this._updateEditingProps(editing);
-        if (this.editable && !editing) {
+        this.editing = editing;
+        if (this.control && this.saveCb) {
           this._resetAbstractControl();
         }
         this.edit.emit(editing);

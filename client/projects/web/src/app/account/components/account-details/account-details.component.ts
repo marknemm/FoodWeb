@@ -23,7 +23,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   private _accountNotFound = false;
   private _isMyAccount = false;
   private _passwordFormMode: PasswordFormMode = 'Account';
-  private _seeDonationsParams: DonationReadFilters;
+  private _seeDonationsLinkParams: DonationReadFilters;
   private _destroy$ = new Subject();
 
   constructor(
@@ -56,8 +56,8 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     return this._passwordFormMode;
   }
 
-  get seeDonationsParams(): DonationReadFilters {
-    return this._seeDonationsParams;
+  get seeDonationsLinkParams(): DonationReadFilters {
+    return this._seeDonationsLinkParams;
   }
 
   ngOnInit() {
@@ -67,19 +67,19 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   private _listenAccountChange(): void {
     this._accountService.listenAccountQueryChange(this._activatedRoute).subscribe((account: Account) => {
+      this._isMyAccount = false;
       this._accountNotFound = !account;
       if (!this._accountNotFound) {
         this._originalAccount = account;
         this._isMyAccount = this.sessionService.isMyAccount(account.id);
-        this._seeDonationsParams = this._genSeeDonationParams(account);
-        // An admin account does not need to input the old password to update an account password.
+        this._seeDonationsLinkParams = this._genSeeDonationLinkParams(account);
         this._passwordFormMode = 'Account';
         this.formGroup.patchValue(account);
       }
     });
   }
 
-  private _genSeeDonationParams(account: Account): DonationReadFilters {
+  private _genSeeDonationLinkParams(account: Account): DonationReadFilters {
     return (account.accountType === 'Donor')
       ? { donorAccountId: account.id }
       : { receiverAccountId: account.id };

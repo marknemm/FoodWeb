@@ -1,13 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PasswordForm } from '~web/password/password.form';
-import { Editable } from '~web/shared/editable';
 
 @Component({
   selector: 'food-web-password',
   templateUrl: './password.component.html',
   styleUrls: ['./password.component.scss']
 })
-export class PasswordComponent implements OnInit, Editable {
+export class PasswordComponent implements OnInit {
 
   @Input() editing = false;
   @Input() formGroup: PasswordForm;

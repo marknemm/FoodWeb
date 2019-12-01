@@ -2,14 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ContactInfo } from '~shared';
 import { ContactInfoForm } from '~web/account/contact-info.form';
 import { MapService } from '~web/map/map/map.service';
-import { Editable } from '~web/shared/editable';
 
 @Component({
   selector: 'food-web-contact-info',
   templateUrl: './contact-info.component.html',
   styleUrls: ['./contact-info.component.scss']
 })
-export class ContactInfoComponent implements OnInit, Editable {
+export class ContactInfoComponent implements OnInit {
 
   @Input() editing = false;
   @Input() formGroup: ContactInfoForm;
