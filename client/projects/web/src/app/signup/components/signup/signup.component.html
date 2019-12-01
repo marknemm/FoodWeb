@@ -17,7 +17,7 @@
             <mat-card-content>
               <div class="row">
                 <div class="col-sm-12">
-                  <food-web-username [editing]="true" [formGroup]="formGroup.get('username')"></food-web-username>
+                  <food-web-username [editing]="true" formControlName="username"></food-web-username>
                 </div>
                 <div class="col-sm-12">
                   <food-web-password [editing]="true" [formGroup]="formGroup.get('password')"></food-web-password>
@@ -44,7 +44,7 @@
           <mat-card>
             <mat-card-title class="block-label">Contact Info</mat-card-title>
             <mat-card-content>
-              <food-web-contact-info [editing]="true" [formGroup]="formGroup.get'contactInfo')"></food-web-contact-info>
+              <food-web-contact-info [editing]="true" [formGroup]="formGroup.get('contactInfo')"></food-web-contact-info>
             </mat-card-content>
           </mat-card>
         </div>

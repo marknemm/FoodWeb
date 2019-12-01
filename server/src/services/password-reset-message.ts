@@ -16,7 +16,8 @@ async function _sendPasswordResetEmail(account: AccountEntity, resetToken?: stri
     account,
     'Reset FoodWeb Password',
     template,
-    { resetToken }
+    { resetToken },
+    true
   );
   return account;
 }

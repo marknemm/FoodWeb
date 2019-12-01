@@ -1,6 +1,10 @@
 import { Connection, createConnection } from 'typeorm';
 import path = require('path');
 
+/**
+ * Initializes the (TypeORM - PostgreSQL) database connection pool.
+ * @return A promise that resolves to a generated connection within the initialized pool.
+ */
 export function initDbConnectionPool(): Promise<Connection> {
   const entitiesPath: string = path.join(__dirname, '..', 'entity', '*.js');
   const migrationsPath: string = path.join(__dirname, '..', 'migration', '*.js');

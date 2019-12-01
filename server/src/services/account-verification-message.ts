@@ -39,6 +39,7 @@ export function sendAccountVerificationEmail(account: AccountEntity, unverifiedA
     account,
     'Verify New FoodWeb Account',
     'account-verification',
-    { verificationToken }
+    { verificationToken },
+    true
   ).catch(console.error);
 }

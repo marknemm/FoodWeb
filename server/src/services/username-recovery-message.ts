@@ -10,7 +10,8 @@ export async function sendUsernameRecoveryEmail(accounts: AccountEntity[]): Prom
     account,
     'Recover FoodWeb Username',
     'username-recovery',
-    { usernames, multipleUsernames: (usernames.length > 1) }
+    { usernames, multipleUsernames: (usernames.length > 1) },
+    true
   );
 }
 

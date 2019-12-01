@@ -66,7 +66,9 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
     delete accountFormVal.password;
     (<Account>accountFormVal).operationHours = (<OperationHoursInfoForm>this.get('operationHours')).toOperationHours();
     Object.keys(accountFormVal.notificationSettings).forEach((notificationSettingKey: string) => {
-      accountFormVal.contactInfo[notificationSettingKey] = accountFormVal.notificationSettings[notificationSettingKey];
+      if (accountFormVal.notificationSettings[notificationSettingKey] != null) {
+        accountFormVal.contactInfo[notificationSettingKey] = accountFormVal.notificationSettings[notificationSettingKey];
+      }
     });
     delete accountFormVal.notificationSettings;
     (accountFormVal.accountType === AccountType.Donor)
