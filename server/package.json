@@ -46,7 +46,7 @@
     "fs-extra": "^8.0.1",
     "geo-tz": "^5.0.4",
     "google-distance-matrix": "^1.1.1",
-    "handlebars": "^4.5.2",
+    "handlebars": "^4.5.3",
     "handlebars-helpers": "^0.10.0",
     "juice": "^5.2.0",
     "lodash": "^4.17.15",

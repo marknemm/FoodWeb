@@ -1,6 +1,7 @@
 import { Account, ContactInfo } from '../account/account';
 import { Delivery } from '../delivery/delivery';
-export { Account, Delivery };
+import { DonationClaim } from '../donation-claim/donation-claim';
+export { Account, Delivery, DonationClaim };
 
 /**
  * A donation.
@@ -20,9 +21,10 @@ export interface Donation {
    */
   donorContactOverride: ContactInfo;
   /**
-   * The account of the receiving organization.
+   * A receiving organization's claim to the Donation.
+   * Should be null/undefined if the Donation is in the 'Unmatched' state.
    */
-  receiverAccount?: Account;
+  claim?: DonationClaim;
   /**
    * The last name of the individual submitting the donation.
    */

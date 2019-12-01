@@ -1,13 +1,15 @@
 import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
+import { DistanceTimeQueryResult, getDrivingDistTime } from '../helpers/distance-time';
 import { FoodWebError } from '../helpers/food-web-error';
 import { UpdateDiff } from '../interfaces/update-diff';
-import { Account, Donation, DonationClaimRequest, DonationHelper, DonationStatus, DonationUnclaimRequest } from '../shared';
+import { Account, Donation, DonationClaim, DonationClaimHelper, DonationClaimRequest, DonationHelper, DonationStatus, DonationUnclaimRequest } from '../shared';
 import { cancelDelivery } from './cancel-delivery';
 import { readDonation } from './read-donations';
 
 const _donationHelper = new DonationHelper();
+const _donationClaimHelper = new DonationClaimHelper();
 
 /**
  * Claims a donation.
@@ -22,8 +24,9 @@ export async function claimDonation(claimReq: DonationClaimRequest, myAccount: A
 
   let claimedDonation: Donation = Object.assign({}, donationToClaim);
   claimedDonation.donationStatus = DonationStatus.Matched;
-  claimedDonation.receiverAccount = myAccount;
+  claimedDonation.claim = await _genDonationClaim(claimedDonation, myAccount);
 
+  _donationClaimHelper.validateDonationClaim(claimedDonation.claim);
   return getConnection().transaction(async (manager: EntityManager) =>
     manager.getRepository(DonationEntity).save(claimedDonation)
   );
@@ -43,6 +46,25 @@ function _ensureCanClaimDonation(donation: Donation, myAccount: AccountEntity): 
 }
 
 /**
+ * Generates a Donation Claim with a given Donation and receiver Account.
+ * @param donation The Donation to generate the claim for.
+ * @param receiverAccount The receiver Account that is claiming the donation.
+ * @return A promise that resolves to the generated Donation Claim.
+ */
+async function _genDonationClaim(donation: Donation, receiverAccount: Account): Promise<DonationClaim> {
+  const drivingDistTime: DistanceTimeQueryResult[] = await getDrivingDistTime([{
+    origin: donation.donorContactOverride,
+    destination: receiverAccount.contactInfo
+  }]);
+
+  return {
+    receiverAccount,
+    distanceMiToReceiver: drivingDistTime[0].distanceMi,
+    durationMinToReceiver: drivingDistTime[0].durationMin
+  };
+}
+
+/**
  * Unclaims a donation.
  * @param unclaimReq The unclaim donation request.
  * @param myAccount The account of the current user submitting the request.
@@ -57,7 +79,7 @@ export async function unclaimDonation(unclaimReq: DonationUnclaimRequest, myAcco
   await getConnection().transaction(async (manager: EntityManager) => {
     unclaimedDonation = await _cancelDeliveryIfExists(unclaimedDonation, myAccount, manager);
     unclaimedDonation.donationStatus = DonationStatus.Unmatched;
-    unclaimedDonation.receiverAccount = null;
+    unclaimedDonation.claim = null;
     unclaimedDonation = await manager.getRepository(DonationEntity).save(unclaimedDonation);
   });
 

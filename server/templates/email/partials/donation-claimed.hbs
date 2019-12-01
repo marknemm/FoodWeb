@@ -24,7 +24,7 @@
   <p>
     You will receive a message once the donation is scheduled for pickup.<br>
     Feel free to contact
-    <a href="mailto:{{ donation.receiverAccount.contactInfo.email }}">{{ receiverName }}</a> or
+    <a href="mailto:{{ donation.claim.receiverAccount.contactInfo.email }}">{{ receiverName }}</a> or
     <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>
 {{/if}}

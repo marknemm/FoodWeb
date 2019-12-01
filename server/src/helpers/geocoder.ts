@@ -7,7 +7,7 @@ import geoTz = require('geo-tz');
 export { ContactInfo, GeographyLocation };
 
 // Initial setup for geocoder.
-const offlineMode = (process.env.OFFLINE_MODE === 'true');
+const _offlineMode = (process.env.OFFLINE_MODE === 'true');
 const _geocoder: Geocoder = NodeGeocoder({
   provider: <Providers>process.env.GEOCODER_PROVIDER, 
   apiKey: process.env.GEOCODER_API_KEY,
@@ -54,7 +54,7 @@ function _contactInfoToQuery(contactInfo: ContactInfo | string): Query | string 
  */
 async function _geocode(query: string | Query, retryCnt = 0): Promise<Location> {
   // Return a default set of (Buffalo, NY) GPS coordinates if in offline mode.
-  if (offlineMode) {
+  if (_offlineMode) {
     return { lat: 43, lon: 73 };
   }
   let entries: Entry[] = [];

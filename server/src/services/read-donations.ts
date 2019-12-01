@@ -78,7 +78,8 @@ function _genJoins(queryBuilder: SelectQueryBuilder<DonationEntity>): SelectQuer
     .innerJoinAndSelect('donorAccount.contactInfo', 'donorContactInfo')
     .innerJoinAndSelect('donation.donorContactOverride', 'donorContactOverride')
     .leftJoinAndMapMany('donorAccount.operationHours', 'donorAccount.operationHours', 'donorOpHours')
-    .leftJoinAndSelect('donation.receiverAccount', 'receiverAccount')
+    .leftJoinAndSelect('donation.claim', 'claim')
+    .leftJoinAndSelect('claim.receiverAccount', 'receiverAccount')
     .leftJoinAndSelect('receiverAccount.organization', 'receiverOrganization')
     .leftJoinAndSelect('receiverAccount.contactInfo', 'receiverContactInfo')
     .leftJoinAndSelect('receiverOrganization.receiver', 'receiver')
@@ -214,8 +215,8 @@ function _postProcessDonations(donations: DonationEntity[]): void {
 
 function _formatAccountOperationHours(donation: DonationEntity): void {
   _opHoursHelper.formatOperationHoursTimes(donation.donorAccount.operationHours);
-  if (donation.receiverAccount) {
-    _opHoursHelper.formatOperationHoursTimes(donation.receiverAccount.operationHours);
+  if (donation.claim) {
+    _opHoursHelper.formatOperationHoursTimes(donation.claim.receiverAccount.operationHours);
   }
   if (donation.delivery) {
     _opHoursHelper.formatOperationHoursTimes(donation.delivery.volunteerAccount.operationHours);

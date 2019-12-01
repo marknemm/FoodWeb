@@ -24,10 +24,10 @@
       </div>
       <div class="indented-data">
         <div class="emphasize">{{ receiverName }}</div>
-        <div>{{ donation.receiverAccount.contactInfo.streetAddress }}</div>
+        <div>{{ donation.claim.receiverAccount.contactInfo.streetAddress }}</div>
         <div>
-          {{ donation.receiverAccount.contactInfo.city }}, {{ donation.receiverAccount.contactInfo.state }}
-          {{ donation.receiverAccount.contactInfo.postalCode }}
+          {{ donation.claim.receiverAccount.contactInfo.city }}, {{ donation.claim.receiverAccount.contactInfo.state }}
+          {{ donation.claim.receiverAccount.contactInfo.postalCode }}
         </div>
       </div>
     </div>

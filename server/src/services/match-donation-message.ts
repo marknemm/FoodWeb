@@ -14,7 +14,7 @@ const _donationHelper = new DonationHelper();
  */
 export async function sendClaimMessages(donation: DonationEntity): Promise<DonationEntity> {
   const messagePromises: Promise<any>[] = [];
-  const accounts: AccountEntity[] = [donation.receiverAccount, donation.donorAccount];
+  const accounts: AccountEntity[] = [donation.claim.receiverAccount, donation.donorAccount];
   const { donorName, receiverName } = _donationHelper.memberNames(donation);
   const subjects = [
     `Claimed Donation from ${donorName}`,
@@ -38,7 +38,7 @@ export async function sendClaimMessages(donation: DonationEntity): Promise<Donat
         notificationType: NotificationType.ClaimDonation,
         notificationLink: `/donation/details/${donation.id}`,
         title: `Donation Claimed`,
-        icon: donation.receiverAccount.profileImgUrl,
+        icon: donation.claim.receiverAccount.profileImgUrl,
         body: `
           Donation claimed by <strong>${receiverName}</strong>.<br>
           <i>${donation.description}</i>
@@ -57,7 +57,7 @@ export async function sendClaimMessages(donation: DonationEntity): Promise<Donat
  */
 export async function sendUnclaimMessages(unclaimDiff: UpdateDiff<DonationEntity>): Promise<DonationEntity> {
   const messagePromises: Promise<any>[] = [];
-  const emailAccounts: AccountEntity[] = [unclaimDiff.old.receiverAccount, unclaimDiff.new.donorAccount];
+  const emailAccounts: AccountEntity[] = [unclaimDiff.old.claim.receiverAccount, unclaimDiff.new.donorAccount];
   const donorName: string = _donationHelper.donorName(unclaimDiff.new);
   const receiverName: string = _donationHelper.receiverName(unclaimDiff.old);
   let delivererName = '';
@@ -83,7 +83,7 @@ export async function sendUnclaimMessages(unclaimDiff: UpdateDiff<DonationEntity
       donorName,
       receiverName,
       delivererName,
-      receiverAccount: unclaimDiff.old.receiverAccount
+      receiverAccount: unclaimDiff.old.claim.receiverAccount
     }
   ).catch(console.error);
 
@@ -94,7 +94,7 @@ export async function sendUnclaimMessages(unclaimDiff: UpdateDiff<DonationEntity
         notificationType: NotificationType.UnclaimDonation,
         notificationLink: `/donation/details/${unclaimDiff.new.id}`,
         title: `Donation Unclaimed`,
-        icon: unclaimDiff.old.receiverAccount.profileImgUrl,
+        icon: unclaimDiff.old.claim.receiverAccount.profileImgUrl,
         body: `
           Donation unclaimed by <strong>${receiverName}</strong>.<br>
           <i>${unclaimDiff.new.description}</i>
@@ -111,7 +111,7 @@ export async function sendUnclaimMessages(unclaimDiff: UpdateDiff<DonationEntity
           notificationType: NotificationType.UnclaimDonation,
           notificationLink: `/donation/details/${unclaimDiff.new.id}`,
           title: `Donation Unclaimed`,
-          icon: unclaimDiff.old.receiverAccount.profileImgUrl,
+          icon: unclaimDiff.old.claim.receiverAccount.profileImgUrl,
           body: `
             Delivery Cancelled by <strong>${receiverName}</strong>.<br>
             <i>${unclaimDiff.new.description}</i>

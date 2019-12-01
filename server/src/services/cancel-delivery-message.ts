@@ -15,8 +15,8 @@ const _donationHelper = new DonationHelper();
 export async function sendDeliveryCancelledMessages(unscheduleDiff: UpdateDiff<DonationEntity>): Promise<DonationEntity> {
   const messagePromises: Promise<any>[] = [];
   const volunteerAccount: AccountEntity = unscheduleDiff.old.delivery.volunteerAccount;
-  const emailAccounts: AccountEntity[] = [unscheduleDiff.new.donorAccount, unscheduleDiff.new.receiverAccount, volunteerAccount];
-  const notificationAccounts: AccountEntity[] = [unscheduleDiff.new.donorAccount, unscheduleDiff.new.receiverAccount];
+  const emailAccounts: AccountEntity[] = [unscheduleDiff.new.donorAccount, unscheduleDiff.new.claim.receiverAccount, volunteerAccount];
+  const notificationAccounts: AccountEntity[] = [unscheduleDiff.new.donorAccount, unscheduleDiff.new.claim.receiverAccount];
   const donorName: string = _donationHelper.donorName(unscheduleDiff.new);
   const receiverName: string = _donationHelper.receiverName(unscheduleDiff.new);
   const delivererName: string = _donationHelper.delivererName(unscheduleDiff.old);

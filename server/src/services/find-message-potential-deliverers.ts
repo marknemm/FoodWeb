@@ -27,7 +27,7 @@ export async function findMessagePotentialDeliverers(donation: Donation): Promis
         endDateTime: donation.pickupWindowEnd
       }
     };
-    const queryResult: QueryResult<AccountEntity> = await readAccounts(readRequest, donation.receiverAccount);
+    const queryResult: QueryResult<AccountEntity> = await readAccounts(readRequest, donation.claim.receiverAccount);
     numQueried = queryResult.entities.length;
     return _messagePotentialDeliverers(donation, queryResult.entities);
   } while (numQueried === limit);
@@ -54,7 +54,7 @@ async function _messagePotentialDeliverers(donation: Donation, potentialDelivere
       externalNotifyAccounts,
       `
         Delivery Requested from ${donation.donorAccount.organization.organizationName}
-        to ${donation.receiverAccount.organization.organizationName}
+        to ${donation.claim.receiverAccount.organization.organizationName}
       `,
       'delivery-request',
       { donation }

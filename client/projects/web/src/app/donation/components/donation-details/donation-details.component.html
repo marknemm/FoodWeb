@@ -103,8 +103,8 @@
   <ng-container *ngIf="!editing">
     <div class="row">
       <div class="pickup-information-container" [ngClass]="{
-        'col-lg-6': !!originalDonation.receiverAccount,
-        'col-lg-12': !originalDonation.receiverAccount
+        'col-lg-6': !!originalDonation.claim,
+        'col-lg-12': !originalDonation.claim
       }">
         <mat-card>
           <mat-card-title>Pickup Info</mat-card-title>
@@ -128,14 +128,14 @@
           </mat-card-content>
         </mat-card>
       </div>
-      <div *ngIf="originalDonation.receiverAccount" class="col-lg-6">
+      <div *ngIf="originalDonation.claim" class="col-lg-6">
         <mat-card class="drop-off-information-container">
           <mat-card-title>Drop-Off Info</mat-card-title>
           <mat-card-content>
             <div class="row">
-              <div *ngIf="originalDonation.receiverAccount.organization.deliveryInstructions" class="col-sm-12">
+              <div *ngIf="originalDonation.claim.receiverAccount.organization.deliveryInstructions" class="col-sm-12">
                 <div class="inline-label">Instructions:</div>
-                <div class="d-inline-block">{{ originalDonation.receiverAccount.organization.deliveryInstructions }}</div>
+                <div class="d-inline-block">{{ originalDonation.claim.receiverAccount.organization.deliveryInstructions }}</div>
               </div>
               <!-- <div class="col-sm-6">
                 <div class="inline-label">Window Start:</div>
@@ -150,8 +150,8 @@
         </mat-card>
       </div>
       <div class="donor-info-container" [ngClass]="{
-        'col-lg-6': !!originalDonation.receiverAccount,
-        'col-lg-12': !originalDonation.receiverAccount
+        'col-lg-6': !!originalDonation.claim,
+        'col-lg-12': !originalDonation.claim
       }">
         <mat-card>
           <mat-card-header>
@@ -171,15 +171,15 @@
           </mat-card-actions>
         </mat-card>
       </div>
-      <div *ngIf="originalDonation.receiverAccount" class="receiver-info-container col-lg-6">
+      <div *ngIf="originalDonation.claim" class="receiver-info-container col-lg-6">
         <mat-card>
           <mat-card-header>
-            <img mat-card-avatar src="./assets/{{ accountHelper.organizationFirstChar(originalDonation.receiverAccount.organization) }}.svg" alt="Receiver Icon">
+            <img mat-card-avatar src="./assets/{{ accountHelper.organizationFirstChar(originalDonation.claim.receiverAccount.organization) }}.svg" alt="Receiver Icon">
             <mat-card-title>Receiver</mat-card-title>
             <mat-card-subtitle class="account-name">{{ donationHelper.receiverName(originalDonation) }}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <food-web-contact-info [contactInfo]="originalDonation.receiverAccount.contactInfo"></food-web-contact-info>
+            <food-web-contact-info [contactInfo]="originalDonation.claim.receiverAccount.contactInfo"></food-web-contact-info>
           </mat-card-content>
           <mat-card-actions>
             <div class="align-right">

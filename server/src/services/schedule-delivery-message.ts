@@ -8,7 +8,7 @@ const _donationHelper = new DonationHelper();
 
 export async function sendDeliveryScheduledMessages(donation: DonationEntity): Promise<Donation> {
   const messagePromises: Promise<any>[] = [];
-  const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.receiverAccount, donation.delivery.volunteerAccount];
+  const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, donation.delivery.volunteerAccount];
   const donorName: string = _donationHelper.donorName(donation);
   const receiverName: string = _donationHelper.receiverName(donation);
   const delivererName: string = _donationHelper.delivererName(donation);
@@ -46,7 +46,7 @@ export async function sendDeliveryScheduledMessages(donation: DonationEntity): P
 
   messagePromises.push(
     sendNotification(
-      donation.receiverAccount,
+      donation.claim.receiverAccount,
       {
         notificationType: NotificationType.ScheduleDelivery,
         notificationLink: `/donation/details/${donation.id}`,

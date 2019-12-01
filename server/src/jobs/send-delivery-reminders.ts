@@ -71,8 +71,8 @@ async function _sendAllDeliveryReminderMessages(donations: DonationEntity[], hou
 async function _sendDeliveryReminderMessages(donation: DonationEntity, hour: number): Promise<void> {
   const messagePromises: Promise<any>[] = [];
   const volunteerAccount: AccountEntity = donation.delivery.volunteerAccount;
-  const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.receiverAccount, volunteerAccount];
-  const notificationAccounts: AccountEntity[] = [donation.donorAccount, donation.receiverAccount, volunteerAccount];
+  const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, volunteerAccount];
+  const notificationAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, volunteerAccount];
   const donorName: string = _donationHelper.donorName(donation);
   const receiverName: string = _donationHelper.receiverName(donation);
   const delivererName: string = _donationHelper.delivererName(donation);

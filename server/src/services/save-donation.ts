@@ -71,5 +71,5 @@ function _removeNonUpdateFields(donation: Donation): void {
   delete donation.updateTimestamp;
   delete donation.donorAccount;
   delete donation.donationStatus;
-  delete donation.receiverAccount;
+  delete donation.claim;
 }

@@ -1,11 +1,10 @@
 import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { Constants, Donation, DonationStatus } from '../shared';
+import { Donation, DonationStatus, DONATION_STATUSES } from '../shared';
 import { AccountEntity } from './account.entity';
 import { ContactInfoEntity } from './contact-info.entity';
 import { DeliveryEntity } from './delivery-entity';
+import { DonationClaimEntity } from './donation-claim.entity';
 export { Donation, DonationStatus };
-
-const _constants = new Constants();
 
 @Entity('Donation')
 export class DonationEntity implements Donation {
@@ -20,8 +19,8 @@ export class DonationEntity implements Donation {
   @JoinColumn()
   donorContactOverride: ContactInfoEntity;
 
-  @ManyToOne((type) => AccountEntity, { nullable: true, eager: true })
-  receiverAccount?: AccountEntity;
+  @OneToOne((type) => DonationClaimEntity, (donationClaim) => donationClaim.donation, { nullable: true, eager: true })
+  claim?: DonationClaimEntity;
 
   @Column()
   @Index()
@@ -48,7 +47,7 @@ export class DonationEntity implements Donation {
   @Column({ type: 'timestamp with time zone' })
   pickupWindowEnd: Date;
 
-  @Column({ type: 'enum', enum: _constants.DONATION_STATUSES, default: _constants.DONATION_STATUSES[0] })
+  @Column({ type: 'enum', enum: DONATION_STATUSES, default: DONATION_STATUSES[0] })
   donationStatus: DonationStatus;
 
   @OneToOne((type) => DeliveryEntity, (delivery) => delivery.donation, { nullable: true, cascade: true, eager: true })

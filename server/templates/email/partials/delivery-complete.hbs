@@ -23,10 +23,10 @@
       <div class="emphasize">
         {{ receiverName }}
       </div>
-      <div>{{ donation.receiverAccount.contactInfo.streetAddress }}</div>
+      <div>{{ donation.claim.receiverAccount.contactInfo.streetAddress }}</div>
       <div>
-        {{ donation.receiverAccount.contactInfo.city }}, {{ donation.receiverAccount.contactInfo.state }}
-        {{ donation.receiverAccount.contactInfo.postalCode }}
+        {{ donation.claim.receiverAccount.contactInfo.city }}, {{ donation.claim.receiverAccount.contactInfo.state }}
+        {{ donation.claim.receiverAccount.contactInfo.postalCode }}
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@
   <p>
     Feel free to contact
     <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a>,
-    <a href="mailto:{{ donation.receiverAccount.contactInfo.email }}">{{ receiverName }}</a>,
+    <a href="mailto:{{ donation.claim.receiverAccount.contactInfo.email }}">{{ receiverName }}</a>,
     or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions or comments.
   </p>
 {{else if isReceiver }}
@@ -75,7 +75,7 @@
   <p>
     Feel free to contact
     <a href="mailto:{{ donation.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>,
-    <a href="mailto:{{ donation.receiverAccount.contactInfo.email }}">{{ receiverName }}</a>,
+    <a href="mailto:{{ donation.claim.receiverAccount.contactInfo.email }}">{{ receiverName }}</a>,
     or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions or comments.
   </p>
 {{/if}}

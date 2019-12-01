@@ -16,8 +16,8 @@ const _donationHelper = new DonationHelper();
 export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity): Promise<DonationEntity> {
   const messagePromises: Promise<any>[] = [];
   const volunteerAccount: AccountEntity = donation.delivery.volunteerAccount;
-  const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.receiverAccount, volunteerAccount];
-  const notificationAccounts: AccountEntity[] = [donation.donorAccount, donation.receiverAccount];
+  const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, volunteerAccount];
+  const notificationAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount];
   const donorName: string = _donationHelper.donorName(donation);
   const receiverName: string = _donationHelper.receiverName(donation);
   const delivererName: string = _donationHelper.delivererName(donation);
@@ -108,8 +108,8 @@ export async function sendDeliveryStateUndoMessages(undoDiff: UpdateDiff<Donatio
 async function _sendDeliveryStateUndoMessages(donation: DonationEntity): Promise<DonationEntity> {
   const messagePromises: Promise<any>[] = [];
   const volunteerAccount: AccountEntity = donation.delivery.volunteerAccount;
-  const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.receiverAccount, volunteerAccount];
-  const notificationAccounts: AccountEntity[] = [donation.donorAccount, donation.receiverAccount];
+  const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, volunteerAccount];
+  const notificationAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount];
   const donorName: string = _donationHelper.donorName(donation);
   const receiverName: string = _donationHelper.receiverName(donation);
   const delivererName: string = _donationHelper.delivererName(donation);

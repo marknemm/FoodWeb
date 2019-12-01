@@ -3,6 +3,7 @@ export * from './app-data';
 export * from './audit';
 export * from './delivery';
 export * from './donation';
+export * from './donation-claim';
 export * from './event';
 export * from './heuristics';
 export * from './misc';

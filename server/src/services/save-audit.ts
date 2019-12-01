@@ -54,8 +54,8 @@ function _handleErr<T>(err: Error): AuditEntity<T> {
 
 export function getAuditAccounts(donation: Donation): AccountEntity[] {
   const auditAccounts: AccountEntity[] = [<AccountEntity>donation.donorAccount];
-  if (donation.receiverAccount) {
-    auditAccounts.push(<AccountEntity>donation.receiverAccount);
+  if (donation.claim) {
+    auditAccounts.push(<AccountEntity>donation.claim.receiverAccount);
     if (donation.delivery) {
       auditAccounts.push(<AccountEntity>donation.delivery.volunteerAccount);
     }

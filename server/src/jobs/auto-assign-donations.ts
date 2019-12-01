@@ -2,6 +2,7 @@
 require('./jobs-config');
 import { SelectQueryBuilder } from 'typeorm';
 import { AccountEntity, AccountType } from '../entity/account.entity';
+import { DonationClaimEntity } from '../entity/donation-claim.entity';
 import { DonationEntity, DonationStatus } from '../entity/donation.entity';
 import { initDbConnectionPool } from '../helpers/db-connection-pool';
 import { MailTransporter, sendEmail } from '../helpers/email';
@@ -106,8 +107,8 @@ async function _findAutoReceiver(donation: DonationEntity): Promise<AccountEntit
       // We want to auto-assign donations to receivers that have gotten the fewest donations thus-far.
       queryBuilder.addSelect((subQueryBuilder: SelectQueryBuilder<DonationEntity>) => {
           subQueryBuilder.select('COUNT(donation.id)', 'received_donations_count')
-            .from(DonationEntity, 'donation')
-            .where('donation.receiverAccount = account.id');
+            .from(DonationClaimEntity, 'claim')
+            .where('claim.receiverAccount = account.id');
           return subQueryBuilder;
         }, 'received_donations_count')
         .orderBy('received_donations_count', 'ASC');
@@ -138,7 +139,7 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
   messagePromises.push(
     sendEmail(
       MailTransporter.NOREPLY,
-      donation.receiverAccount,
+      donation.claim.receiverAccount,
       `Auto-Assigned Donation from ${donorName}`,
       'donation-assigned',
       extraVars
@@ -152,7 +153,7 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
         notificationType: NotificationType.ClaimDonation,
         notificationLink: `/donation/details/${donation.id}`,
         title: `Donation Claimed`,
-        icon: donation.receiverAccount.profileImgUrl,
+        icon: donation.claim.receiverAccount.profileImgUrl,
         body: `
           Donation claimed by <strong>${receiverName}</strong>.<br>
           <i>${donation.description}</i>
@@ -163,7 +164,7 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
 
   messagePromises.push(
     sendNotification(
-      donation.receiverAccount,
+      donation.claim.receiverAccount,
       {
         notificationType: NotificationType.ClaimDonation,
         notificationLink: `/donation/details/${donation.id}`,

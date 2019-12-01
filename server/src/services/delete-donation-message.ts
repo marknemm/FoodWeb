@@ -16,9 +16,9 @@ export async function sendDonationDeleteMessages(donation: DonationEntity): Prom
   const emailSubjects = ['Successfully Deleted Donation'];
 
   // If donation was claimed by a receiver, then we must also notify them.
-  if (donation.receiverAccount) {
-    emailAccounts.push(donation.receiverAccount);
-    notificationAccounts.push(donation.receiverAccount);
+  if (donation.claim) {
+    emailAccounts.push(donation.claim.receiverAccount);
+    notificationAccounts.push(donation.claim.receiverAccount);
     receiverName = _donationHelper.receiverName(donation);
     emailSubjects.push(`Claimed Donation Deleted by ${donorName}`);
   }

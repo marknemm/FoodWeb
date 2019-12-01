@@ -13,6 +13,11 @@ export class DonationHelper {
   private _validationHelper = new ValidationHelper();
   private _accountHelper = new AccountHelper();
 
+  /**
+   * Validates a given donation by inspecting the values of its contained properties.
+   * @param donation The donation that is to be validated.
+   * @return The error string if the donation is invalid, an empty string if valid.
+   */
   validateDonation(donation: Donation): string {
     if (!donation) { return ''; }
 
@@ -28,9 +33,6 @@ export class DonationHelper {
     const donorContactOverrideErr: string = this._accountHelper.validateContactInfo(donation.donorContactOverride);
     if (donorContactOverrideErr) { return donorContactOverrideErr; }
 
-    const receiverAccountErr: string = this._accountHelper.validateAccount(donation.receiverAccount, true);
-    if (receiverAccountErr) { return receiverAccountErr; }
-
     return '';
   }
 
@@ -45,8 +47,8 @@ export class DonationHelper {
     );
     if (requireErr) { return requireErr; }
 
-    if (donation.donationStatus !== 'Unmatched' && !donation.receiverAccount) {
-      return 'Receiver account required for matched donation';
+    if (donation.donationStatus !== 'Unmatched' && !donation.claim) {
+      return 'Donation claim required for matched donation';
     }
     if (!Validation.DONATION_STATUS_REGEX.test(donation.donationStatus)) {
       return 'Invalid donation status';
@@ -109,7 +111,7 @@ export class DonationHelper {
       return 'You do not own the donation claim';
     }
     if (myAccount.accountType !== AccountType.Admin) {
-      if (myAccount.id !== donation.receiverAccount.id) {
+      if (myAccount.id !== donation.claim.receiverAccount.id) {
         return 'You do not own the donation claim';
       }
       if (this.isDonationStatusLaterThan(donation, DonationStatus.Scheduled)) {
@@ -128,7 +130,7 @@ export class DonationHelper {
       || (
         myAccount.accountType !== AccountType.Admin
         && myAccount.id !== donation.delivery.volunteerAccount.id
-        && myAccount.id !== donation.receiverAccount.id
+        && myAccount.id !== donation.claim.receiverAccount.id
         && myAccount.id !== donation.donorAccount.id
       )
     ) {
@@ -197,14 +199,14 @@ export class DonationHelper {
   }
 
   receiverName(donation: Donation): string {
-    return (donation.receiverAccount)
-      ? this._accountHelper.accountName(donation.receiverAccount)
+    return (donation.claim)
+      ? this._accountHelper.accountName(donation.claim.receiverAccount)
       : '';
   }
 
   receiverDetailsRouterLink(donation: Donation): string[] {
-    return (donation.receiverAccount)
-      ? this._accountHelper.accountDetailsRouterLink(donation.receiverAccount)
+    return (donation.claim)
+      ? this._accountHelper.accountDetailsRouterLink(donation.claim.receiverAccount)
       : [];
   }
 
