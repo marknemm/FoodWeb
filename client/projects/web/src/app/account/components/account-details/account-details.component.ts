@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AccountHelper, AccountType, DonationReadFilters } from '~shared';
@@ -31,7 +31,8 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     public accountHelper: AccountHelper,
     public signupVerificationService: SignupVerificationService,
     private _accountService: AccountService,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    private _router: Router
   ) {
     this.savePassword = this.savePassword.bind(this);
   }
@@ -76,6 +77,14 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
         this._passwordFormMode = 'Account';
         this.formGroup.patchValue(account);
       }
+      this._router.navigate(
+        [], {
+          relativeTo: this._activatedRoute,
+          queryParams: { expandAll: !this.isMyAccount ? true : undefined },
+          queryParamsHandling: 'merge',
+          fragment: this._activatedRoute.snapshot.fragment
+        }
+      );
     });
   }
 

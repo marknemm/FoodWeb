@@ -37,37 +37,58 @@
     }
   }
 
-  .mat-expansion-panel {
-    background-color: transparent;
-    box-shadow: none;
+  .mat-accordion {
+    .mat-expansion-panel {
+      background-color: transparent;
+      box-shadow: none;
+  
+      .mat-expansion-panel-header {
+        background-color: rgba(0, 0, 0, 0.04);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+        border-left: 1px solid rgba(0, 0, 0, 0.05);
+        border-right: 1px solid rgba(0, 0, 0, 0.05);
+        border-top: 1px solid rgba(0, 0, 0, 0.045);
+        max-height: 48px;
+        font-size: 16px;
+        font-weight: bold;
+        color: $accent-darker;
+  
+        &:hover, &:focus {
+          background-color: rgba(0, 0, 0, 0.06);
+        }
+      }
 
-    .mat-expansion-panel-header {
-      background-color: rgba(0, 0, 0, 0.04);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-      border-left: 1px solid rgba(0, 0, 0, 0.05);
-      border-right: 1px solid rgba(0, 0, 0, 0.05);
-      border-top: 1px solid rgba(0, 0, 0, 0.045);
-      max-height: 48px;
-      font-size: 16px;
-      font-weight: bold;
-      color: $accent-darker;
-
-      &:hover, &:focus {
-        background-color: rgba(0, 0, 0, 0.06);
+      .mat-divider {
+        display: none;
+      }
+  
+      .mat-card-title {
+        margin-top: 0;
+        margin-bottom: 15px;
+      }
+  
+      .account-section-content {
+        margin: 20px 0 -16px -38px;
+        width: calc(100% + 76px);
+  
+        @media only screen and (max-width: $mat-mobile) {
+          margin-bottom: -4px;
+        }
       }
     }
 
-    .mat-card-title {
-      margin-top: 0;
-      margin-bottom: 15px;
-    }
+    &.expand-all {
+      .mat-expansion-panel {
+        margin-top: -20px;
 
-    .account-section-content {
-      margin: 20px 0 -16px -38px;
-      width: calc(100% + 76px);
+        .mat-expansion-panel-header {
+          display: none;
+        }
 
-      @media only screen and (max-width: $mat-mobile) {
-        margin-bottom: -4px;
+        .mat-divider {
+          display: block;
+          margin: 22px -20px;
+        }
       }
     }
   }

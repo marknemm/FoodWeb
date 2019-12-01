@@ -1,6 +1,6 @@
-import { AfterContentInit, ContentChildren, Directive, Input, QueryList } from '@angular/core';
+import { AfterContentInit, ContentChildren, Directive, Input, QueryList, HostBinding } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 /**
  * Applies expansion panel open/close functionality based off of the current route fragment.
@@ -18,23 +18,52 @@ export class FragmentAccordianDirective implements AfterContentInit {
 
   @ContentChildren(MatExpansionPanel) expansionPanelsQuery: QueryList<MatExpansionPanel>;
 
+  private _expandAll = false;
+
   constructor(
     private _activatedRoute: ActivatedRoute
   ) {}
 
+  @HostBinding('class.expand-all')
+  get expandAll(): boolean {
+    return this._expandAll;
+  }
+
   ngAfterContentInit(): void {
-    let firstFragmentChange = true;
     // Use timeout to prevent change after checked error from Angular change detector.
-    setTimeout(() => 
-      this._activatedRoute.fragment.subscribe((fragment: string) => {
-        const openedPanel: boolean = this.openPanelWithId(fragment);
-        // If there is no route fragment initially, or it doesn't match an expansion panel's ID, then open the default.
-        if (firstFragmentChange && !openedPanel) {
-          this.openDefaultPanel();
-        }
-        firstFragmentChange = false;
-      })
-    );
+    setTimeout(() => {
+      this._listenQueryParamChange();
+      this._listenRouteFragmentChange(); 
+    });
+  }
+
+  /**
+   * Listens for route query param change in order to determine if all panels should be forced expanded or not.
+   */
+  private _listenQueryParamChange(): void {
+    this._activatedRoute.queryParamMap.subscribe((queryParams: ParamMap) => {
+      this._expandAll = (queryParams.get('expandAll') === 'true');
+      if (this.expandAll) {
+        this.expansionPanelsQuery.forEach((expansionPanel: MatExpansionPanel) =>
+          expansionPanel.open()
+        );
+      }
+    });
+  }
+
+  /**
+   * Listens for route fragment (hash-tag) change in order to determine which panel to expand.
+   */
+  private _listenRouteFragmentChange(): void {
+    let firstFragmentChange = true;
+    this._activatedRoute.fragment.subscribe((fragment: string) => {
+      const openedPanel: boolean = this.openPanelWithId(fragment, !this.expandAll);
+      // If there is no route fragment initially, or it doesn't match an expansion panel's ID, then expand the default.
+      if (firstFragmentChange && !openedPanel) {
+        this.openDefaultPanel(!this.expandAll);
+      }
+      firstFragmentChange = false;
+    });
   }
 
   /**
@@ -50,10 +79,17 @@ export class FragmentAccordianDirective implements AfterContentInit {
       if (this._getPanelId(expansionPanel) === id) {
         expansionPanel.open();
         openedPanel = true;
-      } else if (closeOthers) {
-        expansionPanel.close();
       }
     });
+
+    // If we found a panel to open, then close all other panels (unless configured otherwise).
+    if (openedPanel && closeOthers) {
+      this.expansionPanelsQuery.forEach((expansionPanel: MatExpansionPanel) => {
+        if (this._getPanelId(expansionPanel) !== id) {
+          expansionPanel.close();
+        }
+      });
+    }
 
     return openedPanel;
   }
