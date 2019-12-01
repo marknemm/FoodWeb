@@ -21,8 +21,8 @@ export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity
   const donorName: string = _donationHelper.donorName(donation);
   const receiverName: string = _donationHelper.receiverName(donation);
   const delivererName: string = _donationHelper.delivererName(donation);
-  const advanceAction: string = (donation.donationStatus === 'Picked Up' ? 'Picked Up' : 'Completed');
-  const emailTmpl: string = (donation.donationStatus === 'Picked Up' ? 'delivery-picked-up' : 'delivery-complete');
+  const advanceAction: string = _getDeliveryAdvanceAction(donation);
+  const emailTmpl: string = _getDeliveryAdvanceEmailTmpl(donation);
   const deliveryAction = `Delivery Has Been ${advanceAction} by ${delivererName}`;
   const emailSubjects = [
     deliveryAction,
@@ -58,6 +58,34 @@ export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity
 
   await Promise.all(messagePromises);
   return donation;
+}
+
+/**
+ * Gets the delivery advance action from a given donation's donationStatus property.
+ * @param donation The donation to derive the delivery advance action from.
+ * @return The delivery advance action.
+ */
+function _getDeliveryAdvanceAction(donation: DonationEntity): string {
+  switch (donation.donationStatus) {
+    case DonationStatus.Started:  return 'Started';
+    case DonationStatus.PickedUp: return 'Picked Up';
+    case DonationStatus.Complete: return 'Completed';
+  }
+  throw new Error(`Donation Status is not Correct for a delivery advance action: ${donation.donationStatus}`);
+}
+
+/**
+ * Gets the delivery advance email template based off of a given donation's donationStatus.
+ * @param donation The donation from which to derive the delivery advance email template.
+ * @return The delivery advance email template (name).
+ */
+function _getDeliveryAdvanceEmailTmpl(donation: DonationEntity): string {
+  switch (donation.donationStatus) {
+    case DonationStatus.Started:  return 'delivery-started';
+    case DonationStatus.PickedUp: return 'delivery-picked-up';
+    case DonationStatus.Complete: return 'delivery-complete';
+  }
+  throw new Error(`Donation Status is not Correct for a delivery advance email template: ${donation.donationStatus}`);
 }
 
 /**

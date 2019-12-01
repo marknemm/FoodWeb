@@ -52,6 +52,8 @@ export class DonationStatusComponent implements OnInit, OnChanges {
         return 'The donation has been matched with a receiver';
       case 'Scheduled':
         return 'The donation has been scheduled for delivery';
+      case 'Started':
+        return 'The delivery of this donation has been started';
       case 'Picked Up':
         return 'The donation has been picked up from the donor and is on route to the receiver';
       case 'Complete':

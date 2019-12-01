@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Account, DeliveryHelper, Donation, DonationHelper } from '~shared';
 
@@ -9,7 +9,7 @@ export type DonationAction = 'ToggleEdit' | 'Save' | 'Delete' | 'Claim' | 'Uncla
   templateUrl: './donation-detail-actions.component.html',
   styleUrls: ['./donation-detail-actions.component.scss']
 })
-export class DonationDetailActionsComponent implements OnInit, OnChanges {
+export class DonationDetailActionsComponent implements OnChanges {
 
   @Input() formGroup: FormGroup;
   @Input() donation: Donation;
@@ -35,47 +35,75 @@ export class DonationDetailActionsComponent implements OnInit, OnChanges {
     private _deliveryHelper: DeliveryHelper
   ) {}
 
+  /**
+   * Whether or not action buttons exist according to the current user's donation ownership/privileges.
+   */
   get hasActionButtons(): boolean {
     return this._hasActionButtons;
   }
 
+  /**
+   * Whether or not the current user can edit the donation.
+   */
   get canEdit(): boolean {
     return this._canEdit;
   }
 
+  /**
+   * Whether or not the current user can claim the donation.
+   */
   get canClaim(): boolean {
     return this._canClaim;
   }
 
+  /**
+   * Whether or not the current user can unclaim the donation.
+   */
   get canUnclaim(): boolean {
     return this._canUnclaim;
   }
 
+  /**
+   * Whether or not the current user can schedule the donation delivery.
+   */
   get canScheduleDelivery(): boolean {
     return this._canScheduleDelivery;
   }
 
+  /**
+   * Whether or not the current user can advance the delivery state of the donation.
+   */
   get canAdvanceDeliveryState(): boolean {
     return this._canAdvanceDeliveryState;
   }
 
+  /**
+   * Whether or not the current user can undo the delivery state of the donation.
+   */
   get canUndoDeliveryState(): boolean {
     return this._canUndoDeliveryState;
   }
 
+  /**
+   * The delivery state advance text (to be used on the advance button).
+   */
   get deliveryAdvanceTxt(): string {
     return this._deliveryAdvanceTxt;
   }
 
+  /**
+   * The delivery state undo text (to be used on the undo button).
+   */
   get deliveryUndoTxt(): string {
     return this._deliveryUndoTxt;
   }
 
+  /**
+   * The delivery state undo confirmation message presented to the user when they hit the undo button.
+   */
   get confirmDeliveryUndoMessage(): string {
     return this._confirmDeliveryUndoMessage;
   }
-
-  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.donation || changes.myAccount) {
@@ -88,6 +116,9 @@ export class DonationDetailActionsComponent implements OnInit, OnChanges {
     }
   }
 
+  /**
+   * Updates all of the access/privilege flags based on the set donation and current user.
+   */
   private _updateAllAccessFlags(): void {
     this._canEdit = !this._donationHelper.validateDonationEditPrivilege(this.donation, this.myAccount);
     this._canClaim = !this._donationHelper.validateDonationClaimPrivilege(this.donation, this.myAccount);
@@ -113,12 +144,18 @@ export class DonationDetailActionsComponent implements OnInit, OnChanges {
     );
   }
 
+  /**
+   * Updates all donation detail action button text based on the set donation.
+   */
   private _updateAllText(): void {
     this._deliveryAdvanceTxt = this._deliveryHelper.genDeliveryAdvanceTxt(this.donation.donationStatus);
     this._deliveryUndoTxt = this._deliveryHelper.genDeliveryUndoTxt(this.donation.donationStatus);
     this._confirmDeliveryUndoMessage = this._deliveryHelper.genConfirmDeliveryUndoMessage(this.donation.donationStatus);
   }
 
+  /**
+   * Resets all access/privilege flags and button text to their original/empty states.
+   */
   private _resetAll(): void {
     this._canEdit = false;
     this._canClaim = false;

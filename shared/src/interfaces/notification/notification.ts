@@ -1,19 +1,5 @@
 import { AuditEventType } from '../audit/audit';
 
-export enum NotificationType {
-  Signup = AuditEventType.Signup,
-  Donate = AuditEventType.Donate,
-  UpdateDonation = AuditEventType.UpdateDonation,
-  RemoveDonation = AuditEventType.RemoveDonation,
-  ClaimDonation = AuditEventType.ClaimDonation,
-  UnclaimDonation = AuditEventType.UnclaimDonation,
-  ScheduleDelivery = AuditEventType.ScheduleDelivery,
-  CancelDelivery = AuditEventType.CancelDelivery,
-  DeliveryStateAdvance = AuditEventType.DeliveryStateAdvance,
-  DeliveryStateUndo = AuditEventType.DeliveryStateUndo,
-  DeliveryReminder = ('Delivery Reminder')
-}
-
 /**
  * A notification that can serve as an SMS Message, SSE Notification, Push Notification, or Web Notification.
  */
@@ -127,3 +113,28 @@ export interface Notification {
    */
   timestamp?: Date;
 }
+
+export enum NotificationType {
+  Signup = AuditEventType.Signup,
+  Donate = AuditEventType.Donate,
+  UpdateDonation = AuditEventType.UpdateDonation,
+  RemoveDonation = AuditEventType.RemoveDonation,
+  ClaimDonation = AuditEventType.ClaimDonation,
+  UnclaimDonation = AuditEventType.UnclaimDonation,
+  ScheduleDelivery = AuditEventType.ScheduleDelivery,
+  CancelDelivery = AuditEventType.CancelDelivery,
+  DeliveryStateAdvance = AuditEventType.DeliveryStateAdvance,
+  DeliveryStateUndo = AuditEventType.DeliveryStateUndo,
+  DeliveryReminder = ('Delivery Reminder')
+}
+
+export const NOTIFICATION_TYPES: NotificationType[] = [
+  NotificationType.Donate,
+  NotificationType.UpdateDonation,
+  NotificationType.RemoveDonation,
+  NotificationType.ClaimDonation,
+  NotificationType.UnclaimDonation,
+  NotificationType.ScheduleDelivery,
+  NotificationType.DeliveryStateAdvance,
+  NotificationType.DeliveryStateUndo
+];

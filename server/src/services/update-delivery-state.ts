@@ -95,7 +95,7 @@ function _ensureCanUndoDeliveryState(donation: Donation, account: AccountEntity)
 }
 
 /**
- * Generates the donation upate value for a given donation that is to have its delivery state changed.
+ * Generates the donation update value for a given donation that is to have its delivery state changed.
  * @param donation The donation that is to have its delivery state (and related data) updated.
  * @param deliveryStateChangeDir The direction to update the given donation's delivery state to.
  * @return The donation with its delivery state updated.

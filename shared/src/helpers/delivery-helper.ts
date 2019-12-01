@@ -81,17 +81,19 @@ export class DeliveryHelper {
 
   genDeliveryAdvanceTxt(donationStatus: DonationStatus): string {
     switch (donationStatus) {
-      case DonationStatus.Scheduled: return 'Set Picked Up';
-      case DonationStatus.PickedUp: return 'Set Complete';
+      case DonationStatus.Scheduled:  return 'Start Delivery';
+      case DonationStatus.Started:    return 'Set Picked Up'
+      case DonationStatus.PickedUp:   return 'Set Complete';
     }
     return '';
   }
 
   genDeliveryUndoTxt(donationStatus: DonationStatus): string {
     switch (donationStatus) {
-      case DonationStatus.Scheduled: return 'Cancel Delivery';
-      case DonationStatus.PickedUp: return 'Undo Delivery Pickup';
-      case DonationStatus.Complete: return 'Undo Delivery Completion';
+      case DonationStatus.Scheduled:  return 'Cancel Delivery';
+      case DonationStatus.Started:    return 'Undo Delivery Start';
+      case DonationStatus.PickedUp:   return 'Undo Delivery Pickup';
+      case DonationStatus.Complete:   return 'Undo Delivery Completion';
     }
     return '';
   }
@@ -99,7 +101,8 @@ export class DeliveryHelper {
   genConfirmDeliveryUndoMessage(donationStatus: DonationStatus): string {
     switch (donationStatus) {
       case DonationStatus.Scheduled: return 'Are you sure you want to cancel your delivery?';
-      case DonationStatus.PickedUp: return 'Are you sure you want to revert the delivery status to "Scheduled"?';
+      case DonationStatus.Started: return 'Are you sure you want to revert the delivery status to "Scheduled"?';
+      case DonationStatus.PickedUp: return 'Are you sure you want to revert the delivery status to "Started"?';
       case DonationStatus.Complete: return 'Are you sure you want to revert the delivery status to "Picked Up"?';
     }
     return '';

@@ -1,0 +1,84 @@
+{{#if isVolunteer }}
+  <div>You have successfully changed the status of the following delivery to <strong>Started</strong>:</div>
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Donor:
+    </div>
+    <div class="indented-data">
+      <div class="emphasize">
+        {{ donorName }}
+      </div>
+      <div>{{ donation.donorContactOverride.streetAddress }}</div>
+      <div>
+        {{ donation.donorContactOverride.city }}, {{ donation.donorContactOverride.state }}
+        {{ donation.donorContactOverride.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Receiver:
+    </div>
+    <div class="indented-data">
+      <div class="emphasize">
+        {{ receiverName }}
+      </div>
+      <div>{{ donation.receiverAccount.contactInfo.streetAddress }}</div>
+      <div>
+        {{ donation.receiverAccount.contactInfo.city }}, {{ donation.receiverAccount.contactInfo.state }}
+        {{ donation.receiverAccount.contactInfo.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <p>
+    If you did not intend to update the status of this delivery, then you can undo your change at this
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a>.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a>,
+    <a href="mailto:{{ donation.receiverAccount.contactInfo.email }}">{{ receiverName }}</a>,
+    or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions or comments.
+  </p>
+{{else if isReceiver }}
+  <div>
+    The delivery of the following donation that you claimed from <strong>{{ donorName }}</strong>
+    has been <strong>Startedd</strong> by <strong>{{ delivererName }}</strong> and should arrive very shortly:
+  </div>
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
+  <p>
+    You can view the donation and delivery details at this
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a>.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>,
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a>,
+    or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+{{else}}
+  <div>
+    The delivery of the following donation that you submitted has been <strong>Started</strong> by <strong>{{ delivererName }}</strong>:
+  </div>
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
+  <p>
+    You can view the donation and delivery details at this
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a>.
+  </p>
+  <p>
+    If the deliverer has not picked up your donation, please bring this mistake to their attention.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>
+    or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions or comments.
+  </p>
+{{/if}}

@@ -1,10 +1,10 @@
-import { ValidationHelper } from './validation-helper';
-import { AccountHelper, Account } from './account-helper';
 import { Constants } from '../constants/constants';
 import { Validation } from '../constants/validation';
+import { AccountType } from '../interfaces/account/account';
 import { Donation, DonationStatus } from '../interfaces/donation/donation';
 import { DonationReadFilters } from '../interfaces/donation/donation-read-filters';
-import { AccountType, ContactInfo } from '../interfaces/account/account';
+import { Account, AccountHelper } from './account-helper';
+import { ValidationHelper } from './validation-helper';
 export { Donation };
 
 export class DonationHelper {

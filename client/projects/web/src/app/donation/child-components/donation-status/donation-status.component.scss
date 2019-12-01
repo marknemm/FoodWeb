@@ -28,6 +28,11 @@
       background-color: purple;
     }
 
+    &.started {
+      color: white;
+      background-color: darkolivegreen;
+    }
+
     &.picked-up {
       color: black;
       background-color: rgb(134, 255, 255);

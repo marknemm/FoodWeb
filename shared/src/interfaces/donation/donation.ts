@@ -2,14 +2,6 @@ import { Account, ContactInfo } from '../account/account';
 import { Delivery } from '../delivery/delivery';
 export { Account, Delivery };
 
-export enum DonationStatus {
-  Unmatched = 'Unmatched',
-  Matched = 'Matched',
-  Scheduled = 'Scheduled',
-  PickedUp = 'Picked Up',
-  Complete = 'Complete'
-}
-
 /**
  * A donation.
  */
@@ -80,3 +72,23 @@ export interface Donation {
    */
   createTimestamp?: Date;
 }
+
+export const DONATION_TYPES = ['Food', 'Merchandise', 'Cash', 'Service', 'Other'];
+
+export enum DonationStatus {
+  Unmatched = 'Unmatched',
+  Matched = 'Matched',
+  Scheduled = 'Scheduled',
+  Started = 'Started',
+  PickedUp = 'Picked Up',
+  Complete = 'Complete'
+}
+
+export const DONATION_STATUSES: DonationStatus[] = [
+  DonationStatus.Unmatched,
+  DonationStatus.Matched,
+  DonationStatus.Scheduled,
+  DonationStatus.Started,
+  DonationStatus.PickedUp,
+  DonationStatus.Complete
+];
