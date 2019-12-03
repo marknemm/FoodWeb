@@ -28,10 +28,11 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   @Input() required = false;
   @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() minDateWidth: string;
-  @Input() datePadding = '4px';
   @Input() dateTime: Date;
   @Input() boldDate = false;
   @Input() boldTime = false;
+  @Input() excludeDateDisplay = false;
+  @Input() excludeTimeDisplay = false;
 
   private _changeCb: (date: Date) => void = () => {};
   private _destroy$ = new Subject();

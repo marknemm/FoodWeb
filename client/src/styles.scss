@@ -15,6 +15,10 @@ html, body {
     height: auto;
     min-height: 100%;
   }
+
+  @media only screen and (max-width: $mat-mobile) {
+    font-size: 13px;
+  }
 }
 
 .align-left {
@@ -64,6 +68,7 @@ a.no-hover {
 
   & + * {
     margin-left: 7px;
+    vertical-align: top;
   }
 }
 
@@ -72,35 +77,6 @@ a.no-hover {
   input[type=number]::-webkit-outer-spin-button { 
     -webkit-appearance: none !important; 
     margin: 0; 
-  }
-}
-
-mat-card.mat-card {
-  & > food-web-edit-save-button {
-    position: absolute;
-    top: 3px;
-    right: 5px;
-  }
-
-  mat-card-header.mat-card-header {
-    position: relative;
-    
-    .mat-card-header-text {
-      margin-top: -2px;
-
-      .mat-card-subtitle {
-        &:not(:first-child) {
-          margin-top: -14px;
-        }
-      }
-    }
-  }
-
-  mat-card-title.mat-card-title {
-    color: $accent-darkest;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    font-size: 20px !important;
-    font-weight: bold !important;
   }
 }
 
@@ -261,6 +237,30 @@ body.sticky-header {
 .cross-no {
   mat-icon {
     color: red;
+  }
+}
+
+.col-br {
+  display: block;
+  width: 100%;
+  height: 0;
+  margin: 0;
+  padding: 0;
+
+  &.mobile {
+    display: none;
+
+    @media only screen and (max-width: $sm) {
+      display: block;
+    }
+  }
+
+  &.mat-mobile {
+    display: none;
+
+    @media only screen and (max-width: $mat-mobile) {
+      display: block;
+    }
   }
 }
 

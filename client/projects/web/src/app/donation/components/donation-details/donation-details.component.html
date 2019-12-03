@@ -1,6 +1,6 @@
 <div *ngIf="originalDonation" class="donation-details-container">
   <form [formGroup]="formGroup" class="donation-details-form">
-    <mat-card>
+    <mat-card class="primary-donation-details">
       <mat-card-header>
         <img mat-card-avatar src="./assets/IconImg.png" alt="FoodWeb Icon">
         <mat-card-title>
@@ -21,45 +21,25 @@
             <span>{{ originalDonation.description }}</span>
             <hr>
           </div>
-          <div class="col-md-4 col-sm-6">
-            <div class="inline-label">Submitter Name:</div>
-            <div>{{ originalDonation.donorFirstName }} {{ originalDonation.donorLastName }}</div>
+          <div class="col-md-4 col-6" [ngClass]="{ 'col-12': (myDonation && originalDonation.estimatedValue) }">
+            <div class="inline-label">Submitter:</div>
+            <div class="d-inline-block">{{ originalDonation.donorFirstName }} {{ originalDonation.donorLastName }}</div>
           </div>
-          <!-- <div class="col-md-4 col-sm-6">
-            <div class="inline-label">Donation Type:</div>
-            <div>{{ originalDonation.donationType }}</div>
-          </div> -->
-          <div class="col-md-4 col-sm-6">
-            <div class="inline-label">Estimated Meal Count:</div>
-            <div>{{ originalDonation.estimatedNumFeed }}</div>
+          <div class="col-md-4 col-6" *ngIf="myDonation && originalDonation.estimatedValue">
+            <div class="inline-label">Value:</div>
+            <div class="d-inline-block">${{ originalDonation.estimatedValue | number:'1.2-2' }}</div>
           </div>
-          <div *ngIf="myDonation && originalDonation.estimatedValue" class="col-md-4 col-sm-6">
-            <div class="inline-label">Estimated Value:</div>
-            <div>${{ originalDonation.estimatedValue | number:'1.2-2' }}</div>
+          <div class="col-md-4 col-6">
+            <div class="inline-label">Meal Count:</div>
+            <div class="d-inline-block">{{ originalDonation.estimatedNumFeed }}</div>
           </div>
-          <div class="col-md-4 col-sm-6">
-            <div class="inline-label">Donated:</div>
-            <div>
-              <food-web-date-time [dateTime]="originalDonation.createTimestamp"></food-web-date-time>
-            </div>
+          <div *ngIf="myDonation" class="col-md-4 col-6">
+            <div class="inline-label">Created:</div>
+            <food-web-date-time class="d-inline-block created-date-time" [dateTime]="originalDonation.createTimestamp"></food-web-date-time>
           </div>
-          <div *ngIf="originalDonation.delivery?.pickupTime" class="col-md-4 col-sm-6">
-            <div class="inline-label">Picked Up</div>
-            <div>
-              <food-web-date-time [dateTime]="originalDonation.delivery.pickupTime"></food-web-date-time>
-            </div>
-          </div>
-          <div *ngIf="originalDonation.delivery?.dropOffTime" class="col-md-4 col-sm-6">
-            <div class="inline-label">Completed</div>
-            <div>
-              <food-web-date-time [dateTime]="originalDonation.delivery.dropOffTime"></food-web-date-time>
-            </div>
-          </div>
-          <div *ngIf="myDonation" class="col-md-4 col-sm-6">
+          <div *ngIf="myDonation" class="col-md-4 col-6">
             <div class="inline-label">Last Updated:</div>
-            <div>
-              <food-web-date-time [dateTime]="originalDonation.updateTimestamp"></food-web-date-time>
-            </div>
+            <food-web-date-time class="d-inline-block updated-date-time" [dateTime]="originalDonation.updateTimestamp"></food-web-date-time>
           </div>
         </div>
       </mat-card-content>
@@ -78,7 +58,7 @@
     <mat-card *ngIf="editing">
       <mat-card-title>Pickup Window</mat-card-title>
       <mat-card-content>
-        <food-web-date-time-range [formGroup]="formGroup.get('pickupWindow')"></food-web-date-time-range>
+        <food-web-date-time-range [formGroup]="formGroup.get('pickupWindow')" [editing]="true"></food-web-date-time-range>
       </mat-card-content>
     </mat-card>
 
@@ -110,19 +90,22 @@
           <mat-card-title>Pickup Info</mat-card-title>
           <mat-card-content>
             <div class="row">
-              <div *ngIf="originalDonation.donorAccount.organization.deliveryInstructions" class="col-sm-12">
+              <div *ngIf="originalDonation.donorAccount.organization.deliveryInstructions" class="col-lg-12 col-md-6 col-sm-12">
                 <div class="inline-label">Instructions:</div>
                 <div class="d-inline-block">{{ originalDonation.donorAccount.organization.deliveryInstructions }}</div>
               </div>
-              <div class="col-sm-6">
-                <div class="inline-label">Pickup Window Start:</div>
-                <food-web-date-time [dateTime]="deliveryHelper.getPickupWindow(originalDonation).startDateTime" [boldTime]="true">
-                </food-web-date-time>
+              <div class="col-12">
+                <div class="inline-label">Pickup Window:</div>
+                <food-web-date-time-range
+                  class="d-inline-block"
+                  [start]="deliveryHelper.getPickupWindow(originalDonation).startDateTime"
+                  [end]="deliveryHelper.getPickupWindow(originalDonation).endDateTime"
+                  [boldTime]="true"
+                ></food-web-date-time-range>
               </div>
-              <div class="col-sm-6">
-                <div class="inline-label">Pickup Window End:</div>
-                <food-web-date-time [dateTime]="deliveryHelper.getPickupWindow(originalDonation).endDateTime" [boldTime]="true">
-                  </food-web-date-time>
+              <div *ngIf="originalDonation.delivery?.pickupTime" class="col-sm-6 col-12">
+                <div class="inline-label">Picked Up:</div>
+                <food-web-date-time class="d-inline-block" [dateTime]="originalDonation.delivery.pickupTime" [boldTime]="true"></food-web-date-time>
               </div>
             </div>
           </mat-card-content>
@@ -137,14 +120,10 @@
                 <div class="inline-label">Instructions:</div>
                 <div class="d-inline-block">{{ originalDonation.claim.receiverAccount.organization.deliveryInstructions }}</div>
               </div>
-              <!-- <div class="col-sm-6">
-                <div class="inline-label">Window Start:</div>
-                <div class="d-inline-block">{{ originalDonation.dropOffWindowStart | date:'short' }}</div>
+              <div *ngIf="originalDonation.delivery?.dropOffTime" class="col-sm-6">
+                <div class="inline-label">Dropped Off:</div>
+                <food-web-date-time class="d-inline-block" [dateTime]="originalDonation.delivery.dropOffTime" [boldTime]="true"></food-web-date-time>
               </div>
-              <div class="col-sm-6">
-                <div class="inline-label">Window End:</div>
-                <div class="d-inline-block">{{ originalDonation.dropOffWindowEnd | date:'short' }}</div>
-              </div> -->
             </div>
           </mat-card-content>
         </mat-card>

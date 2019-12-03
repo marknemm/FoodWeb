@@ -1,11 +1,9 @@
+@import "constants.scss";
+
 .donation-details-container {
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
-
-  .donation-details-subtitle {
-    margin-right: 5px;
-  }
 
   .donation-details-form {
     .donation-primary-label {
@@ -13,24 +11,56 @@
       font-size: 18px;
     }
 
-    .readonly-donation {
-      .inline-label {
-        margin-bottom: 0px;
-      }
-
-      div {
-        margin-bottom: 7px;
-      }
-    }
-
     .delete-button {
       margin-right: 7px;
     }
+
+    .primary-donation-details {
+      .donation-details-subtitle {
+        margin-right: 7px;
+      }
+  
+      .donation-status {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        font-size: 13px;
+    
+        @media only screen and (max-width: 450px) {
+          position: relative;
+          font-size: 11px;
+        }
+      }
+
+      .readonly-donation {
+        margin-bottom: -7px;
+  
+        .inline-label {
+          margin-bottom: 0px;
+        }
+  
+        > div:not(.col-br) {
+          margin-bottom: 7px;
+          display: inline-block;
+        }
+
+        .created-date-time,
+        .updated-date-time {
+          max-height: 18px;
+          overflow: hidden;
+        }
+      }
+    }
   }
 
-  .pickup-information-container {
-    .row > div {
-      margin-bottom: 12px;
+  .pickup-information-container,
+  .drop-off-information-container {
+    .row {
+      margin-bottom: -12px;
+
+      > div {
+        margin-bottom: 12px;
+      }
     }
   }
 
@@ -40,6 +70,10 @@
     .account-name {
       font-weight: bold;
     }
+
+    .mat-card-actions {
+      padding: 0;
+    }
   }
 
   .deliverer-info-container {
@@ -47,15 +81,22 @@
     margin-right: auto;
   }
 
-  .donation-status {
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    font-size: 13px;
+  @media only screen and (max-width: $mat-mobile) {
+    .mat-card-title {
+      font-size: 16px;
+    }
 
-    @media only screen and (max-width: 450px) {
-      position: relative;
-      font-size: 11px;
+    .inline-label,
+    .inline-label + * {
+      font-size: 13px;
+    }
+
+    .donation-description-container span {
+      font-size: 14px;
     }
   }
+}
+
+.mat-card-content {
+  margin-bottom: 0;
 }

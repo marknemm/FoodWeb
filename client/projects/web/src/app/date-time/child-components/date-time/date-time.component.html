@@ -32,11 +32,11 @@
 </div>
 
 <div *ngIf="!editing" class="date-time-display d-inline-block">
-  <span class="date" [ngClass]="{ bold: boldDate }" [style.minWidth]="minDateWidth" [style.paddingRight]="datePadding">
-    {{ dateTime | foodWebFormatDate }}
-  </span>&nbsp;
+  <span class="date" *ngIf="!excludeDateDisplay" [ngClass]="{ bold: boldDate }" [style.minWidth]="minDateWidth">
+    {{ dateTime | foodWebFormatDate }} &nbsp;
+  </span>
   
-  <span class="time" [ngClass]="{ bold: boldTime }">
+  <span class="time" *ngIf="!excludeTimeDisplay" [ngClass]="{ bold: boldTime }">
     {{ dateTime | foodWebFormatTime }}
   </span>
 </div>

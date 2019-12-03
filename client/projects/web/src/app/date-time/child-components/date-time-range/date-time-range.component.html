@@ -1,4 +1,4 @@
-<div [formGroup]="formGroup" class="row">
+<div [formGroup]="formGroup" *ngIf="editing" class="row">
   <div class="date-time-field col-sm-6">
     <food-web-date-time
      #startDateTime
@@ -30,4 +30,14 @@
       End date-time must be later than start date-time
     </mat-error>
   </div>
+</div>
+
+<div *ngIf="!editing" class="date-time-range-display">
+  <food-web-date-time [boldTime]="boldTime" [excludeTimeDisplay]="excludeEndDateDisplay" [dateTime]="start" [editing]="false"></food-web-date-time>
+  <!-- For no display of end date due to same begin and end date, make sure we group times together so they end up on same line if line break occurs. -->
+  <span class="d-inline-block">
+    <food-web-date-time *ngIf="excludeEndDateDisplay" [boldTime]="boldTime" [excludeDateDisplay]="true" [dateTime]="start" [editing]="false"></food-web-date-time>
+    <span class="display-to"> -- </span>
+    <food-web-date-time [boldTime]="boldTime" [excludeDateDisplay]="excludeEndDateDisplay" [dateTime]="end" [editing]="false"></food-web-date-time>
+  </span>
 </div>

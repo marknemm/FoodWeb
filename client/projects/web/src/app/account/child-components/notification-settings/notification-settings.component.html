@@ -1,29 +1,31 @@
-<div *ngIf="editing" [formGroup]="formGroup" class="notification-settings-form">
-  <mat-slide-toggle formControlName="enableEmail" class="receive-emails fill">
-    Receive Emails
-  </mat-slide-toggle>
-  <mat-slide-toggle formControlName="enablePushNotification" class="receive-push-notifications fill">
-    Receive Push Notifications
-  </mat-slide-toggle>
-  <mat-slide-toggle *ngIf="accountType !== 'Donor'" formControlName="notifyForEachDonation" class="notify-for-each-donation fill">
-    Receive Message For Each New {{ accountType === 'Receiver' ? 'Donation' : 'Delivery' }}
-  </mat-slide-toggle>
-</div>
+<div class="notification-settings-container" [foodWebDisplayEditTransition]="editing" [form]="notificationSettingsForm" [display]="notificationSettingsDisplay">
+  <div #notificationSettingsForm [formGroup]="formGroup" class="notification-settings-form">
+    <mat-slide-toggle formControlName="enableEmail" class="receive-emails fill">
+      Receive Emails
+    </mat-slide-toggle>
+    <mat-slide-toggle formControlName="enablePushNotification" class="receive-push-notifications fill">
+      Receive Push Notifications
+    </mat-slide-toggle>
+    <mat-slide-toggle *ngIf="accountType !== 'Donor'" formControlName="notifyForEachDonation" class="notify-for-each-donation fill">
+      Receive Message For Each New {{ accountType === 'Receiver' ? 'Donation' : 'Delivery' }}
+    </mat-slide-toggle>
+  </div>
 
-<div *ngIf="!editing" class="notification-settings-display row">
-  <div class="col-sm-12">
-    <food-web-yes-no [yes]="formGroup.get('enableEmail').value">
-      Receive Emails:
-    </food-web-yes-no>
-  </div>
-  <div class="col-sm-12">
-    <food-web-yes-no [yes]="formGroup.get('enablePushNotification').value">
-      Receive Push Notifications:
-    </food-web-yes-no>
-  </div>
-  <div class="col-sm-12" *ngIf="accountType !== 'Donor'">
-    <food-web-yes-no [yes]="formGroup.get('notifyForEachDonation').value">
-      Receive Message For Each New {{ accountType === 'Receiver' ? 'Donation' : 'Delivery' }}:
-    </food-web-yes-no>
+  <div #notificationSettingsDisplay class="notification-settings-display row">
+    <div class="col-sm-12">
+      <food-web-yes-no [yes]="formGroup.get('enableEmail').value">
+        Receive Emails:
+      </food-web-yes-no>
+    </div>
+    <div class="col-sm-12">
+      <food-web-yes-no [yes]="formGroup.get('enablePushNotification').value">
+        Receive Push Notifications:
+      </food-web-yes-no>
+    </div>
+    <div class="col-sm-12" *ngIf="accountType !== 'Donor'">
+      <food-web-yes-no [yes]="formGroup.get('notifyForEachDonation').value">
+        Receive Message For Each New {{ accountType === 'Receiver' ? 'Donation' : 'Delivery' }}:
+      </food-web-yes-no>
+    </div>
   </div>
 </div>
