@@ -1,7 +1,7 @@
 import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { EventRegistrationForm } from '~web/event/event-registration.form';
 import { EventRegistrationService } from '~web/event/event-registration/event-registration.service';
-import { MapService } from '~web/map/map/map.service';
+import { MapAppLinkService } from '~web/map/map-app-link/map-app-link.service';
 import { SessionService } from '~web/session/session/session.service';
 
 @Component({
@@ -29,7 +29,7 @@ export class EventCardComponent implements OnInit, OnChanges {
     public eventRegistrationService: EventRegistrationService,
     @Inject('Window') public window: Window,
     private _sessionService: SessionService,
-    private _mapService: MapService
+    private _mapAppLinkService: MapAppLinkService
   ) {}
 
   get directionsHref(): string {
@@ -46,8 +46,8 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.location) {
-      this._directionsHref = this._mapService.genDirectionHrefEstimate(this.location);
-      this._mapService.genDirectionHref(this.location).subscribe(
+      this._directionsHref = this._mapAppLinkService.genDirectionHrefEstimate(this.location);
+      this._mapAppLinkService.genDirectionHref(this.location).subscribe(
         (directionsHref: string) => this._directionsHref = directionsHref
       )
       this.location = this.location.replace(/<[^>]*>/g, '').replace(',', '<br>');

@@ -1,7 +1,7 @@
-import { AgmCoreModule } from '@agm/core';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { environment } from '~web/environments/environment';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { MapWaypointConverter } from '~shared';
 import { MapComponent } from '~web/map/map/map.component';
 
 @NgModule({
@@ -10,11 +10,14 @@ import { MapComponent } from '~web/map/map/map.component';
   ],
   imports: [
     CommonModule,
-    AgmCoreModule.forRoot({ apiKey: environment.googleMapsJSApiKey }),
+    GoogleMapsModule
   ],
   exports: [
-    AgmCoreModule,
     MapComponent
+  ],
+  providers: [
+    google.maps.DirectionsService,
+    MapWaypointConverter
   ]
 })
 export class MapModule {}

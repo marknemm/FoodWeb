@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Delivery } from '../shared';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Delivery, Directions } from '../shared';
 import { AccountEntity } from './account.entity';
 import { DonationEntity } from './donation.entity';
 
@@ -22,9 +22,21 @@ export class DeliveryEntity implements Delivery {
   @Column({ type: 'timestamp with time zone' })
   pickupWindowEnd: Date;
 
+  @Column({ type: 'real' })
+  distanceMiToDonor: number;
+  
+  @Column({ type: 'integer' })
+  durationMinToDonor: number;
+
+  @Column({ type: 'json' })
+  directionsToDonor: Directions;
+
   @Column({ type: 'timestamp with time zone', nullable: true })
   pickupTime?: Date;
 
   @Column({ type: 'timestamp with time zone', nullable: true })
   dropOffTime?: Date;
+
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createTimestamp: Date;
 }

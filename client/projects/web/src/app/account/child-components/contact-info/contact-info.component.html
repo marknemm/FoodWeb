@@ -64,8 +64,8 @@
         <a class="address" [href]="directionsHref" target="_blank">
           <food-web-address [contactInfo]="contactInfo"></food-web-address>
         </a>
-        <div class="map-container">
-          <food-web-map *ngIf="includeMap" [waypoints]="contactInfo"></food-web-map>
+        <div *ngIf="includeMap" class="map-container">
+          <food-web-map [waypoints]="contactInfo"></food-web-map>
         </div>
       </div>
     </ng-container>

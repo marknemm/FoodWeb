@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ContactInfo } from '~shared';
 import { ContactInfoForm } from '~web/account/contact-info.form';
-import { MapService } from '~web/map/map/map.service';
+import { MapAppLinkService } from '~web/map/map-app-link/map-app-link.service';
 
 @Component({
   selector: 'food-web-contact-info',
@@ -10,16 +10,16 @@ import { MapService } from '~web/map/map/map.service';
 })
 export class ContactInfoComponent implements OnInit {
 
+  @Input() contactInfo: ContactInfo;
   @Input() editing = false;
   @Input() formGroup: ContactInfoForm;
-  @Input() contactInfo: ContactInfo;
   @Input() hideAddress = false;
   @Input() includeMap = false;
 
   private _directionsHref: string;
 
   constructor(
-    public mapService: MapService
+    private _mapAppLinkService: MapAppLinkService
   ) {}
 
   get directionsHref(): string {
@@ -30,8 +30,8 @@ export class ContactInfoComponent implements OnInit {
     this.formGroup = this.formGroup ? this.formGroup : new ContactInfoForm();
     if (this.contactInfo) {
       this.formGroup.patchValue(this.contactInfo);
-      this._directionsHref = this.mapService.genDirectionHrefEstimate(this.contactInfo);
-      this.mapService.genDirectionHref(this.contactInfo).subscribe(
+      this._directionsHref = this._mapAppLinkService.genDirectionHrefEstimate(this.contactInfo);
+      this._mapAppLinkService.genDirectionHref(this.contactInfo).subscribe(
         (directionsHref: string) => this._directionsHref = directionsHref
       );
     }

@@ -1,3 +1,8 @@
-<agm-map [style.width]="width" [style.height]="height" [latitude]="mapCenter.lat" [longitude]="mapCenter.lon" [zoom]="zoom">
-  <agm-marker [latitude]="gpsWaypoint.lat" [longitude]="gpsWaypoint.lon" *ngFor="let gpsWaypoint of gpsWaypoints"></agm-marker>
-</agm-map>
+<google-map
+  [height]="height"
+  [width]="width"
+  [center]="mapService.mapCenter"
+  [options]="options"
+>
+  <map-marker *ngFor="let latLngWaypoint of mapService.latLngWaypoints" [position]="latLngWaypoint"></map-marker>
+</google-map>

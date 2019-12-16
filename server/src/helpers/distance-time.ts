@@ -1,15 +1,14 @@
+import * as GoogleMaps from '@google/maps';
+import { ClientResponse, DistanceMatrixResponse, GoogleMapsClient } from '@google/maps';
 import 'dotenv';
-import { promisify } from 'util';
 import { ContactInfo } from '../shared';
 import { FoodWebError } from './food-web-error';
-import distanceTime = require('google-distance-matrix');
 
+const _distanceTimeClient: GoogleMapsClient = GoogleMaps.createClient({
+  key: process.env.DISTANCE_TIME_API_KEY,
+  Promise
+});
 const _offlineMode: boolean = (process.env.OFFLINE_MODE === 'true');
-distanceTime.key(process.env.DISTANCE_TIME_API_KEY);
-distanceTime.units('imperial');
-
-type GetDistanceTimeFn = (origins: string[], destinations: string[]) => Promise<any>;
-const _distanceTimeMatrix: GetDistanceTimeFn = promisify(distanceTime.matrix.bind(distanceTime));
 
 /**
  * Gets the driving distance and time between a list of orign to destination queries.
@@ -33,13 +32,15 @@ export async function getDrivingDistTime(distanceTimeQueries: DistanceTimeQuery[
  * @return A promise that resolves to an array of the computed driving distances and times.
  * @throws FoodWebError if the distance time query fails.
  */
-export function _getDistanceTimeMatrix(origins: string[], destinations: string[], retryCnt = 0): Promise<any> {
-  return _distanceTimeMatrix(origins, destinations)
-    .then((result: any) => {
-      switch (result.status) {
-        case 'OK':                return result;
+export function _getDistanceTimeMatrix(origins: string[], destinations: string[], retryCnt = 0): Promise<DistanceMatrixResponse> {
+  return <Promise<DistanceMatrixResponse>>_distanceTimeClient
+    .distanceMatrix({ origins, destinations, units: 'imperial' })
+    .asPromise()
+    .then((result: ClientResponse<DistanceMatrixResponse>) => {
+      switch (result.json.status) {
+        case 'OK':                return result.json;
         case 'OVER_QUERY_LIMIT':  return _attemptRetry(origins, destinations, retryCnt);
-        default:                  _handleGetDistanceTimeErr(new Error(result.status));
+        default:                  _handleGetDistanceTimeErr(new Error(result.json.status));
       }
     })
     .catch(_handleGetDistanceTimeErr);
@@ -89,7 +90,7 @@ function _contactInfoToQueryString(contactInfo: ContactInfo): string {
  * @param retryCnt The number of retries that have happened previously.
  * @throws FoodWebError if the retry limit (5) has been exceeded or the distance-time query retry fails.
  */
-function _attemptRetry(origins: string[], destinations: string[], retryCnt: number): Promise<any> {
+function _attemptRetry(origins: string[], destinations: string[], retryCnt: number): Promise<DistanceMatrixResponse> {
   if (++retryCnt >= 5) {
     _handleGetDistanceTimeErr(new Error('OVER_QUERY_LIMIT'));
   }

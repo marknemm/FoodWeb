@@ -1,49 +1,32 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { GPSCoordinate, MapService, Waypoint } from '~web/map/map/map.service';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { GoogleMap } from '@angular/google-maps';
+import { MapOptions, MapService, Waypoint } from '~web/map/map/map.service';
 
 @Component({
   selector: 'food-web-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  styleUrls: ['./map.component.scss'],
+  providers: [MapService]
 })
-export class MapComponent implements OnInit, OnChanges {
+export class MapComponent implements OnChanges {
 
-  @Input() width = '100%';
-  @Input() height = '300px';
-  @Input() waypoints: Waypoint | Waypoint[];
-  @Input() zoom = 12;
   @Input() directions = false;
+  @Input() height = '300px';
+  @Input() options: MapOptions = {};
+  @Input() waypoints: Waypoint | Waypoint[];
+  @Input() width = '100%';
 
-  private _gpsWaypoints: GPSCoordinate[] = [];
-  private _mapCenter: GPSCoordinate;
+  @ViewChild(GoogleMap, { static: true }) map: GoogleMap;
 
   constructor(
-    private _mapService: MapService
+    public mapService: MapService
   ) {}
 
-  get gpsWaypoints(): GPSCoordinate[] {
-    return this._gpsWaypoints;
-  }
-
-  get mapCenter(): GPSCoordinate {
-    return this._mapCenter;
-  }
-
-  ngOnInit() {}
-
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.waypoints) {
-      this._processWaypointsUpdate();
+    if (changes.waypoints || changes.directions) {
+      setTimeout(() => // Wait until we are sure view is fully initialized to access map ViewChild.
+        this.mapService.refreshMap(this.map, this.waypoints, this.directions)
+      );
     }
-  }
-
-  private _processWaypointsUpdate(): void {
-    this.waypoints = (!this.waypoints || this.waypoints instanceof Array) ? this.waypoints : [this.waypoints];
-    this._mapService.waypointsToGPSCoordinates(<Waypoint[]>this.waypoints).subscribe((gpsCoordinates: GPSCoordinate[]) => {
-      this._gpsWaypoints = gpsCoordinates;
-      if (this.gpsWaypoints.length) {
-        this._mapCenter = this._mapService.calcMapCenter(gpsCoordinates);
-      }
-    });
   }
 }

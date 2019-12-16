@@ -1,141 +1,87 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subscriber } from 'rxjs';
+import { GoogleMap } from '@angular/google-maps';
+import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ContactInfo, GeographyLocation } from '~shared';
+import { DirectionsService } from '~web/map/directions/directions.service';
+import { Directions, LatLng, LatLngBounds, LatLngLiteral, Polyline, Waypoint } from '~web/map/map';
+import { WaypointService } from '~web/map/waypoint/waypoint.service';
+export * from '~web/map/map';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MapService {
 
-  constructor() {}
+  private _direcitons$ = new Subject<Directions>();
+  private _latLngWaypoints: LatLngLiteral[] = [];
+  private _mapCenter: LatLng = new google.maps.LatLng(0, 0);
+  private _mapBounds = new google.maps.LatLngBounds();
 
-  refreshCurrentPosition(): Observable<GPSCoordinate> {
-    return new Observable<GPSCoordinate>((subscription: Subscriber<GPSCoordinate>) => {
-      navigator.geolocation.getCurrentPosition(
-        (position: Position) => {
-          subscription.next(this._positionToGPSCoordinate(position));
-          subscription.complete();
-        },
-        (error: PositionError) => {
-          console.error(error);
-          subscription.error(new Error(error.message));
-          subscription.complete();
-        },
-        { enableHighAccuracy: true }
-      );
+  constructor(
+    private _waypointService: WaypointService,
+    private _directionsService: DirectionsService
+  ) {}
+
+  get directions$(): Observable<Directions> {
+    return this._direcitons$.asObservable();
+  }
+
+  get latLngWaypoints(): LatLngLiteral[] {
+    return this._latLngWaypoints;
+  }
+
+  get mapBounds(): LatLngBounds {
+    return this._mapBounds;
+  }
+
+  get mapCenter(): LatLng {
+    return this._mapCenter;
+  }
+
+  refreshMap(map: GoogleMap, waypoints: Waypoint | Waypoint[], calcDirections = false): void {
+    this._refreshLatLngWaypoints(waypoints).subscribe((latLngWaypoints: LatLngLiteral[]) => {
+      this._refreshMapView(map, latLngWaypoints);
+      this._refreshDirections(map, calcDirections);
     });
   }
 
-  genLocationHref(addressInfo: ContactInfo | string): string {
-    return (typeof addressInfo === 'string')
-      ? `https://maps.google.com/?q=${addressInfo}`
-      : `https://maps.google.com/?q=${addressInfo.streetAddress}, ${addressInfo.stateProvince}, ${addressInfo.city}, ${addressInfo.postalCode}`;
-  }
-
-  genDirectionHrefEstimate(destination: Waypoint | string): string {
-    const daddr: string = this._genUrlAddrArg(destination);
-    return `https://www.google.com/maps?saddr=My+Location&daddr=${daddr}`;
-  }
-
-  genDirectionHref(destination: Waypoint | string): Observable<string> {
-    const daddr: string = this._genUrlAddrArg(destination);
-    return this.refreshCurrentPosition().pipe(
-      map((position: GPSCoordinate) => {
-        const saddr = `${position.lat},${position.lon}`;
-        return `https://www.google.com/maps?saddr=${saddr}&daddr=${daddr}`;
-      })
+  private _refreshLatLngWaypoints(waypoints: Waypoint | Waypoint[]): Observable<LatLngLiteral[]> {
+    waypoints = (!waypoints || waypoints instanceof Array) ? waypoints : [waypoints];
+    return this._waypointService.waypointsToLatLngLiterals(<Waypoint[]>waypoints).pipe(
+      map((latLngLiterals: LatLngLiteral[]) => this._latLngWaypoints = latLngLiterals)
     );
   }
 
-  private _genUrlAddrArg(destination: Waypoint | string): string {
-    if (typeof destination === 'string') {
-      return destination;
+  private _refreshMapView(map: GoogleMap, latLngLiterals: LatLngLiteral[]): void {
+    if (this.latLngWaypoints.length) {
+      this._mapBounds = this._calcMapBounds(latLngLiterals);
+      this._mapCenter = this._mapBounds.getCenter();
+      map.fitBounds(this._mapBounds);
     }
-    if ((<ContactInfo>destination).streetAddress) {
-      destination = <ContactInfo>destination;
-      return `${destination.streetAddress}+${destination.city}+${destination.stateProvince}+${destination.postalCode}`;
-    }
-    const destinationGPS: GPSCoordinate = this._waypointToGPSCoordinate(destination);
-    return destinationGPS ? `${destinationGPS.lat},${destinationGPS.lon}` : '';
   }
 
-  calcMapCenter(gpsCoordinates: GPSCoordinate[]): GPSCoordinate {
-    let latSum: number = 0;
-    let lonSum: number = 0;
-    gpsCoordinates.forEach((gpsCoordinate: GPSCoordinate) => {
-      latSum += gpsCoordinate.lat;
-      lonSum += gpsCoordinate.lon;
-    });
-    return {
-      lat: latSum / gpsCoordinates.length,
-      lon: lonSum / gpsCoordinates.length
-    };
+  private _calcMapBounds(latLngWaypoints: LatLngLiteral[]): LatLngBounds {
+    let mapBounds = new google.maps.LatLngBounds();
+
+    // Return immediately if given falsy/empty lat/lng literals array.
+    if (!latLngWaypoints || latLngWaypoints.length === 0) {
+      return mapBounds;
+    }
+
+    latLngWaypoints.forEach((latLngLiteral: LatLngLiteral) =>
+      mapBounds = mapBounds.extend(latLngLiteral)
+    );
+    return mapBounds;
   }
 
-  waypointsToGPSCoordinates(waypoints: Waypoint[]): Observable<GPSCoordinate[]> {
-    return new Observable<GPSCoordinate[]>((subscriber: Subscriber<GPSCoordinate[]>) => {
-      const gpsCoordinates: GPSCoordinate[] = [];
-      let currentPositionIdx: number;
-      let currentPosition$: Observable<GPSCoordinate> = of(null);
-      if (waypoints) {
-        waypoints.forEach((waypoint: Waypoint, idx: number) => {
-          if (waypoint === 'My+Location') {
-            currentPositionIdx = idx;
-            currentPosition$ = this.refreshCurrentPosition();
-          } else {
-            const gpsCoord: GPSCoordinate = this._waypointToGPSCoordinate(waypoint);
-            if (gpsCoord) {
-              gpsCoordinates.push(gpsCoord);
-            }
-          }
-        });
-      }
-      currentPosition$.subscribe((position: GPSCoordinate) => {
-        if (position) {
-          gpsCoordinates.splice(currentPositionIdx, 0, position);
+  private _refreshDirections(map: GoogleMap, calcDirections: boolean): void {
+    if (calcDirections && this.latLngWaypoints.length > 1) {
+      this._directionsService.getDirections(this.latLngWaypoints).subscribe(
+        (directions: Directions) => {
+          directions.polylines.forEach((polyline: Polyline) =>
+            polyline.setMap(map._googleMap)
+          );
+          this._direcitons$.next(directions);
         }
-        subscriber.next(gpsCoordinates);
-        subscriber.complete();
-      });
-    });
-  }
-
-  private _waypointToGPSCoordinate(waypoint: Waypoint): GPSCoordinate {
-    if ((<Position>waypoint).coords) {
-      return this._positionToGPSCoordinate(<Position>waypoint);
-    } else if ((<GeographyLocation>waypoint).coordinates) {
-      return this._geographyLocationToGPSCoordinate(<GeographyLocation>waypoint);
-    } else if ((<ContactInfo>waypoint).location) {
-      return this._contactInfoToGPSCoordinate(<ContactInfo>waypoint);
-    } else if ((<GPSCoordinate>waypoint).lat) {
-      return <GPSCoordinate>waypoint;
+      );
     }
-    return null;
-  }
-
-  private _positionToGPSCoordinate(position: Position): GPSCoordinate {
-    return {
-      lat: position.coords.latitude,
-      lon: position.coords.longitude
-    };
-  }
-
-  private _geographyLocationToGPSCoordinate(geography: GeographyLocation): GPSCoordinate {
-    return {
-      lat: geography.coordinates[1],
-      lon: geography.coordinates[0]
-    };
-  }
-
-  private _contactInfoToGPSCoordinate(contactInfo: ContactInfo): GPSCoordinate {
-    return this._geographyLocationToGPSCoordinate(contactInfo.location);
   }
 }
-
-export interface GPSCoordinate {
-  lat: number;
-  lon: number;
-}
-
-export type Waypoint = 'My+Location' | Position | GeographyLocation | GPSCoordinate | ContactInfo;

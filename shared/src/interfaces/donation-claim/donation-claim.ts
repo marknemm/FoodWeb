@@ -1,4 +1,5 @@
 import { Account } from '../account/account';
+import { Directions } from '../misc';
 export { Account };
 
 /**
@@ -21,6 +22,10 @@ export interface DonationClaim {
    * The driving duration (minutes) from the Donor to the Receiver.
    */
   durationMinToReceiver: number;
+  /**
+   * The driving directions from the Donor to the Receiver.
+   */
+  directionsToReceiver: Directions;
   /**
    * The time when the donation was claimed.
    */

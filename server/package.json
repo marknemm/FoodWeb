@@ -28,6 +28,7 @@
   },
   "private": true,
   "dependencies": {
+    "@google/maps": "^1.0.2",
     "@types/express": "^4.16.1",
     "@types/express-session": "^1.15.12",
     "await-to-js": "^2.1.1",
@@ -45,7 +46,6 @@
     "express-session": "^1.15.6",
     "fs-extra": "^8.0.1",
     "geo-tz": "^5.0.4",
-    "google-distance-matrix": "^1.1.1",
     "handlebars": "^4.5.3",
     "handlebars-helpers": "^0.10.0",
     "juice": "^5.2.0",
@@ -73,6 +73,7 @@
     "@types/cron": "^1.7.1",
     "@types/expect": "^1.20.3",
     "@types/fs-extra": "^7.0.0",
+    "@types/google__maps": "^0.5.8",
     "@types/lodash": "^4.14.118",
     "@types/mocha": "^5.2.5",
     "@types/moment-timezone": "^0.5.9",
