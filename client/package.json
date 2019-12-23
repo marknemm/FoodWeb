@@ -44,7 +44,6 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/build-angular": "~0.801.0",
     "@angular/animations": "^8.1.0",
     "@angular/cdk": "^8.1.4",
     "@angular/cli": "^8.1.0",
@@ -107,7 +106,7 @@
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.801.0",
+    "@angular-devkit/build-angular": "^0.803.21",
     "@angular/compiler-cli": "~8.1.0",
     "@types/cordova": "0.0.34",
     "@types/eventsource": "^1.1.2",

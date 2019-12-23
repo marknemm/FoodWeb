@@ -8,6 +8,7 @@ export { LatLngLiteral };
 export interface Directions {
   distanceMi: number;
   durationMin: number;
+  encodedPolyline: string;
   waypointSegments: WaypointSegment[];
 }
 
@@ -18,6 +19,7 @@ export interface Directions {
 export interface WaypointSegment {
   distanceMi: number;
   durationMin: number;
+  encodedPolyline: string;
   steps: StepSegment[];
 }
 
@@ -28,6 +30,7 @@ export interface WaypointSegment {
 export interface StepSegment {
   distanceMi: number;
   durationMin: number;
+  encodedPolyline: string;
   endLatLng: LatLngLiteral;
   htmlInstructions: string;
   startLatLng: LatLngLiteral;

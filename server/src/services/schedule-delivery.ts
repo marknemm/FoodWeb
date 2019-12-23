@@ -1,7 +1,7 @@
 import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { getDirections } from '../helpers/directions';
+import { genDirections } from '../helpers/directions';
 import { FoodWebError } from '../helpers/food-web-error';
 import { Delivery, DeliveryHelper, DeliveryScheduleRequest, Directions, Donation, DonationStatus } from '../shared';
 import { readDonation } from './read-donations';
@@ -72,7 +72,7 @@ async function _genDonationDelivery(
   myAccount: AccountEntity,
   scheduleRequest: DeliveryScheduleRequest
 ): Promise<Delivery> {
-  const directions: Directions = await getDirections([
+  const directions: Directions = await genDirections([
     myAccount.contactInfo,
     donationToSchedule.donorContactOverride
   ]);

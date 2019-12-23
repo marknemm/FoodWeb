@@ -40,6 +40,14 @@
             "scripts": []
           },
           "configurations": {
+            "hmr": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/admin/src/environments/environment.ts",
+                  "with": "projects/admin/src/environments/environment.hmr.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -72,6 +80,11 @@
             "browserTarget": "admin:build"
           },
           "configurations": {
+            "hmr": {
+              "hmr": true,
+              "hmrWarning": false,
+              "browserTarget": "admin:build:hmr"
+            },
             "production": {
               "browserTarget": "admin:build:production"
             }
@@ -194,6 +207,14 @@
                 }
               ]
             },
+            "hmr": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/app/src/environments/environment.ts",
+                  "with": "projects/app/src/environments/environment.hmr.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -235,6 +256,11 @@
             },
             "browser": {
               "browserTarget": "app:build:browser"
+            },
+            "hmr": {
+              "hmr": true,
+              "hmrWarning": false,
+              "browserTarget": "app:build:hmr"
             },
             "production": {
               "browserTarget": "app:build:production"

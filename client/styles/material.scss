@@ -419,3 +419,18 @@ body .mat-snack-bar-container {
     }
   }
 }
+
+/* Google Maps Widget */
+@media only screen and (max-width: $mat-mobile) {
+  .gmnoprint,
+  .gm-fullscreen-control {
+    margin: 0 !important;
+  }
+
+  .hide-map-controls {
+    .gmnoprint,
+    .gm-fullscreen-control {
+      display: none !important;
+    }
+  }
+}

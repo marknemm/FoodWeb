@@ -1,7 +1,7 @@
 import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { getDirections } from '../helpers/directions';
+import { genDirections } from '../helpers/directions';
 import { FoodWebError } from '../helpers/food-web-error';
 import { Directions, Donation, DonationClaim, DonationClaimHelper, DonationClaimRequest, DonationHelper, DonationStatus } from '../shared';
 import { readDonation } from './read-donations';
@@ -61,7 +61,7 @@ async function _genClaimedDonation(donationToClaim: Donation, receiverAccount: A
  * @return A promise that resolves to the generated Donation Claim.
  */
 async function _genDonationClaim(donation: Donation, receiverAccount: AccountEntity): Promise<DonationClaim> {
-  const directions: Directions = await getDirections([
+  const directions: Directions = await genDirections([
     donation.donorContactOverride,
     receiverAccount.contactInfo
   ]);

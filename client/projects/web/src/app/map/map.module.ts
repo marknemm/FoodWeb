@@ -1,23 +1,40 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { MapWaypointConverter } from '~shared';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatRadioModule } from '@angular/material/radio';
+import { DirectionsExtractor, MapWaypointConverter } from '~shared';
+import { DirectionStepsExtractorPipe } from '~web/map/direction-steps-extractor/direction-steps-extractor.pipe';
+import { DirectionStepsComponent } from '~web/map/direction-steps/direction-steps.component';
+import { MapOptionsComponent } from '~web/map/map-options/map-options.component';
 import { MapComponent } from '~web/map/map/map.component';
 
 @NgModule({
   declarations: [
-    MapComponent
+    DirectionStepsComponent,
+    DirectionStepsExtractorPipe,
+    MapComponent,
+    MapOptionsComponent
   ],
   imports: [
     CommonModule,
-    GoogleMapsModule
+    GoogleMapsModule,
+    MatCheckboxModule,
+    MatExpansionModule,
+    MatRadioModule,
+    ReactiveFormsModule
   ],
   exports: [
-    MapComponent
+    DirectionStepsComponent,
+    MapComponent,
+    MapOptionsComponent
   ],
   providers: [
     google.maps.DirectionsService,
-    MapWaypointConverter
+    MapWaypointConverter,
+    DirectionsExtractor
   ]
 })
 export class MapModule {}

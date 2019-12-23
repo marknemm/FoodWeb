@@ -1,0 +1,5 @@
+<div class="direction-steps-container">
+  <ol>
+    <li *ngFor="let directionStep of (directions | directionStepsExtractor : waypointSegmentIdx)" [innerHTML]="directionStep"></li>
+  </ol>
+</div>

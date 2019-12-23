@@ -2,7 +2,7 @@ import * as lscache from 'lscache';
 
 export class LocalStorageBucket<K = any, V = any> {
 
-  private _memCacheStore = new Map<K, CacheEntry<K, V>>();
+  private _memCacheStore = new Map<string, CacheEntry<K, V>>();
   private _expiryOrder: CacheEntry<K, V>[] = [];
 
   private _expiryMilliseconds: number;
@@ -49,7 +49,7 @@ export class LocalStorageBucket<K = any, V = any> {
       // Remove excess memory cache store entries (starting from the those with the earliest expiration times).
       const numExcess: number = (this._expiryOrder.length - this._maxMemCacheEntries);
       this._expiryOrder.splice(0, numExcess).forEach((entry: CacheEntry<K, V>) =>
-        this._memCacheStore.delete(entry.key)
+        this._memCacheStore.delete(JSON.stringify(entry.key))
       );
     }
   }
@@ -89,7 +89,7 @@ export class LocalStorageBucket<K = any, V = any> {
    * @param entry The entry to add to the memory cache store.
    */
   private _addEntryToMemCache(entry: CacheEntry<K, V>): void {
-    this._memCacheStore.set(entry.key, entry);
+    this._memCacheStore.set(JSON.stringify(entry.key), entry);
     this._addEntryToOrderedExpiryList(entry);
   }
 
@@ -111,7 +111,7 @@ export class LocalStorageBucket<K = any, V = any> {
   private _findInsertIdx(entry: CacheEntry<K, V>): number {
     let lowIdx = 0;
     let highIdx: number = this._expiryOrder.length;
-    do {
+    while (lowIdx < highIdx) {
       const midIdx: number = Math.floor((lowIdx + highIdx) / 2);
       // Return immediately if we found entry with equivalent expireMs.
       if (entry.expiresMs === this._expiryOrder[midIdx].expiresMs) {
@@ -120,7 +120,7 @@ export class LocalStorageBucket<K = any, V = any> {
       (entry.expiresMs > this._expiryOrder[midIdx].expiresMs)
         ? lowIdx = (midIdx + 1)
         : highIdx = (midIdx - 1);
-    } while (lowIdx < highIdx);
+    }
     return lowIdx;
   }
 
@@ -141,7 +141,7 @@ export class LocalStorageBucket<K = any, V = any> {
     const cutOffEntry: CacheEntry<K, V> = this._genCacheEntry(null, null, 0); // A dummy entry that expires now.
     const cutOffIdx: number = this._findInsertIdx(cutOffEntry); // Remove elements up to cut-off index.
     this._expiryOrder.splice(0, cutOffIdx).forEach((entry: CacheEntry<K, V>) =>
-      this._memCacheStore.delete(entry.key)
+      this._memCacheStore.delete(JSON.stringify(entry.key))
     );
   }
 
@@ -151,9 +151,10 @@ export class LocalStorageBucket<K = any, V = any> {
    * @return The item if it exists, otherwise null.
    */
   getItem(key: K): V {
-    return this._memCacheStore.has(key)
-      ? this._memCacheStore.get(key).value
-      : lscache.get(JSON.stringify(key));
+    const keyJsonStr: string = JSON.stringify(key);
+    return this._memCacheStore.has(keyJsonStr)
+      ? this._memCacheStore.get(keyJsonStr).value
+      : lscache.get(keyJsonStr).value;
   }
 
   /**
@@ -162,9 +163,10 @@ export class LocalStorageBucket<K = any, V = any> {
    * @return The item; null if the item does not exist.
    */
   private _getSavedItem(key: K): V {
-    const entry: CacheEntry<K, V> = lscache.get(JSON.stringify(key));
+    const keyJsonStr: string = JSON.stringify(key);
+    const entry: CacheEntry<K, V> = lscache.get(keyJsonStr);
     // if we are retrieving an item that doesn't exist in the in-memory cache, than copy it to it.
-    if (entry && !this._memCacheStore.has(key)) {
+    if (entry && !this._memCacheStore.has(keyJsonStr)) {
       this._addEntryToMemCache(entry);
     }
     return entry ? entry.value : null;
@@ -177,7 +179,7 @@ export class LocalStorageBucket<K = any, V = any> {
    */
   hasItem(key: K): boolean {
     // NOTE: This will copy the item to the in-memory cache if it does not exist there.
-    return (this._memCacheStore.has(key) || this._getSavedItem(key) != null)
+    return (this._memCacheStore.has(JSON.stringify(key)) || this._getSavedItem(key) != null)
   }
 
   /**
@@ -200,9 +202,10 @@ export class LocalStorageBucket<K = any, V = any> {
    * @return The value of the removed item.
    */
   private _removeMemCacheItem(key: K = this._getKeyOfEntryToEject()): V {
-    if (key && this._memCacheStore.has(key)) {
-      const entry: CacheEntry<K, V> = this._memCacheStore.get(key);
-      this._memCacheStore.delete(key);
+    const keyJsonStr: string = JSON.stringify(key);
+    if (key && this._memCacheStore.has(keyJsonStr)) {
+      const entry: CacheEntry<K, V> = this._memCacheStore.get(keyJsonStr);
+      this._memCacheStore.delete(keyJsonStr);
       this._removeEntryFromOrderedExpiryList(entry);
       return entry.value;
     }

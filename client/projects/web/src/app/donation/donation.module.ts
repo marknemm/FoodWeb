@@ -9,6 +9,7 @@ import { DonationRoutingModule } from '~web/donation/donation-routing.module';
 import { DonationStatusComponent } from '~web/donation/donation-status/donation-status.component';
 import { DonationsComponent } from '~web/donation/donations/donations.component';
 import { DonorModule } from '~web/donor/donor.module';
+import { MapModule } from '~web/map/map.module';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
 
@@ -27,7 +28,8 @@ import { SharedModule } from '~web/shared/shared.module';
     SharedModule,
     AccountModule,
     DonorModule,
-    DateTimeModule
+    DateTimeModule,
+    MapModule
   ],
   exports: [
     DonationStatusComponent

@@ -53,6 +53,18 @@
     }
   }
 
+  .delivery-map-card {
+    border-top: 2px solid rgba(0, 0, 0, 0.2);
+    border-right: 2px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    border-left: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+
+    .mat-card-content {
+      margin: -17px;
+    }
+  }
+
   .pickup-information-container,
   .drop-off-information-container {
     .row {

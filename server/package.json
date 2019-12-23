@@ -46,6 +46,7 @@
     "express-session": "^1.15.6",
     "fs-extra": "^8.0.1",
     "geo-tz": "^5.0.4",
+    "google-polyline": "^1.0.3",
     "handlebars": "^4.5.3",
     "handlebars-helpers": "^0.10.0",
     "juice": "^5.2.0",

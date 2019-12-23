@@ -20,10 +20,12 @@ export class DonationDetailsComponent implements OnInit {
 
   formGroup: DonateForm;
 
-  private _myDonation = false;
   private _donationNotFound = false;
-  private _originalDonation: Donation;
   private _editing = false;
+  private _myClaim = false;
+  private _myDelivery = false;
+  private _myDonation = false;
+  private _originalDonation: Donation;
 
   constructor(
     public accountHelper: AccountHelper,
@@ -38,8 +40,20 @@ export class DonationDetailsComponent implements OnInit {
     private _dateTimeService: DateTimeService
   ) {}
 
+  get donationNotFound(): boolean {
+    return this._donationNotFound;
+  }
+
   get editing(): boolean {
     return this._editing;
+  }
+
+  get myClaim(): boolean {
+    return this._myClaim;
+  }
+
+  get myDelivery(): boolean {
+    return this._myDelivery;
   }
 
   get myDonation(): boolean {
@@ -50,8 +64,8 @@ export class DonationDetailsComponent implements OnInit {
     return this._originalDonation;
   }
 
-  get donationNotFound(): boolean {
-    return this._donationNotFound;
+  get showMap(): boolean {
+    return (this.myDelivery || !this.originalDonation.delivery);
   }
 
   ngOnInit() {
@@ -150,6 +164,12 @@ export class DonationDetailsComponent implements OnInit {
     this._originalDonation = donation;
     this.formGroup.patchFromDonation(donation);
     this._myDonation = this.sessionService.isMyAccount(donation.donorAccount.id);
+    this._myClaim = donation.claim
+      ? this.sessionService.isMyAccount(donation.claim.receiverAccount.id)
+      : false;
+    this._myDelivery = donation.delivery
+      ? this.sessionService.isMyAccount(donation.delivery.volunteerAccount.id)
+      : false;
   }
 
 }
