@@ -145,8 +145,6 @@ header .notifications-button-container {
 
 /* Targets the actual notifications menu container... lots of confusing javascript overrides via !important */
 .notifications-menu-backdrop + div {
-  margin-top: 8px;
-
   .cdk-overlay-pane {
     .mat-menu-panel {
       max-width: 432px;
@@ -175,14 +173,6 @@ header .notifications-button-container {
       right: 0 !important;
       max-width: 100vw !important;
     }
-  }
-
-  @media only screen and (max-width: $mat-mobile) {
-    margin-top: 5px;
-  }
-
-  @media only screen and (max-width: 462px) {
-    margin-top: 0;
   }
 }
 
