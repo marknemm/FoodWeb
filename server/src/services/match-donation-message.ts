@@ -1,6 +1,6 @@
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { broadcastEmail, MailTransporter } from '../helpers/email';
+import { broadcastEmail, MailTransporter, genDonationEmailSubject } from '../helpers/email';
 import { NotificationType, sendNotification } from '../helpers/notification';
 import { UpdateDiff } from '../interfaces/update-diff';
 import { DonationHelper } from '../shared';
@@ -16,16 +16,12 @@ export async function sendClaimMessages(donation: DonationEntity): Promise<Donat
   const messagePromises: Promise<any>[] = [];
   const accounts: AccountEntity[] = [donation.claim.receiverAccount, donation.donorAccount];
   const { donorName, receiverName } = _donationHelper.memberNames(donation);
-  const subjects = [
-    `Claimed Donation from ${donorName}`,
-    `Donation Claimed by ${receiverName}`
-  ];
 
   messagePromises.push(
     broadcastEmail(
       MailTransporter.NOREPLY,
       accounts,
-      subjects,
+      genDonationEmailSubject(donation),
       'donation-claimed',
       { donation, donorName, receiverName }
     ).catch(console.error)
@@ -61,22 +57,17 @@ export async function sendUnclaimMessages(unclaimDiff: UpdateDiff<DonationEntity
   const donorName: string = _donationHelper.donorName(unclaimDiff.new);
   const receiverName: string = _donationHelper.receiverName(unclaimDiff.old);
   let delivererName = '';
-  const subjects = [
-    `Unclaimed Donation from ${donorName}`,
-    `Donation Unclaimed by ${receiverName}`
-  ];
 
   // If donation had a delivery lined up, we must also notify the deliverer.
   if (unclaimDiff.old.delivery) {
     emailAccounts.push(unclaimDiff.old.delivery.volunteerAccount);
     delivererName = _donationHelper.delivererName(unclaimDiff.old);
-    subjects.push(`Delivery Cancelled by ${receiverName}`);
   }
 
   await broadcastEmail(
     MailTransporter.NOREPLY,
     emailAccounts,
-    subjects,
+    genDonationEmailSubject(unclaimDiff.new),
     'donation-unclaimed',
     {
       donation: unclaimDiff.new,

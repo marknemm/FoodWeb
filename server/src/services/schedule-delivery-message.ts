@@ -1,6 +1,6 @@
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { broadcastEmail, MailTransporter } from '../helpers/email';
+import { broadcastEmail, MailTransporter, genDonationEmailSubject } from '../helpers/email';
 import { NotificationType, sendNotification } from '../helpers/notification';
 import { Donation, DonationHelper } from '../shared';
 
@@ -12,17 +12,12 @@ export async function sendDeliveryScheduledMessages(donation: DonationEntity): P
   const donorName: string = _donationHelper.donorName(donation);
   const receiverName: string = _donationHelper.receiverName(donation);
   const delivererName: string = _donationHelper.delivererName(donation);
-  const emailHeaders = [
-    `Donation Delivery Scheduled for pickup by ${delivererName}`,
-    `Donation Delivery Scheduled for drop-off by ${delivererName}`,
-    `Delivery Successfully Scheduled from ${donorName} to ${receiverName}`
-  ];
 
   messagePromises.push(
     broadcastEmail(
       MailTransporter.NOREPLY,
       emailAccounts,
-      emailHeaders,
+      genDonationEmailSubject(donation),
       'delivery-scheduled',
       { donation, donorName, receiverName, delivererName }
     ).catch(console.error)

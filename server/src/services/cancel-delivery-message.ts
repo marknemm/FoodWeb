@@ -1,6 +1,6 @@
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { broadcastEmail, MailTransporter } from '../helpers/email';
+import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '../helpers/email';
 import { broadcastNotification, NotificationType } from '../helpers/notification';
 import { UpdateDiff } from '../interfaces/update-diff';
 import { DonationHelper } from '../shared';
@@ -20,17 +20,12 @@ export async function sendDeliveryCancelledMessages(unscheduleDiff: UpdateDiff<D
   const donorName: string = _donationHelper.donorName(unscheduleDiff.new);
   const receiverName: string = _donationHelper.receiverName(unscheduleDiff.new);
   const delivererName: string = _donationHelper.delivererName(unscheduleDiff.old);
-  const emailSubjects = [
-    `Donation Delivery Cancelled by ${delivererName}`,
-    `Donation Delivery Cancelled by ${delivererName}`,
-    `Delivery Successfully Cancelled from ${donorName} to ${receiverName}`
-  ];
 
   messagePromises.push(
     broadcastEmail(
       MailTransporter.NOREPLY,
       emailAccounts,
-      emailSubjects,
+      genDonationEmailSubject(unscheduleDiff.new),
       'delivery-cancelled',
       { donation: unscheduleDiff.new, donorName, receiverName, delivererName }
     ).catch(console.error)

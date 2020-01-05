@@ -1,7 +1,7 @@
 import 'dotenv';
 import nodemailer = require('nodemailer');
 import mailgunTransport = require('nodemailer-mailgun-transport');
-import { Account } from '../shared';
+import { Account, Donation } from '../shared';
 import { genHandlebarsTemplate } from './handlebars';
 
 /**
@@ -101,6 +101,15 @@ export function sendEmail(
       );
     });
   });
+}
+
+/**
+ * Generates an email subject for a given donation.
+ * @param donation The donation for which to generate the email subject.
+ * @return The generated email subject.
+ */
+export function genDonationEmailSubject(donation: Donation): string {
+  return `Donation: ${donation.description} (${donation.id})`;
 }
 
 /**

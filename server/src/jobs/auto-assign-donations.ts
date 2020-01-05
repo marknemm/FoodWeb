@@ -5,7 +5,7 @@ import { AccountEntity, AccountType } from '../entity/account.entity';
 import { DonationClaimEntity } from '../entity/donation-claim.entity';
 import { DonationEntity, DonationStatus } from '../entity/donation.entity';
 import { initDbConnectionPool } from '../helpers/db-connection-pool';
-import { MailTransporter, sendEmail } from '../helpers/email';
+import { MailTransporter, sendEmail, genDonationEmailSubject } from '../helpers/email';
 import { NotificationType, sendNotification } from '../helpers/notification';
 import { QueryResult } from '../helpers/query-builder-helper';
 import { claimDonation } from '../services/claim-donation';
@@ -125,12 +125,13 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
   const messagePromises: Promise<any>[] = [];
   const { donorName, receiverName } = _donationHelper.memberNames(donation);
   const extraVars: any = { donation, donorName, receiverName };
+  const donationEmailSubject: string = genDonationEmailSubject(donation);
 
   messagePromises.push(
     sendEmail(
       MailTransporter.NOREPLY,
       donation.donorAccount,
-      `Donation Claimed by ${receiverName}`,
+      donationEmailSubject,
       'donation-claimed',
       extraVars
     ).catch(console.error)
@@ -140,7 +141,7 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
     sendEmail(
       MailTransporter.NOREPLY,
       donation.claim.receiverAccount,
-      `Auto-Assigned Donation from ${donorName}`,
+      donationEmailSubject,
       'donation-assigned',
       extraVars
     ).catch(console.error)

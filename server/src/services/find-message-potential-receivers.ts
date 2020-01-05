@@ -1,5 +1,5 @@
 import { AccountEntity } from '../entity/account.entity';
-import { broadcastEmail, MailTransporter } from '../helpers/email';
+import { broadcastEmail, MailTransporter, genDonationEmailSubject } from '../helpers/email';
 import { broadcastNotification } from '../helpers/notification';
 import { QueryResult } from '../helpers/query-builder-helper';
 import { AccountReadRequest, AccountType, Donation, DonationHelper, NotificationType } from '../shared';
@@ -54,7 +54,7 @@ async function _messagePotentialReceivers(donation: Donation, potentialReceivers
     broadcastEmail(
       MailTransporter.NOREPLY,
       externalNotifyAccounts,
-      `Donation Available From ${donorName}`,
+      genDonationEmailSubject(donation),
       'donation-match-request',
       { donation }
     )

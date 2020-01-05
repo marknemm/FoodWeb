@@ -1,6 +1,6 @@
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { broadcastEmail, MailTransporter } from '../helpers/email';
+import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '../helpers/email';
 import { broadcastNotification, NotificationType } from '../helpers/notification';
 import { UpdateDiff } from '../interfaces/update-diff';
 import { DonationHelper, DonationStatus } from '../shared';
@@ -23,18 +23,12 @@ export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity
   const delivererName: string = _donationHelper.delivererName(donation);
   const advanceAction: string = _getDeliveryAdvanceAction(donation);
   const emailTmpl: string = _getDeliveryAdvanceEmailTmpl(donation);
-  const deliveryAction = `Delivery Has Been ${advanceAction} by ${delivererName}`;
-  const emailSubjects = [
-    deliveryAction,
-    deliveryAction,
-    `Delivery from ${donorName} to ${receiverName} Status Updated to ${donation.donationStatus}`
-  ];
 
   messagePromises.push(
     broadcastEmail(
       MailTransporter.NOREPLY,
       emailAccounts,
-      emailSubjects,
+      genDonationEmailSubject(donation),
       emailTmpl,
       { donation, donorName, receiverName, delivererName }
     ).catch(console.error)
@@ -113,18 +107,12 @@ async function _sendDeliveryStateUndoMessages(donation: DonationEntity): Promise
   const donorName: string = _donationHelper.donorName(donation);
   const receiverName: string = _donationHelper.receiverName(donation);
   const delivererName: string = _donationHelper.delivererName(donation);
-  const deliveryAction = `Delivery Status has been reverted to ${donation.donationStatus} by ${delivererName}`;
-  const emailSubjects = [
-    deliveryAction,
-    deliveryAction,
-    `Delivery from ${donorName} to ${receiverName} Status Reverted to ${donation.donationStatus}`
-  ];
 
   messagePromises.push(
     broadcastEmail(
       MailTransporter.NOREPLY,
       emailAccounts,
-      emailSubjects,
+      genDonationEmailSubject(donation),
       'delivery-status-undo',
       { donation, donorName, receiverName, delivererName }
     ).catch(console.error)

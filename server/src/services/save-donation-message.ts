@@ -1,4 +1,4 @@
-import { MailTransporter, sendEmail } from '../helpers/email';
+import { genDonationEmailSubject, MailTransporter, sendEmail } from '../helpers/email';
 import { UpdateDiff } from '../interfaces/update-diff';
 import { Donation } from '../shared';
 
@@ -11,7 +11,7 @@ export async function sendDonationCreateMessages(donation: Donation): Promise<Do
   sendEmail(
     MailTransporter.NOREPLY,
     donation.donorAccount,
-    'Donation Successful',
+    genDonationEmailSubject(donation),
     'donation-create-success',
     { donation }
   ).catch(console.error);
@@ -28,7 +28,7 @@ export async function sendDonationUpdateMessages(donationDiff: UpdateDiff<Donati
   await sendEmail(
     MailTransporter.NOREPLY,
     donationDiff.new.donorAccount,
-    'Donation Update Successful',
+    genDonationEmailSubject(donationDiff.new),
     'donation-update-success',
     {
       originalDonation: donationDiff.old,

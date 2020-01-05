@@ -1,6 +1,6 @@
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { broadcastEmail, MailTransporter } from '../helpers/email';
+import { broadcastEmail, MailTransporter, genDonationEmailSubject } from '../helpers/email';
 import { NotificationType, sendNotification } from '../helpers/notification';
 import { DonationHelper } from '../shared';
 
@@ -13,14 +13,12 @@ export async function sendDonationDeleteMessages(donation: DonationEntity): Prom
   const donorName: string = _donationHelper.donorName(donation);
   let receiverName = '';
   let delivererName = '';
-  const emailSubjects = ['Successfully Deleted Donation'];
 
   // If donation was claimed by a receiver, then we must also notify them.
   if (donation.claim) {
     emailAccounts.push(donation.claim.receiverAccount);
     notificationAccounts.push(donation.claim.receiverAccount);
     receiverName = _donationHelper.receiverName(donation);
-    emailSubjects.push(`Claimed Donation Deleted by ${donorName}`);
   }
 
   // If donation had a delivery lined up, we must also notify the deliverer.
@@ -28,14 +26,13 @@ export async function sendDonationDeleteMessages(donation: DonationEntity): Prom
     emailAccounts.push(donation.delivery.volunteerAccount);
     notificationAccounts.push(donation.delivery.volunteerAccount);
     delivererName = _donationHelper.delivererName(donation);
-    emailSubjects.push(`Delivery Cancelled by ${donorName}`);
   }
 
   messagePromises.push(
     broadcastEmail(
       MailTransporter.NOREPLY,
       emailAccounts,
-      emailSubjects,
+      genDonationEmailSubject(donation),
       'donation-deleted',
       { donation, donorName, receiverName, delivererName }
     ).catch(console.error)

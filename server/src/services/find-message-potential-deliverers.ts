@@ -1,5 +1,5 @@
 import { AccountEntity } from '../entity/account.entity';
-import { broadcastEmail, MailTransporter } from '../helpers/email';
+import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '../helpers/email';
 import { broadcastNotification } from '../helpers/notification';
 import { QueryResult } from '../helpers/query-builder-helper';
 import { AccountReadRequest, AccountType, Donation, DonationHelper, NotificationType } from '../shared';
@@ -52,10 +52,7 @@ async function _messagePotentialDeliverers(donation: Donation, potentialDelivere
     broadcastEmail(
       MailTransporter.NOREPLY,
       externalNotifyAccounts,
-      `
-        Delivery Requested from ${donation.donorAccount.organization.organizationName}
-        to ${donation.claim.receiverAccount.organization.organizationName}
-      `,
+      genDonationEmailSubject(donation),
       'delivery-request',
       { donation }
     )
