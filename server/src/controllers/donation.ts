@@ -5,7 +5,7 @@ import { DonationEntity } from '../entity/donation.entity';
 import { genListResponse } from '../helpers/list-response';
 import { QueryResult } from '../helpers/query-builder-helper';
 import { UpdateDiff } from '../interfaces/update-diff';
-import { handleError } from '../middlewares/response-error.middleware';
+import { genErrorResponse, genErrorResponseRethrow } from '../middlewares/response-error.middleware';
 import { ensureAccountVerified, ensureSessionActive } from '../middlewares/session.middleware';
 import { claimDonation } from '../services/claim-donation';
 import { deleteDonation } from '../services/delete-donation';
@@ -26,11 +26,10 @@ router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res:
   const myAccount: AccountEntity = req.session.account;
   const createReq: DonationCreateRequest = req.body;
   createDonation(createReq, myAccount)
+    .then((donation: DonationEntity) => { res.send(donation); return donation; })
+    .catch(genErrorResponseRethrow.bind(this, res))
     .then((donation: DonationEntity) => saveDonationCreateAudit(createReq, donation))
     .then((donation: DonationEntity) => sendDonationCreateMessages(donation))
-    .then((donation: DonationEntity) => { res.send(donation); return donation; })
-    .catch(handleError.bind(this, res))
-    // Perform this task after responding with donation success (might take a long time).
     .then((donation: DonationEntity) => findMessagePotentialReceivers(donation))
     .catch((err: Error) => console.error(err));
 });
@@ -38,11 +37,10 @@ router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res:
 router.post('/claim', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const claimReq: DonationClaimRequest = req.body;
   claimDonation(claimReq, req.session.account)
+    .then((claimedDonation: DonationEntity) => { res.send(claimedDonation); return claimedDonation; })
+    .catch(genErrorResponseRethrow.bind(this, res))
     .then((claimedDonation: DonationEntity) => saveDonationClaimAudit(claimReq, claimedDonation))
     .then((claimedDonation: DonationEntity) => sendClaimMessages(claimedDonation))
-    .then((claimedDonation: DonationEntity) => { res.send(claimedDonation); return claimedDonation; })
-    .catch(handleError.bind(this, res))
-    // Perform this task after responding with donation claim success (might take a long time).
     .then((claimedDonation: DonationEntity) => findMessagePotentialDeliverers(claimedDonation))
     .catch((err: Error) => console.error(err));
 });
@@ -53,7 +51,7 @@ router.get('/', (req: Request, res: Response) => {
     .then((queryResult: QueryResult<DonationEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
     )
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.get('/my', ensureSessionActive, (req: Request, res: Response) => {
@@ -62,43 +60,46 @@ router.get('/my', ensureSessionActive, (req: Request, res: Response) => {
     .then((queryResult: QueryResult<DonationEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
     )
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.get('/:id', (req: Request, res: Response) => {
   const id: number = parseInt(req.params.id, 10);
   readDonation(id)
     .then((donation: DonationEntity) => res.send(donation))
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.put('/', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const updateReq: DonationUpdateRequest = req.body;
   updateDonation(updateReq, req.session.account)
+    .then((donationDiff: UpdateDiff<DonationEntity>) => { res.send(donationDiff.new); return donationDiff; })
+    .catch(genErrorResponseRethrow.bind(this, res))
     .then((donationDiff: UpdateDiff<DonationEntity>) => saveDonationUpdateAudit(updateReq, donationDiff))
     .then((donationDiff: UpdateDiff<DonationEntity>) => sendDonationUpdateMessages(donationDiff))
-    .then((donation: DonationEntity) => res.send(donation))
-    .catch(handleError.bind(this, res));
+    .catch((err: Error) => console.error(err));
 });
 
 router.delete('/:id', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const deleteReq: DonationDeleteRequest = req.body;
   deleteReq.donationId = parseInt(req.params.id, 10);
   deleteDonation(deleteReq, req.session.account)
+    .then((deletedDonation: DonationEntity) => { res.send(); return deletedDonation; })
+    .catch(genErrorResponseRethrow.bind(this, res))
     .then((deletedDonation: DonationEntity) => saveDonationDeleteAudit(deleteReq, deletedDonation))
     .then((deletedDonation: DonationEntity) => sendDonationDeleteMessages(deletedDonation))
-    .then(() => res.send())
-    .catch(handleError.bind(this, res));
+    .catch((err: Error) => console.error(err));
 });
 
 router.delete('/claim/:id', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const unclaimReq: DonationUnclaimRequest = req.body;
   unclaimReq.donationId = parseInt(req.params.id, 10);
   unclaimDonation(unclaimReq, req.session.account)
+    .then((unclaimDonationDiff: UpdateDiff<DonationEntity>) => { res.send(unclaimDonationDiff.new); return unclaimDonationDiff; })
+    .catch(genErrorResponseRethrow.bind(this, res))
     .then((unclaimDonationDiff: UpdateDiff<DonationEntity>) => saveDonationUnclaimAudit(unclaimReq, unclaimDonationDiff))
     .then((unclaimDonationDiff: UpdateDiff<DonationEntity>) => sendUnclaimMessages(unclaimDonationDiff))
-    .then((unclaimedDonation: DonationEntity) => res.send(unclaimedDonation))
-    .catch(handleError.bind(this, res));
+    .catch((err: Error) => console.error(err));
 });
 
 module.exports = router;

@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
-import { GoogleMap } from '@angular/google-maps';
+import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Donation } from '~shared';
 import { MapOptionsForm } from '~web/map/forms/map-options.form';
-import { MapOptions, MapService } from '~web/map/map/map.service';
+import { MapOptions, MapService, WaypointMarker } from '~web/map/map/map.service';
 
 @Component({
   selector: 'food-web-map',
@@ -20,18 +20,24 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   @Input() donation: Donation;
   @Input() height = '300px';
   @Input() options: google.maps.MapOptions = {};
-  @Input() useVolunteerCurrentPos = false;
+  @Input() useVolunteerCurrentPos = true;
   @Input() width = '100%';
 
   @ViewChild(GoogleMap, { static: true }) map: GoogleMap;
+  @ViewChild(MapInfoWindow, {static: false}) infoWindow: MapInfoWindow;
 
   optionsForm = new MapOptionsForm();
 
   private _destroy$ = new Subject();
+  private _selWaypointMarker: WaypointMarker;
 
   constructor(
     public mapService: MapService
   ) {}
+
+  get selWaypointMarker(): WaypointMarker {
+    return this._selWaypointMarker;
+  }
 
   ngOnInit() {
     this.optionsForm.valueChanges.pipe(
@@ -43,6 +49,16 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.donation || changes.useVolunteerCurrentPos || changes.displayRouteToDonor || changes.displayRouteToReceiver) {
+      if (changes.useVolunteerCurrentPos) {
+        this.optionsForm.patchValue({ useVolunteerCurrentPos: this.useVolunteerCurrentPos });
+      }
+      if (changes.displayRouteToDonor) {
+        this.optionsForm.patchValue({ displayRouteToDonor: this.displayRouteToDonor });
+      }
+      if (changes.displayRouteToReceiver) {
+        this.optionsForm.patchValue({ displayRouteToReceiver: this.displayRouteToReceiver });
+      }
+
       this.refreshMap({
         displayRouteToDonor: this.displayRouteToDonor,
         displayRouteToReceiver: this.displayRouteToReceiver,
@@ -59,5 +75,10 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     setTimeout(() => // Wait until we are sure view is fully initialized to access map ViewChild.
       this.mapService.refreshMap(this.map, this.donation, options)
     );
+  }
+
+  openInfoWindow(marker: MapMarker, waypointMarker: WaypointMarker): void {
+    this._selWaypointMarker = waypointMarker;
+    this.infoWindow.open(marker);
   }
 }

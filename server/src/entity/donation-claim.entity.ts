@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Directions, DonationClaim } from '../shared';
+import { CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { DonationClaim } from '../shared';
 import { AccountEntity } from './account.entity';
 import { DonationEntity } from './donation.entity';
+import { MapRouteEntity } from './map-route.entity';
 export { DonationClaim };
 
 @Entity('DonationClaim')
@@ -17,14 +18,8 @@ export class DonationClaimEntity implements DonationClaim {
   @ManyToOne((type) => AccountEntity, { nullable: true, eager: true })
   receiverAccount: AccountEntity;
 
-  @Column({ type: 'real' })
-  distanceMiToReceiver: number;
-
-  @Column({ type: 'integer' })
-  durationMinToReceiver: number;
-
-  @Column({ type: 'json' })
-  directionsToReceiver: Directions;
+  @ManyToOne((type) => MapRouteEntity, { eager: true, cascade: ['insert', 'update'] })
+  routeToReceiver: MapRouteEntity;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createTimestamp: Date;

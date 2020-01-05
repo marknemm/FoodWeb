@@ -81,7 +81,7 @@
   </form>
   
   <ng-container *ngIf="!editing">
-    <mat-card *ngIf="showMap" class="delivery-map-card">
+    <mat-card *ngIf="originalDonation.claim" class="delivery-map-card">
       <mat-card-content>
         <food-web-map [donation]="originalDonation"></food-web-map>
       </mat-card-content>

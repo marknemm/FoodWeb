@@ -1,6 +1,6 @@
 import { Account } from '../account/account';
-import { Directions } from '../misc';
-export { Account };
+import { MapRoute } from '../misc/map-route';
+export { Account, MapRoute };
 
 /**
  * A receiving organization's claim to a donation.
@@ -15,17 +15,9 @@ export interface DonationClaim {
    */
   receiverAccount: Account;
   /**
-   * The distance (miles) from the Donor to the Receiver.
+   * The driving route from the Donor to the Receiver.
    */
-  distanceMiToReceiver: number;
-  /**
-   * The driving duration (minutes) from the Donor to the Receiver.
-   */
-  durationMinToReceiver: number;
-  /**
-   * The driving directions from the Donor to the Receiver.
-   */
-  directionsToReceiver: Directions;
+  routeToReceiver: MapRoute;
   /**
    * The time when the donation was claimed.
    */

@@ -4,7 +4,7 @@ import { NotificationEntity } from '../entity/notification.entity';
 import { genListResponse } from '../helpers/list-response';
 import { QueryResult } from '../helpers/query-builder-helper';
 import { UpdateDiff } from '../interfaces/update-diff';
-import { handleError } from '../middlewares/response-error.middleware';
+import { genErrorResponse } from '../middlewares/response-error.middleware';
 import { ensureSessionActive } from '../middlewares/session.middleware';
 import { readNotifications } from '../services/read-notifications';
 import { updateNotification, updateSeenNotifications } from '../services/save-notification';
@@ -18,7 +18,7 @@ router.get('/', ensureSessionActive, (req: Request, res: Response) => {
     .then((queryResult: QueryResult<NotificationEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
     )
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.put('/last-seen-notification', ensureSessionActive, (req: Request, res: Response) => {
@@ -28,14 +28,14 @@ router.put('/last-seen-notification', ensureSessionActive, (req: Request, res: R
       req.session.account.lastSeenNotificationId = lastSeenNotificationId;
       res.send();
     })
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.put('/', ensureSessionActive, (req: Request, res: Response) => {
   const updateReq: NotificationUpdateRequest = req.body;
   updateNotification(req.session.account, updateReq.notification)
     .then((notificationDiff: UpdateDiff<NotificationEntity>) => res.send(notificationDiff.new))
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 module.exports = router;

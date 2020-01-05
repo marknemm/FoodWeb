@@ -111,7 +111,7 @@ export class DonationHelper {
       return 'You do not own the donation claim';
     }
     if (myAccount.accountType !== AccountType.Admin) {
-      if (myAccount.id !== donation.claim.receiverAccount.id) {
+      if (myAccount.id !== donation.claim.receiverAccount.id && myAccount.id !== donation.donorAccount.id) {
         return 'You do not own the donation claim';
       }
       if (this.isDonationStatusLaterThan(donation, DonationStatus.Scheduled)) {

@@ -1,5 +1,5 @@
-import { Waypoint, Directions } from '~shared';
-export { Waypoint, Directions };
+import { Account, ContactInfo, Directions, Waypoint } from '~shared';
+export { Directions, Waypoint };
 
 export type ClientWaypoint = 'My+Location' | Position | Waypoint;
 
@@ -16,3 +16,11 @@ export type LatLngLiteral = google.maps.LatLngLiteral;
 export type MapOptions = google.maps.MapOptions & DeliveryMapOptions;
 
 export type Polyline = google.maps.Polyline;
+
+export interface WaypointMarker {
+  account: Account;
+  label: string;
+  latLng: LatLngLiteral;
+  latLngSrc: ClientWaypoint;
+  title: string;
+}

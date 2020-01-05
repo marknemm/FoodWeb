@@ -1,9 +1,10 @@
-import { EntityManager, getConnection } from 'typeorm';
+import { EntityManager, getConnection, Repository } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
+import { DonationClaimEntity } from '../entity/donation-claim.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { genDirections } from '../helpers/directions';
 import { FoodWebError } from '../helpers/food-web-error';
-import { Directions, Donation, DonationClaim, DonationClaimHelper, DonationClaimRequest, DonationHelper, DonationStatus } from '../shared';
+import { DonationClaim, DonationClaimHelper, DonationClaimRequest, DonationHelper, DonationStatus } from '../shared';
+import { genMapRoute } from './gen-map-route';
 import { readDonation } from './read-donations';
 
 const _donationHelper = new DonationHelper();
@@ -17,15 +18,12 @@ const _donationClaimHelper = new DonationClaimHelper();
  * @throws FoodWebError if the user is not authorized to claim the donation.
  */
 export async function claimDonation(claimReq: DonationClaimRequest, myAccount: AccountEntity): Promise<DonationEntity> {
-  let donationToClaim: Donation = await readDonation(claimReq.donationId);
+  const donationToClaim: DonationEntity = await readDonation(claimReq.donationId);
   _ensureCanClaimDonation(donationToClaim, myAccount);
 
-  donationToClaim = await _genClaimedDonation(donationToClaim, myAccount);
-  _donationClaimHelper.validateDonationClaim(donationToClaim.claim);
-
-  return getConnection().transaction(async (manager: EntityManager) =>
-    manager.getRepository(DonationEntity).save(donationToClaim)
-  );
+  const donationClaimUpdate: Partial<DonationEntity> = await _genDonationClaimUpdt(donationToClaim, myAccount);
+  _donationClaimHelper.validateDonationClaim(donationClaimUpdate.claim);
+  return _saveDonationClaimUpdt(donationClaimUpdate);
 }
 
 /**
@@ -34,7 +32,7 @@ export async function claimDonation(claimReq: DonationClaimRequest, myAccount: A
  * @param myAccount The account of the user to check for claim authorization.
  * @throws FoodWebError if the user is not authorized to claim the donation.
  */
-function _ensureCanClaimDonation(donation: Donation, myAccount: AccountEntity): void {
+function _ensureCanClaimDonation(donation: DonationEntity, myAccount: AccountEntity): void {
   const errMsg: string = _donationHelper.validateDonationClaimPrivilege(donation, myAccount);
   if (errMsg) {
     throw new FoodWebError(`Donation claim failed: ${errMsg}`);
@@ -42,16 +40,16 @@ function _ensureCanClaimDonation(donation: Donation, myAccount: AccountEntity): 
 }
 
 /**
- * Generates a claimed donation based off of a given donation that is to be claimed.
+ * Generates a claim donation update based off of a given donation that is to be claimed.
  * @param donationToClaim The donation that is to be claimed.
  * @param receiverAccount The account of the receiver that is claiming the donation.
- * @return The claimed donation.
+ * @return The claim donation update.
  */
-async function _genClaimedDonation(donationToClaim: Donation, receiverAccount: AccountEntity): Promise<Donation> {
-  const claimedDonation: Donation = Object.assign({}, donationToClaim);
-  claimedDonation.donationStatus = DonationStatus.Matched;
-  claimedDonation.claim = await _genDonationClaim(claimedDonation, receiverAccount);
-  return claimedDonation;
+async function _genDonationClaimUpdt(donationToClaim: DonationEntity, receiverAccount: AccountEntity): Promise<Partial<DonationEntity>> {
+  const claimDonationUpdt: Partial<DonationEntity> = { id: donationToClaim.id };
+  claimDonationUpdt.donationStatus = DonationStatus.Matched;
+  claimDonationUpdt.claim = <DonationClaimEntity> await _genDonationClaim(donationToClaim, receiverAccount);
+  return claimDonationUpdt;
 }
 
 /**
@@ -60,16 +58,16 @@ async function _genClaimedDonation(donationToClaim: Donation, receiverAccount: A
  * @param receiverAccount The receiver Account that is claiming the donation.
  * @return A promise that resolves to the generated Donation Claim.
  */
-async function _genDonationClaim(donation: Donation, receiverAccount: AccountEntity): Promise<DonationClaim> {
-  const directions: Directions = await genDirections([
-    donation.donorContactOverride,
-    receiverAccount.contactInfo
-  ]);
-
+async function _genDonationClaim(donation: DonationEntity, receiverAccount: AccountEntity): Promise<DonationClaim> {
   return {
     receiverAccount,
-    distanceMiToReceiver: directions.distanceMi,
-    durationMinToReceiver: directions.durationMin,
-    directionsToReceiver: directions
+    routeToReceiver: await genMapRoute(donation.donorContactOverride, receiverAccount.contactInfo)
   };
+}
+
+async function _saveDonationClaimUpdt(donationClaimUpdate: Partial<DonationEntity>): Promise<DonationEntity> {
+  await getConnection().transaction(async (manager: EntityManager) =>
+    manager.getRepository(DonationEntity).save(donationClaimUpdate)
+  );
+  return readDonation(donationClaimUpdate.id);
 }

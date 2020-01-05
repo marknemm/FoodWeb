@@ -2,9 +2,7 @@ import { getRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
 import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '../helpers/query-builder-helper';
-import { DonationReadFilters, DonationReadRequest, OperationHoursHelper, Validation } from '../shared';
-
-const _opHoursHelper = new OperationHoursHelper();
+import { DonationReadFilters, DonationReadRequest, Validation } from '../shared';
 
 export async function readDonation(id: number, donationRepo?: Repository<DonationEntity>): Promise<DonationEntity> {
   const readRequest: DonationReadRequest = { id, page: 1, limit: 1 };
@@ -57,7 +55,6 @@ export function queryDonations(request: DonationReadRequest): QueryMod<DonationE
 
 async function _execDonationQuery(queryBuilder: SelectQueryBuilder<DonationEntity>): Promise<QueryResult<DonationEntity>> {
   const [donations, totalCount]: [DonationEntity[], number] = await queryBuilder.getManyAndCount();
-  _postProcessDonations(donations);
   return { entities: donations, totalCount };
 }
 
@@ -76,9 +73,10 @@ function _genJoins(queryBuilder: SelectQueryBuilder<DonationEntity>): SelectQuer
     .innerJoinAndSelect('donorAccount.organization', 'donorOrganization')
     .innerJoinAndSelect('donorOrganization.donor', 'donor')
     .innerJoinAndSelect('donorAccount.contactInfo', 'donorContactInfo')
-    .innerJoinAndSelect('donation.donorContactOverride', 'donorContactOverride')
+    .leftJoinAndSelect('donation.donorContactOverride', 'donorContactOverride')
     .leftJoinAndMapMany('donorAccount.operationHours', 'donorAccount.operationHours', 'donorOpHours')
     .leftJoinAndSelect('donation.claim', 'claim')
+    .leftJoinAndSelect('claim.routeToReceiver', 'routeToReceiver')
     .leftJoinAndSelect('claim.receiverAccount', 'receiverAccount')
     .leftJoinAndSelect('receiverAccount.organization', 'receiverOrganization')
     .leftJoinAndSelect('receiverAccount.contactInfo', 'receiverContactInfo')
@@ -86,6 +84,7 @@ function _genJoins(queryBuilder: SelectQueryBuilder<DonationEntity>): SelectQuer
     .leftJoinAndMapMany('receiverAccount.operationHours', 'receiverAccount.operationHours', 'receiverOpHours')
     .leftJoinAndSelect('donation.delivery', 'delivery')
     .leftJoinAndSelect('delivery.volunteerAccount', 'delivererAccount')
+    .leftJoinAndSelect('delivery.routeToDonor', 'routeToDonor')
     .leftJoinAndSelect('delivererAccount.volunteer', 'delivererVolunteer')
     .leftJoinAndSelect('delivererAccount.contactInfo', 'delivererContactInfo');
 }
@@ -205,20 +204,4 @@ function _addOrderByPickupWindow(
   queryBuilder = queryBuilder.addOrderBy('delivery.pickupWindowStart', sortOrder);
   queryBuilder = queryBuilder.addOrderBy('donation.pickupWindowStart', sortOrder);
   return queryBuilder;
-}
-
-function _postProcessDonations(donations: DonationEntity[]): void {
-  donations.forEach((donation: DonationEntity) => {
-    _formatAccountOperationHours(donation);
-  });
-}
-
-function _formatAccountOperationHours(donation: DonationEntity): void {
-  _opHoursHelper.formatOperationHoursTimes(donation.donorAccount.operationHours);
-  if (donation.claim) {
-    _opHoursHelper.formatOperationHoursTimes(donation.claim.receiverAccount.operationHours);
-  }
-  if (donation.delivery) {
-    _opHoursHelper.formatOperationHoursTimes(donation.delivery.volunteerAccount.operationHours);
-  }
 }

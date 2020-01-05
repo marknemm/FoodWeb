@@ -6,7 +6,7 @@ import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
 import { genListResponse } from '../helpers/list-response';
 import { QueryResult } from '../helpers/query-builder-helper';
 import { UpdateDiff } from '../interfaces/update-diff';
-import { handleError } from '../middlewares/response-error.middleware';
+import { genErrorResponse, genErrorResponseRethrow } from '../middlewares/response-error.middleware';
 import { ensureSessionActive } from '../middlewares/session.middleware';
 import { recreateUnverifiedAccount, verifyAccount } from '../services/account-verification';
 import { sendAccountVerificationEmail, sendAccountVerificationMessage } from '../services/account-verification-message';
@@ -34,59 +34,65 @@ router.post('/verify', (req: Request, res: Response) => {
   const account: AccountEntity = (req.session ? req.session.account : null);
   const verificationReq: AccountVerificationRequest = req.body;
   verifyAccount(account, verificationReq)
-    .then((account: AccountEntity) => saveAudit(AuditEventType.VerifyAccount, account, account, verificationReq.recaptchaScore))
     .then(_handleAccountVerificationResult.bind(this, req, res))
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponseRethrow.bind(this, res))
+    .then((account: AccountEntity) => saveAudit(AuditEventType.VerifyAccount, account, account, verificationReq.recaptchaScore))
+    .catch((err: Error) => console.error(err));
 });
 
 router.post('/', (req: Request, res: Response) => {
   const createRequest: AccountCreateRequest = req.body;
   createAccount(createRequest)
     .then((newAccountData: NewAccountData) => sendAccountVerificationMessage(newAccountData))
+    .then((account: AccountEntity) => { res.send(account); return account; })
+    .catch(genErrorResponseRethrow.bind(this, res))    
     .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, createRequest.recaptchaScore))
-    .then((account: AccountEntity) => res.send(account))
-    .catch(handleError.bind(this, res));
+    .catch((err: Error) => console.error(err));
 });
 
 router.put('/section', ensureSessionActive, (req: Request, res: Response) => {
   const updateReq: AccountSectionUpdateReqeust = req.body;
   updateAccountSection(updateReq, req.session.account)
+    .then(_handleAccountSaveResult.bind(this, req, res))
+    .catch(genErrorResponseRethrow.bind(this, res))
     .then((accountDiff: UpdateDiff<AccountEntity>) =>
       saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff, updateReq.recaptchaScore)
     )
-    .then((accountDiff: UpdateDiff<AccountEntity>) => _handleAccountSaveResult(req, res, accountDiff.new))
-    .catch(handleError.bind(this, res));
+    .catch((err: Error) => console.error(err));
 });
 
 router.put('/password', ensureSessionActive, (req: Request, res: Response) => {
   const myAccount: AccountEntity = req.session.account;
   const updateReq: PasswordUpdateRequest = req.body;
   updatePassword(updateReq, myAccount)
-    .then(() => saveUpdateAudit(AuditEventType.UpdatePassword, myAccount, { old: 'xxx', new: 'xxx' }, updateReq.recaptchaScore))
     .then(() => res.send({}))
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponseRethrow.bind(this, res))
+    .then(() => saveUpdateAudit(AuditEventType.UpdatePassword, myAccount, { old: 'xxx', new: 'xxx' }, updateReq.recaptchaScore))
+    .catch((err: Error) => console.error(err));
 });
 
 router.put('/reset-password/', (req: Request, res: Response) => {
   const resetReq: PasswordResetRequest = req.body;
   resetPassword(resetReq)
+    .then((account: AccountEntity) => { res.send(account); return account; })
+    .catch(genErrorResponseRethrow.bind(this, res))
+    .then((account: AccountEntity) => sendPasswordResetSuccessEmail(account))
     .then(async (account: AccountEntity) => {
       await saveUpdateAudit(AuditEventType.ResetPassword, account, { old: 'xxx', new: 'xxx' }, resetReq.recaptchaScore);
       return account;
     })
-    .then((account: AccountEntity) => sendPasswordResetSuccessEmail(account))
-    .then((account: AccountEntity) => res.send(account))
-    .catch(handleError.bind(this, res));
+    .catch((err: Error) => console.error(err));
 });
 
 router.put('/', ensureSessionActive, (req: Request, res: Response) => {
   const updateReq: AccountUpdateRequest = req.body;
   updateAccount(updateReq, req.session.account)
+    .then(_handleAccountSaveResult.bind(this, req, res))
+    .catch(genErrorResponseRethrow.bind(this, res))
     .then((accountDiff: UpdateDiff<AccountEntity>) =>
       saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff, updateReq.recaptchaScore)
     )
-    .then((accountDiff: UpdateDiff<AccountEntity>) => _handleAccountSaveResult(req, res, accountDiff.new))
-    .catch(handleError.bind(this, res));
+    .catch((err: Error) => console.error(err));
 });
 
 router.get('/recover-username', (req: Request, res: Response) => {
@@ -94,7 +100,7 @@ router.get('/recover-username', (req: Request, res: Response) => {
   readAccounts({ email, page: 0, limit: 1000 }, null)
     .then((queryResult: QueryResult<AccountEntity>) => sendUsernameRecoveryEmail(queryResult.entities))
     .then(() => res.send())
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.get('/reset-password', (req: Request, res: Response) => {
@@ -104,7 +110,7 @@ router.get('/reset-password', (req: Request, res: Response) => {
       sendPasswordResetEmail(passwordResetEntity.account, passwordResetEntity.resetToken)
     )
     .then(() => res.send())
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.get('/resend-verification-email', ensureSessionActive, (req: Request, res: Response) => {
@@ -112,7 +118,7 @@ router.get('/resend-verification-email', ensureSessionActive, (req: Request, res
   recreateUnverifiedAccount(account)
     .then((unverifiedAccount: UnverifiedAccountEntity) => sendAccountVerificationEmail(account, unverifiedAccount))
     .then(() => res.send())
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.get('/:id', (req: Request, res: Response) => {
@@ -120,7 +126,7 @@ router.get('/:id', (req: Request, res: Response) => {
   const myAccount: Account = (req.session ? req.session.account : null);
   readAccount(id, myAccount)
     .then((account: AccountEntity) => res.send(account))
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.get('/', (req: Request, res: Response) => {
@@ -130,10 +136,11 @@ router.get('/', (req: Request, res: Response) => {
     .then((queryResult: QueryResult<AccountEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
     )
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
-function _handleAccountSaveResult(req: Request, res: Response, account: AccountEntity): void {
+function _handleAccountSaveResult(req: Request, res: Response, accountUpdtDiff: UpdateDiff<AccountEntity>): UpdateDiff<AccountEntity> {
+  const account: AccountEntity = accountUpdtDiff.new;
   const curSessionAccount: Account = req.session.account;
   // If the saved account is the current user's account (new or updated).
   if (curSessionAccount && curSessionAccount.id === account.id) {
@@ -141,14 +148,16 @@ function _handleAccountSaveResult(req: Request, res: Response, account: AccountE
   }
   req.session.account = account;
   res.send(account);
+  return accountUpdtDiff;
 }
 
-function _handleAccountVerificationResult(req: Request, res: Response, account: AccountEntity): void {
+function _handleAccountVerificationResult(req: Request, res: Response, account: AccountEntity): AccountEntity {
   const curSessionAccount: Account = req.session.account;
   if (curSessionAccount && curSessionAccount.id === account.id) {
     curSessionAccount.verified = account.verified;
   }
   res.send(account);
+  return account;
 }
 
 module.exports = router;

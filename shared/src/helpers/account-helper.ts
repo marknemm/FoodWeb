@@ -41,6 +41,25 @@ export class AccountHelper {
     return ['/account/details/', `${account.id}`];
   }
 
+  areContactInfosEqual(contactInfoLhs: ContactInfo, contactInfoRhs: ContactInfo): boolean {
+    if (contactInfoLhs !== contactInfoRhs && (!contactInfoLhs || !contactInfoRhs)) {
+      return false;
+    }
+    return this.areAddressesEqual(contactInfoLhs, contactInfoRhs)
+        && (contactInfoLhs.phoneNumber === contactInfoRhs.phoneNumber)
+        && (contactInfoLhs.email === contactInfoRhs.email);
+  }
+  
+  areAddressesEqual(contactInfoLhs: ContactInfo, contactInfoRhs: ContactInfo): boolean {
+    if (contactInfoLhs !== contactInfoRhs && (!contactInfoLhs || !contactInfoRhs)) {
+      return false;
+    }
+    return (contactInfoLhs.streetAddress === contactInfoRhs.streetAddress)
+        && (contactInfoLhs.city === contactInfoRhs.city)
+        && (contactInfoLhs.stateProvince === contactInfoRhs.stateProvince)
+        && (contactInfoLhs.postalCode === contactInfoRhs.postalCode);
+  }
+
   formatPhoneNumber(phoneNumber: string): string {
     phoneNumber = phoneNumber.trim();
     let basePhoneNumber: string = phoneNumber;

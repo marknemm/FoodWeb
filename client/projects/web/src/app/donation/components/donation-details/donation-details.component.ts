@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AccountHelper, DateTimeRange, DeliveryHelper, DonationHelper } from '~shared';
 import { DateTimeSelectConfig, DateTimeSelectDialogComponent } from '~web/date-time/date-time-select-dialog/date-time-select-dialog.component';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
@@ -10,13 +10,14 @@ import { DonationAction } from '~web/donation/donation-detail-actions/donation-d
 import { Donation, DonationService } from '~web/donation/donation/donation.service';
 import { DonateForm } from '~web/donor/donate.form';
 import { SessionService } from '~web/session/session/session.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'food-web-donation-details',
   templateUrl: './donation-details.component.html',
   styleUrls: ['./donation-details.component.scss']
 })
-export class DonationDetailsComponent implements OnInit {
+export class DonationDetailsComponent implements OnInit, OnDestroy {
 
   formGroup: DonateForm;
 
@@ -26,6 +27,8 @@ export class DonationDetailsComponent implements OnInit {
   private _myDelivery = false;
   private _myDonation = false;
   private _originalDonation: Donation;
+
+  private _destroy$ = new Subject();
 
   constructor(
     public accountHelper: AccountHelper,
@@ -64,13 +67,14 @@ export class DonationDetailsComponent implements OnInit {
     return this._originalDonation;
   }
 
-  get showMap(): boolean {
-    return (this.myDelivery || !this.originalDonation.delivery);
-  }
-
   ngOnInit() {
     this.formGroup = new DonateForm(this._dateTimeService, { safetyChecklistInit: true });
     this._listenDonationChange();
+    this._listenAccountChange();
+  }
+
+  ngOnDestroy() {
+    this._destroy$.next();
   }
 
   onDonationAction(action: DonationAction): void {
@@ -160,16 +164,30 @@ export class DonationDetailsComponent implements OnInit {
     });
   }
 
+  private _listenAccountChange(): void {
+    this.sessionService.login$.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(() => {
+      this._updateDonationPrivileges(this._originalDonation);
+    });
+  }
+
   private _updateDonation(donation: Donation): void {
     this._originalDonation = donation;
     this.formGroup.patchFromDonation(donation);
-    this._myDonation = this.sessionService.isMyAccount(donation.donorAccount.id);
-    this._myClaim = donation.claim
-      ? this.sessionService.isMyAccount(donation.claim.receiverAccount.id)
-      : false;
-    this._myDelivery = donation.delivery
-      ? this.sessionService.isMyAccount(donation.delivery.volunteerAccount.id)
-      : false;
+    this._updateDonationPrivileges(donation);
+  }
+
+  private _updateDonationPrivileges(donation: Donation): void {
+    if (donation) { 
+      this._myDonation = this.sessionService.isMyAccount(donation.donorAccount.id);
+      this._myClaim = donation.claim
+        ? this.sessionService.isMyAccount(donation.claim.receiverAccount.id)
+        : false;
+      this._myDelivery = donation.delivery
+        ? this.sessionService.isMyAccount(donation.delivery.volunteerAccount.id)
+        : false;
+    }
   }
 
 }

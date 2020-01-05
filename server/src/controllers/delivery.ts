@@ -4,7 +4,7 @@ import { DonationEntity } from '../entity/donation.entity';
 import { genListResponse } from '../helpers/list-response';
 import { QueryResult } from '../helpers/query-builder-helper';
 import { UpdateDiff } from '../interfaces/update-diff';
-import { handleError } from '../middlewares/response-error.middleware';
+import { genErrorResponse, genErrorResponseRethrow } from '../middlewares/response-error.middleware';
 import { ensureAccountVerified, ensureSessionActive } from '../middlewares/session.middleware';
 import { readDeliveries, readMyDeliveries, readUnscheduledDeliveries } from '../services/read-deliveries';
 import { saveDeliveryAdvanceAudit, saveDeliveryScheduleAudit, saveDeliveryUndoAudit } from '../services/save-delivery-audit';
@@ -22,7 +22,7 @@ router.get('/unscheduled', (req: Request, res: Response) => {
     .then((queryResult: QueryResult<DonationEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
     )
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.get('/my', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
@@ -31,7 +31,7 @@ router.get('/my', ensureSessionActive, ensureAccountVerified, (req: Request, res
     .then((queryResult: QueryResult<DonationEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
     )
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.get('/', (req: Request, res: Response) => {
@@ -40,36 +40,39 @@ router.get('/', (req: Request, res: Response) => {
     .then((queryResult: QueryResult<DonationEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
     )
-    .catch(handleError.bind(this, res));
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const scheduleReq: DeliveryScheduleRequest = req.body;
   scheduleDelivery(scheduleReq, req.session.account)
+    .then((scheduledDelivery: DonationEntity) => { res.send(scheduledDelivery); return scheduledDelivery; })
+    .catch(genErrorResponseRethrow.bind(this, res))
     .then((scheduledDelivery: DonationEntity) => saveDeliveryScheduleAudit(scheduleReq, scheduledDelivery))
     .then((scheduledDelivery: DonationEntity) => sendDeliveryScheduledMessages(scheduledDelivery))
-    .then((scheduledDelivery: DonationEntity) => res.send(scheduledDelivery))
-    .catch(handleError.bind(this, res));
+    .catch((err: Error) => console.error(err));
 });
 
 router.put('/advance/:id', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const stateChangeReq: DeliveryStateChangeRequest = req.body;
   stateChangeReq.deliveryId = parseInt(req.params.id, 10);
   advanceDeliveryState(stateChangeReq, req.session.account)
+    .then((advancedDelivery: DonationEntity) => { res.send(advancedDelivery); return advancedDelivery; })
+    .catch(genErrorResponseRethrow.bind(this, res))
     .then((advancedDelivery: DonationEntity) => saveDeliveryAdvanceAudit(stateChangeReq, advancedDelivery))
     .then((advancedDelivery: DonationEntity) => sendDeliveryStateAdvancedMessages(advancedDelivery))
-    .then((advancedDelivery: DonationEntity) => res.send(advancedDelivery))
-    .catch(handleError.bind(this, res));
+    .catch((err: Error) => console.error(err));
 });
 
 router.put('/undo/:id', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
   const stateChangeReq: DeliveryStateChangeRequest = req.body;
   stateChangeReq.deliveryId = parseInt(req.params.id, 10);
   undoDeliveryState(stateChangeReq, req.session.account)
+    .then((undoDiff: UpdateDiff<DonationEntity>) => { res.send(undoDiff.new); return undoDiff; })
+    .catch(genErrorResponseRethrow.bind(this, res))
     .then((undoDiff: UpdateDiff<DonationEntity>) => saveDeliveryUndoAudit(stateChangeReq, undoDiff))
     .then((undoDiff: UpdateDiff<DonationEntity>) => sendDeliveryStateUndoMessages(undoDiff))
-    .then((undoneDelivery: DonationEntity) => res.send(undoneDelivery))
-    .catch(handleError.bind(this, res));
+    .catch((err: Error) => console.error(err));
 });
 
 module.exports = router;

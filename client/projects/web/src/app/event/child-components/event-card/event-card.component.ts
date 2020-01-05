@@ -46,10 +46,7 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.location) {
-      this._directionsHref = this._mapAppLinkService.genDirectionHrefEstimate(this.location);
-      this._mapAppLinkService.genDirectionHref(this.location).subscribe(
-        (directionsHref: string) => this._directionsHref = directionsHref
-      )
+      this._directionsHref = this._mapAppLinkService.genDirectionHref(['My+Location', this.location]);
       this.location = this.location.replace(/<[^>]*>/g, '').replace(',', '<br>');
     }
   }

@@ -82,6 +82,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
           relativeTo: this._activatedRoute,
           queryParams: { expandAll: !this.isMyAccount ? true : undefined },
           queryParamsHandling: 'merge',
+          replaceUrl: true,
           fragment: this._activatedRoute.snapshot.fragment
         }
       );

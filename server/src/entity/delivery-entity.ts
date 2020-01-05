@@ -1,7 +1,8 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Delivery, Directions } from '../shared';
+import { Delivery } from '../shared';
 import { AccountEntity } from './account.entity';
 import { DonationEntity } from './donation.entity';
+import { MapRouteEntity } from './map-route.entity';
 
 @Entity('Delivery')
 export class DeliveryEntity implements Delivery {
@@ -22,14 +23,11 @@ export class DeliveryEntity implements Delivery {
   @Column({ type: 'timestamp with time zone' })
   pickupWindowEnd: Date;
 
-  @Column({ type: 'real' })
-  distanceMiToDonor: number;
-  
-  @Column({ type: 'integer' })
-  durationMinToDonor: number;
+  @ManyToOne((type) => MapRouteEntity, { eager: true, cascade: ['insert', 'update'] })
+  routeToDonor: MapRouteEntity;
 
-  @Column({ type: 'json' })
-  directionsToDonor: Directions;
+  @Column({ type: 'timestamp with time zone', nullable: true })
+  startTime?: Date;
 
   @Column({ type: 'timestamp with time zone', nullable: true })
   pickupTime?: Date;

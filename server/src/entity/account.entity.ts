@@ -1,5 +1,5 @@
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { Account, AccountType, Constants } from '../shared';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, AfterLoad, AfterInsert, AfterUpdate } from 'typeorm';
+import { Account, AccountType, Constants, OperationHoursHelper } from '../shared';
 import { AppDataEntity } from './app-data.entity';
 import { ContactInfoEntity } from './contact-info.entity';
 import { OperationHoursEntity } from './operation-hours.entity';
@@ -11,6 +11,8 @@ const _constants = new Constants();
 
 @Entity('Account')
 export class AccountEntity implements Account {
+
+  private _opHoursHelper = new OperationHoursHelper();
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -51,4 +53,14 @@ export class AccountEntity implements Account {
   createTimestamp: Date;
 
   verified?: boolean;
+
+  @AfterLoad() @AfterInsert() @AfterUpdate()
+  formatOperationHours(): void {
+    this._opHoursHelper.formatOperationHoursTimes(this.operationHours);
+  }
+
+  @AfterLoad()
+  fillVerfied(): void {
+
+  }
 }

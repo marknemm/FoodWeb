@@ -150,7 +150,6 @@ function _postProcessAccounts(accounts: AccountEntity[], myAccount: Account, ful
   accounts.forEach((account: AccountEntity) => {
     const isMyAccount: boolean = _accountHelper.isMyAccount(myAccount, account.id);
     fullAccount = (fullAccount || isMyAccount);
-    _opHoursHelper.formatOperationHoursTimes(account.operationHours);
     _delVolunteerAddrIfNotMyAccount(account, fullAccount);
     _setVerifiedIfMyAccount(account, isMyAccount, myAccount);
   });

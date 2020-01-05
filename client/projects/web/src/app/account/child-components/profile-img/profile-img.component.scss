@@ -1,6 +1,7 @@
+@import "constants.scss";
+
 :host {
   .profile-img {
-    border-radius: 50%;
     margin-bottom: 0;
     cursor: inherit;
 
@@ -11,9 +12,8 @@
     img {
       position: relative;
       display: inline-block;
-      vertical-align: top;
       border-radius: 50%;
-      margin: 0px;
+      margin: 0;
       border: 2px solid #e4e4e4;
     }
 

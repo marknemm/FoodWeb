@@ -14,12 +14,8 @@
 
     food-web-profile-img {
       display: inline-block;
-      margin-top: 5px;
+      margin-top: 1px;
       cursor: pointer;
-
-      @media only screen and (max-width: $mat-mobile) {
-        margin-top: 4px;
-      }
     }
   }
 }

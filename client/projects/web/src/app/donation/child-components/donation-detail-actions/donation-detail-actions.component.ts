@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Account, DeliveryHelper, Donation, DonationHelper } from '~shared';
+import { Account, AccountHelper, DeliveryHelper, Donation, DonationHelper } from '~shared';
 
 export type DonationAction = 'ToggleEdit' | 'Save' | 'Delete' | 'Claim' | 'Unclaim' | 'ScheduleDelivery' | 'AdvanceDeliveryState' | 'UndoDeliveryState';
 
@@ -31,6 +31,7 @@ export class DonationDetailActionsComponent implements OnChanges {
   private _confirmDeliveryUndoMessage = '';
 
   constructor(
+    private _accountHelper: AccountHelper,
     private _donationHelper: DonationHelper,
     private _deliveryHelper: DeliveryHelper
   ) {}
@@ -122,7 +123,8 @@ export class DonationDetailActionsComponent implements OnChanges {
   private _updateAllAccessFlags(): void {
     this._canEdit = !this._donationHelper.validateDonationEditPrivilege(this.donation, this.myAccount);
     this._canClaim = !this._donationHelper.validateDonationClaimPrivilege(this.donation, this.myAccount);
-    this._canUnclaim = !this._donationHelper.validateDonationUnclaimPrivilege(this.donation, this.myAccount);
+    this._canUnclaim = !this._donationHelper.validateDonationUnclaimPrivilege(this.donation, this.myAccount)
+                    && this._accountHelper.isReceiver(this.myAccount);
     this._canScheduleDelivery = !this._deliveryHelper.validateDeliverySchedulePrivilege(this.donation.donationStatus, this.myAccount);
     this._canAdvanceDeliveryState = !this._deliveryHelper.validateDeliveryAdvancePrivilege(
       this.donation.delivery,
@@ -133,7 +135,7 @@ export class DonationDetailActionsComponent implements OnChanges {
       this.donation.delivery,
       this.donation.donationStatus,
       this.myAccount
-    );
+    ) && this._accountHelper.isVolunteer(this.myAccount);
     this._hasActionButtons = (
       this.canEdit
       || this.canClaim

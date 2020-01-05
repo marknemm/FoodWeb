@@ -3,8 +3,8 @@ import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
 import { FoodWebError } from '../helpers/food-web-error';
 import { Donation, DonationDeleteRequest, DonationHelper } from '../shared';
-import { cancelDelivery } from './cancel-delivery';
 import { readDonation } from './read-donations';
+import { unclaimDonation } from './unclaim-donation';
 
 const _donationHelper = new DonationHelper();
 
@@ -20,8 +20,9 @@ export async function deleteDonation(deleteReq: DonationDeleteRequest, myAccount
   _ensureCanDeleteDonation(donation, myAccount);
 
   await getConnection().transaction(async (manager: EntityManager) => {
-    if (donation.delivery) {
-      await cancelDelivery(donation, myAccount, manager);
+    if (donation.claim) {
+      // Will implicitly delete an existing delivery as well.
+      await unclaimDonation(donation, myAccount, manager);
     }
     await manager.getRepository(DonationEntity).remove(donation);
   });

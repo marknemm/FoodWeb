@@ -2,24 +2,32 @@ import { Injectable } from '@angular/core';
 import { GoogleMap } from '@angular/google-maps';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Donation } from '~shared';
+import { Account, Donation } from '~shared';
 import { DirectionsService } from '~web/map/directions/directions.service';
-import { ClientWaypoint, Directions, LatLng, LatLngBounds, LatLngLiteral, MapOptions, Polyline } from '~web/map/map';
-import { WaypointService } from '~web/map/waypoint/waypoint.service';
+import { Directions, LatLng, LatLngBounds, LatLngLiteral, MapOptions, Polyline, WaypointMarker } from '~web/map/map';
+import { WaypointService, VolunteerWaypointConfig } from '~web/map/waypoint/waypoint.service';
+import { SessionService } from '~web/session/services/session/session.service';
+import { MapAppLinkService } from '../map-app-link/map-app-link.service';
+import { MapViewportService } from '../map-viewport/map-viewport.service';
 export * from '~web/map/map';
 
 @Injectable()
 export class MapService {
 
   private _directions: Directions = null;
+  private _directionsHref = '';
   private _latLngWaypoints: LatLngLiteral[] = [];
   private _mapBounds = new google.maps.LatLngBounds();
   private _mapCenter: LatLng = new google.maps.LatLng(0, 0);
   private _polylines: Polyline[] = [];
+  private _waypointMarkers: WaypointMarker[] = [];
 
   constructor(
-    private _waypointService: WaypointService,
-    private _directionsService: DirectionsService
+    private _directionsService: DirectionsService,
+    private _mapAppLinkService: MapAppLinkService,
+    private _mapViewportService: MapViewportService,
+    private _sessionService: SessionService,
+    private _waypointService: WaypointService
   ) {}
 
   /**
@@ -27,6 +35,13 @@ export class MapService {
    */
   get directions(): Directions {
     return this._directions;
+  }
+
+  /**
+   * The map directions href for a 3rd party map navigation app/website.
+   */
+  get directionsHref(): string {
+    return this._directionsHref;
   }
 
   /**
@@ -58,6 +73,13 @@ export class MapService {
   }
 
   /**
+   * The data that represents map waypoint markers.
+   */
+  get waypointMarkers(): WaypointMarker[] {
+    return this._waypointMarkers;
+  }
+
+  /**
    * Refreshes a map's data & attributes based on a given donation.
    * @param map The map HTML element that is to be refreshed.
    * @param donation The donation used to refresh the map data/attributes.
@@ -65,10 +87,10 @@ export class MapService {
    */
   refreshMap(map: GoogleMap, donation: Donation, options: MapOptions): void {
     this._clearMapData();
-    const donationWaypoints: ClientWaypoint[] = this._waypointService.extractDonationWaypoints(donation, options.useVolunteerCurrentPos);
-    this._refreshLatLngWaypoints(donationWaypoints).subscribe((latLngWaypoints: LatLngLiteral[]) => {
-      this._refreshMapView(map, latLngWaypoints);
-      this._refreshDirections(map, donation, latLngWaypoints, options);
+    this._refreshWaypoints(donation, options).subscribe(() => {
+      this._refreshDirectionsHref();
+      this._refreshMapView(map);
+      this._refreshDirections(map, donation, options);
     });
   }
 
@@ -82,66 +104,79 @@ export class MapService {
     );
     this._polylines = [];
     this._directions = null;
+    this._directionsHref = '';
   }
 
   /**
    * Refreshes the GPS (lat-lng) coordinate waypoints for the associated map.
-   * @param waypoints The (client) waypoints that are to be transformed into map GPS (lat-lng) coordinate waypoints.
-   * @return An observable that emits the new GPS (lat-lng) coordinate waypoints.
+   * @param donation The donation used to refresh to map waypoints.
+   * @param options The map options.
+   * @return An observable that emits once the waypoints are refreshed.
    */
-  private _refreshLatLngWaypoints(waypoints: ClientWaypoint[]): Observable<LatLngLiteral[]> {
-    return this._waypointService.waypointsToLatLngLiterals(waypoints).pipe(
-      map((latLngLiterals: LatLngLiteral[]) => this._latLngWaypoints = latLngLiterals)
+  private _refreshWaypoints(donation: Donation, options: MapOptions): Observable<void> {
+    const potentialVolunteer: Account = (!donation.delivery && this._sessionService.isVolunteer)
+      ? this._sessionService.account
+      : null;
+    const volunteerWaypointConfig: VolunteerWaypointConfig = this._genVolunteerWaypointConfig(donation, options);
+
+    return this._waypointService.extractWaypoints(donation, potentialVolunteer, volunteerWaypointConfig).pipe(
+      map((waypointMarkers: WaypointMarker[]) => {
+        this._waypointMarkers = waypointMarkers;
+        this._latLngWaypoints = this.waypointMarkers.map((marker: WaypointMarker) => marker.latLng);
+      })
+    );
+  }
+
+  /**
+   * Generates the volunteer waypoint config for the contianing map based off of the associated donation and map options.
+   * @param donation The donation from which the waypoints are generated.
+   * @param options The map options.
+   * @return The volunteer waypoint config.
+   */
+  private _genVolunteerWaypointConfig(donation: Donation, options: MapOptions): VolunteerWaypointConfig {
+    let volunteerWaypointConfig = VolunteerWaypointConfig.Home;
+    // Exlcude the volunteer waypoint for users who are viewing a scheduled delivery which are not the volunteer.
+    if (donation.delivery && !this._sessionService.isMyAccount(donation.delivery.volunteerAccount.id)) {
+      volunteerWaypointConfig = VolunteerWaypointConfig.Exclude;
+    } else if (options.useVolunteerCurrentPos) {
+      volunteerWaypointConfig = VolunteerWaypointConfig.CurrentPosition;
+    }
+    return volunteerWaypointConfig;
+  }
+
+  /**
+   * Refreshes the navigation directions href for the associated map.
+   */
+  private _refreshDirectionsHref(): void {
+    this._directionsHref = this._mapAppLinkService.genDirectionHref(
+      this.waypointMarkers.map((marker: WaypointMarker) => marker.latLngSrc)
     );
   }
 
   /**
    * Refreshes the attributes for the map viewport (bounds & center).
    * @param map The map for which we are refreshing the viewport attributes.
-   * @param latLngWaypoints The map waypoints that must be fit within the viewport.
    */
-  private _refreshMapView(map: GoogleMap, latLngWaypoints: LatLngLiteral[]): void {
-    if (latLngWaypoints.length) {
-      this._mapBounds = this._calcMapBounds(latLngWaypoints);
+  private _refreshMapView(map: GoogleMap): void {
+    if (this.latLngWaypoints.length) {
+      this._mapBounds = this._mapViewportService.calcMapBounds(this.latLngWaypoints);
       this._mapCenter = this._mapBounds.getCenter();
       map.fitBounds(this._mapBounds);
     }
   }
 
   /**
-   * Calculates the map viewport bounds that will fit a given set of map GPS (lat-lng) coordinate waypoints.
-   * @param latLngWaypoints The map waypoints that must be fit within the viewport.
-   * @return The calculated map viewport bounds.
-   */
-  private _calcMapBounds(latLngWaypoints: LatLngLiteral[]): LatLngBounds {
-    let mapBounds = new google.maps.LatLngBounds();
-
-    // Return immediately if given falsy/empty lat/lng literals array.
-    if (!latLngWaypoints || latLngWaypoints.length === 0) {
-      return mapBounds;
-    }
-
-    latLngWaypoints.forEach((latLngLiteral: LatLngLiteral) =>
-      mapBounds = mapBounds.extend(latLngLiteral)
-    );
-    return mapBounds;
-  }
-
-  /**
    * Refeshes the directions.
    * @param map The map for which we are refreshing directions.
    * @param donation The donation that the directions are for.
-   * @param latLngWaypoints The computed GPS (lat-lng) waypoints that the directions are for. If useVolunteerCurrentPos is true,
-   * then the first (volunteer) waypoint will be the current position of the volunteer user. Otherwise, these waypoints align with the
-   * pre-recorded addresses within the accounts associated with the given donation.
    * @param options The map (direction) options.
    */
-  private _refreshDirections(map: GoogleMap, donation: Donation, latLngWaypoints: LatLngLiteral[], options: MapOptions): void {
+  private _refreshDirections(map: GoogleMap, donation: Donation, options: MapOptions): void {
     if (!options.useVolunteerCurrentPos) {
       const directions: Directions = this._directionsService.extractDirectionsFromDonation(donation);
       this._setDirections(map, directions, options);
-    } else if (latLngWaypoints.length > 1) {
-      this._directionsService.genDirections(latLngWaypoints).subscribe(
+    } else if (this.latLngWaypoints.length > 1) {
+      this._directionsService.genDirections(this.latLngWaypoints).subscribe(
         (directions: Directions) => this._setDirections(map, directions, options)
       );
     }

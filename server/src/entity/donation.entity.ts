@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { AfterInsert, AfterLoad, AfterUpdate, Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Donation, DonationStatus, DONATION_STATUSES } from '../shared';
 import { AccountEntity } from './account.entity';
 import { ContactInfoEntity } from './contact-info.entity';
@@ -15,11 +15,11 @@ export class DonationEntity implements Donation {
   @ManyToOne((type) => AccountEntity, { eager: true })
   donorAccount: AccountEntity;
 
-  @OneToOne((type) => ContactInfoEntity, (contactInfo) => contactInfo.donation, { eager: true, cascade: true })
+  @OneToOne((type) => ContactInfoEntity, (contactInfo) => contactInfo.donation, { nullable: true, eager: true, cascade: true })
   @JoinColumn()
-  donorContactOverride: ContactInfoEntity;
+  donorContactOverride?: ContactInfoEntity;
 
-  @OneToOne((type) => DonationClaimEntity, (donationClaim) => donationClaim.donation, { nullable: true, eager: true })
+  @OneToOne((type) => DonationClaimEntity, (donationClaim) => donationClaim.donation, { nullable: true, eager: true, cascade: true })
   claim?: DonationClaimEntity;
 
   @Column()
@@ -58,4 +58,11 @@ export class DonationEntity implements Donation {
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createTimestamp: Date;
+
+  @AfterLoad() @AfterInsert() @AfterUpdate()
+  fillMissingDonorContactOverride(): void {
+    if (!this.donorContactOverride && this.donorAccount) {
+      this.donorContactOverride = this.donorAccount.contactInfo;
+    }
+  }
 }

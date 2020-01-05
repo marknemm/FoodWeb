@@ -1,7 +1,7 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { AccountEntity } from '../entity/account.entity';
-import { handleError } from '../middlewares/response-error.middleware';
+import { genErrorResponse } from '../middlewares/response-error.middleware';
 import { appTokenLogin, login, logout, saveAppSessionToken } from '../services/session';
 import { AppTokenLoginRequest, LoginRequest, LoginResponse } from '../shared';
 
@@ -14,7 +14,7 @@ router.post('/session-token', (req: Request, res: Response) => {
       // Set session on request object.
       req.session['account'] = loginResponse.account;
       res.send(loginResponse);
-    }).catch(handleError.bind(this, res));
+    }).catch(genErrorResponse.bind(this, res));
 });
 
 router.post('/', (req: Request, res: Response) => {
@@ -24,7 +24,7 @@ router.post('/', (req: Request, res: Response) => {
       // Set session on request object.
       req.session['account'] = loginResponse.account;
       res.send(loginResponse);
-    }).catch(handleError.bind(this, res));
+    }).catch(genErrorResponse.bind(this, res));
 });
 
 router.get('/', (req: Request, res: Response) => {
@@ -33,7 +33,7 @@ router.get('/', (req: Request, res: Response) => {
   if (account && req.query.isApp === 'true') {
     saveAppSessionToken(account)
       .then((appSessionToken: string) => loginResponse.appSessionToken = appSessionToken)
-      .catch(handleError.bind(this, res))
+      .catch(genErrorResponse.bind(this, res))
   }
   res.send(loginResponse);
 });

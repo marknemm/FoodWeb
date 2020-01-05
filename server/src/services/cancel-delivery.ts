@@ -3,32 +3,43 @@ import { AccountEntity } from '../entity/account.entity';
 import { DeliveryEntity } from '../entity/delivery-entity';
 import { DonationEntity } from '../entity/donation.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { Donation, DonationHelper, DonationStatus } from '../shared';
+import { DonationHelper, DonationStatus } from '../shared';
+import { readDonation } from './read-donations';
 
 const _donationHelper = new DonationHelper();
 
 /**
- * Cancels the delivery of a given donation.
+ * Cancels the delivery of a given donation (as part of a larger database transaction).
  * @param donation The donation that is to have its delivery cancelled.
- * @param myAccount The account of the user submitting the delivery cancellation request.
- * @param manager An optional TypeORM entity/database manager that is to be used for the database access operation.
- * @return A promsie that resolves to the donation with its delivery cancelled.
+ * @param myAccount The account of the current user submitting the request.
+ * @param manager An entity manager that should be passed in when this is part of a larger database operation.
+ * @return A promise that resolves once the operation completes.
  * @throws FoodWebError if the user that submitted the request is not authroized to cancel the delivery.
  */
-export async function cancelDelivery(donation: Donation, myAccount: AccountEntity, manager?: EntityManager): Promise<DonationEntity> {
+export async function cancelDelivery(donation: DonationEntity, myAccount: AccountEntity, manager: EntityManager): Promise<void>;
+
+/**
+ * Cancels the delivery of a given donation.
+ * @param donation The donation that is to have its delivery cancelled.
+ * @param myAccount The account of the current user submitting the request.
+ * @return A promise resolving to the donation after it has had its delivery cancelled.
+ * @throws FoodWebError if the user that submitted the request is not authroized to cancel the delivery.
+ */
+export async function cancelDelivery(cancelReq: DonationEntity, myAccount: AccountEntity): Promise<DonationEntity>;
+
+export async function cancelDelivery(
+  donation: DonationEntity,
+  myAccount: AccountEntity,
+  manager?: EntityManager
+): Promise<DonationEntity | void> {
   if (manager) {
-    // If passed an EntityManager instance, then we have external model doing donation modifications.
-    return _deleteDelivery(donation, myAccount, manager);
+    await _deleteDelivery(donation, myAccount, manager);
+  } else {
+    await getConnection().transaction(
+      async (localManager: EntityManager) => await _deleteDelivery(donation, myAccount, localManager)
+    );
+    return await readDonation(donation.id);
   }
-
-  // Otherwise, we must do the donation modifications here.
-  const cancelledDonation: DonationEntity = await getConnection().transaction(
-    async (localManager: EntityManager) => {
-      return _deleteDelivery(donation, myAccount, localManager);
-    }
-  );
-
-  return cancelledDonation;
 }
 
 /**
@@ -36,15 +47,13 @@ export async function cancelDelivery(donation: Donation, myAccount: AccountEntit
  * @param donation The donation that is to have its associated delivery entry deleted.
  * @param myAccount The account of the user submitting the delivery cancellation request.
  * @param manager The TypeORM entity/database manager that is to be used for the database access operation.
+ * @return A promise that resolves once the delete operation completes.
  * @throws FoodWebError if the user that submitted the request is not authroized to cancel the delivery.
  */
-async function _deleteDelivery(donation: Donation, myAccount: AccountEntity, manager: EntityManager): Promise<DonationEntity> {
+async function _deleteDelivery(donation: DonationEntity, myAccount: AccountEntity, manager: EntityManager): Promise<void> {
   _ensureCanCancelDelivery(donation, myAccount);
-  const deliveryToCancel: Donation = Object.assign({}, donation);
-  await manager.getRepository(DeliveryEntity).delete(deliveryToCancel.delivery.id);
-  deliveryToCancel.donationStatus = DonationStatus.Matched;
-  deliveryToCancel.delivery = null;
-  return await manager.getRepository(DonationEntity).save(deliveryToCancel);
+  await manager.getRepository(DonationEntity).update(donation.id, { donationStatus: DonationStatus.Matched });
+  await manager.getRepository(DeliveryEntity).remove(donation.delivery);
 }
 
 /**
@@ -53,7 +62,7 @@ async function _deleteDelivery(donation: Donation, myAccount: AccountEntity, man
  * @param account The user account that is to be checked for authorization.
  * @throws FoodWebError if the given user is not authorized to cancel the delivery of the given donation.
  */
-function _ensureCanCancelDelivery(donation: Donation, account: AccountEntity): void {
+function _ensureCanCancelDelivery(donation: DonationEntity, account: AccountEntity): void {
   const errMsg: string = _donationHelper.validateDeliveryCancelPrivilege(donation, account);
   if (errMsg) {
     throw new FoodWebError(`Delete failed: ${errMsg}`);

@@ -81,7 +81,6 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
     const donorLastName: string = this.get('donorLastName').value;
     const donationWindow: DateTimeRange = this.get('pickupWindow').value;
     const donorContactOverride: ContactInfo = this.get('donorContactOverride').value;
-    donorContactOverride
     super.reset();
     this.get('donationType').setValue('Food');
     this.get('donorFirstName').setValue(donorFirstName);

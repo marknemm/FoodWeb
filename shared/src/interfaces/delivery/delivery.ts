@@ -1,6 +1,6 @@
 import { Account } from '../account/account';
-import { Directions } from '../misc';
-export { Account };
+import { MapRoute } from '../misc/map-route';
+export { Account, MapRoute };
 
 /**
  * Delivery data for a donation.
@@ -20,18 +20,13 @@ export interface Delivery {
    */
   pickupWindowEnd: Date;
   /**
-   * The driving distance (miles) from the Volunteer's 'home' address to the Donor.
+   * The driving route from the Deliverer home (address on record) to the Donor.
    */
-  distanceMiToDonor: number;
+  routeToDonor: MapRoute;
   /**
-   * The driving duration (minutes) from the Volunteer's 'home' address to the Donor.
+   * The time that the donation was started by the volunteer.
    */
-  durationMinToDonor: number;
-  /**
-   * The driving directions (path) from the Volunteer 'home' to the Donor.
-   * Contains a list of GPS coordinates denoting the segments of a map polyline used to plot the path.
-   */
-  directionsToDonor: Directions;
+  startTime?: Date;
   /**
    * The time that the donation was picked-up from the donor.
    */

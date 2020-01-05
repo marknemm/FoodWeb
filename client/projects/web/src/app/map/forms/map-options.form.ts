@@ -7,7 +7,7 @@ export class MapOptionsForm extends TypedFormGroup<MapOptions> {
     super({
       displayRouteToDonor: true,
       displayRouteToReceiver: true,
-      useVolunteerCurrentPos: false
+      useVolunteerCurrentPos: true
     });
     if (options) {
       this.patchValue(options);

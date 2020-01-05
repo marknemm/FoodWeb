@@ -13,6 +13,7 @@
   },
   "private": true,
   "dependencies": {
+    "@types/google__maps": "^0.5.8",
     "geocoder": "^0.2.3",
     "google-polyline": "^1.0.3",
     "lodash": "^4.17.15",
@@ -22,7 +23,6 @@
     "utility-types": "^3.4.1"
   },
   "devDependencies": {
-    "@types/google__maps": "^0.5.8",
     "@types/lodash": "^4.14.118",
     "@types/moment-timezone": "^0.5.9",
     "@types/node": "^10.12.12",

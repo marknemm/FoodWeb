@@ -1,0 +1,18 @@
+<div *ngIf="waypointMarker" class="waypoint-marker-info">
+
+  <p class="waypoint-marker-title">{{ waypointMarker.title }}</p>
+
+  <div>
+    <span *ngIf="waypointMyLocation; else accountAddr">
+      My Current Location
+    </span>
+    <ng-template #accountAddr>
+      <div>{{ waypointMarker.account.contactInfo.streetAddress }}</div>
+      <div>
+        {{ waypointMarker.account.contactInfo.city }} {{ waypointMarker.account.contactInfo.stateProvince }},
+        {{ waypointMarker.account.contactInfo.postalCode }}
+      </div>
+    </ng-template>
+  </div>
+
+</div>

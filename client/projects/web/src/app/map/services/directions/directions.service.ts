@@ -14,11 +14,11 @@ export class DirectionsService {
   static readonly DEFAULT_POLYLINE_COLORS: string[] = ['green', 'rgb(247, 148, 7)', 'blue', 'purple', 'cyan', 'red'];
 
   private static readonly DIRECTIONS_CACHE_KEY = 'foodWebDirectionsStore';
-  private readonly _directionsCache: LocalStorageBucket<Waypoint[], Directions> = null;
+  private readonly _directionsCache: LocalStorageBucket<Waypoint[], Directions>;
+  private readonly _googleDirections = new google.maps.DirectionsService();
 
   constructor(
     private _directionsExtractor: DirectionsExtractor,
-    private _googleDirections: google.maps.DirectionsService,
     localStorageCacheService: LocalStorageCacheService
   ) {
     this._directionsCache = localStorageCacheService.getBucket(DirectionsService.DIRECTIONS_CACHE_KEY);
@@ -31,10 +31,10 @@ export class DirectionsService {
    */
   extractDirectionsFromDonation(donation: Donation): Directions {
     const directionsToDonor: Directions = donation.delivery
-      ? donation.delivery.directionsToDonor
+      ? donation.delivery.routeToDonor.directions
       : { distanceMi: 0, durationMin: 0, encodedPolyline: '', waypointSegments: [] };
     const directionsToReceiver: Directions = donation.claim
-      ? donation.claim.directionsToReceiver
+      ? donation.claim.routeToReceiver.directions
       : { distanceMi: 0, durationMin: 0, encodedPolyline: '', waypointSegments: [] };
     return {
       distanceMi: (directionsToDonor.distanceMi + directionsToReceiver.distanceMi),

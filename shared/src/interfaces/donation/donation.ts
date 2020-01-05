@@ -19,7 +19,7 @@ export interface Donation {
    * Contact information overrides for the donor.
    * May or may not be equivalent to donor's original contact info.
    */
-  donorContactOverride: ContactInfo;
+  donorContactOverride?: ContactInfo;
   /**
    * A receiving organization's claim to the Donation.
    * Should be null/undefined if the Donation is in the 'Unmatched' state.

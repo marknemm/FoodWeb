@@ -4,20 +4,36 @@
   [center]="mapService.mapCenter"
   [options]="options"
 >
-  <map-marker *ngFor="let latLngWaypoint of mapService.latLngWaypoints" [position]="latLngWaypoint"></map-marker>
+  <map-marker #marker
+    *ngFor="let waypointMarker of mapService.waypointMarkers"
+    [label]="waypointMarker.label"
+    [position]="waypointMarker.latLng"
+    [title]="waypointMarker.title"
+    (mapClick)="openInfoWindow(marker, waypointMarker)"
+  ></map-marker>
+  <map-info-window>
+    <food-web-map-marker-info [waypointMarker]="selWaypointMarker"></food-web-map-marker-info>
+  </map-info-window>
 </google-map>
 
 <ng-container *ngIf="!displayMapOnly">
+  <div class="map-navigation-container">
+    <a [href]="mapService.directionsHref" target="_blank">
+      <button mat-button color="primary" type="button">Open Map Navigation</button>
+    </a>
+  </div>
   <mat-accordion displayMode="flat">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>Map Options</mat-expansion-panel-header>
-      <food-web-map-options [optionsForm]="optionsForm"></food-web-map-options>
-    </mat-expansion-panel>
-    <mat-expansion-panel *ngIf="mapService.latLngWaypoints.length > 2">
-      <mat-expansion-panel-header>Directions to Donor</mat-expansion-panel-header>
-      <food-web-direction-steps [directions]="mapService.directions" filter="Donor"></food-web-direction-steps>
-    </mat-expansion-panel>
-    <mat-expansion-panel *ngIf="mapService.latLngWaypoints.length > 1">
+    <ng-container *ngIf="mapService.waypointMarkers.length > 2">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>Map Options</mat-expansion-panel-header>
+        <food-web-map-options [optionsForm]="optionsForm"></food-web-map-options>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>Directions to Donor</mat-expansion-panel-header>
+        <food-web-direction-steps [directions]="mapService.directions" filter="Donor"></food-web-direction-steps>
+      </mat-expansion-panel>
+    </ng-container>
+    <mat-expansion-panel *ngIf="mapService.waypointMarkers.length > 1">
       <mat-expansion-panel-header>Directions to Receiver</mat-expansion-panel-header>
       <food-web-direction-steps [directions]="mapService.directions" filter="Receiver"></food-web-direction-steps>
     </mat-expansion-panel>

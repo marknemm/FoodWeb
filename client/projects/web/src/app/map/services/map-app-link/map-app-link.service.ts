@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { ContactInfo, MapWaypointConverter } from '~shared';
-import { LatLngLiteral, Waypoint } from '~web/map/map';
-import { PositionService } from '~web/map/position/position.service';
+import { ClientWaypoint, LatLngLiteral, Waypoint } from '~web/map/map';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +8,6 @@ import { PositionService } from '~web/map/position/position.service';
 export class MapAppLinkService {
 
   constructor(
-    private _positionService: PositionService,
     private _mapWaypointConverter: MapWaypointConverter
   ) {}
 
@@ -27,29 +23,18 @@ export class MapAppLinkService {
   }
 
   /**
-   * Generates a map directions href (to a 3rd party map service) from the user's current location to a given destination waypoint.
-   * This serves as a temporary estimate that will return immediately. This should be followed by a call to 'genDirectionsHref' which is async.
-   * @param destination The destination waypoint from which to generate the map directions href.
-   * @return The map directions href.
-   */
-  genDirectionHrefEstimate(destination: Waypoint | string): string {
-    const daddr: string = this._genUrlAddrArg(destination);
-    return `https://www.google.com/maps?saddr=My+Location&daddr=${daddr}`;
-  }
-
-  /**
-   * Generates a map directions href (to a 3rd party map service) from the user's current location to a given destination waypoint.
-   * @param destination The destination waypoint from which to generate the map directions href.
+   * Generates a map directions href (to a 3rd party map service) based off of a given set of path waypoints.
+   * @param waypoints The path waypoints for which the directions href will be generated.
    * @return An observable that emits the map directions href.
    */
-  genDirectionHref(destination: Waypoint | string): Observable<string> {
-    const daddr: string = this._genUrlAddrArg(destination);
-    return this._positionService.refreshCurrentPosition().pipe(
-      map((position: LatLngLiteral) => {
-        const saddr = `${position.lat},${position.lng}`;
-        return `https://www.google.com/maps?saddr=${saddr}&daddr=${daddr}`;
-      })
+  genDirectionHref(waypoints: (ClientWaypoint | string)[]): string {
+    const saddr: string = this._genUrlAddrArg(waypoints[0]);
+    const waddrs: string[] = waypoints.slice(1, waypoints.length -1).map(
+      (waypoint: ClientWaypoint) => this._genUrlAddrArg(waypoint)
     );
+    const daddr: string = this._genUrlAddrArg(waypoints[waypoints.length - 1]);
+    return `https://www.google.com/maps/dir/?api=1&origin=${saddr}&destination=${daddr}`
+      + (waddrs.length ? `&waypoints=${waddrs.join('|')}` : '');
   }
 
   /**
@@ -57,7 +42,7 @@ export class MapAppLinkService {
    * @param waypoint The waypoint form which to generate the URL address argument.
    * @return The URL address argument.
    */
-  private _genUrlAddrArg(waypoint: Waypoint | string): string {
+  private _genUrlAddrArg(waypoint: ClientWaypoint | string): string {
     if (typeof waypoint === 'string') {
       return waypoint;
     }
@@ -65,7 +50,7 @@ export class MapAppLinkService {
       waypoint = <ContactInfo>waypoint;
       return `${waypoint.streetAddress}+${waypoint.city}+${waypoint.stateProvince}+${waypoint.postalCode}`;
     }
-    const waypointGPS: LatLngLiteral = this._mapWaypointConverter.waypointToLatLngLiteral(waypoint);
+    const waypointGPS: LatLngLiteral = this._mapWaypointConverter.waypointToLatLngLiteral(<Waypoint>waypoint);
     return waypointGPS ? `${waypointGPS.lat},${waypointGPS.lng}` : '';
   }
 }

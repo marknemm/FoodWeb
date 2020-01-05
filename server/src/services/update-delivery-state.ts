@@ -1,10 +1,10 @@
-import { EntityManager, getConnection } from 'typeorm';
+import { EntityManager, getConnection, DeepPartial } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
 import { FoodWebError } from '../helpers/food-web-error';
 import { UpdateDiff } from '../interfaces/update-diff';
 import { cancelDelivery } from '../services/cancel-delivery';
-import { DeliveryHelper, DeliveryStateChangeRequest, Donation, DonationHelper } from '../shared';
+import { DeliveryHelper, DeliveryStateChangeRequest, Donation, DonationHelper, DonationStatus } from '../shared';
 import { readDonation } from './read-donations';
 
 const _donationHelper = new DonationHelper();
@@ -20,13 +20,13 @@ const _deliveryHelper = new DeliveryHelper();
 export async function advanceDeliveryState(stateChangeReq: DeliveryStateChangeRequest, myAccount: AccountEntity): Promise<Donation> {
   const donation = <DonationEntity> await readDonation(stateChangeReq.donationId);
   _ensureCanAdvanceDeliveryState(donation, myAccount);
-  
-  let advancedDonation: DonationEntity = _genUpdateDonation(donation, 'next');
-  advancedDonation = await getConnection().transaction(
-    async (manager: EntityManager) => manager.getRepository(DonationEntity).save(advancedDonation)
+
+  const advanceDonationUpdt: DeepPartial<DonationEntity> = _genDonationStateUpdate(donation, 'next');
+  await getConnection().transaction(
+    async (manager: EntityManager) => manager.getRepository(DonationEntity).save(advanceDonationUpdt)
   );
 
-  return advancedDonation;
+  return readDonation(donation.id);
 }
 
 /**
@@ -57,10 +57,10 @@ export async function undoDeliveryState(
   _ensureCanUndoDeliveryState(donation, myAccount);
 
   // If moving from 'Scheduled' to 'Matched', then perform delivery cancellation process, otherwise perform undo.
-  const donationUpdate: DonationEntity = _genUpdateDonation(donation, 'prev');
-  const undoneDonation: DonationEntity = (donationUpdate.donationStatus === 'Matched')
+  const undoDonationUpdt: DeepPartial<DonationEntity> = _genDonationStateUpdate(donation, 'prev');
+  const undoneDonation: DonationEntity = (undoDonationUpdt.donationStatus === DonationStatus.Matched)
     ? await cancelDelivery(donation, myAccount)
-    : await _undoDeliveryStateNonCancel(donationUpdate);
+    : await _undoDeliveryStateNonCancel(undoDonationUpdt);
 
   return { old: donation, new: undoneDonation };
 }
@@ -69,16 +69,16 @@ export async function undoDeliveryState(
  * Performs the undo of a delivery state advancement for a given donation.
  * @param stateChangeReq The delivery state change request specifying the ID of the donation to have its delivery state advancement undone.
  * @param donation The donation that is to have its delivery state advancement undone.
- * @param donationUpdate The donation update to apply in order to perform the delivery state undo.
+ * @param undoDonationUpdt The donation update to apply in order to perform the delivery state undo.
  * @return A promise that resolves to the donation with its delivery state advancement undone. 
  */
 async function _undoDeliveryStateNonCancel(
-  donationUpdate: DonationEntity
+  undoDonationUpdt: DeepPartial<DonationEntity>
 ): Promise<DonationEntity> {
-  const undoneDonation: DonationEntity = await getConnection().transaction
-    (async (manager: EntityManager) => manager.getRepository(DonationEntity).save(donationUpdate)
+  await getConnection().transaction
+    (async (manager: EntityManager) => manager.getRepository(DonationEntity).save(undoDonationUpdt)
   );
-  return undoneDonation;
+  return readDonation(undoDonationUpdt.id);
 }
 
 /**
@@ -98,15 +98,15 @@ function _ensureCanUndoDeliveryState(donation: Donation, account: AccountEntity)
  * Generates the donation update value for a given donation that is to have its delivery state changed.
  * @param donation The donation that is to have its delivery state (and related data) updated.
  * @param deliveryStateChangeDir The direction to update the given donation's delivery state to.
- * @return The donation with its delivery state updated.
+ * @return The donation state update data that should be saved.
  */
-function _genUpdateDonation(donation: Donation, deliveryStateChangeDir: 'next' | 'prev'): DonationEntity {
-  const updatedDonation: DonationEntity = Object.assign({}, <DonationEntity>donation);
+function _genDonationStateUpdate(donation: Donation, deliveryStateChangeDir: 'next' | 'prev'): DeepPartial<DonationEntity> {
+  const updatedDonation: DeepPartial<DonationEntity> = { id: donation.id };
   updatedDonation.donationStatus = (deliveryStateChangeDir === 'next')
-    ? _donationHelper.getNextDonationStatus(updatedDonation)
-    : _donationHelper.getPrevDonationStatus(updatedDonation);
-  if (donation.donationStatus !== 'Unmatched') {
-    updatedDonation.delivery = Object.assign({}, updatedDonation.delivery);
+    ? _donationHelper.getNextDonationStatus(donation.donationStatus)
+    : _donationHelper.getPrevDonationStatus(donation.donationStatus);
+  if (donation.donationStatus !== DonationStatus.Unmatched) {
+    updatedDonation.delivery = { id: donation.delivery.id };
     _updateDeliveryTiming(updatedDonation);
   }
   return updatedDonation;
@@ -114,18 +114,27 @@ function _genUpdateDonation(donation: Donation, deliveryStateChangeDir: 'next' |
 
 /**
  * Updates the delivery timing data for a donation based off of its (updated) delivery state.
- * NOTE: Internally modifies the given donation!
- * @param donation The donation that is to have its delivery timing updated based off of its updated delivery state.
+ * NOTE: Internally modifies the given donation update object!
+ * @param donationUpdt The donation update that is to have its delivery timing updated based off of its updated delivery state.
  */
-function _updateDeliveryTiming(donation: DonationEntity): void {
-  if (donation.donationStatus === 'Scheduled') {
-    donation.delivery.pickupTime = null;
-  }
-  if (donation.donationStatus === 'Picked Up') {
-    donation.delivery.pickupTime = new Date();
-    donation.delivery.dropOffTime = null;
-  }
-  if (donation.donationStatus === 'Complete') {
-    donation.delivery.dropOffTime = new Date();
+function _updateDeliveryTiming(donationUpdt: DeepPartial<DonationEntity>): void {
+  switch (donationUpdt.donationStatus) {
+    case DonationStatus.Scheduled:
+      donationUpdt.delivery.startTime = null;
+      donationUpdt.delivery.pickupTime = null;
+      donationUpdt.delivery.dropOffTime = null;
+      break;
+    case DonationStatus.Started:
+      donationUpdt.delivery.startTime = new Date();
+      donationUpdt.delivery.pickupTime = null;
+      donationUpdt.delivery.dropOffTime = null;
+      break;
+    case DonationStatus.PickedUp:
+      donationUpdt.delivery.pickupTime = new Date();
+      donationUpdt.delivery.dropOffTime = null;
+      break;
+    case DonationStatus.Complete:
+      donationUpdt.delivery.dropOffTime = new Date();
+      break;
   }
 }

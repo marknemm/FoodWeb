@@ -6,15 +6,7 @@ import { FoodWebError } from '../helpers/food-web-error';
 import { geocode, geoTimezone } from '../helpers/geocoder';
 import { AccountUpdateRequest } from '../interfaces/account/account-update-request';
 import { UpdateDiff } from '../interfaces/update-diff';
-import {
-  Account,
-  AccountCreateRequest,
-  AccountHelper,
-  AccountSectionUpdateReqeust,
-  NotificationSettings,
-  OperationHours,
-  OperationHoursHelper
-} from '../shared';
+import { Account, AccountCreateRequest, AccountHelper, AccountSectionUpdateReqeust, NotificationSettings, OperationHours, OperationHoursHelper } from '../shared';
 import { createUnverifiedAccount } from './account-verification';
 import { savePassword } from './save-password';
 
@@ -30,7 +22,6 @@ export async function createAccount(request: AccountCreateRequest): Promise<NewA
     unverifiedAccount = await createUnverifiedAccount(createdAccount, manager);
   });
 
-  _opHoursHelper.formatOperationHoursTimes(createdAccount.operationHours);
   createdAccount.verified = false;
   return { account: createdAccount, unverifiedAccount };
 }
@@ -71,7 +62,6 @@ export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: 
     _saveAccount(manager, updateReq.account, myAccount)
   );
 
-  _opHoursHelper.formatOperationHoursTimes(updatedAccount.operationHours);
   return { old: <AccountEntity>myAccount, new: updatedAccount };
 }
 
@@ -81,7 +71,7 @@ async function _saveAccount(manager: EntityManager, account: Account, myAccount?
   _ensureEitherOrganizationOrVolunteer(account);
   _ensureAccountHasProfileImg(account);
   _validateAccount(account, myAccount);
-  await _setGeocoordinatesIfNewAddress(account, myAccount);
+  await _checkForAndProcessNewAddress(account, myAccount);
   account.contactInfo.phoneNumber = _accountHelper.formatPhoneNumber(account.contactInfo.phoneNumber);
 
   if (account.id) {
@@ -129,10 +119,15 @@ function _ensureAccountHasProfileImg(account: Account): void {
   }
 }
 
-async function _setGeocoordinatesIfNewAddress(account: Account, myAccount: Account): Promise<void> {
-  if (!myAccount || account.contactInfo.streetAddress !== myAccount.contactInfo.streetAddress) {
+async function _checkForAndProcessNewAddress(account: Account, myAccount: Account): Promise<void> {
+  if (
+    !myAccount
+    || (account.contactInfo.streetAddress !== myAccount.contactInfo.streetAddress)
+    || (account.contactInfo.city !== myAccount.contactInfo.city)
+  ) {
     account.contactInfo.location = await geocode(account.contactInfo);
     account.contactInfo.timezone = geoTimezone(account.contactInfo.location);
+    // TODO: Update all donations associated with account that had address updated to reflect different route.
   }
 }
 
