@@ -126,6 +126,16 @@
         "./projects/web/src/app/event/interfaces/*",
         "./projects/web/src/app/event/services/*"
       ],
+      "~web/fundraise/*": [
+        "./projects/web/src/app/fundraise/*",
+        "./projects/web/src/app/fundraise/child-components/*",
+        "./projects/web/src/app/fundraise/components/*",
+        "./projects/web/src/app/fundraise/directives/*",
+        "./projects/web/src/app/fundraise/forms/*",
+        "./projects/web/src/app/fundraise/pipes/*",
+        "./projects/web/src/app/fundraise/interfaces/*",
+        "./projects/web/src/app/fundraise/services/*"
+      ],
       "~web/heuristics/*": [
         "./projects/web/src/app/heuristics/*",
         "./projects/web/src/app/heuristics/child-components/*",

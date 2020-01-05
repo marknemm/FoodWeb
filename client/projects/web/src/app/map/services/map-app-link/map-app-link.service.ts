@@ -28,7 +28,7 @@ export class MapAppLinkService {
    * @return An observable that emits the map directions href.
    */
   genDirectionHref(waypoints: (ClientWaypoint | string)[]): string {
-    const saddr: string = this._genUrlAddrArg(waypoints[0]);
+    const saddr: string = 'My+Location';
     const waddrs: string[] = waypoints.slice(1, waypoints.length -1).map(
       (waypoint: ClientWaypoint) => this._genUrlAddrArg(waypoint)
     );

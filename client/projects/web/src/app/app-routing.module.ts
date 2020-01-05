@@ -14,17 +14,18 @@ const routes: Routes = [
     path: '',
     component: AppShellComponent,
     children: [
-      { path: 'home', component: HomeComponent },
-      { path: 'home/:login', component: HomeComponent },
       { path: 'about', component: AboutComponent },
-      { path: 'signup', loadChildren: () => import('~web/signup/signup.module').then(mod => mod.SignupModule) },
       { path: 'account', loadChildren: () => import('~web/account/account.module').then(mod => mod.AccountModule) },
-      { path: 'password', loadChildren: () => import('~web/password/password.module').then(mod => mod.PasswordModule) },
+      { path: 'delivery', loadChildren: () => import('~web/delivery/delivery.module').then(mod => mod.DeliveryModule) },
       { path: 'donation', loadChildren: () => import('~web/donation/donation.module').then(mod => mod.DonationModule) },
       { path: 'donor', loadChildren: () => import('~web/donor/donor.module').then(mod => mod.DonorModule) },
-      { path: 'delivery', loadChildren: () => import('~web/delivery/delivery.module').then(mod => mod.DeliveryModule) },
+      { path: 'event', loadChildren: () => import('~web/event/event.module').then(mod => mod.EventModule) },
+      { path: 'fundraise', loadChildren: () => import('~web/fundraise/fundraise.module').then(mod => mod.FundraiseModule) },
+      { path: 'home', component: HomeComponent },
+      { path: 'home/:login', component: HomeComponent },
       { path: 'notification', loadChildren: () => import('~web/notification/notification.module').then(mod => mod.NotificationModule) },
-      { path: 'event', loadChildren: () => import('~web/event/event.module').then(mod => mod.EventModule) }
+      { path: 'password', loadChildren: () => import('~web/password/password.module').then(mod => mod.PasswordModule) },
+      { path: 'signup', loadChildren: () => import('~web/signup/signup.module').then(mod => mod.SignupModule) }
     ]
   },
 ];

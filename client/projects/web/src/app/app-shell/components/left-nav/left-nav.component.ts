@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawerContent } from '@angular/material/sidenav';
-import { faGifts, faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons';
+import { faDonate, faGifts, faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons';
 import { DonationHelper } from '~shared';
 import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
 import { SessionService } from '~web/session/session/session.service';
@@ -16,8 +16,9 @@ export class LeftNavComponent implements OnInit {
 
   @ViewChild('drawerContent', { static: true }) drawerContent: MatDrawerContent;
 
-  faHandHoldingHeart = faHandHoldingHeart;
+  faDonate = faDonate;
   faGifts = faGifts;
+  faHandHoldingHeart = faHandHoldingHeart;
 
   constructor(
     public leftNavService: LeftNavService,

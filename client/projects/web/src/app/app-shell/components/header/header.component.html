@@ -25,17 +25,17 @@
       </button>
       <h1 class="page-title">{{ pageTitleService.title }}</h1>
       <span class="header-right">
-        <ng-container *ngIf="!sessionService.loggedIn">
+        <ng-container *ngIf="!sessionService.loggedIn; else loggedInTmpl">
           <a (click)="login()">Login</a>
           <span> | </span>
           <a [routerLink]="['/signup']">Signup</a>
         </ng-container>
-        <ng-container *ngIf="sessionService.loggedIn">
+        <ng-template #loggedInTmpl>
           <food-web-settings-menu></food-web-settings-menu>
           <food-web-donate-menu *ngIf="sessionService.isDonor"></food-web-donate-menu>
           <food-web-search-menu *ngIf="!sessionService.isDonor" [accountType]="sessionService.account.accountType"></food-web-search-menu>
           <food-web-notifications-menu></food-web-notifications-menu>
-        </ng-container>
+        </ng-template>
       </span>
     </div>
   </div>
