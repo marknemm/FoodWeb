@@ -1,8 +1,11 @@
+import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
-import { broadcastEmail, MailTransporter, genDonationEmailSubject } from '../helpers/email';
+import { ClaimReqHistoryEntity } from '../entity/claim-req-history.entity';
+import { DonationEntity } from '../entity/donation.entity';
+import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '../helpers/email';
 import { broadcastNotification } from '../helpers/notification';
 import { QueryResult } from '../helpers/query-builder-helper';
-import { AccountReadRequest, AccountType, Donation, DonationHelper, NotificationType } from '../shared';
+import { AccountReadRequest, AccountType, DonationHelper, NotificationType } from '../shared';
 import { readAccounts } from './read-accounts';
 
 const _donationHelper = new DonationHelper();
@@ -12,7 +15,7 @@ const _donationHelper = new DonationHelper();
  * @param donation The donation that is up for claim.
  * @return A promise that resolves once the operation has finished.
  */
-export async function findMessagePotentialReceivers(donation: Donation): Promise<void> {
+export async function findMessagePotentialReceivers(donation: DonationEntity): Promise<void> {
   const limit = 300;
   let page = 1;
   let numQueried: number;
@@ -42,18 +45,18 @@ export async function findMessagePotentialReceivers(donation: Donation): Promise
  * @param potentialReceivers The accounts of potential receivers that are to be messaged/notified.
  * @return A promise that resolves to void once all messages/notifications have been sent.
  */
-async function _messagePotentialReceivers(donation: Donation, potentialReceivers: AccountEntity[]): Promise<void> {
+async function _messagePotentialReceivers(donation: DonationEntity, potentialReceivers: AccountEntity[]): Promise<void> {
   const messagePromises: Promise<any>[] = [];
   const donorName: string = _donationHelper.donorName(donation);
   // Filter for accounts that have notifications enabled for each (new) donation.
-  const externalNotifyAccounts: AccountEntity[] = potentialReceivers.filter(
+  const notifyAccounts: AccountEntity[] = potentialReceivers.filter(
     (account: AccountEntity) => account.contactInfo.notifyForEachDonation
   );
 
   messagePromises.push(
     broadcastEmail(
       MailTransporter.NOREPLY,
-      externalNotifyAccounts,
+      notifyAccounts,
       genDonationEmailSubject(donation),
       'donation-match-request',
       { donation }
@@ -62,7 +65,7 @@ async function _messagePotentialReceivers(donation: Donation, potentialReceivers
 
   messagePromises.push(
     broadcastNotification(
-      externalNotifyAccounts,
+      notifyAccounts,
       {
         notificationType: NotificationType.Donate,
         notificationLink: `/donation/details/${donation.id}`,
@@ -76,5 +79,25 @@ async function _messagePotentialReceivers(donation: Donation, potentialReceivers
     )
   );
 
+  messagePromises.push(
+    _saveClaimReqHistories(donation, notifyAccounts)
+  );
+
   await Promise.all(messagePromises);
+}
+
+/**
+ * Saves histories of claim request messages that have been sent out for a given donation to a given list of (receiver) accounts.
+ * NOTE: This is used later on to re-message all receivers so that they may know that the donation has been claimed.
+ * @param donation The donation for which the claim request history is being created.
+ * @param accounts The (receiver) accounts that have received the claim request message(s).
+ * @return A promise that resolves once all histories have been saved.
+ */
+async function _saveClaimReqHistories(donation: DonationEntity, accounts: AccountEntity[]): Promise<void> {
+  const claimReqHistories: ClaimReqHistoryEntity[] = accounts.map((receiverAccount: AccountEntity) =>
+    ({ id: undefined, donation, receiverAccount })
+  );
+  return getConnection().transaction(async (manager: EntityManager) => {
+    await manager.getRepository(ClaimReqHistoryEntity).save(claimReqHistories)
+  });
 }
