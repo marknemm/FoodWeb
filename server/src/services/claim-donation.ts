@@ -1,14 +1,15 @@
-import { EntityManager, getConnection, Repository } from 'typeorm';
+import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationClaimEntity } from '../entity/donation-claim.entity';
 import { DonationEntity } from '../entity/donation.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { DonationClaim, DonationClaimHelper, DonationClaimRequest, DonationHelper, DonationStatus } from '../shared';
+import { DonationClaim, DonationClaimHelper, DonationClaimRequest, DonationHelper, DonationStatus, MapRoute, DateTimeHelper } from '../shared';
 import { genMapRoute } from './gen-map-route';
 import { readDonation } from './read-donations';
 
 const _donationHelper = new DonationHelper();
 const _donationClaimHelper = new DonationClaimHelper();
+const _dateTimeHelper = new DateTimeHelper();
 
 /**
  * Claims a donation.
@@ -59,9 +60,12 @@ async function _genDonationClaimUpdt(donationToClaim: DonationEntity, receiverAc
  * @return A promise that resolves to the generated Donation Claim.
  */
 async function _genDonationClaim(donation: DonationEntity, receiverAccount: AccountEntity): Promise<DonationClaim> {
+  const routeToReceiver: MapRoute = await genMapRoute(donation.donorContactOverride, receiverAccount.contactInfo);
   return {
     receiverAccount,
-    routeToReceiver: await genMapRoute(donation.donorContactOverride, receiverAccount.contactInfo)
+    dropOffWindowStart: _dateTimeHelper.addMinutes(donation.pickupWindowStart, routeToReceiver.durationMin),
+    dropOffWindowEnd: _dateTimeHelper.addMinutes(donation.pickupWindowEnd, routeToReceiver.durationMin),
+    routeToReceiver
   };
 }
 

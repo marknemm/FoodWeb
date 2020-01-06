@@ -3,11 +3,12 @@ import { AccountEntity } from '../entity/account.entity';
 import { DeliveryEntity } from '../entity/delivery-entity';
 import { DonationEntity } from '../entity/donation.entity';
 import { FoodWebError } from '../helpers/food-web-error';
-import { DeliveryHelper, DeliveryScheduleRequest, Donation, DonationStatus } from '../shared';
+import { DateTimeHelper, Delivery, DeliveryHelper, DeliveryScheduleRequest, Donation, DonationStatus, MapRoute } from '../shared';
 import { genMapRoute } from './gen-map-route';
 import { readDonation } from './read-donations';
 
 const _deliveryHelper = new DeliveryHelper();
+const _dateTimeHelper = new DateTimeHelper();
 
 /**
  * Schedules the delivery of a donation.
@@ -56,7 +57,7 @@ async function _genScheduleDonationUpdt(
   // Make shallow copy to preserve original donation.
   const scheduleDonationUpdt: Partial<DonationEntity> = { id: donationToSchedule.id };
   scheduleDonationUpdt.donationStatus = DonationStatus.Scheduled;
-  scheduleDonationUpdt.delivery = await _genDonationDelivery(donationToSchedule, myAccount, scheduleRequest);
+  scheduleDonationUpdt.delivery = <DeliveryEntity> await _genDonationDelivery(donationToSchedule, myAccount, scheduleRequest);
   return scheduleDonationUpdt;
 }
 
@@ -71,11 +72,14 @@ async function _genDonationDelivery(
   donation: Donation,
   myAccount: AccountEntity,
   scheduleRequest: DeliveryScheduleRequest
-): Promise<DeliveryEntity> {
-  return <DeliveryEntity> {
+): Promise<Delivery> {
+  const routeToDonor: MapRoute = await genMapRoute(myAccount.contactInfo, donation.donorContactOverride);
+  return {
     volunteerAccount: myAccount,
     pickupWindowStart: scheduleRequest.pickupWindow.startDateTime,
     pickupWindowEnd: scheduleRequest.pickupWindow.endDateTime,
-    routeToDonor: await genMapRoute(myAccount.contactInfo, donation.donorContactOverride)
+    dropOffWindowStart: _dateTimeHelper.addMinutes(scheduleRequest.pickupWindow.startDateTime, routeToDonor.durationMin),
+    dropOffWindowEnd: _dateTimeHelper.addMinutes(scheduleRequest.pickupWindow.endDateTime, routeToDonor.durationMin),
+    routeToDonor
   };
 }

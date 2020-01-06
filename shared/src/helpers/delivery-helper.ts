@@ -1,10 +1,10 @@
-import { ValidationHelper } from './validation-helper';
+import { AccountType } from '../interfaces/account/account';
+import { Delivery } from '../interfaces/delivery/delivery';
+import { Donation, DonationStatus } from '../interfaces/donation/donation';
+import { DateTimeRange } from '../interfaces/misc/time';
 import { Account } from './account-helper';
 import { DonationHelper } from './donation-helper';
-import { Delivery } from '../interfaces/delivery/delivery';
-import { DonationStatus, Donation } from '../interfaces/donation/donation';
-import { DateTimeRange } from '../interfaces/misc/time';
-import { AccountType } from '../interfaces/account/account';
+import { ValidationHelper } from './validation-helper';
 
 export class DeliveryHelper {
 
@@ -112,5 +112,14 @@ export class DeliveryHelper {
     return (donation.delivery)
       ? { startDateTime: donation.delivery.pickupWindowStart, endDateTime: donation.delivery.pickupWindowEnd }
       : { startDateTime: donation.pickupWindowStart, endDateTime: donation.pickupWindowEnd };
+  }
+
+  getDropOffWindow(donation: Donation): DateTimeRange {
+    if (donation.claim) {
+      return (donation.delivery)
+        ? { startDateTime: donation.delivery.dropOffWindowStart, endDateTime: donation.delivery.dropOffWindowEnd }
+        : { startDateTime: donation.claim.dropOffWindowStart, endDateTime: donation.claim.dropOffWindowEnd };
+    }
+    return { startDateTime: new Date(), endDateTime: new Date() };
   }
 }

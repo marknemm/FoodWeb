@@ -1,4 +1,4 @@
-import { CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { DonationClaim } from '../shared';
 import { AccountEntity } from './account.entity';
 import { DonationEntity } from './donation.entity';
@@ -17,6 +17,12 @@ export class DonationClaimEntity implements DonationClaim {
 
   @ManyToOne((type) => AccountEntity, { nullable: true, eager: true })
   receiverAccount: AccountEntity;
+
+  @Column()
+  dropOffWindowStart: Date;
+
+  @Column()
+  dropOffWindowEnd: Date;
 
   @ManyToOne((type) => MapRouteEntity, { eager: true, cascade: ['insert', 'update'] })
   routeToReceiver: MapRouteEntity;

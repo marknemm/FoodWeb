@@ -61,7 +61,7 @@ export class DonationEntity implements Donation {
 
   @AfterLoad() @AfterInsert() @AfterUpdate()
   fillMissingDonorContactOverride(): void {
-    if (!this.donorContactOverride && this.donorAccount) {
+    if (!this.donorContactOverride && this.donorAccount!.contactInfo) {
       this.donorContactOverride = this.donorAccount.contactInfo;
     }
   }

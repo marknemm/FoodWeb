@@ -126,6 +126,15 @@
                 <div class="inline-label">Instructions:</div>
                 <div class="d-inline-block">{{ originalDonation.claim.receiverAccount.organization.deliveryInstructions }}</div>
               </div>
+              <div class="col-12">
+                <div class="inline-label">Drop-off Window:</div>
+                <food-web-date-time-range
+                  class="d-inline-block"
+                  [start]="deliveryHelper.getDropOffWindow(originalDonation).startDateTime"
+                  [end]="deliveryHelper.getDropOffWindow(originalDonation).endDateTime"
+                  [boldTime]="true"
+                ></food-web-date-time-range>
+              </div>
               <div *ngIf="originalDonation.delivery?.dropOffTime" class="col-sm-6">
                 <div class="inline-label">Dropped Off:</div>
                 <food-web-date-time class="d-inline-block" [dateTime]="originalDonation.delivery.dropOffTime" [boldTime]="true"></food-web-date-time>

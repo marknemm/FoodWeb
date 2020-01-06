@@ -15,6 +15,14 @@ export interface DonationClaim {
    */
   receiverAccount: Account;
   /**
+   * The start date-time of the estimated drop-off window.
+   */
+  dropOffWindowStart: Date;
+  /**
+   * The end date-time of the estimated drop-off window.
+   */
+  dropOffWindowEnd: Date;
+  /**
    * The driving route from the Donor to the Receiver.
    */
   routeToReceiver: MapRoute;

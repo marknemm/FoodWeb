@@ -23,6 +23,12 @@ export class DeliveryEntity implements Delivery {
   @Column({ type: 'timestamp with time zone' })
   pickupWindowEnd: Date;
 
+  @Column({ type: 'timestamp with time zone' })
+  dropOffWindowStart: Date;
+
+  @Column({ type: 'timestamp with time zone' })
+  dropOffWindowEnd: Date;
+
   @ManyToOne((type) => MapRouteEntity, { eager: true, cascade: ['insert', 'update'] })
   routeToDonor: MapRouteEntity;
 

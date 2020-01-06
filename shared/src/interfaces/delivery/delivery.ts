@@ -6,6 +6,9 @@ export { Account, MapRoute };
  * Delivery data for a donation.
  */
 export interface Delivery {
+  /**
+   * The auto-generated database ID for the delivery.
+   */
   id?: number;
   /**
    * The account of the volunteer driver.
@@ -19,6 +22,14 @@ export interface Delivery {
    * The end date-time of the estimated pickup window selected by the deliverer.
    */
   pickupWindowEnd: Date;
+  /**
+   * The start date-time of the estimated drop-off window.
+   */
+  dropOffWindowStart: Date;
+  /**
+   * The end date-time of the estimated drop-off window.
+   */
+  dropOffWindowEnd: Date;
   /**
    * The driving route from the Deliverer home (address on record) to the Donor.
    */
