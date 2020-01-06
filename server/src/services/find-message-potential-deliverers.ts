@@ -1,8 +1,11 @@
+import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from '../entity/account.entity';
+import { DeliveryReqHistoryEntity } from '../entity/delivery-req-history.entity';
+import { DonationEntity } from '../entity/donation.entity';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '../helpers/email';
 import { broadcastNotification } from '../helpers/notification';
 import { QueryResult } from '../helpers/query-builder-helper';
-import { AccountReadRequest, AccountType, Donation, DonationHelper, NotificationType } from '../shared';
+import { AccountReadRequest, AccountType, DonationHelper, NotificationType } from '../shared';
 import { readAccounts } from './read-accounts';
 
 const _donationHelper = new DonationHelper();
@@ -11,7 +14,7 @@ const _donationHelper = new DonationHelper();
  * Gets all potential deliverers for a donation and messages them so that they can be notified of the new delivery.
  * @return A promise that resolves when the operation has completed.
  */
-export async function findMessagePotentialDeliverers(donation: Donation): Promise<void> {
+export async function findMessagePotentialDeliverers(donation: DonationEntity): Promise<void> {
   const limit = 300;
   let page = 1;
   let numQueried: number;
@@ -29,7 +32,7 @@ export async function findMessagePotentialDeliverers(donation: Donation): Promis
     };
     const queryResult: QueryResult<AccountEntity> = await readAccounts(readRequest, donation.claim.receiverAccount);
     numQueried = queryResult.entities.length;
-    return _messagePotentialDeliverers(donation, queryResult.entities);
+    await _messagePotentialDeliverers(donation, queryResult.entities);
   } while (numQueried === limit);
 }
 
@@ -39,19 +42,19 @@ export async function findMessagePotentialDeliverers(donation: Donation): Promis
  * @param potentialDeliverers The accounts of potential deliverers that are to be messaged/notified.
  * @return A promise that resolves to void once all messages/notifications have been sent.
  */
-async function _messagePotentialDeliverers(donation: Donation, potentialDeliverers: AccountEntity[]): Promise<void> {
+async function _messagePotentialDeliverers(donation: DonationEntity, potentialDeliverers: AccountEntity[]): Promise<void> {
   const messagePromises: Promise<any>[] = [];
   const donorName: string = _donationHelper.donorName(donation);
   const receiverName: string = _donationHelper.receiverName(donation);
   // Filter for accounts that have notifications enabled for each (new) delivery/donation.
-  const externalNotifyAccounts: AccountEntity[] = potentialDeliverers.filter(
+  const notifyAccounts: AccountEntity[] = potentialDeliverers.filter(
     (account: AccountEntity) => account.contactInfo.notifyForEachDonation
   );
 
   messagePromises.push(
     broadcastEmail(
       MailTransporter.NOREPLY,
-      externalNotifyAccounts,
+      notifyAccounts,
       genDonationEmailSubject(donation),
       'delivery-request',
       { donation }
@@ -60,7 +63,7 @@ async function _messagePotentialDeliverers(donation: Donation, potentialDelivere
 
   messagePromises.push(
     broadcastNotification(
-      externalNotifyAccounts,
+      notifyAccounts,
       {
         notificationType: NotificationType.ClaimDonation,
         notificationLink: `/donation/details/${donation.id}`,
@@ -73,5 +76,25 @@ async function _messagePotentialDeliverers(donation: Donation, potentialDelivere
     )
   );
 
+  messagePromises.push(
+    _saveDeliveryReqHistories(donation, notifyAccounts)
+  );
+
   await Promise.all(messagePromises);
+}
+
+/**
+ * Saves histories of delivery request messages that have been sent out for a given donation to a given list of (volunteer) accounts.
+ * NOTE: This is used later on to re-message all volunteers so that they may know that the delivery has been scheduled.
+ * @param donation The donation for which the delivery request history is being created.
+ * @param accounts The (volunteer) accounts that have received the delivery request message(s).
+ * @return A promise that resolves once all histories have been saved.
+ */
+async function _saveDeliveryReqHistories(donation: DonationEntity, accounts: AccountEntity[]): Promise<void> {
+  const deliveryReqHistories: DeliveryReqHistoryEntity[] = accounts.map((volunteerAccount: AccountEntity) =>
+    ({ id: undefined, donation, volunteerAccount })
+  );
+  return getConnection().transaction(async (manager: EntityManager) => {
+    await manager.getRepository(DeliveryReqHistoryEntity).save(deliveryReqHistories)
+  });
 }
