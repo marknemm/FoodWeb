@@ -2,22 +2,23 @@ import express = require('express');
 import { Request, Response } from 'express';
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { genListResponse } from '../helpers/list-response';
-import { QueryResult } from '../helpers/query-builder-helper';
+import { QueryResult } from '../helpers/database/query-builder-helper';
+import { genListResponse } from '../helpers/response/list-response';
 import { UpdateDiff } from '../interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '../middlewares/response-error.middleware';
 import { ensureAccountVerified, ensureSessionActive } from '../middlewares/session.middleware';
-import { claimDonation } from '../services/claim-donation';
-import { deleteDonation } from '../services/delete-donation';
-import { sendDonationDeleteMessages } from '../services/delete-donation-message';
-import { findMessagePotentialDeliverers } from '../services/find-message-potential-deliverers';
-import { findMessagePotentialReceivers } from '../services/find-message-potential-receivers';
-import { sendClaimMessages, sendUnclaimMessages } from '../services/match-donation-message';
-import { readDonation, readDonations, readMyDonations } from '../services/read-donations';
-import { createDonation, updateDonation } from '../services/save-donation';
-import { saveDonationClaimAudit, saveDonationCreateAudit, saveDonationDeleteAudit, saveDonationUnclaimAudit, saveDonationUpdateAudit } from '../services/save-donation-audit';
-import { sendDonationCreateMessages, sendDonationUpdateMessages } from '../services/save-donation-message';
-import { unclaimDonation } from '../services/unclaim-donation';
+import { saveDonationClaimAudit, saveDonationCreateAudit, saveDonationDeleteAudit, saveDonationUnclaimAudit, saveDonationUpdateAudit } from '../services/audit/save-donation-audit';
+import { sendDeliveryAvailableMessages } from '../services/delivery/delivery-available-message';
+import { sendClaimAvailableMessages } from '../services/donation-claim/claim-available-message';
+import { claimDonation } from '../services/donation-claim/claim-donation';
+import { sendClaimedDonationMessages } from '../services/donation-claim/claimed-donation-message';
+import { unclaimDonation } from '../services/donation-claim/unclaim-donation';
+import { sendUnclaimedDonationMessages } from '../services/donation-claim/unclaimed-donation-message';
+import { deleteDonation } from '../services/donation/delete-donation';
+import { sendDonationDeleteMessages } from '../services/donation/delete-donation-message';
+import { readDonation, readDonations, readMyDonations } from '../services/donation/read-donations';
+import { createDonation, updateDonation } from '../services/donation/save-donation';
+import { sendDonationCreateMessages, sendDonationUpdateMessages } from '../services/donation/save-donation-message';
 import { DonationClaimRequest, DonationCreateRequest, DonationDeleteRequest, DonationReadRequest, DonationUnclaimRequest, DonationUpdateRequest } from '../shared';
 
 const router = express.Router();
@@ -30,7 +31,7 @@ router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res:
     .catch(genErrorResponseRethrow.bind(this, res))
     .then((donation: DonationEntity) => saveDonationCreateAudit(createReq, donation))
     .then((donation: DonationEntity) => sendDonationCreateMessages(donation))
-    .then((donation: DonationEntity) => findMessagePotentialReceivers(donation))
+    .then((donation: DonationEntity) => sendClaimAvailableMessages(donation))
     .catch((err: Error) => console.error(err));
 });
 
@@ -40,8 +41,8 @@ router.post('/claim', ensureSessionActive, ensureAccountVerified, (req: Request,
     .then((claimedDonation: DonationEntity) => { res.send(claimedDonation); return claimedDonation; })
     .catch(genErrorResponseRethrow.bind(this, res))
     .then((claimedDonation: DonationEntity) => saveDonationClaimAudit(claimReq, claimedDonation))
-    .then((claimedDonation: DonationEntity) => sendClaimMessages(claimedDonation))
-    .then((claimedDonation: DonationEntity) => findMessagePotentialDeliverers(claimedDonation))
+    .then((claimedDonation: DonationEntity) => sendClaimedDonationMessages(claimedDonation))
+    .then((claimedDonation: DonationEntity) => sendDeliveryAvailableMessages(claimedDonation))
     .catch((err: Error) => console.error(err));
 });
 
@@ -98,7 +99,7 @@ router.delete('/claim/:id', ensureSessionActive, ensureAccountVerified, (req: Re
     .then((unclaimDonationDiff: UpdateDiff<DonationEntity>) => { res.send(unclaimDonationDiff.new); return unclaimDonationDiff; })
     .catch(genErrorResponseRethrow.bind(this, res))
     .then((unclaimDonationDiff: UpdateDiff<DonationEntity>) => saveDonationUnclaimAudit(unclaimReq, unclaimDonationDiff))
-    .then((unclaimDonationDiff: UpdateDiff<DonationEntity>) => sendUnclaimMessages(unclaimDonationDiff))
+    .then((unclaimDonationDiff: UpdateDiff<DonationEntity>) => sendUnclaimedDonationMessages(unclaimDonationDiff))
     .catch((err: Error) => console.error(err));
 });
 

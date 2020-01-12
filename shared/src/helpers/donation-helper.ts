@@ -129,7 +129,7 @@ export class DonationHelper {
       !myAccount 
       || (
         myAccount.accountType !== AccountType.Admin
-        && myAccount.id !== donation.delivery.volunteerAccount.id
+        && myAccount.id !== donation.claim.delivery.volunteerAccount.id
         && myAccount.id !== donation.claim.receiverAccount.id
         && myAccount.id !== donation.donorAccount.id
       )
@@ -182,6 +182,25 @@ export class DonationHelper {
     return ['/donation/details/', `${donation.id}`];
   }
 
+  memberAccounts(donation: Donation): { donorAccount: Account, receiverAccount?: Account, delivererAccount?: Account } {
+    return {
+      donorAccount: donation.donorAccount,
+      receiverAccount: (donation.claim ? donation.claim.receiverAccount : null),
+      delivererAccount: ((donation.claim && donation.claim.delivery) ? donation.claim.delivery.volunteerAccount : null)
+    };
+  }
+
+  memberAccountsArr(donation: Donation): Account[] {
+    const memberAccounts: Account[] = [donation.donorAccount];
+    if (donation.claim) {
+      memberAccounts.push(donation.claim.receiverAccount);
+      if (donation.claim.delivery) {
+        memberAccounts.push(donation.claim.delivery.volunteerAccount);
+      }
+    }
+    return memberAccounts;
+  }
+
   memberNames(donation: Donation): { donorName: string, receiverName?: string, delivererName?: string } {
     return {
       donorName: this.donorName(donation),
@@ -211,14 +230,14 @@ export class DonationHelper {
   }
 
   delivererName(donation: Donation): string {
-    return (donation.delivery)
-      ? this._accountHelper.accountName(donation.delivery.volunteerAccount)
+    return (donation.claim && donation.claim.delivery)
+      ? this._accountHelper.accountName(donation.claim.delivery.volunteerAccount)
       : '';
   }
 
   delivererDetailsRouterLink(donation: Donation): string[] {
-    return (donation.delivery)
-      ? this._accountHelper.accountDetailsRouterLink(donation.delivery.volunteerAccount)
+    return (donation.claim && donation.claim.delivery)
+      ? this._accountHelper.accountDetailsRouterLink(donation.claim.delivery.volunteerAccount)
       : [];
   }
 }

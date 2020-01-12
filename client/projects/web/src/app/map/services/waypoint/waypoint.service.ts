@@ -73,8 +73,8 @@ export class WaypointService {
 
     if (donation) {
       if (volunteerWaypointConfig !== VolunteerWaypointConfig.Exclude) {
-        const volunteerAccount: Account = donation.delivery
-          ? donation.delivery.volunteerAccount
+        const volunteerAccount: Account = (donation.claim && donation.claim.delivery)
+          ? donation.claim.delivery.volunteerAccount
           : potentialVolunteer;
         if (volunteerAccount) {
           accounts.push(volunteerAccount);

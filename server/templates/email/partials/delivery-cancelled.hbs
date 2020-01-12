@@ -55,7 +55,7 @@
   <p>
     We apologize for any inconvenience this has caused you.
     <br>Feel free to contact
-    <a href="mailto:{{ donation.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>
+    <a href="mailto:{{ donation.claim.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>
     or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>
 {{else}}
@@ -71,7 +71,7 @@
   <p>
     We apologize for any inconvenience this has caused you.
     <br>Feel free to contact
-    <a href="mailto:{{ donation.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>
+    <a href="mailto:{{ donation.claim.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>
     or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>
 {{/if}}

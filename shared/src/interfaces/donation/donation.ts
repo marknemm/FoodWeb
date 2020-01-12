@@ -62,10 +62,6 @@ export interface Donation {
    */
   donationStatus: DonationStatus;
   /**
-   * Delivery data for the donation. Should be undefined/null if donation status is before scheduled state.
-   */
-  delivery?: Delivery;
-  /**
    * The time of the most recent update. If the donationStatus is 'Complete', then this is garunteed to be the completion/delivery time.
    */
   updateTimestamp?: Date;

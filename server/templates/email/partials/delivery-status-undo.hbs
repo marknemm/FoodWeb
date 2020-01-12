@@ -62,7 +62,7 @@
   </p>
   <p>
     Feel free to contact
-    <a href="mailto:{{ donation.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>,
+    <a href="mailto:{{ donation.claim.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>,
     <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a>,
     or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>
@@ -82,7 +82,7 @@
   </p>
   <p>
     Feel free to contact
-    <a href="mailto:{{ donation.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>
+    <a href="mailto:{{ donation.claim.delivery.volunteerAccount.contactInfo.email }}">{{ delivererName }}</a>
     or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions or comments.
   </p>
 {{/if}}

@@ -1,11 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn, Index } from 'typeorm';
-import { Directions, MapRoute, GeographyLocation } from '../shared';
+import { Column, Index } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
+import { Directions, GeographyLocation, MapRoute } from '../shared';
 export { Directions, MapRoute };
 
-@Entity('MapRoute')
+@OrmEntity('MapRoute')
 export class MapRouteEntity implements MapRoute {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'real' })

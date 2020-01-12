@@ -109,15 +109,15 @@ export class DeliveryHelper {
   }
 
   getPickupWindow(donation: Donation): DateTimeRange {
-    return (donation.delivery)
-      ? { startDateTime: donation.delivery.pickupWindowStart, endDateTime: donation.delivery.pickupWindowEnd }
+    return (donation.claim && donation.claim.delivery)
+      ? { startDateTime: donation.claim.delivery.pickupWindowStart, endDateTime: donation.claim.delivery.pickupWindowEnd }
       : { startDateTime: donation.pickupWindowStart, endDateTime: donation.pickupWindowEnd };
   }
 
   getDropOffWindow(donation: Donation): DateTimeRange {
     if (donation.claim) {
-      return (donation.delivery)
-        ? { startDateTime: donation.delivery.dropOffWindowStart, endDateTime: donation.delivery.dropOffWindowEnd }
+      return (donation.claim.delivery)
+        ? { startDateTime: donation.claim.delivery.dropOffWindowStart, endDateTime: donation.claim.delivery.dropOffWindowEnd }
         : { startDateTime: donation.claim.dropOffWindowStart, endDateTime: donation.claim.dropOffWindowEnd };
     }
     return { startDateTime: new Date(), endDateTime: new Date() };

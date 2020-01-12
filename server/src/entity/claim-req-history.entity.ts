@@ -1,4 +1,5 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ManyToOne } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { AccountEntity } from './account.entity';
 import { DonationEntity } from './donation.entity';
 
@@ -7,10 +8,10 @@ import { DonationEntity } from './donation.entity';
  * NOTE: Used to re-message all accounts so that they may be notified that the donation has been claimed.
  * When this occurs, the history entries for that donation is deleted.
  */
-@Entity('ClaimReqHistory')
+@OrmEntity('ClaimReqHistory')
 export class ClaimReqHistoryEntity {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => DonationEntity)

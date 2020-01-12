@@ -1,14 +1,15 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, ManyToOne } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { Constants, Notification, NotificationType } from '../shared';
 import { AccountEntity } from './account.entity';
 export { Notification, NotificationType };
 
 const _constants = new Constants();
 
-@Entity('Notification')
+@OrmEntity('Notification')
 export class NotificationEntity implements Notification {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'enum', enum: _constants.NOTIFICATION_TYPES })

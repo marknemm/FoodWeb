@@ -1,8 +1,8 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { sseManager } from '../helpers/sse-manager';
+import { sseManager } from '../helpers/messaging/sse-manager';
 import { ensureSessionActive } from '../middlewares/session.middleware';
-import { readUnseenNotificationsCount } from '../services/read-notifications';
+import { readUnseenNotificationsCount } from '../services/notification/read-notifications';
 import { Account, ServerSentEventType } from '../shared';
 
 const router = express.Router();

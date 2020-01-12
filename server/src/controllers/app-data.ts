@@ -4,10 +4,10 @@ import { AccountEntity } from '../entity/account.entity';
 import { AppDataEntity } from '../entity/app-data.entity';
 import { genErrorResponseRethrow } from '../middlewares/response-error.middleware';
 import { ensureSessionActive } from '../middlewares/session.middleware';
-import { deleteAppData } from '../services/delete-app-data';
-import { readAccount } from '../services/read-accounts';
-import { saveAppData } from '../services/save-app-data';
-import { AuditEventType, saveAudit } from '../services/save-audit';
+import { readAccount } from '../services/account/read-accounts';
+import { deleteAppData } from '../services/app-data/delete-app-data';
+import { saveAppData } from '../services/app-data/save-app-data';
+import { AuditEventType, saveAudit } from '../services/audit/save-audit';
 import { AppDataSaveRequest } from '../shared';
 
 const router = express.Router();

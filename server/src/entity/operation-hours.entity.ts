@@ -1,10 +1,11 @@
-import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Index, ManyToOne } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { Constants, OperationHours, Weekday } from '../shared';
 import { AccountEntity } from './account.entity';
 
 const _constants = new Constants();
 
-@Entity(
+@OrmEntity(
   'OperationHours',
   {
     // Default order by.
@@ -17,7 +18,7 @@ const _constants = new Constants();
 @Index(['weekday', 'startTime', 'endTime'])
 export class OperationHoursEntity implements OperationHours {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'enum', enum: _constants.WEEKDAYS })

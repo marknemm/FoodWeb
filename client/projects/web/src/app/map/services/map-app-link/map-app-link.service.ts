@@ -28,12 +28,11 @@ export class MapAppLinkService {
    * @return An observable that emits the map directions href.
    */
   genDirectionHref(waypoints: (ClientWaypoint | string)[]): string {
-    const saddr: string = 'My+Location';
     const waddrs: string[] = waypoints.slice(1, waypoints.length -1).map(
       (waypoint: ClientWaypoint) => this._genUrlAddrArg(waypoint)
     );
     const daddr: string = this._genUrlAddrArg(waypoints[waypoints.length - 1]);
-    return `https://www.google.com/maps/dir/?api=1&origin=${saddr}&destination=${daddr}`
+    return `https://www.google.com/maps/dir/?api=1&destination=${daddr}`
       + (waddrs.length ? `&waypoints=${waddrs.join('|')}` : '');
   }
 

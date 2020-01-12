@@ -4,7 +4,7 @@ export * from './audit';
 export * from './delivery';
 export * from './donation';
 export * from './donation-claim';
-export * from './event';
+export * from './event-registration';
 export * from './heuristics';
 export * from './misc';
 export * from './notification';

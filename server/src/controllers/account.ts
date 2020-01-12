@@ -3,30 +3,21 @@ import { Request, Response } from 'express';
 import { AccountEntity } from '../entity/account.entity';
 import { PasswordResetEntity } from '../entity/password-reset';
 import { UnverifiedAccountEntity } from '../entity/unverified-account.entity';
-import { genListResponse } from '../helpers/list-response';
-import { QueryResult } from '../helpers/query-builder-helper';
+import { QueryResult } from '../helpers/database/query-builder-helper';
+import { genListResponse } from '../helpers/response/list-response';
 import { UpdateDiff } from '../interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '../middlewares/response-error.middleware';
 import { ensureSessionActive } from '../middlewares/session.middleware';
-import { recreateUnverifiedAccount, verifyAccount } from '../services/account-verification';
-import { sendAccountVerificationEmail, sendAccountVerificationMessage } from '../services/account-verification-message';
-import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '../services/password-reset-message';
-import { readAccount, readAccounts } from '../services/read-accounts';
-import { createAccount, NewAccountData, updateAccount, updateAccountSection } from '../services/save-account';
-import { AuditEventType, saveAudit, saveUpdateAudit } from '../services/save-audit';
-import { updatePassword } from '../services/save-password';
-import { resetPassword, savePasswordResetToken } from '../services/save-password-reset';
-import { sendUsernameRecoveryEmail } from '../services/username-recovery-message';
-import {
-  Account,
-  AccountCreateRequest,
-  AccountReadRequest,
-  AccountSectionUpdateReqeust,
-  AccountUpdateRequest,
-  AccountVerificationRequest,
-  PasswordResetRequest,
-  PasswordUpdateRequest
-} from '../shared';
+import { recreateUnverifiedAccount, verifyAccount } from '../services/account/account-verification';
+import { sendAccountVerificationEmail, sendAccountVerificationMessage } from '../services/account/account-verification-message';
+import { readAccount, readAccounts } from '../services/account/read-accounts';
+import { createAccount, NewAccountData, updateAccount, updateAccountSection } from '../services/account/save-account';
+import { sendUsernameRecoveryEmail } from '../services/account/username-recovery-message';
+import { AuditEventType, saveAudit, saveUpdateAudit } from '../services/audit/save-audit';
+import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '../services/password/password-reset-message';
+import { updatePassword } from '../services/password/save-password';
+import { resetPassword, savePasswordResetToken } from '../services/password/save-password-reset';
+import { Account, AccountCreateRequest, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest } from '../shared';
 
 const router = express.Router();
 

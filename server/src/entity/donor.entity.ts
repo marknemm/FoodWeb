@@ -1,12 +1,13 @@
-import { Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { JoinColumn, OneToOne } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { Donor } from '../shared';
 import { OrganizationEntity } from './organization.entity';
 export { Donor };
 
-@Entity('Donor')
+@OrmEntity('Donor')
 export class DonorEntity implements Donor {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @OneToOne((type) => OrganizationEntity, (organizationEntity) => organizationEntity.donor)

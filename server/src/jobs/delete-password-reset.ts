@@ -2,7 +2,7 @@
 require('./jobs-config');
 import { Connection, EntityManager, LessThanOrEqual } from 'typeorm';
 import { PasswordResetEntity } from '../entity/password-reset';
-import { initDbConnectionPool } from '../helpers/db-connection-pool';
+import { initDbConnectionPool } from '../helpers/database/db-connection-pool';
 
 _deletePasswordReset()
   .then(() => process.exit())

@@ -1,10 +1,11 @@
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Index, JoinColumn, OneToOne, UpdateDateColumn } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { AccountEntity } from './account.entity';
 
-@Entity('AppSession')
+@OrmEntity('AppSession')
 export class AppSessionEntity {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @Column()

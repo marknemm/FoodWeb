@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { getDrivingDistTime, DistanceTimeQueryResult } from '../helpers/distance-time';
+import { DistanceTimeQueryResult, getDrivingDistTime } from '../helpers/map/distance-time';
 
 export class donationClaim1575237456579 implements MigrationInterface {
 

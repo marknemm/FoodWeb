@@ -1,7 +1,7 @@
 import { CorsOptions } from 'cors';
 import 'dotenv';
 import { RequestHandler } from 'express';
-import { FoodWebError } from '../helpers/food-web-error';
+import { FoodWebError } from '../helpers/response/food-web-error';
 import corsInit = require('cors');
 
 type OriginCallbackFn = (err: Error, allow?: boolean) => void;

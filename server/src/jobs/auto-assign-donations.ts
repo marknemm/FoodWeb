@@ -4,14 +4,14 @@ import { SelectQueryBuilder } from 'typeorm';
 import { AccountEntity, AccountType } from '../entity/account.entity';
 import { DonationClaimEntity } from '../entity/donation-claim.entity';
 import { DonationEntity, DonationStatus } from '../entity/donation.entity';
-import { initDbConnectionPool } from '../helpers/db-connection-pool';
-import { MailTransporter, sendEmail, genDonationEmailSubject } from '../helpers/email';
-import { NotificationType, sendNotification } from '../helpers/notification';
-import { QueryResult } from '../helpers/query-builder-helper';
-import { claimDonation } from '../services/claim-donation';
-import { findMessagePotentialDeliverers } from '../services/find-message-potential-deliverers';
-import { queryAccounts } from '../services/read-accounts';
-import { queryDonations } from '../services/read-donations';
+import { initDbConnectionPool } from '../helpers/database/db-connection-pool';
+import { QueryResult } from '../helpers/database/query-builder-helper';
+import { genDonationEmailSubject, MailTransporter, sendEmail } from '../helpers/messaging/email';
+import { NotificationType, sendNotification } from '../helpers/messaging/notification';
+import { queryAccounts } from '../services/account/read-accounts';
+import { sendDeliveryAvailableMessages } from '../services/delivery/delivery-available-message';
+import { claimDonation } from '../services/donation-claim/claim-donation';
+import { queryDonations } from '../services/donation/read-donations';
 import { AccountReadRequest, DonationHelper, DonationReadRequest } from '../shared';
 
 const _donationHelper = new DonationHelper();
@@ -75,7 +75,7 @@ async function _autoAssignReceivers(donations: DonationEntity[]): Promise<void> 
     const receiverAccount: AccountEntity = await _findAutoReceiver(donation);
     if (receiverAccount) {
       donation = await claimDonation({ donationId: donation.id }, receiverAccount);
-      messagePromises.push(findMessagePotentialDeliverers(donation));
+      messagePromises.push(sendDeliveryAvailableMessages(donation));
       messagePromises.push(_sendDonationAutoAssignMessages(donation));
     }
   }

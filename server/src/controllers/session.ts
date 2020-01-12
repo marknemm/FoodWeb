@@ -2,7 +2,7 @@ import express = require('express');
 import { Request, Response } from 'express';
 import { AccountEntity } from '../entity/account.entity';
 import { genErrorResponse } from '../middlewares/response-error.middleware';
-import { appTokenLogin, login, logout, saveAppSessionToken } from '../services/session';
+import { appTokenLogin, login, logout, saveAppSessionToken } from '../services/session/session';
 import { AppTokenLoginRequest, LoginRequest, LoginResponse } from '../shared';
 
 const router = express.Router();

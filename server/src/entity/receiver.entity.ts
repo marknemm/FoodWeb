@@ -1,12 +1,13 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, JoinColumn, OneToOne } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { Receiver } from '../shared';
 import { OrganizationEntity } from './organization.entity';
 export { Receiver };
 
-@Entity('Receiver')
+@OrmEntity('Receiver')
 export class ReceiverEntity implements Receiver {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @Column()

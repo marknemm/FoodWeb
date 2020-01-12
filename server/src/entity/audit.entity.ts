@@ -1,13 +1,14 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, JoinTable, ManyToMany } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { Audit, AuditData, AuditEventType, Constants } from '../shared';
 import { AccountEntity } from './account.entity';
 
 const _constants = new Constants();
 
-@Entity('Audit')
+@OrmEntity('Audit')
 export class AuditEntity<T = any> implements Audit {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'enum', enum: _constants.AUDIT_EVENT_TYPES })

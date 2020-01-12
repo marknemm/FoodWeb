@@ -1,11 +1,12 @@
-import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Index, JoinColumn, OneToOne } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { Volunteer } from '../shared';
 import { AccountEntity } from './account.entity';
 
-@Entity('Volunteer')
+@OrmEntity('Volunteer')
 export class VolunteerEntity implements Volunteer {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @Index()

@@ -1,11 +1,12 @@
-import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Index, ManyToOne } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { EventRegistration } from '../shared';
 import { AccountEntity } from './account.entity';
 
-@Entity('EventRegistration')
+@OrmEntity('EventRegistration')
 export class EventRegistrationEntity implements EventRegistration {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @Column()
