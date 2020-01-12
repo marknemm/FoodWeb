@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, AfterLoad, AfterInsert, AfterUpdate } from 'typeorm';
+import { AfterInsert, AfterLoad, AfterUpdate, Column, CreateDateColumn, Index, JoinColumn, OneToMany, OneToOne, UpdateDateColumn } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { Account, AccountType, Constants, OperationHoursHelper } from '../shared';
 import { AppDataEntity } from './app-data.entity';
 import { ContactInfoEntity } from './contact-info.entity';
@@ -9,12 +10,12 @@ export { Account, AccountType };
 
 const _constants = new Constants();
 
-@Entity('Account')
+@OrmEntity('Account')
 export class AccountEntity implements Account {
 
   private _opHoursHelper = new OperationHoursHelper();
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'enum', enum: _constants.ACCOUNT_TYPES.concat([AccountType.Admin]) })

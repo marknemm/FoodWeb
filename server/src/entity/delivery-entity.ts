@@ -1,18 +1,19 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { Delivery } from '../shared';
 import { AccountEntity } from './account.entity';
-import { DonationEntity } from './donation.entity';
+import { DonationClaimEntity } from './donation-claim.entity';
 import { MapRouteEntity } from './map-route.entity';
 
-@Entity('Delivery')
+@OrmEntity('Delivery')
 export class DeliveryEntity implements Delivery {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne((type) => DonationEntity, (donation) => donation.delivery)
+  @OneToOne((type) => DonationClaimEntity, (claim) => claim.delivery, { onDelete: 'CASCADE' })
   @JoinColumn()
-  donation?: DonationEntity;
+  claim?: DonationClaimEntity;
 
   @ManyToOne((type) => AccountEntity, { eager: true })
   volunteerAccount: AccountEntity;
@@ -22,6 +23,12 @@ export class DeliveryEntity implements Delivery {
 
   @Column({ type: 'timestamp with time zone' })
   pickupWindowEnd: Date;
+
+  @Column({ type: 'timestamp with time zone' })
+  dropOffWindowStart: Date;
+
+  @Column({ type: 'timestamp with time zone' })
+  dropOffWindowEnd: Date;
 
   @ManyToOne((type) => MapRouteEntity, { eager: true, cascade: ['insert', 'update'] })
   routeToDonor: MapRouteEntity;

@@ -31,7 +31,7 @@ if (!PRODUCTION && !QA) {
 }
 
 // These must be imported after loading .env into process since they require access to environment variables.
-import { initDbConnectionPool } from './helpers/db-connection-pool';
+import { initDbConnectionPool } from './helpers/database/db-connection-pool';
 import { cors } from './middlewares/cors.middleware';
 import { recaptcha } from './middlewares/recaptcha.middleware';
 import { session } from './middlewares/session.middleware';
@@ -59,7 +59,7 @@ app.use('/server/account', require('./controllers/account'));
 app.use('/server/donation', require('./controllers/donation'));
 app.use('/server/delivery', require('./controllers/delivery'));
 app.use('/server/notification', require('./controllers/notification'));
-app.use('/server/event', require('./controllers/event'));
+app.use('/server/event', require('./controllers/event-registration'));
 app.use('/server/heuristics', require('./controllers/heuristics'));
 app.use('/server/app-data', require('./controllers/app-data'));
 

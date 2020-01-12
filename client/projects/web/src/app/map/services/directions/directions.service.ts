@@ -30,8 +30,8 @@ export class DirectionsService {
    * @return The extracted donation directions.
    */
   extractDirectionsFromDonation(donation: Donation): Directions {
-    const directionsToDonor: Directions = donation.delivery
-      ? donation.delivery.routeToDonor.directions
+    const directionsToDonor: Directions = (donation.claim && donation.claim.delivery)
+      ? donation.claim.delivery.routeToDonor.directions
       : { distanceMi: 0, durationMin: 0, encodedPolyline: '', waypointSegments: [] };
     const directionsToReceiver: Directions = donation.claim
       ? donation.claim.routeToReceiver.directions

@@ -19,13 +19,13 @@
     "lodash": "^4.17.15",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.23",
-    "typescript": "~3.1.6",
+    "typescript": "^3.7.4",
     "utility-types": "^3.4.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.118",
     "@types/moment-timezone": "^0.5.9",
-    "@types/node": "^10.12.12",
+    "@types/node": "^13.1.4",
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
     "concurrently": "^4.1.0",

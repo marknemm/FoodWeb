@@ -1,15 +1,16 @@
-import { AfterInsert, AfterLoad, AfterUpdate, Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Index, JoinColumn, ManyToOne, OneToOne, UpdateDateColumn } from 'typeorm';
+import { OrmAfterLoad, OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { Donation, DonationStatus, DONATION_STATUSES } from '../shared';
 import { AccountEntity } from './account.entity';
 import { ContactInfoEntity } from './contact-info.entity';
-import { DeliveryEntity } from './delivery-entity';
 import { DonationClaimEntity } from './donation-claim.entity';
+import _ = require('lodash');
 export { Donation, DonationStatus };
 
-@Entity('Donation')
+@OrmEntity('Donation')
 export class DonationEntity implements Donation {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne((type) => AccountEntity, { eager: true })
@@ -50,19 +51,16 @@ export class DonationEntity implements Donation {
   @Column({ type: 'enum', enum: DONATION_STATUSES, default: DONATION_STATUSES[0] })
   donationStatus: DonationStatus;
 
-  @OneToOne((type) => DeliveryEntity, (delivery) => delivery.donation, { nullable: true, cascade: true, eager: true })
-  delivery: DeliveryEntity;
-
   @UpdateDateColumn({ type: 'timestamp with time zone' })
   updateTimestamp: Date;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createTimestamp: Date;
 
-  @AfterLoad() @AfterInsert() @AfterUpdate()
-  fillMissingDonorContactOverride(): void {
-    if (!this.donorContactOverride && this.donorAccount) {
-      this.donorContactOverride = this.donorAccount.contactInfo;
+  @OrmAfterLoad()
+  private _fillDonorContactOverride(): void {
+    if (!this.donorContactOverride && this.donorAccount?.contactInfo) {
+      this.donorContactOverride = _.cloneDeep(this.donorAccount.contactInfo);
     }
   }
 }

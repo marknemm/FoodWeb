@@ -1,13 +1,13 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { NotificationEntity } from '../entity/notification.entity';
-import { genListResponse } from '../helpers/list-response';
-import { QueryResult } from '../helpers/query-builder-helper';
+import { QueryResult } from '../helpers/database/query-builder-helper';
+import { genListResponse } from '../helpers/response/list-response';
 import { UpdateDiff } from '../interfaces/update-diff';
 import { genErrorResponse } from '../middlewares/response-error.middleware';
 import { ensureSessionActive } from '../middlewares/session.middleware';
-import { readNotifications } from '../services/read-notifications';
-import { updateNotification, updateSeenNotifications } from '../services/save-notification';
+import { readNotifications } from '../services/notification/read-notifications';
+import { updateNotification, updateSeenNotifications } from '../services/notification/save-notification';
 import { LastSeenNotificationUpdateRequest, NotificationReadRequest, NotificationUpdateRequest } from '../shared';
 
 const router = express.Router();

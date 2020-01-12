@@ -184,8 +184,8 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
       this._myClaim = donation.claim
         ? this.sessionService.isMyAccount(donation.claim.receiverAccount.id)
         : false;
-      this._myDelivery = donation.delivery
-        ? this.sessionService.isMyAccount(donation.delivery.volunteerAccount.id)
+      this._myDelivery = (donation.claim && donation.claim.delivery)
+        ? this.sessionService.isMyAccount(donation.claim.delivery.volunteerAccount.id)
         : false;
     }
   }

@@ -1,14 +1,15 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn } from 'typeorm';
+import { OrmEntity, OrmPrimaryColumn } from '../helpers/database/orm';
 import { AppData } from '../shared';
 export { AppData };
 
-@Entity('AppData')
+@OrmEntity('AppData')
 export class AppDataEntity implements AppData {
 
-  @PrimaryColumn()
+  @OrmPrimaryColumn()
   deviceUuid: string;
 
-  @PrimaryColumn()
+  @OrmPrimaryColumn()
   accountId?: number;
 
   @Column({ nullable: true })

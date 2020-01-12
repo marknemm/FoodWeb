@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { genDirections } from '../helpers/directions';
+import { genDirections } from '../helpers/map/directions';
 import { Directions, LatLngLiteral } from '../shared';
 
 export class directions1576463243837 implements MigrationInterface {

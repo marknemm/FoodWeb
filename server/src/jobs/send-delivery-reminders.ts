@@ -2,11 +2,11 @@
 require('./jobs-config');
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
-import { initDbConnectionPool } from '../helpers/db-connection-pool';
-import { broadcastEmail, MailTransporter } from '../helpers/email';
-import { broadcastNotification, NotificationType } from '../helpers/notification';
-import { QueryResult } from '../helpers/query-builder-helper';
-import { readDonations } from '../services/read-donations';
+import { initDbConnectionPool } from '../helpers/database/db-connection-pool';
+import { QueryResult } from '../helpers/database/query-builder-helper';
+import { broadcastEmail, MailTransporter } from '../helpers/messaging/email';
+import { broadcastNotification, NotificationType } from '../helpers/messaging/notification';
+import { readDonations } from '../services/donation/read-donations';
 import { DateTimeHelper, DonationHelper, DonationReadRequest } from '../shared';
 
 const _reminderIntervalMins = 10; // Job will be scheduled to run every 10 minutes.
@@ -70,16 +70,16 @@ async function _sendAllDeliveryReminderMessages(donations: DonationEntity[], hou
 
 async function _sendDeliveryReminderMessages(donation: DonationEntity, hour: number): Promise<void> {
   const messagePromises: Promise<any>[] = [];
-  const volunteerAccount: AccountEntity = donation.delivery.volunteerAccount;
+  const volunteerAccount: AccountEntity = donation.claim.delivery.volunteerAccount;
   const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, volunteerAccount];
   const notificationAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, volunteerAccount];
   const donorName: string = _donationHelper.donorName(donation);
   const receiverName: string = _donationHelper.receiverName(donation);
   const delivererName: string = _donationHelper.delivererName(donation);
   const timezone: string = donation.donorContactOverride.timezone;
-  const deliveryWindowStartStr: string = _dateTimeHelper.toLocalDateTimeStr(donation.delivery.pickupWindowStart, timezone);
-  const deliveryTimeStartStr: string = _dateTimeHelper.toLocalTimeStr(donation.delivery.pickupWindowStart, timezone);
-  const deliveryTimeEndStr: string = _dateTimeHelper.toLocalTimeStr(donation.delivery.pickupWindowEnd, timezone);
+  const deliveryWindowStartStr: string = _dateTimeHelper.toLocalDateTimeStr(donation.claim.delivery.pickupWindowStart, timezone);
+  const deliveryTimeStartStr: string = _dateTimeHelper.toLocalTimeStr(donation.claim.delivery.pickupWindowStart, timezone);
+  const deliveryTimeEndStr: string = _dateTimeHelper.toLocalTimeStr(donation.claim.delivery.pickupWindowEnd, timezone);
 
   messagePromises.push(
     broadcastEmail(

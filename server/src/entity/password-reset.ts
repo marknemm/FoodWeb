@@ -1,10 +1,11 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, JoinColumn, OneToOne } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { AccountEntity } from './account.entity';
 
-@Entity('PasswordReset')
+@OrmEntity('PasswordReset')
 export class PasswordResetEntity {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @OneToOne((type) => AccountEntity, { nullable: false })

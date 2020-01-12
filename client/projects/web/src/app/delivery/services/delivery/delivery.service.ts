@@ -1,25 +1,15 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscriber } from 'rxjs';
 import { catchError, finalize, flatMap, map } from 'rxjs/operators';
-import {
-  Account,
-  DateTimeRange,
-  DeliveryHelper,
-  DeliveryReadFilters,
-  DeliveryReadRequest,
-  DeliveryScheduleRequest,
-  DeliveryStateChangeRequest,
-  Donation,
-  DonationStatus,
-  ListResponse
-} from '~shared';
+import { Account, DateTimeRange, DeliveryHelper, DeliveryReadFilters, DeliveryReadRequest, DeliveryScheduleRequest, DeliveryStateChangeRequest, Donation, DonationStatus, LatLngLiteral, ListResponse } from '~shared';
 import { environment } from '~web/environments/environment';
 import { SessionService } from '~web/session/session/session.service';
 import { AlertService } from '~web/shared/alert/alert.service';
 import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
 import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
+import { CurrentLocationService } from '~web/shared/services/current-location/current-location.service';
 
 
 @Injectable({
@@ -39,7 +29,8 @@ export class DeliveryService {
     private _errorHandlerService: ErrorHandlerService,
     private _alertService: AlertService,
     private _sessionService: SessionService,
-    private _deliveryHelper: DeliveryHelper
+    private _deliveryHelper: DeliveryHelper,
+    private _currentLocationService: CurrentLocationService
   ) {}
 
   scheduleDelivery(donation: Donation, pickupWindow: DateTimeRange): Observable<Donation> {
@@ -66,19 +57,30 @@ export class DeliveryService {
       return of(donation);
     }
 
-    const stateChangeRequest: DeliveryStateChangeRequest = { donationId: donation.id };
     this._pageProgressService.activate(true);
-    return this._httpClient.put<Donation>(
-      `${this.url}/advance/${ donation.delivery.id }`,
-      stateChangeRequest,
-      { withCredentials: true }
-    ).pipe(
-      map((advancedDonation: Donation) => {
-        this._displayDeliveryAdvanceSuccessMsg(advancedDonation.donationStatus);
-        return advancedDonation;
-      }),
-      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
-      finalize(() => this._pageProgressService.reset())
+    return this._genStateChangeRequest(donation).pipe(
+      flatMap((request: DeliveryStateChangeRequest) =>
+        this._httpClient.put<Donation>(
+          `${this.url}/advance/${ donation.claim.delivery.id }`,
+          request,
+          { withCredentials: true }
+        ).pipe(
+          map((advancedDonation: Donation) => {
+            this._displayDeliveryAdvanceSuccessMsg(advancedDonation.donationStatus);
+            return advancedDonation;
+          }),
+          catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
+          finalize(() => this._pageProgressService.reset())
+        )
+      )
+    );
+  }
+
+  private _genStateChangeRequest(donation: Donation): Observable<DeliveryStateChangeRequest> {
+    return new Observable((subscriber: Subscriber<DeliveryStateChangeRequest>) =>
+      this._currentLocationService.getCurrentLatLngLiteral().subscribe((currentLocation: LatLngLiteral) =>
+        subscriber.next({ donationId: donation.id, currentLocation })
+      )
     );
   }
 
@@ -88,15 +90,22 @@ export class DeliveryService {
       return of(donation);
     }
 
-    const stateChangeRequest: DeliveryStateChangeRequest = { donationId: donation.id };
     this._pageProgressService.activate(true);
-    return this._httpClient.put<Donation>(`${this.url}/undo/${donation.delivery.id}`, stateChangeRequest, { withCredentials: true }).pipe(
-      map((revertedDonation: Donation) => {
-        this._displayDeliveryUndoSuccessMsg(revertedDonation.donationStatus);
-        return revertedDonation;
-      }),
-      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
-      finalize(() => this._pageProgressService.reset())
+    return this._genStateChangeRequest(donation).pipe(
+      flatMap((request: DeliveryStateChangeRequest) =>
+        this._httpClient.put<Donation>(
+          `${this.url}/undo/${donation.claim.delivery.id}`,
+          request,
+          { withCredentials: true }
+        ).pipe(
+          map((revertedDonation: Donation) => {
+            this._displayDeliveryUndoSuccessMsg(revertedDonation.donationStatus);
+            return revertedDonation;
+          }),
+          catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
+          finalize(() => this._pageProgressService.reset())
+        )
+      )
     );
   }
 
@@ -155,7 +164,7 @@ export class DeliveryService {
   }
 
   private _validateDeliveryStateAdvancePrivilege(donation: Donation, myAccount: Account): boolean {
-    const validErr: string = this._deliveryHelper.validateDeliveryAdvancePrivilege(donation.delivery, donation.donationStatus, myAccount);
+    const validErr: string = this._deliveryHelper.validateDeliveryAdvancePrivilege(donation.claim.delivery, donation.donationStatus, myAccount);
     if (validErr) {
       this._errorHandlerService.handleError(new Error(validErr));
       return false;
@@ -169,7 +178,7 @@ export class DeliveryService {
   }
 
   private _validateDeliveryStateUndoPrivilege(donation: Donation, myAccount: Account): boolean {
-    const validErr: string = this._deliveryHelper.validateDeliveryUndoPrivilege(donation.delivery, donation.donationStatus, myAccount);
+    const validErr: string = this._deliveryHelper.validateDeliveryUndoPrivilege(donation.claim.delivery, donation.donationStatus, myAccount);
     if (validErr) {
       this._errorHandlerService.handleError(new Error(validErr));
       return false;

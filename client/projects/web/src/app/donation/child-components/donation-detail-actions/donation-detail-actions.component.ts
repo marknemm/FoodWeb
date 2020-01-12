@@ -126,13 +126,13 @@ export class DonationDetailActionsComponent implements OnChanges {
     this._canUnclaim = !this._donationHelper.validateDonationUnclaimPrivilege(this.donation, this.myAccount)
                     && this._accountHelper.isReceiver(this.myAccount);
     this._canScheduleDelivery = !this._deliveryHelper.validateDeliverySchedulePrivilege(this.donation.donationStatus, this.myAccount);
-    this._canAdvanceDeliveryState = !this._deliveryHelper.validateDeliveryAdvancePrivilege(
-      this.donation.delivery,
+    this._canAdvanceDeliveryState = this.donation.claim && !this._deliveryHelper.validateDeliveryAdvancePrivilege(
+      this.donation.claim.delivery,
       this.donation.donationStatus,
       this.myAccount
     );
-    this._canUndoDeliveryState = !this._deliveryHelper.validateDeliveryUndoPrivilege(
-      this.donation.delivery,
+    this._canUndoDeliveryState = this.donation.claim && !this._deliveryHelper.validateDeliveryUndoPrivilege(
+      this.donation.claim.delivery,
       this.donation.donationStatus,
       this.myAccount
     ) && this._accountHelper.isVolunteer(this.myAccount);

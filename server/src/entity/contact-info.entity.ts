@@ -1,12 +1,13 @@
-import { Column, Entity, Index, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Index, OneToOne } from 'typeorm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { ContactInfo, GeographyLocation } from '../shared';
 import { AccountEntity } from './account.entity';
 import { DonationEntity } from './donation.entity';
 
-@Entity('ContactInfo')
+@OrmEntity('ContactInfo')
 export class ContactInfoEntity implements ContactInfo {
 
-  @PrimaryGeneratedColumn()
+  @OrmPrimaryGeneratedColumn()
   id: number;
 
   @Column()
