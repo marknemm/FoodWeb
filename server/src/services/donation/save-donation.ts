@@ -3,11 +3,11 @@ import { AccountEntity } from '../../entity/account.entity';
 import { ContactInfoEntity } from '../../entity/contact-info.entity';
 import { DonationEntity } from '../../entity/donation.entity';
 import { OrmEntityManager } from '../../helpers/database/orm';
-import { genMapRoute } from '../../helpers/map/gen-map-route';
 import { geocode, geoTimezone } from '../../helpers/map/geocoder';
 import { FoodWebError } from '../../helpers/response/food-web-error';
 import { UpdateDiff } from '../../interfaces/update-diff';
 import { AccountHelper, ContactInfo, Donation, DonationCreateRequest, DonationHelper, DonationStatus, DonationUpdateRequest } from '../../shared';
+import { genMapRoute } from '../map/read-map-routes';
 import { readDonation } from './read-donations';
 
 const _donationHelper = new DonationHelper();

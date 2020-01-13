@@ -1,14 +1,16 @@
 import { plainToClass } from 'class-transformer';
-import { EntityManager, getConnection, QueryFailedError, Repository } from 'typeorm';
+import { QueryFailedError } from 'typeorm';
 import { AccountEntity } from '../../entity/account.entity';
 import { ContactInfoEntity } from '../../entity/contact-info.entity';
 import { OperationHoursEntity } from '../../entity/operation-hours.entity';
 import { UnverifiedAccountEntity } from '../../entity/unverified-account.entity';
+import { OrmEntityManager, OrmRepository } from '../../helpers/database/orm';
 import { geocode, geoTimezone } from '../../helpers/map/geocoder';
 import { FoodWebError } from '../../helpers/response/food-web-error';
 import { AccountUpdateRequest } from '../../interfaces/account/account-update-request';
 import { UpdateDiff } from '../../interfaces/update-diff';
 import { AccountCreateRequest, AccountHelper, AccountSectionUpdateReqeust, NotificationSettings, OperationHoursHelper } from '../../shared';
+import { updateMapRouteEndpoints } from '../map/save-map-route';
 import { savePassword } from '../password/save-password';
 import { createUnverifiedAccount } from './account-verification';
 
@@ -20,7 +22,7 @@ export async function createAccount(request: AccountCreateRequest): Promise<NewA
   let createdAccount: AccountEntity;
   let unverifiedAccount: UnverifiedAccountEntity;
 
-  await getConnection().transaction(async (manager: EntityManager) => {
+  await OrmEntityManager.transaction(async (manager: OrmEntityManager) => {
     createdAccount = await _saveAccount(manager, accountToSave);
     await savePassword(manager, createdAccount, request.password);
     unverifiedAccount = await createUnverifiedAccount(createdAccount, manager);
@@ -65,20 +67,20 @@ export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: 
   updateReq.account.lastSeenNotificationId = myAccount.lastSeenNotificationId;
   const accountToSave: AccountEntity = plainToClass(AccountEntity, updateReq.account);
 
-  const updatedAccount: AccountEntity = await getConnection().transaction((manager: EntityManager) =>
+  const updatedAccount: AccountEntity = await OrmEntityManager.transaction((manager: OrmEntityManager) =>
     _saveAccount(manager, accountToSave, myAccount)
   );
 
   return { old: myAccount, new: updatedAccount };
 }
 
-async function _saveAccount(manager: EntityManager, account: AccountEntity, myAccount?: AccountEntity): Promise<AccountEntity> {
-  const accountRepo: Repository<AccountEntity> = manager.getRepository(AccountEntity);
-  const operationHoursRepo: Repository<OperationHoursEntity> = manager.getRepository(OperationHoursEntity);
+async function _saveAccount(manager: OrmEntityManager, account: AccountEntity, myAccount?: AccountEntity): Promise<AccountEntity> {
+  const accountRepo: OrmRepository<AccountEntity> = manager.getRepository(AccountEntity);
+  const operationHoursRepo: OrmRepository<OperationHoursEntity> = manager.getRepository(OperationHoursEntity);
   _ensureEitherOrganizationOrVolunteer(account);
   _ensureAccountHasProfileImg(account);
   _validateAccount(account, myAccount);
-  await _checkForAndProcessNewAddress(account, myAccount);
+  await _checkForAndProcessNewAddress(manager, account, myAccount);
   account.contactInfo.phoneNumber = _accountHelper.formatPhoneNumber(account.contactInfo.phoneNumber);
 
   if (account.id) {
@@ -126,7 +128,7 @@ function _ensureAccountHasProfileImg(account: AccountEntity): void {
   }
 }
 
-async function _checkForAndProcessNewAddress(account: AccountEntity, myAccount: AccountEntity): Promise<void> {
+async function _checkForAndProcessNewAddress(manager: OrmEntityManager, account: AccountEntity, myAccount: AccountEntity): Promise<void> {
   if (
     !myAccount
     || (account.contactInfo.streetAddress !== myAccount.contactInfo.streetAddress)
@@ -134,7 +136,10 @@ async function _checkForAndProcessNewAddress(account: AccountEntity, myAccount: 
   ) {
     account.contactInfo.location = await geocode(account.contactInfo);
     account.contactInfo.timezone = geoTimezone(account.contactInfo.location);
-    // TODO: Update all donations associated with account that had address updated to reflect different route.
+    if (myAccount) {
+      // Update all cached routes that referenced the old GPS location to use the new GPS location.
+      await updateMapRouteEndpoints(myAccount.contactInfo, account.contactInfo, manager);
+    }
   }
 }
 
@@ -145,7 +150,7 @@ function _handleSaveQueryFailError(err: QueryFailedError): Error {
 }
 
 async function _insertOperationHours(
-  repo: Repository<OperationHoursEntity>,
+  repo: OrmRepository<OperationHoursEntity>,
   accountId: number,
   operationHoursArr: OperationHoursEntity[]
 ): Promise<void> {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ContactInfo, MapWaypointConverter } from '~shared';
+import { ContactInfo, MapWaypointConverter, Donation } from '~shared';
 import { ClientWaypoint, LatLngLiteral, Waypoint } from '~web/map/map';
+import { DonationStatus } from '../../../../../../../../shared/src';
 
 @Injectable({
   providedIn: 'root'
@@ -25,9 +26,14 @@ export class MapAppLinkService {
   /**
    * Generates a map directions href (to a 3rd party map service) based off of a given set of path waypoints.
    * @param waypoints The path waypoints for which the directions href will be generated.
+   * @param donation The optional donation that the direction href is for.
    * @return An observable that emits the map directions href.
    */
-  genDirectionHref(waypoints: (ClientWaypoint | string)[]): string {
+  genDirectionHref(waypoints: (ClientWaypoint | string)[], donation?: Donation): string {
+    // If given a donation, the status is 'Picked Up', and we have 3 waypoints, then get rid of the waypoint for the donor stop (already done).
+    if (donation && donation.donationStatus === DonationStatus.PickedUp && waypoints.length === 3) {
+      waypoints = [waypoints[0], waypoints[2]];
+    }
     const waddrs: string[] = waypoints.slice(1, waypoints.length -1).map(
       (waypoint: ClientWaypoint) => this._genUrlAddrArg(waypoint)
     );

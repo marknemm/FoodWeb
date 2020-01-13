@@ -1,5 +1,5 @@
 import { Account } from '../account/account';
-import { MapRoute } from '../misc/map-route';
+import { MapRoute } from '../map/map-route';
 export { Account, MapRoute };
 
 /**

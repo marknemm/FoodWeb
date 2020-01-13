@@ -1,7 +1,7 @@
 import { DirectionsResponse, DirectionsRoute, DirectionsStep, Distance, Duration, LatLngArray, RouteLeg } from '@google/maps';
 import { decode, encode } from 'google-polyline';
-import { Directions, StepSegment, WaypointSegment } from '../interfaces/misc/map';
-export * from '../interfaces/misc/map';
+import { Directions, StepSegment, WaypointSegment } from '../interfaces/map/map';
+export * from '../interfaces/map/map';
 
 export class DirectionsExtractor {
 

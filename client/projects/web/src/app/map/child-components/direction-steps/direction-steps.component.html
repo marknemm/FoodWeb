@@ -1,5 +1,15 @@
-<div class="direction-steps-container">
-  <ol>
+<div *ngIf="directions" class="direction-steps-container">
+  <table class="direction-steps-summary">
+    <tr>
+      <td>Duration:</td>
+      <td>{{ directions.waypointSegments[waypointSegmentIdx].durationMin }} mins</td>
+    </tr>
+    <tr>
+      <td>Distance:</td>
+      <td>{{ directions.waypointSegments[waypointSegmentIdx].distanceMi }} mi</td>
+    </tr>
+  </table>
+  <ol class="direction-steps-list">
     <li *ngFor="let directionStep of (directions | directionStepsExtractor : waypointSegmentIdx)" [innerHTML]="directionStep"></li>
   </ol>
 </div>

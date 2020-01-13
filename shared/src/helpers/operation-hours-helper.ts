@@ -1,7 +1,7 @@
-import { DateTimeHelper } from './date-time-helper'
 import { Constants } from '../constants/constants';
-import { DateTimeRange } from '../interfaces/misc/time';
 import { OperationHours, Weekday } from '../interfaces/account/operation-hours';
+import { DateTimeRange } from '../interfaces/date-time/time';
+import { DateTimeHelper } from './date-time-helper';
 export { OperationHours };
 
 export class OperationHoursHelper {

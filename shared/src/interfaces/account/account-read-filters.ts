@@ -1,5 +1,5 @@
+import { DateTimeRange } from '../date-time/time';
 import { AccountType } from './account';
-import { DateTimeRange } from '../misc/time';
 
 export interface AccountReadFilters {
   id?: number;

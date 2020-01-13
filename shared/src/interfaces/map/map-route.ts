@@ -1,5 +1,5 @@
-import { Directions } from './map';
 import { GeographyLocation } from '../account';
+import { Directions } from './map';
 export { Directions };
 
 export interface MapRoute {

@@ -1,5 +1,5 @@
 import { ContactInfo, GeographyLocation } from '../interfaces/account';
-import { LatLngLiteral, Waypoint } from '../interfaces/misc/map';
+import { LatLngLiteral, Waypoint } from '../interfaces/map/map';
 
 /**
  * Performs various (Map) Waypoint conversion operations.

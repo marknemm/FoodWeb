@@ -2,10 +2,10 @@ import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from '../../entity/account.entity';
 import { DonationClaimEntity } from '../../entity/donation-claim.entity';
 import { DonationEntity } from '../../entity/donation.entity';
-import { genMapRoute } from '../../helpers/map/gen-map-route';
 import { FoodWebError } from '../../helpers/response/food-web-error';
 import { DateTimeHelper, DonationClaimHelper, DonationClaimRequest, DonationHelper, DonationStatus } from '../../shared';
 import { readDonation } from '../donation/read-donations';
+import { genMapRoute } from '../map/read-map-routes';
 
 const _donationHelper = new DonationHelper();
 const _donationClaimHelper = new DonationClaimHelper();
@@ -49,7 +49,7 @@ function _ensureCanClaimDonation(donation: DonationEntity, myAccount: AccountEnt
 async function _genDonationClaimUpdt(donationToClaim: DonationEntity, receiverAccount: AccountEntity): Promise<Partial<DonationEntity>> {
   const claimDonationUpdt: Partial<DonationEntity> = { id: donationToClaim.id };
   claimDonationUpdt.donationStatus = DonationStatus.Matched;
-  claimDonationUpdt.claim = <DonationClaimEntity> await _genDonationClaim(donationToClaim, receiverAccount);
+  claimDonationUpdt.claim = <DonationClaimEntity>await _genDonationClaim(donationToClaim, receiverAccount);
   return claimDonationUpdt;
 }
 

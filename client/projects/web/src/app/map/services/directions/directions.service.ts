@@ -1,7 +1,9 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, Subscriber } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DirectionsExtractor, Donation, WaypointSegment } from '~shared';
+import { Account, DirectionsExtractor, Donation, MapRoute, MapRouteReadRequest, WaypointSegment } from '~shared';
+import { environment } from '~web/environments/environment';
 import { Directions, LatLng, Polyline } from '~web/map/interfaces/map';
 import { LatLngLiteral, Waypoint } from '~web/map/map';
 import { LocalStorageBucket, LocalStorageCacheService } from '~web/shared/local-storage-cache/local-storage-cache.service';
@@ -12,13 +14,15 @@ import { LocalStorageBucket, LocalStorageCacheService } from '~web/shared/local-
 export class DirectionsService {
 
   static readonly DEFAULT_POLYLINE_COLORS: string[] = ['green', 'rgb(247, 148, 7)', 'blue', 'purple', 'cyan', 'red'];
-
   private static readonly DIRECTIONS_CACHE_KEY = 'foodWebDirectionsStore';
+
+  readonly url = `${environment.server}/map`;
   private readonly _directionsCache: LocalStorageBucket<Waypoint[], Directions>;
   private readonly _googleDirections = new google.maps.DirectionsService();
 
   constructor(
     private _directionsExtractor: DirectionsExtractor,
+    private _httpClient: HttpClient,
     localStorageCacheService: LocalStorageCacheService
   ) {
     this._directionsCache = localStorageCacheService.getBucket(DirectionsService.DIRECTIONS_CACHE_KEY);
@@ -27,21 +31,65 @@ export class DirectionsService {
   /**
    * Extracts a set of directions from a given donation.
    * @param donation The donation from which to extract directions from.
+   * @param potentialVolunteer The potential volunteer (current user) for the donation.
+   * NOTE: Should only be non-null if the given donation does not have a scheduled delivery and the current user is a 'Volunteer'.
    * @return The extracted donation directions.
    */
-  extractDirectionsFromDonation(donation: Donation): Directions {
-    const directionsToDonor: Directions = (donation.claim && donation.claim.delivery)
-      ? donation.claim.delivery.routeToDonor.directions
-      : { distanceMi: 0, durationMin: 0, encodedPolyline: '', waypointSegments: [] };
-    const directionsToReceiver: Directions = donation.claim
+  extractDirectionsFromDonation(donation: Donation, potentialVolunteer: Account): Observable<Directions> {
+    const directionsToDonor$: Observable<Directions> = this._getDirectionsToDonor(donation, potentialVolunteer);
+    const directionsToReceiver: Directions = this._getDirectionsToReceiver(donation);
+
+    return directionsToDonor$.pipe(
+      map((directionsToDonor: Directions) => ({
+        distanceMi: (directionsToDonor.distanceMi + directionsToReceiver.distanceMi),
+        durationMin: (directionsToDonor.durationMin + directionsToReceiver.durationMin),
+        encodedPolyline: this._combineDonationEncodedPolylines(directionsToDonor, directionsToReceiver),
+        waypointSegments: directionsToDonor.waypointSegments.concat(directionsToReceiver.waypointSegments)
+      }))
+    );
+  }
+
+  /**
+   * Gets the directions from either a volunteer within a given donation or a potential volunteer
+   * (the current user) to the donor within a given donation.
+   * @param donation The donation from which to extract the directions (from volunteer) to donor.
+   * @param potentialVolunteer An observable that emits:
+   * The potential volunteer (current user) that will be non-null if the given
+   * donation does not have a volunteer yet, and the current user is a volunteer.
+   */
+  private _getDirectionsToDonor(donation: Donation, potentialVolunteer: Account): Observable<Directions> {
+    if (donation.claim && donation.claim.delivery) {
+      return of(donation.claim.delivery.routeToDonor.directions)
+    } else if (!potentialVolunteer) {
+      return of({ distanceMi: 0, durationMin: 0, encodedPolyline: '', waypointSegments: [] });
+    }
+
+    const donorCoords: [number, number] = donation.donorContactOverride.location.coordinates;
+    const volunteerCoords: [number, number] = potentialVolunteer.contactInfo.location.coordinates;
+    const request: MapRouteReadRequest = {
+      origLat: `${volunteerCoords[1]}`,
+      origLng: `${volunteerCoords[0]}`,
+      destLat: `${donorCoords[1]}`,
+      destLng: `${donorCoords[0]}`
+    };
+
+    const params = new HttpParams({ fromObject: <any>request })
+    return this._httpClient.get<MapRoute>(
+      `${this.url}/route`, { params, withCredentials: true }
+    ).pipe(
+      map((mapRoute: MapRoute) => mapRoute.directions)
+    );
+  }
+
+  /**
+   * Gets the directions from a receiver within a given donation to a donor within a given donation.
+   * @param donation The donation from which to extract the directions (from donor) to receiver.
+   * @return The directions that were extracted from the donation.
+   */
+  private _getDirectionsToReceiver(donation: Donation): Directions {
+    return (donation.claim)
       ? donation.claim.routeToReceiver.directions
       : { distanceMi: 0, durationMin: 0, encodedPolyline: '', waypointSegments: [] };
-    return {
-      distanceMi: (directionsToDonor.distanceMi + directionsToReceiver.distanceMi),
-      durationMin: (directionsToDonor.durationMin + directionsToReceiver.durationMin),
-      encodedPolyline: this._combineDonationEncodedPolylines(directionsToDonor, directionsToReceiver),
-      waypointSegments: directionsToDonor.waypointSegments.concat(directionsToReceiver.waypointSegments)
-    };
   }
 
   /**
