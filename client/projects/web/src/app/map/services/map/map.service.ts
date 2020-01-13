@@ -88,7 +88,7 @@ export class MapService {
   refreshMap(map: GoogleMap, donation: Donation, options: MapOptions): void {
     this._clearMapData();
     this._refreshWaypoints(donation, options).subscribe(() => {
-      this._refreshDirectionsHref();
+      this._refreshDirectionsHref(donation);
       this._refreshMapView(map);
       this._refreshDirections(map, donation, options);
     });
@@ -114,9 +114,7 @@ export class MapService {
    * @return An observable that emits once the waypoints are refreshed.
    */
   private _refreshWaypoints(donation: Donation, options: MapOptions): Observable<void> {
-    const potentialVolunteer: Account = ((!donation.claim || !donation.claim.delivery) && this._sessionService.isVolunteer)
-      ? this._sessionService.account
-      : null;
+    const potentialVolunteer: Account = this._getPotentialVolunteer(donation);
     const volunteerWaypointConfig: VolunteerWaypointConfig = this._genVolunteerWaypointConfig(donation, options);
 
     return this._waypointService.extractWaypoints(donation, potentialVolunteer, volunteerWaypointConfig).pipe(
@@ -125,6 +123,19 @@ export class MapService {
         this._latLngWaypoints = this.waypointMarkers.map((marker: WaypointMarker) => marker.latLng);
       })
     );
+  }
+
+  /**
+   * Gets a potential volunteer for a given donation. The given donation can only have a potential volunteer if
+   * it has been claimed but not scheduled for delivery. The potential volunteer will be set to the current user's account
+   * if their account type is 'Volunteer'.
+   * @param donation The donation for which to get the potential volunteer.
+   * @return The potential volunteer account if there is one. If one doesn't exist for the given donation, then null.
+   */
+  private _getPotentialVolunteer(donation: Donation): Account {
+    return ((!donation.claim || !donation.claim.delivery) && this._sessionService.isVolunteer)
+      ? this._sessionService.account
+      : null;
   }
 
   /**
@@ -147,9 +158,10 @@ export class MapService {
   /**
    * Refreshes the navigation directions href for the associated map.
    */
-  private _refreshDirectionsHref(): void {
+  private _refreshDirectionsHref(donation: Donation): void {
     this._directionsHref = this._mapAppLinkService.genDirectionHref(
-      this.waypointMarkers.map((marker: WaypointMarker) => marker.latLngSrc)
+      this.waypointMarkers.map((marker: WaypointMarker) => marker.latLngSrc),
+      donation
     );
   }
 
@@ -172,12 +184,18 @@ export class MapService {
    * @param options The map (direction) options.
    */
   private _refreshDirections(map: GoogleMap, donation: Donation, options: MapOptions): void {
+    let directions$: Observable<Directions>;
+
     if (!options.useVolunteerCurrentPos) {
-      const directions: Directions = this._directionsService.extractDirectionsFromDonation(donation);
-      this._setDirections(map, directions, options);
+      const potentialVolunteer = this._getPotentialVolunteer(donation);
+      directions$ = this._directionsService.extractDirectionsFromDonation(donation, potentialVolunteer);
     } else if (this.latLngWaypoints.length > 1) {
-      this._directionsService.genDirections(this.latLngWaypoints).subscribe(
-        (directions: Directions) => this._setDirections(map, directions, options)
+      directions$ = this._directionsService.genDirections(this.latLngWaypoints);
+    }
+
+    if (directions$) {
+      directions$.subscribe((directions: Directions) =>
+        this._setDirections(map, directions, options)
       );
     }
   }

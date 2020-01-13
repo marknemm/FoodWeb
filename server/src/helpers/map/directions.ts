@@ -1,7 +1,7 @@
 import * as GoogleMaps from '@google/maps';
 import { ClientResponse, DirectionsResponse, GoogleMapsClient, LatLngLiteral } from '@google/maps';
 import 'dotenv';
-import { Directions, DirectionsExtractor, MapWaypointConverter, Waypoint } from '../../shared';
+import { Directions, DirectionsExtractor, MapRoute, MapWaypointConverter, Waypoint, ContactInfo, GeographyLocation } from '../../shared';
 import { FoodWebError } from '../response/food-web-error';
 
 const _directionsClient: GoogleMapsClient = GoogleMaps.createClient({
@@ -11,6 +11,35 @@ const _directionsClient: GoogleMapsClient = GoogleMaps.createClient({
 const _offlineMode: boolean = (process.env.OFFLINE_MODE === 'true');
 const _waypointConverter = new MapWaypointConverter();
 const _directionsExtractor = new DirectionsExtractor();
+
+/**
+ * Queries a 3rd party map service for the driving route.
+ * @param orig The origin contact info or geography location (address).
+ * @param dest The destination contact info or geography location (address).
+ * @return A promise that resolves to the queried map route.
+ */
+export async function queryRoute(
+  orig: MapRouteEndpoint,
+  dest: MapRouteEndpoint
+): Promise<MapRoute> {
+  const directions: Directions = await genDirections([orig, dest]);
+  return {
+    directions,
+    distanceMi: directions.distanceMi,
+    durationMin: directions.durationMin,
+    endLocation: routeEndpointToLocation(dest),
+    startLocation: routeEndpointToLocation(orig)
+  };
+}
+
+/**
+ * Converts a given map route endpoint into a (geography) location.
+ * @param endpoint The map route endpoint that is to be converted into a (geography) location.
+ * @return The (geography) location result.
+ */
+export function routeEndpointToLocation(endpoint: MapRouteEndpoint): GeographyLocation {
+  return endpoint['location'] ? endpoint['location'] : endpoint;
+}
 
 /**
  * Generates the driving directions between a list of waypoints.
@@ -35,7 +64,7 @@ export async function genDirections(directionWaypoints: Waypoint[]): Promise<Dir
  * @return A promise that resolves to the raw directions response.
  * @throws FoodWebError if the direction query fails.
  */
-export function _queryDirections(latLngWaypoints: LatLngLiteral[], retryCnt = 0): Promise<DirectionsResponse> {
+function _queryDirections(latLngWaypoints: LatLngLiteral[], retryCnt = 0): Promise<DirectionsResponse> {
   const origin: LatLngLiteral = latLngWaypoints[0];
   const waypoints: LatLngLiteral[] = latLngWaypoints.slice(1, latLngWaypoints.length - 1);
   const destination: LatLngLiteral = latLngWaypoints[latLngWaypoints.length - 1];
@@ -79,3 +108,5 @@ function _handleGenDirectionsErr(err: Error): void {
   console.error(err);
   throw new FoodWebError('Unexpected failure when generating driving directions');
 }
+
+export type MapRouteEndpoint = ContactInfo | GeographyLocation;

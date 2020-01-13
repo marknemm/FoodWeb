@@ -1,5 +1,5 @@
-import { getRepository, SelectQueryBuilder } from 'typeorm';
 import { AccountEntity } from '../../entity/account.entity';
+import { getOrmRepository, OrmSelectQueryBuilder } from '../../helpers/database/orm';
 import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '../../helpers/database/query-builder-helper';
 import { LoginRequiredError } from '../../helpers/response/food-web-error';
 import { Account, AccountHelper, AccountReadFilters, AccountReadRequest, OperationHours, OperationHoursHelper } from '../../shared';
@@ -24,7 +24,7 @@ export function readFullAccounts(request: AccountReadRequest, myAccount: Account
 }
 
 export function queryAccounts(request: AccountReadRequest, myAccount?: Account): QueryMod<AccountEntity, QueryResult<AccountEntity>> {
-  const queryBuilder: SelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
+  const queryBuilder: OrmSelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
   return new QueryMod<AccountEntity, QueryResult<AccountEntity>>(
     queryBuilder,
     () => _execAccountQuery(queryBuilder, myAccount, false)
@@ -41,12 +41,12 @@ async function _readAccount(idOrUsername: number | string, myAccount: Account, f
 }
 
 function _readAccounts(request: AccountReadRequest, myAccount: Account, fullAccount: boolean): Promise<QueryResult<AccountEntity>> {
-  const queryBuilder: SelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
+  const queryBuilder: OrmSelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
   return _execAccountQuery(queryBuilder, myAccount, fullAccount);
 }
 
 async function _execAccountQuery(
-  queryBuilder: SelectQueryBuilder<AccountEntity>,
+  queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
   myAccount: Account,
   fullAccount: boolean
 ): Promise<QueryResult<AccountEntity>> {
@@ -55,8 +55,8 @@ async function _execAccountQuery(
   return { entities: accounts, totalCount };
 }
 
-function _buildQuery(request: AccountReadRequest, myAccount: Account): SelectQueryBuilder<AccountEntity> {
-  let queryBuilder: SelectQueryBuilder<AccountEntity> = getRepository(AccountEntity).createQueryBuilder('account');
+function _buildQuery(request: AccountReadRequest, myAccount: Account): OrmSelectQueryBuilder<AccountEntity> {
+  let queryBuilder: OrmSelectQueryBuilder<AccountEntity> = getOrmRepository(AccountEntity).createQueryBuilder('account');
   queryBuilder = _genJoins(queryBuilder);
   queryBuilder = _genWhereCondition(queryBuilder, request, myAccount);
   queryBuilder = _genOrdering(queryBuilder);
@@ -64,7 +64,7 @@ function _buildQuery(request: AccountReadRequest, myAccount: Account): SelectQue
   return queryBuilder;
 }
 
-function _genJoins(queryBuilder: SelectQueryBuilder<AccountEntity>): SelectQueryBuilder<AccountEntity> {
+function _genJoins(queryBuilder: OrmSelectQueryBuilder<AccountEntity>): OrmSelectQueryBuilder<AccountEntity> {
   return queryBuilder
     .innerJoinAndSelect('account.contactInfo', 'contactInfo')
     .leftJoinAndSelect('account.organization', 'organization')
@@ -75,10 +75,10 @@ function _genJoins(queryBuilder: SelectQueryBuilder<AccountEntity>): SelectQuery
 }
 
 function _genWhereCondition(
-  queryBuilder: SelectQueryBuilder<AccountEntity>,
+  queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
   filters: AccountReadFilters,
   myAccount: Account
-): SelectQueryBuilder<AccountEntity> {
+): OrmSelectQueryBuilder<AccountEntity> {
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'account', filters, ['id', 'username', 'accountType']);
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'contactInfo', filters, ['email']);
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'organization', filters, ['organizationName']);
@@ -89,10 +89,10 @@ function _genWhereCondition(
 }
 
 function _genOperationHoursCondition(
-  queryBuilder: SelectQueryBuilder<AccountEntity>,
+  queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
   filters: AccountReadFilters,
   myAccount: Account
-): SelectQueryBuilder<AccountEntity> {
+): OrmSelectQueryBuilder<AccountEntity> {
   if (filters.operationHoursRange) {
     if (!myAccount) { throw new LoginRequiredError(); }
     const operationHours: OperationHours = _opHoursHelper.dateTimeRangeToOperationHours(
@@ -118,10 +118,10 @@ function _genOperationHoursCondition(
 }
 
 function _genDistanceCondition(
-  queryBuilder: SelectQueryBuilder<AccountEntity>,
+  queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
   filters: AccountReadFilters,
   myAccount: Account
-): SelectQueryBuilder<AccountEntity> {
+): OrmSelectQueryBuilder<AccountEntity> {
   if (filters.distanceRangeMi != null) {
     if (!myAccount) { throw new LoginRequiredError(); }
     queryBuilder = queryBuilder.andWhere(
@@ -138,8 +138,8 @@ function _genDistanceCondition(
 }
 
 function _genOrdering(
-  queryBuilder: SelectQueryBuilder<AccountEntity>
-): SelectQueryBuilder<AccountEntity> {
+  queryBuilder: OrmSelectQueryBuilder<AccountEntity>
+): OrmSelectQueryBuilder<AccountEntity> {
   return queryBuilder
     .addOrderBy('organization.organizationName', 'ASC')
     .addOrderBy('volunteer.lastName', 'ASC')

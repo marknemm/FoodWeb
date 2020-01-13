@@ -1,6 +1,6 @@
 import { Account } from '../account/account';
 import { Delivery } from '../delivery';
-import { MapRoute } from '../misc/map-route';
+import { MapRoute } from '../map/map-route';
 export { Account, MapRoute };
 
 /**

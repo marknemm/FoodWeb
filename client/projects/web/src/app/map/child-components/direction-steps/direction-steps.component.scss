@@ -1,4 +1,13 @@
 .direction-steps-container {
+  table.direction-steps-summary {
+    margin-top: 20px;
+    font-size: 16px;
+
+    tr td:first-child {
+      font-weight: bold;
+    }
+  }
+
   ol, ul {
     margin-top: 16px;
     padding-left: 5px;

@@ -1,7 +1,7 @@
 import { AccountType } from '../interfaces/account/account';
+import { DateTimeRange } from '../interfaces/date-time/time';
 import { Delivery } from '../interfaces/delivery/delivery';
 import { Donation, DonationStatus } from '../interfaces/donation/donation';
-import { DateTimeRange } from '../interfaces/misc/time';
 import { Account } from './account-helper';
 import { DonationHelper } from './donation-helper';
 import { ValidationHelper } from './validation-helper';

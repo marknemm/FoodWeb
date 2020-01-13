@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, Subscriber } from 'rxjs';
 import { Account, AccountHelper, Donation, MapWaypointConverter, Waypoint } from '~shared';
 import { ClientWaypoint, LatLngLiteral, WaypointMarker } from '~web/map/map';
-import { PositionService } from '~web/map/position/position.service';
+import { CurrentLocationService } from '~web/shared/services/current-location/current-location.service';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class WaypointService {
   constructor(
     private _accountHelper: AccountHelper,
     private _mapWaypointConverter: MapWaypointConverter,
-    private _positionService: PositionService
+    private _currentLocationService: CurrentLocationService
   ) {}
 
   /**
@@ -40,7 +40,7 @@ export class WaypointService {
       clientWaypoints.forEach((waypoint: ClientWaypoint, idx: number) => {
         if (waypoint === 'My+Location') {
           currentPositionIdx = idx;
-          currentPosition$ = this._positionService.refreshCurrentPosition();
+          currentPosition$ = this._currentLocationService.getCurrentLatLngLiteral();
         } else {
           latLngLiterals.push(
             this._waypointToLatLngLiteral(waypoint)
@@ -114,7 +114,7 @@ export class WaypointService {
    */
   private _waypointToLatLngLiteral(waypoint: ClientWaypoint): LatLngLiteral {
     if ((<Position>waypoint).coords) {
-      return this._positionService.positionToLatLngLiteral(<Position>waypoint);
+      return this._currentLocationService.positionToLatLngLiteral(<Position>waypoint);
     }
     return this._mapWaypointConverter.waypointToLatLngLiteral(<Waypoint>waypoint);
   }

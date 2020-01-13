@@ -1,11 +1,11 @@
-import { EntityManager, getConnection, DeepPartial } from 'typeorm';
+import { DeepPartial, EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from '../../entity/account.entity';
 import { DeliveryEntity } from '../../entity/delivery-entity';
 import { DonationEntity } from '../../entity/donation.entity';
-import { genMapRoute } from '../../helpers/map/gen-map-route';
 import { FoodWebError } from '../../helpers/response/food-web-error';
 import { DateTimeHelper, DeliveryHelper, DeliveryScheduleRequest, DonationStatus } from '../../shared';
 import { readDonation } from '../donation/read-donations';
+import { genMapRoute } from '../map/read-map-routes';
 
 const _deliveryHelper = new DeliveryHelper();
 const _dateTimeHelper = new DateTimeHelper();
@@ -58,7 +58,7 @@ async function _genScheduleDonationUpdt(
   const scheduleDonationUpdt: DeepPartial<DonationEntity> = { id: donationToSchedule.id };
   scheduleDonationUpdt.donationStatus = DonationStatus.Scheduled;
   scheduleDonationUpdt.claim = { id: donationToSchedule.claim.id };
-  scheduleDonationUpdt.claim.delivery = <DeliveryEntity> await _genDonationDelivery(donationToSchedule, myAccount, scheduleRequest);
+  scheduleDonationUpdt.claim.delivery = <DeliveryEntity>await _genDonationDelivery(donationToSchedule, myAccount, scheduleRequest);
   return scheduleDonationUpdt;
 }
 

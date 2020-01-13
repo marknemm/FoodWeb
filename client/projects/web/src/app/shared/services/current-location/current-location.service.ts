@@ -28,7 +28,7 @@ export class CurrentLocationService {
 
   getCurrentLatLngLiteral(): Observable<LatLngLiteral> {
     return this.getCurrentPosition().pipe(
-      map(this._positionToLatLngLiteral)
+      map(this.positionToLatLngLiteral)
     );
   }
 
@@ -46,7 +46,7 @@ export class CurrentLocationService {
 
   watchLatLngLiteral(): Observable<LatLngLiteral> {
     return this.watchPosition().pipe(
-      map(this._positionToLatLngLiteral)
+      map(this.positionToLatLngLiteral)
     );
   }
 
@@ -59,7 +59,7 @@ export class CurrentLocationService {
     }
   }
 
-  private _positionToLatLngLiteral(position: Position): LatLngLiteral {
+  positionToLatLngLiteral(position: Position): LatLngLiteral {
     return { lat: position.coords.latitude, lng: position.coords.longitude };
   }
 }
