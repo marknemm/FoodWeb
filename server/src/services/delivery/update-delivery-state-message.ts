@@ -3,10 +3,11 @@ import { DonationEntity } from '../../entity/donation.entity';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '../../helpers/messaging/email';
 import { broadcastNotification, NotificationType } from '../../helpers/messaging/notification';
 import { UpdateDiff } from '../../interfaces/update-diff';
-import { DonationHelper, DonationStatus } from '../../shared';
+import { DateTimeHelper, DonationHelper, DonationStatus } from '../../shared';
 import { sendDeliveryCancelledMessages } from './cancel-delivery-message';
 
 const _donationHelper = new DonationHelper();
+const _dateTimeHelper = new DateTimeHelper();
 
 /**
  * Sends delivery state advanced messages to each user associated with the given donation (donor, receiver, & volunteer).
@@ -24,13 +25,29 @@ export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity
   const advanceAction: string = _getDeliveryAdvanceAction(donation);
   const emailTmpl: string = _getDeliveryAdvanceEmailTmpl(donation);
 
+  const donorTimezone: string = donation.donorContactOverride.timezone;
+  const receiverTimezone: string = donation.claim.receiverAccount.contactInfo.timezone;
+  const pickupWindowStartTime: string = _dateTimeHelper.toLocalTimeStr(donation.claim.delivery.pickupWindowStart, donorTimezone);
+  const pickupWindowEndTime: string = _dateTimeHelper.toLocalTimeStr(donation.claim.delivery.pickupWindowEnd, donorTimezone);
+  const dropOffWindowStartTime: string = _dateTimeHelper.toLocalTimeStr(donation.claim.delivery.dropOffWindowStart, receiverTimezone);
+  const dropOffWindowEndTime: string = _dateTimeHelper.toLocalTimeStr(donation.claim.delivery.dropOffWindowEnd, receiverTimezone);
+
   messagePromises.push(
     broadcastEmail(
       MailTransporter.NOREPLY,
       emailAccounts,
       genDonationEmailSubject(donation),
       emailTmpl,
-      { donation, donorName, receiverName, delivererName }
+      {
+        donation,
+        donorName,
+        receiverName,
+        delivererName,
+        pickupWindowStartTime,
+        pickupWindowEndTime,
+        dropOffWindowStartTime,
+        dropOffWindowEndTime
+      }
     ).catch(console.error)
   );
 

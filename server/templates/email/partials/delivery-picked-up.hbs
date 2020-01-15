@@ -49,10 +49,13 @@
 {{else if isReceiver }}
   <div>
     The following donation that you claimed from <strong>{{ donorName }}</strong>
-    has been <strong>Picked Up</strong> by <strong>{{ delivererName }}</strong> and should arrive very shortly:
+    has been <strong>Picked Up</strong> by <strong>{{ delivererName }}</strong> and should arrive soon:
   </div>
   <p class="donation-description">{{ donation.description }}</p>
   <hr>
+  <p>
+    Estimated arrival window: <strong>{{ dropOffWindowStartTime }}</strong> -- <strong>{{ dropOffWindowEndTime }}</strong>
+  </p>
   <p>
     You can view the donation and delivery details at this
     <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a>.

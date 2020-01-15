@@ -80,6 +80,6 @@ async function _genDonationDelivery(
   delivery.pickupWindowEnd = scheduleRequest.pickupWindow.endDateTime;
   delivery.routeToDonor = await genMapRoute(myAccount.contactInfo, donation.donorContactOverride);
   delivery.dropOffWindowStart = _dateTimeHelper.addMinutes(scheduleRequest.pickupWindow.startDateTime, delivery.routeToDonor.durationMin);
-  delivery.dropOffWindowEnd = _dateTimeHelper.addMinutes(scheduleRequest.pickupWindow.endDateTime, delivery.routeToDonor.durationMin);
+  delivery.dropOffWindowEnd = _dateTimeHelper.addMinutes(delivery.dropOffWindowStart, 30);
   return delivery;
 }
