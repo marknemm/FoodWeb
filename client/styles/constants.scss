@@ -63,3 +63,21 @@ $alert-danger-color: #a94442;
 $donor-color: $primary-lighter;
 $receiver-color: #f79407;
 $volunteer-color: #f70d07;
+
+$donation-unmatched-background: rgb(255, 245, 225);
+$donation-unmatched-color: rgb(210, 145, 30);
+
+$donation-matched-background: rgb(255, 234, 212);
+$donation-matched-color: rgb(255, 120, 40);
+
+$delivery-scheduled-background: rgb(255, 230, 230);
+$delivery-scheduled-color: rgb(234, 60, 83);
+
+$delivery-started-background: rgb(240, 235, 255);
+$delivery-started-color: rgb(118, 42, 131);
+
+$delivery-picked-up-background: rgb(230, 240, 255);
+$delivery-picked-up-color: rgb(49, 112, 143);
+
+$delivery-complete-background: rgb(245, 255, 245);
+$delivery-complete-color: rgb(60, 120, 60);

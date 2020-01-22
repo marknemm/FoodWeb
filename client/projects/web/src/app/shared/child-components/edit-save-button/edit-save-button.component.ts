@@ -10,10 +10,13 @@ import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.
 })
 export class EditSaveButtonComponent<T = any> implements OnChanges {
 
+  @Input() cancelText = 'Cancel';
   @Input() control: AbstractControl;
   @Input() disableSave = false;
   @Input() editing = false;
+  @Input() editText = 'Edit';
   @Input() noCancelEdit = false;
+  @Input() saveText = 'Save';
   @Input() useButtonText = false;
 
   /**

@@ -1,0 +1,31 @@
+@import "constants.scss";
+
+.delivery-donation-description {
+  position: relative;
+
+  .mat-card-avatar {
+    $width: 39px;
+    $height: $width - 4px;
+
+    width: $width;
+    height: $height;
+
+    @media only screen and (max-width: $mat-mobile) {
+      width: $width - 5px;
+      height: $height - 5px;
+    }
+  }
+
+  .mat-card-title {
+    margin-top: 7px;
+    margin-left: -7px;
+
+    @media only screen and (max-width: $mat-mobile) {
+      margin-top: 4px;
+    }
+  }
+
+  .donation-description {
+    margin-bottom: 10px;
+  }
+}

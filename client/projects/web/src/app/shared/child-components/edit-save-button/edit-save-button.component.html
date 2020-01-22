@@ -4,7 +4,7 @@
       <mat-icon>edit</mat-icon>
     </button>
     <button mat-raised-button *ngIf="useButtonText" type="button" color="primary" class="edit-button" (click)="setEditing(true)">
-      Edit
+      {{ editText }}
     </button>
   </ng-container>
   <ng-container *ngIf="editing">
@@ -18,10 +18,10 @@
     </ng-container>
     <ng-container *ngIf="useButtonText">
       <button mat-button type="button" *ngIf="!noCancelEdit" color="warn" class="cancel-button" (click)="setEditing(false)">
-        Cancel
+        {{ cancelText }}
       </button>
       <button mat-raised-button type="submit" color="primary" class="save-button" (click)="saveValue()" [disabled]="isSaveDisabled">
-        Save
+        {{ saveText }}
       </button>
     </ng-container>
   </ng-container>

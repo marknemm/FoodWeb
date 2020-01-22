@@ -66,7 +66,7 @@ async function _messagePotentialDeliverers(donation: DonationEntity, potentialDe
       notifyAccounts,
       {
         notificationType: NotificationType.ClaimDonation,
-        notificationLink: `/donation/details/${donation.id}`,
+        notificationLink: `/delivery/details/${donation.id}`,
         title: 'Delivery Requested',
         icon: donation.donorAccount.profileImgUrl,
         body: `

@@ -6,6 +6,7 @@ import { DateTimeModule } from '~web/date-time/date-time.module';
 import { DonateComponent } from '~web/donor/donate/donate.component';
 import { DonationFormComponent } from '~web/donor/donation-form/donation-form.component';
 import { DonorRoutingModule } from '~web/donor/donor-routing.module';
+import { EditDonationComponent } from '~web/donor/edit-donation/edit-donation.component';
 import { FoodSafetyChecklistComponent } from '~web/donor/food-safety-checklist/food-safety-checklist.component';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
@@ -14,6 +15,7 @@ import { SharedModule } from '~web/shared/shared.module';
   declarations: [
     DonateComponent,
     DonationFormComponent,
+    EditDonationComponent,
     FoodSafetyChecklistComponent
   ],
   imports: [

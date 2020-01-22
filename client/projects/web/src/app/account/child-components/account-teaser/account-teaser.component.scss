@@ -1,0 +1,20 @@
+.account-teaser {
+  .mat-card-header {
+
+    .mat-card-subtitle {
+      font-weight: bold;
+    }
+
+    &.no-custom-title {
+      margin-bottom: 4px;
+    
+      .mat-card-title {
+        margin-top: 6px;
+      }
+    }
+  }
+
+  .mat-card-actions {
+    padding-top: 0;
+  }
+}

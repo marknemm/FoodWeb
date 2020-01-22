@@ -105,6 +105,16 @@
         "./projects/web/src/app/donation/interfaces/*",
         "./projects/web/src/app/donation/services/*"
       ],
+      "~web/donation-delivery-shared/*": [
+        "./projects/web/src/app/donation-delivery-shared/*",
+        "./projects/web/src/app/donation-delivery-shared/child-components/*",
+        "./projects/web/src/app/donation-delivery-shared/components/*",
+        "./projects/web/src/app/donation-delivery-shared/directives/*",
+        "./projects/web/src/app/donation-delivery-shared/forms/*",
+        "./projects/web/src/app/donation-delivery-shared/pipes/*",
+        "./projects/web/src/app/donation-delivery-shared/interfaces/*",
+        "./projects/web/src/app/donation-delivery-shared/services/*"
+      ],
       "~web/donor/*": [
         "./projects/web/src/app/donor/*",
         "./projects/web/src/app/donor/child-components/*",

@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Account, AccountType } from '~shared';
 import { AccountForm } from '~web/account/account.form';
 import { SessionService } from '~web/session/session/session.service';
+import { PageTitleService } from '~web/shared/page-title/page-title.service';
 import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
 import { SignupService } from '~web/signup/signup/signup.service';
 import { TermsConditionsDialogComponent } from '~web/signup/terms-conditions-dialog/terms-conditions-dialog.component';
@@ -25,10 +26,11 @@ export class SignupComponent implements OnInit, OnDestroy {
   constructor(
     public sessionService: SessionService,
     public signupVerificationService: SignupVerificationService,
-    private _signupService: SignupService,
-    private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _matDialog: MatDialog,
+    private _pageTitleService: PageTitleService,
+    private _router: Router,
+    private _signupService: SignupService
   ) {}
 
   get accountType(): AccountType {
@@ -48,6 +50,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._pageTitleService.title = 'Signup';
     this.formGroup = new AccountForm({ formMode: 'Signup' }, this._destroy$.asObservable());
     this._listenAccountTypeSelect();
     this._listenAccountTypeRoute();
@@ -57,9 +60,10 @@ export class SignupComponent implements OnInit, OnDestroy {
     // When accountType form field is updated, we must update route so user can rely on back button / link directly to correct signup.
     this.formGroup.get('accountType').valueChanges.pipe(
       takeUntil(this._destroy$)
-    ).subscribe((accountType: AccountType) =>
-      this._router.navigate(['/signup', accountType])
-    );
+    ).subscribe((accountType: AccountType) => {
+      this._router.navigate(['/signup', accountType]);
+      this._pageTitleService.title = 'Signup';
+    });
   }
 
   private _listenAccountTypeRoute(): void {

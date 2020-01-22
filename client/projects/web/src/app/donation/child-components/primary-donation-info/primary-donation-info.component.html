@@ -1,0 +1,29 @@
+<mat-card *ngIf="donation" class="primary-donation-info">
+  <mat-card-header>
+    <img mat-card-avatar alt="Food Web" src="./assets/IconImgSm.png">
+    <mat-card-title>Donation Description</mat-card-title>
+    <mat-card-subtitle>{{ donation.description }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="row">
+      <div class="meal-count col-lg-2 col-md-3 col-sm-4 col-6">
+        <span class="inline-label">Meal Count:</span>
+        <span>{{ donation.estimatedNumFeed }}</span>
+      </div>
+      <div *ngIf="myDonation" class="monetary-value col-md-2 col-sm-4 col-6">
+        <span class="inline-label">Value:</span>
+        <span>{{ donation.estimatedValue | number:'1.2-2' }}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="pickup-window col-sm-6">
+        <div class="inline-label">Pickup Window:</div>
+        <food-web-date-time-range class="d-inline-block" [range]="pickupWindow" [boldTime]="true"></food-web-date-time-range>
+      </div>
+      <div *ngIf="dropOffWindow" class="drop-off-window col-sm-6">
+        <div class="inline-label">Drop-off Window:</div>
+        <food-web-date-time-range class="d-inline-block" [range]="dropOffWindow" [boldTime]="true"></food-web-date-time-range>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

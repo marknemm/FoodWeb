@@ -1,54 +1,72 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/router';
-import { AccountType } from '~shared';
+import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PageTitleService {
 
-  title: string;
+  title = '';
 
-  constructor(
-    router: Router,
-    activatedRoute: ActivatedRoute
-  ) {
+  private _previousRoute = '';
+
+  constructor(router: Router) {
     router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
         const route: string = event.url.split(/[#?]/)[0];
-        if (route === '/account/list') {
-          const accountType = <AccountType>activatedRoute.snapshot.queryParamMap.get('accountType');
-          this.title = (accountType ? `${accountType}s` : this._deriveDefaultTitle(route));
-        } else if (route.indexOf('/account/details') >= 0) {
-          this.title = 'Account';
-        } else if (route.indexOf('/account/my') >= 0) {
-          this.title = 'My Account';
-        } else if (route.indexOf('/donor/donate') >= 0) {
-          this.title = 'Donate';
-        } else if (route.indexOf('/donation/details') >= 0) {
-          this.title = 'Donation';
-        } else if (route.indexOf('/donation/list/my') >= 0) {
-          this.title = 'My Donations';
-        } else if (route.indexOf('/delivery/list/my') >= 0) {
-          this.title = 'My Deliveries';
-        } else if (route.indexOf('/donation/list') >= 0) {
-          this.title = 'Donations';
-        } else if (route.indexOf('/delivery/list') >= 0) {
-          this.title = 'Deliveries';
-        } else if (route.indexOf('/notification/list/my') >= 0) {
-          this.title = 'Notifications';
-        } else if (route.indexOf('/signup/') >= 0) {
-          this.title = 'Signup';
-        } else {
-          this.title = this._deriveDefaultTitle(route);
+        // Skip route changes that only impact route fragment or query parameters.
+        if (route !== this._previousRoute) {
+          this._previousRoute = route;
+          const preProcessedRoute: string = this._preprocessRoute(route);
+          this.title = this._deriveDefaultTitle(preProcessedRoute);
         }
       }
     });
   }
 
+  private _preprocessRoute(route: string): string {
+    const routeSplits: string[] = route.split('/');
+    this._preProcessRouteIfList(routeSplits);
+    this._preProcessRouteIfMy(routeSplits);
+    return routeSplits.join('/');
+  }
+
+  private _preProcessRouteIfList(routeSplits: string[]): void {
+    const listIdx: number = routeSplits.indexOf('list');
+    if (listIdx >= 0) {
+      routeSplits.splice(listIdx, 1);
+      (routeSplits[0])
+        ? routeSplits[0] = this._makePlural(routeSplits[0])
+        : routeSplits[1] = this._makePlural(routeSplits[1]);
+    }
+  }
+
+  private _makePlural(word: string): string {
+    if (word) {
+      if (word.lastIndexOf('y') === word.length - 1) {
+        word = `${word.slice(0, word.length - 1)}ies`;
+      } else if (word.lastIndexOf('s') === word.length - 1) {
+        word = `${word.slice(0, word.length - 1)}es`;
+      } else {
+        word = `${word}s`;
+      }
+    }
+    return word;
+  }
+
+  private _preProcessRouteIfMy(routeSplits: string[]): void {
+    const myIdx: number = routeSplits.indexOf('my');
+    if (myIdx >= 0) {
+      routeSplits.splice(myIdx, 1);
+      routeSplits.unshift('my');
+    }
+  }
+
   private _deriveDefaultTitle(route: string): string {
     let titleFrags: string[] = route.split(/[\/|\-|_]/);
-    titleFrags = titleFrags.map(
+    titleFrags = titleFrags.filter(
+      (word: string) => !/^\d+$/.test(word)
+    ).map(
       (word: string) => word.substr(0, 1).toUpperCase() + word.substr(1)
     );
     const title: string = titleFrags.join(' ').trim();

@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { DateTimeRangeForm } from '~web/date-time/date-time-range.form';
+import { DateTimeRangeForm, DateTimeRange } from '~web/date-time/date-time-range.form';
 import { DateTimeComponent } from '~web/date-time/date-time/date-time.component';
 
 @Component({
@@ -21,6 +21,7 @@ export class DateTimeRangeComponent implements OnChanges {
   @Input() boldTime = false;
   @Input() start: Date;
   @Input() end: Date;
+  @Input() range: DateTimeRange = { startDateTime: null, endDateTime: null };
 
   @ViewChild('startDateTime', { static: false }) startDateTime: DateTimeComponent;
   @ViewChild('endDateTime', { static: false }) endDateTime: DateTimeComponent;
@@ -35,6 +36,14 @@ export class DateTimeRangeComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.start || changes.end) {
+      this.range.startDateTime = this.start ? this.start : this.range.startDateTime;
+      this.range.endDateTime = this.end ? this.end : this.range.endDateTime;
+    }
+    if (changes.range) {
+      this.start = this.range.startDateTime;
+      this.end = this.range.endDateTime;
+    }
+    if (changes.start || changes.end || changes.range) {
       this._excludeEndDateDisplay = (this.start && this.end && this.start.toDateString() === this.end.toDateString());
     }
   }

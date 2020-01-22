@@ -79,25 +79,6 @@ export class DeliveryHelper {
     return (donationStatus === DonationStatus.Complete);
   }
 
-  genDeliveryAdvanceTxt(donationStatus: DonationStatus): string {
-    switch (donationStatus) {
-      case DonationStatus.Scheduled:  return 'Start Delivery';
-      case DonationStatus.Started:    return 'Set Picked Up'
-      case DonationStatus.PickedUp:   return 'Set Complete';
-    }
-    return '';
-  }
-
-  genDeliveryUndoTxt(donationStatus: DonationStatus): string {
-    switch (donationStatus) {
-      case DonationStatus.Scheduled:  return 'Cancel Delivery';
-      case DonationStatus.Started:    return 'Undo Delivery Start';
-      case DonationStatus.PickedUp:   return 'Undo Delivery Pickup';
-      case DonationStatus.Complete:   return 'Undo Delivery Completion';
-    }
-    return '';
-  }
-
   genConfirmDeliveryUndoMessage(donationStatus: DonationStatus): string {
     switch (donationStatus) {
       case DonationStatus.Scheduled: return 'Are you sure you want to cancel your delivery?';
@@ -121,5 +102,9 @@ export class DeliveryHelper {
         : { startDateTime: donation.claim.dropOffWindowStart, endDateTime: donation.claim.dropOffWindowEnd };
     }
     return { startDateTime: new Date(), endDateTime: new Date() };
+  }
+
+  deliveryDetailsRouterLink(donation: Donation): string[] {
+    return ['/delivery/details/', `${donation.id}`];
   }
 }

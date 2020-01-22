@@ -5,92 +5,42 @@
   margin-left: auto;
   margin-right: auto;
 
-  .donation-details-form {
-    .donation-primary-label {
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    .delete-button {
-      margin-right: 7px;
-    }
-
-    .primary-donation-details {
-      .donation-details-subtitle {
-        margin-right: 7px;
-      }
-  
-      .donation-status {
-        position: absolute;
-        right: 0px;
-        top: 0px;
-        font-size: 13px;
-    
-        @media only screen and (max-width: 450px) {
-          position: relative;
-          font-size: 11px;
-        }
-      }
-
-      .readonly-donation {
-        margin-bottom: -7px;
-  
-        .inline-label {
-          margin-bottom: 0px;
-        }
-  
-        > div:not(.col-br) {
-          margin-bottom: 7px;
-          display: inline-block;
-        }
-
-        .created-date-time,
-        .updated-date-time {
-          max-height: 18px;
-          overflow: hidden;
-        }
-      }
-    }
-  }
-
-  .delivery-map-card {
-    border-top: 2px solid rgba(0, 0, 0, 0.2);
-    border-right: 2px solid rgba(0, 0, 0, 0.2);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-    border-left: 2px solid rgba(0, 0, 0, 0.2);
-    border-radius: 0;
-
-    .mat-card-content {
-      margin: -17px;
-    }
-  }
-
-  .pickup-information-container,
-  .drop-off-information-container {
-    .row {
-      margin-bottom: -12px;
-
-      > div {
-        margin-bottom: 12px;
-      }
-    }
+  .page-header {
+    position: relative;
+    text-align: center;
+    margin-bottom: 14px;
   }
 
   .donor-info-container,
   .receiver-info-container,
   .deliverer-info-container {
-    .account-name {
-      font-weight: bold;
-    }
+    margin-left: auto;
+    margin-right: auto;
 
-    .mat-card-actions {
-      padding: 0;
+    .donation-submitter {
+      margin-bottom: 12px;
     }
   }
 
-  .deliverer-info-container {
-    margin-left: auto;
-    margin-right: auto;
+  .mat-card-content {
+    margin-bottom: 0;
+  }
+
+  hr {
+    margin: 2rem 0;
+
+    &.offset-top {
+      margin-top: calc(2rem - 20px);
+
+      @media only screen and (max-width: $mat-mobile) {
+        margin-top: calc(2rem - 8px);
+      }
+    }
+
+    @media only screen and (max-width: $mat-mobile) {
+      margin-left: -5px;
+      margin-right: -5px;
+    }
   }
 
   @media only screen and (max-width: $mat-mobile) {
@@ -102,13 +52,5 @@
     .inline-label + * {
       font-size: 13px;
     }
-
-    .donation-description-container span {
-      font-size: 14px;
-    }
   }
-}
-
-.mat-card-content {
-  margin-bottom: 0;
 }
