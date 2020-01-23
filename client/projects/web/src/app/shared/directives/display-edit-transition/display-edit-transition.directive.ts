@@ -66,10 +66,8 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
 
   private _recalcStylesFor(styles: CSSStyleDeclaration, show: boolean): void {
     if (show) {
-      styles.display = null;
-      setTimeout(() => {
-        styles.opacity = '1';
-      });
+      styles.removeProperty('display');
+      setTimeout(() => styles.removeProperty('opacity'));
     } else {
       styles.display = 'none';
       styles.opacity = '0';

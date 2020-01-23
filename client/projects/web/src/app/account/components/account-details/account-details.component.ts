@@ -104,7 +104,8 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _saveAccountSection(sectionName: AccountFormKey): Observable<boolean> {
-    const sectionValue: any = this.formGroup.get(sectionName).value;
+    const account: Account = this.formGroup.toAccount();
+    const sectionValue: any = account[sectionName];
     return this._accountService.updateAccountSection(sectionName, sectionValue).pipe(
       map((savedAccount: Account) =>
         this._handleSaveSuccess(sectionName, savedAccount) // Implicit return true.

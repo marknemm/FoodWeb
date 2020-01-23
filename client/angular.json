@@ -398,40 +398,6 @@
             "scripts": []
           },
           "configurations": {
-            "production": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/web/src/environments/environment.prod.ts"
-                }
-              ]
-            },
-            "production-no-recaptcha": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/web/src/environments/environment.prod-no-recaptcha.ts"
-                }
-              ]
-            },
             "demo": {
               "optimization": true,
               "outputHashing": "all",
@@ -466,11 +432,56 @@
                 }
               ]
             },
+            "es5": {
+              "tsConfig": "projects/web/tsconfig.es5.json"
+            },
             "hmr": {
               "fileReplacements": [
                 {
                   "replace": "projects/web/src/environments/environment.ts",
                   "with": "projects/web/src/environments/environment.hmr.ts"
+                }
+              ]
+            },
+            "offline": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/web/src/environments/environment.ts",
+                  "with": "projects/web/src/environments/environment.offline.ts"
+                }
+              ]
+            },
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "projects/web/src/environments/environment.ts",
+                  "with": "projects/web/src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "production-no-recaptcha": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "projects/web/src/environments/environment.ts",
+                  "with": "projects/web/src/environments/environment.prod-no-recaptcha.ts"
                 }
               ]
             },
@@ -507,14 +518,6 @@
                   "with": "projects/web/src/environments/environment.qa-no-recaptcha.ts"
                 }
               ]
-            },
-            "offline": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/web/src/environments/environment.offline.ts"
-                }
-              ]
             }
           }
         },
@@ -525,13 +528,16 @@
             "sourceMap": true
           },
           "configurations": {
-            "production": {
-              "browserTarget": "web:build:production"
+            "es5": {
+              "browserTarget": "web:build:es5"
             },
             "hmr": {
               "hmr": true,
               "hmrWarning": false,
               "browserTarget": "web:build:hmr"
+            },
+            "production": {
+              "browserTarget": "web:build:production"
             },
             "qa": {
               "browserTarget": "web:build:qa"

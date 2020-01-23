@@ -85,7 +85,26 @@ export class DateTimeHelper {
     if (typeof date === 'string') {
       return /[\/-]/.test(date)
         ? new Date(date)
-        : new Date(`${this.toLocalDateStr(new Date())} ${date}`);
+        : this.timeStrToDate(date)
+    }
+    return date;
+  }
+
+  timeStrToDate(timeStr: string): Date {
+    const date = new Date();
+    if (timeStr) {
+      timeStr = timeStr.toLowerCase();
+      let timeSplits: string[] = timeStr.split(/[ap ]/);
+      timeSplits = timeSplits[0].split(':');
+      let hours: number = Number.parseInt(timeSplits[0], 10);
+      if (hours !== 12 && timeStr.indexOf('pm') >= 0) {
+         hours += 12;
+      } else if (hours === 12 && timeStr.indexOf('am') >= 0) {
+        hours = 0;
+      }
+      const minutes: number = Number.parseInt(timeSplits[1], 10);
+      date.setHours(hours);
+      date.setMinutes(minutes);
     }
     return date;
   }
