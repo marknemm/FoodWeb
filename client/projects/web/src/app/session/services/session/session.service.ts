@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
-import { catchError, finalize, map, mergeMap } from 'rxjs/operators';
+import { catchError, finalize, map, mergeMap, takeUntil } from 'rxjs/operators';
 import { Account, AccountHelper, LoginRequest, LoginResponse } from '~shared';
 import { environment } from '~web/environments/environment';
 import { AlertService } from '~web/shared/alert/alert.service';
@@ -119,11 +119,10 @@ export class SessionService {
   /**
    * Checks if an account is the current user's account.
    * @param accountId The ID of the account to check.
-   * @param ignoreAdmin Set to true to ignore admin privileges; admins technically own all accounts (default is false).
    * @return true if the account is the current user's account, false if not.
    */
-  isMyAccount(accountId: number, ignoreAdmin = false): boolean {
-    return this._accountHelper.isMyAccount(this.account, accountId, ignoreAdmin);
+  isMyAccount(accountId: number): boolean {
+    return this._accountHelper.isMyAccount(this.account, accountId);
   }
 
   /**
@@ -166,6 +165,17 @@ export class SessionService {
       this._alertService.displaySimpleMessage(`Welcome, ${this._accountHelper.accountName(response.account)}`, 'success');
     }
     return response.account;
+  }
+
+  /**
+   * Gets a login observable.
+   * @param destroy$ An observable which when emitted, destroys the login subscription for the return observable.
+   * @return The login observable.
+   */
+  onLogin(destroy$: Observable<any>): Observable<Account> {
+    return this._login$.pipe(
+      takeUntil(destroy$)
+    );
   }
 
   /**
@@ -223,5 +233,16 @@ export class SessionService {
     if (notifyUser) {
       this._alertService.displaySimpleMessage('Logout successful', 'success');
     }
+  }
+
+  /**
+   * Gets a logout observable.
+   * @param destroy$ An observable which when emitted, destroys the logout subscription for the return observable.
+   * @return The logout observable.
+   */
+  onLogout(destroy$: Observable<any>): Observable<Account> {
+    return this._logout$.pipe(
+      takeUntil(destroy$)
+    );
   }
 }

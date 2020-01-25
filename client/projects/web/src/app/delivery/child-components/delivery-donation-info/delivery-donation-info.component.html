@@ -1,0 +1,16 @@
+<mat-card *ngIf="donation" class="delivery-donation-description">
+  <mat-card-header>
+    <img mat-card-avatar alt="Food Web" src="./assets/IconImgSm.png">
+    <mat-card-title>Donation Info</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="donation-description">
+      <span class="inline-label d-inline">Description:</span>
+      <span>{{ donation.description }}</span>
+    </div>
+    <div class="donation-meal-count">
+      <span class="inline-label">Meal Count:</span>
+      <span>{{ donation.estimatedNumFeed }}</span>
+    </div>
+  </mat-card-content>
+</mat-card>

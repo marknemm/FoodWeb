@@ -1,0 +1,5 @@
+<div *ngIf="donationStatus" class="donation-status-container">
+  <span class="donation-status with-border" [ngClass]="donationStatusClass" [matTooltip]="donationStatusTooltip">
+    {{ donationStatusPrefix }} {{ donationStatus }}
+  </span>
+</div>

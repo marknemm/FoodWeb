@@ -1,0 +1,66 @@
+<div *ngIf="donation" class="delivery-details-container">
+  <div class="page-title block-label">{{ pageTitleService.title }}</div>
+
+  <food-web-donation-workflow
+    [donation]="donation"
+    [myAccount]="sessionService.account"
+    (action)="onDeliveryAction($event)"
+  ></food-web-donation-workflow>
+
+  <div *ngIf="!myDelivery" class="row">
+    <div class="donation-delivery-info-container col-12">
+      <food-web-delivery-donation-info [donation]="donation"></food-web-delivery-donation-info>
+    </div>
+  </div>
+
+  <mat-card *ngIf="donation.claim" class="delivery-map-card">
+    <mat-card-content>
+      <food-web-map [donation]="donation"></food-web-map>
+    </mat-card-content>
+  </mat-card>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-lg-6 col-12">
+      <div class="pickup-info-container">
+        <food-web-pickup-info [donation]="donation"></food-web-pickup-info>
+      </div>
+
+      <div class="donor-info-container">
+        <food-web-account-teaser [account]="donation.donorAccount" customTitle="Donor">
+          <div class="donation-submitter">
+            <div class="inline-label">Donation Submitter:</div>
+            <div class="d-inline-block">{{ donation.donorFirstName }} {{ donation.donorLastName }}</div>
+          </div>
+        </food-web-account-teaser>
+      </div>
+    </div>
+  
+    <hr class="offset-top col-12 d-lg-none d-xl-none">
+  
+    <div class="col-lg-6 col-12">
+      <div *ngIf="donation.claim" class="drop-off-info-container">
+        <food-web-drop-off-info [donation]="donation"></food-web-drop-off-info>
+      </div>
+  
+      <div *ngIf="donation.claim" class="receiver-info-container">
+        <food-web-account-teaser [account]="donation.claim.receiverAccount" customTitle="Receiver"></food-web-account-teaser>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="myDelivery">
+    <hr class="offset-top">
+
+    <div class="row">
+      <div class="donation-description-container col-12 col-lg-6">
+        <food-web-delivery-donation-info [donation]="donation"></food-web-delivery-donation-info>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div *ngIf="deliveryNotFound" class="page-title block-header">
+  <strong>Delivery not found</strong>
+</div>

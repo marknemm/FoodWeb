@@ -1,20 +1,19 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Account, AccountHelper, DeliveryHelper, Donation, DonationHelper } from '~shared';
-
-export type DonationAction = 'ToggleEdit' | 'Save' | 'Delete' | 'Claim' | 'Unclaim' | 'ScheduleDelivery' | 'AdvanceDeliveryState' | 'UndoDeliveryState';
+import { Account, AccountHelper, DeliveryHelper, Donation, DonationHelper, DonationStatus } from '~shared';
+import { DonationAction } from '~web/donation-delivery-shared/donation-actions/donation-actions.service';
 
 @Component({
-  selector: 'food-web-donation-detail-actions',
-  templateUrl: './donation-detail-actions.component.html',
-  styleUrls: ['./donation-detail-actions.component.scss']
+  selector: 'food-web-donation-actions',
+  templateUrl: './donation-actions.component.html',
+  styleUrls: ['./donation-actions.component.scss']
 })
-export class DonationDetailActionsComponent implements OnChanges {
+export class DonationActionsComponent implements OnChanges {
 
-  @Input() formGroup: FormGroup;
   @Input() donation: Donation;
+  @Input() donationUpdateForm: FormGroup;
+  @Input() hideActionHint = false;
   @Input() myAccount: Account;
-  @Input() editing = false;
   @Input() valid = true;
 
   @Output() action = new EventEmitter<DonationAction>();
@@ -26,14 +25,15 @@ export class DonationDetailActionsComponent implements OnChanges {
   private _canScheduleDelivery = false;
   private _canAdvanceDeliveryState = false;
   private _canUndoDeliveryState = false;
+  private _deliveryActionRequiredTxt = '';
   private _deliveryAdvanceTxt = '';
-  private _deliveryUndoTxt = '';
+  private _deliveryRevertTxt = '';
   private _confirmDeliveryUndoMessage = '';
 
   constructor(
     private _accountHelper: AccountHelper,
-    private _donationHelper: DonationHelper,
-    private _deliveryHelper: DeliveryHelper
+    private _deliveryHelper: DeliveryHelper,
+    private _donationHelper: DonationHelper
   ) {}
 
   /**
@@ -86,17 +86,24 @@ export class DonationDetailActionsComponent implements OnChanges {
   }
 
   /**
-   * The delivery state advance text (to be used on the advance button).
+   * The deliveery state action required text (to prompt the user to advance the delivery status).
+   */
+  get deliveryActionRequiredTxt(): string {
+    return this._deliveryActionRequiredTxt;
+  }
+
+  /**
+   * The delivery state advance text (to be used on the advance status button).
    */
   get deliveryAdvanceTxt(): string {
     return this._deliveryAdvanceTxt;
   }
 
   /**
-   * The delivery state undo text (to be used on the undo button).
+   * The delivery state revert text (to be used on the revert status button).
    */
-  get deliveryUndoTxt(): string {
-    return this._deliveryUndoTxt;
+  get deliveryRevertTxt(): string {
+    return this._deliveryRevertTxt;
   }
 
   /**
@@ -125,7 +132,7 @@ export class DonationDetailActionsComponent implements OnChanges {
     this._canClaim = !this._donationHelper.validateDonationClaimPrivilege(this.donation, this.myAccount);
     this._canUnclaim = !this._donationHelper.validateDonationUnclaimPrivilege(this.donation, this.myAccount)
                     && this._accountHelper.isReceiver(this.myAccount);
-    this._canScheduleDelivery = !this._deliveryHelper.validateDeliverySchedulePrivilege(this.donation.donationStatus, this.myAccount);
+    this._canScheduleDelivery = this._accountHelper.isVolunteer(this.myAccount) && this.donation.claim && !this.donation.claim.delivery;
     this._canAdvanceDeliveryState = this.donation.claim && !this._deliveryHelper.validateDeliveryAdvancePrivilege(
       this.donation.claim.delivery,
       this.donation.donationStatus,
@@ -136,38 +143,76 @@ export class DonationDetailActionsComponent implements OnChanges {
       this.donation.donationStatus,
       this.myAccount
     ) && this._accountHelper.isVolunteer(this.myAccount);
-    this._hasActionButtons = (
-      this.canEdit
-      || this.canClaim
-      || this.canUnclaim
-      || this.canScheduleDelivery
-      || this.canAdvanceDeliveryState
-      || this.canUndoDeliveryState
-    );
+    this._hasActionButtons = this._canEdit || this._canClaim || this._canUnclaim || this._canScheduleDelivery
+                          || this._canAdvanceDeliveryState || this._canUndoDeliveryState;
   }
 
   /**
    * Updates all donation detail action button text based on the set donation.
    */
   private _updateAllText(): void {
-    this._deliveryAdvanceTxt = this._deliveryHelper.genDeliveryAdvanceTxt(this.donation.donationStatus);
-    this._deliveryUndoTxt = this._deliveryHelper.genDeliveryUndoTxt(this.donation.donationStatus);
+    this._deliveryActionRequiredTxt = this._genDeliveryActionRequiredTxt(this.donation.donationStatus);
+    this._deliveryAdvanceTxt = this._genDeliveryAdvanceTxt(this.donation.donationStatus);
+    this._deliveryRevertTxt = this._genDeliveryRevertTxt(this.donation.donationStatus);
     this._confirmDeliveryUndoMessage = this._deliveryHelper.genConfirmDeliveryUndoMessage(this.donation.donationStatus);
+  }
+
+  /**
+   * Generates delivery 'action required' text that is used to prompt the user to advance the delivery status.
+   * @param donationStatus The current status of the donation/delivery.
+   * @return The delivery 'action required' text. An empty string if the current donation/delivery status does not require it.
+   */
+  private _genDeliveryActionRequiredTxt(donationStatus: DonationStatus): string {
+    switch (donationStatus) {
+      case DonationStatus.Scheduled:  return `Select 'Start Delivery' when you depart to pickup the donation.`;
+      case DonationStatus.Started:    return `Select 'Advance Status' once you have picked up the donation.`;
+      case DonationStatus.PickedUp:   return `Select 'Advance Status' once you have dropped off the donation.`;
+    }
+    return '';
+  }
+
+  /**
+   * Generates the delivery 'advance' status button text.
+   * @param donationStatus The current status of the donation/delivery.
+   * @return The delivery 'advance' status button text. An empty string if the current donation/delivery status does not require it.
+   */
+  private _genDeliveryAdvanceTxt(donationStatus: DonationStatus): string {
+    switch (donationStatus) {
+      case DonationStatus.Scheduled:  return 'Start Delivery';
+      case DonationStatus.Started:
+      case DonationStatus.PickedUp:   return `Advance Status`;
+    }
+    return '';
+  }
+
+  /**
+   * Generates the delivery 'advance' status button text.
+   * @param donationStatus The current status of the donation/delivery.
+   * @return The delivery 'advance' status button text. An empty string if the current donation/delivery status does not require it.
+   */
+  private _genDeliveryRevertTxt(donationStatus: DonationStatus): string {
+    switch (donationStatus) {
+      case DonationStatus.Scheduled:  return 'Cancel Delivery';
+      case DonationStatus.Started:
+      case DonationStatus.PickedUp:
+      case DonationStatus.Complete:   return 'Revert Status';
+    }
+    return '';
   }
 
   /**
    * Resets all access/privilege flags and button text to their original/empty states.
    */
   private _resetAll(): void {
+    this._hasActionButtons = false;
     this._canEdit = false;
     this._canClaim = false;
     this._canUnclaim = false;
     this._canScheduleDelivery = false;
     this._canAdvanceDeliveryState = false;
     this._canUndoDeliveryState = false;
-    this._hasActionButtons = false;
     this._deliveryAdvanceTxt = '';
-    this._deliveryUndoTxt = '';
+    this._deliveryRevertTxt = '';
     this._confirmDeliveryUndoMessage = '';
   }
 

@@ -204,11 +204,16 @@ mat-card.mat-card {
     position: relative;
     
     .mat-card-header-text {
-      margin-top: -2px;
+      margin-top: -6px;
+
+      @media only screen and (max-width: $mat-mobile) {
+        margin-top: -1px;
+      }
 
       .mat-card-subtitle {
         &:not(:first-child) {
           margin-top: -14px;
+          margin-bottom: 10px;
         }
       }
     }
@@ -245,6 +250,10 @@ mat-card.mat-card {
 
   @media only screen and (max-width: $mat-mobile) {
     margin-bottom: 10px;
+  }
+
+  .mat-card-content + .mat-card-actions {
+    margin-top: -8px;
   }
 }
 

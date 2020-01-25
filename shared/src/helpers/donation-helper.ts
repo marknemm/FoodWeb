@@ -152,6 +152,21 @@ export class DonationHelper {
     return (curStatusIdx < compareStatusIdx);
   }
 
+  isDonationDonor(donation: Donation, account: Account): boolean {
+    return donation && account
+        && (donation.donorAccount.id === account.id);
+  }
+
+  isDonationReceiver(donation: Donation, account: Account): boolean {
+    return donation && account && donation.claim
+        && (donation.claim.receiverAccount.id === account.id);
+  }
+
+  isDonationVolunteer(donation: Donation, account: Account): boolean {
+    return donation && account && donation.claim && donation.claim.delivery
+        && (donation.claim.delivery.volunteerAccount.id === account.id);
+  }
+
   getNextDonationStatus(nextOf: Donation | DonationStatus): DonationStatus {
     const nextOfStatus: DonationStatus = (typeof nextOf === 'object') ? nextOf.donationStatus : nextOf;
     const curStatusIdx: number = this._constants.DONATION_STATUSES.indexOf(nextOfStatus);

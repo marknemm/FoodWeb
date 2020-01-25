@@ -22,7 +22,7 @@ export async function advanceDeliveryState(stateChangeReq: DeliveryStateChangeRe
   const donation = <DonationEntity> await readDonation(stateChangeReq.donationId);
   _ensureCanAdvanceDeliveryState(donation, myAccount);
 
-  const advanceDonationUpdt: DeepPartial<DonationEntity> = _genDonationStateUpdate(donation, 'next');
+  const advanceDonationUpdt: DeepPartial<DonationEntity> = _genDonationUpdate(donation, 'next');
   await getConnection().transaction(
     async (manager: EntityManager) => manager.getRepository(DonationEntity).save(advanceDonationUpdt)
   );
@@ -58,7 +58,7 @@ export async function undoDeliveryState(
   _ensureCanUndoDeliveryState(donation, myAccount);
 
   // If moving from 'Scheduled' to 'Matched', then perform delivery cancellation process, otherwise perform undo.
-  const undoDonationUpdt: DeepPartial<DonationEntity> = _genDonationStateUpdate(donation, 'prev');
+  const undoDonationUpdt: DeepPartial<DonationEntity> = _genDonationUpdate(donation, 'prev');
   const undoneDonation: DonationEntity = (undoDonationUpdt.donationStatus === DonationStatus.Matched)
     ? await cancelDelivery(donation, myAccount)
     : await _undoDeliveryStateNonCancel(undoDonationUpdt);
@@ -101,7 +101,7 @@ function _ensureCanUndoDeliveryState(donation: DonationEntity, account: AccountE
  * @param deliveryStateChangeDir The direction to update the given donation's delivery state to.
  * @return The donation state update data that should be saved.
  */
-function _genDonationStateUpdate(donation: DonationEntity, deliveryStateChangeDir: 'next' | 'prev'): DeepPartial<DonationEntity> {
+function _genDonationUpdate(donation: DonationEntity, deliveryStateChangeDir: 'next' | 'prev'): DeepPartial<DonationEntity> {
   const donationUpdate: DeepPartial<DonationEntity> = { id: donation.id };
   donationUpdate.donationStatus = (deliveryStateChangeDir === 'next')
     ? _donationHelper.getNextDonationStatus(donation.donationStatus)
@@ -133,8 +133,11 @@ function _updateDeliveryTiming(donation: DonationEntity, donationUpdt: DeepParti
       donationUpdt.claim.delivery.startTime = now;
       donationUpdt.claim.delivery.pickupTime = null;
       donationUpdt.claim.delivery.dropOffTime = null;
-      donationUpdt.claim.delivery.dropOffWindowStart = _dateTimeHelper.addMinutes(now, donation.claim.routeToReceiver.durationMin);
-      donationUpdt.claim.delivery.dropOffWindowEnd = _dateTimeHelper.addMinutes(<Date>donationUpdt.claim.delivery.dropOffWindowStart, 15);
+      donationUpdt.claim.delivery.pickupWindowStart = _dateTimeHelper.addMinutes(now, donation.claim.delivery.routeToDonor.durationMin);
+      donationUpdt.claim.delivery.pickupWindowEnd = _dateTimeHelper.addMinutes(<Date>donationUpdt.claim.delivery.pickupWindowStart, 15);
+      donationUpdt.claim.delivery.dropOffWindowStart =
+        _dateTimeHelper.addMinutes(<Date>donationUpdt.claim.delivery.pickupWindowStart, donation.claim.routeToReceiver.durationMin);
+      donationUpdt.claim.delivery.dropOffWindowEnd = _dateTimeHelper.addMinutes(<Date>donationUpdt.claim.delivery.dropOffWindowStart, 30);
       break;
     case DonationStatus.PickedUp:
       donationUpdt.claim.delivery.pickupTime = now;

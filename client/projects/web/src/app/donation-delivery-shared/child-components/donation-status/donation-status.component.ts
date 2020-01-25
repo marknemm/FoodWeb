@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { DonationStatus } from '~shared';
+import { DonationHelper, DonationStatus } from '~shared';
 
 @Component({
   selector: 'food-web-donation-status',
@@ -11,15 +11,25 @@ export class DonationStatusComponent implements OnInit, OnChanges {
   @Input() donationStatus: DonationStatus;
 
   private _donationStatusClass = '';
+  private _donationStatusPrefix = '';
   private _donationStatusTooltip = '';
 
-  constructor() {}
+  constructor(
+    private _donationHelper: DonationHelper
+  ) {}
 
   /**
    * The class for styling the donation's status indicator.
    */
   get donationStatusClass(): string {
     return this._donationStatusClass;
+  }
+
+  /**
+   * The prefix ('Donation' or 'Delivery') for the displayed donation status.
+   */
+  get donationStatusPrefix(): string {
+    return this._donationStatusPrefix;
   }
 
   /**
@@ -34,6 +44,7 @@ export class DonationStatusComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.donationStatus) {
       this._donationStatusClass = this._genDonationStatusClass();
+      this._donationStatusPrefix = this._genDonationStatusPrefix();
       this._donationStatusTooltip = this._genDonationStatusTooltip();
     }
   }
@@ -42,6 +53,12 @@ export class DonationStatusComponent implements OnInit, OnChanges {
     return (this.donationStatus != null)
       ? this.donationStatus.toLowerCase().replace(/ /g, '-')
       : '';
+  }
+
+  private _genDonationStatusPrefix(): string {
+    return (this._donationHelper.isDonationStatusEarlierThan(this.donationStatus, DonationStatus.Scheduled))
+      ? 'Donation'
+      : 'Delivery';
   }
 
   private _genDonationStatusTooltip(): string {

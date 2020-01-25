@@ -1,8 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { AccountHelper, ListResponse } from '~shared';
+import { AccountHelper, AccountType, ListResponse } from '~shared';
 import { Account, AccountService } from '~web/account/account/account.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
@@ -11,12 +9,10 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
   templateUrl: './accounts.component.html',
   styleUrls: ['./accounts.component.scss']
 })
-export class AccountsComponent implements OnInit, OnDestroy {
+export class AccountsComponent implements OnInit {
 
-  accounts: Account[] = [];
-  totalCount = 0;
-
-  private _destroy$ = new Subject();
+  private _accounts: Account[] = [];
+  private _totalCount = 0;
 
   constructor(
     public pageTitleService: PageTitleService,
@@ -25,25 +21,34 @@ export class AccountsComponent implements OnInit, OnDestroy {
     private _activatedRoute: ActivatedRoute
   ) {}
 
+  get accounts(): Account[] {
+    return this._accounts;
+  }
+
+  get totalCount(): number {
+    return this._totalCount;
+  }
+
   ngOnInit() {
-    this._accountService.listenAccountsQueryChange(this._activatedRoute).pipe(
-      takeUntil(this._destroy$)
-    ).subscribe(
+    this._listenAccountsQueryChange();
+    this._setPageTitle();
+  }
+
+  private _listenAccountsQueryChange(): void {
+    this._accountService.listenAccountsQueryChange(this._activatedRoute).subscribe(
       (response: ListResponse<Account>) => {
-        this.accounts = response.list;
-        this.totalCount = response.totalCount;
+        this._setPageTitle();
+        this._accounts = response.list;
+        this._totalCount = response.totalCount;
       }
     );
   }
 
-  ngOnDestroy() {
-    this._destroy$.next();
-  }
-
-  getAccountTitle(account: Account): string  {
-    return (account.accountType === 'Volunteer')
-      ? `${account.volunteer.firstName} ${account.volunteer.lastName}`
-      : account.organization.organizationName
+  private _setPageTitle(): void {
+    const accountType = <AccountType>this._activatedRoute.snapshot.queryParamMap.get('accountType');
+    this.pageTitleService.title = (accountType)
+      ? `${accountType}s`
+      : 'Accounts';
   }
 
 }

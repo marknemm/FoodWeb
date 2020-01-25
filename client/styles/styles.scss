@@ -43,13 +43,16 @@ a.no-hover {
   }
 }
 
-.page-title {
-  font-size: 28px;
-  margin-bottom: 10px;
-  text-align: center;
+.mat-drawer-content {
+  .page-title {
+    font-size: 28px;
+    margin-bottom: 10px;
+    text-align: center;
 
-  @media only screen and (max-width: $sm) {
-    font-size: 24px;
+    @media only screen and (max-width: $sm) {
+      font-size: 24px;
+      margin-top: -8px;
+    }
   }
 }
 
@@ -77,26 +80,6 @@ a.no-hover {
   input[type=number]::-webkit-outer-spin-button { 
     -webkit-appearance: none !important; 
     margin: 0; 
-  }
-}
-
-.donation-description-container {
-  hr {
-    margin: 0.6rem 0;
-
-    &:first-child {
-      margin-top: 0px;
-    }
-  }
-
-  span {
-    text-align: center;
-    display: inline-block;
-    margin: 0px 5px;
-    width: 100%;
-    font-weight: bold;
-    font-size: 16px;
-    color: $accent-darkest;
   }
 }
 
@@ -250,6 +233,65 @@ body.sticky-header {
 
     @media only screen and (max-width: $mat-mobile) {
       display: block;
+    }
+  }
+}
+
+.donation-status {
+  box-sizing: border-box;
+  $border-size: 2px;
+
+  &.unmatched {
+    background-color: $donation-unmatched-background;
+    color: $donation-unmatched-color;
+
+    &.with-border {
+      border: $border-size solid $donation-unmatched-color;
+    }
+  }
+
+  &.matched {
+    background-color: $donation-matched-background;
+    color: $donation-matched-color;
+
+    &.with-border {
+      border: $border-size solid $donation-matched-color;
+    }
+  }
+
+  &.scheduled {
+    background-color: $delivery-scheduled-background;
+    color: $delivery-scheduled-color;
+
+    &.with-border {
+      border: $border-size solid $delivery-scheduled-color;
+    }
+  }
+
+  &.started {
+    background-color: $delivery-started-background;
+    color: $delivery-started-color;
+
+    &.with-border {
+      border: $border-size solid $delivery-started-color;
+    }
+  }
+
+  &.picked-up {
+    background-color: $delivery-picked-up-background;
+    color: $delivery-picked-up-color;
+
+    &.with-border {
+      border: $border-size solid $delivery-picked-up-color;
+    }
+  }
+
+  &.complete {
+    background-color: $delivery-complete-background;
+    color: $delivery-complete-color;
+
+    &.with-border {
+      border: $border-size solid $delivery-complete-color;
     }
   }
 }

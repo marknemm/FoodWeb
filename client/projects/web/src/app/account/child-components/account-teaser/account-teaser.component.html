@@ -1,0 +1,18 @@
+<mat-card class="account-teaser">
+  <mat-card-header [ngClass]="{ 'no-custom-title': !customTitle }">
+    <img mat-card-avatar [src]="account.profileImgUrl" alt="Receiver Icon">
+    <mat-card-title>{{ customTitle ? customTitle : accountName }}</mat-card-title>
+    <mat-card-subtitle *ngIf="customTitle">{{ accountName }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-content></ng-content>
+    <food-web-contact-info [contactInfo]="account.contactInfo" [hideAddress]="hideAddress"></food-web-contact-info>
+  </mat-card-content>
+  <mat-card-actions>
+    <div class="align-right">
+      <a [routerLink]="accountRouterLink">
+        <button mat-raised-button type="button" color="primary">View Account</button>
+      </a>
+    </div>
+  </mat-card-actions>
+</mat-card>

@@ -11,20 +11,20 @@ export class AccountHelper {
     return (account && account.accountType === AccountType.Admin);
   }
 
-  isDonor(account: Account, ignoreAdmin = false): boolean {
-    return (account && (account.accountType === AccountType.Donor || (!ignoreAdmin && this.isAdmin(account))));
+  isDonor(account: Account): boolean {
+    return (account && (account.accountType === AccountType.Donor));
   }
 
-  isReceiver(account: Account, ignoreAdmin = false): boolean {
-    return (account && (account.accountType === AccountType.Receiver || (!ignoreAdmin && this.isAdmin(account))));
+  isReceiver(account: Account): boolean {
+    return (account && (account.accountType === AccountType.Receiver));
   }
 
-  isVolunteer(account: Account, ignoreAdmin = false): boolean {
-    return (account && (account.accountType === AccountType.Volunteer || (!ignoreAdmin && this.isAdmin(account))));
+  isVolunteer(account: Account): boolean {
+    return (account && (account.accountType === AccountType.Volunteer));
   }
 
-  isMyAccount(myAccount: Account, accountId: number, ignoreAdmin = false): boolean {
-    return (myAccount && (myAccount.id === accountId || (!ignoreAdmin && this.isAdmin(myAccount))));
+  isMyAccount(myAccount: Account, accountId: number): boolean {
+    return (myAccount && (myAccount.id === accountId));
   }
 
   organizationFirstChar(organization: Organization): string {
