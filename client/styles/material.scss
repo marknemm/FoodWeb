@@ -335,8 +335,10 @@ body .mat-snack-bar-container {
 .timepicker {
 
   @media only screen and (max-height: 700px) {
+    $width: 300px;
     position: fixed !important;
     top: $header-height;
+    left: calc(50vw - #{$width / 2});
 
     .timepicker__header {
       padding: 10px 15px !important;
