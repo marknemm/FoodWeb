@@ -1,5 +1,4 @@
-import { DeliveryReadFilters } from './delivery-read-filters';
+import { DonationReadRequest } from '../donation';
 import { PagingParams } from '../paging-params';
-export { DeliveryReadFilters };
 
-export type DeliveryReadRequest = DeliveryReadFilters & PagingParams;
+export interface DeliveryReadRequest extends DonationReadRequest, PagingParams {}

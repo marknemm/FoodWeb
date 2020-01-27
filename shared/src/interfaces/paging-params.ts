@@ -1,4 +1,4 @@
 export interface PagingParams {
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
 }

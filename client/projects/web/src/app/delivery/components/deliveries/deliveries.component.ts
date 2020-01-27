@@ -11,8 +11,10 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 })
 export class DeliveriesComponent implements OnInit {
 
-  donations: Donation[] = [];
-  totalCount = 0;
+  filtersPanelOpened = false;
+
+  private _donations: Donation[] = [];
+  private _totalCount = 0;
 
   constructor(
     public deliveryHelper: DeliveryHelper,
@@ -22,11 +24,19 @@ export class DeliveriesComponent implements OnInit {
     private _deliveryService: DeliveryService
   ) {}
 
+  get donations(): Donation[] {
+    return this._donations;
+  }
+
+  get totalCount(): number {
+    return this._totalCount;
+  }
+
   ngOnInit() {
     this._deliveryService.listenDeliveriesQueryChange(this._activatedRoute).subscribe(
       (response: ListResponse<Donation>) => {
-        this.donations = response.list;
-        this.totalCount = response.totalCount;
+        this._donations = response.list;
+        this._totalCount = response.totalCount;
       }
     );
   }

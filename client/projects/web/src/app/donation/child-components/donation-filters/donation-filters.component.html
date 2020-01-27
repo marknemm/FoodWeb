@@ -1,0 +1,58 @@
+<form [formGroup]="filtersForm" class="donation-filters" (ngSubmit)="filter.emit(filtersForm.value)">
+  <h2 class="title primary">Donation Filters</h2>
+
+  <mat-form-field class="fill">
+    <mat-select placeholder="Status" formControlName="donationStatus">
+      <mat-option *ngFor="let status of constantsService.DONATION_STATUSES" [value]="status">{{ status }}</mat-option>
+      <mat-option [value]="null">--</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="fill">
+    <input matInput placeholder="Donor Organization" formControlName="donorOrganizationName">
+  </mat-form-field>
+
+  <div class="row">
+    <div class="col-6">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Donor Last Name" formControlName="donorLastName">
+      </mat-form-field>
+    </div>
+
+    <div class="col-6">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Donor First Name" formControlName="donorFirstName">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <h2 class="title">Sort Options</h2>
+
+  <div class="row">
+    <div class="col-8">
+      <mat-form-field class="fill">
+        <mat-select placeholder="Sort By" formControlName="sortBy">
+          <mat-option *ngFor="let sortByOpt of filtersForm.sortByOpts" [value]="sortByOpt.value">
+            {{ sortByOpt.name }}
+          </mat-option>
+          <mat-option [value]="null">--</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-4">
+      <mat-form-field class="fill">
+        <mat-select placeholder="Order" formControlName="sortOrder">
+          <mat-option value="ASC">ASC</mat-option>
+          <mat-option value="DESC">DESC</mat-option>
+          <mat-option [value]="null">--</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="filter-buttons">
+    <button mat-button type="button" color="warn" (click)="filtersForm.reset()">Clear</button>
+    <button mat-raised-button type="submit" color="primary">Submit</button>
+  </div>
+</form>

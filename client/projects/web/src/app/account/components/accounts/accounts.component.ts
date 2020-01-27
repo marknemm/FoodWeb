@@ -11,6 +11,8 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 })
 export class AccountsComponent implements OnInit {
 
+  filtersPanelOpened = false;
+
   private _accounts: Account[] = [];
   private _totalCount = 0;
 

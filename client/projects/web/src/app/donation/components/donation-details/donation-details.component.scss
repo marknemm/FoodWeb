@@ -1,9 +1,10 @@
 @import "constants.scss";
 
-.donation-details-container {
+.donation-details {
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
+  overflow-x: hidden;
 
   .page-header {
     position: relative;

@@ -7,7 +7,6 @@ import {
   Donation,
   DonationClaimRequest,
   DonationCreateRequest,
-  DonationReadFilters,
   DonationReadRequest,
   DonationUpdateRequest,
   ListResponse
@@ -137,36 +136,32 @@ export class DonationService {
     const myDonations: boolean = (this._router.url.indexOf('my') >= 0);
     return activatedRoute.queryParamMap.pipe(
       flatMap((params: ParamMap) => {
-        const filters: DonationReadFilters = {};
+        const request: DonationReadRequest = {
+          page: (params.has('page') ? parseInt(params.get('page'), 10) : 1),
+          limit: (params.has('limit') ? parseInt(params.get('limit'), 10) : 10)
+        };
         params.keys.forEach((paramKey: string) => {
           if (paramKey !== 'page' && paramKey !== 'limit') {
-            filters[paramKey] = params.get(paramKey);
+            request[paramKey] = params.get(paramKey);
           }
         });
-        const page: number = (params.has('page') ? parseInt(params.get('page'), 10) : undefined);
-        const limit: number = (params.has('limit') ? parseInt(params.get('limit'), 10) : undefined);
-        return this._getDonations(filters, page, limit, myDonations);
+        return this._getDonations(request, myDonations);
       })
     );
   }
 
-  getMyDonations(filters: DonationReadFilters, page = 1, limit = 10): Observable<ListResponse<Donation>> {
-    return this._getDonations(filters, page, limit, true);
+  getMyDonations(request: DonationReadRequest): Observable<ListResponse<Donation>> {
+    return this._getDonations(request, true);
   }
 
-  getDonations(filters: DonationReadFilters, page = 1, limit = 10): Observable<ListResponse<Donation>> {
-    return this._getDonations(filters, page, limit, false);
+  getDonations(request: DonationReadRequest): Observable<ListResponse<Donation>> {
+    return this._getDonations(request, false);
   }
 
-  private _getDonations(filters: DonationReadFilters, page: number, limit: number, myDonations: boolean): Observable<ListResponse<Donation>> {
+  private _getDonations(request: DonationReadRequest, myDonations: boolean): Observable<ListResponse<Donation>> {
     const getUrl: string = this.url + (myDonations ? '/my' : '');
-    const request = <DonationReadRequest>filters;
-    if (page >= 0) {
-      request.page = page;
-    }
-    if (limit >= 0) {
-      request.limit = limit;
-    }
+    request.page = request.page ? request.page : 1;
+    request.limit = request.limit ? request.limit : 10;
     const params = new HttpParams({ fromObject: <any>request });
     this._pageProgressService.activate(true);
     return this._httpClient.get<ListResponse<Donation>>(getUrl, { params, withCredentials: true }).pipe(
