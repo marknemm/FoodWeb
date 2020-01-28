@@ -38,6 +38,8 @@ export interface QueryResult<T> {
  * @param filterProps A list of the property names within the given filters object that should be used to generate simple where conditions.
  * @param splitFilterOnComma Optional flag that defaults to true. When set, any filter values that are strings that contain comma separated
  * lists will be used to generate an 'IN()' SQL condition instead of one of strict equality.
+ * @param treatEmptyStrAsUndefined Optional flag that defaults to true. When true, any filter values that are empty strings are considered to
+ * be equivalent to undefined, and thus, they are ignored. If false, then empty strings are considered for equality comparison.
  * @return The input queryBuilder with simple where clause conditions added.
  */
 export function genSimpleWhereConditions<T, F>(
@@ -45,14 +47,15 @@ export function genSimpleWhereConditions<T, F>(
   tableAlias: string,
   filters: F,
   filterProps: string[],
-  splitFilterOnComma = true
+  splitFilterOnComma = true,
+  treatEmptyStrAsUndefined = true
 ): SelectQueryBuilder<T> {
   filterProps.forEach((filterProp: string) => {
-    if (filters[filterProp] != null) {
+    if (filters[filterProp] != null && (!treatEmptyStrAsUndefined || filters[filterProp] !== '')) {
       queryBuilder = (splitFilterOnComma && typeof filters[filterProp] === 'string' && filters[filterProp].indexOf(',') >= 0)
         ? _genSimpleInListCondition(queryBuilder, tableAlias, filters, filterProp)
         : _genSimpleEqualCondition(queryBuilder, tableAlias, filters, filterProp)
-    } else if (filters[filterProp] !== undefined) {
+    } else if (filters[filterProp] === null) {
       queryBuilder = _genSimpleNullCondition(queryBuilder, tableAlias, filterProp);
     }
   });

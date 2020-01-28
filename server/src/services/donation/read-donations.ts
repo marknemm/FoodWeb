@@ -2,7 +2,7 @@ import { AccountEntity } from '../../entity/account.entity';
 import { DonationEntity } from '../../entity/donation.entity';
 import { getOrmRepository, OrmRepository, OrmSelectQueryBuilder } from '../../helpers/database/orm';
 import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '../../helpers/database/query-builder-helper';
-import { DonationReadRequest, Validation } from '../../shared';
+import { DonationReadRequest, DonationStatus } from '../../shared';
 
 export async function readDonation(id: number, donationRepo?: OrmRepository<DonationEntity>): Promise<DonationEntity> {
   const readRequest: DonationReadRequest = { id, page: 1, limit: 1 };
@@ -98,6 +98,7 @@ function _genWhereCondition(
   queryBuilder = _genAccountConditions(queryBuilder, request);
   queryBuilder = _genDeliveryWindowConditions(queryBuilder, request);
   queryBuilder = _genDonationExpiredCondition(queryBuilder, request);
+  queryBuilder = _genDonationCompleteCondition(queryBuilder, request);
   return queryBuilder;
 }
 
@@ -105,14 +106,28 @@ function _genAccountConditions(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
   request: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
-  if (request.donorAccountId != null) {
-    queryBuilder = queryBuilder.andWhere('donorAccount.id = :donorId', { donorId: request.donorAccountId });
-  }
+  queryBuilder = _genDonorConditions(queryBuilder, request);
   if (request.receiverAccountId != null) {
     queryBuilder = queryBuilder.andWhere('receiverAccount.id = :receiverId', { receiverId: request.receiverAccountId });
   }
   if (request.delivererAccountId != null) {
     queryBuilder = queryBuilder.andWhere('delivererAccount.id = :delivererId', { delivererId: request.delivererAccountId });
+  }
+  return queryBuilder;
+}
+
+function _genDonorConditions(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  request: DonationReadRequest
+): OrmSelectQueryBuilder<DonationEntity> {
+  if (request.donorAccountId != null) {
+    queryBuilder = queryBuilder.andWhere('donorAccount.id = :donorId', { donorId: request.donorAccountId });
+  }
+  if (request.donorOrganizationName) {
+    queryBuilder = queryBuilder.andWhere(
+      'donorOrganization.organizationName = :donorOrganizationName',
+      { donorOrganizationName: request.donorOrganizationName }
+    );
   }
   return queryBuilder;
 }
@@ -153,12 +168,27 @@ function _genDonationExpiredCondition(
   filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   const expired: boolean = (filters.expired === 'true');
-  // If not looking for a specific donation, then filter out all donations that have expired (pickup window has passed).
-  if (!expired && filters.id == null && !filters.myDonations) {
-    queryBuilder = queryBuilder.andWhere(`(donation.pickupWindowEnd > NOW() OR donation.donationStatus >= 'Picked Up')`);
-  } else if (expired) {
+  if (expired) {
+    // Only include donations whose pickup window has passed and they haven't been picked up.
     queryBuilder = queryBuilder.andWhere('donation.pickupWindowEnd <= NOW()');
-    queryBuilder = queryBuilder.andWhere(`donation.donationStatus < 'Picked Up'`);
+    queryBuilder = queryBuilder.andWhere(`donation.donationStatus < '${DonationStatus.PickedUp}'`);
+  } else if (!_isSearchingSpecificDonation(filters)) {
+    queryBuilder = queryBuilder.andWhere(`(donation.pickupWindowEnd > NOW() OR donation.donationStatus >= 'Picked Up')`);
+  }
+  return queryBuilder;
+}
+
+function _isSearchingSpecificDonation(filters: DonationReadRequest): boolean {
+  return (filters.id != null);
+}
+
+function _genDonationCompleteCondition(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationReadRequest
+): OrmSelectQueryBuilder<DonationEntity> {
+  const includeComplete: boolean = (filters.includeComplete === 'true' || filters.donationStatus === DonationStatus.Complete);
+  if (!includeComplete && !_isSearchingSpecificDonation(filters)) {
+    queryBuilder = queryBuilder.andWhere(`donation.donationStatus <> '${DonationStatus.Complete}'`);
   }
   return queryBuilder;
 }

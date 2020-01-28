@@ -26,6 +26,11 @@
     </div>
   </div>
 
+  <div class="toggles-container">
+    <mat-slide-toggle [checked]="filtersForm.includeComplete" (change)="filtersForm.includeComplete = $event.checked">Include Completed Donations</mat-slide-toggle>
+    <mat-slide-toggle [checked]="filtersForm.expired" (change)="filtersForm.expired = $event.checked" formControlName="expired">Expired Donations Only</mat-slide-toggle>
+  </div>
+
   <h2 class="title">Sort Options</h2>
 
   <div class="row">

@@ -26,6 +26,14 @@
     }
   }
 
+  .toggles-container {
+    padding-bottom: 8px;
+
+    .mat-slide-toggle {
+      margin-bottom: 5px;
+    }
+  }
+
   .filter-buttons {
     text-align: right;
 

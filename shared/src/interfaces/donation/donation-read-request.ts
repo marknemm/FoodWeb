@@ -57,9 +57,13 @@ export interface DonationReadRequest extends PagingParams {
    */
   donationType?: string;
   /**
-   * If true, then only expired donations will come back. If false, then no expired donations will come back.
+   * If 'true', then only expired donations will come back. If 'false', then no expired donations will come back.
    */
   expired?: string;
+  /**
+   * If 'true', then completed donations will be included in results. If false or omitted, then they will not be included.
+   */
+  includeComplete?: string;
   /**
    * Set to true if filtering donations belonging to current user.
    */
