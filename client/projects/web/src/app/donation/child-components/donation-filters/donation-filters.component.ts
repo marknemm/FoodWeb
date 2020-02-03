@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { DonationFiltersForm, DonationReadRequest } from '~web/donation/forms/donation-filters.form';
+import { DonationSortBy } from '~shared';
+import { DonationFiltersForm, DonationReadRequest } from '~web/donation-delivery-shared/donation-filters.form';
 import { ConstantsService } from '~web/shared/constants/constants.service';
 
 @Component({
@@ -10,9 +11,19 @@ import { ConstantsService } from '~web/shared/constants/constants.service';
 })
 export class DonationFiltersComponent implements OnInit {
 
-  filtersForm = new DonationFiltersForm();
-
   @Output() filter = new EventEmitter<DonationReadRequest>();
+
+  /**
+   * Options for sorting dropdown.
+   */
+  readonly sortByOpts: DonationSortByOption[] = [
+    { name: 'Pickup Window', value: 'pickupWindowStart' },
+    { name: 'Date Created', value: 'createTimestamp' },
+    { name: 'Donation Status', value: 'donationStatus' },
+    { name: 'Donor Organization', value: 'donorOrganizationName' }
+  ];
+
+  filtersForm = new DonationFiltersForm();
 
   constructor(
     public constantsService: ConstantsService,
@@ -25,4 +36,9 @@ export class DonationFiltersComponent implements OnInit {
     );
   }
 
+}
+
+export interface DonationSortByOption {
+  name: string;
+  value: DonationSortBy;
 }

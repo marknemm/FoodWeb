@@ -4,16 +4,6 @@ export { DonationReadRequest };
 
 export class DonationFiltersForm extends TypedFormGroup<DonationReadRequest> {
 
-  /**
-   * Options for sorting dropdown.
-   */
-  readonly sortByOpts: SortByOption[] = [
-    { name: 'Pickup Window', value: 'pickupWindowStart' },
-    { name: 'Date Created', value: 'createTimestamp' },
-    { name: 'Donation Status', value: 'donationStatus' },
-    { name: 'Donor Organization', value: 'donorOrganizationName' }
-  ];
-
   constructor(filters?: Partial<DonationReadRequest>) {
     super({
       id: undefined,
@@ -21,8 +11,8 @@ export class DonationFiltersForm extends TypedFormGroup<DonationReadRequest> {
       donorLastName: undefined,
       donorFirstName: undefined,
       donorOrganizationName: undefined,
-      includeComplete: undefined,
       expired: undefined,
+      receiverOrganizationName: undefined,
       sortBy: undefined,
       sortOrder: undefined
     });
@@ -41,20 +31,4 @@ export class DonationFiltersForm extends TypedFormGroup<DonationReadRequest> {
   set expired(value: boolean) {
     this.get('expired').setValue(value ? 'true' : undefined);
   }
-
-  /**
-   * The 'includeComplete' form control value.
-   */
-  get includeComplete(): boolean {
-    return (this.get('includeComplete').value === 'true');
-  }
-
-  set includeComplete(value: boolean) {
-    this.get('includeComplete').setValue(value ? 'true' : undefined);
-  }
-}
-
-export interface SortByOption {
-  name: string;
-  value: string;
 }

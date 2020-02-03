@@ -1,0 +1,32 @@
+<mat-drawer-container class="filter-list" [autosize]="true">
+  <mat-drawer-content>
+    <div class="page container">
+
+      <ng-content select="food-web-filter-list-title"></ng-content>
+
+      <div class="filter-list-toolbar">
+        <button mat-button type="button" matTooltip="Search & Filter {{ listItemsLabel }}" (click)="onFiltersOpenedChange(!this.filtersOpened)">
+          <mat-icon>search</mat-icon>
+          <mat-icon>filter_list</mat-icon>
+        </button>
+      </div>
+
+      <ng-content select="food-web-filter-list-content"></ng-content>
+
+      <div *ngIf="totalCount; else noneFound" class="food-web-paginator-container">
+        <food-web-paginator [length]="totalCount"></food-web-paginator>
+      </div>
+
+      <ng-template #noneFound>
+        <p class="none-found">
+          Could not find any {{ listItemsLabel }}
+        </p>
+      </ng-template>
+
+    </div>
+  </mat-drawer-content>
+
+  <mat-drawer [opened]="filtersOpened" (openedChange)="onFiltersOpenedChange($event)" mode="over" position="end">
+    <ng-content select="food-web-filter-list-filters"></ng-content>
+  </mat-drawer>
+</mat-drawer-container>

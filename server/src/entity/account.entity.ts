@@ -1,5 +1,5 @@
-import { AfterInsert, AfterLoad, AfterUpdate, Column, CreateDateColumn, Index, JoinColumn, OneToMany, OneToOne, UpdateDateColumn } from 'typeorm';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
+import { Column, CreateDateColumn, Index, JoinColumn, OneToMany, OneToOne, UpdateDateColumn } from 'typeorm';
+import { OrmAfterLoad, OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { Account, AccountType, Constants, OperationHoursHelper } from '../shared';
 import { AppDataEntity } from './app-data.entity';
 import { ContactInfoEntity } from './contact-info.entity';
@@ -9,11 +9,10 @@ import { VolunteerEntity } from './volunteer-entity';
 export { Account, AccountType };
 
 const _constants = new Constants();
+const _opHoursHelper = new OperationHoursHelper();
 
 @OrmEntity('Account')
 export class AccountEntity implements Account {
-
-  private _opHoursHelper = new OperationHoursHelper();
 
   @OrmPrimaryGeneratedColumn()
   id: number;
@@ -55,12 +54,12 @@ export class AccountEntity implements Account {
 
   verified?: boolean;
 
-  @AfterLoad() @AfterInsert() @AfterUpdate()
+  @OrmAfterLoad()
   formatOperationHours(): void {
-    this._opHoursHelper.formatOperationHoursTimes(this.operationHours);
+    _opHoursHelper.formatOperationHoursTimes(this.operationHours);
   }
 
-  @AfterLoad()
+  @OrmAfterLoad()
   fillVerfied(): void {
 
   }

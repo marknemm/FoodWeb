@@ -8,6 +8,7 @@ import _ = require('lodash');
 export { Donation, DonationStatus };
 
 @OrmEntity('Donation')
+@Index('donorNameIdx', { synchronize: false })
 export class DonationEntity implements Donation {
 
   @OrmPrimaryGeneratedColumn()
@@ -24,7 +25,6 @@ export class DonationEntity implements Donation {
   claim?: DonationClaimEntity;
 
   @Column()
-  @Index()
   donorLastName: string;
 
   @Column()
@@ -50,6 +50,9 @@ export class DonationEntity implements Donation {
 
   @Column({ type: 'enum', enum: DONATION_STATUSES, default: DONATION_STATUSES[0] })
   donationStatus: DonationStatus;
+
+  @Column({ default: false })
+  complete: boolean;
 
   @UpdateDateColumn({ type: 'timestamp with time zone' })
   updateTimestamp: Date;

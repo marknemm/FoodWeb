@@ -81,7 +81,7 @@ function _genWhereCondition(
 ): OrmSelectQueryBuilder<AccountEntity> {
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'account', filters, ['id', 'username', 'accountType']);
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'contactInfo', filters, ['email']);
-  queryBuilder = genSimpleWhereConditions(queryBuilder, 'organization', filters, ['organizationName']);
+  queryBuilder = genSimpleWhereConditions(queryBuilder, 'organization', filters, ['name'], { convertToLowerCase: true });
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'receiver', filters, ['autoReceiver']);
   queryBuilder = _genOperationHoursCondition(queryBuilder, filters, myAccount);
   queryBuilder = _genDistanceCondition(queryBuilder, filters, myAccount);
@@ -141,7 +141,7 @@ function _genOrdering(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>
 ): OrmSelectQueryBuilder<AccountEntity> {
   return queryBuilder
-    .addOrderBy('organization.organizationName', 'ASC')
+    .addOrderBy('organization.name', 'ASC')
     .addOrderBy('volunteer.lastName', 'ASC')
     .addOrderBy('volunteer.firstName', 'ASC')
 }

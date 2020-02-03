@@ -1,4 +1,4 @@
-import { Column, JoinColumn, OneToOne } from 'typeorm';
+import { Column, JoinColumn, OneToOne, Index } from 'typeorm';
 import { OrmEntity, OrmPrimaryGeneratedColumn } from '../helpers/database/orm';
 import { Organization } from '../shared';
 import { AccountEntity } from './account.entity';
@@ -6,16 +6,17 @@ import { DonorEntity } from './donor.entity';
 import { ReceiverEntity } from './receiver.entity';
 
 @OrmEntity('Organization')
+@Index('organizationNameIdx', { synchronize: false })
 export class OrganizationEntity implements Organization {
 
   @OrmPrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  organizationName: string;
+  name: string;
 
   @Column('text', { default: '' })
-  organizationInfo?: string;
+  description?: string;
 
   @Column('text', { default: '' })
   deliveryInstructions?: string;

@@ -3,7 +3,7 @@ SELECT
   "ContactInfo"."phoneNumber",
   "Volunteer"."firstName",
   "Volunteer"."lastName",
-  "Organization"."organizationName"
+  "Organization"."name"
 FROM "ContactInfo"
 INNER JOIN "Account" ON "Account"."contactInfoId" = "ContactInfo"."id"
 LEFT JOIN "Volunteer" ON "Volunteer"."accountId" = "Account"."id"

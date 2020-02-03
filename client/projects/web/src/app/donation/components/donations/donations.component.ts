@@ -11,8 +11,6 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 })
 export class DonationsComponent implements OnInit {
 
-  filtersPanelOpened = false;
-
   private _donations: Donation[] = [];
   private _totalCount = 0;
 
@@ -42,7 +40,6 @@ export class DonationsComponent implements OnInit {
   }
 
   filterDonations(filters: DonationReadRequest): void {
-    this.filtersPanelOpened = false;
     this._router.navigate([], {
       relativeTo: this._activatedRoute,
       queryParams: filters

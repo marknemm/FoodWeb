@@ -4,7 +4,7 @@
       <food-web-username *ngIf="isMyAccount" formControlName="username"></food-web-username>
       <ng-container *ngIf="!isMyAccount">
         <div *ngIf="originalAccount.organization">
-          {{ originalAccount.organization.organizationName }}
+          {{ originalAccount.organization.name }}
         </div>
       </ng-container>
     </div>
