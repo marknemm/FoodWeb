@@ -113,8 +113,8 @@ export class AccountHelper {
 
     const requireErr: string = this._validationHelper.validateRequiredFields(
       account,
-      ['username', 'accountType', 'contactInfo', 'operationHours'],
-      ['Username', 'Account type', 'Contact info', 'Operation hours']
+      ['username', 'accountType', 'contactInfo'],
+      ['Username', 'Account type', 'Contact info']
     );
     if (requireErr) { return requireErr; }
 

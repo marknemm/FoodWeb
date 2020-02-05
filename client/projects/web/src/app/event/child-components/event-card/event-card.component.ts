@@ -50,7 +50,6 @@ export class EventCardComponent implements OnInit, OnChanges {
       setTimeout(() => {
         this._signupPanelShouldGlow = (localStorage.getItem(`food-web-event-selected-${this.featuredEvent.showUntil.getTime()}`) !== 'true');
         this._directionsHref = this._mapAppLinkService.genDirectionHref(['My+Location', this.featuredEvent.location]);
-        this.featuredEvent.location = this.featuredEvent.location.replace(/<[^>]*>/g, '').replace(',', '<br>');
       });
     }
   }

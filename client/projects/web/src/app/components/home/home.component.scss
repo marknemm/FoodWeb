@@ -1,9 +1,6 @@
 $side-container-max-width: 270px;
 
-.home-container {
-  max-width: 960px;
-  margin: auto;
-
+.home {
   &.has-side-content {
     max-width: 1100px;
 

@@ -5,6 +5,7 @@ import { EventCardComponent } from '~web/event/event-card/event-card.component';
 import { EventRegistrationsComponent } from '~web/event/event-registrations/event-registrations.component';
 import { EventRoutingModule } from '~web/event/event.routing.module';
 import { EventsComponent } from '~web/event/events/events.component';
+import { FormatEventLocationPipe } from '~web/event/format-event-location/format-event-location.pipe';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
 
@@ -12,7 +13,8 @@ import { SharedModule } from '~web/shared/shared.module';
   declarations: [
     EventCardComponent,
     EventsComponent,
-    EventRegistrationsComponent
+    EventRegistrationsComponent,
+    FormatEventLocationPipe
   ],
   imports: [
     EventRoutingModule,

@@ -43,7 +43,7 @@ export class FeaturedEventsService {
       time: '6:00 to 7:00 PM',
     },
     {
-      date: 'Monday, May 12',
+      date: 'Tuesday, May 12',
       day: 12,
       description: 'Signup for our next volunteer training at the <strong>Hindu Cultural Society</strong>',
       title: 'Volunteer Driver Training',
