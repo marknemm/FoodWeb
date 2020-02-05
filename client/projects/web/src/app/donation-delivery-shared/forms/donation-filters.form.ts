@@ -7,17 +7,29 @@ export class DonationFiltersForm extends TypedFormGroup<DonationReadRequest> {
   constructor(filters?: Partial<DonationReadRequest>) {
     super({
       id: undefined,
+      delivererAccountId: undefined,
+      deliveryWindowOverlapEnd: undefined,
+      deliveryWindowOverlapStart: undefined,
       donationStatus: undefined,
+      donorAccountId: undefined,
       donorLastName: undefined,
       donorFirstName: undefined,
       donorOrganizationName: undefined,
+      earliestDeliveryWindowStart: undefined,
+      earliestPickupWindowStart: undefined,
       expired: undefined,
+      latestDeliveryWindowStart: undefined,
+      latestPickupWindowStart: undefined,
+      myDonations: undefined,
+      pickupWindowOverlapEnd: undefined,
+      pickupWindowOverlapStart: undefined,
+      receiverAccountId: undefined,
       receiverOrganizationName: undefined,
       sortBy: undefined,
       sortOrder: undefined
     });
     if (filters) {
-      this.patchValue(<any>filters);
+      this.patchValue(filters);
     }
   }
 

@@ -1,34 +1,51 @@
+@import "constants.scss";
+
 .event-card {
   background-color: #e4e4e4;
-  max-width: 300px;
+  max-width: 400px;
   width: 100%;
   border: 1px solid #ccc;
   margin-left: auto;
   margin-right: auto;
 
-  .event-avatar {
-    $event-icon-size: 60px;
-    width: ($event-icon-size - 10px);
-    height: $event-icon-size;
+  .event-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
 
-    .event-icon {
-      font-size: $event-icon-size;
-      width: $event-icon-size;
+    .event-avatar {
+      $event-icon-size: 60px;
+      width: ($event-icon-size - 10px);
       height: $event-icon-size;
+
+      .event-icon {
+        font-size: $event-icon-size;
+        width: $event-icon-size;
+        height: $event-icon-size;
+      }
+
+      .event-day {
+        position: absolute;
+        top: 20px;
+        left: 12px;
+        width: 35px;
+        padding-top: 2px;
+        font-weight: bold;
+        font-size: 30px;
+        line-height: 26px;
+        text-align: center;
+        background-color: white;
+        color: black;
+      }
     }
 
-    .event-day {
-      position: absolute;
-      top: 20px;
-      left: 12px;
-      width: 35px;
-      padding-top: 2px;
-      font-weight: bold;
-      font-size: 30px;
-      line-height: 26px;
-      text-align: center;
-      background-color: white;
-      color: black;
+    .event-title {
+      margin: 0;
+      font-size: 20px;
+
+      @media only screen and (max-width: $mat-mobile) {
+        margin-top: -3px;
+      }
     }
   }
 
@@ -38,6 +55,10 @@
 
     .mat-icon {
       float: left;
+
+      @media only screen and (max-width: $mat-mobile) {
+        font-size: 22px;
+      }
     }
 
     span, a {
@@ -58,5 +79,12 @@
 
   .signup-complete-message {
     color: green;
+    font-weight: bold;
+  }
+
+  .events-page-link {
+    margin-top: 12px;
+    margin-bottom: -5px;
+    font-weight: bold;
   }
 }

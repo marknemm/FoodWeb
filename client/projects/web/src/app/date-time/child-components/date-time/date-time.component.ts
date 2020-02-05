@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
+import { ErrorStateMatcher, FloatLabelType } from '@angular/material/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DateTimeForm } from '~web/date-time/date-time.form';
@@ -21,7 +21,7 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   @Input() defaultTime = '12:00 pm';
   @Input() datePlaceholder = 'Date';
   @Input() timePlaceholder = 'Time';
-  @Input() floatLabels = true;
+  @Input() floatLabels: FloatLabelType = 'auto';
   @Input() minDate = new Date();
   @Input() maxDate: Date;
   @Input() defaultDate: 'Now' | Date;
@@ -33,6 +33,7 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   @Input() boldTime = false;
   @Input() excludeDateDisplay = false;
   @Input() excludeTimeDisplay = false;
+  @Input() inlineFields = false;
 
   private _changeCb: (date: Date) => void = () => {};
   private _destroy$ = new Subject();

@@ -91,6 +91,7 @@ function _genWhereCondition(
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'donation', filters, simpleDonationWhereProps);
   queryBuilder = _genAccountConditions(queryBuilder, filters);
   queryBuilder = _genDeliveryWindowConditions(queryBuilder, filters);
+  queryBuilder = _genPickupWindowConditions(queryBuilder, filters);
   queryBuilder = _genDonationExpiredCondition(queryBuilder, filters);
   return queryBuilder;
 }
@@ -191,13 +192,44 @@ function _genVolunteerConditions(
   return queryBuilder;
 }
 
+function _genPickupWindowConditions(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationFilters
+): OrmSelectQueryBuilder<DonationEntity> {
+  if (filters.pickupWindowOverlapStart) {
+    queryBuilder = queryBuilder.andWhere(
+      `donation.pickupWindowEnd >= :pickupWindowOverlapStart`,
+      { pickupWindowOverlapStart: filters.pickupWindowOverlapStart }
+    );
+  }
+  if (filters.pickupWindowOverlapEnd) {
+    queryBuilder = queryBuilder.andWhere(
+      'donation.pickupWindowStart <= :pickupWindowOverlapEnd',
+      { pickupWindowOverlapEnd: filters.pickupWindowOverlapEnd }
+    );
+  }
+  if (filters.earliestPickupWindowStart) {
+    queryBuilder = queryBuilder.andWhere(
+      'donation.pickupWindowStart >= :earliestPickupWindowStart',
+      { earliestPickupWindowStart: filters.earliestPickupWindowStart }
+    );
+  }
+  if (filters.latestPickupWindowStart) {
+    queryBuilder = queryBuilder.andWhere(
+      'donation.pickupWindowStart <= :latestPickupWindowStart',
+      { latestPickupWindowStart: filters.latestPickupWindowStart }
+    );
+  }
+  return queryBuilder;
+}
+
 function _genDeliveryWindowConditions(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
   filters: DonationFilters
 ): OrmSelectQueryBuilder<DonationEntity> {
   if (filters.deliveryWindowOverlapStart) {
     queryBuilder = queryBuilder.andWhere(
-      'delivery.pickupWindowEnd >= :deliveryWindowOverlapStart',
+      `delivery.pickupWindowEnd >= :deliveryWindowOverlapStart`,
       { deliveryWindowOverlapStart: filters.deliveryWindowOverlapStart }
     );
   }

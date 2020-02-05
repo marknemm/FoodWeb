@@ -4,7 +4,7 @@ export interface DonationFilters {
   /**
    * The ID of the donation.
    */
-  id?: number;
+  id?: number | string;
   /**
    * The status of the donation.
    */
@@ -12,7 +12,7 @@ export interface DonationFilters {
   /**
    * Filters for associated donors' accounts.
    */
-  donorAccountId?: number;
+  donorAccountId?: number | string;
   /**
    * Filters by donation donor's organization name.
    */
@@ -20,7 +20,7 @@ export interface DonationFilters {
   /**
    * Filters for associated receivers' accounts.
    */
-  receiverAccountId?: number;
+  receiverAccountId?: number | string;
   /**
    * Filters by donation receiver's organization name.
    */
@@ -28,7 +28,7 @@ export interface DonationFilters {
   /**
    * Filters for associated deliverers' accounts.
    */
-  delivererAccountId?: number;
+  delivererAccountId?: number | string;
   /**
    * The last name of the person who submitted the donation.
    */
@@ -41,31 +41,43 @@ export interface DonationFilters {
    * The delivery window start date-time for donation overlap.
    * Filters for all donations with a deliveryWindowEnd value that is at or later than the filter value.
    */
-  deliveryWindowOverlapStart?: Date;
+  deliveryWindowOverlapStart?: Date | string;
   /**
    * The delivery window end time for donation overlap.
    * Filters for all donations with a deliveryWindowStart value that is at or earlier than the filter value.
    */
-  deliveryWindowOverlapEnd?: Date;
+  deliveryWindowOverlapEnd?: Date | string;
   /**
    * The earliest date-time that a filtered donation's deliveryWindowStart can be.
    */
-  earliestDeliveryWindowStart?: Date;
+  earliestDeliveryWindowStart?: Date | string;
   /**
    * The latest date-time that a filtered donation's deliveryWindowStart can be.
    */
-  latestDeliveryWindowStart?: Date;
+  latestDeliveryWindowStart?: Date | string;
   /**
-   * The type of the donation.
+   * Filters for all donations with a pickupWindowEnd value that is at or later than the filter value.
    */
-  donationType?: string;
+  pickupWindowOverlapStart?: Date | string;
+  /**
+   * Filters for all donations with a pickupWindowStart value that is at or earlier than the filter value.
+   */
+  pickupWindowOverlapEnd?: Date | string;
+  /**
+   * The earliest date-time that a filtered donation's pickupWindowStart can be.
+   */
+  earliestPickupWindowStart?: Date | string;
+  /**
+   * The latest date-time that a filtered donation's pickupWindowStart can be.
+   */
+  latestPickupWindowStart?: Date | string;
   /**
    * If 'true', then expired donations will be included. If 'false', then no expired donations will be included.
    * An expired donation is one that has had its pickup window completely pass and has not been scheduled for delivery.
    */
-  expired?: string;
+  expired?: boolean | string;
   /**
    * Set to true if filtering donations belonging to current user.
    */
-  myDonations?: boolean;
+  myDonations?: boolean | string;
 }

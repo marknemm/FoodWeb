@@ -1,6 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { DonationSortBy } from '~shared';
+import { AccountType, DonationSortBy } from '~shared';
 import { DonationFiltersForm, DonationReadRequest } from '~web/donation-delivery-shared/donation-filters.form';
 import { ConstantsService } from '~web/shared/constants/constants.service';
 

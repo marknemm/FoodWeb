@@ -28,6 +28,10 @@
     </div>
   </div>
 
+  <!-- <ng-container *ngIf="accountType !== 'Donor'">
+    <food-web-date-time [editing]="true" [inlineFields]="true" floatLabels="never" formControlName="deliveryWindowOverlapStart"></food-web-date-time>
+  </ng-container> -->
+
   <div class="toggles-container">
     <mat-slide-toggle [checked]="filtersForm.expired" (change)="filtersForm.expired = $event.checked" formControlName="expired">Include Expired Donations</mat-slide-toggle>
   </div>
