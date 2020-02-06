@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable, of, Subscriber } from 'rxjs';
 import { catchError, finalize, flatMap, map } from 'rxjs/operators';
-import { Account, DateTimeRange, DeliveryHelper, DeliveryReadFilters, DeliveryReadRequest, DeliveryScheduleRequest, DeliveryStateChangeRequest, Donation, DonationStatus, LatLngLiteral, ListResponse } from '~shared';
+import { Account, DateTimeRange, DeliveryHelper, DeliveryReadRequest, DeliveryScheduleRequest, DeliveryStateChangeRequest, Donation, DonationStatus, LatLngLiteral, ListResponse } from '~shared';
 import { environment } from '~web/environments/environment';
 import { SessionService } from '~web/session/session/session.service';
 import { AlertService } from '~web/shared/alert/alert.service';
@@ -112,40 +112,36 @@ export class DeliveryService {
   listenDeliveriesQueryChange(activatedRoute: ActivatedRoute): Observable<ListResponse<Donation>> {
     return activatedRoute.queryParamMap.pipe(
       flatMap((params: ParamMap) => {
-        const filters: DeliveryReadFilters = {};
+        const filters: DeliveryReadRequest = {
+          page: (params.has('page') ? parseInt(params.get('page'), 10) : 1),
+          limit: (params.has('limit') ? parseInt(params.get('limit'), 10) : 10)
+        };
         params.keys.forEach((paramKey: string) => {
           if (paramKey !== 'page' && paramKey !== 'limit') {
             filters[paramKey] = params.get(paramKey);
           }
         });
-        const page: number = (params.has('page') ? parseInt(params.get('page'), 10) : undefined);
-        const limit: number = (params.has('limit') ? parseInt(params.get('limit'), 10) : undefined);
         return (this._router.url.indexOf('my') >= 0)
-          ? this.getMyDeliveries(filters, page, limit)
+          ? this.getMyDeliveries(filters)
           : (this._router.url.indexOf('unscheduled') >= 0)
-          ? this.getUnscheduledDeliveries(filters, page, limit)
-          : this._getDeliveries(filters, page, limit);
+          ? this.getUnscheduledDeliveries(filters)
+          : this._getDeliveries(filters);
       })
     );
   }
 
-  getMyDeliveries(filters: DeliveryReadFilters, page = 1, limit = 10): Observable<ListResponse<Donation>> {
-    return this._getDeliveries(filters, page, limit, '/my');
+  getMyDeliveries(request: DeliveryReadRequest): Observable<ListResponse<Donation>> {
+    return this._getDeliveries(request, '/my');
   }
 
-  getUnscheduledDeliveries(filters: DeliveryReadFilters, page = 1, limit = 10): Observable<ListResponse<Donation>> {
-    return this._getDeliveries(filters, page, limit, '/unscheduled');
+  getUnscheduledDeliveries(request: DeliveryReadRequest): Observable<ListResponse<Donation>> {
+    return this._getDeliveries(request, '/unscheduled');
   }
 
-  private _getDeliveries(filters: DeliveryReadFilters, page: number, limit: number, subRoute = ''): Observable<ListResponse<Donation>> {
+  private _getDeliveries(request: DeliveryReadRequest, subRoute = ''): Observable<ListResponse<Donation>> {
     const getUrl: string = (this.url + subRoute);
-    const request = <DeliveryReadRequest>filters;
-    if (page >= 0) {
-      request.page = page;
-    }
-    if (limit >= 0) {
-      request.limit = limit;
-    }
+    request.page = request.page ? request.page : 1;
+    request.limit = request.limit ? request.limit : 10;
     const params = new HttpParams({ fromObject: <any>request });
     this._pageProgressService.activate(true);
     return this._httpClient.get<ListResponse<Donation>>(getUrl, { params, withCredentials: true }).pipe(

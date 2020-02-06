@@ -28,12 +28,12 @@ export class AccountHelper {
   }
 
   organizationFirstChar(organization: Organization): string {
-    return organization.organizationName.substr(0, 1).toUpperCase();
+    return organization.name.substr(0, 1).toUpperCase();
   }
 
   accountName(account: Account): string {
     return (account.accountType === AccountType.Donor || account.accountType === AccountType.Receiver)
-      ? account.organization.organizationName
+      ? account.organization.name
       : `${account.volunteer.firstName} ${account.volunteer.lastName}`;
   }
 
@@ -113,8 +113,8 @@ export class AccountHelper {
 
     const requireErr: string = this._validationHelper.validateRequiredFields(
       account,
-      ['username', 'accountType', 'contactInfo', 'operationHours'],
-      ['Username', 'Account type', 'Contact info', 'Operation hours']
+      ['username', 'accountType', 'contactInfo'],
+      ['Username', 'Account type', 'Contact info']
     );
     if (requireErr) { return requireErr; }
 
@@ -173,7 +173,7 @@ export class AccountHelper {
 
   validateOrganization(organization: Organization, accountType: AccountType): string {
     if (!organization) { return ''; }
-    if (!organization.organizationName) {
+    if (!organization.name) {
       return 'Organization name required';
     }
     if (accountType === AccountType.Donor) {

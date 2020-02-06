@@ -136,6 +136,16 @@
         "./projects/web/src/app/event/interfaces/*",
         "./projects/web/src/app/event/services/*"
       ],
+      "~web/filter-list/*": [
+        "./projects/web/src/app/filter-list/*",
+        "./projects/web/src/app/filter-list/child-components/*",
+        "./projects/web/src/app/filter-list/components/*",
+        "./projects/web/src/app/filter-list/directives/*",
+        "./projects/web/src/app/filter-list/forms/*",
+        "./projects/web/src/app/filter-list/pipes/*",
+        "./projects/web/src/app/filter-list/interfaces/*",
+        "./projects/web/src/app/filter-list/services/*"
+      ],
       "~web/fundraise/*": [
         "./projects/web/src/app/fundraise/*",
         "./projects/web/src/app/fundraise/child-components/*",

@@ -4,8 +4,8 @@ export { Donor, Receiver };
 
 export interface Organization {
   id?: number;
-  organizationName: string;
-  organizationInfo?: string;
+  name: string;
+  description?: string;
   deliveryInstructions?: string;
   donor?: Donor;
   receiver?: Receiver;

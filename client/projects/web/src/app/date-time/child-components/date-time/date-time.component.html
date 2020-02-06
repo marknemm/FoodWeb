@@ -1,6 +1,6 @@
-<div *ngIf="editing" [formGroup]="dateTimeForm" class="date-time-form">
+<div *ngIf="editing" [formGroup]="dateTimeForm" class="date-time-form" [ngClass]="{ 'inline-fields': inlineFields }">
   <div class="date-field">
-    <mat-form-field class="fill" (click)="datePicker.open()">
+    <mat-form-field class="fill" [floatLabel]="floatLabels" (click)="datePicker.open()">
       <input matInput
        [matDatepicker]="datePicker"
        [min]="minDate"

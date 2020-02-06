@@ -1,8 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { DonationHelper, ListResponse } from '~shared';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DonationHelper, DonationReadRequest, ListResponse } from '~shared';
 import { Donation, DonationService } from '~web/donation/donation/donation.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
@@ -11,33 +9,41 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
   templateUrl: './donations.component.html',
   styleUrls: ['./donations.component.scss']
 })
-export class DonationsComponent implements OnInit, OnDestroy {
+export class DonationsComponent implements OnInit {
 
-  donations: Donation[] = [];
-  totalCount = 0;
-
-  private _destroy$ = new Subject();
+  private _donations: Donation[] = [];
+  private _totalCount = 0;
 
   constructor(
-    public pageTitleService: PageTitleService,
     public donationHelper: DonationHelper,
+    public pageTitleService: PageTitleService,
+    private _activatedRoute: ActivatedRoute,
     private _donationService: DonationService,
-    private _activatedRoute: ActivatedRoute
+    private _router: Router
   ) {}
 
+  get donations(): Donation[] {
+    return this._donations;
+  }
+
+  get totalCount(): number {
+    return this._totalCount;
+  }
+
   ngOnInit() {
-    this._donationService.listenDonationsQueryChange(this._activatedRoute).pipe(
-      takeUntil(this._destroy$)
-    ).subscribe(
+    this._donationService.listenDonationsQueryChange(this._activatedRoute).subscribe(
       (response: ListResponse<Donation>) => {
-        this.donations = response.list;
-        this.totalCount = response.totalCount;
+        this._donations = response.list;
+        this._totalCount = response.totalCount;
       }
     );
   }
 
-  ngOnDestroy() {
-    this._destroy$.next();
+  filterDonations(filters: DonationReadRequest): void {
+    this._router.navigate([], {
+      relativeTo: this._activatedRoute,
+      queryParams: filters
+    });
   }
 
 }

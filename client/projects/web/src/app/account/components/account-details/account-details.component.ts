@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AccountHelper, AccountType, DonationReadFilters } from '~shared';
+import { AccountHelper, AccountType, DonationReadRequest } from '~shared';
 import { AccountForm, AccountFormKey } from '~web/account/account.form';
 import { Account, AccountService } from '~web/account/account/account.service';
 import { PasswordFormMode, PasswordFormT } from '~web/password/password.form';
@@ -23,7 +23,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   private _accountNotFound = false;
   private _isMyAccount = false;
   private _passwordFormMode: PasswordFormMode = 'Account';
-  private _seeDonationsLinkParams: DonationReadFilters;
+  private _seeDonationsLinkParams: DonationReadRequest;
   private _destroy$ = new Subject();
 
   constructor(
@@ -57,7 +57,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     return this._passwordFormMode;
   }
 
-  get seeDonationsLinkParams(): DonationReadFilters {
+  get seeDonationsLinkParams(): DonationReadRequest {
     return this._seeDonationsLinkParams;
   }
 
@@ -89,7 +89,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _genSeeDonationLinkParams(account: Account): DonationReadFilters {
+  private _genSeeDonationLinkParams(account: Account): DonationReadRequest {
     return (account.accountType === 'Donor')
       ? { donorAccountId: account.id }
       : { receiverAccountId: account.id };

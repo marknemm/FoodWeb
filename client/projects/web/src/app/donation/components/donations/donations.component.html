@@ -1,9 +1,7 @@
-<div class="donations-container">
-  <div class="page-title block-label">
-    {{ pageTitleService.title }}
-  </div>
+<food-web-filter-list class="donations" listItemsLabel="Donations" [totalCount]="totalCount">
+  <food-web-filter-list-title>{{ pageTitleService.title }}</food-web-filter-list-title>
 
-  <div class="row">
+  <food-web-filter-list-content>
     <div class="col-lg-6" *ngFor="let donation of donations">
       <a [routerLink]="donationHelper.donationDetailsRouterLink(donation)" [state]="donation" class="no-hover">
         <mat-card id="donation-{{ donation.id }}" class="selectable-card">
@@ -33,9 +31,9 @@
         </mat-card>
       </a>
     </div>
-  </div>
+  </food-web-filter-list-content>
 
-  <div class="food-web-paginator-container">
-    <food-web-paginator [length]="totalCount"></food-web-paginator>
-  </div>
-</div>
+  <food-web-filter-list-filters>
+    <food-web-donation-filters (filter)="filterDonations($event)"></food-web-donation-filters>
+  </food-web-filter-list-filters>
+</food-web-filter-list>

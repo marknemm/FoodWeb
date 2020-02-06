@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AccountDetailsComponent } from '~web/account/account-details/account-details.component';
 import { AccountRoutingModule } from '~web/account/account-routing.module';
@@ -48,6 +49,7 @@ import { SharedModule } from '~web/shared/shared.module';
     ReactiveFormsModule,
     NgxMaterialTimepickerModule,
     MaterialModule,
+    MatSidenavModule,
     SharedModule,
     PasswordModule,
     DateTimeModule,

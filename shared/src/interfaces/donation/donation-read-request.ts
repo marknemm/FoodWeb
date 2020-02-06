@@ -1,6 +1,7 @@
-import { DonationReadFilters } from './donation-read-filters';
-import { DonationReadSort } from './donation-read-sort';
 import { PagingParams } from '../paging-params';
-export { DonationReadFilters, DonationReadSort };
+import { SortOptions } from '../sort-options';
+import { DonationFilters } from './donation-filters';
 
-export interface DonationReadRequest extends DonationReadFilters, DonationReadSort, PagingParams {}
+export interface DonationReadRequest extends DonationFilters, PagingParams, SortOptions<DonationSortBy> {}
+
+export type DonationSortBy = 'createTimestamp' | 'donationStatus' | 'donorOrganizationName' | 'pickupWindowStart';

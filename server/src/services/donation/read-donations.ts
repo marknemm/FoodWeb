@@ -2,7 +2,9 @@ import { AccountEntity } from '../../entity/account.entity';
 import { DonationEntity } from '../../entity/donation.entity';
 import { getOrmRepository, OrmRepository, OrmSelectQueryBuilder } from '../../helpers/database/orm';
 import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '../../helpers/database/query-builder-helper';
-import { DonationReadFilters, DonationReadRequest, Validation } from '../../shared';
+import { DonationFilters } from '../../interfaces/donation/donation-filters';
+import { SortOptions } from '../../interfaces/sort-options';
+import { DonationReadRequest, DonationSortBy, DonationStatus } from '../../shared';
 
 export async function readDonation(id: number, donationRepo?: OrmRepository<DonationEntity>): Promise<DonationEntity> {
   const readRequest: DonationReadRequest = { id, page: 1, limit: 1 };
@@ -23,15 +25,9 @@ function _fillMyAccountRequestFilter(request: DonationReadRequest, myAccount: Ac
 
   request.myDonations = true;
   switch (myAccount.accountType) {
-    case 'Donor':
-      request.donorAccountId = myAccount.id;
-      break;
-    case 'Receiver':
-      request.receiverAccountId = myAccount.id;
-      break;
-    case 'Volunteer':
-      request.delivererAccountId = myAccount.id;
-      break;
+    case 'Donor':     request.donorAccountId = myAccount.id;      break;
+    case 'Receiver':  request.receiverAccountId = myAccount.id;   break;
+    case 'Volunteer': request.delivererAccountId = myAccount.id;  break;
   }
   // Else, 'Admin' account type owns all accounts.
 }
@@ -74,14 +70,12 @@ function _genJoins(queryBuilder: OrmSelectQueryBuilder<DonationEntity>): OrmSele
     .innerJoinAndSelect('donorOrganization.donor', 'donor')
     .innerJoinAndSelect('donorAccount.contactInfo', 'donorContactInfo')
     .leftJoinAndSelect('donation.donorContactOverride', 'donorContactOverride')
-    .leftJoinAndMapMany('donorAccount.operationHours', 'donorAccount.operationHours', 'donorOpHours')
     .leftJoinAndSelect('donation.claim', 'claim')
     .leftJoinAndSelect('claim.routeToReceiver', 'routeToReceiver')
     .leftJoinAndSelect('claim.receiverAccount', 'receiverAccount')
     .leftJoinAndSelect('receiverAccount.organization', 'receiverOrganization')
     .leftJoinAndSelect('receiverAccount.contactInfo', 'receiverContactInfo')
     .leftJoinAndSelect('receiverOrganization.receiver', 'receiver')
-    .leftJoinAndMapMany('receiverAccount.operationHours', 'receiverAccount.operationHours', 'receiverOpHours')
     .leftJoinAndSelect('claim.delivery', 'delivery')
     .leftJoinAndSelect('delivery.volunteerAccount', 'delivererAccount')
     .leftJoinAndSelect('delivery.routeToDonor', 'routeToDonor')
@@ -91,39 +85,151 @@ function _genJoins(queryBuilder: OrmSelectQueryBuilder<DonationEntity>): OrmSele
 
 function _genWhereCondition(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationReadFilters
+  filters: DonationFilters
 ): OrmSelectQueryBuilder<DonationEntity> {
-  const simpleDonationWhereProps = ['id', 'donationType', 'donationStatus', 'donorLastName', 'donorFirstName'];
+  const simpleDonationWhereProps = ['id', 'donationType', 'donationStatus'];
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'donation', filters, simpleDonationWhereProps);
   queryBuilder = _genAccountConditions(queryBuilder, filters);
   queryBuilder = _genDeliveryWindowConditions(queryBuilder, filters);
+  queryBuilder = _genPickupWindowConditions(queryBuilder, filters);
   queryBuilder = _genDonationExpiredCondition(queryBuilder, filters);
   return queryBuilder;
 }
 
 function _genAccountConditions(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationReadFilters
+  filters: DonationFilters
+): OrmSelectQueryBuilder<DonationEntity> {
+  queryBuilder = _genDonorConditions(queryBuilder, filters);
+  queryBuilder = _genReceiverConditions(queryBuilder, filters);
+  queryBuilder = _genVolunteerConditions(queryBuilder, filters);
+  return queryBuilder;
+}
+
+function _genDonorConditions(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationFilters
+): OrmSelectQueryBuilder<DonationEntity> {
+  queryBuilder = _genDonorAccountIdCondition(queryBuilder, filters);
+  queryBuilder = _genDonorNameCondition(queryBuilder, filters);
+  queryBuilder = _genDonorOrgNameCondition(queryBuilder, filters);
+  return queryBuilder;
+}
+
+function _genDonorAccountIdCondition(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationFilters
 ): OrmSelectQueryBuilder<DonationEntity> {
   if (filters.donorAccountId != null) {
     queryBuilder = queryBuilder.andWhere('donorAccount.id = :donorId', { donorId: filters.donorAccountId });
   }
+  return queryBuilder;
+}
+
+function _genDonorNameCondition(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationFilters
+): OrmSelectQueryBuilder<DonationEntity> {
+  const simpleDonationWhereProps = ['donorLastName', 'donorFirstName'];
+  queryBuilder = genSimpleWhereConditions(queryBuilder, 'donation', filters, simpleDonationWhereProps, { convertToLowerCase: true });
+  return queryBuilder;
+}
+
+function _genDonorOrgNameCondition(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationFilters
+): OrmSelectQueryBuilder<DonationEntity> {
+  filters.donorOrganizationName = filters.donorOrganizationName?.trim();
+  if (filters.donorOrganizationName) {
+    queryBuilder = queryBuilder.andWhere(
+      'LOWER(donorOrganization.name) = :donorOrganizationName',
+      { donorOrganizationName: filters.donorOrganizationName.toLowerCase() }
+    );
+  }
+  return queryBuilder;
+}
+
+function _genReceiverConditions(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationFilters
+): OrmSelectQueryBuilder<DonationEntity> {
+  queryBuilder = _genReceiverAccountIdCondition(queryBuilder, filters);
+  queryBuilder = _genReceiverOrgNameCondition(queryBuilder, filters);
+  return queryBuilder;
+}
+
+function _genReceiverAccountIdCondition(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationFilters
+): OrmSelectQueryBuilder<DonationEntity> {
   if (filters.receiverAccountId != null) {
     queryBuilder = queryBuilder.andWhere('receiverAccount.id = :receiverId', { receiverId: filters.receiverAccountId });
   }
+  return queryBuilder;
+}
+
+function _genReceiverOrgNameCondition(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationFilters
+): OrmSelectQueryBuilder<DonationEntity> {
+  filters.receiverOrganizationName = filters.receiverOrganizationName?.trim();
+  if (filters.receiverOrganizationName) {
+    queryBuilder = queryBuilder.andWhere(
+      'LOWER(receiverOrganization.name) = :receiverOrganizationName',
+      { receiverOrganizationName: filters.receiverOrganizationName.toLowerCase() }
+    );
+  }
+  return queryBuilder;
+}
+
+function _genVolunteerConditions(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationFilters
+): OrmSelectQueryBuilder<DonationEntity> {
   if (filters.delivererAccountId != null) {
     queryBuilder = queryBuilder.andWhere('delivererAccount.id = :delivererId', { delivererId: filters.delivererAccountId });
   }
   return queryBuilder;
 }
 
+function _genPickupWindowConditions(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationFilters
+): OrmSelectQueryBuilder<DonationEntity> {
+  if (filters.pickupWindowOverlapStart) {
+    queryBuilder = queryBuilder.andWhere(
+      `donation.pickupWindowEnd >= :pickupWindowOverlapStart`,
+      { pickupWindowOverlapStart: filters.pickupWindowOverlapStart }
+    );
+  }
+  if (filters.pickupWindowOverlapEnd) {
+    queryBuilder = queryBuilder.andWhere(
+      'donation.pickupWindowStart <= :pickupWindowOverlapEnd',
+      { pickupWindowOverlapEnd: filters.pickupWindowOverlapEnd }
+    );
+  }
+  if (filters.earliestPickupWindowStart) {
+    queryBuilder = queryBuilder.andWhere(
+      'donation.pickupWindowStart >= :earliestPickupWindowStart',
+      { earliestPickupWindowStart: filters.earliestPickupWindowStart }
+    );
+  }
+  if (filters.latestPickupWindowStart) {
+    queryBuilder = queryBuilder.andWhere(
+      'donation.pickupWindowStart <= :latestPickupWindowStart',
+      { latestPickupWindowStart: filters.latestPickupWindowStart }
+    );
+  }
+  return queryBuilder;
+}
+
 function _genDeliveryWindowConditions(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationReadFilters
+  filters: DonationFilters
 ): OrmSelectQueryBuilder<DonationEntity> {
   if (filters.deliveryWindowOverlapStart) {
     queryBuilder = queryBuilder.andWhere(
-      'delivery.pickupWindowEnd >= :deliveryWindowOverlapStart',
+      `delivery.pickupWindowEnd >= :deliveryWindowOverlapStart`,
       { deliveryWindowOverlapStart: filters.deliveryWindowOverlapStart }
     );
   }
@@ -150,50 +256,63 @@ function _genDeliveryWindowConditions(
 
 function _genDonationExpiredCondition(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationReadFilters
+  filters: DonationFilters
 ): OrmSelectQueryBuilder<DonationEntity> {
   const expired: boolean = (filters.expired === 'true');
-  // If not looking for a specific donation, then filter out all donations that have expired (pickup window has passed).
-  if (!expired && filters.id == null && !filters.myDonations) {
-    queryBuilder = queryBuilder.andWhere(`(donation.pickupWindowEnd > NOW() OR donation.donationStatus >= 'Picked Up')`);
-  } else if (expired) {
-    queryBuilder = queryBuilder.andWhere('donation.pickupWindowEnd <= NOW()');
-    queryBuilder = queryBuilder.andWhere(`donation.donationStatus < 'Picked Up'`);
+  if (!expired && !_isSearchingSpecificDonation(filters)) {
+    // Only include non-expired donations: Pickup window has not passed or has been scheduled for delivery.
+    queryBuilder = queryBuilder.andWhere(`(donation.pickupWindowEnd > NOW() OR donation.donationStatus >= '${DonationStatus.Scheduled}')`);
   }
   return queryBuilder;
 }
 
+function _isSearchingSpecificDonation(filters: DonationFilters): boolean {
+  return (filters.id != null);
+}
+
 function _genOrdering(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  request: DonationReadRequest
+  sortOpts: SortOptions<DonationSortBy>
 ): OrmSelectQueryBuilder<DonationEntity> {
-  if (request.sortDonorOrganization && Validation.SORT_REGEX.test(request.sortDonorOrganization)) {
-    const order = <'ASC' | 'DESC'> request.sortDonorOrganization.toUpperCase();
-    queryBuilder = queryBuilder.addOrderBy('donorOrganization.organizationName', order);
-  }
-  if (request.sortDonationStatus && Validation.SORT_REGEX.test(request.sortDonationStatus)) {
-    const order = <'ASC' | 'DESC'> request.sortDonationStatus.toUpperCase();
-    queryBuilder = queryBuilder.addOrderBy('donation.donationStatus', order);
-  }
+  queryBuilder = _orderByCompleteLast(queryBuilder, sortOpts);
+  queryBuilder = _orderByQueryArg(queryBuilder, sortOpts);
+  queryBuilder = _orderByDeliveryWindow(queryBuilder, sortOpts);
+  return queryBuilder;
+}
 
-  // Sort by created date (equivalent to donation ID). If querying an account's donations, automatically sort in DESC order by default.
-  const isMyDonations: boolean =
-    (request.donorAccountId != null || request.receiverAccountId != null || request.delivererAccountId != null);
-  if (isMyDonations && (!request.sortCreatedDate || !Validation.SORT_REGEX.test(request.sortCreatedDate))) {
-    request.sortCreatedDate = 'DESC';
+function _orderByCompleteLast(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  sortOpts: SortOptions<DonationSortBy>
+): OrmSelectQueryBuilder<DonationEntity> {
+  if (sortOpts.sortBy !== 'donationStatus') {
+    queryBuilder.addOrderBy(`donation.complete`);
   }
-  if (request.sortCreatedDate && Validation.SORT_REGEX.test(request.sortCreatedDate)) {
-    const order = <'ASC' | 'DESC'> request.sortCreatedDate.toUpperCase();
-    queryBuilder = queryBuilder.addOrderBy('donation.id', order);
-  }
+  return queryBuilder;
+}
 
+function _orderByQueryArg(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  sortOpts: SortOptions<DonationSortBy>
+): OrmSelectQueryBuilder<DonationEntity> {
+  const sortOrder: 'ASC' | 'DESC' = sortOpts.sortOrder ? sortOpts.sortOrder : 'DESC';
+  if (sortOpts.sortBy) {
+    if (sortOpts.sortBy === 'donorOrganizationName') {
+      queryBuilder.addOrderBy(`donorOrganization.name`, sortOrder);
+    } else {
+      queryBuilder.addOrderBy(`donation.${sortOpts.sortBy}`, sortOrder);
+    }
+  }
+  return queryBuilder;
+}
+
+function _orderByDeliveryWindow(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  sortOpts: SortOptions<DonationSortBy>
+): OrmSelectQueryBuilder<DonationEntity> {
   // Always include donation pickup/delivery window ordering. Default to ASC to view oldest donations first in donation/delivery search.
-  if (!request.sortPickupWindow || !Validation.SORT_REGEX.test(request.sortPickupWindow)) {
-    request.sortPickupWindow = 'ASC';
+  if (sortOpts.sortBy !== 'pickupWindowStart') {
+    queryBuilder = _addOrderByPickupWindow(queryBuilder, 'ASC');
   }
-  const order = <'ASC' | 'DESC'> request.sortPickupWindow.toUpperCase();
-  queryBuilder = _addOrderByPickupWindow(queryBuilder, order);
-
   return queryBuilder;
 }
 

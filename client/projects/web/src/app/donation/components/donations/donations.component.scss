@@ -1,4 +1,12 @@
-.donations-container {
+@import "constants.scss";
+
+.donations {
+  .donations-toolbar {
+    text-align: right;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
 
   .selectable-card {
 
@@ -19,5 +27,9 @@
         text-overflow: ellipsis;
       }
     }
+  }
+
+  .mat-drawer {
+    width: 320px;
   }
 }

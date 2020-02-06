@@ -2,7 +2,7 @@ import { Constants } from '../constants/constants';
 import { Validation } from '../constants/validation';
 import { AccountType } from '../interfaces/account/account';
 import { Donation, DonationStatus } from '../interfaces/donation/donation';
-import { DonationReadFilters } from '../interfaces/donation/donation-read-filters';
+import { DonationReadRequest } from '../interfaces/donation/donation-read-request';
 import { Account, AccountHelper } from './account-helper';
 import { ValidationHelper } from './validation-helper';
 export { Donation };
@@ -183,7 +183,7 @@ export class DonationHelper {
       : null;
   }
 
-  findDonationsQueryParams(account: Account): DonationReadFilters {
+  findDonationsQueryParams(account: Account): DonationReadRequest {
     if (account) {
       switch (account.accountType) {
         case AccountType.Receiver: return { donationStatus: DonationStatus.Unmatched };

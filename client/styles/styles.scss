@@ -21,6 +21,23 @@ html, body {
   }
 }
 
+.page {
+  position: relative;
+  box-sizing: border-box;
+  padding: $page-vert-pad $page-horz-pad;
+
+  &:not(.container) {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media only screen and (max-width: $mat-mobile) {
+    padding-left: $page-horz-pad-mobile;
+    padding-right: $page-horz-pad-mobile;
+  }
+}
+
 .align-left {
   text-align: left;
 }

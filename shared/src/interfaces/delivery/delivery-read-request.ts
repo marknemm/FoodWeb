@@ -1,5 +1,8 @@
-import { DeliveryReadFilters } from './delivery-read-filters';
+import { DonationSortBy } from '../donation';
 import { PagingParams } from '../paging-params';
-export { DeliveryReadFilters };
+import { SortOptions } from '../sort-options';
+import { DeliveryFilters } from './delivery-filters';
 
-export type DeliveryReadRequest = DeliveryReadFilters & PagingParams;
+export interface DeliveryReadRequest extends DeliveryFilters, PagingParams, SortOptions<DeliverySortBy> {}
+
+export type DeliverySortBy = DonationSortBy;

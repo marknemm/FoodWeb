@@ -1,6 +1,7 @@
 import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { EventRegistrationForm } from '~web/event/event-registration.form';
 import { EventRegistrationService } from '~web/event/event-registration/event-registration.service';
+import { FeaturedEvent } from '~web/event/featured-event';
 import { MapAppLinkService } from '~web/map/map-app-link/map-app-link.service';
 import { SessionService } from '~web/session/session/session.service';
 
@@ -12,18 +13,14 @@ import { SessionService } from '~web/session/session/session.service';
 })
 export class EventCardComponent implements OnInit, OnChanges {
 
-  @Input() eventTitle: string;
-  @Input() date: string;
-  @Input() time: string;
-  @Input() eventDay: string | number;
-  @Input() location: string;
-  @Input() signupTitle: string;
-  @Input() glowLocalStorageVar: string;
+  @Input() featuredEvent: FeaturedEvent;
+  @Input() linkToEventsPage = false;
 
   formGroup: EventRegistrationForm;
 
   private _directionsHref: string;
   private _signupComplete = false;
+  private _signupPanelShouldGlow = false;
 
   constructor(
     public eventRegistrationService: EventRegistrationService,
@@ -36,6 +33,10 @@ export class EventCardComponent implements OnInit, OnChanges {
     return this._directionsHref;
   }
 
+  get signupPanelShouldGlow(): boolean {
+    return this._signupPanelShouldGlow;
+  }
+
   get signupComplete(): boolean {
     return this._signupComplete;
   }
@@ -45,15 +46,23 @@ export class EventCardComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.location) {
-      this._directionsHref = this._mapAppLinkService.genDirectionHref(['My+Location', this.location]);
-      this.location = this.location.replace(/<[^>]*>/g, '').replace(',', '<br>');
+    if (changes.featuredEvent && this.featuredEvent) {
+      setTimeout(() => {
+        this._signupPanelShouldGlow = (localStorage.getItem(`food-web-event-selected-${this.featuredEvent.showUntil.getTime()}`) !== 'true');
+        this._directionsHref = this._mapAppLinkService.genDirectionHref(['My+Location', this.featuredEvent.location]);
+      });
     }
+  }
+
+  onSignupPanelExpanded(): void {
+    this._signupPanelShouldGlow = false;
+    localStorage.setItem(`food-web-event-selected-${this.featuredEvent.showUntil.getTime()}`, 'true');
   }
 
   submitSignup(): void {
     if (this.formGroup.valid) {
-      this.eventRegistrationService.signup(this.eventTitle, `${this.date} ${this.time}`, this.formGroup.value).subscribe(
+      const eventDateTime = `${this.featuredEvent.date} ${this.featuredEvent.time}`;
+      this.eventRegistrationService.signup(this.featuredEvent.time, eventDateTime, this.formGroup.value).subscribe(
         () => this._signupComplete = true
       )
     }

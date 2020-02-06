@@ -1,5 +1,7 @@
-<div *ngIf="donation" class="delivery-details-container">
-  <div class="page-title block-label">{{ pageTitleService.title }}</div>
+<div *ngIf="donation" class="delivery-details page">
+  <div class="page-title block-label">
+    {{ pageTitleService.title }}
+  </div>
 
   <food-web-donation-workflow
     [donation]="donation"

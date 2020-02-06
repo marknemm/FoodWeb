@@ -4,12 +4,12 @@ import { Volunteer } from '../shared';
 import { AccountEntity } from './account.entity';
 
 @OrmEntity('Volunteer')
+@Index('volunteerNameIdx', { synchronize: false })
 export class VolunteerEntity implements Volunteer {
 
   @OrmPrimaryGeneratedColumn()
   id: number;
 
-  @Index()
   @Column()
   lastName: string;
 

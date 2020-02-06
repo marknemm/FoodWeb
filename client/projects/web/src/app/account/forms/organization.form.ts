@@ -9,9 +9,9 @@ export class OrganizationForm extends TypedFormGroup<Organization> {
   constructor(organization?: Partial<Organization>) {
     super({
       id: undefined,
-      organizationName: ['', Validators.required],
+      name: ['', Validators.required],
       deliveryInstructions: '',
-      organizationInfo: '',
+      description: '',
       donor: new DonorForm(),
       receiver: new ReceiverForm()
     });

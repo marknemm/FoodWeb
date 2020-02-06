@@ -1,0 +1,63 @@
+<form [formGroup]="filtersForm" class="delivery-filters" (ngSubmit)="filter.emit(filtersForm.value)">
+  <food-web-filter-list-filters-title [primary]="true">
+    Delivery Filters
+  </food-web-filter-list-filters-title>
+
+  <mat-form-field class="fill">
+    <mat-select placeholder="Donation Status" formControlName="donationStatus">
+      <mat-option *ngFor="let status of donationStatuses" [value]="status">{{ status }}</mat-option>
+      <mat-option [value]="null">--</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="fill">
+    <input matInput placeholder="Donor Organization" formControlName="donorOrganizationName">
+  </mat-form-field>
+
+  <div class="row">
+    <div class="col-6">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Donor Last Name" formControlName="donorLastName">
+      </mat-form-field>
+    </div>
+
+    <div class="col-6">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Donor First Name" formControlName="donorFirstName">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <mat-form-field class="fill">
+    <input matInput placeholder="Receiver Organization" formControlName="receiverOrganizationName">
+  </mat-form-field>
+
+  <food-web-filter-list-filters-title>
+    Sort Options
+  </food-web-filter-list-filters-title>
+
+  <div class="row">
+    <div class="col-8">
+      <mat-form-field class="fill">
+        <mat-select placeholder="Sort By" formControlName="sortBy">
+          <mat-option *ngFor="let sortByOpt of sortByOpts" [value]="sortByOpt.value">
+            {{ sortByOpt.name }}
+          </mat-option>
+          <mat-option [value]="null">--</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-4">
+      <mat-form-field class="fill">
+        <mat-select placeholder="Order" formControlName="sortOrder">
+          <mat-option value="ASC">ASC</mat-option>
+          <mat-option value="DESC">DESC</mat-option>
+          <mat-option [value]="null">--</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <food-web-filter-list-filters-buttons (clear)="filtersForm.reset()"></food-web-filter-list-filters-buttons>
+</form>

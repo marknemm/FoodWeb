@@ -1,10 +1,10 @@
-<form [formGroup]="formGroup" *ngIf="originalAccount" class="account-form">
+<form [formGroup]="formGroup" *ngIf="originalAccount" class="account-form page container">
   <div class="account-main align-center">
     <div class="page-title block-label">
       <food-web-username *ngIf="isMyAccount" formControlName="username"></food-web-username>
       <ng-container *ngIf="!isMyAccount">
         <div *ngIf="originalAccount.organization">
-          {{ originalAccount.organization.organizationName }}
+          {{ originalAccount.organization.name }}
         </div>
       </ng-container>
     </div>

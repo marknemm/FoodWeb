@@ -1,5 +1,9 @@
-<div class="home-container has-side-content">
+<div class="home page has-side-content">
   <div class="main-content">
+    <span class="d-lg-none">
+      <ng-container [ngTemplateOutlet]="traningSignupTmpl"></ng-container>
+    </span>
+
     <mat-card>
       <mat-card-title class="block-label">
         Who Are We
@@ -45,6 +49,10 @@
   </div>
 
   <div class="side-content">
+    <span class="d-none d-lg-inline">
+      <ng-container [ngTemplateOutlet]="traningSignupTmpl"></ng-container>
+    </span>
+
     <mat-card>
       <mat-card-title class="block-label">
         Help Us Out
@@ -63,3 +71,7 @@
     <food-web-general-stats-card></food-web-general-stats-card>
   </div>
 </div>
+
+<ng-template #traningSignupTmpl>
+  <food-web-event-card [featuredEvent]="featuredEvent" [linkToEventsPage]="true"></food-web-event-card>
+</ng-template>

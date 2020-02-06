@@ -163,10 +163,12 @@ export class DonationActionsComponent implements OnChanges {
    * @return The delivery 'action required' text. An empty string if the current donation/delivery status does not require it.
    */
   private _genDeliveryActionRequiredTxt(donationStatus: DonationStatus): string {
-    switch (donationStatus) {
-      case DonationStatus.Scheduled:  return `Select 'Start Delivery' when you depart to pickup the donation.`;
-      case DonationStatus.Started:    return `Select 'Advance Status' once you have picked up the donation.`;
-      case DonationStatus.PickedUp:   return `Select 'Advance Status' once you have dropped off the donation.`;
+    if (this.canAdvanceDeliveryState) {
+      switch (donationStatus) {
+        case DonationStatus.Scheduled:  return `Select 'Start Delivery' when you depart to pickup the donation.`;
+        case DonationStatus.Started:    return `Select 'Advance Status' once you have picked up the donation.`;
+        case DonationStatus.PickedUp:   return `Select 'Advance Status' once you have dropped off the donation.`;
+      }
     }
     return '';
   }
