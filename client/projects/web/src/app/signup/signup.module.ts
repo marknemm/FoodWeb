@@ -27,9 +27,6 @@ import { TermsConditionsDialogComponent } from '~web/signup/terms-conditions-dia
     SharedModule,
     AccountModule
   ],
-  entryComponents: [
-    TermsConditionsDialogComponent
-  ],
   exports: [
     SignupComponent
   ]

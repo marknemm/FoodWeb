@@ -27,7 +27,7 @@
 // import 'web-animations-js';  // Run `npm install --save web-animations-js`.
 
 // Evergreen browsers require these.
-import 'core-js/es6/reflect';
+import 'core-js/es/reflect';
 
 /***************************************************************************************************
  * Zone JS is required by Angular itself.

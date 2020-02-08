@@ -17,6 +17,7 @@ export class DonationActionsComponent implements OnChanges {
   @Input() valid = true;
 
   @Output() action = new EventEmitter<DonationAction>();
+  @Output() actionsAvailable = new EventEmitter<boolean>();
 
   private _hasActionButtons = false;
   private _canEdit = false;
@@ -143,8 +144,19 @@ export class DonationActionsComponent implements OnChanges {
       this.donation.donationStatus,
       this.myAccount
     ) && this._accountHelper.isVolunteer(this.myAccount);
-    this._hasActionButtons = this._canEdit || this._canClaim || this._canUnclaim || this._canScheduleDelivery
-                          || this._canAdvanceDeliveryState || this._canUndoDeliveryState;
+    this._refreshHasActionButtons();
+  }
+
+  /**
+   * Refreshes the hasActionsButtons status based off of the presence of action buttons or a given forceReset flag.
+   * @param forceReset Defaults to false. Set true if forcing hasActionButtons to be false.
+   */
+  private _refreshHasActionButtons(forceReset = false): void {
+    this._hasActionButtons = !forceReset && (
+      this._canEdit || this._canClaim || this._canUnclaim || this._canScheduleDelivery
+      || this._canAdvanceDeliveryState || this._canUndoDeliveryState
+    );
+    this.actionsAvailable.emit(this._hasActionButtons);
   }
 
   /**
@@ -206,7 +218,7 @@ export class DonationActionsComponent implements OnChanges {
    * Resets all access/privilege flags and button text to their original/empty states.
    */
   private _resetAll(): void {
-    this._hasActionButtons = false;
+    this._refreshHasActionButtons(true);
     this._canEdit = false;
     this._canClaim = false;
     this._canUnclaim = false;

@@ -52,10 +52,6 @@ import { YesNoComponent } from '~web/shared/yes-no/yes-no.component';
     YesNoComponent,
     ControlNameDirective
   ],
-  entryComponents: [
-    AlertDialogComponent,
-    AlertSnackBarComponent
-  ],
   providers: [
     { provide: 'Window', useValue: window },
     AccountHelper,

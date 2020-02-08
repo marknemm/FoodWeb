@@ -36,9 +36,6 @@ import { MaterialModule } from '~web/material.module';
     FormatDatePipe,
     FormatDateTimePipe,
     FormatTimePipe
-  ],
-  entryComponents: [
-    DateTimeSelectDialogComponent
   ]
 })
 export class DateTimeModule {}

@@ -21,9 +21,6 @@ import { SharedModule } from '~web/shared/shared.module';
   ],
   exports: [
     LoginDialogComponent
-  ],
-  entryComponents: [
-    LoginDialogComponent
   ]
 })
 export class SessionModule {}
