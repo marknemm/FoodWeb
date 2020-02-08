@@ -8,37 +8,42 @@ export class AccountHelper {
   private _validationHelper = new ValidationHelper();
 
   isAdmin(account: Account): boolean {
-    return (account && account.accountType === AccountType.Admin);
+    return (account?.accountType === AccountType.Admin);
   }
 
   isDonor(account: Account): boolean {
-    return (account && (account.accountType === AccountType.Donor));
+    return (account?.accountType === AccountType.Donor);
   }
 
   isReceiver(account: Account): boolean {
-    return (account && (account.accountType === AccountType.Receiver));
+    return (account?.accountType === AccountType.Receiver);
   }
 
   isVolunteer(account: Account): boolean {
-    return (account && (account.accountType === AccountType.Volunteer));
+    return (account?.accountType === AccountType.Volunteer);
   }
 
   isMyAccount(myAccount: Account, accountId: number): boolean {
-    return (myAccount && (myAccount.id === accountId));
+    return (myAccount?.id === accountId);
   }
 
   organizationFirstChar(organization: Organization): string {
-    return organization.name.substr(0, 1).toUpperCase();
+    return organization
+      ? organization.name.substr(0, 1).toUpperCase()
+      : '';
   }
 
   accountName(account: Account): string {
-    return (account.accountType === AccountType.Donor || account.accountType === AccountType.Receiver)
-      ? account.organization.name
-      : `${account.volunteer.firstName} ${account.volunteer.lastName}`;
+    if (account) {
+      return ([AccountType.Donor, AccountType.Receiver].indexOf(account.accountType) >= 0)
+        ? account.organization.name
+        : `${account.volunteer.firstName} ${account.volunteer.lastName}`;
+    }
+    return '';
   }
 
   accountDetailsRouterLink(account: Account): string[] {
-    return ['/account/details/', `${account.id}`];
+    return (account) ? ['/account/details/', `${account.id}`] : [];
   }
 
   areContactInfosEqual(contactInfoLhs: ContactInfo, contactInfoRhs: ContactInfo): boolean {

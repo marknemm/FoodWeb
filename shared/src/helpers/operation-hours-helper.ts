@@ -15,20 +15,17 @@ export class OperationHoursHelper {
    * @return The sorted (copy) of the operation hours array.
    */
   sortOperationHours(operationHoursArr: OperationHours[]): OperationHours[] {
-    if (operationHoursArr) {
-      operationHoursArr = operationHoursArr.sort((lhs: OperationHours, rhs: OperationHours) => {
-        const rhsWeekdayIdx: number = this._constants.WEEKDAYS.indexOf(rhs.weekday);
-        const lhsWeekdayIdx: number = this._constants.WEEKDAYS.indexOf(lhs.weekday);
-        const dayMsDiff: number = (lhsWeekdayIdx - rhsWeekdayIdx) * 24 * 60 * 60 * 1000;
+    return operationHoursArr?.sort((lhs: OperationHours, rhs: OperationHours) => {
+      const rhsWeekdayIdx: number = this._constants.WEEKDAYS.indexOf(rhs.weekday);
+      const lhsWeekdayIdx: number = this._constants.WEEKDAYS.indexOf(lhs.weekday);
+      const dayMsDiff: number = (lhsWeekdayIdx - rhsWeekdayIdx) * 24 * 60 * 60 * 1000;
 
-        const rhsTimeMs: number = new Date(`1/1/2000 ${rhs.startTime}`).getTime();
-        const lhsTimeMs: number = new Date(`1/1/2000 ${lhs.startTime}`).getTime();
-        const timeMsDiff: number = (lhsTimeMs - rhsTimeMs);
+      const rhsTimeMs: number = new Date(`1/1/2000 ${rhs.startTime}`).getTime();
+      const lhsTimeMs: number = new Date(`1/1/2000 ${lhs.startTime}`).getTime();
+      const timeMsDiff: number = (lhsTimeMs - rhsTimeMs);
 
-        return (dayMsDiff + timeMsDiff);
-      });
-    }
-    return operationHoursArr;
+      return (dayMsDiff + timeMsDiff);
+    });
   }
 
   /**
@@ -37,12 +34,10 @@ export class OperationHoursHelper {
    * @param operationHours Operation hours container that will have its members formatted.
    */
   formatOperationHoursTimes(operationHoursArr: OperationHours[]): void {
-    if (operationHoursArr) {
-      operationHoursArr.forEach((operationHours: OperationHours) => {
-        operationHours.startTime = this._formatOperationHourTime(operationHours.startTime);
-        operationHours.endTime = this._formatOperationHourTime(operationHours.endTime);
-      });
-    }
+    operationHoursArr?.forEach((operationHours: OperationHours) => {
+      operationHours.startTime = this._formatOperationHourTime(operationHours.startTime);
+      operationHours.endTime = this._formatOperationHourTime(operationHours.endTime);
+    });
   }
 
   private _formatOperationHourTime(time: string): string {

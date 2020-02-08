@@ -96,7 +96,7 @@ export class DeliveryHelper {
   }
 
   getDropOffWindow(donation: Donation): DateTimeRange {
-    if (donation.claim) {
+    if (donation?.claim) {
       return (donation.claim.delivery)
         ? { startDateTime: donation.claim.delivery.dropOffWindowStart, endDateTime: donation.claim.delivery.dropOffWindowEnd }
         : { startDateTime: donation.claim.dropOffWindowStart, endDateTime: donation.claim.dropOffWindowEnd };
@@ -105,6 +105,6 @@ export class DeliveryHelper {
   }
 
   deliveryDetailsRouterLink(donation: Donation): string[] {
-    return ['/delivery/details/', `${donation.id}`];
+    return ['/delivery/details/', `${donation?.id}`];
   }
 }

@@ -11,7 +11,7 @@ export class DirectionsExtractor {
    * @return The refined directions result.
    */
   extractDirections(response: DirectionsResponse): Directions {
-    if (response && response.routes && response.routes.length > 0) {
+    if (response?.routes?.length > 0) {
       const waypointSegments: WaypointSegment[] = this._extractWaypointSegments(response.routes[0]);
       let distanceMi = 0;
       let durationMin = 0;
@@ -35,9 +35,7 @@ export class DirectionsExtractor {
    * @return The extracted directions waypoint segments.
    */
   private _extractWaypointSegments(route: DirectionsRoute): WaypointSegment[] {
-    return route.legs
-      ? route.legs.map(this._extractWaypointSegment.bind(this))
-      : [];
+    return (route?.legs) ? route.legs.map(this._extractWaypointSegment.bind(this)) : [];
   }
 
   /**

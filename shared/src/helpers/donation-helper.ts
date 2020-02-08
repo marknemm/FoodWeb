@@ -153,18 +153,15 @@ export class DonationHelper {
   }
 
   isDonationDonor(donation: Donation, account: Account): boolean {
-    return donation && account
-        && (donation.donorAccount.id === account.id);
+    return (donation?.donorAccount.id === account?.id);
   }
 
   isDonationReceiver(donation: Donation, account: Account): boolean {
-    return donation && account && donation.claim
-        && (donation.claim.receiverAccount.id === account.id);
+    return (donation?.claim?.receiverAccount.id === account?.id);
   }
 
   isDonationVolunteer(donation: Donation, account: Account): boolean {
-    return donation && account && donation.claim && donation.claim.delivery
-        && (donation.claim.delivery.volunteerAccount.id === account.id);
+    return (donation?.claim?.delivery?.volunteerAccount.id === account?.id);
   }
 
   getNextDonationStatus(nextOf: Donation | DonationStatus): DonationStatus {
@@ -184,24 +181,22 @@ export class DonationHelper {
   }
 
   findDonationsQueryParams(account: Account): DonationReadRequest {
-    if (account) {
-      switch (account.accountType) {
-        case AccountType.Receiver: return { donationStatus: DonationStatus.Unmatched };
-        case AccountType.Volunteer: return { donationStatus: DonationStatus.Matched };
-      }
+    switch (account?.accountType) {
+      case AccountType.Receiver:  return { donationStatus: DonationStatus.Unmatched };
+      case AccountType.Volunteer: return { donationStatus: DonationStatus.Matched };
     }
     return {};
   }
 
   donationDetailsRouterLink(donation: Donation): string[] {
-    return ['/donation/details/', `${donation.id}`];
+    return (donation) ? ['/donation/details/', `${donation.id}`] : [];
   }
 
   memberAccounts(donation: Donation): { donorAccount: Account, receiverAccount?: Account, delivererAccount?: Account } {
     return {
       donorAccount: donation.donorAccount,
-      receiverAccount: (donation.claim ? donation.claim.receiverAccount : null),
-      delivererAccount: ((donation.claim && donation.claim.delivery) ? donation.claim.delivery.volunteerAccount : null)
+      receiverAccount: donation.claim?.receiverAccount,
+      delivererAccount: donation.claim?.delivery?.volunteerAccount
     };
   }
 
@@ -233,26 +228,18 @@ export class DonationHelper {
   }
 
   receiverName(donation: Donation): string {
-    return (donation.claim)
-      ? this._accountHelper.accountName(donation.claim.receiverAccount)
-      : '';
+    return this._accountHelper.accountName(donation.claim?.receiverAccount);
   }
 
   receiverDetailsRouterLink(donation: Donation): string[] {
-    return (donation.claim)
-      ? this._accountHelper.accountDetailsRouterLink(donation.claim.receiverAccount)
-      : [];
+    return this._accountHelper.accountDetailsRouterLink(donation.claim?.receiverAccount);
   }
 
   delivererName(donation: Donation): string {
-    return (donation.claim && donation.claim.delivery)
-      ? this._accountHelper.accountName(donation.claim.delivery.volunteerAccount)
-      : '';
+    return this._accountHelper.accountName(donation.claim?.delivery?.volunteerAccount);
   }
 
   delivererDetailsRouterLink(donation: Donation): string[] {
-    return (donation.claim && donation.claim.delivery)
-      ? this._accountHelper.accountDetailsRouterLink(donation.claim.delivery.volunteerAccount)
-      : [];
+    return this._accountHelper.accountDetailsRouterLink(donation.claim?.delivery?.volunteerAccount);
   }
 }

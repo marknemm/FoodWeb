@@ -13,14 +13,12 @@ export class MapWaypointConverter {
    */
   waypointsToLatLngLiterals(waypoints: Waypoint[]): LatLngLiteral[] {
     const latLngLiterals: LatLngLiteral[] = [];
-    if (waypoints) {
-      waypoints.forEach((waypoint: Waypoint) => {
-        const gpsCoord: LatLngLiteral = this.waypointToLatLngLiteral(waypoint);
-        if (gpsCoord) {
-          latLngLiterals.push(gpsCoord);
-        }
-      });
-    }
+    waypoints?.forEach((waypoint: Waypoint) => {
+      const gpsCoord: LatLngLiteral = this.waypointToLatLngLiteral(waypoint);
+      if (gpsCoord) {
+        latLngLiterals.push(gpsCoord);
+      }
+    });
     return latLngLiterals;
   }
 
