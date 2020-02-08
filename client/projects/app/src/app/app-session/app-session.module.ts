@@ -17,7 +17,7 @@ import { SessionService } from '~web/session/session/session.service';
 })
 export class AppSessionModule {
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<AppSessionModule> {
     return {
       ngModule: AppSessionModule,
       providers: [

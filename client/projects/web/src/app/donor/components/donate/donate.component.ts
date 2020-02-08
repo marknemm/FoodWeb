@@ -23,7 +23,7 @@ export class DonateComponent implements OnInit {
    */
   savedDonation: Donation = null;
 
-  @ViewChild('pickupWindowRange', { static: false }) pickupWindowRange: DateTimeRangeComponent;
+  @ViewChild('pickupWindowRange') pickupWindowRange: DateTimeRangeComponent;
 
   constructor(
     public sessionService: SessionService,

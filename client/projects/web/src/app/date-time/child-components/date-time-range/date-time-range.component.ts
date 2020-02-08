@@ -23,8 +23,8 @@ export class DateTimeRangeComponent implements OnChanges {
   @Input() end: Date;
   @Input() range: DateTimeRange = { startDateTime: null, endDateTime: null };
 
-  @ViewChild('startDateTime', { static: false }) startDateTime: DateTimeComponent;
-  @ViewChild('endDateTime', { static: false }) endDateTime: DateTimeComponent;
+  @ViewChild('startDateTime') startDateTime: DateTimeComponent;
+  @ViewChild('endDateTime') endDateTime: DateTimeComponent;
 
   private _excludeEndDateDisplay = false;
 

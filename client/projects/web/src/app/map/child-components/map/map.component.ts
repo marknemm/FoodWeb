@@ -24,7 +24,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   @Input() width = '100%';
 
   @ViewChild(GoogleMap, { static: true }) map: GoogleMap;
-  @ViewChild(MapInfoWindow, {static: false}) infoWindow: MapInfoWindow;
+  @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow;
 
   optionsForm = new MapOptionsForm();
 
