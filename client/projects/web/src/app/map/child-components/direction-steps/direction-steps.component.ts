@@ -20,14 +20,14 @@ export class DirectionStepsComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.filter) {
+    if (changes.directions || changes.filter) {
       switch (this.filter) {
         case 'Donor':
           this._waypointSegmentIdx = 0;
           break;
         case 'Receiver':
           // If we don't have a scheduled delivery yet, then we will have only 1 waypoint segment, and it will be from Donor to Receiver.
-          this._waypointSegmentIdx = (this.directions && this.directions.waypointSegments.length > 1) ? 1 : 0;
+          this._waypointSegmentIdx = (this.directions?.waypointSegments.length > 1) ? 1 : 0;
           break;
         default:
           this._waypointSegmentIdx = null; // No direction steps filter.

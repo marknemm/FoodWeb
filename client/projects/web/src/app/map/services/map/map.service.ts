@@ -133,7 +133,7 @@ export class MapService {
    * @return The potential volunteer account if there is one. If one doesn't exist for the given donation, then null.
    */
   private _getPotentialVolunteer(donation: Donation): Account {
-    return ((!donation.claim || !donation.claim.delivery) && this._sessionService.isVolunteer)
+    return (!donation.claim?.delivery && this._sessionService.isVolunteer)
       ? this._sessionService.account
       : null;
   }
@@ -210,7 +210,7 @@ export class MapService {
     this._directions = directions;
     this._polylines = this._directionsService.directionsToPolylines(directions);
     this.polylines.forEach((polyline: Polyline, idx: number) => {
-      if ((options.displayRouteToDonor && idx === 0) || (options.displayRouteToReceiver && idx === 1) || idx > 1) {
+      if ((options.displayRouteToDonor && (idx === 0 || idx === 1)) || idx > 1) {
         polyline.setMap(map._googleMap);
       }
     });

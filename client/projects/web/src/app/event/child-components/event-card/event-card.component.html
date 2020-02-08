@@ -24,7 +24,7 @@
         <mat-expansion-panel-header #expansionHeader [ngClass]="{ 'green-glow': signupPanelShouldGlow }">
           {{ featuredEvent.signupTitle }}
         </mat-expansion-panel-header>
-        <form [formGroup]="formGroup" (ngSubmit)="submitSignup()">
+        <form [formGroup]="formGroup" *ngIf="formGroup" (ngSubmit)="submitSignup()">
           <div>
             <mat-form-field class="fill">
               <input matInput formControlName="fullName" placeholder="Full Name" type="text">
