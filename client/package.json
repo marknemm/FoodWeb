@@ -54,7 +54,7 @@
     "@angular/compiler-cli": "^9.0.0",
     "@angular/core": "^9.0.0",
     "@angular/forms": "^9.0.0",
-    "@angular/google-maps": "^9.0.0-rc.0",
+    "@angular/google-maps": "^9.0.0",
     "@angular/language-service": "^9.0.0",
     "@angular/material": "^9.0.0",
     "@angular/platform-browser": "^9.0.0",
