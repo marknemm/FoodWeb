@@ -27,6 +27,9 @@
   </mat-drawer-content>
 
   <mat-drawer [opened]="filterListService.opened" (openedChange)="this.filterListService.opened = $event" mode="over" position="end" [autoFocus]="false">
+    <button mat-icon-button type="button" class="close-button" (click)="filterListService.opened = false">
+      <mat-icon aria-label="Close">close</mat-icon>
+    </button>
     <ng-content select="food-web-filter-list-filters"></ng-content>
   </mat-drawer>
 </mat-drawer-container>

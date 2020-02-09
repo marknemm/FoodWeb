@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AccountDetailsComponent } from '~web/account/account-details/account-details.component';
+import { AccountFiltersComponent } from '~web/account/account-filters/account-filters.component';
 import { AccountRoutingModule } from '~web/account/account-routing.module';
 import { AccountTeaserComponent } from '~web/account/account-teaser/account-teaser.component';
 import { AccountTypeComponent } from '~web/account/account-type/account-type.component';
@@ -20,6 +21,7 @@ import { ReceiverComponent } from '~web/account/receiver/receiver.component';
 import { UsernameComponent } from '~web/account/username/username.component';
 import { VolunteerComponent } from '~web/account/volunteer/volunteer.component';
 import { DateTimeModule } from '~web/date-time/date-time.module';
+import { FilterListModule } from '~web/filter-list/filter-list.module';
 import { MapModule } from '~web/map/map.module';
 import { MaterialModule } from '~web/material.module';
 import { PasswordModule } from '~web/password/password.module';
@@ -28,47 +30,49 @@ import { SharedModule } from '~web/shared/shared.module';
 @NgModule({
   declarations: [
     AccountDetailsComponent,
+    AccountFiltersComponent,
     AccountsComponent,
     AccountTeaserComponent,
     AccountTypeComponent,
-    UsernameComponent,
+    AddressComponent,
     ContactInfoComponent,
+    DonorComponent,
+    NotificationSettingsComponent,
     OrganizationComponent,
-    VolunteerComponent,
     OperationHoursInfoComponent,
     OperationHoursComponent,
-    AddressComponent,
     ProfileImgComponent,
     ReceiverComponent,
-    DonorComponent,
-    NotificationSettingsComponent
+    UsernameComponent,
+    VolunteerComponent
   ],
   imports: [
     AccountRoutingModule,
     CommonModule,
-    ReactiveFormsModule,
-    NgxMaterialTimepickerModule,
+    DateTimeModule,
+    FilterListModule,
+    MapModule,
     MaterialModule,
     MatSidenavModule,
-    SharedModule,
+    NgxMaterialTimepickerModule,
     PasswordModule,
-    DateTimeModule,
-    MapModule
+    ReactiveFormsModule,
+    SharedModule
   ],
   exports: [
-    PasswordModule,
     AccountDetailsComponent,
     AccountsComponent,
     AccountTeaserComponent,
     AccountTypeComponent,
-    UsernameComponent,
-    ContactInfoComponent,
-    OrganizationComponent,
-    VolunteerComponent,
     AddressComponent,
-    OperationHoursInfoComponent,
+    ContactInfoComponent,
     OperationHoursComponent,
-    ProfileImgComponent
+    OperationHoursInfoComponent,
+    OrganizationComponent,
+    PasswordModule,
+    ProfileImgComponent,
+    UsernameComponent,
+    VolunteerComponent
   ]
 })
 export class AccountModule {}

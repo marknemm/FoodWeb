@@ -1,9 +1,7 @@
-<div class="page container">
-  <div class="page-title block-label">
-    {{ pageTitleService.title }}
-  </div>
+<food-web-filter-list class="accounts" listItemsLabel="Accounts" [totalCount]="totalCount">
+  <food-web-filter-list-title>{{ pageTitleService.title }}</food-web-filter-list-title>
 
-  <div class="row">
+  <food-web-filter-list-content>
     <div class="col-lg-6" *ngFor="let account of accounts">
       <a [routerLink]="['/account/details/', account.id]" [state]="account" class="account-link">
         <mat-card id="account-{{ account.id }}" class="account-card">
@@ -34,9 +32,9 @@
         </mat-card>
       </a>
     </div>
-  </div>
+  </food-web-filter-list-content>
 
-  <div class="food-web-paginator-container">
-    <food-web-paginator [length]="totalCount"></food-web-paginator>
-  </div>
-</div>
+  <food-web-filter-list-filters>
+    <food-web-account-filters (filter)="filterAccounts($event)"></food-web-account-filters>
+  </food-web-filter-list-filters>
+</food-web-filter-list>

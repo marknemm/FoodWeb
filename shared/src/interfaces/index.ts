@@ -13,4 +13,5 @@ export * from './notification';
 export * from './paging-params';
 export * from './server-sent-event';
 export * from './session';
+export * from './sort-options';
 export * from './write-request';

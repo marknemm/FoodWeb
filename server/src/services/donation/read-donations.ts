@@ -3,8 +3,7 @@ import { DonationEntity } from '../../entity/donation.entity';
 import { getOrmRepository, OrmRepository, OrmSelectQueryBuilder } from '../../helpers/database/orm';
 import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '../../helpers/database/query-builder-helper';
 import { DonationFilters } from '../../interfaces/donation/donation-filters';
-import { SortOptions } from '../../interfaces/sort-options';
-import { DonationReadRequest, DonationSortBy, DonationStatus } from '../../shared';
+import { DonationReadRequest, DonationSortBy, DonationStatus, SortOptions } from '../../shared';
 
 export async function readDonation(id: number, donationRepo?: OrmRepository<DonationEntity>): Promise<DonationEntity> {
   const readRequest: DonationReadRequest = { id, page: 1, limit: 1 };
@@ -241,7 +240,7 @@ function _genOrdering(
 ): OrmSelectQueryBuilder<DonationEntity> {
   queryBuilder = _orderByCompleteLast(queryBuilder, sortOpts);
   queryBuilder = _orderByQueryArg(queryBuilder, sortOpts);
-  queryBuilder = _orderByDonorPickupWindow(queryBuilder, sortOpts); // Default sorting that is always present.
+  queryBuilder = _orderByDefault(queryBuilder, sortOpts);
   return queryBuilder;
 }
 
@@ -272,7 +271,7 @@ function _orderByQueryArg(
   return queryBuilder;
 }
 
-function _orderByDonorPickupWindow(
+function _orderByDefault(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
   sortOpts: SortOptions<DonationSortBy>
 ): OrmSelectQueryBuilder<DonationEntity> {

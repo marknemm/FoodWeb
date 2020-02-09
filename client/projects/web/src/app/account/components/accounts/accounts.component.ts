@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AccountHelper, AccountType, ListResponse } from '~shared';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AccountHelper, AccountReadRequest, AccountType, ListResponse } from '~shared';
 import { Account, AccountService } from '~web/account/account/account.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
@@ -11,16 +11,15 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 })
 export class AccountsComponent implements OnInit {
 
-  filtersPanelOpened = false;
-
   private _accounts: Account[] = [];
   private _totalCount = 0;
 
   constructor(
-    public pageTitleService: PageTitleService,
     public accountHelper: AccountHelper,
+    public pageTitleService: PageTitleService,
     private _accountService: AccountService,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    private _router: Router
   ) {}
 
   get accounts(): Account[] {
@@ -51,6 +50,13 @@ export class AccountsComponent implements OnInit {
     this.pageTitleService.title = (accountType)
       ? `${accountType}s`
       : 'Accounts';
+  }
+
+  filterAccounts(filters: AccountReadRequest): void {
+    this._router.navigate([], {
+      relativeTo: this._activatedRoute,
+      queryParams: filters
+    });
   }
 
 }

@@ -2,7 +2,7 @@ import { AccountEntity } from '../../entity/account.entity';
 import { getOrmRepository, OrmSelectQueryBuilder } from '../../helpers/database/orm';
 import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '../../helpers/database/query-builder-helper';
 import { LoginRequiredError } from '../../helpers/response/food-web-error';
-import { Account, AccountHelper, AccountReadFilters, AccountReadRequest, OperationHours, OperationHoursHelper } from '../../shared';
+import { Account, AccountHelper, AccountReadFilters, AccountReadRequest, AccountSortBy, OperationHours, OperationHoursHelper, SortOptions } from '../../shared';
 
 const _accountHelper = new AccountHelper();
 const _opHoursHelper = new OperationHoursHelper();
@@ -59,7 +59,7 @@ function _buildQuery(request: AccountReadRequest, myAccount: Account): OrmSelect
   let queryBuilder: OrmSelectQueryBuilder<AccountEntity> = getOrmRepository(AccountEntity).createQueryBuilder('account');
   queryBuilder = _genJoins(queryBuilder);
   queryBuilder = _genWhereCondition(queryBuilder, request, myAccount);
-  queryBuilder = _genOrdering(queryBuilder);
+  queryBuilder = _genOrdering(queryBuilder, request);
   queryBuilder = genPagination(queryBuilder, request);
   return queryBuilder;
 }
@@ -81,7 +81,8 @@ function _genWhereCondition(
 ): OrmSelectQueryBuilder<AccountEntity> {
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'account', filters, ['id', 'username', 'accountType']);
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'contactInfo', filters, ['email']);
-  queryBuilder = genSimpleWhereConditions(queryBuilder, 'organization', filters, ['name'], { convertToLowerCase: true });
+  const orgNameFilt = { name: filters.organizationName };
+  queryBuilder = genSimpleWhereConditions(queryBuilder, 'organization', orgNameFilt, ['name'], { convertToLowerCase: true });
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'receiver', filters, ['autoReceiver']);
   queryBuilder = _genOperationHoursCondition(queryBuilder, filters, myAccount);
   queryBuilder = _genDistanceCondition(queryBuilder, filters, myAccount);
@@ -138,12 +139,44 @@ function _genDistanceCondition(
 }
 
 function _genOrdering(
-  queryBuilder: OrmSelectQueryBuilder<AccountEntity>
+  queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
+  sortOpts: SortOptions<AccountSortBy>
 ): OrmSelectQueryBuilder<AccountEntity> {
-  return queryBuilder
-    .addOrderBy('organization.name', 'ASC')
-    .addOrderBy('volunteer.lastName', 'ASC')
-    .addOrderBy('volunteer.firstName', 'ASC')
+  queryBuilder = _orderByQueryArg(queryBuilder, sortOpts);
+  queryBuilder = _orderByDefault(queryBuilder, sortOpts);
+  return queryBuilder;
+}
+
+function _orderByQueryArg(
+  queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
+  sortOpts: SortOptions<AccountSortBy>
+): OrmSelectQueryBuilder<AccountEntity> {
+  const sortOrder: 'ASC' | 'DESC' = sortOpts.sortOrder ? sortOpts.sortOrder : 'DESC';
+  if (sortOpts.sortBy) {
+    if (sortOpts.sortBy === 'email') {
+      queryBuilder.addOrderBy(`contactInfo.email`, sortOrder);
+    } else if (sortOpts.sortBy === 'name') {
+      queryBuilder.addOrderBy('organization.name', sortOrder)
+                  .addOrderBy('volunteer.lastName', sortOrder)
+                  .addOrderBy('volunteer.firstName', sortOrder);
+    } else {
+      queryBuilder.addOrderBy(`account.${sortOpts.sortBy}`, sortOrder);
+    }
+  }
+  return queryBuilder;
+}
+
+function _orderByDefault(
+  queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
+  sortOpts: SortOptions<AccountSortBy>
+): OrmSelectQueryBuilder<AccountEntity> {
+  if (sortOpts.sortBy !== 'name') {
+    queryBuilder
+      .addOrderBy('organization.name', 'ASC')
+      .addOrderBy('volunteer.lastName', 'ASC')
+      .addOrderBy('volunteer.firstName', 'ASC');
+  }
+  return queryBuilder;
 }
 
 function _postProcessAccounts(accounts: AccountEntity[], myAccount: Account, fullAccount?: boolean): void {
