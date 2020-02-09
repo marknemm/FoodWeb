@@ -1,6 +1,7 @@
 @import "constants.scss";
 
 .fundraise {
+  max-width: calc(100% + #{$page-horz-pad});
   width: calc(100% + #{$page-horz-pad});
   height: calc(100vh - #{$header-height - 120px});
   margin: -120px -15px;
