@@ -14,7 +14,7 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 })
 export class HeaderComponent implements OnInit {
 
-  @Input() siteIconUri = './assets/IconImgSmWithWeb.png';
+  @Input() siteIconUri = './assets/IconImgSm.png';
   @Input() siteTitle = 'FoodWeb';
 
   constructor(
