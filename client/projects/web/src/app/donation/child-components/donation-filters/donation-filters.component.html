@@ -3,6 +3,10 @@
     Donation Filters
   </food-web-filter-list-filters-title>
 
+  <button mat-icon-button type="button" class="close-button" (click)="filterListService.opened = false">
+    <mat-icon aria-label="Close">close</mat-icon>
+  </button>
+
   <mat-form-field class="fill">
     <mat-select placeholder="Donation Status" formControlName="donationStatus">
       <mat-option *ngFor="let status of constantsService.DONATION_STATUSES" [value]="status">{{ status }}</mat-option>
@@ -28,12 +32,21 @@
     </div>
   </div>
 
-  <!-- <ng-container *ngIf="accountType !== 'Donor'">
-    <food-web-date-time [editing]="true" [inlineFields]="true" floatLabels="never" formControlName="deliveryWindowOverlapStart"></food-web-date-time>
-  </ng-container> -->
-
   <div class="toggles-container">
     <mat-slide-toggle [checked]="filtersForm.expired" (change)="filtersForm.expired = $event.checked" formControlName="expired">Include Expired Donations</mat-slide-toggle>
+  </div>
+
+  <food-web-filter-list-filters-title>
+    Delivery Window Filters
+  </food-web-filter-list-filters-title>
+
+  <div class="row">
+    <div class="col-12">
+      <food-web-date-time primaryLabel="Overlap Start" [editing]="true" [inlineFields]="true" floatLabels="never" formControlName="deliveryWindowOverlapStart" [minDate]="null"></food-web-date-time>
+    </div>
+    <div class="col-12">
+      <food-web-date-time primaryLabel="Overlap End" [editing]="true" [inlineFields]="true" floatLabels="never" formControlName="deliveryWindowOverlapEnd" [minDate]="null"></food-web-date-time>
+    </div>
   </div>
 
   <food-web-filter-list-filters-title>Sort Options</food-web-filter-list-filters-title>

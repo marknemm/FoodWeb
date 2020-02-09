@@ -4,4 +4,4 @@ import { DonationFilters } from './donation-filters';
 
 export interface DonationReadRequest extends DonationFilters, PagingParams, SortOptions<DonationSortBy> {}
 
-export type DonationSortBy = 'createTimestamp' | 'donationStatus' | 'donorOrganizationName' | 'pickupWindowStart';
+export type DonationSortBy = 'createTimestamp' | 'deliveryWindowStart' | 'donationStatus' | 'donorOrganizationName' | 'receiverOrganizationName';

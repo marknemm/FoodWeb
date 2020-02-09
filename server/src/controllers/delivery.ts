@@ -12,12 +12,12 @@ import { scheduleDelivery } from '../services/delivery/schedule-delivery';
 import { sendDeliveryScheduledMessages } from '../services/delivery/schedule-delivery-message';
 import { advanceDeliveryState, undoDeliveryState } from '../services/delivery/update-delivery-state';
 import { sendDeliveryStateAdvancedMessages, sendDeliveryStateUndoMessages } from '../services/delivery/update-delivery-state-message';
-import { DeliveryReadRequest, DeliveryScheduleRequest, DeliveryStateChangeRequest } from '../shared';
+import { DonationReadRequest, DeliveryScheduleRequest, DeliveryStateChangeRequest } from '../shared';
 
 const router = express.Router();
 
 router.get('/unscheduled', (req: Request, res: Response) => {
-  const readRequest: DeliveryReadRequest = req.query;
+  const readRequest: DonationReadRequest = req.query;
   readUnscheduledDeliveries(readRequest, req.session.account)
     .then((queryResult: QueryResult<DonationEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
@@ -26,7 +26,7 @@ router.get('/unscheduled', (req: Request, res: Response) => {
 });
 
 router.get('/my', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
-  const readRequest: DeliveryReadRequest = req.query;
+  const readRequest: DonationReadRequest = req.query;
   readMyDeliveries(readRequest, req.session.account)
     .then((queryResult: QueryResult<DonationEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
@@ -35,7 +35,7 @@ router.get('/my', ensureSessionActive, ensureAccountVerified, (req: Request, res
 });
 
 router.get('/', (req: Request, res: Response) => {
-  const readRequest: DeliveryReadRequest = req.query;
+  const readRequest: DonationReadRequest = req.query;
   readDeliveries(readRequest)
     .then((queryResult: QueryResult<DonationEntity>) =>
       res.send(genListResponse(queryResult, readRequest))

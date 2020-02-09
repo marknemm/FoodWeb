@@ -1,6 +1,14 @@
 .date-time-form.inline-fields {
   $inline-field-padding: 15px;
 
+  .primary-label {
+    font-size: 13px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    line-height: 18px;
+    color: rgba(0, 0, 0, 0.54);
+    margin-bottom: -15px;
+  }
+
   .date-field,
   .time-field {
     display: inline-block;

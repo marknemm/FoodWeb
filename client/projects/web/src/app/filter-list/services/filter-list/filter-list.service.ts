@@ -1,17 +1,26 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class FilterListService {
 
-  filtersSubmitted = new Subject<void>();
+  private _opened = false;
+  private _openedChange = new Subject<boolean>();
 
   constructor() {}
 
-  listenFiltersSubmitted(destory$: Observable<any>): Observable<void> {
-    return this.filtersSubmitted.asObservable().pipe(
-      takeUntil(destory$)
-    );
+  get opened(): boolean {
+    return this._opened;
+  }
+
+  set opened(open: boolean) {
+    this._opened = open;
+    this._openedChange.next(open);
+  }
+
+  get openedChange(): Observable<boolean> {
+    return this._openedChange.asObservable();
   }
 }

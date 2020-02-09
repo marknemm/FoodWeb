@@ -3,11 +3,12 @@ require('./jobs-config');
 import { AccountEntity } from '../entity/account.entity';
 import { DonationEntity } from '../entity/donation.entity';
 import { initDbConnectionPool } from '../helpers/database/db-connection-pool';
+import { OrmSelectQueryBuilder } from '../helpers/database/orm';
 import { QueryResult } from '../helpers/database/query-builder-helper';
 import { broadcastEmail, MailTransporter } from '../helpers/messaging/email';
 import { broadcastNotification, NotificationType } from '../helpers/messaging/notification';
-import { readDonations } from '../services/donation/read-donations';
-import { DateTimeHelper, DonationHelper, DonationReadRequest } from '../shared';
+import { queryDonations } from '../services/donation/read-donations';
+import { DateTimeHelper, DonationHelper } from '../shared';
 
 const _reminderIntervalMins = 10; // Job will be scheduled to run every 10 minutes.
 const _dateTimeHelper = new DateTimeHelper();
@@ -34,13 +35,11 @@ async function _sendDeliveryReminders(): Promise<void> {
     let totalDonations = (limit * page) + 1; // +1 to trigger first loop.
 
     while (page * limit < totalDonations) {
-      const readRequest: DonationReadRequest = {
-        page: page++,
-        limit,
-        earliestDeliveryWindowStart,
-        latestDeliveryWindowStart
-      };
-      const queryResult: QueryResult<DonationEntity> = await readDonations(readRequest);
+      const queryResult: QueryResult<DonationEntity> = await queryDonations({ page: page++, limit }).modQuery(
+        (queryBuilder: OrmSelectQueryBuilder<DonationEntity>) =>
+          queryBuilder.andWhere('delivery.pickupWindowStart >= :earliestDeliveryWindowStart', { earliestDeliveryWindowStart })
+                      .andWhere('delivery.pickupWindowStart <= :latestDeliveryWindowStart', { latestDeliveryWindowStart })
+      );
       await _sendAllDeliveryReminderMessages(queryResult.entities, hour);
       totalDonations = queryResult.totalCount;
     }

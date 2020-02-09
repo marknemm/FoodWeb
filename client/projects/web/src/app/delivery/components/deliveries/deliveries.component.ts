@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DeliveryHelper, DeliveryReadRequest, Donation, DonationHelper, ListResponse } from '~shared';
+import { DeliveryHelper, Donation, DonationHelper, DonationReadRequest, ListResponse } from '~shared';
 import { DeliveryService } from '~web/delivery/delivery/delivery.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
@@ -48,7 +48,7 @@ export class DeliveriesComponent implements OnInit {
     );
   }
 
-  filterDeliveries(filters: DeliveryReadRequest): void {
+  filterDeliveries(filters: DonationReadRequest): void {
     this.filtersPanelOpened = false;
     this._router.navigate([], {
       relativeTo: this._activatedRoute,

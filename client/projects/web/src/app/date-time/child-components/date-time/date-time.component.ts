@@ -17,23 +17,24 @@ import { DateTimeForm } from '~web/date-time/date-time.form';
 })
 export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor, Validator {
 
-  @Input() editing = false;
-  @Input() defaultTime = '12:00 pm';
-  @Input() datePlaceholder = 'Date';
-  @Input() timePlaceholder = 'Time';
-  @Input() floatLabels: FloatLabelType = 'auto';
-  @Input() minDate = new Date();
-  @Input() maxDate: Date;
-  @Input() defaultDate: 'Now' | Date;
-  @Input() required = false;
-  @Input() errorStateMatcher: ErrorStateMatcher;
-  @Input() minDateWidth: string;
-  @Input() dateTime: Date;
   @Input() boldDate = false;
   @Input() boldTime = false;
+  @Input() dateTime: Date;
+  @Input() datePlaceholder = 'Date';
+  @Input() defaultDate: 'Now' | Date;
+  @Input() defaultTime = '12:00 pm';
+  @Input() editing = false;
+  @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() excludeDateDisplay = false;
   @Input() excludeTimeDisplay = false;
+  @Input() floatLabels: FloatLabelType = 'auto';
   @Input() inlineFields = false;
+  @Input() maxDate: Date;
+  @Input() minDate = new Date();
+  @Input() minDateWidth = '';
+  @Input() primaryLabel = ''
+  @Input() required = false;
+  @Input() timePlaceholder = 'Time';
 
   private _changeCb: (date: Date) => void = () => {};
   private _destroy$ = new Subject();

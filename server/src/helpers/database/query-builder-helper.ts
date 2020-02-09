@@ -1,5 +1,5 @@
-import { SelectQueryBuilder } from 'typeorm';
 import { PagingParams } from '../../shared';
+import { OrmSelectQueryBuilder } from './orm';
 
 /**
  * Generic interface used by a model to expose its select query for further modification by an external model.
@@ -9,8 +9,8 @@ import { PagingParams } from '../../shared';
 export class QueryMod<T, R = QueryResult<T>> {
 
   constructor(
-    private _queryBuilder: SelectQueryBuilder<T>,
-    private _execFn: (queryBuilder: SelectQueryBuilder<T>) => Promise<R>
+    private _queryBuilder: OrmSelectQueryBuilder<T>,
+    private _execFn: (queryBuilder: OrmSelectQueryBuilder<T>) => Promise<R>
   ) {}
 
   /**
@@ -18,7 +18,7 @@ export class QueryMod<T, R = QueryResult<T>> {
    * @param modFn The select query mod function.
    * @return A promise that resolves to the result of executing the modified query.
    */
-  modQuery(modFn: (queryBuilder: SelectQueryBuilder<T>) => void): Promise<R> {
+  modQuery(modFn: (queryBuilder: OrmSelectQueryBuilder<T>) => void): Promise<R> {
     modFn(this._queryBuilder);
     return this._execFn(this._queryBuilder);
   }
@@ -67,12 +67,12 @@ export interface GenSimpleWhereOptions {
  * @return The input queryBuilder with simple where clause conditions added.
  */
 export function genSimpleWhereConditions<T, F>(
-  queryBuilder: SelectQueryBuilder<T>,
+  queryBuilder: OrmSelectQueryBuilder<T>,
   tableAlias: string,
   filters: F,
   filterProps: string[],
   options: GenSimpleWhereOptions = {}
-): SelectQueryBuilder<T> {
+): OrmSelectQueryBuilder<T> {
   filterProps.forEach((filterProp: string) => {
     if (filters[filterProp] != null && (options.treatEmptyStrAsUndefined === false || filters[filterProp] !== '')) {
       queryBuilder = _genSimpleNonNullCondition(queryBuilder, tableAlias, filters, filterProp, options);
@@ -84,12 +84,12 @@ export function genSimpleWhereConditions<T, F>(
 }
 
 function _genSimpleNonNullCondition<T, F>(
-  queryBuilder: SelectQueryBuilder<T>,
+  queryBuilder: OrmSelectQueryBuilder<T>,
   tableAlias: string,
   filters: F,
   filterProp: string,
   options: GenSimpleWhereOptions
-): SelectQueryBuilder<T> {
+): OrmSelectQueryBuilder<T> {
   const isFilterValStr: boolean = (typeof filters[filterProp] === 'string');
   const splitFilterOnComma: boolean = (
     options.splitFilterOnComma !== false
@@ -108,12 +108,12 @@ function _genSimpleNonNullCondition<T, F>(
 }
 
 function _genSimpleInListCondition<T, F>(
-  queryBuilder: SelectQueryBuilder<T>,
+  queryBuilder: OrmSelectQueryBuilder<T>,
   tableAlias: string,
   filters: F,
   filterProp: string,
   options: GenSimpleWhereOptions
-): SelectQueryBuilder<T> {
+): OrmSelectQueryBuilder<T> {
   const filterPropObj = {};
   filterPropObj[filterProp] = filters[filterProp].split(',');
   if (options.convertToLowerCase) {
@@ -125,12 +125,12 @@ function _genSimpleInListCondition<T, F>(
 }
 
 function _genSimpleEqualCondition<T, F>(
-  queryBuilder: SelectQueryBuilder<T>,
+  queryBuilder: OrmSelectQueryBuilder<T>,
   tableAlias: string,
   filters: F,
   filterProp: string,
   options: GenSimpleWhereOptions
-): SelectQueryBuilder<T> {
+): OrmSelectQueryBuilder<T> {
   const filterPropObj = {};
   const toLowerCase: boolean = options.convertToLowerCase && (typeof filters[filterProp] === 'string');
   filterPropObj[filterProp] = (toLowerCase)
@@ -142,10 +142,10 @@ function _genSimpleEqualCondition<T, F>(
 }
 
 function _genSimpleNullCondition<T>(
-  queryBuilder: SelectQueryBuilder<T>,
+  queryBuilder: OrmSelectQueryBuilder<T>,
   tableAlias: string,
   filterProp: string
-): SelectQueryBuilder<T> {
+): OrmSelectQueryBuilder<T> {
   return queryBuilder.andWhere(`${tableAlias}.${filterProp} IS NULL`);
 }
 
@@ -157,10 +157,10 @@ function _genSimpleNullCondition<T>(
  * @return The input queryBuilder with pagination SQL added.
  */
 export function genPagination<T>(
-  queryBuilder: SelectQueryBuilder<T>,
+  queryBuilder: OrmSelectQueryBuilder<T>,
   pagingParams: PagingParams,
   defaultLimit = 10
-): SelectQueryBuilder<T> {
+): OrmSelectQueryBuilder<T> {
   return queryBuilder
     .skip(genSkip(pagingParams, defaultLimit))
     .take(genTake(pagingParams, defaultLimit));

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable, of, Subscriber } from 'rxjs';
 import { catchError, finalize, flatMap, map } from 'rxjs/operators';
-import { Account, DateTimeRange, DeliveryHelper, DeliveryReadRequest, DeliveryScheduleRequest, DeliveryStateChangeRequest, Donation, DonationStatus, LatLngLiteral, ListResponse } from '~shared';
+import { Account, DateTimeRange, DeliveryHelper, DonationReadRequest, DeliveryScheduleRequest, DeliveryStateChangeRequest, Donation, DonationStatus, LatLngLiteral, ListResponse } from '~shared';
 import { environment } from '~web/environments/environment';
 import { SessionService } from '~web/session/session/session.service';
 import { AlertService } from '~web/shared/alert/alert.service';
@@ -112,7 +112,7 @@ export class DeliveryService {
   listenDeliveriesQueryChange(activatedRoute: ActivatedRoute): Observable<ListResponse<Donation>> {
     return activatedRoute.queryParamMap.pipe(
       flatMap((params: ParamMap) => {
-        const filters: DeliveryReadRequest = {
+        const filters: DonationReadRequest = {
           page: (params.has('page') ? parseInt(params.get('page'), 10) : 1),
           limit: (params.has('limit') ? parseInt(params.get('limit'), 10) : 10)
         };
@@ -130,15 +130,15 @@ export class DeliveryService {
     );
   }
 
-  getMyDeliveries(request: DeliveryReadRequest): Observable<ListResponse<Donation>> {
+  getMyDeliveries(request: DonationReadRequest): Observable<ListResponse<Donation>> {
     return this._getDeliveries(request, '/my');
   }
 
-  getUnscheduledDeliveries(request: DeliveryReadRequest): Observable<ListResponse<Donation>> {
+  getUnscheduledDeliveries(request: DonationReadRequest): Observable<ListResponse<Donation>> {
     return this._getDeliveries(request, '/unscheduled');
   }
 
-  private _getDeliveries(request: DeliveryReadRequest, subRoute = ''): Observable<ListResponse<Donation>> {
+  private _getDeliveries(request: DonationReadRequest, subRoute = ''): Observable<ListResponse<Donation>> {
     const getUrl: string = (this.url + subRoute);
     request.page = request.page ? request.page : 1;
     request.limit = request.limit ? request.limit : 10;

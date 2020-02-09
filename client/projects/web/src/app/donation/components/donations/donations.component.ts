@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DonationHelper, DonationReadRequest, ListResponse } from '~shared';
@@ -40,6 +41,13 @@ export class DonationsComponent implements OnInit {
   }
 
   filterDonations(filters: DonationReadRequest): void {
+    // Convert dates into raw ISO strings.
+    for (let filtKey in filters) {
+      if (filters[filtKey] instanceof Date) {
+        filters[filtKey] = (<Date>filters[filtKey]).toISOString();
+      }
+    }
+
     this._router.navigate([], {
       relativeTo: this._activatedRoute,
       queryParams: filters

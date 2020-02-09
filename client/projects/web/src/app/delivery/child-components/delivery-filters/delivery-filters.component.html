@@ -33,6 +33,19 @@
   </mat-form-field>
 
   <food-web-filter-list-filters-title>
+    Delivery Window Filters
+  </food-web-filter-list-filters-title>
+
+  <div class="row">
+    <div class="col-12">
+      <food-web-date-time primaryLabel="Overlap Start" [editing]="true" [inlineFields]="true" floatLabels="never" formControlName="deliveryWindowOverlapStart" [minDate]="null"></food-web-date-time>
+    </div>
+    <div class="col-12">
+      <food-web-date-time primaryLabel="Overlap End" [editing]="true" [inlineFields]="true" floatLabels="never" formControlName="deliveryWindowOverlapEnd" [minDate]="null"></food-web-date-time>
+    </div>
+  </div>
+
+  <food-web-filter-list-filters-title>
     Sort Options
   </food-web-filter-list-filters-title>
 

@@ -18,7 +18,7 @@ export class FilterListFiltersButtonsComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit(): void {
-    this._filterListSerivce.filtersSubmitted.next();
+    this._filterListSerivce.opened = false;
     this.submit.emit();
   }
 

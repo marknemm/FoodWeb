@@ -1,4 +1,8 @@
 <div *ngIf="editing" [formGroup]="dateTimeForm" class="date-time-form" [ngClass]="{ 'inline-fields': inlineFields }">
+  <div *ngIf="primaryLabel" class="primary-label">
+    {{ primaryLabel }}
+  </div>
+
   <div class="date-field">
     <mat-form-field class="fill" [floatLabel]="floatLabels" (click)="datePicker.open()">
       <input matInput

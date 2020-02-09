@@ -1,40 +1,30 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
 import { FilterListService } from '~web/filter-list/filter-list/filter-list.service';
 
 @Component({
   selector: 'food-web-filter-list',
   templateUrl: './filter-list.component.html',
-  styleUrls: ['./filter-list.component.scss'],
-  providers: [FilterListService]
+  styleUrls: ['./filter-list.component.scss']
 })
-export class FilterListComponent implements OnInit, OnDestroy {
+export class FilterListComponent implements OnInit {
 
-  @Input() filtersOpened = false;
   @Input() listItemsLabel = '';
   @Input() totalCount: number;
 
-  @Output() openedChange = new EventEmitter<boolean>();
-
-  private _destory$ = new Subject<void>();
+  @Input() set filtersOpened(open: boolean) {
+    this.filterListService.opened = open;
+  }
+  get filtersOpened(): boolean {
+    return this.filterListService.opened;
+  }
 
   constructor(
-    private _filterListService: FilterListService
-  ) {}
-
-  ngOnInit() {
-    this._filterListService.listenFiltersSubmitted(this._destory$).subscribe(
-      () => this.onFiltersOpenedChange(false)
-    );
+    public filterListService: FilterListService
+  ) {
+    // Important to reset service value here instead of in ngOnInit() so we don't overwrite @Input value if one is given.
+    this.filterListService.opened = false;
   }
 
-  ngOnDestroy() {
-    this._destory$.next();
-  }
-
-  onFiltersOpenedChange(opened: boolean): void {
-    this.filtersOpened = opened;
-    this.openedChange.emit(this.filtersOpened);
-  }
+  ngOnInit() {}
 
 }

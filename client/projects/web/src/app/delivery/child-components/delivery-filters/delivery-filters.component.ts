@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { DeliveryReadRequest, DeliverySortBy, DonationStatus } from '~shared';
+import { DonationReadRequest, DonationSortBy, DonationStatus } from '~shared';
 import { DonationFiltersForm } from '~web/donation-delivery-shared/donation-filters.form';
 import { ConstantsService } from '~web/shared/constants/constants.service';
 
@@ -13,16 +13,16 @@ export class DeliveryFiltersComponent implements OnInit {
 
   @Input() myDeliveries = false;
 
-  @Output() filter = new EventEmitter<DeliveryReadRequest>();
+  @Output() filter = new EventEmitter<DonationReadRequest>();
 
   /**
    * Options for sorting dropdown.
    */
   readonly sortByOpts: DeliverySortByOption[] = [
-    { name: 'Pickup Window', value: 'pickupWindowStart' },
-    { name: 'Date Created', value: 'createTimestamp' },
+    { name: 'Delivery Window', value: 'deliveryWindowStart' },
     { name: 'Donation Status', value: 'donationStatus' },
-    { name: 'Donor Organization', value: 'donorOrganizationName' }
+    { name: 'Donor Organization', value: 'donorOrganizationName' },
+    { name: 'Receiver Organization', value: 'receiverOrganizationName' }
   ];
   readonly donationStatuses: DonationStatus[];
 
@@ -50,5 +50,5 @@ export class DeliveryFiltersComponent implements OnInit {
 
 export interface DeliverySortByOption {
   name: string;
-  value: DeliverySortBy;
+  value: DonationSortBy;
 }

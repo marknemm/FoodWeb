@@ -1,5 +1,8 @@
 import { DonationStatus } from './donation';
 
+/**
+ * Common filters for querying donations.
+ */
 export interface DonationFilters {
   /**
    * The ID of the donation.
@@ -47,30 +50,6 @@ export interface DonationFilters {
    * Filters for all donations with a deliveryWindowStart value that is at or earlier than the filter value.
    */
   deliveryWindowOverlapEnd?: Date | string;
-  /**
-   * The earliest date-time that a filtered donation's deliveryWindowStart can be.
-   */
-  earliestDeliveryWindowStart?: Date | string;
-  /**
-   * The latest date-time that a filtered donation's deliveryWindowStart can be.
-   */
-  latestDeliveryWindowStart?: Date | string;
-  /**
-   * Filters for all donations with a pickupWindowEnd value that is at or later than the filter value.
-   */
-  pickupWindowOverlapStart?: Date | string;
-  /**
-   * Filters for all donations with a pickupWindowStart value that is at or earlier than the filter value.
-   */
-  pickupWindowOverlapEnd?: Date | string;
-  /**
-   * The earliest date-time that a filtered donation's pickupWindowStart can be.
-   */
-  earliestPickupWindowStart?: Date | string;
-  /**
-   * The latest date-time that a filtered donation's pickupWindowStart can be.
-   */
-  latestPickupWindowStart?: Date | string;
   /**
    * If 'true', then expired donations will be included. If 'false', then no expired donations will be included.
    * An expired donation is one that has had its pickup window completely pass and has not been scheduled for delivery.

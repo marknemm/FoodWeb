@@ -91,7 +91,6 @@ function _genWhereCondition(
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'donation', filters, simpleDonationWhereProps);
   queryBuilder = _genAccountConditions(queryBuilder, filters);
   queryBuilder = _genDeliveryWindowConditions(queryBuilder, filters);
-  queryBuilder = _genPickupWindowConditions(queryBuilder, filters);
   queryBuilder = _genDonationExpiredCondition(queryBuilder, filters);
   return queryBuilder;
 }
@@ -192,63 +191,29 @@ function _genVolunteerConditions(
   return queryBuilder;
 }
 
-function _genPickupWindowConditions(
-  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
-): OrmSelectQueryBuilder<DonationEntity> {
-  if (filters.pickupWindowOverlapStart) {
-    queryBuilder = queryBuilder.andWhere(
-      `donation.pickupWindowEnd >= :pickupWindowOverlapStart`,
-      { pickupWindowOverlapStart: filters.pickupWindowOverlapStart }
-    );
-  }
-  if (filters.pickupWindowOverlapEnd) {
-    queryBuilder = queryBuilder.andWhere(
-      'donation.pickupWindowStart <= :pickupWindowOverlapEnd',
-      { pickupWindowOverlapEnd: filters.pickupWindowOverlapEnd }
-    );
-  }
-  if (filters.earliestPickupWindowStart) {
-    queryBuilder = queryBuilder.andWhere(
-      'donation.pickupWindowStart >= :earliestPickupWindowStart',
-      { earliestPickupWindowStart: filters.earliestPickupWindowStart }
-    );
-  }
-  if (filters.latestPickupWindowStart) {
-    queryBuilder = queryBuilder.andWhere(
-      'donation.pickupWindowStart <= :latestPickupWindowStart',
-      { latestPickupWindowStart: filters.latestPickupWindowStart }
-    );
-  }
-  return queryBuilder;
-}
-
 function _genDeliveryWindowConditions(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
   filters: DonationFilters
 ): OrmSelectQueryBuilder<DonationEntity> {
+  // WARNING: This condition may slow down the query when we have a lot of records. Refactor in future if necessary!
   if (filters.deliveryWindowOverlapStart) {
     queryBuilder = queryBuilder.andWhere(
-      `delivery.pickupWindowEnd >= :deliveryWindowOverlapStart`,
-      { deliveryWindowOverlapStart: filters.deliveryWindowOverlapStart }
+      ` (delivery.pickupWindowEnd >= :deliveryWindowOverlapStart)
+        OR (delivery.id IS NULL AND donation.pickupWindowEnd >= :donationWindowOverlapStart)`,
+      {
+        deliveryWindowOverlapStart: filters.deliveryWindowOverlapStart,
+        donationWindowOverlapStart: filters.deliveryWindowOverlapStart
+      }
     );
   }
   if (filters.deliveryWindowOverlapEnd) {
     queryBuilder = queryBuilder.andWhere(
-      'delivery.pickupWindowStart <= :deliveryWindowOverlapEnd',
-      { deliveryWindowOverlapEnd: filters.deliveryWindowOverlapEnd }
-    );
-  }
-  if (filters.earliestDeliveryWindowStart) {
-    queryBuilder = queryBuilder.andWhere(
-      'delivery.pickupWindowStart >= :earliestDeliveryWindowStart',
-      { earliestDeliveryWindowStart: filters.earliestDeliveryWindowStart }
-    );
-  }
-  if (filters.latestDeliveryWindowStart) {
-    queryBuilder = queryBuilder.andWhere(
-      'delivery.pickupWindowStart <= :latestDeliveryWindowStart',
-      { latestDeliveryWindowStart: filters.latestDeliveryWindowStart }
+      ` (delivery.pickupWindowStart <= :deliveryWindowOverlapEnd)
+        OR (delivery.id IS NULL AND donation.pickupWindowStart <= :donationWindowOverlapEnd)`,
+      {
+        deliveryWindowOverlapEnd: filters.deliveryWindowOverlapEnd,
+        donationWindowOverlapEnd: filters.deliveryWindowOverlapEnd
+      }
     );
   }
   return queryBuilder;
@@ -276,7 +241,7 @@ function _genOrdering(
 ): OrmSelectQueryBuilder<DonationEntity> {
   queryBuilder = _orderByCompleteLast(queryBuilder, sortOpts);
   queryBuilder = _orderByQueryArg(queryBuilder, sortOpts);
-  queryBuilder = _orderByDeliveryWindow(queryBuilder, sortOpts);
+  queryBuilder = _orderByDonorPickupWindow(queryBuilder, sortOpts); // Default sorting that is always present.
   return queryBuilder;
 }
 
@@ -298,6 +263,8 @@ function _orderByQueryArg(
   if (sortOpts.sortBy) {
     if (sortOpts.sortBy === 'donorOrganizationName') {
       queryBuilder.addOrderBy(`donorOrganization.name`, sortOrder);
+    } else if (sortOpts.sortBy === 'receiverOrganizationName') {
+      queryBuilder.addOrderBy(`receiverOrganization.name`, sortOrder);
     } else {
       queryBuilder.addOrderBy(`donation.${sortOpts.sortBy}`, sortOrder);
     }
@@ -305,22 +272,13 @@ function _orderByQueryArg(
   return queryBuilder;
 }
 
-function _orderByDeliveryWindow(
+function _orderByDonorPickupWindow(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
   sortOpts: SortOptions<DonationSortBy>
 ): OrmSelectQueryBuilder<DonationEntity> {
-  // Always include donation pickup/delivery window ordering. Default to ASC to view oldest donations first in donation/delivery search.
-  if (sortOpts.sortBy !== 'pickupWindowStart') {
-    queryBuilder = _addOrderByPickupWindow(queryBuilder, 'ASC');
+  // Always include donation pickup/delivery window ordering.
+  if (sortOpts.sortBy !== 'deliveryWindowStart') {
+    queryBuilder = queryBuilder.addOrderBy('donation.pickupWindowStart', sortOpts.sortOrder);
   }
-  return queryBuilder;
-}
-
-function _addOrderByPickupWindow(
-  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  sortOrder: 'ASC' | 'DESC'
-): OrmSelectQueryBuilder<DonationEntity> {
-  queryBuilder = queryBuilder.addOrderBy('delivery.pickupWindowStart', sortOrder);
-  queryBuilder = queryBuilder.addOrderBy('donation.pickupWindowStart', sortOrder);
   return queryBuilder;
 }
