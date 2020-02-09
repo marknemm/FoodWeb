@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
 import { NotificationService } from '~web/notification/notification/notification.service';
@@ -13,6 +13,9 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+
+  @Input() siteIconUri = './assets/IconImgSmWithWeb.png';
+  @Input() siteTitle = 'FoodWeb';
 
   constructor(
     public sessionService: SessionService,

@@ -1,8 +1,10 @@
 <header foodWebStickyHeader [mainHeader]="mainHeader" [subHeader]="subHeader">
   <div class="inner-header">
     <mat-toolbar color="primary" class="main-header-section" #mainHeader>
-      <img src="./assets/IconImgSm.png" alt="Food Web Icon" class="site-icon">
-      <a [routerLink]="['/home']" class="site-title">Food Web</a>
+      <a [routerLink]="['/home']" class="site-title">
+        <img [src]="siteIconUri" alt="{{ siteTitle }} Icon" class="site-icon">
+        <span>{{ siteTitle }}</span>
+      </a>
       <div class="non-blocking-page-progress-indicator" *ngIf="pageProgressService.showNonBlockingProgress">
         <food-web-progress-indicator
           [backdropColor]="pageProgressService.backdropColor"
