@@ -1,0 +1,20 @@
+<mat-nav-list>
+  <a mat-list-item [routerLink]="['/']" (click)="_onNavigate()">
+    <span><mat-icon>settings_applications</mat-icon> <span>Admin Console</span></span>
+  </a>
+  <a mat-list-item [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Donor' }" (click)="_onNavigate()">
+    <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Donor'] }}</mat-icon> <span>Donors</span></span>
+  </a>
+  <a mat-list-item [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Receiver' }" (click)="_onNavigate()">
+    <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Receiver'] }}</mat-icon> <span>Receivers</span></span>
+  </a>
+  <a mat-list-item [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Volunteer' }" (click)="_onNavigate()">
+    <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Volunteer'] }}</mat-icon> <span>Volunteers</span></span>
+  </a>
+  <a mat-list-item [routerLink]="['/donation/list']" (click)="_onNavigate()">
+    <span><fa-icon [icon]="faGifts"></fa-icon> <span>Donations</span></span>
+  </a>
+  <a mat-list-item [routerLink]="['/delivery/list']" (click)="_onNavigate()">
+    <span><mat-icon>pin_drop</mat-icon> <span>Deliveries</span></span>
+  </a>
+</mat-nav-list>

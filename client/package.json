@@ -12,7 +12,7 @@
     "admin:build": "ng build --project admin --prod --aot",
     "admin:build:watch": "ng build --project admin --watch",
     "admin:lint": "ng lint --project admin",
-    "admin:start": "ng serve --configuration hmr --project admin --proxy-config proxy.conf.json",
+    "admin:start": "ng serve --project admin --port=4201 --proxy-config proxy.conf.json --sourceMap=true",
     "admin:test": "npm run admin:lint && ng test --project admin --watch=false --code-coverage --source-map",
     "admin:test:watch": "ng test --project admin --code-coverage --source-map",
     "app:build": "ng build --project app --baseHref=./ --prod --aot",

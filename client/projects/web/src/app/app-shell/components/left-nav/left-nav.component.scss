@@ -1,32 +1,6 @@
 @import "constants.scss";
 
 .left-nav-container {
-  .mat-nav-list a {
-    color: $accent-darkest;
-
-    .mat-icon,
-    .ng-fa-icon {
-      display: inline-block;
-      width: 30px;
-      box-sizing: border-box;
-    }
-
-    .mat-icon {
-      font-size: 22px;
-      height: 22px;
-      vertical-align: middle;
-      margin-top: -4px;
-    }
-
-    .ng-fa-icon {
-      padding-left: 2px;
-    }
-
-    span {
-      display: inline-block;
-    }
-  }
-
   .blocking-page-progress-indicator {
     position: fixed;
     z-index: 100;
