@@ -2,21 +2,34 @@
   <mat-card-header class="event-header">
     <div mat-card-avatar class="event-avatar">
       <mat-icon class="event-icon">event</mat-icon>
-      <div *ngIf="featuredEvent.day" class="event-day">{{ featuredEvent.day }}</div>
+      <div class="event-day">{{ featuredEvent.date | date: 'dd' }}</div>
     </div>
     <mat-card-title class="event-title">
       {{ featuredEvent.title }}
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p class="event-description" [innerHTML]="featuredEvent.description"></p>
-    <p class="event-time">
+    <p class="event-description" [innerHTML]="featuredEvent.description" *ngIf="featuredEvent.description"></p>
+    <p class="event-time" *ngIf="featuredEvent.date">
       <mat-icon>access_time</mat-icon>
-      <span>{{ featuredEvent.date }}<br>{{ featuredEvent.time }}</span>
+      <span>
+        {{ featuredEvent.date | date: 'EEEE, MMMM d' }}<br>
+        {{ featuredEvent.date | date: 'shortTime' }}
+        <ng-container *ngIf="endTime">
+          - {{ endTime | date: 'shortTime' }}
+        </ng-container>
+      </span>
     </p>
-    <p class="event-location">
+    <p class="event-location" *ngIf="featuredEvent.streetAddress || featuredEvent.city || featuredEvent.stateProvince || featuredEvent.postalCode">
       <mat-icon>location_on</mat-icon>
-      <a [href]="directionsHref" target="_blank" [innerHTML]="featuredEvent.location | formatEventLocation"></a>
+      <a [href]="directionsHref" target="_blank">
+        <ng-container *ngIf="featuredEvent.streetAddress">{{ featuredEvent.streetAddress }}<br></ng-container>
+        <ng-container *ngIf="featuredEvent.city">
+          {{ featuredEvent.city }}<ng-container *ngIf="featuredEvent.stateProvince || featuredEvent.postalCode">,</ng-container>
+        </ng-container>
+        <ng-container *ngIf="featuredEvent.stateProvince"> {{ featuredEvent.stateProvince }}</ng-container>
+        <ng-container *ngIf="featuredEvent.postalCode"> {{ featuredEvent.postalCode }}</ng-container>
+      </a>
     </p>
     <div class="event-action-container" *ngIf="featuredEvent.signupTitle && !signupComplete">
       <food-web-progress-indicator [trigger]="eventRegistrationService.loading" [blocking]="true"></food-web-progress-indicator>
@@ -53,4 +66,5 @@
       <a [routerLink]="['/event/list']">See All Future Events</a>
     </p>
   </mat-card-content>
+  <ng-content></ng-content>
 </mat-card>

@@ -27,7 +27,7 @@ export class DonationHelper {
     const pickupWindowErr: string = this._validatePickupWindow(donation.pickupWindowStart, donation.pickupWindowEnd);
     if (pickupWindowErr) { return pickupWindowErr; }
 
-    const donorAccountErr: string = this._accountHelper.validateAccount(donation.donorAccount, true);
+    const donorAccountErr: string = this._accountHelper.validateAccount(donation.donorAccount);
     if (donorAccountErr) { return donorAccountErr; }
 
     const donorContactOverrideErr: string = this._accountHelper.validateContactInfo(donation.donorContactOverride);
@@ -82,13 +82,11 @@ export class DonationHelper {
     if (!myAccount) {
       return 'You do not own the donation';
     }
-    if (myAccount.accountType !== AccountType.Admin) {
-      if (donation.donorAccount.id !== myAccount.id) {
-        return 'You do not own the donation';
-      }
-      if (this.isDonationStatusLaterThan(donation, DonationStatus.Scheduled)) {
-        return 'Cannot edit/delete a donation that has been picked up';
-      }
+    if (donation.donorAccount.id !== myAccount.id) {
+      return 'You do not own the donation';
+    }
+    if (this.isDonationStatusLaterThan(donation, DonationStatus.Scheduled)) {
+      return 'Cannot edit/delete a donation that has been picked up';
     }
     return '';
   }
@@ -110,13 +108,11 @@ export class DonationHelper {
     if (!myAccount) {
       return 'You do not own the donation claim';
     }
-    if (myAccount.accountType !== AccountType.Admin) {
-      if (myAccount.id !== donation.claim.receiverAccount.id && myAccount.id !== donation.donorAccount.id) {
-        return 'You do not own the donation claim';
-      }
-      if (this.isDonationStatusLaterThan(donation, DonationStatus.Scheduled)) {
-        return 'Cannot unclaim a completed donation';
-      }
+    if (myAccount.id !== donation.claim.receiverAccount.id && myAccount.id !== donation.donorAccount.id) {
+      return 'You do not own the donation claim';
+    }
+    if (this.isDonationStatusLaterThan(donation, DonationStatus.Scheduled)) {
+      return 'Cannot unclaim a completed donation';
     }
     return '';
   }
@@ -126,10 +122,9 @@ export class DonationHelper {
       return 'You cannot cancel a delivery that is not in a scheduled state';
     }
     if (
-      !myAccount 
+      !myAccount
       || (
-        myAccount.accountType !== AccountType.Admin
-        && myAccount.id !== donation.claim.delivery.volunteerAccount.id
+        myAccount.id !== donation.claim.delivery.volunteerAccount.id
         && myAccount.id !== donation.claim.receiverAccount.id
         && myAccount.id !== donation.donorAccount.id
       )

@@ -1,0 +1,32 @@
+<div class="table-title-content row" (mouseleave)="_recalcShowDatatableFilter(searchInput)">
+  <h2 class="col-sm-6 datatable-title" [attr.id]="titleId">
+    <ng-content></ng-content>
+  </h2>
+  <div class="col-sm-6 datatable-filter-container">
+    <mat-form-field
+      [hidden]="!includeSearch"
+      class="datatable-filter"
+      [ngClass]="{ 'show-datatable-filter': searchFilterVisible }"
+      floatLabel="never"
+      [tabindex]="searchFilterVisible ? -1 : 0"
+      (focus)="_onSearchFormFieldFocus(searchInput)"
+      (mouseenter)="_onSearchFormFieldHover()"
+    >
+      <mat-icon matPrefix aria-label="Search Table Icon" class="search-icon">{{ searchIcon }}</mat-icon>
+      <input matInput
+        #searchInput
+        [placeholder]="searchPlaceholder"
+        class="filter-search"
+        type="search"
+        autocomplete="off"
+        (focus)="searchInput.select()"
+        (blur)="_recalcShowDatatableFilter(searchInput)"
+        (input)="updateFilter($event)"
+        [value]="searchValue"
+        [disabled]="searchFilterDisabled">
+    </mat-form-field>
+    <span class="datatable-title-buttons">
+      <ng-content select="[table-title-button]"></ng-content>
+    </span>
+  </div>
+</div>

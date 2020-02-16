@@ -28,11 +28,11 @@
         <resource-file src="res/icon/notification/android/icon-xhdpi.png" target="app/src/main/res/drawable-xhdpi/notification.png" />
         <resource-file src="res/icon/notification/android/icon-xxhdpi.png" target="app/src/main/res/drawable-xxhdpi/notification.png" />
         <resource-file src="res/icon/notification/android/icon-xxxhdpi.png" target="app/src/main/res/drawable-xxxhdpi/notification.png" />
-        <splash src="res/splash/android/drawable-mdpi/splash.9.png" density="mdpi" />
-        <splash src="res/splash/android/drawable-hdpi/splash.9.png" density="hdpi" />
-        <splash src="res/splash/android/drawable-xhdpi/splash.9.png" density="xhdpi" />
-        <splash src="res/splash/android/drawable-xxhdpi/splash.9.png" density="xxhdpi" />
-        <splash src="res/splash/android/drawable-xxxhdpi/splash.9.png" density="xxxhdpi" />
+        <splash density="mdpi" src="res/splash/android/drawable-mdpi/splash.9.png" />
+        <splash density="hdpi" src="res/splash/android/drawable-hdpi/splash.9.png" />
+        <splash density="xhdpi" src="res/splash/android/drawable-xhdpi/splash.9.png" />
+        <splash density="xxhdpi" src="res/splash/android/drawable-xxhdpi/splash.9.png" />
+        <splash density="xxxhdpi" src="res/splash/android/drawable-xxxhdpi/splash.9.png" />
         <preference name="ShowSplashScreenSpinner" value="false" />
         <preference name="AutoHideSplashScreen" value="false" />
         <preference name="SplashMaintainAspectRatio" value="true" />
@@ -50,4 +50,5 @@
         <host name="10.0.0.2" scheme="http" />
     </universal-links>
     <allow-navigation href="http://localhost:8100" sessionid="3948c099" />
+    <content src="index.html" />
 </widget>

@@ -248,6 +248,16 @@
         "./projects/web/src/app/signup/interfaces/*",
         "./projects/web/src/app/signup/pipes/*",
         "./projects/web/src/app/signup/services/*"
+      ],
+      "~web/table/*": [
+        "./projects/web/src/app/table/*",
+        "./projects/web/src/app/table/child-components/*",
+        "./projects/web/src/app/table/components/*",
+        "./projects/web/src/app/table/directives/*",
+        "./projects/web/src/app/table/forms/*",
+        "./projects/web/src/app/table/interfaces/*",
+        "./projects/web/src/app/table/pipes/*",
+        "./projects/web/src/app/table/services/*"
       ]
     },
     "sourceMap": true,

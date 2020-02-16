@@ -124,6 +124,7 @@
     "karma-jasmine": "^3.1.0",
     "karma-jasmine-html-reporter": "^1.5.2",
     "karma-spec-reporter": "0.0.32",
+    "ng-mocks": "^9.0.0",
     "protractor": "^5.4.3",
     "symlink-dir": "^3.1.1",
     "ts-node": "^8.6.2",

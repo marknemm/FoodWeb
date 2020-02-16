@@ -21,7 +21,7 @@ export class DonationClaimHelper {
     const routeToReceiverErr: string = this.validateRouteToReceiver(claim.routeToReceiver);
     if (routeToReceiverErr) { return routeToReceiverErr; }
 
-    const receiverAccountErr: string = this._accountHelper.validateAccount(claim.receiverAccount, true);
+    const receiverAccountErr: string = this._accountHelper.validateAccount(claim.receiverAccount);
     if (receiverAccountErr) { return receiverAccountErr; }
 
     return '';

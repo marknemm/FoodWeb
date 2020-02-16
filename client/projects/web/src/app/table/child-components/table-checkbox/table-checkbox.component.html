@@ -1,0 +1,20 @@
+<mat-checkbox *ngIf="!row"
+  [aria-label]="ariaLabel"
+  [aria-labelledby]="ariaLabelledby"
+  (click)="$event.stopPropagation()"
+  (change)="($event ? toggleSelectAll() : null)"
+  [checked]="selectionModel.hasValue() && isAllSelected()"
+  [indeterminate]="selectionModel.hasValue() && !isAllSelected()"
+>
+  <ng-content></ng-content>
+</mat-checkbox>
+
+<mat-checkbox *ngIf="row"
+  [aria-label]="ariaLabel"
+  [aria-labelledby]="ariaLabelledby"
+  (click)="$event.stopPropagation()"
+  (change)="$event ? _onChanged($event.checked) : null"
+  [checked]="selectionModel.isSelected(row)"
+>
+  <ng-content></ng-content>
+</mat-checkbox>

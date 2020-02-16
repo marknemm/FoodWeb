@@ -55,11 +55,9 @@ export class AppModule {
 
   constructor(
     appDataService: AppDataService,
-    iconService: IconService,
-    jsonDateReviver: JSONDateReviver
+    iconService: IconService
   ) {
     appDataService.init();
     iconService.init();
-    jsonDateReviver.initJSONDateReviver();
   }
 }

@@ -1,0 +1,60 @@
+<!-- Defintion for checkbox column -->
+<ng-container matColumnDef="checkbox">
+  <th mat-header-cell *matHeaderCellDef class="checkbox-header-cell">
+    <food-web-table-checkbox [dataSource]="dataSource" attr.aria-label="Toggle select all rows"></food-web-table-checkbox>
+  </th>
+  <td mat-cell *matCellDef="let row" class="checkbox-cell">
+    <food-web-table-checkbox [dataSource]="dataSource" [row]="row" attr.aria-label="Toggle select row"></food-web-table-checkbox>
+  </td>
+</ng-container>
+
+<!-- Definition for rowActions column (e.g. edit/delete buttons) -->
+<ng-container matColumnDef="rowActions" [stickyEnd]="stickyRowActions">
+  <th mat-header-cell *matHeaderCellDef class="row-actions-header-cell"></th>
+  <td mat-cell *matCellDef="let row" class="row-actions-cell">
+    <ng-container *ngTemplateOutlet="rowActionDef;context:{ row: row }"></ng-container>
+  </td>
+</ng-container>
+
+<!-- Add these default definitions to table programmatically for any missing definition -->
+<ng-container [matColumnDef]="column.name" [sticky]="column.sticky" *ngFor="let column of defaultStdColumns">
+  <th mat-header-cell
+    *matHeaderCellDef
+    mat-sort-header
+    [ngClass]="column.headerCellClass"
+    [style.width]="column.width"
+    [style.minWidth]="column.minWidth"
+  >
+    <food-web-table-checkbox *ngIf="column.headerCellCheckbox" [dataSource]="dataSource" [column]="column" attr.aria-label="Toggle All ${column.name}"></food-web-table-checkbox>
+    <span *ngIf="!column.headerCellTemplate" [innerHTML]="column.visibleName ? column.visibleName : ''"></span>
+    <ng-container *ngIf="column.headerCellTemplate">
+      <ng-container *ngTemplateOutlet="column.headerCellTemplate; context:{ column: column }"></ng-container>
+    </ng-container>
+  </th>
+  <td mat-cell
+    *matCellDef="let row"
+    [ngClass]="column.cellClass"
+    [style.width]="column.width"
+    [style.minWidth]="column.minWidth"
+  >
+    <food-web-table-checkbox *ngIf="column.cellCheckbox" [dataSource]="dataSource" [row]="row" [column]="column" attr.aria-label="Toggle ${column.name}"></food-web-table-checkbox>
+    <span *ngIf="!column.cellTemplate" [innerHTML]="_genCellData(column, row)"></span>
+    <ng-container *ngIf="column.cellTemplate">
+      <ng-container *ngTemplateOutlet="column.cellTemplate; context:{ column: column, row: row, value: _genCellData(column, row) }"></ng-container>
+    </ng-container>
+  </td>
+</ng-container>
+<tr mat-header-row *matHeaderRowDef="columnNames; sticky: stickyHeader"></tr>
+<tr mat-row *matRowDef="let row; columns: columnNames;" [foodWebSelectableRow]="row" [dataSource]="dataSource"
+  [ngClass]="{ 'table-row-selected': dataSource.selectionModel?.isSelected(row) }"></tr>
+
+<!-- Empty Material Table shell -->
+<div class="datatable-container">
+  <table mat-table [dataSource]="dataSource" [ngClass]="{
+    'table-single-select': dataSource.selectionType === 'single',
+    'table-multi-select': dataSource.selectionType === 'multi'
+  }">
+    <!-- Include empty header row defintion to prevent error -->
+    <tr mat-header-row *matHeaderRowDef="[]" class="empty-header-row"></tr>
+  </table>
+</div>

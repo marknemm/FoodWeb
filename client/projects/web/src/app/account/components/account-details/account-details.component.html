@@ -35,7 +35,7 @@
             <mat-card-title class="block-label">Organization</mat-card-title>
             <mat-card-content>
               <food-web-organization [formGroup]="formGroup.get('organization')" [accountType]="accountType" [editing]="organizationSaveEdit.editing"></food-web-organization>
-              <div *ngIf="originalAccount && !accountHelper.isAdmin(originalAccount)" class="see-donations-link">
+              <div *ngIf="originalAccount" class="see-donations-link">
                 <a *ngIf="!isMyAccount" [routerLink]="['/donation/list']" [queryParams]="seeDonationsLinkParams">See Donations</a>
                 <a *ngIf="isMyAccount" [routerLink]="['/donation/list/my']">See My Donations</a>
               </div>
@@ -48,7 +48,7 @@
             <mat-card-title class="block-label">Volunteer Name</mat-card-title>
             <mat-card-content>
               <food-web-volunteer [formGroup]="formGroup.get('volunteer')" [editing]="volunteerSaveEdit.editing"></food-web-volunteer>
-              <div *ngIf="isMyAccount && originalAccount && !accountHelper.isAdmin(originalAccount)" class="see-donations-link">
+              <div *ngIf="isMyAccount && originalAccount" class="see-donations-link">
                 <a [routerLink]="['/delivery/list/my']">See My Deliveries</a>
               </div>
             </mat-card-content>

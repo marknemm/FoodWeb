@@ -1,0 +1,26 @@
+<button mat-button
+  *ngIf="responsive"
+  type="button"
+  class="table-add-button hidden-md hidden-sm hidden-xs"
+  color="primary"
+  [disabled]="disabled"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-labelledby]="ariaLabelledby"
+  (click)="_onClick()"
+>
+  <mat-icon fontIcon="fa-plus"></mat-icon> {{ buttonText }}
+</button>
+
+<button mat-mini-fab
+  type="button"
+  color="primary"
+  class="table-add-button"
+  [ngClass]="{ 'hidden-lg': responsive }"
+  [matTooltip]="tooltip"
+  [disabled]="disabled"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-labelledby]="ariaLabelledby"
+  (click)="_onClick()"
+>
+  <mat-icon fontIcon="fa-plus"></mat-icon>
+</button>

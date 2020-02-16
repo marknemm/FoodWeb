@@ -55,10 +55,8 @@ import { SharedModule } from '~web/shared/shared.module';
 export class AppModule {
 
   constructor(
-    iconService: IconService,
-    jsonDateReviver: JSONDateReviver
+    iconService: IconService
   ) {
     iconService.init();
-    jsonDateReviver.initJSONDateReviver();
   }
 }

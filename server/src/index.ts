@@ -57,7 +57,7 @@ app.use('/server/account', require('./controllers/account'));
 app.use('/server/app-data', require('./controllers/app-data'));
 app.use('/server/delivery', require('./controllers/delivery'));
 app.use('/server/donation', require('./controllers/donation'));
-app.use('/server/event', require('./controllers/event-registration'));
+app.use('/server/featured-event', require('./controllers/featured-event'));
 app.use('/server/heuristics', require('./controllers/heuristics'));
 app.use('/server/map', require('./controllers/map'));
 app.use('/server/notification', require('./controllers/notification'));

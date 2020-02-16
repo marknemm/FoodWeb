@@ -1,0 +1,26 @@
+<p>
+  We regret to inform you that the following event has been cancelled: 
+  <span class="emphasize">{{ featuredEvent.title }}</span>
+</p>
+
+<hr>
+
+<div class="col-6">
+  <div class="inline-label">Time:</div>
+  <div class="indented-data">{{ eventDateStr }} at {{ eventTimeStr }}</div>
+</div>
+
+<div class="col-6">
+  <div class="inline-label">Location:</div>
+  <div class="indented-data">
+    <div>{{ featuredEvent.streetAddress }}</div>
+    <div>
+      {{ featuredEvent.city }}, {{ featuredEvent.state }}
+      {{ featuredEvent.postalCode }}
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<p>We apologize for any inconvenience. We look forward to seeing you at our future events.</p>

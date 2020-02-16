@@ -79,7 +79,7 @@ async function _saveAccount(manager: OrmEntityManager, account: AccountEntity, m
   const operationHoursRepo: OrmRepository<OperationHoursEntity> = manager.getRepository(OperationHoursEntity);
   _ensureEitherOrganizationOrVolunteer(account);
   _ensureAccountHasProfileImg(account);
-  _validateAccount(account, myAccount);
+  _validateAccount(account);
   await _checkForAndProcessNewAddress(manager, account, myAccount);
   account.contactInfo.phoneNumber = _accountHelper.formatPhoneNumber(account.contactInfo.phoneNumber);
 
@@ -94,9 +94,8 @@ async function _saveAccount(manager: OrmEntityManager, account: AccountEntity, m
   return accountRepo.findOne({ id: account.id });
 }
 
-function _validateAccount(account: AccountEntity, myAccount?: AccountEntity): void {
-  const allowAdminAccountType = (myAccount && myAccount.accountType === 'Admin');
-  const accountErr: string = _accountHelper.validateAccount(account, allowAdminAccountType);
+function _validateAccount(account: AccountEntity): void {
+  const accountErr: string = _accountHelper.validateAccount(account);
   if (accountErr) {
     throw new FoodWebError(accountErr);
   }

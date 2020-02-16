@@ -1,0 +1,11 @@
+<food-web-event-card [featuredEvent]="featuredEvent">
+  <mat-card-actions *ngIf="!hideActions">
+    <div class="align-right">
+      <button mat-button foodWebConfirmButton type="button" color="warn" (clickConfirm)="deleteEvent.emit()"
+        confirmTitle="Confirm Delete" confirmMessage="Are you sure you want to permanently delete the event?">Delete</button>
+      <a routerLink="/event/edit/{{ featuredEvent.id }}">
+        <button mat-raised-button type="button" color="primary">Edit</button>
+      </a>
+    </div>
+  </mat-card-actions>
+</food-web-event-card>

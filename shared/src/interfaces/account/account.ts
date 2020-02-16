@@ -20,8 +20,7 @@ export interface Account {
 export enum AccountType {
   Donor = 'Donor',
   Receiver = 'Receiver',
-  Volunteer = 'Volunteer',
-  Admin = 'Admin'
+  Volunteer = 'Volunteer'
 };
 
 export const ACCOUNT_TYPES: AccountType[] = [

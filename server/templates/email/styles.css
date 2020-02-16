@@ -27,6 +27,7 @@ table, tr, td {
 
 .col-6 {
   display: inline-block;
+  vertical-align: top;
   width: 278px;
   margin-bottom: 1em;
 }

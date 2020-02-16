@@ -1,0 +1,24 @@
+<button mat-button
+  *ngIf="responsive"
+  type="button"
+  class="table-delete-button hidden-md hidden-sm hidden-xs"
+  color="warn"
+  [disabled]="disabled"
+  (click)="_onClick()"
+>
+  <mat-icon fontIcon="fa-trash" [attr.aria-label]="ariaLabel"></mat-icon> {{ buttonText }}
+</button>
+
+<button mat-mini-fab
+  type="button"
+  color="warn"
+  class="table-delete-button"
+  [ngClass]="{ 'hidden-lg': responsive }"
+  [matTooltip]="tooltip"
+  [disabled]="disabled"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-labelledby]="ariaLabelledby"
+  (click)="_onClick()"
+>
+  <mat-icon matPrefix fontIcon="fa-trash"></mat-icon>
+</button>

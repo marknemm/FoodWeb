@@ -1,0 +1,10 @@
+<div class="create-event page">
+  <div class="row">
+    <div class="col-md-6" [hidden]="createEventComplete">
+      <food-web-featured-event-form #formComponent formTitle="Create Event" (save)="createEvent($event)"></food-web-featured-event-form>
+    </div>
+    <div class="event-demo col-md-6">
+      <food-web-event-card [featuredEvent]="formComponent.featuredEventForm.value"></food-web-event-card>
+    </div>
+  </div>
+</div>

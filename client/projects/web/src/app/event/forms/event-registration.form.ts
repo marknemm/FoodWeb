@@ -9,9 +9,18 @@ export class EventRegistrationForm extends TypedFormGroup<EventRegistration> {
     super({
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', [Validators.required, Validators.pattern(Validation.PHONE_REGEX)]]
+      phoneNumber: ['', [Validators.required, Validators.pattern(Validation.PHONE_REGEX)]],
+      timezone: ['', Validators.required]
     });
+    this._initTimezone();
     this._attemptInitValuesFromSession(sessionService)
+  }
+
+  private _initTimezone(): void {
+    const timezone: string = (Intl.DateTimeFormat().resolvedOptions().timeZone)
+      ? Intl.DateTimeFormat().resolvedOptions().timeZone
+      : 'America/New_York';
+    this.get('timezone').setValue(timezone);
   }
 
   private _attemptInitValuesFromSession(sessionService: SessionService): void {

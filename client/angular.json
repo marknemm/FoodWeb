@@ -77,7 +77,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "admin:build"
+            "browserTarget": "admin:build",
+            "sourceMap": true
           },
           "configurations": {
             "hmr": {
@@ -248,7 +249,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "app:build"
+            "browserTarget": "app:build",
+            "sourceMap": true
           },
           "configurations": {
             "app": {

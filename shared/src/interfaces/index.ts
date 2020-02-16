@@ -5,7 +5,7 @@ export * from './date-time';
 export * from './delivery';
 export * from './donation';
 export * from './donation-claim';
-export * from './event-registration';
+export * from './event';
 export * from './heuristics';
 export * from './list-response';
 export * from './map';

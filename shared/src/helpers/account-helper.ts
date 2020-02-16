@@ -7,10 +7,6 @@ export class AccountHelper {
 
   private _validationHelper = new ValidationHelper();
 
-  isAdmin(account: Account): boolean {
-    return (account?.accountType === AccountType.Admin);
-  }
-
   isDonor(account: Account): boolean {
     return (account?.accountType === AccountType.Donor);
   }
@@ -113,7 +109,7 @@ export class AccountHelper {
     return matchSubstr;
   }
 
-  validateAccount(account: Account, allowAdminAccountType = false): string {
+  validateAccount(account: Account): string {
     if (!account) { return ''; }
 
     const requireErr: string = this._validationHelper.validateRequiredFields(
@@ -140,7 +136,7 @@ export class AccountHelper {
       const volunteerErr: string = this.validateVolunteer(account.volunteer);
       if (volunteerErr) { return volunteerErr; }
     }
-    if (!Validation.ACCOUNT_TYPE_REGEX.test(account.accountType) && (account.accountType !== AccountType.Admin || allowAdminAccountType)) {
+    if (!Validation.ACCOUNT_TYPE_REGEX.test(account.accountType)) {
       return 'Invalid account type';
     }
 

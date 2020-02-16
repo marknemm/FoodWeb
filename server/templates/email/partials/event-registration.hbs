@@ -1,0 +1,26 @@
+<p>
+  FoodWeb event registration confirmation for event: 
+  <span class="emphasize">{{ featuredEvent.title }}</span>
+</p>
+
+<hr>
+
+<div class="col-6">
+  <div class="inline-label">Time:</div>
+  <div class="indented-data">{{ eventDateStr }} at {{ eventTimeStr }}</div>
+</div>
+
+<div class="col-6">
+  <div class="inline-label">Location:</div>
+  <div class="indented-data">
+    <div>{{ featuredEvent.streetAddress }}</div>
+    <div>
+      {{ featuredEvent.city }}, {{ featuredEvent.state }}
+      {{ featuredEvent.postalCode }}
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<p>We look forward to seeing you there!</p>

@@ -1,5 +1,5 @@
 import 'dotenv';
-import { Account, Donation } from '../../shared';
+import { Account, Donation, AccountType } from '../../shared';
 import { genHandlebarsTemplate } from './handlebars';
 import nodemailer = require('nodemailer');
 import mailgunTransport = require('nodemailer-mailgun-transport');
@@ -12,6 +12,13 @@ export enum MailTransporter {
   SUPPORT = 'SUPPORT'
 }
 
+export type Recipient = Account | SimpleRecipient;
+
+export interface SimpleRecipient {
+  name: string;
+  email: string;
+}
+
 const offlineMode: boolean = (process.env.OFFLINE_MODE === 'true');
 const noreplyTransporter: nodemailer.Transporter = _initEmailTransporter(MailTransporter.NOREPLY);
 const supportTransporter: nodemailer.Transporter = _initEmailTransporter(MailTransporter.SUPPORT);
@@ -20,7 +27,7 @@ const supportTransporter: nodemailer.Transporter = _initEmailTransporter(MailTra
  * Broadcasts an email message to a given set of accounts. Automatically personalizes the header of each
  * email to the owner of each account.
  * @param mailTransporter The mail transporter to use (determines the from address).
- * @param accounts The accounts to broadcast the email to.
+ * @param recipients The recipients to broadcast the email to.
  * @param subjects The subject(s) of the emails to broadcast. Can be a uniform subject, or a list of personalized subjects.
  * @param template The handlebars (hbs) template to use for the body of the email.
  * @param context The optional context containing variables that may be injected into the handlebars template.
@@ -29,7 +36,7 @@ const supportTransporter: nodemailer.Transporter = _initEmailTransporter(MailTra
  */
 export function broadcastEmail(
   mailTransporter: MailTransporter,
-  accounts: Account[],
+  recipients: Recipient[],
   subjects: string | string[],
   template: string,
   context?: any,
@@ -38,11 +45,11 @@ export function broadcastEmail(
   // If offline, then return immediately.
   if (offlineMode) { return Promise.resolve([]); }
   const sendPromises: Promise<void>[] = [];
-  for (let i = 0; i < accounts.length; i++) {
+  for (let i = 0; i < recipients.length; i++) {
     sendPromises.push(
       sendEmail(
         mailTransporter,
-        accounts[i],
+        recipients[i],
         (subjects instanceof Array) ? subjects[i] : subjects,
         template,
         JSON.parse(JSON.stringify(context)), // Make copy of context since it is modified for each account.
@@ -65,22 +72,22 @@ export function broadcastEmail(
  */
 export function sendEmail(
   mailTransporter: MailTransporter,
-  account: Account,
+  recipient: Recipient,
   subject: string,
   template: string,
   context?: any,
   forceSend = false
 ): Promise<void> {
   // If offline, or the target account has disabled email notifications, then return immediately.
-  if (!_shouldSendEmail(offlineMode, forceSend, account)) {
+  if (!_shouldSendEmail(offlineMode, forceSend, recipient)) {
     return Promise.resolve();
   }
-  context = _fillMissingContext(context, account, template);
+  context = _fillMissingContext(context, recipient, template);
 
   return new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {
     const transporter: nodemailer.Transporter = _getTransporter(mailTransporter);
     const from: string = process.env[`${mailTransporter}_EMAIL`];
-    const to: string = account.contactInfo.email;
+    const to: string = _extractRecipientTo(recipient);
     // Can define extra 'Admin' email recipients in .env to get all messages.
     const recipients: string[] = _getAllRecipients(to);
 
@@ -116,32 +123,77 @@ export function genDonationEmailSubject(donation: Donation): string {
  * Determines whether or not an email should be sent to a given account.
  * @param offlineMode If the server is in offline (development) mode.
  * @param forceSend If set to true, then sends the email even if the account has emails disabled.
- * @param account The account that the email is being sent to.
+ * @param recipient The recipient that the email is to be sent to.
  * @return true if the email should be sent, false if not.
  */
-function _shouldSendEmail(offlineMode: boolean, forceSend: boolean, account: Account): boolean {
-  return (!offlineMode && (forceSend || account.contactInfo.enableEmail));
+function _shouldSendEmail(offlineMode: boolean, forceSend: boolean, recipient: Recipient): boolean {
+  const account = <Account>recipient;
+  return (!offlineMode && (forceSend || !account.contactInfo || account.contactInfo.enableEmail));
 }
 
 /**
  * Fills in the missing (hbs) template context variables that are universally used in all email templates.
- * @param context The context that shall be filled (INTERNALLY MODIFIED).
- * @param account The account that the email is to be sent to.
+ * @param context The context that shall be filled.
+ * @param recipient The recipient that the email is to be sent to.
  * @param template The (hbs) template that is to be used for the email body.
- * @return The filled (hbs) template context.
+ * @return The filled (hbs) template context (copy of input context).
  */
-function _fillMissingContext(context: any, account: Account, template: string): any {
+function _fillMissingContext(context: any, recipient: Recipient, template: string): any {
   context = (context ? Object.assign({}, context) : {});
+  context = _fillMissingAccountContext(context, <Account>recipient);
+  context = _fillMissingSimpleRecipientContext(context, <SimpleRecipient>recipient);
+  context.emailContent = template;
   context.env = (context.env ? context.env : process.env);
   context.year = (context.year ? context.year : new Date().getFullYear());
-  context.account = (context.account ? context.account : account);
-  context.emailContent = template;
-  context.isVolunteer = (account.accountType === 'Volunteer');
-  context.isDonor = (account.accountType === 'Donor');
-  context.isReceiver = (account.accountType === 'Receiver');
-  context.isAdmin = (account.accountType === 'Admin');
-  context.timezone = (context.account.contactInfo.timezone);
   return context;
+}
+
+/**
+ * Fills in missing (hbs) template context account variables that are universally used in all email templates.
+ * @param context The context that shall be filled (INTERNALLY MODIFIED).
+ * @param account The account that the email is to be sent to. If null, then no filling occurs.
+ * @return The filled (hbs) template context.
+ */
+function _fillMissingAccountContext(context: any, account: Account): any {
+  account = (context?.account) ? context.account : account;
+  if (account?.accountType) {
+    context.account = account;
+    context.isDonor = (account.accountType === AccountType.Donor);
+    context.isReceiver = (account.accountType === AccountType.Receiver);
+    context.isVolunteer = (account.accountType === AccountType.Volunteer);
+    context.recipientName = (account.accountType === AccountType.Volunteer)
+      ? `${account.volunteer.firstName} ${account.volunteer.lastName}`
+      : `${account.organization.name}`;
+    context.timezone = (account.contactInfo.timezone);
+  }
+  return context;
+}
+
+/**
+ * Fills in missing (hbs) template context simple recipient variables that are universally used in all email templates.
+ * @param context The context that shall be filled (INTERNALLY MODIFIED).
+ * @param recipient The simple recipient that the email is to be sent to. If null, then no filling occurs.
+ * @return The filled (hbs) template context.
+ */
+function _fillMissingSimpleRecipientContext(context: any, recipient: SimpleRecipient): any {
+  if (recipient?.name) {
+    context.recipientName = recipient.name;
+  }
+  return context;
+}
+
+/**
+ * Extracts the 'to' email from a given recipient object.
+ * @param recipient The recipient object from which to extract the 'to' email.
+ * @return The extracted 'to' email.
+ */
+function _extractRecipientTo(recipient: Recipient): string {
+  if (recipient) {
+    return ((<Account>recipient).contactInfo)
+      ? (<Account>recipient).contactInfo.email
+      : (<SimpleRecipient>recipient).email;
+  }
+  return '';
 }
 
 /**

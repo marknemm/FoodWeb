@@ -13,7 +13,7 @@ export async function updatePassword(updateReq: PasswordUpdateRequest, myAccount
   // Ensure we have an oldPassword to check against for extra security!
   const oldPassword = (updateReq.oldPassword ? updateReq.oldPassword : ' ');
   await getConnection().transaction(async (manager: EntityManager) => {
-    await savePassword(manager, myAccount, password, oldPassword, _accountHelper.isAdmin(myAccount));
+    await savePassword(manager, myAccount, password, oldPassword);
   });
 }
 

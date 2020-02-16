@@ -61,4 +61,10 @@ import { YesNoComponent } from '~web/shared/yes-no/yes-no.component';
     JSONDateReviver
   ]
 })
-export class SharedModule {}
+export class SharedModule {
+
+  constructor(jsonDateReviver: JSONDateReviver) {
+    jsonDateReviver.initJSONDateReviver();
+  }
+
+}

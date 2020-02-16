@@ -169,11 +169,11 @@ export function genPagination<T>(
 /**
  * Generates the skip portion of the SQL query.
  * @param pagingParams The paging parameters submitted in the request.
- * @param defaultLimit An optional default limit if pagingParams.limit is undefined. Defaults to 10.
+ * @param defaultSkip An optional default skip if pagingParams.page is undefined. Defaults to 0.
  * @return The generated skip value.
  */
-export function genSkip(pagingParams: PagingParams, defaultLimit = 10): number {
-  pagingParams = _refinePagingParams(pagingParams, defaultLimit);
+export function genSkip(pagingParams: PagingParams, defaultSkip = 0): number {
+  pagingParams = _refinePagingParams(pagingParams, defaultSkip);
   return (pagingParams.page - 1) * pagingParams.limit;
 }
 

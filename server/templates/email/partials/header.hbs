@@ -1,13 +1,7 @@
 <div class="email-header">
   <table class="fill" border="0" cellpadding="0" cellspacing="0">
     <tr>
-      <td align="left">
-        {{#if isVolunteer }}
-          <b>Hi, {{ account.volunteer.firstName }} {{ account.volunteer.lastName }}</b>
-        {{else}}
-          <b>Hi, {{ account.organization.name }}</b>
-        {{/if}}
-      </td>
+      <td align="left">{{ recipientName }}</td>
       <td align="right">
         <a href="{{ env.SERVER_HOST_ADDRESS }}">Home</a> |
         <a href="{{ env.SERVER_HOST_ADDRESS }}/login">Login</a>

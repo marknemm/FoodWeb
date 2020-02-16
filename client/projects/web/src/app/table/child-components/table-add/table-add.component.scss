@@ -1,0 +1,13 @@
+.sm-add-button {
+  display: none;
+}
+
+@media only screen and (max-width: 767px) {
+  .lg-add-button {
+    display: none;
+  }
+
+  .sm-add-button {
+    display: inline-block;
+  }
+}

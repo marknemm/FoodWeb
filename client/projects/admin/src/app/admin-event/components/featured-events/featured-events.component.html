@@ -1,0 +1,12 @@
+<div *ngIf="featuredEvents" class="events page">
+  <div class="page-title block-label">
+    <span class="page-title">Featured Events</span>
+  </div>
+
+  <div class="row">
+    <div *ngFor="let featuredEvent of featuredEvents; let idx = index" class="event col-lg-4 col-md-6">
+      <food-web-admin-event-card [featuredEvent]="featuredEvent" (deleteEvent)="deleteEvent(featuredEvent, idx)"></food-web-admin-event-card>
+    </div>
+  </div>
+
+</div>
