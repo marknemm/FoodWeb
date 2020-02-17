@@ -6,6 +6,7 @@ import { UsernameRecoveryService } from '~web/account/username-recovery/username
 import { PasswordResetService } from '~web/password/password-reset/password-reset.service';
 import { LoginForm } from '~web/session/login.form';
 import { SessionService } from '~web/session/session/session.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'food-web-login',
@@ -29,8 +30,9 @@ export class LoginComponent implements OnInit {
 
   constructor(
     public sessionService: SessionService,
-    private _usernameRecoveryService: UsernameRecoveryService,
-    private _passwordResetService: PasswordResetService
+    private _activatedRoute: ActivatedRoute,
+    private _passwordResetService: PasswordResetService,
+    private _usernameRecoveryService: UsernameRecoveryService
   ) {}
 
   get isLogin(): boolean {

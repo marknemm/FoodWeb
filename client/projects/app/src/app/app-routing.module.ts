@@ -7,10 +7,6 @@ import { HomeComponent } from '~web/components/home/home.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
-  // Redirects from old app structure.
-  { path: 'notifications', pathMatch: 'full', redirectTo: 'notification/list/my' },
-  { path: 'signup-verification', pathMatch: 'full', redirectTo: 'signup/verification' },
-  { path: 'donation-details/:id', pathMatch: 'full', redirectTo: 'donation/details/:id' },
   // Redirect web login/signup to app routes.
   { path: 'login', pathMatch: 'full', redirectTo: 'bootstrap/login' },
   { path: 'signup', pathMatch: 'full', redirectTo: 'bootstrap/signup' },

@@ -68,6 +68,16 @@
         "./projects/admin/src/app/admin-event/pipes/*",
         "./projects/admin/src/app/admin-event/services/*"
       ],
+      "~admin/bootstrap/*": [
+        "./projects/admin/src/app/bootstrap/*",
+        "./projects/admin/src/app/bootstrap/child-components/*",
+        "./projects/admin/src/app/bootstrap/components/*",
+        "./projects/admin/src/app/bootstrap/directives/*",
+        "./projects/admin/src/app/bootstrap/forms/*",
+        "./projects/admin/src/app/bootstrap/interfaces/*",
+        "./projects/admin/src/app/bootstrap/pipes/*",
+        "./projects/admin/src/app/bootstrap/services/*"
+      ],
       "~admin/components/*": [ "./projects/admin/src/app/components/*" ],
       "~admin/envrionments/*": ["./projects/admin/src/environments/*"],
       "~hmr": ["./hmr"],

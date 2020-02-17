@@ -8,6 +8,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AdminAppShellModule } from '~admin/admin-app-shell/admin-app-shell.module';
 import { AppRoutingModule } from '~admin/app-routing.module';
 import { AppComponent } from '~admin/app.component';
+import { BootstrapService } from '~admin/bootstrap/bootstrap/bootstrap.service';
 import { AdminConsoleComponent } from '~admin/components/admin-console/admin-console.component';
 import { MaterialModule } from '~web/material.module';
 import { SessionModule } from '~web/session/session.module';
@@ -35,4 +36,8 @@ import { SharedModule } from '~web/shared/shared.module';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+  constructor(bootstrapService: BootstrapService) {
+    bootstrapService.listenSessionStateChange();
+  }
+}

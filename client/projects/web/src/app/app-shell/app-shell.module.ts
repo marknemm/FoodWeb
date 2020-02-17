@@ -5,6 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AccountModule } from '~web/account/account.module';
 import { AppShellComponent } from '~web/app-shell/app-shell/app-shell.component';
 import { DonateMenuComponent } from '~web/app-shell/donate-menu/donate-menu.component';
+import { HeaderActionsComponent } from '~web/app-shell/header-actions/header-actions.component';
 import { HeaderComponent } from '~web/app-shell/header/header.component';
 import { LeftNavItemsComponent } from '~web/app-shell/left-nav-items/left-nav-items.component';
 import { LeftNavComponent } from '~web/app-shell/left-nav/left-nav.component';
@@ -19,6 +20,7 @@ import { SharedModule } from '~web/shared/shared.module';
 @NgModule({
   declarations: [
     AppShellComponent,
+    HeaderActionsComponent,
     HeaderComponent,
     LeftNavComponent,
     LeftNavItemsComponent,

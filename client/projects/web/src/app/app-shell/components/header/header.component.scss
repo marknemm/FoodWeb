@@ -130,34 +130,6 @@ header {
         box-sizing: border-box;
         overflow: hidden;
         padding-right: inherit;
-  
-        > span,
-        > a {
-          position: relative;
-          vertical-align: middle;
-          top: 5px;
-          font-weight: 500;
-  
-          @media only screen and (max-width: $mat-mobile) {
-            top: 6px;
-            font-size: 15px;
-          }
-        }
-
-        food-web-profile-img {
-          margin-left: 7px;
-          margin-right: 7px;
-        }
-  
-        a {
-          color: $accent-darkest;
-          cursor: pointer;
-          font-weight: 500;
-  
-          &:hover {
-            text-decoration: underline;
-          }
-        }
       }
 
       @media only screen and (max-width: $sm) {
