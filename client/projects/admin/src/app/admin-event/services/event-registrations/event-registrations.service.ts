@@ -33,7 +33,7 @@ export class EventRegistrationsService {
 
   getEventIdentifiers(): Observable<Partial<FeaturedEvent>[]> {
     this._eventsLoading = true;
-    return this._httpClient.get<Partial<FeaturedEvent>[]>(this.eventIdentifiersUrl).pipe(
+    return this._httpClient.get<Partial<FeaturedEvent>[]>(this.eventIdentifiersUrl, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._eventsLoading )
     )
