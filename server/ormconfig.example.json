@@ -6,13 +6,13 @@
   "password": "password",
   "database": "database",
   "entities": [
-    "./dist/server/src/entity/**/*.js"
+    "./dist/server/database/src/entity/**/*.js"
   ],
   "migrations": [
-    "./dist/server/src/migration/**/*.js"
+    "./dist/server/database/src/migration/**/*.js"
   ],
   "cli": {
-    "entitiesDir": "src/entity",
-    "migrationsDir": "src/migration"
+    "entitiesDir": "./database/src/entity",
+    "migrationsDir": "./database/src/migration"
   }
 }

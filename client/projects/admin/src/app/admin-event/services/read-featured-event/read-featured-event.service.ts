@@ -14,7 +14,7 @@ export { FeaturedEvent };
 })
 export class ReadFeaturedEventService {
 
-  readonly url = `${environment.server}/featured-event`;
+  readonly url = `${environment.server}/admin/featured-event`;
 
   constructor(
     private _errorHandlerService: ErrorHandlerService,

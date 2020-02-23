@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -11,8 +12,20 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./dist/",
+    "paths": {
+      "~admin/*": ["./projects/admin/src/*"],
+      "~entity/*": ["database/src/entity/*"],
+      "~jobs/*": ["./jobs/*"],
+      "~migration/*": ["database/src/migration/*"],
+      "~orm/*": ["./database/src/orm/*"],
+      "~shared": ["./shared"],
+      "~web/*": ["./projects/web/src/*"]
+    },
+    "resolveJsonModule": true,
     "rootDirs": [
-      "./src/",
+      "./database/src/",
+      "./projects/web/src/",
+      "./projects/admin/src/",
       "../shared/src/"
     ],
     "target": "es5",

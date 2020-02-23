@@ -147,7 +147,7 @@
       "name": "Hybrid Attach",
       "configurations": [
         "Server Attach",
-        "Client Attach"
+        "Client Web Attach"
       ]
     },
     {
