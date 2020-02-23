@@ -25,7 +25,7 @@ global['serverDir'] = path.join(global['rootDir'], 'server');
 global['serverAdminDir'] = path.join(global['serverDir'], 'projects', 'admin');
 global['serverWebDir'] = path.join(global['serverDir'], 'projects', 'web');
 global['clientDir'] = path.join(global['rootDir'], 'client');
-global['clientBuildDir'] = path.join(global['clientDir'], 'dist', 'web');
+global['clientBuildDir'] = path.join(global['clientDir'], 'dist', 'admin');
 global['assetsDir'] = path.join(global['clientBuildDir'], 'assets');
 global['clientEmailDir'] = path.join(global['clientDir'], 'email');
 global['publicDir'] = path.join(global['rootDir'], 'public');
@@ -61,14 +61,13 @@ app.use(cors);
 app.use(bodyParser.json());
 app.use(multer().any());
 app.use(session);
-app.use(ensureSessionAdmin); // VERY IMPORTANT: Ensures that an Admin account is authenticated for every request!!!
 app.use(recaptcha);
 app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 
 // Connect Express admin sub-module controllers.
-app.use('/server/admin/featured-event', require("~admin/controllers/admin-featured-event"));
+app.use('/server/admin', ensureSessionAdmin, require('~admin/controllers/admin'));
 
 // Connect Express web sub-module controllers.
 app.use('/server/account', require('~web/controllers/account'));

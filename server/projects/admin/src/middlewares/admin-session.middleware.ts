@@ -16,10 +16,7 @@ const _adminAccountIds: number[] = process.env.ADMIN_ACCOUNT_IDS.split(',').map(
  * @param next A callback that when called will execute the next route handler.
  */
 export function ensureSessionAdmin(request: Request, response: Response, next: NextFunction): void {
-  console.log(request.url);
-  console.log(`Session Account ID: ${request.session.account?.id}`);
-  console.log(`Admin Account IDs: ${_adminAccountIds.toString()}`);
-  if (request.url.indexOf('/session') >= 0 || (request.session.account && _adminAccountIds.indexOf(request.session.account.id) >= 0)) {
+  if (request.session.account && _adminAccountIds.indexOf(request.session.account.id) >= 0) {
     next(); // Call the next route handler.
   } else {
     response.status(302).send({ message: 'Admin Authentication required' });

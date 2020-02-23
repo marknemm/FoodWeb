@@ -10,6 +10,7 @@
     "all:lint": "npm run web:lint && npm run app:lint && npm run admin:lint",
     "all:test": "npm run web:test && npm run app:test && npm run admin:test",
     "admin:build": "ng build --project admin --prod --aot",
+    "admin:build:env": "ng build --project admin --prod --aot --configuration=${environment}",
     "admin:build:watch": "ng build --project admin --watch",
     "admin:lint": "ng lint --project admin",
     "admin:start": "ng serve --project admin --port=4201 --proxy-config proxy.conf.json --sourceMap=true",
