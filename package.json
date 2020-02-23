@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "server/dist/server/src/index.js",
   "scripts": {
-    "build": "cd ./client && npm run admin:build && cd ../server && npm run build && cd ../",
+    "build": "cd ./client && npm run build && cd ../server && npm run build && cd ../",
     "clean": "cd ./client && npm run clean && cd ../server && npm run clean && cd ../shared && npm run clean && cd ../",
     "clean:all": "cd ./client && npm run clean:all && cd ../server && npm run clean:all && cd ../shared && npm run clean:all && cd../ && rimraf ./node_modules",
     "debug": "concurrently \"cd ./client && npm run build:watch\" \"cd ./server && npm run debug\"",

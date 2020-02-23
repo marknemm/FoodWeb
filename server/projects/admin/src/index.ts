@@ -49,6 +49,7 @@ import { initOrm } from '~orm/index';
 import { cors } from '~web/middlewares/cors.middleware';
 import { recaptcha } from '~web/middlewares/recaptcha.middleware';
 import { session } from '~web/middlewares/session.middleware';
+import { ensureSessionAdmin } from '~admin/middlewares/admin-session.middleware';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
@@ -60,6 +61,7 @@ app.use(cors);
 app.use(bodyParser.json());
 app.use(multer().any());
 app.use(session);
+app.use(ensureSessionAdmin); // VERY IMPORTANT: Ensures that an Admin account is authenticated for every request!!!
 app.use(recaptcha);
 app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));

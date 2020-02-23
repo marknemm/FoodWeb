@@ -13,7 +13,7 @@
   [aria-label]="ariaLabel"
   [aria-labelledby]="ariaLabelledby"
   (click)="$event.stopPropagation()"
-  (change)="$event ? _onChanged($event.checked) : null"
+  (change)="$event ? _onChanged() : null"
   [checked]="selectionModel.isSelected(row)"
 >
   <ng-content></ng-content>
