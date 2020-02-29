@@ -59,7 +59,7 @@ function _updateNotificationsSettings(
 }
 
 export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: AccountEntity): Promise<UpdateDiff<AccountEntity>> {
-  if (!_accountHelper.isMyAccount(myAccount, updateReq.account.id)) {
+  if (!_accountHelper.doesAccountIdMatch(myAccount, updateReq.account.id)) {
     throw new FoodWebError('User unauthorized to update account', 401);
   }
 

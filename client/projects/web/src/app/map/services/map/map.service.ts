@@ -147,7 +147,7 @@ export class MapService {
   private _genVolunteerWaypointConfig(donation: Donation, options: MapOptions): VolunteerWaypointConfig {
     let volunteerWaypointConfig = VolunteerWaypointConfig.Home;
     // Exlcude the volunteer waypoint for users who are viewing a scheduled delivery which are not the volunteer.
-    if (donation.claim && donation.claim.delivery && !this._sessionService.isMyAccount(donation.claim.delivery.volunteerAccount.id)) {
+    if (donation.claim && donation.claim.delivery && !this._sessionService.hasAccountOwnership(donation.claim.delivery.volunteerAccount.id)) {
       volunteerWaypointConfig = VolunteerWaypointConfig.Exclude;
     } else if (options.useVolunteerCurrentPos) {
       volunteerWaypointConfig = VolunteerWaypointConfig.CurrentPosition;

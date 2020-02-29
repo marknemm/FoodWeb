@@ -66,12 +66,12 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
 
   private _updateDonationPrivileges(donation: Donation): void {
     if (donation) { 
-      this._myDonation = this.sessionService.isMyAccount(donation.donorAccount.id);
+      this._myDonation = this.sessionService.hasAccountOwnership(donation.donorAccount.id);
       this._myClaim = donation.claim
-        ? this.sessionService.isMyAccount(donation.claim.receiverAccount.id)
+        ? this.sessionService.hasAccountOwnership(donation.claim.receiverAccount.id)
         : false;
       this._myDelivery = (donation.claim && donation.claim.delivery)
-        ? this.sessionService.isMyAccount(donation.claim.delivery.volunteerAccount.id)
+        ? this.sessionService.hasAccountOwnership(donation.claim.delivery.volunteerAccount.id)
         : false;
     }
   }

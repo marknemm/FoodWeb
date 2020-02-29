@@ -12,7 +12,6 @@ import { AppRoutingModule } from '~app/app-routing.module';
 import { AppSessionModule } from '~app/app-session/app-session.module';
 import { AppDataService } from '~app/app-shared/app-data/app-data.service';
 import { AppComponent } from '~app/app.component';
-import { JSONDateReviver } from '~shared';
 import { AppShellModule } from '~web/app-shell/app-shell.module';
 import { AboutComponent } from '~web/components/about/about.component';
 import { HomeComponent } from '~web/components/home/home.component';

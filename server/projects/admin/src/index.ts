@@ -66,20 +66,14 @@ app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 
-// Connect Express admin sub-module controllers.
-app.use('/server/admin', ensureSessionAdmin, require('~admin/controllers/admin'));
-
-// Connect Express web sub-module controllers.
-app.use('/server/account', require('~web/controllers/account'));
-app.use('/server/app-data', require('~web/controllers/app-data'));
-app.use('/server/delivery', require('~web/controllers/delivery'));
-app.use('/server/donation', require('~web/controllers/donation'));
-app.use('/server/featured-event', require('~web/controllers/featured-event'));
-app.use('/server/heuristics', require('~web/controllers/heuristics'));
-app.use('/server/map', require('~web/controllers/map'));
-app.use('/server/notification', require('~web/controllers/notification'));
+// Admin routes work by overriding web 
+// Connect Express (web) session sub-module controller. This will be the only un-authenticated route (for login).
 app.use('/server/session', require('~web/controllers/session'));
-app.use('/server/sse', require('~web/controllers/sse'));
+// Connect Express admin sub-module controllers.
+app.use('/server', ensureSessionAdmin, require('~admin/controllers/admin'));
+// Connect Express web sub-module controllers.
+// NOTE: Admin controller route handlers will take precedence over (override) duplicate web route handlers.
+app.use('/server', ensureSessionAdmin, require('~web/controllers/web'));
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {

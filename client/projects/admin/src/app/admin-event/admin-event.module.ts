@@ -32,6 +32,10 @@ import { TableModule } from '~web/table/table.module';
     MaterialModule,
     SharedModule,
     TableModule
+  ],
+  exports: [
+    // Works as if we are extending the base Web EventModule.
+    EventModule
   ]
 })
 export class AdminEventModule {}

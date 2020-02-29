@@ -19,6 +19,7 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
     destory$: Observable<any>
   ) {
     super({
+      id: undefined,
       accountType: [null, Validators.required],
       username: ['', Validators.required],
       profileImgUrl: '',

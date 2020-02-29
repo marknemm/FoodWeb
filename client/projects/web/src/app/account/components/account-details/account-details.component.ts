@@ -21,7 +21,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   private _originalAccount: Account;
   private _accountNotFound = false;
-  private _isMyAccount = false;
+  private _hasAccountOwnership = false;
   private _passwordFormMode: PasswordFormMode = 'Account';
   private _seeDonationsLinkParams: DonationReadRequest;
   private _destroy$ = new Subject();
@@ -49,8 +49,8 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     return this._accountNotFound;
   }
 
-  get isMyAccount(): boolean {
-    return this._isMyAccount
+  get hasAccountOwnership(): boolean {
+    return this._hasAccountOwnership
   }
 
   get passwordFormMode(): PasswordFormMode {
@@ -68,11 +68,12 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   private _listenAccountChange(): void {
     this._accountService.listenAccountQueryChange(this._activatedRoute).subscribe((account: Account) => {
-      this._isMyAccount = false;
+      this._hasAccountOwnership = false;
       this._accountNotFound = !account;
       if (!this._accountNotFound) {
         this._originalAccount = account;
-        this._isMyAccount = this.sessionService.isMyAccount(account.id);
+        this._hasAccountOwnership = this.sessionService.hasAccountOwnership(account.id);
+        console.log(this._hasAccountOwnership);
         this._seeDonationsLinkParams = this._genSeeDonationLinkParams(account);
         this._passwordFormMode = 'Account';
         this.formGroup.patchValue(account);
@@ -80,7 +81,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
       this._router.navigate(
         [], {
           relativeTo: this._activatedRoute,
-          queryParams: { expandAll: !this.isMyAccount ? true : undefined },
+          queryParams: { expandAll: !this.hasAccountOwnership ? true : undefined },
           queryParamsHandling: 'merge',
           replaceUrl: true,
           fragment: this._activatedRoute.snapshot.fragment
@@ -105,8 +106,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   private _saveAccountSection(sectionName: AccountFormKey): Observable<boolean> {
     const account: Account = this.formGroup.toAccount();
-    const sectionValue: any = account[sectionName];
-    return this._accountService.updateAccountSection(sectionName, sectionValue).pipe(
+    return this._accountService.updateAccountSection(account, sectionName).pipe(
       map((savedAccount: Account) =>
         this._handleSaveSuccess(sectionName, savedAccount) // Implicit return true.
       )
@@ -115,7 +115,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   savePassword(): Observable<boolean> {
     const passwordUpdate: PasswordFormT = this.formGroup.toPassword();
-    return this._accountService.updatePassword(passwordUpdate).pipe(
+    return this._accountService.updatePassword(this._originalAccount, passwordUpdate).pipe(
       map(() => this._handleSaveSuccess('password', this.originalAccount)) // Implicit return true.
     );
   }

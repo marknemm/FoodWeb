@@ -53,7 +53,7 @@ export class DeliveryDetailsComponent implements OnInit {
   private _updateDeliveryPrivileges(donation: Donation): void {
     if (donation) { 
       this._myDelivery = (donation.claim && donation.claim.delivery)
-        ? this.sessionService.isMyAccount(donation.claim.delivery.volunteerAccount.id)
+        ? this.sessionService.hasAccountOwnership(donation.claim.delivery.volunteerAccount.id)
         : false;
     }
   }

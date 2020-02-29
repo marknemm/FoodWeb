@@ -99,6 +99,7 @@
     "ngx-gallery": "^5.10.0",
     "ngx-img-cropper": "^9.0.1",
     "ngx-material-timepicker": "^5.3.0",
+    "ngx-quill": "^8.0.0",
     "phonegap-plugin-multidex": "^1.0.0",
     "phonegap-plugin-push": "^2.3.0",
     "rxjs": "^6.5.4",

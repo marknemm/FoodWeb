@@ -181,7 +181,7 @@ function _orderByDefault(
 
 function _postProcessAccounts(accounts: AccountEntity[], myAccount: Account, fullAccount?: boolean): void {
   accounts.forEach((account: AccountEntity) => {
-    const isMyAccount: boolean = _accountHelper.isMyAccount(myAccount, account.id);
+    const isMyAccount: boolean = _accountHelper.doesAccountIdMatch(myAccount, account.id);
     fullAccount = (fullAccount || isMyAccount);
     _delVolunteerAddrIfNotMyAccount(account, fullAccount);
     _setVerifiedIfMyAccount(account, isMyAccount, myAccount);

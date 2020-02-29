@@ -14,13 +14,13 @@ import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.ser
 export class AppSessionService extends SessionService {
 
   constructor(
-    protected _httpClient: HttpClient,
-    protected _router: Router,
-    protected _errorHandlerService: ErrorHandlerService,
+    protected _accountHelper: AccountHelper,
     protected _alertService: AlertService,
-    protected _accountHelper: AccountHelper
+    protected _errorHandlerService: ErrorHandlerService,
+    protected _httpClient: HttpClient,
+    protected _router: Router
   ) {
-    super(_httpClient, _errorHandlerService, _alertService, _accountHelper);
+    super(_accountHelper, _alertService, _errorHandlerService, _httpClient);
   }
 
   /**

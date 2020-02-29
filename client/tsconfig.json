@@ -68,6 +68,16 @@
         "./projects/admin/src/app/admin-event/pipes/*",
         "./projects/admin/src/app/admin-event/services/*"
       ],
+      "~admin/admin-session/*": [
+        "./projects/admin/src/app/admin-session/*",
+        "./projects/admin/src/app/admin-session/child-components/*",
+        "./projects/admin/src/app/admin-session/components/*",
+        "./projects/admin/src/app/admin-session/directives/*",
+        "./projects/admin/src/app/admin-session/forms/*",
+        "./projects/admin/src/app/admin-session/interfaces/*",
+        "./projects/admin/src/app/admin-session/pipes/*",
+        "./projects/admin/src/app/admin-session/services/*"
+      ],
       "~admin/bootstrap/*": [
         "./projects/admin/src/app/bootstrap/*",
         "./projects/admin/src/app/bootstrap/child-components/*",

@@ -22,10 +22,10 @@ export class SessionService {
   protected _logout$ = new Subject<Account>();
 
   constructor(
-    protected _httpClient: HttpClient,
-    protected _errorHandlerService: ErrorHandlerService,
+    protected _accountHelper: AccountHelper,
     protected _alertService: AlertService,
-    protected _accountHelper: AccountHelper
+    protected _errorHandlerService: ErrorHandlerService,
+    protected _httpClient: HttpClient
   ) {
     // Attempt to get account from local browser storage upon init.
     const jsonAccount: string = localStorage.getItem('account');
@@ -117,12 +117,12 @@ export class SessionService {
   }
 
   /**
-   * Checks if an account is the current user's account.
+   * Checks if an account is owned by the current user.
    * @param accountId The ID of the account to check.
-   * @return true if the account is the current user's account, false if not.
+   * @return true if the account is owned by the current user, false if not.
    */
-  isMyAccount(accountId: number): boolean {
-    return this._accountHelper.isMyAccount(this.account, accountId);
+  hasAccountOwnership(accountId: number): boolean {
+    return this._accountHelper.doesAccountIdMatch(this.account, accountId);
   }
 
   /**

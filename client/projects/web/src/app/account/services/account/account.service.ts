@@ -27,10 +27,11 @@ export class AccountService {
     private _alertService: AlertService
   ) {}
 
-  updateAccountSection<T>(secitonName: string, sectionValue: T): Observable<Account> {
-    const accountSectionUpdtReq: AccountSectionUpdateReqeust<T> = { accountSectionName: secitonName, accountSection: sectionValue };
+  updateAccountSection<T>(account: Account, secitonName: string): Observable<Account> {
+    const url = `${this.url}/${account.id}/section`;
+    const accountSectionUpdtReq: AccountSectionUpdateReqeust<T> = { accountSectionName: secitonName, accountSection: account[secitonName] };
     this._pageProgressService.activate(true);
-    return this._httpClient.put<Account>(`${this.url}/section`, accountSectionUpdtReq, { withCredentials: true }).pipe(
+    return this._httpClient.put<Account>(url, accountSectionUpdtReq, { withCredentials: true }).pipe(
       map((savedAccount: Account) => this._handleAccountUpdateResponse(savedAccount)),
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
@@ -46,10 +47,11 @@ export class AccountService {
     return savedAccount;
   }
 
-  updatePassword(passwordUpdate: PasswordFormT): Observable<void> {
+  updatePassword(account: Account, passwordUpdate: PasswordFormT): Observable<void> {
+    const url = `${this.url}/${account.id}/password`;
     const request: PasswordUpdateRequest = passwordUpdate;
     this._pageProgressService.activate(true);
-    return this._httpClient.put<void>(`${this.url}/password`, request, { withCredentials: true }).pipe(
+    return this._httpClient.put<void>(url, request, { withCredentials: true }).pipe(
       map(() => this._alertService.displaySimpleMessage('Password update successful', 'success')),
       catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
