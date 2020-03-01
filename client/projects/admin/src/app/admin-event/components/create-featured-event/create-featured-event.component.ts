@@ -9,21 +9,29 @@ import { FeaturedEvent } from '~shared';
 })
 export class CreateFeaturedEventComponent implements OnInit {
 
-  private _createEventComplete = false;
+  private _eventCreateComplete = false;
+  private _savedFeaturedEvent: FeaturedEvent;
 
   constructor(
     private _createFeaturedEventService: CreateFeaturedEventService
   ) {}
 
-  get createEventComplete(): boolean {
-    return this._createEventComplete;
+  get eventCreateComplete(): boolean {
+    return this._eventCreateComplete;
+  }
+
+  get savedFeaturedEvent(): FeaturedEvent {
+    return this._savedFeaturedEvent;
   }
 
   ngOnInit() {}
 
   createEvent(featuredEvent: FeaturedEvent): void {
     this._createFeaturedEventService.createEvent(featuredEvent).subscribe(
-      () => this._createEventComplete = true
+      (savedFeaturedEvent: FeaturedEvent) => {
+        this._eventCreateComplete = true;
+        this._savedFeaturedEvent = savedFeaturedEvent;
+      }
     );
   }
 

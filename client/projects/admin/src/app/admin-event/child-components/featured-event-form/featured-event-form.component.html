@@ -61,7 +61,7 @@
     </mat-card-content>
     <mat-card-actions>
       <div class="align-right">
-        <button mat-button foodWebConfirmButton type="button" color="warn" (clickConfirm)="delete.emit()"
+        <button mat-button foodWebConfirmButton *ngIf="!excludeDelete" type="button" color="warn" (clickConfirm)="delete.emit()"
           confirmTitle="Confirm Delete" confirmMessage="Are you sure you want to permanently delete the event?">Delete</button>
         <button mat-raised-button type="submit" color="primary">Submit</button>
       </div>

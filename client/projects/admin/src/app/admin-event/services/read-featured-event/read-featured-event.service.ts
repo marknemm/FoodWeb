@@ -33,8 +33,8 @@ export class ReadFeaturedEventService {
 
   findFeaturedEvent(id: number): Observable<FeaturedEvent> {
     // Attempt to get featured event from window state history.
-    if (window.history.state && window.history.state.id === id) {
-      return of(window.history.state);
+    if (window.history.state?.featuredEvent?.id === id) {
+      return of(window.history.state.featuredEvent);
     }
     // Get featured event from server.
     const url = `${this.url}/${id}`;

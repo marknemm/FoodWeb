@@ -11,6 +11,7 @@ export class FeaturedEventFormComponent implements OnInit, OnChanges {
 
   @Input() formTitle = '';
   @Input() featuredEvent: Partial<FeaturedEvent>;
+  @Input() excludeDelete = false;
 
   @Output() delete = new EventEmitter<void>();
   @Output() save = new EventEmitter<FeaturedEvent>();

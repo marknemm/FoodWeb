@@ -5,7 +5,7 @@
         formTitle="Edit Event"
         [featuredEvent]="featuredEvent"
         (save)="saveEvent($event)"
-        (delete)="deleteEvent()"
+        (delete)="deleteEvent(featuredEvent)"
       ></food-web-featured-event-form>
     </div>
     <div class="event-demo col-md-6">
