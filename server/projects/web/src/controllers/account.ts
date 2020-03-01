@@ -41,7 +41,7 @@ router.post('/', (req: Request, res: Response) => {
     .catch((err: Error) => console.error(err));
 });
 
-router.put('/section', ensureSessionActive, (req: Request, res: Response) => {
+router.put('/:id/section', ensureSessionActive, (req: Request, res: Response) => {
   const updateReq: AccountSectionUpdateReqeust = req.body;
   updateAccountSection(updateReq, req.session.account)
     .then(_handleAccountSaveResult.bind(this, req, res))
@@ -52,7 +52,7 @@ router.put('/section', ensureSessionActive, (req: Request, res: Response) => {
     .catch((err: Error) => console.error(err));
 });
 
-router.put('/password', ensureSessionActive, (req: Request, res: Response) => {
+router.put('/:id/password', ensureSessionActive, (req: Request, res: Response) => {
   const myAccount: AccountEntity = req.session.account;
   const updateReq: PasswordUpdateRequest = req.body;
   updatePassword(updateReq, myAccount)
@@ -75,7 +75,7 @@ router.put('/reset-password/', (req: Request, res: Response) => {
     .catch((err: Error) => console.error(err));
 });
 
-router.put('/', ensureSessionActive, (req: Request, res: Response) => {
+router.put('/:id', ensureSessionActive, (req: Request, res: Response) => {
   const updateReq: AccountUpdateRequest = req.body;
   updateAccount(updateReq, req.session.account)
     .then(_handleAccountSaveResult.bind(this, req, res))
@@ -132,21 +132,15 @@ router.get('/', (req: Request, res: Response) => {
 
 function _handleAccountSaveResult(req: Request, res: Response, accountUpdtDiff: UpdateDiff<AccountEntity>): UpdateDiff<AccountEntity> {
   const account: AccountEntity = accountUpdtDiff.new;
-  const curSessionAccount: Account = req.session.account;
-  // If the saved account is the current user's account (new or updated).
-  if (curSessionAccount && curSessionAccount.id === account.id) {
-    account.verified = curSessionAccount.verified; // Prevent account verification from being overwritten.
-  }
+  // Prevent account verification from being overwritten.
+  account.verified = (account.verified ? account.verified : req.session.account?.verified);
   req.session.account = account;
   res.send(account);
   return accountUpdtDiff;
 }
 
 function _handleAccountVerificationResult(req: Request, res: Response, account: AccountEntity): AccountEntity {
-  const curSessionAccount: Account = req.session.account;
-  if (curSessionAccount && curSessionAccount.id === account.id) {
-    curSessionAccount.verified = account.verified;
-  }
+  req.session.account.verified = account.verified;
   res.send(account);
   return account;
 }

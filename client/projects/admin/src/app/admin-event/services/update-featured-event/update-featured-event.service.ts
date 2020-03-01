@@ -13,7 +13,7 @@ import { PageProgressService } from '~web/shared/page-progress/page-progress.ser
 })
 export class UpdateFeaturedEventService {
 
-  readonly url = `${environment.server}/admin/featured-event`;
+  readonly url = `${environment.server}/featured-event`;
 
   constructor(
     private _alertSerivce: AlertService,

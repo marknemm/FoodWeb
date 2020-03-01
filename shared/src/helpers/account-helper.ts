@@ -19,7 +19,7 @@ export class AccountHelper {
     return (account?.accountType === AccountType.Volunteer);
   }
 
-  isMyAccount(myAccount: Account, accountId: number): boolean {
+  doesAccountIdMatch(myAccount: Account, accountId: number): boolean {
     return (myAccount?.id === accountId);
   }
 

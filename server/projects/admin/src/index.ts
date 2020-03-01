@@ -25,7 +25,7 @@ global['serverDir'] = path.join(global['rootDir'], 'server');
 global['serverAdminDir'] = path.join(global['serverDir'], 'projects', 'admin');
 global['serverWebDir'] = path.join(global['serverDir'], 'projects', 'web');
 global['clientDir'] = path.join(global['rootDir'], 'client');
-global['clientBuildDir'] = path.join(global['clientDir'], 'dist', 'web');
+global['clientBuildDir'] = path.join(global['clientDir'], 'dist', 'admin');
 global['assetsDir'] = path.join(global['clientBuildDir'], 'assets');
 global['clientEmailDir'] = path.join(global['clientDir'], 'email');
 global['publicDir'] = path.join(global['rootDir'], 'public');
@@ -61,26 +61,20 @@ app.use(cors);
 app.use(bodyParser.json());
 app.use(multer().any());
 app.use(session);
-app.use(ensureSessionAdmin); // VERY IMPORTANT: Ensures that an Admin account is authenticated for every request!!!
 app.use(recaptcha);
 app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 
-// Connect Express admin sub-module controllers.
-app.use('/server/admin/featured-event', require("~admin/controllers/admin-featured-event"));
-
-// Connect Express web sub-module controllers.
-app.use('/server/account', require('~web/controllers/account'));
-app.use('/server/app-data', require('~web/controllers/app-data'));
-app.use('/server/delivery', require('~web/controllers/delivery'));
-app.use('/server/donation', require('~web/controllers/donation'));
-app.use('/server/featured-event', require('~web/controllers/featured-event'));
-app.use('/server/heuristics', require('~web/controllers/heuristics'));
-app.use('/server/map', require('~web/controllers/map'));
-app.use('/server/notification', require('~web/controllers/notification'));
+// Admin routes work by overriding web 
+// Connect Express admin session sub-module controller. This will be the only un-authenticated route (for login).
+app.use('/server/session', require('~admin/controllers/admin-session'));
 app.use('/server/session', require('~web/controllers/session'));
-app.use('/server/sse', require('~web/controllers/sse'));
+// Connect Express admin sub-module controllers.
+app.use('/server', ensureSessionAdmin, require('~admin/controllers/admin'));
+// Connect Express web sub-module controllers.
+// NOTE: Admin controller route handlers will take precedence over (override) duplicate web route handlers.
+app.use('/server', ensureSessionAdmin, require('~web/controllers/web'));
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {

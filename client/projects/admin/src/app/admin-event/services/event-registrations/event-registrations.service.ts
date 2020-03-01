@@ -11,7 +11,7 @@ import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.ser
 })
 export class EventRegistrationsService {
 
-  readonly eventsUrl = `${environment.server}/admin/featured-event`;
+  readonly eventsUrl = `${environment.server}/featured-event`;
   readonly eventIdentifiersUrl = `${this.eventsUrl}/identifiers`;
   readonly eventRegistrationsUrlTmpl = `${this.eventsUrl}/:id/registrations`;
 

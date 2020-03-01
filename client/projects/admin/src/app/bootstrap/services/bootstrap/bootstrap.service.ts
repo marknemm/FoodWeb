@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
-import { SessionService } from '~web/session/session/session.service';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AdminSessionService } from '~admin/admin-session/admin-session/admin-session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class BootstrapService implements CanActivate {
 
   constructor(
     private _router: Router,
-    private _sessionService: SessionService
+    private _sessionService: AdminSessionService
   ) {}
 
   listenSessionStateChange(): void {

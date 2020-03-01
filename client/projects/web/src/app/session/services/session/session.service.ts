@@ -22,10 +22,10 @@ export class SessionService {
   protected _logout$ = new Subject<Account>();
 
   constructor(
-    protected _httpClient: HttpClient,
-    protected _errorHandlerService: ErrorHandlerService,
+    protected _accountHelper: AccountHelper,
     protected _alertService: AlertService,
-    protected _accountHelper: AccountHelper
+    protected _errorHandlerService: ErrorHandlerService,
+    protected _httpClient: HttpClient
   ) {
     // Attempt to get account from local browser storage upon init.
     const jsonAccount: string = localStorage.getItem('account');
@@ -117,12 +117,12 @@ export class SessionService {
   }
 
   /**
-   * Checks if an account is the current user's account.
+   * Checks if an account is owned by the current user.
    * @param accountId The ID of the account to check.
-   * @return true if the account is the current user's account, false if not.
+   * @return true if the account is owned by the current user, false if not.
    */
-  isMyAccount(accountId: number): boolean {
-    return this._accountHelper.isMyAccount(this.account, accountId);
+  hasAccountOwnership(accountId: number): boolean {
+    return this._accountHelper.doesAccountIdMatch(this.account, accountId);
   }
 
   /**
@@ -184,11 +184,20 @@ export class SessionService {
    * @return An observable that emits the user's account if they are (still) logged in, otherwise null.
    */
   refreshSessionStatus(): Observable<Account> {
-    this._loading = true;
-    return this._httpClient.get<LoginResponse>(this.url, { withCredentials: true }).pipe(
+    return this.checkIfUserLoggedIn().pipe(
       mergeMap((response: LoginResponse) =>
         this._handleSessionRefreshResponse(response)
-      ),
+      )
+    );
+  }
+
+  /**
+   * Checks if the user is logged in on the server (server session state may not match client session state).
+   * @return An observable that emits the login response from the server login check.
+   */
+  checkIfUserLoggedIn(): Observable<LoginResponse> {
+    this._loading = true;
+    return this._httpClient.get<LoginResponse>(this.url, { withCredentials: true }).pipe(
       finalize(() => this._loading = false)
     );
   }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, flatMap, map } from 'rxjs/operators';
-import { Account } from '~shared';
+import { Account, LoginResponse } from '~shared';
 import { LoginDialogComponent } from '~web/session/login-dialog/login-dialog.component';
 import { SessionService } from '~web/session/session/session.service';
 import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
@@ -29,7 +29,8 @@ export class SessionMonitorService implements HttpInterceptor {
   private _handleError(error: any): Observable<ReAuthAttempt> {
     if (error instanceof HttpErrorResponse && error.status === 302) {
       // Refresh session status (sync with session status on server, and if mobile app, try to auto re-auth with token).
-      return this._sessionService.refreshSessionStatus().pipe(
+      return this._sessionService.checkIfUserLoggedIn().pipe(
+        map((loginResponse: LoginResponse) => loginResponse.account),
         flatMap((account: Account) => {
           return (account)
             ? of({ reAuthSucc: true })
@@ -41,11 +42,12 @@ export class SessionMonitorService implements HttpInterceptor {
   }
 
   private _promptLogin(error: any): Observable<ReAuthAttempt> {
-    return LoginDialogComponent.openIfNotLoggedIn(this._sessionService, this._matDialog, { disableClose: true }).pipe(
-      map(() => {
-        const loggedIn: boolean = this._sessionService.loggedIn;
-        if (!loggedIn) {
+    return LoginDialogComponent.open(this._matDialog, { disableClose: true }).pipe(
+      map((loginAccount: Account) => {
+        const loggedIn: boolean = !!loginAccount;
+        if (!loginAccount) {
           this._errorHandlerService.handleError(error);
+          this._sessionService.logout();
         }
         return { reAuthSucc: loggedIn };
       })
