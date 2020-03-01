@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -12,6 +12,7 @@ import { AppComponent } from '~admin/app.component';
 import { BootstrapService } from '~admin/bootstrap/bootstrap/bootstrap.service';
 import { AdminConsoleComponent } from '~admin/components/admin-console/admin-console.component';
 import { MaterialModule } from '~web/material.module';
+import { SessionMonitorService } from '~web/session/session-monitor/session-monitor.service';
 import { SharedModule } from '~web/shared/shared.module';
 
 @NgModule({
@@ -33,7 +34,9 @@ import { SharedModule } from '~web/shared/shared.module';
     ReactiveFormsModule,
     SharedModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -3,7 +3,7 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { Device } from '@ionic-native/device/ngx';
 import { Observable, of } from 'rxjs';
 import { LoginFormChange } from '~web/session/login/login.component';
-import { SessionService } from '~web/session/session/session.service';
+import { Account, SessionService } from '~web/session/session/session.service';
 
 @Component({
   selector: 'food-web-login-dialog',
@@ -27,7 +27,28 @@ export class LoginDialogComponent implements OnInit {
     this.loginFormChanged(LoginFormChange.Login);
   }
 
-  public static openIfNotLoggedIn(sessionService: SessionService, matDialog: MatDialog, config: MatDialogConfig = {}): Observable<boolean> {
+  /**
+   * Opens a login dialog if the user is not currently logged in.
+   * @param sessionService The session service used to determine if the user is logged in.
+   * @param matDialog The material dialog service used for dialog initialization & display.
+   * @param config The optional material dialog config.
+   * @return An observable that emits the session account on dialog close if the login was successful,
+   * or immediately if the user was already logged in. Returns null/undefined if the user was not logged in
+   * and the dialog closes without successful login.
+   */
+  public static openIfNotLoggedIn(sessionService: SessionService, matDialog: MatDialog, config: MatDialogConfig = {}): Observable<Account> {
+    return (!sessionService.loggedIn)
+      ? LoginDialogComponent.open(matDialog, config)
+      : of(sessionService.account);
+  }
+
+  /**
+   * Opens a login dialog.
+   * @param matDialog The material dialog service used for dialog initialization & display.
+   * @param config The optional material dialog config.
+   * @return An observable that emits the session account on dialog close if the login was sucessful, null/undefined otherwise.
+   */
+  public static open(matDialog: MatDialog, config: MatDialogConfig = {}): Observable<Account> {
     const device = new Device();
     const isMobileApp: boolean = (device.platform && device.platform === 'Browser');
     config.panelClass = (config.panelClass)
@@ -40,9 +61,7 @@ export class LoginDialogComponent implements OnInit {
     }
     config.autoFocus = !isMobileApp;
     config.maxWidth = '400px';
-    return (!sessionService.loggedIn)
-      ? matDialog.open(LoginDialogComponent, config).afterClosed()
-      : of(true);
+    return matDialog.open(LoginDialogComponent, config).afterClosed();
   }
 
   loginFormChanged(change: LoginFormChange): void {

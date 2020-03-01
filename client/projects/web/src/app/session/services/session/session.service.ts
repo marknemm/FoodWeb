@@ -184,11 +184,20 @@ export class SessionService {
    * @return An observable that emits the user's account if they are (still) logged in, otherwise null.
    */
   refreshSessionStatus(): Observable<Account> {
-    this._loading = true;
-    return this._httpClient.get<LoginResponse>(this.url, { withCredentials: true }).pipe(
+    return this.checkIfUserLoggedIn().pipe(
       mergeMap((response: LoginResponse) =>
         this._handleSessionRefreshResponse(response)
-      ),
+      )
+    );
+  }
+
+  /**
+   * Checks if the user is logged in on the server (server session state may not match client session state).
+   * @return An observable that emits the login response from the server login check.
+   */
+  checkIfUserLoggedIn(): Observable<LoginResponse> {
+    this._loading = true;
+    return this._httpClient.get<LoginResponse>(this.url, { withCredentials: true }).pipe(
       finalize(() => this._loading = false)
     );
   }

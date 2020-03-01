@@ -1,11 +1,5 @@
-import 'dotenv';
 import { NextFunction, Request, Response } from 'express';
-import { Account } from '~shared';
-export { Account };
-
-const _adminAccountIds: number[] = process.env.ADMIN_ACCOUNT_IDS.split(',').map(
-  (idStr: string) => Number.parseInt(idStr, 10)
-);
+import { verifyAccountIsAdmin } from '~admin/helpers/admin-verification';
 
 /**
  * Middleware that ensures that there is an active admin session for the client issuing the request.
@@ -16,7 +10,7 @@ const _adminAccountIds: number[] = process.env.ADMIN_ACCOUNT_IDS.split(',').map(
  * @param next A callback that when called will execute the next route handler.
  */
 export function ensureSessionAdmin(request: Request, response: Response, next: NextFunction): void {
-  if (request.session.account && _adminAccountIds.indexOf(request.session.account.id) >= 0) {
+  if (request.session.account && verifyAccountIsAdmin(request.session.account)) {
     next(); // Call the next route handler.
   } else {
     response.status(302).send({ message: 'Admin Authentication required' });

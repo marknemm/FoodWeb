@@ -67,7 +67,8 @@ app.use(express.static(global['publicDir']));
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 
 // Admin routes work by overriding web 
-// Connect Express (web) session sub-module controller. This will be the only un-authenticated route (for login).
+// Connect Express admin session sub-module controller. This will be the only un-authenticated route (for login).
+app.use('/server/session', require('~admin/controllers/admin-session'));
 app.use('/server/session', require('~web/controllers/session'));
 // Connect Express admin sub-module controllers.
 app.use('/server', ensureSessionAdmin, require('~admin/controllers/admin'));
