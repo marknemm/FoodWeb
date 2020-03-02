@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { QuillModule } from 'ngx-quill';
 import { AdminAppShellModule } from '~admin/admin-app-shell/admin-app-shell.module';
 import { AdminSessionModule } from '~admin/admin-session/admin-session.module';
 import { AppRoutingModule } from '~admin/app-routing.module';
@@ -31,6 +32,9 @@ import { SharedModule } from '~web/shared/shared.module';
     HttpClientModule,
     MaterialModule,
     NgxMaterialTimepickerModule,
+    QuillModule.forRoot({
+      theme: (window.innerWidth >= 830) ? 'snow' : 'bubble'
+    }),
     ReactiveFormsModule,
     SharedModule,
   ],

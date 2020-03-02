@@ -2,9 +2,11 @@
   <food-web-filter-list-title>{{ pageTitleService.title }}</food-web-filter-list-title>
 
   <food-web-filter-list-toolbar-items>
-    <button mat-button type="button" matTooltip="Write Email" class="write-email-button" (click)="writeEmail()">
-      <mat-icon>email</mat-icon>
-    </button>
+    <a [routerLink]="['/account/compose-message']" queryParamsHandling="preserve" class="compose-message-link">
+      <button mat-button type="button" matTooltip="Compose Message">
+        <mat-icon>email</mat-icon>
+      </button>
+    </a>
   </food-web-filter-list-toolbar-items>
 
   <food-web-filter-list-content>

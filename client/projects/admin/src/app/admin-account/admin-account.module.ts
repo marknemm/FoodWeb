@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
 import { AdminAccountFiltersComponent } from '~admin/admin-account/admin-account-filters/admin-account-filters.component';
 import { AdminAccountsComponent } from '~admin/admin-account/components/admin-accounts/admin-accounts.component';
+import { ComposeMessageComponent } from '~admin/admin-account/compose-message/compose-message.component';
 import { AccountModule } from '~web/account/account.module';
 import { FilterListModule } from '~web/filter-list/filter-list.module';
 import { MaterialModule } from '~web/material.module';
@@ -11,7 +13,8 @@ import { AdminAccountRoutingModule } from './admin-account-routing.module';
 @NgModule({
   declarations: [
     AdminAccountFiltersComponent,
-    AdminAccountsComponent
+    AdminAccountsComponent,
+    ComposeMessageComponent
   ],
   imports: [
     AdminAccountRoutingModule,
@@ -19,6 +22,7 @@ import { AdminAccountRoutingModule } from './admin-account-routing.module';
     AccountModule,
     FilterListModule,
     MaterialModule,
+    QuillModule,
     ReactiveFormsModule
   ],
   exports: [

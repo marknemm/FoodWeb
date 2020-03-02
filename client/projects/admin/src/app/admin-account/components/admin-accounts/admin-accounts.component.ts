@@ -18,15 +18,11 @@ export class AdminAccountsComponent extends AccountsComponent implements OnInit 
   constructor(
     public accountHelper: AccountHelper,
     public pageTitleService: PageTitleService,
-    accountService: AccountService,
-    activatedRoute: ActivatedRoute,
-    router: Router
+    protected _accountService: AccountService,
+    protected _activatedRoute: ActivatedRoute,
+    protected _router: Router
   ) {
-    super(accountHelper, pageTitleService, accountService, activatedRoute, router);
-  }
-
-  writeEmail(): void {
-
+    super(accountHelper, pageTitleService, _accountService, _activatedRoute, _router);
   }
 
 }
