@@ -1,3 +1,5 @@
+@import "constants.scss";
+
 .account-teaser {
   .mat-card-header {
 
@@ -5,7 +7,7 @@
       font-weight: bold;
     }
 
-    &.no-custom-title {
+    &.no-subtitle {
       margin-bottom: 4px;
     
       .mat-card-title {
@@ -14,7 +16,18 @@
     }
   }
 
+  .mat-card-content {
+    margin-bottom: 8px;
+  }
+
   .mat-card-actions {
     padding-top: 0;
+
+    .view-account-button {
+      $height: 28px;
+      height: $height;
+      line-height: $height;
+      font-weight: bold;
+    }
   }
 }

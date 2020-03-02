@@ -10,10 +10,13 @@ import { MapAppLinkService } from '~web/map/map-app-link/map-app-link.service';
 })
 export class ContactInfoComponent implements OnChanges {
 
+  @Input() addressFirst = false;
   @Input() contactInfo: ContactInfo;
   @Input() editing = false;
   @Input() formGroup = new ContactInfoForm();
   @Input() hideAddress = false;
+  @Input() hideEmail = false;
+  @Input() hidePhone = false;
   @Input() includeMap = false;
 
   private _directionsHref = '';
@@ -21,6 +24,12 @@ export class ContactInfoComponent implements OnChanges {
   constructor(
     private _mapAppLinkService: MapAppLinkService
   ) {}
+
+  get addressColSize(): string {
+    return (!this.hideEmail && this.hidePhone) || (this.hideEmail && !this.hidePhone)
+      ? 'col-sm-6'
+      : 'col-sm-12';
+  }
 
   get directionsHref(): string {
     return this._directionsHref;

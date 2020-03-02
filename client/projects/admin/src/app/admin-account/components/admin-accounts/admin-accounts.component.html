@@ -1,6 +1,12 @@
 <food-web-filter-list class="accounts" listItemsLabel="Accounts" [totalCount]="totalCount">
   <food-web-filter-list-title>{{ pageTitleService.title }}</food-web-filter-list-title>
 
+  <food-web-filter-list-toolbar-items>
+    <button mat-button type="button" matTooltip="Write Email" class="write-email-button" (click)="writeEmail()">
+      <mat-icon>email</mat-icon>
+    </button>
+  </food-web-filter-list-toolbar-items>
+
   <food-web-filter-list-content>
     <div class="col-lg-6" *ngFor="let account of accounts">
       <food-web-account-teaser [account]="account" [addressFirst]="true" [hasEmailSubtitle]="true"></food-web-account-teaser>
@@ -8,6 +14,6 @@
   </food-web-filter-list-content>
 
   <food-web-filter-list-filters>
-    <food-web-account-filters (filter)="filterAccounts($event)"></food-web-account-filters>
+    <food-web-admin-account-filters (filter)="filterAccounts($event)"></food-web-admin-account-filters>
   </food-web-filter-list-filters>
 </food-web-filter-list>

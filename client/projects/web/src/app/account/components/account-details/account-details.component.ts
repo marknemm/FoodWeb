@@ -73,7 +73,6 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
       if (!this._accountNotFound) {
         this._originalAccount = account;
         this._hasAccountOwnership = this.sessionService.hasAccountOwnership(account.id);
-        console.log(this._hasAccountOwnership);
         this._seeDonationsLinkParams = this._genSeeDonationLinkParams(account);
         this._passwordFormMode = 'Account';
         this.formGroup.patchValue(account);

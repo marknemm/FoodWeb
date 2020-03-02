@@ -5,7 +5,8 @@
       <ng-content select="food-web-filter-list-title"></ng-content>
 
       <div class="filter-list-toolbar">
-        <button mat-button type="button" matTooltip="Search & Filter {{ listItemsLabel }}" (click)="filterListService.opened = !filterListService.opened">
+        <ng-content select="food-web-filter-list-toolbar-items"></ng-content>
+        <button mat-button type="button" matTooltip="Search & Filter {{ listItemsLabel }}" class="filter-button" (click)="filterListService.opened = !filterListService.opened">
           <mat-icon>search</mat-icon>
           <mat-icon>filter_list</mat-icon>
         </button>
