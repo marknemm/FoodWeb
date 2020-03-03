@@ -13,7 +13,7 @@ const routes: Routes = [
     component: AdminAppShellComponent,
     canActivate: [BootstrapService],
     children: [
-      { path: 'account', loadChildren: () => import('~web/account/account.module').then(mod => mod.AccountModule) },
+      { path: 'account', loadChildren: () => import('~admin/admin-account/admin-account.module').then(mod => mod.AdminAccountModule) },
       { path: 'console', component: AdminConsoleComponent },
       { path: 'delivery', loadChildren: () => import('~web/delivery/delivery.module').then(mod => mod.DeliveryModule) },
       { path: 'donation', loadChildren: () => import('~web/donation/donation.module').then(mod => mod.DonationModule) },

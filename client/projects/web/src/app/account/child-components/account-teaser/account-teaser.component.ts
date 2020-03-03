@@ -9,8 +9,10 @@ import { Account, AccountHelper } from '~shared';
 export class AccountTeaserComponent implements OnChanges {
 
   @Input() account: Account;
+  @Input() addressFirst = false;
   @Input() customTitle: string;
   @Input() hideAddress = false;
+  @Input() hasEmailSubtitle = false;
 
   private _accountName = '';
   private _accountRouterLink: string[] = [];
@@ -25,6 +27,10 @@ export class AccountTeaserComponent implements OnChanges {
 
   get accountRouterLink(): string[] {
     return this._accountRouterLink;
+  }
+
+  get hasSubtitle(): boolean {
+    return (!!this.customTitle || this.hasEmailSubtitle);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

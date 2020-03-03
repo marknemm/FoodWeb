@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, flatMap } from 'rxjs/operators';
-import { environment } from '~admin/envrionments/environment';
+import { environment } from '~admin/environments/environment';
 import { FeaturedEvent } from '~shared';
 import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
 import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
@@ -33,8 +33,8 @@ export class ReadFeaturedEventService {
 
   findFeaturedEvent(id: number): Observable<FeaturedEvent> {
     // Attempt to get featured event from window state history.
-    if (window.history.state && window.history.state.id === id) {
-      return of(window.history.state);
+    if (window.history.state?.featuredEvent?.id === id) {
+      return of(window.history.state.featuredEvent);
     }
     // Get featured event from server.
     const url = `${this.url}/${id}`;

@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
-import { environment } from '~admin/envrionments/environment';
+import { environment } from '~admin/environments/environment';
 import { FeaturedEvent } from '~shared';
 import { AlertService } from '~web/shared/alert/alert.service';
 import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';

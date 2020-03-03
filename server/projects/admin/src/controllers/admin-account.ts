@@ -3,12 +3,13 @@ import { Request, Response } from 'express';
 import { adminUpdateAccount, adminUpdateAccountSection } from '~admin/services/admin-account/admin-save-account';
 import { Account, AccountEntity } from '~entity/account.entity';
 import { QueryResult } from '~orm/index';
-import { AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest } from '~shared';
+import { AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, SendMessageRequest } from '~shared';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { readFullAccounts } from '~web/services/account/read-accounts';
 import { AuditEventType, saveUpdateAudit } from '~web/services/audit/save-audit';
+import { testMessage, sendMessage } from '~admin/services/admin-account/send-message-to-accounts';
 
 const router = express.Router();
 
@@ -44,6 +45,21 @@ router.put('/:id', (req: Request, res: Response) => {
       saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff, updateReq.recaptchaScore)
     )
     .catch((err: Error) => console.error(err));
+});
+
+router.post('/send-message', (req: Request, res: Response) => {
+  const sendMessageReq: SendMessageRequest = req.body;
+  const accountFilters: AccountReadFilters = req.query;
+  sendMessage(sendMessageReq, accountFilters, req.session.account)
+    .then(() => res.send())
+    .catch(genErrorResponse.bind(this, res));
+});
+
+router.post('/test-message', (req: Request, res: Response) => {
+  const sendMessageReq: SendMessageRequest = req.body;
+  testMessage(sendMessageReq, req.session.account)
+    .then(() => res.send())
+    .catch(genErrorResponse.bind(this, res));
 });
 
 function _handleAccountSaveResult(req: Request, res: Response, accountUpdtDiff: UpdateDiff<AccountEntity>): UpdateDiff<AccountEntity> {

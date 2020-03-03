@@ -11,15 +11,15 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 })
 export class AccountsComponent implements OnInit {
 
-  private _accounts: Account[] = [];
-  private _totalCount = 0;
+  protected _accounts: Account[] = [];
+  protected _totalCount = 0;
 
   constructor(
     public accountHelper: AccountHelper,
     public pageTitleService: PageTitleService,
-    private _accountService: AccountService,
-    private _activatedRoute: ActivatedRoute,
-    private _router: Router
+    protected _accountService: AccountService,
+    protected _activatedRoute: ActivatedRoute,
+    protected _router: Router
   ) {}
 
   get accounts(): Account[] {
@@ -35,7 +35,7 @@ export class AccountsComponent implements OnInit {
     this._setPageTitle();
   }
 
-  private _listenAccountsQueryChange(): void {
+  protected _listenAccountsQueryChange(): void {
     this._accountService.listenAccountsQueryChange(this._activatedRoute).subscribe(
       (response: ListResponse<Account>) => {
         this._setPageTitle();
@@ -45,7 +45,7 @@ export class AccountsComponent implements OnInit {
     );
   }
 
-  private _setPageTitle(): void {
+  protected _setPageTitle(): void {
     const accountType = <AccountType>this._activatedRoute.snapshot.queryParamMap.get('accountType');
     this.pageTitleService.title = (accountType)
       ? `${accountType}s`

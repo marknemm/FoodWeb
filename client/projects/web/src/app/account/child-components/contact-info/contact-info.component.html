@@ -43,7 +43,8 @@
 
   <div #contactInfoDisplay class="contact-info-display row">
     <ng-container *ngIf="contactInfo">
-      <div class="col-sm-6" *ngIf="contactInfo.email">
+      <ng-container *ngIf="addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
+      <div class="col-sm-6" *ngIf="!hideEmail && contactInfo.email">
         <div class="inline-label">Email:</div>
         <div class="d-inline-block">
           <a class="email" href="mailto:{{ contactInfo.email }}">
@@ -51,7 +52,7 @@
           </a>
         </div>
       </div>
-      <div class="col-sm-6" *ngIf="contactInfo.phoneNumber">
+      <div class="col-sm-6" *ngIf="!hidePhone && contactInfo.phoneNumber">
         <div class="inline-label">Phone Number:</div>
         <div class="d-inline-block">
           <a class="phone-number" href="tel:{{ contactInfo.phoneNumber }}">
@@ -59,12 +60,16 @@
           </a>
         </div>
       </div>
-      <div *ngIf="!hideAddress && contactInfo.streetAddress" class="col-sm-12">
-        <div class="inline-label">Address:</div>
-        <a class="address" [href]="directionsHref" target="_blank">
-          <food-web-address [contactInfo]="contactInfo"></food-web-address>
-        </a>
-      </div>
+      <ng-container *ngIf="!addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
     </ng-container>
   </div>
 </div>
+
+<ng-template #addressTmpl>
+  <div *ngIf="!hideAddress && contactInfo.streetAddress" [ngClass]="addressColSize">
+    <div class="inline-label">Address:</div>
+    <a class="address" [href]="directionsHref" target="_blank">
+      <food-web-address [contactInfo]="contactInfo"></food-web-address>
+    </a>
+  </div>
+</ng-template>

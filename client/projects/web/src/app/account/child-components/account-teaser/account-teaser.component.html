@@ -1,17 +1,22 @@
 <mat-card class="account-teaser">
-  <mat-card-header [ngClass]="{ 'no-custom-title': !customTitle }">
+  <mat-card-header [ngClass]="{ 'no-subtitle': !hasSubtitle }">
     <img mat-card-avatar [src]="account.profileImgUrl" alt="Receiver Icon">
     <mat-card-title>{{ customTitle ? customTitle : accountName }}</mat-card-title>
-    <mat-card-subtitle *ngIf="customTitle">{{ accountName }}</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="hasSubtitle">
+      <a *ngIf="hasEmailSubtitle; else nonEmailSubtitle" href="mailto:{{ account.contactInfo.email }}">
+        {{ account.contactInfo.email }}
+      </a>
+      <ng-template #nonEmailSubtitle>{{ accountName }}</ng-template>
+    </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <ng-content></ng-content>
-    <food-web-contact-info [contactInfo]="account.contactInfo" [hideAddress]="hideAddress"></food-web-contact-info>
+    <food-web-contact-info [contactInfo]="account.contactInfo" [addressFirst]="addressFirst" [hideAddress]="hideAddress" [hideEmail]="hasEmailSubtitle"></food-web-contact-info>
   </mat-card-content>
   <mat-card-actions>
     <div class="align-right">
       <a [routerLink]="accountRouterLink">
-        <button mat-raised-button type="button" color="primary">View Account</button>
+        <button mat-raised-button class="view-account-button" type="button" color="primary">View Account</button>
       </a>
     </div>
   </mat-card-actions>

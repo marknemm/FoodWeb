@@ -13,4 +13,5 @@ export * from './organization';
 export * from './password-reset-request';
 export * from './password-update-request';
 export * from './receiver';
+export * from './send-message-request';
 export * from './volunteer';

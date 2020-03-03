@@ -10,6 +10,8 @@ export class AdminEventCardComponent implements OnInit {
 
   @Input() featuredEvent: FeaturedEvent;
   @Input() hideActions = false;
+  @Input() hideDelete = false;
+  @Input() hideEdit = false;
   @Input() linkToEventsPage = false;
 
   @Output() deleteEvent = new EventEmitter<void>();
