@@ -9,7 +9,7 @@ import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { readFullAccounts } from '~web/services/account/read-accounts';
 import { AuditEventType, saveUpdateAudit } from '~web/services/audit/save-audit';
-import { testMessage } from '~admin/services/admin-account/send-message-to-accounts';
+import { testMessage, sendMessage } from '~admin/services/admin-account/send-message-to-accounts';
 
 const router = express.Router();
 
@@ -48,18 +48,18 @@ router.put('/:id', (req: Request, res: Response) => {
 });
 
 router.post('/send-message', (req: Request, res: Response) => {
-  const accountFilters: AccountReadFilters = req.query;
   const sendMessageReq: SendMessageRequest = req.body;
-  console.log(accountFilters);
-  console.log(sendMessageReq);
-  res.send();
+  const accountFilters: AccountReadFilters = req.query;
+  sendMessage(sendMessageReq, accountFilters, req.session.account)
+    .then(() => res.send())
+    .catch(genErrorResponse.bind(this, res));
 });
 
 router.post('/test-message', (req: Request, res: Response) => {
   const sendMessageReq: SendMessageRequest = req.body;
   testMessage(sendMessageReq, req.session.account)
     .then(() => res.send())
-    .catch(genErrorResponse.bind(this, res))
+    .catch(genErrorResponse.bind(this, res));
 });
 
 function _handleAccountSaveResult(req: Request, res: Response, accountUpdtDiff: UpdateDiff<AccountEntity>): UpdateDiff<AccountEntity> {
