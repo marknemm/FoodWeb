@@ -64,7 +64,7 @@
         "./projects/admin/src/app/bootstrap/services/*"
       ],
       "~admin/components/*": [ "./projects/admin/src/app/components/*" ],
-      "~admin/envrionments/*": ["./projects/admin/src/environments/*"],
+      "~admin/environments/*": ["./projects/admin/src/environments/*"],
       "~app/app.component": ["./projects/app/src/app/app.component"],
       "~app/app.module": ["./projects/app/src/app/app.module"],
       "~app/app-routing.module": ["./projects/app/src/app/app-routing.module"],

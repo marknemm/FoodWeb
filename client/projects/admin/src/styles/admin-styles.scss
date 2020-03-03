@@ -1,81 +1,9 @@
 @import "constants.scss";
+@import "./quill-editor-page.scss";
 
 // Admin console does not have signup, so hide it in login screen.
 .login-container {
   .signup-link-container {
     display: none !important;
-  }
-}
-
-.quill-editor-page {
-  position: relative;
-  width: 100%;
-
-  quill-editor {
-    $document-width: 830px;
-    position: relative;
-    display: block;
-    width: 100%;
-
-    .ql-toolbar.ql-snow {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background-color: #f4f4f4;
-      width: 100%;
-      border-top: none;
-      border-right: none;
-      border-left: none;
-      padding: 15px 15px 10px;
-
-      @media only screen and (min-width: 1400px) {
-        text-align: center;
-  
-        > * {
-          text-align: left;
-        }
-      }
-    }
-
-    .ql-container {
-      position: relative;
-      background-color: white;
-      min-height: 100vh;
-      max-width: $document-width;
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 20px;
-      margin-top: 20px;
-      padding: 50px;
-
-      .ql-editor {
-        min-height: 100vh;
-
-        &.ql-blank::before {
-          visibility: hidden;
-
-          @media only screen and (max-width: $sm) {
-            visibility: visible;
-            padding-left: 15px;
-          }
-        }
-      }
-
-      @media only screen and (max-width: $document-width) {
-        margin-top: 0;
-      }
-
-      @media only screen and (max-width: $sm) {
-        padding: 15px;
-      }
-    }
-
-    .ql-toolbar.ql-snow + .ql-container.ql-snow {
-      border: 1px solid #ccc;
-
-      @media only screen and (max-width: $document-width) {
-        border: none;
-      }
-    }
   }
 }

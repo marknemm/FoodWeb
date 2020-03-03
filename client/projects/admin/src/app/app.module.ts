@@ -33,7 +33,7 @@ import { SharedModule } from '~web/shared/shared.module';
     MaterialModule,
     NgxMaterialTimepickerModule,
     QuillModule.forRoot({
-      theme: (window.innerWidth >= 830) ? 'snow' : 'bubble'
+      theme: (window.innerWidth > 830) ? 'snow' : 'bubble'
     }),
     ReactiveFormsModule,
     SharedModule,

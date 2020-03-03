@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
-import { environment } from '~admin/envrionments/environment';
+import { environment } from '~admin/environments/environment';
 import { FeaturedEvent, FeaturedEventRequest, ListResponse } from '~shared';
 import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
 export { FeaturedEvent };

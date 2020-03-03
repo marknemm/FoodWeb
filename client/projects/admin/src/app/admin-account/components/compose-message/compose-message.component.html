@@ -1,3 +1,27 @@
-<div class="quill-editor-page">
-  <quill-editor [formControl]="messageCtrl" placeholder="Write message here..."></quill-editor>
-</div>
+<form [formGroup]="composeMessageForm" class="quill-editor-page">
+  <div class="subject-container">
+    <mat-form-field class="fill" floatLabel="never">
+      <input matInput formControlName="messageSubject" placeholder="Message Subject" required>
+    </mat-form-field>
+  </div>
+  <quill-editor formControlName="messageBodyHTML" placeholder="Message Body *" [required]="true"></quill-editor>
+  <div class="action-buttons align-right">
+    <div class="action-buttons-inner">
+      <button mat-icon-button type="button" class="test-message-button" matTooltip="Test Message" (click)="testMessage()">
+        <fa-icon [icon]="faFlask"></fa-icon>
+      </button>
+      <button mat-icon-button
+        foodWebConfirmButton
+        type="button"
+        class="send-message-button"
+        matTooltip="Send Message"
+        confirmTitle="Confirm Send Message"
+        confirmMessage="Are you sure you wish to send this message to the filtered accounts?"
+        [disabled]="composeMessageForm.invalid"
+        (clickConfirm)="sendMessage()"
+      >
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+  </div>
+</form>

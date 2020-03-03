@@ -24,12 +24,13 @@ global['rootDir'] = path.join(__dirname, '..', '..', '..', '..', '..', '..');
 global['serverDir'] = path.join(global['rootDir'], 'server');
 global['serverAdminDir'] = path.join(global['serverDir'], 'projects', 'admin');
 global['serverWebDir'] = path.join(global['serverDir'], 'projects', 'web');
+global['serverDistDir'] = path.join(global['serverDir'], 'dist', 'server');
 global['clientDir'] = path.join(global['rootDir'], 'client');
 global['clientBuildDir'] = path.join(global['clientDir'], 'dist', 'admin');
 global['assetsDir'] = path.join(global['clientBuildDir'], 'assets');
 global['clientEmailDir'] = path.join(global['clientDir'], 'email');
 global['publicDir'] = path.join(global['rootDir'], 'public');
-global['emailTemplatesDir'] = path.join(global['serverDir'], 'templates', 'email');
+global['emailTemplatesDir'] = path.join(global['serverDistDir'], 'templates', 'email');
 
 // Load .env into process (pre-set environment variables on machine take precedence).
 if (!PRODUCTION && !QA) {
