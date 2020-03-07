@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { PasswordForm } from '~web/password/password.form';
 
 @Component({
@@ -6,7 +6,7 @@ import { PasswordForm } from '~web/password/password.form';
   templateUrl: './password.component.html',
   styleUrls: ['./password.component.scss']
 })
-export class PasswordComponent implements OnInit {
+export class PasswordComponent implements OnInit, OnChanges {
 
   @Input() editing = false;
   @Input() formGroup: PasswordForm;
@@ -21,5 +21,9 @@ export class PasswordComponent implements OnInit {
 
   ngOnInit() {
     this._passwordLabel = (this.formGroup.formMode === 'Account' ? 'New Password' : 'Password');
+  }
+
+  ngOnChanges() {
+    this.formGroup = this.formGroup ? this.formGroup : new PasswordForm();
   }
 }

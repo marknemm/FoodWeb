@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { AccountHelper, AccountType, DonationReadRequest } from '~shared';
 import { AccountForm, AccountFormKey } from '~web/account/account.form';
 import { Account, AccountService } from '~web/account/account/account.service';
-import { PasswordFormMode, PasswordFormT } from '~web/password/password.form';
+import { PasswordFormT } from '~web/password/password.form';
 import { SessionService } from '~web/session/session/session.service';
 import { SaveCb } from '~web/shared/child-components/edit-save-button/edit-save-button.component';
 import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
@@ -17,22 +17,21 @@ import { SignupVerificationService } from '~web/signup/signup-verification/signu
 })
 export class AccountDetailsComponent implements OnInit, OnDestroy {
 
-  formGroup: AccountForm;
+  accountForm: AccountForm;
 
-  private _originalAccount: Account;
-  private _accountNotFound = false;
-  private _hasAccountOwnership = false;
-  private _passwordFormMode: PasswordFormMode = 'Account';
-  private _seeDonationsLinkParams: DonationReadRequest;
-  private _destroy$ = new Subject();
+  protected _originalAccount: Account;
+  protected _accountNotFound = false;
+  protected _hasAccountOwnership = false;
+  protected _seeDonationsLinkParams: DonationReadRequest;
+  protected _destroy$ = new Subject();
 
   constructor(
     public sessionService: SessionService,
     public accountHelper: AccountHelper,
     public signupVerificationService: SignupVerificationService,
-    private _accountService: AccountService,
-    private _activatedRoute: ActivatedRoute,
-    private _router: Router
+    protected _accountService: AccountService,
+    protected _activatedRoute: ActivatedRoute,
+    protected _router: Router
   ) {
     this.savePassword = this.savePassword.bind(this);
   }
@@ -42,7 +41,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   get accountType(): AccountType {
-    return this.formGroup.get('accountType').value;
+    return this.accountForm.get('accountType').value;
   }
 
   get accountNotFound(): boolean {
@@ -53,16 +52,12 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     return this._hasAccountOwnership
   }
 
-  get passwordFormMode(): PasswordFormMode {
-    return this._passwordFormMode;
-  }
-
   get seeDonationsLinkParams(): DonationReadRequest {
     return this._seeDonationsLinkParams;
   }
 
   ngOnInit() {
-    this.formGroup = new AccountForm({ formMode: 'Account' }, this._destroy$);
+    this.accountForm = new AccountForm({ formMode: 'Account' }, this._destroy$);
     this._listenAccountChange();
   }
 
@@ -74,8 +69,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
         this._originalAccount = account;
         this._hasAccountOwnership = this.sessionService.hasAccountOwnership(account.id);
         this._seeDonationsLinkParams = this._genSeeDonationLinkParams(account);
-        this._passwordFormMode = 'Account';
-        this.formGroup.patchValue(account);
+        this.accountForm.patchValue(account);
       }
       this._router.navigate(
         [], {
@@ -90,9 +84,15 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _genSeeDonationLinkParams(account: Account): DonationReadRequest {
-    return (account.accountType === 'Donor')
-      ? { donorAccountId: account.id }
-      : { receiverAccountId: account.id };
+    if (account) {
+      switch (account.accountType) {
+        case AccountType.Donor:     return { donorAccountId: account.id };
+        case AccountType.Receiver:  return { receiverAccountId: account.id };
+        case AccountType.Volunteer: return { delivererAccountId: account.id };
+        default:                    throw new Error(`Invalid account type: ${account.accountType}`);
+      }
+    }
+    return {};
   }
 
   ngOnDestroy() {
@@ -104,7 +104,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _saveAccountSection(sectionName: AccountFormKey): Observable<boolean> {
-    const account: Account = this.formGroup.toAccount();
+    const account: Account = this.accountForm.toAccount();
     return this._accountService.updateAccountSection(account, sectionName).pipe(
       map((savedAccount: Account) =>
         this._handleSaveSuccess(sectionName, savedAccount) // Implicit return true.
@@ -113,7 +113,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   savePassword(): Observable<boolean> {
-    const passwordUpdate: PasswordFormT = this.formGroup.toPassword();
+    const passwordUpdate: PasswordFormT = this.accountForm.toPassword();
     return this._accountService.updatePassword(this._originalAccount, passwordUpdate).pipe(
       map(() => this._handleSaveSuccess('password', this.originalAccount)) // Implicit return true.
     );
@@ -123,7 +123,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     this._originalAccount = savedAccount;
     const accountSectionPatch: Partial<Account> = {};
     accountSectionPatch[sectionName] = savedAccount[sectionName];
-    this.formGroup.patchValue(accountSectionPatch);
+    this.accountForm.patchValue(accountSectionPatch);
     return true;
   }
 

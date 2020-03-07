@@ -3,33 +3,7 @@
 
   <food-web-filter-list-content>
     <div class="col-lg-6" *ngFor="let donation of donations">
-      <a [routerLink]="donationHelper.donationDetailsRouterLink(donation)" [state]="donation" class="no-hover">
-        <mat-card id="donation-{{ donation.id }}" class="selectable-card">
-          <mat-card-header>
-            <img mat-card-avatar [src]="donation.donorAccount.profileImgUrl" alt="{{ donationHelper.donorName(donation) }} Profile Image">
-            <mat-card-title>{{ donationHelper.donorName(donation) }}</mat-card-title>
-            <mat-card-subtitle>
-              <food-web-donation-status [donationStatus]="donation.donationStatus" class="donation-status"></food-web-donation-status>
-            </mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="donation-display row">
-              <div class="col-sm-12">
-                <div class="inline-label">Description:</div>
-                <div class="donation-description">{{ donation.description }}</div>
-              </div>
-              <div class="col-sm-6">
-                <div class="inline-label">Donation Window Start:</div>
-                <div><food-web-date-time [dateTime]="donation.pickupWindowStart" [boldTime]="true"></food-web-date-time></div>
-              </div>
-              <div class="col-sm-6">
-                <div class="inline-label">Donation Window End:</div>
-                <div><food-web-date-time [dateTime]="donation.pickupWindowEnd" [boldTime]="true"></food-web-date-time></div>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </a>
+      <food-web-donation-teaser [donation]="donation"></food-web-donation-teaser>
     </div>
   </food-web-filter-list-content>
 

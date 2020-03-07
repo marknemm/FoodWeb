@@ -9,7 +9,7 @@
     (action)="onDonationAction($event)"
   ></food-web-donation-workflow>
 
-  <div *ngIf="!myDelivery" class="row">
+  <div class="row">
     <div class="donation-info-container col-12">
       <food-web-primary-donation-info [donation]="donation" [myDonation]="myDonation"></food-web-primary-donation-info>
     </div>
@@ -18,7 +18,7 @@
   <hr class="offset-top">
 
   <div class="row">
-    <div class="donor-info-container" *ngIf="!myDonation" [ngClass]="{
+    <div class="donor-info-container" [ngClass]="{
       'col-lg-6': !!donation.claim,
       'col-lg-12': !donation.claim
     }">
@@ -30,11 +30,11 @@
       </food-web-account-teaser>
     </div>
 
-    <div *ngIf="donation.claim && !myClaim" class="receiver-info-container col-lg-6">
+    <div *ngIf="donation.claim" class="receiver-info-container col-lg-6">
       <food-web-account-teaser [account]="donation.claim.receiverAccount" customTitle="Receiver"></food-web-account-teaser>
     </div>
 
-    <div *ngIf="donation.claim?.delivery && !myDelivery" class="deliverer-info-container col-lg-6">
+    <div *ngIf="donation.claim?.delivery" class="deliverer-info-container col-lg-6">
       <food-web-account-teaser [account]="donation.claim.delivery.volunteerAccount" customTitle="Deliverer" [hideAddress]="true"></food-web-account-teaser>
     </div>
   </div>

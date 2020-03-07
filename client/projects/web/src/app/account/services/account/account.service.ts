@@ -73,8 +73,8 @@ export class AccountService {
       return of(this._sessionService.account);
     }
     // Attempt to get account from window state history.
-    if (window.history.state && window.history.state.id === id) {
-      return of(window.history.state);
+    if (window.history.state?.account?.id === id) {
+      return of(window.history.state.account);
     }
     // Get account from server.
     const url = `${this.url}/${id}`;

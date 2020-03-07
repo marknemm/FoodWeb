@@ -172,6 +172,12 @@
   }
 }
 
+button.mat-raised-button.compact {
+  $height: 28px;
+  height: $height;
+  line-height: $height;
+}
+
 .mat-select {
   &.accent {
     .mat-select-value {

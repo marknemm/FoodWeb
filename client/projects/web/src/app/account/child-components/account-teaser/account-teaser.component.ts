@@ -1,14 +1,16 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Account, AccountHelper } from '~shared';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Account, AccountHelper, AccountType } from '~shared';
+import { MapAnchorType } from '~web/account/address/address.component';
 
 @Component({
   selector: 'food-web-account-teaser',
   templateUrl: './account-teaser.component.html',
   styleUrls: ['./account-teaser.component.scss'],
 })
-export class AccountTeaserComponent implements OnChanges {
+export class AccountTeaserComponent implements OnInit, OnChanges {
 
   @Input() account: Account;
+  @Input() addressAnchorType: MapAnchorType;
   @Input() addressFirst = false;
   @Input() customTitle: string;
   @Input() hideAddress = false;
@@ -31,6 +33,20 @@ export class AccountTeaserComponent implements OnChanges {
 
   get hasSubtitle(): boolean {
     return (!!this.customTitle || this.hasEmailSubtitle);
+  }
+
+  ngOnInit() {
+    this.addressAnchorType = this.addressAnchorType ? this.addressAnchorType : this._deriveAddressAnchorType();
+  }
+
+  /**
+   * Derives a default address (map) anchor type based off of the account type.
+   * @return The derived address anchor type.
+   */
+  private _deriveAddressAnchorType(): MapAnchorType {
+    return (this.account?.accountType === AccountType.Volunteer)
+      ? 'Location'
+      : 'Directions';
   }
 
   ngOnChanges(changes: SimpleChanges): void {

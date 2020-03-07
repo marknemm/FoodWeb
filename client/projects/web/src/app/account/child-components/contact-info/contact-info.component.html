@@ -68,8 +68,6 @@
 <ng-template #addressTmpl>
   <div *ngIf="!hideAddress && contactInfo.streetAddress" [ngClass]="addressColSize">
     <div class="inline-label">Address:</div>
-    <a class="address" [href]="directionsHref" target="_blank">
-      <food-web-address [contactInfo]="contactInfo"></food-web-address>
-    </a>
+    <food-web-address [contactInfo]="contactInfo" [mapAnchorType]="addressAnchorType"></food-web-address>
   </div>
 </ng-template>
