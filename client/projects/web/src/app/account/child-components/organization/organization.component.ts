@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { AccountType } from '~shared';
 import { OrganizationForm } from '~web/account/organization.form';
 
 @Component({
@@ -8,24 +9,25 @@ import { OrganizationForm } from '~web/account/organization.form';
 })
 export class OrganizationComponent implements OnInit {
 
+  @Input() accountType: AccountType;
   @Input() editing = false;
-  @Input() accountType: string = '';
   @Input() formGroup: OrganizationForm;
 
-  deliveryInstructionsPlaceholderModifier: string = '';
+  private _deliveryInstrLabel = '';
 
   constructor() {}
+
+  get deliveryInstrLabel(): string {
+    return this._deliveryInstrLabel;
+  }
 
   ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
     this.formGroup = this.formGroup ? this.formGroup : new OrganizationForm();
     if (changes.accountType) {
-      let newAcctType = changes.accountType.currentValue;
-      this.deliveryInstructionsPlaceholderModifier =
-        'Please leave instructions for donation ' + 
-        (newAcctType === 'Donor' ? 'pickups' : 'deliveries') +
-        ' here';
+      const accountMod: string = (this.accountType === AccountType.Donor) ? 'pickups' : 'deliveries';
+      this._deliveryInstrLabel = `Please leave instructions for donation ${accountMod} here`;
     }
   }
 }

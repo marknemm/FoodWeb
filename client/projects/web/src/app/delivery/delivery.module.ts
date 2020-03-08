@@ -8,6 +8,7 @@ import { DeliveryDetailsComponent } from '~web/delivery/delivery-details/deliver
 import { DeliveryDonationInfoComponent } from '~web/delivery/delivery-donation-info/delivery-donation-info.component';
 import { DeliveryFiltersComponent } from '~web/delivery/delivery-filters/delivery-filters.component';
 import { DeliveryRoutingModule } from '~web/delivery/delivery-routing.module';
+import { DeliveryTeaserComponent } from '~web/delivery/delivery-teaser/delivery-teaser.component';
 import { DropOffInfoComponent } from '~web/delivery/drop-off-info/drop-off-info.component';
 import { PickupInfoComponent } from '~web/delivery/pickup-info/pickup-info.component';
 import { DonationDeliverySharedModule } from '~web/donation-delivery-shared/donation-delivery-shared.module';
@@ -22,6 +23,7 @@ import { SharedModule } from '~web/shared/shared.module';
     DeliveryDetailsComponent,
     DeliveryDonationInfoComponent,
     DeliveryFiltersComponent,
+    DeliveryTeaserComponent,
     DropOffInfoComponent,
     PickupInfoComponent
   ],
@@ -36,6 +38,9 @@ import { SharedModule } from '~web/shared/shared.module';
     MaterialModule,
     ReactiveFormsModule,
     SharedModule
+  ],
+  exports: [
+    DeliveryTeaserComponent
   ]
 })
 export class DeliveryModule {}

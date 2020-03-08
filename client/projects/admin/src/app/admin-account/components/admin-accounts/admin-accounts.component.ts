@@ -25,4 +25,8 @@ export class AdminAccountsComponent extends AccountsComponent implements OnInit 
     super(accountHelper, pageTitleService, _accountService, _activatedRoute, _router);
   }
 
+  ngOnInit() {
+    super.ngOnInit();
+  }
+
 }

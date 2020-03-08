@@ -1,0 +1,24 @@
+.donation-teaser {
+  .donation-status {
+    font-size: 11px;
+  }
+
+  .donation-display {
+
+    &> div {
+      margin-bottom: 12px;
+    }
+
+    .donation-description {
+      white-space: nowrap;
+      overflow-x: hidden;
+      max-width: 100%;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .mat-card-actions {
+    padding-top: 0;
+    margin-top: -16px;
+  }
+}

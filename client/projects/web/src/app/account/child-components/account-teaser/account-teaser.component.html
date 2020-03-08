@@ -11,12 +11,18 @@
   </mat-card-header>
   <mat-card-content>
     <ng-content></ng-content>
-    <food-web-contact-info [contactInfo]="account.contactInfo" [addressFirst]="addressFirst" [hideAddress]="hideAddress" [hideEmail]="hasEmailSubtitle"></food-web-contact-info>
+    <food-web-contact-info
+      [addressAnchorType]="addressAnchorType"
+      [addressFirst]="addressFirst"
+      [contactInfo]="account.contactInfo"
+      [hideAddress]="hideAddress"
+      [hideEmail]="hasEmailSubtitle"
+    ></food-web-contact-info>
   </mat-card-content>
   <mat-card-actions>
     <div class="align-right">
-      <a [routerLink]="accountRouterLink">
-        <button mat-raised-button class="view-account-button" type="button" color="primary">View Account</button>
+      <a [routerLink]="accountRouterLink" [state]="{ account: account }" class="no-hover">
+        <button mat-raised-button class="compact" type="button" color="primary"><strong>View Account</strong></button>
       </a>
     </div>
   </mat-card-actions>

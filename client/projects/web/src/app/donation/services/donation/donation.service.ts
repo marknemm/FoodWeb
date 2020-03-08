@@ -120,8 +120,8 @@ export class DonationService {
 
   getDonation(id: number): Observable<Donation> {
     // Attempt to get donation from window state history.
-    if (window.history.state && window.history.state.id === id) {
-      return of(window.history.state);
+    if ( window.history.state?.donation?.id === id) {
+      return of(window.history.state.donation);
     }
     // Get donation from server.
     const url = `${this.url}/${id}`;

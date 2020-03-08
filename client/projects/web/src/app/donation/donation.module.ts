@@ -8,6 +8,7 @@ import { DonationDeliverySharedModule } from '~web/donation-delivery-shared/dona
 import { DonationDetailsComponent } from '~web/donation/donation-details/donation-details.component';
 import { DonationFiltersComponent } from '~web/donation/donation-filters/donation-filters.component';
 import { DonationRoutingModule } from '~web/donation/donation-routing.module';
+import { DonationTeaserComponent } from '~web/donation/donation-teaser/donation-teaser.component';
 import { DonationsComponent } from '~web/donation/donations/donations.component';
 import { PrimaryDonationInfoComponent } from '~web/donation/primary-donation-info/primary-donation-info.component';
 import { DonorModule } from '~web/donor/donor.module';
@@ -21,6 +22,7 @@ import { SharedModule } from '~web/shared/shared.module';
     DonationsComponent,
     DonationDetailsComponent,
     DonationFiltersComponent,
+    DonationTeaserComponent,
     PrimaryDonationInfoComponent
   ],
   imports: [
@@ -36,6 +38,9 @@ import { SharedModule } from '~web/shared/shared.module';
     MatSidenavModule,
     ReactiveFormsModule,
     SharedModule
+  ],
+  exports: [
+    DonationTeaserComponent
   ]
 })
 export class DonationModule {}

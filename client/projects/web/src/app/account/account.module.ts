@@ -66,6 +66,7 @@ import { SharedModule } from '~web/shared/shared.module';
     AccountTypeComponent,
     AddressComponent,
     ContactInfoComponent,
+    NotificationSettingsComponent,
     OperationHoursComponent,
     OperationHoursInfoComponent,
     OrganizationComponent,

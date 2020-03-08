@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ContactInfo } from '~shared';
+import { MapAnchorType } from '~web/account/address/address.component';
 import { ContactInfoForm } from '~web/account/contact-info.form';
-import { MapAppLinkService } from '~web/map/map-app-link/map-app-link.service';
 
 @Component({
   selector: 'food-web-contact-info',
@@ -10,6 +10,7 @@ import { MapAppLinkService } from '~web/map/map-app-link/map-app-link.service';
 })
 export class ContactInfoComponent implements OnChanges {
 
+  @Input() addressAnchorType: MapAnchorType = 'Directions';
   @Input() addressFirst = false;
   @Input() contactInfo: ContactInfo;
   @Input() editing = false;
@@ -19,11 +20,7 @@ export class ContactInfoComponent implements OnChanges {
   @Input() hidePhone = false;
   @Input() includeMap = false;
 
-  private _directionsHref = '';
-
-  constructor(
-    private _mapAppLinkService: MapAppLinkService
-  ) {}
+  constructor() {}
 
   get addressColSize(): string {
     return (!this.hideEmail && this.hidePhone) || (this.hideEmail && !this.hidePhone)
@@ -31,16 +28,9 @@ export class ContactInfoComponent implements OnChanges {
       : 'col-sm-12';
   }
 
-  get directionsHref(): string {
-    return this._directionsHref;
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes.contactInfo) {
       this.formGroup.patchValue(this.contactInfo);
-      this._directionsHref = (this.contactInfo)
-        ? this._mapAppLinkService.genDirectionHref(['My+Location', this.contactInfo])
-        : '';
     }
   }
 }

@@ -65,6 +65,16 @@
       ],
       "~admin/components/*": [ "./projects/admin/src/app/components/*" ],
       "~admin/environments/*": ["./projects/admin/src/environments/*"],
+      "~admin/admin-password/*": [
+        "./projects/admin/src/app/admin-password/*",
+        "./projects/admin/src/app/admin-password/child-components/*",
+        "./projects/admin/src/app/admin-password/components/*",
+        "./projects/admin/src/app/admin-password/directives/*",
+        "./projects/admin/src/app/admin-password/forms/*",
+        "./projects/admin/src/app/admin-password/pipes/*",
+        "./projects/admin/src/app/admin-password/interfaces/*",
+        "./projects/admin/src/app/admin-password/services/*"
+      ],
       "~app/app.component": ["./projects/app/src/app/app.component"],
       "~app/app.module": ["./projects/app/src/app/app.module"],
       "~app/app-routing.module": ["./projects/app/src/app/app-routing.module"],

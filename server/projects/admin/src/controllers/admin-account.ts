@@ -1,17 +1,26 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { adminUpdateAccount, adminUpdateAccountSection } from '~admin/services/admin-account/admin-save-account';
+import { sendMessage, testMessage } from '~admin/services/admin-account/send-message-to-accounts';
 import { Account, AccountEntity } from '~entity/account.entity';
 import { QueryResult } from '~orm/index';
-import { AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, SendMessageRequest } from '~shared';
+import { AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, SendMessageRequest, PasswordUpdateRequest } from '~shared';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
-import { readFullAccounts } from '~web/services/account/read-accounts';
+import { readFullAccount, readFullAccounts } from '~web/services/account/read-accounts';
 import { AuditEventType, saveUpdateAudit } from '~web/services/audit/save-audit';
-import { testMessage, sendMessage } from '~admin/services/admin-account/send-message-to-accounts';
+import { adminUpdatePassword } from '~admin/services/admin-password/save-password';
 
 const router = express.Router();
+
+router.get('/:id', (req: Request, res: Response) => {
+  const id: number = parseInt(req.params.id, 10);
+  const myAccount: Account = (req.session ? req.session.account : null);
+  readFullAccount(id, myAccount)
+    .then((account: AccountEntity) => res.send(account))
+    .catch(genErrorResponse.bind(this, res));
+});
 
 router.get('/', (req: Request, res: Response) => {
   const readRequest: AccountReadRequest = req.query;
@@ -21,6 +30,17 @@ router.get('/', (req: Request, res: Response) => {
       res.send(genListResponse(queryResult, readRequest))
     )
     .catch(genErrorResponse.bind(this, res));
+});
+
+router.put('/:id/password', (req: Request, res: Response) => {
+  const myAccount: AccountEntity = req.session.account;
+  const updateReq: PasswordUpdateRequest = req.body;
+  const accountId: number = Number.parseInt(req.params.id, 10);
+  adminUpdatePassword(updateReq, accountId)
+    .then(() => res.send({}))
+    .catch(genErrorResponseRethrow.bind(this, res))
+    .then(() => saveUpdateAudit(AuditEventType.UpdatePassword, myAccount, { old: 'xxx', new: 'xxx' }, updateReq.recaptchaScore))
+    .catch((err: Error) => console.error(err));
 });
 
 router.put('/:id/section', (req: Request, res: Response) => {

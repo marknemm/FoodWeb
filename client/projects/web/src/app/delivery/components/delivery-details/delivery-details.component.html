@@ -10,7 +10,7 @@
   ></food-web-donation-workflow>
 
   <div *ngIf="!myDelivery" class="row">
-    <div class="donation-delivery-info-container col-12">
+    <div class="donation-description-container col-12">
       <food-web-delivery-donation-info [donation]="donation"></food-web-delivery-donation-info>
     </div>
   </div>
@@ -24,7 +24,7 @@
   <hr>
 
   <div class="row">
-    <div class="col-lg-6 col-12">
+    <div class="col-md-6 col-12">
       <div class="pickup-info-container">
         <food-web-pickup-info [donation]="donation"></food-web-pickup-info>
       </div>
@@ -39,9 +39,9 @@
       </div>
     </div>
   
-    <hr class="offset-top col-12 d-lg-none d-xl-none">
+    <hr class="offset-top col-12 d-md-none d-lg-none d-xl-none">
   
-    <div class="col-lg-6 col-12">
+    <div class="col-md-6 col-12">
       <div *ngIf="donation.claim" class="drop-off-info-container">
         <food-web-drop-off-info [donation]="donation"></food-web-drop-off-info>
       </div>
@@ -52,15 +52,21 @@
     </div>
   </div>
 
-  <ng-container *ngIf="myDelivery">
-    <hr class="offset-top">
-
+  <ng-container *ngIf="myDelivery || donation.claim?.delivery">
+    <hr class="offset-top col-12">
     <div class="row">
-      <div class="donation-description-container col-12 col-lg-6">
+      <div *ngIf="myDelivery" class="col-md-6 donation-description-container">
         <food-web-delivery-donation-info [donation]="donation"></food-web-delivery-donation-info>
+      </div>
+      <div *ngIf="donation.claim?.delivery" class="col-md-6 volunteer-info-container">
+        <food-web-account-teaser [account]="donation.claim.delivery.volunteerAccount" customTitle="volunteer"></food-web-account-teaser>
       </div>
     </div>
   </ng-container>
+
+  <ng-template #donationInfo>
+    
+  </ng-template>
 </div>
 
 <div *ngIf="deliveryNotFound" class="page-title block-header">

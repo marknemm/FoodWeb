@@ -15,8 +15,8 @@ import { SharedModule } from '~web/shared/shared.module';
   imports: [
     PasswordRoutingModule,
     CommonModule,
-    ReactiveFormsModule,
     MaterialModule,
+    ReactiveFormsModule,
     SharedModule
   ],
   exports: [
