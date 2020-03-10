@@ -40,7 +40,12 @@
                 "projects/admin/src/styles"
               ]
             },
-            "scripts": []
+            "fileReplacements": [
+              {
+                "replace": "projects/web/src/environments/environment.ts",
+                "with": "projects/admin/src/environments/environment.ts"
+              }
+            ]
           },
           "configurations": {
             "hmr": {
@@ -192,7 +197,12 @@
                 "projects/app/src/styles"
               ]
             },
-            "scripts": []
+            "fileReplacements": [
+              {
+                "replace": "projects/web/src/environments/environment.ts",
+                "with": "projects/app/src/environments/environment.ts"
+              }
+            ]
           },
           "configurations": {
             "app": {

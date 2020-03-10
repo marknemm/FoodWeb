@@ -27,6 +27,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     if (!!this._activatedRoute.snapshot.params['login']) {
+      // Logout if directed to '/home/login' with an impersonationToken query param present.
+      if (!!this._activatedRoute.snapshot.queryParams['impersonationToken']) {
+        this._sessionService.logout(false);
+      }
       LoginDialogComponent.openIfNotLoggedIn(this._sessionService, this._matDialog);
     }
     this._featuredEventsService.getNextFeaturedEvent().subscribe(
