@@ -26,29 +26,6 @@ export const session: RequestHandler = expressSession(sessionOptions);
  */
 function _genSessionOpts(): SessionOptions {
   const ttlMs: number = parseInt(process.env.SESSION_TTL_MS, 10);
-  const DEVELOPMENT: boolean = (process.env.DEVELOPMENT === 'true');
-  return (DEVELOPMENT)
-    ? _genMemStoreSessionOpts(ttlMs)
-    : _genRedisSessionOpts(ttlMs);
-}
-
-function _genMemStoreSessionOpts(ttlMs: number): SessionOptions {
-  return {
-    secret: process.env.SESSION_SECRET,
-    store: new MemoryStore(),
-    cookie: {
-      expires: new Date(Date.now() + ttlMs), // NOTE: Must use expires date for IE compatibility!
-      maxAge: ttlMs, // The maximum age of the cookie (works in all browsers but IE...)
-      httpOnly: true, // Will not be accessible by Javascript (protects against XSS attacks).
-      secure: false, // https connection not required to send cookie (fine for testing).
-    },
-    saveUninitialized: false,
-    resave: false,
-    rolling: true, // Should refresh the expires
-  };
-}
-
-function _genRedisSessionOpts(ttlMs: number): SessionOptions {
   const RedisStore = connectRedis(expressSession);
 
   const redisOpts: RedisStoreOptions = {

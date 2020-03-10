@@ -2,7 +2,17 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Server Attach",
+      "name": "Server Admin Attach",
+      "type": "node",
+      "request": "attach",
+      "port": 9230,
+      "cwd": "${workspaceRoot}",
+      "restart": true,
+      "trace": true,
+      "sourceMaps": true
+    },
+    {
+      "name": "Server Web Attach",
       "type": "node",
       "request": "attach",
       "port": 9229,

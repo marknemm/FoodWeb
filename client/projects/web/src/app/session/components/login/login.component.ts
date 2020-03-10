@@ -1,11 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { never, ObservableInput } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { never, ObservableInput, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { UsernameRecoveryService } from '~web/account/username-recovery/username-recovery.service';
 import { PasswordResetService } from '~web/password/password-reset/password-reset.service';
 import { LoginForm } from '~web/session/login.form';
-import { SessionService } from '~web/session/session/session.service';
+import { Account, SessionService } from '~web/session/session/session.service';
 
 @Component({
   selector: 'food-web-login',
@@ -19,16 +20,18 @@ export class LoginComponent implements OnInit {
   @Output() formChanged = new EventEmitter<LoginFormChange>();
   @Output() loggedIn = new EventEmitter<void>();
 
-  loginForm: LoginForm;
+  readonly loginForm = new LoginForm();
 
-  private _isUsernameRecovery = false;
-  private _recoveryMessageSent = false;
+  private _impersonationToken = '';
   private _isPasswordReset = false;
-  private _resetMessageSent = false;
+  private _isUsernameRecovery = false;
   private _loginErr = '';
+  private _recoveryMessageSent = false;
+  private _resetMessageSent = false;
 
   constructor(
     public sessionService: SessionService,
+    private _activatedRoute: ActivatedRoute,
     private _passwordResetService: PasswordResetService,
     private _usernameRecoveryService: UsernameRecoveryService
   ) {}
@@ -37,32 +40,32 @@ export class LoginComponent implements OnInit {
     return (!this.isUsernameRecovery && !this.isPasswordReset);
   }
 
-  get messageSent(): boolean {
-    return (this.recoveryMessageSent || this.resetMessageSent);
+  get isPasswordReset(): boolean {
+    return this._isPasswordReset;
   }
 
   get isUsernameRecovery(): boolean {
     return this._isUsernameRecovery;
   }
 
-  get recoveryMessageSent(): boolean {
-    return this._recoveryMessageSent;
-  }
-
-  get isPasswordReset(): boolean {
-    return this._isPasswordReset;
-  }
-
-  get resetMessageSent(): boolean {
-    return this._resetMessageSent;
+  get loading(): boolean {
+    return (this.sessionService.loading || this._usernameRecoveryService.loading || this._passwordResetService.loading);
   }
 
   get loginErr(): string {
     return this._loginErr;
   }
 
-  get loading(): boolean {
-    return (this.sessionService.loading || this._usernameRecoveryService.loading || this._passwordResetService.loading);
+  get messageSent(): boolean {
+    return (this.recoveryMessageSent || this.resetMessageSent);
+  }
+
+  get recoveryMessageSent(): boolean {
+    return this._recoveryMessageSent;
+  }
+
+  get resetMessageSent(): boolean {
+    return this._resetMessageSent;
   }
 
   get usernameEmailPlaceholder(): string {
@@ -72,7 +75,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loginForm = new LoginForm();
+    this._impersonationToken = (this._activatedRoute.snapshot.queryParamMap.has('impersonationToken'))
+      ? this._activatedRoute.snapshot.queryParamMap.get('impersonationToken') : '';
   }
 
   submit(): void {
@@ -88,9 +92,11 @@ export class LoginComponent implements OnInit {
   login(): void {
     const username: string = this.loginForm.get('usernameEmail').value;
     const password: string = this.loginForm.get('password').value;
-    this.sessionService.login(username, password, true)
-      .pipe(catchError(this._handleLoginErr.bind(this)))
-      .subscribe(this._handleLoginSuccess.bind(this));
+    const loginResponse$: Observable<Account> = (this._impersonationToken)
+      ? this.sessionService.impersonationLogin(username, password, this._impersonationToken)
+      : this.sessionService.login(username, password, true);
+    loginResponse$.pipe(catchError(this._handleLoginErr.bind(this)))
+                  .subscribe(this._handleLoginSuccess.bind(this));
   }
 
   private _handleLoginErr(err: HttpErrorResponse): ObservableInput<any> {

@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, finalize, map, mergeMap, takeUntil } from 'rxjs/operators';
-import { Account, AccountHelper, LoginRequest, LoginResponse } from '~shared';
+import { Account, AccountHelper, ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
 import { environment } from '~web/environments/environment';
 import { AlertService } from '~web/shared/alert/alert.service';
 import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
@@ -165,6 +165,28 @@ export class SessionService {
       this._alertService.displaySimpleMessage(`Welcome, ${this._accountHelper.accountName(response.account)}`, 'success');
     }
     return response.account;
+  }
+
+  /**
+   * Impersonates a user by logging in as a user that has been granted a given one-time use impersonation token.
+   * @param usernameEmail The username/email of the user that has been granted the impersonation token (not the target impersonated user).
+   * @param password The password of the user that has been granted the impersonation token (not the target impersonated user).
+   * @param impersonationToken The granted impersonation token belonging to the current user.
+   * @return An observable that emits the impersonation target account on success, and throws an error on failure.
+   */
+  impersonationLogin(usernameEmail: string, password: string, impersonationToken: string): Observable<Account> {
+    const impersonateRequest: ImpersonateRequest = {
+      impersonatorUsernameEmail: usernameEmail,
+      impersonatorPassword: password,
+      impersonationToken
+    };
+    this._loading = true;
+    return this._httpClient.post<LoginResponse>(`${this.url}/impersonate`, impersonateRequest, { withCredentials: true }).pipe(
+      map((response: LoginResponse) =>
+        this._handleLoginSuccess(response, true)
+      ),
+      finalize(() => this._loading = false)
+    );
   }
 
   /**

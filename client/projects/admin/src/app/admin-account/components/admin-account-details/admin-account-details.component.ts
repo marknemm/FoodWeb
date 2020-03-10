@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminSessionService } from '~admin/admin-session/admin-session/admin-session.service';
+import { ImpersonateService } from '~admin/admin-session/impersonate/impersonate.service';
 import { AccountHelper } from '~shared';
 import { AccountDetailsComponent } from '~web/account/account-details/account-details.component';
 import { AccountService } from '~web/account/account/account.service';
@@ -20,6 +21,7 @@ export class AdminAccountDetailsComponent extends AccountDetailsComponent implem
   constructor(
     public sessionService: AdminSessionService,
     public accountHelper: AccountHelper,
+    public impersonateService: ImpersonateService,
     public signupVerificationService: SignupVerificationService,
     protected _accountService: AccountService,
     protected _activatedRoute: ActivatedRoute,

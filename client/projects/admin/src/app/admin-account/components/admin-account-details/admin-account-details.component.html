@@ -15,7 +15,11 @@
     <food-web-account-type formControlName="accountType"></food-web-account-type>
   </div>
 
-  <mat-divider></mat-divider>
+  <div class="admin-actions align-right">
+    <button mat-raised-button type="button" color="primary" (click)="impersonateService.impersonateUser(originalAccount)">Impersonate User</button>
+  </div>
+
+  <hr>
 
   <p *ngIf="hasAccountOwnership && originalAccount.verified === false" class="account-not-verified">
     Account Not Verified:

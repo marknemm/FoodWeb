@@ -1,6 +1,7 @@
 import express = require('express');
 import dotenv = require('dotenv');
 import forceHttps = require('express-force-https');
+import compression = require('compression');
 import bodyParser = require('body-parser');
 import multer = require('multer');
 import path = require('path');
@@ -57,6 +58,7 @@ if (PRODUCTION || QA) {
   app.use(forceHttps);
 }
 app.use(cors);
+app.use(compression());
 app.use(bodyParser.json());
 app.use(multer().any());
 app.use(session);
