@@ -24,7 +24,7 @@ export async function verifyAccount(account: AccountEntity, verificationReq: Acc
   const verificationToken: string = verificationReq.verificationToken;
   const repo: Repository<UnverifiedAccountEntity> = getRepository(UnverifiedAccountEntity);
   const unverifiedAccount: UnverifiedAccountEntity = await repo.findOne({
-    where: (account) ? { account, verificationToken } : { verificationToken }
+    where: { verificationToken }
   });
 
   if (!unverifiedAccount) {
