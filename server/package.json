@@ -23,10 +23,10 @@
     "test": "npm run lint && ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts",
     "test:watch": "ts-mocha -p ./src/tsconfig.spec.json ./src/**/*.ts",
     "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -f ormconfig.json",
-    "typeorm:migration:create": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:create -n",
-    "typeorm:migration:generate": "npm run build && ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:generate -n",
-    "typeorm:migration:revert": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:revert",
-    "typeorm:migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:run"
+    "typeorm:migration:create": "npm run pg:dump && ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:create -n",
+    "typeorm:migration:generate": "npm run pg:dump && npm run build && ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:generate -n",
+    "typeorm:migration:revert": "npm run pg:dump && ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:revert",
+    "typeorm:migration:run": "npm run pg:dump && ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:run"
   },
   "private": true,
   "dependencies": {

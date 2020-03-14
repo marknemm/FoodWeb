@@ -40,6 +40,11 @@
         box-sizing: border-box;
         padding: $quill-doc-padding;
 
+        p {
+          margin-top: 0;
+          margin-bottom: 1rem;
+        }
+
         &.ql-blank::before {
           padding-left: $quill-doc-padding - 15px;
 

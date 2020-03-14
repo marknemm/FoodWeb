@@ -4,15 +4,18 @@ import { SelectQueryBuilder } from 'typeorm';
 import { AccountEntity, AccountType } from '~entity/account.entity';
 import { DonationClaimEntity } from '~entity/donation-claim.entity';
 import { DonationEntity, DonationStatus } from '~entity/donation.entity';
-import { initOrm, QueryResult } from '~orm/index';
-import { AccountReadRequest, DonationHelper, DonationReadRequest } from '~shared';
+import { initOrm, QueryResult, OrmEntity, getOrmRepository } from '~orm/index';
+import { AccountReadRequest, DateTimeHelper, DonationHelper, DonationReadRequest } from '~shared';
 import { genDonationEmailSubject, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
 import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
 import { queryAccounts } from '~web/services/account/read-accounts';
 import { sendDeliveryAvailableMessages } from '~web/services/delivery/delivery-available-message';
 import { claimDonation } from '~web/services/donation-claim/claim-donation';
 import { queryDonations } from '~web/services/donation/read-donations';
+import { AutoClaimHistoryEntity } from '~entity/auto-claim-history.entity';
 
+const _runTimestamp = new Date();
+const _dateTimeHelper = new DateTimeHelper();
 const _donationHelper = new DonationHelper();
 
 _autoAssignDonations()
@@ -50,15 +53,17 @@ async function _autoAssignDonations(): Promise<void> {
  * Adds an elapsed time filter to a given DonationEntity select query builder.
  * The filter will only select donations that have a pickup window start time within one hour of the current time,
  * or have had 80% of the duration of time between donation creation and pickup window start elapsed.
+ * The filter will also only target donations that must be delivered within a day and a half from now.
  * @param queryBuilder The select query builder to add the filter to.
  */
 function _addElapsedTimeFilter(queryBuilder: SelectQueryBuilder<DonationEntity>): void {
-  queryBuilder = queryBuilder.andWhere(`(
-    EXTRACT(EPOCH FROM (donation.pickupWindowStart - now()))::DECIMAL <= 3600000
-    OR (
-      EXTRACT(EPOCH FROM (now() - donation.createTimestamp))::DECIMAL
-      / ABS(EXTRACT(EPOCH FROM (donation.pickupWindowStart - donation.createTimestamp)))::DECIMAL
-      >= 0.8
+  queryBuilder = queryBuilder.andWhere(
+    `donation.pickupWindowStart <= (NOW() + INTERVAL '24 HOURS')`
+  ).andWhere(`(
+       donation.pickupWindowStart <= (NOW() + INTERVAL '1 HOURS')
+    OR donation.pickupWindowStart >= TO_TIMESTAMP(
+        (0.8 / EXTRACT(EPOCH FROM (NOW() - donation.createTimestamp))::DECIMAL)
+      + EXTRACT(EPOCH FROM (donation.createTimestamp))::DECIMAL
     )
   )`);
 }
@@ -71,14 +76,29 @@ function _addElapsedTimeFilter(queryBuilder: SelectQueryBuilder<DonationEntity>)
 async function _autoAssignReceivers(donations: DonationEntity[]): Promise<void> {
   const messagePromises: Promise<void>[] = [];
   for (let donation of donations) {
+    if (_shouldDelayAutoMatch(donation)) { continue; } // Do not auto-assign when late-night to prevent notifications. 
     const receiverAccount: AccountEntity = await _findAutoReceiver(donation);
     if (receiverAccount) {
       donation = await claimDonation({ donationId: donation.id }, receiverAccount);
+      await _recordAutoAssignment(donation);
       messagePromises.push(sendDeliveryAvailableMessages(donation));
       messagePromises.push(_sendDonationAutoAssignMessages(donation));
     }
   }
   await Promise.all(messagePromises);
+}
+
+/**
+ * Determines whether or not auto-matching should be delayed (until morning) for a given donation.
+ * @param donation The donation to check if auto-matching should be delayed for.
+ */
+function _shouldDelayAutoMatch(donation: DonationEntity): boolean {
+  const minHour = 8;
+  const maxHour = 22;
+  const donationTimezone: string = donation.donorAccount.contactInfo.timezone;
+  const nowLocalHours: number = _dateTimeHelper.toLocalHours(new Date(), donationTimezone);
+  const pickupLocalHours: number = _dateTimeHelper.toLocalHours(donation.pickupWindowStart, donationTimezone);
+  return (nowLocalHours >= maxHour || nowLocalHours < minHour) && (pickupLocalHours < maxHour && pickupLocalHours > minHour);
 }
 
 /**
@@ -102,17 +122,36 @@ async function _findAutoReceiver(donation: DonationEntity): Promise<AccountEntit
   };
   const queryResult: QueryResult<AccountEntity> = await queryAccounts(readRequest, donation.donorAccount)
     .modQuery((queryBuilder: SelectQueryBuilder<AccountEntity>) => {
-      // Override ORDER BY clause to sort receivers by the number of donations that they have received (in ASC order).
-      // We want to auto-assign donations to receivers that have gotten the fewest donations thus-far.
+      // Override ORDER BY clause to sort receivers by the number of auto-claims that they have received in the past 2 days.
+      // We want to auto-assign donations to receivers that have gotten the fewest auto receives in the past 2 days.
       queryBuilder.addSelect((subQueryBuilder: SelectQueryBuilder<DonationEntity>) => {
-          subQueryBuilder.select('COUNT(claim.id)', 'received_donations_count')
-            .from(DonationClaimEntity, 'claim')
-            .where('claim.receiverAccount = account.id');
+          subQueryBuilder.select('COUNT(autoClaimHistory.id)', 'auto_claim_count')
+            .from(AutoClaimHistoryEntity, 'autoClaimHistory')
+            .innerJoin(DonationClaimEntity, 'claim', '"autoClaimHistory"."claimId" = claim.id')
+            .where('claim.receiverAccount = account.id')
+            .andWhere(`autoClaimHistory.timestamp >= (NOW() - INTERVAL '48 HOURS')`);
           return subQueryBuilder;
-        }, 'received_donations_count')
-        .orderBy('received_donations_count', 'ASC');
+        }, 'auto_claim_count'
+      ).addSelect('RANDOM()', 'random')
+       .orderBy('auto_claim_count', 'ASC')
+       .addOrderBy('random');
     });
   return queryResult.entities[0];
+}
+
+/**
+ * Records an auto-assignment record for a given donation.
+ * NOTE: This record's primary use is to ensure that an associated receiver does not
+ * get overwhelmed with auto-assigns during any single job run.
+ * @param donation The donation that has been auto-assigned.
+ * @return A promise that resolves once the operation completes.
+ */
+async function _recordAutoAssignment(donation: DonationEntity): Promise<void> {
+  const autoClaimHistory: Partial<AutoClaimHistoryEntity> = {
+    timestamp: _runTimestamp,
+    claim: donation.claim
+  };
+  await getOrmRepository(AutoClaimHistoryEntity).insert(autoClaimHistory);
 }
 
 /**

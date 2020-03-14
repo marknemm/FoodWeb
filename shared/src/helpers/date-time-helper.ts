@@ -59,6 +59,18 @@ export class DateTimeHelper {
     return <string>date;
   }
 
+  toLocalHours(date: string | Date, timezone?: string): number {
+    if (date) {
+      date = this.toDate(date);
+      const customOpts: Intl.DateTimeFormatOptions = timezone ? { timeZone: timezone } : {};
+      const formatterOpts: Intl.DateTimeFormatOptions = Object.assign(customOpts, { hour: '2-digit' });
+      return Number.parseInt(
+        new Intl.DateTimeFormat(this.locale, formatterOpts).format(date), 10
+      );
+    }
+    return 0;
+  }
+
   toLocalWeekdayStr(date: string | Date, timezone?: string): string {
     if (date) {
       date = this.toDate(date);

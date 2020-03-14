@@ -14,9 +14,9 @@ export class ClaimReqHistoryEntity {
   @OrmPrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => DonationEntity)
+  @ManyToOne(() => DonationEntity, { onDelete: 'CASCADE' })
   donation?: DonationEntity;
 
-  @ManyToOne(() => AccountEntity, { eager: true })
+  @ManyToOne(() => AccountEntity, { onDelete: 'CASCADE' })
   receiverAccount: AccountEntity;
 }
