@@ -16,6 +16,7 @@ import { PaginatorComponent } from '~web/shared/paginator/paginator.component';
 import { ProgressIndicatorComponent } from '~web/shared/progress-indicator/progress-indicator.component';
 import { ReturnLinkDirective } from '~web/shared/return-link/return-link.directive';
 import { YesNoComponent } from '~web/shared/yes-no/yes-no.component';
+import { IeAlertService } from './services/ie-alert/ie-alert.service';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,11 @@ import { YesNoComponent } from '~web/shared/yes-no/yes-no.component';
 })
 export class SharedModule {
 
-  constructor(jsonDateReviver: JSONDateReviver) {
+  constructor(
+    ieAlert: IeAlertService,
+    jsonDateReviver: JSONDateReviver
+  ) {
+    ieAlert.showIEWarning();
     jsonDateReviver.initJSONDateReviver();
   }
 
