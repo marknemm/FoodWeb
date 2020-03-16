@@ -1,15 +1,34 @@
-<form [formGroup]="filtersForm" class="account-filters" (ngSubmit)="filter.emit(filtersForm.value)">
+<form [formGroup]="filtersForm" class="account-filters" (ngSubmit)="filter.emit(filtersForm.toAccountReadRequest())">
   <food-web-filter-list-filters-title [primary]="true">
     Account Filters
   </food-web-filter-list-filters-title>
 
-  <mat-form-field class="fill">
-    <input matInput placeholder="Organization Name" formControlName="organizationName">
+  <mat-form-field class="fill" *ngIf="!isVolunteerAccountType">
+    <input matInput type="text" placeholder="Organization Name" formControlName="organizationName">
   </mat-form-field>
+
+  <div class="row" *ngIf="!isOrganizationAccountType">
+    <div class="col-6">
+      <mat-form-field class="fill">
+        <input matInput type="text" placeholder="Volunteer First" formControlName="volunteerFirstName">
+      </mat-form-field>
+    </div>
+    <div class="col-6">
+      <mat-form-field class="fill">
+        <input matInput type="text" placeholder="Volunteer Last" formControlName="volunteerLastName">
+      </mat-form-field>
+    </div>
+  </div>
 
   <mat-form-field class="fill">
     <input matInput type="email" placeholder="Email Address" formControlName="email">
   </mat-form-field>
+
+  <food-web-filter-list-filters-title>
+    Operation Hours Filters
+  </food-web-filter-list-filters-title>
+
+  <food-web-operation-hours [editing]="true" [formGroup]="filtersForm.get('operationHours')" weekdayWidth="100%" weekdayPadding="0" timeWidth="50%"></food-web-operation-hours>
 
   <food-web-filter-list-filters-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></food-web-filter-list-filters-sort>
 

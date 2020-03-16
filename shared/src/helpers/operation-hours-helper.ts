@@ -1,6 +1,7 @@
 import { Constants } from '../constants/constants';
 import { OperationHours, Weekday } from '../interfaces/account/operation-hours';
 import { DateTimeRange } from '../interfaces/date-time/time';
+import { Donation } from '../interfaces/donation/donation';
 import { DateTimeHelper } from './date-time-helper';
 export { OperationHours };
 
@@ -52,6 +53,21 @@ export class OperationHoursHelper {
     const minuteStr: string = (minutes > 9 ? `${minutes}` : `0${minutes}`);
 
     return `${hourStr}:${minuteStr} ${amPmStr}`;
+  }
+
+  /**
+   * Generates an operation hours (range) filter from a given donation. The filter will be used to find receiver accounts
+   * that have hours of operation that overlap with a donation's pickup window.
+   * @param donation The donation to generate the operation hours filter from.
+   * @return The generated operation hours filter.
+   */
+  genOperationHoursFilter(donation: Donation): OperationHours {
+    const pickupDateTimeRange: DateTimeRange = {
+      startDateTime: donation.pickupWindowStart,
+      endDateTime: donation.pickupWindowEnd
+    };
+    const timezone: string = donation.donorAccount.contactInfo.timezone;
+    return this.dateTimeRangeToOperationHours(pickupDateTimeRange, timezone);
   }
 
   /**

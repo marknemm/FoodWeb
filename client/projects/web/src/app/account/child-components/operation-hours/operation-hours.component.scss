@@ -5,8 +5,7 @@
 
   .weekday-field {
     display: inline-block;
-    width: 125px;
-    padding-right: 20px;
+    box-sizing: border-box;
     margin-bottom: 8px;
   }
 
@@ -19,8 +18,15 @@
 
     .time-field {
       display: inline-block;
-      width: 110px;
-      padding-right: 20px;
+      box-sizing: border-box;
+
+      &:first-child {
+        padding-right: 15px;
+      }
+
+      &:last-child {
+        padding-left: 15px;
+      }
     }
   }
 

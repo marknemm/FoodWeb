@@ -13,6 +13,9 @@ export class OperationHoursComponent implements OnInit {
   @Input() editing = false;
   @Input() operationHours: OperationHours;
   @Input() formGroup: OperationHoursForm;
+  @Input() timeWidth = '110px';
+  @Input() weekdayWidth = '125px';
+  @Input() weekdayPadding = '0 20px 0 0';
 
   constructor(
     public constantsService: ConstantsService

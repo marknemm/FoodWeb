@@ -1,14 +1,15 @@
-import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from 'database/src/entity/account.entity';
 import { DeliveryReqHistoryEntity } from 'database/src/entity/delivery-req-history.entity';
 import { DonationEntity } from 'database/src/entity/donation.entity';
+import { EntityManager, getConnection } from 'typeorm';
 import { QueryResult } from '~orm/index';
+import { AccountReadRequest, AccountType, DonationHelper, NotificationType, OperationHours, OperationHoursHelper } from '~shared';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
 import { broadcastNotification } from '~web/helpers/messaging/notification';
-import { AccountReadRequest, AccountType, DonationHelper, NotificationType } from '~shared';
 import { readAccounts } from '../account/read-accounts';
 
 const _donationHelper = new DonationHelper();
+const _operationHoursHelper = new OperationHoursHelper();
 
 /**
  * Gets all potential deliverers for a donation and messages them so that they can be notified of the new delivery.
@@ -20,15 +21,15 @@ export async function sendDeliveryAvailableMessages(donation: DonationEntity): P
   let numQueried: number;
 
   do {
+    const operationHours: OperationHours = _operationHoursHelper.genOperationHoursFilter(donation);
     const readRequest: AccountReadRequest = {
       page: page++,
       limit,
       accountType: AccountType.Volunteer,
       distanceRangeMi: 20,
-      operationHoursRange: {
-        startDateTime: donation.pickupWindowStart,
-        endDateTime: donation.pickupWindowEnd
-      }
+      operationHoursWeekday: operationHours.weekday,
+      operationHoursStartTime: operationHours.startTime,
+      operationHoursEndTime: operationHours.endTime
     };
     const queryResult: QueryResult<AccountEntity> = await readAccounts(readRequest, donation.claim.receiverAccount);
     numQueried = queryResult.entities.length;
