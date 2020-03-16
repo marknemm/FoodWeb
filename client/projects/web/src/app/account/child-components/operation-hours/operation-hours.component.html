@@ -1,5 +1,5 @@
 <div [formGroup]="formGroup" class="operation-hours-form">
-  <div class="weekday-field">
+  <div class="weekday-field" [style.width]="weekdayWidth" [style.padding]="weekdayPadding">
     <mat-form-field class="fill no-pad" floatLabel="never">
       <mat-select placeholder="Weekday" class="accent" formControlName="weekday">
         <mat-option *ngFor="let weekday of constantsService.WEEKDAYS; let i = index" [value]="weekday">{{ weekday }}</mat-option>
@@ -7,7 +7,7 @@
     </mat-form-field>
   </div>
   <div class="time-fields-container">
-    <div class="time-field">
+    <div class="time-field" [style.width]="timeWidth">
       <mat-form-field class="fill" floatLabel="never">
         <input matInput placeholder="Start Time" [ngxTimepicker]="startTimePicker" autocomplete="off" readonly="true"
           formControlName="startTime" [errorStateMatcher]="formGroup.timeRangeErrStateMatcher">
@@ -21,7 +21,7 @@
         ></ngx-material-timepicker>
       </mat-form-field>
     </div>
-    <div class="time-field">
+    <div class="time-field" [style.width]="timeWidth">
       <mat-form-field class="fill" floatLabel="never">
         <input matInput placeholder="End Time" [ngxTimepicker]="endTimePicker" autocomplete="off" readonly="true"
           formControlName="endTime" [errorStateMatcher]="formGroup.timeRangeErrStateMatcher">
