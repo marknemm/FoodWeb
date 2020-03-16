@@ -2,21 +2,22 @@
 require('./jobs-config');
 import { SelectQueryBuilder } from 'typeorm';
 import { AccountEntity, AccountType } from '~entity/account.entity';
+import { AutoClaimHistoryEntity } from '~entity/auto-claim-history.entity';
 import { DonationClaimEntity } from '~entity/donation-claim.entity';
-import { DonationEntity, DonationStatus } from '~entity/donation.entity';
-import { initOrm, QueryResult, OrmEntity, getOrmRepository } from '~orm/index';
-import { AccountReadRequest, DateTimeHelper, DonationHelper, DonationReadRequest } from '~shared';
+import { DonationEntity, DonationStatus, Donation } from '~entity/donation.entity';
+import { getOrmRepository, initOrm, QueryResult } from '~orm/index';
+import { AccountReadRequest, DateTimeHelper, DateTimeRange, DonationHelper, DonationReadRequest, OperationHours, OperationHoursHelper } from '~shared';
 import { genDonationEmailSubject, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
 import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
 import { queryAccounts } from '~web/services/account/read-accounts';
 import { sendDeliveryAvailableMessages } from '~web/services/delivery/delivery-available-message';
 import { claimDonation } from '~web/services/donation-claim/claim-donation';
 import { queryDonations } from '~web/services/donation/read-donations';
-import { AutoClaimHistoryEntity } from '~entity/auto-claim-history.entity';
 
 const _runTimestamp = new Date();
 const _dateTimeHelper = new DateTimeHelper();
 const _donationHelper = new DonationHelper();
+const _operationHoursHelper = new OperationHoursHelper();
 
 _autoAssignDonations()
   .then(() => process.exit())
@@ -107,6 +108,7 @@ function _shouldDelayAutoMatch(donation: DonationEntity): boolean {
  * @return A promise that resolves to the found automatic receiver. Will return null/undefined if no receiver is found.
  */
 async function _findAutoReceiver(donation: DonationEntity): Promise<AccountEntity> {
+  const operationHours: OperationHours = _operationHoursHelper.genOperationHoursFilter(donation);
   const readRequest: AccountReadRequest = {
     page: 1,
     limit: 1,
@@ -115,10 +117,9 @@ async function _findAutoReceiver(donation: DonationEntity): Promise<AccountEntit
     distanceRangeMi: 20,
     lon: donation.donorContactOverride.location.coordinates[0],
     lat: donation.donorContactOverride.location.coordinates[1],
-    operationHoursRange: {
-      startDateTime: donation.pickupWindowStart,
-      endDateTime: donation.pickupWindowEnd
-    }
+    operationHoursWeekday: operationHours.weekday,
+    operationHoursStartTime: operationHours.startTime,
+    operationHoursEndTime: operationHours.endTime
   };
   const queryResult: QueryResult<AccountEntity> = await queryAccounts(readRequest, donation.donorAccount)
     .modQuery((queryBuilder: SelectQueryBuilder<AccountEntity>) => {
@@ -138,6 +139,8 @@ async function _findAutoReceiver(donation: DonationEntity): Promise<AccountEntit
     });
   return queryResult.entities[0];
 }
+
+
 
 /**
  * Records an auto-assignment record for a given donation.

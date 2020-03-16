@@ -83,8 +83,10 @@ function _genWhereCondition(
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'contactInfo', filters, ['email']);
   const orgNameFilt = { name: filters.organizationName };
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'organization', orgNameFilt, ['name'], { convertToLowerCase: true });
+  const volunteerNameFilt = { lastName: filters.volunteerLastName, firstName: filters.volunteerFirstName };
+  queryBuilder = genSimpleWhereConditions(queryBuilder, 'volunteer', volunteerNameFilt, ['lastName', 'firstName'], { convertToLowerCase: true });
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'receiver', filters, ['autoReceiver']);
-  queryBuilder = _genOperationHoursCondition(queryBuilder, filters, myAccount);
+  queryBuilder = _genOperationHoursCondition(queryBuilder, filters);
   queryBuilder = _genDistanceCondition(queryBuilder, filters, myAccount);
   return queryBuilder;
 }
@@ -92,28 +94,30 @@ function _genWhereCondition(
 function _genOperationHoursCondition(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
   filters: AccountReadFilters,
-  myAccount: Account
 ): OrmSelectQueryBuilder<AccountEntity> {
-  if (filters.operationHoursRange) {
-    if (!myAccount) { throw new LoginRequiredError(); }
-    const operationHours: OperationHours = _opHoursHelper.dateTimeRangeToOperationHours(
-      filters.operationHoursRange,
-      myAccount.contactInfo.timezone
-    );
-    // Check for any overlap (invert condition where op hours are completely after or before donation window).
-    queryBuilder = queryBuilder.andWhere(`
-      (
-        operationHours.weekday IS NULL
-        OR (
-          operationHours.weekday = :weekday
-          AND NOT (
-            operationHours.startTime >= :endTime
-            OR operationHours.endTime <= :startTime
-          )
-        )
-      )`,
-      operationHours
-    );
+  // Check for any overlap (invert condition where op hours are completely after or before donation window).
+  if (filters.operationHoursWeekday || filters.operationHoursStartTime || filters.operationHoursEndTime) {
+    let operationHoursCondition = '';
+    let operationHoursBindings: Partial<OperationHours> = {};
+
+    if (filters.operationHoursWeekday) {
+      operationHoursCondition += 'operationHours.weekday = :weekday ';
+      operationHoursBindings.weekday = filters.operationHoursWeekday;
+    }
+    if (filters.operationHoursStartTime) {
+      operationHoursCondition += 'AND operationHours.endTime > :startTime '
+      operationHoursBindings.startTime = filters.operationHoursStartTime;
+    }
+    if (filters.operationHoursEndTime) {
+      operationHoursCondition += 'AND operationHours.startTime < :endTime '
+      operationHoursBindings.endTime = filters.operationHoursEndTime;
+    }
+    operationHoursCondition = operationHoursCondition.replace(/^AND/, '').trim();
+
+    queryBuilder = queryBuilder.andWhere(`(
+      operationHours.weekday IS NULL
+      OR (${operationHoursCondition})
+    )`, operationHoursBindings);
   }
   return queryBuilder;
 }

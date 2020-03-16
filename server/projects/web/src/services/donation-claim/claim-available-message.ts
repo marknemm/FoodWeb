@@ -1,14 +1,15 @@
-import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity } from 'database/src/entity/account.entity';
 import { ClaimReqHistoryEntity } from 'database/src/entity/claim-req-history.entity';
 import { DonationEntity } from 'database/src/entity/donation.entity';
+import { EntityManager, getConnection } from 'typeorm';
 import { QueryResult } from '~orm/index';
+import { AccountReadRequest, AccountType, DonationHelper, NotificationType, OperationHours, OperationHoursHelper } from '~shared';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
 import { broadcastNotification } from '~web/helpers/messaging/notification';
-import { AccountReadRequest, AccountType, DonationHelper, NotificationType } from '~shared';
 import { readAccounts } from '../account/read-accounts';
 
 const _donationHelper = new DonationHelper();
+const _operationHoursHelper = new OperationHoursHelper();
 
 /**
  * Sends messages to potential receiver charities so that they are given a chance to claim the donation.
@@ -21,6 +22,7 @@ export async function sendClaimAvailableMessages(donation: DonationEntity): Prom
   let numQueried: number;
 
   do {
+    const operationHours: OperationHours = _operationHoursHelper.genOperationHoursFilter(donation);
     const readRequest: AccountReadRequest = {
       page: page++,
       limit,
@@ -28,10 +30,9 @@ export async function sendClaimAvailableMessages(donation: DonationEntity): Prom
       distanceRangeMi: 20,
       lon: donation.donorContactOverride.location.coordinates[0],
       lat: donation.donorContactOverride.location.coordinates[1],
-      operationHoursRange: {
-        startDateTime: donation.pickupWindowStart,
-        endDateTime: donation.pickupWindowEnd
-      }
+      operationHoursWeekday: operationHours.weekday,
+      operationHoursStartTime: operationHours.startTime,
+      operationHoursEndTime: operationHours.endTime
     };
     const queryResult: QueryResult<AccountEntity> = await readAccounts(readRequest, donation.donorAccount);
     numQueried = queryResult.entities.length;
