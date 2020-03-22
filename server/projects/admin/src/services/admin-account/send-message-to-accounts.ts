@@ -1,8 +1,8 @@
+import { adminReadAccounts } from '~admin/services/admin-account/admin-read-accounts';
 import { Account, AccountEntity } from '~entity/account.entity';
 import { QueryResult } from '~orm/index';
 import { AccountReadFilters, AccountReadRequest, SendMessageRequest } from '~shared';
 import { broadcastEmail, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
-import { readAccounts } from '~web/services/account/read-accounts';
 
 /**
  * Sends a given (custom) message to accounts specified by a given set of account filters.
@@ -20,7 +20,7 @@ export async function sendMessage(sendMessageReq: SendMessageRequest, accountFil
     const readRequest: AccountReadRequest = accountFilters;
     readRequest.page = page++;
     readRequest.limit = limit;
-    const queryResult: QueryResult<AccountEntity> = await readAccounts(readRequest, myAccount);
+    const queryResult: QueryResult<AccountEntity> = await adminReadAccounts(readRequest, myAccount);
     numQueried = queryResult.entities.length;
     await _messageTargetAccounts(sendMessageReq, queryResult.entities);
   } while (numQueried === limit);

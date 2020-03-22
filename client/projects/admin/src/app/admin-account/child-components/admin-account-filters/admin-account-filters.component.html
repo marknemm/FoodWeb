@@ -4,14 +4,68 @@
   </food-web-filter-list-filters-title>
 
   <mat-form-field class="fill">
-    <input matInput placeholder="Organization Name" formControlName="organizationName">
+    <mat-select placeholder="Account Type" formControlName="accountType">
+      <mat-option *ngFor="let accountType of constantsService.ACCOUNT_TYPES" [value]="accountType">
+        {{ accountType }}
+      </mat-option>
+      <mat-option [value]="undefined">--</mat-option>
+    </mat-select>
   </mat-form-field>
+
+  <mat-form-field class="fill" *ngIf="!isVolunteerAccountType">
+    <input matInput type="text" placeholder="Organization Name" formControlName="organizationName">
+  </mat-form-field>
+
+  <div class="row" *ngIf="!isOrganizationAccountType">
+    <div class="col-6">
+      <mat-form-field class="fill">
+        <input matInput type="text" placeholder="Volunteer First" formControlName="volunteerFirstName">
+      </mat-form-field>
+    </div>
+    <div class="col-6">
+      <mat-form-field class="fill">
+        <input matInput type="text" placeholder="Volunteer Last" formControlName="volunteerLastName">
+      </mat-form-field>
+    </div>
+  </div>
 
   <mat-form-field class="fill">
     <input matInput type="email" placeholder="Email Address" formControlName="email">
   </mat-form-field>
 
+  <mat-form-field class="fill">
+    <input matInput type="text" placeholder="Username" formControlName="username">
+  </mat-form-field>
+
+  <mat-form-field class="fill">
+    <input matInput type="number" placeholder="Account ID" formControlName="id">
+  </mat-form-field>
+
+  <mat-form-field class="fill" *ngIf="!isOrganizationAccountType">
+    <mat-select placeholder="Attended Training" formControlName="signedAgreement">
+      <mat-option value="true">True</mat-option>
+      <mat-option value="false">False</mat-option>
+      <mat-option [value]="undefined">--</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="fill">
+    <mat-select placeholder="Account Verified" formControlName="verified">
+      <mat-option value="true">True</mat-option>
+      <mat-option value="false">False</mat-option>
+      <mat-option [value]="undefined">--</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <ng-container *ngIf="!isDonorAccountType">
+    <food-web-filter-list-filters-title>
+      Operation Hours Filters
+    </food-web-filter-list-filters-title>
+
+    <food-web-operation-hours [editing]="true" [formGroup]="filtersForm.get('operationHours')" weekdayWidth="100%" weekdayPadding="0" timeWidth="50%"></food-web-operation-hours>
+  </ng-container>
+
   <food-web-filter-list-filters-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></food-web-filter-list-filters-sort>
 
-  <food-web-filter-list-filters-buttons (clear)="filtersForm.reset()"></food-web-filter-list-filters-buttons>
+  <food-web-filter-list-filters-buttons (clear)="filtersForm.reset(undefined, { resetAccountType: true })"></food-web-filter-list-filters-buttons>
 </form>

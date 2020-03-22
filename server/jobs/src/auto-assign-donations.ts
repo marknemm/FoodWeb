@@ -4,9 +4,9 @@ import { SelectQueryBuilder } from 'typeorm';
 import { AccountEntity, AccountType } from '~entity/account.entity';
 import { AutoClaimHistoryEntity } from '~entity/auto-claim-history.entity';
 import { DonationClaimEntity } from '~entity/donation-claim.entity';
-import { DonationEntity, DonationStatus, Donation } from '~entity/donation.entity';
+import { DonationEntity, DonationStatus } from '~entity/donation.entity';
 import { getOrmRepository, initOrm, QueryResult } from '~orm/index';
-import { AccountReadRequest, DateTimeHelper, DateTimeRange, DonationHelper, DonationReadRequest, OperationHours, OperationHoursHelper } from '~shared';
+import { AccountReadRequest, DateTimeHelper, DonationHelper, DonationReadRequest, OperationHours, OperationHoursHelper } from '~shared';
 import { genDonationEmailSubject, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
 import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
 import { queryAccounts } from '~web/services/account/read-accounts';
@@ -44,7 +44,7 @@ async function _autoAssignDonations(): Promise<void> {
       donationStatus: DonationStatus.Unmatched
     };
     const queryResult: QueryResult<DonationEntity> = await queryDonations(readRequest)
-      .modQuery(_addElapsedTimeFilter);
+      .modQuery(_addElapsedTimeFilter).exec();
     await _autoAssignReceivers(queryResult.entities);
     totalDonations = queryResult.totalCount;
   }
@@ -136,7 +136,7 @@ async function _findAutoReceiver(donation: DonationEntity): Promise<AccountEntit
       ).addSelect('RANDOM()', 'random')
        .orderBy('auto_claim_count', 'ASC')
        .addOrderBy('random');
-    });
+    }).exec();
   return queryResult.entities[0];
 }
 

@@ -1,5 +1,5 @@
-<mat-drawer-container class="filter-list" [autosize]="true">
-  <mat-drawer-content>
+<mat-sidenav-container class="filter-list" [autosize]="true">
+  <mat-sidenav-content>
     <div class="page container">
 
       <ng-content select="food-web-filter-list-title"></ng-content>
@@ -25,12 +25,9 @@
       </ng-template>
 
     </div>
-  </mat-drawer-content>
+  </mat-sidenav-content>
 
-  <mat-drawer [opened]="filterListService.opened" (openedChange)="this.filterListService.opened = $event" mode="over" position="end" [autoFocus]="false">
-    <button mat-icon-button type="button" class="close-button" (click)="filterListService.opened = false">
-      <mat-icon aria-label="Close">close</mat-icon>
-    </button>
+  <mat-sidenav [opened]="filterListService.opened" (openedChange)="this.filterListService.opened = $event" mode="over" position="end" [autoFocus]="false">
     <ng-content select="food-web-filter-list-filters"></ng-content>
-  </mat-drawer>
-</mat-drawer-container>
+  </mat-sidenav>
+</mat-sidenav-container>
