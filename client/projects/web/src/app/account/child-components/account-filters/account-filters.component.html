@@ -24,11 +24,13 @@
     <input matInput type="email" placeholder="Email Address" formControlName="email">
   </mat-form-field>
 
-  <food-web-filter-list-filters-title>
-    Operation Hours Filters
-  </food-web-filter-list-filters-title>
+  <ng-container *ngIf="!isDonorAccountType">
+    <food-web-filter-list-filters-title>
+      Operation Hours Filters
+    </food-web-filter-list-filters-title>
 
-  <food-web-operation-hours [editing]="true" [formGroup]="filtersForm.get('operationHours')" weekdayWidth="100%" weekdayPadding="0" timeWidth="50%"></food-web-operation-hours>
+    <food-web-operation-hours [editing]="true" [formGroup]="filtersForm.get('operationHours')" weekdayWidth="100%" weekdayPadding="0" timeWidth="50%"></food-web-operation-hours>
+  </ng-container>
 
   <food-web-filter-list-filters-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></food-web-filter-list-filters-sort>
 

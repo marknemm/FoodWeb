@@ -14,12 +14,13 @@ export interface AccountReadFilters {
    */
   accountType?: AccountType;
   /**
+   * Whether or not the (volunteer) account has been marked as having signed the waiver/agreement (attended training).
+   */
+  signedAgreement?: 'true' | 'false' | boolean;
+  /**
    * Whether or not this account is configured to auto-receive donations.
    */
   autoReceiver?: boolean;
-  /**
-   * 
-   */
   distanceRangeMi?: number;
   /**
    * The (primary) email associated with the account.
@@ -53,6 +54,10 @@ export interface AccountReadFilters {
    * The account's username.
    */
   username?: string;
+  /**
+   * Whether or not the account has been verified.
+   */
+  verified?: 'true' | 'false' | boolean;
   /**
    * The first name of the volunteer.
    */

@@ -16,10 +16,18 @@ export class QueryMod<T, R = QueryResult<T>> {
   /**
    * Uses a given select query mod function to modify a base query that has been exposed by its origin service.
    * @param modFn The select query mod function.
-   * @return A promise that resolves to the result of executing the modified query.
+   * @return This query mod object so that modQuery calls may be chained.
    */
-  modQuery(modFn: (queryBuilder: OrmSelectQueryBuilder<T>) => void): Promise<R> {
+  modQuery(modFn: (queryBuilder: OrmSelectQueryBuilder<T>) => void): QueryMod<T, R> {
     modFn(this._queryBuilder);
+    return this;
+  }
+
+  /**
+   * Executes the base query and modifications.
+   * @return A promsie that resolves to the query execution result.
+   */
+  exec(): Promise<R> {
     return this._execFn(this._queryBuilder);
   }
 }

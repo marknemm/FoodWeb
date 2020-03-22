@@ -9,7 +9,7 @@ export class VolunteerForm extends TypedFormGroup<Volunteer> {
       id: undefined,
       lastName: ['', Validators.required],
       firstName: ['', Validators.required],
-      hasEquipment: [false, Validators.required]
+      signedAgreement: [false, Validators.required]
     });
     if (volunteer) {
       this.patchValue(volunteer);

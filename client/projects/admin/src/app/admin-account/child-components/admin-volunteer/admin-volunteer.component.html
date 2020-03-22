@@ -11,7 +11,7 @@
       </mat-form-field>
     </div>
     <div class="col-12">
-      <mat-slide-toggle formControlName="hasEquipment" class="fill">Attended Training</mat-slide-toggle>
+      <mat-slide-toggle formControlName="signedAgreement" class="fill">Attended Training</mat-slide-toggle>
     </div>
   </div>
 
@@ -23,10 +23,10 @@
     <div class="col-sm-6">
       <div class="inline-label">Attended Training:</div>
       <div class="d-inline-block">
-        <span *ngIf="formGroup.get('hasEquipment').value" class="check-yes">
+        <span *ngIf="formGroup.get('signedAgreement').value" class="check-yes">
           <mat-icon>check</mat-icon> <span>Yes</span>
         </span>
-        <span *ngIf="!formGroup.get('hasEquipment').value" class="cross-no">
+        <span *ngIf="!formGroup.get('signedAgreement').value" class="cross-no">
           <mat-icon>close</mat-icon> <span>No</span>
         </span>
       </div>

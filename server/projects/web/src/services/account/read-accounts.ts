@@ -2,10 +2,9 @@ import { AccountEntity } from 'database/src/entity/account.entity';
 import { getOrmRepository, OrmSelectQueryBuilder } from '~orm/index';
 import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '~orm/index';
 import { LoginRequiredError } from '~web/helpers/response/food-web-error';
-import { Account, AccountHelper, AccountReadFilters, AccountReadRequest, AccountSortBy, OperationHours, OperationHoursHelper, SortOptions } from '~shared';
+import { Account, AccountHelper, AccountReadFilters, AccountReadRequest, AccountSortBy, OperationHours, SortOptions } from '~shared';
 
 const _accountHelper = new AccountHelper();
-const _opHoursHelper = new OperationHoursHelper();
 
 export function readAccount(idOrUsername: number | string, myAccount?: Account): Promise<AccountEntity> {
   return _readAccount(idOrUsername, myAccount, false);
@@ -23,11 +22,19 @@ export function readFullAccounts(request: AccountReadRequest, myAccount: Account
   return _readAccounts(request, myAccount, true);
 }
 
-export function queryAccounts(request: AccountReadRequest, myAccount?: Account): QueryMod<AccountEntity, QueryResult<AccountEntity>> {
+export function queryAccounts(request: AccountReadRequest, myAccount?: Account): QueryMod<AccountEntity> {
   const queryBuilder: OrmSelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
   return new QueryMod<AccountEntity, QueryResult<AccountEntity>>(
     queryBuilder,
     () => _execAccountQuery(queryBuilder, myAccount, false)
+  );
+}
+
+export function queryFullAccounts(request: AccountReadRequest, myAccount?: Account): QueryMod<AccountEntity> {
+  const queryBuilder: OrmSelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
+  return new QueryMod<AccountEntity, QueryResult<AccountEntity>>(
+    queryBuilder,
+    () => _execAccountQuery(queryBuilder, myAccount, true)
   );
 }
 
