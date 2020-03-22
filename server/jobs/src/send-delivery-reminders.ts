@@ -37,7 +37,7 @@ async function _sendDeliveryReminders(): Promise<void> {
         (queryBuilder: OrmSelectQueryBuilder<DonationEntity>) =>
           queryBuilder.andWhere('delivery.pickupWindowStart >= :earliestDeliveryWindowStart', { earliestDeliveryWindowStart })
                       .andWhere('delivery.pickupWindowStart <= :latestDeliveryWindowStart', { latestDeliveryWindowStart })
-      );
+      ).exec();
       await _sendAllDeliveryReminderMessages(queryResult.entities, hour);
       totalDonations = queryResult.totalCount;
     }

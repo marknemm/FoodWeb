@@ -28,16 +28,6 @@
   .mat-drawer {
     width: 320px;
 
-    .close-button {
-      position: absolute;
-      top: 3px;
-      right: 0;
-  
-      @media only screen and (max-width: $mat-mobile) {
-        top: 2px;
-      }
-    }
-
     @media only screen and (max-width: $mat-mobile) {
       width: 100vw;
     }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AccountFiltersComponent } from '~web/account/account-filters/account-filters.component';
+import { ConstantsService } from '~web/shared/constants/constants.service';
 
 @Component({
   selector: 'food-web-admin-account-filters',
@@ -13,11 +14,14 @@ import { AccountFiltersComponent } from '~web/account/account-filters/account-fi
 export class AdminAccountFiltersComponent extends AccountFiltersComponent implements OnInit {
 
   constructor(
+    public constantsService: ConstantsService,
     activatedRoute: ActivatedRoute
   ) {
     super(activatedRoute);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    super.ngOnInit();
+  }
 
 }

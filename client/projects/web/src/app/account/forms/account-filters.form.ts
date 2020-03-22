@@ -9,12 +9,14 @@ export class AccountFiltersForm extends TypedFormGroup<AccountFiltersFormValue> 
     super({
       id: undefined,
       accountType: undefined,
+      signedAgreement: undefined,
       email: undefined,
       operationHours: new OperationHoursForm(undefined, true),
       organizationName: undefined,
       sortBy: undefined,
       sortOrder: undefined,
       username: undefined,
+      verified: undefined,
       volunteerFirstName: undefined,
       volunteerLastName: undefined
     });

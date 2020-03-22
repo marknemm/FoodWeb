@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FilterListService } from '~web/filter-list/filter-list/filter-list.service';
 
 @Component({
   selector: 'food-web-filter-list-filters-title',
@@ -9,7 +10,9 @@ export class FilterListFiltersTitleComponent implements OnInit {
 
   @Input() primary = false;
 
-  constructor() {}
+  constructor(
+    public filterListService: FilterListService
+  ) {}
 
   ngOnInit() {}
 

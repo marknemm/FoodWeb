@@ -1,23 +1,23 @@
 import express = require('express');
 import { Request, Response } from 'express';
+import { adminReadAccount, adminReadAccounts } from '~admin/services/admin-account/admin-read-accounts';
 import { adminUpdateAccount, adminUpdateAccountSection } from '~admin/services/admin-account/admin-save-account';
 import { sendMessage, testMessage } from '~admin/services/admin-account/send-message-to-accounts';
+import { adminUpdatePassword } from '~admin/services/admin-password/save-password';
 import { Account, AccountEntity } from '~entity/account.entity';
 import { QueryResult } from '~orm/index';
-import { AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, SendMessageRequest, PasswordUpdateRequest } from '~shared';
+import { AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, PasswordUpdateRequest, SendMessageRequest } from '~shared';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
-import { readFullAccount, readFullAccounts } from '~web/services/account/read-accounts';
 import { AuditEventType, saveUpdateAudit } from '~web/services/audit/save-audit';
-import { adminUpdatePassword } from '~admin/services/admin-password/save-password';
 
 const router = express.Router();
 
 router.get('/:id', (req: Request, res: Response) => {
   const id: number = parseInt(req.params.id, 10);
   const myAccount: Account = (req.session ? req.session.account : null);
-  readFullAccount(id, myAccount)
+  adminReadAccount(id, myAccount)
     .then((account: AccountEntity) => res.send(account))
     .catch(genErrorResponse.bind(this, res));
 });
@@ -25,7 +25,7 @@ router.get('/:id', (req: Request, res: Response) => {
 router.get('/', (req: Request, res: Response) => {
   const readRequest: AccountReadRequest = req.query;
   const myAccount: Account = (req.session ? req.session.account : null);
-  readFullAccounts(readRequest, myAccount)
+  adminReadAccounts(readRequest, myAccount)
     .then((queryResult: QueryResult<AccountEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
     )

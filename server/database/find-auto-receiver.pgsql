@@ -38,7 +38,7 @@ FROM
       "volunteer"."id" AS "volunteer_id",
       "volunteer"."lastName" AS "volunteer_lastName",
       "volunteer"."firstName" AS "volunteer_firstName",
-      "volunteer"."hasEquipment" AS "volunteer_hasEquipment",
+      "volunteer"."signedAgreement" AS "volunteer_signedAgreement",
       "volunteer"."accountId" AS "volunteer_accountId",
       "operationHours"."id" AS "operationHours_id",
       "operationHours"."weekday" AS "operationHours_weekday",

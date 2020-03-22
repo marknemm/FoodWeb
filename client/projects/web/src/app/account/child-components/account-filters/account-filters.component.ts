@@ -27,6 +27,14 @@ export class AccountFiltersComponent implements OnInit {
     private _activatedRoute: ActivatedRoute
   ) {}
 
+  get isDonorAccountType(): boolean {
+    return (this.filtersForm.get('accountType').value === AccountType.Donor);
+  }
+
+  get isReceiverAccountType(): boolean {
+    return (this.filtersForm.get('accountType').value === AccountType.Receiver);
+  }
+
   get isVolunteerAccountType(): boolean {
     return (this.filtersForm.get('accountType').value === AccountType.Volunteer);
   }

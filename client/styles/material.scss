@@ -285,7 +285,10 @@ mat-card.mat-card {
 
   .mat-drawer-content {
     background-color: $content-background;
-    min-height: calc(100vh - #{$header-height});
+    
+    @media only screen and (min-height: $mat-mobile + 1px) {
+      height: calc(100vh - #{$header-height});
+    }
 
     @media only screen and (max-width: $mat-mobile) {
       min-height: calc(100vh - #{$header-height-mobile});
