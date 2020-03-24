@@ -31,21 +31,31 @@
       </a>
     </div>
     <div class="col-md-4 col-sm-6">
-      <a [routerLink]="['/donation/list']" class="card-link">
-        <mat-card matRipple>
-          <mat-card-title class="align-center">Search Donations</mat-card-title>
-          <mat-card-content>
-            <fa-icon [icon]="faGifts" class="fill-icon"></fa-icon>
-          </mat-card-content>
-        </mat-card>
-      </a>
-    </div>
-    <div class="col-md-4 col-sm-6">
       <a [routerLink]="['/account/list']" class="card-link">
         <mat-card matRipple>
           <mat-card-title class="align-center">Search Accounts</mat-card-title>
           <mat-card-content>
             <mat-icon class="fill-icon">people_alt</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+    <div class="col-md-4 col-sm-6">
+      <a [routerLink]="['/account/compose-message']" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Message Accounts</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon">email</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+    <div class="col-md-4 col-sm-6">
+      <a [routerLink]="['/donation/list']" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Search Donations</mat-card-title>
+          <mat-card-content>
+            <fa-icon [icon]="faGifts" class="fill-icon"></fa-icon>
           </mat-card-content>
         </mat-card>
       </a>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faFlask } from '@fortawesome/free-solid-svg-icons';
 import { ComposeMessageForm } from '~admin/admin-account/compose-message.form';
 import { SendMessageService } from '~admin/admin-account/send-message/send-message.service';
@@ -13,13 +13,16 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 })
 export class ComposeMessageComponent implements OnInit {
 
-  readonly faFlask = faFlask;
   readonly composeMessageForm = new ComposeMessageForm();
+  readonly faFlask = faFlask;
+
+  accountFiltersOpened = false;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
+    private _pageTitleService: PageTitleService,
+    private _router: Router,
     private _sendMessageService: SendMessageService,
-    private _pageTitleService: PageTitleService
   ) {}
 
   ngOnInit() {
@@ -35,6 +38,14 @@ export class ComposeMessageComponent implements OnInit {
 
   testMessage(): void {
     this._sendMessageService.testMessage(this.composeMessageForm.value).subscribe(() => {});
+  }
+
+  updateAccountFilters(filters: AccountReadFilters): void {
+    this._router.navigate([], {
+      relativeTo: this._activatedRoute,
+      queryParams: filters
+    });
+    this.accountFiltersOpened = false;
   }
 
 }

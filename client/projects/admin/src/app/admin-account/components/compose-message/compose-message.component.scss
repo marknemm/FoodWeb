@@ -55,3 +55,11 @@
     }
   }
 }
+
+.mat-drawer {
+  width: 320px;
+
+  @media only screen and (max-width: $mat-mobile) {
+    width: 100vw;
+  }
+}
