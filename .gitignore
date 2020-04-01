@@ -4,7 +4,7 @@
 /**/scratch.*
 
 # database dump binary
-*.dump
+/**/dump
 
 # compiled output
 /**/dist
@@ -23,6 +23,7 @@ $RECYCLE.BIN/
 
 # dependencies
 **/node_modules
+**/__ngcc_entry_points__.json
 
 # sensitive data
 **/.env
@@ -71,8 +72,8 @@ log.txt
 Thumbs.db
 
 # ORM Files
-**/ormconfig.json
 **/ormlogs.log
+**/docker-ormconfig.json
 
 # Mobile build artifacts
 **/platforms

@@ -2,10 +2,10 @@ import express = require('express');
 import dotenv = require('dotenv');
 import forceHttps = require('express-force-https');
 import compression = require('compression');
-import bodyParser = require('body-parser');
 import multer = require('multer');
 import path = require('path');
 import tsConfigPaths = require('tsconfig-paths');
+import { json } from 'body-parser';
 
 // Setup path alias resolution for JS.
 const tsConfig = require('../../../../../tsconfig.json');
@@ -61,7 +61,7 @@ if (PRODUCTION || QA) {
 }
 app.use(cors);
 app.use(compression());
-app.use(bodyParser.json());
+app.use(json());
 app.use(multer().any());
 app.use(session);
 app.use(recaptcha);
@@ -69,7 +69,7 @@ app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 
-// Admin routes work by overriding web 
+// Admin routes work by overriding web
 // Connect Express admin session sub-module controller. This will be the only un-authenticated route (for login).
 app.use('/server/session', require('~admin/controllers/admin-session'));
 app.use('/server/session', require('~web/controllers/session'));

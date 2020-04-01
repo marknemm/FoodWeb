@@ -1,8 +1,10 @@
 import 'dotenv';
-import { Account, Donation, AccountType } from '~shared';
+import { Transporter } from 'nodemailer';
+import { Account, AccountType, Donation } from '~shared';
 import { genHandlebarsTemplate } from './handlebars';
 import nodemailer = require('nodemailer');
 import mailgunTransport = require('nodemailer-mailgun-transport');
+import Mail = require('nodemailer/lib/mailer');
 
 /**
  * The email transporter keys (determines the from address / accounts used to send emails).
@@ -79,34 +81,33 @@ export function sendEmail(
   forceSend = false
 ): Promise<void> {
   // If offline, or the target account has disabled email notifications, then return immediately.
-  if (!_shouldSendEmail(offlineMode, forceSend, recipient)) {
+  if (!_shouldSendEmail(forceSend, recipient)) {
     return Promise.resolve();
   }
   context = _fillMissingContext(context, recipient, template);
 
   return new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {
-    const transporter: nodemailer.Transporter = _getTransporter(mailTransporter);
-    const from: string = process.env[`${mailTransporter}_EMAIL`];
-    const to: string = _extractRecipientTo(recipient);
-    // Can define extra 'Admin' email recipients in .env to get all messages.
-    const recipients: string[] = _getAllRecipients(to);
+    const transporter: Transporter = _getTransporter(mailTransporter);
+    const mailOpts: Mail.Options = {
+      from: process.env[`${mailTransporter}_EMAIL`],
+      to: _extractRecipientTo(recipient),
+      subject,
+      html: genHandlebarsTemplate('email-container', context)
+    };
 
-    recipients.forEach((recipient: string) => {
-      const html: string = genHandlebarsTemplate('email-container', context);
-      transporter.sendMail(
-        { from, to: recipient, subject, html },
-        (err: any) => {
-          if (err) {
-            console.error(err);
-            if (recipient === to) {
-              reject(new Error(`Failed to send template ${template} to ${to}`));
-            }
-          } else if (recipient === to) {
-            resolve();
-          }
+    transporter.sendMail(
+      mailOpts,
+      (err: any) => {
+        if (err) {
+          console.error(err);
+          reject(new Error(`Failed to send template ${template} to ${mailOpts.to}`));
+        } else {
+          resolve();
         }
-      );
-    });
+      }
+    );
+
+    _sendAdminEmails(transporter, mailOpts);
   });
 }
 
@@ -121,12 +122,11 @@ export function genDonationEmailSubject(donation: Donation): string {
 
 /**
  * Determines whether or not an email should be sent to a given account.
- * @param offlineMode If the server is in offline (development) mode.
  * @param forceSend If set to true, then sends the email even if the account has emails disabled.
  * @param recipient The recipient that the email is to be sent to.
  * @return true if the email should be sent, false if not.
  */
-function _shouldSendEmail(offlineMode: boolean, forceSend: boolean, recipient: Recipient): boolean {
+function _shouldSendEmail(forceSend: boolean, recipient: Recipient): boolean {
   const account = <Account>recipient;
   return (!offlineMode && (forceSend || !account.contactInfo || account.contactInfo.enableEmail));
 }
@@ -197,6 +197,31 @@ function _extractRecipientTo(recipient: Recipient): string {
 }
 
 /**
+ * Sends an email to all configured admin recipients.
+ * @param transporter The mail transporter that will be used to send the admin emails.
+ * @param mailOpts The mail options that were used to send the standard email to its target.
+ */
+function _sendAdminEmails(transporter: Transporter, mailOpts: Mail.Options): void {
+  const adminRecipients: string[] = _getAdminRecipients(<string>mailOpts.to);
+  adminRecipients.forEach((adminRecipient: string) => {
+    const adminMailOpts = Object.assign({}, mailOpts);
+    adminMailOpts.to = adminRecipient;
+    transporter.sendMail(adminMailOpts, (err: any) => (err) ? console.error(err) : undefined);
+  });
+}
+
+/**
+ * Gets all recipients for an email. Adds all configured (via env) admin email recipients to each outgoing email.
+ * @param to The (main) recipient of the email.
+ * @return The list of recipients of the email.
+ */
+function _getAdminRecipients(to: string): string[] {
+  return (process.env.ADMIN_EMAILS)
+    ? process.env.ADMIN_EMAILS.trim().split(',').filter((email: string) => email !== to)
+    : [];
+}
+
+/**
  * Gets a specified email transporter (determines the address the email will be from).
  * @param mailTransporter The key of the email transporter to retrieve.
  * @return The retrieved email transporter.
@@ -206,20 +231,6 @@ function _getTransporter(mailTransporter: MailTransporter): nodemailer.Transport
     case MailTransporter.NOREPLY: return noreplyTransporter;
     case MailTransporter.SUPPORT: return supportTransporter;
   }
-}
-
-/**
- * Gets all recipients for an email. Adds all configured (via env) admin email recipients to each outgoing email.
- * @param to The (main) recipient of the email.
- * @return The list of recipients of the email.
- */
-function _getAllRecipients(to: string): string[] {
-  let recipients: string[] = [to];
-  if (process.env.ADMIN_EMAILS) {
-    const adminEmails: string[] = process.env.ADMIN_EMAILS.trim().split(',').filter((email: string) => email !== to);
-    recipients = recipients.concat(adminEmails);
-  }
-  return recipients;
 }
 
 /**
@@ -258,6 +269,9 @@ function _createTransporter(mailTransporter: MailTransporter): nodemailer.Transp
         auth: {
           user: process.env[`${mailTransporter}_USERNAME`],
           pass: process.env[`${mailTransporter}_PASSWORD`]
+        },
+        tls: {
+          rejectUnauthorized: (process.env[`${mailTransporter}_TLS_REJECT_UNAUTHORIZED`] !== 'false')
         }
       });
 }
@@ -268,7 +282,7 @@ function _createTransporter(mailTransporter: MailTransporter): nodemailer.Transp
  * @throws An error if the transporter connection is determined to be invalid during verification.
  */
 function _verifyTransporterConnection(transporter: nodemailer.Transporter): void {
-  transporter.verify((error: any) => {  
+  transporter.verify((error: any) => {
     if (error) { throw new Error(error.message ? error.message : error); }
   });
 }

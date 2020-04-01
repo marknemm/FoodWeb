@@ -2,10 +2,10 @@ import express = require('express');
 import dotenv = require('dotenv');
 import forceHttps = require('express-force-https');
 import compression = require('compression');
-import bodyParser = require('body-parser');
 import multer = require('multer');
 import path = require('path');
 import tsConfigPaths = require('tsconfig-paths');
+import { json } from 'body-parser';
 
 // Setup path alias resolution for JS.
 const tsConfig = require('../../../../../tsconfig.json');
@@ -59,7 +59,7 @@ if (PRODUCTION || QA) {
 }
 app.use(cors);
 app.use(compression());
-app.use(bodyParser.json());
+app.use(json());
 app.use(multer().any());
 app.use(session);
 app.use(recaptcha);

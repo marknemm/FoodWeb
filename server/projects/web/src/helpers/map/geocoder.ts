@@ -9,17 +9,17 @@ export { ContactInfo, GeographyLocation };
 // Initial setup for geocoder.
 const _offlineMode = (process.env.OFFLINE_MODE === 'true');
 const _geocoder: Geocoder = NodeGeocoder({
-  provider: <Providers>process.env.GEOCODER_PROVIDER, 
+  provider: <Providers>process.env.GEOCODER_PROVIDER,
   apiKey: process.env.GEOCODER_API_KEY,
-  clientId: process.env.GEOCODER_CLIENT_ID,
+  // clientId: process.env.GEOCODER_CLIENT_ID,
   httpAdapter: <'http' | 'https' | 'request'>process.env.GEOCODER_HTTP_ADAPTER,
   formatter: process.env.GEOCODER_FORMATTER,
   formatterPattern: process.env.GEOCODER_FORMATTER_PATTERN,
-  email: process.env.GEOCODER_EMAIL,
-  appId: process.env.GEOCODER_APP_ID,
-  appCode: process.env.GEOCODER_APP_CODE,
-  country: process.env.COUNTRY,
-  state: process.env.STATE
+  // email: process.env.GEOCODER_EMAIL,
+  // appId: process.env.GEOCODER_APP_ID,
+  // appCode: process.env.GEOCODER_APP_CODE,
+  // country: process.env.COUNTRY,
+  // state: process.env.STATE
 });
 
 /**
@@ -82,7 +82,7 @@ async function _geocode(query: string | Query, retryCnt = 0): Promise<Location> 
 function _handleErr(err: Error | string, retryCb, retryCnt: number): Promise<Location> {
   console.error(err);
   if (isErrOverQueryLimit(err) && retryCnt < 5) {
-    return new Promise<Location>(resolve =>
+    return new Promise<Location>((resolve) =>
       setTimeout(() => resolve(retryCb()), retryCnt * 500)
     );
   } else {
