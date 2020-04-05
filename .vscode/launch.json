@@ -66,35 +66,7 @@
       }
     },
     {
-      "name": "Server Launch",
-      "type": "node",
-      "request": "launch",
-      "port": 9229,
-      "cwd": "${workspaceRoot}",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "start"
-      ],
-      "restart": true,
-      "timeout": 1000000
-    },
-    {
-      "name": "Client Launch",
-      "type": "chrome",
-      "request": "launch",
-      "port": 9222,
-      "url": "http://localhost:5000",
-      "webRoot": "${workspaceRoot}\\client",
-      "trace": true,
-      "sourceMaps": true,
-      "userDataDir": "${workspaceRoot}\\.vscode\\chrome",
-      "sourceMapPathOverrides": {
-        "webpack:///C:*": "C:/*"
-      },
-      "timeout": 1000000
-    },
-    {
-      "name": "Server-Test",
+      "name": "Server Test",
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
@@ -116,7 +88,7 @@
       }
     },
     {
-      "name": "Shared-Test",
+      "name": "Shared Test",
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
@@ -156,15 +128,15 @@
     {
       "name": "Hybrid Attach",
       "configurations": [
-        "Server Attach",
+        "Server Web Attach",
         "Client Web Attach"
       ]
     },
     {
-      "name": "Hybrid Launch",
+      "name": "Hybrid Admin Attach",
       "configurations": [
-        "Server Launch",
-        "Client Launch"
+        "Server Admin Attach",
+        "Client Admin Attach"
       ]
     }
   ]

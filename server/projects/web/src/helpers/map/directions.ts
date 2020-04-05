@@ -1,10 +1,10 @@
 import * as GoogleMaps from '@google/maps';
-import { ClientResponse, DirectionsResponse, GoogleMapsClient, LatLngLiteral } from '@google/maps';
+import { ClientResponse, DirectionsResponse, GoogleMapsClientWithPromise, LatLngLiteral } from '@google/maps';
 import 'dotenv';
-import { Directions, DirectionsExtractor, MapRoute, MapWaypointConverter, Waypoint, ContactInfo, GeographyLocation } from '~shared';
+import { ContactInfo, Directions, DirectionsExtractor, GeographyLocation, MapRoute, MapWaypointConverter, Waypoint } from '~shared';
 import { FoodWebError } from '../response/food-web-error';
 
-const _directionsClient: GoogleMapsClient = GoogleMaps.createClient({
+const _directionsClient: GoogleMapsClientWithPromise = GoogleMaps.createClient({
   key: process.env.DIRECTIONS_API_KEY,
   Promise
 });

@@ -1,0 +1,11 @@
+{
+  "/server/*": {
+     "target": "http://localhost:5001",
+     "secure": false,
+     "changeOrigin": true,
+     "logLevel": "debug",
+     "pathRewrite": {
+       "^/server" : "http://foodweb-admin-server:5001/server"
+      }
+  }
+}

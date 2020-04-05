@@ -635,7 +635,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "food-web",
-      "styleext": "scss"
+      "style": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "food-web"

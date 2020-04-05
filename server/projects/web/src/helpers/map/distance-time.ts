@@ -1,10 +1,10 @@
 import * as GoogleMaps from '@google/maps';
-import { ClientResponse, DistanceMatrixResponse, GoogleMapsClient } from '@google/maps';
+import { ClientResponse, DistanceMatrixResponse, GoogleMapsClientWithPromise } from '@google/maps';
 import 'dotenv';
 import { ContactInfo } from '~shared';
 import { FoodWebError } from '../response/food-web-error';
 
-const _distanceTimeClient: GoogleMapsClient = GoogleMaps.createClient({
+const _distanceTimeClient: GoogleMapsClientWithPromise = GoogleMaps.createClient({
   key: process.env.DISTANCE_TIME_API_KEY,
   Promise
 });
@@ -86,7 +86,7 @@ function _contactInfoToQueryString(contactInfo: ContactInfo): string {
 /**
  * Attempts to retry the distance-time matrix query. Will only retry a maximum of 5 times. Will addatively throttle each retry.
  * @param origins The list of origins that will form the row entries of the resulting distance matrix.
- * @param destinations The list of destinations that will form the column (element) entries of the resulting distance matrix. 
+ * @param destinations The list of destinations that will form the column (element) entries of the resulting distance matrix.
  * @param retryCnt The number of retries that have happened previously.
  * @throws FoodWebError if the retry limit (5) has been exceeded or the distance-time query retry fails.
  */

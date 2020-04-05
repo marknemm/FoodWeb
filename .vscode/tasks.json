@@ -2,17 +2,147 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "staticWeb",
-      "command": "Chrome",
-      "windows": {
-        "command": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
-      },
-      "osx": {
-        "command": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-      },
-      "args": [
-        "${file}"
-      ]
+      "label": "Docker FoodWeb: Start",
+      "type": "shell",
+      "command": "docker-compose up -d foodweb",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb Admin: Start",
+      "type": "shell",
+      "command": "docker-compose up -d foodweb-admin",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb: Reinstall Dependencies",
+      "type": "shell",
+      "dependsOn": [
+        "Docker FoodWeb: Reinstall Client Dependencies",
+        "Docker FoodWeb: Reinstall Server Dependencies"
+      ],
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb: Reinstall Client Dependencies",
+      "type": "shell",
+      "command": "docker exec -it foodweb bash -c 'npm install'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb: Reinstall Server Dependencies",
+      "type": "shell",
+      "command": "docker exec -it foodweb-server bash -c 'npm install'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb Admin: Reinstall Dependencies",
+      "type": "shell",
+      "dependsOn": [
+        "Docker FoodWeb Admin: Reinstall Client Dependencies",
+        "Docker FoodWeb Admin: Reinstall Server Dependencies"
+      ],
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb Admin: Reinstall Client Dependencies",
+      "type": "shell",
+      "command": "docker exec -it foodweb-admin bash -c 'npm install'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb Admin: Reinstall Server Dependencies",
+      "type": "shell",
+      "command": "docker exec -it foodweb-admin-server bash -c 'npm install'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb: Dump Postgres Database",
+      "type": "shell",
+      "command": "docker exec -it foodweb-server bash -c 'npm run pg:dump ${input:dumpFileName}'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb: Restore Postgres Database",
+      "type": "shell",
+      "command": "docker exec -it foodweb-server bash -c 'npm run pg:restore ${input:restoreFileName}'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb: Destroy Postgres Database",
+      "type": "shell",
+      "command": "docker exec -it foodweb-server bash -c 'npm run pg:destroy'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb: Generate TypeORM Migration",
+      "type": "shell",
+      "command": "docker exec -it foodweb-server bash -c 'npm run typeorm:migration:generate ${input:typeOrmMigrationName}'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb: Create TypeORM Migration",
+      "type": "shell",
+      "command": "docker exec -it foodweb-server bash -c 'npm run typeorm:migration:create ${input:typeOrmMigrationName}'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb: Run TypeORM Migrations",
+      "type": "shell",
+      "command": "docker exec -it foodweb-server bash -c 'npm run typeorm:migration:run'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb: Revert TypeORM Migrations",
+      "type": "shell",
+      "command": "docker exec -it foodweb-server bash -c 'npm run typeorm:migration:revert'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker Logs",
+      "type": "shell",
+      "command": "docker-compose logs -f --tail=100",
+      "group": "none",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "typeOrmMigrationName",
+      "description": "Enter the new TypeORM migration name:",
+      "type": "promptString"
+    },
+    {
+      "id": "dumpFileName",
+      "description": "Enter the dump file name:",
+      "default": "",
+      "type": "promptString"
+    },
+    {
+      "id": "restoreFileName",
+      "description": "Enter the restore file name:",
+      "default": "",
+      "type": "promptString"
+    },
+    {
+      "id": "sqlExecOpts",
+      "description": "Enter the psql execution options:",
+      "default": "",
+      "type": "promptString"
     }
   ]
 }

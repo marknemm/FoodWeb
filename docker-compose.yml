@@ -1,0 +1,129 @@
+version: '2'
+
+services:
+
+  foodweb-client-base:
+    image: foodweb
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    networks:
+      - foodweb
+    volumes:
+      - ./client:/usr/src/foodweb/client
+      - ./shared:/usr/src/foodweb/shared
+      - ./tslint.json:/usr/src/foodweb/tslint.json
+      # Exclude the following directories from shared volume by overwriting with blank directory
+      - /usr/src/foodweb/client/node_modules
+      - /usr/src/foodweb/client/dist
+      - /usr/src/foodweb/client/projects/admin
+      - /usr/src/foodweb/client/projects/app
+      - /usr/src/foodweb/shared/node_modules
+      - /usr/src/foodweb/shared/dist
+
+  foodweb:
+    extends: foodweb-client-base
+    container_name: foodweb
+    ports:
+      - "4200:4200"
+    depends_on:
+      - foodweb-server
+    command: bash -c "npm run web:start:docker"
+
+  foodweb-admin:
+    extends: foodweb-client-base
+    container_name: foodweb-admin
+    ports:
+      - "4201:4201"
+    depends_on:
+      - foodweb-admin-server
+    command: bash -c "npm run admin:start:docker"
+
+  foodweb-server-base:
+    image: foodweb-server
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    networks:
+      - foodweb
+    volumes:
+      - ./server:/usr/src/foodweb/server
+      - ./shared:/usr/src/foodweb/shared
+      - ./tslint.json:/usr/src/foodweb/tslint.json
+      # Exclude the following directories from shared volume by overwriting with blank directory
+      - /usr/src/foodweb/server/node_modules
+      - /usr/src/foodweb/server/dist
+      - /usr/src/foodweb/shared/node_modules
+      - /usr/src/foodweb/shared/dist
+
+  foodweb-server:
+    extends: foodweb-server-base
+    container_name: foodweb-server
+    ports:
+      - "5000:5000"
+      - "9229:9229"
+    depends_on:
+      - fake-smtp-server
+      - postgres
+      - redis
+    command: bash -c "npm run start:docker"
+
+  foodweb-admin-server:
+    extends: foodweb-server-base
+    container_name: foodweb-admin-server
+    build: .
+    ports:
+      - "5001:5001"
+      - "9230:9230"
+    depends_on:
+      - fake-smtp-server
+      - postgres
+      - redis
+    command: bash -c "npm run admin:start:docker"
+
+  fake-smtp-server:
+    image: "reachfive/fake-smtp-server"
+    container_name: fake-smtp-server
+    logging:
+      driver: none
+    networks:
+      - foodweb
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+
+  postgres:
+    image: "mdillon/postgis:11"
+    container_name: postgres
+    logging:
+      driver: none
+    networks:
+      - foodweb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: foodweb
+      POSTGRES_USER: postgres
+      POSTGRES_DB: foodweb
+    shm_size: 256mb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: "redis:5-alpine"
+    container_name: redis
+    logging:
+      driver: none
+    networks:
+      - foodweb
+    ports:
+      - "6379:6379"
+
+networks:
+
+  foodweb:
+    driver: bridge
+
+volumes:
+  pgdata:
+    external: true
