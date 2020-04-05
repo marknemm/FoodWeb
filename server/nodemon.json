@@ -1,6 +1,6 @@
 {
   "events": {
-    "start": "npm run precompile-templates"
+    "start": "npm run templates:precompile"
   },
   "signal": "SIGINT"
 }
