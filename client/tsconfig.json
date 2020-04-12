@@ -64,6 +64,16 @@
         "./projects/admin/src/app/bootstrap/services/*"
       ],
       "~admin/components/*": [ "./projects/admin/src/app/components/*" ],
+      "~admin/developer/*": [
+        "./projects/admin/src/app/developer/*",
+        "./projects/admin/src/app/developer/child-components/*",
+        "./projects/admin/src/app/developer/components/*",
+        "./projects/admin/src/app/developer/directives/*",
+        "./projects/admin/src/app/developer/forms/*",
+        "./projects/admin/src/app/developer/interfaces/*",
+        "./projects/admin/src/app/developer/pipes/*",
+        "./projects/admin/src/app/developer/services/*"
+      ],
       "~admin/environments/*": ["./projects/admin/src/environments/*"],
       "~admin/admin-password/*": [
         "./projects/admin/src/app/admin-password/*",

@@ -26,6 +26,7 @@ global['serverDir'] = path.join(global['rootDir'], 'server');
 global['serverAdminDir'] = path.join(global['serverDir'], 'projects', 'admin');
 global['serverWebDir'] = path.join(global['serverDir'], 'projects', 'web');
 global['serverDistDir'] = path.join(global['serverDir'], 'dist', 'server');
+global['serverDbDumpDir'] = path.join(global['serverDir'], 'database', 'util', 'dump');
 global['clientDir'] = path.join(global['rootDir'], 'client');
 global['clientBuildDir'] = path.join(global['clientDir'], 'dist', 'admin');
 global['assetsDir'] = path.join(global['clientBuildDir'], 'assets');

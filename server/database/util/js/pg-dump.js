@@ -27,12 +27,14 @@ process.env['PGPASSWORD'] = 'foodweb';
 
 // Perform development database dump (check if we should be using local or docker database).
 (async () => {
+  let execResult;
   if (await isPortReachable(5432)) { // Try local.
-    execSync(`pg_dump -U ${user} -d ${database} > "${dumpPathname}"`);
+    execResult = execSync(`pg_dump -U ${user} -d ${database} > "${dumpPathname}"`);
   } else if(await isPortReachable(5432, { host: 'postgres' })) { // Try docker.
-    execSync(`pg_dump -h postgres -U ${user} -d ${database} > "${dumpPathname}"`);
+    execResult = execSync(`pg_dump -h postgres -U ${user} -d ${database} > "${dumpPathname}"`);
   } else { // Give up.
     console.error('Could not connect to a development PostgreSQL instance.');
     process.exit(1);
   }
+  console.log(execResult.toString());
 })();

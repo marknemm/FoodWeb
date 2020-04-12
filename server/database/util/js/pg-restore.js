@@ -17,4 +17,5 @@ const dumpPathname = path.join(dumpDir, `${dumpFileName}.pgsql`);
 
 // Perform development database dump.
 const pgExecScript = path.join(__dirname, 'pg-exec.js');
-execSync(`node ${pgExecScript} -f "${dumpPathname}"`);
+const execResult = execSync(`node ${pgExecScript} -f "${dumpPathname}"`);
+console.log(execResult.toString());

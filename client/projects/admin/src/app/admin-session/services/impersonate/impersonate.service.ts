@@ -2,11 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { catchError, finalize } from 'rxjs/operators';
 import { environment } from '~admin/environments/environment';
-import { Account } from '~shared';
+import { Account, ImpersonateTokenResponse } from '~shared';
 import { AlertService } from '~web/shared/alert/alert.service';
 import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
 import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
-import { ImpersonateTokenResponse } from '../../../../../../../shared/src';
 
 @Injectable({
   providedIn: 'root'

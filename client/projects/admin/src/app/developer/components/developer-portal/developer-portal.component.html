@@ -1,0 +1,14 @@
+<div class="home page">
+  <div class="row console-cards">
+    <div class="col-md-4 col-sm-6">
+      <button mat-button class="card-button" (click)="downloadDevDbService.downloadDevDb()" [disabled]="downloadDevDbService.httpResponseService.loading">
+        <mat-card>
+          <mat-card-title class="align-center">Download Dev DB</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon">storage</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </button>
+    </div>
+  </div>
+</div>

@@ -16,7 +16,6 @@ services:
       # Exclude the following directories from shared volume by overwriting with blank directory
       - /usr/src/foodweb/client/node_modules
       - /usr/src/foodweb/client/dist
-      - /usr/src/foodweb/client/projects/admin
       - /usr/src/foodweb/client/projects/app
       - /usr/src/foodweb/shared/node_modules
       - /usr/src/foodweb/shared/dist

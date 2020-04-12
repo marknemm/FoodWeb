@@ -64,6 +64,20 @@
       "problemMatcher": []
     },
     {
+      "label": "Docker FoodWeb: Reinitialize Postgres Database",
+      "type": "shell",
+      "command": "docker exec -it foodweb-server bash -c 'npm run pg:initialize'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb: Make Postgres Timestamps Relevant",
+      "type": "shell",
+      "command": "docker exec -it foodweb-server bash -c 'npm run pg:make-timestamps-relevant'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
       "label": "Docker FoodWeb: Dump Postgres Database",
       "type": "shell",
       "command": "docker exec -it foodweb-server bash -c 'npm run pg:dump ${input:dumpFileName}'",

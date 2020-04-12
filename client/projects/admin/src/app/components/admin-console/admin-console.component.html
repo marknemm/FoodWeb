@@ -1,5 +1,5 @@
 <div class="home page">
-  <div class="row">
+  <div class="row console-cards">
     <div class="col-md-4 col-sm-6">
       <a [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Donor' }" class="card-link">
         <mat-card matRipple>
@@ -116,6 +116,16 @@
           <mat-card-title class="align-center">Event Registrations</mat-card-title>
           <mat-card-content>
             <fa-icon [icon]="faClipboardList" class="fill-icon"></fa-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+    <div class="col-md-4 col-sm-6">
+      <a [routerLink]="['/developer']" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Developer Portal</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon">code</mat-icon>
           </mat-card-content>
         </mat-card>
       </a>
