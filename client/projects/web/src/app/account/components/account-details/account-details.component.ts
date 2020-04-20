@@ -113,7 +113,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   savePassword(): Observable<boolean> {
-    const passwordUpdate: PasswordFormT = this.accountForm.toPassword();
+    const passwordUpdate: PasswordFormT = this.accountForm.passwordFormValue;
     return this._accountService.updatePassword(this._originalAccount, passwordUpdate).pipe(
       map(() => this._handleSaveSuccess('password', this.originalAccount)) // Implicit return true.
     );

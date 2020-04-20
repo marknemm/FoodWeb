@@ -8,6 +8,7 @@ import { AdminAccountFiltersComponent } from '~admin/admin-account/admin-account
 import { AdminVolunteerComponent } from '~admin/admin-account/admin-volunteer/admin-volunteer.component';
 import { AdminAccountsComponent } from '~admin/admin-account/components/admin-accounts/admin-accounts.component';
 import { ComposeMessageComponent } from '~admin/admin-account/compose-message/compose-message.component';
+import { CreateAccountComponent } from '~admin/admin-account/create-account/create-account.component';
 import { AdminPasswordModule } from '~admin/admin-password/admin-password.module';
 import { AccountModule } from '~web/account/account.module';
 import { FilterListModule } from '~web/filter-list/filter-list.module';
@@ -21,7 +22,8 @@ import { AdminAccountRoutingModule } from './admin-account-routing.module';
     AdminAccountFiltersComponent,
     AdminAccountsComponent,
     AdminVolunteerComponent,
-    ComposeMessageComponent
+    ComposeMessageComponent,
+    CreateAccountComponent
   ],
   imports: [
     AdminAccountRoutingModule,

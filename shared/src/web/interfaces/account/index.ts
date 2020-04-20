@@ -1,4 +1,3 @@
-export * from './account-create-request';
 export * from './account-section-update-request';
 export * from './account-read-filters';
 export * from './account-read-request';
@@ -14,4 +13,5 @@ export * from './password-reset-request';
 export * from './password-update-request';
 export * from './receiver';
 export * from './send-message-request';
+export * from './signup-request';
 export * from './volunteer';

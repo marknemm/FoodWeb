@@ -1,6 +1,6 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { getOrmRepository, OrmSelectQueryBuilder } from '~orm/index';
-import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '~orm/index';
+import { AccountEntity } from '~entity';
+import { getOrmRepository, OrmSelectQueryBuilder } from '~orm';
+import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '~orm';
 import { LoginRequiredError } from '~web/helpers/response/food-web-error';
 import { Account, AccountHelper, AccountReadFilters, AccountReadRequest, AccountSortBy, OperationHours, SortOptions } from '~shared';
 

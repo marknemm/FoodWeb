@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, ManyToOne } from 'typeorm';
-import { Constants, Notification, NotificationType } from '~shared';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '~orm/index';
+import { Constants, Notification, NotificationType } from '../../../../shared/src/web';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
 import { AccountEntity } from './account.entity';
 export { Notification, NotificationType };
 
@@ -30,19 +30,19 @@ export class NotificationEntity implements Notification {
   @Column({ nullable: true })
   icon?: string;
 
-  @Column({ nullable: true })  
+  @Column({ nullable: true })
   image?: string;
 
-  @Column({ nullable: true })  
+  @Column({ nullable: true })
   priority?: 'high' | 'normal';
 
-  @Column({ nullable: true })  
+  @Column({ nullable: true })
   action?: string;
 
-  @Column({ nullable: true })  
+  @Column({ nullable: true })
   tag?: string;
 
-  @Column({ type: 'json', nullable: true })  
+  @Column({ type: 'json', nullable: true })
   custom?: any;
 
   @Column({ default: false })

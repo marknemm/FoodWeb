@@ -1,6 +1,0 @@
-{
-  "extends": "./tsconfig.admin.json",
-  "compilerOptions": {
-    "outDir": "./admin-dist/"
-  }
-}

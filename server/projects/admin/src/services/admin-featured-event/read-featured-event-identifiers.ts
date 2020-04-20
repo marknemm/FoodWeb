@@ -1,5 +1,5 @@
-import { FeaturedEventEntity } from 'database/src/entity/featured-event.entity';
-import { getOrmRepository } from '~orm/index';
+import { FeaturedEventEntity } from '~entity';
+import { getOrmRepository } from '~orm';
 
 /**
  * Reads the primary identification data for all featured events.

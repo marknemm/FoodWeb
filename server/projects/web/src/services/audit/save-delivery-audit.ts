@@ -1,7 +1,6 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
-import { UpdateDiff } from '~web/interfaces/update-diff';
+import { AccountEntity, DonationEntity } from '~entity';
 import { DeliveryScheduleRequest, DeliveryStateChangeRequest, DonationStatus } from '~shared';
+import { UpdateDiff } from '~web/interfaces/update-diff';
 import { AuditEventType, getAuditAccounts, saveAudit, saveUpdateAudit } from './save-audit';
 
 export function saveDeliveryScheduleAudit(scheduleReq: DeliveryScheduleRequest, scheduledDelivery: DonationEntity): Promise<DonationEntity> {

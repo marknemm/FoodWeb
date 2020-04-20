@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ContactInfo, MapWaypointConverter, Donation } from '~shared';
+import { ContactInfo, MapWaypointConverter, Donation, DonationStatus } from '~shared';
 import { ClientWaypoint, LatLngLiteral, Waypoint } from '~web/map/map';
-import { DonationStatus } from '../../../../../../../../shared/src';
 
 @Injectable({
   providedIn: 'root'

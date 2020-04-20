@@ -9,7 +9,9 @@
       "cwd": "${workspaceRoot}",
       "restart": true,
       "trace": true,
-      "sourceMaps": true
+      "sourceMaps": true,
+      "localRoot": "${workspaceRoot}/server/admin-dist",
+      "remoteRoot": "/usr/src/foodweb/server/admin-dist"
     },
     {
       "name": "Server Web Attach",
@@ -19,7 +21,9 @@
       "cwd": "${workspaceRoot}",
       "restart": true,
       "trace": true,
-      "sourceMaps": true
+      "sourceMaps": true,
+      "localRoot": "${workspaceRoot}/server/dist",
+      "remoteRoot": "/usr/src/foodweb/server/dist"
     },
     {
       "name": "Client Admin Attach",
@@ -74,6 +78,8 @@
       "outFiles": [
         "${workspaceRoot}\\server\\dist\\**\\*.js"
       ],
+      "localRoot": "${workspaceRoot}/server/dist",
+      "remoteRoot": "/usr/src/foodweb/server/dist",
       "stopOnEntry": false,
       "args": [
         "--no-timeouts",

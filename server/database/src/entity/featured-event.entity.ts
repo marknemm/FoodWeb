@@ -1,12 +1,12 @@
 import { Column, Index, OneToMany } from 'typeorm';
-import { FeaturedEvent } from '~shared';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '~orm/index';
+import { FeaturedEvent } from '../../../../shared/src/web';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
 import { EventRegistrationEntity } from './event-registration.entity';
 export { FeaturedEvent, EventRegistrationEntity };
 
 @OrmEntity('FeaturedEvent')
 export class FeaturedEventEntity implements FeaturedEvent {
-  
+
   @OrmPrimaryGeneratedColumn()
   id: number;
 

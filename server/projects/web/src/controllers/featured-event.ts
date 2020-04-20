@@ -1,8 +1,8 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { EventRegistrationEntity } from 'database/src/entity/event-registration.entity';
+import { EventRegistrationEntity } from '~entity';
+import { QueryResult } from '~orm';
 import { EventRegistrationCreateRequest, FeaturedEvent, FeaturedEventRequest } from '~shared';
-import { QueryResult } from '~orm/index';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { sendEventRegistrationMessage } from '~web/services/featured-event/event-registration-message';

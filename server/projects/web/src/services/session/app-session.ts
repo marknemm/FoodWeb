@@ -1,8 +1,7 @@
 import { randomBytes } from 'crypto';
 import { getRepository, Repository } from 'typeorm';
-import { AccountEntity } from '~entity/account.entity';
-import { AppSessionEntity } from '~entity/app-session.entity';
-import { getOrmRepository } from '~orm/index';
+import { AccountEntity, AppSessionEntity } from '~entity';
+import { getOrmRepository } from '~orm';
 import { LoginResponse } from '~shared';
 import { FoodWebError } from '~web/helpers/response/food-web-error';
 

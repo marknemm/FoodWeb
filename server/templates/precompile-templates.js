@@ -9,7 +9,10 @@ const srcEmailPartialsPath = path.join(srcEmailTemplatesPath, 'partials');
 const srcEmailCssPath = path.join(srcEmailTemplatesPath, 'styles.css');
 
 // Generate template dist paths.
-const distTemplatesPath = path.join(__dirname, '..', 'dist', 'server', 'templates');
+const serverRoot = path.join(__dirname, '..');
+const distPath = path.join(serverRoot, 'dist');
+const distServerPath = path.join(distPath, 'server');
+const distTemplatesPath = path.join(distServerPath, 'templates');
 const distEmailTemplatesPath = path.join(distTemplatesPath, 'email');
 const distEmailPartialsPath = path.join(distEmailTemplatesPath, 'partials');
 
@@ -21,6 +24,8 @@ precompileTemplates();
  * Creates precompiled template dist directories if they do not exist.
  */
 function createTemplatesDistIfNotExist() {
+  mkdirIfNotExist(distPath);
+  mkdirIfNotExist(distServerPath);
   mkdirIfNotExist(distTemplatesPath);
   mkdirIfNotExist(distEmailTemplatesPath);
   mkdirIfNotExist(distEmailPartialsPath);

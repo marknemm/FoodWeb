@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 require('./jobs-config');
-import { AccountEntity } from '~entity/account.entity';
-import { DonationEntity } from '~entity/donation.entity';
-import { initOrm, OrmSelectQueryBuilder, QueryResult } from '~orm/index';
-import { DateTimeHelper, DonationHelper } from '~shared';
-import { broadcastEmail, MailTransporter } from '~web/helpers/messaging/email';
-import { broadcastNotification, NotificationType } from '~web/helpers/messaging/notification';
-import { queryDonations } from '~web/services/donation/read-donations';
+import { DateTimeHelper, DonationHelper } from '../../../shared/src/web';
+import { AccountEntity, DonationEntity } from '../../database/src/entity';
+import { initOrm, OrmSelectQueryBuilder, QueryResult } from '../../database/src/orm';
+import { broadcastEmail, MailTransporter } from '../../projects/web/src/helpers/messaging/email';
+import { broadcastNotification, NotificationType } from '../../projects/web/src/helpers/messaging/notification';
+import { queryDonations } from '../../projects/web/src/services/donation/read-donations';
 
 const _reminderIntervalMins = 10; // Job will be scheduled to run every 10 minutes.
 const _dateTimeHelper = new DateTimeHelper();

@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Directions, LatLngLiteral } from '~shared';
-import { genDirections } from '~web/helpers/map/directions';
+import { Directions, LatLngLiteral } from '../../../../shared/src/web';
+import { genDirections } from '../../../projects/web/src/helpers/map/directions';
 
 export class directions1576463243837 implements MigrationInterface {
 

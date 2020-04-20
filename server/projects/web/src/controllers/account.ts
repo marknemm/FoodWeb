@@ -1,9 +1,8 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { PasswordResetEntity } from 'database/src/entity/password-reset';
-import { UnverifiedAccountEntity } from 'database/src/entity/unverified-account.entity';
-import { QueryResult } from '~orm/index';
+import { AccountEntity, PasswordResetEntity, UnverifiedAccountEntity } from '~entity';
+import { QueryResult } from '~orm';
+import { Account, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest, SignupRequest } from '~shared';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
@@ -17,7 +16,6 @@ import { AuditEventType, saveAudit, saveUpdateAudit } from '~web/services/audit/
 import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '~web/services/password/password-reset-message';
 import { updatePassword } from '~web/services/password/save-password';
 import { resetPassword, savePasswordResetToken } from '~web/services/password/save-password-reset';
-import { Account, AccountCreateRequest, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest } from '~shared';
 
 const router = express.Router();
 
@@ -32,12 +30,12 @@ router.post('/verify', (req: Request, res: Response) => {
 });
 
 router.post('/', (req: Request, res: Response) => {
-  const createRequest: AccountCreateRequest = req.body;
-  createAccount(createRequest)
+  const signupRequest: SignupRequest = req.body;
+  createAccount(signupRequest)
     .then((newAccountData: NewAccountData) => sendAccountVerificationMessage(newAccountData))
     .then((account: AccountEntity) => { res.send(account); return account; })
-    .catch(genErrorResponseRethrow.bind(this, res))    
-    .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, createRequest.recaptchaScore))
+    .catch(genErrorResponseRethrow.bind(this, res))
+    .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, signupRequest.recaptchaScore))
     .catch((err: Error) => console.error(err));
 });
 

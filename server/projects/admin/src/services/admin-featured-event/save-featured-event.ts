@@ -1,5 +1,5 @@
-import { FeaturedEvent, FeaturedEventEntity } from '~entity/featured-event.entity';
-import { getOrmRepository, OrmEntityManager } from '~orm/index';
+import { FeaturedEvent, FeaturedEventEntity } from '~entity';
+import { getOrmRepository, OrmEntityManager } from '~orm';
 import { DateTimeHelper } from '~shared';
 import { FoodWebError } from '~web/helpers/response/food-web-error';
 

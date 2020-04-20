@@ -1,8 +1,8 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
-import { QueryResult } from '~orm/index';
+import { AccountEntity, DonationEntity } from '~entity';
+import { QueryResult } from '~orm';
+import { DonationClaimRequest, DonationCreateRequest, DonationDeleteRequest, DonationReadRequest, DonationUnclaimRequest, DonationUpdateRequest } from '~shared';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
@@ -19,7 +19,6 @@ import { sendDonationDeleteMessages } from '~web/services/donation/delete-donati
 import { readDonation, readDonations, readMyDonations } from '~web/services/donation/read-donations';
 import { createDonation, updateDonation } from '~web/services/donation/save-donation';
 import { sendDonationCreateMessages, sendDonationUpdateMessages } from '~web/services/donation/save-donation-message';
-import { DonationClaimRequest, DonationCreateRequest, DonationDeleteRequest, DonationReadRequest, DonationUnclaimRequest, DonationUpdateRequest } from '~shared';
 
 const router = express.Router();
 

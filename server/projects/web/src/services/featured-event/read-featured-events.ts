@@ -1,7 +1,7 @@
 import { FindConditions, MoreThanOrEqual } from 'typeorm';
-import { FeaturedEventEntity } from 'database/src/entity/featured-event.entity';
-import { getOrmRepository } from '~orm/index';
-import { QueryResult, genSkip, genTake } from '~orm/index';
+import { FeaturedEventEntity } from '~entity';
+import { getOrmRepository } from '~orm';
+import { QueryResult, genSkip, genTake } from '~orm';
 import { FeaturedEventFilters, FeaturedEventRequest, FeaturedEventSortBy, SortOptions } from '~shared';
 
 /**

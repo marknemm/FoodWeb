@@ -1,5 +1,5 @@
 import { Column, Index, JoinColumn, OneToOne } from 'typeorm';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '~orm/index';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
 import { DonationClaimEntity } from './donation-claim.entity';
 
 @OrmEntity('AutoClaimHistory')

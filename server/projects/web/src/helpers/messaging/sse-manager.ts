@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AccountEntity } from 'database/src/entity/account.entity';
+import { AccountEntity } from '~entity';
 import { Account } from '~shared';
 
 /**

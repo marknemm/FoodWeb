@@ -4,6 +4,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, flatMap, map } from 'rxjs/operators';
 import { Account, AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, ListResponse, PasswordUpdateRequest } from '~shared';
+import { AccountFormKey } from '~web/account/forms/account.form';
 import { environment } from '~web/environments/environment';
 import { PasswordFormT } from '~web/password/forms/password.form';
 import { SessionService } from '~web/session/session/session.service';
@@ -27,7 +28,7 @@ export class AccountService {
     private _alertService: AlertService
   ) {}
 
-  updateAccountSection<T>(account: Account, secitonName: string): Observable<Account> {
+  updateAccountSection<T>(account: Account, secitonName: AccountFormKey): Observable<Account> {
     const url = `${this.url}/${account.id}/section`;
     const accountSectionUpdtReq: AccountSectionUpdateReqeust<T> = { accountSectionName: secitonName, accountSection: account[secitonName] };
     this._pageProgressService.activate(true);

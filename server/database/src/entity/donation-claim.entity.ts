@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-import { DonationClaim } from '~shared';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '~orm/index';
+import { DonationClaim } from '../../../../shared/src/web';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
 import { AccountEntity } from './account.entity';
 import { DeliveryEntity } from './delivery-entity';
 import { DonationEntity } from './donation.entity';

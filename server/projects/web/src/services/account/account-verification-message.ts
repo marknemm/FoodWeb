@@ -1,5 +1,4 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { UnverifiedAccountEntity } from 'database/src/entity/unverified-account.entity';
+import { AccountEntity, UnverifiedAccountEntity } from '~entity';
 import { MailTransporter, sendEmail } from '~web/helpers/messaging/email';
 import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
 import { NewAccountData } from './save-account';

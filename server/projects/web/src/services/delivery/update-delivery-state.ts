@@ -1,9 +1,8 @@
 import { DeepPartial, EntityManager, getConnection } from 'typeorm';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
+import { AccountEntity, DonationEntity } from '~entity';
+import { DateTimeHelper, DeliveryHelper, DeliveryStateChangeRequest, DonationHelper, DonationStatus } from '~shared';
 import { FoodWebError } from '~web/helpers/response/food-web-error';
 import { UpdateDiff } from '~web/interfaces/update-diff';
-import { DateTimeHelper, DeliveryHelper, DeliveryStateChangeRequest, DonationHelper, DonationStatus } from '~shared';
 import { readDonation } from '../donation/read-donations';
 import { cancelDelivery } from './cancel-delivery';
 
@@ -71,7 +70,7 @@ export async function undoDeliveryState(
  * @param stateChangeReq The delivery state change request specifying the ID of the donation to have its delivery state advancement undone.
  * @param donation The donation that is to have its delivery state advancement undone.
  * @param undoDonationUpdt The donation update to apply in order to perform the delivery state undo.
- * @return A promise that resolves to the donation with its delivery state advancement undone. 
+ * @return A promise that resolves to the donation with its delivery state advancement undone.
  */
 async function _undoDeliveryStateNonCancel(
   undoDonationUpdt: DeepPartial<DonationEntity>

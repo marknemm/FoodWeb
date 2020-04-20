@@ -1,16 +1,8 @@
 import dotenv = require('dotenv');
 import path = require('path');
-import tsConfigPaths = require('tsconfig-paths');
 
 // If we are running a job as its own process, then we must set basic env config, otherwise skip.
 if (!global['rootDir']) {
-  // Setup path alias resolution for JS.
-  const tsConfig = require('../../../../tsconfig.json');
-  tsConfigPaths.register({
-    baseUrl: path.join(__dirname, '..', '..'),
-    paths: tsConfig.compilerOptions.paths
-  });
-
   global['rootDir'] = path.join(__dirname, '..', '..', '..', '..', '..');
   global['serverDir'] = path.join(global['rootDir'], 'server');
   global['serverWebDir'] = path.join(global['serverDir'], 'projects', 'web');

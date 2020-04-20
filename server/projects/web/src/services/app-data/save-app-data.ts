@@ -1,8 +1,7 @@
-import { EntityManager, getConnection } from 'typeorm';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { AppData, AppDataEntity } from 'database/src/entity/app-data.entity';
-import uuidv5 = require('uuid/v5');
 import { plainToClass } from 'class-transformer';
+import { EntityManager, getConnection } from 'typeorm';
+import { AccountEntity, AppData, AppDataEntity } from '~entity';
+import uuidv5 = require('uuid/v5');
 
 export function saveAppData(appData: AppData, account: AccountEntity): Promise<AppDataEntity> {
   const appDataToSave: AppDataEntity = plainToClass(AppDataEntity, appData);

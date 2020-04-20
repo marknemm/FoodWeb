@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn } from 'typeorm';
-import { AppData } from '~shared';
-import { OrmEntity, OrmPrimaryColumn } from '~orm/index';
+import { AppData } from '../../../../shared/src/web';
+import { OrmEntity, OrmPrimaryColumn } from '../orm';
 export { AppData };
 
 @OrmEntity('AppData')

@@ -1,6 +1,6 @@
 import { adminReadAccounts } from '~admin/services/admin-account/admin-read-accounts';
-import { Account, AccountEntity } from '~entity/account.entity';
-import { QueryResult } from '~orm/index';
+import { Account, AccountEntity } from '~entity';
+import { QueryResult } from '~orm';
 import { AccountReadFilters, AccountReadRequest, SendMessageRequest } from '~shared';
 import { broadcastEmail, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
 

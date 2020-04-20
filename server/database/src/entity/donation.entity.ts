@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Index, JoinColumn, ManyToOne, OneToOne, UpdateDateColumn } from 'typeorm';
-import { Donation, DonationStatus, DONATION_STATUSES } from '~shared';
-import { OrmAfterLoad, OrmEntity, OrmPrimaryGeneratedColumn } from '~orm/index';
+import { Donation, DonationStatus, DONATION_STATUSES } from '../../../../shared/src/web';
+import { OrmAfterLoad, OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
 import { AccountEntity } from './account.entity';
 import { ContactInfoEntity } from './contact-info.entity';
 import { DonationClaimEntity } from './donation-claim.entity';

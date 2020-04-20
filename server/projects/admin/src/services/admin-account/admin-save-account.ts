@@ -1,4 +1,4 @@
-import { AccountEntity } from '~entity/account.entity';
+import { AccountEntity } from '~entity';
 import { AccountSectionUpdateReqeust, AccountUpdateRequest } from '~shared';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { readFullAccount } from '~web/services/account/read-accounts';

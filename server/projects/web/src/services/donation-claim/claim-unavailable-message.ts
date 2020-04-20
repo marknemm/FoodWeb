@@ -1,11 +1,9 @@
 import { Not } from 'typeorm';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { ClaimReqHistoryEntity } from 'database/src/entity/claim-req-history.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
-import { getOrmRepository, OrmEntityManager, OrmRepository } from '~orm/index';
+import { AccountEntity, ClaimReqHistoryEntity, DonationEntity } from '~entity';
+import { getOrmRepository, OrmEntityManager, OrmRepository } from '~orm';
+import { DonationHelper, NotificationType } from '~shared';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
 import { broadcastNotification } from '~web/helpers/messaging/notification';
-import { DonationHelper, NotificationType } from '~shared';
 
 const _donationHelper = new DonationHelper();
 

@@ -30,12 +30,24 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
       operationHours: new OperationHoursInfoForm(),
       password: new PasswordForm({ formMode: config.formMode })
     });
+
+    // Listen for accountType value to update.
     this.get('accountType').valueChanges.pipe(
       takeUntil(destory$)
     ).subscribe(this._onAccountTypeUpdate.bind(this));
+
+    // Initialize the form value if provided.
     if (config.value) {
       this.patchValue(config.value);
     }
+  }
+
+  get password(): string {
+    return this.get('password').value.password;
+  }
+
+  get passwordFormValue(): PasswordFormT {
+    return this.get('password').value;
   }
 
   private _onAccountTypeUpdate(accountType: AccountType): void {
@@ -76,14 +88,6 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
       ? delete accountFormVal.organization.receiver
       : delete accountFormVal.organization.donor;
     return <Account>accountFormVal;
-  }
-
-  toPassword(): PasswordFormT {
-    return this.get('password').value;
-  }
-
-  getPasswordValue(): string {
-    return this.get('password').value.password;
   }
 }
 

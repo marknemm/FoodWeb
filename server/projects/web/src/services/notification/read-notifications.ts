@@ -1,7 +1,6 @@
 import { FindConditions, getRepository, In, MoreThan } from 'typeorm';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { NotificationEntity } from 'database/src/entity/notification.entity';
-import { QueryResult } from '~orm/index';
+import { AccountEntity, NotificationEntity } from '~entity';
+import { QueryResult } from '~orm';
 import { Account, NotificationReadFilters, NotificationReadRequest, NotificationType } from '~shared';
 
 /**

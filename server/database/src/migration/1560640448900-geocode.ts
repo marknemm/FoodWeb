@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { ContactInfo, geocode, GeographyLocation } from '~web/helpers/map/geocoder';
+import { ContactInfo, geocode, GeographyLocation } from '../../../projects/web/src/helpers/map/geocoder';
 
 export class geocode1560640448900 implements MigrationInterface {
 

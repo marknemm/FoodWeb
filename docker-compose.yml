@@ -13,12 +13,10 @@ services:
       - ./client:/usr/src/foodweb/client
       - ./shared:/usr/src/foodweb/shared
       - ./tslint.json:/usr/src/foodweb/tslint.json
-      # Exclude the following directories from shared volume by overwriting with blank directory
+      # Exclude the following generated directories from shared volume by overwriting with blank directory
       - /usr/src/foodweb/client/node_modules
-      - /usr/src/foodweb/client/dist
       - /usr/src/foodweb/client/projects/app
       - /usr/src/foodweb/shared/node_modules
-      - /usr/src/foodweb/shared/dist
 
   foodweb:
     extends: foodweb-client-base
@@ -51,9 +49,7 @@ services:
       - ./tslint.json:/usr/src/foodweb/tslint.json
       # Exclude the following directories from shared volume by overwriting with blank directory
       - /usr/src/foodweb/server/node_modules
-      - /usr/src/foodweb/server/dist
       - /usr/src/foodweb/shared/node_modules
-      - /usr/src/foodweb/shared/dist
 
   foodweb-server:
     extends: foodweb-server-base

@@ -15,7 +15,7 @@ const pgExecScript = path.join(__dirname, 'pg-exec.js');
 
 // Check to see if the Account table exists.
 execResult = execSync(`node ${pgExecScript} -f ${accountExistsPathname}`);
-const accountExists = execResult.toString().indexOf('true') >= 0;
+const accountExists = execResult.toString().split('\n')[2].trim() === 't';
 
 // Check to see if the Account table has any entries.
 let accountCnt = 0;
@@ -30,4 +30,6 @@ if (accountCnt === 0) {
   console.log(execResult.toString());
   execResult = execSync(`node ${pgExecScript} -f ${makeTimestampsRelevantPathname}`);
   console.log(execResult.toString());
+} else {
+  console.log('Skipping database initialization since it has already been initialized.');
 }

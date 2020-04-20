@@ -1,6 +1,6 @@
-import { Account, AccountEntity, AccountType } from '~entity/account.entity';
-import { UnverifiedAccountEntity } from '~entity/unverified-account.entity';
-import { OrmSelectQueryBuilder, QueryMod, QueryResult } from '~orm/index';
+import { Account, AccountEntity, AccountType } from '~entity';
+import { UnverifiedAccountEntity } from '~entity';
+import { OrmSelectQueryBuilder, QueryMod, QueryResult } from '~orm';
 import { AccountReadFilters, AccountReadRequest } from '~shared';
 import { queryFullAccounts, readFullAccount } from '~web/services/account/read-accounts';
 

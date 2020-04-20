@@ -1,6 +1,6 @@
-import { EventRegistrationEntity } from 'database/src/entity/event-registration.entity';
-import { FeaturedEventEntity } from 'database/src/entity/featured-event.entity';
-import { getOrmRepository, OrmEntityManager } from '~orm/index';
+import { EventRegistrationEntity } from '~entity';
+import { FeaturedEventEntity } from '~entity';
+import { getOrmRepository, OrmEntityManager } from '~orm';
 
 export async function deleteFeaturedEvent(featuredEventId: number): Promise<FeaturedEventEntity> {
   const deletedFeaturedEvent: FeaturedEventEntity = await getOrmRepository(FeaturedEventEntity).findOne({ id: featuredEventId });

@@ -1,8 +1,6 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { ClaimReqHistoryEntity } from 'database/src/entity/claim-req-history.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
 import { EntityManager, getConnection } from 'typeorm';
-import { QueryResult } from '~orm/index';
+import { AccountEntity, ClaimReqHistoryEntity, DonationEntity } from '~entity';
+import { QueryResult } from '~orm';
 import { AccountReadRequest, AccountType, DonationHelper, NotificationType, OperationHours, OperationHoursHelper } from '~shared';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
 import { broadcastNotification } from '~web/helpers/messaging/notification';

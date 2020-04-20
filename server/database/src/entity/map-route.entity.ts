@@ -1,6 +1,6 @@
 import { Column, Index } from 'typeorm';
-import { Directions, GeographyLocation, MapRoute } from '~shared';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '~orm/index';
+import { Directions, GeographyLocation, MapRoute } from '../../../../shared/src/web';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
 export { Directions, MapRoute };
 
 @OrmEntity('MapRoute')

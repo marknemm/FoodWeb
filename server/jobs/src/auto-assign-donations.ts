@@ -1,18 +1,15 @@
 #!/usr/bin/env node
 require('./jobs-config');
 import { SelectQueryBuilder } from 'typeorm';
-import { AccountEntity, AccountType } from '~entity/account.entity';
-import { AutoClaimHistoryEntity } from '~entity/auto-claim-history.entity';
-import { DonationClaimEntity } from '~entity/donation-claim.entity';
-import { DonationEntity, DonationStatus } from '~entity/donation.entity';
-import { getOrmRepository, initOrm, QueryResult } from '~orm/index';
-import { AccountReadRequest, DateTimeHelper, DonationHelper, DonationReadRequest, OperationHours, OperationHoursHelper } from '~shared';
-import { genDonationEmailSubject, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
-import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
-import { queryAccounts } from '~web/services/account/read-accounts';
-import { sendDeliveryAvailableMessages } from '~web/services/delivery/delivery-available-message';
-import { claimDonation } from '~web/services/donation-claim/claim-donation';
-import { queryDonations } from '~web/services/donation/read-donations';
+import { AccountReadRequest, DateTimeHelper, DonationHelper, DonationReadRequest, DonationStatus, OperationHours, OperationHoursHelper } from '../../../shared/src/web';
+import { AccountEntity, AccountType, AutoClaimHistoryEntity, DonationClaimEntity, DonationEntity } from '../../database/src/entity';
+import { getOrmRepository, initOrm, QueryResult } from '../../database/src/orm';
+import { genDonationEmailSubject, MailTransporter, sendEmail } from '../../projects/web/src/helpers/messaging/email';
+import { NotificationType, sendNotification } from '../../projects/web/src/helpers/messaging/notification';
+import { queryAccounts } from '../../projects/web/src/services/account/read-accounts';
+import { sendDeliveryAvailableMessages } from '../../projects/web/src/services/delivery/delivery-available-message';
+import { claimDonation } from '../../projects/web/src/services/donation-claim/claim-donation';
+import { queryDonations } from '../../projects/web/src/services/donation/read-donations';
 
 const _runTimestamp = new Date();
 const _dateTimeHelper = new DateTimeHelper();
@@ -77,7 +74,7 @@ function _addElapsedTimeFilter(queryBuilder: SelectQueryBuilder<DonationEntity>)
 async function _autoAssignReceivers(donations: DonationEntity[]): Promise<void> {
   const messagePromises: Promise<void>[] = [];
   for (let donation of donations) {
-    if (_shouldDelayAutoMatch(donation)) { continue; } // Do not auto-assign when late-night to prevent notifications. 
+    if (_shouldDelayAutoMatch(donation)) { continue; } // Do not auto-assign when late-night to prevent notifications.
     const receiverAccount: AccountEntity = await _findAutoReceiver(donation);
     if (receiverAccount) {
       donation = await claimDonation({ donationId: donation.id }, receiverAccount);

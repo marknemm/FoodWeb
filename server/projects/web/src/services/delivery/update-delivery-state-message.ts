@@ -1,9 +1,8 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
+import { AccountEntity, DonationEntity } from '~entity';
+import { DateTimeHelper, DonationHelper, DonationStatus } from '~shared';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
 import { broadcastNotification, NotificationType } from '~web/helpers/messaging/notification';
 import { UpdateDiff } from '~web/interfaces/update-diff';
-import { DateTimeHelper, DonationHelper, DonationStatus } from '~shared';
 import { sendDeliveryCancelledMessages } from './cancel-delivery-message';
 
 const _donationHelper = new DonationHelper();

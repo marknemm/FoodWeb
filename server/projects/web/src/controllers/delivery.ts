@@ -1,7 +1,8 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { DonationEntity } from 'database/src/entity/donation.entity';
-import { QueryResult } from '~orm/index';
+import { DonationEntity } from '~entity';
+import { QueryResult } from '~orm';
+import { DeliveryScheduleRequest, DeliveryStateChangeRequest, DonationReadRequest } from '~shared';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
@@ -12,7 +13,6 @@ import { scheduleDelivery } from '~web/services/delivery/schedule-delivery';
 import { sendDeliveryScheduledMessages } from '~web/services/delivery/schedule-delivery-message';
 import { advanceDeliveryState, undoDeliveryState } from '~web/services/delivery/update-delivery-state';
 import { sendDeliveryStateAdvancedMessages, sendDeliveryStateUndoMessages } from '~web/services/delivery/update-delivery-state-message';
-import { DonationReadRequest, DeliveryScheduleRequest, DeliveryStateChangeRequest } from '~shared';
 
 const router = express.Router();
 

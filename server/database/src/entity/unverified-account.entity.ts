@@ -1,5 +1,5 @@
 import { Column, JoinColumn, OneToOne } from 'typeorm';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '~orm/index';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
 import { AccountEntity } from './account.entity';
 
 @OrmEntity('UnverifiedAccount')

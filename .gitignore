@@ -11,6 +11,17 @@
 /**/admin-dist
 /**/www
 
+# generated files
+/client/projects/admin/docker-proxy.conf.json
+/client/projects/admin/tsconfig.json
+/client/projects/admin/tsconfig.spec.json
+/client/projects/app/docker-proxy.conf.json
+/client/projects/app/tsconfig.json
+/client/projects/app/tsconfig.spec.json
+/client/projects/web/docker-proxy.conf.json
+/client/projects/web/tsconfig.json
+/client/projects/web/tsconfig.spec.json
+
 # temp space
 /tmp
 .tmp

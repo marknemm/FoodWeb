@@ -1,7 +1,5 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
-import { getOrmRepository, OrmRepository, OrmSelectQueryBuilder } from '~orm/index';
-import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '~orm/index';
+import { AccountEntity, DonationEntity } from '~entity';
+import { genPagination, genSimpleWhereConditions, getOrmRepository, OrmRepository, OrmSelectQueryBuilder, QueryMod, QueryResult } from '~orm';
 import { DonationFilters, DonationReadRequest, DonationSortBy, DonationStatus, SortOptions } from '~shared';
 
 export async function readDonation(id: number, donationRepo?: OrmRepository<DonationEntity>): Promise<DonationEntity> {

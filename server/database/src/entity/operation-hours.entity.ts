@@ -1,6 +1,6 @@
 import { Column, Index, ManyToOne } from 'typeorm';
-import { Constants, OperationHours, Weekday } from '~shared';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '~orm/index';
+import { Constants, OperationHours, Weekday } from '../../../../shared/src/web';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
 import { AccountEntity } from './account.entity';
 
 const _constants = new Constants();

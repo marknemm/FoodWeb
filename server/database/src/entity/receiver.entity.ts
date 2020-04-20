@@ -1,6 +1,6 @@
 import { Column, JoinColumn, OneToOne } from 'typeorm';
-import { Receiver } from '~shared';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '~orm/index';
+import { Receiver } from '../../../../shared/src/web';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
 import { OrganizationEntity } from './organization.entity';
 export { Receiver };
 

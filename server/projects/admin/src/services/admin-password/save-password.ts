@@ -1,5 +1,5 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { OrmEntityManager } from '~orm/index';
+import { AccountEntity } from '~entity';
+import { OrmEntityManager } from '~orm';
 import { PasswordUpdateRequest } from '~shared';
 import { readFullAccount } from '~web/services/account/read-accounts';
 import { savePassword } from '~web/services/password/save-password';

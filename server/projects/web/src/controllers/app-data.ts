@@ -1,14 +1,13 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { AppDataEntity } from 'database/src/entity/app-data.entity';
+import { AccountEntity, AppDataEntity } from '~entity';
+import { AppDataSaveRequest } from '~shared';
 import { genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { ensureSessionActive } from '~web/middlewares/session.middleware';
 import { readAccount } from '~web/services/account/read-accounts';
 import { deleteAppData } from '~web/services/app-data/delete-app-data';
 import { saveAppData } from '~web/services/app-data/save-app-data';
 import { AuditEventType, saveAudit } from '~web/services/audit/save-audit';
-import { AppDataSaveRequest } from '~shared';
 
 const router = express.Router();
 

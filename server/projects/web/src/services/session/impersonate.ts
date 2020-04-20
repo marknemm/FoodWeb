@@ -1,4 +1,4 @@
-import { AccountEntity } from '~entity/account.entity';
+import { AccountEntity } from '~entity';
 import { ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
 import { RedisStore } from '~web/helpers/misc/redis-store';
 import { FoodWebError } from '~web/helpers/response/food-web-error';

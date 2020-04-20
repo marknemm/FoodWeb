@@ -1,10 +1,8 @@
 import { EntityManager, getConnection } from 'typeorm';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { DonationClaimEntity } from 'database/src/entity/donation-claim.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
+import { AccountEntity, DonationClaimEntity, DonationEntity } from '~entity';
+import { DonationHelper, DonationStatus, DonationUnclaimRequest } from '~shared';
 import { FoodWebError } from '~web/helpers/response/food-web-error';
 import { UpdateDiff } from '~web/interfaces/update-diff';
-import { DonationHelper, DonationStatus, DonationUnclaimRequest } from '~shared';
 import { readDonation } from '../donation/read-donations';
 
 const _donationHelper = new DonationHelper();

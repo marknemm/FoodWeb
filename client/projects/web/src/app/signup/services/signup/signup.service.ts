@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, finalize, mergeMap } from 'rxjs/operators';
-import { Account, AccountCreateRequest } from '~shared';
+import { Account, SignupRequest } from '~shared';
 import { environment } from '~web/environments/environment';
 import { SessionService } from '~web/session/session/session.service';
 import { AlertService } from '~web/shared/alert/alert.service';
@@ -37,11 +37,11 @@ export class SignupService {
 
   createAccount(account: Account, password: string, agreed: boolean): void {
     if (agreed) {
-      const request: AccountCreateRequest = { account, password };
+      const signupRequest: SignupRequest = { account, password };
       this._pageProgressService.activate(true);
       this._loading = true;
-      this._httpClient.post<Account>(this.url, request, { withCredentials: true }).pipe(
-        mergeMap((account: Account) => this._sessionService.login(account.username, password, true)),
+      this._httpClient.post<Account>(this.url, signupRequest, { withCredentials: true }).pipe(
+        mergeMap((account: Account) => this._sessionService.login(account.username, signupRequest.password, true)),
         catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
         finalize(() => {
           this._pageProgressService.reset();

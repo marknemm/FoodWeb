@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "~entity": ["../../database/src/entity/index"],
+      "~orm": ["../../database/src/orm/index"],
+      "~shared": ["../../../shared/src/web/index"],
+      "~web/*": ["./src/*"]
+    },
+    "rootDirs": [
+      "./src/",
+      "../../database/src/",
+      "../../../shared/src/web"
+    ]
+  }
+}

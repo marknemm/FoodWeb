@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Account, Donation, DonationHelper, DonationStatus } from 'shared';
+import { Account, Donation, DonationHelper, DonationStatus } from '~shared';
 import { DonationAction } from '~web/donation-delivery-shared/donation-actions/donation-actions.service';
 
 @Component({

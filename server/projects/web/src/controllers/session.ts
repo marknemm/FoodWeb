@@ -1,13 +1,13 @@
 import express = require('express');
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { Request, Response } from 'express';
+import { AccountEntity } from '~entity';
+import { Request, Response, Router } from 'express';
 import { AppTokenLoginRequest, ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
 import { genErrorResponse } from '~web/middlewares/response-error.middleware';
 import { appTokenLogin, saveAppSessionToken } from '~web/services/session/app-session';
 import { login, logout } from '~web/services/session/session';
 import { impersonateLogin } from '~web/services/session/impersonate';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.post('/session-token', (req: Request, res: Response) => {
   const loginRequest: AppTokenLoginRequest = req.body;

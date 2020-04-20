@@ -1,5 +1,5 @@
 import { ManyToOne } from 'typeorm';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '~orm/index';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
 import { AccountEntity } from './account.entity';
 import { DonationEntity } from './donation.entity';
 

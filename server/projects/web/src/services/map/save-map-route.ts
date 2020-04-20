@@ -1,5 +1,5 @@
-import { MapRouteEntity } from 'database/src/entity/map-route.entity';
-import { OrmEntityManager } from '~orm/index';
+import { MapRouteEntity } from '~entity';
+import { OrmEntityManager } from '~orm';
 import { queryRoute } from '~web/helpers/map/directions';
 import { ContactInfo, MapRoute } from '~shared';
 import { findMapRoutesWithEndpoint } from './read-map-routes';

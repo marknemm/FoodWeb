@@ -1,7 +1,7 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { NotificationEntity } from 'database/src/entity/notification.entity';
-import { QueryResult } from '~orm/index';
+import { NotificationEntity } from '~entity';
+import { QueryResult } from '~orm';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse } from '~web/middlewares/response-error.middleware';

@@ -1,5 +1,5 @@
-import { EventRegistrationEntity } from 'database/src/entity/event-registration.entity';
-import { getOrmRepository } from '~orm/index';
+import { EventRegistrationEntity } from '~entity';
+import { getOrmRepository } from '~orm';
 
 /**
  * Reads featured event registrations from the database.

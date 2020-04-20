@@ -1,7 +1,5 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
-import { OrmRepository } from '~orm/index';
-import { QueryResult } from '~orm/index';
+import { AccountEntity, DonationEntity } from '~entity';
+import { OrmRepository, QueryResult } from '~orm';
 import { DonationReadRequest } from '~shared';
 import { readDonations, readMyDonations } from '../donation/read-donations';
 

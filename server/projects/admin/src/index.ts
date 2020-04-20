@@ -6,17 +6,8 @@ import multer = require('multer');
 import path = require('path');
 import tsConfigPaths = require('tsconfig-paths');
 import { json } from 'body-parser';
-
-// Setup path alias resolution for JS.
-const tsConfig = require('../../../../../tsconfig.json');
-tsConfigPaths.register({
-  baseUrl: path.join(__dirname, '..', '..', '..'),
-  paths: tsConfig.compilerOptions.paths
-});
-
-import { Application, Request, Response } from 'express';
+import { Application, Request, Response, Router } from 'express';
 import 'reflect-metadata';
-import { JSONDateReviver } from '~shared';
 
 // Set important paths in global.
 const PRODUCTION: boolean = (process.env['PRODUCTION']  === 'true');
@@ -34,6 +25,15 @@ global['clientEmailDir'] = path.join(global['clientDir'], 'email');
 global['publicDir'] = path.join(global['rootDir'], 'public');
 global['emailTemplatesDir'] = path.join(global['serverDistDir'], 'templates', 'email');
 
+// Setup path alias resolution for JS.
+const tsconfigPathname: string = path.join(global['serverAdminDir'], 'tsconfig.json');
+const tsconfig = require(tsconfigPathname);
+console.log(path.join(__dirname, '..'));
+tsConfigPaths.register({
+  baseUrl: path.join(__dirname, '..'), // This is the /dist/server/projects/admin dir.
+  paths: tsconfig.compilerOptions.paths
+});
+
 // Load .env into process (pre-set environment variables on machine take precedence).
 if (!PRODUCTION && !QA) {
   const envPath: string = path.join(global['serverAdminDir'], '.env');
@@ -48,11 +48,18 @@ if (process.env.ADMIN !== 'true') {
 }
 
 // These must be imported after loading .env into process since they require access to environment variables.
-import { initOrm } from '~orm/index';
+import { initOrm } from '~orm';
+import { JSONDateReviver } from '~shared';
 import { cors } from '~web/middlewares/cors.middleware';
 import { recaptcha } from '~web/middlewares/recaptcha.middleware';
 import { session } from '~web/middlewares/session.middleware';
 import { ensureSessionAdmin } from '~admin/middlewares/admin-session.middleware';
+
+// NOTE: It is necessary to do an import ... require so tree shaking doesn't get rid of any controllers.
+import adminSessionController = require('~admin/controllers/admin-session');
+import webSessionController = require('~web/controllers/session');
+import adminController = require('~admin/controllers/admin');
+import webController = require('~web/controllers/web');
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
@@ -72,13 +79,13 @@ app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 
 // Admin routes work by overriding web
 // Connect Express admin session sub-module controller. This will be the only un-authenticated route (for login).
-app.use('/server/session', require('~admin/controllers/admin-session'));
-app.use('/server/session', require('~web/controllers/session'));
+app.use('/server/session', <Router>adminSessionController);
+app.use('/server/session', <Router>webSessionController);
 // Connect Express admin sub-module controllers.
-app.use('/server', ensureSessionAdmin, require('~admin/controllers/admin'));
+app.use('/server', ensureSessionAdmin, <Router>adminController);
 // Connect Express web sub-module controllers.
 // NOTE: Admin controller route handlers will take precedence over (override) duplicate web route handlers.
-app.use('/server', ensureSessionAdmin, require('~web/controllers/web'));
+app.use('/server', ensureSessionAdmin, <Router>webController);
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {

@@ -1,12 +1,12 @@
 import express = require('express');
-import { EventRegistrationEntity } from 'database/src/entity/event-registration.entity';
-import { FeaturedEventEntity } from 'database/src/entity/featured-event.entity';
 import { Request, Response } from 'express';
 import { deleteFeaturedEvent } from '~admin/services/admin-featured-event/delete-featured-event';
 import { sendFeaturedEventCancelledMessages } from '~admin/services/admin-featured-event/featured-event-cancelled-message';
 import { readEventRegistrations } from '~admin/services/admin-featured-event/read-event-registrations';
 import { readFeaturedEventIdentifiers } from '~admin/services/admin-featured-event/read-featured-event-identifiers';
 import { saveFeaturedEvent } from '~admin/services/admin-featured-event/save-featured-event';
+import { EventRegistrationEntity } from '~entity';
+import { FeaturedEventEntity } from '~entity';
 import { FeaturedEvent, FeaturedEventCreateRequest, FeaturedEventUpdateRequest } from '~shared';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { readFeaturedEvent } from '~web/services/featured-event/read-featured-events';
