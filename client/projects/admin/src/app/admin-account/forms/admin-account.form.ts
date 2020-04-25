@@ -24,16 +24,16 @@ export class AdminAccountForm extends TypedFormGroup<AdminAccountFormT> {
     return <TypedFormGroup<AccountCreateOptions>>this.get('accountCreateOptions');
   }
 
+  get accountCreateOptions(): AccountCreateOptions {
+    return this.get('accountCreateOptions').value;
+  }
+
   get password(): string {
     return this.accountForm.password;
   }
 
   toAccount(): Account {
     return this.accountForm.toAccount();
-  }
-
-  toAccountCreateOptions(): AccountCreateOptions {
-    return this.get('accountCreateOptions').value;
   }
 
 }

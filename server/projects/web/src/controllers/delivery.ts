@@ -14,36 +14,40 @@ import { sendDeliveryScheduledMessages } from '~web/services/delivery/schedule-d
 import { advanceDeliveryState, undoDeliveryState } from '~web/services/delivery/update-delivery-state';
 import { sendDeliveryStateAdvancedMessages, sendDeliveryStateUndoMessages } from '~web/services/delivery/update-delivery-state-message';
 
-const router = express.Router();
+export const router = express.Router();
 
-router.get('/unscheduled', (req: Request, res: Response) => {
-  const readRequest: DonationReadRequest = req.query;
-  readUnscheduledDeliveries(readRequest, req.session.account)
-    .then((queryResult: QueryResult<DonationEntity>) =>
-      res.send(genListResponse(queryResult, readRequest))
-    )
-    .catch(genErrorResponse.bind(this, res));
-});
-
-router.get('/my', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
-  const readRequest: DonationReadRequest = req.query;
-  readMyDeliveries(readRequest, req.session.account)
-    .then((queryResult: QueryResult<DonationEntity>) =>
-      res.send(genListResponse(queryResult, readRequest))
-    )
-    .catch(genErrorResponse.bind(this, res));
-});
-
-router.get('/', (req: Request, res: Response) => {
+router.get('/', handleGetDeliveries);
+export function handleGetDeliveries(req: Request, res: Response) {
   const readRequest: DonationReadRequest = req.query;
   readDeliveries(readRequest)
     .then((queryResult: QueryResult<DonationEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
     )
     .catch(genErrorResponse.bind(this, res));
-});
+}
 
-router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
+router.get('/my', ensureSessionActive, ensureAccountVerified, handleGetMyDeliveries);
+export function handleGetMyDeliveries(req: Request, res: Response) {
+  const readRequest: DonationReadRequest = req.query;
+  readMyDeliveries(readRequest, req.session.account)
+    .then((queryResult: QueryResult<DonationEntity>) =>
+      res.send(genListResponse(queryResult, readRequest))
+    )
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.get('/unscheduled', handleGetUnscheduledDeliveries);
+export function handleGetUnscheduledDeliveries(req: Request, res: Response) {
+  const readRequest: DonationReadRequest = req.query;
+  readUnscheduledDeliveries(readRequest, req.session.account)
+    .then((queryResult: QueryResult<DonationEntity>) =>
+      res.send(genListResponse(queryResult, readRequest))
+    )
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.post('/', ensureSessionActive, ensureAccountVerified, handlePostDelivery);
+export function handlePostDelivery(req: Request, res: Response) {
   const scheduleReq: DeliveryScheduleRequest = req.body;
   scheduleDelivery(scheduleReq, req.session.account)
     .then((scheduledDelivery: DonationEntity) => { res.send(scheduledDelivery); return scheduledDelivery; })
@@ -51,9 +55,10 @@ router.post('/', ensureSessionActive, ensureAccountVerified, (req: Request, res:
     .then((scheduledDelivery: DonationEntity) => saveDeliveryScheduleAudit(scheduleReq, scheduledDelivery))
     .then((scheduledDelivery: DonationEntity) => sendDeliveryScheduledMessages(scheduledDelivery))
     .catch((err: Error) => console.error(err));
-});
+}
 
-router.put('/advance/:id', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
+router.put('/advance/:id', ensureSessionActive, ensureAccountVerified, handlePutAdvanceDeliveryState);
+export function handlePutAdvanceDeliveryState(req: Request, res: Response) {
   const stateChangeReq: DeliveryStateChangeRequest = req.body;
   stateChangeReq.deliveryId = parseInt(req.params.id, 10);
   advanceDeliveryState(stateChangeReq, req.session.account)
@@ -62,9 +67,10 @@ router.put('/advance/:id', ensureSessionActive, ensureAccountVerified, (req: Req
     .then((advancedDelivery: DonationEntity) => saveDeliveryAdvanceAudit(stateChangeReq, advancedDelivery))
     .then((advancedDelivery: DonationEntity) => sendDeliveryStateAdvancedMessages(advancedDelivery))
     .catch((err: Error) => console.error(err));
-});
+}
 
-router.put('/undo/:id', ensureSessionActive, ensureAccountVerified, (req: Request, res: Response) => {
+router.put('/undo/:id', ensureSessionActive, ensureAccountVerified, handlePutUndoDeliveryState);
+export function handlePutUndoDeliveryState(req: Request, res: Response) {
   const stateChangeReq: DeliveryStateChangeRequest = req.body;
   stateChangeReq.deliveryId = parseInt(req.params.id, 10);
   undoDeliveryState(stateChangeReq, req.session.account)
@@ -73,6 +79,4 @@ router.put('/undo/:id', ensureSessionActive, ensureAccountVerified, (req: Reques
     .then((undoDiff: UpdateDiff<DonationEntity>) => saveDeliveryUndoAudit(stateChangeReq, undoDiff))
     .then((undoDiff: UpdateDiff<DonationEntity>) => sendDeliveryStateUndoMessages(undoDiff))
     .catch((err: Error) => console.error(err));
-});
-
-module.exports = router;
+}

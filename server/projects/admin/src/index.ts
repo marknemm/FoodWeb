@@ -54,12 +54,8 @@ import { cors } from '~web/middlewares/cors.middleware';
 import { recaptcha } from '~web/middlewares/recaptcha.middleware';
 import { session } from '~web/middlewares/session.middleware';
 import { ensureSessionAdmin } from '~admin/middlewares/admin-session.middleware';
-
-// NOTE: It is necessary to do an import ... require so tree shaking doesn't get rid of any controllers.
-import adminSessionController = require('~admin/controllers/admin-session');
-import webSessionController = require('~web/controllers/session');
-import adminController = require('~admin/controllers/admin');
-import webController = require('~web/controllers/web');
+import { router as sessionRouter } from '~admin/controllers/admin-session';
+import { router as adminRouter } from '~admin/controllers/admin';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
@@ -77,15 +73,9 @@ app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 
-// Admin routes work by overriding web
 // Connect Express admin session sub-module controller. This will be the only un-authenticated route (for login).
-app.use('/server/session', <Router>adminSessionController);
-app.use('/server/session', <Router>webSessionController);
-// Connect Express admin sub-module controllers.
-app.use('/server', ensureSessionAdmin, <Router>adminController);
-// Connect Express web sub-module controllers.
-// NOTE: Admin controller route handlers will take precedence over (override) duplicate web route handlers.
-app.use('/server', ensureSessionAdmin, <Router>webController);
+app.use('/server/session', sessionRouter);
+app.use('/server', ensureSessionAdmin, adminRouter);
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {

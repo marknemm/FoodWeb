@@ -50,6 +50,7 @@ import { JSONDateReviver } from '~shared';
 import { cors } from '~web/middlewares/cors.middleware';
 import { recaptcha } from '~web/middlewares/recaptcha.middleware';
 import { session } from '~web/middlewares/session.middleware';
+import { router as webRouter } from '~web/controllers/web';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
@@ -68,7 +69,7 @@ app.use(express.static(global['publicDir']));
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 
 // Connect Express web sub-module controllers.
-app.use('/server', require('~web/controllers/web'));
+app.use('/server', webRouter);
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {

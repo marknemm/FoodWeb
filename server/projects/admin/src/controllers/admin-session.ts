@@ -3,11 +3,24 @@ import { Request, Response } from 'express';
 import { adminLogin } from '~admin/services/admin-session/admin-login';
 import { saveImpersonationToken } from '~admin/services/admin-session/save-impersonation-token';
 import { ImpersonateTokenResponse, LoginRequest, LoginResponse } from '~shared';
+import { handleDeleteSession, handleGetSession } from '~web/controllers/session';
 import { genErrorResponse } from '~web/middlewares/response-error.middleware';
 
-const router = express.Router();
+export const router = express.Router();
 
-router.post('/', (req: Request, res: Response) => {
+// Use web session controller route handler.
+router.get('/', handleGetSession);
+
+router.get('/impersonate-token/:id', handleGetImpersonateToken);
+function handleGetImpersonateToken(req: Request, res: Response) {
+  const accountId: number = Number.parseInt(req.params.id, 10);
+  saveImpersonationToken(accountId, req.session['account'])
+    .then((impersonateTokenResponse: ImpersonateTokenResponse) => res.send(impersonateTokenResponse))
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.post('/', handlePostSession);
+function handlePostSession(req: Request, res: Response) {
   const loginRequest: LoginRequest = req.body;
   adminLogin(loginRequest)
     .then((loginResponse: LoginResponse) => {
@@ -15,13 +28,7 @@ router.post('/', (req: Request, res: Response) => {
       req.session['account'] = loginResponse.account;
       res.send(loginResponse);
     }).catch(genErrorResponse.bind(this, res));
-});
+}
 
-router.get('/impersonate-token/:id', (req: Request, res: Response) => {
-  const accountId: number = Number.parseInt(req.params.id, 10);
-  saveImpersonationToken(accountId, req.session['account'])
-    .then((impersonateTokenResponse: ImpersonateTokenResponse) => res.send(impersonateTokenResponse))
-    .catch(genErrorResponse.bind(this, res));
-});
-
-module.exports = router;
+// Use web session controller route handler.
+router.delete('/', handleDeleteSession);

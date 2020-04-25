@@ -55,12 +55,15 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
    * Creates the account.
    */
   createAccount(): void {
-    const account: Account = this.adminAccountForm.toAccount();
-    const password: string = this.adminAccountForm.password;
-    const accountCreateOpts: AccountCreateOptions = this.adminAccountForm.toAccountCreateOptions();
-    this._createAccountService.createAccount(account, password, accountCreateOpts).subscribe(
-      (createdAccount: Account) => this._createdAccount = createdAccount
-    );
+    this.adminAccountForm.markAllAsTouched();
+    if (this.adminAccountForm.valid) {
+      const account: Account = this.adminAccountForm.toAccount();
+      const password: string = this.adminAccountForm.password;
+      const accountCreateOpts: AccountCreateOptions = this.adminAccountForm.accountCreateOptions;
+      this._createAccountService.createAccount(account, password, accountCreateOpts).subscribe(
+        (createdAccount: Account) => this._createdAccount = createdAccount
+      );
+    }
   }
 
   ngOnDestroy() {
