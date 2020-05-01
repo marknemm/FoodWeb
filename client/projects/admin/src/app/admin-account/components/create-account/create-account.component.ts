@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { AdminSignupVerificationService } from '~admin/admin-account/admin-signup-verification/admin-signup-verification.service';
 import { CreateAccountService } from '~admin/admin-account/create-account/create-account.service';
 import { AccountCreateOptions, AdminAccountForm } from '~admin/admin-account/forms/admin-account.form';
 import { AdminSessionService } from '~admin/admin-session/admin-session/admin-session.service';
 import { Account } from '~shared';
+import { ImmutableStore } from '~web/data-structure/immutable-store';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
-import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
 
 @Component({
   selector: 'food-web-create-account',
@@ -17,18 +18,17 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
 
   adminAccountForm: AdminAccountForm;
 
-  private _createdAccount: Account;
   private _destory$ = new Subject();
 
   constructor(
     public sessionService: AdminSessionService,
-    public signupVerificationService: SignupVerificationService,
+    public signupVerificationService: AdminSignupVerificationService,
     private _pageTitleService: PageTitleService,
     private _createAccountService: CreateAccountService
   ) {}
 
-  get createdAccount(): Account {
-    return this._createdAccount;
+  get createdAccountStore(): ImmutableStore<Account> {
+    return this._createAccountService.createdAccountStore;
   }
 
   ngOnInit() {
@@ -60,9 +60,7 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
       const account: Account = this.adminAccountForm.toAccount();
       const password: string = this.adminAccountForm.password;
       const accountCreateOpts: AccountCreateOptions = this.adminAccountForm.accountCreateOptions;
-      this._createAccountService.createAccount(account, password, accountCreateOpts).subscribe(
-        (createdAccount: Account) => this._createdAccount = createdAccount
-      );
+      this._createAccountService.createAccount(account, password, accountCreateOpts).subscribe();
     }
   }
 

@@ -9,9 +9,23 @@
       "problemMatcher": []
     },
     {
+      "label": "Docker FoodWeb: Stop Server",
+      "type": "shell",
+      "command": "docker-compose stop foodweb-server",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
       "label": "Docker FoodWeb Admin: Start",
       "type": "shell",
       "command": "docker-compose up -d foodweb-admin",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb Admin: Stop Server",
+      "type": "shell",
+      "command": "docker-compose stop foodweb-admin-server",
       "group": "none",
       "problemMatcher": []
     },
@@ -101,28 +115,36 @@
     {
       "label": "Docker FoodWeb: Generate TypeORM Migration",
       "type": "shell",
-      "command": "docker exec -it foodweb-server bash -c 'npm run typeorm:migration:generate ${input:typeOrmMigrationName}'",
+      "command": "docker-compose run --rm foodweb-server bash -c 'npm run typeorm:migration:generate ${input:typeOrmMigrationName}'",
       "group": "none",
+      "dependsOn": [
+        "Docker FoodWeb: Stop Server",
+        "Docker FoodWeb Admin: Stop Server"
+      ],
       "problemMatcher": []
     },
     {
       "label": "Docker FoodWeb: Create TypeORM Migration",
       "type": "shell",
-      "command": "docker exec -it foodweb-server bash -c 'npm run typeorm:migration:create ${input:typeOrmMigrationName}'",
+      "command": "docker-compose run --rm foodweb-server bash -c 'npm run typeorm:migration:create ${input:typeOrmMigrationName}'",
       "group": "none",
+      "dependsOn": [
+        "Docker FoodWeb: Stop Server",
+        "Docker FoodWeb Admin: Stop Server"
+      ],
       "problemMatcher": []
     },
     {
       "label": "Docker FoodWeb: Run TypeORM Migrations",
       "type": "shell",
-      "command": "docker exec -it foodweb-server bash -c 'npm run typeorm:migration:run'",
+      "command": "docker-compose run --rm foodweb-server bash -c 'npm run typeorm:migration:run'",
       "group": "none",
       "problemMatcher": []
     },
     {
       "label": "Docker FoodWeb: Revert TypeORM Migrations",
       "type": "shell",
-      "command": "docker exec -it foodweb-server bash -c 'npm run typeorm:migration:revert'",
+      "command": "docker-compose run --rm foodweb-server bash -c 'npm run typeorm:migration:revert'",
       "group": "none",
       "problemMatcher": []
     },

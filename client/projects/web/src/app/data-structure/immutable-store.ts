@@ -20,7 +20,7 @@ ObservableStore.globalSettings = {
  */
 export class ImmutableStore<T> extends ObservableStore<DeepReadonly<T>> {
 
-  constructor(settings: ObservableStoreSettings) {
+  constructor(settings: ObservableStoreSettings = {}) {
     super(settings);
   }
 

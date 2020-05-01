@@ -33,10 +33,10 @@
     "test:watch": "ts-mocha -p ./projects/web/tsconfig.spec.json ./src/**/*.ts",
     "typeorm:docker:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -f docker-ormconfig.json",
     "typeorm:cli": "node ./database/util/js/typeorm-exec.js",
-    "typeorm:migration:create": "npm run pg:dump && npm run typeorm:cli -- migration:create -n",
-    "typeorm:migration:generate": "npm run pg:dump && npm run build && npm run typeorm:cli -- migration:generate -n",
-    "typeorm:migration:revert": "npm run pg:dump && npm run typeorm:cli -- migration:revert",
-    "typeorm:migration:run": "npm run pg:dump && npm run typeorm:cli -- migration:run"
+    "typeorm:migration:create": "npm run start:prep && npm run pg:dump && npm run typeorm:cli -- migration:create -n",
+    "typeorm:migration:generate": "npm run start:prep && npm run pg:dump && npm run build && npm run typeorm:cli -- migration:generate -n",
+    "typeorm:migration:revert": "npm run start:prep && npm run pg:dump && npm run typeorm:cli -- migration:revert",
+    "typeorm:migration:run": "npm run start:prep && npm run pg:dump && npm run typeorm:cli -- migration:run"
   },
   "private": true,
   "dependencies": {

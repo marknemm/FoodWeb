@@ -1,0 +1,43 @@
+<form [formGroup]="formGroup" class="donate-form page" [ngClass]="{ 'submitted': !!savedDonation }" (submit)="donate()">
+
+  <div class="donate-form-title page-title block-label">
+    {{ pageTitleService.title }}
+  </div>
+
+  <ng-container *ngIf="!savedDonation">
+    <mat-card class="donate-card">
+      <mat-card-title>Donation Information</mat-card-title>
+      <mat-card-content>
+        <food-web-donation-form [formGroup]="formGroup" *ngIf="!savedDonation"></food-web-donation-form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="donate-card">
+      <mat-card-title>Pickup Window</mat-card-title>
+      <mat-card-content>
+        <food-web-date-time-range #pickupWindowRange [formGroup]="formGroup.get('pickupWindow')" [editing]="true"></food-web-date-time-range>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="donate-card">
+      <mat-card-title>Contact Info</mat-card-title>
+      <mat-card-content>
+        <food-web-contact-info [editing]="true" [formGroup]="formGroup.get('donorContactOverride')"></food-web-contact-info>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+
+  <div *ngIf="savedDonation" class="align-center">
+    <hr>
+    <div>{{ savedDonation.description }}</div>
+  </div>
+
+  <div class="action-footer align-right">
+    <button mat-raised-button type="submit" color="primary" *ngIf="!savedDonation">Create</button>
+    <button mat-button type="button" color="accent" *ngIf="savedDonation" (click)="donateAgain()">Create Another</button>
+    <a *ngIf="savedDonation" class="view-donation-link" [routerLink]="['/donation/details', savedDonation.id]">
+      <button mat-raised-button type="button" color="primary">View Donation</button>
+    </a>
+  </div>
+
+</form>

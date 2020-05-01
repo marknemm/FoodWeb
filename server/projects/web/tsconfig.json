@@ -7,11 +7,11 @@
       "~orm": ["../../database/src/orm/index"],
       "~shared": ["../../../shared/src/web/index"],
       "~web/*": ["./src/*"]
-    },
-    "rootDirs": [
-      "./src/",
-      "../../database/src/",
-      "../../../shared/src/web"
-    ]
-  }
+    }
+  },
+  "include": [
+    "./src/**/*",
+    "../../database/src/**/*",
+    "../../../shared/src/web/**/*"
+  ]
 }

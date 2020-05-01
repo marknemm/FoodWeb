@@ -50,8 +50,8 @@ export function handleGetResetPassword(req: Request, res: Response) {
     .catch(genErrorResponse.bind(this, res));
 }
 
-router.get('/resend-verification-email', ensureSessionActive, handleGetResendVerificationEmail);
-export function handleGetResendVerificationEmail(req: Request, res: Response) {
+router.get('/resend-verification-email', ensureSessionActive, handleGetResendMyVerificationEmail);
+export function handleGetResendMyVerificationEmail(req: Request, res: Response) {
   const account: AccountEntity = req.session.account;
   recreateUnverifiedAccount(account)
     .then((unverifiedAccount: UnverifiedAccountEntity) => sendAccountVerificationEmail(account, unverifiedAccount))

@@ -5,18 +5,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "inlineSourceMap": true,
-    "lib": [
-      "es6",
-      "dom"
-    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./dist/",
     "resolveJsonModule": true,
-    "target": "es5",
-    "typeRoots": [
-      "./node_modules/@types",
-      "./@types"
-    ]
+    "target": "ES2018"
   }
 }

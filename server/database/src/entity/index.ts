@@ -12,6 +12,7 @@ export * from './donation.entity';
 export * from './donor.entity';
 export * from './event-registration.entity';
 export * from './featured-event.entity';
+export * from './full-text-search.entity';
 export * from './map-route.entity';
 export * from './notification.entity';
 export * from './operation-hours.entity';

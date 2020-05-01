@@ -5,13 +5,15 @@ import { adminReadAccount, adminReadAccounts } from '~admin/services/admin-accou
 import { adminCreateAccount, adminUpdateAccount, adminUpdateAccountSection, NewAccountData } from '~admin/services/admin-account/admin-save-account';
 import { sendMessage, testMessage } from '~admin/services/admin-account/send-message-to-accounts';
 import { adminUpdatePassword } from '~admin/services/admin-password/save-password';
-import { Account, AccountEntity } from '~entity';
+import { Account, AccountEntity, UnverifiedAccountEntity } from '~entity';
 import { QueryResult } from '~orm';
 import { AccountCreateRequest, AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, PasswordUpdateRequest, SendMessageRequest } from '~shared';
-import { handleGetRecoverUsername, handleGetResendVerificationEmail, handleGetResetPassword, handlePostAccountVerify, handlePutResetPassword } from '~web/controllers/account';
+import { handleGetRecoverUsername, handleGetResendMyVerificationEmail, handleGetResetPassword, handlePostAccountVerify, handlePutResetPassword } from '~web/controllers/account';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
+import { recreateUnverifiedAccount } from '~web/services/account/account-verification';
+import { sendAccountVerificationEmail } from '~web/services/account/account-verification-message';
 import { AuditEventType, saveAudit, saveUpdateAudit } from '~web/services/audit/save-audit';
 
 export const router = express.Router();
@@ -30,7 +32,17 @@ function handleGetAccounts(req: Request, res: Response) {
 // Use web account controller route handlers.
 router.get('/recover-username', handleGetRecoverUsername);
 router.get('/reset-password', handleGetResetPassword);
-router.get('/resend-verification-email', handleGetResendVerificationEmail);
+router.get('/resend-verification-email/', handleGetResendMyVerificationEmail);
+
+router.get('/resend-verification-email/:id', handleGetResendVerificationEmail);
+function handleGetResendVerificationEmail(req: Request, res: Response) {
+  const id: number = parseInt(req.params.id, 10);
+  adminReadAccount(id)
+    .then(async (account: AccountEntity) => ({ account, unverifiedAccount: await recreateUnverifiedAccount(account) }))
+    .then(({ account, unverifiedAccount }) => sendAccountVerificationEmail(account, unverifiedAccount))
+    .then(() => res.send())
+    .catch(genErrorResponse.bind(this, res));
+}
 
 router.get('/:id', handleGetAccount);
 function handleGetAccount(req: Request, res: Response) {

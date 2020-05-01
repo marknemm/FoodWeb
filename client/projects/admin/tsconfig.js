@@ -33,6 +33,26 @@ const config = {
         "./src/app/admin-app-shell/pipes/*",
         "./src/app/admin-app-shell/services/*"
       ],
+      "~admin/admin-delivery/*": [
+        "./src/app/admin-delivery/*",
+        "./src/app/admin-delivery/child-components/*",
+        "./src/app/admin-delivery/components/*",
+        "./src/app/admin-delivery/directives/*",
+        "./src/app/admin-delivery/forms/*",
+        "./src/app/admin-delivery/interfaces/*",
+        "./src/app/admin-delivery/pipes/*",
+        "./src/app/admin-delivery/services/*"
+      ],
+      "~admin/admin-donation/*": [
+        "./src/app/admin-donation/*",
+        "./src/app/admin-donation/child-components/*",
+        "./src/app/admin-donation/components/*",
+        "./src/app/admin-donation/directives/*",
+        "./src/app/admin-donation/forms/*",
+        "./src/app/admin-donation/interfaces/*",
+        "./src/app/admin-donation/pipes/*",
+        "./src/app/admin-donation/services/*"
+      ],
       "~admin/admin-event/*": [
         "./src/app/admin-event/*",
         "./src/app/admin-event/child-components/*",
