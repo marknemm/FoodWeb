@@ -2,11 +2,12 @@ import express = require('express');
 import { Request, Response } from 'express';
 import { AccountEntity, PasswordResetEntity, UnverifiedAccountEntity } from '~entity';
 import { QueryResult } from '~orm';
-import { Account, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest, SignupRequest } from '~shared';
+import { Account, AccountAutocompleteRequest, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest, SignupRequest } from '~shared';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { ensureSessionActive } from '~web/middlewares/session.middleware';
+import { genAccountAutocomplete } from '~web/services/account/account-autocomplete';
 import { recreateUnverifiedAccount, verifyAccount } from '~web/services/account/account-verification';
 import { sendAccountVerificationEmail, sendAccountVerificationMessage } from '~web/services/account/account-verification-message';
 import { readAccount, readAccounts } from '~web/services/account/read-accounts';
@@ -27,6 +28,14 @@ export function handleGetAccounts(req: Request, res: Response) {
     .then((queryResult: QueryResult<AccountEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
     )
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.get('/autocomplete', handleGetAccountAutocomplete);
+export function handleGetAccountAutocomplete(req: Request, res: Response) {
+  const autocompleteRequest: AccountAutocompleteRequest = req.query;
+  genAccountAutocomplete(autocompleteRequest)
+    .then((accountAutocompleteFeed: Partial<AccountEntity>[]) => res.send(accountAutocompleteFeed))
     .catch(genErrorResponse.bind(this, res));
 }
 

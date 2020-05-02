@@ -8,8 +8,8 @@ import path = require('path');
  * @return A promise that resolves to a generated connection.
  */
 export function initOrm(): Promise<Connection> {
-  const entitiesPath: string = path.join(__dirname, '..', 'entity', '*.js');
-  const migrationsPath: string = path.join(__dirname, '..', 'migration', '*.js');
+  const entitiesPath: string = path.join(global['serverDistDir'], 'database', 'src', 'entity', '*.js');
+  const migrationsPath: string = path.join(global['serverDistDir'], 'database', 'src', 'migration', '*.js');
   return createConnection({
     type: 'postgres',
     host: process.env.DATABASE_HOST,

@@ -1,6 +1,6 @@
 import { Column, Index, JoinColumn, OneToOne } from 'typeorm';
 import { Volunteer } from '../../../../shared/src/web';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../../../projects/web/src/helpers/orm';
 import { AccountEntity } from './account.entity';
 
 @OrmEntity('Volunteer')

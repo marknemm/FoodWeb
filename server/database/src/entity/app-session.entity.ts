@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Index, JoinColumn, OneToOne, UpdateDateColumn } from 'typeorm';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../../../projects/web/src/helpers/orm';
 import { AccountEntity } from './account.entity';
 
 @OrmEntity('AppSession')

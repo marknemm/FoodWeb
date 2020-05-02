@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, ManyToOne } from 'typeorm';
 import { Constants, Notification, NotificationType } from '../../../../shared/src/web';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../../../projects/web/src/helpers/orm';
 import { AccountEntity } from './account.entity';
 export { Notification, NotificationType };
 

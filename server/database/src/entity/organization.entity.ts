@@ -1,6 +1,6 @@
 import { Column, Index, JoinColumn, OneToOne } from 'typeorm';
 import { Organization } from '../../../../shared/src/web';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../../../projects/web/src/helpers/orm';
 import { AccountEntity } from './account.entity';
 import { DonorEntity } from './donor.entity';
 import { ReceiverEntity } from './receiver.entity';

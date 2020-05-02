@@ -1,6 +1,6 @@
 import { Column, Index, OneToOne } from 'typeorm';
 import { ContactInfo, GeographyLocation } from '../../../../shared/src/web';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../../../projects/web/src/helpers/orm';
 import { AccountEntity } from './account.entity';
 import { DonationEntity } from './donation.entity';
 

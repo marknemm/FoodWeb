@@ -23,8 +23,8 @@ export class fullTextSearchEntity1588193611219 implements MigrationInterface {
                 TO_TSVECTOR(
                   CONCAT(
                     "Account"."accountType", ' ',
-                    "Account"."username", ' ',
-                    "ContactInfo"."email", ' ',
+                    REGEXP_REPLACE("Account"."username", '[^\w]+', '', 'g'), ' ',
+                    REGEXP_REPLACE("ContactInfo"."email", '[@\.]', ' ', 'g'), ' ',
                     "ContactInfo"."phoneNumber", ' ',
                     CASE WHEN ("Account"."accountType" <> 'Volunteer')
                       THEN CONCAT(
@@ -125,6 +125,11 @@ export class fullTextSearchEntity1588193611219 implements MigrationInterface {
                     TO_CHAR("Donation"."pickupWindowStart", 'MM/DD/YYYY'), ' ',
                     TO_CHAR("Donation"."pickupWindowEnd", 'Month DD YYYY HH12:MI AM'), ' ',
                     TO_CHAR("Donation"."pickupWindowEnd", 'MM/DD/YYYY'), ' ',
+                    CASE WHEN ("DonorContactOverride"."email" IS NOT NULL)
+                      THEN REGEXP_REPLACE("DonorContactOverride"."email", '[@\.]', ' ', 'g')
+                      ELSE ''
+                    END, ' ',
+                    "DonorContactOverride"."phoneNumber", ' ',
                     "DonorContactOverride"."streetAddress", ' ',
                     "DonorContactOverride"."city", ' ',
                     "DonorContactOverride"."stateProvince", ' ',

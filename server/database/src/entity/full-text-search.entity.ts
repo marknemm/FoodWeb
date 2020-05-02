@@ -1,5 +1,5 @@
 import { Column, Index } from 'typeorm';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../../../projects/web/src/helpers/orm';
 
 @OrmEntity('FullTextSearch')
 @Index(['entityId', 'entityTable'], { unique: true })

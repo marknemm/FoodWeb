@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Index, JoinColumn, OneToMany, OneToOne, UpdateDateColumn } from 'typeorm';
 import { Account, AccountType, Constants, OperationHoursHelper } from '../../../../shared/src/web';
-import { OrmAfterLoad, OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
+import { OrmAfterLoad, OrmEntity, OrmPrimaryGeneratedColumn } from '../../../projects/web/src/helpers/orm';
 import { AppDataEntity } from './app-data.entity';
 import { ContactInfoEntity } from './contact-info.entity';
 import { OperationHoursEntity } from './operation-hours.entity';

@@ -223,3 +223,14 @@ function _refinePagingParams(pagingParams: PagingParams, defaultLimit: number): 
 function _ensureIsNumber(value: string | number): number {
   return (typeof value === 'number') ? value : parseInt(value, 10);
 }
+
+/**
+ * Preprocesses a given full-text query in order to render better results.
+ * @param query The full-text query.
+ * @return The preprocessed full-text query.
+ */
+export function preprocessFullTextQuery(query: string): string {
+  // TODO: Research the efficiency of the GIN index here; not sure if turning each word into a prefix match is ok for performance.
+  // TODO: Improve fullTextQuery preprocessing to account for operators (e.g. &, <->).
+  return query.trim().replace(/\s/g, ':*|') + ':*';
+}

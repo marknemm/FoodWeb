@@ -5,7 +5,7 @@
     "paths": {
       "~admin/*": ["./src/*"],
       "~entity": ["../../database/src/entity/index"],
-      "~orm": ["../../database/src/orm/index"],
+      "~orm": ["../web/src/helpers/orm/index"],
       "~shared": ["../../../shared/src/admin/index"],
       "~web/*": ["../web/src/*"]
     }

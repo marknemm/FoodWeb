@@ -14,6 +14,10 @@ export interface AccountReadFilters {
    */
   accountType?: AccountType;
   /**
+   * A full-text query string for generalized search.
+   */
+  fullTextQuery?: string;
+  /**
    * Whether or not the (volunteer) account has been marked as having signed the waiver/agreement (attended training).
    */
   signedAgreement?: 'true' | 'false' | boolean;

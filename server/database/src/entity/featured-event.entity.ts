@@ -1,6 +1,6 @@
 import { Column, Index, OneToMany } from 'typeorm';
 import { FeaturedEvent } from '../../../../shared/src/web';
-import { OrmEntity, OrmPrimaryGeneratedColumn } from '../orm';
+import { OrmEntity, OrmPrimaryGeneratedColumn } from '../../../projects/web/src/helpers/orm';
 import { EventRegistrationEntity } from './event-registration.entity';
 export { FeaturedEvent, EventRegistrationEntity };
 
