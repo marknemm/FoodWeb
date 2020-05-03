@@ -1,0 +1,9 @@
+@import "../constants.scss";
+
+.mat-select {
+  &.accent {
+    .mat-select-value {
+      color: $accent;
+    }
+  }
+}

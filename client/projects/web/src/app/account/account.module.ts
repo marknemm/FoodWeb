@@ -22,7 +22,7 @@ import { ReceiverComponent } from '~web/account/receiver/receiver.component';
 import { UsernameComponent } from '~web/account/username/username.component';
 import { VolunteerComponent } from '~web/account/volunteer/volunteer.component';
 import { DateTimeModule } from '~web/date-time/date-time.module';
-import { FilterListModule } from '~web/filter-list/filter-list.module';
+import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { MapModule } from '~web/map/map.module';
 import { MaterialModule } from '~web/material.module';
 import { PasswordModule } from '~web/password/password.module';
@@ -52,7 +52,7 @@ import { SharedModule } from '~web/shared/shared.module';
     AccountRoutingModule,
     CommonModule,
     DateTimeModule,
-    FilterListModule,
+    FilteredListModule,
     MapModule,
     MaterialModule,
     MatSidenavModule,

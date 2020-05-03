@@ -12,11 +12,12 @@ import { ControlNameDirective } from '~web/shared/directives/control-name/contro
 import { DisplayEditTransitionDirective } from '~web/shared/display-edit-transition/display-edit-transition.directive';
 import { EditSaveButtonComponent } from '~web/shared/edit-save-button/edit-save-button.component';
 import { FragmentAccordianDirective } from '~web/shared/fragment-accordian/fragment-accordian.directive';
+import { IeAlertService } from '~web/shared/ie-alert/ie-alert.service';
 import { PaginatorComponent } from '~web/shared/paginator/paginator.component';
 import { ProgressIndicatorComponent } from '~web/shared/progress-indicator/progress-indicator.component';
 import { ReturnLinkDirective } from '~web/shared/return-link/return-link.directive';
+import { SearchBarComponent } from '~web/shared/search-bar/search-bar.component';
 import { YesNoComponent } from '~web/shared/yes-no/yes-no.component';
-import { IeAlertService } from './services/ie-alert/ie-alert.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { IeAlertService } from './services/ie-alert/ie-alert.service';
     DisplayEditTransitionDirective,
     FragmentAccordianDirective,
     YesNoComponent,
-    ControlNameDirective
+    ControlNameDirective,
+    SearchBarComponent
   ],
   imports: [
     RouterModule.forChild([]),
@@ -51,7 +53,8 @@ import { IeAlertService } from './services/ie-alert/ie-alert.service';
     DisplayEditTransitionDirective,
     FragmentAccordianDirective,
     YesNoComponent,
-    ControlNameDirective
+    ControlNameDirective,
+    SearchBarComponent
   ],
   providers: [
     { provide: 'Window', useValue: window },

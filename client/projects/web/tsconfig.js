@@ -90,15 +90,15 @@ const config = {
         "./src/app/event/interfaces/*",
         "./src/app/event/services/*"
       ],
-      "~web/filter-list/*": [
-        "./src/app/filter-list/*",
-        "./src/app/filter-list/child-components/*",
-        "./src/app/filter-list/components/*",
-        "./src/app/filter-list/directives/*",
-        "./src/app/filter-list/forms/*",
-        "./src/app/filter-list/pipes/*",
-        "./src/app/filter-list/interfaces/*",
-        "./src/app/filter-list/services/*"
+      "~web/filtered-list/*": [
+        "./src/app/filtered-list/*",
+        "./src/app/filtered-list/child-components/*",
+        "./src/app/filtered-list/components/*",
+        "./src/app/filtered-list/directives/*",
+        "./src/app/filtered-list/forms/*",
+        "./src/app/filtered-list/pipes/*",
+        "./src/app/filtered-list/interfaces/*",
+        "./src/app/filtered-list/services/*"
       ],
       "~web/fundraise/*": [
         "./src/app/fundraise/*",

@@ -16,6 +16,7 @@ export class DonationFiltersForm extends TypedFormGroup<DonationReadRequest> {
       donorFirstName: undefined,
       donorOrganizationName: undefined,
       expired: undefined,
+      fullTextQuery: undefined,
       myDonations: undefined,
       receiverAccountId: undefined,
       receiverOrganizationName: undefined,

@@ -1,0 +1,25 @@
+@import "../constants.scss";
+
+.mat-list {
+  .mat-list-item, .mat-list-item.mat-2-line {
+    &.auto-height {
+      height: auto;
+      box-sizing: border-box;
+
+      .mat-list-item-content {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+    }
+  }
+}
+
+.mat-action-list {
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

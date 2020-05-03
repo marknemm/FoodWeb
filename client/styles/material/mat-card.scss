@@ -1,0 +1,77 @@
+@import "../constants.scss";
+
+mat-card.mat-card {
+  margin-bottom: 20px;
+
+  > food-web-edit-save-button {
+    position: absolute;
+    top: 3px;
+    right: 5px;
+  }
+
+  mat-card-header.mat-card-header {
+    position: relative;
+
+    .mat-card-header-text {
+      margin-top: -6px;
+
+      .mat-card-subtitle:not(:first-child) {
+        margin-top: -14px;
+        margin-bottom: 10px;
+      }
+
+      @media only screen and (max-width: $mat-mobile) {
+        margin-top: -1px;
+      }
+    }
+  }
+
+  mat-card-title.mat-card-title,
+  mat-card-content.mat-card-content {
+    position: relative;
+  }
+
+  mat-card-title.mat-card-title {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    color: $accent-darkest;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+
+    .mat-toolbar:first-child {
+      margin: -16px 0px 0px -16px;
+      max-height: 50px;
+      width: calc(100% + 32px);
+      justify-content: center;
+      border-radius: inherit;
+    }
+
+    @media only screen and (max-width: $sm) {
+      font-size: 18px;
+    }
+
+    @media only screen and (max-width: $mat-mobile) {
+      font-size: 16px;
+    }
+  }
+
+  mat-card-content.mat-card-content {
+    + .mat-card-actions {
+      margin-top: -8px;
+    }
+
+    @media only screen and (max-width: $mat-mobile) {
+      font-size: 13px;
+    }
+  }
+
+  &.selectable-card:hover {
+    text-decoration: none;
+    box-shadow: 0px 3px 2px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  }
+
+  @media only screen and (max-width: $mat-mobile) {
+    margin-bottom: 10px;
+  }
+}

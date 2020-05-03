@@ -11,7 +11,7 @@ import { ComposeMessageComponent } from '~admin/admin-account/compose-message/co
 import { CreateAccountComponent } from '~admin/admin-account/create-account/create-account.component';
 import { AdminPasswordModule } from '~admin/admin-password/admin-password.module';
 import { AccountModule } from '~web/account/account.module';
-import { FilterListModule } from '~web/filter-list/filter-list.module';
+import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { AdminAccountRoutingModule } from './admin-account-routing.module';
@@ -30,7 +30,7 @@ import { AdminAccountRoutingModule } from './admin-account-routing.module';
     CommonModule,
     AccountModule,
     AdminPasswordModule,
-    FilterListModule,
+    FilteredListModule,
     FontAwesomeModule,
     MaterialModule,
     QuillModule,

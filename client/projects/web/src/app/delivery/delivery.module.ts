@@ -12,7 +12,7 @@ import { DeliveryTeaserComponent } from '~web/delivery/delivery-teaser/delivery-
 import { DropOffInfoComponent } from '~web/delivery/drop-off-info/drop-off-info.component';
 import { PickupInfoComponent } from '~web/delivery/pickup-info/pickup-info.component';
 import { DonationDeliverySharedModule } from '~web/donation-delivery-shared/donation-delivery-shared.module';
-import { FilterListModule } from '~web/filter-list/filter-list.module';
+import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { MapModule } from '~web/map/map.module';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
@@ -33,7 +33,7 @@ import { SharedModule } from '~web/shared/shared.module';
     CommonModule,
     DateTimeModule,
     DonationDeliverySharedModule,
-    FilterListModule,
+    FilteredListModule,
     MapModule,
     MaterialModule,
     ReactiveFormsModule,

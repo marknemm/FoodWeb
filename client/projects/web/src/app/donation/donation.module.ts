@@ -12,7 +12,7 @@ import { DonationTeaserComponent } from '~web/donation/donation-teaser/donation-
 import { DonationsComponent } from '~web/donation/donations/donations.component';
 import { PrimaryDonationInfoComponent } from '~web/donation/primary-donation-info/primary-donation-info.component';
 import { DonorModule } from '~web/donor/donor.module';
-import { FilterListModule } from '~web/filter-list/filter-list.module';
+import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { MapModule } from '~web/map/map.module';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
@@ -32,7 +32,7 @@ import { SharedModule } from '~web/shared/shared.module';
     DateTimeModule,
     DonationDeliverySharedModule,
     DonorModule,
-    FilterListModule,
+    FilteredListModule,
     MapModule,
     MaterialModule,
     MatSidenavModule,

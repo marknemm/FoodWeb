@@ -232,5 +232,5 @@ function _ensureIsNumber(value: string | number): number {
 export function preprocessFullTextQuery(query: string): string {
   // TODO: Research the efficiency of the GIN index here; not sure if turning each word into a prefix match is ok for performance.
   // TODO: Improve fullTextQuery preprocessing to account for operators (e.g. &, <->).
-  return query.trim().replace(/\s/g, ':*|') + ':*';
+  return query.replace(/[()&@.]/g, ' ').trim().replace(/\s+/g, ':*|') + ':*';
 }

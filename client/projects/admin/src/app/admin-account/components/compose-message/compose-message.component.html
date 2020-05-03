@@ -32,8 +32,8 @@
     </form>
   </mat-sidenav-content>
   <mat-sidenav [opened]="accountFiltersOpened" (openedChange)="accountFiltersOpened = $event" mode="over" position="end" [autoFocus]="false">
-    <food-web-filter-list-filters>
+    <food-web-list-filters>
       <food-web-admin-account-filters (filter)="updateAccountFilters($event)"></food-web-admin-account-filters>
-    </food-web-filter-list-filters>
+    </food-web-list-filters>
   </mat-sidenav>
 </mat-sidenav-container>

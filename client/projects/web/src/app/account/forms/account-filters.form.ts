@@ -9,10 +9,11 @@ export class AccountFiltersForm extends TypedFormGroup<AccountFiltersFormValue> 
     super({
       id: undefined,
       accountType: undefined,
-      signedAgreement: undefined,
       email: undefined,
+      fullTextQuery: undefined,
       operationHours: new OperationHoursForm(undefined, true),
       organizationName: undefined,
+      signedAgreement: undefined,
       sortBy: undefined,
       sortOrder: undefined,
       username: undefined,

@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { JSONDateReviver } from '~shared';
 import { AppRoutingModule } from '~web/app-routing.module';
 import { AppShellModule } from '~web/app-shell/app-shell.module';
 import { AppComponent } from '~web/app.component';

@@ -1,7 +1,7 @@
 <form [formGroup]="filtersForm" class="delivery-filters" (ngSubmit)="filter.emit(filtersForm.value)">
-  <food-web-filter-list-filters-title [primary]="true">
+  <food-web-list-filters-title [primary]="true">
     Delivery Filters
-  </food-web-filter-list-filters-title>
+  </food-web-list-filters-title>
 
   <mat-form-field class="fill">
     <mat-select placeholder="Donation Status" formControlName="donationStatus">
@@ -32,9 +32,9 @@
     <input matInput placeholder="Receiver Organization" formControlName="receiverOrganizationName">
   </mat-form-field>
 
-  <food-web-filter-list-filters-title>
+  <food-web-list-filters-title>
     Delivery Window Filters
-  </food-web-filter-list-filters-title>
+  </food-web-list-filters-title>
 
   <div class="row">
     <div class="col-12">
@@ -45,7 +45,7 @@
     </div>
   </div>
 
-  <food-web-filter-list-filters-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></food-web-filter-list-filters-sort>
+  <food-web-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></food-web-list-sort>
 
-  <food-web-filter-list-filters-buttons (clear)="filtersForm.reset()"></food-web-filter-list-filters-buttons>
+  <food-web-list-filters-footer (clear)="filtersForm.reset()"></food-web-list-filters-footer>
 </form>

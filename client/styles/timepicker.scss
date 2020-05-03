@@ -1,0 +1,41 @@
+@import "./constants.scss";
+
+.timepicker {
+
+  @media only screen and (max-height: 700px) {
+    $width: 300px;
+    position: fixed !important;
+    top: $header-height;
+    left: calc(50vw - #{$width / 2});
+
+    .timepicker__header {
+      padding: 10px 15px !important;
+    }
+
+    .timepicker__body {
+      padding: 10px 5px !important;
+    }
+
+    .timepicker__actions {
+      padding: 10px 15px !important;
+    }
+  }
+
+  .timepicker__header, .clock-face__clock-hand, .clock-face__number > .active {
+    background-color: $primary !important;
+  }
+
+  .timepicker__actions {
+    div {
+      ngx-material-timepicker-button button.timepicker-button {
+        color: $primary;
+      }
+
+      &:first-child ngx-material-timepicker-button button.timepicker-button span {
+        color: $warn;
+        font-weight: 500;
+      }
+    }
+  }
+
+}

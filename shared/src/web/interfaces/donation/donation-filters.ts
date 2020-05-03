@@ -13,6 +13,10 @@ export interface DonationFilters {
    */
   donationStatus?: DonationStatus | string;
   /**
+   * A full-text query string for generalized search.
+   */
+  fullTextQuery?: string;
+  /**
    * Filters for associated donors' accounts.
    */
   donorAccountId?: number | string;

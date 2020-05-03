@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { AccountReadRequest, AccountSortBy, AccountType } from '~shared';
 import { AccountFiltersForm } from '~web/account/account-filters.form';
-import { SortByOpt } from '~web/filter-list/sort-by-opt';
+import { SortByOpt } from '~web/filtered-list/sort-by-opt';
 
 @Component({
   selector: 'food-web-account-filters',

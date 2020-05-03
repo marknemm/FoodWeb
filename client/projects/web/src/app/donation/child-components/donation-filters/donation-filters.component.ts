@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { DonationSortBy } from '~shared';
 import { DonationFiltersForm, DonationReadRequest } from '~web/donation-delivery-shared/donation-filters.form';
-import { SortByOpt } from '~web/filter-list/sort-by-opt';
+import { SortByOpt } from '~web/filtered-list/sort-by-opt';
 import { ConstantsService } from '~web/shared/constants/constants.service';
 
 @Component({

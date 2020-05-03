@@ -1,5 +1,5 @@
 import { AccountEntity, DonationEntity } from '~entity';
-import { genPagination, genSimpleWhereConditions, getOrmRepository, OrmRepository, OrmSelectQueryBuilder, QueryMod, QueryResult } from '~orm';
+import { genPagination, genSimpleWhereConditions, getOrmRepository, OrmRepository, OrmSelectQueryBuilder, QueryMod, QueryResult, preprocessFullTextQuery } from '~orm';
 import { DonationFilters, DonationReadRequest, DonationSortBy, DonationStatus, SortOptions } from '~shared';
 
 export async function readDonation(id: number, donationRepo?: OrmRepository<DonationEntity>): Promise<DonationEntity> {
@@ -61,19 +61,35 @@ function _buildQuery(donationRepo: OrmRepository<DonationEntity>, request: Donat
 
 function _genJoins(queryBuilder: OrmSelectQueryBuilder<DonationEntity>): OrmSelectQueryBuilder<DonationEntity> {
   return queryBuilder
+    .innerJoin(
+      'FullTextSearch', 'donationFullTextSearch',
+      `donationFullTextSearch.entityId = donation.id AND donationFullTextSearch.entityTable = 'Donation'`
+    )
     .innerJoinAndSelect('donation.donorAccount', 'donorAccount')
     .innerJoinAndSelect('donorAccount.organization', 'donorOrganization')
     .innerJoinAndSelect('donorOrganization.donor', 'donor')
     .innerJoinAndSelect('donorAccount.contactInfo', 'donorContactInfo')
+    .innerJoin(
+      'FullTextSearch', 'donorFullTextSearch',
+      `donorFullTextSearch.entityId = donorAccount.id AND donorFullTextSearch.entityTable = 'Account'`
+    )
     .leftJoinAndSelect('donation.donorContactOverride', 'donorContactOverride')
     .leftJoinAndSelect('donation.claim', 'claim')
     .leftJoinAndSelect('claim.routeToReceiver', 'routeToReceiver')
     .leftJoinAndSelect('claim.receiverAccount', 'receiverAccount')
+    .innerJoin(
+      'FullTextSearch', 'receiverFullTextSearch',
+      `receiverFullTextSearch.entityId = receiverAccount.id AND receiverFullTextSearch.entityTable = 'Account'`
+    )
     .leftJoinAndSelect('receiverAccount.organization', 'receiverOrganization')
     .leftJoinAndSelect('receiverAccount.contactInfo', 'receiverContactInfo')
     .leftJoinAndSelect('receiverOrganization.receiver', 'receiver')
     .leftJoinAndSelect('claim.delivery', 'delivery')
     .leftJoinAndSelect('delivery.volunteerAccount', 'delivererAccount')
+    .innerJoin(
+      'FullTextSearch', 'delivererFullTextSearch',
+      `delivererFullTextSearch.entityId = delivererAccount.id AND delivererFullTextSearch.entityTable = 'Account'`
+    )
     .leftJoinAndSelect('delivery.routeToDonor', 'routeToDonor')
     .leftJoinAndSelect('delivererAccount.volunteer', 'delivererVolunteer')
     .leftJoinAndSelect('delivererAccount.contactInfo', 'delivererContactInfo');
@@ -88,6 +104,7 @@ function _genWhereCondition(
   queryBuilder = _genAccountConditions(queryBuilder, filters);
   queryBuilder = _genDeliveryWindowConditions(queryBuilder, filters);
   queryBuilder = _genDonationExpiredCondition(queryBuilder, filters);
+  queryBuilder = _genFullTextCondition(queryBuilder, filters);
   return queryBuilder;
 }
 
@@ -220,15 +237,28 @@ function _genDonationExpiredCondition(
   filters: DonationFilters
 ): OrmSelectQueryBuilder<DonationEntity> {
   const expired: boolean = (filters.expired === 'true');
-  if (!expired && !_isSearchingSpecificDonation(filters)) {
+  if (!expired && filters.id == null) {
     // Only include non-expired donations: Pickup window has not passed or has been scheduled for delivery.
     queryBuilder = queryBuilder.andWhere(`(donation.pickupWindowEnd > NOW() OR donation.donationStatus >= '${DonationStatus.Scheduled}')`);
   }
   return queryBuilder;
 }
 
-function _isSearchingSpecificDonation(filters: DonationFilters): boolean {
-  return (filters.id != null);
+function _genFullTextCondition(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationFilters)
+: OrmSelectQueryBuilder<DonationEntity> {
+  if (filters.fullTextQuery?.trim()) {
+    const fullTextQuery: string = preprocessFullTextQuery(filters.fullTextQuery);
+    // NOTE: This portion of filter clause may prove to be very inefficienc. Must keep an eye on this...
+    queryBuilder = queryBuilder.andWhere(`(
+      TO_TSQUERY(:fullTextQuery) @@ donationFullTextSearch.fullText
+      OR TO_TSQUERY(:fullTextQuery) @@ donorFullTextSearch.fullText
+      OR TO_TSQUERY(:fullTextQuery) @@ receiverFullTextSearch.fullText
+      OR TO_TSQUERY(:fullTextQuery) @@ delivererFullTextSearch.fullText
+    )`, { fullTextQuery });
+  }
+  return queryBuilder;
 }
 
 function _genOrdering(
