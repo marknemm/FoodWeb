@@ -40,6 +40,10 @@ if (!PRODUCTION && !QA) {
   }
 }
 
+// Override dist directory in dev environment due to conflict between parallel web & admin builds.
+const DIST_DIR: string = (PRODUCTION || QA || !process.env['DEV_DIST_DIR']) ? 'dist' : process.env['DEV_DIST_DIR'];
+global['serverDistDir'] = path.join(global['serverDir'], DIST_DIR, 'server');
+
 if (process.env.ADMIN === 'true') {
   throw new Error('Attempting to start WEB server with ADMIN env set to true');
 }

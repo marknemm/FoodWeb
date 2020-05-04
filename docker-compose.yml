@@ -62,6 +62,10 @@ services:
       - postgres
       - redis
     command: bash -c "npm run start:docker"
+    volumes:
+      # Exclude the following directories from shared volume by overwriting with blank directory
+      - /usr/src/foodweb/server/projects/admin
+      - /usr/src/foodweb/server/admin-dist
 
   foodweb-admin-server:
     extends: foodweb-server-base

@@ -10,6 +10,7 @@ import path = require('path');
 export function initOrm(): Promise<Connection> {
   const entitiesPath: string = path.join(global['serverDistDir'], 'database', 'src', 'entity', '*.js');
   const migrationsPath: string = path.join(global['serverDistDir'], 'database', 'src', 'migration', '*.js');
+  console.log(entitiesPath);
   return createConnection({
     type: 'postgres',
     host: process.env.DATABASE_HOST,

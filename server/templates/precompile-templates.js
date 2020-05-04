@@ -19,6 +19,7 @@ const distEmailPartialsPath = path.join(distEmailTemplatesPath, 'partials');
 // Perform precompilation workflow.
 createTemplatesDistIfNotExist();
 precompileTemplates();
+copyResultToAdminDist();
 
 /**
  * Creates precompiled template dist directories if they do not exist.
@@ -87,4 +88,15 @@ function inlineFileCss(inTmplPath, inCssPath, outTmplPath) {
   const cssToInline = fs.readFileSync(inCssPath, 'utf8');
   const inlinedTmpl = juice.inlineContent(tmplToInline, cssToInline);
   fs.writeFileSync(outTmplPath, inlinedTmpl);
+}
+
+/**
+ * Copies the template precompile result from /dist to /admin-dist if it exists for dev mode.
+ */
+function copyResultToAdminDist() {
+  const adminDistServerPath = distServerPath.replace('/dist', '/admin-dist');
+  const adminDistTemplatesPath = path.join(adminDistServerPath, 'templates');
+  if (fs.existsSync(adminDistServerPath)) {
+    fs.copySync(distTemplatesPath, adminDistTemplatesPath, { overwrite: true });
+  }
 }

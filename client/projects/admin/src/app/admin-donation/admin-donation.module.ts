@@ -9,6 +9,7 @@ import { DonationModule } from '~web/donation/donation.module';
 import { DonorModule } from '~web/donor/donor.module';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
+import { DonationRoutingModule } from '~web/donation/donation-routing.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { SharedModule } from '~web/shared/shared.module';
   ],
   imports: [
     AdminDonationRoutingModule,
+    DonationRoutingModule,
     AccountModule,
     CommonModule,
     DateTimeModule,

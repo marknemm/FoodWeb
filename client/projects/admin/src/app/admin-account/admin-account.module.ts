@@ -10,6 +10,7 @@ import { AdminAccountsComponent } from '~admin/admin-account/components/admin-ac
 import { ComposeMessageComponent } from '~admin/admin-account/compose-message/compose-message.component';
 import { CreateAccountComponent } from '~admin/admin-account/create-account/create-account.component';
 import { AdminPasswordModule } from '~admin/admin-password/admin-password.module';
+import { AccountRoutingModule } from '~web/account/account-routing.module';
 import { AccountModule } from '~web/account/account.module';
 import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { MaterialModule } from '~web/material.module';
@@ -27,6 +28,7 @@ import { AdminAccountRoutingModule } from './admin-account-routing.module';
   ],
   imports: [
     AdminAccountRoutingModule,
+    AccountRoutingModule,
     CommonModule,
     AccountModule,
     AdminPasswordModule,
