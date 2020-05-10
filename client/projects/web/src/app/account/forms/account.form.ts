@@ -1,7 +1,6 @@
 import { Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Omit } from 'utility-types';
 import { Account, AccountType, NotificationSettings, OperationHours } from '~shared';
 import { ContactInfoForm } from '~web/account/contact-info.form';
 import { NotificationSettingsForm } from '~web/account/notification-settings.form';
@@ -20,7 +19,7 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
   ) {
     super({
       id: undefined,
-      accountType: [null, Validators.required],
+      accountType: [undefined, Validators.required],
       username: ['', Validators.required],
       profileImgUrl: '',
       organization: new OrganizationForm(),
@@ -61,7 +60,7 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
   }
 
   patchValue(value: Partial<AccountFormT | Account>): void {
-    if (!value['notificationSettings']) {
+    if (!value.hasOwnProperty('notificationSettings')) {
      (<NotificationSettingsForm>this.get('notificationSettings')).patchValue(value.contactInfo);
     }
     super.patchValue(<Partial<AccountFormT>>value);

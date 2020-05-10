@@ -1,5 +1,6 @@
 import { SelectionModel } from "@angular/cdk/collections";
 import { TemplateRef } from "@angular/core";
+import { DeepReadonly } from "~shared";
 
 /**
  * Defines metadata for a (FoodWeb) Table's columns.
@@ -67,14 +68,14 @@ export interface TableColumn<T = any> {
   /**
    * The selection model for column cell checkboxes. Will be automatically set and maintained by TableDataSource.
    */
-  selectionModel?: SelectionModel<T>;
+  selectionModel?: SelectionModel<DeepReadonly<T>>;
   /**
    * A callback method that shall be called whenever the column cells' checkboxes' checked-state changes.
    */
-  cellCheckboxCb?: (row: T, name: string, checked: boolean) => void,
+  cellCheckboxCb?: (row: DeepReadonly<T>, name: string, checked: boolean) => void,
   /**
    * Applies a data transform function to the data that is to be displayed in a default cell template.
    * The function takes as input the row, and it should output the value to display in the cell.
    */
-  dataTransform?: (row: T, name: string) => any;
+  dataTransform?: (row: DeepReadonly<T>, name: string) => any;
 }

@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
-import { environment } from '~admin/environments/environment';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
 import { HttpClient } from '@angular/common/http';
-import { Account } from '~shared';
-import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
+import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AdminSessionService } from '~admin/admin-session/services/admin-session/admin-session.service';
+import { Account, DeepReadonly } from '~shared';
+import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +24,7 @@ export class AdminSignupVerificationService extends SignupVerificationService {
    * Resends a signup verification email for a given account.
    * @param account The account for which to resend the signup verification email.
    */
-  resendVerificationEmailFor(account: Account): void {
+  resendVerificationEmailFor(account: DeepReadonly<Account>): void {
     if (!this.loading) {
       const url = `${this.url}/resend-verification-email/${account.id}`;
       this._httpClient.get(url, { withCredentials: true }).pipe(

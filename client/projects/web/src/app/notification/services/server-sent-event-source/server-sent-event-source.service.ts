@@ -18,7 +18,7 @@ export class ServerSentEventSourceService {
 
   private _eventSource: EventSource;
   private _onMessage = new ReplaySubject<MessageEvent>();
-  private _onError = new ReplaySubject<MessageEvent>();
+  private _onError = new ReplaySubject<Event>();
 
   constructor(
     private _applicationRef: ApplicationRef,
@@ -51,7 +51,7 @@ export class ServerSentEventSourceService {
   /**
    * Observable that emits an event message whenever the server side event client receives an error from the server.
    */
-  get onError(): Observable<MessageEvent> {
+  get onError(): Observable<Event> {
     return this._onError.asObservable();
   }
 
@@ -64,7 +64,7 @@ export class ServerSentEventSourceService {
       this._eventSource.onmessage = (event: MessageEvent) => {
         this._onMessage.next(event);
       }
-      this._eventSource.onerror = (event: MessageEvent) => this._onError.next(event);
+      this._eventSource.onerror = (event: Event) => this._onError.next(event);
     }
   }
 

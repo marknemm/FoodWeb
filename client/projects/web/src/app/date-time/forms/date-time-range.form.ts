@@ -1,4 +1,4 @@
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, AbstractControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 import { DateTimeRange } from '~web/date-time/date-time/date-time.service';
@@ -50,7 +50,7 @@ export class DateTimeRangeForm extends TypedFormGroup<DateTimeRange> {
     config.defaultEndDateTime = config.defaultEndDateTime === 'Now' ? new Date() : config.defaultEndDateTime;
   }
 
-  private _dateTimeRangeOrderValidator(form: DateTimeRangeForm): { dateTimeRangeOrder: string } {
+  private _dateTimeRangeOrderValidator(form: AbstractControl): { dateTimeRangeOrder: string } {
     const startDate: Date = form.get('startDateTime').value;
     const endDate: Date = form.get('endDateTime').value;
     if (!startDate || !endDate || startDate < endDate) {

@@ -5,6 +5,7 @@ const config = {
   compilerOptions: {
     outDir: "../../out-tsc/spec",
     paths: tsconfig.compilerOptions.paths,
+    strict: false,
     types: [
       "jasmine",
       "node"

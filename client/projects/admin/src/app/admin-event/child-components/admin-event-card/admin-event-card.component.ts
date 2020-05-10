@@ -12,6 +12,7 @@ export class AdminEventCardComponent implements OnInit {
   @Input() hideActions = false;
   @Input() hideDelete = false;
   @Input() hideEdit = false;
+  @Input() hideViewRegistrations = false;
   @Input() linkToEventsPage = false;
 
   @Output() deleteEvent = new EventEmitter<void>();

@@ -105,7 +105,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   private _saveAccountSection(sectionName: AccountFormKey): Observable<boolean> {
     const account: Account = this.accountForm.toAccount();
-    return this._accountService.updateAccountSection(account, sectionName).pipe(
+    return this._accountService.updateAccountSection(account, <keyof Account>sectionName).pipe(
       map((savedAccount: Account) =>
         this._handleSaveSuccess(sectionName, savedAccount) // Implicit return true.
       )
@@ -122,7 +122,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   private _handleSaveSuccess(sectionName: AccountFormKey, savedAccount: Account): true {
     this._originalAccount = savedAccount;
     const accountSectionPatch: Partial<Account> = {};
-    accountSectionPatch[sectionName] = savedAccount[sectionName];
+    (<any>accountSectionPatch)[sectionName] = savedAccount[<keyof Account>sectionName];
     this.accountForm.patchValue(accountSectionPatch);
     return true;
   }

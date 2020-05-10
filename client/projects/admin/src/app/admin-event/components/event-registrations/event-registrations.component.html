@@ -3,32 +3,14 @@
     {{ pageTitleService.title }}
   </div>
 
-  <form [formGroup]="eventIdentifierForm" class="event-identifier-form" (ngSubmit)="getEventRegistrations()">
-    <mat-form-field class="fill" floatLabel="never">
-      <input matInput #searchInput
-        placeholder="Search for event registrations..."
-        formControlName="eventIdentifierStr"
-        [matAutocomplete]="autocomplete"
-        (click)="searchInput.select()">
-      <mat-autocomplete #autocomplete (optionSelected)="getEventRegistrations()">
-        <mat-option *ngFor="let eventIdentifierStr of filteredEventIdentifierStrs" [value]="eventIdentifierStr">
-          {{ eventIdentifierStr }}
-        </mat-option>
-      </mat-autocomplete>
-      <button mat-icon-button matSuffix type="submit" aria-label="Search Submit" class="search-button">
-        <mat-icon>search</mat-icon>
-      </button>
-    </mat-form-field>
-  </form>
-
-  <food-web-table-container *ngIf="registrationsTableTitle || eventRegistrationService.eventRegistrationsLoading">
+  <food-web-table-container>
     <mat-card class="datatable-card">
       <mat-card-title>
         <food-web-table-title searchPlaceholder="Filter table..." searchIcon="filter_list">
-          {{ registrationsTableTitle }}
+          <span [innerHTML]="eventRegistrationsTitle"></span>
         </food-web-table-title>
       </mat-card-title>
-      <food-web-progress-indicator [trigger]="eventRegistrationService.eventRegistrationsLoading" class="datatable-progress"></food-web-progress-indicator>
+      <food-web-progress-indicator [trigger]="eventRegistrationService.loading" class="datatable-progress"></food-web-progress-indicator>
       <mat-card-content>
         <food-web-table mat-table [dataSource]="registrationsDataSource" matSort></food-web-table>
       </mat-card-content>

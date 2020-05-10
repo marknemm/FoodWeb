@@ -34,7 +34,7 @@ export class MapAppLinkService {
       waypoints = [waypoints[0], waypoints[2]];
     }
     const waddrs: string[] = waypoints.slice(1, waypoints.length -1).map(
-      (waypoint: ClientWaypoint) => this._genUrlAddrArg(waypoint)
+      (waypoint: ClientWaypoint | string) => this._genUrlAddrArg(waypoint)
     );
     const daddr: string = this._genUrlAddrArg(waypoints[waypoints.length - 1]);
     return `https://www.google.com/maps/dir/?api=1&destination=${daddr}`

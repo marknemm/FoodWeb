@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { catchError, finalize } from 'rxjs/operators';
 import { environment } from '~admin/environments/environment';
@@ -31,11 +31,11 @@ export class ImpersonateService {
     const url = `${this.url}/${account.id}`;
     this._pageProgressService.activate(true);
     this._httpClient.get<ImpersonateTokenResponse>(url, { withCredentials: true }).pipe(
-      catchError(this._errorHandlerService.handleError.bind(this)),
+      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
       finalize(() => this._pageProgressService.reset())
     ).subscribe((response: ImpersonateTokenResponse) => {
       this._alertService.displaySimpleMessage('User Impersonation Successful', 'success');
-      this._window.open(`${environment.web}/home/login?impersonationToken=${response.impersonationToken}`, '_blank');
+      this._window.open(`${environment.webServer}/home/login?impersonationToken=${response.impersonationToken}`, '_blank');
     });
   }
 }

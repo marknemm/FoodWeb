@@ -37,20 +37,21 @@ export function updateAccountSection(
   }
   // Shallow copy orignal account to set update field(s).
   const account: AccountEntity = Object.assign(new AccountEntity(), myAccount);
-  account[updateReq.accountSectionName] = updateReq.accountSection;
+  (<any>account)[updateReq.accountSectionName] = updateReq.accountSection;
   return updateAccount({ account }, myAccount);
 }
 
 function _updateNotificationsSettings(
-  updateReq: AccountSectionUpdateReqeust<NotificationSettings>,
+  updateReq: AccountSectionUpdateReqeust,
   myAccount: AccountEntity
 ): Promise<UpdateDiff<AccountEntity>> {
   // Shallow copy orignal account to set update field(s).
   const account: AccountEntity = Object.assign(new AccountEntity(), myAccount);
+  const notificationSettingsUpdate = <ContactInfoEntity> updateReq.accountSection;
   account.contactInfo = Object.assign(new ContactInfoEntity(), account.contactInfo);
-  account.contactInfo.enableEmail = updateReq.accountSection.enableEmail;
-  account.contactInfo.enablePushNotification = updateReq.accountSection.enablePushNotification;
-  account.contactInfo.notifyForEachDonation = updateReq.accountSection.notifyForEachDonation;
+  account.contactInfo.enableEmail = notificationSettingsUpdate.enableEmail;
+  account.contactInfo.enablePushNotification = notificationSettingsUpdate.enablePushNotification;
+  account.contactInfo.notifyForEachDonation = notificationSettingsUpdate.notifyForEachDonation;
   return updateAccount({ account }, myAccount);
 }
 

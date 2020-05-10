@@ -29,19 +29,19 @@ export class HttpResponseService {
     return !!this._loadingRecords.get(httpResponse$);
   }
 
-  handleHttpResponse<T>(opts: HttpResponseHandlerOptions<T> = {}): OperatorFunction<Object, T> {
+  handleHttpResponse<T>(opts: HttpResponseHandlerOptions<T> = {}): OperatorFunction<any, T> {
     return (httpResponse$: Observable<T>): Observable<T> => {
-      opts = this.fillDefaultHttpHandlerOpts(opts);
-      this.setLoadingStatus(httpResponse$, opts, true);
+      opts = this._fillDefaultHttpHandlerOpts(opts);
+      this._setLoadingStatus(httpResponse$, opts, true);
       return httpResponse$.pipe(
-        tap((response: T) => this.handleHttpSuccessResponse(response, opts)),
-        catchError((err: HttpErrorResponse) => this.handleHttpErrorResponse(err, opts)),
-        finalize(() => this.setLoadingStatus(httpResponse$, opts, false))
+        tap((response: T) => this._handleHttpSuccessResponse(response, opts)),
+        catchError((err: HttpErrorResponse) => this._handleHttpErrorResponse(err, opts)),
+        finalize(() => this._setLoadingStatus(httpResponse$, opts, false))
       );
     }
   }
 
-  private fillDefaultHttpHandlerOpts<T>(opts: HttpResponseHandlerOptions<T>): HttpResponseHandlerOptions<T> {
+  private _fillDefaultHttpHandlerOpts<T>(opts: HttpResponseHandlerOptions<T>): HttpResponseHandlerOptions<T> {
     opts = (opts != null) ? Object.assign({}, opts) : {};
     opts.handleErrorResponse = (opts.handleErrorResponse != null) ? opts.handleErrorResponse : true;
     opts.pageProgressBlocking = (opts.pageProgressBlocking != null) ? opts.pageProgressBlocking : true;
@@ -49,7 +49,7 @@ export class HttpResponseService {
     return opts;
   }
 
-  private setLoadingStatus<T>(httpResponse$: Observable<T>, opts: HttpResponseHandlerOptions<T>, loading: boolean): void {
+  private _setLoadingStatus<T>(httpResponse$: Observable<T>, opts: HttpResponseHandlerOptions<T>, loading: boolean): void {
     // Keep track of each separate loading HTTP response.
     (loading)
       ? this._loadingRecords.set(httpResponse$, true)
@@ -63,10 +63,10 @@ export class HttpResponseService {
     }
   }
 
-  private handleHttpSuccessResponse<T>(response: T, opts: HttpResponseHandlerOptions<T>): void {
+  private _handleHttpSuccessResponse<T>(response: T, opts: HttpResponseHandlerOptions<T>): void {
     // If an immutable store is configured, then set its state to the response data.
     if (opts.immutableStore) {
-      opts.immutableStore.setState(response);
+      opts.immutableStore.setValue(response);
     }
 
     // Display a success alert message if one is configured.
@@ -75,7 +75,7 @@ export class HttpResponseService {
     }
   }
 
-  private handleHttpErrorResponse<T>(err: HttpErrorResponse, opts: HttpResponseHandlerOptions<T>): ObservableInput<T> {
+  private _handleHttpErrorResponse<T>(err: HttpErrorResponse, opts: HttpResponseHandlerOptions<T>): ObservableInput<T> {
     // Re-throw the error if instructed not to perform default error response handling.
     if (!opts.handleErrorResponse) {
       throw err;

@@ -1,4 +1,4 @@
-import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { FormControl, FormGroupDirective, NgForm, Validators, AbstractControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Validation } from '~shared';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
@@ -25,7 +25,7 @@ export class PasswordForm extends TypedFormGroup<PasswordFormT> {
     }
   }
 
-  private _validatePasswordMatch(form: PasswordForm): { passwordConfirmMatch: string } {
+  private _validatePasswordMatch(form: AbstractControl): { passwordConfirmMatch: string } {
     const password: string = form.get('password').value;
     const confirmPassword: string = form.get('confirmPassword').value;
     return (!password || !confirmPassword || password === confirmPassword) ?

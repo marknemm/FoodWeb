@@ -114,11 +114,13 @@ const config = {
     types: ["node"]
   },
   include: [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "../web/src/**/*.ts"
   ],
   exclude: [
     "src/test.ts",
-    "src/**/*.spec.ts"
+    "src/**/*.spec.ts",
+    "../web/src/**/*.spec.ts"
   ]
 };
 

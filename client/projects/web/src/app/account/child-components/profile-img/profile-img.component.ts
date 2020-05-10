@@ -31,16 +31,20 @@ export class ProfileImgComponent implements OnInit, ControlValueAccessor {
     this._onChangeCb = onChangeCb;
   }
 
-  onSelectFile(event) {
+  onSelectFile(event: HTMLInputEvent) {
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event: ProgressEvent) => {
-        this.imgUrl = event.target['result'];
+        this.imgUrl = (<any>event.target).result;
         this._onChangeCb(this.imgUrl);
       }
     }
   }
 
   registerOnTouched(): void {}
+}
+
+interface HTMLInputEvent extends Event {
+  target: HTMLInputElement & EventTarget;
 }

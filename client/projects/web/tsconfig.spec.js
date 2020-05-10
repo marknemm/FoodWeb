@@ -4,6 +4,7 @@ const config = {
   extends: "../../tsconfig.json",
   compilerOptions: {
     paths: tsconfig.compilerOptions.paths,
+    strict: false,
     types: [
       "jasmine",
       "node"

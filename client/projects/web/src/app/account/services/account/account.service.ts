@@ -28,9 +28,9 @@ export class AccountService {
     private _alertService: AlertService
   ) {}
 
-  updateAccountSection<T>(account: Account, secitonName: AccountFormKey): Observable<Account> {
+  updateAccountSection(account: Account, secitonName: keyof Account): Observable<Account> {
     const url = `${this.url}/${account.id}/section`;
-    const accountSectionUpdtReq: AccountSectionUpdateReqeust<T> = { accountSectionName: secitonName, accountSection: account[secitonName] };
+    const accountSectionUpdtReq: AccountSectionUpdateReqeust = { accountSectionName: secitonName, accountSection: account[secitonName] };
     this._pageProgressService.activate(true);
     return this._httpClient.put<Account>(url, accountSectionUpdtReq, { withCredentials: true }).pipe(
       map((savedAccount: Account) => this._handleAccountUpdateResponse(savedAccount)),

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
-import { Router, RouterEvent } from '@angular/router';
+import { Router, Event } from '@angular/router';
 import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
 
 @Injectable({
@@ -93,7 +93,7 @@ export class PageProgressService {
   }
 
   private _listenForRouteChange(router: Router): void {
-    router.events.subscribe((event: RouterEvent) => {
+    router.events.subscribe((event: Event) => {
       if (event instanceof PageTransitionEvent) {
         this.trigger = false;
       }

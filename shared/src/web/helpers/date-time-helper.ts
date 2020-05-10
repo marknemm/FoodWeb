@@ -1,4 +1,4 @@
-import { DeepReadonly } from 'utility-types';
+import { DeepReadonly } from 'ts-essentials';
 
 export class DateTimeHelper {
 

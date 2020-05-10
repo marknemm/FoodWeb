@@ -49,7 +49,7 @@ export class SignupVerificationService {
     const verificationToken: string = this._activatedRoute.snapshot.queryParamMap.get('verificationToken');
     const request: AccountVerificationRequest = { verificationToken };
     return this._httpClient.post<Account>(`${this.url}/verify`, request, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ handleErrorResponse: false, showPageProgressOnLoad: false }),
+      this._httpResponseService.handleHttpResponse<Account>({ handleErrorResponse: false, showPageProgressOnLoad: false }),
       tap((account: Account) => this._sessionService.account = account)
     );
   }

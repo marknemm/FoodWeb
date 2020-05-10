@@ -68,7 +68,9 @@ export class DonationService {
 
   private _genDonationUpdateRequest(originalDonation: Donation, donationSectionUpdate: Partial<Donation>): DonationUpdateRequest {
     const donation: Donation = Object.assign({}, originalDonation);
-    Object.keys(donationSectionUpdate).forEach((property: string) => donation[property] = donationSectionUpdate[property]);
+    Object.keys(donationSectionUpdate).forEach((property: string) =>
+      donation[property] = donationSectionUpdate[property]
+    );
     return { donation };
   }
 
@@ -142,7 +144,7 @@ export class DonationService {
         };
         params.keys.forEach((paramKey: string) => {
           if (paramKey !== 'page' && paramKey !== 'limit') {
-            request[paramKey] = params.get(paramKey);
+            (<any>request)[paramKey] = params.get(paramKey);
           }
         });
         return this._getDonations(request, myDonations);

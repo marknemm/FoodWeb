@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError, finalize, map } from 'rxjs/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
 import { environment } from '~admin/environments/environment';
 import { FeaturedEvent } from '~shared';
 import { AlertService } from '~web/shared/alert/alert.service';
@@ -31,19 +31,9 @@ export class DeleteFeaturedEventService {
     this._pageProgressService.activate(true);
     return this._httpClient.delete<void>(`${this.url}/${featuredEvent.id}`, { withCredentials: true })
       .pipe(
-        map(this._showSuccessMessage.bind(this)),
+        tap(() => this._alertSerivce.displaySimpleMessage('Event Deletion Successful', 'success')),
         catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
         finalize(() => this._pageProgressService.reset())
       );
-  }
-
-  /**
-   * Displays a success message for the deletion of a featured event.
-   * @param featuredEvent The featured event to show the success message for.
-   * @return The input featured event.
-   */
-  private _showSuccessMessage(featuredEvent: FeaturedEvent): FeaturedEvent {
-    this._alertSerivce.displaySimpleMessage('Event Deletion Successful', 'success');
-    return featuredEvent;
   }
 }

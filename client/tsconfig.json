@@ -10,6 +10,9 @@
     "moduleResolution": "node",
     "target": "es2015",
     "sourceMap": true,
+    "strict": true,
+    "strictNullChecks": false,
+    "suppressImplicitAnyIndexErrors": true,
     "typeRoots": [
       "node_modules/@types"
     ],

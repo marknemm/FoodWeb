@@ -1,127 +1,120 @@
-import { ObservableStore, ObservableStoreSettings, StateWithPropertyChanges } from '@codewithdan/observable-store';
-import { stateFunc } from '@codewithdan/observable-store/dist/observable-store';
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { DeepReadonly } from 'utility-types';
-import { environment } from '~web/environments/environment';
-export { ObservableStoreSettings };
-
-// Setup default global settings for Observable Store.
-ObservableStore.globalSettings = {
-  logStateChanges: false,
-  isProduction: environment.production,
-  trackStateHistory: !environment.production,
-};
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, skip, takeUntil } from 'rxjs/operators';
+import { DeepReadonly } from '~shared';
 
 /**
  * A simple redux-like store for maintaining state throughout Foodweb.
- * @extends ObservableStore
  */
-export class ImmutableStore<T> extends ObservableStore<DeepReadonly<T>> {
+export class ImmutableStore<T> {
 
-  constructor(settings: ObservableStoreSettings = {}) {
-    super(settings);
+  /**
+   * The raw internal store value.
+   */
+  private _value: T
+  /**
+   * A behavior subject that emits the raw internal store value when setValue is invoked.
+   */
+  private _value$: BehaviorSubject<T>;
+
+  constructor(initValue?: T) {
+    this._value = initValue;
+    this._value$ = new BehaviorSubject<T>(this._value);
   }
 
   /**
-   * Retrieves the store's state as a reference to the mutable stored value.
-   * @param cloneState An optional flag used to determine the level of cloning that should occur before returning the retrieved state.
-   * Defaults to CloneLevel.None.
-   * @return The store's state.
+   * The current immutable store value.
    */
-  getMutableState(cloneState = CloneLevel.None): T {
-    const state = <T>super.getState(cloneState === CloneLevel.Deep);
-    return (cloneState === CloneLevel.Shallow)
-      ? Object.assign({}, state)
-      : state;
+  get value(): DeepReadonly<T> {
+    return <DeepReadonly<T>>this._value;
   }
 
   /**
-   * Subscribe to store changes in the particlar slice of state updated by a Service.
-   * If the store contains 'n' slices of state each being managed by one of 'n' services,
-   * then changes in any of the other slices of state will not generate values in the stateChanged stream.
-   * @param cloneState An optional flag used to determine the level of cloning that should occur before emitting the changed state.
-   * Defaults to CloneLevel.None.
-   * @return An RxJS Observable containing the current store state
-   * (or a specific slice of state if a stateSliceSelector has been specified).
+   * An observable that emits the current immutable store value, and any updates to it.
    */
-  getMutableStateChanged(cloneState = CloneLevel.None): Observable<T> {
-    return this.stateChanged.pipe(
-      map((state: DeepReadonly<T>) => {
-        switch (cloneState) {
-          case CloneLevel.Deep:     return _.cloneDeep(<T>state);
-          case CloneLevel.Shallow:  return Object.assign({}, <T>state);
-          default:                  return <T>state;
-        }
-      })
+  get value$(): Observable<DeepReadonly<T>> {
+    return this._value$.asObservable();
+  }
+
+  /**
+   * An observable that emits any updates to the immutable store's value, but not the current value.
+   */
+  get valueUpdates$(): Observable<DeepReadonly<T>> {
+    return this._value$.asObservable().pipe(skip(1));
+  }
+
+  getValue$(destroy$: Observable<any>): Observable<DeepReadonly<T>> {
+    return this.value$.pipe(takeUntil(destroy$));
+  }
+
+  getValueUpdates$(destroy$: Observable<any>): Observable<DeepReadonly<T>> {
+    return this.valueUpdates$.pipe(takeUntil(destroy$));
+  }
+
+  /**
+   * Retrieves the store's mutable value.
+   * @param cloneLevel An optional flag used to determine the level of cloning that should occur before returning the value.
+   * Defaults to CloneLevel.None.
+   * @return The store's mutable value.
+   */
+  getMutableValue(cloneLevel = CloneLevel.None): T {
+    return this._cloneWithLevel(this._value, cloneLevel);
+  }
+
+  /**
+   * Retrieves an oversable which emits a reference to the store's mutable value.
+   * @param cloneLevel An optional falg used to determine the level of cloning that should occur before emitting the value.
+   * Defaults to CloneLevel.None.
+   * @return An observable that emits the store's current mutable value, and any updates to it.
+   */
+  getMutableValue$(cloneLevel = CloneLevel.None): Observable<T> {
+    return this._value$.asObservable().pipe(
+      map((value: T) => this._cloneWithLevel(value, cloneLevel))
     );
   }
 
   /**
-   * Retrieves a specified property within the store's state.
+   * Retrieves a specified property within the immutable store's value.
    * @param propertyName The name of the property to retrieve.
-   * @param cloneState On optional flag used to determine the level of cloning that should occur before returning the state property slice.
-   * Defaults to CloneLevel.None.
-   * @return The store's state property.
+   * @return The immutable store value's property.
    */
-  getMutableStateProperty<K extends Extract<keyof T, string>, P = T[K]>(propertyName: K, cloneState = CloneLevel.None): P {
-    const statePropValue: P = super.getStateProperty<P>(propertyName, cloneState === CloneLevel.Deep);
-    return (cloneState === CloneLevel.Shallow)
-      ? Object.assign({}, statePropValue)
-      : statePropValue;
+  getMutableProperty<K extends Extract<keyof T, string>>(propertyName: K, cloneLevel = CloneLevel.None): T[K] {
+    const propertyVal: T[K] = (this._value ? this._value[propertyName] : undefined);
+    return this._cloneWithLevel(propertyVal, cloneLevel);
   }
 
   /**
-   * Subscribe to store changes in the particlar slice of state updated by a Service and also include the properties that changed as well.
-   * Upon subscribing to stateWithPropertyChanges you will get back an object containing state
-   * (which has the current slice of store state) and stateChanges
-   * (which has the individual properties/data that were changed in the store).
-   * @param cloneState On optional flag used to determine the level of cloning that should occur before emitting the state property slice
-   * change. Defaults to CloneLevel.None.
-   * @return An rxJS Observable containing the current store state's property value.
+   * @param value The new value to set.
+   * IMPORTANT: If the clone level is not set, then any external changes made to the object will be reflected in the store!
+   * @param cloneLevel Optionally, set the clone level for the value that is to be set. Defaults to None.
+   * @param preventValueEmit Optionally, set to true if this should not result in the value$ observable emitting the updated value.
+   * @return The set value.
    */
-  getMutableStateWithPropertyChanged(cloneState = CloneLevel.None): Observable<StateWithPropertyChanges<T>> {
-    return this.stateWithPropertyChanges.pipe(
-      map((stateWithPropChanges: StateWithPropertyChanges<DeepReadonly<T>>) => {
-        switch (cloneState) {
-          case CloneLevel.Deep:     return _.cloneDeep(<StateWithPropertyChanges<T>>stateWithPropChanges);
-          case CloneLevel.Shallow:  return Object.assign({}, <StateWithPropertyChanges<T>>stateWithPropChanges);
-          default:                  return <StateWithPropertyChanges<T>>stateWithPropChanges;
-        }
-      })
-    );
+  setValue(value: DeepReadonly<T>, cloneLevel = CloneLevel.None, preventValueEmit = false): DeepReadonly<T> {
+    value = this._cloneWithLevel(value, cloneLevel);
+    this._value = <T>value;
+    if (!preventValueEmit) {
+      this._value$.next(this._value);
+    }
+    return <DeepReadonly<T>>this._value;
   }
 
   /**
-   * Retrieves the store's state.
-   * @return The store's immutable state.
+   * Clones a given value to a certain level (Deep, Shallow, or None).
+   * @param value The value that is to be cloned.
+   * @param cloneLevel The level of cloning to perform.
+   * @return The value with the level of cloning applied.
    */
-  getState(): DeepReadonly<T> {
-    return super.getState(false);
-  }
-
-  /**
-   * Retrieves a specified property within the store's state.
-   * @param propertyName The name of the property to retrieve.
-   * @return The store's immutable state property.
-   */
-  getStateProperty<K extends Extract<keyof DeepReadonly<T>, string>, P = DeepReadonly<T>[K]>(propertyName: K): P {
-    return super.getStateProperty(propertyName, false);
-  }
-
-  /**
-   * @override
-   * @param state Either the state update object or a function which takes as input the old state object and returns a state update object.
-   * @param action An optional action string describing the state update (for debugging purposes).
-   * @param dispatchState An optional flag that controls whether or not the state change is dispatched to subscribers
-   * of the store's state change observables. Defaults to true.
-   * @return The set deep readonly state.
-   */
-  setState(state: ObservableStoreState<T>, action?: string, dispatchState?: boolean): DeepReadonly<T> {
-    return super.setState(<DeepReadonly<T>>state, action, dispatchState);
+  private _cloneWithLevel<C>(value: C, cloneLevel: CloneLevel): C {
+    switch (cloneLevel) {
+      case CloneLevel.Deep:     return _.cloneDeep(value);
+      case CloneLevel.Shallow:  return Object.assign({}, value);
+      default:                  return value;
+    }
   }
 }
 
-export type ObservableStoreState<T> = Partial<T> | Partial<DeepReadonly<T>> | stateFunc<T> | stateFunc<DeepReadonly<T>>;
+/**
+ * The level of cloning that should occur on an object.
+ */
 export enum CloneLevel { Deep, Shallow, None };

@@ -1,5 +1,5 @@
 <div class="create-account page container" [formGroup]="adminAccountForm.get('accountCreateOptions')">
-  <food-web-account-creation-form *ngIf="!(createdAccountStore.stateChanged | async); else accountCreatedTmpl" [accountForm]="adminAccountForm.accountForm" (createAccount)="createAccount()">
+  <food-web-account-creation-form *ngIf="!(createdAccountStore.value$ | async); else accountCreatedTmpl" [accountForm]="adminAccountForm.accountForm" (createAccount)="createAccount()">
     <mat-slide-toggle
       class="password-options"
       formControlName="autoGenPassword"
@@ -28,7 +28,7 @@
       <mat-card-content>
         <div class="signup-success-button-container align-right">
           <button mat-button *ngIf="!adminAccountForm.accountCreateOptions.autoVerify"
-            color="accent" type="button" (click)="signupVerificationService.resendVerificationEmailFor(createdAccountStore.getState())">
+            color="accent" type="button" (click)="signupVerificationService.resendVerificationEmailFor(createdAccountStore.value)">
             Resend Verification Email
           </button>
           <a [routerLink]="['/']">

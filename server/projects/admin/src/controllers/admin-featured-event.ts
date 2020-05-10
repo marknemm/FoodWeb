@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { deleteFeaturedEvent } from '~admin/services/admin-featured-event/delete-featured-event';
 import { sendFeaturedEventCancelledMessages } from '~admin/services/admin-featured-event/featured-event-cancelled-message';
 import { readEventRegistrations } from '~admin/services/admin-featured-event/read-event-registrations';
-import { readFeaturedEventIdentifiers } from '~admin/services/admin-featured-event/read-featured-event-identifiers';
 import { saveFeaturedEvent } from '~admin/services/admin-featured-event/save-featured-event';
 import { EventRegistrationEntity, FeaturedEventEntity } from '~entity';
 import { FeaturedEvent, FeaturedEventCreateRequest, FeaturedEventUpdateRequest } from '~shared';
@@ -15,13 +14,6 @@ export const router = express.Router();
 
 // Use web featured event controller route handler.
 router.get('/', handleGetFeaturedEvents);
-
-router.get('/identifiers', handleGetEventIdentifiers);
-function handleGetEventIdentifiers(req: Request, res: Response) {
-  readFeaturedEventIdentifiers()
-    .then((featuerdEventIdentifiers: Partial<FeaturedEvent>[]) => res.send(featuerdEventIdentifiers))
-    .catch(genErrorResponse.bind(this, res));
-}
 
 router.get('/:id', handleGetFeaturedEvent);
 function handleGetFeaturedEvent(req: Request, res: Response) {
@@ -37,7 +29,7 @@ router.get('/:id/registrations', handleGetEventRegistrations);
 function handleGetEventRegistrations(req: Request, res: Response) {
   const featuredEventId: number = Number.parseInt(req.params.id, 10);
   readEventRegistrations(featuredEventId)
-    .then((registrations: EventRegistrationEntity[]) => res.send(registrations))
+    .then((featuredEvent: FeaturedEventEntity) => res.send(featuredEvent))
     .catch(genErrorResponse.bind(this, res));
 }
 

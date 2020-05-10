@@ -42,11 +42,11 @@ export class DonationsComponent implements OnInit {
 
   filterDonations(filters: DonationReadRequest): void {
     // Convert dates into raw ISO strings.
-    for (let filtKey in filters) {
+    Object.keys(filters).forEach((filtKey: string) => {
       if (filters[filtKey] instanceof Date) {
         filters[filtKey] = (<Date>filters[filtKey]).toISOString();
       }
-    }
+    });
 
     this._router.navigate([], {
       relativeTo: this._activatedRoute,

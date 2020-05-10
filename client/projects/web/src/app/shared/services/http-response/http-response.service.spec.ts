@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpResponseService } './http-response.service';
+import { HttpResponseService } from './http-response.service';
 
 describe('HttpResponseService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
