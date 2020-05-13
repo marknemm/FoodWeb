@@ -8,7 +8,7 @@ import { adminUpdatePassword } from '~admin/services/admin-password/save-passwor
 import { Account, AccountEntity, UnverifiedAccountEntity } from '~entity';
 import { QueryResult } from '~orm';
 import { AccountCreateRequest, AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, PasswordUpdateRequest, SendMessageRequest } from '~shared';
-import { handleGetRecoverUsername, handleGetResendMyVerificationEmail, handleGetResetPassword, handlePostAccountVerify, handlePutResetPassword } from '~web/controllers/account';
+import { handleGetRecoverUsername, handleGetResendMyVerificationEmail, handleGetResetPassword, handlePostAccountVerify, handlePutResetPassword, handleGetAccountAutocomplete } from '~web/controllers/account';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
@@ -30,6 +30,7 @@ function handleGetAccounts(req: Request, res: Response) {
 }
 
 // Use web account controller route handlers.
+router.get('/autocomplete', handleGetAccountAutocomplete);
 router.get('/recover-username', handleGetRecoverUsername);
 router.get('/reset-password', handleGetResetPassword);
 router.get('/resend-verification-email/', handleGetResendMyVerificationEmail);

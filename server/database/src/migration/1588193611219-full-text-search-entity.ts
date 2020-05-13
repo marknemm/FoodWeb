@@ -20,28 +20,27 @@ export class fullTextSearchEntity1588193611219 implements MigrationInterface {
         INSERT INTO "FullTextSearch" ("entityId", "entityTable", "fullText")
         SELECT  "Account"."id" AS "entityId",
                 'Account' AS "entityTable",
-                TO_TSVECTOR(
-                  CONCAT(
-                    "Account"."accountType", ' ',
-                    REGEXP_REPLACE("Account"."username", '[^\w]+', '', 'g'), ' ',
-                    REGEXP_REPLACE("ContactInfo"."email", '[@\.]', ' ', 'g'), ' ',
-                    "ContactInfo"."phoneNumber", ' ',
-                    CASE WHEN ("Account"."accountType" <> 'Volunteer')
-                      THEN CONCAT(
-                        "ContactInfo"."streetAddress", ' ',
-                        "ContactInfo"."city", ' ',
-                        "ContactInfo"."stateProvince", ' ',
-                        "ContactInfo"."postalCode", ' ',
-                        "ContactInfo"."timezone", ' '
-                      )
-                      ELSE ''
-                    END,
-                    "Organization"."name", ' ',
-                    "Organization"."description", ' ',
-                    "Organization"."deliveryInstructions", ' ',
-                    "Volunteer"."lastName", ' ',
-                    "Volunteer"."firstName"
-                  )
+                (
+                     SETWEIGHT(TO_TSVECTOR("Account"."accountType"::TEXT), 'B')
+                  || SETWEIGHT(TO_TSVECTOR('simple', REGEXP_REPLACE("Account"."username", '[^\w]+', '', 'g')), 'B')
+                  || SETWEIGHT(TO_TSVECTOR('simple', REGEXP_REPLACE("ContactInfo"."email", '[@\.]', ' ', 'g')), 'B')
+                  || SETWEIGHT(TO_TSVECTOR('simple', "ContactInfo"."phoneNumber"), 'D')
+                  || SETWEIGHT(TO_TSVECTOR('simple',
+                      CASE WHEN ("Account"."accountType" <> 'Volunteer')
+                        THEN CONCAT(
+                          "ContactInfo"."streetAddress", ' ',
+                          "ContactInfo"."city", ' ',
+                          "ContactInfo"."stateProvince", ' ',
+                          "ContactInfo"."postalCode"
+                        )
+                        ELSE ''
+                      END
+                     ), 'B')
+                  || SETWEIGHT(TO_TSVECTOR(COALESCE("Organization"."name", '')), 'A')
+                  || SETWEIGHT(TO_TSVECTOR(COALESCE("Organization"."description", '')), 'B')
+                  || SETWEIGHT(TO_TSVECTOR(COALESCE("Organization"."deliveryInstructions", '')), 'C')
+                  || SETWEIGHT(TO_TSVECTOR(COALESCE("Volunteer"."firstName", '')), 'A')
+                  || SETWEIGHT(TO_TSVECTOR(COALESCE("Volunteer"."lastName", '')), 'A')
                 ) AS "fullText"
         FROM      "Account"
         LEFT JOIN "ContactInfo"   ON "Account"."contactInfoId" = "ContactInfo"."id"
@@ -69,19 +68,19 @@ export class fullTextSearchEntity1588193611219 implements MigrationInterface {
 
     await queryRunner.query(`
       CREATE TRIGGER "genAccountFullText_ContactInfo"
-      AFTER INSERT OR UPDATE ON "Account"
+      AFTER INSERT OR UPDATE ON "ContactInfo"
       FOR EACH ROW EXECUTE PROCEDURE "genAccountFullText"('ContactInfo')
     `);
 
     await queryRunner.query(`
       CREATE TRIGGER "genAccountFullText_Organization"
-      AFTER INSERT OR UPDATE ON "Account"
+      AFTER INSERT OR UPDATE ON "Organization"
       FOR EACH ROW EXECUTE PROCEDURE "genAccountFullText"('Organization')
     `);
 
     await queryRunner.query(`
       CREATE TRIGGER "genAccountFullText_Volunteer"
-      AFTER INSERT OR UPDATE ON "Account"
+      AFTER INSERT OR UPDATE ON "Volunteer"
       FOR EACH ROW EXECUTE PROCEDURE "genAccountFullText"('Volunteer')
     `);
 
@@ -112,77 +111,32 @@ export class fullTextSearchEntity1588193611219 implements MigrationInterface {
         INSERT INTO "FullTextSearch" ("entityId", "entityTable", "fullText")
         SELECT  "Donation"."id" AS "entityId",
                 'Donation' AS "entityTable",
-                TO_TSVECTOR(
-                  CONCAT(
-                    "Donation"."donorLastName", ' ',
-                    "Donation"."donorFirstName", ' ',
-                    "Donation"."donationType", ' ',
-                    "Donation"."description", ' ',
-                    "Donation"."donationStatus", ' ',
-                    TO_CHAR("Donation"."createTimestamp", 'Month DD YYYY HH12:MI AM'), ' ',
-                    TO_CHAR("Donation"."createTimestamp", 'MM/DD/YYYY'), ' ',
-                    TO_CHAR("Donation"."pickupWindowStart", 'Month DD YYYY HH12:MI AM'), ' ',
-                    TO_CHAR("Donation"."pickupWindowStart", 'MM/DD/YYYY'), ' ',
-                    TO_CHAR("Donation"."pickupWindowEnd", 'Month DD YYYY HH12:MI AM'), ' ',
-                    TO_CHAR("Donation"."pickupWindowEnd", 'MM/DD/YYYY'), ' ',
-                    CASE WHEN ("DonorContactOverride"."email" IS NOT NULL)
-                      THEN REGEXP_REPLACE("DonorContactOverride"."email", '[@\.]', ' ', 'g')
-                      ELSE ''
-                    END, ' ',
-                    "DonorContactOverride"."phoneNumber", ' ',
-                    "DonorContactOverride"."streetAddress", ' ',
-                    "DonorContactOverride"."city", ' ',
-                    "DonorContactOverride"."stateProvince", ' ',
-                    "DonorContactOverride"."postalCode", ' ',
-                    "DonorContactOverride"."timezone", ' ',
-                    TO_CHAR("DonationClaim"."createTimestamp", 'Month DD YYYY HH12:MI AM'), ' ',
-                    TO_CHAR("DonationClaim"."createTimestamp", 'MM/DD/YYYY'), ' ',
-                    TO_CHAR("DonationClaim"."dropOffWindowStart", 'Month DD YYYY HH12:MI AM'), ' ',
-                    TO_CHAR("DonationClaim"."dropOffWindowStart", 'MM/DD/YYYY'), ' ',
-                    TO_CHAR("DonationClaim"."dropOffWindowEnd", 'Month DD YYYY HH12:MI AM'), ' ',
-                    TO_CHAR("DonationClaim"."dropOffWindowEnd", 'MM/DD/YYYY'), ' ',
-                    TO_CHAR("Delivery"."createTimestamp", 'Month DD YYYY HH12:MI AM'), ' ',
-                    TO_CHAR("Delivery"."createTimestamp", 'MM/DD/YYYY'), ' ',
-                    TO_CHAR("Delivery"."pickupWindowStart", 'Month DD YYYY HH12:MI AM'), ' ',
-                    TO_CHAR("Delivery"."pickupWindowStart", 'MM/DD/YYYY'), ' ',
-                    TO_CHAR("Delivery"."pickupWindowEnd", 'Month DD YYYY HH12:MI AM'), ' ',
-                    TO_CHAR("Delivery"."pickupWindowEnd", 'MM/DD/YYYY'), ' ',
-                    TO_CHAR("Delivery"."dropOffWindowStart", 'Month DD YYYY HH12:MI AM'), ' ',
-                    TO_CHAR("Delivery"."dropOffWindowStart", 'MM/DD/YYYY'), ' ',
-                    TO_CHAR("Delivery"."dropOffWindowEnd", 'Month DD YYYY HH12:MI AM'), ' ',
-                    TO_CHAR("Delivery"."dropOffWindowEnd", 'MM/DD/YYYY'), ' ',
-                    CASE WHEN ("Delivery"."startTime" IS NOT NULL)
-                      THEN CONCAT(
-                        TO_CHAR("Delivery"."startTime", 'Month DD YYYY HH12:MI AM'), ' ',
-                        TO_CHAR("Delivery"."startTime", 'MM/DD/YYYY'), ' '
-                      )
-                      ELSE ''
-                    END,
-                    CASE WHEN ("Delivery"."pickupTime" IS NOT NULL)
-                      THEN CONCAT(
-                        TO_CHAR("Delivery"."pickupTime", 'Month DD YYYY'), ' ',
-                        TO_CHAR("Delivery"."pickupTime", 'MM/DD/YYYY'), ' '
-                      )
-                      ELSE ''
-                    END,
-                    CASE WHEN ("Delivery"."dropOffTime" IS NOT NULL)
-                      THEN CONCAT(
-                        TO_CHAR("Delivery"."dropOffTime", 'Month DD YYYY'), ' ',
-                        TO_CHAR("Delivery"."dropOffTime", 'MM/DD/YYYY'), ' '
-                      )
-                      ELSE ''
-                    END
-                  )
+                (
+                     SETWEIGHT(TO_TSVECTOR("Donation"."donorLastName"), 'B')
+                  || SETWEIGHT(TO_TSVECTOR("Donation"."donorFirstName"), 'B')
+                  || SETWEIGHT(TO_TSVECTOR("Donation"."donationType"), 'A')
+                  || SETWEIGHT(TO_TSVECTOR("Donation"."description"), 'A')
+                  || SETWEIGHT(TO_TSVECTOR("Donation"."donationStatus"::TEXT), 'A')
+                  || SETWEIGHT(TO_TSVECTOR(
+                      REGEXP_REPLACE(COALESCE("DonorContactOverride"."email", ''), '[@\.]', ' ', 'g')
+                     ), 'B')
+                  || SETWEIGHT(TO_TSVECTOR('simple',
+                      CASE WHEN ("DonorContactOverride"."id" IS NOT NULL)
+                        THEN CONCAT(
+                          "DonorContactOverride"."streetAddress", ' ',
+                          "DonorContactOverride"."city", ' ',
+                          "DonorContactOverride"."stateProvince", ' ',
+                          "DonorContactOverride"."postalCode"
+                        )
+                        ELSE ''
+                      END
+                     ), 'B')
                 ) AS "fullText"
         FROM      "Donation"
         LEFT JOIN "ContactInfo" AS "DonorContactOverride" ON  "Donation"."donorContactOverrideId" = "DonorContactOverride"."id"
-        LEFT JOIN "DonationClaim"                         ON  "DonationClaim"."donationId" = "Donation"."id"
-        LEFT JOIN "Delivery"                              ON  "Delivery"."claimId" = "DonationClaim"."id"
         WHERE CASE (TG_ARGV[0])
           WHEN 'Donation'             THEN "Donation"."id" = NEW."id"
           WHEN 'DonorContactOverride' THEN "DonorContactOverride"."id" = NEW."id"
-          WHEN 'DonationClaim'        THEN "DonationClaim"."id" = NEW."id"
-          WHEN 'Delivery'             THEN "Delivery"."id" = NEW."id"
         END
         ON CONFLICT ("entityId", "entityTable") DO UPDATE
         SET "entityId"    = excluded."entityId",
@@ -205,18 +159,6 @@ export class fullTextSearchEntity1588193611219 implements MigrationInterface {
     `);
 
     await queryRunner.query(`
-      CREATE TRIGGER "genDonationFullText_DonationClaim"
-      AFTER INSERT OR UPDATE ON "DonationClaim"
-      FOR EACH ROW EXECUTE PROCEDURE "genDonationFullText"('DonationClaim')
-    `);
-
-    await queryRunner.query(`
-      CREATE TRIGGER "genDonationFullText_Delivery"
-      AFTER INSERT OR UPDATE ON "Delivery"
-      FOR EACH ROW EXECUTE PROCEDURE "genDonationFullText"('Delivery')
-    `);
-
-    await queryRunner.query(`
       UPDATE  "Donation"
       SET     "id" = "Donation"."id"
     `);
@@ -225,34 +167,22 @@ export class fullTextSearchEntity1588193611219 implements MigrationInterface {
       UPDATE  "ContactInfo"
       SET     "id" = "ContactInfo"."id"
     `);
-
-    await queryRunner.query(`
-      UPDATE  "DonationClaim"
-      SET     "id" = "DonationClaim"."id"
-    `);
-
-    await queryRunner.query(`
-      UPDATE  "Delivery"
-      SET     "id" = "Delivery"."id"
-    `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TRIGGER "genAccountFullText_Volunteer"`);
-    await queryRunner.query(`DROP TRIGGER "genAccountFullText_Organization"`);
-    await queryRunner.query(`DROP TRIGGER "genAccountFullText_ContactInfo"`);
-    await queryRunner.query(`DROP TRIGGER "genAccountFullText_Account"`);
-    await queryRunner.query(`DROP FUNCTION "genAccountFullText"()`);
+    await queryRunner.query(`DROP TRIGGER IF EXISTS "genAccountFullText_Volunteer" ON "Volunteer"`);
+    await queryRunner.query(`DROP TRIGGER IF EXISTS "genAccountFullText_Organization" ON "Organization"`);
+    await queryRunner.query(`DROP TRIGGER IF EXISTS "genAccountFullText_ContactInfo" ON "ContactInfo"`);
+    await queryRunner.query(`DROP TRIGGER IF EXISTS "genAccountFullText_Account" ON "Account"`);
+    await queryRunner.query(`DROP FUNCTION IF EXISTS "genAccountFullText"()`);
 
-    await queryRunner.query(`DROP TRIGGER "genDonationFullText_Delivery`);
-    await queryRunner.query(`DROP TRIGGER "genDonationFullText_DonationClaim`);
-    await queryRunner.query(`DROP TRIGGER "genDonationFullText_DonorContactOverride`);
-    await queryRunner.query(`DROP TRIGGER "genDonationFullText_Donation`);
-    await queryRunner.query(`DROP FUNCTION "genDonationFullText"()`);
+    await queryRunner.query(`DROP TRIGGER IF EXISTS "genDonationFullText_DonorContactOverride" ON "ContactInfo"`);
+    await queryRunner.query(`DROP TRIGGER IF EXISTS "genDonationFullText_Donation" ON "Donation"`);
+    await queryRunner.query(`DROP FUNCTION IF EXISTS "genDonationFullText"()`);
 
-    await queryRunner.query(`DROP INDEX "fullTextIdx"`);
-    await queryRunner.query(`DROP INDEX "IDX_a2bf19d1221030d712cab2c521"`, undefined);
-    await queryRunner.query(`DROP TABLE "FullTextSearch"`, undefined);
+    await queryRunner.query(`DROP INDEX IF EXISTS "fullTextIdx"`);
+    await queryRunner.query(`DROP INDEX IF EXISTS "IDX_a2bf19d1221030d712cab2c521"`, undefined);
+    await queryRunner.query(`DROP TABLE IF EXISTS "FullTextSearch"`, undefined);
   }
 
 }

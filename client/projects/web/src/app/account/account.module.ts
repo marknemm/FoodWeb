@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { AccountAutocompleteComponent } from '~web/account/account-autocomplete/account-autocomplete.component';
 import { AccountCreationFormComponent } from '~web/account/account-creation-form/account-creation-form.component';
 import { AccountDetailsComponent } from '~web/account/account-details/account-details.component';
 import { AccountFiltersComponent } from '~web/account/account-filters/account-filters.component';
@@ -30,6 +31,7 @@ import { SharedModule } from '~web/shared/shared.module';
 
 @NgModule({
   declarations: [
+    AccountAutocompleteComponent,
     AccountCreationFormComponent,
     AccountDetailsComponent,
     AccountFiltersComponent,
@@ -62,6 +64,7 @@ import { SharedModule } from '~web/shared/shared.module';
     SharedModule
   ],
   exports: [
+    AccountAutocompleteComponent,
     AccountCreationFormComponent,
     AccountDetailsComponent,
     AccountsComponent,

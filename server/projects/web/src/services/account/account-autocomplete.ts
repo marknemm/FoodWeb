@@ -12,7 +12,8 @@ export function genAccountAutocomplete(autocompleteReq: AccountAutocompleteReque
   queryBuilder = _genSelects(queryBuilder);
   queryBuilder = _genJoins(queryBuilder);
   queryBuilder = _genFilters(queryBuilder, autocompleteReq);
-  queryBuilder = queryBuilder.take(20);
+  queryBuilder = queryBuilder.orderBy('rank', 'DESC');
+  queryBuilder = queryBuilder.limit(20);
   return queryBuilder.getMany();
 }
 
@@ -23,6 +24,7 @@ export function genAccountAutocomplete(autocompleteReq: AccountAutocompleteReque
  */
 function _genSelects(queryBuilder: OrmSelectQueryBuilder<AccountEntity>): OrmSelectQueryBuilder<AccountEntity> {
   return queryBuilder.select([
+    'TS_RANK_CD(fullTextSearch.fullText, :fullTextQuery) AS rank',
     'account.id',
     'account.accountType',
     'contactInfo.id',
@@ -46,14 +48,14 @@ function _genSelects(queryBuilder: OrmSelectQueryBuilder<AccountEntity>): OrmSel
  * @return The modified input queryBuilder.
  */
 function _genJoins(queryBuilder: OrmSelectQueryBuilder<AccountEntity>): OrmSelectQueryBuilder<AccountEntity> {
-  queryBuilder = queryBuilder.innerJoin(
-    'FullTextSearch', 'fullTextSearch',
-    `fullTextSearch.entityId = account.id AND fullTextSearch.entityTable = 'Account'`
-  );
-  queryBuilder = queryBuilder.innerJoin('account.contactInfo', 'contactInfo');
-  queryBuilder = queryBuilder.leftJoin('account.organization', 'organization');
-  queryBuilder = queryBuilder.leftJoin('account.volunteer', 'volunteer');
-  return queryBuilder;
+  return queryBuilder
+    .innerJoin(
+      'FullTextSearch', 'fullTextSearch',
+      `fullTextSearch.entityId = account.id AND fullTextSearch.entityTable = 'Account'`
+    )
+    .innerJoin('account.contactInfo', 'contactInfo')
+    .leftJoin('account.organization', 'organization')
+    .leftJoin('account.volunteer', 'volunteer');
 }
 
 /**
@@ -65,15 +67,17 @@ function _genFilters(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
   autocompleteReq: AccountAutocompleteRequest
 ): OrmSelectQueryBuilder<AccountEntity> {
-  if (autocompleteReq.fullTextQuery?.trim()) {
-    const fullTextQuery: string = preprocessFullTextQuery(autocompleteReq.fullTextQuery);
-    queryBuilder = queryBuilder.andWhere('TO_TSQUERY(:fullTextQuery) @@ fullTextSearch.fullText', { fullTextQuery });
-  }
+  // Always perform fulltext search filtering.
+  const fullTextQuery: string = preprocessFullTextQuery(autocompleteReq.fullTextQuery);
+  queryBuilder = queryBuilder.andWhere('TO_TSQUERY(:fullTextQuery) @@ fullTextSearch.fullText', { fullTextQuery });
+
+  // Filter by account type if specified.
   if (autocompleteReq.accountType) {
     queryBuilder = queryBuilder.andWhere(
       'account.accountType = :accountType',
       { accountType: autocompleteReq.accountType }
     );
   }
+
   return queryBuilder;
 }

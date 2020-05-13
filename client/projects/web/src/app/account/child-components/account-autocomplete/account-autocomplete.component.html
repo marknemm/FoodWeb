@@ -1,0 +1,17 @@
+<mat-form-field class="fill">
+  <input matInput type="text"
+    [placeholder]="placeholder"
+    [matAutocomplete]="autocomplete"
+    [formControl]="accountCtrl"
+    (ngModelChange)="refreshAutocompleteOptions($event)">
+</mat-form-field>
+
+<mat-autocomplete #autocomplete="matAutocomplete">
+  <mat-option *ngFor="let account of accountAutocompleteStore.value" [value]="accountHelper.accountName(account)">
+    <div class="account-name">{{ accountHelper.accountName(account) }}</div>
+    <div class="account-contact-info">
+      <div class="account-email">{{ account.contactInfo.email }}</div>
+      <div class="account-address">{{ account.contactInfo.streetAddress }}, {{ account.contactInfo.city }} {{ account.contactInfo.stateProvince }}</div>
+    </div>
+  </mat-option>
+</mat-autocomplete>
