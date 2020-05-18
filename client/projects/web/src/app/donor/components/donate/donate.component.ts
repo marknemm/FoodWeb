@@ -45,7 +45,6 @@ export class DonateComponent implements OnInit {
    */
   donate(): void {
     this.formGroup.markAllAsTouched();
-    this.pickupWindowRange.markAsTouched();
     if (this.formGroup.valid) {
       const donation: Donation = this.formGroup.toDonation();
       this._donationService.createDonation(donation).subscribe((savedDonation: Donation) => {

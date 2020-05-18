@@ -8,7 +8,6 @@ import { MaterialModule } from '~web/material.module';
 import { AlertDialogComponent } from '~web/shared/alert-dialog/alert-dialog.component';
 import { AlertSnackBarComponent } from '~web/shared/alert-snack-bar/alert-snack-bar.component';
 import { ConfirmButtonDirective } from '~web/shared/confirm-button/confirm-button.directive';
-import { ControlNameDirective } from '~web/shared/directives/control-name/control-name.directive';
 import { DisplayEditTransitionDirective } from '~web/shared/display-edit-transition/display-edit-transition.directive';
 import { EditSaveButtonComponent } from '~web/shared/edit-save-button/edit-save-button.component';
 import { FragmentAccordianDirective } from '~web/shared/fragment-accordian/fragment-accordian.directive';
@@ -31,7 +30,6 @@ import { YesNoComponent } from '~web/shared/yes-no/yes-no.component';
     DisplayEditTransitionDirective,
     FragmentAccordianDirective,
     YesNoComponent,
-    ControlNameDirective,
     SearchBarComponent
   ],
   imports: [
@@ -53,7 +51,6 @@ import { YesNoComponent } from '~web/shared/yes-no/yes-no.component';
     DisplayEditTransitionDirective,
     FragmentAccordianDirective,
     YesNoComponent,
-    ControlNameDirective,
     SearchBarComponent
   ],
   providers: [

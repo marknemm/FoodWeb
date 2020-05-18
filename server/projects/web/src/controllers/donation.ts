@@ -2,7 +2,7 @@ import express = require('express');
 import { Request, Response } from 'express';
 import { AccountEntity, DonationEntity } from '~entity';
 import { QueryResult } from '~orm';
-import { DonationClaimRequest, DonationCreateRequest, DonationDeleteRequest, DonationReadRequest, DonationUnclaimRequest, DonationUpdateRequest } from '~shared';
+import { DonationClaimRequest, DonationSaveRequest, DonationDeleteRequest, DonationReadRequest, DonationUnclaimRequest } from '~shared';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
@@ -53,7 +53,7 @@ export function getDonation(req: Request, res: Response) {
 router.post('/', ensureSessionActive, ensureAccountVerified, handlePostDonation);
 export function handlePostDonation(req: Request, res: Response) {
   const myAccount: AccountEntity = req.session.account;
-  const createReq: DonationCreateRequest = req.body;
+  const createReq: DonationSaveRequest = req.body;
   createDonation(createReq, myAccount)
     .then((donation: DonationEntity) => { res.send(donation); return donation; })
     .catch(genErrorResponseRethrow.bind(this, res))
@@ -77,7 +77,7 @@ export function handlePostDonationClaim(req: Request, res: Response) {
 
 router.put('/', ensureSessionActive, ensureAccountVerified, handlePutDonation);
 export function handlePutDonation(req: Request, res: Response) {
-  const updateReq: DonationUpdateRequest = req.body;
+  const updateReq: DonationSaveRequest = req.body;
   updateDonation(updateReq, req.session.account)
     .then((donationDiff: UpdateDiff<DonationEntity>) => { res.send(donationDiff.new); return donationDiff; })
     .catch(genErrorResponseRethrow.bind(this, res))

@@ -8,6 +8,7 @@ import { AccountCreationFormComponent } from '~web/account/account-creation-form
 import { AccountDetailsComponent } from '~web/account/account-details/account-details.component';
 import { AccountFiltersComponent } from '~web/account/account-filters/account-filters.component';
 import { AccountRoutingModule } from '~web/account/account-routing.module';
+import { AccountSelectComponent } from '~web/account/account-select/account-select.component';
 import { AccountTeaserComponent } from '~web/account/account-teaser/account-teaser.component';
 import { AccountTypeComponent } from '~web/account/account-type/account-type.component';
 import { AccountsComponent } from '~web/account/accounts/accounts.component';
@@ -36,6 +37,7 @@ import { SharedModule } from '~web/shared/shared.module';
     AccountDetailsComponent,
     AccountFiltersComponent,
     AccountsComponent,
+    AccountSelectComponent,
     AccountTeaserComponent,
     AccountTypeComponent,
     AddressComponent,
@@ -68,6 +70,7 @@ import { SharedModule } from '~web/shared/shared.module';
     AccountCreationFormComponent,
     AccountDetailsComponent,
     AccountsComponent,
+    AccountSelectComponent,
     AccountTeaserComponent,
     AccountTypeComponent,
     AddressComponent,

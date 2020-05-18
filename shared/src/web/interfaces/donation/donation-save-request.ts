@@ -1,6 +1,6 @@
 import { WriteRequest } from '../write-request';
 import { Donation } from './donation';
 
-export interface DonationUpdateRequest extends WriteRequest {
+export interface DonationSaveRequest extends WriteRequest {
   donation: Donation;
 }

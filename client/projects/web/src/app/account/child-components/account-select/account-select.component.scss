@@ -1,0 +1,52 @@
+@import "constants.scss";
+
+.filter-form-field {
+  padding: 10px 12px 15px;
+
+  .filter-progress-indicator {
+    $progress-indicator-height: 3px;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: $progress-indicator-height;
+    bottom: -$progress-indicator-height;
+    left: 0;
+  }
+}
+
+.mat-option {
+  position: relative;
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+
+  .account-name {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    width: 40%;
+    padding-right: 10px;
+    box-sizing: border-box;
+    vertical-align: top;
+  }
+
+  .account-contact-info {
+    position: relative;
+    display: inline-block;
+    text-align: right;
+    width: 60%;
+    color: #666;
+    font-size: 14px;
+
+    .account-email,
+    .account-address {
+      position: relative;
+      width: 100%;
+      height: 24px;
+      box-sizing: border-box;
+    }
+  }
+
+  &.clear-option {
+    color: #AAA;
+    font-style: italic;
+  }
+}

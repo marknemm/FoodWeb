@@ -13,7 +13,8 @@
        readonly="true"
        formControlName="date"
        [errorStateMatcher]="errorStateMatcher"
-       [required]="required">
+       (ngModelChange)="_onValueChange()"
+       (blur)="touchedCb()">
       <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
       <mat-datepicker touchUi #datePicker ></mat-datepicker>
     </mat-form-field>
@@ -28,7 +29,8 @@
        readonly="true"
        formControlName="time"
        [errorStateMatcher]="errorStateMatcher"
-       [required]="required">
+       (ngModelChange)="_onValueChange()"
+       (blur)="touchedCb()">
       <button mat-icon-button type="button" matSuffix aria-label="Open Time Dialog" (click)="timePicker.open()">
         <mat-icon>alarm</mat-icon>
       </button>
@@ -41,7 +43,7 @@
   <span class="date" *ngIf="!excludeDateDisplay" [ngClass]="{ bold: boldDate }" [style.minWidth]="minDateWidth">
     {{ dateTime | foodWebFormatDate }} &nbsp;
   </span>
-  
+
   <span class="time" *ngIf="!excludeTimeDisplay" [ngClass]="{ bold: boldTime }">
     {{ dateTime | foodWebFormatTime }}
   </span>

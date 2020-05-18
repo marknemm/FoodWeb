@@ -19,7 +19,6 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
       donorFirstName: ['', Validators.required],
       donorLastName: ['', Validators.required],
       donationType: ['Food', Validators.required],
-      otherDonationType: [null, Validators.required],
       estimatedNumFeed: [null, [Validators.required, Validators.min(0), Validators.pattern(/^\d*$/)]],
       estimatedValue: [null, [Validators.min(0), Validators.pattern(Validation.MONEY_REGEX)]],
       description: ['', Validators.required],
@@ -32,29 +31,28 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
       safetyChecklist: [config.safetyChecklistInit, Validators.requiredTrue]
     });
     this._dateTimeService = dateTimeService;
-    this._initValidationAndValues(config);
+    this.get('safetyChecklist').patchValue(config.safetyChecklistInit);
+    this.deriveValuesFromDonorAccount(config.donorAccount);
   }
 
-  private _initValidationAndValues(config: DonateFormConfig): void {
-    if (config.donorAccount) {
+  deriveValuesFromDonorAccount(donorAccount: Account): void {
+    if (donorAccount) {
       this.get('pickupWindow').patchValue(
-        this._genInitPickupWindow(config.donorAccount)
+        this._genPickupWindowFromAccount(donorAccount)
       );
       this.get('donorContactOverride').patchValue(
-        this._genInitDonorContactOverride(config.donorAccount)
+        this._genContactOverrideFromAccount(donorAccount)
       );
     }
-    this.get('safetyChecklist').patchValue(config.safetyChecklistInit);
-    this.get('otherDonationType').disable();
   }
 
-  private _genInitPickupWindow(donorAccount: Account): DateTimeRange {
+  private _genPickupWindowFromAccount(donorAccount: Account): DateTimeRange {
     return (donorAccount)
       ? this._dateTimeService.genDefaultDateRangeFromAvailability(donorAccount)
       : null;
   }
 
-  private _genInitDonorContactOverride(donorAccount: Account): ContactInfo {
+  private _genContactOverrideFromAccount(donorAccount: Account): ContactInfo {
     if (donorAccount) {
       const shallowCopyContactInfo: ContactInfo = Object.assign({}, donorAccount.contactInfo);
       delete shallowCopyContactInfo.id;
@@ -114,7 +112,6 @@ export interface DonationFormT {
   donorFirstName: string;
   donorLastName: string;
   donationType: string;
-  otherDonationType?: string;
   estimatedNumFeed: number;
   estimatedValue?: number;
   description: string;

@@ -5,10 +5,10 @@ import { adminReadAccount, adminReadAccounts } from '~admin/services/admin-accou
 import { adminCreateAccount, adminUpdateAccount, adminUpdateAccountSection, NewAccountData } from '~admin/services/admin-account/admin-save-account';
 import { sendMessage, testMessage } from '~admin/services/admin-account/send-message-to-accounts';
 import { adminUpdatePassword } from '~admin/services/admin-password/save-password';
-import { Account, AccountEntity, UnverifiedAccountEntity } from '~entity';
+import { Account, AccountEntity } from '~entity';
 import { QueryResult } from '~orm';
 import { AccountCreateRequest, AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, PasswordUpdateRequest, SendMessageRequest } from '~shared';
-import { handleGetRecoverUsername, handleGetResendMyVerificationEmail, handleGetResetPassword, handlePostAccountVerify, handlePutResetPassword, handleGetAccountAutocomplete } from '~web/controllers/account';
+import { handleGetAccountAutocomplete, handleGetRecoverUsername, handleGetResendMyVerificationEmail, handleGetResetPassword, handlePostAccountVerify, handlePutResetPassword } from '~web/controllers/account';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';

@@ -3,14 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, flatMap, map } from 'rxjs/operators';
-import {
-  Donation,
-  DonationClaimRequest,
-  DonationCreateRequest,
-  DonationReadRequest,
-  DonationUpdateRequest,
-  ListResponse
-} from '~shared';
+import { Donation, DonationClaimRequest, DonationReadRequest, DonationSaveRequest, ListResponse } from '~shared';
 import { environment } from '~web/environments/environment';
 import { AlertService } from '~web/shared/alert/alert.service';
 import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
@@ -41,7 +34,7 @@ export class DonationService {
    * @return An observable that emits the newly saved donation when the server response returns.
    */
   createDonation(donation: Donation): Observable<Donation> {
-    const createRequest: DonationCreateRequest = { donation };
+    const createRequest: DonationSaveRequest = { donation };
     this._pageProgressService.activate(true);
     return this._httpClient.post<Donation>(this.url, createRequest, { withCredentials: true }).pipe(
       map((savedDonation: Donation) => {
@@ -54,7 +47,7 @@ export class DonationService {
   }
 
   updateDonation(originalDonation: Donation, donationSectionUpdate: Partial<Donation>): Observable<Donation> {
-    const updateRequest: DonationUpdateRequest = this._genDonationUpdateRequest(originalDonation, donationSectionUpdate);
+    const updateRequest: DonationSaveRequest = this._genDonationUpdateRequest(originalDonation, donationSectionUpdate);
     this._pageProgressService.activate(true);
     return this._httpClient.put<Donation>(this.url, updateRequest, { withCredentials: true }).pipe(
       map((savedDonation: Donation) => {
@@ -66,7 +59,7 @@ export class DonationService {
     );
   }
 
-  private _genDonationUpdateRequest(originalDonation: Donation, donationSectionUpdate: Partial<Donation>): DonationUpdateRequest {
+  private _genDonationUpdateRequest(originalDonation: Donation, donationSectionUpdate: Partial<Donation>): DonationSaveRequest {
     const donation: Donation = Object.assign({}, originalDonation);
     Object.keys(donationSectionUpdate).forEach((property: string) =>
       donation[property] = donationSectionUpdate[property]

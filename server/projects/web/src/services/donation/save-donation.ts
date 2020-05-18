@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { AccountEntity, ContactInfoEntity, DonationEntity } from '~entity';
 import { OrmEntityManager } from '~orm';
-import { AccountHelper, ContactInfo, Donation, DonationCreateRequest, DonationHelper, DonationStatus, DonationUpdateRequest } from '~shared';
+import { AccountHelper, ContactInfo, Donation, DonationHelper, DonationSaveRequest, DonationStatus } from '~shared';
 import { geocode, geoTimezone } from '~web/helpers/map/geocoder';
 import { FoodWebError } from '~web/helpers/response/food-web-error';
 import { UpdateDiff } from '~web/interfaces/update-diff';
@@ -11,7 +11,7 @@ import { readDonation } from './read-donations';
 const _donationHelper = new DonationHelper();
 const _accountHelper = new AccountHelper();
 
-export async function createDonation(createReq: DonationCreateRequest, myAccount: AccountEntity): Promise<DonationEntity> {
+export async function createDonation(createReq: DonationSaveRequest, myAccount: AccountEntity): Promise<DonationEntity> {
   const donationToSave: Donation = createReq.donation;
   donationToSave.donationStatus = DonationStatus.Unmatched;
   donationToSave.donorAccount = myAccount;
@@ -23,7 +23,7 @@ export async function createDonation(createReq: DonationCreateRequest, myAccount
   );
 }
 
-export async function updateDonation(updateReq: DonationUpdateRequest, myAccount: AccountEntity): Promise<UpdateDiff<DonationEntity>> {
+export async function updateDonation(updateReq: DonationSaveRequest, myAccount: AccountEntity): Promise<UpdateDiff<DonationEntity>> {
   const donationToSave: DonationEntity = plainToClass(DonationEntity, updateReq.donation);
   const originalDonation: DonationEntity = await readDonation(donationToSave.id);
   _validateDonation(donationToSave);

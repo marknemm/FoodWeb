@@ -23,11 +23,11 @@ export class DonationHelper {
 
     const baseDonationErr: string = this._validateBaseDonation(donation);
     if (baseDonationErr) { return baseDonationErr; }
-    
+
     const pickupWindowErr: string = this._validatePickupWindow(donation.pickupWindowStart, donation.pickupWindowEnd);
     if (pickupWindowErr) { return pickupWindowErr; }
 
-    const donorAccountErr: string = this._accountHelper.validateAccount(donation.donorAccount);
+    const donorAccountErr: string = this._validateDonorAccount(donation.donorAccount);
     if (donorAccountErr) { return donorAccountErr; }
 
     const donorContactOverrideErr: string = this._accountHelper.validateContactInfo(donation.donorContactOverride);
@@ -74,6 +74,16 @@ export class DonationHelper {
     }
     if (pickupWindowStart >= pickupWindowEnd) {
       return 'Pickup window start time must be later than end time';
+    }
+    return '';
+  }
+
+  private _validateDonorAccount(donorAccount: Account): string {
+    if (!donorAccount) {
+      return 'Donation must have a donor account.';
+    }
+    if (donorAccount.id == null) {
+      return 'Donation donor account must have an ID present.';
     }
     return '';
   }
@@ -217,7 +227,7 @@ export class DonationHelper {
   donorName(donation: Donation): string {
     return this._accountHelper.accountName(donation.donorAccount);
   }
-  
+
   donorDetailsRouterLink(donation: Donation): string[] {
     return this._accountHelper.accountDetailsRouterLink(donation.donorAccount);
   }

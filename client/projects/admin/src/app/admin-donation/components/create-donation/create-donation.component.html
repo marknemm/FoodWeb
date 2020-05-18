@@ -4,29 +4,30 @@
     {{ pageTitleService.title }}
   </div>
 
-  <food-web-account-autocomplete></food-web-account-autocomplete>
-
   <ng-container *ngIf="!savedDonation">
     <mat-card class="donate-card">
       <mat-card-title>Donation Information</mat-card-title>
+      <food-web-account-select formControlName="donorAccount" accountType="Donor" placeholder="Donor Organization" filterPlaceholder="Search Donors..."></food-web-account-select>
       <mat-card-content>
-        <food-web-donation-form [formGroup]="formGroup" *ngIf="!savedDonation"></food-web-donation-form>
+        <food-web-donation-form formGroupName="donateForm" *ngIf="!savedDonation"></food-web-donation-form>
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="donate-card">
-      <mat-card-title>Pickup Window</mat-card-title>
-      <mat-card-content>
-        <food-web-date-time-range #pickupWindowRange [formGroup]="formGroup.get('pickupWindow')" [editing]="true"></food-web-date-time-range>
-      </mat-card-content>
-    </mat-card>
+    <ng-container formGroupName="donateForm">
+      <mat-card class="donate-card">
+        <mat-card-title>Pickup Window</mat-card-title>
+        <mat-card-content>
+          <food-web-date-time-range #pickupWindowRange formGroupName="pickupWindow" [editing]="true"></food-web-date-time-range>
+        </mat-card-content>
+      </mat-card>
 
-    <mat-card class="donate-card">
-      <mat-card-title>Contact Info</mat-card-title>
-      <mat-card-content>
-        <food-web-contact-info [editing]="true" [formGroup]="formGroup.get('donorContactOverride')"></food-web-contact-info>
-      </mat-card-content>
-    </mat-card>
+      <mat-card class="donate-card">
+        <mat-card-title>Contact Info</mat-card-title>
+        <mat-card-content>
+          <food-web-contact-info [editing]="true" formGroupName="donorContactOverride"></food-web-contact-info>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
   </ng-container>
 
   <div *ngIf="savedDonation" class="align-center">
@@ -35,11 +36,16 @@
   </div>
 
   <div class="action-footer align-right">
-    <button mat-raised-button type="submit" color="primary" *ngIf="!savedDonation">Create</button>
-    <button mat-button type="button" color="accent" *ngIf="savedDonation" (click)="donateAgain()">Create Another</button>
-    <a *ngIf="savedDonation" class="view-donation-link" [routerLink]="['/donation/details', savedDonation.id]">
-      <button mat-raised-button type="button" color="primary">View Donation</button>
-    </a>
+    <ng-container *ngIf="!savedDonation; else savedDonationTmpl">
+      <mat-slide-toggle formControlName="sendNotifications" class="send-notifications-toggle">Send Notifications</mat-slide-toggle>
+      <button mat-raised-button type="submit" color="primary">Create</button>
+    </ng-container>
+    <ng-template #savedDonationTmpl>
+      <button mat-button type="button" color="accent" (click)="donateAgain()">Create Another</button>
+      <a class="view-donation-link" [routerLink]="['/donation/details', savedDonation.id]">
+        <button mat-raised-button type="button" color="primary">View Donation</button>
+      </a>
+    </ng-template>
   </div>
 
 </form>

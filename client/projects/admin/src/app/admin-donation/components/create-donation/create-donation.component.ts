@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
+import { AdminDonationSaveService } from '~admin/admin-donation/admin-donation-save/admin-donation-save.service';
+import { CreateDonationForm } from '~admin/admin-donation/forms/create-donation.form';
 import { Donation } from '~shared';
 import { DateTimeRangeComponent } from '~web/date-time/date-time-range/date-time-range.component';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { DonationService } from '~web/donation/donation/donation.service';
-import { DonateForm } from '~web/donor/donate.form';
 import { SessionService } from '~web/session/session/session.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
@@ -12,33 +13,36 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
   templateUrl: './create-donation.component.html',
   styleUrls: ['./create-donation.component.scss'],
 })
-export class CreateDonationComponent implements OnInit {
+export class CreateDonationComponent implements OnInit, OnDestroy {
 
   /**
    * Reactive form model used for donation.
    */
-  formGroup: DonateForm;
+  formGroup: CreateDonationForm;
   /**
    * The newly saved donation that is only set once the donation is complete.
    * Will be unset if the user chooses to donate again.
    */
   savedDonation: Donation = null;
 
+  private _destroy$ = new Subject();
+
   @ViewChild('pickupWindowRange') pickupWindowRange: DateTimeRangeComponent;
 
   constructor(
     public pageTitleService: PageTitleService,
     public sessionService: SessionService,
-    private _donationService: DonationService,
     private _dateTimeService: DateTimeService,
+    private _donationSaveService: AdminDonationSaveService
   ) {}
 
   ngOnInit() {
     this.pageTitleService.title = 'Create Donation';
-    this.formGroup = new DonateForm(
-      this._dateTimeService,
-      { donorAccount: this.sessionService.account, safetyChecklistInit: false }
-    );
+    this.formGroup = new CreateDonationForm(this._dateTimeService, this._destroy$);
+  }
+
+  ngOnDestroy() {
+    this._destroy$.next(); // Cleanup any RxJS subscriptions.
   }
 
   /**
@@ -46,10 +50,10 @@ export class CreateDonationComponent implements OnInit {
    */
   donate(): void {
     this.formGroup.markAllAsTouched();
-    this.pickupWindowRange.markAsTouched();
     if (this.formGroup.valid) {
       const donation: Donation = this.formGroup.toDonation();
-      this._donationService.createDonation(donation).subscribe((savedDonation: Donation) => {
+      const sendNotifications: boolean = this.formGroup.sendNotifications;
+      this._donationSaveService.createDonation(donation, sendNotifications).subscribe((savedDonation: Donation) => {
         this.savedDonation = savedDonation;
       });
     }

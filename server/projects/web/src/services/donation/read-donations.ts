@@ -77,7 +77,7 @@ function _genJoins(queryBuilder: OrmSelectQueryBuilder<DonationEntity>): OrmSele
     .leftJoinAndSelect('donation.claim', 'claim')
     .leftJoinAndSelect('claim.routeToReceiver', 'routeToReceiver')
     .leftJoinAndSelect('claim.receiverAccount', 'receiverAccount')
-    .innerJoin(
+    .leftJoin(
       'FullTextSearch', 'receiverFullTextSearch',
       `receiverFullTextSearch.entityId = receiverAccount.id AND receiverFullTextSearch.entityTable = 'Account'`
     )
@@ -86,7 +86,7 @@ function _genJoins(queryBuilder: OrmSelectQueryBuilder<DonationEntity>): OrmSele
     .leftJoinAndSelect('receiverOrganization.receiver', 'receiver')
     .leftJoinAndSelect('claim.delivery', 'delivery')
     .leftJoinAndSelect('delivery.volunteerAccount', 'delivererAccount')
-    .innerJoin(
+    .leftJoin(
       'FullTextSearch', 'delivererFullTextSearch',
       `delivererFullTextSearch.entityId = delivererAccount.id AND delivererFullTextSearch.entityTable = 'Account'`
     )

@@ -7,3 +7,11 @@
     }
   }
 }
+
+.mat-select-panel {
+  .mat-option {
+    &.auto-height {
+      height: auto;
+    }
+  }
+}
