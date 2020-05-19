@@ -1,55 +1,40 @@
-import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { TypedFormControl } from '~web/data-structure/typed-form-control';
+import { Component, Input } from '@angular/core';
+import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
 import { DateTimeRange, DateTimeService } from '~web/date-time/date-time/date-time.service';
+import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
   selector: 'food-web-date-time-select',
   templateUrl: './date-time-select.component.html',
   styleUrls: ['./date-time-select.component.scss'],
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateTimeSelectComponent), multi: true },
-  ]
+  providers: [valueAccessorProvider(DateTimeSelectComponent)]
 })
-export class DateTimeSelectComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class DateTimeSelectComponent extends FormComponentBase<DateTimeRange> {
 
+  @Input() ariaLabel: string;
   @Input() rangeWindow: DateTimeRange;
   @Input() rangeWindowStart: Date;
   @Input() rangeWindowEnd: Date;
   @Input() rangeMins: number;
-  @Input() ariaLabel: string;
 
-  dateTimeRanges: DateTimeRange[] = [];
-  dateTimeControl = new TypedFormControl<DateTimeRange>();
-
-  private _destroy$ = new Subject();
+  private _dateTimeRanges: DateTimeRange[] = [];
 
   constructor(
-    private _dateTimeService: DateTimeService
-  ) {}
+    private _dateTimeService: DateTimeService,
+    formHelperService: FormHelperService
+  ) {
+    super(formHelperService);
+  }
+
+  get dateTimeRanges(): DateTimeRange[] {
+    return this._dateTimeRanges;
+  }
 
   ngOnInit() {
+    super.ngOnInit();
     if (!this.rangeWindow && this.rangeWindowStart && this.rangeWindowEnd) {
       this.rangeWindow = { startDateTime: this.rangeWindowStart, endDateTime: this.rangeWindowEnd };
     }
-    this.dateTimeRanges = this._dateTimeService.genDateTimeRangeIncrements(this.rangeWindow, this.rangeMins);
+    this._dateTimeRanges = this._dateTimeService.genDateTimeRangeIncrements(this.rangeWindow, this.rangeMins);
   }
-
-  ngOnDestroy() {
-    this._destroy$.next();
-  }
-
-  writeValue(value: DateTimeRange): void {
-    this.dateTimeControl.setValue(value);
-  }
-
-  registerOnChange(changeCb: (value: DateTimeRange) => void): void {
-    this.dateTimeControl.valueChanges.pipe(
-      takeUntil(this._destroy$)
-    ).subscribe(changeCb);
-  }
-
-  registerOnTouched(_: any): void {}
 }

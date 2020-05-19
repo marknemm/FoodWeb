@@ -1,4 +1,9 @@
-<mat-radio-group [attr.ariaLabel]="ariaLabel" [formControl]="dateTimeControl" class="date-time-selections">
+<mat-radio-group
+  class="date-time-selections"
+  [attr.ariaLabel]="ariaLabel"
+  [formControl]="formControl"
+  (ngModelChange)="onChangeCb()"
+  (blur)="onTouchedCb()">
   <mat-list class="mat-radio-list">
     <mat-divider></mat-divider>
     <mat-list-item matRipple *ngFor="let dateTimeRange of dateTimeRanges">

@@ -1,22 +1,22 @@
-import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
+import { Component, forwardRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 import { ErrorStateMatcher, FloatLabelType } from '@angular/material/core';
+import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
 import { DateTimeForm } from '~web/date-time/date-time.form';
-import { TypedFormControl } from '~web/data-structure/typed-form-control';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
   selector: 'food-web-date-time',
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.scss'],
   providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateTimeComponent), multi: true },
     { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeComponent), multi: true },
+    valueAccessorProvider(DateTimeComponent),
     DateTimeForm,
     FormHelperService
   ]
 })
-export class DateTimeComponent implements OnInit, OnChanges, ControlValueAccessor, Validator {
+export class DateTimeComponent extends FormComponentBase<Date> implements OnChanges, Validator {
 
   @Input() boldDate = false;
   @Input() boldTime = false;
@@ -29,8 +29,6 @@ export class DateTimeComponent implements OnInit, OnChanges, ControlValueAccesso
   @Input() excludeDateDisplay = false;
   @Input() excludeTimeDisplay = false;
   @Input() floatLabels: FloatLabelType = 'auto';
-  @Input() formControl = new TypedFormControl<Date>();
-  @Input() formControlName = '';
   @Input() inlineFields = false;
   @Input() maxDate: Date;
   @Input() minDate = new Date();
@@ -38,19 +36,15 @@ export class DateTimeComponent implements OnInit, OnChanges, ControlValueAccesso
   @Input() primaryLabel = ''
   @Input() timePlaceholder = 'Time';
 
-  private _changeCb: (date: Date) => void = () => {};
-  private _touchedCb = () => {};
-
   constructor(
     public dateTimeForm: DateTimeForm,
-    private _formHelperService: FormHelperService
-  ) {}
-
-  get touchedCb(): () => void {
-    return this._touchedCb;
+    formHelperService: FormHelperService
+  ) {
+    super(formHelperService);
   }
 
   ngOnInit() {
+    super.ngOnInit();
     const required: boolean = this._deriveFormControlState();
     this.dateTimeForm.init({ defaultDate: this.defaultDate, required });
   }
@@ -68,30 +62,20 @@ export class DateTimeComponent implements OnInit, OnChanges, ControlValueAccesso
     }
   }
 
+  /**
+   * @override
+   */
   writeValue(date: Date): void {
+    super.writeValue(date);
     this.dateTimeForm.patchFromDate(date);
     this.defaultTime = this.dateTimeForm.get('time').value;
-  }
-
-  registerOnChange(changeCb: (date: Date) => void): void {
-    this._changeCb = changeCb;
   }
 
   _onValueChange(): void {
     const curDateVal: Date = this.dateTimeForm.toDate();
     if (curDateVal) {
-      this._changeCb(curDateVal);
+      this.onChangeCb(curDateVal);
     }
-  }
-
-  registerOnTouched(touchedCb: () => void): void {
-    this._touchedCb = touchedCb;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    (isDisabled)
-      ? this.dateTimeForm.disable()
-      : this.dateTimeForm.enable();
   }
 
   validate(): ValidationErrors {

@@ -7,8 +7,8 @@
   <ng-container *ngIf="!savedDonation">
     <mat-card class="donate-card">
       <mat-card-title>Donation Information</mat-card-title>
-      <food-web-account-select formControlName="donorAccount" accountType="Donor" placeholder="Donor Organization" filterPlaceholder="Search Donors..."></food-web-account-select>
       <mat-card-content>
+        <food-web-account-select formControlName="donorAccount" accountType="Donor" placeholder="Donor Organization" filterPlaceholder="Search Donors..."></food-web-account-select>
         <food-web-donation-form formGroupName="donateForm" *ngIf="!savedDonation"></food-web-donation-form>
       </mat-card-content>
     </mat-card>
@@ -28,6 +28,20 @@
         </mat-card-content>
       </mat-card>
     </ng-container>
+
+    <mat-card class="donate-card">
+      <mat-card-title>Donation Claim</mat-card-title>
+      <mat-card-content>
+        <food-web-account-select formControlName="receiverAccount" accountType="Receiver" placeholder="Donor Organization" filterPlaceholder="Search Receivers..."></food-web-account-select>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="donate-card" formGroupName="delivery">
+      <mat-card-title>Delivery</mat-card-title>
+      <mat-card-content>
+        <food-web-account-select formControlName="volunteerAccount" accountType="Volunteer" placeholder="Volunteer" filterPlaceholder="Search Volunteers..."></food-web-account-select>
+      </mat-card-content>
+    </mat-card>
   </ng-container>
 
   <div *ngIf="savedDonation" class="align-center">

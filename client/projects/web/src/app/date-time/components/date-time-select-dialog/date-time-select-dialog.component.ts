@@ -3,14 +3,6 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { DateTimeRange } from '~web/date-time/date-time/date-time.service';
 
-export interface DateTimeSelectConfig {
-  selectTitle?: string;
-  rangeMins?: number;
-  rangeWindow?: DateTimeRange;
-  rangeWindowStart?: Date;
-  rangeWindowEnd?: Date;
-}
-
 @Component({
   selector: 'food-web-date-time-select-dialog',
   templateUrl: './date-time-select-dialog.component.html',
@@ -18,12 +10,16 @@ export interface DateTimeSelectConfig {
 })
 export class DateTimeSelectDialogComponent implements OnInit {
 
-  selectedDateTime: DateTimeRange;
+  private _selectedDateTime: DateTimeRange;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public selectConfig: DateTimeSelectConfig
   ) {}
+
+  get selectedDateTime(): DateTimeRange {
+    return this._selectedDateTime;
+  }
 
   static open(matDialog: MatDialog, data?: DateTimeSelectConfig): Observable<DateTimeRange> {
     return matDialog.open(DateTimeSelectDialogComponent, { data }).afterClosed();
@@ -31,4 +27,12 @@ export class DateTimeSelectDialogComponent implements OnInit {
 
   ngOnInit() {}
 
+}
+
+export interface DateTimeSelectConfig {
+  selectTitle?: string;
+  rangeMins?: number;
+  rangeWindow?: DateTimeRange;
+  rangeWindowStart?: Date;
+  rangeWindowEnd?: Date;
 }

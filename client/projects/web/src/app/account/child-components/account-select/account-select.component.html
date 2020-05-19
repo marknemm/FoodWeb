@@ -17,8 +17,7 @@
         [formControl]="filterCtrl"
         [placeholder]="filterPlaceholder"
         (keydown)="$event.stopPropagation()"
-        (ngModelChange)="accountAutocompleteService.refreshAutocompleteOptions($event, accountType)"
-        placeholder="Search">
+        (ngModelChange)="accountAutocompleteService.refreshAutocompleteOptions($event, accountType)">
         <food-web-progress-indicator class="filter-progress-indicator" [trigger]="accountAutocompleteService.loading"></food-web-progress-indicator>
     </mat-form-field>
 

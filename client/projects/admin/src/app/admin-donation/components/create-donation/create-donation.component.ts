@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AdminDonationSaveService } from '~admin/admin-donation/admin-donation-save/admin-donation-save.service';
-import { CreateDonationForm } from '~admin/admin-donation/forms/create-donation.form';
+import { AdminDonationForm } from '~admin/admin-donation/forms/admin-donation.form';
 import { Donation } from '~shared';
 import { DateTimeRangeComponent } from '~web/date-time/date-time-range/date-time-range.component';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
@@ -15,17 +15,9 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 })
 export class CreateDonationComponent implements OnInit, OnDestroy {
 
-  /**
-   * Reactive form model used for donation.
-   */
-  formGroup: CreateDonationForm;
-  /**
-   * The newly saved donation that is only set once the donation is complete.
-   * Will be unset if the user chooses to donate again.
-   */
-  savedDonation: Donation = null;
-
   private _destroy$ = new Subject();
+  private _formGroup: AdminDonationForm;
+  private _savedDonation: Donation = null;
 
   @ViewChild('pickupWindowRange') pickupWindowRange: DateTimeRangeComponent;
 
@@ -36,9 +28,24 @@ export class CreateDonationComponent implements OnInit, OnDestroy {
     private _donationSaveService: AdminDonationSaveService
   ) {}
 
+  /**
+   * Reactive form model used for donation.
+   */
+  get formGroup(): AdminDonationForm {
+    return this._formGroup;
+  }
+
+  /**
+   * The newly saved donation that is only set once the donation is complete.
+   * Will be unset if the user chooses to donate again.
+   */
+  get savedDonation(): Donation {
+    return this._savedDonation;
+  }
+
   ngOnInit() {
     this.pageTitleService.title = 'Create Donation';
-    this.formGroup = new CreateDonationForm(this._dateTimeService, this._destroy$);
+    this._formGroup = new AdminDonationForm(this._dateTimeService, this._destroy$);
   }
 
   ngOnDestroy() {
@@ -54,7 +61,7 @@ export class CreateDonationComponent implements OnInit, OnDestroy {
       const donation: Donation = this.formGroup.toDonation();
       const sendNotifications: boolean = this.formGroup.sendNotifications;
       this._donationSaveService.createDonation(donation, sendNotifications).subscribe((savedDonation: Donation) => {
-        this.savedDonation = savedDonation;
+        this._savedDonation = savedDonation;
       });
     }
   }
@@ -64,7 +71,7 @@ export class CreateDonationComponent implements OnInit, OnDestroy {
    */
   donateAgain(): void {
     this.formGroup.reset();
-    this.savedDonation = null;
+    this._savedDonation = null;
   }
 
 }

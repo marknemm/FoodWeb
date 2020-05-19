@@ -1,20 +1,22 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
+import { TypedFormControl } from '~web/data-structure/typed-form-control';
 import { DateTimeRange, DateTimeRangeForm } from '~web/date-time/date-time-range.form';
-import { DateTimeComponent } from '~web/date-time/date-time/date-time.component';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
-import { TypedFormControl } from '~web/data-structure/typed-form-control';
 
 @Component({
   selector: 'food-web-date-time-range',
   templateUrl: './date-time-range.component.html',
   styleUrls: ['./date-time-range.component.scss'],
-  providers: [FormHelperService]
+  providers: [
+    valueAccessorProvider(DateTimeRangeComponent),
+    FormHelperService
+  ]
 })
-export class DateTimeRangeComponent implements OnInit, OnChanges {
+export class DateTimeRangeComponent extends FormComponentBase<DateTimeRange> implements OnChanges {
 
   @Input() formGroup = new DateTimeRangeForm();
-  @Input() formGroupName = '';
   @Input() editing = false;
   @Input() startDatePlaceholder = 'Start Date';
   @Input() startTimePlaceholder = 'Start Time';
@@ -28,17 +30,16 @@ export class DateTimeRangeComponent implements OnInit, OnChanges {
   @Input() end: Date;
   @Input() range: DateTimeRange = { startDateTime: null, endDateTime: null };
 
-  @ViewChild('startDateTime') startDateTime: DateTimeComponent;
-  @ViewChild('endDateTime') endDateTime: DateTimeComponent;
-
   private _endMinDate: Date;
   private _excludeEndDateDisplay = false;
   private _startMaxDate: Date;
 
   constructor(
     private _dateTimeService: DateTimeService,
-    private _formHelperService: FormHelperService
-  ) {}
+    formHelperService: FormHelperService
+  ) {
+    super(formHelperService);
+  }
 
   get endMinDate(): Date {
     return this._endMinDate;
@@ -50,10 +51,6 @@ export class DateTimeRangeComponent implements OnInit, OnChanges {
 
   get startMaxDate(): Date {
     return this._startMaxDate;
-  }
-
-  ngOnInit() {
-    this.formGroup = this._formHelperService.deriveAbstractControl(this.formGroupName, this.formGroup);
   }
 
   ngOnChanges(changes: SimpleChanges) {
