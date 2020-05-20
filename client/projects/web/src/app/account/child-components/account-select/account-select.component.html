@@ -3,7 +3,8 @@
     [formControl]="formControl"
     [placeholder]="placeholder"
     (opened)="onPanelOpened(filterInput)"
-    (selectionChange)="onChangeCb($event.value)">
+    (selectionChange)="onChangeCb($event.value)"
+    (ngModelChange)="syncFilterStr()">
 
     <mat-select-trigger>
       {{ accountHelper.accountName(formControl.value) }}

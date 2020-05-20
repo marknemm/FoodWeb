@@ -1,11 +1,11 @@
 import { Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AdminDeliveryForm, AdminDeliveryFormT } from '~admin/admin-donation/forms/admin-delivery.form';
 import { Account, Delivery, Donation } from '~shared';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
 import { DonateForm, DonationFormT } from '~web/donor/forms/donate.form';
-import { Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { AdminDeliveryForm, AdminDeliveryFormT } from './admin-delivery.form';
 
 export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
 
@@ -41,6 +41,10 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
     return this.get('delivery').value;
   }
 
+  get deliveryEnabled(): boolean {
+    return this.get('delivery').enabled;
+  }
+
   get volunteerAccount(): Account {
     return this.delivery?.volunteerAccount;
   }
@@ -52,23 +56,41 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
   private _listenForDonorAccountChange(destroy$: Observable<any>): void {
     this.get('donorAccount').valueChanges.pipe(
       takeUntil(destroy$)
-    ).subscribe((donorAccount: Account) =>
-      this.donateForm.deriveValuesFromDonorAccount(donorAccount)
+    ).subscribe(
+      () => this.donateForm.deriveValuesFromDonorAccount(this.donorAccount)
     );
+    this.donateForm.deriveValuesFromDonorAccount(this.donorAccount);
   }
 
   private _listenForReceiverAccountChange(destroy$: Observable<any>): void {
     this.get('receiverAccount').valueChanges.pipe(
       takeUntil(destroy$)
-    ).subscribe((receiverAccount: Account) =>
-      (receiverAccount) ? this.get('delivery').enable() : this.get('delivery').disable()
+    ).subscribe(
+      () => this._onReceiverAccountChange(this.receiverAccount)
     );
+    this._onReceiverAccountChange(this.receiverAccount);
+  }
+
+  private _onReceiverAccountChange(receiverAccount: Account): void {
+    (receiverAccount) ? this.get('delivery').enable() : this.get('delivery').disable();
   }
 
   toDonation(): Donation {
     const donation: Donation = this.donateForm.toDonation();
     donation.donorAccount = this.donorAccount;
     return donation;
+  }
+
+  /**
+   * Resets the value of the donation form and marks all fields as untouched/pristine.
+   * Sets all direct child form fields to null except for 'donorAccount', 'receiverAccount', & 'sendNotifications'.
+   * @override
+   */
+  reset(): void {
+    const donorAccount: Account = this.donorAccount;
+    const receiverAccount: Account = this.receiverAccount;
+    const sendNotifications: boolean = this.sendNotifications;
+    super.reset({ donorAccount, receiverAccount, sendNotifications });
   }
 }
 

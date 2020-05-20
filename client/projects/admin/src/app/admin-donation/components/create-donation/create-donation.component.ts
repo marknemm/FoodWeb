@@ -1,9 +1,8 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AdminDonationSaveService } from '~admin/admin-donation/admin-donation-save/admin-donation-save.service';
 import { AdminDonationForm } from '~admin/admin-donation/forms/admin-donation.form';
 import { Donation } from '~shared';
-import { DateTimeRangeComponent } from '~web/date-time/date-time-range/date-time-range.component';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
 import { SessionService } from '~web/session/session/session.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
@@ -18,8 +17,6 @@ export class CreateDonationComponent implements OnInit, OnDestroy {
   private _destroy$ = new Subject();
   private _formGroup: AdminDonationForm;
   private _savedDonation: Donation = null;
-
-  @ViewChild('pickupWindowRange') pickupWindowRange: DateTimeRangeComponent;
 
   constructor(
     public pageTitleService: PageTitleService,

@@ -1,5 +1,7 @@
-import { FormControl, Validators, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { DateTimeHelper } from '~shared';
+import { TypedFormControl } from '~web/data-structure/typed-form-control';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 import { DateTimeRange } from '~web/date-time/date-time/date-time.service';
 export { DateTimeRange };
@@ -16,18 +18,51 @@ export class DateTimeRangeForm extends TypedFormGroup<DateTimeRange> {
   readonly required: boolean;
   readonly rangeErrStateMatcher: ErrorStateMatcher;
 
+  private _dateTimeHelper = new DateTimeHelper();
+
   constructor(config: DateTimeRangeFormConfig = {}) {
     super({
       startDateTime: null,
       endDateTime: null
     });
+    this.fillMissingRangePart();
     this.setValidators(this._dateTimeRangeOrderValidator);
     this._initValidationAndValues(config);
     this.required = config.required;
     this.rangeErrStateMatcher = this._genDateTimeRangeErrStateMatcher();
   }
 
-  _initValidationAndValues(config: DateTimeRangeFormConfig): void {
+  get startDateTime(): Date {
+    return this.get('startDateTime').value;
+  }
+
+  get endDateTime(): Date {
+    return this.get('endDateTime').value;
+  }
+
+  /**
+   * Fills in a missing part of the date-time range if one is present without the other.
+   * Simply sets the missing part an hour away from the present part.
+   */
+  public fillMissingRangePart(): void {
+    // Auto-fill endDateTime if startDateTime is non-empty, and endDateTime is empty.
+    if (this.startDateTime && !this.endDateTime) {
+      (<TypedFormControl<Date>>this.get('endDateTime')).setValue(
+        this._dateTimeHelper.addHours(this.startDateTime, 1),
+        { emitEvent: false, emitViewToModelChange: false }
+      );
+    }
+
+    // Auto-fill startDateTime if endDateTime is non-empty, and startDateTime is empty.
+    if (!this.startDateTime && this.endDateTime) {
+      (<TypedFormControl<Date>>this.get('startDateTime')).setValue(
+        this._dateTimeHelper.addHours(this.endDateTime, -1),
+        <any>{ emitEvent: false, emitViewToModelChange: false }
+      );
+    }
+  }
+
+  private _initValidationAndValues(config: DateTimeRangeFormConfig): void {
     this._preprocessConfig(config);
     if (config.required) {
       this.get('startDateTime').setValidators(Validators.required);

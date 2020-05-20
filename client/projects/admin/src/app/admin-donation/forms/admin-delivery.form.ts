@@ -17,6 +17,16 @@ export class AdminDeliveryForm extends TypedFormGroup<AdminDeliveryFormT> {
   get volunteerAccount(): Account {
     return this.get('volunteerAccount').value;
   }
+
+  /**
+   * Resets the value of the donation form and marks all fields as untouched/pristine.
+   * Sets all direct child form fields to null except for 'volunteerAccount'.
+   * @override
+   */
+  reset(): void {
+    const volunteerAccount: Account = this.volunteerAccount;
+    super.reset({ volunteerAccount });
+  }
 }
 
 export interface AdminDeliveryFormT {

@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
-import { TypedFormControl } from '~web/data-structure/typed-form-control';
 import { DateTimeRange, DateTimeRangeForm } from '~web/date-time/date-time-range.form';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
@@ -30,27 +29,14 @@ export class DateTimeRangeComponent extends FormComponentBase<DateTimeRange> imp
   @Input() end: Date;
   @Input() range: DateTimeRange = { startDateTime: null, endDateTime: null };
 
-  private _endMinDate: Date;
-  private _excludeEndDateDisplay = false;
-  private _startMaxDate: Date;
+  private _startEndDateSame = false;
 
-  constructor(
-    private _dateTimeService: DateTimeService,
-    formHelperService: FormHelperService
-  ) {
+  constructor(formHelperService: FormHelperService) {
     super(formHelperService);
   }
 
-  get endMinDate(): Date {
-    return this._endMinDate;
-  }
-
-  get excludeEndDateDisplay(): boolean {
-    return this._excludeEndDateDisplay;
-  }
-
-  get startMaxDate(): Date {
-    return this._startMaxDate;
+  get startEndDateSame(): boolean {
+    return this._startEndDateSame;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -68,33 +54,6 @@ export class DateTimeRangeComponent extends FormComponentBase<DateTimeRange> imp
       this.start = this.range.startDateTime;
       this.end = this.range.endDateTime;
     }
-    this._excludeEndDateDisplay = (this.start && this.end && this.start.toDateString() === this.end.toDateString());
-  }
-
-  _onDateUpdate(): void {
-    const startDateTimeCtrl = <TypedFormControl<Date>>this.formGroup.get('startDateTime');
-    const endDateTimeCtrl = <TypedFormControl<Date>>this.formGroup.get('endDateTime');
-    const startDateTime: Date = startDateTimeCtrl.value;
-    const endDateTime: Date = endDateTimeCtrl.value;
-
-    // Auto-fill endDateTime if startDateTime is non-empty, and endDateTime is empty.
-    if (startDateTime && !endDateTime) {
-      endDateTimeCtrl.setValue(
-        this._dateTimeService.addHours(startDateTime, 1),
-        { emitEvent: false, emitViewToModelChange: false }
-      );
-    }
-
-    // Auto-fill startDateTime if endDateTime is non-empty, and startDateTime is empty.
-    if (!startDateTime && endDateTime) {
-      startDateTimeCtrl.setValue(
-        this._dateTimeService.addHours(endDateTime, -1),
-        { emitEvent: false, emitViewToModelChange: false }
-      );
-    }
-
-    // Adjust max start date and min end date based off of cur5rent startDateTime & endDateTime values.
-    this._startMaxDate = endDateTime;
-    this._endMinDate = startDateTime;
+    this._startEndDateSame = (this.start && this.end && this.start.toDateString() === this.end.toDateString());
   }
 }

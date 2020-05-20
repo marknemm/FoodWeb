@@ -10,7 +10,7 @@
      [maxDate]="maxDate"
      [floatLabels]="floatLabels"
      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
-     (ngModelChange)="_onDateUpdate()">
+     (ngModelChange)="formGroup.fillMissingRangePart()">
     </food-web-date-time>
   </div>
   <div class="date-time-field col-sm-6">
@@ -20,11 +20,11 @@
      [editing]="true"
      [datePlaceholder]="endDatePlaceholder"
      [timePlaceholder]="endTimePlaceholder"
-     [minDate]="endMinDate || minDate"
+     [minDate]="minDate"
      [maxDate]="maxDate"
      [floatLabels]="floatLabels"
      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
-     (ngModelChange)="_onDateUpdate()">
+     (ngModelChange)="formGroup.fillMissingRangePart()">
     </food-web-date-time>
     <mat-error *ngIf="formGroup.hasError('dateTimeRangeOrder')" class="range-order-err">
       End date-time must be later than start date-time
@@ -33,11 +33,11 @@
 </div>
 
 <div *ngIf="!editing" class="date-time-range-display">
-  <food-web-date-time [boldTime]="boldTime" [excludeTimeDisplay]="excludeEndDateDisplay" [dateTime]="start" [editing]="false"></food-web-date-time>
+  <food-web-date-time [boldTime]="boldTime" [excludeTimeDisplay]="startEndDateSame" [dateTime]="start" [editing]="false"></food-web-date-time>
   <!-- For no display of end date due to same begin and end date, make sure we group times together so they end up on same line if line break occurs. -->
   <span class="d-inline-block">
-    <food-web-date-time *ngIf="excludeEndDateDisplay" [boldTime]="boldTime" [excludeDateDisplay]="true" [dateTime]="start" [editing]="false"></food-web-date-time>
+    <food-web-date-time *ngIf="startEndDateSame" [boldTime]="boldTime" [excludeDateDisplay]="true" [dateTime]="start" [editing]="false"></food-web-date-time>
     <span class="display-to"> -- </span>
-    <food-web-date-time [boldTime]="boldTime" [excludeDateDisplay]="excludeEndDateDisplay" [dateTime]="end" [editing]="false"></food-web-date-time>
+    <food-web-date-time [boldTime]="boldTime" [excludeDateDisplay]="startEndDateSame" [dateTime]="end" [editing]="false"></food-web-date-time>
   </span>
 </div>

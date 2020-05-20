@@ -1,6 +1,7 @@
 import { forwardRef, Input, OnDestroy, OnInit, Provider, Type } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { Subject } from "rxjs";
+import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Observable, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { TypedAbstractControl } from "~web/data-structure/typed-abstract-control";
 import { TypedFormControl } from "~web/data-structure/typed-form-control";
 import { TypedFormGroup } from "~web/data-structure/typed-form-group";
@@ -74,7 +75,7 @@ export abstract class FormComponentBase<T> implements OnInit, OnDestroy, Control
    */
   writeValue(value: T): void {
     if (!this.controlInputBound) {
-      this.activeAbstractControl.setValue(value, { emitEvent: false });
+      this.activeAbstractControl.setValue(value);
     }
   }
 
@@ -104,6 +105,14 @@ export abstract class FormComponentBase<T> implements OnInit, OnDestroy, Control
     if (!this.controlInputBound) {
       (isDisabled) ? this.activeAbstractControl.disable() : this.activeAbstractControl.enable();
     }
+  }
+
+  /**
+   * Listens for value changes to occur within a given abstract control.
+   * @return An observable that emits any value changes. Will automatically be unsubscribed from when component is destroyed.
+   */
+  onValueChanges(ctrl: AbstractControl): Observable<T> {
+    return ctrl.valueChanges.pipe(takeUntil(this._destroy$));
   }
 }
 

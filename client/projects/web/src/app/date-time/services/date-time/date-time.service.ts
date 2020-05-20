@@ -65,7 +65,7 @@ export class DateTimeService extends DateTimeHelper {
     return this._constantsService.WEEKDAYS[weekdayIdx];
   }
 
-  genDefaultDateRangeFromAvailability(account: Account): DateTimeRange {
+  genDateRangeFromAvailability(account: Account): DateTimeRange {
     const dateRange: DateTimeRange = {
       startDateTime: this.dateCeil5Mins(this.formatCurrentDateTime()),
       endDateTime: null,

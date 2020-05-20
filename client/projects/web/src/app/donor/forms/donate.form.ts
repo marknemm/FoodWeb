@@ -37,19 +37,10 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
 
   deriveValuesFromDonorAccount(donorAccount: Account): void {
     if (donorAccount) {
-      this.get('pickupWindow').patchValue(
-        this._genPickupWindowFromAccount(donorAccount)
-      );
       this.get('donorContactOverride').patchValue(
         this._genContactOverrideFromAccount(donorAccount)
       );
     }
-  }
-
-  private _genPickupWindowFromAccount(donorAccount: Account): DateTimeRange {
-    return (donorAccount)
-      ? this._dateTimeService.genDefaultDateRangeFromAvailability(donorAccount)
-      : null;
   }
 
   private _genContactOverrideFromAccount(donorAccount: Account): ContactInfo {
@@ -73,19 +64,21 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
    * Resets the value of the donation form and marks all fields as untouched/pristine.
    * Sets all fields to null except for 'donorFirstName', 'donorLastName', 'pickupWindow',
    * 'donorContactOverride', and 'safetyChecklist'.
+   * @override
    */
   reset(): void {
     const donorFirstName: string = this.get('donorFirstName').value;
     const donorLastName: string = this.get('donorLastName').value;
-    const donationWindow: DateTimeRange = this.get('pickupWindow').value;
+    const pickupWindow: DateTimeRange = this.get('pickupWindow').value;
     const donorContactOverride: ContactInfo = this.get('donorContactOverride').value;
-    super.reset();
-    this.get('donationType').setValue('Food');
-    this.get('donorFirstName').setValue(donorFirstName);
-    this.get('donorLastName').setValue(donorLastName);
-    this.get('pickupWindow').setValue(donationWindow);
-    this.get('donorContactOverride').setValue(donorContactOverride);
-    this.get('safetyChecklist').setValue(true);
+    super.reset({
+      donationType: 'Food',
+      donorFirstName,
+      donorLastName,
+      pickupWindow,
+      donorContactOverride,
+      safetyChecklist: true
+    });
   }
 
   toDonation(): Donation {

@@ -4,7 +4,7 @@
     {{ pageTitleService.title }}
   </div>
 
-  <ng-container *ngIf="!savedDonation">
+  <div [hidden]="savedDonation">
     <mat-card class="donate-card">
       <mat-card-title>Donation Information</mat-card-title>
       <mat-card-content>
@@ -17,7 +17,7 @@
       <mat-card class="donate-card">
         <mat-card-title>Pickup Window</mat-card-title>
         <mat-card-content>
-          <food-web-date-time-range #pickupWindowRange formGroupName="pickupWindow" [editing]="true"></food-web-date-time-range>
+          <food-web-date-time-range formGroupName="pickupWindow" [editing]="true"></food-web-date-time-range>
         </mat-card-content>
       </mat-card>
 
@@ -32,17 +32,17 @@
     <mat-card class="donate-card">
       <mat-card-title>Donation Claim</mat-card-title>
       <mat-card-content>
-        <food-web-account-select formControlName="receiverAccount" accountType="Receiver" placeholder="Donor Organization" filterPlaceholder="Search Receivers..."></food-web-account-select>
+        <food-web-account-select formControlName="receiverAccount" accountType="Receiver" placeholder="Receiver Organization" filterPlaceholder="Search Receivers..."></food-web-account-select>
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="donate-card" formGroupName="delivery">
+    <mat-card class="donate-card" formGroupName="delivery" *ngIf="formGroup.deliveryEnabled">
       <mat-card-title>Delivery</mat-card-title>
       <mat-card-content>
         <food-web-account-select formControlName="volunteerAccount" accountType="Volunteer" placeholder="Volunteer" filterPlaceholder="Search Volunteers..."></food-web-account-select>
       </mat-card-content>
     </mat-card>
-  </ng-container>
+  </div>
 
   <div *ngIf="savedDonation" class="align-center">
     <hr>
