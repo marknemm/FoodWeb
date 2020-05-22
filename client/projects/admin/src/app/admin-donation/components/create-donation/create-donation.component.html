@@ -36,10 +36,19 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="donate-card" formGroupName="delivery" *ngIf="formGroup.deliveryEnabled">
+    <mat-card class="donate-card" formGroupName="delivery" *ngIf="formGroup.receiverAccount">
       <mat-card-title>Delivery</mat-card-title>
       <mat-card-content>
-        <food-web-account-select formControlName="volunteerAccount" accountType="Volunteer" placeholder="Volunteer" filterPlaceholder="Search Volunteers..."></food-web-account-select>
+        <food-web-account-select formControlName="volunteerAccount" accountType="Volunteer" placeholder="Volunteer" filterPaceholder="Search Volunteers..."></food-web-account-select>
+        <ng-container *ngIf="this.formGroup.volunteerAccount">
+          <div class="block-label">Schedule Delivery</div>
+          <food-web-date-time-range formGroupName="pickupWindow" [editing]="true"></food-web-date-time-range>
+
+          <div class="block-label">Delivery Steps</div>
+          <food-web-date-time formControlName="startTime" datePlaceholder="Start Date" timePlaceholder="Start Time" [editing]="true" [inlineFields]="true"></food-web-date-time>
+          <food-web-date-time formControlName="pickupTime" datePlaceholder="Pickup Date" timePlaceholder="Pickup Time" [editing]="true" [inlineFields]="true"></food-web-date-time>
+          <food-web-date-time formControlName="dropOffTime" datePlaceholder="Drop-off Date" timePlaceholder="Drop-off Time" [editing]="true" [inlineFields]="true"></food-web-date-time>
+        </ng-container>
       </mat-card-content>
     </mat-card>
   </div>

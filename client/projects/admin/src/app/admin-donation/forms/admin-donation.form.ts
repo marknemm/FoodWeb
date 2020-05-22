@@ -18,7 +18,7 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
       donateForm: new DonateForm(dateTimeService, { donorAccount: donation?.donorAccount, safetyChecklistInit: true }),
       donorAccount: [donation?.donorAccount, Validators.required],
       receiverAccount: donation?.claim?.receiverAccount,
-      delivery: new AdminDeliveryForm(donation?.claim?.delivery),
+      delivery: new AdminDeliveryForm(destroy$, donation?.claim?.delivery),
       sendNotifications: true,
     });
     this._listenForDonorAccountChange(destroy$);
@@ -27,6 +27,10 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
 
   get donateForm(): DonateForm {
     return <DonateForm> this.get('donateForm');
+  }
+
+  get deliveryForm(): AdminDeliveryForm {
+    return <AdminDeliveryForm> this.get('delivery');
   }
 
   get donorAccount(): Account {

@@ -12,14 +12,14 @@
   .date-field,
   .time-field {
     display: inline-block;
-    max-width: 50%;
     box-sizing: border-box;
+    width: 50%;
   }
 
   .date-field {
     padding-right: $inline-field-padding;
   }
-  
+
   .time-field {
     padding-left: $inline-field-padding;
   }

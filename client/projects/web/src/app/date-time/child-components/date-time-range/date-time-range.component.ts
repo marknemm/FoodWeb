@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
 import { DateTimeRange, DateTimeRangeForm } from '~web/date-time/date-time-range.form';
-import { DateTimeService } from '~web/date-time/date-time/date-time.service';
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({

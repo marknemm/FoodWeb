@@ -1,6 +1,7 @@
 import { AbstractControlOptions, AsyncValidatorFn, FormBuilder, FormGroup, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { TypedAbstractControl } from '~web/data-structure/typed-abstract-control';
+import { takeUntil } from 'rxjs/operators';
 
 export class TypedFormGroup<T> extends FormGroup {
 
@@ -9,19 +10,12 @@ export class TypedFormGroup<T> extends FormGroup {
   readonly valueChanges: Observable<T>;
 
   constructor(
-    controls: {
-      [K in keyof T]?:
-          T[K]
-        | TypedAbstractControl<T[K]>
-        | [T[K]]
-        | [T[K], ValidatorFn]
-        | [T[K], ValidatorFn[]]
-    },
+    controls: TypedFormControlMembers<T>,
     validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions,
     asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[]
   ) {
     const formBuilder = new FormBuilder();
-    const rawFormGroup: FormGroup = formBuilder.group(controls);
+    const rawFormGroup: FormGroup = formBuilder.group(controls ? controls : {});
     super(rawFormGroup.controls, validatorOrOpts, asyncValidator);
   }
 
@@ -58,4 +52,19 @@ export class TypedFormGroup<T> extends FormGroup {
   reset(value?: Partial<T>, options?: { onlySelf?: boolean; emitEvent?: boolean; }): void {
     super.reset(value, options);
   }
+
+  onValueChanges<K extends Extract<keyof T, string>>(name: K, destroy$: Observable<any>): Observable<T[K]> {
+    return this.get(name).valueChanges.pipe(
+      takeUntil(destroy$)
+    );
+  }
+}
+
+export type TypedFormControlMembers<T> = {
+  [K in keyof T]?:
+      T[K]
+    | TypedAbstractControl<T[K]>
+    | [T[K]]
+    | [T[K], ValidatorFn]
+    | [T[K], ValidatorFn[]]
 }

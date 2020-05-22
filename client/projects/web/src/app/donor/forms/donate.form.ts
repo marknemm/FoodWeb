@@ -7,14 +7,12 @@ import { DateTimeService } from '~web/date-time/date-time/date-time.service';
 
 export class DonateForm extends TypedFormGroup<DonationFormT> {
 
-  private _dateTimeService: DateTimeService;
-
   constructor(
     dateTimeService: DateTimeService,
     config: DonateFormConfig = {}
   ) {
-    const defaultStartDateTime: Date = dateTimeService.dateCeil5Mins(new Date());
-    const defaultEndDateTime: Date = dateTimeService.addHours(defaultStartDateTime, 1);
+    const startDateTime: Date = dateTimeService.dateCeil5Mins(new Date());
+    const endDateTime: Date = dateTimeService.addHours(startDateTime, 1);
     super({
       donorFirstName: ['', Validators.required],
       donorLastName: ['', Validators.required],
@@ -23,14 +21,12 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
       estimatedValue: [null, [Validators.min(0), Validators.pattern(Validation.MONEY_REGEX)]],
       description: ['', Validators.required],
       pickupWindow: new DateTimeRangeForm({
-        required: true,
-        defaultStartDateTime,
-        defaultEndDateTime
+        startDateTime: [startDateTime, Validators.required],
+        endDateTime: [endDateTime, Validators.required]
       }),
       donorContactOverride: new ContactInfoForm(),
       safetyChecklist: [config.safetyChecklistInit, Validators.requiredTrue]
     });
-    this._dateTimeService = dateTimeService;
     this.get('safetyChecklist').patchValue(config.safetyChecklistInit);
     this.deriveValuesFromDonorAccount(config.donorAccount);
   }

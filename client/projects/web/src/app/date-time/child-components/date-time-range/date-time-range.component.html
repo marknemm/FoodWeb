@@ -1,5 +1,5 @@
 <div [formGroup]="formGroup" *ngIf="editing" class="row">
-  <div class="date-time-field col-sm-6">
+  <div class="date-time-field col-sm-12">
     <food-web-date-time
      #startDateTime
      formControlName="startDateTime"
@@ -13,7 +13,7 @@
      (ngModelChange)="formGroup.fillMissingRangePart()">
     </food-web-date-time>
   </div>
-  <div class="date-time-field col-sm-6">
+  <div class="date-time-field col-sm-12">
     <food-web-date-time
      #endDateTime
      formControlName="endDateTime"

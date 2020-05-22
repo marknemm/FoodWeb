@@ -1,21 +1,79 @@
-import { Account, Delivery } from '~shared';
+import { AbstractControl, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Account, DateTimeRange, Delivery } from '~shared';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { DateTimeRangeForm } from '~web/date-time/date-time-range.form';
 
 export class AdminDeliveryForm extends TypedFormGroup<AdminDeliveryFormT> {
 
-  constructor(delivery?: Delivery) {
+  constructor(
+    destroy$: Observable<any>,
+    delivery?: Delivery
+  ) {
     super({
       volunteerAccount: delivery?.volunteerAccount,
-      pickupWindowStart: delivery?.pickupWindowStart,
-      pickupWindowEnd: delivery?.pickupWindowEnd,
+      pickupWindow: new DateTimeRangeForm({
+        startDateTime: [delivery?.pickupWindowStart, Validators.required],
+        endDateTime: [delivery?.pickupWindowEnd, Validators.required]
+      }),
       startTime: delivery?.startTime,
       pickupTime: delivery?.pickupTime,
       dropOffTime: delivery?.dropOffTime
     });
+    this._listenForVolunteerAccountChange(destroy$);
+    this._listenForStartTimeChange(destroy$);
+    this._listenForPickupTimeChange(destroy$);
   }
 
   get volunteerAccount(): Account {
     return this.get('volunteerAccount').value;
+  }
+
+  private _listenForVolunteerAccountChange(destroy$: Observable<any>): void {
+    this.onValueChanges('volunteerAccount', destroy$).subscribe(
+      () => this._onVolunteerAccountChange()
+    );
+    this._onVolunteerAccountChange();
+  }
+
+  private _onVolunteerAccountChange(): void {
+    for (let controlName in this.controls) {
+      if (controlName !== 'volunteerAccount') {
+        const control: AbstractControl = this.controls[controlName];
+        (this.volunteerAccount)
+          ? control.enable()
+          : control.disable();
+      }
+    }
+    this._onStartTimeChange();
+  }
+
+  private _listenForStartTimeChange(destroy$: Observable<any>): void {
+    this.onValueChanges('startTime', destroy$).subscribe(
+      () => this._onStartTimeChange()
+    );
+    this._onStartTimeChange();
+  }
+
+  private _onStartTimeChange(): void {
+    (this.get('startTime').value && this.get('startTime').enabled)
+      ? this.get('pickupTime').enable()
+      : this.get('pickupTime').disable();
+    this._onPickupTimeChange();
+  }
+
+  private _listenForPickupTimeChange(destroy$: Observable<any>): void {
+    this.onValueChanges('pickupTime', destroy$).subscribe(
+      () => this._onPickupTimeChange()
+    );
+    this._onPickupTimeChange();
+  }
+
+  private _onPickupTimeChange(): void {
+    (this.get('pickupTime').value && this.get('pickupTime').enabled)
+      ? this.get('dropOffTime').enable()
+      : this.get('dropOffTime').disable();
   }
 
   /**
@@ -27,12 +85,20 @@ export class AdminDeliveryForm extends TypedFormGroup<AdminDeliveryFormT> {
     const volunteerAccount: Account = this.volunteerAccount;
     super.reset({ volunteerAccount });
   }
+
+  /**
+   * @override
+   */
+  enable(): void {
+    super.enable();
+    // Recalculate the enabled state of all form members other than volunteerAccount based on the presence of a volunteerAccount value.
+    this._onVolunteerAccountChange();
+  }
 }
 
 export interface AdminDeliveryFormT {
   volunteerAccount: Account;
-  pickupWindowStart: Date;
-  pickupWindowEnd: Date;
+  pickupWindow: DateTimeRange;
   startTime: Date;
   pickupTime: Date;
   dropOffTime: Date;

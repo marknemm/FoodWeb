@@ -29,7 +29,7 @@ export class DateTimeComponent extends FormComponentBase<Date> implements OnChan
   @Input() excludeDateDisplay = false;
   @Input() excludeTimeDisplay = false;
   @Input() floatLabels: FloatLabelType = 'auto';
-  @Input() inlineFields = false;
+  @Input() inlineFields = true;
   @Input() maxDate: Date;
   @Input() minDate = new Date();
   @Input() minDateWidth = '';
@@ -80,5 +80,14 @@ export class DateTimeComponent extends FormComponentBase<Date> implements OnChan
 
   validate(): ValidationErrors {
     return (this.dateTimeForm.invalid ? this.dateTimeForm.errors : null);
+  }
+
+  /**
+   * @override
+   */
+  setDisabledState(isDisabled: boolean): void {
+    (isDisabled)
+      ? this.dateTimeForm.disable()
+      : this.dateTimeForm.enable();
   }
 }
