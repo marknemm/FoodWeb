@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faCalendarPlus, faClipboardList, faGifts } from '@fortawesome/free-solid-svg-icons';
+import { DownloadDevDbService } from '~admin/developer/download-dev-db/download-dev-db.service';
 import { ConstantsService } from '~web/shared/constants/constants.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
@@ -16,6 +17,7 @@ export class AdminConsoleComponent implements OnInit {
 
   constructor(
     public constantsService: ConstantsService,
+    public downloadDevDbService: DownloadDevDbService,
     private _pageTitleService: PageTitleService
   ) {}
 

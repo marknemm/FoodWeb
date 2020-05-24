@@ -6,4 +6,20 @@
   @media only screen and (max-width: $mat-mobile) {
     padding-top: 20px;
   }
+
+  .section-label {
+    text-align: center;
+
+    + hr {
+      margin-top: 6px;
+    }
+  }
+
+  .console-cards {
+    margin-bottom: 30px;
+
+    @media only screen and (max-width: $sm) {
+      margin-bottom: 15px;
+    }
+  }
 }

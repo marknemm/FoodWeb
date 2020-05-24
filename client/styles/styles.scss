@@ -52,6 +52,17 @@ a.no-hover {
   }
 }
 
+.section-label {
+  display: block;
+  font-weight: bold;
+  color: $accent-darkest;
+  font-size: 24px;
+
+  @media only screen and (max-width: $sm) {
+    font-size: 20px;
+  }
+}
+
 .block-label {
   display: block;
   font-weight: bold;
