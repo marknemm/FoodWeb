@@ -14,6 +14,8 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 })
 export class CreateDonationComponent implements OnInit, OnDestroy {
 
+  readonly minDate = new Date('1/1/2018');
+
   private _destroy$ = new Subject();
   private _formGroup: AdminDonationForm;
   private _savedDonation: Donation = null;
@@ -55,11 +57,9 @@ export class CreateDonationComponent implements OnInit, OnDestroy {
   donate(): void {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
-      const donation: Donation = this.formGroup.toDonation();
-      const sendNotifications: boolean = this.formGroup.sendNotifications;
-      this._donationSaveService.createDonation(donation, sendNotifications).subscribe((savedDonation: Donation) => {
-        this._savedDonation = savedDonation;
-      });
+      this._donationSaveService.createDonation(this.formGroup).subscribe(
+        (savedDonation: Donation) => this._savedDonation = savedDonation
+      );
     }
   }
 

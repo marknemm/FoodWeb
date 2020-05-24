@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 import { DateTimeRange } from '~shared';
-import { DateTimeSelectConfig, DateTimeSelectDialogComponent } from '~web/date-time/date-time-select-dialog/date-time-select-dialog.component';
+import { DateTimeRangeRadioDialogComponent, DateTimeRangeRadioConfig } from '~web/date-time/date-time-range-radio-dialog/date-time-range-radio-dialog.component';
 import { DeliveryService } from '~web/delivery/delivery/delivery.service';
 import { Donation, DonationService } from '~web/donation/donation/donation.service';
 
@@ -55,13 +55,12 @@ export class DonationActionsService {
    * @return An observable that emits the updated donation after the schedule operaiton completes.
    */
   private _scheduleDelivery(donation: Donation): Observable<Donation> {
-    const scheduleDialogData: DateTimeSelectConfig = {
-      selectTitle: 'Estimate Your Pickup Window',
-      rangeMins: 15,
+    const scheduleDialogData: DateTimeRangeRadioConfig = {
+      title: 'Estimate Your Pickup Window',
       rangeWindowStart: donation.pickupWindowStart,
       rangeWindowEnd: donation.pickupWindowEnd
     };
-    const pickupWindow$: Observable<DateTimeRange> = DateTimeSelectDialogComponent.open(this._matDialog, scheduleDialogData);
+    const pickupWindow$: Observable<DateTimeRange> = DateTimeRangeRadioDialogComponent.open(this._matDialog, scheduleDialogData);
 
     return pickupWindow$.pipe(
       flatMap((pickupWindow: DateTimeRange) =>

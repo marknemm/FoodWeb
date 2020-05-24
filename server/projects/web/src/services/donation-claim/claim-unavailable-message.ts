@@ -12,9 +12,9 @@ const _donationHelper = new DonationHelper();
  * The messages will be sent to all user's that were previously sent message(s) giving them the opportunity to claim the donation.
  * @param donation The donation.
  * @param manager The optional Entity Manager used to encompase all internal database writes within a transaction.
- * @return A promise that resolves once the operation completes.
+ * @return A promise that resolves to the claimed donation on completion.
  */
-export async function sendClaimUnavailableMessages(donation: DonationEntity, manager?: OrmEntityManager): Promise<void> {
+export async function sendClaimUnavailableMessages(donation: DonationEntity, manager?: OrmEntityManager): Promise<DonationEntity> {
   const claimReqHistoryRepo: OrmRepository<ClaimReqHistoryEntity> = (manager)
     ? manager.getRepository(ClaimReqHistoryEntity)
     : getOrmRepository(ClaimReqHistoryEntity);
@@ -41,6 +41,7 @@ export async function sendClaimUnavailableMessages(donation: DonationEntity, man
 
   // Cleanup claim request history items that are no longer needed.
   await claimReqHistoryRepo.delete({ donation });
+  return donation;
 }
 
 /**

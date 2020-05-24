@@ -2,11 +2,11 @@
   class="date-time-selections"
   [attr.ariaLabel]="ariaLabel"
   [formControl]="formControl"
-  (ngModelChange)="onChangeCb()"
+  (ngModelChange)="onChangeCb($event)"
   (blur)="onTouchedCb()">
-  <mat-list class="mat-radio-list">
-    <mat-divider></mat-divider>
-    <mat-list-item matRipple *ngFor="let dateTimeRange of dateTimeRanges">
+  <mat-list class="mat-radio-list" [ngClass]="{ 'disabled': formControl.disabled }">
+    <mat-divider *ngIf="!excludeTopDivider"></mat-divider>
+    <mat-list-item matRipple [disabled]="formControl.disabled" *ngFor="let dateTimeRange of dateTimeRanges">
       <mat-radio-button #dateTimeRangeRadio [value]="dateTimeRange" [disableRipple]="true">
         <div>
           <span class="inline-label">Start:</span>

@@ -1,5 +1,6 @@
-import { Account, ContactInfo, Organization, OperationHours, Volunteer, AccountType } from '../interfaces/account/account';
 import { Validation } from '../constants/validation';
+import { Account, AccountType, ContactInfo, OperationHours, Organization, Volunteer } from '../interfaces/account/account';
+import { AccountAutocompleteItem } from '../interfaces/account/account-autocomplete-item';
 import { ValidationHelper } from './validation-helper';
 export { Account };
 
@@ -29,7 +30,7 @@ export class AccountHelper {
       : '';
   }
 
-  accountName(account: Account): string {
+  accountName(account: Account | AccountAutocompleteItem): string {
     if (account) {
       return ([AccountType.Donor, AccountType.Receiver].indexOf(account.accountType) >= 0)
         ? account.organization.name
@@ -50,7 +51,7 @@ export class AccountHelper {
         && (contactInfoLhs.phoneNumber === contactInfoRhs.phoneNumber)
         && (contactInfoLhs.email === contactInfoRhs.email);
   }
-  
+
   areAddressesEqual(contactInfoLhs: ContactInfo, contactInfoRhs: ContactInfo): boolean {
     if (contactInfoLhs !== contactInfoRhs && (!contactInfoLhs || !contactInfoRhs)) {
       return false;
@@ -151,7 +152,7 @@ export class AccountHelper {
 
   validateContactInfo(contactInfo: ContactInfo): string {
     if (!contactInfo) { return ''; }
-    
+
     // Check to ensure all required fields exist.
     const requireErr: string = this._validationHelper.validateRequiredFields(
       contactInfo,

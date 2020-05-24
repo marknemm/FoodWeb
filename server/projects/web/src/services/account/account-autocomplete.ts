@@ -1,13 +1,14 @@
 import { AccountEntity } from '~entity';
 import { getOrmRepository, OrmSelectQueryBuilder, preprocessFullTextQuery } from '~orm';
 import { AccountAutocompleteRequest } from '~shared';
+import { AccountAutocompleteItem } from '~shared';
 
 /**
  * Generates an account autocomplete feed.
  * @param autocompleteReq The account autocomplete request.
  * @return A promise that resolves to a list of partial accounts.
  */
-export function genAccountAutocomplete(autocompleteReq: AccountAutocompleteRequest): Promise<Partial<AccountEntity>[]> {
+export function genAccountAutocomplete(autocompleteReq: AccountAutocompleteRequest): Promise<AccountAutocompleteItem[]> {
   let queryBuilder: OrmSelectQueryBuilder<AccountEntity> = getOrmRepository(AccountEntity).createQueryBuilder('account');
   queryBuilder = _genSelects(queryBuilder);
   queryBuilder = _genJoins(queryBuilder);

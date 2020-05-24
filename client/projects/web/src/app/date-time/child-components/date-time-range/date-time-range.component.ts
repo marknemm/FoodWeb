@@ -1,5 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
+import { DateTimeRangeRadioConfig, DateTimeRangeRadioDialogComponent } from '~web/date-time/components/date-time-range-radio-dialog/date-time-range-radio-dialog.component';
 import { DateTimeRange, DateTimeRangeForm } from '~web/date-time/date-time-range.form';
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
@@ -15,6 +17,7 @@ import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 export class DateTimeRangeComponent extends FormComponentBase<DateTimeRange> implements OnChanges {
 
   @Input() formGroup = new DateTimeRangeForm();
+  @Input() allowClear = false;
   @Input() editing = false;
   @Input() startDatePlaceholder = 'Start Date';
   @Input() startTimePlaceholder = 'Start Time';
@@ -27,10 +30,14 @@ export class DateTimeRangeComponent extends FormComponentBase<DateTimeRange> imp
   @Input() start: Date;
   @Input() end: Date;
   @Input() range: DateTimeRange = { startDateTime: null, endDateTime: null };
+  @Input() dateTimeRangeRadioConfig: DateTimeRangeRadioConfig;
 
   private _startEndDateSame = false;
 
-  constructor(formHelperService: FormHelperService) {
+  constructor(
+    private _matDialog: MatDialog,
+    formHelperService: FormHelperService
+  ) {
     super(formHelperService);
   }
 
@@ -54,5 +61,13 @@ export class DateTimeRangeComponent extends FormComponentBase<DateTimeRange> imp
       this.end = this.range.endDateTime;
     }
     this._startEndDateSame = (this.start && this.end && this.start.toDateString() === this.end.toDateString());
+  }
+
+  openDateTimeRangeRadio(event: MouseEvent) {
+    event.stopPropagation();
+    this.dateTimeRangeRadioConfig.initValue = this.formGroup.value;
+    DateTimeRangeRadioDialogComponent.open(this._matDialog, this.dateTimeRangeRadioConfig).subscribe(
+      (dateTimeRange: DateTimeRange) => this.formGroup.patchValue(dateTimeRange)
+    )
   }
 }

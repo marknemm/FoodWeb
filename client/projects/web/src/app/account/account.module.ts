@@ -29,6 +29,7 @@ import { MapModule } from '~web/map/map.module';
 import { MaterialModule } from '~web/material.module';
 import { PasswordModule } from '~web/password/password.module';
 import { SharedModule } from '~web/shared/shared.module';
+import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { SharedModule } from '~web/shared/shared.module';
     ProfileImgComponent,
     ReceiverComponent,
     UsernameComponent,
-    VolunteerComponent
+    VolunteerComponent,
+    AccountNamePipe
   ],
   imports: [
     AccountRoutingModule,

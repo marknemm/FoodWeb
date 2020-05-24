@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Account, AccountHelper, AccountType } from '~shared';
+import { AccountAutocompleteItem, AccountHelper, AccountType } from '~shared';
 import { AccountAutocompleteService } from '~web/account/account-autocomplete/account-autocomplete.service';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
@@ -28,12 +28,12 @@ export class AccountAutocompleteComponent extends FormComponentBase<string> {
     super(formHelperService);
   }
 
-  get accountAutocompleteStore(): ImmutableStore<Account[]> {
+  get accountAutocompleteStore(): ImmutableStore<AccountAutocompleteItem[]> {
     return this._accountAutocompleteService.accountAutocompleteStore;
   }
 
   onChange(accountName: string): void {
-    this._accountAutocompleteService.refreshAutocompleteOptions(accountName, this.accountType);
+    this._accountAutocompleteService.refreshAutocompleteItems(accountName, this.accountType);
     this.onChangeCb(accountName);
   }
 

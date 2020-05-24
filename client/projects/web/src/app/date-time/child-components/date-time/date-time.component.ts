@@ -18,6 +18,7 @@ import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 })
 export class DateTimeComponent extends FormComponentBase<Date> implements OnChanges, Validator {
 
+  @Input() allowClear = false;
   @Input() boldDate = false;
   @Input() boldTime = false;
   @Input() dateTime: Date;
@@ -89,5 +90,15 @@ export class DateTimeComponent extends FormComponentBase<Date> implements OnChan
     (isDisabled)
       ? this.dateTimeForm.disable()
       : this.dateTimeForm.enable();
+  }
+
+  clearDate(event: MouseEvent): void {
+    this.dateTimeForm.get('date').reset();
+    event.stopPropagation();
+  }
+
+  clearTime(event: MouseEvent): void {
+    this.dateTimeForm.get('time').reset();
+    event.stopPropagation();
   }
 }

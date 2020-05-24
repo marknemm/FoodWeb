@@ -7,7 +7,7 @@
     (ngModelChange)="syncFilterStr()">
 
     <mat-select-trigger>
-      {{ accountHelper.accountName(formControl.value) }}
+      {{ formControl.value | foodWebAccountName }}
     </mat-select-trigger>
 
     <mat-form-field class="fill no-pad no-label-border filter-form-field" floatLabel="never">
@@ -18,12 +18,12 @@
         [formControl]="filterCtrl"
         [placeholder]="filterPlaceholder"
         (keydown)="$event.stopPropagation()"
-        (ngModelChange)="accountAutocompleteService.refreshAutocompleteOptions($event, accountType)">
+        (ngModelChange)="accountAutocompleteService.refreshAutocompleteItems($event, accountType)">
         <food-web-progress-indicator class="filter-progress-indicator" [trigger]="accountAutocompleteService.loading"></food-web-progress-indicator>
     </mat-form-field>
 
     <mat-option *ngFor="let account of accountAutocompleteStore.value" [value]="account" class="auto-height">
-      <div class="account-name">{{ accountHelper.accountName(account) }}</div>
+      <div class="account-name">{{ account | foodWebAccountName }}</div>
       <div class="account-contact-info">
         <div class="account-email">{{ account.contactInfo.email }}</div>
         <div class="account-address">{{ account.contactInfo.streetAddress }}, {{ account.contactInfo.city }} {{ account.contactInfo.stateProvince }}</div>

@@ -2,7 +2,7 @@ import { Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AdminDeliveryForm, AdminDeliveryFormT } from '~admin/admin-donation/forms/admin-delivery.form';
-import { Account, Delivery, Donation } from '~shared';
+import { AccountAutocompleteItem, Donation } from '~shared';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
 import { DonateForm, DonationFormT } from '~web/donor/forms/donate.form';
@@ -16,8 +16,8 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
   ) {
     super({
       donateForm: new DonateForm(dateTimeService, { donorAccount: donation?.donorAccount, safetyChecklistInit: true }),
-      donorAccount: [donation?.donorAccount, Validators.required],
-      receiverAccount: donation?.claim?.receiverAccount,
+      donorAccount: [<AccountAutocompleteItem>donation?.donorAccount, Validators.required],
+      receiverAccount: <AccountAutocompleteItem>donation?.claim?.receiverAccount,
       delivery: new AdminDeliveryForm(destroy$, donation?.claim?.delivery),
       sendNotifications: true,
     });
@@ -33,15 +33,15 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
     return <AdminDeliveryForm> this.get('delivery');
   }
 
-  get donorAccount(): Account {
+  get donorAccount(): AccountAutocompleteItem {
     return this.get('donorAccount').value;
   }
 
-  get receiverAccount(): Account {
+  get receiverAccount(): AccountAutocompleteItem {
     return this.get('receiverAccount').value;
   }
 
-  get delivery(): Partial<Delivery> {
+  get delivery(): AdminDeliveryFormT {
     return this.get('delivery').value;
   }
 
@@ -49,12 +49,16 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
     return this.get('delivery').enabled;
   }
 
-  get volunteerAccount(): Account {
-    return this.delivery?.volunteerAccount;
+  get volunteerAccount(): AccountAutocompleteItem {
+    return this.deliveryForm.volunteerAccount;
   }
 
   get sendNotifications(): boolean {
     return this.get('sendNotifications').value;
+  }
+
+  getDonation(): Donation {
+    return this.donateForm.toDonation();
   }
 
   private _listenForDonorAccountChange(destroy$: Observable<any>): void {
@@ -75,14 +79,8 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
     this._onReceiverAccountChange(this.receiverAccount);
   }
 
-  private _onReceiverAccountChange(receiverAccount: Account): void {
+  private _onReceiverAccountChange(receiverAccount: AccountAutocompleteItem): void {
     (receiverAccount) ? this.get('delivery').enable() : this.get('delivery').disable();
-  }
-
-  toDonation(): Donation {
-    const donation: Donation = this.donateForm.toDonation();
-    donation.donorAccount = this.donorAccount;
-    return donation;
   }
 
   /**
@@ -91,8 +89,8 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
    * @override
    */
   reset(): void {
-    const donorAccount: Account = this.donorAccount;
-    const receiverAccount: Account = this.receiverAccount;
+    const donorAccount: AccountAutocompleteItem = this.donorAccount;
+    const receiverAccount: AccountAutocompleteItem = this.receiverAccount;
     const sendNotifications: boolean = this.sendNotifications;
     super.reset({ donorAccount, receiverAccount, sendNotifications });
   }
@@ -100,8 +98,8 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
 
 export interface AdminDonationFormT {
   donateForm: DonationFormT;
-  donorAccount: Account;
-  receiverAccount: Account;
+  donorAccount: AccountAutocompleteItem;
+  receiverAccount: AccountAutocompleteItem;
   delivery: AdminDeliveryFormT;
   sendNotifications: boolean;
 }

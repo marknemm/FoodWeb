@@ -2,7 +2,7 @@ import express = require('express');
 import { Request, Response } from 'express';
 import { AccountEntity, PasswordResetEntity, UnverifiedAccountEntity } from '~entity';
 import { QueryResult } from '~orm';
-import { Account, AccountAutocompleteRequest, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest, SignupRequest } from '~shared';
+import { Account, AccountAutocompleteItem, AccountAutocompleteRequest, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest, SignupRequest } from '~shared';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
@@ -35,7 +35,7 @@ router.get('/autocomplete', handleGetAccountAutocomplete);
 export function handleGetAccountAutocomplete(req: Request, res: Response) {
   const autocompleteRequest: AccountAutocompleteRequest = req.query;
   genAccountAutocomplete(autocompleteRequest)
-    .then((accountAutocompleteFeed: Partial<AccountEntity>[]) => res.send(accountAutocompleteFeed))
+    .then((accountAutocompleteFeed: AccountAutocompleteItem[]) => res.send(accountAutocompleteFeed))
     .catch(genErrorResponse.bind(this, res));
 }
 

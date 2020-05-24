@@ -4,14 +4,14 @@
     autocomplete="none"
     [placeholder]="placeholder"
     [matAutocomplete]="autocomplete"
-    [formControl]="accountNameCtrl"
+    [formControl]="formControl"
     (ngModelChange)="onChange($event)"
     (blur)="onTouchedCb()">
 </mat-form-field>
 
 <mat-autocomplete #autocomplete="matAutocomplete">
-  <mat-option *ngFor="let account of accountAutocompleteStore.value" [value]="accountHelper.accountName(account)">
-    <div class="account-name">{{ accountHelper.accountName(account) }}</div>
+  <mat-option *ngFor="let account of accountAutocompleteStore.value" [value]="account | foodWebAccountName">
+    <div class="account-name">{{ account | foodWebAccountName }}</div>
     <div class="account-contact-info">
       <div class="account-email">{{ account.contactInfo.email }}</div>
       <div class="account-address">{{ account.contactInfo.streetAddress }}, {{ account.contactInfo.city }} {{ account.contactInfo.stateProvince }}</div>

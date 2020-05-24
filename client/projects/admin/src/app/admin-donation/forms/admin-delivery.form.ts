@@ -1,9 +1,8 @@
 import { AbstractControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { Account, DateTimeRange, Delivery } from '~shared';
+import { AccountAutocompleteItem, DateTimeRange, Delivery } from '~shared';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
-import { DateTimeRangeForm } from '~web/date-time/date-time-range.form';
+import { DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
 
 export class AdminDeliveryForm extends TypedFormGroup<AdminDeliveryFormT> {
 
@@ -12,7 +11,7 @@ export class AdminDeliveryForm extends TypedFormGroup<AdminDeliveryFormT> {
     delivery?: Delivery
   ) {
     super({
-      volunteerAccount: delivery?.volunteerAccount,
+      volunteerAccount: <AccountAutocompleteItem> delivery?.volunteerAccount,
       pickupWindow: new DateTimeRangeForm({
         startDateTime: [delivery?.pickupWindowStart, Validators.required],
         endDateTime: [delivery?.pickupWindowEnd, Validators.required]
@@ -26,8 +25,20 @@ export class AdminDeliveryForm extends TypedFormGroup<AdminDeliveryFormT> {
     this._listenForPickupTimeChange(destroy$);
   }
 
-  get volunteerAccount(): Account {
+  get volunteerAccount(): AccountAutocompleteItem {
     return this.get('volunteerAccount').value;
+  }
+
+  get pickupWindow(): DateTimeRange {
+    return this.get('pickupWindow').value;
+  }
+
+  get startTime(): Date {
+    return this.get('startTime').value;
+  }
+
+  get pickupTime(): Date {
+    return this.get('pickupTime').value;
   }
 
   private _listenForVolunteerAccountChange(destroy$: Observable<any>): void {
@@ -82,7 +93,7 @@ export class AdminDeliveryForm extends TypedFormGroup<AdminDeliveryFormT> {
    * @override
    */
   reset(): void {
-    const volunteerAccount: Account = this.volunteerAccount;
+    const volunteerAccount: AccountAutocompleteItem = this.volunteerAccount;
     super.reset({ volunteerAccount });
   }
 
@@ -97,7 +108,7 @@ export class AdminDeliveryForm extends TypedFormGroup<AdminDeliveryFormT> {
 }
 
 export interface AdminDeliveryFormT {
-  volunteerAccount: Account;
+  volunteerAccount: AccountAutocompleteItem;
   pickupWindow: DateTimeRange;
   startTime: Date;
   pickupTime: Date;

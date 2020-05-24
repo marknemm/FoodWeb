@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Account, AccountHelper, AccountType, DeepReadonly } from '~shared';
+import { AccountAutocompleteItem, AccountHelper, AccountType, DeepReadonly } from '~shared';
 import { AccountAutocompleteService } from '~web/account/account-autocomplete/account-autocomplete.service';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
@@ -16,7 +16,7 @@ import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
     FormHelperService
   ]
 })
-export class AccountSelectComponent extends FormComponentBase<Account> {
+export class AccountSelectComponent extends FormComponentBase<AccountAutocompleteItem> {
 
   @Input() accountType: AccountType;
   @Input() filterPlaceholder = 'Search Accounts...';
@@ -35,8 +35,13 @@ export class AccountSelectComponent extends FormComponentBase<Account> {
   /**
    * The account autocomplete store which contains account data for the select options.
    */
-  get accountAutocompleteStore(): ImmutableStore<Account[]> {
+  get accountAutocompleteStore(): ImmutableStore<AccountAutocompleteItem[]> {
     return this.accountAutocompleteService.accountAutocompleteStore;
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
+    this.syncFilterStr();
   }
 
   /**
@@ -53,17 +58,34 @@ export class AccountSelectComponent extends FormComponentBase<Account> {
    * If it is not present, then the filter is updated so that the account will be included in the autocomplete store.
    */
   syncFilterStr(): void {
-    const selectedAccount: Account = this.formControl.value;
+    const selectedAccount: AccountAutocompleteItem = this.formControl.value;
 
     if (selectedAccount) {
-      const foundAccount: DeepReadonly<Account> = this.accountAutocompleteStore.value.find(
-        (account: DeepReadonly<Account>) => account.id === selectedAccount.id
-      );
+      const foundAccount: boolean = this._setValueToFoundItem(selectedAccount);
 
       if (!foundAccount) {
         this.filterCtrl.setValue(this.accountHelper.accountName(selectedAccount));
+        this.accountAutocompleteService.refreshAutocompleteItems(this.filterCtrl.value, this.accountType).subscribe(
+          () => this._setValueToFoundItem(selectedAccount)
+        );
       }
     }
+  }
+
+  /**
+   * Attempts to find a given account autocomplete item. If found, sets the current form control value to it.
+   * NOTE: Cannot always set the account to find directly, since its reference may not match the select account options.
+   * @param toFind The account autocomplete item that is to be found.
+   * @return true if the account autocomplete item was found, false if not.
+   */
+  private _setValueToFoundItem(toFind: AccountAutocompleteItem): boolean {
+    const foundAccount: DeepReadonly<AccountAutocompleteItem> = this.accountAutocompleteStore.value.find(
+      (account: DeepReadonly<AccountAutocompleteItem>) => account.id === toFind.id
+    );
+    if (foundAccount) {
+      this.formControl.setValue(foundAccount, { emitEvent: false, emitViewToModelChange: false });
+    }
+    return !!foundAccount;
   }
 
 }

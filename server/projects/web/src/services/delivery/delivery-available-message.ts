@@ -11,9 +11,10 @@ const _operationHoursHelper = new OperationHoursHelper();
 
 /**
  * Gets all potential deliverers for a donation and messages them so that they can be notified of the new delivery.
- * @return A promise that resolves when the operation has completed.
+ * @param donation The donation that is available for delivery.
+ * @return A promise that resolves to the input donation when the operation has completed.
  */
-export async function sendDeliveryAvailableMessages(donation: DonationEntity): Promise<void> {
+export async function sendDeliveryAvailableMessages(donation: DonationEntity): Promise<DonationEntity> {
   const limit = 300;
   let page = 1;
   let numQueried: number;
@@ -33,6 +34,8 @@ export async function sendDeliveryAvailableMessages(donation: DonationEntity): P
     numQueried = queryResult.entities.length;
     await _messagePotentialDeliverers(donation, queryResult.entities);
   } while (numQueried === limit);
+
+  return donation;
 }
 
 /**

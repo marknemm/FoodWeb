@@ -4,6 +4,7 @@ import { ContactInfoForm } from '~web/account/contact-info.form';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 import { DateTimeRangeForm } from '~web/date-time/date-time-range.form';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
+import { AccountAutocompleteItem } from '../../../../../../../shared/src/web';
 
 export class DonateForm extends TypedFormGroup<DonationFormT> {
 
@@ -31,21 +32,16 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
     this.deriveValuesFromDonorAccount(config.donorAccount);
   }
 
-  deriveValuesFromDonorAccount(donorAccount: Account): void {
-    if (donorAccount) {
-      this.get('donorContactOverride').patchValue(
-        this._genContactOverrideFromAccount(donorAccount)
-      );
-    }
+  get pickupWindow(): DateTimeRange {
+    return this.get('pickupWindow').value;
   }
 
-  private _genContactOverrideFromAccount(donorAccount: Account): ContactInfo {
+  deriveValuesFromDonorAccount(donorAccount: Account | AccountAutocompleteItem): void {
     if (donorAccount) {
-      const shallowCopyContactInfo: ContactInfo = Object.assign({}, donorAccount.contactInfo);
-      delete shallowCopyContactInfo.id;
-      return shallowCopyContactInfo;
+      const donorContactOverride: ContactInfo = Object.assign({}, donorAccount.contactInfo);
+      delete donorContactOverride.id;
+      this.get('donorContactOverride').patchValue(donorContactOverride);
     }
-    return null;
   }
 
   patchFromDonation(donation: Donation): void {

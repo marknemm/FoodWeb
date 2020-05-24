@@ -1,9 +1,10 @@
 @import "../constants.scss";
 
 .mat-radio-list {
-  .mat-list-item {
+  &:not(.disabled) .mat-list-item {
     &:hover {
       background-color: whitesmoke;
+      cursor: pointer;
     }
   }
 

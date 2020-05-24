@@ -25,17 +25,10 @@ export class fullTextSearchEntity1588193611219 implements MigrationInterface {
                   || SETWEIGHT(TO_TSVECTOR('simple', REGEXP_REPLACE("Account"."username", '[^\w]+', '', 'g')), 'B')
                   || SETWEIGHT(TO_TSVECTOR('simple', REGEXP_REPLACE("ContactInfo"."email", '[@\.]', ' ', 'g')), 'B')
                   || SETWEIGHT(TO_TSVECTOR('simple', "ContactInfo"."phoneNumber"), 'D')
-                  || SETWEIGHT(TO_TSVECTOR('simple',
-                      CASE WHEN ("Account"."accountType" <> 'Volunteer')
-                        THEN CONCAT(
-                          "ContactInfo"."streetAddress", ' ',
-                          "ContactInfo"."city", ' ',
-                          "ContactInfo"."stateProvince", ' ',
-                          "ContactInfo"."postalCode"
-                        )
-                        ELSE ''
-                      END
-                     ), 'B')
+                  || SETWEIGHT(TO_TSVECTOR("ContactInfo"."streetAddress"), 'B')
+                  || SETWEIGHT(TO_TSVECTOR("ContactInfo"."city"), 'B')
+                  || SETWEIGHT(TO_TSVECTOR("ContactInfo"."stateProvince"), 'B')
+                  || SETWEIGHT(TO_TSVECTOR("ContactInfo"."postalCode"), 'B')
                   || SETWEIGHT(TO_TSVECTOR(COALESCE("Organization"."name", '')), 'A')
                   || SETWEIGHT(TO_TSVECTOR(COALESCE("Organization"."description", '')), 'B')
                   || SETWEIGHT(TO_TSVECTOR(COALESCE("Organization"."deliveryInstructions", '')), 'C')

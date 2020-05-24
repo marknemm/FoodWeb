@@ -6,7 +6,7 @@ import { sendDeliveryUnavailableMessages } from './delivery-unavailable-message'
 
 const _donationHelper = new DonationHelper();
 
-export async function sendDeliveryScheduledMessages(donation: DonationEntity): Promise<Donation> {
+export async function sendDeliveryScheduledMessages(donation: DonationEntity): Promise<DonationEntity> {
   const messagePromises: Promise<any>[] = [];
   const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, donation.claim.delivery.volunteerAccount];
   const { donorName, receiverName, delivererName } = _donationHelper.memberNames(donation);

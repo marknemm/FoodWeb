@@ -1,10 +1,10 @@
 import express = require('express');
 import { router as accountRouter } from '~admin/controllers/admin-account';
+import { router as deliveryRouter } from '~admin/controllers/admin-delivery';
 import { router as donationRouter } from '~admin/controllers/admin-donation';
 import { router as featuredEventRouter } from '~admin/controllers/admin-featured-event';
 import { router as developerRouter } from '~admin/controllers/developer';
 import { router as appDataRouter } from '~web/controllers/app-data';
-import { router as deliveryRouter } from '~web/controllers/delivery';
 import { router as heuristicsRouter } from '~web/controllers/heuristics';
 import { router as mapRouter } from '~web/controllers/map';
 import { router as notificationRouter } from '~web/controllers/notification';

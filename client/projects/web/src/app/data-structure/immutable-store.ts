@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, skip, takeUntil } from 'rxjs/operators';
+import { map, skip, takeUntil, take } from 'rxjs/operators';
 import { DeepReadonly } from '~shared';
 
 /**
@@ -41,6 +41,13 @@ export class ImmutableStore<T> {
    */
   get valueUpdates$(): Observable<DeepReadonly<T>> {
     return this._value$.asObservable().pipe(skip(1));
+  }
+
+  /**
+   * An obervable that emits the next update only, and then completes.
+   */
+  get nextUpdate$(): Observable<DeepReadonly<T>> {
+    return this._value$.asObservable().pipe(skip(1), take(1));
   }
 
   getValue$(destroy$: Observable<any>): Observable<DeepReadonly<T>> {

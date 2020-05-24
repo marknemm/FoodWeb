@@ -1,8 +1,9 @@
-<div [formGroup]="formGroup" *ngIf="editing" class="row">
+<div [formGroup]="formGroup" *ngIf="editing" class="date-time-range-form row">
   <div class="date-time-field col-sm-12">
     <food-web-date-time
      #startDateTime
      formControlName="startDateTime"
+     [allowClear]="allowClear"
      [editing]="true"
      [datePlaceholder]="startDatePlaceholder"
      [timePlaceholder]="startTimePlaceholder"
@@ -17,6 +18,7 @@
     <food-web-date-time
      #endDateTime
      formControlName="endDateTime"
+     [allowClear]="allowClear"
      [editing]="true"
      [datePlaceholder]="endDatePlaceholder"
      [timePlaceholder]="endTimePlaceholder"
@@ -30,6 +32,11 @@
       End date-time must be later than start date-time
     </mat-error>
   </div>
+  <div
+    *ngIf="dateTimeRangeRadioConfig && this.formGroup.enabled"
+    class="date-time-range-radio-intercept"
+    (click)="openDateTimeRangeRadio($event)"
+  ></div>
 </div>
 
 <div *ngIf="!editing" class="date-time-range-display">

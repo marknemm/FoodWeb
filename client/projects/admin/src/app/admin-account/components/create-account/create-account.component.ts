@@ -13,6 +13,7 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
   selector: 'food-web-create-account',
   templateUrl: './create-account.component.html',
   styleUrls: ['./create-account.component.scss'],
+  providers: [CreateAccountService]
 })
 export class CreateAccountComponent implements OnInit, OnDestroy {
 
