@@ -11,6 +11,7 @@ import { claimDonation } from '~web/services/donation-claim/claim-donation';
 import { createDonation } from '~web/services/donation/save-donation';
 import { sendDonationCreateMessages } from '~web/services/donation/save-donation-message';
 import { chainHandlePostDelivery } from './admin-delivery';
+import { adminReadAccount } from '~admin/services/admin-account/admin-read-accounts';
 
 export const router = express.Router();
 
@@ -27,7 +28,7 @@ async function handlePostDonation(req: Request, res: Response) {
 
     // Grab the donor account and create the donation.
     try {
-      const donorAccount: AccountEntity = await readAccount(createReq.donorAccountId);
+      const donorAccount: AccountEntity = await adminReadAccount(createReq.donorAccountId);
       donation = await createDonation(createReq, donorAccount);
     } catch (err) {
       genErrorResponseRethrow(res, err);
@@ -70,7 +71,7 @@ async function chainHandlePostDonationClaim(claimReq: AdminClaimSaveRequest, res
   let donation: DonationEntity;
 
   try {
-    const receiverAccount: AccountEntity = await readAccount(claimReq.receiverAccountId);
+    const receiverAccount: AccountEntity = await adminReadAccount(claimReq.receiverAccountId);
     donation = await claimDonation(claimReq, receiverAccount);
   } catch (err) {
     genErrorResponseRethrow(res, err);

@@ -1,14 +1,14 @@
 import express = require('express');
 import { Request, Response } from 'express';
+import { adminReadAccount } from '~admin/services/admin-account/admin-read-accounts';
 import { AccountEntity, DonationEntity } from '~entity';
 import { AdminDeliverySaveRequest } from '~shared';
 import { handleGetDeliveries, handleGetMyDeliveries, handleGetUnscheduledDeliveries, handlePutAdvanceDeliveryState, handlePutUndoDeliveryState } from '~web/controllers/delivery';
 import { genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { ensureAccountVerified, ensureSessionActive } from '~web/middlewares/session.middleware';
-import { scheduleDelivery } from '~web/services/delivery/schedule-delivery';
 import { saveDeliveryScheduleAudit } from '~web/services/audit/save-delivery-audit';
+import { scheduleDelivery } from '~web/services/delivery/schedule-delivery';
 import { sendDeliveryScheduledMessages } from '~web/services/delivery/schedule-delivery-message';
-import { readAccount } from '~web/services/account/read-accounts';
 
 export const router = express.Router();
 
@@ -28,7 +28,7 @@ export async function chainHandlePostDelivery(deliverySaveReq: AdminDeliverySave
   let donation: DonationEntity;
 
   try {
-    const volunteerAccount: AccountEntity = await readAccount(deliverySaveReq.volunteerAccountId)
+    const volunteerAccount: AccountEntity = await adminReadAccount(deliverySaveReq.volunteerAccountId)
     return scheduleDelivery(deliverySaveReq, volunteerAccount)
   } catch (err) {
     genErrorResponseRethrow(res, err);
