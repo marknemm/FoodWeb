@@ -1,11 +1,19 @@
 .action-footer {
-  .action-hint {
-    font-weight: normal;
-    color: black;
-    margin-bottom: 7px;
-  }
+  .action-row {
+    margin-bottom: 20px;
 
-  .delete-button {
-    margin-right: 7px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .action-hint {
+      font-weight: normal;
+      color: black;
+      margin-bottom: 7px;
+    }
+
+    .delete-button {
+      margin-right: 7px;
+    }
   }
 }

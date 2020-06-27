@@ -72,10 +72,13 @@ export abstract class FormComponentBase<T> implements OnInit, OnDestroy, Control
   /**
    * Writes a given value to the underlying active abstract control; either formGroup or formControl.
    * @param value The value to write.
+   * @param options Options for the write operation (See AbstractControl.setValue for more details).
    */
-  writeValue(value: T): void {
+  writeValue(value: T, options?: { onlySelf?: boolean, emitEvent?: boolean }): void {
+    // Only set the underlying control's value if it was not supplied via an input binding.
+    // This implies that there is no encompassing from group which has supplied the derived component with its form control.
     if (!this.controlInputBound) {
-      this.activeAbstractControl.setValue(value);
+      this.activeAbstractControl.setValue(value, options);
     }
   }
 

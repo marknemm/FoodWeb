@@ -1,7 +1,7 @@
 import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity, AuditEntity } from '~entity';
 import { AuditEventType, Donation } from '~shared';
-import { UpdateDiff } from '~web/interfaces/update-diff';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 export { AuditEntity, AuditEventType };
 
 export async function saveAudit<T>(

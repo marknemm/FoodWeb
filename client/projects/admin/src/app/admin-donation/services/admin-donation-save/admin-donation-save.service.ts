@@ -18,6 +18,11 @@ export class AdminDonationSaveService {
     private _httpResponseService: HttpResponseService
   ) {}
 
+  /**
+   * Creates a donation with data within a given donation creation form.
+   * @param donationForm The donation creation form group.
+   * @return An observable that resolves to the created donation once the server operation completes.
+   */
   createDonation(donationForm: AdminDonationForm): Observable<Donation> {
     const request: AdminDonationSaveRequest = this._genDonationSaveRequest(donationForm);
     return this._httpClient.post<Donation>(this.url, request, { withCredentials: true }).pipe(
@@ -25,9 +30,26 @@ export class AdminDonationSaveService {
     );
   }
 
+  /**
+   * Updates a donation with data within a given donation update form.
+   * @param donationForm The donation update form group.
+   * @return An observable that resolves to theupdated donation once the server opeartion completes.
+   */
+  updateDonation(donationForm: AdminDonationForm): Observable<Donation> {
+    const request: AdminDonationSaveRequest = this._genDonationSaveRequest(donationForm);
+    return this._httpClient.put<Donation>(this.url, request, { withCredentials: true }).pipe(
+      this._httpResponseService.handleHttpResponse()
+    );
+  }
+
+  /**
+   * Generates a donation save request from data within a given donation form.
+   * @param donationForm The donation form group containing donation save data.
+   * @return The generated donation save request.
+   */
   private _genDonationSaveRequest(donationForm: AdminDonationForm): AdminDonationSaveRequest {
     return {
-      donation: donationForm.getDonation(),
+      donationSaveData: donationForm.getDonationSaveData(),
       donorAccountId: donationForm.donorAccount.id,
       claimSaveReq: {
         donationId: null,
@@ -37,11 +59,7 @@ export class AdminDonationSaveService {
       deliverySaveReq: {
         donationId: null,
         volunteerAccountId: donationForm.volunteerAccount?.id,
-        pickupWindow: donationForm.delivery?.pickupWindow,
-        startTime: donationForm.delivery?.startTime,
-        pickupTime: donationForm.delivery?.pickupTime,
-        dropOffTime: donationForm.delivery?.dropOffTime,
-        sendNotifications: donationForm.sendNotifications
+        delivery: donationForm.deliveryForm.toDeliverySaveData()
       },
       sendNotifications: donationForm.sendNotifications
     };

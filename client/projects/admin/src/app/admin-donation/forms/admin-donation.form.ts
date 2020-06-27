@@ -1,8 +1,8 @@
 import { Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AdminDeliveryForm, AdminDeliveryFormT } from '~admin/admin-donation/forms/admin-delivery.form';
-import { AccountAutocompleteItem, Donation } from '~shared';
+import { AdminDeliveryForm, AdminDeliveryFormT } from '~admin/admin-delivery/forms/admin-delivery.form';
+import { AccountAutocompleteItem, Donation, DonationSaveData } from '~shared';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
 import { DonateForm, DonationFormT } from '~web/donor/forms/donate.form';
@@ -34,15 +34,15 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
   }
 
   get donorAccount(): AccountAutocompleteItem {
-    return this.get('donorAccount').value;
+    return this.value.donorAccount;
   }
 
   get receiverAccount(): AccountAutocompleteItem {
-    return this.get('receiverAccount').value;
+    return this.get('receiverAccount').enabled ? this.value.receiverAccount : null;
   }
 
   get delivery(): AdminDeliveryFormT {
-    return this.get('delivery').value;
+    return this.deliveryEnabled ? this.value.delivery : null;
   }
 
   get deliveryEnabled(): boolean {
@@ -54,11 +54,11 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
   }
 
   get sendNotifications(): boolean {
-    return this.get('sendNotifications').value;
+    return this.value.sendNotifications;
   }
 
-  getDonation(): Donation {
-    return this.donateForm.toDonation();
+  getDonationSaveData(): DonationSaveData {
+    return this.donateForm.toDonationSaveData();
   }
 
   private _listenForDonorAccountChange(destroy$: Observable<any>): void {
@@ -81,6 +81,17 @@ export class AdminDonationForm extends TypedFormGroup<AdminDonationFormT> {
 
   private _onReceiverAccountChange(receiverAccount: AccountAutocompleteItem): void {
     (receiverAccount) ? this.get('delivery').enable() : this.get('delivery').disable();
+  }
+
+  /**
+   * Patches this form's value based off of a given donation.
+   * @param donation The donation used for the patch.
+   */
+  patchFromDonation(donation: Donation): void {
+    this.donateForm.patchFromDonation(donation);
+    this.get('donorAccount').setValue(donation.donorAccount);
+    this.get('receiverAccount').setValue(donation.claim?.receiverAccount);
+    this.deliveryForm.patchFromDelivery(donation.claim?.delivery);
   }
 
   /**

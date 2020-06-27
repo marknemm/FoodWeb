@@ -113,11 +113,7 @@ export class AccountHelper {
   validateAccount(account: Account): string {
     if (!account) { return ''; }
 
-    const requireErr: string = this._validationHelper.validateRequiredFields(
-      account,
-      ['username', 'accountType', 'contactInfo'],
-      ['Username', 'Account type', 'Contact info']
-    );
+    const requireErr: string = this._validationHelper.validateProps(account, ['username', 'accountType', 'contactInfo']);
     if (requireErr) { return requireErr; }
 
     // Organization is only required for 'Donor' and 'Receiver' type accounts.
@@ -153,22 +149,19 @@ export class AccountHelper {
   validateContactInfo(contactInfo: ContactInfo): string {
     if (!contactInfo) { return ''; }
 
-    // Check to ensure all required fields exist.
-    const requireErr: string = this._validationHelper.validateRequiredFields(
+    // Check to ensure all required fields exist and contain values that fit various regex patterns.
+    const validateErr: string = this._validationHelper.validateProps(
       contactInfo,
-      ['email', 'phoneNumber', 'streetAddress', 'city', 'stateProvince', 'postalCode'],
-      ['Email address', 'Phone number', 'Street address', 'City', 'State or province', 'Postal code']
+      [
+        { prop: 'email', name: 'email address', required: true, regex: Validation.EMAIL_REGEX },
+        { prop: 'phoneNumber', required: true, regex: Validation.PHONE_REGEX },
+        'streetAddress',
+        'city',
+        { prop: 'stateProvince', name: 'state or province' },
+        { prop: 'postalCode', required: true, regex: Validation.POSTAL_CODE_REGEX }
+      ]
     );
-    if (requireErr) { return requireErr; }
-
-    // Check to ensure all fields conform to validation regexs.
-    const patternErr: string = this._validationHelper.validateRegexFields(
-      contactInfo,
-      ['email', 'phoneNumber', 'postalCode'],
-      ['email address', 'phone number', 'postal code'],
-      [Validation.EMAIL_REGEX, Validation.PHONE_REGEX, Validation.POSTAL_CODE_REGEX]
-    );
-    if (patternErr) { return patternErr; }
+    if (validateErr) { return validateErr; }
 
     return '';
   }

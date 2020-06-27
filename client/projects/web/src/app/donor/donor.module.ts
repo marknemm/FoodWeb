@@ -22,7 +22,7 @@ import { SharedModule } from '~web/shared/shared.module';
     DonorRoutingModule,
     CommonModule,
     ReactiveFormsModule,
-    MaterialModule, 
+    MaterialModule,
     SharedModule,
     DateTimeModule,
     AccountModule

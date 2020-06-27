@@ -14,7 +14,6 @@
        readonly="true"
        formControlName="date"
        [errorStateMatcher]="errorStateMatcher"
-       (ngModelChange)="_onValueChange()"
        (blur)="onTouchedCb()">
       <button mat-icon-button matSuffix type="button" color="warn" (click)="clearDate($event)" *ngIf="allowClear && dateTimeForm.get('date').value && dateTimeForm.get('date').enabled">
         <mat-icon>clear</mat-icon>
@@ -33,7 +32,6 @@
        readonly="true"
        formControlName="time"
        [errorStateMatcher]="errorStateMatcher"
-       (ngModelChange)="_onValueChange()"
        (blur)="onTouchedCb()">
       <button mat-icon-button matSuffix type="button" color="warn" (click)="clearTime($event)" *ngIf="allowClear && dateTimeForm.get('time').value && dateTimeForm.get('time').enabled">
         <mat-icon>clear</mat-icon>

@@ -3,9 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { AccountHelper, DeliveryHelper, DonationHelper } from '~shared';
 import { DonationAction, DonationActionsService } from '~web/donation-delivery-shared/donation-actions/donation-actions.service';
-import { Donation, DonationService } from '~web/donation/donation/donation.service';
+import { Donation, DonationReadService } from '~web/donation/donation-read/donation-read.service';
 import { SessionService } from '~web/session/session/session.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
   selector: 'food-web-donation-details',
@@ -29,7 +29,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
     public sessionService: SessionService,
     private _activatedRoute: ActivatedRoute,
     private _donationActionsService: DonationActionsService,
-    private _donationService: DonationService,
+    private _donationReadService: DonationReadService,
     private _router: Router
   ) {}
 
@@ -65,7 +65,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _updateDonationPrivileges(donation: Donation): void {
-    if (donation) { 
+    if (donation) {
       this._myDonation = this.sessionService.hasAccountOwnership(donation.donorAccount.id);
       this._myClaim = donation.claim
         ? this.sessionService.hasAccountOwnership(donation.claim.receiverAccount.id)
@@ -77,8 +77,8 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _listenDonationChange(): void {
-    this._donationService.listenDonationQueryChange(this._activatedRoute).subscribe((donation: Donation) =>
-      setTimeout(() => this._updateDonation(donation))
+    this._donationReadService.listenDonationQueryChange(this._activatedRoute).subscribe(
+      (donation: Donation) => setTimeout(() => this._updateDonation(donation))
     );
   }
 

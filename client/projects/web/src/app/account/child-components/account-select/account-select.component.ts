@@ -5,6 +5,7 @@ import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/fo
 import { ImmutableStore } from '~web/data-structure/immutable-store';
 import { TypedFormControl } from '~web/data-structure/typed-form-control';
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
+import { FloatLabelType } from '@angular/material/core';
 
 @Component({
   selector: 'food-web-account-select',
@@ -20,6 +21,7 @@ export class AccountSelectComponent extends FormComponentBase<AccountAutocomplet
 
   @Input() accountType: AccountType;
   @Input() filterPlaceholder = 'Search Accounts...';
+  @Input() floatLabel: FloatLabelType = 'auto';
   @Input() placeholder = 'Select an Account';
 
   readonly filterCtrl = new TypedFormControl<string>();
@@ -64,7 +66,12 @@ export class AccountSelectComponent extends FormComponentBase<AccountAutocomplet
       const foundAccount: boolean = this._setValueToFoundItem(selectedAccount);
 
       if (!foundAccount) {
+        // Immediately add missing selectedAccount to the autocomplete store so that it can be properly selected.
+        this.accountAutocompleteStore.getMutableValue().push(selectedAccount);
+        // Must set again so that underlying select control can select newly added autocomplete store option.
+        this.formControl.setValue(selectedAccount);
         this.filterCtrl.setValue(this.accountHelper.accountName(selectedAccount));
+        // Query the server for the total set of autocomplete entries.
         this.accountAutocompleteService.refreshAutocompleteItems(this.filterCtrl.value, this.accountType).subscribe(
           () => this._setValueToFoundItem(selectedAccount)
         );

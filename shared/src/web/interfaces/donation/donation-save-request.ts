@@ -1,6 +1,6 @@
 import { WriteRequest } from '../write-request';
-import { Donation } from './donation';
+import { DonationSaveData } from './donation-save-data';
 
 export interface DonationSaveRequest extends WriteRequest {
-  donation: Donation;
+  donationSaveData: DonationSaveData;
 }

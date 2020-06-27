@@ -7,7 +7,9 @@ import { AccountAutocompleteComponent } from '~web/account/account-autocomplete/
 import { AccountCreationFormComponent } from '~web/account/account-creation-form/account-creation-form.component';
 import { AccountDetailsComponent } from '~web/account/account-details/account-details.component';
 import { AccountFiltersComponent } from '~web/account/account-filters/account-filters.component';
+import { AccountNamePipe } from '~web/account/account-name/account-name.pipe';
 import { AccountRoutingModule } from '~web/account/account-routing.module';
+import { AccountSelectDialogComponent } from '~web/account/account-select-dialog/account-select-dialog.component';
 import { AccountSelectComponent } from '~web/account/account-select/account-select.component';
 import { AccountTeaserComponent } from '~web/account/account-teaser/account-teaser.component';
 import { AccountTypeComponent } from '~web/account/account-type/account-type.component';
@@ -29,7 +31,6 @@ import { MapModule } from '~web/map/map.module';
 import { MaterialModule } from '~web/material.module';
 import { PasswordModule } from '~web/password/password.module';
 import { SharedModule } from '~web/shared/shared.module';
-import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
     AccountFiltersComponent,
     AccountsComponent,
     AccountSelectComponent,
+    AccountSelectDialogComponent,
     AccountTeaserComponent,
     AccountTypeComponent,
     AddressComponent,
@@ -73,6 +75,7 @@ import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
     AccountDetailsComponent,
     AccountsComponent,
     AccountSelectComponent,
+    AccountSelectDialogComponent,
     AccountTeaserComponent,
     AccountTypeComponent,
     AddressComponent,

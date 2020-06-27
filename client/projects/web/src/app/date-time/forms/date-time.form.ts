@@ -55,12 +55,12 @@ export class DateTimeForm extends TypedFormGroup<DateTimeFormT> {
     config.defaultDate = config.defaultDate === 'Now' ? new Date() : config.defaultDate;
   }
 
-  patchFromDate(date: Date): void {
+  patchFromDate(date: Date, options?: { onlySelf?: boolean; emitEvent?: boolean; }): void {
     if (date) {
       const time: string = this._dateTimeService.formatTime(date);
-      this.patchValue({ date, time });
+      this.patchValue({ date, time }, options);
     } else {
-      this.patchValue({ date: null, time: '' });
+      this.patchValue({ date: null, time: '' }, options);
     }
   }
 

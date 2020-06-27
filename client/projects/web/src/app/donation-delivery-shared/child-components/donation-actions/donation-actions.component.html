@@ -1,57 +1,82 @@
 <div class="action-footer">
-  <ng-container *ngIf="canEdit">
-    <div *ngIf="!hideActionHint" class="action-hint">
+  <div class="action-row" *ngIf="donationActionsService.canAccessAction('Edit')">
+    <hr>
+    <div *ngIf="!hideActionHints" class="action-hint">
       <strong>Tip</strong>: Feel free to delete or edit your donation any time before a volunteer starts the delivery.
     </div>
-    <button mat-raised-button foodWebConfirmButton type="button" color="warn" class="delete-button" (clickConfirm)="action.emit('Delete')"
-      confirmTitle="Confirm Delete" confirmMessage="Are you sure you want to permanently delete the donation?">
+    <button mat-raised-button
+      *ngIf="donationActionsService.canAccessAction('Delete')"
+      type="button"
+      color="warn"
+      class="delete-button"
+      (clickConfirm)="action.emit('Delete')"
+      foodWebConfirmButton
+      confirmTitle="Confirm Delete"
+      confirmMessage="Are you sure you want to permanently delete the donation?">
       Delete Donation
     </button>
-    <a [routerLink]="['/donor/edit-donation/' + donation.id]" [state]="{ donation: donation }">
+    <a [routerLink]="[donationActionsService.editUrl, donation.id]" [state]="{ donation: donation }">
       <button mat-raised-button type="button" color="primary" class="edit-button">
         Edit Donation
       </button>
     </a>
-  </ng-container>
+  </div>
 
-  <ng-container *ngIf="canClaim">
-    <div *ngIf="!hideActionHint" class="action-hint">
+  <div class="action-row" *ngIf="donationActionsService.canAccessAction('Claim')">
+    <hr>
+    <div *ngIf="!hideActionHints" class="action-hint">
       <strong>Tip</strong>: Browse this donation's details below, and feel free to claim it if you wish to receive it.
     </div>
-    <button mat-raised-button *ngIf="canClaim" type="button" color="primary" (click)="action.emit('Claim')">
+    <button mat-raised-button type="button" color="primary" (click)="action.emit('Claim')">
       Claim Donation
     </button>
-  </ng-container>
+  </div>
 
-  <ng-container *ngIf="canUnclaim">
-    <div *ngIf="!hideActionHint" class="action-hint">
+  <div class="action-row" *ngIf="donationActionsService.canAccessAction('Unclaim')">
+    <hr>
+    <div *ngIf="!hideActionHints" class="action-hint">
       <strong>Tip</strong>: Feel free to unclaim this donation any time before a volunteer starts the delivery.
     </div>
-    <button mat-raised-button foodWebConfirmButton *ngIf="canUnclaim" type="button" color="warn"
+    <button mat-raised-button foodWebConfirmButton type="button" color="warn"
       (clickConfirm)="action.emit('Unclaim')" confirmTitle="Confirm Unclaim" confirmMessage="Are you sure you want to unclaim the donation?">
       Unclaim Donation
     </button>
-  </ng-container>
+  </div>
 
-  <ng-container *ngIf="canScheduleDelivery">
-    <div *ngIf="!hideActionHint" class="action-hint">
+  <div class="action-row" *ngIf="donationActionsService.canAccessAction('ScheduleDelivery')">
+    <hr>
+    <div *ngIf="!hideActionHints" class="action-hint">
       <strong>Tip</strong>: Browse this delivery's details below, and feel free to schedule it if it works well for you.
     </div>
     <button mat-raised-button type="button" color="primary" (click)="action.emit('ScheduleDelivery')">
       Schedule Delivery
     </button>
-  </ng-container>
-
-  <div *ngIf="deliveryActionRequiredTxt && !hideActionHint" class="action-hint">
-    <strong>Action Required</strong>: {{ deliveryActionRequiredTxt }}
   </div>
 
-  <button mat-raised-button foodWebConfirmButton *ngIf="canUndoDeliveryState" type="button" color="warn" (clickConfirm)="action.emit('UndoDeliveryState')"
-    confirmTitle="Confirm {{ deliveryRevertTxt }}" [confirmMessage]="confirmDeliveryUndoMessage">
-    {{ deliveryRevertTxt }}
-  </button>
+  <div class="action-row" *ngIf="canAccessDeliveryStatusActions">
+    <hr>
+    <div *ngIf="deliveryActionRequiredTxt && !hideActionHints" class="action-hint">
+      <strong>Action Required</strong>: {{ deliveryActionRequiredTxt }}
+    </div>
 
-  <button mat-raised-button *ngIf="canAdvanceDeliveryState" type="button" color="primary" (click)="action.emit('AdvanceDeliveryState')">
-    {{ deliveryAdvanceTxt }}
-  </button>
+    <button mat-raised-button
+      *ngIf="donationActionsService.canAccessAction('UndoDeliveryState')"
+      foodWebConfirmButton
+      type="button"
+      color="warn"
+      confirmTitle="Confirm {{ deliveryRevertTxt }}" [confirmMessage]="confirmDeliveryUndoMessage"
+      (clickConfirm)="action.emit('UndoDeliveryState')"
+    >
+      {{ deliveryRevertTxt }}
+    </button>
+
+    <button mat-raised-button
+      *ngIf="donationActionsService.canAccessAction('AdvanceDeliveryState')"
+      type="button"
+      color="primary"
+      (click)="action.emit('AdvanceDeliveryState')"
+    >
+      {{ deliveryAdvanceTxt }}
+    </button>
+  </div>
 </div>

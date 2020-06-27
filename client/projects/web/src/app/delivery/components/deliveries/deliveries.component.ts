@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DeliveryHelper, Donation, DonationHelper, DonationReadRequest, ListResponse } from '~shared';
-import { DeliveryService } from '~web/delivery/delivery/delivery.service';
+import { DeliveryReadService } from '~web/delivery/delivery-read/delivery-read.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
@@ -22,14 +22,14 @@ export class DeliveriesComponent implements OnInit {
     public donationHelper: DonationHelper,
     public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
-    private _deliveryService: DeliveryService,
+    private _deliveryReadService: DeliveryReadService,
     private _router: Router
   ) {}
 
   get donations(): Donation[] {
     return this._donations;
   }
-  
+
   get myDeliveries(): boolean {
     return this._myDeliveries;
   }
@@ -40,7 +40,7 @@ export class DeliveriesComponent implements OnInit {
 
   ngOnInit() {
     this._myDeliveries = this._router.url.indexOf('/my') >= 0;
-    this._deliveryService.listenDeliveriesQueryChange(this._activatedRoute).subscribe(
+    this._deliveryReadService.listenDeliveriesQueryChange(this._activatedRoute).subscribe(
       (response: ListResponse<Donation>) => {
         this._donations = response.list;
         this._totalCount = response.totalCount;

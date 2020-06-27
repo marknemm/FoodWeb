@@ -2,9 +2,9 @@ import express = require('express');
 import { Request, Response } from 'express';
 import { AccountEntity, DonationEntity } from '~entity';
 import { QueryResult } from '~orm';
-import { DonationClaimRequest, DonationSaveRequest, DonationDeleteRequest, DonationReadRequest, DonationUnclaimRequest } from '~shared';
+import { DonationClaimRequest, DonationDeleteRequest, DonationReadRequest, DonationSaveRequest, DonationUnclaimRequest } from '~shared';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { genListResponse } from '~web/helpers/response/list-response';
-import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { ensureAccountVerified, ensureSessionActive } from '~web/middlewares/session.middleware';
 import { saveDonationClaimAudit, saveDonationCreateAudit, saveDonationDeleteAudit, saveDonationUnclaimAudit, saveDonationUpdateAudit } from '~web/services/audit/save-donation-audit';
@@ -86,11 +86,15 @@ export function handlePutDonation(req: Request, res: Response) {
     .catch((err: Error) => console.error(err));
 }
 
-router.delete('/:id', ensureSessionActive, ensureAccountVerified, handleDeleteDonation);
-export function handleDeleteDonation(req: Request, res: Response) {
+router.delete(
+  '/:id',
+  ensureSessionActive, ensureAccountVerified,
+  (req: Request, res: Response) => handleDeleteDonation(req, res)
+);
+export function handleDeleteDonation(req: Request, res: Response, account: AccountEntity = req.session.account): void {
   const deleteReq: DonationDeleteRequest = req.body;
   deleteReq.donationId = parseInt(req.params.id, 10);
-  deleteDonation(deleteReq, req.session.account)
+  deleteDonation(deleteReq, account)
     .then((deletedDonation: DonationEntity) => { res.send(); return deletedDonation; })
     .catch(genErrorResponseRethrow.bind(this, res))
     .then((deletedDonation: DonationEntity) => saveDonationDeleteAudit(deleteReq, deletedDonation))
@@ -98,11 +102,15 @@ export function handleDeleteDonation(req: Request, res: Response) {
     .catch((err: Error) => console.error(err));
 }
 
-router.delete('/claim/:id', ensureSessionActive, ensureAccountVerified, handleDeleteDonationClaim);
-export function handleDeleteDonationClaim(req: Request, res: Response) {
+router.delete(
+  '/claim/:id',
+  ensureSessionActive, ensureAccountVerified,
+  (req: Request, res: Response) => handleDeleteDonationClaim(req, res)
+);
+export function handleDeleteDonationClaim(req: Request, res: Response, account: AccountEntity = req.session.account): void {
   const unclaimReq: DonationUnclaimRequest = req.body;
   unclaimReq.donationId = parseInt(req.params.id, 10);
-  unclaimDonation(unclaimReq, req.session.account)
+  unclaimDonation(unclaimReq, account)
     .then((unclaimDonationDiff: UpdateDiff<DonationEntity>) => { res.send(unclaimDonationDiff.new); return unclaimDonationDiff; })
     .catch(genErrorResponseRethrow.bind(this, res))
     .then((unclaimDonationDiff: UpdateDiff<DonationEntity>) => saveDonationUnclaimAudit(unclaimReq, unclaimDonationDiff))

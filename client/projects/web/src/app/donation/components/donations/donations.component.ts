@@ -1,8 +1,7 @@
-import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DonationHelper, DonationReadRequest, ListResponse } from '~shared';
-import { Donation, DonationService } from '~web/donation/donation/donation.service';
+import { Donation, DonationReadService } from '~web/donation/donation-read/donation-read.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
@@ -19,7 +18,7 @@ export class DonationsComponent implements OnInit {
     public donationHelper: DonationHelper,
     public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
-    private _donationService: DonationService,
+    private _donationReadService: DonationReadService,
     private _router: Router
   ) {}
 
@@ -32,7 +31,7 @@ export class DonationsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._donationService.listenDonationsQueryChange(this._activatedRoute).subscribe(
+    this._donationReadService.listenDonationsQueryChange(this._activatedRoute).subscribe(
       (response: ListResponse<Donation>) => {
         this._donations = response.list;
         this._totalCount = response.totalCount;

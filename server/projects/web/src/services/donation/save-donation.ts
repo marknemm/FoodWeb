@@ -1,66 +1,75 @@
 import { plainToClass } from 'class-transformer';
 import { AccountEntity, ContactInfoEntity, DonationEntity } from '~entity';
 import { OrmEntityManager } from '~orm';
-import { AccountHelper, ContactInfo, Donation, DonationHelper, DonationSaveRequest, DonationStatus } from '~shared';
+import { AccountHelper, ContactInfo, DonationHelper, DonationSaveData, DonationSaveRequest, DonationStatus } from '~shared';
 import { geocode, geoTimezone } from '~web/helpers/map/geocoder';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { FoodWebError } from '~web/helpers/response/food-web-error';
-import { UpdateDiff } from '~web/interfaces/update-diff';
-import { genMapRoute } from '../map/read-map-routes';
-import { readDonation } from './read-donations';
+import { readDonation } from '~web/services/donation/read-donations';
+import { genMapRoute } from '~web/services/map/read-map-routes';
 
 const _donationHelper = new DonationHelper();
 const _accountHelper = new AccountHelper();
 
 export async function createDonation(createReq: DonationSaveRequest, myAccount: AccountEntity): Promise<DonationEntity> {
-  const donationToSave: Donation = createReq.donation;
-  donationToSave.donationStatus = DonationStatus.Unmatched;
-  donationToSave.donorAccount = myAccount;
-  _validateDonation(donationToSave);
-  await _preprocessDonorContactOverride(donationToSave);
-
+  const donationToSave: DonationSaveData = await prepareDonation(createReq.donationSaveData, myAccount);
   return OrmEntityManager.transaction((manager: OrmEntityManager) =>
     manager.getRepository(DonationEntity).save(donationToSave)
   );
 }
 
 export async function updateDonation(updateReq: DonationSaveRequest, myAccount: AccountEntity): Promise<UpdateDiff<DonationEntity>> {
-  const donationToSave: DonationEntity = plainToClass(DonationEntity, updateReq.donation);
-  const originalDonation: DonationEntity = await readDonation(donationToSave.id);
-  _validateDonation(donationToSave);
-  _ensureCanUpdateDonation(donationToSave, myAccount);
-
-  const donorOverrideAddressSame: boolean = _accountHelper.areAddressesEqual(
-    donationToSave.donorContactOverride,
-    originalDonation.donorContactOverride
-  );
-  // NOTE: Order of the next 2 lines is important! We need to process update to donor contact override before recalculating routes.
-  await _preprocessDonorContactOverride(donationToSave);
-  await _recalcRoutesIfAddressChange(donationToSave, donorOverrideAddressSame);
-
-  _removeNonUpdateFields(donationToSave);
-  const updatedDonation: DonationEntity = await _saveDonationUpdate(donationToSave, originalDonation, donorOverrideAddressSame);
+  const originalDonation: DonationEntity = await readDonation(updateReq.donationSaveData.id);
+  const donationToSave: DonationSaveData = await prepareDonation(updateReq.donationSaveData, myAccount, originalDonation);
+  _removeNonUpdateFields(<DonationEntity>donationToSave);
+  const updatedDonation: DonationEntity = await _saveDonationUpdate(donationToSave, originalDonation);
   return { old: originalDonation, new: updatedDonation };
 }
 
-function _validateDonation(donation: Donation): void {
+export async function prepareDonation(
+  donationSaveData: DonationSaveData,
+  myAccount: AccountEntity,
+  origDonation?: DonationEntity
+): Promise<DonationSaveData> {
+  const donationToSave: DonationSaveData = plainToClass(DonationEntity, donationSaveData);
+
+  // Perform tasks and validation for both donation create & update.
+  donationToSave.donorAccount = (donationToSave.donorAccount ? donationToSave.donorAccount : myAccount);
+  donationToSave.donationStatus = (donationToSave.donationStatus ? donationToSave.donationStatus : DonationStatus.Unmatched);
+  _validateDonation(donationToSave);
+  await _preprocessDonorContactOverride(donationToSave);
+
+  // Perform tasks specific to donation update if this is an update.
+  if (donationToSave.id != null) {
+    origDonation = origDonation ? origDonation : await readDonation(donationToSave.id);
+    _ensureCanUpdateDonation(donationToSave, myAccount);
+    await _recalcRoutesIfAddressChange(donationToSave, origDonation.donorContactOverride);
+  }
+
+  return donationToSave;
+}
+
+function _validateDonation(donation: DonationSaveData): void {
   const errMsg: string = _donationHelper.validateDonation(donation);
   if (errMsg) {
     throw new FoodWebError(errMsg);
   }
 }
 
-function _ensureCanUpdateDonation(donation: DonationEntity, myAccount: AccountEntity): void {
+function _ensureCanUpdateDonation(donation: DonationSaveData, myAccount: AccountEntity): void {
   const errMsg: string = _donationHelper.validateDonationEditPrivilege(donation, myAccount);
   if (errMsg) {
     throw new FoodWebError(`Update failed: ${errMsg}`);
   }
 }
 
-async function _preprocessDonorContactOverride(donation: Donation): Promise<void> {
+async function _preprocessDonorContactOverride(donation: DonationSaveData): Promise<void> {
   const donorContactOverride: ContactInfo = donation.donorContactOverride;
   if (_accountHelper.areContactInfosEqual(donorContactOverride, donation.donorAccount.contactInfo)) {
     donation.donorContactOverride = null;
   } else {
+    // If the donor contact override was the same as the donor's regular contact info, but it was updated,
+    // then unset ID to create new ContactInfo for the override.
     if (donorContactOverride.id === donation.donorAccount.contactInfo.id) {
       donorContactOverride.id = undefined;
     }
@@ -70,24 +79,25 @@ async function _preprocessDonorContactOverride(donation: Donation): Promise<void
   }
 }
 
-async function _recalcRoutesIfAddressChange(donation: Donation, donorOverrideAddressSame: boolean): Promise<void> {
-  if (!donorOverrideAddressSame) {
-    /* NOTE: The donorContactOverride can be null just before saving,
-     * since if it is the same as the donor's contact info, we don't want to actually save a copy. */
-    const donorContactInfo: ContactInfo = donation.donorContactOverride
-      ? donation.donorContactOverride
-      : donation.donorAccount.contactInfo;
-    if (donation.claim) {
-      donation.claim.routeToReceiver = await genMapRoute(donorContactInfo, donation.claim.receiverAccount.contactInfo);
+async function _recalcRoutesIfAddressChange(updtDonation: DonationSaveData, origDonorContactInfo: ContactInfoEntity): Promise<void> {
+  /* NOTE: The donorContactOverride can be null just before saving,
+   * since if it is the same as the donor's contact info, we don't want to actually save a copy. */
+  const updtDonorContactInfo: ContactInfo = (updtDonation.donorContactOverride)
+    ? updtDonation.donorContactOverride
+    : updtDonation.donorAccount.contactInfo;
 
-      if (donation.claim.delivery) {
-        donation.claim.delivery.routeToDonor = await genMapRoute(donation.claim.delivery.volunteerAccount.contactInfo, donorContactInfo);
-      }
+  const donorOverrideAddressSame: boolean = _accountHelper.areAddressesEqual(updtDonorContactInfo, origDonorContactInfo);
+  if (!donorOverrideAddressSame && updtDonation.claim) {
+    updtDonation.claim.routeToReceiver = await genMapRoute(updtDonorContactInfo, updtDonation.claim.receiverAccount.contactInfo);
+
+    if (updtDonation.claim.delivery) {
+      const { volunteerAccount } = _donationHelper.memberAccounts(updtDonation);
+      updtDonation.claim.delivery.routeToDonor = await genMapRoute(volunteerAccount.contactInfo, updtDonorContactInfo);
     }
   }
 }
 
-function _removeNonUpdateFields(donation: Donation): void {
+function _removeNonUpdateFields(donation: DonationEntity): void {
   // Remove fields that shouldn't be updated by the current update operation for extra security.
   delete donation.createTimestamp;
   delete donation.updateTimestamp;
@@ -96,12 +106,12 @@ function _removeNonUpdateFields(donation: Donation): void {
   delete donation.claim;
 }
 
-async function _saveDonationUpdate(donation: Donation, originalDonation: DonationEntity, donorOverrideAddressSame: boolean): Promise<DonationEntity> {
+async function _saveDonationUpdate(donation: DonationSaveData, originalDonation: DonationEntity): Promise<DonationEntity> {
   return OrmEntityManager.transaction(async (manager: OrmEntityManager) => {
     const updateResult: DonationEntity = await manager.getRepository(DonationEntity).save(donation, { mergeInto: originalDonation });
 
     // If we got rid of the donor contact info override on the donation, we must cleanup dangling entry.
-    if (!donation.donorContactOverride && !donorOverrideAddressSame) {
+    if (!donation.donorContactOverride && _donationHelper.hasDonorContactInfoOverride(originalDonation)) {
       await manager.getRepository(ContactInfoEntity).remove(originalDonation.donorContactOverride);
     }
 

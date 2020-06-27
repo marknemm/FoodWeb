@@ -1,9 +1,16 @@
-import { AccountEntity, DonationEntity } from '~entity';
-import { OrmRepository, QueryResult } from '~orm';
+import { AccountEntity, DonationEntity, DeliveryEntity } from '~entity';
+import { OrmRepository, QueryResult, getOrmRepository } from '~orm';
 import { DonationReadRequest } from '~shared';
 import { readDonations, readMyDonations } from '../donation/read-donations';
 
-export function readDeliveries(
+export function readDelivery(
+  deliveryId: number,
+  deliveryRepo: OrmRepository<DeliveryEntity> = getOrmRepository(DeliveryEntity)
+): Promise<DeliveryEntity> {
+  return deliveryRepo.findOne({ id: deliveryId });
+}
+
+export function readDonationsWithDeliveries(
   request: DonationReadRequest,
   donationRepo?: OrmRepository<DonationEntity>
 ): Promise<QueryResult<DonationEntity>> {

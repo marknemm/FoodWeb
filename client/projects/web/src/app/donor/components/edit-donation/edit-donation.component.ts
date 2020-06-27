@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DonationSaveData } from '~shared';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { Donation, DonationService } from '~web/donation/donation/donation.service';
+import { Donation, DonationReadService } from '~web/donation/donation-read/donation-read.service';
+import { DonationSaveService } from '~web/donation/donation-save/donation-save.service';
 import { DonateForm } from '~web/donor/donate.form';
 import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
@@ -22,7 +24,8 @@ export class EditDonationComponent implements OnInit {
     public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _dateTimeService: DateTimeService,
-    private _donationService: DonationService,
+    private _donationReadService: DonationReadService,
+    private _donationSaveService: DonationSaveService,
     private _pageProgressService: PageProgressService,
     private _router: Router
   ) {}
@@ -43,8 +46,8 @@ export class EditDonationComponent implements OnInit {
 
   private _listenDonationChange(): void {
     this._pageProgressService.activate(true);
-    this._donationService.listenDonationQueryChange(this._activatedRoute).subscribe((donation: Donation) =>
-      setTimeout(() => this._updateDonation(donation))
+    this._donationReadService.listenDonationQueryChange(this._activatedRoute).subscribe(
+      (donation: Donation) => setTimeout(() => this._updateDonation(donation))
     );
   }
 
@@ -61,8 +64,8 @@ export class EditDonationComponent implements OnInit {
   }
 
   saveDonation(): void {
-    const donationUpdate: Donation = this.editForm.toDonation();
-    this._donationService.updateDonation(this._originalDonation, donationUpdate).subscribe(
+    const donationUpdate: DonationSaveData = this.editForm.toDonationSaveData();
+    this._donationSaveService.updateDonation(this._originalDonation, donationUpdate).subscribe(
       (savedDonation: Donation) => this._router.navigate([this._donationDetailsUrl], { state: savedDonation })
     );
   }

@@ -3,8 +3,8 @@ import { getConnection } from 'typeorm';
 import { AccountEntity, NotificationEntity } from '~entity';
 import { getOrmRepository, OrmEntityManager } from '~orm';
 import { Notification } from '~shared';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { FoodWebError } from '~web/helpers/response/food-web-error';
-import { UpdateDiff } from '~web/interfaces/update-diff';
 
 /**
  * Creates a NotificationEntity and saves it in the database.

@@ -1,10 +1,9 @@
 import { Validators } from '@angular/forms';
-import { Account, ContactInfo, DateTimeRange, Donation, Validation } from '~shared';
+import { Account, AccountAutocompleteItem, ContactInfo, DateTimeRange, Donation, DonationSaveData, Validation } from '~shared';
 import { ContactInfoForm } from '~web/account/contact-info.form';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 import { DateTimeRangeForm } from '~web/date-time/date-time-range.form';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { AccountAutocompleteItem } from '../../../../../../../shared/src/web';
 
 export class DonateForm extends TypedFormGroup<DonationFormT> {
 
@@ -73,7 +72,7 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
     });
   }
 
-  toDonation(): Donation {
+  toDonationSaveData(): DonationSaveData {
     const formValue: DonationFormT = this.getRawValue();
     const donation: Donation = <any>{};
     Object.keys(formValue).forEach((formValueKey: string) => {

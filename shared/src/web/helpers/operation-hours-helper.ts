@@ -7,7 +7,7 @@ export { OperationHours };
 
 export class OperationHoursHelper {
 
-  private readonly _dateTimeHelper = new DateTimeHelper()
+  private readonly _dateTimeHelper = new DateTimeHelper();
   private readonly _constants = new Constants();
 
   /**

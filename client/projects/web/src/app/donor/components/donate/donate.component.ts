@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Donation, DonationSaveData } from '~shared';
 import { DateTimeRangeComponent } from '~web/date-time/date-time-range/date-time-range.component';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { Donation, DonationService } from '~web/donation/donation/donation.service';
+import { DonationSaveService } from '~web/donation/donation-save/donation-save.service';
 import { DonateForm } from '~web/donor/donate.form';
 import { SessionService } from '~web/session/session/session.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
@@ -27,7 +28,7 @@ export class DonateComponent implements OnInit {
 
   constructor(
     public sessionService: SessionService,
-    private _donationService: DonationService,
+    private _donationSaveService: DonationSaveService,
     private _dateTimeService: DateTimeService,
     private _pageTitleService: PageTitleService
   ) {}
@@ -46,8 +47,8 @@ export class DonateComponent implements OnInit {
   donate(): void {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
-      const donation: Donation = this.formGroup.toDonation();
-      this._donationService.createDonation(donation).subscribe((savedDonation: Donation) => {
+      const donationSaveData: DonationSaveData = this.formGroup.toDonationSaveData();
+      this._donationSaveService.createDonation(donationSaveData).subscribe((savedDonation: Donation) => {
         this.savedDonation = savedDonation;
       });
     }

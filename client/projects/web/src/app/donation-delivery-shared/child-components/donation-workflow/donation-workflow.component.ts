@@ -60,8 +60,6 @@ export class DonationWorkflowComponent implements OnChanges {
 
   @Output() action = new EventEmitter<DonationAction>();
 
-  hasActionButtons = false;
-
   private _toggleShowAllStatusesTxt = 'Show all statuses';
 
   constructor(

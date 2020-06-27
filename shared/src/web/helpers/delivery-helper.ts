@@ -3,32 +3,50 @@ import { DateTimeRange } from '../interfaces/date-time/time';
 import { Delivery } from '../interfaces/delivery/delivery';
 import { Donation, DonationStatus } from '../interfaces/donation/donation';
 import { Account } from './account-helper';
-import { DonationHelper } from './donation-helper';
+import { DateTimeHelper } from './date-time-helper';
 import { ValidationHelper } from './validation-helper';
 
 export class DeliveryHelper {
 
-  private _donationHelper = new DonationHelper();
+  private _dateTimeHelepr = new DateTimeHelper();
   private _validationHelper = new ValidationHelper();
 
   validateDelivery(delivery: Delivery, donationStatus: DonationStatus): string {
     if (!delivery) { return ''; }
 
     // See what properties are required based off of the donationStatus.
-    const requireProps: string[] = ['volunteerAccount'];
-    const requireNames: string[] = ['Volunteer account'];
-    if (donationStatus === DonationStatus.Complete) {
-      requireProps.push('pickupTime', 'dropOffTime');
-      requireNames.push('Pickup time', 'Drop-off time');
-    } else if (donationStatus === DonationStatus.PickedUp) {
-      requireProps.push('pickupTime');
-      requireNames.push('Pickup time');
+    const validationQueries: (keyof Delivery)[] = ['volunteerAccount', 'pickupWindowStart', 'pickupWindowEnd'];
+    if (this.hasDeliveryBeenStarted(donationStatus)) {
+      validationQueries.push('startTime');
+    }
+    if (this.hasDeliveryBeenPickedUp(donationStatus)) {
+      validationQueries.push('pickupTime');
+    }
+    if (this.hasDeliveryBeenCompleted(donationStatus)) {
+      validationQueries.push('dropOffTime');
     }
 
-    const requireErr: string = this._validationHelper.validateRequiredFields(
-      delivery, requireProps, requireNames
-    );
+    const requireErr: string = this._validationHelper.validateProps(delivery, validationQueries);
     if (requireErr) { return requireErr; }
+
+    const timeOrderErr: string = this._validateDeliveryTimeOrder(delivery);
+    if (timeOrderErr) { return timeOrderErr; }
+  }
+
+  private _validateDeliveryTimeOrder(delivery: Delivery): string {
+    const volunteerTimezone: string = delivery.volunteerAccount.contactInfo.timezone;
+    if (delivery.startTime && delivery.pickupTime) {
+      if (delivery.startTime > delivery.pickupTime) {
+        return `The delivery start time (${this._dateTimeHelepr.toLocalDateTimeStr(delivery.startTime, volunteerTimezone)})`
+          + `cannot be later than the pickup time (${this._dateTimeHelepr.toLocalDateTimeStr(delivery.pickupTime, volunteerTimezone)})`;
+      }
+
+      if (delivery.dropOffTime && delivery.pickupTime > delivery.dropOffTime) {
+        return `The delivery pickup time (${this._dateTimeHelepr.toLocalDateTimeStr(delivery.pickupTime, volunteerTimezone)})`
+          + `cannot be later than the drop-off time (${this._dateTimeHelepr.toLocalDateTimeStr(delivery.dropOffTime, volunteerTimezone)})`;
+      }
+    }
+    return '';
   }
 
   validateDeliverySchedulePrivilege(donationStatus: DonationStatus, myAccount: Account): string {
@@ -68,11 +86,27 @@ export class DeliveryHelper {
   }
 
   hasDeliveryBeenScheduled(donationStatus: DonationStatus): boolean {
-    return this._donationHelper.isDonationStatusLaterThan(donationStatus, DonationStatus.Matched);
+    return [
+      DonationStatus.Scheduled,
+      DonationStatus.Started,
+      DonationStatus.PickedUp,
+      DonationStatus.Complete
+    ].indexOf(donationStatus) >= 0;
+  }
+
+  hasDeliveryBeenStarted(donationStatus: DonationStatus): boolean {
+    return [
+      DonationStatus.Started,
+      DonationStatus.PickedUp,
+      DonationStatus.Complete
+    ].indexOf(donationStatus) >= 0;
   }
 
   hasDeliveryBeenPickedUp(donationStatus: DonationStatus): boolean {
-    return ([DonationStatus.PickedUp, DonationStatus.Complete].indexOf(donationStatus) >= 0);
+    return [
+      DonationStatus.PickedUp,
+      DonationStatus.Complete
+    ].indexOf(donationStatus) >= 0;
   }
 
   hasDeliveryBeenCompleted(donationStatus: DonationStatus): boolean {

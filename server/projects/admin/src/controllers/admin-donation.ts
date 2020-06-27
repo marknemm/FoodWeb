@@ -1,17 +1,18 @@
 import express = require('express');
 import { Request, Response } from 'express';
+import { adminReadAccount } from '~admin/services/admin-account/admin-read-accounts';
+import { adminCreateDonation, adminUpdateDonation } from '~admin/services/admin-donation/admin-save-donation';
+import { adminSendDonationCreateMessages, adminSendDonationUpdateMessages } from '~admin/services/admin-donation/admin-save-donation-message';
 import { AccountEntity, DonationEntity } from '~entity';
 import { AdminClaimSaveRequest, AdminDonationSaveRequest } from '~shared';
-import { getDonation, handleDeleteDonation, handleDeleteDonationClaim, handleGetDonations, handleGetMyDonations, handlePutDonation } from '~web/controllers/donation';
-import { genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
-import { readAccount } from '~web/services/account/read-accounts';
-import { saveDonationClaimAudit, saveDonationCreateAudit } from '~web/services/audit/save-donation-audit';
-import { sendClaimAvailableMessages } from '~web/services/donation-claim/claim-available-message';
+import { getDonation, handleDeleteDonation, handleDeleteDonationClaim, handleGetDonations, handleGetMyDonations } from '~web/controllers/donation';
+import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
+import { saveDonationClaimAudit, saveDonationCreateAudit, saveDonationUpdateAudit } from '~web/services/audit/save-donation-audit';
 import { claimDonation } from '~web/services/donation-claim/claim-donation';
-import { createDonation } from '~web/services/donation/save-donation';
-import { sendDonationCreateMessages } from '~web/services/donation/save-donation-message';
-import { chainHandlePostDelivery } from './admin-delivery';
-import { adminReadAccount } from '~admin/services/admin-account/admin-read-accounts';
+import { sendClaimedDonationMessages } from '~web/services/donation-claim/claimed-donation-message';
+import { readDonation } from '~web/services/donation/read-donations';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 
 export const router = express.Router();
 
@@ -19,70 +20,77 @@ router.get('/', handleGetDonations);
 router.get('/my', handleGetMyDonations);
 router.get('/:id', getDonation);
 
-router.post('/', handlePostDonation);
-async function handlePostDonation(req: Request, res: Response) {
+router.post('/', adminHandlePostDonation);
+async function adminHandlePostDonation(req: Request, res: Response) {
   const createReq: AdminDonationSaveRequest = req.body;
-
-  try {
-    let donation: DonationEntity;
-
-    // Grab the donor account and create the donation.
-    try {
-      const donorAccount: AccountEntity = await adminReadAccount(createReq.donorAccountId);
-      donation = await createDonation(createReq, donorAccount);
-    } catch (err) {
-      genErrorResponseRethrow(res, err);
-    }
-
-    // Perform donation audit and send appropriate messages. Note, not using await on purpose.
-    saveDonationCreateAudit(createReq, donation);
-    if (createReq.sendNotifications) {
-      sendDonationCreateMessages(donation);
-      if (!createReq.claimSaveReq?.receiverAccountId) {
-        sendClaimAvailableMessages(donation);
-      }
-    }
-
-    // Create donation claim and delivery if this is a composite save request.
-    if (createReq.claimSaveReq?.receiverAccountId) {
-      createReq.claimSaveReq.donationId = donation.id;
-      donation = await chainHandlePostDonationClaim(createReq.claimSaveReq, res);
-      if (createReq.deliverySaveReq?.volunteerAccountId) {
-        createReq.deliverySaveReq.donationId = donation.id;
-        donation = await chainHandlePostDelivery(createReq.deliverySaveReq, res);
-      }
-    }
-
-    res.send(donation);
-  } catch(err) {
-    console.error(err);
-  }
-}
-
-router.post('/claim', handlePostDonationClaim);
-function handlePostDonationClaim(req: Request, res: Response) {
-  const claimReq: AdminClaimSaveRequest = req.body;
-  chainHandlePostDonationClaim(claimReq, res)
-    .then((claimedDonation: DonationEntity) => res.send(claimedDonation))
-    .catch((err: Error) => console.error(err));
-}
-
-async function chainHandlePostDonationClaim(claimReq: AdminClaimSaveRequest, res: Response): Promise<DonationEntity> {
   let donation: DonationEntity;
 
+  // Perform donation creation operation and respond to client immediately on success/failure.
   try {
-    const receiverAccount: AccountEntity = await adminReadAccount(claimReq.receiverAccountId);
-    donation = await claimDonation(claimReq, receiverAccount);
+    donation = await adminCreateDonation(createReq);
+    res.send(donation);
   } catch (err) {
-    genErrorResponseRethrow(res, err);
+    return genErrorResponse(res, err);
   }
 
-  saveDonationClaimAudit(claimReq, donation);
-  (claimReq.sendNotifications) ? sendDonationCreateMessages(donation) : undefined;
-  return donation;
+  // Save audit and send appropriate notifications.
+  saveDonationCreateAudit(createReq, donation);
+  if (createReq.sendNotifications) {
+    adminSendDonationCreateMessages(donation);
+  }
 }
 
-router.put('/', handlePutDonation);
+router.post('/claim', adminHandlePostDonationClaim);
+async function adminHandlePostDonationClaim(req: Request, res: Response) {
+  const claimReq: AdminClaimSaveRequest = req.body;
+  let claimedDonation: DonationEntity;
 
-router.delete('/:id', handleDeleteDonation);
-router.delete('/claim/:id', handleDeleteDonationClaim);
+  // Perform donation claim operation and respond to client immediately on success/failure.
+  try {
+    const receiverAccount: AccountEntity = await adminReadAccount(claimReq.receiverAccountId);
+    claimedDonation = await claimDonation(claimReq, receiverAccount);
+    res.send(claimedDonation)
+  } catch (err) {
+    return genErrorResponseRethrow(res, err);
+  }
+
+  // Save audit and send appropriate notifications.
+  saveDonationClaimAudit(claimReq, claimedDonation);
+  if (claimReq.sendNotifications) {
+    sendClaimedDonationMessages(claimedDonation);
+  }
+}
+
+router.put('/', adminHandlePutDonation);
+async function adminHandlePutDonation(req: Request, res: Response) {
+  const saveReq: AdminDonationSaveRequest = req.body;
+  let donationUpdtDiff: UpdateDiff<DonationEntity>;
+
+  try {
+    donationUpdtDiff = await adminUpdateDonation(saveReq);
+    res.send(donationUpdtDiff.new);
+  } catch (err) {
+    genErrorResponse(res, err);
+  }
+
+  saveDonationUpdateAudit(saveReq, donationUpdtDiff);
+  if (saveReq.sendNotifications) {
+    adminSendDonationUpdateMessages(donationUpdtDiff);
+  }
+}
+
+router.delete('/:id', adminHandleDeleteDonation);
+function adminHandleDeleteDonation(req: Request, res: Response) {
+  const donationId: number = parseInt(req.params.id, 10);
+  readDonation(donationId)
+    .then((donationToDel: DonationEntity) => handleDeleteDonation(req, res, donationToDel?.donorAccount))
+    .catch((err: FoodWebError) => genErrorResponse(res, err));
+}
+
+router.delete('/claim/:id', adminHandleDeleteDonationClaim);
+function adminHandleDeleteDonationClaim(req: Request, res: Response) {
+  const donationId: number = parseInt(req.params.id, 10);
+  readDonation(donationId)
+    .then((donationToUnclaim: DonationEntity) => handleDeleteDonationClaim(req, res, donationToUnclaim?.claim?.receiverAccount))
+    .catch((err: FoodWebError) => genErrorResponse(res, err));
+}

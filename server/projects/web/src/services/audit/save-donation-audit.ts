@@ -1,6 +1,6 @@
 import { AccountEntity, DonationEntity } from '~entity';
 import { DonationClaimRequest, DonationDeleteRequest, DonationSaveRequest, DonationUnclaimRequest } from '~shared';
-import { UpdateDiff } from '~web/interfaces/update-diff';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { AuditEventType, getAuditAccounts, saveAudit, saveUpdateAudit } from './save-audit';
 
 export function saveDonationCreateAudit(createReq: DonationSaveRequest, donation: DonationEntity): Promise<DonationEntity> {

@@ -1,7 +1,7 @@
 import { randomBytes } from 'crypto';
 import { AccountEntity } from '~entity';
 import { AccountCreateRequest, AccountSectionUpdateReqeust, AccountUpdateRequest } from '~shared';
-import { UpdateDiff } from '~web/interfaces/update-diff';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { verifyAccount } from '~web/services/account/account-verification';
 import { readFullAccount } from '~web/services/account/read-accounts';
 import { createAccount, NewAccountData, updateAccount, updateAccountSection } from '~web/services/account/save-account';

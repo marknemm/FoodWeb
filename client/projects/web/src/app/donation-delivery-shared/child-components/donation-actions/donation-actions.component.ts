@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Account, AccountHelper, DeliveryHelper, Donation, DonationHelper, DonationStatus } from '~shared';
-import { DonationAction } from '~web/donation-delivery-shared/donation-actions/donation-actions.service';
+import { Account, DeliveryHelper, Donation, DonationStatus } from '~shared';
+import { DonationAction, DonationActionsService } from '~web/donation-delivery-shared/donation-actions/donation-actions.service';
 
 @Component({
   selector: 'food-web-donation-actions',
@@ -12,82 +12,40 @@ export class DonationActionsComponent implements OnChanges {
 
   @Input() donation: Donation;
   @Input() donationUpdateForm: FormGroup;
-  @Input() hideActionHint = false;
+  @Input() hideActionHints = false;
   @Input() myAccount: Account;
   @Input() valid = true;
+  @Input() allowAllEditActions = false;
 
   @Output() action = new EventEmitter<DonationAction>();
-  @Output() actionsAvailable = new EventEmitter<boolean>();
 
-  private _hasActionButtons = false;
-  private _canEdit = false;
-  private _canClaim = false;
-  private _canUnclaim = false;
-  private _canScheduleDelivery = false;
-  private _canAdvanceDeliveryState = false;
-  private _canUndoDeliveryState = false;
+  private _canAccessDeliveryStatusActions = false;
+  private _confirmDeliveryUndoMessage = '';
   private _deliveryActionRequiredTxt = '';
   private _deliveryAdvanceTxt = '';
   private _deliveryRevertTxt = '';
-  private _confirmDeliveryUndoMessage = '';
 
   constructor(
-    private _accountHelper: AccountHelper,
-    private _deliveryHelper: DeliveryHelper,
-    private _donationHelper: DonationHelper
+    public donationActionsService: DonationActionsService,
+    private _deliveryHelper: DeliveryHelper
   ) {}
 
   /**
-   * Whether or not action buttons exist according to the current user's donation ownership/privileges.
+   * Wether or not any of the delivery status (advance/undo) actions can be accessed.
    */
-  get hasActionButtons(): boolean {
-    return this._hasActionButtons;
+  get canAccessDeliveryStatusActions(): boolean {
+    return this._canAccessDeliveryStatusActions;
   }
 
   /**
-   * Whether or not the current user can edit the donation.
+   * The delivery state undo confirmation message presented to the user when they hit the undo button.
    */
-  get canEdit(): boolean {
-    return this._canEdit;
+  get confirmDeliveryUndoMessage(): string {
+    return this._confirmDeliveryUndoMessage;
   }
 
   /**
-   * Whether or not the current user can claim the donation.
-   */
-  get canClaim(): boolean {
-    return this._canClaim;
-  }
-
-  /**
-   * Whether or not the current user can unclaim the donation.
-   */
-  get canUnclaim(): boolean {
-    return this._canUnclaim;
-  }
-
-  /**
-   * Whether or not the current user can schedule the donation delivery.
-   */
-  get canScheduleDelivery(): boolean {
-    return this._canScheduleDelivery;
-  }
-
-  /**
-   * Whether or not the current user can advance the delivery state of the donation.
-   */
-  get canAdvanceDeliveryState(): boolean {
-    return this._canAdvanceDeliveryState;
-  }
-
-  /**
-   * Whether or not the current user can undo the delivery state of the donation.
-   */
-  get canUndoDeliveryState(): boolean {
-    return this._canUndoDeliveryState;
-  }
-
-  /**
-   * The deliveery state action required text (to prompt the user to advance the delivery status).
+   * The delivery state action required text (to prompt the user to advance the delivery status).
    */
   get deliveryActionRequiredTxt(): string {
     return this._deliveryActionRequiredTxt;
@@ -107,56 +65,18 @@ export class DonationActionsComponent implements OnChanges {
     return this._deliveryRevertTxt;
   }
 
-  /**
-   * The delivery state undo confirmation message presented to the user when they hit the undo button.
-   */
-  get confirmDeliveryUndoMessage(): string {
-    return this._confirmDeliveryUndoMessage;
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes.donation || changes.myAccount) {
       if (this.donation && this.myAccount) {
-        this._updateAllAccessFlags();
+        this.donationActionsService.updateAllAccessFlags(this.donation, this.myAccount);
+        this._canAccessDeliveryStatusActions = this.donationActionsService.canAccessAnyActions(
+          ['UndoDeliveryState', 'AdvanceDeliveryState']
+        );
         this._updateAllText();
       } else {
         this._resetAll();
       }
     }
-  }
-
-  /**
-   * Updates all of the access/privilege flags based on the set donation and current user.
-   */
-  private _updateAllAccessFlags(): void {
-    this._canEdit = !this._donationHelper.validateDonationEditPrivilege(this.donation, this.myAccount);
-    this._canClaim = !this._donationHelper.validateDonationClaimPrivilege(this.donation, this.myAccount);
-    this._canUnclaim = !this._donationHelper.validateDonationUnclaimPrivilege(this.donation, this.myAccount)
-                    && this._accountHelper.isReceiver(this.myAccount);
-    this._canScheduleDelivery = this._accountHelper.isVolunteer(this.myAccount) && this.donation.claim && !this.donation.claim.delivery;
-    this._canAdvanceDeliveryState = this.donation.claim && !this._deliveryHelper.validateDeliveryAdvancePrivilege(
-      this.donation.claim.delivery,
-      this.donation.donationStatus,
-      this.myAccount
-    );
-    this._canUndoDeliveryState = this.donation.claim && !this._deliveryHelper.validateDeliveryUndoPrivilege(
-      this.donation.claim.delivery,
-      this.donation.donationStatus,
-      this.myAccount
-    ) && this._accountHelper.isVolunteer(this.myAccount);
-    this._refreshHasActionButtons();
-  }
-
-  /**
-   * Refreshes the hasActionsButtons status based off of the presence of action buttons or a given forceReset flag.
-   * @param forceReset Defaults to false. Set true if forcing hasActionButtons to be false.
-   */
-  private _refreshHasActionButtons(forceReset = false): void {
-    this._hasActionButtons = !forceReset && (
-      this._canEdit || this._canClaim || this._canUnclaim || this._canScheduleDelivery
-      || this._canAdvanceDeliveryState || this._canUndoDeliveryState
-    );
-    this.actionsAvailable.emit(this._hasActionButtons);
   }
 
   /**
@@ -175,7 +95,7 @@ export class DonationActionsComponent implements OnChanges {
    * @return The delivery 'action required' text. An empty string if the current donation/delivery status does not require it.
    */
   private _genDeliveryActionRequiredTxt(donationStatus: DonationStatus): string {
-    if (this.canAdvanceDeliveryState) {
+    if (this.donationActionsService.canAccessAction('AdvanceDeliveryState')) {
       switch (donationStatus) {
         case DonationStatus.Scheduled:  return `Select 'Start Delivery' when you depart to pickup the donation.`;
         case DonationStatus.Started:    return `Select 'Advance Status' once you have picked up the donation.`;
@@ -218,13 +138,7 @@ export class DonationActionsComponent implements OnChanges {
    * Resets all access/privilege flags and button text to their original/empty states.
    */
   private _resetAll(): void {
-    this._refreshHasActionButtons(true);
-    this._canEdit = false;
-    this._canClaim = false;
-    this._canUnclaim = false;
-    this._canScheduleDelivery = false;
-    this._canAdvanceDeliveryState = false;
-    this._canUndoDeliveryState = false;
+    this.donationActionsService.resetAllAccessFlags();
     this._deliveryAdvanceTxt = '';
     this._deliveryRevertTxt = '';
     this._confirmDeliveryUndoMessage = '';

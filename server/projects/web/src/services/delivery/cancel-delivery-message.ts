@@ -2,7 +2,7 @@ import { AccountEntity, DonationEntity } from '~entity';
 import { DonationHelper } from '~shared';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
 import { broadcastNotification, NotificationType } from '~web/helpers/messaging/notification';
-import { UpdateDiff } from '~web/interfaces/update-diff';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 
 const _donationHelper = new DonationHelper();
 

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Donation } from '~shared';
 import { DonationAction, DonationActionsService } from '~web/donation-delivery-shared/donation-actions/donation-actions.service';
-import { DonationService } from '~web/donation/donation/donation.service';
+import { DonationReadService } from '~web/donation/donation-read/donation-read.service';
 import { SessionService } from '~web/session/session/session.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
@@ -24,7 +24,7 @@ export class DeliveryDetailsComponent implements OnInit {
     public sessionService: SessionService,
     private _activatedRoute: ActivatedRoute,
     private _donationActionsService: DonationActionsService,
-    private _donationService: DonationService
+    private _donationReadService: DonationReadService
   ) {}
 
   get deliveryNotFound(): boolean {
@@ -51,7 +51,7 @@ export class DeliveryDetailsComponent implements OnInit {
   }
 
   private _updateDeliveryPrivileges(donation: Donation): void {
-    if (donation) { 
+    if (donation) {
       this._myDelivery = (donation.claim && donation.claim.delivery)
         ? this.sessionService.hasAccountOwnership(donation.claim.delivery.volunteerAccount.id)
         : false;
@@ -59,8 +59,8 @@ export class DeliveryDetailsComponent implements OnInit {
   }
 
   private _listenDonationChange(): void {
-    this._donationService.listenDonationQueryChange(this._activatedRoute).subscribe((donation: Donation) =>
-      setTimeout(() => this._updateDonation(donation))
+    this._donationReadService.listenDonationQueryChange(this._activatedRoute).subscribe(
+      (donation: Donation) => setTimeout(() => this._updateDonation(donation))
     );
   }
 

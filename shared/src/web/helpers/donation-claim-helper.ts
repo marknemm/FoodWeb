@@ -11,7 +11,7 @@ export class DonationClaimHelper {
    * @param claim The donation claim that is to be validated.
    * @return The error string if the claim is invalid, an empty string if valid.
    */
-  validateDonationClaim(claim: DonationClaim): string {
+  validateDonationClaim(claim: Partial<DonationClaim>): string {
     if (!claim) { return ''; }
 
     if (!claim.routeToReceiver) {

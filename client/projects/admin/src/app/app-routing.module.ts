@@ -15,7 +15,7 @@ const routes: Routes = [
     children: [
       { path: 'account', loadChildren: () => import('~admin/admin-account/admin-account.module').then(mod => mod.AdminAccountModule) },
       { path: 'console', component: AdminConsoleComponent },
-      { path: 'delivery', loadChildren: () => import('~web/delivery/delivery.module').then(mod => mod.DeliveryModule) },
+      { path: 'delivery', loadChildren: () => import('~admin/admin-delivery/admin-delivery.module').then(mod => mod.AdminDeliveryModule) },
       { path: 'developer', loadChildren: () => import('~admin/developer/developer.module').then(mod => mod.DeveloperModule) },
       { path: 'donation', loadChildren: () => import('~admin/admin-donation/admin-donation.module').then(mod => mod.AdminDonationModule) },
       { path: 'donor', loadChildren: () => import('~web/donor/donor.module').then(mod => mod.DonorModule) },
