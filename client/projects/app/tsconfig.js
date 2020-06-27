@@ -9,7 +9,7 @@ for (const webPath in webTsconfig.compilerOptions.paths) {
 }
 
 const config = {
-  extends: "../../tsconfig.json",
+  extends: "../../tsconfig.base.json",
   compilerOptions: {
     target: "es5",
     baseUrl: "./",

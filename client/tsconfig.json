@@ -1,34 +1,29 @@
+/*
+  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
+  It is not intended to be used to perform a compilation.
+
+  To learn more about this file see: https://angular.io/config/solution-tsconfig.
+*/
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "downlevelIteration": true,
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "target": "es2015",
-    "sourceMap": true,
-    "strict": true,
-    "strictNullChecks": false,
-    "suppressImplicitAnyIndexErrors": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "types": [
-      "node",
-      "cordova",
-      "cordova-plugin-device/types",
-      "phonegap-plugin-push/types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ]
-  },
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
-  }
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/admin/tsconfig.json"
+    },
+    {
+      "path": "./projects/admin/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/app/tsconfig.json"
+    },
+    {
+      "path": "./projects/app/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/web/tsconfig.json"
+    },
+    {
+      "path": "./projects/web/tsconfig.spec.json"
+    }
+  ]
 }

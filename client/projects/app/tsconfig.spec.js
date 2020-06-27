@@ -1,7 +1,7 @@
 const tsconfig = require('./tsconfig');
 
 const config = {
-  extends: "../../tsconfig.json",
+  extends: "../../tsconfig.base.json",
   compilerOptions: {
     outDir: "../../out-tsc/spec",
     paths: tsconfig.compilerOptions.paths,

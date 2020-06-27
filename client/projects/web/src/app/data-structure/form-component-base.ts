@@ -1,4 +1,4 @@
-import { forwardRef, Input, OnDestroy, OnInit, Provider, Type } from "@angular/core";
+import { Directive, forwardRef, Input, OnDestroy, OnInit, Provider, Type } from "@angular/core";
 import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -12,6 +12,7 @@ import { FormHelperService } from "~web/shared/form-helper/form-helper.service";
  * Base class that implements fundamental ControlValueAccessor functionality.
  * It also initializes a TypedFormControl or TypedFormGroup based off of input bindings that are set on the derived component.
  */
+@Directive()
 export abstract class FormComponentBase<T> implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Input() formControl: TypedFormControl<T>;

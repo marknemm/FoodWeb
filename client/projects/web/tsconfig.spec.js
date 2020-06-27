@@ -1,7 +1,7 @@
 const tsconfig = require('./tsconfig');
 
 const config = {
-  extends: "../../tsconfig.json",
+  extends: "../../tsconfig.base.json",
   compilerOptions: {
     paths: tsconfig.compilerOptions.paths,
     strict: false,

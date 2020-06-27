@@ -1,5 +1,5 @@
 const config = {
-  extends: "../../tsconfig.json",
+  extends: "../../tsconfig.base.json",
   compilerOptions: {
     baseUrl: "./",
     paths: {
