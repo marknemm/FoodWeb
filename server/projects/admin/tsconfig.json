@@ -1,11 +1,11 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
       "~admin/*": ["./src/*"],
-      "~entity": ["../../database/src/entity/index"],
-      "~orm": ["../web/src/helpers/orm/index"],
+      "~entity": ["../web/src/database/entity/index"],
+      "~orm": ["../web/src/database/orm/index"],
       "~shared": ["../../../shared/src/admin/index"],
       "~web/*": ["../web/src/*"]
     }

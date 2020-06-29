@@ -1,7 +1,7 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { adminReadAccount } from '~admin/services/admin-account/admin-read-accounts';
-import { updateDelivery } from '~admin/services/admin-delivery/admin-save-delivery';
+import { adminUpdateDelivery } from '~admin/services/admin-delivery/admin-save-delivery';
 import { AccountEntity, DeliveryEntity, DonationEntity } from '~entity';
 import { AdminDeliverySaveRequest, AdminDeliveryScheduleRequest } from '~shared';
 import { handleGetDeliveries, handleGetMyDeliveries, handleGetUnscheduledDeliveries, handlePutAdvanceDeliveryState, handlePutUndoDeliveryState } from '~web/controllers/delivery';
@@ -45,7 +45,7 @@ async function handlePostDelivery(req: Request, res: Response): Promise<void> {
 router.put('/', handlePutDelivery);
 function handlePutDelivery(req: Request, res: Response): void {
   const deliverySaveReq: AdminDeliverySaveRequest = req.body;
-  updateDelivery(deliverySaveReq)
+  adminUpdateDelivery(deliverySaveReq)
     .then((donation: DonationEntity) => res.send(donation))
     .catch((err: Error) => console.error(err));
 }

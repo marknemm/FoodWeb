@@ -49,7 +49,7 @@ export class AdminEditDonationComponent implements OnInit, OnDestroy {
   private _listenDonationChange(): void {
     this._pageProgressService.activate(true);
     this._donationReadService.listenDonationQueryChange(this._activatedRoute).subscribe(
-      (donation: Donation) => setTimeout(() => this._updateDonation(donation))
+      (donation: Donation) => this._updateDonation(donation)
     );
   }
 

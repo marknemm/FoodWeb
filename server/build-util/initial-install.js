@@ -26,6 +26,6 @@ if (!fs.existsSync(dotEnvPathname)) {
 }
 
 // Run the 'pg-initialize.js' database util script, which will initialize the database if not already done.
-const initDBPathname = path.join(serverRootDir, 'database', 'util', 'js', 'pg-initialize.js');
+const initDBPathname = path.join(serverRootDir, 'database-util', 'js', 'pg-initialize.js');
 execResult = execSync(`node ${initDBPathname}`);
 console.log(execResult.toString());

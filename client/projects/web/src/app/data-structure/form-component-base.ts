@@ -115,7 +115,7 @@ export abstract class FormComponentBase<T> implements OnInit, OnDestroy, Control
    * Listens for value changes to occur within a given abstract control.
    * @return An observable that emits any value changes. Will automatically be unsubscribed from when component is destroyed.
    */
-  onValueChanges(ctrl: AbstractControl): Observable<T> {
+  onValueChanges<C>(ctrl: TypedAbstractControl<C> & AbstractControl): Observable<C> {
     return ctrl.valueChanges.pipe(takeUntil(this._destroy$));
   }
 }

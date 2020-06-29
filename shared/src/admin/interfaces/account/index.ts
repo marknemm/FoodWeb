@@ -1,1 +1,1 @@
-export * from './account-create-request';
+export * from './admin-account-create-request';

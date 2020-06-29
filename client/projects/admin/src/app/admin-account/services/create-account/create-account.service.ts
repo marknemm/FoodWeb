@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AccountCreateOptions } from '~admin/admin-account/admin-account.form';
 import { environment } from '~admin/environments/environment';
-import { Account, AccountCreateRequest } from '~shared';
+import { Account, AdminAccountCreateRequest } from '~shared';
 import { HttpResponseService } from '~web/shared/http-response/http-response.service';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
 
@@ -21,7 +21,7 @@ export class CreateAccountService {
   ) {}
 
   createAccount(account: Account, password: string, accountCreateOptions: AccountCreateOptions): Observable<Account> {
-    const accountCreateRequest: AccountCreateRequest = { account, password, accountCreateOptions };
+    const accountCreateRequest: AdminAccountCreateRequest = { account, password, accountCreateOptions };
     return this._httpClient.post<Account>(this.url, accountCreateRequest, { withCredentials: true }).pipe(
       this._httpResponseService.handleHttpResponse({ immutableStore: this.createdAccountStore })
     );

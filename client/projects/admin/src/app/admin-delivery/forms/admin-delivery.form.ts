@@ -61,7 +61,7 @@ export class AdminDeliveryForm extends TypedFormGroup<AdminDeliveryFormT> {
           : control.disable();
       }
     }
-    this._onStartTimeChange();
+    setTimeout(() => this._onStartTimeChange()); // Prevent ValueChangedAfterCheckedError.
   }
 
   private _listenForStartTimeChange(destroy$: Observable<any>): void {

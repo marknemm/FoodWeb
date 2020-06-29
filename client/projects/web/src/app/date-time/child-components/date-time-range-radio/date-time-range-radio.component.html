@@ -1,13 +1,13 @@
 <mat-radio-group
   class="date-time-selections"
   [attr.ariaLabel]="ariaLabel"
-  [formControl]="formControl"
-  (ngModelChange)="onChangeCb($event)"
+  [formControl]="selIdxFormCtrl"
+  (ngModelChange)="onChangeCb(dateTimeRanges[$event])"
   (blur)="onTouchedCb()">
   <mat-list class="mat-radio-list" [ngClass]="{ 'disabled': formControl.disabled }">
     <mat-divider *ngIf="!excludeTopDivider"></mat-divider>
-    <mat-list-item matRipple [disabled]="formControl.disabled" *ngFor="let dateTimeRange of dateTimeRanges">
-      <mat-radio-button #dateTimeRangeRadio [value]="dateTimeRange" [disableRipple]="true">
+    <mat-list-item matRipple [disabled]="formControl.disabled" *ngFor="let dateTimeRange of dateTimeRanges; let idx = index">
+      <mat-radio-button #dateTimeRangeRadio [value]="idx" [disableRipple]="true">
         <div>
           <span class="inline-label">Start:</span>
           <food-web-date-time [dateTime]="dateTimeRange.startDateTime" minDateWidth="73px" [boldTime]="true"></food-web-date-time>

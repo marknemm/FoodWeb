@@ -1,13 +1,13 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { sendAccountCreateMessages } from '~admin/services/admin-account/account-create-messages';
+import { adminSendAccountCreateMessages } from '~admin/services/admin-account/admin-account-create-messages';
 import { adminReadAccount, adminReadAccounts } from '~admin/services/admin-account/admin-read-accounts';
 import { adminCreateAccount, adminUpdateAccount, adminUpdateAccountSection, NewAccountData } from '~admin/services/admin-account/admin-save-account';
-import { sendMessage, testMessage } from '~admin/services/admin-account/send-message-to-accounts';
-import { adminUpdatePassword } from '~admin/services/admin-password/save-password';
+import { adminSendMessage, adminTestMessage } from '~admin/services/admin-account/admin-send-message-to-accounts';
+import { adminUpdatePassword } from '~admin/services/admin-password/admin-save-password';
 import { Account, AccountEntity } from '~entity';
 import { QueryResult } from '~orm';
-import { AccountCreateRequest, AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, PasswordUpdateRequest, SendMessageRequest } from '~shared';
+import { AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, AdminAccountCreateRequest, PasswordUpdateRequest, SendMessageRequest } from '~shared';
 import { handleGetAccountAutocomplete, handleGetRecoverUsername, handleGetResendMyVerificationEmail, handleGetResetPassword, handlePostAccountVerify, handlePutResetPassword } from '~web/controllers/account';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { genListResponse } from '~web/helpers/response/list-response';
@@ -59,10 +59,10 @@ router.post('/verify', handlePostAccountVerify);
 
 router.post('/', handlePostAccount);
 function handlePostAccount(req: Request, res: Response) {
-  const createReq: AccountCreateRequest = req.body;
+  const createReq: AdminAccountCreateRequest = req.body;
   adminCreateAccount(createReq)
     .then((newAccountData: NewAccountData) =>
-      sendAccountCreateMessages(createReq.accountCreateOptions, newAccountData, createReq.password)
+      adminSendAccountCreateMessages(createReq.accountCreateOptions, newAccountData, createReq.password)
     )
     .then((account: AccountEntity) => { res.send(account); return account; })
     .catch(genErrorResponseRethrow.bind(this, res))
@@ -74,7 +74,7 @@ router.post('/send-message', handlePostAccountMessage);
 function handlePostAccountMessage(req: Request, res: Response) {
   const sendMessageReq: SendMessageRequest = req.body;
   const accountFilters: AccountReadFilters = req.query;
-  sendMessage(sendMessageReq, accountFilters, req.session.account)
+  adminSendMessage(sendMessageReq, accountFilters, req.session.account)
     .then(() => res.send())
     .catch(genErrorResponse.bind(this, res));
 }
@@ -82,7 +82,7 @@ function handlePostAccountMessage(req: Request, res: Response) {
 router.post('/test-message', handlePostAccountTestMessage);
 function handlePostAccountTestMessage(req: Request, res: Response) {
   const sendMessageReq: SendMessageRequest = req.body;
-  testMessage(sendMessageReq, req.session.account)
+  adminTestMessage(sendMessageReq, req.session.account)
     .then(() => res.send())
     .catch(genErrorResponse.bind(this, res));
 }

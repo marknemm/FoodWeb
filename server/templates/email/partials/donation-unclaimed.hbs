@@ -1,10 +1,10 @@
 {{#if isReceiver }}
-  <div>You have successfully cancelled your claim to a donation from <strong>{{ donorName }}</strong>:</div>
+  <div>Your claim of the following donation submitted by <strong>{{ donorName }}</strong> has been removed:</div>
   <p class="donation-description">{{ donation.description }}</p>
   <hr>
   <p>
     Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a> to view the donation.
-    You may re-claim this donation as long as no other charity has claimed it.
+    If this is a mistake, then you may re-claim this donation as long as no other charity has claimed it.
   </p>
   <p>
     Feel free to contact

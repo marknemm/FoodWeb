@@ -1,21 +1,5 @@
-{{#if isReceiver }}
-  <div>You have successfully claimed a donation from <strong>{{ donorName }}</strong>:</div>
-  <p class="donation-description">{{ donation.description }}</p>
-  <hr>
-  <p>
-    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a> to view the donation.
-    You may also cancel your claim while viewing the donation.
-  </p>
-  <p>
-    You will receive a message once the donation is scheduled for delivery.
-  </p>
-  <p>
-    Feel free to contact
-    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a> or
-    <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
-  </p>
-{{else}}
-  <div><strong>{{ receiverName }}</strong> has claimed your donation:</div>
+{{#if isDonor }}
+  <div>The claim of a donation that you submitted has been reassigned to <strong>{{ receiverName }}</strong>:</div>
   <p class="donation-description">{{ donation.description }}</p>
   <hr>
   <p>
@@ -25,6 +9,42 @@
     You will receive a message once the donation is scheduled for pickup.<br>
     Feel free to contact
     <a href="mailto:{{ donation.claim.receiverAccount.contactInfo.email }}">{{ receiverName }}</a> or
+    <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+{{else if isReceiver }}
+  <div>You have been assigned by a FoodWeb admin as the receiver of a donation from <strong>{{ donorName }}</strong>:</div>
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
+  <p>
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a> to view the donation.
+    You may also cancel your claim while viewing the donation.
+  </p>
+  {{#if hasVolunteer }}
+    <p>
+      The donation delivery has already been scheduled by {{ delivererName }}.
+      You will receive a message once the delivery status advances.
+    </p>
+  {{else}}
+    <p>
+      You will receive a message once the donation is scheduled for delivery.
+    </p>
+  {{/if}}
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a> or
+    <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+{{else}}
+  <div>The claim of a donation that you have scheduled for delivery has been reassigned to <string>{{ receiverName }}</string></div>
+  <p class="donation-description">{{ donation.description }}</p>
+  <hr>
+  <p>
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/delivery/details/{{ donation.id }}">link</a> to view your delivery.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donation.donorContactOverride.email }}">{{ donorName }}</a>,
+    <a href="mailto:{{ donation.claim.receiverAccount.contactInfo.email }}">{{ receiverName }}</a>, or
     <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
   </p>
 {{/if}}

@@ -1,14 +1,21 @@
+/*
+  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
+  It is not intended to be used to perform a compilation.
+*/
 {
-  "compilerOptions": {
-    "baseUrl": "./",
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "inlineSourceMap": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "outDir": "./dist/",
-    "resolveJsonModule": true,
-    "target": "ES2018"
-  }
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/admin/tsconfig.json"
+    },
+    {
+      "path": "./projects/admin/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/web/tsconfig.json"
+    },
+    {
+      "path": "./projects/web/tsconfig.spec.json"
+    }
+  ]
 }

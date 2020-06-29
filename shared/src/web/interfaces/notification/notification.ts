@@ -120,21 +120,28 @@ export enum NotificationType {
   UpdateDonation = AuditEventType.UpdateDonation,
   RemoveDonation = AuditEventType.RemoveDonation,
   ClaimDonation = AuditEventType.ClaimDonation,
+  ClaimReassigned = ('Claim Reassigned'),
   UnclaimDonation = AuditEventType.UnclaimDonation,
   ScheduleDelivery = AuditEventType.ScheduleDelivery,
   CancelDelivery = AuditEventType.CancelDelivery,
   DeliveryStateAdvance = AuditEventType.DeliveryStateAdvance,
   DeliveryStateUndo = AuditEventType.DeliveryStateUndo,
-  DeliveryReminder = ('Delivery Reminder')
+  DeliveryReminder = ('Delivery Reminder'),
+  DeliveryReassigned = ('Delivery Reassigned')
 }
 
 export const NOTIFICATION_TYPES: NotificationType[] = [
+  NotificationType.Signup,
   NotificationType.Donate,
   NotificationType.UpdateDonation,
   NotificationType.RemoveDonation,
   NotificationType.ClaimDonation,
+  NotificationType.ClaimReassigned,
   NotificationType.UnclaimDonation,
   NotificationType.ScheduleDelivery,
+  NotificationType.CancelDelivery,
   NotificationType.DeliveryStateAdvance,
-  NotificationType.DeliveryStateUndo
+  NotificationType.DeliveryStateUndo,
+  NotificationType.DeliveryReminder,
+  NotificationType.DeliveryReassigned
 ];
