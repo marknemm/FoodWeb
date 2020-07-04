@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AccountReadRequest, AccountSortBy, AccountType } from '~shared';
-import { AccountFiltersForm, AccountFiltersFormValue } from '~web/account/account-filters.form';
+import { AccountFiltersForm, AccountFiltersFormT } from '~web/account/account-filters.form';
 import { SortByOpt } from '~web/filtered-list/sort-by-opt';
 
 @Component({
@@ -10,7 +10,7 @@ import { SortByOpt } from '~web/filtered-list/sort-by-opt';
 })
 export class AccountFiltersComponent implements OnInit, OnChanges {
 
-  @Input() activeFilters: AccountFiltersFormValue = {};
+  @Input() activeFilters: AccountFiltersFormT = {};
 
   @Output() filter = new EventEmitter<AccountReadRequest>();
 

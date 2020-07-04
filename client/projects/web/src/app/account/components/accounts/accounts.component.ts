@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
-import { Account, AccountHelper, AccountReadFilters, AccountReadRequest, AccountType, ListResponse } from '~shared';
+import { Account, AccountHelper, AccountReadFilters, AccountType, ListResponse } from '~shared';
+import { AccountFiltersFormT } from '~web/account/account-filters.form';
 import { AccountReadService } from '~web/account/account-read/account-read.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
@@ -62,11 +63,8 @@ export class AccountsComponent implements OnInit {
       : 'Accounts';
   }
 
-  filterAccounts(filters: AccountReadRequest): void {
-    this._router.navigate([], {
-      relativeTo: this._activatedRoute,
-      queryParams: filters
-    });
+  filterAccounts(filters: AccountFiltersFormT): void {
+    this._accountReadService.updateURLQueryString(filters, this._activatedRoute);
   }
 
 }

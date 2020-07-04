@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { Observable, of } from 'rxjs';
 import { Account, AccountReadFilters, AccountReadRequest, ListResponse } from '~shared';
@@ -18,8 +18,23 @@ export class AccountReadService {
   constructor(
     private _httpResponseService: HttpResponseService,
     private _httpClient: HttpClient,
+    private _router: Router,
     private _sessionService: SessionService
   ) {}
+
+  updateURLQueryString(filters: AccountReadRequest, activatedRoute: ActivatedRoute): void {
+    // Convert dates into raw ISO strings.
+    for (const filtKey in filters) {
+      if (filters[filtKey] instanceof Date) {
+        filters[filtKey] = (<Date>filters[filtKey]).toISOString();
+      }
+    }
+
+    this._router.navigate([], {
+      relativeTo: activatedRoute,
+      queryParams: filters
+    });
+  }
 
   /**
    * Handles URL param updates associated with retrieving a single account.

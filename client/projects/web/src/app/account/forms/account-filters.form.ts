@@ -3,9 +3,9 @@ import { OperationHoursForm } from '~web/account/operation-hours.form';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 export { AccountReadRequest };
 
-export class AccountFiltersForm extends TypedFormGroup<AccountFiltersFormValue> {
+export class AccountFiltersForm extends TypedFormGroup<AccountFiltersFormT> {
 
-  constructor(filters?: Partial<AccountFiltersFormValue>) {
+  constructor(filters?: Partial<AccountFiltersFormT>) {
     super({
       id: undefined,
       accountType: undefined,
@@ -31,7 +31,7 @@ export class AccountFiltersForm extends TypedFormGroup<AccountFiltersFormValue> 
    * @return The converted AccountReadRequest.
    */
   toAccountReadRequest(): AccountReadRequest {
-    const value: AccountFiltersFormValue = this.value;
+    const value: AccountFiltersFormT = this.value;
     if (value.operationHours) {
       value.operationHoursWeekday = value.operationHours.weekday;
       value.operationHoursStartTime = value.operationHours.startTime;
@@ -44,7 +44,7 @@ export class AccountFiltersForm extends TypedFormGroup<AccountFiltersFormValue> 
   /**
    * @override
    */
-  patchValue(value: Partial<AccountFiltersFormValue>, options?: { onlySelf?: boolean, emitEvent?: boolean }): void {
+  patchValue(value: Partial<AccountFiltersFormT>, options?: { onlySelf?: boolean, emitEvent?: boolean }): void {
     value = this._fillOperationHoursForm(value);
     super.patchValue(value, options);
   }
@@ -52,7 +52,7 @@ export class AccountFiltersForm extends TypedFormGroup<AccountFiltersFormValue> 
   /**
    * @override
    */
-  reset(value?: Partial<AccountFiltersFormValue>, options?: { resetAccountType?: boolean, onlySelf?: boolean, emitEvent?: boolean }): void {
+  reset(value?: Partial<AccountFiltersFormT>, options?: { resetAccountType?: boolean, onlySelf?: boolean, emitEvent?: boolean }): void {
     const accountType: AccountType = this.get('accountType').value;
     value = this._fillOperationHoursForm(value);
     super.reset(value, options);
@@ -66,7 +66,7 @@ export class AccountFiltersForm extends TypedFormGroup<AccountFiltersFormValue> 
   /**
    * @override
    */
-  setValue(value: Partial<AccountFiltersFormValue>, options?: { onlySelf?: boolean, emitEvent?: boolean }): void {
+  setValue(value: Partial<AccountFiltersFormT>, options?: { onlySelf?: boolean, emitEvent?: boolean }): void {
     value = this._fillOperationHoursForm(value);
     super.setValue(value, options);
   }
@@ -77,7 +77,7 @@ export class AccountFiltersForm extends TypedFormGroup<AccountFiltersFormValue> 
    * @param value The value to fill the operation hours of.
    * @return A copy of the input value with operation hours filled.
    */
-  private _fillOperationHoursForm(value?: Partial<AccountFiltersFormValue>): Partial<AccountFiltersFormValue> {
+  private _fillOperationHoursForm(value?: Partial<AccountFiltersFormT>): Partial<AccountFiltersFormT> {
     if (value) {
       const valueCopy = Object.assign({}, value);
       valueCopy.operationHours = {};
@@ -97,6 +97,6 @@ export class AccountFiltersForm extends TypedFormGroup<AccountFiltersFormValue> 
 
 }
 
-export interface AccountFiltersFormValue extends AccountReadRequest {
+export interface AccountFiltersFormT extends AccountReadRequest {
   operationHours?: Partial<OperationHours>;
 }

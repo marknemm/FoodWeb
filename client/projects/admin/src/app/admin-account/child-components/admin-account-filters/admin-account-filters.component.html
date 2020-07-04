@@ -1,4 +1,4 @@
-<form [formGroup]="filtersForm" class="account-filters" (ngSubmit)="filter.emit(filtersForm.value)">
+<form [formGroup]="filtersForm" class="account-filters" (ngSubmit)="filter.emit(filtersForm.toAccountReadRequest())">
   <food-web-list-filters-title [primary]="true">
     Account Filters
   </food-web-list-filters-title>
