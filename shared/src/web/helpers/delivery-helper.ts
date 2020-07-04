@@ -123,22 +123,25 @@ export class DeliveryHelper {
     return '';
   }
 
-  getPickupWindow(donation: Donation): DateTimeRange {
-    return (donation.claim && donation.claim.delivery)
-      ? { startDateTime: donation.claim.delivery.pickupWindowStart, endDateTime: donation.claim.delivery.pickupWindowEnd }
-      : { startDateTime: donation.pickupWindowStart, endDateTime: donation.pickupWindowEnd };
+  getPickupWindow(donation: Partial<Donation>): DateTimeRange {
+    if (donation) {
+      return (donation.claim?.delivery)
+        ? { startDateTime: donation.claim.delivery.pickupWindowStart, endDateTime: donation.claim.delivery.pickupWindowEnd }
+        : { startDateTime: donation.pickupWindowStart, endDateTime: donation.pickupWindowEnd };
+    }
+    return null;
   }
 
-  getDropOffWindow(donation: Donation): DateTimeRange {
+  getDropOffWindow(donation: Partial<Donation>): DateTimeRange {
     if (donation?.claim) {
       return (donation.claim.delivery)
         ? { startDateTime: donation.claim.delivery.dropOffWindowStart, endDateTime: donation.claim.delivery.dropOffWindowEnd }
         : { startDateTime: donation.claim.dropOffWindowStart, endDateTime: donation.claim.dropOffWindowEnd };
     }
-    return { startDateTime: new Date(), endDateTime: new Date() };
+    return null;
   }
 
-  deliveryDetailsRouterLink(donation: Donation): string[] {
+  deliveryDetailsRouterLink(donation: Partial<Donation>): string[] {
     return ['/delivery/details/', `${donation?.id}`];
   }
 }

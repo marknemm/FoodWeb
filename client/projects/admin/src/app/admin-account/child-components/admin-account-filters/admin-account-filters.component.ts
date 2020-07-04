@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input } from '@angular/core';
 import { AccountFiltersComponent } from '~web/account/account-filters/account-filters.component';
 import { ConstantsService } from '~web/shared/constants/constants.service';
 
@@ -11,17 +10,14 @@ import { ConstantsService } from '~web/shared/constants/constants.service';
     './admin-account-filters.component.scss'
   ],
 })
-export class AdminAccountFiltersComponent extends AccountFiltersComponent implements OnInit {
+export class AdminAccountFiltersComponent extends AccountFiltersComponent {
+
+  @Input() omitSorting = false;
 
   constructor(
     public constantsService: ConstantsService,
-    activatedRoute: ActivatedRoute
   ) {
-    super(activatedRoute);
-  }
-
-  ngOnInit() {
-    super.ngOnInit();
+    super();
   }
 
 }

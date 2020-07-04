@@ -16,6 +16,10 @@
   </food-web-filtered-list-content>
 
   <food-web-list-filters>
-    <food-web-delivery-filters #deliveryFilters [myDeliveries]="myDeliveries" (filter)="filterDeliveries($event)"></food-web-delivery-filters>
+    <food-web-delivery-filters #deliveryFilters
+      [activeFilters]="activeFilters"
+      [myDeliveries]="myDeliveries"
+      (filter)="filterDeliveries($event)"
+    ></food-web-delivery-filters>
   </food-web-list-filters>
 </food-web-filtered-list>

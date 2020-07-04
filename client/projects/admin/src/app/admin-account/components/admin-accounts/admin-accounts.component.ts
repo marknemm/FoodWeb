@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountHelper } from '~shared';
-import { AccountService } from '~web/account/account/account.service';
+import { AccountReadService } from '~web/account/account-read/account-read.service';
 import { AccountsComponent } from '~web/account/accounts/accounts.component';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
@@ -13,20 +13,16 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
     './admin-accounts.component.scss'
   ]
 })
-export class AdminAccountsComponent extends AccountsComponent implements OnInit {
+export class AdminAccountsComponent extends AccountsComponent {
 
   constructor(
     public accountHelper: AccountHelper,
     public pageTitleService: PageTitleService,
-    protected _accountService: AccountService,
+    protected _accountReadService: AccountReadService,
     protected _activatedRoute: ActivatedRoute,
     protected _router: Router
   ) {
-    super(accountHelper, pageTitleService, _accountService, _activatedRoute, _router);
-  }
-
-  ngOnInit() {
-    super.ngOnInit();
+    super(accountHelper, pageTitleService, _accountReadService, _activatedRoute, _router);
   }
 
 }

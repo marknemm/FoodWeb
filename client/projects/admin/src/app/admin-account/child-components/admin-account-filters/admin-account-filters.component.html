@@ -65,7 +65,7 @@
     <food-web-operation-hours [editing]="true" [formGroup]="filtersForm.get('operationHours')" weekdayWidth="100%" weekdayPadding="0" timeWidth="50%"></food-web-operation-hours>
   </ng-container>
 
-  <food-web-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></food-web-list-sort>
+  <food-web-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts" *ngIf="!omitSorting"></food-web-list-sort>
 
   <food-web-list-filters-footer (clear)="filtersForm.reset(undefined, { resetAccountType: true })"></food-web-list-filters-footer>
 </form>

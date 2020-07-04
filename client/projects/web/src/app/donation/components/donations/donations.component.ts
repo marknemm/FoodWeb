@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 import { DonationHelper, DonationReadRequest, ListResponse } from '~shared';
 import { Donation, DonationReadService } from '~web/donation/donation-read/donation-read.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
@@ -11,6 +12,7 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 })
 export class DonationsComponent implements OnInit {
 
+  private _activeFilters: DonationReadRequest = {};
   private _donations: Donation[] = [];
   private _totalCount = 0;
 
@@ -18,9 +20,12 @@ export class DonationsComponent implements OnInit {
     public donationHelper: DonationHelper,
     public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
-    private _donationReadService: DonationReadService,
-    private _router: Router
+    private _donationReadService: DonationReadService
   ) {}
+
+  get activeFilters(): DonationReadRequest {
+    return this._activeFilters;
+  }
 
   get donations(): Donation[] {
     return this._donations;
@@ -31,26 +36,19 @@ export class DonationsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._donationReadService.listenDonationsQueryChange(this._activatedRoute).subscribe(
-      (response: ListResponse<Donation>) => {
-        this._donations = response.list;
-        this._totalCount = response.totalCount;
-      }
-    );
+    this._activatedRoute.queryParams.pipe(
+      switchMap((params: Params) => {
+        this._activeFilters = params;
+        return this._donationReadService.handleDonationsQueryChange(params);
+      })
+    ).subscribe((response: ListResponse<Donation>) => {
+      this._donations = response.list;
+      this._totalCount = response.totalCount;
+    });
   }
 
   filterDonations(filters: DonationReadRequest): void {
-    // Convert dates into raw ISO strings.
-    Object.keys(filters).forEach((filtKey: string) => {
-      if (filters[filtKey] instanceof Date) {
-        filters[filtKey] = (<Date>filters[filtKey]).toISOString();
-      }
-    });
-
-    this._router.navigate([], {
-      relativeTo: this._activatedRoute,
-      queryParams: filters
-    });
+    this._donationReadService.updateURLQueryString(filters, this._activatedRoute);
   }
 
 }

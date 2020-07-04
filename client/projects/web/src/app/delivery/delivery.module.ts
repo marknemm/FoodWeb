@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AccountModule } from '~web/account/account.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
 import { DeliveriesComponent } from '~web/delivery/deliveries/deliveries.component';
+import { DeliveryDetailsRouterLinkPipe } from '~web/delivery/delivery-details-router-link/delivery-details-router-link.pipe';
 import { DeliveryDetailsComponent } from '~web/delivery/delivery-details/delivery-details.component';
 import { DeliveryDonationInfoComponent } from '~web/delivery/delivery-donation-info/delivery-donation-info.component';
 import { DeliveryFiltersComponent } from '~web/delivery/delivery-filters/delivery-filters.component';
@@ -21,6 +22,7 @@ import { SharedModule } from '~web/shared/shared.module';
   declarations: [
     DeliveriesComponent,
     DeliveryDetailsComponent,
+    DeliveryDetailsRouterLinkPipe,
     DeliveryDonationInfoComponent,
     DeliveryFiltersComponent,
     DeliveryTeaserComponent,
@@ -40,6 +42,7 @@ import { SharedModule } from '~web/shared/shared.module';
     SharedModule
   ],
   exports: [
+    DeliveryDetailsRouterLinkPipe,
     DeliveryTeaserComponent
   ]
 })

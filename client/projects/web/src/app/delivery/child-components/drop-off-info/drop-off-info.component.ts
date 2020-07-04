@@ -1,29 +1,17 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { DateTimeRange, DeliveryHelper, Donation } from '~shared';
+import { Component, Input, OnInit } from '@angular/core';
+import { Donation } from '~shared';
 
 @Component({
   selector: 'food-web-drop-off-info',
   templateUrl: './drop-off-info.component.html',
   styleUrls: ['./drop-off-info.component.scss'],
 })
-export class DropOffInfoComponent implements OnChanges {
+export class DropOffInfoComponent implements OnInit {
 
   @Input() donation: Donation;
 
-  private _dropOffWindow: DateTimeRange;
+  constructor() {}
 
-  constructor(
-    private _deliveryHelper: DeliveryHelper
-  ) {}
-
-  get dropOffWindow(): DateTimeRange {
-    return this._dropOffWindow;
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.donation) {
-      this._dropOffWindow = this._deliveryHelper.getDropOffWindow(this.donation);
-    }
-  }
+  ngOnInit() {}
 
 }

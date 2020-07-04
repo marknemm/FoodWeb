@@ -19,6 +19,7 @@ import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 export class DateTimeComponent extends FormComponentBase<Date> implements OnChanges, Validator {
 
   @Input() allowClear = false;
+  @Input() allowUndefTime = false;
   @Input() boldDate = false;
   @Input() boldTime = false;
   @Input() dateTime: Date;
@@ -76,7 +77,7 @@ export class DateTimeComponent extends FormComponentBase<Date> implements OnChan
   }
 
   _onValueChange(): void {
-    const curDateVal: Date = this.dateTimeForm.toDate();
+    const curDateVal: Date = this.dateTimeForm.toDate(this.allowUndefTime);
     this.onChangeCb(curDateVal);
   }
 

@@ -1,6 +1,6 @@
 <mat-sidenav-container [autosize]="true">
   <mat-sidenav-content>
-    <form [formGroup]="composeMessageForm" class="quill-editor-page">
+    <form [formGroup]="accountMessageForm" class="quill-editor-page">
       <div class="subject-container">
         <mat-form-field class="fill" floatLabel="never">
           <input matInput formControlName="messageSubject" placeholder="Message Subject" required>
@@ -22,7 +22,7 @@
             matTooltip="Send Message"
             confirmTitle="Confirm Send Message"
             confirmMessage="Are you sure you wish to send this message to the filtered accounts?"
-            [disabled]="composeMessageForm.invalid"
+            [disabled]="accountMessageForm.invalid"
             (clickConfirm)="sendMessage()"
           >
             <mat-icon>send</mat-icon>
@@ -33,7 +33,7 @@
   </mat-sidenav-content>
   <mat-sidenav [opened]="accountFiltersOpened" (openedChange)="accountFiltersOpened = $event" mode="over" position="end" [autoFocus]="false">
     <food-web-list-filters>
-      <food-web-admin-account-filters (filter)="updateAccountFilters($event)"></food-web-admin-account-filters>
+      <food-web-admin-account-filters [omitSorting]="true" (filter)="updateAccountFilters($event)"></food-web-admin-account-filters>
     </food-web-list-filters>
   </mat-sidenav>
 </mat-sidenav-container>

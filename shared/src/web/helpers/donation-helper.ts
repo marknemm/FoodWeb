@@ -250,10 +250,6 @@ export class DonationHelper {
     return {};
   }
 
-  donationDetailsRouterLink(donation: Partial<Donation>): string[] {
-    return (donation) ? ['/donation/details/', `${donation.id}`] : [];
-  }
-
   memberAccountsArr(donation: Partial<Donation>): Account[] {
     const { donorAccount, receiverAccount, volunteerAccount } = this.memberAccounts(donation);
     const memberAccounts: Account[] = [donorAccount];
@@ -284,6 +280,15 @@ export class DonationHelper {
 
   volunteerAccount(donation: Partial<Donation>): Account {
     return donation?.claim?.delivery?.volunteerAccount;
+  }
+
+  memberName(donation: Partial<Donation>, accountType: AccountType): string {
+    switch (accountType) {
+      case AccountType.Donor:     return this.donorName(donation);
+      case AccountType.Receiver:  return this.receiverName(donation);
+      case AccountType.Volunteer: return this.delivererName(donation);
+      default:                    throw new Error(`Incorrect account type argument: ${accountType}`);
+    }
   }
 
   memberNames(donation: Partial<Donation>): { donorName: string, receiverName?: string, delivererName?: string } {

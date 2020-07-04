@@ -5,6 +5,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { AccountModule } from '~web/account/account.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
 import { DonationDeliverySharedModule } from '~web/donation-delivery-shared/donation-delivery-shared.module';
+import { DonationDetailsRouterLinkPipe } from '~web/donation/donation-details-router-link/donation-details-router-link.pipe';
 import { DonationDetailsComponent } from '~web/donation/donation-details/donation-details.component';
 import { DonationFiltersComponent } from '~web/donation/donation-filters/donation-filters.component';
 import { DonationRoutingModule } from '~web/donation/donation-routing.module';
@@ -21,6 +22,7 @@ import { SharedModule } from '~web/shared/shared.module';
   declarations: [
     DonationsComponent,
     DonationDetailsComponent,
+    DonationDetailsRouterLinkPipe,
     DonationFiltersComponent,
     DonationTeaserComponent,
     PrimaryDonationInfoComponent
@@ -40,6 +42,7 @@ import { SharedModule } from '~web/shared/shared.module';
     SharedModule
   ],
   exports: [
+    DonationDetailsRouterLinkPipe,
     DonationTeaserComponent
   ]
 })

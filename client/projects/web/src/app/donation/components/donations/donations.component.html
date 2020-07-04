@@ -16,6 +16,6 @@
   </food-web-filtered-list-content>
 
   <food-web-list-filters>
-    <food-web-donation-filters #donationFilters (filter)="filterDonations($event)"></food-web-donation-filters>
+    <food-web-donation-filters #donationFilters [activeFilters]="activeFilters" (filter)="filterDonations($event)"></food-web-donation-filters>
   </food-web-list-filters>
 </food-web-filtered-list>

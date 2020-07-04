@@ -22,6 +22,6 @@
   </food-web-filtered-list-content>
 
   <food-web-list-filters>
-    <food-web-admin-account-filters #accountFilters (filter)="filterAccounts($event)"></food-web-admin-account-filters>
+    <food-web-admin-account-filters #accountFilters [activeFilters]="activeFilters" (filter)="filterAccounts($event)"></food-web-admin-account-filters>
   </food-web-list-filters>
 </food-web-filtered-list>

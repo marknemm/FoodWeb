@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { DeliveryHelper, Donation, DonationHelper, DonationReadRequest, ListResponse } from '~shared';
 import { DeliveryReadService } from '~web/delivery/delivery-read/delivery-read.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'food-web-deliveries',
@@ -13,6 +14,7 @@ export class DeliveriesComponent implements OnInit {
 
   filtersPanelOpened = false;
 
+  private _activeFilters: DonationReadRequest = {};
   private _donations: Donation[] = [];
   private _myDeliveries = false;
   private _totalCount = 0;
@@ -25,6 +27,10 @@ export class DeliveriesComponent implements OnInit {
     private _deliveryReadService: DeliveryReadService,
     private _router: Router
   ) {}
+
+  get activeFilters(): DonationReadRequest {
+    return this._activeFilters;
+  }
 
   get donations(): Donation[] {
     return this._donations;
@@ -40,20 +46,19 @@ export class DeliveriesComponent implements OnInit {
 
   ngOnInit() {
     this._myDeliveries = this._router.url.indexOf('/my') >= 0;
-    this._deliveryReadService.listenDeliveriesQueryChange(this._activatedRoute).subscribe(
-      (response: ListResponse<Donation>) => {
-        this._donations = response.list;
-        this._totalCount = response.totalCount;
-      }
-    );
+    this._activatedRoute.queryParams.pipe(
+      switchMap((params: Params) => {
+        this._activeFilters = params;
+        return this._deliveryReadService.handleDeliveriesQueryChange(params);
+      })
+    ).subscribe((response: ListResponse<Donation>) => {
+      this._donations = response.list;
+      this._totalCount = response.totalCount;
+    });
   }
 
   filterDeliveries(filters: DonationReadRequest): void {
-    this.filtersPanelOpened = false;
-    this._router.navigate([], {
-      relativeTo: this._activatedRoute,
-      queryParams: filters
-    });
+    this._deliveryReadService.updateURLQueryString(filters, this._activatedRoute);
   }
 
 }

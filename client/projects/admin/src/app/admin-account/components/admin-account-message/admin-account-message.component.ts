@@ -1,28 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faFlask } from '@fortawesome/free-solid-svg-icons';
-import { ComposeMessageForm } from '~admin/admin-account/compose-message.form';
-import { SendMessageService } from '~admin/admin-account/send-message/send-message.service';
+import { AdminAccountMessageService } from '~admin/admin-account/admin-account-message/admin-account-message.service';
+import { AdminAccountMessageForm } from '~admin/admin-account/admin-account-message.form';
 import { AccountReadFilters } from '~shared';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
   selector: 'food-web-compose-message',
-  templateUrl: './compose-message.component.html',
-  styleUrls: ['./compose-message.component.scss'],
+  templateUrl: './admin-account-message.component.html',
+  styleUrls: ['./admin-account-message.component.scss'],
 })
-export class ComposeMessageComponent implements OnInit {
+export class AdminAccountMessageComponent implements OnInit {
 
-  readonly composeMessageForm = new ComposeMessageForm();
+  readonly accountMessageForm = new AdminAccountMessageForm();
   readonly faFlask = faFlask;
 
   accountFiltersOpened = false;
 
   constructor(
+    private _accountMessageService: AdminAccountMessageService,
     private _activatedRoute: ActivatedRoute,
     private _pageTitleService: PageTitleService,
-    private _router: Router,
-    private _sendMessageService: SendMessageService,
+    private _router: Router
   ) {}
 
   ngOnInit() {
@@ -30,14 +30,14 @@ export class ComposeMessageComponent implements OnInit {
   }
 
   sendMessage(): void {
-    if (this.composeMessageForm.valid) {
+    if (this.accountMessageForm.valid) {
       const accountFilters: AccountReadFilters = this._activatedRoute.snapshot.queryParams;
-      this._sendMessageService.sendMessage(this.composeMessageForm.value, accountFilters).subscribe(() => {});
+      this._accountMessageService.sendMessage(this.accountMessageForm.value, accountFilters).subscribe(() => {});
     }
   }
 
   testMessage(): void {
-    this._sendMessageService.testMessage(this.composeMessageForm.value).subscribe(() => {});
+    this._accountMessageService.testMessage(this.accountMessageForm.value).subscribe(() => {});
   }
 
   updateAccountFilters(filters: AccountReadFilters): void {

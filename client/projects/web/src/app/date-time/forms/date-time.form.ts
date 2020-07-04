@@ -64,10 +64,13 @@ export class DateTimeForm extends TypedFormGroup<DateTimeFormT> {
     }
   }
 
-  toDate(): Date {
-    if (this.value.date && this.value.time) {
-      const dateStr: string = formatDate(this.value.date, 'M/d/yyyy', 'en-US')
-      return new Date(`${dateStr} ${this.value.time}`);
+  toDate(allowUndefTime = false): Date {
+    if (this.value.date && (this.value.time || allowUndefTime)) {
+      const dateStr: string = formatDate(this.value.date, 'M/d/yyyy', 'en-US');
+      const dateTimeStr: string = (this.value.time)
+        ? `${dateStr} ${this.value.time}`
+        : dateStr;
+      return new Date(dateTimeStr);
     }
     return null;
   }

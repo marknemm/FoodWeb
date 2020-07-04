@@ -1,18 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
-import { ComposeMessageComponent } from './compose-message.component';
+import 'jasmine';
+import { AdminAccountMessageComponent } from './admin-account-message.component';
 
-describe('ComposeMessageComponent', () => {
-  let component: ComposeMessageComponent;
-  let fixture: ComponentFixture<ComposeMessageComponent>;
+describe('AdminAccountMessageComponent', () => {
+  let component: AdminAccountMessageComponent;
+  let fixture: ComponentFixture<AdminAccountMessageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ComposeMessageComponent ],
+      declarations: [ AdminAccountMessageComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ComposeMessageComponent);
+    fixture = TestBed.createComponent(AdminAccountMessageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

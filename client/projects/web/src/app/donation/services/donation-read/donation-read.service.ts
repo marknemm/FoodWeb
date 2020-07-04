@@ -1,11 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, Params } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 import { Donation, DonationReadRequest, ListResponse } from '~shared';
 import { environment } from '~web/environments/environment';
 import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import * as _ from 'lodash';
 export { Donation };
 
 @Injectable({
@@ -23,6 +24,20 @@ export class DonationReadService {
     private _httpResponseService: HttpResponseService,
     private _router: Router
   ) {}
+
+  updateURLQueryString(filters: DonationReadRequest, activatedRoute: ActivatedRoute): void {
+    // Convert dates into raw ISO strings.
+    for (const filtKey in filters) {
+      if (filters[filtKey] instanceof Date) {
+        filters[filtKey] = (<Date>filters[filtKey]).toISOString();
+      }
+    }
+
+    this._router.navigate([], {
+      relativeTo: activatedRoute,
+      queryParams: filters
+    });
+  }
 
   listenDonationQueryChange(activatedRoute: ActivatedRoute): Observable<Donation> {
     return activatedRoute.paramMap.pipe(
@@ -45,22 +60,12 @@ export class DonationReadService {
     );
   }
 
-  listenDonationsQueryChange(activatedRoute: ActivatedRoute): Observable<ListResponse<Donation>> {
+  handleDonationsQueryChange(params: Params): Observable<ListResponse<Donation>> {
     const myDonations: boolean = (this._router.url.indexOf('my') >= 0);
-    return activatedRoute.queryParamMap.pipe(
-      flatMap((params: ParamMap) => {
-        const request: DonationReadRequest = {
-          page: (params.has('page') ? parseInt(params.get('page'), 10) : 1),
-          limit: (params.has('limit') ? parseInt(params.get('limit'), 10) : 10)
-        };
-        params.keys.forEach((paramKey: string) => {
-          if (paramKey !== 'page' && paramKey !== 'limit') {
-            (<any>request)[paramKey] = params.get(paramKey);
-          }
-        });
-        return this._getDonations(request, myDonations);
-      })
-    );
+    const request: DonationReadRequest = _.cloneDeep(params);
+    request.page = (params.page ? parseInt(params.page, 10) : 1);
+    request.limit = (params.limit ? parseInt(params.limit, 10) : 10);
+    return this._getDonations(request, myDonations);
   }
 
   getMyDonations(request: DonationReadRequest): Observable<ListResponse<Donation>> {

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AdminSignupVerificationService } from '~admin/admin-account/admin-signup-verification/admin-signup-verification.service';
-import { CreateAccountService } from '~admin/admin-account/create-account/create-account.service';
+import { AdminAccountCreateService } from '~admin/admin-account/services/admin-account-create/admin-account-create';
 import { AccountCreateOptions, AdminAccountForm } from '~admin/admin-account/forms/admin-account.form';
 import { AdminSessionService } from '~admin/admin-session/admin-session/admin-session.service';
 import { Account } from '~shared';
@@ -11,11 +11,11 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
   selector: 'food-web-create-account',
-  templateUrl: './create-account.component.html',
-  styleUrls: ['./create-account.component.scss'],
-  providers: [CreateAccountService]
+  templateUrl: './admin-account-create.component.html',
+  styleUrls: ['./admin-account-create.component.scss'],
+  providers: [AdminAccountCreateService]
 })
-export class CreateAccountComponent implements OnInit, OnDestroy {
+export class AdminAccountCreateComponent implements OnInit, OnDestroy {
 
   adminAccountForm: AdminAccountForm;
 
@@ -25,7 +25,7 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
     public sessionService: AdminSessionService,
     public signupVerificationService: AdminSignupVerificationService,
     private _pageTitleService: PageTitleService,
-    private _createAccountService: CreateAccountService
+    private _createAccountService: AdminAccountCreateService
   ) {}
 
   get createdAccountStore(): ImmutableStore<Account> {

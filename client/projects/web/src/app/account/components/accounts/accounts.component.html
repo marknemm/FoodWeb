@@ -16,6 +16,6 @@
   </food-web-filtered-list-content>
 
   <food-web-list-filters>
-    <food-web-account-filters #accountFilters (filter)="filterAccounts($event)"></food-web-account-filters>
+    <food-web-account-filters #accountFilters [activeFilters]="activeFilters" (filter)="filterAccounts($event)"></food-web-account-filters>
   </food-web-list-filters>
 </food-web-filtered-list>

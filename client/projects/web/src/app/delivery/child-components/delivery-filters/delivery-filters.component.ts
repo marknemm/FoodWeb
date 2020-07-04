@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DonationReadRequest, DonationSortBy, DonationStatus } from '~shared';
 import { DonationFiltersForm } from '~web/donation-delivery-shared/donation-filters.form';
 import { SortByOpt } from '~web/filtered-list/sort-by-opt';
@@ -10,8 +9,9 @@ import { ConstantsService } from '~web/shared/constants/constants.service';
   templateUrl: './delivery-filters.component.html',
   styleUrls: ['./delivery-filters.component.scss'],
 })
-export class DeliveryFiltersComponent implements OnInit {
+export class DeliveryFiltersComponent implements OnInit, OnChanges {
 
+  @Input() activeFilters: DonationReadRequest = {};
   @Input() myDeliveries = false;
 
   @Output() filter = new EventEmitter<DonationReadRequest>();
@@ -25,26 +25,28 @@ export class DeliveryFiltersComponent implements OnInit {
     { name: 'Donor Organization', value: 'donorOrganizationName' },
     { name: 'Receiver Organization', value: 'receiverOrganizationName' }
   ];
-  readonly donationStatuses: DonationStatus[];
 
-  filtersForm = new DonationFiltersForm();
+  readonly filtersForm = new DonationFiltersForm();
+
+  private _donationStatuses: DonationStatus[];
 
   constructor(
-    public constantsService: ConstantsService,
-    private _activatedRoute: ActivatedRoute
-  ) {
-    this.donationStatuses = this.constantsService.DONATION_STATUSES.filter((status: DonationStatus) =>
-      (status !== DonationStatus.Unmatched) && (status !== DonationStatus.Matched)
-    );
+    public constantsService: ConstantsService
+  ) {}
+
+  get donationStatuses(): DonationStatus[] {
+    return this._donationStatuses;
   }
 
-  ngOnInit() {
-    if (!this.myDeliveries) {
-      this.donationStatuses.unshift(DonationStatus.Matched);
+  ngOnInit() {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.myDeliveries) {
+      this._donationStatuses = this.constantsService.getDeliveryStatuses(!this.myDeliveries);
     }
-    this._activatedRoute.queryParams.subscribe((currentFilters: Params) =>
-      this.filtersForm.patchValue(currentFilters)
-    );
+    if (changes.activeFilters) {
+      this.filtersForm.patchValue(this.activeFilters);
+    }
   }
 
 }

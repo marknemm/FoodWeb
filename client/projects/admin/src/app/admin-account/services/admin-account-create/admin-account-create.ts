@@ -10,7 +10,7 @@ import { ImmutableStore } from '~web/data-structure/immutable-store';
 @Injectable({
   providedIn: 'root'
 })
-export class CreateAccountService {
+export class AdminAccountCreateService {
 
   readonly url = `${environment.server}/account`;
   readonly createdAccountStore = new ImmutableStore<Account>();

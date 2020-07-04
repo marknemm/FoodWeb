@@ -1,4 +1,4 @@
-<mat-card class="drop-off-info">
+<mat-card class="drop-off-info" *ngIf="donation?.claim">
   <mat-card-title>Drop-Off Info</mat-card-title>
   <mat-card-content>
     <div class="row">
@@ -8,7 +8,7 @@
       </div>
       <div class="col-12">
         <div class="inline-label">Drop-off Window:</div>
-        <food-web-date-time-range class="d-inline-block" [range]="dropOffWindow" [boldTime]="true"></food-web-date-time-range>
+        <food-web-date-time-range class="d-inline-block" [range]="donation | dropOffWindow" [boldTime]="true"></food-web-date-time-range>
       </div>
       <div *ngIf="donation.claim.delivery?.dropOffTime" class="col-sm-6">
         <div class="inline-label">Dropped Off:</div>

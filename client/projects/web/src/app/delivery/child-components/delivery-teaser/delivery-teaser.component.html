@@ -1,7 +1,7 @@
 <mat-card id="donation-{{ donation.id }}" class="delivery-teaser">
   <mat-card-header>
-    <img mat-card-avatar [src]="donation.donorAccount.profileImgUrl" alt="{{ donorName }} Profile Image">
-    <mat-card-title>{{ donorName }}</mat-card-title>
+    <img mat-card-avatar [src]="donation.donorAccount.profileImgUrl" alt="{{ donation | donationMemberName : 'Donor' }} Profile Image">
+    <mat-card-title>{{ donation | donationMemberName : 'Donor' }}</mat-card-title>
     <mat-card-subtitle>
       <food-web-donation-status [donationStatus]="donation.donationStatus" class="donation-status"></food-web-donation-status>
     </mat-card-subtitle>
@@ -28,7 +28,7 @@
   </mat-card-content>
   <mat-card-actions>
     <div class="align-right">
-      <a [routerLink]="deliveryRouterLink" [state]="{ donation: donation }" class="no-hover">
+      <a [routerLink]="donation | deliveryDetailsRouterLink" [state]="{ donation: donation }" class="no-hover">
         <button mat-raised-button type="button" class="compact" color="primary"><strong>View Delivery</strong></button>
       </a>
     </div>

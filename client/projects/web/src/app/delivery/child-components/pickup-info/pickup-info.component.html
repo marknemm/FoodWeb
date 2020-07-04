@@ -1,4 +1,4 @@
-<mat-card *ngIf="donation" class="pickup-info">
+<mat-card class="pickup-info" *ngIf="donation">
   <mat-card-title>Pickup Info</mat-card-title>
   <mat-card-content>
     <div class="row">
@@ -8,7 +8,7 @@
       </div>
       <div class="col-12">
         <div class="inline-label">Pickup Window:</div>
-        <food-web-date-time-range class="d-inline-block" [range]="pickupWindow" [boldTime]="true"></food-web-date-time-range>
+        <food-web-date-time-range class="d-inline-block" [range]="donation | pickupWindow" [boldTime]="true"></food-web-date-time-range>
       </div>
       <div *ngIf="donation.claim?.delivery?.pickupTime" class="col-sm-6 col-12">
         <div class="inline-label">Picked Up:</div>

@@ -22,7 +22,6 @@ import { SharedModule } from '~web/shared/shared.module';
   ],
   imports: [
     AdminDonationRoutingModule,
-    AdminDeliveryModule,
     DonationRoutingModule,
     AccountModule,
     CommonModule,
