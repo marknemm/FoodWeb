@@ -33,14 +33,25 @@ export async function adminSendMessage(sendMessageReq: SendMessageRequest, accou
  * @return A promise that resolves once the operation completes.
  */
 async function _messageTargetAccounts(sendMessageReq: SendMessageRequest, accounts: AccountEntity[]): Promise<void> {
+  const messageBodyHTML: string = _trimMessageBodyHTML(sendMessageReq.messageBodyHTML);
   await broadcastEmail(
     MailTransporter.NOREPLY,
     accounts,
     sendMessageReq.messageSubject,
     'custom-message',
-    { messageBodyHTML: sendMessageReq.messageBodyHTML },
+    { messageBodyHTML },
     true
   );
+}
+
+/**
+ * Trims given message body HTML by removing excess leading and trailing space.
+ * @param messageBodyHTML The message body HTML.
+ * @return The trimmed message body HTML.
+ */
+function _trimMessageBodyHTML(messageBodyHTML: string): string {
+  return messageBodyHTML.replace(/^(\s*<p>\s*<br>\s*<\/p>\s*)+/gi, '')
+                        .replace(/(\s*<p>\s*<br>\s*<\/p>\s*)+$/gi, '');
 }
 
 /**
@@ -50,12 +61,13 @@ async function _messageTargetAccounts(sendMessageReq: SendMessageRequest, accoun
  * @return A promise that resolves once the operation completes.
  */
 export async function adminTestMessage(sendMessageReq: SendMessageRequest, myAccount: Account): Promise<void> {
+  const messageBodyHTML: string = _trimMessageBodyHTML(sendMessageReq.messageBodyHTML);
   return sendEmail(
     MailTransporter.NOREPLY,
     myAccount,
     `Test Message: ${sendMessageReq.messageSubject}`,
     'custom-message',
-    { messageBodyHTML: sendMessageReq.messageBodyHTML },
+    { messageBodyHTML },
     true
   );
 }
