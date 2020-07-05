@@ -1,7 +1,7 @@
 <form [formGroup]="filtersForm" class="donation-filters" (ngSubmit)="filter.emit(filtersForm.value)">
-  <food-web-filter-list-filters-title [primary]="true">
+  <food-web-list-filters-title [primary]="true">
     Donation Filters
-  </food-web-filter-list-filters-title>
+  </food-web-list-filters-title>
 
   <mat-form-field class="fill">
     <mat-select placeholder="Donation Status" formControlName="donationStatus">
@@ -29,23 +29,46 @@
   </div>
 
   <div class="toggles-container">
-    <mat-slide-toggle [checked]="filtersForm.expired" (change)="filtersForm.expired = $event.checked" formControlName="expired">Include Expired Donations</mat-slide-toggle>
+    <mat-slide-toggle
+      [checked]="filtersForm.expired"
+      (change)="filtersForm.expired = $event.checked"
+      formControlName="expired">
+      Include Expired Donations
+    </mat-slide-toggle>
   </div>
 
-  <food-web-filter-list-filters-title>
+  <food-web-list-filters-title>
     Delivery Window Filters
-  </food-web-filter-list-filters-title>
+  </food-web-list-filters-title>
 
   <div class="row">
     <div class="col-12">
-      <food-web-date-time primaryLabel="Overlap Start" [editing]="true" [inlineFields]="true" floatLabels="never" formControlName="deliveryWindowOverlapStart" [minDate]="null"></food-web-date-time>
+      <food-web-date-time
+        [allowClear]="true"
+        [allowUndefTime]="true"
+        [editing]="true"
+        [inlineFields]="true"
+        [minDate]="null"
+        floatLabels="never"
+        formControlName="deliveryWindowOverlapStart"
+        primaryLabel="Overlap Start"
+      ></food-web-date-time>
     </div>
     <div class="col-12">
-      <food-web-date-time primaryLabel="Overlap End" [editing]="true" [inlineFields]="true" floatLabels="never" formControlName="deliveryWindowOverlapEnd" [minDate]="null"></food-web-date-time>
+      <food-web-date-time
+        [allowClear]="true"
+        [allowUndefTime]="true"
+        [editing]="true"
+        [inlineFields]="true"
+        [minDate]="null"
+        floatLabels="never"
+        formControlName="deliveryWindowOverlapEnd"
+        primaryLabel="Overlap End"
+      ></food-web-date-time>
     </div>
   </div>
 
-  <food-web-filter-list-filters-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></food-web-filter-list-filters-sort>
+  <food-web-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></food-web-list-sort>
 
-  <food-web-filter-list-filters-buttons (clear)="filtersForm.reset()"></food-web-filter-list-filters-buttons>
+  <food-web-list-filters-footer (clear)="filtersForm.reset()"></food-web-list-filters-footer>
 </form>

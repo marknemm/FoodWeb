@@ -1,0 +1,11 @@
+@import "constants.scss";
+
+.search-bar {
+  $font-size: 20px;
+  font-size: $font-size;
+
+  .search-icon.mat-icon {
+    font-size: $font-size + 5px;
+    color: $accent-darker;
+  }
+}

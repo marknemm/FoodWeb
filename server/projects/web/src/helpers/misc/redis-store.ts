@@ -1,5 +1,5 @@
 import redis = require('redis');
-import { RedisClient } from 'redis';
+import { RedisClient, RetryStrategyOptions } from 'redis';
 import { promisify } from 'util';
 
 /**
@@ -15,7 +15,16 @@ export class RedisStore {
    */
   readonly client: RedisClient = redis.createClient({
     url: process.env.REDIS_URL,
-    password: process.env.REDIS_PASSWORD
+    password: process.env.REDIS_PASSWORD,
+    retry_strategy: (retryOpts: RetryStrategyOptions) => {
+      if (retryOpts.error && retryOpts.error.code === "ECONNREFUSED") {
+        return new Error("The server refused the connection");
+      }
+      if (retryOpts.attempt > 10) {
+        return undefined;
+      }
+      return (retryOpts.attempt * 200); // Max out during attempt 10 at 2000ms.
+    }
   });
 
   /**

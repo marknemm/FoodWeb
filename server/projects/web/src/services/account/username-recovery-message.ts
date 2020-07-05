@@ -1,4 +1,4 @@
-import { AccountEntity, AccountType } from 'database/src/entity/account.entity';
+import { AccountEntity, AccountType } from '~entity';
 import { MailTransporter, sendEmail } from '~web/helpers/messaging/email';
 
 export async function sendUsernameRecoveryEmail(accounts: AccountEntity[]): Promise<void> {

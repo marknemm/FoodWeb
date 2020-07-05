@@ -1,0 +1,75 @@
+.console-cards {
+  .card-cell {
+
+    button.card-button,
+    a.card-link {
+      position: relative;
+      display: inline-block;
+      padding: 0;
+      margin-bottom: 20px;
+      width: 100%;
+
+      .mat-card {
+        margin-bottom: 0;
+      }
+
+      &[disabled="true"] .mat-card {
+        background-color: #e4e4e4;
+      }
+
+      &:not([disabled="true"]):hover {
+        .mat-card {
+          .mat-card-title {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    .mat-card {
+      position: relative;
+
+      .fill-icon {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+      }
+
+      .mat-icon.fill-icon {
+        $max-font-size: 200px;
+        font-size: $max-font-size; // Fallback if browser doesn't understand 'vw' unit.
+        font-size: 20vw;
+
+        @media only screen and (min-width: 1000px) {
+          font-size: $max-font-size; // Set max font-size.
+        }
+
+        @media only screen and (max-width: $mat-mobile) {
+          font-size: 120px;
+        }
+      }
+
+      .ng-fa-icon.fill-icon {
+        $max-font-size: 138px;
+        font-size: $max-font-size; // Fallback if browser doesn't understand 'vw' unit.
+        font-size: 13.8vw;
+
+        @media only screen and (min-width: 1000px) {
+          font-size: $max-font-size; // Set max font-size.
+        }
+
+        @media only screen and (max-width: $mat-mobile) {
+          font-size: 120px;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $mat-mobile) {
+      display: inline-block;
+      max-width: 250px;
+      margin-left: auto;
+      margin-right: auto;
+      flex: none;
+    }
+  }
+}

@@ -1,11 +1,10 @@
 import { DeepPartial, EntityManager, getConnection } from 'typeorm';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { DeliveryEntity } from 'database/src/entity/delivery-entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
+import { AccountEntity, DeliveryEntity, DonationEntity } from '~entity';
+import { DateTimeHelper, DateTimeRange, DeliveryHelper, DeliveryScheduleRequest, Donation, DonationStatus, ContactInfo } from '~shared';
 import { FoodWebError } from '~web/helpers/response/food-web-error';
-import { DateTimeHelper, DeliveryHelper, DeliveryScheduleRequest, DonationStatus } from '~shared';
-import { readDonation } from '../donation/read-donations';
-import { genMapRoute } from '../map/read-map-routes';
+import { ScheduledDeliverySaveData, ScheduledDonationSaveData } from '~web/interfaces/delivery/scheduled-delivery-save-data';
+import { readDonation } from '~web/services/donation/read-donations';
+import { genMapRoute } from '~web/services/map/read-map-routes';
 
 const _deliveryHelper = new DeliveryHelper();
 const _dateTimeHelper = new DateTimeHelper();
@@ -19,9 +18,9 @@ const _dateTimeHelper = new DateTimeHelper();
  */
 export async function scheduleDelivery(scheduleRequest: DeliveryScheduleRequest, myAccount: AccountEntity): Promise<DonationEntity> {
   const donationToSchedule: DonationEntity = await readDonation(scheduleRequest.donationId);
-  _ensureCanScheduleDelivery(donationToSchedule, myAccount);
+  const delivery: ScheduledDeliverySaveData = await prepareScheduledDelivery(donationToSchedule, scheduleRequest.pickupWindow, myAccount);
 
-  const scheduleDonationUpdt: DeepPartial<DonationEntity> = await _genScheduleDonationUpdt(donationToSchedule, myAccount, scheduleRequest);
+  const scheduleDonationUpdt: DeepPartial<DonationEntity> = await _genScheduledDonation(donationToSchedule, delivery);
   await getConnection().transaction(
     async (manager: EntityManager) => manager.getRepository(DonationEntity).save(scheduleDonationUpdt)
   );
@@ -30,12 +29,39 @@ export async function scheduleDelivery(scheduleRequest: DeliveryScheduleRequest,
 }
 
 /**
+ * Prepares donation delivery save data for a given donation that is being scheduled.
+ * Includes scheduling validation.
+ * @param donationToSchedule The donation that the delivery is being generated for.
+ * @param myAccount The account of the user that is scheduling the delivery.
+ * @param pickupWindow The narrowed down delivery pickup window set by the volunteer scheduling the delivery.
+ * @return The donation delivery save data.
+ */
+export async function prepareScheduledDelivery(
+  donationToSchedule: Partial<Donation>,
+  pickupWindow: DateTimeRange,
+  myAccount: AccountEntity
+): Promise<ScheduledDeliverySaveData> {
+  _ensureCanScheduleDelivery(donationToSchedule, myAccount);
+  const delivery: ScheduledDeliverySaveData = new DeliveryEntity();
+  const donorContactInfo: ContactInfo = (donationToSchedule.donorContactOverride)
+    ? donationToSchedule.donorContactOverride
+    : donationToSchedule.donorAccount.contactInfo;
+  delivery.volunteerAccount = myAccount;
+  delivery.pickupWindowStart = pickupWindow.startDateTime;
+  delivery.pickupWindowEnd = pickupWindow.endDateTime;
+  delivery.routeToDonor = await genMapRoute(myAccount.contactInfo, donorContactInfo);
+  delivery.dropOffWindowStart = _dateTimeHelper.addMinutes(pickupWindow.startDateTime, delivery.routeToDonor.durationMin);
+  delivery.dropOffWindowEnd = _dateTimeHelper.addMinutes(delivery.dropOffWindowStart, 30);
+  return delivery;
+}
+
+/**
  * Ensures that a given user can schedule the delivery of a given donation.
  * @param donation The donation that shall be scheduled for delivery.
  * @param myAccount The account of the user who is scheduling the delivery.
  * @throws FoodWebError if the donation delivery cannot be scheduled.
  */
-function _ensureCanScheduleDelivery(donation: DonationEntity, myAccount: AccountEntity): void {
+function _ensureCanScheduleDelivery(donation: Partial<Donation>, myAccount: AccountEntity): void {
   const errMsg: string = _deliveryHelper.validateDeliverySchedulePrivilege(donation.donationStatus, myAccount);
   if (errMsg) {
     throw new FoodWebError(`Delivery scheduling failed: ${errMsg}`);
@@ -43,43 +69,19 @@ function _ensureCanScheduleDelivery(donation: DonationEntity, myAccount: Account
 }
 
 /**
- * Generates a scheduled donation based on a given donation.
+ * Generates scheduled donation save data based on a given donation to schedule and its new delivery data.
  * @param donationToSchedule The donation that is to be scheduled.
- * @param myAccount The account of the user who is scheduling the donation.
- * @param scheduleRequest The donation schedule request issued by the user's web/app client.
- * @return The scheduled donation.
+ * @param delivery The scheduled delivery save data.
+ * @return The scheduled donation save data.
  */
-async function _genScheduleDonationUpdt(
-  donationToSchedule: DonationEntity,
-  myAccount: AccountEntity,
-  scheduleRequest: DeliveryScheduleRequest
-): Promise<DeepPartial<DonationEntity>> {
+async function _genScheduledDonation(donationToSchedule: DonationEntity, delivery: ScheduledDeliverySaveData): Promise<ScheduledDonationSaveData> {
   // Make shallow copy to preserve original donation.
-  const scheduleDonationUpdt: DeepPartial<DonationEntity> = { id: donationToSchedule.id };
-  scheduleDonationUpdt.donationStatus = DonationStatus.Scheduled;
-  scheduleDonationUpdt.claim = { id: donationToSchedule.claim.id };
-  scheduleDonationUpdt.claim.delivery = <DeliveryEntity>await _genDonationDelivery(donationToSchedule, myAccount, scheduleRequest);
-  return scheduleDonationUpdt;
-}
-
-/**
- * Generates a donation delivery for a given donation that is being scheduled.
- * @param donation The donation that the delivery is being generated for.
- * @param myAccount The account of the user that is scheduling the delivery.
- * @param scheduleRequest The donation schedule request issued by the user's web/app client.
- * @return The donation delivery.
- */
-async function _genDonationDelivery(
-  donation: DonationEntity,
-  myAccount: AccountEntity,
-  scheduleRequest: DeliveryScheduleRequest
-): Promise<DeliveryEntity> {
-  const delivery: DeliveryEntity = new DeliveryEntity();
-  delivery.volunteerAccount = myAccount;
-  delivery.pickupWindowStart = scheduleRequest.pickupWindow.startDateTime;
-  delivery.pickupWindowEnd = scheduleRequest.pickupWindow.endDateTime;
-  delivery.routeToDonor = await genMapRoute(myAccount.contactInfo, donation.donorContactOverride);
-  delivery.dropOffWindowStart = _dateTimeHelper.addMinutes(scheduleRequest.pickupWindow.startDateTime, delivery.routeToDonor.durationMin);
-  delivery.dropOffWindowEnd = _dateTimeHelper.addMinutes(delivery.dropOffWindowStart, 30);
-  return delivery;
+  return {
+    id: donationToSchedule.id,
+    donationStatus: DonationStatus.Scheduled,
+    claim: {
+      id: donationToSchedule.claim.id,
+      delivery
+    }
+  };
 }

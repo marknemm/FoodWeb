@@ -6,6 +6,9 @@
     "node_modules/codelyzer"
   ],
   "rules": {
+    "deprecation": {
+      "severity": "warning"
+    },
     "no-output-on-prefix": true,
     "no-inputs-metadata-property": true,
     "no-outputs-metadata-property": true,

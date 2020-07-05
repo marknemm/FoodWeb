@@ -5,11 +5,12 @@ import { ensureSessionActive } from '~web/middlewares/session.middleware';
 import { readUnseenNotificationsCount } from '~web/services/notification/read-notifications';
 import { Account, ServerSentEventType } from '~shared';
 
-const router = express.Router();
+export const router = express.Router();
 
-router.get('/', ensureSessionActive, (req: Request, res: Response) => {
+router.get('/', ensureSessionActive, handleGetSSE);
+export function handleGetSSE(req: Request, res: Response) {
   sseManager.addConnection(req, res);
-});
+}
 
 sseManager.onConnect(async (account: Account) => {
   const unseenNotificationsCount: number = await readUnseenNotificationsCount(account);
@@ -18,5 +19,3 @@ sseManager.onConnect(async (account: Account) => {
     data: { unseenNotificationsCount }
   });
 });
-
-module.exports = router;

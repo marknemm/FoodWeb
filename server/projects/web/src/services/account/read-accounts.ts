@@ -1,8 +1,7 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { getOrmRepository, OrmSelectQueryBuilder } from '~orm/index';
-import { genPagination, genSimpleWhereConditions, QueryMod, QueryResult } from '~orm/index';
-import { LoginRequiredError } from '~web/helpers/response/food-web-error';
+import { AccountEntity } from '~entity';
+import { genPagination, genSimpleWhereConditions, getOrmRepository, OrmSelectQueryBuilder, preprocessFullTextQuery, QueryMod, QueryResult } from '~orm';
 import { Account, AccountHelper, AccountReadFilters, AccountReadRequest, AccountSortBy, OperationHours, SortOptions } from '~shared';
+import { LoginRequiredError } from '~web/helpers/response/food-web-error';
 
 const _accountHelper = new AccountHelper();
 
@@ -73,6 +72,10 @@ function _buildQuery(request: AccountReadRequest, myAccount: Account): OrmSelect
 
 function _genJoins(queryBuilder: OrmSelectQueryBuilder<AccountEntity>): OrmSelectQueryBuilder<AccountEntity> {
   return queryBuilder
+    .innerJoin(
+      'FullTextSearch', 'fullTextSearch',
+      `fullTextSearch.entityId = account.id AND fullTextSearch.entityTable = 'Account'`
+    )
     .innerJoinAndSelect('account.contactInfo', 'contactInfo')
     .leftJoinAndSelect('account.organization', 'organization')
     .leftJoinAndSelect('organization.receiver', 'receiver')
@@ -95,6 +98,7 @@ function _genWhereCondition(
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'receiver', filters, ['autoReceiver']);
   queryBuilder = _genOperationHoursCondition(queryBuilder, filters);
   queryBuilder = _genDistanceCondition(queryBuilder, filters, myAccount);
+  queryBuilder = _genFullTextCondition(queryBuilder, filters);
   return queryBuilder;
 }
 
@@ -145,6 +149,17 @@ function _genDistanceCondition(
         dist: (filters.distanceRangeMi * 1609.34)
       }
     );
+  }
+  return queryBuilder;
+}
+
+function _genFullTextCondition(
+  queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
+  filters: AccountReadFilters)
+: OrmSelectQueryBuilder<AccountEntity> {
+  if (filters.fullTextQuery?.trim()) {
+    const fullTextQuery: string = preprocessFullTextQuery(filters.fullTextQuery);
+    queryBuilder = queryBuilder.andWhere('TO_TSQUERY(:fullTextQuery) @@ fullTextSearch.fullText', { fullTextQuery });
   }
   return queryBuilder;
 }

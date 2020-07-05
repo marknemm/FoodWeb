@@ -1,8 +1,6 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { ClaimReqHistoryEntity } from 'database/src/entity/claim-req-history.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
 import { EntityManager, getConnection } from 'typeorm';
-import { QueryResult } from '~orm/index';
+import { AccountEntity, ClaimReqHistoryEntity, DonationEntity } from '~entity';
+import { QueryResult } from '~orm';
 import { AccountReadRequest, AccountType, DonationHelper, NotificationType, OperationHours, OperationHoursHelper } from '~shared';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
 import { broadcastNotification } from '~web/helpers/messaging/notification';
@@ -14,9 +12,9 @@ const _operationHoursHelper = new OperationHoursHelper();
 /**
  * Sends messages to potential receiver charities so that they are given a chance to claim the donation.
  * @param donation The donation that is up for claim.
- * @return A promise that resolves once the operation has finished.
+ * @return A promise that resolves to the available donation once completed.
  */
-export async function sendClaimAvailableMessages(donation: DonationEntity): Promise<void> {
+export async function sendClaimAvailableMessages(donation: DonationEntity): Promise<DonationEntity> {
   const limit = 300;
   let page = 1;
   let numQueried: number;
@@ -38,6 +36,8 @@ export async function sendClaimAvailableMessages(donation: DonationEntity): Prom
     numQueried = queryResult.entities.length;
     await _messagePotentialReceivers(donation, queryResult.entities);
   } while (numQueried === limit);
+
+  return donation;
 }
 
 /**

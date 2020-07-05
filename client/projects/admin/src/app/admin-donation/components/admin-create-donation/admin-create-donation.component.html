@@ -1,0 +1,24 @@
+<div class="page">
+  <div class="donate-form-title page-title">
+    {{ pageTitleService.title }}
+  </div>
+
+  <food-web-admin-donation-form
+    *ngIf="!savedDonation; else donationSavedTmpl"
+    [formGroup]="formGroup"
+    (submitDonation)="submitDonation()"
+    submitButtonTxt="Create"
+  ></food-web-admin-donation-form>
+
+  <ng-template #donationSavedTmpl>
+    <hr>
+    <div>{{ savedDonation.description }}</div>
+
+    <div class="action-footer align-right">
+      <button mat-button type="button" color="accent" (click)="donateAgain()">Create Another</button>
+      <a class="view-donation-link" [routerLink]="['/donation/details', savedDonation.id]">
+        <button mat-raised-button type="button" color="primary">View Donation</button>
+      </a>
+    </div>
+  </ng-template>
+</div>

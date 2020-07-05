@@ -5,7 +5,7 @@ export abstract class TypedAbstractControl<T> extends AbstractControl {
 
   readonly value: T;
   readonly valueChanges: Observable<T>;
-  
-  abstract setValue(value: T, options?: object): void;
-  abstract patchValue(value: T, options?: object): void;
+
+  abstract setValue(value: T, options?: { onlySelf?: boolean, emitEvent?: boolean }): void;
+  abstract patchValue(value: T, options?: { onlySelf?: boolean, emitEvent?: boolean }): void;
 }

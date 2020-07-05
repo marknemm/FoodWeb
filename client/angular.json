@@ -17,7 +17,7 @@
             "index": "projects/admin/src/index.html",
             "main": "projects/admin/src/main.ts",
             "polyfills": "projects/admin/src/polyfills.ts",
-            "tsConfig": "projects/admin/tsconfig.app.json",
+            "tsConfig": "projects/admin/tsconfig.json",
             "aot": false,
             "assets": [
               {
@@ -140,7 +140,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/admin/tsconfig.app.json",
+              "projects/admin/tsconfig.json",
               "projects/admin/tsconfig.spec.json",
               "projects/admin/e2e/tsconfig.json"
             ],
@@ -177,7 +177,7 @@
             "index": "projects/app/src/index.html",
             "main": "projects/app/src/main.ts",
             "polyfills": "projects/app/src/polyfills.ts",
-            "tsConfig": "projects/app/tsconfig.app.json",
+            "tsConfig": "projects/app/tsconfig.json",
             "aot": false,
             "assets": [
               {
@@ -323,7 +323,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/app/tsconfig.app.json",
+              "projects/app/tsconfig.json",
               "projects/app/tsconfig.spec.json",
               "projects/app/e2e/tsconfig.json"
             ],
@@ -398,7 +398,7 @@
             "index": "projects/web/src/index.html",
             "main": "projects/web/src/main.ts",
             "polyfills": "projects/web/src/polyfills.ts",
-            "tsConfig": "projects/web/tsconfig.app.json",
+            "tsConfig": "projects/web/tsconfig.json",
             "aot": false,
             "assets": [
               {
@@ -604,7 +604,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/web/tsconfig.app.json",
+              "projects/web/tsconfig.json",
               "projects/web/tsconfig.spec.json",
               "projects/web/e2e/tsconfig.json"
             ],

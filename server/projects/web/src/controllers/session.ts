@@ -1,36 +1,16 @@
 import express = require('express');
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { Request, Response } from 'express';
+import { AccountEntity } from '~entity';
+import { Request, Response, Router } from 'express';
 import { AppTokenLoginRequest, ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
 import { genErrorResponse } from '~web/middlewares/response-error.middleware';
 import { appTokenLogin, saveAppSessionToken } from '~web/services/session/app-session';
 import { login, logout } from '~web/services/session/session';
 import { impersonateLogin } from '~web/services/session/impersonate';
 
-const router = express.Router();
+export const router: Router = express.Router();
 
-router.post('/session-token', (req: Request, res: Response) => {
-  const loginRequest: AppTokenLoginRequest = req.body;
-  appTokenLogin(loginRequest.appSessionToken)
-    .then((loginResponse: LoginResponse) => _handleLoginSuccess(req, res, loginResponse))
-    .catch(genErrorResponse.bind(this, res));
-});
-
-router.post('/impersonate', (req: Request, res: Response) => {
-  const impersonateRequest: ImpersonateRequest = req.body;
-  impersonateLogin(impersonateRequest)
-    .then((loginResponse: LoginResponse) => _handleLoginSuccess(req, res, loginResponse))
-    .catch(genErrorResponse.bind(this, res));
-});
-
-router.post('/', (req: Request, res: Response) => {
-  const loginRequest: LoginRequest = req.body;
-  login(loginRequest)
-    .then((loginResponse: LoginResponse) => _handleLoginSuccess(req, res, loginResponse))
-    .catch(genErrorResponse.bind(this, res));
-});
-
-router.get('/', (req: Request, res: Response) => {
+router.get('/', handleGetSession);
+export function handleGetSession(req: Request, res: Response) {
   const account: AccountEntity = req.session['account'];
   const loginResponse: LoginResponse = { account };
   if (account && req.query.isApp === 'true') {
@@ -39,15 +19,40 @@ router.get('/', (req: Request, res: Response) => {
       .catch(genErrorResponse.bind(this, res));
   }
   res.send(loginResponse);
-});
+}
 
-router.delete('/', (req: Request, res: Response) => {
+router.post('/session-token', handlePostSessionToken);
+export function handlePostSessionToken(req: Request, res: Response) {
+  const loginRequest: AppTokenLoginRequest = req.body;
+  appTokenLogin(loginRequest.appSessionToken)
+    .then((loginResponse: LoginResponse) => _handleLoginSuccess(req, res, loginResponse))
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.post('/impersonate', handlePostImpersonate);
+export function handlePostImpersonate(req: Request, res: Response) {
+  const impersonateRequest: ImpersonateRequest = req.body;
+  impersonateLogin(impersonateRequest)
+    .then((loginResponse: LoginResponse) => _handleLoginSuccess(req, res, loginResponse))
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.post('/', handlePostSession);
+export function handlePostSession(req: Request, res: Response) {
+  const loginRequest: LoginRequest = req.body;
+  login(loginRequest)
+    .then((loginResponse: LoginResponse) => _handleLoginSuccess(req, res, loginResponse))
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.delete('/', handleDeleteSession);
+export function handleDeleteSession(req: Request, res: Response) {
   if (req.query.isApp === 'true') {
     logout(req.session['account']);
   }
   req.session.destroy(console.error);
   res.send();
-});
+}
 
 /**
  * Handles a successful login response.
@@ -60,5 +65,3 @@ function _handleLoginSuccess(req: Request, res: Response, loginResponse: LoginRe
   req.session['account'] = loginResponse.account;
   res.send(loginResponse);
 }
-
-module.exports = router;

@@ -1,13 +1,12 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
+import { AccountEntity, DonationEntity } from '~entity';
+import { Donation, DonationHelper } from '~shared';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
 import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
-import { Donation, DonationHelper } from '~shared';
 import { sendDeliveryUnavailableMessages } from './delivery-unavailable-message';
 
 const _donationHelper = new DonationHelper();
 
-export async function sendDeliveryScheduledMessages(donation: DonationEntity): Promise<Donation> {
+export async function sendDeliveryScheduledMessages(donation: DonationEntity): Promise<DonationEntity> {
   const messagePromises: Promise<any>[] = [];
   const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, donation.claim.delivery.volunteerAccount];
   const { donorName, receiverName, delivererName } = _donationHelper.memberNames(donation);

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Account, AccountHelper } from '~shared';
+import { AccountHelper } from '~shared';
 import { SessionService } from '~web/session/session/session.service';
 import { AlertService } from '~web/shared/alert/alert.service';
 import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';

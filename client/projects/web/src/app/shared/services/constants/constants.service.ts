@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Constants } from '~shared';
+import { Constants, DonationStatus } from '~shared';
 
 @Injectable({
   providedIn: 'root'
@@ -12,4 +12,14 @@ export class ConstantsService extends Constants {
     Volunteer: 'time_to_leave',
     Admin: 'vpn_key'
   };
+
+  getDeliveryStatuses(includeMatched = false): DonationStatus[] {
+    const deliveryStatuses = this.DONATION_STATUSES.filter(
+      (status: DonationStatus) => (status !== DonationStatus.Unmatched) && (status !== DonationStatus.Matched)
+    );
+    if (includeMatched) {
+      deliveryStatuses.unshift(DonationStatus.Matched);
+    }
+    return deliveryStatuses;
+  }
 }

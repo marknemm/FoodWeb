@@ -1,0 +1,38 @@
+<mat-sidenav-container [autosize]="true">
+  <mat-sidenav-content>
+    <form [formGroup]="accountMessageForm" class="quill-editor-page">
+      <div class="subject-container">
+        <mat-form-field class="fill" floatLabel="never">
+          <input matInput formControlName="messageSubject" placeholder="Message Subject" required>
+        </mat-form-field>
+      </div>
+      <quill-editor formControlName="messageBodyHTML" placeholder="Message Body *" [required]="true"></quill-editor>
+      <div class="action-buttons align-right">
+        <div class="action-buttons-inner">
+          <button mat-icon-button type="button" class="account-filter-button" matTooltip="Filter Target Accounts" (click)="accountFiltersOpened = true">
+            <mat-icon>filter_list</mat-icon>
+          </button>
+          <button mat-icon-button type="button" class="test-message-button" matTooltip="Test Message" (click)="testMessage()">
+            <fa-icon [icon]="faFlask"></fa-icon>
+          </button>
+          <button mat-icon-button
+            foodWebConfirmButton
+            type="button"
+            class="send-message-button"
+            matTooltip="Send Message"
+            confirmTitle="Confirm Send Message"
+            confirmMessage="Are you sure you wish to send this message to the filtered accounts?"
+            [disabled]="accountMessageForm.invalid"
+            (clickConfirm)="sendMessage()">
+            <mat-icon>send</mat-icon>
+          </button>
+        </div>
+      </div>
+    </form>
+  </mat-sidenav-content>
+  <mat-sidenav [opened]="accountFiltersOpened" (openedChange)="accountFiltersOpened = $event" mode="over" position="end" [autoFocus]="false">
+    <food-web-list-filters>
+      <food-web-admin-account-filters [activeFilters]="activeFilters" [omitSorting]="true" (filter)="updateAccountFilters($event)"></food-web-admin-account-filters>
+    </food-web-list-filters>
+  </mat-sidenav>
+</mat-sidenav-container>

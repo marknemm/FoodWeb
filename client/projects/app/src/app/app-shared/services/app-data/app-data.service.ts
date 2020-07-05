@@ -194,7 +194,7 @@ export class AppDataService extends Device {
   deleteAppData(): Observable<void> {
     const accountId: number = this.accountId;
     this._accountId = null;
-    return this._httpClient.delete(`${this.url}/${accountId}/${this.uuid}`, { withCredentials: true }).pipe(
+    return <Observable<void>>this._httpClient.delete(`${this.url}/${accountId}/${this.uuid}`, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) => this._errHandlerService.handleError(err))
     );
   }

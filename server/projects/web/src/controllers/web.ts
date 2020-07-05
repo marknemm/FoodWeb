@@ -1,16 +1,26 @@
 import express = require('express');
 
-const router = express.Router();
+// NOTE: It is necessary to do an import ... require so tree shaking doesn't get rid of any controllers.
+import { router as accountRouter } from '~web/controllers/account';
+import { router as appDataRouter } from '~web/controllers/app-data';
+import { router as deliveryRouter } from '~web/controllers/delivery';
+import { router as donationRouter } from '~web/controllers/donation';
+import { router as featuredEventRouter } from '~web/controllers/featured-event';
+import { router as heuristicsRouter } from '~web/controllers/heuristics';
+import { router as mapRouter } from '~web/controllers/map';
+import { router as notificationRouter } from '~web/controllers/notification';
+import { router as sessionRouter } from '~web/controllers/session';
+import { router as sseRouter } from '~web/controllers/sse';
 
-router.use('/account', require('~web/controllers/account'));
-router.use('/app-data', require('~web/controllers/app-data'));
-router.use('/delivery', require('~web/controllers/delivery'));
-router.use('/donation', require('~web/controllers/donation'));
-router.use('/featured-event', require('~web/controllers/featured-event'));
-router.use('/heuristics', require('~web/controllers/heuristics'));
-router.use('/map', require('~web/controllers/map'));
-router.use('/notification', require('~web/controllers/notification'));
-router.use('/session', require('~web/controllers/session'));
-router.use('/sse', require('~web/controllers/sse'));
+export const router = express.Router();
 
-module.exports = router;
+router.use('/account',        accountRouter);
+router.use('/app-data',       appDataRouter);
+router.use('/delivery',       deliveryRouter);
+router.use('/donation',       donationRouter);
+router.use('/featured-event', featuredEventRouter);
+router.use('/heuristics',     heuristicsRouter);
+router.use('/map',            mapRouter);
+router.use('/notification',   notificationRouter);
+router.use('/session',        sessionRouter);
+router.use('/sse',            sseRouter);

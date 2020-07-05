@@ -1,15 +1,20 @@
 <div class="account-type-selections" [ngClass]="{ 'edit': editing, 'display': !editing }">
   <ng-container *ngFor="let accountType of constantsService.ACCOUNT_TYPES">
-    <mat-card [ngClass]="{ selected: accountType === accountTypeCtrl.value }" matRipple [matRippleDisabled]="!editing" (click)="accountTypeClick(accountType)">
-      <mat-card-title>
-        <mat-toolbar [color]="accountType | lowercase">{{ accountType }}</mat-toolbar>
-      </mat-card-title>
-      <mat-card-content>
-        <mat-icon [color]="accountType | lowercase">
-          {{ constantsService.ACCOUNT_TYPE_ICONS[accountType] }}
-        </mat-icon>
-      </mat-card-content>
-      <div class="not-selected-mask"></div>
-    </mat-card>
+    <button mat-button
+      [disabled]="!editing"
+      [ngClass]="{ selected: accountType === formControl.value }"
+      (click)="accountTypeClick(accountType)" (blur)="onTouchedCb()">
+      <mat-card>
+        <mat-card-title>
+          <mat-toolbar [color]="accountType | lowercase">{{ accountType }}</mat-toolbar>
+        </mat-card-title>
+        <mat-card-content>
+          <mat-icon [color]="accountType | lowercase">
+            {{ constantsService.ACCOUNT_TYPE_ICONS[accountType] }}
+          </mat-icon>
+        </mat-card-content>
+        <div class="not-selected-mask"></div>
+      </mat-card>
+    </button>
   </ng-container>
 </div>

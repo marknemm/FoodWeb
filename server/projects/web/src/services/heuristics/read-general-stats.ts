@@ -1,6 +1,6 @@
 import 'dotenv';
 import { getRepository } from 'typeorm';
-import { DonationEntity } from 'database/src/entity/donation.entity';
+import { DonationEntity } from '~entity';
 import { GeneralStats } from '~shared';
 
 /**

@@ -1,15 +1,21 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { DateTimeRangeForm, DateTimeRange } from '~web/date-time/date-time-range.form';
-import { DateTimeComponent } from '~web/date-time/date-time/date-time.component';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
+import { DateTimeRangeRadioConfig, DateTimeRangeRadioDialogComponent } from '~web/date-time/components/date-time-range-radio-dialog/date-time-range-radio-dialog.component';
+import { DateTimeRange, DateTimeRangeForm } from '~web/date-time/date-time-range.form';
+import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
   selector: 'food-web-date-time-range',
   templateUrl: './date-time-range.component.html',
-  styleUrls: ['./date-time-range.component.scss']
+  styleUrls: ['./date-time-range.component.scss'],
+  providers: valueAccessorProvider(DateTimeRangeComponent)
 })
-export class DateTimeRangeComponent implements OnChanges {
+export class DateTimeRangeComponent extends FormComponentBase<DateTimeRange> implements OnChanges {
 
-  @Input() formGroup: DateTimeRangeForm;
+  @Input() formGroup = new DateTimeRangeForm();
+  @Input() allowClear = false;
+  @Input() allowUndefTime = false;
   @Input() editing = false;
   @Input() startDatePlaceholder = 'Start Date';
   @Input() startTimePlaceholder = 'Start Time';
@@ -22,19 +28,28 @@ export class DateTimeRangeComponent implements OnChanges {
   @Input() start: Date;
   @Input() end: Date;
   @Input() range: DateTimeRange = { startDateTime: null, endDateTime: null };
+  @Input() dateTimeRangeRadioConfig: DateTimeRangeRadioConfig;
 
-  @ViewChild('startDateTime') startDateTime: DateTimeComponent;
-  @ViewChild('endDateTime') endDateTime: DateTimeComponent;
+  private _startEndDateSame = false;
 
-  private _excludeEndDateDisplay = false;
+  constructor(
+    private _matDialog: MatDialog,
+    formHelperService: FormHelperService
+  ) {
+    super(formHelperService);
+  }
 
-  constructor() {}
-
-  get excludeEndDateDisplay(): boolean {
-    return this._excludeEndDateDisplay;
+  get startEndDateSame(): boolean {
+    return this._startEndDateSame;
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.start || changes.end || changes.range) {
+      this._syncStartEndAndRange(changes);
+    }
+  }
+
+  private _syncStartEndAndRange(changes: SimpleChanges) {
     if (changes.start || changes.end) {
       this.range.startDateTime = this.start ? this.start : this.range.startDateTime;
       this.range.endDateTime = this.end ? this.end : this.range.endDateTime;
@@ -43,20 +58,14 @@ export class DateTimeRangeComponent implements OnChanges {
       this.start = this.range.startDateTime;
       this.end = this.range.endDateTime;
     }
-    if (changes.start || changes.end || changes.range) {
-      this._excludeEndDateDisplay = (this.start && this.end && this.start.toDateString() === this.end.toDateString());
-    }
+    this._startEndDateSame = (this.start && this.end && this.start.toDateString() === this.end.toDateString());
   }
 
-  markAsTouched(): void {
-    this.formGroup.markAsTouched();
-    this.startDateTime.markAsTouched();
-    this.endDateTime.markAsTouched();
-  }
-
-  markAsPristine(): void {
-    this.formGroup.markAsPristine();
-    this.startDateTime.markAsPristine();
-    this.endDateTime.markAsPristine();
+  openDateTimeRangeRadio(event: MouseEvent) {
+    event.stopPropagation();
+    this.dateTimeRangeRadioConfig.initValue = this.formGroup.value;
+    DateTimeRangeRadioDialogComponent.open(this._matDialog, this.dateTimeRangeRadioConfig).subscribe(
+      (dateTimeRange: DateTimeRange) => this.formGroup.patchValue(dateTimeRange)
+    )
   }
 }

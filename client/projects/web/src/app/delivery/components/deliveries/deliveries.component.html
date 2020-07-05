@@ -1,13 +1,25 @@
-<food-web-filter-list class="deliveries" listItemsLabel="Deliveries" [totalCount]="totalCount">
-  <food-web-filter-list-title>{{ pageTitleService.title }}</food-web-filter-list-title>
+<food-web-filtered-list class="deliveries" listItemsLabel="Deliveries" [totalCount]="totalCount">
+  <food-web-filtered-list-title>{{ pageTitleService.title }}</food-web-filtered-list-title>
 
-  <food-web-filter-list-content>
+  <food-web-filtered-list-toolbar>
+    <food-web-search-bar
+      placeholder="Search Deliveries..."
+      [formControl]="deliveryFilters.filtersForm.get('fullTextQuery')"
+      (search)="filterDeliveries(deliveryFilters.filtersForm.value)"
+    ></food-web-search-bar>
+  </food-web-filtered-list-toolbar>
+
+  <food-web-filtered-list-content>
     <div class="col-lg-6" *ngFor="let donation of donations">
       <food-web-delivery-teaser [donation]="donation"></food-web-delivery-teaser>
     </div>
-  </food-web-filter-list-content>
+  </food-web-filtered-list-content>
 
-  <food-web-filter-list-filters>
-    <food-web-delivery-filters [myDeliveries]="myDeliveries" (filter)="filterDeliveries($event)"></food-web-delivery-filters>
-  </food-web-filter-list-filters>
-</food-web-filter-list>
+  <food-web-list-filters>
+    <food-web-delivery-filters #deliveryFilters
+      [activeFilters]="activeFilters"
+      [myDeliveries]="myDeliveries"
+      (filter)="filterDeliveries($event)"
+    ></food-web-delivery-filters>
+  </food-web-list-filters>
+</food-web-filtered-list>

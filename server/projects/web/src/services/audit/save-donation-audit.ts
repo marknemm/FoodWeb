@@ -1,10 +1,9 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { UpdateDiff } from '~web/interfaces/update-diff';
-import { DonationClaimRequest, DonationCreateRequest, DonationDeleteRequest, DonationUnclaimRequest, DonationUpdateRequest } from '~shared';
+import { AccountEntity, DonationEntity } from '~entity';
+import { DonationClaimRequest, DonationDeleteRequest, DonationSaveRequest, DonationUnclaimRequest } from '~shared';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { AuditEventType, getAuditAccounts, saveAudit, saveUpdateAudit } from './save-audit';
-import { DonationEntity } from 'database/src/entity/donation.entity';
 
-export function saveDonationCreateAudit(createReq: DonationCreateRequest, donation: DonationEntity): Promise<DonationEntity> {
+export function saveDonationCreateAudit(createReq: DonationSaveRequest, donation: DonationEntity): Promise<DonationEntity> {
   const auditAccounts: AccountEntity[] = getAuditAccounts(donation);
   return saveAudit(AuditEventType.Donate, auditAccounts, donation, createReq.recaptchaScore);
 }
@@ -15,7 +14,7 @@ export function saveDonationClaimAudit(claimReq: DonationClaimRequest, claimedDo
 }
 
 export function saveDonationUpdateAudit(
-  updateReq: DonationUpdateRequest,
+  updateReq: DonationSaveRequest,
   donationDiff: UpdateDiff<DonationEntity>
 ): Promise<UpdateDiff<DonationEntity>> {
   const auditAccounts: AccountEntity[] = getAuditAccounts(donationDiff.old);

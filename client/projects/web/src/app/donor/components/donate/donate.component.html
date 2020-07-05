@@ -22,14 +22,14 @@
     <mat-card class="donate-card">
       <mat-card-title>Pickup Window</mat-card-title>
       <mat-card-content>
-        <food-web-date-time-range #pickupWindowRange [formGroup]="formGroup.get('pickupWindow')" [editing]="true"></food-web-date-time-range>
+        <food-web-date-time-range #pickupWindowRange formGroupName="pickupWindow" [editing]="true"></food-web-date-time-range>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="donate-card">
       <mat-card-title>Contact Info</mat-card-title>
       <mat-card-content>
-        <food-web-contact-info [editing]="true" [formGroup]="formGroup.get('donorContactOverride')"></food-web-contact-info>
+        <food-web-contact-info [editing]="true" formGroupName="donorContactOverride"></food-web-contact-info>
       </mat-card-content>
     </mat-card>
 

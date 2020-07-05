@@ -4,7 +4,8 @@ import { AdminSessionService } from '~admin/admin-session/admin-session/admin-se
 import { ImpersonateService } from '~admin/admin-session/impersonate/impersonate.service';
 import { AccountHelper } from '~shared';
 import { AccountDetailsComponent } from '~web/account/account-details/account-details.component';
-import { AccountService } from '~web/account/account/account.service';
+import { AccountReadService } from '~web/account/account-read/account-read.service';
+import { AccountSaveService } from '~web/account/account-save/account-save.service';
 import { PasswordForm } from '~web/password/password.form';
 import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
 
@@ -23,11 +24,12 @@ export class AdminAccountDetailsComponent extends AccountDetailsComponent implem
     public accountHelper: AccountHelper,
     public impersonateService: ImpersonateService,
     public signupVerificationService: SignupVerificationService,
-    protected _accountService: AccountService,
+    protected _accountReadService: AccountReadService,
+    protected _accountSaveService: AccountSaveService,
     protected _activatedRoute: ActivatedRoute,
     protected _router: Router
   ) {
-    super(sessionService, accountHelper, signupVerificationService, _accountService, _activatedRoute, _router);
+    super(sessionService, accountHelper, signupVerificationService, _accountReadService, _accountSaveService, _activatedRoute, _router);
   }
 
   ngOnInit() {

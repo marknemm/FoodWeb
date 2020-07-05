@@ -1,4 +1,4 @@
-export const environment = {
+export const environment: FoodWebAdminEnvironment = {
   production: true,
   qa: false,
   demo: false,
@@ -11,5 +11,5 @@ export const environment = {
   recaptchaSiteKey: '6LdJXagUAAAAAIWSTEbvcU1-HxB1WHrp3pcMS0Qj',
   googleMapsJSApiKey: 'AIzaSyDQdydkED1Z-nZvQXQQHlOYXnrmdqdFedA',
   server: 'https://food-web-admin.herokuapp.com/server',
-  web: 'https://www.wnyfoodweb.com'
+  webServer: 'https://www.wnyfoodweb.com'
 };

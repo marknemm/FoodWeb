@@ -1,64 +1,66 @@
 import express = require('express');
-import { EventRegistrationEntity } from 'database/src/entity/event-registration.entity';
-import { FeaturedEventEntity } from 'database/src/entity/featured-event.entity';
 import { Request, Response } from 'express';
-import { deleteFeaturedEvent } from '~admin/services/admin-featured-event/delete-featured-event';
-import { sendFeaturedEventCancelledMessages } from '~admin/services/admin-featured-event/featured-event-cancelled-message';
-import { readEventRegistrations } from '~admin/services/admin-featured-event/read-event-registrations';
-import { readFeaturedEventIdentifiers } from '~admin/services/admin-featured-event/read-featured-event-identifiers';
-import { saveFeaturedEvent } from '~admin/services/admin-featured-event/save-featured-event';
+import { adminDeleteFeaturedEvent } from '~admin/services/admin-featured-event/admin-delete-featured-event';
+import { adminSendFeaturedEventCancelledMessages } from '~admin/services/admin-featured-event/admin-featured-event-cancelled-message';
+import { adminReadEventRegistrations } from '~admin/services/admin-featured-event/admin-read-event-registrations';
+import { adminSaveFeaturedEvent } from '~admin/services/admin-featured-event/admin-save-featured-event';
+import { FeaturedEventEntity } from '~entity';
 import { FeaturedEvent, FeaturedEventCreateRequest, FeaturedEventUpdateRequest } from '~shared';
+import { handleGetFeaturedEvents, handlePostFeaturedEventRegistration } from '~web/controllers/featured-event';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { readFeaturedEvent } from '~web/services/featured-event/read-featured-events';
 
-const router = express.Router();
+export const router = express.Router();
 
-router.get('/identifiers', (req: Request, res: Response) => {
-  readFeaturedEventIdentifiers()
-    .then((featuerdEventIdentifiers: Partial<FeaturedEvent>[]) => res.send(featuerdEventIdentifiers))
-    .catch(genErrorResponse.bind(this, res));
-});
+// Use web featured event controller route handler.
+router.get('/', handleGetFeaturedEvents);
 
-router.get('/:id', (req: Request, res: Response) => {
+router.get('/:id', handleGetFeaturedEvent);
+function handleGetFeaturedEvent(req: Request, res: Response) {
   const featuredEventId: number = Number.parseInt(req.params.id, 10);
   readFeaturedEvent(featuredEventId)
     .then((featuredEvent: FeaturedEvent) => {
       res.send(featuredEvent)
     })
     .catch(genErrorResponse.bind(this, res));
-});
+}
 
-router.get('/:id/registrations', (req: Request, res: Response) => {
+router.get('/:id/registrations', handleGetEventRegistrations);
+function handleGetEventRegistrations(req: Request, res: Response) {
   const featuredEventId: number = Number.parseInt(req.params.id, 10);
-  readEventRegistrations(featuredEventId)
-    .then((registrations: EventRegistrationEntity[]) => res.send(registrations))
+  adminReadEventRegistrations(featuredEventId)
+    .then((featuredEvent: FeaturedEventEntity) => res.send(featuredEvent))
     .catch(genErrorResponse.bind(this, res));
-});
+}
 
-router.post('/', (req: Request, res: Response) => {
+router.post('/', handlePostFeaturedEvent);
+function handlePostFeaturedEvent(req: Request, res: Response) {
   const createRequest: FeaturedEventCreateRequest = req.body;
-  saveFeaturedEvent(createRequest.featuredEvent)
+  adminSaveFeaturedEvent(createRequest.featuredEvent)
     .then((featuredEvent: FeaturedEventEntity) => { res.send(featuredEvent); return featuredEvent; })
     .catch(genErrorResponse.bind(this, res));
     // TODO: Audit event creation.
-});
+}
 
-router.put('/:id', (req: Request, res: Response) => {
+// Use web featured event controller route handler.
+router.post('/', handlePostFeaturedEventRegistration);
+
+router.put('/:id', handlePutFeaturedEvent);
+function handlePutFeaturedEvent(req: Request, res: Response) {
   const updateRequest: FeaturedEventUpdateRequest = req.body;
-  saveFeaturedEvent(updateRequest.featuredEvent)
+  adminSaveFeaturedEvent(updateRequest.featuredEvent)
     .then((featuredEvent: FeaturedEvent) => { res.send(featuredEvent); return featuredEvent; })
     .catch(genErrorResponse.bind(this, res));
     // TODO: Audit event update.
-});
+}
 
-router.delete('/:id', (req: Request, res: Response) => {
+router.delete('/:id', handleDeleteFeaturedEvent);
+function handleDeleteFeaturedEvent(req: Request, res: Response) {
   const featuredEventId: number = Number.parseInt(req.params.id, 10);
-  deleteFeaturedEvent(featuredEventId)
+  adminDeleteFeaturedEvent(featuredEventId)
     .then((featuredEvent: FeaturedEventEntity) => { res.send(featuredEvent); return featuredEvent; })
     .catch(genErrorResponseRethrow.bind(this, res))
-    .then((featuredEvent: FeaturedEventEntity) => sendFeaturedEventCancelledMessages(featuredEvent))
+    .then((featuredEvent: FeaturedEventEntity) => adminSendFeaturedEventCancelledMessages(featuredEvent))
     .catch((err: Error) => console.error(err));
     // TODO: Audit event deletion.
-});
-
-module.exports = router;
+}

@@ -1,0 +1,36 @@
+@import "../constants.scss";
+
+body .mat-snack-bar-container {
+  margin: 8px;
+
+  &.mat-alert-info {
+    background-color: $alert-info-background;
+    color: $alert-info-color;
+  }
+
+  &.mat-alert-success {
+    background-color: $alert-success-background;
+    color: $alert-success-color;
+  }
+
+  &.mat-alert-warn {
+    background-color: $alert-warn-background;
+    color: $alert-warn-color;
+  }
+
+  &.mat-alert-danger {
+    background-color: $alert-danger-background;
+    color: $alert-danger-color;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    font-size: 18px;
+    outline: none;
+  }
+}

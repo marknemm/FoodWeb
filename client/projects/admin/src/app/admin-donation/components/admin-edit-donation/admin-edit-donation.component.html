@@ -1,0 +1,13 @@
+<div class="page">
+  <div class="donate-form-title page-title">
+    {{ pageTitleService.title }}
+  </div>
+
+  <food-web-admin-donation-form
+    [formGroup]="formGroup"
+    [showCancelButton]="true"
+    (submitDonation)="submitDonation()"
+    (cancel)="cancelEdit()"
+    submitButtonTxt="Save"
+  ></food-web-admin-donation-form>
+</div>

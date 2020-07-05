@@ -1,0 +1,35 @@
+@import "../constants.scss";
+
+.mat-form-field {
+  .mat-form-field-subscript-wrapper {
+    margin-top: 0.15em;
+  }
+
+  &.no-pad {
+    .mat-form-field-wrapper {
+      padding-bottom: 0px;
+    }
+
+    .mat-form-field-underline {
+      bottom: 0px;
+    }
+  }
+
+  &.no-label-border {
+    .mat-form-field-infix {
+      border-top: none;
+    }
+  }
+
+  &.accent-underline {
+    .mat-form-field-underline {
+      background-color: $accent;
+    }
+  }
+
+  &.accent-darker-underline {
+    .mat-form-field-underline {
+      background-color: $accent-darker;
+    }
+  }
+}

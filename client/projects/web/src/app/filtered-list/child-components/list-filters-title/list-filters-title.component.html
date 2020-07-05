@@ -1,0 +1,6 @@
+<h2 class="list-filters-title" [ngClass]="{ 'primary': primary }">
+  <button mat-icon-button *ngIf="primary" type="button" class="close-button" (click)="filteredListService.opened = false">
+    <mat-icon aria-label="Close">close</mat-icon>
+  </button>
+  <ng-content></ng-content>
+</h2>

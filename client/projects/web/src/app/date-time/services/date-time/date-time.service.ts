@@ -28,12 +28,12 @@ export class DateTimeService extends DateTimeHelper {
   }
 
   formatDate(date: Date | string): string {
-    return formatDate(date, 'M/d/yyyy', 'en-US');
+    return date ? formatDate(date, 'M/d/yyyy', 'en-US') : '';
   }
 
   formatTime(date: Date | string): string {
     date = this.toDate(date);
-    return formatDate(date, 'hh:mm aa', 'en-US');
+    return date ? formatDate(date, 'hh:mm aa', 'en-US') : '';
   }
 
   formatDateTime(date: Date | string): string {
@@ -65,7 +65,7 @@ export class DateTimeService extends DateTimeHelper {
     return this._constantsService.WEEKDAYS[weekdayIdx];
   }
 
-  genDefaultDateRangeFromAvailability(account: Account): DateTimeRange {
+  genDateRangeFromAvailability(account: Account): DateTimeRange {
     const dateRange: DateTimeRange = {
       startDateTime: this.dateCeil5Mins(this.formatCurrentDateTime()),
       endDateTime: null,
@@ -95,10 +95,11 @@ export class DateTimeService extends DateTimeHelper {
     return timeRange;
   }
 
-  genDateTimeRangeIncrements(rangeToSplit: DateTimeRange, incrementMinutes: number): DateTimeRange[] {
+  genDateTimeRangeIncrements(rangeToSplit: DateTimeRange, stepMins = 15, allowPast = false): DateTimeRange[] {
+    if (!rangeToSplit) return [];
     const timeRanges: DateTimeRange[] = [];
     const curDateTime = new Date();
-    let startDateTime: Date = curDateTime < rangeToSplit.startDateTime
+    let startDateTime: Date = (allowPast || curDateTime < rangeToSplit.startDateTime)
       ? rangeToSplit.startDateTime
       : this.dateCeil5Mins(curDateTime);
     const totalEndDate: Date = rangeToSplit.endDateTime;
@@ -106,7 +107,7 @@ export class DateTimeService extends DateTimeHelper {
     // Ensure we can generate another increment before the pickup window (total) end date.
     while (startDateTime < totalEndDate) {
       const remainingMinutes: number = (totalEndDate.getTime() - startDateTime.getTime()) / 1000 / 60;
-      const endDateTime = this.offsetDateMins(startDateTime, Math.min(incrementMinutes, remainingMinutes));
+      const endDateTime = this.offsetDateMins(startDateTime, Math.min(stepMins, remainingMinutes));
       timeRanges.push({ startDateTime, endDateTime });
       startDateTime = endDateTime;
     }

@@ -1,0 +1,18 @@
+@import "../constants.scss";
+
+.mat-icon {
+  &.mat-donor {
+    background-color: inherit;
+    color: $donor-color;
+  }
+
+  &.mat-receiver {
+    background-color: inherit;
+    color: $receiver-color;
+  }
+
+  &.mat-volunteer {
+    background-color: inherit;
+    color: $volunteer-color;
+  }
+}

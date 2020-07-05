@@ -1,0 +1,17 @@
+@import "../constants.scss";
+
+.mat-select {
+  &.accent {
+    .mat-select-value {
+      color: $accent;
+    }
+  }
+}
+
+.mat-select-panel {
+  .mat-option {
+    &.auto-height {
+      height: auto;
+    }
+  }
+}

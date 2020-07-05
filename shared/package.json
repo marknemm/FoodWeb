@@ -17,8 +17,8 @@
     "geocoder": "^0.2.3",
     "google-polyline": "^1.0.3",
     "lodash": "^4.17.15",
-    "typescript": "~3.7.5",
-    "utility-types": "^3.10.0"
+    "ts-essentials": "^6.0.4",
+    "typescript": "~3.7.5"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.149",
@@ -27,7 +27,7 @@
     "chai-http": "^4.3.0",
     "jasmine-core": "^3.5.0",
     "jasmine-spec-reporter": "^4.2.1",
-    "mocha": "^7.0.1",
+    "mocha": "^7.1.2",
     "nodemon": "^2.0.2",
     "rimraf": "^3.0.1",
     "ts-mocha": "^6.0.0",

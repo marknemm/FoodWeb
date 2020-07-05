@@ -6,17 +6,8 @@ import multer = require('multer');
 import path = require('path');
 import tsConfigPaths = require('tsconfig-paths');
 import { json } from 'body-parser';
-
-// Setup path alias resolution for JS.
-const tsConfig = require('../../../../../tsconfig.json');
-tsConfigPaths.register({
-  baseUrl: path.join(__dirname, '..', '..', '..'),
-  paths: tsConfig.compilerOptions.paths
-});
-
 import { Application, Request, Response } from 'express';
 import 'reflect-metadata';
-import { JSONDateReviver } from '~shared';
 
 // Set important paths in global.
 const PRODUCTION: boolean = (process.env['PRODUCTION']  === 'true');
@@ -32,6 +23,14 @@ global['clientEmailDir'] = path.join(global['clientDir'], 'email');
 global['publicDir'] = path.join(global['rootDir'], 'public');
 global['emailTemplatesDir'] = path.join(global['serverDistDir'], 'templates', 'email');
 
+// Setup path alias resolution for JS.
+const tsconfigPathname: string = path.join(global['serverWebDir'], 'tsconfig.json');
+const tsconfig = require(tsconfigPathname);
+tsConfigPaths.register({
+  baseUrl: path.join(__dirname, '..'), // This is the /dist/server/projects/web dir.
+  paths: tsconfig.compilerOptions.paths
+});
+
 // Load .env into process (pre-set environment variables on machine take precedence).
 if (!PRODUCTION && !QA) {
   const envPath: string = path.join(global['serverWebDir'], '.env');
@@ -41,15 +40,21 @@ if (!PRODUCTION && !QA) {
   }
 }
 
+// Override dist directory in dev environment due to conflict between parallel web & admin builds.
+const DIST_DIR: string = (PRODUCTION || QA || !process.env['DEV_DIST_DIR']) ? 'dist' : process.env['DEV_DIST_DIR'];
+global['serverDistDir'] = path.join(global['serverDir'], DIST_DIR, 'server');
+
 if (process.env.ADMIN === 'true') {
   throw new Error('Attempting to start WEB server with ADMIN env set to true');
 }
 
 // These must be imported after loading .env into process since they require access to environment variables.
-import { initOrm } from '~orm/index';
+import { initOrm } from '~orm';
+import { JSONDateReviver } from '~shared';
 import { cors } from '~web/middlewares/cors.middleware';
 import { recaptcha } from '~web/middlewares/recaptcha.middleware';
 import { session } from '~web/middlewares/session.middleware';
+import { router as webRouter } from '~web/controllers/web';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
@@ -68,7 +73,7 @@ app.use(express.static(global['publicDir']));
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 
 // Connect Express web sub-module controllers.
-app.use('/server', require('~web/controllers/web'));
+app.use('/server', webRouter);
 
 // Public Resource Route Handler (for local image hosting).
 app.get('/public/*', (request: Request, response: Response) => {

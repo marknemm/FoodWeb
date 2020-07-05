@@ -1,0 +1,60 @@
+@import './constants.scss';
+
+.donation-status {
+  box-sizing: border-box;
+  $border-size: 2px;
+
+  &.unmatched {
+    background-color: $donation-unmatched-background;
+    color: $donation-unmatched-color;
+
+    &.with-border {
+      border: $border-size solid $donation-unmatched-color;
+    }
+  }
+
+  &.matched {
+    background-color: $donation-matched-background;
+    color: $donation-matched-color;
+
+    &.with-border {
+      border: $border-size solid $donation-matched-color;
+    }
+  }
+
+  &.scheduled {
+    background-color: $delivery-scheduled-background;
+    color: $delivery-scheduled-color;
+
+    &.with-border {
+      border: $border-size solid $delivery-scheduled-color;
+    }
+  }
+
+  &.started {
+    background-color: $delivery-started-background;
+    color: $delivery-started-color;
+
+    &.with-border {
+      border: $border-size solid $delivery-started-color;
+    }
+  }
+
+  &.picked-up {
+    background-color: $delivery-picked-up-background;
+    color: $delivery-picked-up-color;
+
+    &.with-border {
+      border: $border-size solid $delivery-picked-up-color;
+    }
+  }
+
+  &.complete {
+    background-color: $delivery-complete-background;
+    color: $delivery-complete-color;
+
+    &.with-border {
+      border: $border-size solid $delivery-complete-color;
+    }
+  }
+}

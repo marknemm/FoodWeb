@@ -1,6 +1,6 @@
-import { genDonationEmailSubject, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
-import { UpdateDiff } from '~web/interfaces/update-diff';
 import { Donation } from '~shared';
+import { genDonationEmailSubject, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 
 /**
  * Sends donation created message(s) to the donor.
@@ -8,7 +8,7 @@ import { Donation } from '~shared';
  * @return A promsie that resolves to the newly created donation.
  */
 export async function sendDonationCreateMessages(donation: Donation): Promise<Donation> {
-  sendEmail(
+  await sendEmail(
     MailTransporter.NOREPLY,
     donation.donorAccount,
     genDonationEmailSubject(donation),

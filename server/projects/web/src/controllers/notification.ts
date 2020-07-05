@@ -1,27 +1,29 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { NotificationEntity } from 'database/src/entity/notification.entity';
-import { QueryResult } from '~orm/index';
+import { NotificationEntity } from '~entity';
+import { QueryResult } from '~orm';
+import { LastSeenNotificationUpdateRequest, NotificationReadRequest, NotificationUpdateRequest } from '~shared';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { genListResponse } from '~web/helpers/response/list-response';
-import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse } from '~web/middlewares/response-error.middleware';
 import { ensureSessionActive } from '~web/middlewares/session.middleware';
 import { readNotifications } from '~web/services/notification/read-notifications';
 import { updateNotification, updateSeenNotifications } from '~web/services/notification/save-notification';
-import { LastSeenNotificationUpdateRequest, NotificationReadRequest, NotificationUpdateRequest } from '~shared';
 
-const router = express.Router();
+export const router = express.Router();
 
-router.get('/', ensureSessionActive, (req: Request, res: Response) => {
+router.get('/', ensureSessionActive, handleGetNotifications);
+export function handleGetNotifications(req: Request, res: Response) {
   const readRequest: NotificationReadRequest = req.query;
   readNotifications(readRequest, req.session.account)
     .then((queryResult: QueryResult<NotificationEntity>) =>
       res.send(genListResponse(queryResult, readRequest))
     )
     .catch(genErrorResponse.bind(this, res));
-});
+}
 
-router.put('/last-seen-notification', ensureSessionActive, (req: Request, res: Response) => {
+router.put('/last-seen-notification', ensureSessionActive, handlePutLastSeenNotification);
+export function handlePutLastSeenNotification(req: Request, res: Response) {
   const updateReq: LastSeenNotificationUpdateRequest = req.body;
   updateSeenNotifications(req.session.account, updateReq.lastSeenNotificationId)
     .then((lastSeenNotificationId: number) => {
@@ -29,13 +31,12 @@ router.put('/last-seen-notification', ensureSessionActive, (req: Request, res: R
       res.send();
     })
     .catch(genErrorResponse.bind(this, res));
-});
+}
 
-router.put('/', ensureSessionActive, (req: Request, res: Response) => {
+router.put('/', ensureSessionActive, handlePutNotification);
+export function handlePutNotification(req: Request, res: Response) {
   const updateReq: NotificationUpdateRequest = req.body;
   updateNotification(req.session.account, updateReq.notification)
     .then((notificationDiff: UpdateDiff<NotificationEntity>) => res.send(notificationDiff.new))
     .catch(genErrorResponse.bind(this, res));
-});
-
-module.exports = router;
+}

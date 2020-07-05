@@ -1,5 +1,5 @@
 import { Validators } from '@angular/forms';
-import { Account, ContactInfo, DateTimeRange, Donation, Validation } from '~shared';
+import { Account, AccountAutocompleteItem, ContactInfo, DateTimeRange, Donation, DonationSaveData, Validation } from '~shared';
 import { ContactInfoForm } from '~web/account/contact-info.form';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 import { DateTimeRangeForm } from '~web/date-time/date-time-range.form';
@@ -7,60 +7,40 @@ import { DateTimeService } from '~web/date-time/date-time/date-time.service';
 
 export class DonateForm extends TypedFormGroup<DonationFormT> {
 
-  private _dateTimeService: DateTimeService;
-
   constructor(
     dateTimeService: DateTimeService,
     config: DonateFormConfig = {}
   ) {
-    const defaultStartDateTime: Date = dateTimeService.dateCeil5Mins(new Date());
-    const defaultEndDateTime: Date = dateTimeService.addHours(defaultStartDateTime, 1);
+    const startDateTime: Date = dateTimeService.dateCeil5Mins(new Date());
+    const endDateTime: Date = dateTimeService.addHours(startDateTime, 1);
     super({
       donorFirstName: ['', Validators.required],
       donorLastName: ['', Validators.required],
       donationType: ['Food', Validators.required],
-      otherDonationType: [null, Validators.required],
       estimatedNumFeed: [null, [Validators.required, Validators.min(0), Validators.pattern(/^\d*$/)]],
       estimatedValue: [null, [Validators.min(0), Validators.pattern(Validation.MONEY_REGEX)]],
       description: ['', Validators.required],
       pickupWindow: new DateTimeRangeForm({
-        required: true,
-        defaultStartDateTime,
-        defaultEndDateTime
+        startDateTime: [startDateTime, Validators.required],
+        endDateTime: [endDateTime, Validators.required]
       }),
       donorContactOverride: new ContactInfoForm(),
       safetyChecklist: [config.safetyChecklistInit, Validators.requiredTrue]
     });
-    this._dateTimeService = dateTimeService;
-    this._initValidationAndValues(config);
-  }
-
-  private _initValidationAndValues(config: DonateFormConfig): void {
-    if (config.donorAccount) {
-      this.get('pickupWindow').patchValue(
-        this._genInitPickupWindow(config.donorAccount)
-      );
-      this.get('donorContactOverride').patchValue(
-        this._genInitDonorContactOverride(config.donorAccount)
-      );
-    }
     this.get('safetyChecklist').patchValue(config.safetyChecklistInit);
-    this.get('otherDonationType').disable();
+    this.deriveValuesFromDonorAccount(config.donorAccount);
   }
 
-  private _genInitPickupWindow(donorAccount: Account): DateTimeRange {
-    return (donorAccount)
-      ? this._dateTimeService.genDefaultDateRangeFromAvailability(donorAccount)
-      : null;
+  get pickupWindow(): DateTimeRange {
+    return this.get('pickupWindow').value;
   }
 
-  private _genInitDonorContactOverride(donorAccount: Account): ContactInfo {
+  deriveValuesFromDonorAccount(donorAccount: Account | AccountAutocompleteItem): void {
     if (donorAccount) {
-      const shallowCopyContactInfo: ContactInfo = Object.assign({}, donorAccount.contactInfo);
-      delete shallowCopyContactInfo.id;
-      return shallowCopyContactInfo;
+      const donorContactOverride: ContactInfo = Object.assign({}, donorAccount.contactInfo);
+      delete donorContactOverride.id;
+      this.get('donorContactOverride').patchValue(donorContactOverride);
     }
-    return null;
   }
 
   patchFromDonation(donation: Donation): void {
@@ -75,22 +55,24 @@ export class DonateForm extends TypedFormGroup<DonationFormT> {
    * Resets the value of the donation form and marks all fields as untouched/pristine.
    * Sets all fields to null except for 'donorFirstName', 'donorLastName', 'pickupWindow',
    * 'donorContactOverride', and 'safetyChecklist'.
+   * @override
    */
   reset(): void {
     const donorFirstName: string = this.get('donorFirstName').value;
     const donorLastName: string = this.get('donorLastName').value;
-    const donationWindow: DateTimeRange = this.get('pickupWindow').value;
+    const pickupWindow: DateTimeRange = this.get('pickupWindow').value;
     const donorContactOverride: ContactInfo = this.get('donorContactOverride').value;
-    super.reset();
-    this.get('donationType').setValue('Food');
-    this.get('donorFirstName').setValue(donorFirstName);
-    this.get('donorLastName').setValue(donorLastName);
-    this.get('pickupWindow').setValue(donationWindow);
-    this.get('donorContactOverride').setValue(donorContactOverride);
-    this.get('safetyChecklist').setValue(true);
+    super.reset({
+      donationType: 'Food',
+      donorFirstName,
+      donorLastName,
+      pickupWindow,
+      donorContactOverride,
+      safetyChecklist: true
+    });
   }
 
-  toDonation(): Donation {
+  toDonationSaveData(): DonationSaveData {
     const formValue: DonationFormT = this.getRawValue();
     const donation: Donation = <any>{};
     Object.keys(formValue).forEach((formValueKey: string) => {
@@ -114,7 +96,6 @@ export interface DonationFormT {
   donorFirstName: string;
   donorLastName: string;
   donationType: string;
-  otherDonationType?: string;
   estimatedNumFeed: number;
   estimatedValue?: number;
   description: string;

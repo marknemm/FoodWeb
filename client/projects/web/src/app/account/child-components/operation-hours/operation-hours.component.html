@@ -3,37 +3,34 @@
     <mat-form-field class="fill no-pad" floatLabel="never">
       <mat-select placeholder="Weekday" class="accent" formControlName="weekday">
         <mat-option *ngFor="let weekday of constantsService.WEEKDAYS; let i = index" [value]="weekday">{{ weekday }}</mat-option>
+        <mat-option [value]="undefined">--</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
   <div class="time-fields-container">
     <div class="time-field" [style.width]="timeWidth">
-      <mat-form-field class="fill" floatLabel="never">
-        <input matInput placeholder="Start Time" [ngxTimepicker]="startTimePicker" autocomplete="off" readonly="true"
-          formControlName="startTime" [errorStateMatcher]="formGroup.timeRangeErrStateMatcher">
-        <button mat-icon-button type="button" matSuffix aria-label="Open Time Dialog" (click)="startTimePicker.open()">
-          <mat-icon>alarm</mat-icon>
-        </button>
-        <ngx-material-timepicker #startTimePicker
-          [minutesGap]="5"
-          [defaultTime]="getDefaultStartTime(formGroup)"
-          [preventOverlayClick]="true"
-        ></ngx-material-timepicker>
-      </mat-form-field>
+      <food-web-time
+        [allowClear]="allowClear"
+        [defaultTime]="getDefaultStartTime(formGroup)"
+        [editing]="editing"
+        [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
+        [minutesGap]="minutesGap"
+        [preventOverlayClick]="!allowOverlayClick"
+        formControlName="startTime"
+        placeholder="Start Time"
+      ></food-web-time>
     </div>
     <div class="time-field" [style.width]="timeWidth">
-      <mat-form-field class="fill" floatLabel="never">
-        <input matInput placeholder="End Time" [ngxTimepicker]="endTimePicker" autocomplete="off" readonly="true"
-          formControlName="endTime" [errorStateMatcher]="formGroup.timeRangeErrStateMatcher">
-        <button mat-icon-button type="button" matSuffix aria-label="Open Time Dialog" (click)="endTimePicker.open()">
-          <mat-icon>alarm</mat-icon>
-        </button>
-        <ngx-material-timepicker #endTimePicker
-          [minutesGap]="5"
-          [defaultTime]="getDefaultEndTime(formGroup)"
-          [preventOverlayClick]="true"
-        ></ngx-material-timepicker>
-      </mat-form-field>
+      <food-web-time
+        [allowClear]="allowClear"
+        [defaultTime]="getDefaultEndTime(formGroup)"
+        [editing]="editing"
+        [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
+        [minutesGap]="minutesGap"
+        [preventOverlayClick]="!allowOverlayClick"
+        formControlName="endTime"
+        placeholder="End Time"
+      ></food-web-time>
     </div>
   </div>
   <mat-error *ngIf="formGroup.hasError('timeRangeOrder')" class="operation-hours-error">

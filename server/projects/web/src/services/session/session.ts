@@ -1,8 +1,6 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { AppSessionEntity } from 'database/src/entity/app-session.entity';
-import { UnverifiedAccountEntity } from 'database/src/entity/unverified-account.entity';
 import { getRepository } from 'typeorm';
-import { QueryResult } from '~orm/index';
+import { AccountEntity, AppSessionEntity, UnverifiedAccountEntity } from '~entity';
+import { QueryResult } from '~orm';
 import { LoginRequest, LoginResponse } from '~shared';
 import { checkPasswordMatch } from '~web/helpers/misc/password-match';
 import { FoodWebError } from '~web/helpers/response/food-web-error';
@@ -50,7 +48,7 @@ async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> 
   if (!account) {
     throw new Error(`User could not be found with username/email: ${usernameEmail}`);
   }
-  
+
   account.verified = (await getRepository(UnverifiedAccountEntity).count({ account: { id: account.id } })) === 0;
   return account;
 }

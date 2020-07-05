@@ -1,109 +1,63 @@
-import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective } from '@angular/forms';
+import { Injectable, Optional, Host, SkipSelf } from '@angular/core';
+import { AbstractControl, ControlContainer } from '@angular/forms';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FormHelperService {
 
   constructor(
-    private _formBuilder: FormBuilder
+    @Optional() @Host() @SkipSelf()
+    private _controlContainer: ControlContainer,
   ) {}
 
-  deriveAbstractControl(control: AbstractControl, controlName: string, formGroupDirective: FormGroupDirective): AbstractControl {
-    if (control) {
-      return control;
-    }
-    control = new FormControl();
-
-    // Initialize form control via form control name if one is given.
-    if (controlName && formGroupDirective && formGroupDirective.form) {
-      control = formGroupDirective.form.get(controlName);
-      if (!control) {
-        throw new Error(`Form control cannot be found with name: ${controlName}`);
-      }
-    // Otherwise, initialize form control to surrounding form group if no control given as input.
-    } else if (!control) {
-      control = formGroupDirective.form;
-    }
-    return control;
+  /**
+   * Derives an abstract control via a given control name and instance.
+   * Gives precedence to deriving the control from the control name. If the control name is empty, then resorts to using the passed in instance.
+   * @param controlName The abstract control's name.
+   * @param control The abstract control instance.
+   * @return The derived abstract control.
+   */
+  deriveAbstractControl<T extends AbstractControl>(controlName: string, control: T): T {
+    return (controlName)
+      ? <T>this._controlContainer.control.get(controlName)
+      : control;
   }
 
-  deriveFormArray(formArray: FormArray, formArrayName: string, formGroupDirective: FormGroupDirective): FormArray {
-    if (formArray) {
-      return formArray;
+  /**
+   * Determines if a given abstract control has a required validator.
+   * @param abstractControl The abstract control to test.
+   * @return true if it has a required validator, false if not.
+   */
+  hasRequiredValidator(abstractControl: AbstractControl): boolean {
+    if (abstractControl.validator) {
+      const validator = abstractControl.validator({} as AbstractControl);
+      return (validator && validator.required);
     }
-    if (formGroupDirective && formGroupDirective.form && formGroupDirective.form.get(formArrayName) instanceof FormArray) {
-      return (formGroupDirective.form.get(formArrayName) as FormArray);
-    }
-    return new FormArray([]);
+    return false;
   }
 
-  deriveFormControl(formControl: FormControl, formControlName: string, formGroupDirective: FormGroupDirective): FormControl {
-    if (formControl) {
-      return formControl;
-    }
-    if (formGroupDirective && formGroupDirective.form && formGroupDirective.form.get(formControlName) instanceof FormControl) {
-      return (formGroupDirective.form.get(formControlName) as FormControl);
-    }
-    return new FormControl(null);
+  /**
+   * Listens for markAsTouched to be invoked on a given abstract control, and then invokes a given callback function.
+   * @param abstractControl The abstract control.
+   * @param touchedCb The callback function.
+   */
+  onMarkAsTouched(abstractControl: AbstractControl, touchedCb: () => void): void {
+    const origMarkAsTouched: Function = abstractControl.markAsTouched;
+    abstractControl.markAsTouched = () => {
+      origMarkAsTouched.apply(abstractControl, arguments);
+      touchedCb();
+    };
   }
 
-  deriveFormGroup(formGroup: FormGroup, formGroupName: string, formGroupDirective: FormGroupDirective): FormGroup {
-    if (formGroup) {
-      return formGroup;
-    }
-    if (formGroupDirective && formGroupDirective.form && formGroupDirective.form.get(formGroupName) instanceof FormGroup) {
-      return (formGroupDirective.form.get(formGroupName) as FormGroup);
-    }
-    return new FormGroup({});
-  }
-
-  addMissingControls(toForm: FormGroup, fromForm: FormGroup): void;
-  addMissingControls(toForm: FormGroup, fromControlsConfig: { [key: string]: any }): void;
-  addMissingControls(toForm: FormGroup, formConfig: { [key: string]: any } | FormGroup): void {
-    const fromForm: FormGroup = (formConfig instanceof FormGroup) ?
-      formConfig :
-      this._formBuilder.group(formConfig);
-    Object.keys(fromForm.controls).forEach((controlKey: string) => {
-      if (!toForm.get(controlKey)) {
-        const controlOrig: AbstractControl = fromForm.get(controlKey);
-        const controlCopy: AbstractControl = this.copyAbstractControl(controlOrig);
-        toForm.addControl(controlKey, controlCopy);
-      }
-    });
-  }
-
-  copyAbstractControl(control: AbstractControl): AbstractControl {
-    if (control instanceof FormControl) {
-      return this.copyFormControl(control);
-    }
-    if (control instanceof FormGroup) {
-      return this.copyFormGroup(control);
-    }
-    return this.copyFormArray(control as FormArray);
-  }
-
-  copyFormGroup(form: FormGroup): FormGroup {
-    const formCopy = new FormGroup({});
-    this.addMissingControls(formCopy, form);
-    formCopy.setValidators(form.validator);
-    formCopy.setAsyncValidators(form.asyncValidator);
-    formCopy.patchValue(form.value);
-    return formCopy;
-  }
-
-  copyFormArray(array: FormArray): FormArray {
-    const arrayCopy = new FormArray([]);
-    array.controls.forEach((control: AbstractControl) => {
-      arrayCopy.push(this.copyAbstractControl(control));
-    });
-    arrayCopy.setValidators(array.validator);
-    arrayCopy.setAsyncValidators(array.asyncValidator);
-    return arrayCopy;
-  }
-
-  copyFormControl(control: FormControl): FormControl {
-    return new FormControl(control.value, control.validator, control.asyncValidator);
+  /**
+   * Listens for markAsPristine to be invoked on a given abstract control, and then invokes a given callback function.
+   * @param abstractControl The abstract control.
+   * @param pristineCb The callback function.
+   */
+  onMarkAsPristine(abstractControl: AbstractControl, pristineCb: () => void): void {
+    const origMarkAsPristine: Function = abstractControl.markAsPristine;
+    abstractControl.markAsPristine = () => {
+      origMarkAsPristine.apply(abstractControl, arguments);
+      pristineCb();
+    };
   }
 }

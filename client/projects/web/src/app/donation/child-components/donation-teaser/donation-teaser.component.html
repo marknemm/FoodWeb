@@ -1,7 +1,7 @@
 <mat-card id="donation-{{ donation.id }}" class="donation-teaser">
   <mat-card-header>
-    <img mat-card-avatar [src]="donation.donorAccount.profileImgUrl" alt="{{ donorName }} Profile Image">
-    <mat-card-title>{{ donorName }}</mat-card-title>
+    <img mat-card-avatar [src]="donation.donorAccount.profileImgUrl" alt="{{ donation | donationMemberName : 'Donor' }} Profile Image">
+    <mat-card-title>{{ donation | donationMemberName : 'Donor' }}</mat-card-title>
     <mat-card-subtitle>
       <food-web-donation-status [donationStatus]="donation.donationStatus" class="donation-status"></food-web-donation-status>
     </mat-card-subtitle>
@@ -13,18 +13,18 @@
         <div class="donation-description">{{ donation.description }}</div>
       </div>
       <div class="col-sm-6">
-        <div class="inline-label">Donation Window Start:</div>
-        <div><food-web-date-time [dateTime]="donation.pickupWindowStart" [boldTime]="true"></food-web-date-time></div>
+        <div class="inline-label">Pickup Window Start:</div>
+        <div><food-web-date-time [dateTime]="(donation | pickupWindow).startDateTime" [boldTime]="true"></food-web-date-time></div>
       </div>
       <div class="col-sm-6">
-        <div class="inline-label">Donation Window End:</div>
-        <div><food-web-date-time [dateTime]="donation.pickupWindowEnd" [boldTime]="true"></food-web-date-time></div>
+        <div class="inline-label">Pickup Window End:</div>
+        <div><food-web-date-time [dateTime]="(donation | pickupWindow).endDateTime" [boldTime]="true"></food-web-date-time></div>
       </div>
     </div>
   </mat-card-content>
   <mat-card-actions>
     <div class="align-right">
-      <a [routerLink]="donationRouterLink" [state]="{ donation: donation }" class="no-hover">
+      <a [routerLink]="donation | donationDetailsRouterLink" [state]="{ donation: donation }" class="no-hover">
         <button mat-raised-button type="button" class="compact" color="primary"><strong>View Donation</strong></button>
       </a>
     </div>

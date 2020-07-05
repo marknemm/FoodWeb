@@ -20,14 +20,12 @@
               {{ toggleShowAllStatusesTxt }}
             </button>
 
-            <span class="actions" [ngClass]="{ 'align-right': donation.donationStatus === 'Complete' }" [hidden]="hasActionButtons">
-              <hr *ngIf="donation.donationStatus !== 'Complete'">
+            <span class="actions">
               <food-web-donation-actions #actions
                 [donation]="donation"
                 [myAccount]="myAccount"
                 [donationUpdateForm]="donationUpdateForm"
-                (action)="action.emit($event)"
-                (hasActionButtons)="hasActionButtons = $event">
+                (action)="action.emit($event)">
               </food-web-donation-actions>
             </span>
           </ng-container>

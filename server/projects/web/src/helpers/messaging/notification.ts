@@ -1,10 +1,8 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { AppDataEntity } from 'database/src/entity/app-data.entity';
-import { Notification, NotificationEntity, NotificationType } from 'database/src/entity/notification.entity';
+import { AccountEntity, AppDataEntity, Notification, NotificationEntity, NotificationType } from '~entity';
+import { ServerSentEventType } from '~shared';
 import { readAppData } from '~web/services/app-data/read-app-data';
 import { readUnseenNotificationsCount } from '~web/services/notification/read-notifications';
 import { createNotification } from '~web/services/notification/save-notification';
-import { ServerSentEventType } from '~shared';
 import { broadcastPushNotifications } from './push-notification-manager';
 import { SSE, sseManager } from './sse-manager';
 export { Notification, NotificationType };

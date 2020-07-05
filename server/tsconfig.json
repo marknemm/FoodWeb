@@ -1,37 +1,21 @@
+/*
+  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
+  It is not intended to be used to perform a compilation.
+*/
 {
-  "compilerOptions": {
-    "baseUrl": "./",
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "inlineSourceMap": true,
-    "lib": [
-      "es6",
-      "dom"
-    ],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "outDir": "./dist/",
-    "paths": {
-      "~admin/*": ["./projects/admin/src/*"],
-      "~entity/*": ["database/src/entity/*"],
-      "~jobs/*": ["./jobs/*"],
-      "~migration/*": ["database/src/migration/*"],
-      "~orm/*": ["./database/src/orm/*"],
-      "~shared": ["./shared"],
-      "~web/*": ["./projects/web/src/*"]
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/admin/tsconfig.json"
     },
-    "resolveJsonModule": true,
-    "rootDirs": [
-      "./database/src/",
-      "./projects/web/src/",
-      "./projects/admin/src/",
-      "../shared/src/"
-    ],
-    "target": "es5",
-    "typeRoots": [
-      "./node_modules/@types",
-      "./@types"
-    ]
-  }
+    {
+      "path": "./projects/admin/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/web/tsconfig.json"
+    },
+    {
+      "path": "./projects/web/tsconfig.spec.json"
+    }
+  ]
 }

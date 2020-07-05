@@ -1,0 +1,44 @@
+@import "constants.scss";
+
+.filtered-list-toolbar {
+  > table {
+    text-align: right;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    width: 100%;
+    font-weight: bold;
+
+    > tr > td {
+      vertical-align: top;
+
+      &:empty {
+        display: none;
+      }
+
+      &:last-child {
+        width: 36px;
+
+        .filter-button {
+          vertical-align: top;
+          margin-top: 1px;
+          min-width: 0;
+          padding-left: 5px;
+          padding-right: 5px;
+
+          .mat-icon {
+            font-size: 25px;
+            color: $accent-darker;
+          }
+        }
+      }
+
+      @media only screen and (max-width: $mat-mobile) {
+        padding-top: 0;
+
+        &:last-child .filter-button {
+          margin-top: 4px;
+        }
+      }
+    }
+  }
+}

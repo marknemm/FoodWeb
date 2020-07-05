@@ -1,7 +1,6 @@
 import 'dotenv';
 import { Message, Sender } from 'node-gcm';
-import { AppData } from 'database/src/entity/app-data.entity';
-import { Notification } from 'database/src/entity/notification.entity';
+import { AppData, Notification } from '~entity';
 import { toExternalUrl } from '../misc/resource-resolver';
 
 const _pushNotificationClient = new Sender(process.env.FCM_SERVER_KEY);

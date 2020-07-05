@@ -1,22 +1,23 @@
-import { Component, forwardRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
+import { Component, forwardRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 import { ErrorStateMatcher, FloatLabelType } from '@angular/material/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
 import { DateTimeForm } from '~web/date-time/date-time.form';
+import { DateTimeService } from '~web/date-time/date-time/date-time.service';
+import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
   selector: 'food-web-date-time',
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.scss'],
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateTimeComponent), multi: true },
-    { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeComponent), multi: true },
-    DateTimeForm
-  ]
+  providers: valueAccessorProvider(DateTimeComponent).concat([
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeComponent), multi: true }
+  ])
 })
-export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor, Validator {
+export class DateTimeComponent extends FormComponentBase<Date> implements OnChanges, Validator {
 
+  @Input() allowClear = false;
+  @Input() allowUndefTime = false;
   @Input() boldDate = false;
   @Input() boldTime = false;
   @Input() dateTime: Date;
@@ -28,35 +29,46 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
   @Input() excludeDateDisplay = false;
   @Input() excludeTimeDisplay = false;
   @Input() floatLabels: FloatLabelType = 'auto';
-  @Input() inlineFields = false;
+  @Input() inlineFields = true;
   @Input() maxDate: Date;
   @Input() minDate = new Date();
   @Input() minDateWidth = '';
+  @Input() minutesGap = 5;
   @Input() primaryLabel = ''
-  @Input() required = false;
   @Input() timePlaceholder = 'Time';
 
-  private _changeCb: (date: Date) => void = () => {};
-  private _destroy$ = new Subject();
+  /**
+   * Acts an an internal form group. The form control exposed to the outside will gather this form's data
+   * together as a single Date value.
+   */
+  readonly dateTimeForm: DateTimeForm;
 
   constructor(
-    public dateTimeForm: DateTimeForm
-  ) {}
+    protected _formHelperService: FormHelperService,
+    dateTimeService: DateTimeService
+  ) {
+    super(_formHelperService);
+    this.dateTimeForm = new DateTimeForm(dateTimeService);
+  }
 
   ngOnInit() {
-    this.dateTimeForm.init({ defaultDate: this.defaultDate, required: this.required });
-    this.dateTimeForm.valueChanges.pipe(
-      takeUntil(this._destroy$)
-    ).subscribe(
-      this._onValueChange.bind(this)
+    super.ngOnInit();
+    const required: boolean = this._deriveFormControlState();
+    this.dateTimeForm.init({ defaultDate: this.defaultDate, required });
+    this.onValueChanges(this.dateTimeForm).subscribe(
+      () => this.onChangeCb(this.dateTimeForm.toDate(this.allowUndefTime))
     );
   }
 
-  private _onValueChange(): void {
-    const curDateVal: Date = this.dateTimeForm.toDate();
-    if (curDateVal) {
-      this._changeCb(curDateVal);
-    }
+  /**
+   * Derives form control state (such as validation, touched, dirty) for the internal date time form
+   * based off of the externally exposed form control.
+   * @return Whether or not the date-time value is required.
+   */
+  private _deriveFormControlState(): boolean {
+    this._formHelperService.onMarkAsTouched(this.formControl, () => this.dateTimeForm.markAllAsTouched());
+    this._formHelperService.onMarkAsPristine(this.formControl, () => this.dateTimeForm.markAsPristine());
+    return this._formHelperService.hasRequiredValidator(this.formControl);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -65,30 +77,29 @@ export class DateTimeComponent implements OnInit, OnChanges, OnDestroy, ControlV
     }
   }
 
-  ngOnDestroy() {
-    this._destroy$.next();
-  }
-
+  /**
+   * @override
+   * @param date The date-time value to write.
+   */
   writeValue(date: Date): void {
-    this.dateTimeForm.patchFromDate(date);
-    this.defaultTime = this.dateTimeForm.get('time').value;
+    this.dateTimeForm.patchFromDate(date, { emitEvent: false });
   }
 
-  registerOnChange(changeCb: (date: Date) => void): void {
-    this._changeCb = changeCb;
-  }
-
+  /**
+   * Validates the date time form.
+   * @return Any validation errors that are present in the date time form; null if none are present.
+   */
   validate(): ValidationErrors {
     return (this.dateTimeForm.invalid ? this.dateTimeForm.errors : null);
   }
 
-  markAsTouched(): void {
-    this.dateTimeForm.markAllAsTouched();
+  /**
+   * @override
+   * @param isDisabled The disabled state to set.
+   */
+  setDisabledState(isDisabled: boolean): void {
+    (isDisabled)
+      ? this.dateTimeForm.disable()
+      : this.dateTimeForm.enable();
   }
-
-  markAsPristine(): void {
-    this.dateTimeForm.markAsPristine();
-  }
-
-  registerOnTouched(): void {}
 }

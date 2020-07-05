@@ -1,11 +1,9 @@
 import { Not } from 'typeorm';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { ClaimReqHistoryEntity } from 'database/src/entity/claim-req-history.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
-import { getOrmRepository, OrmEntityManager, OrmRepository } from '~orm/index';
+import { AccountEntity, ClaimReqHistoryEntity, DonationEntity } from '~entity';
+import { getOrmRepository, OrmEntityManager, OrmRepository } from '~orm';
+import { DonationHelper, NotificationType } from '~shared';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
 import { broadcastNotification } from '~web/helpers/messaging/notification';
-import { DonationHelper, NotificationType } from '~shared';
 
 const _donationHelper = new DonationHelper();
 
@@ -14,9 +12,9 @@ const _donationHelper = new DonationHelper();
  * The messages will be sent to all user's that were previously sent message(s) giving them the opportunity to claim the donation.
  * @param donation The donation.
  * @param manager The optional Entity Manager used to encompase all internal database writes within a transaction.
- * @return A promise that resolves once the operation completes.
+ * @return A promise that resolves to the claimed donation on completion.
  */
-export async function sendClaimUnavailableMessages(donation: DonationEntity, manager?: OrmEntityManager): Promise<void> {
+export async function sendClaimUnavailableMessages(donation: DonationEntity, manager?: OrmEntityManager): Promise<DonationEntity> {
   const claimReqHistoryRepo: OrmRepository<ClaimReqHistoryEntity> = (manager)
     ? manager.getRepository(ClaimReqHistoryEntity)
     : getOrmRepository(ClaimReqHistoryEntity);
@@ -43,6 +41,7 @@ export async function sendClaimUnavailableMessages(donation: DonationEntity, man
 
   // Cleanup claim request history items that are no longer needed.
   await claimReqHistoryRepo.delete({ donation });
+  return donation;
 }
 
 /**

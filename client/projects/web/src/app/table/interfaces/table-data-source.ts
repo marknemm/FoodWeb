@@ -2,6 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { TableColumn } from '~web/table/table-column';
+import { DeepReadonly } from '~shared';
 export { TableColumn };
 
 /**
@@ -13,7 +14,7 @@ export enum TableSelectionType {
   checkbox = 'checkbox'
 }
 
-export class TableDataSource<T> extends MatTableDataSource<T> {
+export class TableDataSource<T> extends MatTableDataSource<DeepReadonly<T>> {
 
   /**
    * Emitted whenever the (meta) structure of the table changes.
@@ -38,7 +39,7 @@ export class TableDataSource<T> extends MatTableDataSource<T> {
   private _selectionModel: SelectionModel<T>;
 
   constructor(
-    data: T[] = [],
+    data: DeepReadonly<T>[] = [],
     columns: (TableColumn | string)[] = [],
     selectionType?: TableSelectionType
   ) {
@@ -118,7 +119,7 @@ export class TableDataSource<T> extends MatTableDataSource<T> {
    * @param filter The filter string.
    * @return true if the row should be include, false if it should be exlcuded.
    */
-  private _filterPredicate(row: T, filter: string): boolean {
+  private _filterPredicate(row: DeepReadonly<T>, filter: string): boolean {
     let rowPropConcat = '';
     this.columns.forEach((column: TableColumn) => {
       const columnData = (column.dataTransform ? column.dataTransform(row, column.name) : (<any>row)[column.name]);

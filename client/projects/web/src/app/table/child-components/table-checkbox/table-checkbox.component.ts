@@ -1,6 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, DoCheck, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TableColumn, TableDataSource } from '~web/table/table-data-source';
+import { DeepReadonly } from '~shared';
 
 @Component({
   selector: 'food-web-table-checkbox',
@@ -16,7 +17,7 @@ export class TableCheckboxComponent<T = any> implements OnInit, DoCheck {
   /**
    * The row that the checkbox belongs to. If not set, then it is assumed that this is a header cell checkbox used for check/uncheck all functionality.
    */
-  @Input() row: T;
+  @Input() row: DeepReadonly<T>;
   /**
    * The column that the checkbox belongs to. If set, then the checkbox will belong to a column and will be used for property state update.
    * If not set, then the checkbox will belong to a row for row selection.
@@ -86,7 +87,7 @@ export class TableCheckboxComponent<T = any> implements OnInit, DoCheck {
       this.selectionModel.clear() :
       this.selectionModel.select(...this.dataSource.data);
     if (this.column) {
-      this.dataSource.data.forEach((row: T) => this._handleColumnCheckboxUpdt(row));
+      this.dataSource.data.forEach((row: DeepReadonly<T>) => this._handleColumnCheckboxUpdt(row));
     }
     this.change.emit(allSelected);
   }
@@ -106,7 +107,7 @@ export class TableCheckboxComponent<T = any> implements OnInit, DoCheck {
    * Handles the update of a column checkbox's checked state.
    * @param row The row containing the checkbox that was updated.
    */
-  private _handleColumnCheckboxUpdt(row: T): void {
+  private _handleColumnCheckboxUpdt(row: DeepReadonly<T>): void {
     let valueUpdt = this.selectionModel.isSelected(row);
 
     // If we have cell checkbox value mappings, then get the update value from these.

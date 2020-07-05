@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { NavigationEnd, Router, Event } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class PageTitleService {
   private _previousRoute = '';
 
   constructor(router: Router) {
-    router.events.subscribe((event: RouterEvent) => {
+    router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         const route: string = event.url.split(/[#?]/)[0];
         // Skip route changes that only impact route fragment or query parameters.

@@ -1,15 +1,16 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AccountReadRequest, AccountSortBy, AccountType } from '~shared';
-import { AccountFiltersForm } from '~web/account/account-filters.form';
-import { SortByOpt } from '~web/filter-list/sort-by-opt';
+import { AccountFiltersForm, AccountFiltersFormT } from '~web/account/account-filters.form';
+import { SortByOpt } from '~web/filtered-list/sort-by-opt';
 
 @Component({
   selector: 'food-web-account-filters',
   templateUrl: './account-filters.component.html',
   styleUrls: ['./account-filters.component.scss'],
 })
-export class AccountFiltersComponent implements OnInit {
+export class AccountFiltersComponent implements OnInit, OnChanges {
+
+  @Input() activeFilters: AccountFiltersFormT = {};
 
   @Output() filter = new EventEmitter<AccountReadRequest>();
 
@@ -23,9 +24,7 @@ export class AccountFiltersComponent implements OnInit {
     { name: 'Email Address', value: 'email' }
   ];
 
-  constructor(
-    private _activatedRoute: ActivatedRoute
-  ) {}
+  constructor() {}
 
   get isDonorAccountType(): boolean {
     return (this.filtersForm.get('accountType').value === AccountType.Donor);
@@ -40,21 +39,18 @@ export class AccountFiltersComponent implements OnInit {
   }
 
   get isOrganizationAccountType(): boolean {
-    const organizationAccountTypes: AccountType[] = [AccountType.Donor, AccountType.Receiver];
-    return (organizationAccountTypes.indexOf(this.filtersForm.get('accountType').value) >= 0);
+    return (this.isDonorAccountType || this.isReceiverAccountType);
   }
 
-  ngOnInit() {
-    this._activatedRoute.queryParams.subscribe(
-      (filters: Params) => this._refreshActiveFitlers(filters)
-    );
-  }
+  ngOnInit() {}
 
-  protected _refreshActiveFitlers(filters: Params): void {
-    this.filtersForm.patchValue(filters);
-    this.sortByOpts[0].name = this.filtersForm.get('accountType').value
-      ? (this.isVolunteerAccountType ? 'Volunteer Name' : 'Organization Name')
-      : 'Organization/Volunteer Name';
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.activeFilters) {
+      this.filtersForm.patchValue(this.activeFilters);
+      this.sortByOpts[0].name = this.filtersForm.get('accountType').value
+        ? (this.isVolunteerAccountType ? 'Volunteer Name' : 'Organization Name')
+        : 'Organization/Volunteer Name';
+    }
   }
 
 }

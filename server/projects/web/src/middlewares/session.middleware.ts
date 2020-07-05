@@ -32,7 +32,7 @@ function _genSessionOpts(): SessionOptions {
     url: process.env.REDIS_URL,
     ttl: (ttlMs / 1000), // NOTE: Time-to-live here is in seconds!
     pass: process.env.REDIS_PASSWORD,
-    logErrors: (process.env.LOG_CONSOLE_REDIS_ERRS === 'true'),
+    logErrors: (process.env.LOG_CONSOLE_REDIS_ERRS === 'true')
   };
 
   return {

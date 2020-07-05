@@ -1,10 +1,9 @@
 import { randomBytes } from 'crypto';
 import { EntityManager, getConnection, getRepository } from 'typeorm';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { PasswordResetEntity } from 'database/src/entity/password-reset';
-import { QueryResult } from '~orm/index';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { AccountEntity, PasswordResetEntity } from '~entity';
+import { QueryResult } from '~orm';
 import { PasswordResetRequest } from '~shared';
+import { FoodWebError } from '~web/helpers/response/food-web-error';
 import { readAccount, readAccounts } from '../account/read-accounts';
 import { savePassword } from './save-password';
 
@@ -53,7 +52,7 @@ async function _findAccount(usernameEmail: string): Promise<AccountEntity> {
 async function _findOrGenPasswordResetEntity(account: AccountEntity): Promise<PasswordResetEntity> {
   return getConnection().transaction(async (manager: EntityManager) => {
     // Attempt to load already created password reset entity (user may click 'Resend Email').
-    let passwordResetEntity: PasswordResetEntity = await manager.getRepository(PasswordResetEntity).findOne({ 
+    let passwordResetEntity: PasswordResetEntity = await manager.getRepository(PasswordResetEntity).findOne({
       account: { id: account.id }
     });
     // If we cannot load password reset entity, then generate a new one.

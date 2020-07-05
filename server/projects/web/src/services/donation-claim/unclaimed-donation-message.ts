@@ -1,8 +1,8 @@
-import { DonationEntity } from 'database/src/entity/donation.entity';
+import { DonationEntity } from '~entity';
+import { Account, DonationHelper, NotificationType } from '~shared';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
 import { sendNotification } from '~web/helpers/messaging/notification';
-import { UpdateDiff } from '~web/interfaces/update-diff';
-import { Account, DonationHelper, NotificationType } from '~shared';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { sendDeliveryUnavailableMessages } from '../delivery/delivery-unavailable-message';
 
 const _donationHelper = new DonationHelper();
@@ -14,7 +14,7 @@ const _donationHelper = new DonationHelper();
  */
 export async function sendUnclaimedDonationMessages(unclaimDiff: UpdateDiff<DonationEntity>): Promise<DonationEntity> {
   const messagePromises: Promise<any>[] = [];
-  
+
   messagePromises.push(
     _sendEmailToAllDonationAccounts(unclaimDiff)
   );

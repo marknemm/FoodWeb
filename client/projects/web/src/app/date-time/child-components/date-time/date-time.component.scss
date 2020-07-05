@@ -1,38 +1,34 @@
-.date-time-form.inline-fields {
-  $inline-field-padding: 15px;
+.date-time-form {
+  &.inline-fields {
+    $inline-field-padding: 15px;
 
-  .primary-label {
-    font-size: 13px;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    line-height: 18px;
-    color: rgba(0, 0, 0, 0.54);
-    margin-bottom: -15px;
-  }
+    .primary-label {
+      font-size: 13px;
+      font-family: Roboto, "Helvetica Neue", sans-serif;
+      line-height: 18px;
+      color: rgba(0, 0, 0, 0.54);
+      margin-bottom: -15px;
+    }
 
-  .date-field,
-  .time-field {
-    display: inline-block;
-    max-width: 50%;
-    box-sizing: border-box;
-  }
+    food-web-date,
+    food-web-time {
+      display: inline-block;
+      box-sizing: border-box;
+    }
 
-  .date-field {
-    padding-right: $inline-field-padding;
-  }
-  
-  .time-field {
-    padding-left: $inline-field-padding;
-  }
-}
+    food-web-date {
+      padding-right: $inline-field-padding;
+    }
 
-.date-time-display {
-  .date,
-  .time {
-    display: inline-block;
-  }
+    &.editing {
+      food-web-date,
+      food-web-time {
+        width: 50%;
+      }
 
-  .date.bold,
-  .time.bold {
-    font-weight: bold;
+      food-web-time {
+        padding-left: $inline-field-padding;
+      }
+    }
   }
 }

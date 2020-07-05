@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { AccountHelper, AccountType, DonationReadRequest } from '~shared';
+import { map, switchMap } from 'rxjs/operators';
+import { Account, AccountHelper, AccountType, DonationReadRequest } from '~shared';
+import { AccountReadService } from '~web/account/account-read/account-read.service';
+import { AccountSaveService } from '~web/account/account-save/account-save.service';
 import { AccountForm, AccountFormKey } from '~web/account/account.form';
-import { Account, AccountService } from '~web/account/account/account.service';
 import { PasswordFormT } from '~web/password/password.form';
 import { SessionService } from '~web/session/session/session.service';
 import { SaveCb } from '~web/shared/child-components/edit-save-button/edit-save-button.component';
@@ -29,7 +30,8 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     public sessionService: SessionService,
     public accountHelper: AccountHelper,
     public signupVerificationService: SignupVerificationService,
-    protected _accountService: AccountService,
+    protected _accountReadService: AccountReadService,
+    protected _accountSaveService: AccountSaveService,
     protected _activatedRoute: ActivatedRoute,
     protected _router: Router
   ) {
@@ -62,7 +64,9 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _listenAccountChange(): void {
-    this._accountService.listenAccountQueryChange(this._activatedRoute).subscribe((account: Account) => {
+    this._activatedRoute.params.pipe(
+      switchMap((params: Params) => this._accountReadService.handleAccountQueryChange(params))
+    ).subscribe((account: Account) => {
       this._hasAccountOwnership = false;
       this._accountNotFound = !account;
       if (!this._accountNotFound) {
@@ -71,15 +75,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
         this._seeDonationsLinkParams = this._genSeeDonationLinkParams(account);
         this.accountForm.patchValue(account);
       }
-      this._router.navigate(
-        [], {
-          relativeTo: this._activatedRoute,
-          queryParams: { expandAll: !this.hasAccountOwnership ? true : undefined },
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-          fragment: this._activatedRoute.snapshot.fragment
-        }
-      );
+      this._renavigateToAccountDetailsPage();
     });
   }
 
@@ -95,6 +91,18 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     return {};
   }
 
+  private _renavigateToAccountDetailsPage(): void {
+    this._router.navigate(
+      [], {
+        relativeTo: this._activatedRoute,
+        queryParams: { expandAll: !this.hasAccountOwnership ? true : undefined },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+        fragment: this._activatedRoute.snapshot.fragment
+      }
+    );
+  }
+
   ngOnDestroy() {
     this._destroy$.next();
   }
@@ -105,7 +113,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   private _saveAccountSection(sectionName: AccountFormKey): Observable<boolean> {
     const account: Account = this.accountForm.toAccount();
-    return this._accountService.updateAccountSection(account, sectionName).pipe(
+    return this._accountSaveService.updateAccountSection(account, <keyof Account>sectionName).pipe(
       map((savedAccount: Account) =>
         this._handleSaveSuccess(sectionName, savedAccount) // Implicit return true.
       )
@@ -113,8 +121,8 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   savePassword(): Observable<boolean> {
-    const passwordUpdate: PasswordFormT = this.accountForm.toPassword();
-    return this._accountService.updatePassword(this._originalAccount, passwordUpdate).pipe(
+    const passwordUpdate: PasswordFormT = this.accountForm.passwordFormValue;
+    return this._accountSaveService.updatePassword(this._originalAccount, passwordUpdate).pipe(
       map(() => this._handleSaveSuccess('password', this.originalAccount)) // Implicit return true.
     );
   }
@@ -122,7 +130,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   private _handleSaveSuccess(sectionName: AccountFormKey, savedAccount: Account): true {
     this._originalAccount = savedAccount;
     const accountSectionPatch: Partial<Account> = {};
-    accountSectionPatch[sectionName] = savedAccount[sectionName];
+    (<any>accountSectionPatch)[sectionName] = savedAccount[<keyof Account>sectionName];
     this.accountForm.patchValue(accountSectionPatch);
     return true;
   }

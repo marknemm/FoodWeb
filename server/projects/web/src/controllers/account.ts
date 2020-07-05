@@ -1,13 +1,13 @@
 import express = require('express');
 import { Request, Response } from 'express';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { PasswordResetEntity } from 'database/src/entity/password-reset';
-import { UnverifiedAccountEntity } from 'database/src/entity/unverified-account.entity';
-import { QueryResult } from '~orm/index';
+import { AccountEntity, PasswordResetEntity, UnverifiedAccountEntity } from '~entity';
+import { QueryResult } from '~orm';
+import { Account, AccountAutocompleteItem, AccountAutocompleteRequest, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest, SignupRequest } from '~shared';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { genListResponse } from '~web/helpers/response/list-response';
-import { UpdateDiff } from '~web/interfaces/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { ensureSessionActive } from '~web/middlewares/session.middleware';
+import { genAccountAutocomplete } from '~web/services/account/account-autocomplete';
 import { recreateUnverifiedAccount, verifyAccount } from '~web/services/account/account-verification';
 import { sendAccountVerificationEmail, sendAccountVerificationMessage } from '~web/services/account/account-verification-message';
 import { readAccount, readAccounts } from '~web/services/account/read-accounts';
@@ -17,11 +17,68 @@ import { AuditEventType, saveAudit, saveUpdateAudit } from '~web/services/audit/
 import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '~web/services/password/password-reset-message';
 import { updatePassword } from '~web/services/password/save-password';
 import { resetPassword, savePasswordResetToken } from '~web/services/password/save-password-reset';
-import { Account, AccountCreateRequest, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest } from '~shared';
 
-const router = express.Router();
+export const router = express.Router();
 
-router.post('/verify', (req: Request, res: Response) => {
+router.get('/', handleGetAccounts);
+export function handleGetAccounts(req: Request, res: Response) {
+  const readRequest: AccountReadRequest = req.query;
+  const myAccount: Account = (req.session ? req.session.account : null);
+  readAccounts(readRequest, myAccount)
+    .then((queryResult: QueryResult<AccountEntity>) =>
+      res.send(genListResponse(queryResult, readRequest))
+    )
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.get('/autocomplete', handleGetAccountAutocomplete);
+export function handleGetAccountAutocomplete(req: Request, res: Response) {
+  const autocompleteRequest: AccountAutocompleteRequest = req.query;
+  genAccountAutocomplete(autocompleteRequest)
+    .then((accountAutocompleteFeed: AccountAutocompleteItem[]) => res.send(accountAutocompleteFeed))
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.get('/recover-username', handleGetRecoverUsername);
+export function handleGetRecoverUsername(req: Request, res: Response) {
+  const email: string = req.query.email;
+  readAccounts({ email, page: 0, limit: 1000 }, null)
+    .then((queryResult: QueryResult<AccountEntity>) => sendUsernameRecoveryEmail(queryResult.entities))
+    .then(() => res.send())
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.get('/reset-password', handleGetResetPassword);
+export function handleGetResetPassword(req: Request, res: Response) {
+  const usernameEmail: string = req.query.usernameEmail;
+  savePasswordResetToken(usernameEmail)
+    .then((passwordResetEntity: PasswordResetEntity) =>
+      sendPasswordResetEmail(passwordResetEntity.account, passwordResetEntity.resetToken)
+    )
+    .then(() => res.send())
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.get('/resend-verification-email', ensureSessionActive, handleGetResendMyVerificationEmail);
+export function handleGetResendMyVerificationEmail(req: Request, res: Response) {
+  const account: AccountEntity = req.session.account;
+  recreateUnverifiedAccount(account)
+    .then((unverifiedAccount: UnverifiedAccountEntity) => sendAccountVerificationEmail(account, unverifiedAccount))
+    .then(() => res.send())
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.get('/:id', handleGetAccount);
+export function handleGetAccount(req: Request, res: Response) {
+  const id: number = parseInt(req.params.id, 10);
+  const myAccount: Account = (req.session ? req.session.account : null);
+  readAccount(id, myAccount)
+    .then((account: AccountEntity) => res.send(account))
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.post('/verify', handlePostAccountVerify);
+export function handlePostAccountVerify(req: Request, res: Response) {
   const account: AccountEntity = (req.session ? req.session.account : null);
   const verificationReq: AccountVerificationRequest = req.body;
   verifyAccount(account, verificationReq)
@@ -29,19 +86,21 @@ router.post('/verify', (req: Request, res: Response) => {
     .catch(genErrorResponseRethrow.bind(this, res))
     .then((account: AccountEntity) => saveAudit(AuditEventType.VerifyAccount, account, account, verificationReq.recaptchaScore))
     .catch((err: Error) => console.error(err));
-});
+}
 
-router.post('/', (req: Request, res: Response) => {
-  const createRequest: AccountCreateRequest = req.body;
-  createAccount(createRequest)
+router.post('/', handlePostAccount);
+export function handlePostAccount(req: Request, res: Response) {
+  const signupRequest: SignupRequest = req.body;
+  createAccount(signupRequest)
     .then((newAccountData: NewAccountData) => sendAccountVerificationMessage(newAccountData))
     .then((account: AccountEntity) => { res.send(account); return account; })
-    .catch(genErrorResponseRethrow.bind(this, res))    
-    .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, createRequest.recaptchaScore))
+    .catch(genErrorResponseRethrow.bind(this, res))
+    .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, signupRequest.recaptchaScore))
     .catch((err: Error) => console.error(err));
-});
+}
 
-router.put('/:id/section', ensureSessionActive, (req: Request, res: Response) => {
+router.put('/:id/section', ensureSessionActive, handlePutAccountSection);
+export function handlePutAccountSection(req: Request, res: Response) {
   const updateReq: AccountSectionUpdateReqeust = req.body;
   updateAccountSection(updateReq, req.session.account)
     .then(_handleAccountSaveResult.bind(this, req, res))
@@ -50,9 +109,10 @@ router.put('/:id/section', ensureSessionActive, (req: Request, res: Response) =>
       saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff, updateReq.recaptchaScore)
     )
     .catch((err: Error) => console.error(err));
-});
+}
 
-router.put('/:id/password', ensureSessionActive, (req: Request, res: Response) => {
+router.put('/:id/password', ensureSessionActive, handlePutPassword);
+export function handlePutPassword(req: Request, res: Response) {
   const myAccount: AccountEntity = req.session.account;
   const updateReq: PasswordUpdateRequest = req.body;
   updatePassword(updateReq, myAccount)
@@ -60,9 +120,10 @@ router.put('/:id/password', ensureSessionActive, (req: Request, res: Response) =
     .catch(genErrorResponseRethrow.bind(this, res))
     .then(() => saveUpdateAudit(AuditEventType.UpdatePassword, myAccount, { old: 'xxx', new: 'xxx' }, updateReq.recaptchaScore))
     .catch((err: Error) => console.error(err));
-});
+}
 
-router.put('/reset-password/', (req: Request, res: Response) => {
+router.put('/reset-password/', handlePutResetPassword);
+export function handlePutResetPassword(req: Request, res: Response) {
   const resetReq: PasswordResetRequest = req.body;
   resetPassword(resetReq)
     .then((account: AccountEntity) => { res.send(account); return account; })
@@ -73,9 +134,10 @@ router.put('/reset-password/', (req: Request, res: Response) => {
       return account;
     })
     .catch((err: Error) => console.error(err));
-});
+}
 
-router.put('/:id', ensureSessionActive, (req: Request, res: Response) => {
+router.put('/:id', ensureSessionActive, handlePutAccount);
+export function handlePutAccount(req: Request, res: Response) {
   const updateReq: AccountUpdateRequest = req.body;
   updateAccount(updateReq, req.session.account)
     .then(_handleAccountSaveResult.bind(this, req, res))
@@ -84,51 +146,7 @@ router.put('/:id', ensureSessionActive, (req: Request, res: Response) => {
       saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff, updateReq.recaptchaScore)
     )
     .catch((err: Error) => console.error(err));
-});
-
-router.get('/recover-username', (req: Request, res: Response) => {
-  const email: string = req.query.email;
-  readAccounts({ email, page: 0, limit: 1000 }, null)
-    .then((queryResult: QueryResult<AccountEntity>) => sendUsernameRecoveryEmail(queryResult.entities))
-    .then(() => res.send())
-    .catch(genErrorResponse.bind(this, res));
-});
-
-router.get('/reset-password', (req: Request, res: Response) => {
-  const usernameEmail: string = req.query.usernameEmail;
-  savePasswordResetToken(usernameEmail)
-    .then((passwordResetEntity: PasswordResetEntity) =>
-      sendPasswordResetEmail(passwordResetEntity.account, passwordResetEntity.resetToken)
-    )
-    .then(() => res.send())
-    .catch(genErrorResponse.bind(this, res));
-});
-
-router.get('/resend-verification-email', ensureSessionActive, (req: Request, res: Response) => {
-  const account: AccountEntity = req.session.account;
-  recreateUnverifiedAccount(account)
-    .then((unverifiedAccount: UnverifiedAccountEntity) => sendAccountVerificationEmail(account, unverifiedAccount))
-    .then(() => res.send())
-    .catch(genErrorResponse.bind(this, res));
-});
-
-router.get('/:id', (req: Request, res: Response) => {
-  const id: number = parseInt(req.params.id, 10);
-  const myAccount: Account = (req.session ? req.session.account : null);
-  readAccount(id, myAccount)
-    .then((account: AccountEntity) => res.send(account))
-    .catch(genErrorResponse.bind(this, res));
-});
-
-router.get('/', (req: Request, res: Response) => {
-  const readRequest: AccountReadRequest = req.query;
-  const myAccount: Account = (req.session ? req.session.account : null);
-  readAccounts(readRequest, myAccount)
-    .then((queryResult: QueryResult<AccountEntity>) =>
-      res.send(genListResponse(queryResult, readRequest))
-    )
-    .catch(genErrorResponse.bind(this, res));
-});
+}
 
 function _handleAccountSaveResult(req: Request, res: Response, accountUpdtDiff: UpdateDiff<AccountEntity>): UpdateDiff<AccountEntity> {
   const account: AccountEntity = accountUpdtDiff.new;
@@ -144,5 +162,3 @@ function _handleAccountVerificationResult(req: Request, res: Response, account: 
   res.send(account);
   return account;
 }
-
-module.exports = router;

@@ -6,13 +6,13 @@
   "password": "foodweb",
   "database": "foodweb",
   "entities": [
-    "./dist/server/database/src/entity/**/*.js"
+    "./dist/server/projects/web/src/database/entity/**/*.js"
   ],
   "migrations": [
-    "./dist/server/database/src/migration/**/*.js"
+    "./dist/server/projects/web/src/database/migration/**/*.js"
   ],
   "cli": {
-    "entitiesDir": "./database/src/entity",
-    "migrationsDir": "./database/src/migration"
+    "entitiesDir": "./projects/web/src/database/entity",
+    "migrationsDir": "./projects/web/src/database/migration"
   }
 }

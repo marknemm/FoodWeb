@@ -10,12 +10,15 @@ import { ConstantsService } from '~web/shared/constants/constants.service';
 })
 export class OperationHoursComponent implements OnInit {
 
+  @Input() allowClear = false;
   @Input() editing = false;
-  @Input() operationHours: OperationHours;
   @Input() formGroup: OperationHoursForm;
+  @Input() minutesGap = 5;
+  @Input() operationHours: OperationHours;
+  @Input() allowOverlayClick = false;
   @Input() timeWidth = '110px';
-  @Input() weekdayWidth = '125px';
   @Input() weekdayPadding = '0 20px 0 0';
+  @Input() weekdayWidth = '125px';
 
   constructor(
     public constantsService: ConstantsService

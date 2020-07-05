@@ -18,11 +18,11 @@
     <div class="row">
       <div class="pickup-window col-sm-6">
         <div class="inline-label">Pickup Window:</div>
-        <food-web-date-time-range class="d-inline-block" [range]="pickupWindow" [boldTime]="true"></food-web-date-time-range>
+        <food-web-date-time-range class="d-inline-block" [range]="donation | pickupWindow" [boldTime]="true"></food-web-date-time-range>
       </div>
-      <div *ngIf="dropOffWindow" class="drop-off-window col-sm-6">
+      <div *ngIf="donation | dropOffWindow" class="drop-off-window col-sm-6">
         <div class="inline-label">Drop-off Window:</div>
-        <food-web-date-time-range class="d-inline-block" [range]="dropOffWindow" [boldTime]="true"></food-web-date-time-range>
+        <food-web-date-time-range class="d-inline-block" [range]="donation | dropOffWindow" [boldTime]="true"></food-web-date-time-range>
       </div>
     </div>
   </mat-card-content>

@@ -1,5 +1,4 @@
 import { formatDate } from '@angular/common';
-import { Injectable } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 import { DateTimeService } from '~web/date-time/date-time/date-time.service';
@@ -15,7 +14,6 @@ export interface DateTimeFormT {
   time: string;
 }
 
-@Injectable()
 export class DateTimeForm extends TypedFormGroup<DateTimeFormT> {
 
   private _required: boolean;
@@ -55,19 +53,22 @@ export class DateTimeForm extends TypedFormGroup<DateTimeFormT> {
     config.defaultDate = config.defaultDate === 'Now' ? new Date() : config.defaultDate;
   }
 
-  patchFromDate(date: Date): void {
+  patchFromDate(date: Date, options?: { onlySelf?: boolean; emitEvent?: boolean; }): void {
     if (date) {
       const time: string = this._dateTimeService.formatTime(date);
-      this.patchValue({ date, time });
+      this.patchValue({ date, time }, options);
     } else {
-      this.patchValue({ date: null, time: '' });
+      this.patchValue({ date: null, time: '' }, options);
     }
   }
 
-  toDate(): Date {
-    if (this.value.date && this.value.time) {
-      const dateStr: string = formatDate(this.value.date, 'M/d/yyyy', 'en-US')
-      return new Date(`${dateStr} ${this.value.time}`);
+  toDate(allowUndefTime = false): Date {
+    if (this.value.date && (this.value.time || allowUndefTime)) {
+      const dateStr: string = formatDate(this.value.date, 'M/d/yyyy', 'en-US');
+      const dateTimeStr: string = (this.value.time)
+        ? `${dateStr} ${this.value.time}`
+        : dateStr;
+      return new Date(dateTimeStr);
     }
     return null;
   }

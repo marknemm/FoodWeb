@@ -1,6 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { getRepository } from 'typeorm';
-import { MapRouteEntity } from 'database/src/entity/map-route.entity';
+import { MapRouteEntity } from '~entity';
 import { MapRouteEndpoint, queryRoute, routeEndpointToLocation } from '~web/helpers/map/directions';
 import { ContactInfo, MapRoute } from '~shared';
 

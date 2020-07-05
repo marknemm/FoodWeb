@@ -1,5 +1,5 @@
-import { AppDataEntity } from 'database/src/entity/app-data.entity';
-import { OrmEntityManager } from '~orm/index';
+import { AppDataEntity } from '~entity';
+import { OrmEntityManager } from '~orm';
 
 export function deleteAppData(accountId: number, deviceUuid: string): Promise<AppDataEntity> {
   return OrmEntityManager.transaction((manager: OrmEntityManager) =>

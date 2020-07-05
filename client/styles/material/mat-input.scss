@@ -1,0 +1,6 @@
+@import "../constants.scss";
+
+.mat-input-element.mat-autosize {
+  overflow-y: hidden;
+  min-height: 18px;
+}

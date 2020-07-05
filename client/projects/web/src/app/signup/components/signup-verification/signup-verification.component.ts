@@ -16,7 +16,7 @@ import { SignupVerificationService } from '~web/signup/signup-verification/signu
 export class SignupVerificationComponent implements OnInit {
 
   readonly supportEmail: string = environment.supportEmail;
-  
+
   private _verifySuccess = false;
   private _errMessage = '';
 
@@ -46,7 +46,7 @@ export class SignupVerificationComponent implements OnInit {
     login$.subscribe(() => {
       (!this.sessionService.loggedIn || !this.sessionService.account.verified)
         ? this.signupVerificationService.verifyAccount().pipe(
-            catchError(this._handleErrResponse.bind(this))
+            catchError((err: HttpErrorResponse) => this._handleErrResponse(err))
           ).subscribe(() => this._verifySuccess = true)
         : this._verifySuccess = true;
     });

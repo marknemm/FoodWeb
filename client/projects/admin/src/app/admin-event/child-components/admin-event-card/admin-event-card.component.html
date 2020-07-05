@@ -12,6 +12,9 @@
       <a *ngIf="!hideEdit" class="edit-link" routerLink="/event/edit/{{ featuredEvent.id }}" [state]="{ featuredEvent: featuredEvent }">
         <button mat-raised-button type="button" color="primary">Edit</button>
       </a>
+      <a *ngIf="!hideViewRegistrations" class="view-registrations-link" routerLink="/event/registrations/{{ featuredEvent.id }}">
+        <button mat-raised-button type="button" color="primary">View Registrations</button>
+      </a>
     </div>
   </mat-card-actions>
 </food-web-event-card>

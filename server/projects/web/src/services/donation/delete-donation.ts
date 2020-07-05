@@ -1,9 +1,7 @@
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { ContactInfoEntity } from 'database/src/entity/contact-info.entity';
-import { DonationEntity } from 'database/src/entity/donation.entity';
-import { OrmEntityManager } from '~orm/index';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { AccountEntity, ContactInfoEntity, DonationEntity } from '~entity';
+import { OrmEntityManager } from '~orm';
 import { DonationDeleteRequest, DonationHelper } from '~shared';
+import { FoodWebError } from '~web/helpers/response/food-web-error';
 import { sendDeliveryUnavailableMessages } from '../delivery/delivery-unavailable-message';
 import { sendClaimUnavailableMessages } from '../donation-claim/claim-unavailable-message';
 import { readDonation } from './read-donations';

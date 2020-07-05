@@ -1,0 +1,40 @@
+<form [formGroup]="formGroup">
+  <mat-dialog-content>
+    <p class="dialog-message">
+      Select the volunteer account that will schedule the delivery:
+    </p>
+
+    <food-web-account-select
+      formControlName="volunteerAccount"
+      accountType="Volunteer"
+      floatLabel="never"
+      placeholder="Volunteer Account"
+      filterPlaceholder="Seach Volunteer Accounts..."
+    ></food-web-account-select>
+
+    <p class="dialog-message">
+      Select the pickup window for the delivery:
+    </p>
+
+    <food-web-date-time-range-radio
+      formControlName="pickupWindow"
+      ariaLabel="Select delivery pickup window"
+      [stepMins]="config.stepMins"
+      [rangeWindowStart]="config.donation?.pickupWindowStart"
+      [rangeWindowEnd]="config.donation?.pickupWindowEnd"
+      [allowPast]="true">
+    </food-web-date-time-range-radio>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <div class="fill align-right">
+      <button mat-button type="button" color="warn" (click)="dialogRef.close(null)">Cancel</button>
+      <button mat-raised-button
+        [disabled]="formGroup.invalid"
+        type="submit"
+        color="primary"
+        (click)="dialogRef.close(formGroup.value)"
+      >Submit</button>
+    </div>
+  </mat-dialog-actions>
+</form>

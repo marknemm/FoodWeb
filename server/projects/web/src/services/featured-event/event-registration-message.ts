@@ -1,4 +1,4 @@
-import { EventRegistrationEntity } from 'database/src/entity/event-registration.entity';
+import { EventRegistrationEntity } from '~entity';
 import { MailTransporter, sendEmail } from '~web/helpers/messaging/email';
 import { DateTimeHelper } from '~shared';
 

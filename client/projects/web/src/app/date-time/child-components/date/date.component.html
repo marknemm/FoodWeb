@@ -1,0 +1,29 @@
+<div *ngIf="editing; else displayTmpl" class="date-edit">
+  <mat-form-field [floatLabel]="floatLabels" (click)="datePicker.open()" class="fill">
+    <input matInput
+      [errorStateMatcher]="errorStateMatcher"
+      [formControl]="formControl"
+      [matDatepicker]="datePicker"
+      [max]="maxDate"
+      [min]="minDate"
+      [placeholder]="placeholder"
+      (blur)="onTouchedCb()"
+      autocomplete="off"
+      readonly="true">
+    <button mat-icon-button matSuffix
+      *ngIf="showClearButton"
+      (click)="clearDate($event)"
+      color="warn"
+      type="button">
+      <mat-icon>clear</mat-icon>
+    </button>
+    <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+    <mat-datepicker touchUi #datePicker ></mat-datepicker>
+  </mat-form-field>
+</div>
+
+<ng-template #displayTmpl>
+  <span [ngClass]="{ bold: bold }" [style.minWidth]="minWidth" class="date-display">
+    {{ date | foodWebFormatDate }}
+  </span>
+</ng-template>

@@ -1,21 +1,27 @@
-<food-web-filter-list class="accounts" listItemsLabel="Accounts" [totalCount]="totalCount">
-  <food-web-filter-list-title>{{ pageTitleService.title }}</food-web-filter-list-title>
+<food-web-filtered-list class="accounts" listItemsLabel="Accounts" [totalCount]="totalCount">
+  <food-web-filtered-list-title>{{ pageTitleService.title }}</food-web-filtered-list-title>
 
-  <food-web-filter-list-toolbar-items>
+  <food-web-filtered-list-toolbar>
+    <food-web-search-bar
+      placeholder="Search Accounts..."
+      [formControl]="accountFilters.filtersForm.get('fullTextQuery')"
+      (search)="filterAccounts(accountFilters.filtersForm.toAccountReadRequest())"
+    ></food-web-search-bar>
+
     <a [routerLink]="['/account/compose-message']" queryParamsHandling="preserve" class="compose-message-link">
       <button mat-button type="button" matTooltip="Compose Message">
         <mat-icon>email</mat-icon>
       </button>
     </a>
-  </food-web-filter-list-toolbar-items>
+  </food-web-filtered-list-toolbar>
 
-  <food-web-filter-list-content>
+  <food-web-filtered-list-content>
     <div class="col-lg-6" *ngFor="let account of accounts">
       <food-web-account-teaser [account]="account" [addressFirst]="true" [hasEmailSubtitle]="true"></food-web-account-teaser>
     </div>
-  </food-web-filter-list-content>
+  </food-web-filtered-list-content>
 
-  <food-web-filter-list-filters>
-    <food-web-admin-account-filters (filter)="filterAccounts($event)"></food-web-admin-account-filters>
-  </food-web-filter-list-filters>
-</food-web-filter-list>
+  <food-web-list-filters>
+    <food-web-admin-account-filters #accountFilters [activeFilters]="activeFilters" (filter)="filterAccounts($event)"></food-web-admin-account-filters>
+  </food-web-list-filters>
+</food-web-filtered-list>

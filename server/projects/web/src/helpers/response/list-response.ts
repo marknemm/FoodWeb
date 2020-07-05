@@ -1,5 +1,5 @@
 import { ListResponse, PagingParams } from '~shared';
-import { QueryResult } from '~orm/index';
+import { QueryResult } from '~orm';
 
 /**
  * Generates a (client ready) generic list response from given query data.

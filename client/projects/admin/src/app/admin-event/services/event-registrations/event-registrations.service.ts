@@ -1,51 +1,42 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { environment } from '~admin/environments/environment';
-import { EventRegistration, FeaturedEvent } from '~shared';
-import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
+import { FeaturedEvent } from '~shared';
+import { ImmutableStore } from '~web/data-structure/immutable-store';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventRegistrationsService {
 
-  readonly eventsUrl = `${environment.server}/featured-event`;
-  readonly eventIdentifiersUrl = `${this.eventsUrl}/identifiers`;
-  readonly eventRegistrationsUrlTmpl = `${this.eventsUrl}/:id/registrations`;
-
-  private _eventRegistrationsLoading = false;
-  private _eventsLoading = false;
+  readonly url = `${environment.server}/featured-event/:id/registrations`;
+  readonly featuredEventStore = new ImmutableStore<FeaturedEvent>();
 
   constructor(
     private _httpClient: HttpClient,
-    private _errorHandlerService: ErrorHandlerService
+    private _httpResponseService: HttpResponseService
   ) {}
 
-  get eventRegistrationsLoading(): boolean {
-    return this._eventRegistrationsLoading;
+  get loading(): boolean {
+    return this._httpResponseService.loading;
   }
 
-  get eventsLoading(): boolean {
-    return this._eventsLoading;
+  getEventOnIdUrlParamChange(activatedRoute: ActivatedRoute): void {
+    activatedRoute.paramMap.subscribe((paramMap: ParamMap) => {
+      const eventIdStr: string = paramMap.get('id');
+      this._getEventWithRegistrations(eventIdStr);
+    });
   }
 
-  getEventIdentifiers(): Observable<Partial<FeaturedEvent>[]> {
-    this._eventsLoading = true;
-    return this._httpClient.get<Partial<FeaturedEvent>[]>(this.eventIdentifiersUrl, { withCredentials: true }).pipe(
-      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
-      finalize(() => this._eventsLoading )
-    )
-  }
-
-  getEventRegistrations(eventIdentifiersStr: string): Observable<EventRegistration[]> {
-    const featuredEventIdStr: string = eventIdentifiersStr.split(':')[0];
-    const eventRegistrationsUrl: string = this.eventRegistrationsUrlTmpl.replace(':id', featuredEventIdStr);
-    this._eventRegistrationsLoading = true;
-    return this._httpClient.get<EventRegistration[]>(eventRegistrationsUrl, { withCredentials: true }).pipe(
-      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
-      finalize(() => this._eventRegistrationsLoading = false)
-    );
+  private _getEventWithRegistrations(eventIdStr: string): void {
+    const url: string = this.url.replace(':id', eventIdStr);
+    this._httpClient.get<FeaturedEvent>(url, { withCredentials: true }).pipe(
+      this._httpResponseService.handleHttpResponse({
+        immutableStore: this.featuredEventStore,
+        showPageProgressOnLoad: false
+      })
+    ).subscribe();
   }
 }

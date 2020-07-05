@@ -1,15 +1,11 @@
 import { plainToClass } from 'class-transformer';
 import { QueryFailedError } from 'typeorm';
-import { AccountEntity } from 'database/src/entity/account.entity';
-import { ContactInfoEntity } from 'database/src/entity/contact-info.entity';
-import { OperationHoursEntity } from 'database/src/entity/operation-hours.entity';
-import { UnverifiedAccountEntity } from 'database/src/entity/unverified-account.entity';
-import { OrmEntityManager, OrmRepository } from '~orm/index';
+import { AccountEntity, ContactInfoEntity, OperationHoursEntity, UnverifiedAccountEntity } from '~entity';
+import { OrmEntityManager, OrmRepository } from '~orm';
+import { AccountHelper, AccountSectionUpdateReqeust, AccountUpdateRequest, OperationHoursHelper, SignupRequest } from '~shared';
 import { geocode, geoTimezone } from '~web/helpers/map/geocoder';
+import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { FoodWebError } from '~web/helpers/response/food-web-error';
-import { AccountUpdateRequest } from '~shared';
-import { UpdateDiff } from '~web/interfaces/update-diff';
-import { AccountCreateRequest, AccountHelper, AccountSectionUpdateReqeust, NotificationSettings, OperationHoursHelper } from '~shared';
 import { updateMapRouteEndpoints } from '../map/save-map-route';
 import { savePassword } from '../password/save-password';
 import { createUnverifiedAccount } from './account-verification';
@@ -17,7 +13,7 @@ import { createUnverifiedAccount } from './account-verification';
 const _accountHelper = new AccountHelper();
 const _opHoursHelper = new OperationHoursHelper();
 
-export async function createAccount(request: AccountCreateRequest): Promise<NewAccountData> {
+export async function createAccount(request: SignupRequest): Promise<NewAccountData> {
   const accountToSave: AccountEntity = plainToClass(AccountEntity, request.account);
   let createdAccount: AccountEntity;
   let unverifiedAccount: UnverifiedAccountEntity;
@@ -41,20 +37,21 @@ export function updateAccountSection(
   }
   // Shallow copy orignal account to set update field(s).
   const account: AccountEntity = Object.assign(new AccountEntity(), myAccount);
-  account[updateReq.accountSectionName] = updateReq.accountSection;
+  (<any>account)[updateReq.accountSectionName] = updateReq.accountSection;
   return updateAccount({ account }, myAccount);
 }
 
 function _updateNotificationsSettings(
-  updateReq: AccountSectionUpdateReqeust<NotificationSettings>,
+  updateReq: AccountSectionUpdateReqeust,
   myAccount: AccountEntity
 ): Promise<UpdateDiff<AccountEntity>> {
   // Shallow copy orignal account to set update field(s).
   const account: AccountEntity = Object.assign(new AccountEntity(), myAccount);
+  const notificationSettingsUpdate = <ContactInfoEntity> updateReq.accountSection;
   account.contactInfo = Object.assign(new ContactInfoEntity(), account.contactInfo);
-  account.contactInfo.enableEmail = updateReq.accountSection.enableEmail;
-  account.contactInfo.enablePushNotification = updateReq.accountSection.enablePushNotification;
-  account.contactInfo.notifyForEachDonation = updateReq.accountSection.notifyForEachDonation;
+  account.contactInfo.enableEmail = notificationSettingsUpdate.enableEmail;
+  account.contactInfo.enablePushNotification = notificationSettingsUpdate.enablePushNotification;
+  account.contactInfo.notifyForEachDonation = notificationSettingsUpdate.notifyForEachDonation;
   return updateAccount({ account }, myAccount);
 }
 

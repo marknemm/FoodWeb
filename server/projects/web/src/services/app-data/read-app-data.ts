@@ -1,6 +1,6 @@
 import { getRepository, In } from 'typeorm';
-import { AppDataEntity } from 'database/src/entity/app-data.entity';
-import { genSkip, genTake, QueryResult } from '~orm/index';
+import { AppDataEntity } from '~entity';
+import { genSkip, genTake, QueryResult } from '~orm';
 import { AppDataReadRequest } from '~shared';
 
 /**

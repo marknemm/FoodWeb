@@ -1,8 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DonationSortBy } from '~shared';
 import { DonationFiltersForm, DonationReadRequest } from '~web/donation-delivery-shared/donation-filters.form';
-import { SortByOpt } from '~web/filter-list/sort-by-opt';
+import { SortByOpt } from '~web/filtered-list/sort-by-opt';
 import { ConstantsService } from '~web/shared/constants/constants.service';
 
 @Component({
@@ -10,7 +9,9 @@ import { ConstantsService } from '~web/shared/constants/constants.service';
   templateUrl: './donation-filters.component.html',
   styleUrls: ['./donation-filters.component.scss'],
 })
-export class DonationFiltersComponent implements OnInit {
+export class DonationFiltersComponent implements OnInit, OnChanges {
+
+  @Input() activeFilters: DonationReadRequest = {};
 
   @Output() filter = new EventEmitter<DonationReadRequest>();
 
@@ -24,17 +25,18 @@ export class DonationFiltersComponent implements OnInit {
     { name: 'Donor Organization', value: 'donorOrganizationName' }
   ];
 
-  filtersForm = new DonationFiltersForm();
+  readonly filtersForm = new DonationFiltersForm();
 
   constructor(
-    public constantsService: ConstantsService,
-    private _activatedRoute: ActivatedRoute
+    public constantsService: ConstantsService
   ) {}
 
-  ngOnInit() {
-    this._activatedRoute.queryParams.subscribe((currentFilters: Params) =>
-      this.filtersForm.patchValue(currentFilters)
-    );
+  ngOnInit() {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.activeFilters) {
+      this.filtersForm.patchValue(this.activeFilters);
+    }
   }
 
 }

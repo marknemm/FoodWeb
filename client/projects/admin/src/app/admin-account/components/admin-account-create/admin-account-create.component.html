@@ -1,0 +1,43 @@
+<div class="create-account page container" [formGroup]="adminAccountForm.get('accountCreateOptions')">
+  <food-web-account-creation-form *ngIf="!(createdAccountStore.value$ | async); else accountCreatedTmpl" [accountForm]="adminAccountForm.accountForm" (createAccount)="createAccount()">
+    <mat-slide-toggle
+      class="password-options"
+      formControlName="autoGenPassword"
+      matTooltip="Auto-generates a password for the created account, and sends it to the registered email address.">
+      Auto Generate Password
+    </mat-slide-toggle>
+
+    <div class="account-verification-options align-right">
+      <mat-slide-toggle
+        formControlName="autoVerify"
+        matTooltip="Auto-verifies the created account, and prevents an account verification email from being sent.">
+        Auto Verify Account
+      </mat-slide-toggle>
+    </div>
+  </food-web-account-creation-form>
+
+  <ng-template #accountCreatedTmpl>
+    <mat-card>
+      <mat-card-title>Account Creation Successful!</mat-card-title>
+      <p *ngIf="!adminAccountForm.accountCreateOptions.autoVerify">
+        An account verification email has been sent for the newly created account.
+      </p>
+      <p *ngIf="adminAccountForm.accountCreateOptions.autoVerify && adminAccountForm.accountCreateOptions.autoGenPassword">
+        An auto-generate password email has been sent for the newly created account.
+      </p>
+      <mat-card-content>
+        <div class="signup-success-button-container align-right">
+          <button mat-button *ngIf="!adminAccountForm.accountCreateOptions.autoVerify"
+            color="accent" type="button" (click)="signupVerificationService.resendVerificationEmailFor(createdAccountStore.value)">
+            Resend Verification Email
+          </button>
+          <a [routerLink]="['/']">
+            <button mat-raised-button color="primary" type="button">
+              Admin Console
+            </button>
+          </a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</div>

@@ -210,9 +210,21 @@ export class MapService {
     this._directions = directions;
     this._polylines = this._directionsService.directionsToPolylines(directions);
     this.polylines.forEach((polyline: Polyline, idx: number) => {
-      if ((options.displayRouteToDonor && (idx === 0 || idx === 1)) || idx > 1) {
+      if (this._shouldDisplayPolyline(options, idx)) {
         polyline.setMap(map._googleMap);
       }
     });
+  }
+
+  /**
+   * Determines if a polyline described by a given index should be displayed based off of given map options.
+   * @param options The map options including config for route polyline display.
+   * @param idx The (0 based) index of the polyline.
+   * @return true if the route polyline should be displayed, false if not.
+   */
+  private _shouldDisplayPolyline(options: MapOptions, idx: number): boolean {
+    return (this.polylines.length === 2)
+      ? (idx !== 0 || options.displayRouteToDonor) && (idx !== 1 || options.displayRouteToReceiver)
+      : options.displayRouteToReceiver;
   }
 }
