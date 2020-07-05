@@ -23,8 +23,7 @@
             confirmTitle="Confirm Send Message"
             confirmMessage="Are you sure you wish to send this message to the filtered accounts?"
             [disabled]="accountMessageForm.invalid"
-            (clickConfirm)="sendMessage()"
-          >
+            (clickConfirm)="sendMessage()">
             <mat-icon>send</mat-icon>
           </button>
         </div>
@@ -33,7 +32,7 @@
   </mat-sidenav-content>
   <mat-sidenav [opened]="accountFiltersOpened" (openedChange)="accountFiltersOpened = $event" mode="over" position="end" [autoFocus]="false">
     <food-web-list-filters>
-      <food-web-admin-account-filters [omitSorting]="true" (filter)="updateAccountFilters($event)"></food-web-admin-account-filters>
+      <food-web-admin-account-filters [activeFilters]="activeFilters" [omitSorting]="true" (filter)="updateAccountFilters($event)"></food-web-admin-account-filters>
     </food-web-list-filters>
   </mat-sidenav>
 </mat-sidenav-container>

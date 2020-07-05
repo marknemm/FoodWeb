@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { faFlask } from '@fortawesome/free-solid-svg-icons';
-import { AdminAccountMessageService } from '~admin/admin-account/admin-account-message/admin-account-message.service';
 import { AdminAccountMessageForm } from '~admin/admin-account/admin-account-message.form';
-import { AccountReadFilters } from '~shared';
+import { AdminAccountMessageService } from '~admin/admin-account/admin-account-message/admin-account-message.service';
+import { AccountReadFilters, AccountReadRequest } from '~shared';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
@@ -18,6 +18,8 @@ export class AdminAccountMessageComponent implements OnInit {
 
   accountFiltersOpened = false;
 
+  private _activeFilters: AccountReadRequest = {};
+
   constructor(
     private _accountMessageService: AdminAccountMessageService,
     private _activatedRoute: ActivatedRoute,
@@ -25,8 +27,13 @@ export class AdminAccountMessageComponent implements OnInit {
     private _router: Router
   ) {}
 
+  get activeFilters(): AccountReadRequest {
+    return this._activeFilters;
+  }
+
   ngOnInit() {
     this._pageTitleService.title = 'Compose Message';
+    this._activatedRoute.queryParams.subscribe((params: Params) => this._activeFilters = params);
   }
 
   sendMessage(): void {
