@@ -1,55 +1,35 @@
-<div *ngIf="editing" [formGroup]="dateTimeForm" class="date-time-form" [ngClass]="{ 'inline-fields': inlineFields }">
+<div [formGroup]="dateTimeForm" [ngClass]="{ 'editing': editing, 'inline-fields': inlineFields }" class="date-time-form">
   <div *ngIf="primaryLabel" class="primary-label">
     {{ primaryLabel }}
   </div>
 
-  <div class="date-field">
-    <mat-form-field class="fill" [floatLabel]="floatLabels" (click)="datePicker.open()">
-      <input matInput
-       [matDatepicker]="datePicker"
-       [min]="minDate"
-       [max]="maxDate"
-       [placeholder]="datePlaceholder"
-       autocomplete="off"
-       readonly="true"
-       formControlName="date"
-       [errorStateMatcher]="errorStateMatcher"
-       (blur)="onTouchedCb()">
-      <button mat-icon-button matSuffix type="button" color="warn" (click)="clearDate($event)" *ngIf="allowClear && dateTimeForm.get('date').value && dateTimeForm.get('date').enabled">
-        <mat-icon>clear</mat-icon>
-      </button>
-      <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
-      <mat-datepicker touchUi #datePicker ></mat-datepicker>
-    </mat-form-field>
-  </div>
+  <food-web-date
+    *ngIf="editing || !excludeDateDisplay"
+    [allowClear]="allowClear"
+    [bold]="boldDate"
+    [date]="dateTime"
+    [defaultDate]="defaultDate"
+    [editing]="editing"
+    [errorStateMatcher]="errorStateMatcher"
+    [floatLabels]="floatLabels"
+    [maxDate]="maxDate"
+    [minDate]="minDate"
+    [minWidth]="minDateWidth"
+    [placeholder]="datePlaceholder"
+    formControlName="date"
+  ></food-web-date>
 
-  <div class="time-field">
-    <mat-form-field class="fill" [floatLabel]="floatLabels">
-      <input matInput
-       [placeholder]="timePlaceholder"
-       [ngxTimepicker]="timePicker"
-       autocomplete="off"
-       readonly="true"
-       formControlName="time"
-       [errorStateMatcher]="errorStateMatcher"
-       (blur)="onTouchedCb()">
-      <button mat-icon-button matSuffix type="button" color="warn" (click)="clearTime($event)" *ngIf="allowClear && dateTimeForm.get('time').value && dateTimeForm.get('time').enabled">
-        <mat-icon>clear</mat-icon>
-      </button>
-      <button mat-icon-button type="button" matSuffix aria-label="Open Time Dialog" [disabled]="dateTimeForm.disabled" (click)="timePicker.open()">
-        <mat-icon>alarm</mat-icon>
-      </button>
-      <ngx-material-timepicker #timePicker [minutesGap]="5" [defaultTime]="defaultTime"></ngx-material-timepicker>
-    </mat-form-field>
-  </div>
-</div>
-
-<div *ngIf="!editing" class="date-time-display d-inline-block">
-  <span class="date" *ngIf="!excludeDateDisplay" [ngClass]="{ bold: boldDate }" [style.minWidth]="minDateWidth">
-    {{ dateTime | foodWebFormatDate }} &nbsp;
-  </span>
-
-  <span class="time" *ngIf="!excludeTimeDisplay" [ngClass]="{ bold: boldTime }">
-    {{ dateTime | foodWebFormatTime }}
-  </span>
+  <food-web-time
+    *ngIf="editing || !excludeTimeDisplay"
+    [allowClear]="allowClear"
+    [bold]="boldTime"
+    [defaultTime]="defaultTime"
+    [editing]="editing"
+    [errorStateMatcher]="errorStateMatcher"
+    [floatLabels]="floatLabels"
+    [minutesGap]="minutesGap"
+    [placeholder]="timePlaceholder"
+    [time]="dateTime | foodWebFormatTime"
+    formControlName="time"
+  ></food-web-time>
 </div>

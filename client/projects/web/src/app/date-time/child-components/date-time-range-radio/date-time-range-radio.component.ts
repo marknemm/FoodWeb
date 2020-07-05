@@ -8,10 +8,7 @@ import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
   selector: 'food-web-date-time-range-radio',
   templateUrl: './date-time-range-radio.component.html',
   styleUrls: ['./date-time-range-radio.component.scss'],
-  providers: [
-    valueAccessorProvider(DateTimeRangeRadioComponent),
-    FormHelperService
-  ]
+  providers: valueAccessorProvider(DateTimeRangeRadioComponent)
 })
 export class DateTimeRangeRadioComponent extends FormComponentBase<DateTimeRange> implements OnChanges {
 

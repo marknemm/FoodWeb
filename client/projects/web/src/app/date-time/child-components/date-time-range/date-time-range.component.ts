@@ -9,15 +9,13 @@ import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
   selector: 'food-web-date-time-range',
   templateUrl: './date-time-range.component.html',
   styleUrls: ['./date-time-range.component.scss'],
-  providers: [
-    valueAccessorProvider(DateTimeRangeComponent),
-    FormHelperService
-  ]
+  providers: valueAccessorProvider(DateTimeRangeComponent)
 })
 export class DateTimeRangeComponent extends FormComponentBase<DateTimeRange> implements OnChanges {
 
   @Input() formGroup = new DateTimeRangeForm();
   @Input() allowClear = false;
+  @Input() allowUndefTime = false;
   @Input() editing = false;
   @Input() startDatePlaceholder = 'Start Date';
   @Input() startTimePlaceholder = 'Start Time';

@@ -9,10 +9,7 @@ import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
   selector: 'food-web-contact-info',
   templateUrl: './contact-info.component.html',
   styleUrls: ['./contact-info.component.scss'],
-  providers: [
-    valueAccessorProvider(ContactInfoComponent),
-    FormHelperService
-  ]
+  providers: valueAccessorProvider(ContactInfoComponent)
 })
 export class ContactInfoComponent extends FormComponentBase<ContactInfo> implements OnChanges {
 

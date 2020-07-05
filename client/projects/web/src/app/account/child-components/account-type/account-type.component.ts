@@ -8,10 +8,7 @@ import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
   selector: 'food-web-account-type',
   templateUrl: './account-type.component.html',
   styleUrls: ['./account-type.component.scss'],
-  providers: [
-    valueAccessorProvider(AccountTypeComponent),
-    FormHelperService
-  ]
+  providers: valueAccessorProvider(AccountTypeComponent)
 })
 export class AccountTypeComponent extends FormComponentBase<AccountType> {
 

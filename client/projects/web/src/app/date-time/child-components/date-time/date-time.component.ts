@@ -3,18 +3,16 @@ import { NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 import { ErrorStateMatcher, FloatLabelType } from '@angular/material/core';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
 import { DateTimeForm } from '~web/date-time/date-time.form';
+import { DateTimeService } from '~web/date-time/date-time/date-time.service';
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
   selector: 'food-web-date-time',
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.scss'],
-  providers: [
-    { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeComponent), multi: true },
-    valueAccessorProvider(DateTimeComponent),
-    DateTimeForm,
-    FormHelperService
-  ]
+  providers: valueAccessorProvider(DateTimeComponent).concat([
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeComponent), multi: true }
+  ])
 })
 export class DateTimeComponent extends FormComponentBase<Date> implements OnChanges, Validator {
 
@@ -35,14 +33,22 @@ export class DateTimeComponent extends FormComponentBase<Date> implements OnChan
   @Input() maxDate: Date;
   @Input() minDate = new Date();
   @Input() minDateWidth = '';
+  @Input() minutesGap = 5;
   @Input() primaryLabel = ''
   @Input() timePlaceholder = 'Time';
 
+  /**
+   * Acts an an internal form group. The form control exposed to the outside will gather this form's data
+   * together as a single Date value.
+   */
+  readonly dateTimeForm: DateTimeForm;
+
   constructor(
-    public dateTimeForm: DateTimeForm,
-    formHelperService: FormHelperService
+    protected _formHelperService: FormHelperService,
+    dateTimeService: DateTimeService
   ) {
-    super(formHelperService);
+    super(_formHelperService);
+    this.dateTimeForm = new DateTimeForm(dateTimeService);
   }
 
   ngOnInit() {
@@ -50,10 +56,15 @@ export class DateTimeComponent extends FormComponentBase<Date> implements OnChan
     const required: boolean = this._deriveFormControlState();
     this.dateTimeForm.init({ defaultDate: this.defaultDate, required });
     this.onValueChanges(this.dateTimeForm).subscribe(
-      () => this._onValueChange()
+      () => this.onChangeCb(this.dateTimeForm.toDate(this.allowUndefTime))
     );
   }
 
+  /**
+   * Derives form control state (such as validation, touched, dirty) for the internal date time form
+   * based off of the externally exposed form control.
+   * @return Whether or not the date-time value is required.
+   */
   private _deriveFormControlState(): boolean {
     this._formHelperService.onMarkAsTouched(this.formControl, () => this.dateTimeForm.markAllAsTouched());
     this._formHelperService.onMarkAsPristine(this.formControl, () => this.dateTimeForm.markAsPristine());
@@ -68,39 +79,27 @@ export class DateTimeComponent extends FormComponentBase<Date> implements OnChan
 
   /**
    * @override
+   * @param date The date-time value to write.
    */
   writeValue(date: Date): void {
     this.dateTimeForm.patchFromDate(date, { emitEvent: false });
-    if (this.dateTimeForm.get('time').value) {
-      this.defaultTime = this.dateTimeForm.get('time').value;
-    }
   }
 
-  _onValueChange(): void {
-    const curDateVal: Date = this.dateTimeForm.toDate(this.allowUndefTime);
-    this.onChangeCb(curDateVal);
-  }
-
+  /**
+   * Validates the date time form.
+   * @return Any validation errors that are present in the date time form; null if none are present.
+   */
   validate(): ValidationErrors {
     return (this.dateTimeForm.invalid ? this.dateTimeForm.errors : null);
   }
 
   /**
    * @override
+   * @param isDisabled The disabled state to set.
    */
   setDisabledState(isDisabled: boolean): void {
     (isDisabled)
       ? this.dateTimeForm.disable()
       : this.dateTimeForm.enable();
-  }
-
-  clearDate(event: MouseEvent): void {
-    this.dateTimeForm.get('date').reset();
-    event.stopPropagation();
-  }
-
-  clearTime(event: MouseEvent): void {
-    this.dateTimeForm.get('time').reset();
-    event.stopPropagation();
   }
 }

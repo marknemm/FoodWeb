@@ -1,21 +1,17 @@
 import { Component, Input } from '@angular/core';
+import { FloatLabelType } from '@angular/material/core';
 import { AccountAutocompleteItem, AccountHelper, AccountType, DeepReadonly } from '~shared';
 import { AccountAutocompleteService } from '~web/account/account-autocomplete/account-autocomplete.service';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
 import { TypedFormControl } from '~web/data-structure/typed-form-control';
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
-import { FloatLabelType } from '@angular/material/core';
 
 @Component({
   selector: 'food-web-account-select',
   templateUrl: './account-select.component.html',
   styleUrls: ['./account-select.component.scss'],
-  providers: [
-    valueAccessorProvider(AccountSelectComponent),
-    AccountAutocompleteService,
-    FormHelperService
-  ]
+  providers: valueAccessorProvider(AccountSelectComponent).concat([AccountAutocompleteService])
 })
 export class AccountSelectComponent extends FormComponentBase<AccountAutocompleteItem> {
 
