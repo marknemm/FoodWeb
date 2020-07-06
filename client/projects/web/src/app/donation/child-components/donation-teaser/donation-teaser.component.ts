@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Donation } from '~shared';
+import { AccountType, Donation } from '~shared';
 
 @Component({
   selector: 'food-web-donation-teaser',
@@ -7,6 +7,8 @@ import { Donation } from '~shared';
   styleUrls: ['./donation-teaser.component.scss'],
 })
 export class DonationTeaserComponent implements OnInit {
+
+  readonly AccountType = AccountType;
 
   @Input() donation: Donation;
 

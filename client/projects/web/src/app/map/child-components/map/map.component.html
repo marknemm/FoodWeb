@@ -11,6 +11,13 @@
     [title]="waypointMarker.title"
     (mapClick)="openInfoWindow(marker, waypointMarker)"
   ></map-marker>
+
+  <map-polyline
+    *ngFor="let polyline of mapService.mapPolylines"
+    [path]="polyline.path"
+    [options]="polyline.options"
+  ></map-polyline>
+
   <map-info-window>
     <food-web-map-marker-info [waypointMarker]="selWaypointMarker"></food-web-map-marker-info>
   </map-info-window>

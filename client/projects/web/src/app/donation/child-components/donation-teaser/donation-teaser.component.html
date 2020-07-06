@@ -1,7 +1,7 @@
 <mat-card id="donation-{{ donation.id }}" class="donation-teaser">
   <mat-card-header>
-    <img mat-card-avatar [src]="donation.donorAccount.profileImgUrl" alt="{{ donation | donationMemberName : 'Donor' }} Profile Image">
-    <mat-card-title>{{ donation | donationMemberName : 'Donor' }}</mat-card-title>
+    <img mat-card-avatar [src]="donation.donorAccount.profileImgUrl" alt="{{ donation | donationMemberName : AccountType.Donor }} Profile Image">
+    <mat-card-title>{{ donation | donationMemberName : AccountType.Donor }}</mat-card-title>
     <mat-card-subtitle>
       <food-web-donation-status [donationStatus]="donation.donationStatus" class="donation-status"></food-web-donation-status>
     </mat-card-subtitle>

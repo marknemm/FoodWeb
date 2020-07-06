@@ -4,7 +4,7 @@ import { Observable, of, Subscriber } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Account, DirectionsExtractor, Donation, MapRoute, MapRouteReadRequest, WaypointSegment } from '~shared';
 import { environment } from '~web/environments/environment';
-import { Directions, LatLng, Polyline } from '~web/map/interfaces/map';
+import { Directions, LatLng, Polyline, MapOptions } from '~web/map/interfaces/map';
 import { LatLngLiteral, Waypoint } from '~web/map/map';
 import { LocalStorageBucket, LocalStorageCacheService } from '~web/shared/local-storage-cache/local-storage-cache.service';
 
@@ -120,7 +120,7 @@ export class DirectionsService {
     if (this._directionsCache.hasItem(route)) {
       return of(this._directionsCache.getItem(route));
     }
-    
+
     return this._queryDirections(route).pipe(
       map((directionsResult: DirectionsResult) => {
         const directions: Directions = this._directionsExtractor.extractDirections(<any>directionsResult);
@@ -175,25 +175,55 @@ export class DirectionsService {
   /**
    * Converts given directions into renderable map polylines.
    * @param directions The directions that are to be converted to map polylines.
-   * @param polylineColors The optional colors of the map polylines. Defaults to DirectionsService.DEFAULT_POLYLINE_COLORS.
    * @return The map polylines.
    */
-  directionsToPolylines(directions: Directions, polylineColors: string[] = DirectionsService.DEFAULT_POLYLINE_COLORS): Polyline[] {
+  directionsToPolylines(directions: Directions, options: MapOptions): DirectionPolylines {
+    const polylineColors = DirectionsService.DEFAULT_POLYLINE_COLORS;
     const mapsEncoder = google.maps.geometry.encoding;
-    const polylines: Polyline[] = [];
+    const directionPolylines: DirectionPolylines = { polylines: [], mapPolylines: [] };
+
     if (directions.waypointSegments && directions.waypointSegments.length !== 0) {
       directions.waypointSegments.forEach((waypointSeg: WaypointSegment, idx: number) => {
         const path: LatLng[] = (waypointSeg && waypointSeg.encodedPolyline)
           ? mapsEncoder.decodePath(waypointSeg.encodedPolyline)
           : [];
-        polylines.push(
-          new google.maps.Polyline({ path, strokeColor: polylineColors[idx % polylineColors.length] })
-        );
+        const strokeColor: string = polylineColors[idx % polylineColors.length];
+        const polyline = new google.maps.Polyline({ path, strokeColor });
+        directionPolylines.polylines.push(polyline);
+        if (this._shouldDisplayPolyline(options, directions.waypointSegments.length, idx)) {
+          directionPolylines.mapPolylines.push(
+            { path, options: { strokeColor } }
+          );
+        }
       });
     }
-    return polylines;
+
+    return directionPolylines;
   }
 
+  /**
+   * Determines if a polyline described by a given index should be displayed based off of given map options.
+   * @param options The map options including config for route polyline display.
+   * @param polylineCnt The total number of polylines that can be displayed.
+   * @param idx The (0 based) index of the polyline.
+   * @return true if the route polyline should be displayed, false if not.
+   */
+  private _shouldDisplayPolyline(options: MapOptions, polylineCnt: number, idx: number): boolean {
+    return (polylineCnt === 2)
+      ? (idx !== 0 || options.displayRouteToDonor) && (idx !== 1 || options.displayRouteToReceiver)
+      : options.displayRouteToReceiver;
+  }
+
+}
+
+export interface DirectionPolylines {
+  polylines: Polyline[];
+  mapPolylines: RenderPolyline[];
+}
+
+export interface RenderPolyline {
+  path: google.maps.MVCArray<google.maps.LatLng> | google.maps.LatLng[] | google.maps.LatLngLiteral[];
+  options: google.maps.PolylineOptions;
 }
 
 type DirectionsRequest = google.maps.DirectionsRequest;

@@ -3,12 +3,12 @@ import { GoogleMap } from '@angular/google-maps';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Account, Donation } from '~shared';
-import { DirectionsService } from '~web/map/directions/directions.service';
-import { Directions, LatLng, LatLngBounds, LatLngLiteral, MapOptions, Polyline, WaypointMarker } from '~web/map/map';
-import { WaypointService, VolunteerWaypointConfig } from '~web/map/waypoint/waypoint.service';
-import { SessionService } from '~web/session/services/session/session.service';
-import { MapAppLinkService } from '../map-app-link/map-app-link.service';
-import { MapViewportService } from '../map-viewport/map-viewport.service';
+import { DirectionPolylines, DirectionsService, RenderPolyline } from '~web/map/directions/directions.service';
+import { Directions, LatLng, LatLngBounds, LatLngLiteral, MapOptions, WaypointMarker } from '~web/map/map';
+import { MapAppLinkService } from '~web/map/map-app-link/map-app-link.service';
+import { MapViewportService } from '~web/map/map-viewport/map-viewport.service';
+import { VolunteerWaypointConfig, WaypointService } from '~web/map/waypoint/waypoint.service';
+import { SessionService } from '~web/session/session/session.service';
 export * from '~web/map/map';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class MapService {
   private _latLngWaypoints: LatLngLiteral[] = [];
   private _mapBounds = new google.maps.LatLngBounds();
   private _mapCenter: LatLng = new google.maps.LatLng(0, 0);
-  private _polylines: Polyline[] = [];
+  private _directionPolylines: DirectionPolylines = { polylines: [], mapPolylines: [] };
   private _waypointMarkers: WaypointMarker[] = [];
 
   constructor(
@@ -68,8 +68,8 @@ export class MapService {
   /**
    * The renderable map directions polylines.
    */
-  get polylines(): Polyline[] {
-    return this._polylines;
+  get mapPolylines(): RenderPolyline[] {
+    return this._directionPolylines.mapPolylines;
   }
 
   /**
@@ -90,7 +90,7 @@ export class MapService {
     this._refreshWaypoints(donation, options).subscribe(() => {
       this._refreshDirectionsHref(donation);
       this._refreshMapView(map);
-      this._refreshDirections(map, donation, options);
+      this._refreshDirections(donation, options);
     });
   }
 
@@ -99,10 +99,7 @@ export class MapService {
    */
   private _clearMapData(): void {
     this._latLngWaypoints = [];
-    this.polylines.forEach((polyline: Polyline) =>
-      polyline.setMap(null)
-    );
-    this._polylines = [];
+    this._directionPolylines = { polylines: [], mapPolylines: [] };
     this._directions = null;
     this._directionsHref = '';
   }
@@ -179,11 +176,10 @@ export class MapService {
 
   /**
    * Refeshes the directions.
-   * @param map The map for which we are refreshing directions.
    * @param donation The donation that the directions are for.
    * @param options The map (direction) options.
    */
-  private _refreshDirections(map: GoogleMap, donation: Donation, options: MapOptions): void {
+  private _refreshDirections(donation: Donation, options: MapOptions): void {
     let directions$: Observable<Directions>;
 
     if (!options.useVolunteerCurrentPos) {
@@ -194,37 +190,10 @@ export class MapService {
     }
 
     if (directions$) {
-      directions$.subscribe((directions: Directions) =>
-        this._setDirections(map, directions, options)
-      );
+      directions$.subscribe((directions: Directions) => {
+        this._directions = directions;
+        this._directionPolylines = this._directionsService.directionsToPolylines(directions, options);
+      });
     }
-  }
-
-  /**
-   * Sets the directions data values for a given map.
-   * @param map The map for which to set the directions.
-   * @param directions The directions to set.
-   * @param options The map (direction) options.
-   */
-  private _setDirections(map: GoogleMap, directions: Directions, options: MapOptions): void {
-    this._directions = directions;
-    this._polylines = this._directionsService.directionsToPolylines(directions);
-    this.polylines.forEach((polyline: Polyline, idx: number) => {
-      if (this._shouldDisplayPolyline(options, idx)) {
-        polyline.setMap(map._googleMap);
-      }
-    });
-  }
-
-  /**
-   * Determines if a polyline described by a given index should be displayed based off of given map options.
-   * @param options The map options including config for route polyline display.
-   * @param idx The (0 based) index of the polyline.
-   * @return true if the route polyline should be displayed, false if not.
-   */
-  private _shouldDisplayPolyline(options: MapOptions, idx: number): boolean {
-    return (this.polylines.length === 2)
-      ? (idx !== 0 || options.displayRouteToDonor) && (idx !== 1 || options.displayRouteToReceiver)
-      : options.displayRouteToReceiver;
   }
 }
