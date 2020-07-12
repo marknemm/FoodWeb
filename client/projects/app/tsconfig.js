@@ -68,12 +68,13 @@ const config = {
       "phonegap-plugin-push/types"
     ]
   },
-  include: [
-    "src/**/*.ts"
+  files: [
+    "src/main.ts",
+    "src/polyfills.ts"
   ],
-  exclude: [
-    "src/test.ts",
-    "src/**/*.spec.ts"
+  include: [
+    "src/**/*.d.ts",
+    "../web/src/**/*.d.ts"
   ]
 };
 

@@ -14,9 +14,10 @@
   "private": true,
   "dependencies": {
     "@types/google__maps": "^0.5.12",
+    "@types/lodash-es": "^4.17.3",
     "geocoder": "^0.2.3",
     "google-polyline": "^1.0.3",
-    "lodash": "^4.17.15",
+    "lodash-es": "^4.17.15",
     "ts-essentials": "^6.0.4",
     "typescript": "~3.7.5"
   },

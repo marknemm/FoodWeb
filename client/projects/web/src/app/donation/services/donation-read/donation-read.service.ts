@@ -6,7 +6,7 @@ import { flatMap } from 'rxjs/operators';
 import { Donation, DonationReadRequest, ListResponse } from '~shared';
 import { environment } from '~web/environments/environment';
 import { HttpResponseService } from '~web/shared/http-response/http-response.service';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash-es';
 export { Donation };
 
 @Injectable({
@@ -62,7 +62,7 @@ export class DonationReadService {
 
   handleDonationsQueryChange(params: Params): Observable<ListResponse<Donation>> {
     const myDonations: boolean = (this._router.url.indexOf('my') >= 0);
-    const request: DonationReadRequest = _.cloneDeep(params);
+    const request: DonationReadRequest = cloneDeep(params);
     request.page = (params.page ? parseInt(params.page, 10) : 1);
     request.limit = (params.limit ? parseInt(params.limit, 10) : 10);
     return this._getDonations(request, myDonations);

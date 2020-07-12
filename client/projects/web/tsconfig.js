@@ -195,12 +195,12 @@ const config = {
     sourceMap: true,
     types: ["node"]
   },
-  include: [
-    "src/**/*.ts"
+  files: [
+    "src/main.ts",
+    "src/polyfills.ts"
   ],
-  exclude: [
-    "src/test.ts",
-    "src/**/*.spec.ts"
+  include: [
+    "src/**/*.d.ts"
   ]
 };
 

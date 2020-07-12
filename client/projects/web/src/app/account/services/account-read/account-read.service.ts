@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { Observable, of } from 'rxjs';
 import { Account, AccountReadFilters, AccountReadRequest, ListResponse } from '~shared';
 import { environment } from '~web/environments/environment';
@@ -75,7 +75,7 @@ export class AccountReadService {
    * @return An observable that emits the retrieved account list based off of the updated URL query parameter filters.
    */
   handleAccountsQueryChange(params: Params): Observable<ListResponse<Account>> {
-    const filters: AccountReadFilters = _.cloneDeep(params);
+    const filters: AccountReadFilters = cloneDeep(params);
     const page: number = (params.page ? parseInt(params.page, 10) : undefined);
     const limit: number = (params.limit ? parseInt(params.limit, 10) : undefined);
     return this.getAccounts(filters, page, limit);

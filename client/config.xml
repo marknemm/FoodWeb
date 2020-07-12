@@ -52,6 +52,6 @@
         <host name="10.0.0.2" scheme="http" />
     </universal-links>
     <allow-navigation href="http://localhost:8100" sessionid="3948c099" />
-    <content original-src="index.html" src="http://172.18.0.7:8100" />
+    <content src="index.html" />
     <allow-navigation href="http://172.18.0.7:8100" sessionid="c285d60e" />
 </widget>

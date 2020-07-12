@@ -1,6 +1,6 @@
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, skip, takeUntil, take } from 'rxjs/operators';
+import { map, skip, take, takeUntil } from 'rxjs/operators';
 import { DeepReadonly } from '~shared';
 
 /**
@@ -114,7 +114,7 @@ export class ImmutableStore<T> {
    */
   private _cloneWithLevel<C>(value: C, cloneLevel: CloneLevel): C {
     switch (cloneLevel) {
-      case CloneLevel.Deep:     return _.cloneDeep(value);
+      case CloneLevel.Deep:     return cloneDeep(value);
       case CloneLevel.Shallow:  return Object.assign({}, value);
       default:                  return value;
     }
