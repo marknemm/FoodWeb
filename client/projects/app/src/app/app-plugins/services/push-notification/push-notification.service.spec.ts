@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { PushNotificationService } from '~app/push-notifications/push-notification.service';
+import 'jasmine';
+import { PushNotificationService } from './push-notification.service';
 
 describe('PushNotificationService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

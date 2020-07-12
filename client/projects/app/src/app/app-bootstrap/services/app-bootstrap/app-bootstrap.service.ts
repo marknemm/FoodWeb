@@ -7,7 +7,7 @@ import { AppSessionService } from '~app/app-session/app-session/app-session.serv
 @Injectable({
   providedIn: 'root'
 })
-export class BootstrapService implements CanActivate {
+export class AppBootstrapService implements CanActivate {
 
   constructor(
     private _sessionService: AppSessionService,

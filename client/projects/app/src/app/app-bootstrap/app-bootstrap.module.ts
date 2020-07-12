@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AppSessionModule } from '~app/app-session/app-session.module';
-import { AppSignupComponent } from '~app/bootstrap/app-signup/app-signup.component';
-import { BootstrapRoutingModule } from '~app/bootstrap/bootstrap-routing.module';
+import { AppSignupComponent } from '~app/app-bootstrap/app-signup/app-signup.component';
+import { AppBootstrapRoutingModule } from '~app/app-bootstrap/app-bootstrap-routing.module';
 import { SignupModule } from '~web/signup/signup.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    BootstrapRoutingModule,
+    AppBootstrapRoutingModule,
     AppSessionModule,
     SignupModule
   ],
@@ -16,4 +16,4 @@ import { SignupModule } from '~web/signup/signup.module';
     AppSignupComponent
   ]
 })
-export class BootstrapModule {}
+export class AppBootstrapModule {}

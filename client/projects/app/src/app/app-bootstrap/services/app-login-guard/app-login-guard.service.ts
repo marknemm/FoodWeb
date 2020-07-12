@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, RouterStateSnapshot } from '@angular/router';
 import { AppMinimize } from '@ionic-native/app-minimize/ngx';
+import { AppDataService } from '~app/app-session/app-data/app-data.service';
 import { AppSessionService } from '~app/app-session/app-session/app-session.service';
-import { AppDataService } from '~app/app-shared/app-data/app-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BootstrapGuardService implements CanActivate, CanDeactivate<any> {
+export class AppLoginGuardService implements CanActivate, CanDeactivate<any> {
 
   constructor(
     private _appData: AppDataService,

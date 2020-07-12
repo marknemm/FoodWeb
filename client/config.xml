@@ -22,6 +22,7 @@
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:usesCleartextTraffic="true" />
         </edit-config>
+        <preference name="CodePushDeploymentKey" value="YsZZBYU-bVuHZZOapXW_qYeuzA_lTgBE2ND2K" />
         <resource-file src="google-services.json" target="app/google-services.json" />
         <resource-file src="res/icon/notification/android/icon-mdpi.png" target="app/src/main/res/drawable-mdpi/notification.png" />
         <resource-file src="res/icon/notification/android/icon-hdpi.png" target="app/src/main/res/drawable-hdpi/notification.png" />
@@ -42,6 +43,7 @@
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <preference name="CodePushDeploymentKey" value="9_b4tYbhozF87Ds-JMbRrq7EAbaht3cEfCSfs" />
     </platform>
     <universal-links>
         <host name="www.wnyfoodweb.com" scheme="https" />
@@ -50,5 +52,6 @@
         <host name="10.0.0.2" scheme="http" />
     </universal-links>
     <allow-navigation href="http://localhost:8100" sessionid="3948c099" />
-    <content src="index.html" />
+    <content original-src="index.html" src="http://172.18.0.7:8100" />
+    <allow-navigation href="http://172.18.0.7:8100" sessionid="c285d60e" />
 </widget>

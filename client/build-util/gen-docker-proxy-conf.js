@@ -3,6 +3,7 @@ const path = require('path');
 
 genDockerProxyConfJSON('web');
 genDockerProxyConfJSON('admin');
+genDockerProxyConfJSON('app');
 
 function genDockerProxyConfJSON(project) {
   const projectRoot = path.join(__dirname, '..', 'projects', project);

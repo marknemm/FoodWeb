@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { EventResponse, Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -21,8 +21,7 @@ export class PushNotificationService {
       alert: "true",
       badge: true,
       sound: 'false'
-    },
-    windows: {}
+    }
   };
 
   private _pushNotificationClient: PushObject;
@@ -43,7 +42,7 @@ export class PushNotificationService {
   }
 
   register(): Observable<string> {
-    if (this.isRegistered) return;
+    if (this.isRegistered) return of(this.pushRegistrationId);
     this._pushNotificationClient = this._push.init(this._pushOpts);
     this._listenForNotifications();
     this._pushNotificationClient.on('error').subscribe(console.error);

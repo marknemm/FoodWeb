@@ -1,10 +1,7 @@
 <div class="app-signup-container">
   <div class="app-signup-content container">
     <food-web-signup #signup></food-web-signup>
-    <div class="login-link" [ngClass]="{
-      'align-center': !signup.formGroup.get('accountType').value,
-      'align-right': signup.formGroup.get('accountType').value
-    }">
+    <div class="login-link align-right">
       Have an account:
       <a [routerLink]="['/login']">Login</a>
     </div>

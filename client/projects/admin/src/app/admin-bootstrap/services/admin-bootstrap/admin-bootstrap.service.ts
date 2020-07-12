@@ -7,7 +7,7 @@ import { AdminSessionService } from '~admin/admin-session/admin-session/admin-se
 @Injectable({
   providedIn: 'root'
 })
-export class BootstrapService implements CanActivate {
+export class AdminBootstrapService implements CanActivate {
 
   private _loginSubscription = new Subscription();
 
