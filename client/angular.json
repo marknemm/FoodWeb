@@ -215,35 +215,27 @@
             ]
           },
           "configurations": {
-            "app": {
+            "device": {
               "fileReplacements": [
                 {
                   "replace": "projects/app/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.app.ts"
+                  "with": "projects/app/src/environments/environment.device.ts"
                 },
                 {
                   "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.app.ts"
+                  "with": "projects/app/src/environments/environment.device.ts"
                 }
               ]
             },
-            "browser": {
+            "emu": {
               "fileReplacements": [
                 {
                   "replace": "projects/app/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.browser.ts"
+                  "with": "projects/app/src/environments/environment.emu.ts"
                 },
                 {
                   "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.browser.ts"
-                }
-              ]
-            },
-            "hmr": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/app/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.hmr.ts"
+                  "with": "projects/app/src/environments/environment.emu.ts"
                 }
               ]
             },
@@ -284,16 +276,11 @@
             "sourceMap": true
           },
           "configurations": {
-            "app": {
-              "browserTarget": "app:build:app"
+            "device": {
+              "browserTarget": "app:build:device"
             },
-            "browser": {
-              "browserTarget": "app:build:browser"
-            },
-            "hmr": {
-              "hmr": true,
-              "hmrWarning": false,
-              "browserTarget": "app:build:hmr"
+            "emu": {
+              "browserTarget": "app:build:emu"
             },
             "production": {
               "browserTarget": "app:build:production"

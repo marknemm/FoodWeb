@@ -15,6 +15,18 @@ Feel free to lookup and use the raw docker commands by viewing **.vscode/tasks.j
 
 Also View the FoodWeb top-level [README.md](https://github.com/marknemm/FoodWeb/blob/master/README.md) for more available Docker commands.
 
+### Start Web
+
+Run the VS Code task `Docker FoodWeb: Start Server` to start the web server within the foodweb-server container.
+Additionally, performs initial dependency installation and bootstraps all related server technologies.
+Navigate to valid routes under `http://localhost:5000` to direclty invoke server REST route handlers.
+
+### Start Admin
+
+Run the VS Code task `Docker FoodWeb Admin: Start Server` to start the admin server within the foodweb-admin-server container.
+Additionally, performs initial dependency installation and bootstraps all related server technologies.
+Navigate to valid routes under `http://localhost:5001` to direclty invoke server REST route handlers.
+
 ### Reinstall Dependencies
 
 Run the VS Code task `Docker FoodWeb: Reinstall Server Dependencies` to reinstall server dependencies within a running foodweb-server container.
