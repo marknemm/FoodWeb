@@ -15,7 +15,6 @@ services:
       - ./tslint.json:/usr/src/foodweb/tslint.json
       # Exclude the following generated directories from shared volume by overwriting with blank directory
       - /usr/src/foodweb/client/node_modules
-      - /usr/src/foodweb/client/projects/app
       - /usr/src/foodweb/shared/node_modules
 
   foodweb:
@@ -35,6 +34,15 @@ services:
     depends_on:
       - foodweb-admin-server
     command: bash -c "npm run admin:start:docker"
+
+  foodweb-app:
+    extends: foodweb-client-base
+    container_name: foodweb-app
+    ports:
+      - "8100:8100"
+    depends_on:
+      - foodweb-server
+    command: bash -c "npm run app:start:docker"
 
   foodweb-server-base:
     image: foodweb-server

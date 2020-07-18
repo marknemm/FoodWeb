@@ -107,31 +107,46 @@ Feel free to lookup and use the raw docker commands by viewing **.vscode/tasks.j
 
 Also, note that each node project within FoodWeb has specialilzed docker commands described in the projects' README.md files.
 
-### Run
+### Start Web
 
 Run the VS Code task `Docker FoodWeb: Start` to:
 
-  - Install all dependencies.
+  - Perform an initial install of all dependencies.
   - Start a postgres docker container which exposes port **5432**.
   - Start a redis docker container which exposes port **6379**.
   - Start a fake-smtp-server docker container which exposes a web interface on port **1080**, and SMTP server on port **1025**.
   - Start a foodweb-server docker container which exposes a node.js app on port **5000** and a debugger on port **9229**.
   - Start a foodweb docker container which exposes an Angular app on port **4200**.
 
-Navigate to `http://localhost:4200/` to view the web app.
+Navigate to `http://localhost:4200` to view the web app.
 
-### Run Admin
+### Start App
+
+Run the VS Code task `Docker FoodWeb App: Start` to:
+
+  - Perform an initial install of all dependencies.
+  - Start a postgres docker container which exposes port **5432**.
+  - Start a redis docker container which exposes port **6379**.
+  - Start a fake-smtp-server docker container which exposes a web interface on port **1080**, and SMTP server on port **1025**.
+  - Start a foodweb-server docker container which exposes a node.js app on port **5000** and a debugger on port **9229**.
+  - Start a foodweb-app docker container which exposes an Angular/Cordova (browser) app on port **8100**.
+
+Navigate to `http://localhost:8100` to view the mobile app in browser.
+Note that when running in browser, the app will not have access to mobile device capabilities (eg. push notifications).
+See [README.md](https://github.com/marknemm/FoodWeb/blob/master/client/README.md) for details concerning how to emulate/simulate the mobile app.
+
+### Start Admin
 
 Run the VS Code task `Docker FoodWeb Admin: Start` to:
 
-  - Install all dependencies.
+  - Perform an initial install of all dependencies.
   - Start a postgres docker container which exposes port **5432**.
   - Start a redis docker container which exposes port **6379**.
   - Start a fake-smtp-server docker container which exposes a web interface on port **1080**, and SMTP server on port **1025**.
   - Start a foodweb-admin-server docker container which exposes a node.js app on port **5001** and a debugger on port **9230**.
   - Start a foodweb-admin docker container which exposes an Angular app on port **4201**.
 
-Navigate to `http://localhost:4201/` to view the admin console.
+Navigate to `http://localhost:4201` to view the admin console.
 
 ### Reinstall Dependencies
 
@@ -179,29 +194,40 @@ Also, keep in mind that each node project within FoodWeb has separate npm script
 
 Run `npm install` to install all dependencies on your host machine.
 
-### Run
+### Start Web
 
 Run `npm start` to concurrently: 
 
-  - Build & watch the client source code.
-  - Build & watch the server source code.
+  - Build & watch the web client source code.
+  - Build & watch the web server source code.
   - Spin-up an **Angular dev** server on port **4200** that restarts whenever client code rebuilds.
   - Spin-up a **nodemon** server on port **5000** that restarts whenever the server code rebuilds.
 
-Navigate to `http://localhost:4200/` to view the web app.
+Navigate to `http://localhost:4200` to view the web app.
 
-### Run Admin
+### Start App
 
-Run `npm admin:start` to concurrently:
+Run `npm run app:start` to concurrently:
+
+  - Build & watch the app client source code.
+  - Build & watch the web server source code.
+  - Spin-up an **Angular dev** server on port **8100** that restarts whenever the client code rebuilds.
+  - Spin-up a **nodemon** server on port **5000** that restarts whenever the server code rebuilds.
+
+Navigate to `http://localhost:8100` to view the mobile app in browser.
+
+### Start Admin
+
+Run `npm run admin:start` to concurrently:
 
   - Build & watch the admin client source code.
   - Build & watch the admin server source code.
   - Spin-up an **Angular dev** server on port **4201** that restarts whenever the client code rebuilds.
   - Spin-up a **nodemon** server on port **5001** that restarts whenever the server code rebuilds.
 
-Navigate to `http://localhost:4201/` to view the admin console.
+Navigate to `http://localhost:4201` to view the admin console.
 
-### Build
+### Build Web
 
 Run `npm run build` to perform a production build of both the client and server code.
 

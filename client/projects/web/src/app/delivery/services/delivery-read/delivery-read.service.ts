@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { Observable } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { Donation, DonationReadRequest, ListResponse } from '~shared';
@@ -41,7 +41,7 @@ export class DeliveryReadService {
   }
 
   handleDeliveriesQueryChange(params: Params): Observable<ListResponse<Donation>> {
-    const filters: DonationReadRequest = _.cloneDeep(params);
+    const filters: DonationReadRequest = cloneDeep(params);
     filters.page = (params.page ? parseInt(params.page, 10) : 1);
     filters.limit = (params.limit ? parseInt(params.limit, 10) : 10);
 

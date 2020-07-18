@@ -16,9 +16,31 @@ Feel free to lookup and use the raw docker commands by viewing **.vscode/tasks.j
 
 Also View the FoodWeb top-level [README.md](https://github.com/marknemm/FoodWeb/blob/master/README.md) for more available Docker commands.
 
+### Start Web
+
+Run the VS Code task `Docker FoodWeb: Start` to start the web client within the foodweb container.
+Additionally, performs initial dependency installation and bootstraps all related server technologies.
+Navigate to `http://localhost:4200` to view the web app.
+
+### Start App
+
+Run the VS Code task `Docker FoodWeb App: Start` to start the app (browser) client within the foodweb-app container.
+Additionally, performs initial dependency installation and bootstraps all related server technologies.
+Navigate to `http://localhost:8100` to view the mobile app.
+
+### Start Admin
+
+Run the VS Code task `Docker FoodWeb Admin: Start` to start the admin client within the foodweb-admin container.
+Additionally, performs initial dependency installation and bootstraps all related server technologies.
+Navigate to `http://localhost:4201` to view the admin app.
+
 ### Reinstall Dependencies
 
 Run the VS Code task `Docker FoodWeb: Reinstall Client Dependencies` to reinstall client dependencies within a running foodweb container.
+
+### Reinstall App Dependencies
+
+Run the VS Code task `Docker FoodWeb App: Reinstall Client Dependencies` to reinstall client dependencies within a running foodweb-app container.
 
 ### Reinstall Admin Dependencies
 
@@ -34,17 +56,42 @@ All client npm scripts are found within **package.json**. The following may not 
 
 Run `npm install` to install all client dependencies.
 
-### Run
+### Start Web
 
 Run `npm start` to spin up an Angular 2 dev server.<br>
-Navigate to `http://localhost:4200/`.
+Navigate to `http://localhost:4200`.
 
-### Run Admin
+### Start App
+
+Run `npm run app:start` to spin up an App Angular 2 dev server.<br>
+Navigate to `http://loclhost:8100`.
+
+### Start Admin
 
 Run `npm run admin:start` to spin up an admin Angular 2 dev server.<br>
-Navigate to `http://localhost:4201/`.
+Navigate to `http://localhost:4201`.
 
-### Build
+### Prepare & Watch Emulated App
+
+Run `npm run app:emu:prepare:watch` to concurrently build-watch the Angular source code, and prepare-watch the Angular build output (under client/www).<br>
+Note that this will not account for any changes to plugin dependencies. A full build is necessary for platform/plugin initialization or changes.<br>
+Run/Install the platform output on an Android virtual device. For example, open `client/platforms/android` in Android Studio and hit run/debug.
+
+### Prepare & Watch Simulated App
+
+Run `npm run app:prepare:watch` to concurrently build-watch the Angular source code, and prepare-watch the Angular build output (under client/www).<br>
+Note that this will not account for any changes to puglin dependencies. A full build is necessary for platform/plugin initialization or changes.<br>
+Run/Install the platform output on an iOS device simulator. For example, open `client/platforms/ios` in Xcode and hit run/debug.
+
+### Prepare & Watch Device App
+
+NOTE: Before running this npm script, it is neccessary to follow the direcitons at the top of `client/projects/app/src/environments/environment.device.example.ts` in order to enable a connection between your smartphone and localhost on your development machine.
+
+Run `npm run app:device:prepare:watch` to concurrently build-watch the Angular source code, and prepare-watch the Angular build output (under client/www).<br>
+Note that this will not account for any changes to puglin dependencies. A full build is necessary for platform/plugin initialization or changes.<br>
+Run/Install the platform output on a linked Android/iOS smartphone. For example, open `client/platforms/ios` in Xcode or `client/platforms/android` in Android Studio and hit run/debug.
+
+### Build Web
 
 Run `npm run build` to perform a production build of the Angular client code.
 

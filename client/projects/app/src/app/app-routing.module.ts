@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BootstrapService } from '~app/bootstrap/bootstrap/bootstrap.service';
+import { AppBootstrapService } from '~app/app-bootstrap/app-bootstrap/app-bootstrap.service';
 import { AppShellComponent } from '~web/app-shell/app-shell/app-shell.component';
 import { AboutComponent } from '~web/components/about/about.component';
 import { HomeComponent } from '~web/components/home/home.component';
@@ -11,11 +11,11 @@ const routes: Routes = [
   { path: 'login', pathMatch: 'full', redirectTo: 'bootstrap/login' },
   { path: 'signup', pathMatch: 'full', redirectTo: 'bootstrap/signup' },
   { path: 'signup/:accountType', redirectTo: 'bootstrap/signup/:accountType' },
-  { path: 'bootstrap', loadChildren: () => import('./bootstrap/bootstrap.module').then(mod => mod.BootstrapModule) },
+  { path: 'bootstrap', loadChildren: () => import('./app-bootstrap/app-bootstrap.module').then(mod => mod.AppBootstrapModule) },
   {
     path: '',
     component: AppShellComponent,
-    canActivate: [BootstrapService],
+    canActivate: [AppBootstrapService],
     children: [
       { path: 'home', component: HomeComponent },
       { path: 'home/:login', component: HomeComponent },

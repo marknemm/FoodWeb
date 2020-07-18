@@ -1,7 +1,7 @@
 {
   "name": "food-web",
+  "type": "angular",
   "integrations": {
     "cordova": {}
-  },
-  "type": "angular"
+  }
 }

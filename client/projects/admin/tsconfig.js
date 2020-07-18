@@ -33,6 +33,16 @@ const config = {
         "./src/app/admin-app-shell/pipes/*",
         "./src/app/admin-app-shell/services/*"
       ],
+      "~admin/admin-bootstrap/*": [
+        "./src/app/admin-bootstrap/*",
+        "./src/app/admin-bootstrap/child-components/*",
+        "./src/app/admin-bootstrap/components/*",
+        "./src/app/admin-bootstrap/directives/*",
+        "./src/app/admin-bootstrap/forms/*",
+        "./src/app/admin-bootstrap/interfaces/*",
+        "./src/app/admin-bootstrap/pipes/*",
+        "./src/app/admin-bootstrap/services/*"
+      ],
       "~admin/admin-delivery/*": [
         "./src/app/admin-delivery/*",
         "./src/app/admin-delivery/child-components/*",
@@ -76,16 +86,6 @@ const config = {
       "~admin/app.component": ["./src/app/app.component"],
       "~admin/app.module": ["./src/app/app.module"],
       "~admin/app-routing.module": ["./src/app/app-routing.module"],
-      "~admin/bootstrap/*": [
-        "./src/app/bootstrap/*",
-        "./src/app/bootstrap/child-components/*",
-        "./src/app/bootstrap/components/*",
-        "./src/app/bootstrap/directives/*",
-        "./src/app/bootstrap/forms/*",
-        "./src/app/bootstrap/interfaces/*",
-        "./src/app/bootstrap/pipes/*",
-        "./src/app/bootstrap/services/*"
-      ],
       "~admin/components/*": [ "./src/app/components/*" ],
       "~admin/developer/*": [
         "./src/app/developer/*",
@@ -113,14 +113,13 @@ const config = {
     sourceMap: true,
     types: ["node"]
   },
-  include: [
-    "src/**/*.ts",
-    "../web/src/**/*.ts"
+  files: [
+    "src/main.ts",
+    "src/polyfills.ts"
   ],
-  exclude: [
-    "src/test.ts",
-    "src/**/*.spec.ts",
-    "../web/src/**/*.spec.ts"
+  include: [
+    "src/**/*.d.ts",
+    "../web/src/**/*.d.ts"
   ]
 };
 

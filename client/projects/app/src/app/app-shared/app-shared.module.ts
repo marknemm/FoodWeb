@@ -13,4 +13,4 @@ import { SharedModule } from '~web/shared/shared.module';
     SharedModule
   ]
 })
-export class AppSessionModule {}
+export class AppSharedModule {}

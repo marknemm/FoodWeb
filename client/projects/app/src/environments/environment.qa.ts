@@ -1,4 +1,4 @@
-export const environment: FoodWebEnvironment = {
+export const environment: FoodWebAppEnvironment = {
   production: false,
   qa: true,
   demo: false,

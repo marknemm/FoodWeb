@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import * as _ from 'lodash';
+import { debounce } from 'lodash-es';
 import { Observable, Subscription } from 'rxjs';
 import { AccountAutocompleteItem, AccountAutocompleteRequest, AccountType, DeepReadonly } from '~shared';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
@@ -21,7 +21,7 @@ export class AccountAutocompleteService {
     private _httpClient: HttpClient,
     private _httpResonseService: HttpResponseService
   ) {
-    this._getAccountAutocompleteItems = _.debounce(this._getAccountAutocompleteItems, 300);
+    this._getAccountAutocompleteItems = debounce(this._getAccountAutocompleteItems, 300);
   }
 
   get loading(): boolean {

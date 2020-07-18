@@ -6,7 +6,8 @@
       "type": "shell",
       "dependsOn": [
         "Docker FoodWeb: Start",
-        "Docker FoodWeb Admin: Start"
+        "Docker FoodWeb Admin: Start",
+        "Docker FoodWeb App: Start"
       ],
       "group": "none",
       "problemMatcher": []
@@ -16,7 +17,8 @@
       "type": "shell",
       "dependsOn": [
         "Docker FoodWeb: Stop",
-        "Docker FoodWeb Admin: Stop"
+        "Docker FoodWeb Admin: Stop",
+        "Docker FoodWeb App: Stop"
       ],
       "group": "none",
       "problemMatcher": []
@@ -39,6 +41,13 @@
       "problemMatcher": []
     },
     {
+      "label": "Docker FoodWeb: Start Server",
+      "type": "shell",
+      "command": "docker-compose up -d foodweb-server",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
       "label": "Docker FoodWeb: Stop",
       "type": "shell",
       "dependsOn": [
@@ -51,14 +60,14 @@
     {
       "label": "Docker FoodWeb: Stop Client",
       "type": "shell",
-      "command": "docker-compose stop foodweb",
+      "command": "docker-compose down foodweb",
       "group": "none",
       "problemMatcher": []
     },
     {
       "label": "Docker FoodWeb: Stop Server",
       "type": "shell",
-      "command": "docker-compose stop foodweb-server",
+      "command": "docker-compose down foodweb-server",
       "group": "none",
       "problemMatcher": []
     },
@@ -66,6 +75,13 @@
       "label": "Docker FoodWeb Admin: Start",
       "type": "shell",
       "command": "docker-compose up -d foodweb-admin",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb Admin: Start Server",
+      "type": "shell",
+      "command": "docker-compose up -d foodweb-admin-server",
       "group": "none",
       "problemMatcher": []
     },
@@ -82,14 +98,28 @@
     {
       "label": "Docker FoodWeb Admin: Stop Client",
       "type": "shell",
-      "command": "docker-compose stop foodweb-admin",
+      "command": "docker-compose down foodweb-admin",
       "group": "none",
       "problemMatcher": []
     },
     {
       "label": "Docker FoodWeb Admin: Stop Server",
       "type": "shell",
-      "command": "docker-compose stop foodweb-admin-server",
+      "command": "docker-compose down foodweb-admin-server",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb App: Start",
+      "type": "shell",
+      "command": "docker-compose up -d foodweb-app",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb App: Stop",
+      "type": "shell",
+      "command": "docker-compose down foodweb-app",
       "group": "none",
       "problemMatcher": []
     },
@@ -114,6 +144,23 @@
       "label": "Docker FoodWeb: Reinstall Server Dependencies",
       "type": "shell",
       "command": "docker exec -it foodweb-server bash -c 'npm run install:all'",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb App: Reinstall Dependencies",
+      "type": "shell",
+      "dependsOn": [
+        "Docker FoodWeb App: Reinstall Client Dependencies",
+        "Docker FoodWeb: Reinstall Server Dependencies"
+      ],
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker FoodWeb App: Reinstall Client Dependencies",
+      "type": "shell",
+      "command": "docker exec -it foodweb-app bash -c 'npm run install:all'",
       "group": "none",
       "problemMatcher": []
     },

@@ -18,7 +18,12 @@
             "main": "projects/admin/src/main.ts",
             "polyfills": "projects/admin/src/polyfills.ts",
             "tsConfig": "projects/admin/tsconfig.json",
-            "aot": false,
+            "allowedCommonJsDependencies": [
+              "event-source-polyfill",
+              "google-polyline",
+              "lscache"
+            ],
+            "aot": true,
             "assets": [
               {
                 "glob": "**/*",
@@ -178,7 +183,12 @@
             "main": "projects/app/src/main.ts",
             "polyfills": "projects/app/src/polyfills.ts",
             "tsConfig": "projects/app/tsconfig.json",
-            "aot": false,
+            "allowedCommonJsDependencies": [
+              "event-source-polyfill",
+              "google-polyline",
+              "lscache"
+            ],
+            "aot": true,
             "assets": [
               {
                 "glob": "**/*",
@@ -205,35 +215,27 @@
             ]
           },
           "configurations": {
-            "app": {
+            "device": {
               "fileReplacements": [
                 {
                   "replace": "projects/app/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.app.ts"
+                  "with": "projects/app/src/environments/environment.device.ts"
                 },
                 {
                   "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.app.ts"
+                  "with": "projects/app/src/environments/environment.device.ts"
                 }
               ]
             },
-            "browser": {
+            "emu": {
               "fileReplacements": [
                 {
                   "replace": "projects/app/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.browser.ts"
+                  "with": "projects/app/src/environments/environment.emu.ts"
                 },
                 {
                   "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.browser.ts"
-                }
-              ]
-            },
-            "hmr": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/app/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.hmr.ts"
+                  "with": "projects/app/src/environments/environment.emu.ts"
                 }
               ]
             },
@@ -274,16 +276,11 @@
             "sourceMap": true
           },
           "configurations": {
-            "app": {
-              "browserTarget": "app:build:app"
+            "device": {
+              "browserTarget": "app:build:device"
             },
-            "browser": {
-              "browserTarget": "app:build:browser"
-            },
-            "hmr": {
-              "hmr": true,
-              "hmrWarning": false,
-              "browserTarget": "app:build:hmr"
+            "emu": {
+              "browserTarget": "app:build:emu"
             },
             "production": {
               "browserTarget": "app:build:production"
@@ -399,7 +396,12 @@
             "main": "projects/web/src/main.ts",
             "polyfills": "projects/web/src/polyfills.ts",
             "tsConfig": "projects/web/tsconfig.json",
-            "aot": false,
+            "allowedCommonJsDependencies": [
+              "event-source-polyfill",
+              "google-polyline",
+              "lscache"
+            ],
+            "aot": true,
             "assets": [
               {
                 "glob": "**/*",

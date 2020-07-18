@@ -3,7 +3,7 @@
 // `ng build --configuration=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `angular.json`.
 
-export const environment: FoodWebEnvironment = {
+export const environment: FoodWebAppEnvironment = {
   production: false,
   qa: false,
   demo: false,
@@ -14,5 +14,5 @@ export const environment: FoodWebEnvironment = {
   supportEmail: 'support@wnyfoodweb.com',
   recaptchaSiteKey: '',
   googleMapsJSApiKey: 'AIzaSyDQdydkED1Z-nZvQXQQHlOYXnrmdqdFedA',
-  server: 'http://10.0.2.2:5000/server'
+  server: 'http://localhost:5000/server'
 };
