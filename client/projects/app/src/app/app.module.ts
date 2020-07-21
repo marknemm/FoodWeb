@@ -1,67 +1,36 @@
-import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppMinimize } from '@ionic-native/app-minimize/ngx';
-import { CodePush } from '@ionic-native/code-push/ngx';
-import { Device } from '@ionic-native/device/ngx';
-import { Push } from '@ionic-native/push/ngx';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { CodePushService } from '~app/app-plugins/code-push/code-push.service';
-import { AppRoutingModule } from '~app/app-routing.module';
-import { AppDataService } from '~app/app-session/app-data/app-data.service';
-import { AppSessionModule } from '~app/app-session/app-session.module';
-import { AppComponent } from '~app/app.component';
-import { AppShellModule } from '~web/app-shell/app-shell.module';
-import { AboutComponent } from '~web/components/about/about.component';
-import { HomeComponent } from '~web/components/home/home.component';
-import { EventModule } from '~web/event/event.module';
-import { HeuristicsModule } from '~web/heuristics/heuristics.module';
-import { MaterialModule } from '~web/material.module';
-import { IconService } from '~web/shared/icon/icon.service';
-import { SharedModule } from '~web/shared/shared.module';
+import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
+import { NativeScriptModule } from "@nativescript/angular";
+
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { ItemsComponent } from "./item/items.component";
+import { ItemDetailComponent } from "./item/item-detail.component";
+
+// Uncomment and add to NgModule imports if you need to use two-way binding
+// import { NativeScriptFormsModule } from "nativescript-angular/forms";
+
+// Uncomment and add to NgModule imports if you need to use the HttpClient wrapper
+// import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    AboutComponent
-  ],
-  imports: [
-    AppRoutingModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    MaterialModule,
-    NgxMaterialTimepickerModule,
-    SharedModule,
-    AppShellModule,
-    AppSessionModule.forRoot(),
-    EventModule,
-    HeuristicsModule
-  ],
-  providers: [
-    AppMinimize,
-    CodePush,
-    Device,
-    Push,
-    SplashScreen
-  ],
-  bootstrap: [AppComponent]
+    bootstrap: [
+        AppComponent
+    ],
+    imports: [
+        NativeScriptModule,
+        AppRoutingModule
+    ],
+    declarations: [
+        AppComponent,
+        ItemsComponent,
+        ItemDetailComponent
+    ],
+    providers: [],
+    schemas: [
+        NO_ERRORS_SCHEMA
+    ]
 })
-export class AppModule {
-
-  constructor(
-    appDataService: AppDataService,
-    codePushService: CodePushService,
-    iconService: IconService
-  ) {
-    codePushService.maintainSynchronization();
-    appDataService.init();
-    iconService.init();
-  }
-}
+/*
+Pass your application module to the bootstrapModule function located in main.ts to start your app
+*/
+export class AppModule { }

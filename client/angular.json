@@ -170,216 +170,9 @@
     },
     "app": {
       "projectType": "application",
-      "schematics": {},
-      "root": "projects/app",
-      "sourceRoot": "projects/app/src",
-      "prefix": "food-web-app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "www",
-            "index": "projects/app/src/index.html",
-            "main": "projects/app/src/main.ts",
-            "polyfills": "projects/app/src/polyfills.ts",
-            "tsConfig": "projects/app/tsconfig.json",
-            "allowedCommonJsDependencies": [
-              "event-source-polyfill",
-              "google-polyline",
-              "lscache"
-            ],
-            "aot": true,
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "./assets",
-                "output": "./assets"
-              },
-              "projects/app/src/assets"
-            ],
-            "styles": [
-              "styles/styles.scss",
-              "projects/app/src/styles/app-styles.scss"
-            ],
-            "stylePreprocessorOptions": {
-              "includePaths": [
-                "styles",
-                "projects/app/src/styles"
-              ]
-            },
-            "fileReplacements": [
-              {
-                "replace": "projects/web/src/environments/environment.ts",
-                "with": "projects/app/src/environments/environment.ts"
-              }
-            ]
-          },
-          "configurations": {
-            "device": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/app/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.device.ts"
-                },
-                {
-                  "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.device.ts"
-                }
-              ]
-            },
-            "emu": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/app/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.emu.ts"
-                },
-                {
-                  "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.emu.ts"
-                }
-              ]
-            },
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/app/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/app/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "app:build",
-            "sourceMap": true
-          },
-          "configurations": {
-            "device": {
-              "browserTarget": "app:build:device"
-            },
-            "emu": {
-              "browserTarget": "app:build:emu"
-            },
-            "production": {
-              "browserTarget": "app:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "app:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/app/src/test.ts",
-            "polyfills": "projects/app/src/polyfills.ts",
-            "tsConfig": "projects/app/tsconfig.spec.json",
-            "karmaConfig": "projects/app/karma.conf.js",
-            "assets": [
-              "assets"
-            ],
-            "styles": [
-              "styles/styles.scss",
-              "projects/app/src/styles/app-styles.scss"
-            ],
-            "stylePreprocessorOptions": {
-              "includePaths": [
-                "styles",
-                "projects/app/src/styles"
-              ]
-            },
-            "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/app/tsconfig.json",
-              "projects/app/tsconfig.spec.json",
-              "projects/app/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/app/e2e/protractor.conf.js",
-            "devServerTarget": "app:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "app:serve:production"
-            }
-          }
-        },
-        "ionic-cordova-build": {
-          "builder": "@ionic/angular-toolkit:cordova-build",
-          "options": {
-            "browserTarget": "app:build"
-          },
-          "configurations": {
-            "app": {
-              "browserTarget": "app:build:app"
-            },
-            "browser": {
-              "browserTarget": "app:build:browser"
-            },
-            "production": {
-              "browserTarget": "app:build:production"
-            }
-          }
-        },
-        "ionic-cordova-serve": {
-          "builder": "@ionic/angular-toolkit:cordova-serve",
-          "options": {
-            "cordovaBuildTarget": "app:ionic-cordova-build",
-            "devServerTarget": "app:serve"
-          },
-          "configurations": {
-            "app": {
-              "cordovaBuildTarget": "app:ionic-cordova-build:app",
-              "devServerTarget": "app:serve:app"
-            },
-            "browser": {
-              "cordovaBuildTarget": "app:ionic-cordova-build:browser",
-              "devServerTarget": "app:serve:browser"
-            },
-            "production": {
-              "cordovaBuildTarget": "app:ionic-cordova-build:production",
-              "devServerTarget": "app:serve:production"
-            }
-          }
-        }
-      }
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "ns"
     },
     "web": {
       "projectType": "application",
@@ -631,7 +424,7 @@
     }
   },
   "cli": {
-    "defaultCollection": "@ionic/angular-toolkit",
+    "defaultCollection": "@nativescript/schematics",
     "analytics": "fc94d962-abda-41f7-869e-10556a9370e9"
   },
   "schematics": {
@@ -641,15 +434,7 @@
     },
     "@schematics/angular:directive": {
       "prefix": "food-web"
-    },
-    "@ionic/angular-toolkit:component": {
-      "prefix": "food-web",
-      "styleext": "scss"
-    },
-    "@ionic/angular-toolkit:page": {
-      "prefix": "food-web",
-      "styleext": "scss"
     }
   },
-  "defaultProject": "food-web"
+  "defaultProject": "web"
 }

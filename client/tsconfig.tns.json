@@ -1,0 +1,37 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "es2015",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noEmitHelpers": true,
+    "noEmitOnError": true,
+    "skipLibCheck": true,
+    "lib": [
+      "es2018",
+      "es2017",
+      "dom",
+      "es6"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "projects/app/*"
+      ]
+    }
+  },
+  "include": [
+    "projects/app/references.d.ts",
+    "projects/app/src/tests/**/*.ts"
+  ],
+  "files": [
+    "projects/app/src/main.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "platforms",
+    "e2e"
+  ]
+}
