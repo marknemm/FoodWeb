@@ -5,7 +5,7 @@ import { SortByOpt } from '~web/filtered-list/sort-by-opt';
 import { ConstantsService } from '~web/shared/constants/constants.service';
 
 @Component({
-  selector: 'food-web-delivery-filters',
+  selector: 'foodweb-delivery-filters',
   templateUrl: './delivery-filters.component.html',
   styleUrls: ['./delivery-filters.component.scss'],
 })

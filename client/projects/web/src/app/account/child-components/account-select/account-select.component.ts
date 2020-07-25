@@ -8,7 +8,7 @@ import { TypedFormControl } from '~web/data-structure/typed-form-control';
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
-  selector: 'food-web-account-select',
+  selector: 'foodweb-account-select',
   templateUrl: './account-select.component.html',
   styleUrls: ['./account-select.component.scss'],
   providers: valueAccessorProvider(AccountSelectComponent).concat([AccountAutocompleteService])

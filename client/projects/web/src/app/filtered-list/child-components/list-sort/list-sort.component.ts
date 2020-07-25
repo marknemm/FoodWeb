@@ -4,7 +4,7 @@ import { SortByOpt } from '~web/filtered-list/sort-by-opt';
 export { SortByOpt };
 
 @Component({
-  selector: 'food-web-list-sort',
+  selector: 'foodweb-list-sort',
   templateUrl: './list-sort.component.html',
   styleUrls: ['./list-sort.component.scss'],
 })

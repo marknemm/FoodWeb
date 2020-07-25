@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { DonationHelper, DonationStatus } from '~shared';
 
 @Component({
-  selector: 'food-web-donation-status',
+  selector: 'foodweb-donation-status',
   templateUrl: './donation-status.component.html',
   styleUrls: ['./donation-status.component.scss']
 })

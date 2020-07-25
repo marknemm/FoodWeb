@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'food-web-about',
+  selector: 'foodweb-about',
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss']
 })

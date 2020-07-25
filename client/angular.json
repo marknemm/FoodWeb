@@ -8,7 +8,7 @@
       "schematics": {},
       "root": "projects/admin",
       "sourceRoot": "projects/admin/src",
-      "prefix": "food-web-admin",
+      "prefix": "foodweb-admin",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -170,16 +170,16 @@
     },
     "app": {
       "projectType": "application",
-      "root": "",
-      "sourceRoot": "src",
-      "prefix": "ns"
+      "root": "projects/app",
+      "sourceRoot": "projects/app/src",
+      "prefix": "foodweb-app"
     },
     "web": {
       "projectType": "application",
       "schematics": {},
       "root": "projects/web",
       "sourceRoot": "projects/web/src",
-      "prefix": "food-web",
+      "prefix": "foodweb",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

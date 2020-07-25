@@ -9,7 +9,7 @@ import { LoginForm } from '~web/session/login.form';
 import { Account, SessionService } from '~web/session/session/session.service';
 
 @Component({
-  selector: 'food-web-login',
+  selector: 'foodweb-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

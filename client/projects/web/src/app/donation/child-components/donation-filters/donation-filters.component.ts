@@ -5,7 +5,7 @@ import { SortByOpt } from '~web/filtered-list/sort-by-opt';
 import { ConstantsService } from '~web/shared/constants/constants.service';
 
 @Component({
-  selector: 'food-web-donation-filters',
+  selector: 'foodweb-donation-filters',
   templateUrl: './donation-filters.component.html',
   styleUrls: ['./donation-filters.component.scss'],
 })

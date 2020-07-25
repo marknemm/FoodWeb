@@ -5,7 +5,7 @@ import { DateTimeRange, DateTimeService } from '~web/date-time/date-time/date-ti
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
-  selector: 'food-web-date-time-range-radio',
+  selector: 'foodweb-date-time-range-radio',
   templateUrl: './date-time-range-radio.component.html',
   styleUrls: ['./date-time-range-radio.component.scss'],
   providers: valueAccessorProvider(DateTimeRangeRadioComponent)

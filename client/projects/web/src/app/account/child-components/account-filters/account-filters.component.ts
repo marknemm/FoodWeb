@@ -4,7 +4,7 @@ import { AccountFiltersForm, AccountFiltersFormT } from '~web/account/account-fi
 import { SortByOpt } from '~web/filtered-list/sort-by-opt';
 
 @Component({
-  selector: 'food-web-account-filters',
+  selector: 'foodweb-account-filters',
   templateUrl: './account-filters.component.html',
   styleUrls: ['./account-filters.component.scss'],
 })

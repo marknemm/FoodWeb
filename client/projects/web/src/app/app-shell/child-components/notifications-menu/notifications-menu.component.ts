@@ -3,7 +3,7 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { NotificationService } from '~web/notification/services/notification/notification.service';
 
 @Component({
-  selector: 'food-web-notifications-menu',
+  selector: 'foodweb-notifications-menu',
   templateUrl: './notifications-menu.component.html',
   styleUrls: ['./notifications-menu.component.scss'],
 })

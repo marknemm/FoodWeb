@@ -3,7 +3,7 @@ import { PasswordResetService } from '~web/password/password-reset/password-rese
 import { PasswordForm } from '~web/password/password.form';
 
 @Component({
-  selector: 'food-web-password-reset',
+  selector: 'foodweb-password-reset',
   templateUrl: './password-reset.component.html',
   styleUrls: ['./password-reset.component.scss']
 })

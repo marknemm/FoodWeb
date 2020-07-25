@@ -1,5 +1,5 @@
 <div class="create-account page container" [formGroup]="adminAccountForm.get('accountCreateOptions')">
-  <food-web-account-creation-form *ngIf="!(createdAccountStore.value$ | async); else accountCreatedTmpl" [accountForm]="adminAccountForm.accountForm" (createAccount)="createAccount()">
+  <foodweb-account-creation-form *ngIf="!(createdAccountStore.value$ | async); else accountCreatedTmpl" [accountForm]="adminAccountForm.accountForm" (createAccount)="createAccount()">
     <mat-slide-toggle
       class="password-options"
       formControlName="autoGenPassword"
@@ -14,7 +14,7 @@
         Auto Verify Account
       </mat-slide-toggle>
     </div>
-  </food-web-account-creation-form>
+  </foodweb-account-creation-form>
 
   <ng-template #accountCreatedTmpl>
     <mat-card>

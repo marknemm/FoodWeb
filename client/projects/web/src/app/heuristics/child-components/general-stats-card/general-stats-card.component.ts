@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { GeneralStats, GeneralStatsService } from '~web/heuristics/heuristics/general-stats.service';
 
 @Component({
-  selector: 'food-web-general-stats-card',
+  selector: 'foodweb-general-stats-card',
   templateUrl: './general-stats-card.component.html',
   styleUrls: ['./general-stats-card.component.scss']
 })

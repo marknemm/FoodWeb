@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ReceiverForm } from '~web/account/receiver.form';
 
 @Component({
-  selector: 'food-web-receiver',
+  selector: 'foodweb-receiver',
   templateUrl: './receiver.component.html',
   styleUrls: ['./receiver.component.scss']
 })

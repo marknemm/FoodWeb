@@ -7,7 +7,7 @@ import { DateTimeService } from '~web/date-time/date-time/date-time.service';
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
-  selector: 'food-web-date-time',
+  selector: 'foodweb-date-time',
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.scss'],
   providers: valueAccessorProvider(DateTimeComponent).concat([

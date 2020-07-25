@@ -32,7 +32,7 @@
       </a>
     </p>
     <div class="event-action-container" *ngIf="featuredEvent.signupTitle && !signupComplete">
-      <food-web-progress-indicator [trigger]="eventRegistrationService.loading" [blocking]="true"></food-web-progress-indicator>
+      <foodweb-progress-indicator [trigger]="eventRegistrationService.loading" [blocking]="true"></foodweb-progress-indicator>
       <mat-expansion-panel (afterExpand)="onSignupPanelExpanded()">
         <mat-expansion-panel-header #expansionHeader [ngClass]="{ 'green-glow': signupPanelShouldGlow }">
           {{ featuredEvent.signupTitle }}

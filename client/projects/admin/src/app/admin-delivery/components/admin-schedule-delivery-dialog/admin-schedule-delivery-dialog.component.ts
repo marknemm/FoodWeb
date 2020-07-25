@@ -4,7 +4,7 @@ import { AdminScheduleDeliveryForm } from '~admin/admin-delivery/admin-schedule-
 import { Account, DateTimeRange, Donation } from '~shared';
 
 @Component({
-  selector: 'food-web-admin-schedule-delivery-dialog',
+  selector: 'foodweb-admin-schedule-delivery-dialog',
   templateUrl: './admin-schedule-delivery-dialog.component.html',
   styleUrls: ['./admin-schedule-delivery-dialog.component.scss'],
 })

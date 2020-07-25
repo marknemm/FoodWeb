@@ -3,7 +3,7 @@ import { Notification } from '~shared';
 import { NotificationService } from '~web/notification/notification/notification.service';
 
 @Component({
-  selector: 'food-web-notification',
+  selector: 'foodweb-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss']
 })

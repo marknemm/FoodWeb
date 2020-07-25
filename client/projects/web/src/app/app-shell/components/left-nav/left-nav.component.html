@@ -4,7 +4,7 @@
   </mat-drawer>
   <mat-drawer-content #drawerContent>
     <div *ngIf="pageProgressService.showBlockingProgress" class="blocking-page-progress-indicator" [style.width]="pageProgressService.blockingProgressWidth">
-      <food-web-progress-indicator
+      <foodweb-progress-indicator
         [backdropColor]="pageProgressService.backdropColor"
         [backdropOpacity]="pageProgressService.backdropOpacity"
         [backdropVisible]="pageProgressService.backdropVisible"
@@ -15,7 +15,7 @@
         [strokeWidth]="pageProgressService.strokeWidth"
         [trigger]="pageProgressService.trigger"
         [value]="pageProgressService.value">
-      </food-web-progress-indicator>
+      </foodweb-progress-indicator>
     </div>
     <div class="page-content">
       <ng-content></ng-content>

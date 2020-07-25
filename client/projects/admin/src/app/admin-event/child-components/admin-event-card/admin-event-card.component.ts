@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FeaturedEvent } from '~shared';
 
 @Component({
-  selector: 'food-web-admin-event-card',
+  selector: 'foodweb-admin-event-card',
   templateUrl: './admin-event-card.component.html',
   styleUrls: ['./admin-event-card.component.scss'],
 })

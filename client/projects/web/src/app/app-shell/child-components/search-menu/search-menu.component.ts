@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { AccountType, DonationStatus } from '~shared';
 
 @Component({
-  selector: 'food-web-search-menu',
+  selector: 'foodweb-search-menu',
   templateUrl: './search-menu.component.html',
   styleUrls: ['./search-menu.component.scss'],
 })

@@ -4,7 +4,7 @@ import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/fo
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
-  selector: 'food-web-date',
+  selector: 'foodweb-date',
   templateUrl: './date.component.html',
   styleUrls: ['./date.component.scss'],
   providers: valueAccessorProvider(DateComponent)

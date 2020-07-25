@@ -6,7 +6,7 @@ import { Donation, DonationReadService } from '~web/donation/donation-read/donat
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
-  selector: 'food-web-donations',
+  selector: 'foodweb-donations',
   templateUrl: './donations.component.html',
   styleUrls: ['./donations.component.scss']
 })

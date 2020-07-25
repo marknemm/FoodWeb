@@ -3,7 +3,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 
 @Component({
-  selector: 'food-web-search-bar',
+  selector: 'foodweb-search-bar',
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.scss'],
   providers: [

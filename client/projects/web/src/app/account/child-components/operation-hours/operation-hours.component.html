@@ -9,7 +9,7 @@
   </div>
   <div class="time-fields-container">
     <div class="time-field" [style.width]="timeWidth">
-      <food-web-time
+      <foodweb-time
         [allowClear]="allowClear"
         [defaultTime]="getDefaultStartTime(formGroup)"
         [editing]="editing"
@@ -18,10 +18,10 @@
         [preventOverlayClick]="!allowOverlayClick"
         formControlName="startTime"
         placeholder="Start Time"
-      ></food-web-time>
+      ></foodweb-time>
     </div>
     <div class="time-field" [style.width]="timeWidth">
-      <food-web-time
+      <foodweb-time
         [allowClear]="allowClear"
         [defaultTime]="getDefaultEndTime(formGroup)"
         [editing]="editing"
@@ -30,7 +30,7 @@
         [preventOverlayClick]="!allowOverlayClick"
         formControlName="endTime"
         placeholder="End Time"
-      ></food-web-time>
+      ></foodweb-time>
     </div>
   </div>
   <mat-error *ngIf="formGroup.hasError('timeRangeOrder')" class="operation-hours-error">

@@ -3,7 +3,7 @@ import { CreateFeaturedEventService } from '~admin/admin-event/create-featured-e
 import { FeaturedEvent } from '~shared';
 
 @Component({
-  selector: 'food-web-create-featured-event',
+  selector: 'foodweb-create-featured-event',
   templateUrl: './create-featured-event.component.html',
   styleUrls: ['./create-featured-event.component.scss'],
 })

@@ -9,7 +9,7 @@ import { SessionService } from '~web/session/session/session.service';
 import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
 
 @Component({
-  selector: 'food-web-signup-verification',
+  selector: 'foodweb-signup-verification',
   templateUrl: './signup-verification.component.html',
   styleUrls: ['./signup-verification.component.scss']
 })

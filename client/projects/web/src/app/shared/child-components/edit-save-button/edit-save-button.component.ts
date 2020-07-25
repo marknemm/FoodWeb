@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.service';
 
 @Component({
-  selector: 'food-web-edit-save-button',
+  selector: 'foodweb-edit-save-button',
   templateUrl: './edit-save-button.component.html',
   styleUrls: ['./edit-save-button.component.scss']
 })

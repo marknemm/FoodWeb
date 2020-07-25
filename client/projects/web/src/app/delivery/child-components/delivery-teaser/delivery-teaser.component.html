@@ -3,26 +3,26 @@
     <img mat-card-avatar [src]="donation.donorAccount.profileImgUrl" alt="{{ donation | donationMemberName : AccountType.Donor }} Profile Image">
     <mat-card-title>{{ donation | donationMemberName : AccountType.Donor }}</mat-card-title>
     <mat-card-subtitle>
-      <food-web-donation-status [donationStatus]="donation.donationStatus" class="donation-status"></food-web-donation-status>
+      <foodweb-donation-status [donationStatus]="donation.donationStatus" class="donation-status"></foodweb-donation-status>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <div class="delivery-display row">
       <div class="col-sm-6">
         <div class="inline-label">Delivery Window Start:</div>
-        <div><food-web-date-time [dateTime]="donation.pickupWindowStart" [boldTime]="true"></food-web-date-time></div>
+        <div><foodweb-date-time [dateTime]="donation.pickupWindowStart" [boldTime]="true"></foodweb-date-time></div>
       </div>
       <div class="col-sm-6">
         <div class="inline-label">Delivery Window End:</div>
-        <div><food-web-date-time [dateTime]="donation.pickupWindowEnd" [boldTime]="true"></food-web-date-time></div>
+        <div><foodweb-date-time [dateTime]="donation.pickupWindowEnd" [boldTime]="true"></foodweb-date-time></div>
       </div>
       <div class="col-sm-6">
         <div class="inline-label">Pick-up:</div>
-        <br><food-web-address [contactInfo]="donation.donorAccount.contactInfo"></food-web-address>
+        <br><foodweb-address [contactInfo]="donation.donorAccount.contactInfo"></foodweb-address>
       </div>
       <div class="col-sm-6">
         <div class="inline-label">Drop-off:</div>
-        <br><food-web-address [contactInfo]="donation.claim.receiverAccount.contactInfo"></food-web-address>
+        <br><foodweb-address [contactInfo]="donation.claim.receiverAccount.contactInfo"></foodweb-address>
       </div>
     </div>
   </mat-card-content>

@@ -8,7 +8,7 @@
       <div class="col-lg-6">
         <div *ngFor="let operationHoursForm of operationHoursFormArr.controls | slice : 0 : getColSplitIdx(operationHoursFormArr.controls)" class="operation-hours-form-container">
           <div class="delete-container">
-            <food-web-operation-hours [formGroup]="operationHoursForm" [editing]="editing"></food-web-operation-hours>
+            <foodweb-operation-hours [formGroup]="operationHoursForm" [editing]="editing"></foodweb-operation-hours>
             <button mat-icon-button color="warn" type="button" class="delete-button" (click)="operationHoursFormArr.remove(operationHoursForm, confirmDialogService)">
               <mat-icon [inline]="true">clear</mat-icon>
             </button>
@@ -18,7 +18,7 @@
       <div class="col-lg-6">
         <div *ngFor="let operationHoursForm of operationHoursFormArr.controls | slice : getColSplitIdx(operationHoursFormArr.controls)" class="operation-hours-form-container">
           <div class="delete-container">
-            <food-web-operation-hours [formGroup]="operationHoursForm" [editing]="editing"></food-web-operation-hours>
+            <foodweb-operation-hours [formGroup]="operationHoursForm" [editing]="editing"></foodweb-operation-hours>
             <button mat-icon-button color="warn" type="button" class="delete-button" (click)="operationHoursFormArr.remove(operationHoursForm, confirmDialogService)">
               <mat-icon [inline]="true">clear</mat-icon>
             </button>

@@ -6,7 +6,7 @@ import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/fo
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
-  selector: 'food-web-contact-info',
+  selector: 'foodweb-contact-info',
   templateUrl: './contact-info.component.html',
   styleUrls: ['./contact-info.component.scss'],
   providers: valueAccessorProvider(ContactInfoComponent)

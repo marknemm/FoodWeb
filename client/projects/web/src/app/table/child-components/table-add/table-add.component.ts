@@ -3,7 +3,7 @@ import { TableDataSource } from '~web/table/table-data-source';
 export { TableDataSource };
 
 @Component({
-  selector: 'food-web-table-add',
+  selector: 'foodweb-table-add',
   templateUrl: './table-add.component.html',
   styleUrls: ['./table-add.component.scss']
 })

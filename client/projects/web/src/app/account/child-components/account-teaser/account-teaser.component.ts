@@ -3,7 +3,7 @@ import { Account, AccountHelper, AccountType } from '~shared';
 import { MapAnchorType } from '~web/account/address/address.component';
 
 @Component({
-  selector: 'food-web-account-teaser',
+  selector: 'foodweb-account-teaser',
   templateUrl: './account-teaser.component.html',
   styleUrls: ['./account-teaser.component.scss'],
 })

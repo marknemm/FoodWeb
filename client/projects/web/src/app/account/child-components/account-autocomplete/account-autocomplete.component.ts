@@ -6,7 +6,7 @@ import { ImmutableStore } from '~web/data-structure/immutable-store';
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
-  selector: 'food-web-account-autocomplete',
+  selector: 'foodweb-account-autocomplete',
   templateUrl: './account-autocomplete.component.html',
   styleUrls: ['./account-autocomplete.component.scss'],
   providers: [

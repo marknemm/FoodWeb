@@ -10,7 +10,7 @@ import { ImmutableStore } from '~web/data-structure/immutable-store';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
-  selector: 'food-web-create-account',
+  selector: 'foodweb-create-account',
   templateUrl: './admin-account-create.component.html',
   styleUrls: ['./admin-account-create.component.scss'],
   providers: [AdminAccountCreateService]

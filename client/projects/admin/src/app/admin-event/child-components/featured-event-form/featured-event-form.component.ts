@@ -3,7 +3,7 @@ import { FeaturedEventForm } from '~admin/admin-event/featured-event.form';
 import { FeaturedEvent } from '~shared';
 
 @Component({
-  selector: 'food-web-featured-event-form',
+  selector: 'foodweb-featured-event-form',
   templateUrl: './featured-event-form.component.html',
   styleUrls: ['./featured-event-form.component.scss'],
 })

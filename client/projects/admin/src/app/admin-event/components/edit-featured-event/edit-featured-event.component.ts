@@ -6,7 +6,7 @@ import { UpdateFeaturedEventService } from '~admin/admin-event/update-featured-e
 import { FeaturedEvent } from '~shared';
 
 @Component({
-  selector: 'food-web-edit-featured-event',
+  selector: 'foodweb-edit-featured-event',
   templateUrl: './edit-featured-event.component.html',
   styleUrls: ['./edit-featured-event.component.scss'],
 })

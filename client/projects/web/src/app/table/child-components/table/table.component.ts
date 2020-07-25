@@ -8,7 +8,7 @@ import { TableColumn, TableDataSource, TableSelectionType } from '~web/table/tab
 export { TableColumn, TableDataSource, TableSelectionType };
 
 @Component({
-  selector: 'food-web-table',
+  selector: 'foodweb-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })

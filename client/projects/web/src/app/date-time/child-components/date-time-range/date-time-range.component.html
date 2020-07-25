@@ -1,6 +1,6 @@
 <div [formGroup]="formGroup" *ngIf="editing" class="date-time-range-form row">
   <div class="date-time-field col-sm-12">
-    <food-web-date-time
+    <foodweb-date-time
      #startDateTime
      formControlName="startDateTime"
      [allowClear]="allowClear"
@@ -13,10 +13,10 @@
      [floatLabels]="floatLabels"
      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
      (ngModelChange)="formGroup.fillMissingRangePart()">
-    </food-web-date-time>
+    </foodweb-date-time>
   </div>
   <div class="date-time-field col-sm-12">
-    <food-web-date-time
+    <foodweb-date-time
      #endDateTime
      formControlName="endDateTime"
      [allowClear]="allowClear"
@@ -29,7 +29,7 @@
      [floatLabels]="floatLabels"
      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
      (ngModelChange)="formGroup.fillMissingRangePart()">
-    </food-web-date-time>
+    </foodweb-date-time>
     <mat-error *ngIf="formGroup.hasError('dateTimeRangeOrder')" class="range-order-err">
       End date-time must be later than start date-time
     </mat-error>
@@ -42,11 +42,11 @@
 </div>
 
 <div *ngIf="!editing" class="date-time-range-display">
-  <food-web-date-time [boldTime]="boldTime" [excludeTimeDisplay]="startEndDateSame" [dateTime]="start" [editing]="false"></food-web-date-time>
+  <foodweb-date-time [boldTime]="boldTime" [excludeTimeDisplay]="startEndDateSame" [dateTime]="start" [editing]="false"></foodweb-date-time>
   <!-- For no display of end date due to same begin and end date, make sure we group times together so they end up on same line if line break occurs. -->
   <span class="d-inline-block">
-    <food-web-date-time *ngIf="startEndDateSame" [boldTime]="boldTime" [excludeDateDisplay]="true" [dateTime]="start" [editing]="false"></food-web-date-time>
+    <foodweb-date-time *ngIf="startEndDateSame" [boldTime]="boldTime" [excludeDateDisplay]="true" [dateTime]="start" [editing]="false"></foodweb-date-time>
     <span class="display-to"> -- </span>
-    <food-web-date-time [boldTime]="boldTime" [excludeDateDisplay]="startEndDateSame" [dateTime]="end" [editing]="false"></food-web-date-time>
+    <foodweb-date-time [boldTime]="boldTime" [excludeDateDisplay]="startEndDateSame" [dateTime]="end" [editing]="false"></foodweb-date-time>
   </span>
 </div>

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector: 'food-web-profile-img',
+  selector: 'foodweb-profile-img',
   templateUrl: './profile-img.component.html',
   styleUrls: ['./profile-img.component.scss'],
   providers: [

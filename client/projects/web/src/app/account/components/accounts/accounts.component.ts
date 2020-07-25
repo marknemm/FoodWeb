@@ -7,7 +7,7 @@ import { AccountReadService } from '~web/account/account-read/account-read.servi
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
-  selector: 'food-web-accounts',
+  selector: 'foodweb-accounts',
   templateUrl: './accounts.component.html',
   styleUrls: ['./accounts.component.scss']
 })

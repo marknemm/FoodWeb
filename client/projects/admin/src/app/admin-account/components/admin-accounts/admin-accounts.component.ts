@@ -6,7 +6,7 @@ import { AccountsComponent } from '~web/account/accounts/accounts.component';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
-  selector: 'food-web-admin-accounts',
+  selector: 'foodweb-admin-accounts',
   templateUrl: './admin-accounts.component.html',
   styleUrls: [
     '../../../../../../web/src/app/account/components/accounts/accounts.component.scss',

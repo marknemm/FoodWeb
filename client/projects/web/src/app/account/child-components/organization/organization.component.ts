@@ -3,7 +3,7 @@ import { AccountType } from '~shared';
 import { OrganizationForm } from '~web/account/organization.form';
 
 @Component({
-  selector: 'food-web-organization',
+  selector: 'foodweb-organization',
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })

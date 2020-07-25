@@ -3,8 +3,8 @@
   <mat-card class="donate-card">
     <mat-card-title>Donation Information</mat-card-title>
     <mat-card-content>
-      <food-web-account-select formControlName="donorAccount" accountType="Donor" placeholder="Donor Organization" filterPlaceholder="Search Donors..."></food-web-account-select>
-      <food-web-donation-form formGroupName="donateForm"></food-web-donation-form>
+      <foodweb-account-select formControlName="donorAccount" accountType="Donor" placeholder="Donor Organization" filterPlaceholder="Search Donors..."></foodweb-account-select>
+      <foodweb-donation-form formGroupName="donateForm"></foodweb-donation-form>
     </mat-card-content>
   </mat-card>
 
@@ -12,14 +12,14 @@
     <mat-card class="donate-card">
       <mat-card-title>Pickup Window</mat-card-title>
       <mat-card-content>
-        <food-web-date-time-range formGroupName="pickupWindow" [editing]="true" [minDate]="minDate"></food-web-date-time-range>
+        <foodweb-date-time-range formGroupName="pickupWindow" [editing]="true" [minDate]="minDate"></foodweb-date-time-range>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="donate-card">
       <mat-card-title>Contact Info</mat-card-title>
       <mat-card-content>
-        <food-web-contact-info [editing]="true" formGroupName="donorContactOverride"></food-web-contact-info>
+        <foodweb-contact-info [editing]="true" formGroupName="donorContactOverride"></foodweb-contact-info>
       </mat-card-content>
     </mat-card>
   </ng-container>
@@ -27,17 +27,17 @@
   <mat-card class="donate-card">
     <mat-card-title>Donation Claim</mat-card-title>
     <mat-card-content>
-      <food-web-account-select formControlName="receiverAccount" accountType="Receiver" placeholder="Receiver Organization" filterPlaceholder="Search Receivers..."></food-web-account-select>
+      <foodweb-account-select formControlName="receiverAccount" accountType="Receiver" placeholder="Receiver Organization" filterPlaceholder="Search Receivers..."></foodweb-account-select>
     </mat-card-content>
   </mat-card>
 
   <mat-card class="donate-card" formGroupName="delivery" *ngIf="formGroup.receiverAccount">
     <mat-card-title>Delivery</mat-card-title>
     <mat-card-content>
-      <food-web-account-select formControlName="volunteerAccount" accountType="Volunteer" placeholder="Volunteer" filterPaceholder="Search Volunteers..."></food-web-account-select>
+      <foodweb-account-select formControlName="volunteerAccount" accountType="Volunteer" placeholder="Volunteer" filterPaceholder="Search Volunteers..."></foodweb-account-select>
       <ng-container *ngIf="formGroup.volunteerAccount">
         <div class="block-label">Delivery Pickup Window</div>
-        <food-web-date-time-range
+        <foodweb-date-time-range
           formGroupName="pickupWindow"
           [dateTimeRangeRadioConfig]="{
             title: 'Choose a Delivery Pickup Window',
@@ -45,10 +45,10 @@
             allowPast: true
           }"
           [editing]="true"
-        ></food-web-date-time-range>
+        ></foodweb-date-time-range>
 
         <div class="block-label">Delivery Steps</div>
-        <food-web-date-time
+        <foodweb-date-time
           formControlName="startTime"
           datePlaceholder="Start Date"
           timePlaceholder="Start Time"
@@ -57,8 +57,8 @@
           [defaultDate]="formGroup.deliveryForm.pickupWindow?.startDateTime"
           [defaultTime]="formGroup.deliveryForm.pickupWindow?.startDateTime | foodWebFormatTime"
           [editing]="true">
-        </food-web-date-time>
-        <food-web-date-time
+        </foodweb-date-time>
+        <foodweb-date-time
           formControlName="pickupTime"
           datePlaceholder="Pickup Date"
           timePlaceholder="Pickup Time"
@@ -67,8 +67,8 @@
           [defaultDate]="formGroup.deliveryForm.startTime"
           [defaultTime]="formGroup.deliveryForm.startTime | foodWebFormatTime"
           [editing]="true"
-        ></food-web-date-time>
-        <food-web-date-time
+        ></foodweb-date-time>
+        <foodweb-date-time
           formControlName="dropOffTime"
           datePlaceholder="Drop-off Date"
           timePlaceholder="Drop-off Time"
@@ -77,7 +77,7 @@
           [defaultDate]="formGroup.deliveryForm.pickupTime"
           [defaultTime]="formGroup.deliveryForm.pickupTime | foodWebFormatTime"
           [editing]="true"
-        ></food-web-date-time>
+        ></foodweb-date-time>
       </ng-container>
     </mat-card-content>
   </mat-card>

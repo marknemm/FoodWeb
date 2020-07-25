@@ -2,7 +2,7 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FilteredListService } from '~web/filtered-list/filtered-list/filtered-list.service';
 
 @Component({
-  selector: 'food-web-filtered-list',
+  selector: 'foodweb-filtered-list',
   templateUrl: './filtered-list.component.html',
   styleUrls: ['./filtered-list.component.scss']
 })

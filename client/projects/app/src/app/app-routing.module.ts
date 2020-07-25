@@ -2,13 +2,13 @@ import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "@nativescript/angular";
 
-import { ItemsComponent } from "./item/items.component";
-import { ItemDetailComponent } from "./item/item-detail.component";
-
 const routes: Routes = [
-    { path: "", redirectTo: "/items", pathMatch: "full" },
-    { path: "items", component: ItemsComponent },
-    { path: "item/:id", component: ItemDetailComponent }
+    { path: "", redirectTo: "/home", pathMatch: "full" },
+    { path: "home", loadChildren: () => import("./home/home.module").then((m) => m.HomeModule) },
+    { path: "browse", loadChildren: () => import("./browse/browse.module").then((m) => m.BrowseModule) },
+    { path: "search", loadChildren: () => import("./search/search.module").then((m) => m.SearchModule) },
+    { path: "featured", loadChildren: () => import("./featured/featured.module").then((m) => m.FeaturedModule) },
+    { path: "settings", loadChildren: () => import("./settings/settings.module").then((m) => m.SettingsModule) }
 ];
 
 @NgModule({

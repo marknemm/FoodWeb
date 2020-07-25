@@ -4,7 +4,7 @@ import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
 import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
 
 @Component({
-  selector: 'food-web-left-nav',
+  selector: 'foodweb-left-nav',
   templateUrl: './left-nav.component.html',
   styleUrls: ['./left-nav.component.scss']
 })

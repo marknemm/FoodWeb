@@ -10,7 +10,7 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 import { TableDataSource } from '~web/table/table-data-source';
 
 @Component({
-  selector: 'food-web-event-registrations',
+  selector: 'foodweb-event-registrations',
   templateUrl: './event-registrations.component.html',
   styleUrls: ['./event-registrations.component.scss']
 })

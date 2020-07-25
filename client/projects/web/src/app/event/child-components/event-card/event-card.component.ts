@@ -7,7 +7,7 @@ import { MapAppLinkService } from '~web/map/map-app-link/map-app-link.service';
 import { SessionService } from '~web/session/session/session.service';
 
 @Component({
-  selector: 'food-web-event-card',
+  selector: 'foodweb-event-card',
   templateUrl: './event-card.component.html',
   styleUrls: ['./event-card.component.scss'],
   providers: [RegisterEventService]

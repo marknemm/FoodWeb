@@ -3,18 +3,18 @@
     <span class="page-title">{{ pageTitleService.title }}</span>
   </div>
 
-  <food-web-donation-workflow
+  <foodweb-donation-workflow
     [donation]="donation"
     [myAccount]="sessionService.account"
     (action)="onDonationAction($event)"
-  ></food-web-donation-workflow>
+  ></foodweb-donation-workflow>
 
   <div class="row">
     <div class="donation-info-container col-12">
-      <food-web-primary-donation-info [donation]="donation" [myDonation]="myDonation"></food-web-primary-donation-info>
+      <foodweb-primary-donation-info [donation]="donation" [myDonation]="myDonation"></foodweb-primary-donation-info>
     </div>
   </div>
-  
+
   <hr class="offset-top">
 
   <div class="row">
@@ -22,20 +22,20 @@
       'col-lg-6': !!donation.claim,
       'col-lg-12': !donation.claim
     }">
-      <food-web-account-teaser [account]="donation.donorAccount" customTitle="Donor">
+      <foodweb-account-teaser [account]="donation.donorAccount" customTitle="Donor">
         <div class="donation-submitter">
           <div class="inline-label">Donation Submitter:</div>
           <div class="d-inline-block">{{ donation.donorFirstName }} {{ donation.donorLastName }}</div>
         </div>
-      </food-web-account-teaser>
+      </foodweb-account-teaser>
     </div>
 
     <div *ngIf="donation.claim" class="receiver-info-container col-lg-6">
-      <food-web-account-teaser [account]="donation.claim.receiverAccount" customTitle="Receiver"></food-web-account-teaser>
+      <foodweb-account-teaser [account]="donation.claim.receiverAccount" customTitle="Receiver"></foodweb-account-teaser>
     </div>
 
     <div *ngIf="donation.claim?.delivery" class="deliverer-info-container col-lg-6">
-      <food-web-account-teaser [account]="donation.claim.delivery.volunteerAccount" customTitle="Deliverer" [hideAddress]="true"></food-web-account-teaser>
+      <foodweb-account-teaser [account]="donation.claim.delivery.volunteerAccount" customTitle="Deliverer" [hideAddress]="true"></foodweb-account-teaser>
     </div>
   </div>
 </div>

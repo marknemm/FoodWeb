@@ -6,7 +6,7 @@ import { TypedFormControl } from '~web/data-structure/typed-form-control';
 import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.service';
 
 @Component({
-  selector: 'food-web-operation-hours-info',
+  selector: 'foodweb-operation-hours-info',
   templateUrl: './operation-hours-info.component.html',
   styleUrls: ['./operation-hours-info.component.scss']
 })

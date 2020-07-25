@@ -8,11 +8,11 @@
       </div>
       <div class="col-12">
         <div class="inline-label">Pickup Window:</div>
-        <food-web-date-time-range class="d-inline-block" [range]="donation | pickupWindow" [boldTime]="true"></food-web-date-time-range>
+        <foodweb-date-time-range class="d-inline-block" [range]="donation | pickupWindow" [boldTime]="true"></foodweb-date-time-range>
       </div>
       <div *ngIf="donation.claim?.delivery?.pickupTime" class="col-sm-6 col-12">
         <div class="inline-label">Picked Up:</div>
-        <food-web-date-time class="d-inline-block" [dateTime]="donation.claim.delivery.pickupTime" [boldTime]="true"></food-web-date-time>
+        <foodweb-date-time class="d-inline-block" [dateTime]="donation.claim.delivery.pickupTime" [boldTime]="true"></foodweb-date-time>
       </div>
     </div>
   </mat-card-content>

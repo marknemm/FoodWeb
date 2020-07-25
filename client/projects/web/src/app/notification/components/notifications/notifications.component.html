@@ -6,10 +6,10 @@
   <mat-action-list>
     <mat-divider></mat-divider>
     <ng-container *ngFor="let notification of notifications">
-      <food-web-notification [notification]="notification"></food-web-notification>
+      <foodweb-notification [notification]="notification"></foodweb-notification>
       <mat-divider></mat-divider>
     </ng-container>
   </mat-action-list>
 
-  <food-web-paginator [length]="totalCount"></food-web-paginator>
+  <foodweb-paginator [length]="totalCount"></foodweb-paginator>
 </div>

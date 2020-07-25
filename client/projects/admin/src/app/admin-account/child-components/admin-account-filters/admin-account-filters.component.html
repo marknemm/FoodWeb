@@ -1,7 +1,7 @@
 <form [formGroup]="filtersForm" class="account-filters" (ngSubmit)="filter.emit(filtersForm.toAccountReadRequest())">
-  <food-web-list-filters-title [primary]="true">
+  <foodweb-list-filters-title [primary]="true">
     Account Filters
-  </food-web-list-filters-title>
+  </foodweb-list-filters-title>
 
   <mat-form-field class="fill">
     <mat-select placeholder="Account Type" formControlName="accountType">
@@ -58,21 +58,21 @@
   </mat-form-field>
 
   <ng-container *ngIf="!isDonorAccountType">
-    <food-web-list-filters-title>
+    <foodweb-list-filters-title>
       Operation Hours Filters
-    </food-web-list-filters-title>
+    </foodweb-list-filters-title>
 
-    <food-web-operation-hours
+    <foodweb-operation-hours
       [allowClear]="true"
       [editing]="true"
       [formGroup]="filtersForm.get('operationHours')"
       timeWidth="50%"
       weekdayPadding="0"
       weekdayWidth="100%"
-    ></food-web-operation-hours>
+    ></foodweb-operation-hours>
   </ng-container>
 
-  <food-web-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts" *ngIf="!omitSorting"></food-web-list-sort>
+  <foodweb-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts" *ngIf="!omitSorting"></foodweb-list-sort>
 
-  <food-web-list-filters-footer (clear)="filtersForm.reset(undefined, { resetAccountType: true })"></food-web-list-filters-footer>
+  <foodweb-list-filters-footer (clear)="filtersForm.reset(undefined, { resetAccountType: true })"></foodweb-list-filters-footer>
 </form>

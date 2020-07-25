@@ -9,7 +9,7 @@ import { PageProgressService } from '~web/shared/page-progress/page-progress.ser
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
-  selector: 'food-web-edit-donation',
+  selector: 'foodweb-edit-donation',
   templateUrl: './edit-donation.component.html',
   styleUrls: ['./edit-donation.component.scss'],
 })

@@ -4,7 +4,7 @@ import { AlertMessage, AlertResponse } from '~web/shared/alert/alert-message';
 import { AlertResponseService } from '~web/shared/alert/alert-response.service';
 
 @Component({
-  selector: 'food-web-alert-snack-bar',
+  selector: 'foodweb-alert-snack-bar',
   templateUrl: './alert-snack-bar.component.html',
   styleUrls: ['./alert-snack-bar.component.scss']
 })

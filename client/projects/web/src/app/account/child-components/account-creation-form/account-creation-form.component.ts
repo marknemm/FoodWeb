@@ -7,7 +7,7 @@ import { AccountForm } from '~web/account/account.form';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
-  selector: 'food-web-account-creation-form',
+  selector: 'foodweb-account-creation-form',
   templateUrl: './account-creation-form.component.html',
   styleUrls: ['./account-creation-form.component.scss'],
 })

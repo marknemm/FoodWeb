@@ -5,7 +5,7 @@ import { ConstantsService } from '~web/shared/constants/constants.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
-  selector: 'food-web-admin-console',
+  selector: 'foodweb-admin-console',
   templateUrl: './admin-console.component.html',
   styleUrls: ['./admin-console.component.scss'],
 })

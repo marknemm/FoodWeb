@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { TypedFormControl } from '~web/data-structure/typed-form-control';
 
 @Component({
-  selector: 'food-web-username',
+  selector: 'foodweb-username',
   templateUrl: './username.component.html',
   styleUrls: ['./username.component.scss'],
   providers: [

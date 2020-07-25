@@ -7,7 +7,7 @@ import { MapOptionsForm } from '~web/map/forms/map-options.form';
 import { MapOptions, MapService, WaypointMarker } from '~web/map/map/map.service';
 
 @Component({
-  selector: 'food-web-map',
+  selector: 'foodweb-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
   providers: [MapService]

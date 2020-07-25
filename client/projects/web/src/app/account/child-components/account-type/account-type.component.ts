@@ -5,7 +5,7 @@ import { ConstantsService } from '~web/shared/constants/constants.service';
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
-  selector: 'food-web-account-type',
+  selector: 'foodweb-account-type',
   templateUrl: './account-type.component.html',
   styleUrls: ['./account-type.component.scss'],
   providers: valueAccessorProvider(AccountTypeComponent)

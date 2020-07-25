@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { WaypointMarker } from '~web/map/interfaces/map';
 
 @Component({
-  selector: 'food-web-map-marker-info',
+  selector: 'foodweb-map-marker-info',
   templateUrl: './map-marker-info.component.html',
   styleUrls: ['./map-marker-info.component.scss'],
 })

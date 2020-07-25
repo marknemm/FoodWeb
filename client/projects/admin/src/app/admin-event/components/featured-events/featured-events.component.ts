@@ -4,7 +4,7 @@ import { FeaturedEvent } from '~shared';
 import { FeaturedEventsService } from '~web/event/featured-events/featured-events.service';
 
 @Component({
-  selector: 'food-web-featured-events',
+  selector: 'foodweb-featured-events',
   templateUrl: './featured-events.component.html',
   styleUrls: ['./featured-events.component.scss'],
 })

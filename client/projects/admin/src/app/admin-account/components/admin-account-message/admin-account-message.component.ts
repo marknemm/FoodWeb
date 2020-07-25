@@ -7,7 +7,7 @@ import { AccountReadFilters, AccountReadRequest } from '~shared';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
-  selector: 'food-web-compose-message',
+  selector: 'foodweb-compose-message',
   templateUrl: './admin-account-message.component.html',
   styleUrls: ['./admin-account-message.component.scss'],
 })

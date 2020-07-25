@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FilteredListService } from '~web/filtered-list/filtered-list/filtered-list.service';
 
 @Component({
-  selector: 'food-web-list-filters-footer',
+  selector: 'foodweb-list-filters-footer',
   templateUrl: './list-filters-footer.component.html',
   styleUrls: ['./list-filters-footer.component.scss'],
 })

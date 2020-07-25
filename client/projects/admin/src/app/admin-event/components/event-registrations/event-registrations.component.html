@@ -3,17 +3,17 @@
     {{ pageTitleService.title }}
   </div>
 
-  <food-web-table-container>
+  <foodweb-table-container>
     <mat-card class="datatable-card">
       <mat-card-title>
-        <food-web-table-title searchPlaceholder="Filter table..." searchIcon="filter_list">
+        <foodweb-table-title searchPlaceholder="Filter table..." searchIcon="filter_list">
           <span [innerHTML]="eventRegistrationsTitle"></span>
-        </food-web-table-title>
+        </foodweb-table-title>
       </mat-card-title>
-      <food-web-progress-indicator [trigger]="eventRegistrationService.loading" class="datatable-progress"></food-web-progress-indicator>
+      <foodweb-progress-indicator [trigger]="eventRegistrationService.loading" class="datatable-progress"></foodweb-progress-indicator>
       <mat-card-content>
-        <food-web-table mat-table [dataSource]="registrationsDataSource" matSort></food-web-table>
+        <foodweb-table mat-table [dataSource]="registrationsDataSource" matSort></foodweb-table>
       </mat-card-content>
     </mat-card>
-  </food-web-table-container>
+  </foodweb-table-container>
 </div>

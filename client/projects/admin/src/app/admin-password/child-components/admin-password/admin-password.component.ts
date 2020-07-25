@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PasswordComponent } from '~web/password/password/password.component';
 
 @Component({
-  selector: 'food-web-admin-password',
+  selector: 'foodweb-admin-password',
   templateUrl: './admin-password.component.html',
   styleUrls: [
     '../../../../../../web/src/app/password/child-components/password/password.component.scss',

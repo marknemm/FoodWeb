@@ -23,11 +23,11 @@
       <mat-divider></mat-divider>
     </div>
     <mat-action-list>
-      <food-web-notification
+      <foodweb-notification
         *ngFor="let notification of notificationService.notificationsPreview"
         [notification]="notification"
         [max2Lines]="true">
-      </food-web-notification>
+      </foodweb-notification>
     </mat-action-list>
     <div class="footer">
       <mat-divider></mat-divider>

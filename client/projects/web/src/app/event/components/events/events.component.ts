@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FeaturedEvent, FeaturedEventsService } from '~web/event/featured-events/featured-events.service';
 
 @Component({
-  selector: 'food-web-events',
+  selector: 'foodweb-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss'],
 })

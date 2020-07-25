@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { VolunteerForm } from '~web/account/volunteer.form';
 
 @Component({
-  selector: 'food-web-volunteer',
+  selector: 'foodweb-volunteer',
   templateUrl: './volunteer.component.html',
   styleUrls: ['./volunteer.component.scss']
 })

@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Directions } from '~web/map/map';
 
 @Component({
-  selector: 'food-web-direction-steps',
+  selector: 'foodweb-direction-steps',
   templateUrl: './direction-steps.component.html',
   styleUrls: ['./direction-steps.component.scss'],
 })

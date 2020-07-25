@@ -4,8 +4,8 @@
   <a [routerLink]="['/signup']">Signup</a>
 </ng-container>
 <ng-template #loggedInTmpl>
-  <food-web-settings-menu></food-web-settings-menu>
-  <food-web-donate-menu *ngIf="sessionService.isDonor"></food-web-donate-menu>
-  <food-web-search-menu *ngIf="!sessionService.isDonor" [accountType]="sessionService.account.accountType"></food-web-search-menu>
-  <food-web-notifications-menu></food-web-notifications-menu>
+  <foodweb-settings-menu></foodweb-settings-menu>
+  <foodweb-donate-menu *ngIf="sessionService.isDonor"></foodweb-donate-menu>
+  <foodweb-search-menu *ngIf="!sessionService.isDonor" [accountType]="sessionService.account.accountType"></foodweb-search-menu>
+  <foodweb-notifications-menu></foodweb-notifications-menu>
 </ng-template>

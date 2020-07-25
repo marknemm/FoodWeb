@@ -4,7 +4,7 @@ import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
 import { ConstantsService } from '~web/shared/constants/constants.service';
 
 @Component({
-  selector: 'food-web-admin-left-nav-items',
+  selector: 'foodweb-admin-left-nav-items',
   templateUrl: './admin-left-nav-items.component.html',
   styleUrls: ['./admin-left-nav-items.component.scss'],
 })

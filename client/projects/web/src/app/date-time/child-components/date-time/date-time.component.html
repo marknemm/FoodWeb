@@ -3,7 +3,7 @@
     {{ primaryLabel }}
   </div>
 
-  <food-web-date
+  <foodweb-date
     *ngIf="editing || !excludeDateDisplay"
     [allowClear]="allowClear"
     [bold]="boldDate"
@@ -17,9 +17,9 @@
     [minWidth]="minDateWidth"
     [placeholder]="datePlaceholder"
     formControlName="date"
-  ></food-web-date>
+  ></foodweb-date>
 
-  <food-web-time
+  <foodweb-time
     *ngIf="editing || !excludeTimeDisplay"
     [allowClear]="allowClear"
     [bold]="boldTime"
@@ -31,5 +31,5 @@
     [placeholder]="timePlaceholder"
     [time]="dateTime | foodWebFormatTime"
     formControlName="time"
-  ></food-web-time>
+  ></foodweb-time>
 </div>

@@ -3,7 +3,7 @@
     <img mat-card-avatar [src]="donation.donorAccount.profileImgUrl" alt="{{ donation | donationMemberName : AccountType.Donor }} Profile Image">
     <mat-card-title>{{ donation | donationMemberName : AccountType.Donor }}</mat-card-title>
     <mat-card-subtitle>
-      <food-web-donation-status [donationStatus]="donation.donationStatus" class="donation-status"></food-web-donation-status>
+      <foodweb-donation-status [donationStatus]="donation.donationStatus" class="donation-status"></foodweb-donation-status>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
@@ -14,11 +14,11 @@
       </div>
       <div class="col-sm-6">
         <div class="inline-label">Pickup Window Start:</div>
-        <div><food-web-date-time [dateTime]="(donation | pickupWindow).startDateTime" [boldTime]="true"></food-web-date-time></div>
+        <div><foodweb-date-time [dateTime]="(donation | pickupWindow).startDateTime" [boldTime]="true"></foodweb-date-time></div>
       </div>
       <div class="col-sm-6">
         <div class="inline-label">Pickup Window End:</div>
-        <div><food-web-date-time [dateTime]="(donation | pickupWindow).endDateTime" [boldTime]="true"></food-web-date-time></div>
+        <div><foodweb-date-time [dateTime]="(donation | pickupWindow).endDateTime" [boldTime]="true"></foodweb-date-time></div>
       </div>
     </div>
   </mat-card-content>

@@ -14,7 +14,7 @@
       "path": "./projects/admin/tsconfig.spec.json"
     },
     {
-      "path": "./projects/app/tsconfig.tns.json"
+      "path": "./tsconfig.tns.json"
     },
     {
       "path": "./projects/web/tsconfig.json"

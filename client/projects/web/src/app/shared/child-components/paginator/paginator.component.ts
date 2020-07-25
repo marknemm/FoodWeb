@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
 
 @Component({
-  selector: 'food-web-paginator',
+  selector: 'foodweb-paginator',
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.scss']
 })

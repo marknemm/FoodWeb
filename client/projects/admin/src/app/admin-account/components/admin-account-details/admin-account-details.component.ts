@@ -10,7 +10,7 @@ import { PasswordForm } from '~web/password/password.form';
 import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
 
 @Component({
-  selector: 'food-web-admin-account-details',
+  selector: 'foodweb-admin-account-details',
   templateUrl: './admin-account-details.component.html',
   styleUrls: [
     '../../../../../../web/src/app/account/components/account-details/account-details.component.scss',

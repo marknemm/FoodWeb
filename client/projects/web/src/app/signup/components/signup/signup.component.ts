@@ -10,7 +10,7 @@ import { SignupService } from '~web/signup/signup/signup.service';
 import { TermsConditionsDialogComponent } from '~web/signup/terms-conditions-dialog/terms-conditions-dialog.component';
 
 @Component({
-  selector: 'food-web-signup',
+  selector: 'foodweb-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })

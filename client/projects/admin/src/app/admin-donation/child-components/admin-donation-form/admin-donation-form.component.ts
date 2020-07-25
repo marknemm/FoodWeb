@@ -4,7 +4,7 @@ import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.
 import { of, Observable } from 'rxjs';
 
 @Component({
-  selector: 'food-web-admin-donation-form',
+  selector: 'foodweb-admin-donation-form',
   templateUrl: './admin-donation-form.component.html',
   styleUrls: ['./admin-donation-form.component.scss'],
 })

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { DateTimeRange } from '~web/date-time/date-time/date-time.service';
 
 @Component({
-  selector: 'food-web-date-time-range-radio-dialog',
+  selector: 'foodweb-date-time-range-radio-dialog',
   templateUrl: './date-time-range-radio-dialog.component.html',
   styleUrls: ['./date-time-range-radio-dialog.component.scss']
 })

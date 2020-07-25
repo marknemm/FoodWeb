@@ -13,19 +13,19 @@
 
   <div #notificationSettingsDisplay class="notification-settings-display row">
     <div class="col-sm-12">
-      <food-web-yes-no [yes]="formGroup.get('enableEmail').value">
+      <foodweb-yes-no [yes]="formGroup.get('enableEmail').value">
         Receive Emails:
-      </food-web-yes-no>
+      </foodweb-yes-no>
     </div>
     <div class="col-sm-12">
-      <food-web-yes-no [yes]="formGroup.get('enablePushNotification').value">
+      <foodweb-yes-no [yes]="formGroup.get('enablePushNotification').value">
         Receive Push Notifications:
-      </food-web-yes-no>
+      </foodweb-yes-no>
     </div>
     <div class="col-sm-12" *ngIf="accountType !== 'Donor'">
-      <food-web-yes-no [yes]="formGroup.get('notifyForEachDonation').value">
+      <foodweb-yes-no [yes]="formGroup.get('notifyForEachDonation').value">
         Receive Message For Each New {{ accountType === 'Receiver' ? 'Donation' : 'Delivery' }}:
-      </food-web-yes-no>
+      </foodweb-yes-no>
     </div>
   </div>
 </div>

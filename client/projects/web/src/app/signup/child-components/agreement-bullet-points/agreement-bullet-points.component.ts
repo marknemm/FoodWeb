@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AccountType } from '~shared';
 
 @Component({
-  selector: 'food-web-agreement-bullet-points',
+  selector: 'foodweb-agreement-bullet-points',
   templateUrl: './agreement-bullet-points.component.html',
   styleUrls: ['./agreement-bullet-points.component.scss']
 })

@@ -5,7 +5,7 @@ import { Account, AccountType } from '~shared';
 import { TypedFormControl } from '~web/data-structure/typed-form-control';
 
 @Component({
-  selector: 'food-web-account-select-dialog',
+  selector: 'foodweb-account-select-dialog',
   templateUrl: './account-select-dialog.component.html',
   styleUrls: ['./account-select-dialog.component.scss'],
 })

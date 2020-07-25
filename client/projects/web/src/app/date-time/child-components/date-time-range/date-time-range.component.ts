@@ -6,7 +6,7 @@ import { DateTimeRange, DateTimeRangeForm } from '~web/date-time/date-time-range
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
-  selector: 'food-web-date-time-range',
+  selector: 'foodweb-date-time-range',
   templateUrl: './date-time-range.component.html',
   styleUrls: ['./date-time-range.component.scss'],
   providers: valueAccessorProvider(DateTimeRangeComponent)

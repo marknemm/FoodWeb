@@ -6,7 +6,7 @@ import { PageTitleService } from '~web/shared/page-title/page-title.service';
 import { switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'food-web-deliveries',
+  selector: 'foodweb-deliveries',
   templateUrl: './deliveries.component.html',
   styleUrls: ['./deliveries.component.scss']
 })

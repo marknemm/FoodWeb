@@ -4,7 +4,7 @@ import { Account, DeliveryHelper, Donation, DonationStatus } from '~shared';
 import { DonationAction, DonationActionsService } from '~web/donation-delivery-shared/donation-actions/donation-actions.service';
 
 @Component({
-  selector: 'food-web-donation-actions',
+  selector: 'foodweb-donation-actions',
   templateUrl: './donation-actions.component.html',
   styleUrls: ['./donation-actions.component.scss']
 })

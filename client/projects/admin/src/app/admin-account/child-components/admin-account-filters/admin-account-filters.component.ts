@@ -3,7 +3,7 @@ import { AccountFiltersComponent } from '~web/account/account-filters/account-fi
 import { ConstantsService } from '~web/shared/constants/constants.service';
 
 @Component({
-  selector: 'food-web-admin-account-filters',
+  selector: 'foodweb-admin-account-filters',
   templateUrl: './admin-account-filters.component.html',
   styleUrls: [
     '../../../../../../web/src/app/account/child-components/account-filters/account-filters.component.scss',

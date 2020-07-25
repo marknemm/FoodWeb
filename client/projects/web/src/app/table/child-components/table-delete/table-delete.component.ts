@@ -5,7 +5,7 @@ import { TableDataSource } from '~web/table/table-data-source';
 export { TableDataSource };
 
 @Component({
-  selector: 'food-web-table-delete',
+  selector: 'foodweb-table-delete',
   templateUrl: './table-delete.component.html',
   styleUrls: ['./table-delete.component.scss']
 })

@@ -6,7 +6,7 @@ import { LoginFormChange } from '~web/session/login/login.component';
 import { Account, SessionService } from '~web/session/session/session.service';
 
 @Component({
-  selector: 'food-web-login-dialog',
+  selector: 'foodweb-login-dialog',
   templateUrl: './login-dialog.component.html',
   styleUrls: ['./login-dialog.component.scss']
 })

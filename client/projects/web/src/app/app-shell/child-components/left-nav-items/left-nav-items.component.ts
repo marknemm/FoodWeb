@@ -6,7 +6,7 @@ import { SessionService } from '~web/session/session/session.service';
 import { ConstantsService } from '~web/shared/constants/constants.service';
 
 @Component({
-  selector: 'food-web-left-nav-items',
+  selector: 'foodweb-left-nav-items',
   templateUrl: './left-nav-items.component.html',
   styleUrls: ['./left-nav-items.component.scss'],
 })

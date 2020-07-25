@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { TableDataSource } from '~web/table/table-data-source';
 
 @Component({
-  selector: 'food-web-table-title',
+  selector: 'foodweb-table-title',
   templateUrl: './table-title.component.html',
   styleUrls: ['./table-title.component.scss']
 })

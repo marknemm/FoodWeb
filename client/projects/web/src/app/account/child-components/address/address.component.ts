@@ -3,7 +3,7 @@ import { ContactInfo } from '~shared';
 import { MapAppLinkService } from '~web/map/map-app-link/map-app-link.service';
 
 @Component({
-  selector: 'food-web-address',
+  selector: 'foodweb-address',
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss']
 })

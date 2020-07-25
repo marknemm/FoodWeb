@@ -4,7 +4,7 @@ import { LoginDialogComponent } from '~web/session/login-dialog/login-dialog.com
 import { SessionService } from '~web/session/session/session.service';
 
 @Component({
-  selector: 'food-web-header-actions',
+  selector: 'foodweb-header-actions',
   templateUrl: './header-actions.component.html',
   styleUrls: ['./header-actions.component.scss'],
 })

@@ -4,7 +4,7 @@ import { OperationHoursForm } from '~web/account/operation-hours.form';
 import { ConstantsService } from '~web/shared/constants/constants.service';
 
 @Component({
-  selector: 'food-web-operation-hours',
+  selector: 'foodweb-operation-hours',
   templateUrl: './operation-hours.component.html',
   styleUrls: ['./operation-hours.component.scss'],
 })

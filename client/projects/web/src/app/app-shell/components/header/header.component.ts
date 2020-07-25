@@ -6,7 +6,7 @@ import { PageProgressService } from '~web/shared/page-progress/page-progress.ser
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
-  selector: 'food-web-header',
+  selector: 'foodweb-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })

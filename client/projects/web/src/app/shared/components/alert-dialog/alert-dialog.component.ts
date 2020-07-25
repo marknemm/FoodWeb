@@ -4,7 +4,7 @@ import { AlertMessage } from '~web/shared/alert/alert-message';
 import { AlertResponseService } from '~web/shared/alert/alert-response.service';
 
 @Component({
-  selector: 'food-web-alert-dialog',
+  selector: 'foodweb-alert-dialog',
   templateUrl: './alert-dialog.component.html',
   styleUrls: ['./alert-dialog.component.scss']
 })

@@ -3,7 +3,7 @@ import { AccountType, NotificationSettings } from '~shared';
 import { NotificationSettingsForm } from '~web/account/notification-settings.form';
 
 @Component({
-  selector: 'food-web-notifications-settings',
+  selector: 'foodweb-notifications-settings',
   templateUrl: './notification-settings.component.html',
   styleUrls: ['./notification-settings.component.scss'],
 })

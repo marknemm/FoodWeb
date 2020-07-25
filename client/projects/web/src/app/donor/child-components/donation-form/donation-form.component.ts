@@ -5,7 +5,7 @@ import { ConstantsService } from '~web/shared/constants/constants.service';
 import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
 
 @Component({
-  selector: 'food-web-donation-form',
+  selector: 'foodweb-donation-form',
   templateUrl: './donation-form.component.html',
   styleUrls: ['./donation-form.component.scss'],
   providers: [FormHelperService]

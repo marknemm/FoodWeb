@@ -12,7 +12,7 @@ import { SaveCb } from '~web/shared/child-components/edit-save-button/edit-save-
 import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
 
 @Component({
-  selector: 'food-web-account-details',
+  selector: 'foodweb-account-details',
   templateUrl: './account-details.component.html',
   styleUrls: ['./account-details.component.scss']
 })

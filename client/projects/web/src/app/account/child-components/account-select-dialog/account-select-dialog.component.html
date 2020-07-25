@@ -1,12 +1,12 @@
 <mat-dialog-content>
   <p class="dialog-message">{{ config.dialogMessage }}</p>
 
-  <food-web-account-select
+  <foodweb-account-select
     [formControl]="accountCtrl"
     [accountType]="config.accountType"
     [placeholder]="config.selectPlaceholder"
     [filterPlaceholder]="config.filterPlaceholder"
-  ></food-web-account-select>
+  ></foodweb-account-select>
 </mat-dialog-content>
 
 <mat-dialog-actions>

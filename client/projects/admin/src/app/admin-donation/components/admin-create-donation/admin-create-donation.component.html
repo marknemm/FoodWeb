@@ -3,12 +3,12 @@
     {{ pageTitleService.title }}
   </div>
 
-  <food-web-admin-donation-form
+  <foodweb-admin-donation-form
     *ngIf="!savedDonation; else donationSavedTmpl"
     [formGroup]="formGroup"
     (submitDonation)="submitDonation()"
     submitButtonTxt="Create"
-  ></food-web-admin-donation-form>
+  ></foodweb-admin-donation-form>
 
   <ng-template #donationSavedTmpl>
     <hr>

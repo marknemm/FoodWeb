@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { PasswordForm } from '~web/password/password.form';
 
 @Component({
-  selector: 'food-web-password',
+  selector: 'foodweb-password',
   templateUrl: './password.component.html',
   styleUrls: ['./password.component.scss']
 })

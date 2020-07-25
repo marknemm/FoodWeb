@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'food-web-admin-app-shell',
+  selector: 'foodweb-admin-app-shell',
   templateUrl: './admin-app-shell.component.html',
   styleUrls: ['./admin-app-shell.component.scss'],
 })

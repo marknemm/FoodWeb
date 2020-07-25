@@ -1,5 +1,5 @@
 <form #loginFormDirective="ngForm" [formGroup]="loginForm" (submit)="submit()" class="login-container" [ngClass]="{ container: !insideDialog }">
-  <img src="./assets/IconImgMd.png" *ngIf="!insideDialog" class="food-web-img">
+  <img src="./assets/IconImgMd.png" *ngIf="!insideDialog" class="foodweb-img">
 
   <div *ngIf="!messageSent">
     <mat-form-field>
@@ -45,4 +45,4 @@
   </div>
 </form>
 
-<food-web-progress-indicator [trigger]="loading" [blocking]="true" [diameter]="150"></food-web-progress-indicator>
+<foodweb-progress-indicator [trigger]="loading" [blocking]="true" [diameter]="150"></foodweb-progress-indicator>

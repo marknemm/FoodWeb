@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'food-web-progress-indicator',
+  selector: 'foodweb-progress-indicator',
   templateUrl: './progress-indicator.component.html',
   styleUrls: ['./progress-indicator.component.scss']
 })

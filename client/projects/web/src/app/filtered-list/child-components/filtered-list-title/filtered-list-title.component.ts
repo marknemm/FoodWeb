@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'food-web-filtered-list-title',
+  selector: 'foodweb-filtered-list-title',
   templateUrl: './filtered-list-title.component.html',
   styleUrls: ['./filtered-list-title.component.scss'],
 })

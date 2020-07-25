@@ -8,7 +8,7 @@ import { SessionService } from '~web/session/session/session.service';
 import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
-  selector: 'food-web-donation-details',
+  selector: 'foodweb-donation-details',
   templateUrl: './donation-details.component.html',
   styleUrls: ['./donation-details.component.scss']
 })
