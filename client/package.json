@@ -116,6 +116,7 @@
   },
   "devDependencies": {
     "@angular/compiler-cli": "^10.0.4",
+    "@nativescript/schematics": "^10.0.0-rc.0",
     "@nativescript/types": "rc",
     "@nativescript/webpack": "rc",
     "@ngtools/webpack": "^10.0.3",
