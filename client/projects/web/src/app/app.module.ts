@@ -5,19 +5,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { environment } from '~web/../environments/environment';
 import { AppRoutingModule } from '~web/app-routing.module';
 import { AppShellModule } from '~web/app-shell/app-shell.module';
 import { AppComponent } from '~web/app.component';
 import { AboutComponent } from '~web/components/about/about.component';
 import { HomeComponent } from '~web/components/home/home.component';
-import { environment } from '~web/environments/environment';
 import { EventModule } from '~web/event/event.module';
 import { HeuristicsModule } from '~web/heuristics/heuristics.module';
 import { MaterialModule } from '~web/material.module';
-import { SessionMonitorService } from '~web/session/session-monitor/session-monitor.service';
+import { SessionMonitorService } from '~web/session/services/session-monitor/session-monitor.service';
 import { SessionModule } from '~web/session/session.module';
-import { IconService } from '~web/shared/icon/icon.service';
-import { RecaptchaService } from '~web/shared/recaptcha/recaptcha.service';
+import { IconService } from '~web/shared/services/icon/icon.service';
+import { RecaptchaService } from '~web/shared/services/recaptcha/recaptcha.service';
 import { SharedModule } from '~web/shared/shared.module';
 
 @NgModule({

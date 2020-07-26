@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
-import { NotificationService } from '~web/notification/notification/notification.service';
-import { SessionService } from '~web/session/session/session.service';
-import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { LeftNavService } from '~web/app-shell/services/left-nav/left-nav.service';
+import { NotificationService } from '~web/notification/services/notification/notification.service';
+import { SessionService } from '~web/session/services/session/session.service';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-header',

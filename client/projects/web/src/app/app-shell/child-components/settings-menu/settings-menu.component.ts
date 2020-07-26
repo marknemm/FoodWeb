@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faGifts } from '@fortawesome/free-solid-svg-icons';
-import { SessionService } from '~web/session/session/session.service';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
   selector: 'foodweb-settings-menu',

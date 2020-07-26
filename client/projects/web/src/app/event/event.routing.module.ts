@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EventsComponent } from '~web/event/events/events.component';
+import { EventsComponent } from './components/events/events.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'list' },

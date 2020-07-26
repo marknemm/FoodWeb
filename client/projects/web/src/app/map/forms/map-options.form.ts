@@ -1,5 +1,5 @@
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
-import { MapOptions } from '~web/map/map';
+import { MapOptions } from '~web/map/interfaces/map';
 
 export class MapOptionsForm extends TypedFormGroup<MapOptions> {
 

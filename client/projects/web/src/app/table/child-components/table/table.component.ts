@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatColumnDef, MatFooterRowDef, MatHeaderRowDef, MatRowDef, MatTable } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TableColumn, TableDataSource, TableSelectionType } from '~web/table/table-data-source';
+import { TableColumn, TableDataSource, TableSelectionType } from '~web/table/interfaces/table-data-source';
 export { TableColumn, TableDataSource, TableSelectionType };
 
 @Component({

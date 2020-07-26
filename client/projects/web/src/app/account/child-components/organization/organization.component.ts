@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { AccountType } from '~shared';
-import { OrganizationForm } from '~web/account/organization.form';
+import { OrganizationForm } from '~web/account/forms/organization.form';
 
 @Component({
   selector: 'foodweb-organization',

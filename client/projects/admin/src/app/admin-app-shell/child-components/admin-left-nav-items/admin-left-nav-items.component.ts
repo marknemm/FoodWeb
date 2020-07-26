@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { faGifts } from '@fortawesome/free-solid-svg-icons';
 import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
-import { ConstantsService } from '~web/shared/constants/constants.service';
+import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
   selector: 'foodweb-admin-left-nav-items',

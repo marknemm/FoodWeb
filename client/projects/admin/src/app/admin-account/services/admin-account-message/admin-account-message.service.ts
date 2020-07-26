@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '~admin/environments/environment';
 import { AccountReadFilters, SendMessageRequest } from '~shared';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'

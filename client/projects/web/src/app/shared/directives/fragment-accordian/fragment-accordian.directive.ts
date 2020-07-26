@@ -7,7 +7,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
  * If the route fragment matches a contained expansion panel's ID, then it will automatically be opened.
  */
 @Directive({
-  selector: '[foodWebFragmentAccordian]'
+  selector: '[foodwebFragmentAccordian]'
 })
 export class FragmentAccordianDirective implements AfterContentInit {
 
@@ -33,7 +33,7 @@ export class FragmentAccordianDirective implements AfterContentInit {
     // Use timeout to prevent change after checked error from Angular change detector.
     setTimeout(() => {
       this._listenQueryParamChange();
-      this._listenRouteFragmentChange(); 
+      this._listenRouteFragmentChange();
     });
   }
 

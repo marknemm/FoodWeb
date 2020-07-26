@@ -4,7 +4,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MockComponent } from 'ng-mocks';
 import { TableAddComponent } from '~web/table/table-add/table-add.component';
-import { TableDataSource } from '~web/table/table-data-source';
+import { TableDataSource } from '~web/table/interfaces/table-data-source';
 import { TableTitleComponent } from './table-title.component';
 
 describe('TableTitleComponent', () => {

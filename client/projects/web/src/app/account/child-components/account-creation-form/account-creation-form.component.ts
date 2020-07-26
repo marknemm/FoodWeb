@@ -3,8 +3,8 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AccountType } from '~shared';
-import { AccountForm } from '~web/account/account.form';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { AccountForm } from '~web/account/forms/account.form';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-account-creation-form',

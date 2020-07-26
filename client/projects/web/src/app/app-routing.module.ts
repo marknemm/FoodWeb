@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppShellComponent } from '~web/app-shell/app-shell/app-shell.component';
+import { AppShellComponent } from '~web/app-shell/components/app-shell/app-shell.component';
 import { AboutComponent } from '~web/components/about/about.component';
 import { HomeComponent } from '~web/components/home/home.component';
 

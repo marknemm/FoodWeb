@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawerContent } from '@angular/material/sidenav';
-import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
-import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
+import { LeftNavService } from '~web/app-shell/services/left-nav/left-nav.service';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
 @Component({
   selector: 'foodweb-left-nav',

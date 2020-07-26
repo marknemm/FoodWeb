@@ -1,6 +1,6 @@
 import { AccountReadRequest, AccountType, OperationHours } from '~shared';
-import { OperationHoursForm } from '~web/account/operation-hours.form';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { OperationHoursForm } from './operation-hours.form';
 export { AccountReadRequest };
 
 export class AccountFiltersForm extends TypedFormGroup<AccountFiltersFormT> {

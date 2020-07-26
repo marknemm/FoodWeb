@@ -5,18 +5,18 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { AccountModule } from '~web/account/account.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
 import { DonationDeliverySharedModule } from '~web/donation-delivery-shared/donation-delivery-shared.module';
-import { DonationDetailsRouterLinkPipe } from '~web/donation/donation-details-router-link/donation-details-router-link.pipe';
-import { DonationDetailsComponent } from '~web/donation/donation-details/donation-details.component';
-import { DonationFiltersComponent } from '~web/donation/donation-filters/donation-filters.component';
-import { DonationRoutingModule } from '~web/donation/donation-routing.module';
-import { DonationTeaserComponent } from '~web/donation/donation-teaser/donation-teaser.component';
-import { DonationsComponent } from '~web/donation/donations/donations.component';
-import { PrimaryDonationInfoComponent } from '~web/donation/primary-donation-info/primary-donation-info.component';
 import { DonorModule } from '~web/donor/donor.module';
 import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { MapModule } from '~web/map/map.module';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
+import { DonationFiltersComponent } from './child-components/donation-filters/donation-filters.component';
+import { DonationTeaserComponent } from './child-components/donation-teaser/donation-teaser.component';
+import { PrimaryDonationInfoComponent } from './child-components/primary-donation-info/primary-donation-info.component';
+import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
+import { DonationsComponent } from './components/donations/donations.component';
+import { DonationRoutingModule } from './donation-routing.module';
+import { DonationDetailsRouterLinkPipe } from './pipes/donation-details-router-link/donation-details-router-link.pipe';
 
 @NgModule({
   declarations: [

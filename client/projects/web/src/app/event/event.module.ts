@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { EventCardComponent } from '~web/event/event-card/event-card.component';
-import { EventRoutingModule } from '~web/event/event.routing.module';
-import { EventsComponent } from '~web/event/events/events.component';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
+import { EventCardComponent } from './child-components/event-card/event-card.component';
+import { EventsComponent } from './components/events/events.component';
+import { EventRoutingModule } from './event.routing.module';
 
 @NgModule({
   declarations: [

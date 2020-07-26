@@ -3,10 +3,10 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AlertDialogComponent } from '~web/shared/alert-dialog/alert-dialog.component';
-import { AlertSnackBarComponent } from '~web/shared/alert-snack-bar/alert-snack-bar.component';
-import { AlertConfig, AlertLevel, AlertMessage, AlertResponse } from '~web/shared/alert/alert-message';
-import { AlertResponseService } from '~web/shared/alert/alert-response.service';
+import { AlertDialogComponent } from '~web/shared/components/alert-dialog/alert-dialog.component';
+import { AlertSnackBarComponent } from '~web/shared/components/alert-snack-bar/alert-snack-bar.component';
+import { AlertConfig, AlertLevel, AlertMessage, AlertResponse } from '~web/shared/services/alert/alert-message';
+import { AlertResponseService } from '~web/shared/services/alert/alert-response.service';
 export * from './alert-message';
 
 @Injectable({

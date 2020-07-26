@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AccountDetailsComponent } from '~web/account/account-details/account-details.component';
-import { AccountsComponent } from '~web/account/accounts/accounts.component';
-import { AuthGaurdService } from '~web/session/auth-gaurd/auth-gaurd.service';
+import { AuthGaurdService } from '~web/session/services/auth-gaurd/auth-gaurd.service';
+import { AccountDetailsComponent } from './components/account-details/account-details.component';
+import { AccountsComponent } from './components/accounts/accounts.component';
 
 const routes: Routes = [
   { path: 'my', component: AccountDetailsComponent, canActivate: [AuthGaurdService] },

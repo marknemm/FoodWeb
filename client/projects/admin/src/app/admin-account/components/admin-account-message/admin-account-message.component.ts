@@ -4,7 +4,7 @@ import { faFlask } from '@fortawesome/free-solid-svg-icons';
 import { AdminAccountMessageForm } from '~admin/admin-account/admin-account-message.form';
 import { AdminAccountMessageService } from '~admin/admin-account/admin-account-message/admin-account-message.service';
 import { AccountReadFilters, AccountReadRequest } from '~shared';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-compose-message',

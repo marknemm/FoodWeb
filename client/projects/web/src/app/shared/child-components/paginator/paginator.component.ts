@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
+import { LeftNavService } from '~web/app-shell/services/left-nav/left-nav.service';
 
 @Component({
   selector: 'foodweb-paginator',

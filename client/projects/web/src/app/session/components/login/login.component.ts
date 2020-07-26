@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { never, ObservableInput, Observable } from 'rxjs';
+import { never, Observable, ObservableInput } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { UsernameRecoveryService } from '~web/account/username-recovery/username-recovery.service';
-import { PasswordResetService } from '~web/password/password-reset/password-reset.service';
-import { LoginForm } from '~web/session/login.form';
-import { Account, SessionService } from '~web/session/session/session.service';
+import { UsernameRecoveryService } from '~web/account/services/username-recovery/username-recovery.service';
+import { PasswordResetService } from '~web/password/services/password-reset/password-reset.service';
+import { LoginForm } from '~web/session/forms/login.form';
+import { Account, SessionService } from '~web/session/services/session/session.service';
 
 @Component({
   selector: 'foodweb-login',

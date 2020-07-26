@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { SortByOpt } from '~web/filtered-list/sort-by-opt';
+import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
 export { SortByOpt };
 
 @Component({

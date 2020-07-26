@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EMPTY, ObservableInput } from 'rxjs';
-import { AlertMessage, AlertService } from '~web/shared/alert/alert.service';
+import { AlertMessage, AlertService } from '~web/shared/services/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'

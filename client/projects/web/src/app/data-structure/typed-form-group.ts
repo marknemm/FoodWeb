@@ -67,4 +67,4 @@ export type TypedFormControlMembers<T> = {
     | [T[K]]
     | [T[K], ValidatorFn]
     | [T[K], ValidatorFn[]]
-}
+};

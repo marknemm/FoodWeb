@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, Subscriber } from 'rxjs';
-import { Account, AccountHelper, Donation, MapWaypointConverter, Waypoint } from '~shared';
-import { ClientWaypoint, LatLngLiteral, WaypointMarker } from '~web/map/map';
-import { CurrentLocationService } from '~web/shared/services/current-location/current-location.service';
 import { map } from 'rxjs/operators';
+import { Account, AccountHelper, Donation, MapWaypointConverter, Waypoint } from '~shared';
+import { ClientWaypoint, LatLngLiteral, WaypointMarker } from '~web/map/interfaces/map';
+import { CurrentLocationService } from '~web/shared/services/current-location/current-location.service';
 
 @Injectable({
   providedIn: 'root'
@@ -128,7 +128,7 @@ export class WaypointService {
    */
   private _genWaypointMarkers(waypointAccounts: Account[], latLngLiterals: LatLngLiteral[], clientWaypoints: ClientWaypoint[]): WaypointMarker[] {
     return latLngLiterals.map((latLng: LatLngLiteral, idx: number) =>
-      this._genWaypointMarker(waypointAccounts[idx], latLng, clientWaypoints[idx], idx) 
+      this._genWaypointMarker(waypointAccounts[idx], latLng, clientWaypoints[idx], idx)
     );
   }
 

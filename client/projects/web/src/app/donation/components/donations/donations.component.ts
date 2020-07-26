@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { DonationHelper, DonationReadRequest, ListResponse } from '~shared';
-import { Donation, DonationReadService } from '~web/donation/donation-read/donation-read.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-donations',

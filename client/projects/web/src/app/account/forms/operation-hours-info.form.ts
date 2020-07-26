@@ -1,7 +1,7 @@
 import { OperationHours } from '~shared';
-import { OperationHoursInfo } from '~web/account/account.form';
-import { OperationHoursArray } from '~web/account/operation-hours.array';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { OperationHoursInfo } from './account.form';
+import { OperationHoursArray } from './operation-hours.array';
 
 export class OperationHoursInfoForm extends TypedFormGroup<OperationHoursInfo> {
 

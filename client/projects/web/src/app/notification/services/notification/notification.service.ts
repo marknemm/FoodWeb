@@ -3,10 +3,10 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { HttpParams, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { flatMap, catchError, finalize } from 'rxjs/operators';
-import { environment } from '~web/environments/environment';
-import { ServerSentEventSourceService } from '~web/notification/server-sent-event-source/server-sent-event-source.service';
-import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
-import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
+import { environment } from '~web/../environments/environment';
+import { ServerSentEventSourceService } from '~web/notification/services/server-sent-event-source/server-sent-event-source.service';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
 import {
   Notification,
   ListResponse,
@@ -18,7 +18,7 @@ import {
   ServerSentEventType
 } from '~shared';
 
-import { SessionService } from '~web/session/session/session.service';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Injectable({
   providedIn: 'root'

@@ -4,9 +4,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TableDataSource } from '~web/table/table-data-source';
-import { TableTitleComponent } from '~web/table/table-title/table-title.component';
-import { TableComponent } from '~web/table/table/table.component';
+import { TableDataSource } from '~web/table/interfaces/table-data-source';
+import { TableTitleComponent } from '~web/table/child-components/table-title/table-title.component';
+import { TableComponent } from '~web/table/child-components/table/table.component';
 
 @Component({
   selector: 'foodweb-table-container,[food-web-table-container]',

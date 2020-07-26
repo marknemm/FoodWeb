@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ActionBarComponent } from './action-bar.component';
+import { ActionBarComponent } from './app-action-bar.component';
 
 describe('ActionBarComponent', () => {
   let component: ActionBarComponent;

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PasswordResetService } from '~web/password/password-reset/password-reset.service';
-import { PasswordForm } from '~web/password/password.form';
+import { PasswordForm } from '~web/password/forms/password.form';
+import { PasswordResetService } from '~web/password/services/password-reset/password-reset.service';
 
 @Component({
   selector: 'foodweb-password-reset',

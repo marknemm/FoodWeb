@@ -31,7 +31,7 @@
     "app:start:docker": "npm run build:prep && node ./build-util/initial-install.js && ionic cordova run browser --debug --livereload --external --source-map",
     "build": "npm run web:build",
     "build:env": "npm run build:prep && ng build --project web --prod --aot --configuration=${environment}",
-    "build:prep": "node ./build-util/initial-install.js && node ./build-util/gen-tsconfig-json.js",
+    "build:prep": "node ./build-util/initial-install.js",
     "build:watch": "npm run build:prep && npm run web:build:watch",
     "clean": "rimraf ./dist ./www ./platforms ./plugins ./coverage",
     "clean:all": "npm run clean && rimraf ./node_modules && npm run app:clean",

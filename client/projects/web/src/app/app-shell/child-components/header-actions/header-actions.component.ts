@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { LoginDialogComponent } from '~web/session/login-dialog/login-dialog.component';
-import { SessionService } from '~web/session/session/session.service';
+import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
   selector: 'foodweb-header-actions',

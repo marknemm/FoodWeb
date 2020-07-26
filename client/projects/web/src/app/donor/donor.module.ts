@@ -3,13 +3,13 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AccountModule } from '~web/account/account.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
-import { DonateComponent } from '~web/donor/donate/donate.component';
-import { DonationFormComponent } from '~web/donor/donation-form/donation-form.component';
-import { DonorRoutingModule } from '~web/donor/donor-routing.module';
-import { EditDonationComponent } from '~web/donor/edit-donation/edit-donation.component';
-import { FoodSafetyChecklistComponent } from '~web/donor/food-safety-checklist/food-safety-checklist.component';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
+import { DonationFormComponent } from './child-components/donation-form/donation-form.component';
+import { FoodSafetyChecklistComponent } from './child-components/food-safety-checklist/food-safety-checklist.component';
+import { DonateComponent } from './components/donate/donate.component';
+import { EditDonationComponent } from './components/edit-donation/edit-donation.component';
+import { DonorRoutingModule } from './donor-routing.module';
 
 @NgModule({
   declarations: [

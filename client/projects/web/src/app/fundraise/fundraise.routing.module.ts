@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FundraiseComponent } from '~web/fundraise/fundraise/fundraise.component';
+import { FundraiseComponent } from './components/fundraise/fundraise.component';
 
 const routes: Routes = [
   { path: '', component: FundraiseComponent }

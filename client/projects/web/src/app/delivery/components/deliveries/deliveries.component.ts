@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { DeliveryHelper, Donation, DonationHelper, DonationReadRequest, ListResponse } from '~shared';
-import { DeliveryReadService } from '~web/delivery/delivery-read/delivery-read.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { DeliveryReadService } from '~web/delivery/services/delivery-read/delivery-read.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { switchMap } from 'rxjs/operators';
 
 @Component({

@@ -1,4 +1,4 @@
-import { Account, ContactInfo, Directions, Waypoint } from '~shared';
+import { Account, Directions, Waypoint } from '~shared';
 export { Directions, Waypoint };
 
 export type ClientWaypoint = 'My+Location' | Position | Waypoint;

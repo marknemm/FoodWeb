@@ -3,9 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { CanActivate } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { LoginDialogComponent } from '~web/session/login-dialog/login-dialog.component';
-import { SessionService } from '~web/session/session/session.service';
-import { AlertService } from '~web/shared/alert/alert.service';
+import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
+import { SessionService } from '~web/session/services/session/session.service';
+import { AlertService } from '~web/shared/services/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'

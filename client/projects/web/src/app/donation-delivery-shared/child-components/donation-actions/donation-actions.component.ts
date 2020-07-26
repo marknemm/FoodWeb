@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Account, DeliveryHelper, Donation, DonationStatus } from '~shared';
-import { DonationAction, DonationActionsService } from '~web/donation-delivery-shared/donation-actions/donation-actions.service';
+import { DonationAction, DonationActionsService } from '~web/donation-delivery-shared/services/donation-actions/donation-actions.service';
 
 @Component({
   selector: 'foodweb-donation-actions',

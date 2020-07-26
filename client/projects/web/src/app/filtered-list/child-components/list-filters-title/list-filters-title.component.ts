@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FilteredListService } from '~web/filtered-list/filtered-list/filtered-list.service';
+import { FilteredListService } from '~web/filtered-list/services/filtered-list/filtered-list.service';
 
 @Component({
   selector: 'foodweb-list-filters-title',

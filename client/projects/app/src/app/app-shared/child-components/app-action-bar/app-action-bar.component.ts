@@ -4,10 +4,10 @@ import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 
 @Component({
   selector: 'foodweb-app-action-bar',
-  templateUrl: './action-bar.component.html',
-  styleUrls: ['./action-bar.component.scss']
+  templateUrl: './app-action-bar.component.html',
+  styleUrls: ['./app-action-bar.component.scss']
 })
-export class ActionBarComponent implements OnInit {
+export class AppActionBarComponent implements OnInit {
 
   @Input() pageTitle: string;
 

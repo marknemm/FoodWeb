@@ -2,9 +2,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, ObservableInput, OperatorFunction } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
-import { AlertService } from '~web/shared/alert/alert.service';
-import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
-import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
+import { AlertService } from '~web/shared/services/alert/alert.service';
+import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 import { HttpResponseHandlerOptions } from './http-response-handler-options';
 export { HttpResponseHandlerOptions };
 

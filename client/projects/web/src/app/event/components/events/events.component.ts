@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FeaturedEvent, FeaturedEventsService } from '~web/event/featured-events/featured-events.service';
+import { FeaturedEvent, FeaturedEventsService } from '~web/event/services/featured-events/featured-events.service';
 
 @Component({
   selector: 'foodweb-events',

@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, DoCheck, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { TableColumn, TableDataSource } from '~web/table/table-data-source';
+import { TableColumn, TableDataSource } from '~web/table/interfaces/table-data-source';
 import { DeepReadonly } from '~shared';
 
 @Component({

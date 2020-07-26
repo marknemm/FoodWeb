@@ -1,6 +1,6 @@
 import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.service';
+import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 
 @Directive({
   selector: '[foodWebConfirmButton]'

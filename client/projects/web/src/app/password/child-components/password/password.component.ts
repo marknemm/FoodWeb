@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { PasswordForm } from '~web/password/password.form';
+import { PasswordForm } from '~web/password/forms/password.form';
 
 @Component({
   selector: 'foodweb-password',

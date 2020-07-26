@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { FeaturedEvent, FeaturedEventsService } from '~web/event/featured-events/featured-events.service';
-import { LoginDialogComponent } from '~web/session/login-dialog/login-dialog.component';
-import { SessionService } from '~web/session/session/session.service';
+import { FeaturedEvent, FeaturedEventsService } from '~web/event/services/featured-events/featured-events.service';
+import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
-  selector: 'app-home',
+  selector: 'foodweb-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

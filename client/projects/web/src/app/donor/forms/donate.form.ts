@@ -1,9 +1,9 @@
 import { Validators } from '@angular/forms';
 import { Account, AccountAutocompleteItem, ContactInfo, DateTimeRange, Donation, DonationSaveData, Validation } from '~shared';
-import { ContactInfoForm } from '~web/account/contact-info.form';
+import { ContactInfoForm } from '~web/account/forms/contact-info.form';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
-import { DateTimeRangeForm } from '~web/date-time/date-time-range.form';
-import { DateTimeService } from '~web/date-time/date-time/date-time.service';
+import { DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
+import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 
 export class DonateForm extends TypedFormGroup<DonationFormT> {
 

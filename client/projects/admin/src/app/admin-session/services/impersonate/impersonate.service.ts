@@ -3,9 +3,9 @@ import { Inject, Injectable } from '@angular/core';
 import { catchError, finalize } from 'rxjs/operators';
 import { environment } from '~admin/environments/environment';
 import { Account, ImpersonateTokenResponse } from '~shared';
-import { AlertService } from '~web/shared/alert/alert.service';
-import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
-import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
+import { AlertService } from '~web/shared/services/alert/alert.service';
+import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
 @Injectable({
   providedIn: 'root'

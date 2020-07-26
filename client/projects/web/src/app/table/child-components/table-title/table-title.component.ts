@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { TableDataSource } from '~web/table/table-data-source';
+import { TableDataSource } from '~web/table/interfaces/table-data-source';
 
 @Component({
   selector: 'foodweb-table-title',

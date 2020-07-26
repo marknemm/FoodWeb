@@ -6,8 +6,8 @@ import { EventIdentifierForm } from '~admin/admin-event/event-identifier.form';
 import { EventRegistrationsService } from '~admin/admin-event/event-registrations/event-registrations.service';
 import { DeepReadonly, EventRegistration, FeaturedEvent } from '~shared';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
-import { TableDataSource } from '~web/table/table-data-source';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { TableDataSource } from '~web/table/interfaces/table-data-source';
 
 @Component({
   selector: 'foodweb-event-registrations',

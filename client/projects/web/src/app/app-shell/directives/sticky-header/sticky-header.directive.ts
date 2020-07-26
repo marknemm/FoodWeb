@@ -1,10 +1,10 @@
 import { DOCUMENT } from '@angular/common';
 import { Directive, HostListener, Inject, Input } from '@angular/core';
 import { MatToolbar } from '@angular/material/toolbar';
-import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
+import { LeftNavService } from '~web/app-shell/services/left-nav/left-nav.service';
 
 @Directive({
-  selector: '[foodWebStickyHeader]'
+  selector: '[foodwebStickyHeader]'
 })
 export class StickyHeaderDirective {
 

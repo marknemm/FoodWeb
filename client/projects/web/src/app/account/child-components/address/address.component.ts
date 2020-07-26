@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ContactInfo } from '~shared';
-import { MapAppLinkService } from '~web/map/map-app-link/map-app-link.service';
+import { MapAppLinkService } from '~web/map/services/map-app-link/map-app-link.service';
 
 @Component({
   selector: 'foodweb-address',

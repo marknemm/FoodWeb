@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { OperationHours } from '~shared';
-import { OperationHoursForm } from '~web/account/operation-hours.form';
-import { ConstantsService } from '~web/shared/constants/constants.service';
+import { OperationHoursForm } from '~web/account/forms/operation-hours.form';
+import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
   selector: 'foodweb-operation-hours',

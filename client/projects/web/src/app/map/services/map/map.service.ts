@@ -3,13 +3,13 @@ import { GoogleMap } from '@angular/google-maps';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Account, Donation } from '~shared';
-import { DirectionPolylines, DirectionsService, RenderPolyline } from '~web/map/directions/directions.service';
-import { Directions, LatLng, LatLngBounds, LatLngLiteral, MapOptions, WaypointMarker } from '~web/map/map';
-import { MapAppLinkService } from '~web/map/map-app-link/map-app-link.service';
-import { MapViewportService } from '~web/map/map-viewport/map-viewport.service';
-import { VolunteerWaypointConfig, WaypointService } from '~web/map/waypoint/waypoint.service';
-import { SessionService } from '~web/session/session/session.service';
-export * from '~web/map/map';
+import { Directions, LatLng, LatLngBounds, LatLngLiteral, MapOptions, WaypointMarker } from '~web/map/interfaces/map';
+import { DirectionPolylines, DirectionsService, RenderPolyline } from '~web/map/services/directions/directions.service';
+import { MapAppLinkService } from '~web/map/services/map-app-link/map-app-link.service';
+import { MapViewportService } from '~web/map/services/map-viewport/map-viewport.service';
+import { VolunteerWaypointConfig, WaypointService } from '~web/map/services/waypoint/waypoint.service';
+import { SessionService } from '~web/session/services/session/session.service';
+export * from '~web/map/interfaces/map';
 
 @Injectable()
 export class MapService {

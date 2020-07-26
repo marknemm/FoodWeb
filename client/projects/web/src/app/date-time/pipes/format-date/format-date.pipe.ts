@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DateTimeService } from '~web/date-time/date-time/date-time.service';
+import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 
 @Pipe({
   name: 'foodWebFormatDate'

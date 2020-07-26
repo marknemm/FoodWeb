@@ -2,13 +2,13 @@ import { Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Account, AccountType, NotificationSettings, OperationHours } from '~shared';
-import { ContactInfoForm } from '~web/account/contact-info.form';
-import { NotificationSettingsForm } from '~web/account/notification-settings.form';
-import { OperationHoursInfoForm } from '~web/account/operation-hours-info.form';
-import { OrganizationForm } from '~web/account/organization.form';
-import { VolunteerForm } from '~web/account/volunteer.form';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
-import { PasswordForm, PasswordFormT } from '~web/password/password.form';
+import { PasswordForm, PasswordFormT } from '~web/password/forms/password.form';
+import { ContactInfoForm } from './contact-info.form';
+import { NotificationSettingsForm } from './notification-settings.form';
+import { OperationHoursInfoForm } from './operation-hours-info.form';
+import { OrganizationForm } from './organization.form';
+import { VolunteerForm } from './volunteer.form';
 export { PasswordFormT };
 
 export class AccountForm extends TypedFormGroup<AccountFormT> {

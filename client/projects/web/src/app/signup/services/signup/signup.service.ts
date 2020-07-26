@@ -2,11 +2,11 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, finalize, mergeMap } from 'rxjs/operators';
 import { Account, SignupRequest } from '~shared';
-import { environment } from '~web/environments/environment';
-import { SessionService } from '~web/session/session/session.service';
-import { AlertService } from '~web/shared/alert/alert.service';
-import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
-import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
+import { environment } from '~web/../environments/environment';
+import { SessionService } from '~web/session/services/session/session.service';
+import { AlertService } from '~web/shared/services/alert/alert.service';
+import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 export { Account };
 
 export interface PasswordUpdate {

@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Account, DateTimeHelper, DateTimeRange, OperationHours, TimeRange } from '~shared';
-import { ConstantsService } from '~web/shared/constants/constants.service';
+import { ConstantsService } from '~web/shared/services/constants/constants.service';
 export { TimeRange, DateTimeRange };
 
 @Injectable({

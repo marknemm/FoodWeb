@@ -1,9 +1,8 @@
 import { Component, OnInit, Optional } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { Device } from '@ionic-native/device/ngx';
 import { Observable, of } from 'rxjs';
-import { LoginFormChange } from '~web/session/login/login.component';
-import { Account, SessionService } from '~web/session/session/session.service';
+import { LoginFormChange } from '~web/session/components/login/login.component';
+import { Account, SessionService } from '~web/session/services/session/session.service';
 
 @Component({
   selector: 'foodweb-login-dialog',
@@ -21,10 +20,6 @@ export class LoginDialogComponent implements OnInit {
 
   get title(): string {
     return this._title;
-  }
-
-  ngOnInit() {
-    this.loginFormChanged(LoginFormChange.Login);
   }
 
   /**
@@ -49,19 +44,17 @@ export class LoginDialogComponent implements OnInit {
    * @return An observable that emits the session account on dialog close if the login was sucessful, null/undefined otherwise.
    */
   public static open(matDialog: MatDialog, config: MatDialogConfig = {}): Observable<Account> {
-    const device = new Device();
-    const isMobileApp: boolean = (device.platform && device.platform === 'Browser');
     config.panelClass = (config.panelClass)
       ? (typeof config.panelClass === 'string')
         ? [config.panelClass]
         : config.panelClass
       : [];
-    if (isMobileApp) {
-      config.panelClass.push('full-screen-mobile');
-    }
-    config.autoFocus = !isMobileApp;
     config.maxWidth = '400px';
     return matDialog.open(LoginDialogComponent, config).afterClosed();
+  }
+
+  ngOnInit() {
+    this.loginFormChanged(LoginFormChange.Login);
   }
 
   loginFormChanged(change: LoginFormChange): void {

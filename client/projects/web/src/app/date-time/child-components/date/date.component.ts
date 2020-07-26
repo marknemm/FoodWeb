@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ErrorStateMatcher, FloatLabelType } from '@angular/material/core';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
-import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'foodweb-date',

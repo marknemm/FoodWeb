@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { AccountAutocompleteItem, AccountHelper, AccountType } from '~shared';
-import { AccountAutocompleteService } from '~web/account/account-autocomplete/account-autocomplete.service';
+import { AccountAutocompleteService } from '~web/account/services/account-autocomplete/account-autocomplete.service';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
-import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'foodweb-account-autocomplete',

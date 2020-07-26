@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { AdminSessionService } from '~admin/admin-session/admin-session/admin-session.service';
 import { SessionModule } from '~web/session/session.module';
-import { SessionService } from '~web/session/session/session.service';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @NgModule({
   declarations: [],

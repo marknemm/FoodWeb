@@ -1,8 +1,8 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NativeScriptModule } from '@nativescript/angular';
 import { NativeScriptUISideDrawerModule } from 'nativescript-ui-sidedrawer/angular';
-import { ActionBarComponent } from './action-bar/action-bar.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AppSharedModule } from './app-shared/app-shared.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 
@@ -13,11 +13,11 @@ import { HomeComponent } from './home/home.component';
   imports: [
     AppRoutingModule,
     NativeScriptModule,
-    NativeScriptUISideDrawerModule
+    NativeScriptUISideDrawerModule,
+    AppSharedModule
   ],
   declarations: [
     AppComponent,
-    ActionBarComponent,
     HomeComponent
   ],
   schemas: [

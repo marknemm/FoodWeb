@@ -5,9 +5,9 @@ import { cloneDeep } from 'lodash-es';
 import { Observable } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { Donation, DonationReadRequest, ListResponse } from '~shared';
-import { environment } from '~web/environments/environment';
-import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
-import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
+import { environment } from '~web/../environments/environment';
+import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
 @Injectable({
   providedIn: 'root'

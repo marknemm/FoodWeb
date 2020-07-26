@@ -4,9 +4,9 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { cloneDeep } from 'lodash-es';
 import { Observable, of } from 'rxjs';
 import { Account, AccountReadFilters, AccountReadRequest, ListResponse } from '~shared';
-import { environment } from '~web/environments/environment';
-import { SessionService } from '~web/session/session/session.service';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { environment } from '~web/../environments/environment';
+import { SessionService } from '~web/session/services/session/session.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'

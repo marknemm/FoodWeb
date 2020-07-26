@@ -1,6 +1,6 @@
-import { SelectionModel } from "@angular/cdk/collections";
-import { TemplateRef } from "@angular/core";
-import { DeepReadonly } from "~shared";
+import { SelectionModel } from '@angular/cdk/collections';
+import { TemplateRef } from '@angular/core';
+import { DeepReadonly } from '~shared';
 
 /**
  * Defines metadata for a (FoodWeb) Table's columns.

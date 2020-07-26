@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.service';
+import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 
 @Component({
   selector: 'foodweb-edit-save-button',

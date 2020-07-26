@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AccountFiltersComponent } from '~web/account/account-filters/account-filters.component';
-import { ConstantsService } from '~web/shared/constants/constants.service';
+import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
   selector: 'foodweb-admin-account-filters',

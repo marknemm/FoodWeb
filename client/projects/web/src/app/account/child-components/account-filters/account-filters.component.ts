@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AccountReadRequest, AccountSortBy, AccountType } from '~shared';
-import { AccountFiltersForm, AccountFiltersFormT } from '~web/account/account-filters.form';
-import { SortByOpt } from '~web/filtered-list/sort-by-opt';
+import { AccountFiltersForm, AccountFiltersFormT } from '~web/account/forms/account-filters.form';
+import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
 
 @Component({
   selector: 'foodweb-account-filters',

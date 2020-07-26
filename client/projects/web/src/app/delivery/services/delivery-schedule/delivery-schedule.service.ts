@@ -4,9 +4,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { DateTimeRange, DeliveryScheduleRequest, Donation } from '~shared';
-import { DateTimeRangeRadioConfig, DateTimeRangeRadioDialogComponent } from '~web/date-time/date-time-range-radio-dialog/date-time-range-radio-dialog.component';
-import { environment } from '~web/environments/environment';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { DateTimeRangeRadioConfig, DateTimeRangeRadioDialogComponent } from '~web/date-time/components/date-time-range-radio-dialog/date-time-range-radio-dialog.component';
+import { environment } from '~web/../environments/environment';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'

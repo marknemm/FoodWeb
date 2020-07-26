@@ -69,7 +69,7 @@ module.exports = env => {
   const externals = nsWebpack.getConvertedExternals(env.externals);
   const appFullPath = resolve(projectRoot, appPath);
   const appResourcesFullPath = resolve(projectRoot, appResourcesPath);
-  const tsConfigName = 'tsconfig.tns.json';
+  const tsConfigName = join('projects', 'app', 'tsconfig.json');
   const entryModule = `${nsWebpack.getEntryModule(appFullPath, platform)}.ts`;
   const entryPath = `.${sep}${entryModule}`;
   const entries = { bundle: entryPath };
@@ -192,7 +192,8 @@ module.exports = env => {
         resolve(__dirname, 'node_modules/@nativescript/core'),
         resolve(__dirname, 'node_modules'),
         'node_modules/@nativescript/core',
-        'node_modules'
+        'node_modules',
+        'styles'
       ],
       alias: {
         '~': appFullPath,
@@ -316,7 +317,7 @@ module.exports = env => {
                   options: { useForImports: true }
               },
               'sass-loader',
-          ],
+          ]
         },
 
         // Angular components reference css files and their imports using raw-loader

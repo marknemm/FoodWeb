@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { JSONDateReviver } from '~shared';
-import { SessionService } from '~web/session/session/session.service';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'foodweb-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

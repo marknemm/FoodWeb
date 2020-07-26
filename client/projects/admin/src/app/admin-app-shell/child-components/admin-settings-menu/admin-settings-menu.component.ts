@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SessionService } from '~web/session/session/session.service';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
   selector: 'foodweb-admin-settings-menu',

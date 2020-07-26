@@ -7,16 +7,16 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "prefix": "foodweb-admin",
+          "prefix": "foodweb",
           "style": "scss"
         },
         "@schematics/angular:directive": {
-          "prefix": "foodweb-admin"
+          "prefix": "foodweb"
         }
       },
       "root": "projects/admin",
       "sourceRoot": "projects/admin/src",
-      "prefix": "foodweb-admin",
+      "prefix": "foodweb",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -180,14 +180,14 @@
       "projectType": "application",
       "root": "projects/app",
       "sourceRoot": "projects/app/src",
-      "prefix": "foodweb-app",
+      "prefix": "foodweb",
       "schematics": {
         "@schematics/angular:component": {
-          "prefix": "foodweb-app",
+          "prefix": "foodweb",
           "style": "scss"
         },
         "@schematics/angular:directive": {
-          "prefix": "foodweb-app"
+          "prefix": "foodweb"
         }
       }
     },

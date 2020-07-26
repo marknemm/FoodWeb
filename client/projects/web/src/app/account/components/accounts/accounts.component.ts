@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { Account, AccountHelper, AccountReadFilters, AccountType, ListResponse } from '~shared';
-import { AccountFiltersFormT } from '~web/account/account-filters.form';
-import { AccountReadService } from '~web/account/account-read/account-read.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { AccountFiltersFormT } from '~web/account/forms/account-filters.form';
+import { AccountReadService } from '~web/account/services/account-read/account-read.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-accounts',

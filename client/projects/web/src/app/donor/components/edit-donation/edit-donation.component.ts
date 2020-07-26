@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DonationSaveData } from '~shared';
-import { DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { Donation, DonationReadService } from '~web/donation/donation-read/donation-read.service';
-import { DonationSaveService } from '~web/donation/donation-save/donation-save.service';
-import { DonateForm } from '~web/donor/donate.form';
-import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
+import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
+import { DonateForm } from '~web/donor/forms/donate.form';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-edit-donation',

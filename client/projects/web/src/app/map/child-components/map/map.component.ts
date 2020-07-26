@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Donation } from '~shared';
 import { MapOptionsForm } from '~web/map/forms/map-options.form';
-import { MapOptions, MapService, WaypointMarker } from '~web/map/map/map.service';
+import { MapOptions, MapService, WaypointMarker } from '~web/map/services/map/map.service';
 
 @Component({
   selector: 'foodweb-map',

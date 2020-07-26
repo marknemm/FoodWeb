@@ -2,11 +2,11 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Directive({
-  selector: '[foodWebReturnLink]'
+  selector: '[foodwebReturnLink]'
 })
 export class ReturnLinkDirective {
 
-  @Input('foodWebReturnLink') returnFragment: string;
+  @Input('foodwebReturnLink') returnFragment: string;
   @Input() routerLink: string[];
   @Input() queryParams: Params;
   @Input() state: any;

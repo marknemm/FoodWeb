@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, TemplateRef } from '@angular/core';
 import { MatSnackBarRef, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
-import { AlertMessage, AlertResponse } from '~web/shared/alert/alert-message';
-import { AlertResponseService } from '~web/shared/alert/alert-response.service';
+import { AlertMessage, AlertResponse } from '~web/shared/services/alert/alert-message';
+import { AlertResponseService } from '~web/shared/services/alert/alert-response.service';
 
 @Component({
   selector: 'foodweb-alert-snack-bar',

@@ -2,9 +2,9 @@ import { Component, forwardRef, Input, OnChanges, SimpleChanges } from '@angular
 import { NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 import { ErrorStateMatcher, FloatLabelType } from '@angular/material/core';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
-import { DateTimeForm } from '~web/date-time/date-time.form';
-import { DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
+import { DateTimeForm } from '~web/date-time/forms/date-time.form';
+import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'foodweb-date-time',

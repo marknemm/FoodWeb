@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ContactInfo } from '~shared';
-import { MapAnchorType } from '~web/account/address/address.component';
-import { ContactInfoForm } from '~web/account/contact-info.form';
+import { MapAnchorType } from '~web/account/child-components/address/address.component';
+import { ContactInfoForm } from '~web/account/forms/contact-info.form';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
-import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'foodweb-contact-info',

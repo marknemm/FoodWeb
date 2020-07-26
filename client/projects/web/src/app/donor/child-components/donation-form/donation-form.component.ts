@@ -1,8 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { DonateForm } from '~web/donor/forms/donate.form';
-import { ConstantsService } from '~web/shared/constants/constants.service';
-import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
+import { ConstantsService } from '~web/shared/services/constants/constants.service';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'foodweb-donation-form',

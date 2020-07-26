@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { EventRegistration, EventRegistrationCreateRequest, FeaturedEvent } from '~shared';
-import { environment } from '~web/environments/environment';
-import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
+import { environment } from '~web/../environments/environment';
+import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
 
 @Injectable({
   providedIn: 'root'

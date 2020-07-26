@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { faDonate, faGifts, faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons';
 import { DonationHelper } from '~shared';
-import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
-import { SessionService } from '~web/session/session/session.service';
-import { ConstantsService } from '~web/shared/constants/constants.service';
+import { LeftNavService } from '~web/app-shell/services/left-nav/left-nav.service';
+import { SessionService } from '~web/session/services/session/session.service';
+import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
   selector: 'foodweb-left-nav-items',

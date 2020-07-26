@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { AccountType } from '~shared';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
-import { ConstantsService } from '~web/shared/constants/constants.service';
-import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
+import { ConstantsService } from '~web/shared/services/constants/constants.service';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'foodweb-account-type',

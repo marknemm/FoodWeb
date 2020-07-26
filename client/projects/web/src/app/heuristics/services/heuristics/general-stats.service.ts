@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { never, Observable, timer } from 'rxjs';
 import { catchError, finalize, flatMap } from 'rxjs/operators';
 import { GeneralStats } from '~shared';
-import { environment } from '~web/environments/environment';
+import { environment } from '~web/../environments/environment';
 export { GeneralStats };
 
 @Injectable({

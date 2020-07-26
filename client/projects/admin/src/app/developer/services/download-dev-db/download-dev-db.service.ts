@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '~admin/environments/environment';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'

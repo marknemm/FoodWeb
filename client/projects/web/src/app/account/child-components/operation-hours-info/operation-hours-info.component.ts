@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { OperationHours, Weekday } from '~shared';
-import { OperationHoursInfoForm } from '~web/account/operation-hours-info.form';
-import { OperationHoursArray } from '~web/account/operation-hours.array';
+import { OperationHoursInfoForm } from '~web/account/forms/operation-hours-info.form';
+import { OperationHoursArray } from '~web/account/forms/operation-hours.array';
 import { TypedFormControl } from '~web/data-structure/typed-form-control';
-import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.service';
+import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 
 @Component({
   selector: 'foodweb-operation-hours-info',

@@ -3,12 +3,12 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Directive({
-  selector: '[foodWebDisplayEditTransition]',
+  selector: '[foodwebDisplayEditTransition]',
   exportAs: 'editDisplayTransition'
 })
 export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDestroy {
 
-  @Input('foodWebDisplayEditTransition') editing = false;
+  @Input('foodwebDisplayEditTransition') editing = false;
   @Input() form: HTMLElement;
   @Input() display: HTMLElement;
   @Input() duration = 0.25;

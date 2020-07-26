@@ -7,7 +7,7 @@ import { AccountCreateOptions, AdminAccountForm } from '~admin/admin-account/for
 import { AdminSessionService } from '~admin/admin-session/admin-session/admin-session.service';
 import { Account } from '~shared';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-create-account',

@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Directions } from '~web/map/map';
+import { Directions } from '~web/map/interfaces/map';
 
 @Component({
   selector: 'foodweb-direction-steps',

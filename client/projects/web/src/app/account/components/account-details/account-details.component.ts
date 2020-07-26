@@ -1,15 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Account, AccountHelper, AccountType, DonationReadRequest } from '~shared';
-import { AccountReadService } from '~web/account/account-read/account-read.service';
-import { AccountSaveService } from '~web/account/account-save/account-save.service';
-import { AccountForm, AccountFormKey } from '~web/account/account.form';
-import { PasswordFormT } from '~web/password/password.form';
-import { SessionService } from '~web/session/session/session.service';
+import { AccountForm, AccountFormKey } from '~web/account/forms/account.form';
+import { AccountReadService } from '~web/account/services/account-read/account-read.service';
+import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
+import { PasswordFormT } from '~web/password/forms/password.form';
+import { SessionService } from '~web/session/services/session/session.service';
 import { SaveCb } from '~web/shared/child-components/edit-save-button/edit-save-button.component';
-import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
+import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
 @Component({
   selector: 'foodweb-account-details',

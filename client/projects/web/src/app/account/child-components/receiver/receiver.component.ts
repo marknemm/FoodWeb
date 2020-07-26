@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ReceiverForm } from '~web/account/receiver.form';
+import { ReceiverForm } from '~web/account/forms/receiver.form';
 
 @Component({
   selector: 'foodweb-receiver',

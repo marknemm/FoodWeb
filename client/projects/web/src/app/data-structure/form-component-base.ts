@@ -1,14 +1,13 @@
-import { Directive, forwardRef, Input, OnDestroy, OnInit, Provider, Type } from "@angular/core";
-import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { Observable, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { TypedAbstractControl } from "~web/data-structure/typed-abstract-control";
-import { TypedFormControl } from "~web/data-structure/typed-form-control";
-import { TypedFormGroup } from "~web/data-structure/typed-form-group";
-import { FormHelperService } from "~web/shared/form-helper/form-helper.service";
+import { Directive, forwardRef, Input, OnDestroy, OnInit, Provider, Type } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { TypedAbstractControl } from '~web/data-structure/typed-abstract-control';
+import { TypedFormControl } from '~web/data-structure/typed-form-control';
+import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 /**
- * @abstract
  * Base class that implements fundamental ControlValueAccessor functionality.
  * It also initializes a TypedFormControl or TypedFormGroup based off of input bindings that are set on the derived component.
  */

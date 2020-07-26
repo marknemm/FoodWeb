@@ -4,14 +4,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AccountModule } from '~web/account/account.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
-import { DonationActionsComponent } from '~web/donation-delivery-shared/donation-actions/donation-actions.component';
-import { DonationMemberNamePipe } from '~web/donation-delivery-shared/donation-member-name/donation-member-name.pipe';
-import { DonationStatusComponent } from '~web/donation-delivery-shared/donation-status/donation-status.component';
-import { DonationWorkflowComponent } from '~web/donation-delivery-shared/donation-workflow/donation-workflow.component';
-import { DropOffWindowPipe } from '~web/donation-delivery-shared/drop-off-window/drop-off-window.pipe';
-import { PickupWindowPipe } from '~web/donation-delivery-shared/pickup-window/pickup-window.pipe';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
+import { DonationActionsComponent } from './child-components/donation-actions/donation-actions.component';
+import { DonationStatusComponent } from './child-components/donation-status/donation-status.component';
+import { DonationWorkflowComponent } from './child-components/donation-workflow/donation-workflow.component';
+import { DonationMemberNamePipe } from './pipes/donation-member-name/donation-member-name.pipe';
+import { DropOffWindowPipe } from './pipes/drop-off-window/drop-off-window.pipe';
+import { PickupWindowPipe } from './pipes/pickup-window/pickup-window.pipe';
 
 @NgModule({
   declarations: [

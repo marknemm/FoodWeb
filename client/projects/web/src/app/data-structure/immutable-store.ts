@@ -11,7 +11,7 @@ export class ImmutableStore<T> {
   /**
    * The raw internal store value.
    */
-  private _value: T
+  private _value: T;
   /**
    * A behavior subject that emits the raw internal store value when setValue is invoked.
    */
@@ -124,4 +124,4 @@ export class ImmutableStore<T> {
 /**
  * The level of cloning that should occur on an object.
  */
-export enum CloneLevel { Deep, Shallow, None };
+export enum CloneLevel { Deep, Shallow, None }

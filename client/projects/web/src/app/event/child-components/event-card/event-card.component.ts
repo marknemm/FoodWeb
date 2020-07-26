@@ -1,10 +1,10 @@
 import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FeaturedEvent } from '~shared';
-import { DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { EventRegistrationForm } from '~web/event/event-registration.form';
-import { RegisterEventService } from '~web/event/register-event/register-event.service';
-import { MapAppLinkService } from '~web/map/map-app-link/map-app-link.service';
-import { SessionService } from '~web/session/session/session.service';
+import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { EventRegistrationForm } from '~web/event/forms/event-registration.form';
+import { RegisterEventService } from '~web/event/services/register-event/register-event.service';
+import { MapAppLinkService } from '~web/map/services/map-app-link/map-app-link.service';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
   selector: 'foodweb-event-card',

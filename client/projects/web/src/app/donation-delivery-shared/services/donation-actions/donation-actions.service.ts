@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, of } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
-import { Account, DateTimeRange, DeliveryHelper, Donation, DonationHelper } from '~shared';
-import { DateTimeRangeRadioConfig, DateTimeRangeRadioDialogComponent } from '~web/date-time/date-time-range-radio-dialog/date-time-range-radio-dialog.component';
-import { DeliveryScheduleService } from '~web/delivery/delivery-schedule/delivery-schedule.service';
-import { DeliveryStatusUpdateService } from '~web/delivery/delivery-status-update/delivery-status-update.service';
-import { DonationClaimService } from '~web/donation/donation-claim/donation-claim.service';
-import { DonationDeleteService } from '~web/donation/donation-delete/donation-delete.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Account, DeliveryHelper, Donation, DonationHelper } from '~shared';
+import { DeliveryScheduleService } from '~web/delivery/services/delivery-schedule/delivery-schedule.service';
+import { DeliveryStatusUpdateService } from '~web/delivery/services/delivery-status-update/delivery-status-update.service';
+import { DonationClaimService } from '~web/donation/services/donation-claim/donation-claim.service';
+import { DonationDeleteService } from '~web/donation/services/donation-delete/donation-delete.service';
 
 export type DonationAction = 'Edit' | 'Save' | 'Delete' | 'Claim' | 'Unclaim' | 'ScheduleDelivery' | 'AdvanceDeliveryState' | 'UndoDeliveryState';
 
@@ -178,7 +177,7 @@ export class DonationActionsService {
    * @return An observable that emits the updated donation after the schedule operaiton completes.
    */
   protected _scheduleDelivery(donation: Donation): Observable<Donation> {
-    return this._deliveryScheduleService.scheduleDelivery(donation)
+    return this._deliveryScheduleService.scheduleDelivery(donation);
   }
 
   /**

@@ -4,8 +4,8 @@ import { debounce } from 'lodash-es';
 import { Observable, Subscription } from 'rxjs';
 import { AccountAutocompleteItem, AccountAutocompleteRequest, AccountType, DeepReadonly } from '~shared';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
-import { environment } from '~web/environments/environment';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { environment } from '~web/../environments/environment';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'

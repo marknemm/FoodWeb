@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { Account, AccountType } from '~shared';
-import { AccountForm } from '~web/account/account.form';
-import { SessionService } from '~web/session/session/session.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
-import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
-import { SignupService } from '~web/signup/signup/signup.service';
-import { TermsConditionsDialogComponent } from '~web/signup/terms-conditions-dialog/terms-conditions-dialog.component';
+import { AccountForm } from '~web/account/forms/account.form';
+import { SessionService } from '~web/session/services/session/session.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { TermsConditionsDialogComponent } from '~web/signup/components/terms-conditions-dialog/terms-conditions-dialog.component';
+import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
+import { SignupService } from '~web/signup/services/signup/signup.service';
 
 @Component({
   selector: 'foodweb-signup',

@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { AccountHelper, DeliveryHelper, DonationHelper } from '~shared';
-import { DonationAction, DonationActionsService } from '~web/donation-delivery-shared/donation-actions/donation-actions.service';
-import { Donation, DonationReadService } from '~web/donation/donation-read/donation-read.service';
-import { SessionService } from '~web/session/session/session.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { DonationAction, DonationActionsService } from '~web/donation-delivery-shared/services/donation-actions/donation-actions.service';
+import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
+import { SessionService } from '~web/session/services/session/session.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-donation-details',

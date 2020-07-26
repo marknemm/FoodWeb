@@ -1,8 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
 import { TypedFormControl } from '~web/data-structure/typed-form-control';
-import { DateTimeRange, DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
+import { DateTimeRange, DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'foodweb-date-time-range-radio',

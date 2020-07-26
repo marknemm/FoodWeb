@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, finalize, map, mergeMap, takeUntil } from 'rxjs/operators';
 import { Account, AccountHelper, ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
-import { environment } from '~web/environments/environment';
-import { AlertService } from '~web/shared/alert/alert.service';
-import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
+import { environment } from '~web/../environments/environment';
+import { AlertService } from '~web/shared/services/alert/alert.service';
+import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
 export { Account };
 
 @Injectable({

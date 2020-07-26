@@ -6,7 +6,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { AdminScheduleDeliveryConfig, AdminScheduleDeliveryDialogComponent, AdminScheduleDeliveryDialogResult } from '~admin/admin-delivery/admin-schedule-delivery-dialog/admin-schedule-delivery-dialog.component';
 import { AdminDeliveryScheduleRequest, Donation } from '~shared';
 import { DeliveryScheduleService } from '~web/delivery/delivery-schedule/delivery-schedule.service';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'

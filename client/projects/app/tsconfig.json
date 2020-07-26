@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "node",
@@ -15,19 +15,19 @@
       "dom",
       "es6"
     ],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "~/*": [
-        "projects/app/*"
-      ]
+      "~app/*": ["./src/app/*"],
+      "~shared": ["../web/src/shared"],
+      "~web/*": ["../web/src/app/*"]
     }
   },
   "include": [
-    "projects/app/references.d.ts",
-    "projects/app/src/tests/**/*.ts"
+    "./references.d.ts",
+    "../web/src/app/types/missing-types.d.ts"
   ],
   "files": [
-    "projects/app/src/main.ts"
+    "./src/main.ts"
   ],
   "exclude": [
     "node_modules",

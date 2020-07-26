@@ -4,8 +4,8 @@ import { ActivatedRoute, ParamMap, Router, Params } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 import { Donation, DonationReadRequest, ListResponse } from '~shared';
-import { environment } from '~web/environments/environment';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { environment } from '~web/../environments/environment';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 import { cloneDeep } from 'lodash-es';
 export { Donation };
 
