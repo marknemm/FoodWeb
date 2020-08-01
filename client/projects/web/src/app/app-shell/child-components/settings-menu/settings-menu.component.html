@@ -21,7 +21,7 @@
         <mat-icon>place</mat-icon> My Deliveries
       </button>
     </a>
-    <a [routerLink]="['/home']" (click)="sessionService.logout()" class="logout">
+    <a [routerLink]="['/home']" (click)="authService.logout()" class="logout">
       <button mat-list-item type="button">
         <mat-icon>power_settings_new</mat-icon> Logout
       </button>

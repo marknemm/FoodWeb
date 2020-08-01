@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountHelper } from '~shared';
-import { AccountReadService } from '~web/account/account-read/account-read.service';
-import { AccountsComponent } from '~web/account/accounts/accounts.component';
+import { AccountsComponent } from '~web/account/components/accounts/accounts.component';
+import { AccountReadService } from '~web/account/services/account-read/account-read.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({

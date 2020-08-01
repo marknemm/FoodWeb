@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AdminScheduleDeliveryDialogComponent } from '~admin/admin-delivery/admin-schedule-delivery-dialog/admin-schedule-delivery-dialog.component';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AccountModule } from '~web/account/account.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
 import { DeliveryRoutingModule } from '~web/delivery/delivery-routing.module';
@@ -9,6 +8,7 @@ import { DeliveryModule } from '~web/delivery/delivery.module';
 import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { AdminDeliveryRoutingModule } from './admin-delivery-routing.module';
+import { AdminScheduleDeliveryDialogComponent } from './components/admin-schedule-delivery-dialog/admin-schedule-delivery-dialog.component';
 
 @NgModule({
   declarations: [

@@ -1,26 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { JSONDateReviver } from '~shared';
-import { SessionService } from '~web/session/services/session/session.service';
+import { AuthenticationService } from './session/services/authentication/authentication.service';
 
 @Component({
   selector: 'foodweb-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
   constructor(
     private _matIconReg: MatIconRegistry,
     private _domSanitizer: DomSanitizer,
+    authService: AuthenticationService,
     jsonDateReviver: JSONDateReviver,
-    sessionService: SessionService
   ) {
     this._matIconReg.registerFontClassAlias('fontawesome', 'fa');
     this._initLetterIcons();
     jsonDateReviver.initJSONDateReviver();
-    sessionService.refreshSessionStatus().subscribe();
+    authService.refreshSessionStatus().subscribe();
   }
 
   private _initLetterIcons(): void {
@@ -30,6 +30,4 @@ export class AppComponent implements OnInit {
       this._matIconReg.addSvgIcon(`letter_${char}`, svgUrl);
     }
   }
-
-  ngOnInit() {}
 }

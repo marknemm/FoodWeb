@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { AdminDonationSaveService } from '~admin/admin-donation/admin-donation-save/admin-donation-save.service';
-import { AdminDonationForm } from '~admin/admin-donation/admin-donation.form';
+import { AdminDonationForm } from '~admin/admin-donation/forms/admin-donation.form';
+import { AdminDonationSaveService } from '~admin/admin-donation/services/admin-donation-save/admin-donation-save.service';
 import { Donation } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { DonationReadService } from '~web/donation/donation-read/donation-read.service';
+import { DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 

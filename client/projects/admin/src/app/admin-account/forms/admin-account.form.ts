@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { Account } from '~shared';
-import { AccountForm, AccountFormConfig, AccountFormT, PasswordFormT } from '~web/account/account.form';
+import { AccountForm, AccountFormConfig, AccountFormT, PasswordFormT } from '~web/account/forms/account.form';
 import { TypedFormGroup } from '~web/data-structure/typed-form-group';
 export { PasswordFormT };
 

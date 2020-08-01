@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, flatMap } from 'rxjs/operators';
-import { environment } from '~admin/environments/environment';
+import { environment } from '~admin/../environments/environment';
 import { FeaturedEvent } from '~shared';
 import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';

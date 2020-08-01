@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { VolunteerComponent } from '~web/account/volunteer/volunteer.component';
+import { VolunteerComponent } from '~web/account/child-components/volunteer/volunteer.component';
 
 @Component({
   selector: 'foodweb-admin-volunteer',

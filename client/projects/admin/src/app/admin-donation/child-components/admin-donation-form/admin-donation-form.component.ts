@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AdminDonationForm } from '~admin/admin-donation/admin-donation.form';
-import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.service';
-import { of, Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { AdminDonationForm } from '~admin/admin-donation/forms/admin-donation.form';
+import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 
 @Component({
   selector: 'foodweb-admin-donation-form',

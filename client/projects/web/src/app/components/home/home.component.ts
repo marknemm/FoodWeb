@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { FeaturedEvent, FeaturedEventsService } from '~web/event/services/featured-events/featured-events.service';
 import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
+import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private _activatedRoute: ActivatedRoute,
+    private _authService: AuthenticationService,
     private _featuredEventsService: FeaturedEventsService,
     private _matDialog: MatDialog,
     private _sessionService: SessionService
@@ -29,7 +31,7 @@ export class HomeComponent implements OnInit {
     if (!!this._activatedRoute.snapshot.params['login']) {
       // Logout if directed to '/home/login' with an impersonationToken query param present.
       if (!!this._activatedRoute.snapshot.queryParams['impersonationToken']) {
-        this._sessionService.logout(false);
+        this._authService.logout();
       }
       LoginDialogComponent.openIfNotLoggedIn(this._sessionService, this._matDialog);
     }

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminAccountCreateComponent } from '~admin/admin-account/admin-account-create/admin-account-create.component';
-import { AdminAccountDetailsComponent } from '~admin/admin-account/admin-account-details/admin-account-details.component';
-import { AdminAccountMessageComponent } from '~admin/admin-account/admin-account-message/admin-account-message.component';
-import { AdminAccountsComponent } from '~admin/admin-account/admin-accounts/admin-accounts.component';
+import { AdminAccountCreateComponent } from './components/admin-account-create/admin-account-create.component';
+import { AdminAccountDetailsComponent } from './components/admin-account-details/admin-account-details.component';
+import { AdminAccountMessageComponent } from './components/admin-account-message/admin-account-message.component';
+import { AdminAccountsComponent } from './components/admin-accounts/admin-accounts.component';
 
 const routes: Routes = [
   { path: 'compose-message', component: AdminAccountMessageComponent },

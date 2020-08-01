@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
@@ -12,6 +13,7 @@ import { SessionService } from '~web/session/services/session/session.service';
 export class AdminSettingsMenuComponent implements OnInit {
 
   constructor(
+    public authService: AuthenticationService,
     public sessionService: SessionService
   ) {}
 

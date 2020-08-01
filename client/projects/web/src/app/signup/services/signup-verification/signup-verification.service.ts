@@ -50,7 +50,7 @@ export class SignupVerificationService {
     const request: AccountVerificationRequest = { verificationToken };
     return this._httpClient.post<Account>(`${this.url}/verify`, request, { withCredentials: true }).pipe(
       this._httpResponseService.handleHttpResponse<Account>({ handleErrorResponse: false, showPageProgressOnLoad: false }),
-      tap((account: Account) => this._sessionService.account = account)
+      tap((account: Account) => this._sessionService.saveAccount(account))
     );
   }
 }

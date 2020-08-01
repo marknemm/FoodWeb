@@ -81,15 +81,15 @@ export class MapService {
 
   /**
    * Refreshes a map's data & attributes based on a given donation.
-   * @param map The map HTML element that is to be refreshed.
+   * @param googleMap The map HTML element that is to be refreshed.
    * @param donation The donation used to refresh the map data/attributes.
    * @param options Delivery map options.
    */
-  refreshMap(map: GoogleMap, donation: Donation, options: MapOptions): void {
+  refreshMap(googleMap: GoogleMap, donation: Donation, options: MapOptions): void {
     this._clearMapData();
     this._refreshWaypoints(donation, options).subscribe(() => {
       this._refreshDirectionsHref(donation);
-      this._refreshMapView(map);
+      this._refreshMapView(googleMap);
       this._refreshDirections(donation, options);
     });
   }
@@ -166,11 +166,11 @@ export class MapService {
    * Refreshes the attributes for the map viewport (bounds & center).
    * @param map The map for which we are refreshing the viewport attributes.
    */
-  private _refreshMapView(map: GoogleMap): void {
+  private _refreshMapView(googleMap: GoogleMap): void {
     if (this.latLngWaypoints.length) {
       this._mapBounds = this._mapViewportService.calcMapBounds(this.latLngWaypoints);
       this._mapCenter = this._mapBounds.getCenter();
-      map.fitBounds(this._mapBounds);
+      googleMap.fitBounds(this._mapBounds);
     }
   }
 

@@ -75,7 +75,7 @@ export class EventCardComponent implements OnInit, OnChanges {
     if (this.formGroup.valid) {
       this.eventRegistrationService.register(this.featuredEvent, this.formGroup.value).subscribe(
         () => this._signupComplete = true
-      )
+      );
     }
   }
 

@@ -24,7 +24,8 @@
   },
   "include": [
     "./references.d.ts",
-    "../web/src/app/types/missing-types.d.ts"
+    "../web/src/app/types/missing-types.d.ts",
+    "../web/src/app/types/food-web-environment.d.ts"
   ],
   "files": [
     "./src/main.ts"

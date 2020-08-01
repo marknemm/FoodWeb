@@ -51,7 +51,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   get hasAccountOwnership(): boolean {
-    return this._hasAccountOwnership
+    return this._hasAccountOwnership;
   }
 
   get seeDonationsLinkParams(): DonationReadRequest {

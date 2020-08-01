@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges } from '@angular/core';
-import { FeaturedEventForm } from '~admin/admin-event/featured-event.form';
+import { FeaturedEventForm } from '~admin/admin-event/forms/featured-event.form';
 import { FeaturedEvent } from '~shared';
 
 @Component({
-  selector: 'foodweb-featured-event-form',
+  selector: 'foodweb-admin-featured-event-form',
   templateUrl: './featured-event-form.component.html',
   styleUrls: ['./featured-event-form.component.scss'],
 })

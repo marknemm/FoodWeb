@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DeleteFeaturedEventService } from '~admin/admin-event/delete-featured-event/delete-featured-event.service';
-import { ReadFeaturedEventService } from '~admin/admin-event/read-featured-event/read-featured-event.service';
-import { UpdateFeaturedEventService } from '~admin/admin-event/update-featured-event/update-featured-event.service';
+import { DeleteFeaturedEventService } from '~admin/admin-event/services/delete-featured-event/delete-featured-event.service';
+import { ReadFeaturedEventService } from '~admin/admin-event/services/read-featured-event/read-featured-event.service';
+import { UpdateFeaturedEventService } from '~admin/admin-event/services/update-featured-event/update-featured-event.service';
 import { FeaturedEvent } from '~shared';
 
 @Component({
-  selector: 'foodweb-edit-featured-event',
+  selector: 'foodweb-admin-edit-featured-event',
   templateUrl: './edit-featured-event.component.html',
   styleUrls: ['./edit-featured-event.component.scss'],
 })

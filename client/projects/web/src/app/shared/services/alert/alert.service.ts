@@ -5,14 +5,14 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AlertDialogComponent } from '~web/shared/components/alert-dialog/alert-dialog.component';
 import { AlertSnackBarComponent } from '~web/shared/components/alert-snack-bar/alert-snack-bar.component';
-import { AlertConfig, AlertLevel, AlertMessage, AlertResponse } from '~web/shared/services/alert/alert-message';
-import { AlertResponseService } from '~web/shared/services/alert/alert-response.service';
+import { Alert, AlertConfig, AlertLevel, AlertMessage, AlertResponse } from './alert';
+import { AlertResponseService } from './alert-response.service';
 export * from './alert-message';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlertService {
+export class AlertService implements Alert {
 
   constructor(
     private _matDialog: MatDialog,

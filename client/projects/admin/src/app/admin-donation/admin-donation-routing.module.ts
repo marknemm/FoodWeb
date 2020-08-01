@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminCreateDonationComponent } from '~admin/admin-donation/admin-create-donation/admin-create-donation.component';
-import { AdminEditDonationComponent } from '~admin/admin-donation/admin-edit-donation/admin-edit-donation.component';
+import { AdminCreateDonationComponent } from './components/admin-create-donation/admin-create-donation.component';
+import { AdminEditDonationComponent } from './components/admin-edit-donation/admin-edit-donation.component';
 
 const routes: Routes = [
   { path: 'create', component: AdminCreateDonationComponent },

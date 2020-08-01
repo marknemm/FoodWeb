@@ -1,24 +1,21 @@
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { HttpParams, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { flatMap, catchError, finalize } from 'rxjs/operators';
-import { environment } from '~web/../environments/environment';
-import { ServerSentEventSourceService } from '~web/notification/services/server-sent-event-source/server-sent-event-source.service';
-import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
-import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
+import { catchError, finalize, switchMap } from 'rxjs/operators';
 import {
-  Notification,
-  ListResponse,
-  NotificationsAvailableEvent,
+  LastSeenNotificationUpdateRequest, ListResponse, Notification,
   NotificationReadFilters,
-  NotificationReadRequest,
-  LastSeenNotificationUpdateRequest,
+  NotificationReadRequest, NotificationsAvailableEvent,
   NotificationUpdateRequest,
   ServerSentEventType
 } from '~shared';
+import { environment } from '~web/../environments/environment';
+import { ServerSentEventSourceService } from '~web/notification/services/server-sent-event-source/server-sent-event-source.service';
+import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
+import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
-import { SessionService } from '~web/session/services/session/session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,20 +24,20 @@ export class NotificationService {
 
   readonly url = `${environment.server}/notification`;
 
-  private _unseenNotificationsCount = 0;
   private _notificationsPreview: Notification[] = [];
+  private _unseenNotificationsCount = 0;
 
   constructor(
-    private _router: Router,
+    private _authService: AuthenticationService,
+    private _errorHandlerService: ErrorHandlerService,
     private _httpClient: HttpClient,
     private _pageProgressService: PageProgressService,
-    private _errorHandlerService: ErrorHandlerService,
-    private _sseSourceService: ServerSentEventSourceService,
-    private _sessionService: SessionService
+    private _router: Router,
+    private _sseSourceService: ServerSentEventSourceService
   ) {
     this._listenForUnseenNotifications();
-    this._sessionService.login$.subscribe(() => this._getNotificationsPreview());
-    this._sessionService.logout$.subscribe(() => this._clearNotificationsData());
+    this._authService.login$.subscribe(() => this._getNotificationsPreview());
+    this._authService.logout$.subscribe(() => this._clearNotificationsData());
   }
 
   get unseenNotificationsCount(): number {
@@ -67,15 +64,15 @@ export class NotificationService {
       ServerSentEventType.NotificationsAvailable
     ).subscribe((notificationsAvailableEvent) => {
       this._unseenNotificationsCount = notificationsAvailableEvent.unseenNotificationsCount;
-      this._getNotifications({}, 1, 10).subscribe((notificationsResponse: ListResponse<Notification>) => {
+      this._getNotifications({}, 1, 10).subscribe((notificationsResponse: ListResponse<Notification>) =>
         this._notificationsPreview = notificationsResponse.list
-      });
+      );
     });
   }
 
   listenNotificationsQueryChange(activatedRoute: ActivatedRoute): Observable<ListResponse<Notification>> {
     return activatedRoute.queryParamMap.pipe(
-      flatMap((params: ParamMap) => {
+      switchMap((params: ParamMap) => {
         const filters: NotificationReadFilters = {};
         params.keys.forEach((paramKey: string) => {
           if (paramKey !== 'page' && paramKey !== 'limit') {

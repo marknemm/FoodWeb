@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CreateFeaturedEventComponent } from '~admin/admin-event/create-featured-event/create-featured-event.component';
-import { EditFeaturedEventComponent } from '~admin/admin-event/edit-featured-event/edit-featured-event.component';
-import { EventRegistrationsComponent } from '~admin/admin-event/event-registrations/event-registrations.component';
-import { FeaturedEventsComponent } from '~admin/admin-event/featured-events/featured-events.component';
+import { CreateFeaturedEventComponent } from './components/create-featured-event/create-featured-event.component';
+import { EditFeaturedEventComponent } from './components/edit-featured-event/edit-featured-event.component';
+import { EventRegistrationsComponent } from './components/event-registrations/event-registrations.component';
+import { FeaturedEventsComponent } from './components/featured-events/featured-events.component';
 
 const routes: Routes = [
   { path: 'create', component: CreateFeaturedEventComponent },

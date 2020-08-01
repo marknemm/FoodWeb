@@ -4,7 +4,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { ServerSentEventType } from '~shared';
 import { environment } from '~web/../environments/environment';
-import { SessionService } from '~web/session/services/session/session.service';
+import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 
 const EventSource = NativeEventSource || EventSourcePolyfill;
 
@@ -21,11 +21,11 @@ export class ServerSentEventSourceService {
 
   constructor(
     private _applicationRef: ApplicationRef,
-    private _sessionService: SessionService
+    private _authService: AuthenticationService
   ) {
-    this._sessionService.login$.subscribe(() => this.open());
-    this._sessionService.logout$.subscribe(() => this.close());
-    if (this._sessionService.loggedIn) { this.open(); }
+    this._authService.login$.subscribe(() => this.open());
+    this._authService.logout$.subscribe(() => this.close());
+    if (this._authService.loggedIn) { this.open(); }
   }
 
   /**
@@ -60,9 +60,7 @@ export class ServerSentEventSourceService {
   open(): void {
     if (!this.isOpen) {
       this._eventSource = new EventSource(this.url, { withCredentials: true });
-      this._eventSource.onmessage = (event: MessageEvent) => {
-        this._onMessage.next(event);
-      }
+      this._eventSource.onmessage = (event: MessageEvent) => this._onMessage.next(event);
       this._eventSource.onerror = (event: Event) => this._onError.next(event);
     }
   }

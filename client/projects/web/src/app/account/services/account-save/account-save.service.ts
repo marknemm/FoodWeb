@@ -46,7 +46,7 @@ export class AccountSaveService {
    */
   private _updateAccountSessionData(savedAccount: Account): void {
     if (savedAccount.id === this._sessionService.account.id) {
-      this._sessionService.account = savedAccount;
+      this._sessionService.saveAccount(savedAccount);
     }
   }
 

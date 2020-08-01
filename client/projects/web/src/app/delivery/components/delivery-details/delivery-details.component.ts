@@ -45,7 +45,7 @@ export class DeliveryDetailsComponent implements OnInit {
   }
 
   private _listenAccountChange(): void {
-    this.sessionService.onLogin(this._destroy$).subscribe(() =>
+    this.sessionService.onAccountSave(this._destroy$).subscribe(() =>
       this._updateDeliveryPrivileges(this._donation)
     );
   }

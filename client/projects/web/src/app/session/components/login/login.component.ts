@@ -1,12 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { never, Observable, ObservableInput } from 'rxjs';
+import { NEVER, Observable, ObservableInput } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Account } from '~shared';
 import { UsernameRecoveryService } from '~web/account/services/username-recovery/username-recovery.service';
 import { PasswordResetService } from '~web/password/services/password-reset/password-reset.service';
 import { LoginForm } from '~web/session/forms/login.form';
-import { Account, SessionService } from '~web/session/services/session/session.service';
+import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 
 @Component({
   selector: 'foodweb-login',
@@ -30,8 +31,8 @@ export class LoginComponent implements OnInit {
   private _resetMessageSent = false;
 
   constructor(
-    public sessionService: SessionService,
     private _activatedRoute: ActivatedRoute,
+    private _authService: AuthenticationService,
     private _passwordResetService: PasswordResetService,
     private _usernameRecoveryService: UsernameRecoveryService
   ) {}
@@ -49,7 +50,7 @@ export class LoginComponent implements OnInit {
   }
 
   get loading(): boolean {
-    return (this.sessionService.loading || this._usernameRecoveryService.loading || this._passwordResetService.loading);
+    return (this._authService.loading || this._usernameRecoveryService.loading || this._passwordResetService.loading);
   }
 
   get loginErr(): string {
@@ -93,8 +94,8 @@ export class LoginComponent implements OnInit {
     const username: string = this.loginForm.get('usernameEmail').value;
     const password: string = this.loginForm.get('password').value;
     const loginResponse$: Observable<Account> = (this._impersonationToken)
-      ? this.sessionService.impersonationLogin(username, password, this._impersonationToken)
-      : this.sessionService.login(username, password, true);
+      ? this._authService.impersonationLogin(username, password, this._impersonationToken)
+      : this._authService.login(username, password, true);
     loginResponse$.pipe(catchError(this._handleLoginErr.bind(this)))
                   .subscribe(this._handleLoginSuccess.bind(this));
   }
@@ -102,7 +103,7 @@ export class LoginComponent implements OnInit {
   private _handleLoginErr(err: HttpErrorResponse): ObservableInput<any> {
     console.error(err);
     this._loginErr = (err.error && err.error.message) ? err.error.message : err.message;
-    return never;
+    return NEVER;
   }
 
   private _handleLoginSuccess(): void {

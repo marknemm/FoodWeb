@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DeleteFeaturedEventService } from '~admin/admin-event/delete-featured-event/delete-featured-event.service';
+import { DeleteFeaturedEventService } from '~admin/admin-event/services/delete-featured-event/delete-featured-event.service';
 import { FeaturedEvent } from '~shared';
-import { FeaturedEventsService } from '~web/event/featured-events/featured-events.service';
+import { FeaturedEventsService } from '~web/event/services/featured-events/featured-events.service';
 
 @Component({
   selector: 'foodweb-featured-events',

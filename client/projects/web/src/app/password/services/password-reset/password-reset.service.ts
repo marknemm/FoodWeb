@@ -1,14 +1,13 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, finalize, mergeMap } from 'rxjs/operators';
+import { Account, PasswordResetRequest } from '~shared';
 import { environment } from '~web/../environments/environment';
-import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
-import { PasswordResetRequest } from '~shared';
-
-import { SessionService, Account } from '~web/session/services/session/session.service';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +19,7 @@ export class PasswordResetService {
   private _loading = false;
 
   constructor(
-    private _sessionService: SessionService,
+    private _authService: AuthenticationService,
     private _pageProgressSerivce: PageProgressService,
     private _httpClient: HttpClient,
     private _errorHandlerService: ErrorHandlerService,
@@ -47,7 +46,7 @@ export class PasswordResetService {
     this._loading = true;
     this._pageProgressSerivce.activate(true);
     return this._httpClient.put<Account>(this.url, request, { withCredentials: true }).pipe(
-      mergeMap((account: Account) => this._sessionService.login(account.username, password, true)),
+      mergeMap((account: Account) => this._authService.login(account.username, password, true)),
       catchError((err: any) => this._errorHandlerService.handleError(err)),
       finalize(() => {
         this._loading = false;

@@ -13,7 +13,7 @@ export class EventRegistrationForm extends TypedFormGroup<EventRegistration> {
       timezone: ['', Validators.required]
     });
     this._initTimezone();
-    this._attemptInitValuesFromSession(sessionService)
+    this._attemptInitValuesFromSession(sessionService);
   }
 
   private _initTimezone(): void {

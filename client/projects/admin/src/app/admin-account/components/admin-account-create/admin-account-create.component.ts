@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AdminSignupVerificationService } from '~admin/admin-account/admin-signup-verification/admin-signup-verification.service';
-import { AdminAccountCreateService } from '~admin/admin-account/services/admin-account-create/admin-account-create';
 import { AccountCreateOptions, AdminAccountForm } from '~admin/admin-account/forms/admin-account.form';
-import { AdminSessionService } from '~admin/admin-session/admin-session/admin-session.service';
+import { AdminAccountCreateService } from '~admin/admin-account/services/admin-account-create/admin-account-create.service';
+import { AdminSignupVerificationService } from '~admin/admin-account/services/admin-signup-verification/admin-signup-verification.service';
+import { AdminSessionService } from '~admin/admin-session/services/admin-session/admin-session.service';
 import { Account } from '~shared';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
-  selector: 'foodweb-create-account',
+  selector: 'foodweb-admin-create-account',
   templateUrl: './admin-account-create.component.html',
   styleUrls: ['./admin-account-create.component.scss'],
   providers: [AdminAccountCreateService]

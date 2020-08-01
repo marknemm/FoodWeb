@@ -6,23 +6,23 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { QuillModule } from 'ngx-quill';
-import { AdminAppShellModule } from '~admin/admin-app-shell/admin-app-shell.module';
-import { AdminBootstrapService } from '~admin/admin-bootstrap/admin-bootstrap/admin-bootstrap.service';
-import { AdminDeliveryScheduleService } from '~admin/admin-delivery/admin-delivery-schedule/admin-delivery-schedule.service';
-import { AdminDonationActionsService } from '~admin/admin-donation/admin-donation-actions/admin-donation-actions.service';
-import { AdminDonationClaimService } from '~admin/admin-donation/admin-donation-claim/admin-donation-claim.service';
-import { AdminDonationSaveService } from '~admin/admin-donation/admin-donation-save/admin-donation-save.service';
-import { AdminSessionModule } from '~admin/admin-session/admin-session.module';
-import { AppRoutingModule } from '~admin/app-routing.module';
-import { AppComponent } from '~admin/app.component';
-import { AdminConsoleComponent } from '~admin/components/admin-console/admin-console.component';
-import { DeliveryScheduleService } from '~web/delivery/delivery-schedule/delivery-schedule.service';
-import { DonationActionsService } from '~web/donation-delivery-shared/donation-actions/donation-actions.service';
-import { DonationClaimService } from '~web/donation/donation-claim/donation-claim.service';
-import { DonationSaveService } from '~web/donation/donation-save/donation-save.service';
+import { DeliveryScheduleService } from '~web/delivery/services/delivery-schedule/delivery-schedule.service';
+import { DonationActionsService } from '~web/donation-delivery-shared/services/donation-actions/donation-actions.service';
+import { DonationClaimService } from '~web/donation/services/donation-claim/donation-claim.service';
+import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
 import { MaterialModule } from '~web/material.module';
-import { SessionMonitorService } from '~web/session/session-monitor/session-monitor.service';
+import { SessionMonitorService } from '~web/session/services/session-monitor/session-monitor.service';
 import { SharedModule } from '~web/shared/shared.module';
+import { AdminAppShellModule } from './admin-app-shell/admin-app-shell.module';
+import { AdminBootstrapService } from './admin-bootstrap/services/admin-bootstrap/admin-bootstrap.service';
+import { AdminDeliveryScheduleService } from './admin-delivery/services/admin-delivery-schedule/admin-delivery-schedule.service';
+import { AdminDonationActionsService } from './admin-donation/services/admin-donation-actions/admin-donation-actions.service';
+import { AdminDonationClaimService } from './admin-donation/services/admin-donation-claim/admin-donation-claim.service';
+import { AdminDonationSaveService } from './admin-donation/services/admin-donation-save/admin-donation-save.service';
+import { AdminSessionModule } from './admin-session/admin-session.module';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { AdminConsoleComponent } from './components/admin-console/admin-console.component';
 
 @NgModule({
   declarations: [

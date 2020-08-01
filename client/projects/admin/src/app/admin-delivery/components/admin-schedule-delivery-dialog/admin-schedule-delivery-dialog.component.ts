@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AdminScheduleDeliveryForm } from '~admin/admin-delivery/admin-schedule-delivery.form';
+import { AdminScheduleDeliveryForm } from '~admin/admin-delivery/forms/admin-schedule-delivery.form';
 import { Account, DateTimeRange, Donation } from '~shared';
 
 @Component({

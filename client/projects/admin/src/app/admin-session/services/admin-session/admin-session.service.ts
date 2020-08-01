@@ -20,7 +20,7 @@ export class AdminSessionService extends SessionService {
   }
 
   /**
-   * @override Since admins have owenership of all accounts, this will always return true.
+   * Since admins have ownership of all accounts, this will always return true.
    */
   hasAccountOwnership(accountId: number): boolean {
     return true;
@@ -33,6 +33,6 @@ export class AdminSessionService extends SessionService {
    * @return true if it is the admin's account, false if not.
    */
   isMyAccount(accountId: number): boolean {
-    return this._accountHelper.doesAccountIdMatch(this._account, accountId);
+    return this._accountHelper.doesAccountIdMatch(this.account, accountId);
   }
 }

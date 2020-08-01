@@ -4,8 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Account, AccountType, AdminClaimSaveRequest, Donation } from '~shared';
-import { AccountSelectConfig, AccountSelectDialogComponent } from '~web/account/account-select-dialog/account-select-dialog.component';
-import { DonationClaimService } from '~web/donation/donation-claim/donation-claim.service';
+import { AccountSelectConfig, AccountSelectDialogComponent } from '~web/account/child-components/account-select-dialog/account-select-dialog.component';
+import { DonationClaimService } from '~web/donation/services/donation-claim/donation-claim.service';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({

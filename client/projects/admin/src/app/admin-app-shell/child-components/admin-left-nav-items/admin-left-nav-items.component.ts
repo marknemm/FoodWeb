@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faGifts } from '@fortawesome/free-solid-svg-icons';
-import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
+import { LeftNavService } from '~web/app-shell/services/left-nav/left-nav.service';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({

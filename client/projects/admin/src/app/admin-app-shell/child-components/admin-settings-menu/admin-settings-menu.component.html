@@ -11,7 +11,7 @@
         <mat-icon>supervisor_account</mat-icon> Account
       </button>
     </a>
-    <a [routerLink]="['/']" (click)="sessionService.logout()" class="logout">
+    <a [routerLink]="['/']" (click)="authService.logout()" class="logout">
       <button mat-list-item type="button">
         <mat-icon>power_settings_new</mat-icon> Logout
       </button>

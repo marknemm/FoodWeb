@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AccountFiltersComponent } from '~web/account/account-filters/account-filters.component';
+import { AccountFiltersComponent } from '~web/account/child-components/account-filters/account-filters.component';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({

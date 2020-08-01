@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PasswordComponent } from '~web/password/password/password.component';
+import { PasswordComponent } from '~web/password/child-components/password/password.component';
 
 @Component({
   selector: 'foodweb-admin-password',
