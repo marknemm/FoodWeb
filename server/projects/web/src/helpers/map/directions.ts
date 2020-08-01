@@ -2,7 +2,7 @@ import * as GoogleMaps from '@google/maps';
 import { ClientResponse, DirectionsResponse, GoogleMapsClientWithPromise, LatLngLiteral } from '@google/maps';
 import 'dotenv';
 import { ContactInfo, Directions, DirectionsExtractor, GeographyLocation, MapRoute, MapWaypointConverter, Waypoint } from '~shared';
-import { FoodWebError } from '../response/food-web-error';
+import { FoodWebError } from '../response/foodweb-error';
 
 const _directionsClient: GoogleMapsClientWithPromise = GoogleMaps.createClient({
   key: process.env.DIRECTIONS_API_KEY,

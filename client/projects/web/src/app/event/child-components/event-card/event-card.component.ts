@@ -55,7 +55,7 @@ export class EventCardComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.featuredEvent && this.featuredEvent) {
       setTimeout(() => {
-        this._signupPanelShouldGlow = (localStorage.getItem(`food-web-event-selected-${this.featuredEvent.showUntil?.getTime()}`) !== 'true');
+        this._signupPanelShouldGlow = (localStorage.getItem(`foodweb-event-selected-${this.featuredEvent.showUntil?.getTime()}`) !== 'true');
         const fullAddress = `${this.featuredEvent.streetAddress}, ${this.featuredEvent.city} `
           + `${this.featuredEvent.stateProvince}, ${this.featuredEvent.postalCode}`;
         this._directionsHref = this._mapAppLinkService.genDirectionHref(['My+Location', fullAddress]);
@@ -68,7 +68,7 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   onSignupPanelExpanded(): void {
     this._signupPanelShouldGlow = false;
-    localStorage.setItem(`food-web-event-selected-${this.featuredEvent.showUntil?.getTime()}`, 'true');
+    localStorage.setItem(`foodweb-event-selected-${this.featuredEvent.showUntil?.getTime()}`, 'true');
   }
 
   submitSignup(): void {

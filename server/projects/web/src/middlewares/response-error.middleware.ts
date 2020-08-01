@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 
 /**
  * Handles errors in controllers by logging the error message and sending a user-friendly error response.

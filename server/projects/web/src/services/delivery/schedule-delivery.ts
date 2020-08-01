@@ -1,7 +1,7 @@
 import { DeepPartial, EntityManager, getConnection } from 'typeorm';
 import { AccountEntity, DeliveryEntity, DonationEntity } from '~entity';
 import { DateTimeHelper, DateTimeRange, DeliveryHelper, DeliveryScheduleRequest, Donation, DonationStatus, ContactInfo } from '~shared';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { ScheduledDeliverySaveData, ScheduledDonationSaveData } from '~web/interfaces/delivery/scheduled-delivery-save-data';
 import { readDonation } from '~web/services/donation/read-donations';
 import { genMapRoute } from '~web/services/map/read-map-routes';

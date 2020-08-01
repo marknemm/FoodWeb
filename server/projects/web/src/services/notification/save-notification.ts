@@ -4,7 +4,7 @@ import { AccountEntity, NotificationEntity } from '~entity';
 import { getOrmRepository, OrmEntityManager } from '~orm';
 import { Notification } from '~shared';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 
 /**
  * Creates a NotificationEntity and saves it in the database.

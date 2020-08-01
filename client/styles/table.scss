@@ -228,7 +228,7 @@ $filter-transition-time: 0.33s;
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
 
-    food-web-table-title {
+    foodweb-table-title {
       border-radius: inherit;
 
       .table-title-content {
@@ -275,7 +275,7 @@ $filter-transition-time: 0.33s;
 }
 
 :not(.mat-card-title) {
-  > food-web-table-title {
+  > foodweb-table-title {
     .datatable-title-buttons {
       button {
         margin-top: 7px;

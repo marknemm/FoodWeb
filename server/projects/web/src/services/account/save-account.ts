@@ -5,7 +5,7 @@ import { OrmEntityManager, OrmRepository } from '~orm';
 import { AccountHelper, AccountSectionUpdateReqeust, AccountUpdateRequest, OperationHoursHelper, SignupRequest } from '~shared';
 import { geocode, geoTimezone } from '~web/helpers/map/geocoder';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { updateMapRouteEndpoints } from '../map/save-map-route';
 import { savePassword } from '../password/save-password';
 import { createUnverifiedAccount } from './account-verification';

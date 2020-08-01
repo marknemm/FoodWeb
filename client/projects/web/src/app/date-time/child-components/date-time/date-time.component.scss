@@ -10,23 +10,23 @@
       margin-bottom: -15px;
     }
 
-    food-web-date,
-    food-web-time {
+    foodweb-date,
+    foodweb-time {
       display: inline-block;
       box-sizing: border-box;
     }
 
-    food-web-date {
+    foodweb-date {
       padding-right: $inline-field-padding;
     }
 
     &.editing {
-      food-web-date,
-      food-web-time {
+      foodweb-date,
+      foodweb-time {
         width: 50%;
       }
 
-      food-web-time {
+      foodweb-time {
         padding-left: $inline-field-padding;
       }
     }

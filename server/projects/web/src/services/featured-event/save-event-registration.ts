@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { EventRegistrationEntity } from '~entity';
 import { getOrmRepository, OrmEntityManager } from '~orm';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { EventRegistration } from '~shared';
 
 /**

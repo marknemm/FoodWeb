@@ -3,7 +3,7 @@ import { EntityManager, getConnection, getRepository } from 'typeorm';
 import { AccountEntity, PasswordResetEntity } from '~entity';
 import { QueryResult } from '~orm';
 import { PasswordResetRequest } from '~shared';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { readAccount, readAccounts } from '../account/read-accounts';
 import { savePassword } from './save-password';
 

@@ -1,7 +1,7 @@
 import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity, DeliveryEntity, DonationEntity } from '~entity';
 import { DonationHelper, DonationStatus } from '~shared';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { readDonation } from '../donation/read-donations';
 
 const _donationHelper = new DonationHelper();

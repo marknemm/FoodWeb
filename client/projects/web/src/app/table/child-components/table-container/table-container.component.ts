@@ -9,7 +9,7 @@ import { TableTitleComponent } from '~web/table/child-components/table-title/tab
 import { TableComponent } from '~web/table/child-components/table/table.component';
 
 @Component({
-  selector: 'foodweb-table-container,[food-web-table-container]',
+  selector: 'foodweb-table-container,[foodweb-table-container]',
   templateUrl: './table-container.component.html',
   styleUrls: ['./table-container.component.scss']
 })

@@ -3,7 +3,7 @@ import { adminReadAccount } from '~admin/services/admin-account/admin-read-accou
 import { AccountEntity, DonationEntity, DeliveryEntity, DonationClaimEntity } from '~entity';
 import { OrmEntityManager } from '~orm';
 import { AdminDonationSaveRequest, DateTimeRange, DonationHelper, DonationSaveData, DonationStatus } from '~shared';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { prepareScheduledDelivery } from '~web/services/delivery/schedule-delivery';
 import { prepareDonationClaim } from '~web/services/donation-claim/claim-donation';
 import { readDonation } from '~web/services/donation/read-donations';

@@ -1,6 +1,6 @@
 import { verifyAccountIsAdmin } from '~admin/helpers/admin-verification';
 import { LoginRequest, LoginResponse } from '~shared';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { login } from '~web/services/session/session';
 
 /**

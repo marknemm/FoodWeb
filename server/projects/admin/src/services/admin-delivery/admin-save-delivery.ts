@@ -2,7 +2,7 @@ import { plainToClass } from 'class-transformer';
 import { DeliveryEntity, DonationEntity } from '~entity';
 import { OrmEntityManager } from '~orm';
 import { Delivery, DeliveryHelper, AdminDeliverySaveRequest, DonationStatus } from '~shared';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { readDonation } from '~web/services/donation/read-donations';
 
 const _deliveryHelper = new DeliveryHelper();
