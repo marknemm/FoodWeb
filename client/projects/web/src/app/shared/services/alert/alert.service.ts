@@ -5,19 +5,19 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AlertDialogComponent } from '~web/shared/components/alert-dialog/alert-dialog.component';
 import { AlertSnackBarComponent } from '~web/shared/components/alert-snack-bar/alert-snack-bar.component';
-import { Alert, AlertConfig, AlertLevel, AlertMessage, AlertResponse } from './alert';
+import { AlertConfig, AlertLevel, AlertMessage, AlertResponse } from './alert-message';
 import { AlertResponseService } from './alert-response.service';
 export * from './alert-message';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlertService implements Alert {
+export class AlertService {
 
   constructor(
-    private _matDialog: MatDialog,
-    private _matSnackBar: MatSnackBar,
-    private _alertResponseService: AlertResponseService
+    protected _matDialog: MatDialog,
+    protected _matSnackBar: MatSnackBar,
+    protected _alertResponseService: AlertResponseService
   ) {}
 
   displaySimpleMessage(messageBody: string, level: AlertLevel, blocking?: boolean): void {
@@ -32,14 +32,14 @@ export class AlertService implements Alert {
       this._displayNonBlockingMessage<T>(message, config);
   }
 
-  private _displayBlockingMessage<T>(message: AlertMessage<T>, config: MatDialogConfig<AlertMessage<T>>): Observable<T> {
+  protected _displayBlockingMessage<T>(message: AlertMessage<T>, config: MatDialogConfig<AlertMessage<T>>): Observable<T> {
     config.data = message;
     config.role = this._deriveDialogRole(config, message);
     config.panelClass = this._deriveAlertClass(config, message);
     return this._matDialog.open(AlertDialogComponent, config).afterClosed();
   }
 
-  private _displayNonBlockingMessage<T>(message: AlertMessage<T>, config: MatSnackBarConfig<AlertMessage<T>>): Observable<T> {
+  protected _displayNonBlockingMessage<T>(message: AlertMessage<T>, config: MatSnackBarConfig<AlertMessage<T>>): Observable<T> {
     config.data = message;
     config.panelClass = this._deriveAlertClass(config, message);
     config.announcementMessage = this._deriveSnackBarAnnouncement(config, message);
@@ -50,14 +50,14 @@ export class AlertService implements Alert {
     );
   }
 
-  private _deriveDialogRole(config: MatDialogConfig, message: AlertMessage): 'dialog' | 'alertdialog' {
+  protected _deriveDialogRole(config: MatDialogConfig, message: AlertMessage): 'dialog' | 'alertdialog' {
     if (config.role) {
       return config.role;
     }
     return (['warn', 'danger'].indexOf(message.level) >= 0) ? 'alertdialog' : 'dialog';
   }
 
-  private _deriveAlertClass(config: AlertConfig, message: AlertMessage): string[] {
+  protected _deriveAlertClass(config: AlertConfig, message: AlertMessage): string[] {
     let dialogClass: string[] = [];
     if (typeof config.panelClass === 'string') {
       dialogClass = config.panelClass.split(' ');
@@ -67,7 +67,7 @@ export class AlertService implements Alert {
     return dialogClass.concat(`mat-alert-${message.level}`);
   }
 
-  private _deriveSnackBarAnnouncement(config: MatSnackBarConfig, message: AlertMessage): string {
+  protected _deriveSnackBarAnnouncement(config: MatSnackBarConfig, message: AlertMessage): string {
     if (config.announcementMessage) {
       return config.announcementMessage;
     }
@@ -80,7 +80,7 @@ export class AlertService implements Alert {
     return `Snack bar has an alert message of type: ${message.level}.`;
   }
 
-  private _getActionValue<T>(message: AlertMessage): T {
+  protected _getActionValue<T>(message: AlertMessage): T {
     const primaryResponse: AlertResponse<T> = this._alertResponseService.getPrimaryResponse(message);
     const actionValue: T = (primaryResponse ? primaryResponse.value : null);
     return actionValue;

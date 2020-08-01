@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Alert, AlertConfig, AlertLevel, AlertMessage } from '~web/shared/services/alert/alert';
+import { AlertResponseService } from '~web/shared/services/alert/alert-response.service';
+import { AlertConfig, AlertLevel, AlertMessage, AlertService } from '~web/shared/services/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AppAlertService implements Alert {
+export class AppAlertService extends AlertService {
 
-  constructor() {}
+  constructor(
+    protected _alertResponseService: AlertResponseService
+  ) {
+    super(null, null, _alertResponseService);
+  }
 
   displaySimpleMessage(messageBody: string, level: AlertLevel, blocking?: boolean): void {
     this.displayMessage({ body: messageBody, level, blocking});

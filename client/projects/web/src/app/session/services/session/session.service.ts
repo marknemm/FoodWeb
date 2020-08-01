@@ -1,10 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Account, AccountHelper } from '~shared';
-import { AlertService } from '~web/shared/services/alert/alert.service';
-import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Account, AccountHelper } from '~shared';
 export { Account };
 
 @Injectable({
@@ -17,10 +14,7 @@ export class SessionService {
   protected _sessionDeleteMonitors = new Map<string, Subject<any>>();
 
   constructor(
-    protected _accountHelper: AccountHelper,
-    protected _alertService: AlertService,
-    protected _errorHandlerService: ErrorHandlerService,
-    protected _httpClient: HttpClient
+    protected _accountHelper: AccountHelper
   ) {}
 
   /**
@@ -73,90 +67,6 @@ export class SessionService {
   }
 
   /**
-   * Gets session data from the cache if it is present, or loads it from persistent storage if it is not in the cache.
-   * @param key The key of the data to retreive.
-   * @return The retrieved data.
-   */
-  get(key: string): any {
-    return this._sessionCache.get(key) || this.load(key);
-  }
-
-  /**
-   * Loads session data directly from persistent storage and writes it to the cache.
-   * @param key The key of the data to load.
-   * @param noCacheWrite Set to true if the loaded data should not be written to the cache.
-   * @return The loaded data.
-   */
-  load(key: string, noCacheWrite = false): any {
-    const jsonData: string = localStorage.getItem(key);
-    if (!jsonData) { return null; }
-
-    const data: any = JSON.parse(jsonData);
-    if (!noCacheWrite) {
-      this._sessionCache.set(key, data);
-    }
-    return data;
-  }
-
-  /**
-   * Saves session data to persistent storage and a cache.
-   * @param key The key of the data to save.
-   * @param data The data to save.
-   * @param noCacheWrite Optionally set to try if the data should not be cached.
-   */
-  save(key: string, data: any, noCacheWrite = false): void {
-    const jsonData: string = JSON.stringify(data);
-    localStorage.setItem(key, jsonData);
-
-    if (!noCacheWrite) {
-      this._sessionCache.set(key, data);
-    }
-    this._sessionSaveMonitors.get(key)?.next(data);
-  }
-
-  /**
-   * Deletes session data from persistent storage and the cache.
-   */
-  delete(key: string): void {
-    const data = this.get(key);
-    if (data) {
-      localStorage.removeItem(key);
-      this._sessionCache.delete(key);
-      this._sessionDeleteMonitors.get(key)?.next(data);
-    }
-  }
-
-  /**
-   * Registers a save monitor for a given key that will emit once an associated value is saved.
-   * @param key The key to monitor.
-   * @param destroy$ An optional observable that may be used to unsubscribe from the return observable.
-   * @return An observable that emits a saved value once a save is detected.
-   */
-  onSave(key: string, destroy$ = new Observable<any>()): Observable<any> {
-    if (!this._sessionSaveMonitors.has(key)) {
-      this._sessionSaveMonitors.set(key, new Subject<any>());
-    }
-    return this._sessionSaveMonitors.get(key).asObservable().pipe(
-      takeUntil(destroy$)
-    );
-  }
-
-  /**
-   * Registers a delete monitor for a given key that will emit once the session entry is deleted.
-   * @param key The key to monitor.
-   * @param destroy$ An optional observable that may be used to unsubscribe from the return observable.
-   * @return An observable that emits a deleted value once a delete is detected.
-   */
-  onDelete(key: string, destroy$ = new Observable<any>()): Observable<any> {
-    if (!this._sessionDeleteMonitors.has(key)) {
-      this._sessionDeleteMonitors.set(key, new Subject<any>());
-    }
-    return this._sessionDeleteMonitors.get(key).asObservable().pipe(
-      takeUntil(destroy$)
-    );
-  }
-
-  /**
    * Saves account session data on the client.
    * @param account The account to save.
    */
@@ -198,5 +108,115 @@ export class SessionService {
    */
   hasAccountOwnership(accountId: number): boolean {
     return this._accountHelper.doesAccountIdMatch(this.account, accountId);
+  }
+
+  /**
+   * Gets session data from the cache if it is present, or loads it from persistent storage if it is not in the cache.
+   * @param key The key of the data to retreive.
+   * @return The retrieved data.
+   */
+  get(key: string): any {
+    return this._sessionCache.get(key) || this.load(key);
+  }
+
+  /**
+   * Loads session data directly from persistent storage and writes it to the cache.
+   * @param key The key of the data to load.
+   * @param noCacheWrite Set to true if the loaded data should not be written to the cache.
+   * @return The loaded data.
+   */
+  load(key: string, noCacheWrite = false): any {
+    const jsonData: string = this._rawLoad(key);
+    if (!jsonData) { return null; }
+
+    const data: any = JSON.parse(jsonData);
+    if (!noCacheWrite) {
+      this._sessionCache.set(key, data);
+    }
+    return data;
+  }
+
+  /**
+   * Performs the raw (most basic) level of the load operation (interacts directly with native API).
+   * @param key The key of the data to load.
+   */
+  protected _rawLoad(key: string): string {
+    return localStorage.getItem(key);
+  }
+
+  /**
+   * Saves session data to persistent storage and a cache.
+   * @param key The key of the data to save.
+   * @param data The data to save.
+   * @param noCacheWrite Optionally set to try if the data should not be cached.
+   */
+  save(key: string, data: any, noCacheWrite = false): void {
+    const jsonData: string = JSON.stringify(data);
+    localStorage.setItem(key, jsonData);
+
+    if (!noCacheWrite) {
+      this._sessionCache.set(key, data);
+    }
+    this._sessionSaveMonitors.get(key)?.next(data);
+  }
+
+  /**
+   * Performs the raw (most basic) level of the save operation (interacts directly with native API).
+   * @param key The key of the data to save.
+   * @param jsonData The JSON/string data to save.
+   */
+  protected _rawSave(key: string, jsonData: string): void {
+    localStorage.setItem(key, jsonData);
+  }
+
+  /**
+   * Deletes session data from persistent storage and the cache.
+   * @param key The key of the session data to delete.
+   */
+  delete(key: string): void {
+    const data = this.get(key);
+    if (data) {
+      this._rawDelete(key);
+      this._sessionCache.delete(key);
+      this._sessionDeleteMonitors.get(key)?.next(data);
+    }
+  }
+
+  /**
+   * Performs the raw (most basic) level of the delete operation (interacts directly with native API).
+   * @param key The key of the session data to delete.
+   */
+  protected _rawDelete(key: string): void {
+    localStorage.removeItem(key);
+  }
+
+  /**
+   * Registers a save monitor for a given key that will emit once an associated value is saved.
+   * @param key The key to monitor.
+   * @param destroy$ An optional observable that may be used to unsubscribe from the return observable.
+   * @return An observable that emits a saved value once a save is detected.
+   */
+  onSave(key: string, destroy$ = new Observable<any>()): Observable<any> {
+    if (!this._sessionSaveMonitors.has(key)) {
+      this._sessionSaveMonitors.set(key, new Subject<any>());
+    }
+    return this._sessionSaveMonitors.get(key).asObservable().pipe(
+      takeUntil(destroy$)
+    );
+  }
+
+  /**
+   * Registers a delete monitor for a given key that will emit once the session entry is deleted.
+   * @param key The key to monitor.
+   * @param destroy$ An optional observable that may be used to unsubscribe from the return observable.
+   * @return An observable that emits a deleted value once a delete is detected.
+   */
+  onDelete(key: string, destroy$ = new Observable<any>()): Observable<any> {
+    if (!this._sessionDeleteMonitors.has(key)) {
+      this._sessionDeleteMonitors.set(key, new Subject<any>());
+    }
+    return this._sessionDeleteMonitors.get(key).asObservable().pipe(
+      takeUntil(destroy$)
+    );
   }
 }
