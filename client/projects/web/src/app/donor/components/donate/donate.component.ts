@@ -5,7 +5,6 @@ import { DateTimeService } from '~web/date-time/services/date-time/date-time.ser
 import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
 import { DonateForm } from '~web/donor/forms/donate.form';
 import { SessionService } from '~web/session/services/session/session.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-donate',
@@ -29,12 +28,10 @@ export class DonateComponent implements OnInit {
   constructor(
     public sessionService: SessionService,
     private _donationSaveService: DonationSaveService,
-    private _dateTimeService: DateTimeService,
-    private _pageTitleService: PageTitleService
+    private _dateTimeService: DateTimeService
   ) {}
 
   ngOnInit() {
-    this._pageTitleService.title = 'Donate';
     this.formGroup = new DonateForm(
       this._dateTimeService,
       { donorAccount: this.sessionService.account, safetyChecklistInit: false }

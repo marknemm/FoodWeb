@@ -5,7 +5,6 @@ import { AdminDonationSaveService } from '~admin/admin-donation/services/admin-d
 import { Donation } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { SessionService } from '~web/session/services/session/session.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-admin-create-donation',
@@ -19,7 +18,6 @@ export class AdminCreateDonationComponent implements OnInit, OnDestroy {
   private _savedDonation: Donation = null;
 
   constructor(
-    public pageTitleService: PageTitleService,
     public sessionService: SessionService,
     private _dateTimeService: DateTimeService,
     private _donationSaveService: AdminDonationSaveService
@@ -41,7 +39,6 @@ export class AdminCreateDonationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.pageTitleService.title = 'Create Donation';
     this._formGroup = new AdminDonationForm(this._dateTimeService, this._destroy$);
   }
 

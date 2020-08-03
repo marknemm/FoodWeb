@@ -1,0 +1,35 @@
+<span class="notifications-button-container"
+  [matBadge]="notificationService.unseenNotificationsCount"
+  [matBadgeHidden]="!(notificationService.unseenNotificationsCount)"
+  matBadgeSize="small"
+  matBadgeColor="warn"
+  matBadgeDescription="{{ notificationService.unseenNotificationsCount }} unread"
+  matTooltip="Notifications"
+>
+  <button mat-icon-button class="notifications-button" aria-label="Notifications menu" [matMenuTriggerFor]="notificationsMenu" (menuOpened)="notificationService.updateSeenNotifications()">
+    <mat-icon>notifications</mat-icon>
+  </button>
+</span>
+
+<mat-menu #notificationsMenu="matMenu" class="notifications-menu" backdropClass="notifications-menu-backdrop">
+  <div class="notifications-menu-content">
+    <div class="header">
+      <span class="title">Notifications</span>
+      <a [routerLink]="['/account/my']" fragment="notifications" class="notification-settings-link" matTooltip="Notification Settings">
+        <button mat-icon-button type="button">
+          <fa-icon [icon]="faCog"></fa-icon>
+        </button>
+      </a>
+    </div>
+    <mat-action-list>
+      <foodweb-notification
+        *ngFor="let notification of notificationService.notificationsPreview"
+        [notification]="notification"
+        [max2Lines]="true">
+      </foodweb-notification>
+    </mat-action-list>
+    <div class="footer">
+      <a [routerLink]="['/notification/list/my']">See More</a>
+    </div>
+  </div>
+</mat-menu>

@@ -4,12 +4,12 @@
   .mat-card-header {
 
     .mat-card-subtitle {
-      font-weight: bold;
+      font-weight: 500;
     }
 
     &.no-subtitle {
       margin-bottom: 4px;
-    
+
       .mat-card-title {
         margin-top: 6px;
       }
@@ -22,5 +22,9 @@
 
   .mat-card-actions {
     padding-top: 0;
+
+    button {
+      font-weight: 500;
+    }
   }
 }

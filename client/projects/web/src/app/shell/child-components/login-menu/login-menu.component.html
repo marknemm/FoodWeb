@@ -1,0 +1,14 @@
+<button mat-icon-button type="button" class="login-menu-button" matTooltip="Login / Signup" [matMenuTriggerFor]="loginMenu">
+  <mat-icon>account_circle</mat-icon>
+</button>
+
+<mat-menu #loginMenu="matMenu" class="header-submenu">
+  <mat-nav-list>
+    <a mat-list-item (click)="showLoginDialog()">
+      <mat-icon>login</mat-icon> <span>Login</span>
+    </a>
+    <a mat-list-item [routerLink]="['/signup']">
+      <mat-icon>person_add</mat-icon> <span>Signup</span>
+    </a>
+  </mat-nav-list>
+</mat-menu>

@@ -1,7 +1,5 @@
 <form [formGroup]="editForm" *ngIf="!donationNotFound; else donationNotFoundTmpl" class="edit-donation page">
-  <div class="block-label page-title">
-    {{ pageTitleService.title }}
-  </div>
+  <div class="block-label page-title">Edit Donation</div>
 
   <mat-card class="donation-edit">
     <mat-card-content>

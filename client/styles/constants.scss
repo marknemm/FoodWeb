@@ -6,17 +6,13 @@ $mat-mobile: 600px;
 $xs: 575px;
 
 /* Header Consts */
-$main-header-height: 60px;
-$main-header-height-mobile: 45px;
-$sub-header-height: 40px;
-$sub-header-height-mobile: 35px;
-$header-height: ($main-header-height + $sub-header-height);
-$header-height-mobile: ($main-header-height-mobile + $sub-header-height-mobile);
+$header-height: 60px;
+$header-height-mobile: 40px;
 
 /* Main (Page) Content Consts */
 $page-vert-pad: 20px;
 $page-horz-pad: 15px;
-$page-horz-pad-mobile: 6px;
+$page-horz-pad-mobile: 15px;
 
 /* Left Nav Consts */
 $left-nav-width: 180px;
@@ -48,7 +44,7 @@ $warn-lighter: map-get($warn-palette, lighter);
 $warn-darker: map-get($warn-palette, darker);
 $warn-darkest: map-get($warn-palette, 900);
 
-$content-background: #efefef;
+$content-background: #eee8e0;
 
 $alert-info-background: #d9edf7;
 $alert-info-color: #31708f;

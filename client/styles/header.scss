@@ -1,17 +1,66 @@
 @import "./constants.scss";
 
-header .notifications-button-container {
-  .mat-badge-content.mat-badge-active {
-    margin-right: 8px;
-    top: 3px;
+header {
+  .mat-button {
+    color: $accent-darker;
+    font-size: 20px;
 
-    @media screen and (max-width: $mat-mobile) {
-      top: 1px;
+    .mat-button-wrapper {
+      vertical-align: 5px;
+
+      .mat-icon {
+        margin-right: 4px;
+      }
+
+      .ng-fa-icon {
+        margin-right: 5px;
+        vertical-align: -1px;
+      }
+    }
+  }
+
+  .mat-icon-button {
+    color: $accent-darker;
+    margin-top: 7px;
+
+    @media only screen and (max-width: $md) {
+      width: 36px;
+      height: 36px;
+      line-height: 35px;
+      margin-top: 5px;
+    }
+
+    .mat-icon {
+      font-size: 30px;
+      vertical-align: -10px;
+      margin-left: -6px;
+
+      @media only screen and (max-width: $md) {
+        font-size: 25px;
+        vertical-align: -7px;
+        margin-left: -2px;
+      }
+    }
+
+    foodweb-profile-img .profile-img img {
+      width: 34px !important;
+      margin-top: -3px !important;
+
+      @media only screen and (max-width: $md) {
+        width: 28px !important;
+      }
+    }
+  }
+
+  .notifications-button-container {
+    .mat-badge-content.mat-badge-active {
+      margin-right: 10px;
+      top: 5px;
     }
   }
 }
 
-/* Targets the actual notifications menu container... lots of confusing javascript overrides via !important */
+/* Targets the actual notifications menu container */
 .notifications-menu-backdrop + div {
   .cdk-overlay-pane {
     .mat-menu-panel {
@@ -44,11 +93,24 @@ header .notifications-button-container {
   }
 }
 
-body.sticky-header {
-  .notifications-menu-backdrop + div {
-    .cdk-overlay-pane {
-      @media only screen and (max-width: $sm) {
-        top: $sub-header-height-mobile !important;
+.header-submenu {
+  .mat-nav-list {
+    margin: -8px 0;
+    padding-top: 0;
+
+    .mat-list-item {
+      font-size: 18px;
+      color: $accent;
+
+      .mat-icon,
+      .ng-fa-icon {
+        vertical-align: -5px;
+        margin-right: 7px;
+      }
+
+      .ng-fa-icon {
+        padding-left: 2px;
+        width: 24px;
       }
     }
   }

@@ -6,7 +6,6 @@ import { Donation, DonationReadService } from '~web/donation/services/donation-r
 import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
 import { DonateForm } from '~web/donor/forms/donate.form';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-edit-donation',
@@ -21,7 +20,6 @@ export class EditDonationComponent implements OnInit {
   private _donationDetailsUrl = '';
 
   constructor(
-    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _dateTimeService: DateTimeService,
     private _donationReadService: DonationReadService,
@@ -39,7 +37,6 @@ export class EditDonationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pageTitleService.title = 'Edit Donation';
     this._editForm = new DonateForm(this._dateTimeService, { safetyChecklistInit: true });
     this._listenDonationChange();
   }

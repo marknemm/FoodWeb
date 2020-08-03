@@ -4,7 +4,6 @@ import { Observable, of } from 'rxjs';
 import { Account, AccountType } from '~shared';
 import { AccountForm } from '~web/account/forms/account.form';
 import { SessionService } from '~web/session/services/session/session.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { TermsConditionsDialogComponent } from '~web/signup/components/terms-conditions-dialog/terms-conditions-dialog.component';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 import { SignupService } from '~web/signup/services/signup/signup.service';
@@ -20,13 +19,10 @@ export class SignupComponent implements OnInit {
     public sessionService: SessionService,
     public signupVerificationService: SignupVerificationService,
     private _matDialog: MatDialog,
-    private _pageTitleService: PageTitleService,
     private _signupService: SignupService
   ) {}
 
-  ngOnInit() {
-    this._pageTitleService.title = 'Signup';
-  }
+  ngOnInit() {}
 
   signup(accountForm: AccountForm): void {
     accountForm.markAllAsTouched();

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { faCalendarPlus, faClipboardList, faGifts } from '@fortawesome/free-solid-svg-icons';
 import { DownloadDevDbService } from '~admin/developer/services/download-dev-db/download-dev-db.service';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-admin-console',
@@ -17,12 +16,9 @@ export class AdminConsoleComponent implements OnInit {
 
   constructor(
     public constantsService: ConstantsService,
-    public downloadDevDbService: DownloadDevDbService,
-    private _pageTitleService: PageTitleService
+    public downloadDevDbService: DownloadDevDbService
   ) {}
 
-  ngOnInit() {
-    this._pageTitleService.title = 'Admin Console';
-  }
+  ngOnInit() {}
 
 }

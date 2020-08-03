@@ -5,7 +5,6 @@ import { AccountHelper, DeliveryHelper, DonationHelper } from '~shared';
 import { DonationAction, DonationActionsService } from '~web/donation-delivery-shared/services/donation-actions/donation-actions.service';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-donation-details',
@@ -25,7 +24,6 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
     public accountHelper: AccountHelper,
     public donationHelper: DonationHelper,
     public deliveryHelper: DeliveryHelper,
-    public pageTitleService: PageTitleService,
     public sessionService: SessionService,
     private _activatedRoute: ActivatedRoute,
     private _donationActionsService: DonationActionsService,

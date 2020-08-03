@@ -6,7 +6,6 @@ import { EventIdentifierForm } from '~admin/admin-event/forms/event-identifier.f
 import { EventRegistrationsService } from '~admin/admin-event/services/event-registrations/event-registrations.service';
 import { DeepReadonly, EventRegistration, FeaturedEvent } from '~shared';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { TableDataSource } from '~web/table/interfaces/table-data-source';
 
 @Component({
@@ -27,7 +26,6 @@ export class EventRegistrationsComponent implements OnInit, OnDestroy {
 
   constructor(
     public eventRegistrationService: EventRegistrationsService,
-    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
   ) {}
 

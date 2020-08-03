@@ -7,7 +7,7 @@ import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { environment } from '~web/../environments/environment';
 import { AppRoutingModule } from '~web/app-routing.module';
-import { AppShellModule } from '~web/app-shell/app-shell.module';
+import { ShellModule } from '~web/shell/shell.module';
 import { AppComponent } from '~web/app.component';
 import { AboutComponent } from '~web/components/about/about.component';
 import { HomeComponent } from '~web/components/home/home.component';
@@ -37,7 +37,7 @@ import { SharedModule } from '~web/shared/shared.module';
     NgxMaterialTimepickerModule,
     RecaptchaV3Module,
     SharedModule,
-    AppShellModule,
+    ShellModule,
     SessionModule,
     EventModule,
     HeuristicsModule

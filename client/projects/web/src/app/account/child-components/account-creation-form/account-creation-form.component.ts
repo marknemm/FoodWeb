@@ -4,7 +4,6 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AccountType } from '~shared';
 import { AccountForm } from '~web/account/forms/account.form';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-account-creation-form',
@@ -24,7 +23,6 @@ export class AccountCreationFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private _activatedRoute: ActivatedRoute,
-    private _pageTitleService: PageTitleService,
     private _router: Router,
   ) {}
 
@@ -40,9 +38,6 @@ export class AccountCreationFormComponent implements OnInit, OnDestroy {
     if (!this.accountForm) {
       this.accountForm = new AccountForm({ formMode: 'Signup' }, this._destroy$);
     }
-    if (!this.formTitle) {
-      this.formTitle = this._pageTitleService.title;
-    }
     this._listenAccountTypeSelect();
     this._listenAccountTypeRoute();
   }
@@ -57,9 +52,7 @@ export class AccountCreationFormComponent implements OnInit, OnDestroy {
       takeUntil(this._destroy$)
     ).subscribe((accountType: AccountType) => {
       if (!this._activatedRoute.snapshot.url.toString().match(`${accountType}$`)) {
-        const pageTitle: string = this._pageTitleService.title;
         this._router.navigate(['.', accountType], { relativeTo: this._activatedRoute });
-        this._pageTitleService.title = pageTitle; // Ensure page title does not change.
       }
     });
   }

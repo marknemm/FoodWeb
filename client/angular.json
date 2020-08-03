@@ -31,7 +31,6 @@
               "google-polyline",
               "lscache"
             ],
-            "aot": true,
             "assets": [
               {
                 "glob": "**/*",
@@ -219,7 +218,6 @@
               "google-polyline",
               "lscache"
             ],
-            "aot": true,
             "assets": [
               {
                 "glob": "**/*",

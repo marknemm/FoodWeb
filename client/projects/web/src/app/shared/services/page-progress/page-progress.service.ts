@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { Router, Event } from '@angular/router';
-import { LeftNavService } from '~web/app-shell/services/left-nav/left-nav.service';
+import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class PageProgressService {
   private _strokeWidth: number;
 
   constructor(
-    private _leftNavService: LeftNavService,
+    protected _leftNavService: LeftNavService,
     router: Router,
   ) {
     this._leftNavService.openedChanged.subscribe(this._onLeftNavOpenedChanged.bind(this));

@@ -7,7 +7,6 @@ import { AdminSignupVerificationService } from '~admin/admin-account/services/ad
 import { AdminSessionService } from '~admin/admin-session/services/admin-session/admin-session.service';
 import { Account } from '~shared';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-admin-create-account',
@@ -24,7 +23,6 @@ export class AdminAccountCreateComponent implements OnInit, OnDestroy {
   constructor(
     public sessionService: AdminSessionService,
     public signupVerificationService: AdminSignupVerificationService,
-    private _pageTitleService: PageTitleService,
     private _createAccountService: AdminAccountCreateService
   ) {}
 
@@ -33,7 +31,6 @@ export class AdminAccountCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._pageTitleService.title = 'Create Account';
     this.adminAccountForm = new AdminAccountForm({ formMode: 'Signup' }, this._destory$);
     this._listenAutoGenPassChange();
   }

@@ -1,11 +1,29 @@
 @import "constants.scss";
 
 .search-bar {
-  $font-size: 20px;
+  $font-size: 18px;
   font-size: $font-size;
 
   .search-icon.mat-icon {
     font-size: $font-size + 5px;
     color: $accent-darker;
+  }
+
+  @media only screen and (max-width: $md) {
+    $font-size-md: 16px;
+    font-size: $font-size-md;
+
+    .search-icon.mat-icon {
+      font-size: $font-size-md + 5px;
+    }
+  }
+
+  @media only screen and (max-width: $sm) {
+    $font-size-sm: 15px;
+    font-size: $font-size-sm;
+
+    .search-icon.mat-icon {
+      font-size: $font-size-sm + 5px;
+    }
   }
 }

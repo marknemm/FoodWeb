@@ -1,0 +1,9 @@
+@import "constants.scss";
+
+foodweb-settings-menu {
+  margin-left: 5px;
+
+  @media only screen and (max-width: $md) {
+    margin-left: 0;
+  }
+}

@@ -15,12 +15,6 @@ html, body {
   height: 100%;
   overflow: hidden;
 
-  @media only screen and (max-width: $sm) {
-    overflow-y: auto;
-    height: auto;
-    min-height: 100%;
-  }
-
   @media only screen and (max-width: $mat-mobile) {
     font-size: 13px;
   }
@@ -74,7 +68,7 @@ a.no-hover {
   margin-bottom: 2px;
   color: $accent;
   vertical-align: top;
-  font-weight: bold;
+  font-weight: 500;
 
   & + * {
     margin-left: 7px;

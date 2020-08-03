@@ -4,7 +4,6 @@ import { switchMap } from 'rxjs/operators';
 import { Account, AccountHelper, AccountReadFilters, AccountType, ListResponse } from '~shared';
 import { AccountFiltersFormT } from '~web/account/forms/account-filters.form';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-accounts',
@@ -14,12 +13,12 @@ import { PageTitleService } from '~web/shared/services/page-title/page-title.ser
 export class AccountsComponent implements OnInit {
 
   protected _accounts: Account[] = [];
-  protected _totalCount = 0;
   protected _activeFilters: AccountReadFilters = {};
+  protected _pageTitle = 'Accounts';
+  protected _totalCount = 0;
 
   constructor(
     public accountHelper: AccountHelper,
-    public pageTitleService: PageTitleService,
     protected _accountReadService: AccountReadService,
     protected _activatedRoute: ActivatedRoute,
     protected _router: Router
@@ -31,6 +30,10 @@ export class AccountsComponent implements OnInit {
 
   get activeFilters(): AccountReadFilters {
     return this._activeFilters;
+  }
+
+  get pageTitle(): string {
+    return this._pageTitle;
   }
 
   get totalCount(): number {
@@ -58,9 +61,7 @@ export class AccountsComponent implements OnInit {
 
   protected _setPageTitle(): void {
     const accountType = <AccountType>this._activatedRoute.snapshot.queryParamMap.get('accountType');
-    this.pageTitleService.title = (accountType)
-      ? `${accountType}s`
-      : 'Accounts';
+    this._pageTitle = (accountType ? `${accountType}s` : 'Accounts');
   }
 
   filterAccounts(filters: AccountFiltersFormT): void {

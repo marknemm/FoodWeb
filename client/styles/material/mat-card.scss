@@ -13,7 +13,7 @@ mat-card.mat-card {
     position: relative;
 
     .mat-card-header-text {
-      margin-top: -6px;
+      margin-top: -3px;
 
       .mat-card-subtitle:not(:first-child) {
         margin-top: -14px;
@@ -21,7 +21,7 @@ mat-card.mat-card {
       }
 
       @media only screen and (max-width: $mat-mobile) {
-        margin-top: -1px;
+        margin-top: -2px;
       }
     }
   }
@@ -34,10 +34,8 @@ mat-card.mat-card {
   mat-card-title.mat-card-title {
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
-    color: $accent-darkest;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    font-size: 20px;
-    font-weight: bold;
+    color: $accent;
+    font: 500 20px Avenir;
 
     .mat-toolbar:first-child {
       margin: -16px 0px 0px -16px;

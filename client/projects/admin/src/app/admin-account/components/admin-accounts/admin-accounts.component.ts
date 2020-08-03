@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AccountHelper } from '~shared';
 import { AccountsComponent } from '~web/account/components/accounts/accounts.component';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-admin-accounts',
@@ -17,12 +16,11 @@ export class AdminAccountsComponent extends AccountsComponent {
 
   constructor(
     public accountHelper: AccountHelper,
-    public pageTitleService: PageTitleService,
     protected _accountReadService: AccountReadService,
     protected _activatedRoute: ActivatedRoute,
     protected _router: Router
   ) {
-    super(accountHelper, pageTitleService, _accountReadService, _activatedRoute, _router);
+    super(accountHelper, _accountReadService, _activatedRoute, _router);
   }
 
 }

@@ -5,7 +5,6 @@ import { Donation } from '~shared';
 import { DonationAction, DonationActionsService } from '~web/donation-delivery-shared/services/donation-actions/donation-actions.service';
 import { DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-delivery-details',
@@ -20,7 +19,6 @@ export class DeliveryDetailsComponent implements OnInit {
   private _myDelivery = false;
 
   constructor(
-    public pageTitleService: PageTitleService,
     public sessionService: SessionService,
     protected _activatedRoute: ActivatedRoute,
     protected _donationActionsService: DonationActionsService,

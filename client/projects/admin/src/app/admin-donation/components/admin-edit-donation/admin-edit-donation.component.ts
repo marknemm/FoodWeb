@@ -7,7 +7,6 @@ import { Donation } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-admin-edit-donation',
@@ -23,7 +22,6 @@ export class AdminEditDonationComponent implements OnInit, OnDestroy {
   private _originalDonation: Donation;
 
   constructor(
-    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _adminDonationSaveService: AdminDonationSaveService,
     private _dateTimeService: DateTimeService,
@@ -41,7 +39,6 @@ export class AdminEditDonationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.pageTitleService.title = 'Edit Donation';
     this._formGroup = new AdminDonationForm(this._dateTimeService, this._destroy$);
     this._listenDonationChange();
   }

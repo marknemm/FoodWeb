@@ -1,0 +1,99 @@
+@import "constants.scss";
+
+$title-font-size: 16px;
+$icon-size: 38px;
+
+.notifications-button-container {
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+
+  @media screen and (max-width: $mat-mobile) {
+    top: 0;
+  }
+
+  button.mat-button.notifications-button {
+    $button-width: 35px;
+    min-width: $button-width;
+    width: $button-width;
+    padding: 0;
+    height: 100%;
+
+    .mat-icon {
+      $icon-size: 24px;
+      font-size: $icon-size;
+      width: $icon-size;
+      height: $icon-size;
+      margin-top: -2px;
+    }
+  }
+}
+
+.notifications-menu-content {
+  width: 100%;
+
+  > .header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    color: $accent-darkest;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: -5px;
+    padding: 4px 5px 0;
+    text-align: center;
+    background-color: white;
+    border-bottom: 1px solid #e4e4e4;
+
+    .notification-settings-link {
+      position: absolute;
+      color: $accent-darkest;
+      right: 6px;
+      top: 0;
+
+      button {
+        position: relative;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 18px;
+
+        .ng-fa-icon {
+          vertical-align: 0;
+        }
+      }
+    }
+
+    > .mat-divider {
+      margin: 3px 0 0;
+    }
+  }
+
+  > .mat-list {
+    padding-top: 0;
+
+    .mat-line {
+      margin-left: -8px;
+    }
+  }
+
+  > .footer {
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    color: $accent-darkest;
+    font-size: 14px;
+    padding: 0 5px 4px;
+    text-align: center;
+    background-color: white;
+    border-top: 2px solid #e4e4e4;
+
+    > .mat-divider {
+      margin: 0 0 3px;
+    }
+  }
+
+  _:-ms-lang(x), > .header, > .footer { position: relative; }
+}
