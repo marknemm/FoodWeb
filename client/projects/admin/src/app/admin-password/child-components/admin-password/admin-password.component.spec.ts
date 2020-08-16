@@ -1,6 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-
 import { AdminPasswordComponent } from './admin-password.component';
 
 describe('AdminPasswordComponent', () => {
@@ -10,7 +8,6 @@ describe('AdminPasswordComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ AdminPasswordComponent ],
-      imports: [IonicModule.forRoot()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminPasswordComponent);

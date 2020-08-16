@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { ApplicationSettings } from '@nativescript/core';
 import { AccountHelper } from '~shared';
 import { SessionService } from '~web/session/services/session/session.service';
-import { ApplicationSettings } from '@nativescript/core';
 
 @Injectable({
   providedIn: 'root'
@@ -60,5 +60,4 @@ export class AppSessionService extends SessionService {
   protected _rawDelete(key: string): void {
     ApplicationSettings.remove(key);
   }
-
 }

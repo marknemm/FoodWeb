@@ -11,9 +11,9 @@ import {
   ServerSentEventType
 } from '~shared';
 import { environment } from '~web/../environments/environment';
+import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { ServerSentEventSourceService } from '~web/notification/services/server-sent-event-source/server-sent-event-source.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
-import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
 
@@ -29,7 +29,7 @@ export class NotificationService {
 
   constructor(
     private _authService: AuthenticationService,
-    private _errorHandlerService: ErrorHandlerService,
+    private _alertQueueService: AlertQueueService,
     private _httpClient: HttpClient,
     private _pageProgressService: PageProgressService,
     private _router: Router,
@@ -97,7 +97,7 @@ export class NotificationService {
     request.limit = (limit >= 0 ? limit : 10);
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Notification>>(this.url, { params, withCredentials: true }).pipe(
-      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
+      catchError((err: HttpErrorResponse) => this._alertQueueService.add(err)),
       finalize(() => this._pageProgressService.reset())
     );
   }
@@ -116,7 +116,7 @@ export class NotificationService {
         lastSeenNotificationId: this._notificationsPreview[0].id
       };
       this._httpClient.put(`${this.url}/last-seen-notification`, lastSeenNotificationUpdateReq, { withCredentials: true }).pipe(
-        catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
+        catchError((err: HttpErrorResponse) => this._alertQueueService.add(err))
       ).subscribe();
     }
   }
@@ -138,7 +138,7 @@ export class NotificationService {
   private _updateNotification(notification: Notification): void {
     const notificationUpdateRequest: NotificationUpdateRequest = { notification };
       this._httpClient.put(this.url, notificationUpdateRequest, { withCredentials: true }).pipe(
-        catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err))
+        catchError((err: HttpErrorResponse) => this._alertQueueService.add(err))
       ).subscribe();
   }
 }

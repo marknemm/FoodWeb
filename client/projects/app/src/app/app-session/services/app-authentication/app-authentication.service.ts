@@ -3,11 +3,10 @@ import { Injectable } from '@angular/core';
 import { RouterExtensions } from '@nativescript/angular';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { AppAlertService } from '~app/app-shared/services/app-alert/app-alert.service';
+import { AppSessionService } from '~app/app-session/services/app-session/app-session.service';
 import { Account, AccountHelper, AppTokenLoginRequest, LoginRequest, LoginResponse } from '~shared';
+import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
-import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
-import { AppSessionService } from '../app-session/app-session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +15,12 @@ export class AppAuthenticationService extends AuthenticationService {
 
   constructor(
     protected _accountHelper: AccountHelper,
-    protected _alertService: AppAlertService,
-    protected _errorHandlerService: ErrorHandlerService,
+    protected _alertQueueService: AlertQueueService,
     protected _httpClient: HttpClient,
     protected _router: RouterExtensions,
     protected _sessionService: AppSessionService
   ) {
-    super(_accountHelper, _alertService, _errorHandlerService, _httpClient, _sessionService);
+    super(_accountHelper, _alertQueueService, _httpClient, _sessionService);
   }
 
   /**

@@ -1,6 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-
 import { AdminEventCardComponent } from './admin-event-card.component';
 
 describe('AdminEventCardComponent', () => {
@@ -9,8 +7,7 @@ describe('AdminEventCardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminEventCardComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ AdminEventCardComponent ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminEventCardComponent);

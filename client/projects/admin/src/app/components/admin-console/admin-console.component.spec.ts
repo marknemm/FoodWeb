@@ -1,19 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { AdminConsoleComponent } from './admin-console.component';
 
-import { AdminHomeComponent } from './admin-home.component';
-
-describe('AdminHomeComponent', () => {
-  let component: AdminHomeComponent;
-  let fixture: ComponentFixture<AdminHomeComponent>;
+describe('AdminConsoleComponent', () => {
+  let component: AdminConsoleComponent;
+  let fixture: ComponentFixture<AdminConsoleComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminHomeComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ AdminConsoleComponent ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AdminHomeComponent);
+    fixture = TestBed.createComponent(AdminConsoleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

@@ -1,6 +1,5 @@
 import 'jasmine';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 import { AdminScheduleDeliveryDialogComponent } from './admin-schedule-delivery-dialog.component';
 
 describe('AdminScheduleDeliveryDialogComponent', () => {
@@ -9,8 +8,7 @@ describe('AdminScheduleDeliveryDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminScheduleDeliveryDialogComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ AdminScheduleDeliveryDialogComponent ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminScheduleDeliveryDialogComponent);

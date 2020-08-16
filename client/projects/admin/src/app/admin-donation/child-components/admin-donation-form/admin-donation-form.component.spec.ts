@@ -1,6 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-
 import { AdminDonationFormComponent } from './admin-donation-form.component';
 
 describe('AdminDonationFormComponent', () => {
@@ -9,8 +7,7 @@ describe('AdminDonationFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminDonationFormComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ AdminDonationFormComponent ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminDonationFormComponent);

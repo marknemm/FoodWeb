@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { environment } from '~admin/../environments/environment';
 import { FeaturedEvent } from '~shared';
-import { AlertService } from '~web/shared/services/alert/alert.service';
-import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
+import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
+import { AlertService } from '~web/alert/services/alert/alert.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class DeleteFeaturedEventService {
 
   constructor(
     private _alertSerivce: AlertService,
-    private _errorHandlerService: ErrorHandlerService,
+    private _alertQueueService: AlertQueueService,
     private _httpClient: HttpClient,
     private _pageProgressService: PageProgressService
   ) {}
@@ -32,7 +32,7 @@ export class DeleteFeaturedEventService {
     return this._httpClient.delete<void>(`${this.url}/${featuredEvent.id}`, { withCredentials: true })
       .pipe(
         tap(() => this._alertSerivce.displaySimpleMessage('Event Deletion Successful', 'success')),
-        catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
+        catchError((err: HttpErrorResponse) => this._alertQueueService.add(err)),
         finalize(() => this._pageProgressService.reset())
       );
   }

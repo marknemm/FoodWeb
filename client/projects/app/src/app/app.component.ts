@@ -1,49 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { RouterExtensions } from '@nativescript/angular';
-import { Application } from '@nativescript/core';
-import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from 'nativescript-ui-sidedrawer';
-import { filter } from 'rxjs/operators';
+import { Component } from '@angular/core';
+import { AppDefaultAlertProcessorService } from '~app/app-alert/services/app-default-alert-processor/app-default-alert-processor.service';
+import { AppAuthenticationService } from '~app/app-session/services/app-authentication/app-authentication.service';
+import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left-nav.service';
+import { JSONDateReviver } from '~shared';
 
 @Component({
-    selector: 'ns-app',
-    templateUrl: 'app.component.html'
+  selector: 'foodweb-app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-
-  private _activatedUrl: string;
-  private _sideDrawerTransition: DrawerTransitionBase;
+export class AppComponent {
 
   constructor(
-    private router: Router,
-    private routerExtensions: RouterExtensions
+    public leftNavService: AppLeftNavService,
+    authService: AppAuthenticationService,
+    jsonDateReviver: JSONDateReviver,
+    defaultAlertProcessorService: AppDefaultAlertProcessorService,
   ) {
-    // Use the component constructor to inject services.
-  }
-
-  ngOnInit(): void {
-    this._activatedUrl = '/home';
-    this._sideDrawerTransition = new SlideInOnTopTransition();
-
-    this.router.events
-      .pipe(filter((event: any) => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects);
-  }
-
-  get sideDrawerTransition(): DrawerTransitionBase {
-    return this._sideDrawerTransition;
-  }
-
-  isComponentSelected(url: string): boolean {
-    return this._activatedUrl === url;
-  }
-
-  onNavItemTap(navItemRoute: string): void {
-    this.routerExtensions.navigate([navItemRoute], {
-      transition: { name: 'fade' }
-    });
-
-    const sideDrawer = <RadSideDrawer>Application.getRootView();
-    sideDrawer.closeDrawer();
+    jsonDateReviver.initJSONDateReviver();
+    defaultAlertProcessorService.monitorAlerts();
+    authService.refreshSessionStatus().subscribe();
   }
 }

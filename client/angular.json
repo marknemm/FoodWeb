@@ -54,7 +54,7 @@
             },
             "fileReplacements": [
               {
-                "replace": "projects/web/src/environments/environment.ts",
+                "replace": "src/environments/environment.ts",
                 "with": "projects/admin/src/environments/environment.ts"
               }
             ]
@@ -67,7 +67,7 @@
                   "with": "projects/admin/src/environments/environment.hmr.ts"
                 },
                 {
-                  "replace": "projects/web/src/environments/environment.ts",
+                  "replace": "src/environments/environment.ts",
                   "with": "projects/admin/src/environments/environment.hmr.ts"
                 }
               ]
@@ -79,7 +79,7 @@
                   "with": "projects/admin/src/environments/environment.prod.ts"
                 },
                 {
-                  "replace": "projects/web/src/environments/environment.ts",
+                  "replace": "src/environments/environment.ts",
                   "with": "projects/admin/src/environments/environment.prod.ts"
                 }
               ],
@@ -177,9 +177,6 @@
     },
     "app": {
       "projectType": "application",
-      "root": "projects/app",
-      "sourceRoot": "projects/app/src",
-      "prefix": "foodweb",
       "schematics": {
         "@schematics/angular:component": {
           "prefix": "foodweb",
@@ -188,6 +185,11 @@
         "@schematics/angular:directive": {
           "prefix": "foodweb"
         }
+      },
+      "root": "projects/app",
+      "sourceRoot": "projects/app/src",
+      "cli": {
+        "defaultCollection": "@nativescript/schematics"
       }
     },
     "web": {
@@ -201,18 +203,18 @@
           "prefix": "foodweb"
         }
       },
-      "root": "projects/web",
+      "root": ".",
       "sourceRoot": "projects/web/src",
       "prefix": "foodweb",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/web",
+            "outputPath": "dist/main",
             "index": "projects/web/src/index.html",
             "main": "projects/web/src/main.ts",
             "polyfills": "projects/web/src/polyfills.ts",
-            "tsConfig": "projects/web/tsconfig.json",
+            "tsConfig": "projects/web/tsconfig.app.json",
             "allowedCommonJsDependencies": [
               "event-source-polyfill",
               "google-polyline",
@@ -228,7 +230,7 @@
             ],
             "styles": [
               "styles/styles.scss",
-              "projects/web/src/styles/web-styles.scss"
+              "projects/web/src/styles/main-styles.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -274,7 +276,7 @@
               ]
             },
             "es5": {
-              "tsConfig": "projects/web/tsconfig.es5.json"
+              "tsConfig": "tsconfig.es5.json"
             },
             "hmr": {
               "fileReplacements": [
@@ -397,22 +399,22 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/web/src/test.ts",
-            "polyfills": "projects/web/src/polyfills.ts",
-            "tsConfig": "projects/web/tsconfig.spec.json",
-            "karmaConfig": "projects/web/karma.conf.js",
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
             "assets": [
-              "projects/web/src/favicon.ico",
-              "projects/web/src/assets"
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
               "styles/styles.scss",
-              "projects/web/src/styles/web-styles.scss"
+              "src/styles/main-styles.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
                 "styles",
-                "projects/web/src/styles"
+                "src/styles"
               ]
             },
             "scripts": []
@@ -422,9 +424,9 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/web/tsconfig.json",
-              "projects/web/tsconfig.spec.json",
-              "projects/web/e2e/tsconfig.json"
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json",
+              "e2e/tsconfig.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -434,7 +436,7 @@
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "projects/web/e2e/protractor.conf.js",
+            "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "web:serve"
           },
           "configurations": {
@@ -447,8 +449,7 @@
     }
   },
   "cli": {
-    "defaultCollection": "@nativescript/schematics",
-    "analytics": "fc94d962-abda-41f7-869e-10556a9370e9"
+    "analytics": false
   },
   "defaultProject": "web"
 }

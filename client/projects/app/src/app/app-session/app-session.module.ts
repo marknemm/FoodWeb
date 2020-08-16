@@ -1,15 +1,19 @@
-import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { NativeScriptCommonModule } from '@nativescript/angular';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AppSharedModule } from '~app/app-shared/app-shared.module';
 import { AppSessionRoutingModule } from './app-session-routing.module';
+import { AppLoginComponent } from './components/app-login/app-login.component';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    AppSessionRoutingModule,
-    NativeScriptCommonModule,
-    AppSharedModule
+  declarations: [
+    AppLoginComponent
   ],
-  schemas: [NO_ERRORS_SCHEMA]
+  imports: [
+    CommonModule,
+    AppSessionRoutingModule,
+    ReactiveFormsModule,
+    AppSharedModule
+  ]
 })
 export class AppSessionModule {}

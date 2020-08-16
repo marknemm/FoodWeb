@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes } from '@angular/router';
 import { NativeScriptRouterModule } from '@nativescript/angular';
-import { HomeComponent } from './home/home.component';
+import { AppHomeComponent } from '~app/components/app-home/app-home.component';
 
-const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'delivery', loadChildren: () => import('./app-delivery/app-delivery.module').then((m) => m.AppDeliveryModule) },
-  { path: 'session', loadChildren: () => import('./app-session/app-session.module').then((m) => m.AppSessionModule) },
+export const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'home' },
+  { path: 'home', component: AppHomeComponent },
 ];
 
 @NgModule({

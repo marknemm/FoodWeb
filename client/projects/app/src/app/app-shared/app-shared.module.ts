@@ -1,25 +1,25 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NativeScriptCommonModule } from '@nativescript/angular';
+import { AppAlertModule } from '~app/app-alert/app-alert.module';
 import { AccountHelper, DeliveryHelper, DonationHelper, JSONDateReviver, OperationHoursHelper } from '~shared';
-import { AppActionBarComponent } from './child-components/app-action-bar/app-action-bar.component';
 
 @NgModule({
-  declarations: [
-    AppActionBarComponent
-  ],
   imports: [
-    NativeScriptCommonModule
+    NativeScriptCommonModule,
+    AppAlertModule,
   ],
   exports: [
-    AppActionBarComponent
+    AppAlertModule,
   ],
   providers: [
     AccountHelper,
     OperationHoursHelper,
     DonationHelper,
     DeliveryHelper,
-    JSONDateReviver
+    JSONDateReviver,
   ],
-  schemas: [NO_ERRORS_SCHEMA]
+  schemas: [
+    NO_ERRORS_SCHEMA
+  ]
 })
 export class AppSharedModule {}

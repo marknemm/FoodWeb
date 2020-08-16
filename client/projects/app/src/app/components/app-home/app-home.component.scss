@@ -1,0 +1,49 @@
+$side-container-max-width: 270px;
+
+.home {
+  &.has-side-content {
+    .main-content {
+      max-width: calc(100% - #{$side-container-max-width});
+      padding-right: 20px;
+      box-sizing: border-box;
+      float: left;
+    }
+
+    .side-content {
+      position: relative;
+      width: $side-container-max-width;
+      float: right;
+    }
+
+    @media only screen and (max-width: 1060px) {
+      .main-content {
+        max-width: 100%;
+        padding-right: 0;
+        float: none;
+      }
+
+      .side-content {
+        width: 100%;
+        float: none;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+  }
+
+  .stats-quote {
+    padding: 0px 20px;
+    margin-bottom: 10px;
+    color: #6A6A6A;
+    font-style: italic;
+    font-size: 12px;
+  }
+
+  .op-list {
+    padding-left: 25px;
+
+    &> li {
+      margin-bottom: 3px;
+    }
+  }
+}

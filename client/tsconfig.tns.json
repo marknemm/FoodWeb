@@ -1,0 +1,32 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "es2015",
+    "lib": [
+      "es2018",
+      "es2017",
+      "dom",
+      "es6"
+    ],
+    "paths": {
+      "~app/*": ["projects/app/src/app/*"],
+      "~shared": ["projects/app/src/shared"],
+      "~web/*": ["projects/web/src/app/*"]
+    }
+  },
+  "include": [
+    "projects/app/src/types/*",
+    "projcets/web/src/types/*",
+    "projects/app/src/environments/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "platforms",
+    "e2e"
+  ],
+  "files": [
+    "projects/app/src/main.ts"
+  ]
+}

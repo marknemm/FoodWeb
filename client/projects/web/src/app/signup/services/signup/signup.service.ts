@@ -3,9 +3,8 @@ import { Injectable } from '@angular/core';
 import { catchError, finalize, mergeMap } from 'rxjs/operators';
 import { Account, SignupRequest } from '~shared';
 import { environment } from '~web/../environments/environment';
+import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
-import { AlertService } from '~web/shared/services/alert/alert.service';
-import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
 export interface PasswordUpdate {
@@ -25,9 +24,8 @@ export class SignupService {
   constructor(
     private _authService: AuthenticationService,
     private _httpClient: HttpClient,
-    private _errorHandlerService: ErrorHandlerService,
+    private _alertQueueService: AlertQueueService,
     private _pageProgressService: PageProgressService,
-    private _alertService: AlertService
   ) {}
 
   get loading(): boolean {
@@ -41,14 +39,14 @@ export class SignupService {
       this._loading = true;
       this._httpClient.post<Account>(this.url, signupRequest, { withCredentials: true }).pipe(
         mergeMap(() => this._authService.login(account.username, signupRequest.password, true)),
-        catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
+        catchError((err: HttpErrorResponse) => this._alertQueueService.add(err)),
         finalize(() => {
           this._pageProgressService.reset();
           this._loading = false;
         })
       ).subscribe();
     } else {
-      this._alertService.displaySimpleMessage('You must accept the terms and conditions to complete signup', 'danger');
+      this._alertQueueService.add('You must accept the terms and conditions to complete signup');
     }
   }
 }

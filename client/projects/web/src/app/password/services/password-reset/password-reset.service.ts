@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import { catchError, finalize, mergeMap } from 'rxjs/operators';
 import { Account, PasswordResetRequest } from '~shared';
 import { environment } from '~web/../environments/environment';
+import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
-import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
 @Injectable({
@@ -22,7 +22,7 @@ export class PasswordResetService {
     private _authService: AuthenticationService,
     private _pageProgressSerivce: PageProgressService,
     private _httpClient: HttpClient,
-    private _errorHandlerService: ErrorHandlerService,
+    private _alertQueueService: AlertQueueService,
     private _activatedRoute: ActivatedRoute
   ) {}
 
@@ -34,7 +34,7 @@ export class PasswordResetService {
     const params = (new HttpParams()).set('usernameEmail', usernameEmail);
     this._loading = true;
     return this._httpClient.get<void>(this.url, { params, withCredentials: true }).pipe(
-      catchError((err: any) => this._errorHandlerService.handleError(err)),
+      catchError((err: any) => this._alertQueueService.add(err)),
       finalize(() => this._loading = false)
     );
   }
@@ -47,7 +47,7 @@ export class PasswordResetService {
     this._pageProgressSerivce.activate(true);
     return this._httpClient.put<Account>(this.url, request, { withCredentials: true }).pipe(
       mergeMap((account: Account) => this._authService.login(account.username, password, true)),
-      catchError((err: any) => this._errorHandlerService.handleError(err)),
+      catchError((err: any) => this._alertQueueService.add(err)),
       finalize(() => {
         this._loading = false;
         this._pageProgressSerivce.reset();

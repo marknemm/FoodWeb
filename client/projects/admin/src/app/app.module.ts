@@ -13,7 +13,7 @@ import { DonationSaveService } from '~web/donation/services/donation-save/donati
 import { MaterialModule } from '~web/material.module';
 import { SessionMonitorService } from '~web/session/services/session-monitor/session-monitor.service';
 import { SharedModule } from '~web/shared/shared.module';
-import { AdminAppShellModule } from './admin-app-shell/admin-app-shell.module';
+import { AdminShellModule } from './admin-shell/admin-shell.module';
 import { AdminBootstrapService } from './admin-bootstrap/services/admin-bootstrap/admin-bootstrap.service';
 import { AdminDeliveryScheduleService } from './admin-delivery/services/admin-delivery-schedule/admin-delivery-schedule.service';
 import { AdminDonationActionsService } from './admin-donation/services/admin-donation-actions/admin-donation-actions.service';
@@ -30,7 +30,7 @@ import { AdminConsoleComponent } from './components/admin-console/admin-console.
     AdminConsoleComponent
   ],
   imports: [
-    AdminAppShellModule,
+    AdminShellModule,
     AdminSessionModule.forRoot(),
     AppRoutingModule,
     BrowserAnimationsModule,

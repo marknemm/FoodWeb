@@ -2,11 +2,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, finalize, map, mergeMap, takeUntil } from 'rxjs/operators';
-import { Account, AccountHelper, ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
+import { AccountHelper, ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
 import { environment } from '~web/../environments/environment';
-import { AlertService } from '~web/shared/services/alert/alert.service';
-import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
-import { SessionService } from '../session/session.service';
+import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
+import { Account, SessionService } from '../session/session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +20,7 @@ export class AuthenticationService {
 
   constructor(
     protected _accountHelper: AccountHelper,
-    protected _alertService: AlertService,
-    protected _errorHandlerService: ErrorHandlerService,
+    protected _alertQueueService: AlertQueueService,
     protected _httpClient: HttpClient,
     protected _sessionService: SessionService
   ) {}
@@ -92,7 +90,7 @@ export class AuthenticationService {
   protected _handleLoginSuccess(response: LoginResponse, notifyUser = false): Account {
     this._sessionService.saveAccount(response.account);
     if (notifyUser) {
-      this._alertService.displaySimpleMessage(`Welcome, ${this._accountHelper.accountName(response.account)}`, 'success');
+      this._alertQueueService.add(`Welcome, ${this._accountHelper.accountName(response.account)}`, 'success');
     }
     this._login$.next(response.account);
     return response.account;
@@ -176,7 +174,7 @@ export class AuthenticationService {
   protected _sessionRefreshLogout(): null {
     if (this._sessionService.account) {
       this.logout();
-      this._alertService.displaySimpleMessage('You have been logged out due to inactivity', 'warn');
+      this._alertQueueService.add('You have been logged out due to inactivity', 'warn');
     }
     return null;
   }
@@ -188,14 +186,14 @@ export class AuthenticationService {
   logout(notifyUser = false): void {
     this._httpClient.delete<void>(this.url, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) =>
-        this._errorHandlerService.handleError(err)
+        this._alertQueueService.add(err)
       )
     ).subscribe();
 
     const account: Account = this._sessionService.account;
     this._sessionService.deleteAccount();
     if (notifyUser) {
-      this._alertService.displaySimpleMessage('Logout successful', 'success');
+      this._alertQueueService.add('Logout successful', 'success');
     }
     this._logout$.next(account);
   }

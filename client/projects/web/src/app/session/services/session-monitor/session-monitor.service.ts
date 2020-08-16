@@ -4,8 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { Account, LoginResponse } from '~shared';
+import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
-import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
 import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class SessionMonitorService implements HttpInterceptor {
 
   constructor(
     private _authService: AuthenticationService,
-    private _errorHandlerService: ErrorHandlerService,
+    private _alertQueueService: AlertQueueService,
     private _matDialog: MatDialog
   ) {}
 
@@ -46,7 +46,7 @@ export class SessionMonitorService implements HttpInterceptor {
       map((loginAccount: Account) => {
         const loggedIn: boolean = !!loginAccount;
         if (!loginAccount) {
-          this._errorHandlerService.handleError(error);
+          this._alertQueueService.add(error);
           this._authService.logout();
         }
         return { reAuthSucc: loggedIn };

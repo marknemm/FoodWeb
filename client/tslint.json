@@ -1,6 +1,7 @@
 {
   "extends": [
-    "../tslint.json"
+    "../tslint.json",
+    "@nativescript/tslint-rules"
   ],
   "rulesDirectory": [
     "node_modules/codelyzer"
@@ -19,6 +20,7 @@
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
-    "directive-class-suffix": true
+    "directive-class-suffix": true,
+    "prefer-mapped-imports": false
   }
 }

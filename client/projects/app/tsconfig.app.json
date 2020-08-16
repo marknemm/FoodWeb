@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "~app/*": ["src/app/*"],
+      "~shared": ["src/shared"],
+      "~web/*": ["../web/src/app/*"]
+    },
+    "sourceMap": true,
+    "types": [
+      "node"
+    ]
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts",
+    "../web/src/**/*.d.ts"
+  ]
+}

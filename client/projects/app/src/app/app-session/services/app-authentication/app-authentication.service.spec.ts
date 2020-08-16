@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { AppAuthenticationService } from './app-authentication.service';
 
 describe('AppAuthenticationService', () => {

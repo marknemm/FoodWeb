@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminAppShellComponent } from './admin-app-shell/components/admin-app-shell/admin-app-shell.component';
 import { AdminBootstrapService } from './admin-bootstrap/services/admin-bootstrap/admin-bootstrap.service';
+import { AdminShellComponent } from './admin-shell/components/admin-shell/admin-shell.component';
 import { AdminConsoleComponent } from './components/admin-console/admin-console.component';
 
 const routes: Routes = [
@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: 'bootstrap', loadChildren: () => import('src/app/admin-bootstrap/admin-bootstrap.module').then(mod => mod.AdminBootstrapModule) },
   {
     path: '',
-    component: AdminAppShellComponent,
+    component: AdminShellComponent,
     canActivate: [AdminBootstrapService],
     children: [
       { path: 'account', loadChildren: () => import('~admin/admin-account/admin-account.module').then(mod => mod.AdminAccountModule) },

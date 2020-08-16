@@ -2,8 +2,9 @@
 
 header {
   .mat-button {
-    color: $accent-darker;
+    color: $accent-darkest;
     font-size: 20px;
+    font-weight: normal;
 
     .mat-button-wrapper {
       vertical-align: 5px;
@@ -20,7 +21,7 @@ header {
   }
 
   .mat-icon-button {
-    color: $accent-darker;
+    color: $accent-darkest;
     margin-top: 7px;
 
     @media only screen and (max-width: $md) {
@@ -100,7 +101,7 @@ header {
 
     .mat-list-item {
       font-size: 18px;
-      color: $accent;
+      color: $accent-darker;
 
       .mat-icon,
       .ng-fa-icon {

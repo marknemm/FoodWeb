@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AccountHelper } from '~shared';
 import { SessionService } from '~web/session/services/session/session.service';
-import { AlertService } from '~web/shared/services/alert/alert.service';
-import { ErrorHandlerService } from '~web/shared/services/error-handler/error-handler.service';
+import { AlertService } from '~web/alert/services/alert/alert.service';
+import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +13,10 @@ export class AdminSessionService extends SessionService {
   constructor(
     protected _accountHelper: AccountHelper,
     protected _alertService: AlertService,
-    protected _errorHandlerService: ErrorHandlerService,
+    protected _alertQueueService: AlertQueueService,
     protected _httpClient: HttpClient
   ) {
-    super(_accountHelper, _alertService, _errorHandlerService, _httpClient);
+    super(_accountHelper);
   }
 
   /**

@@ -1,11 +1,19 @@
-import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { NativeScriptCommonModule } from '@nativescript/angular';
+import { NgModule } from '@angular/core';
+import { NativeScriptCommonModule, NativeScriptRouterModule } from '@nativescript/angular';
+import { AppLeftNavItemsComponent } from './child-components/app-left-nav-items/app-left-nav-items.component';
+import { AppActionBarComponent } from './components/app-action-bar/app-action-bar.component';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    NativeScriptCommonModule
+  declarations: [
+    AppActionBarComponent,
+    AppLeftNavItemsComponent
   ],
-  schemas: [NO_ERRORS_SCHEMA]
+  imports: [
+    NativeScriptCommonModule,
+    NativeScriptRouterModule.forChild([]),
+  ],
+  exports: [
+
+  ]
 })
 export class AppShellModule {}
