@@ -1,3 +1,40 @@
+<StackLayout row="0" class="nt-drawer__header">
+  <Image class="nt-drawer__header-image fas t-36" src="font://&#xf2bd;"></Image>
+  <Label class="nt-drawer__header-brand" text="User Name"></Label>
+  <Label class="nt-drawer__header-footnote" text="username@mail.com"></Label>
+</StackLayout>
+
+<ScrollView row="1" class="nt-drawer__body">
+  <StackLayout>
+    <GridLayout columns="auto, *" class="nt-drawer__list-item" [nsRouterLink]="['home']" pageTransition="slide" (tap)="leftNavService.toggle()">
+      <Label col="0" text="&#xf015;" class="nt-icon fas"></Label>
+      <Label col="1" text="Home" class="p-r-10"></Label>
+    </GridLayout>
+
+    <GridLayout columns="auto, *" class="nt-drawer__list-item" [nsRouterLink]="['home']" (tap)="leftNavService.toggle()">
+      <Label col="0" text="&#xf1ea;" class="nt-icon far"></Label>
+      <Label col="1" text="Browse" class="p-r-10"></Label>
+    </GridLayout>
+
+    <GridLayout columns="auto, *" class="nt-drawer__list-item" [nsRouterLink]="['home']" (tap)="leftNavService.toggle()">
+      <Label col="0" text="&#xf002;" class="nt-icon fas"></Label>
+      <Label col="1" text="Search" class="p-r-10"></Label>
+    </GridLayout>
+
+    <GridLayout columns="auto, *" class="nt-drawer__list-item" [nsRouterLink]="['home']" (tap)="leftNavService.toggle()">
+      <Label col="0" text="&#xf005;" class="nt-icon fas"></Label>
+      <Label col="1" text="Featured" class="p-r-10"></Label>
+    </GridLayout>
+
+    <StackLayout class="hr"></StackLayout>
+
+    <GridLayout columns="auto, *" class="nt-drawer__list-item" [nsRouterLink]="['home']" (tap)="leftNavService.toggle()">
+      <Label col="0" text="&#xf013;" class="nt-icon fas"></Label>
+      <Label col="1" text="Settings" class="p-r-10"></Label>
+    </GridLayout>
+  </StackLayout>
+</ScrollView>
+
 <!-- <mat-nav-list>
   <a mat-list-item [routerLink]="['/']" (click)="_onNavigate()">
     <span><mat-icon>home</mat-icon> <span>Home</span></span>

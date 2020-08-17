@@ -22,7 +22,7 @@
     "app:clean": "rimraf hooks node_modules package-lock.json platforms",
     "app:device:prepare:watch": "run-p app:ng:device:build:watch watch",
     "app:emu:prepare:watch": "run-p app:ng:emu:build:watch watch",
-    "app:ios": "nsrc run ios --no-hmr --env.environment=ios",
+    "app:ios": "nsc run ios --device \"iPhone 11\" --no-hmr --env.environment=ios",
     "app:lint": "ng lint --project app",
     "app:ng:build:watch": "rimraf ./www/* && npm run build:prep && ng build --project app --sourceMap --watch --deleteOutputPath=false",
     "app:ng:device:build:watch": "rimraf ./www/* && npm run build:prep && ng build --project app --sourceMap --watch --deleteOutputPath=false --configuration=device",

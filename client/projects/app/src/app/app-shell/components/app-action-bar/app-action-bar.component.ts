@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterExtensions } from '@nativescript/angular';
+import { isAndroid, isIOS } from '@nativescript/core';
 import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left-nav.service';
 
 @Component({
@@ -8,8 +10,12 @@ import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left
 })
 export class AppActionBarComponent implements OnInit {
 
+  readonly isAndroid: boolean = isAndroid;
+  readonly isIOS: boolean = isIOS;
+
   constructor(
-    public leftNavService: AppLeftNavService
+    public leftNavService: AppLeftNavService,
+    public router: RouterExtensions,
   ) {}
 
   ngOnInit() {}

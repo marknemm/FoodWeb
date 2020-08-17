@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left-nav.service';
 
 @Component({
   selector: 'foodweb-app-left-nav-items',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppLeftNavItemsComponent implements OnInit {
 
-  constructor() {}
+  constructor(
+    public leftNavService: AppLeftNavService
+  ) {}
 
   ngOnInit() {}
 

@@ -14,5 +14,5 @@ export const environment: FoodWebEnvironment = {
   supportEmail: 'support@wnyfoodweb.com',
   recaptchaSiteKey: '6LdJXagUAAAAAIWSTEbvcU1-HxB1WHrp3pcMS0Qj',
   googleMapsJSApiKey: 'AIzaSyDQdydkED1Z-nZvQXQQHlOYXnrmdqdFedA',
-  server: 'http://localhost:5000/server'
+  server: 'http://127.0.0.1:5000/server'
 };
