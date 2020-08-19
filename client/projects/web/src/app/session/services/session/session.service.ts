@@ -152,7 +152,7 @@ export class SessionService {
    */
   save(key: string, data: any, noCacheWrite = false): void {
     const jsonData: string = JSON.stringify(data);
-    localStorage.setItem(key, jsonData);
+    this._rawSave(key, jsonData);
 
     if (!noCacheWrite) {
       this._sessionCache.set(key, data);

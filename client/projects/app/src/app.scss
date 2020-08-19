@@ -1,2 +1,4 @@
-// Expose our typical styles.scss file to nativescript helpers.
+@import "~@nativescript/theme/core";
+@import "~@nativescript/theme/blue";
+
 @import "styles/styles.scss";

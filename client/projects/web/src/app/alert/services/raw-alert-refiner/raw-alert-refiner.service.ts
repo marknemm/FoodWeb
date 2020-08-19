@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RawAlertMessage, AlertBody, AlertMessage, AlertLevel } from '~web/alert/interfaces/alert-message';
+import { RawAlertMessage, SimpleAlert, AlertLevel } from '~web/alert/interfaces/simple-alert';
 
 @Injectable({
   providedIn: 'root'
@@ -13,46 +13,46 @@ export class RawAlertRefinerService {
    * Refines a given raw alert message.
    * @param rawAlertMessage The raw alert message that is to be refined.
    * @param level The level that shall be assigned to the alert message.
-   * @return The refined alert message.
+   * @return The refined simple alert message.
    */
-  refineRawAlert(rawAlertMessage: RawAlertMessage, level: AlertLevel): AlertMessage {
+  refineRawAlert(rawAlertMessage: RawAlertMessage, level: AlertLevel): SimpleAlert {
     return {
-      body: this._deriveAlertBody(rawAlertMessage),
+      message: this._deriveAlertMessage(rawAlertMessage),
       level
     };
   }
 
   /**
-   * Derives an alert body from a given raw message.
-   * @param rawAlertMessage The raw alert message from which to derive the alert body.
-   * @return The derived alert body.
+   * Derives an alert message from a given raw message.
+   * @param rawAlertMessage The raw alert message from which to derive the alert message.
+   * @return The derived alert message.
    */
-  private _deriveAlertBody(rawAlertMessage: RawAlertMessage): AlertBody {
+  private _deriveAlertMessage(rawAlertMessage: RawAlertMessage): string {
     if (rawAlertMessage instanceof Error || rawAlertMessage instanceof HttpErrorResponse) {
       console.error(rawAlertMessage);
-      return this._deriveAlertBodyFromError(rawAlertMessage);
+      return this._deriveAlertMessageFromError(rawAlertMessage);
     }
     return rawAlertMessage;
   }
 
   /**
-   * Derives an alert body from a given error, which shall be displayed to the user.
-   * @param error The error from which to derive the alert body.
-   * @return The derived alert body.
+   * Derives an alert message from a given error, which shall be displayed to the user.
+   * @param error The error from which to derive the alert message.
+   * @return The derived alert message.
    */
-  private _deriveAlertBodyFromError(error: Error | HttpErrorResponse): string {
+  private _deriveAlertMessageFromError(error: Error | HttpErrorResponse): string {
     if (error instanceof Error) {
       return (error.message ? error.message : 'An unexpected error has occured');
     }
-    return this._deriveAlertBodyFromErrorResponse(error);
+    return this._deriveAlertMessageFromErrorResponse(error);
   }
 
   /**
-   * Derives an alert body from a given HTTP error response.
-   * @param alert The HTTP error response from which to derive the alert body.
-   * @return The derived alert body.
+   * Derives an alert message from a given HTTP error response.
+   * @param alert The HTTP error response from which to derive the alert message.
+   * @return The derived alert message.
    */
-  private _deriveAlertBodyFromErrorResponse(error: HttpErrorResponse): string {
+  private _deriveAlertMessageFromErrorResponse(error: HttpErrorResponse): string {
     if (error.error?.message) {
       return error.error.message;
     }

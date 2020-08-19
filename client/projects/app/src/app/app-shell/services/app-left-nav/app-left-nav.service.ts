@@ -9,12 +9,9 @@ import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 export class AppLeftNavService {
 
   private _openedChanged = new Subject<boolean>();
+  private _isLocked = false;
 
   constructor() {}
-
-  get radSideDrawer(): RadSideDrawer {
-    return <RadSideDrawer>Application.getRootView();
-  }
 
   get opened(): boolean {
     return this.radSideDrawer.getIsOpen();
@@ -28,8 +25,27 @@ export class AppLeftNavService {
     return this._openedChanged.asObservable();
   }
 
+  get isLocked(): boolean {
+    return this._isLocked;
+  }
+
+  get radSideDrawer(): RadSideDrawer {
+    return <RadSideDrawer>Application.getRootView();
+  }
+
   toggle(): void {
     this._setOpened(!this.opened);
+  }
+
+  lock(): void {
+    this._setOpened(false);
+    this.radSideDrawer.gesturesEnabled = false;
+    this._isLocked = true;
+  }
+
+  unlock(): void {
+    this.radSideDrawer.gesturesEnabled = true;
+    this._isLocked = false;
   }
 
   private _setOpened(opened: boolean): void {

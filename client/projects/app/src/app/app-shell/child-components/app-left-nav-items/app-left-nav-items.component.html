@@ -32,6 +32,11 @@
       <Label col="0" text="&#xf013;" class="nt-icon fas"></Label>
       <Label col="1" text="Settings" class="p-r-10"></Label>
     </GridLayout>
+
+    <GridLayout columns="auto, *" class="nt-drawer__list-item" (tap)="authenticationServce.logout()">
+      <Label col="0" text="&#xf011;" class="nt-icon fas"></Label>
+      <Label col="1" text="Logout" class="p-r-10"></Label>
+    </GridLayout>
   </StackLayout>
 </ScrollView>
 

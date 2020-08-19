@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AlertMessage, AppAlertService } from '~app/app-alert/services/app-alert/app-alert.service';
+import { SimpleAlert, AppAlertService } from '~app/app-alert/services/app-alert/app-alert.service';
 import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 
 @Injectable({
@@ -18,8 +18,8 @@ export class AppDefaultAlertProcessorService {
    * a top-level non-blocking snackbar alert.
    */
   monitorAlerts(): void {
-    this._alertQueueService.alertForwarded.subscribe((alert: AlertMessage) =>
-      this._alertService.displaySimpleMessage(alert.body, alert.level)
+    this._alertQueueService.alertForwarded.subscribe((alert: SimpleAlert) =>
+      this._alertService.displayAlert(alert)
     );
   }
 }

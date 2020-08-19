@@ -1,14 +1,16 @@
+import { TemplateRef } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBarConfig } from '@angular/material/snack-bar';
-import { AlertBody, AlertLevel, AlertMessage } from './alert-message';
-export * from './alert-message';
+import { AlertLevel } from './simple-alert';
+export * from './simple-alert';
 
+export type AlertMessage = string | TemplateRef<any>;
 export type AlertButtonType = 'mat-button' | 'mat-raised-button';
 export type AlertConfig<T = any> = MatDialogConfig<T> | MatSnackBarConfig<T>;
 
-export interface Alert<T = any> extends AlertMessage {
+export interface Alert<T = any> {
   title?: string;
-  body: AlertBody;
+  message: AlertMessage;
   level: AlertLevel;
   blocking?: boolean;
   actions?: AlertAction<T>[];

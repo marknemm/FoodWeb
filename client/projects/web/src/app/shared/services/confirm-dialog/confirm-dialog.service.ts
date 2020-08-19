@@ -18,8 +18,8 @@ export class ConfirmDialogService {
   ) {}
 
   displayConfirmDialog(message: string, title?: string, actions: AlertAction<any>[] = this._defaultResponses): Observable<any> {
-    const alertMessage: Alert<boolean> = { body: message, title, level: 'info', actions, blocking: true };
+    const alert: Alert<boolean> = { message, title, level: 'info', actions, blocking: true };
     const config: MatDialogConfig<Alert<boolean>> = { disableClose: true };
-    return this._alertService.displayMessage(alertMessage, config);
+    return this._alertService.displayAlert(alert, config);
   }
 }

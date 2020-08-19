@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppAuthenticationService } from '~app/app-session/services/app-authentication/app-authentication.service';
 import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left-nav.service';
 
 @Component({
@@ -9,7 +10,8 @@ import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left
 export class AppLeftNavItemsComponent implements OnInit {
 
   constructor(
-    public leftNavService: AppLeftNavService
+    public authenticationServce: AppAuthenticationService,
+    public leftNavService: AppLeftNavService,
   ) {}
 
   ngOnInit() {}

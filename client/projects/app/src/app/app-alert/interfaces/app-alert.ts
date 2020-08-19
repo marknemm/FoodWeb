@@ -1,11 +1,12 @@
-import { AlertBody, AlertLevel, AlertMessage } from '~web/alert/interfaces/alert-message';
-export * from '~web/alert/interfaces/alert-message';
+import { AlertLevel, SimpleAlert } from '~web/alert/interfaces/simple-alert';
+import { FeedbackShowOptions } from 'nativescript-feedback';
+export * from '~web/alert/interfaces/simple-alert';
 
-export type AppAlertConfig<T = any> = any;
+export type AppAlertConfig = FeedbackShowOptions;
 
-export interface AppAlert<T = any> extends AlertMessage {
+export interface AppAlert<T = any> extends SimpleAlert {
   title?: string;
-  body: AlertBody;
+  message: string;
   level: AlertLevel;
   blocking?: boolean;
   actions?: AppAlertAction<T>[];
@@ -16,6 +17,4 @@ export interface AppAlertAction<T = any> {
   text?: string;
   value: T;
   color?: string;
-  buttonType?: string;
-  cdkFocusPrimary?: boolean;
 }
