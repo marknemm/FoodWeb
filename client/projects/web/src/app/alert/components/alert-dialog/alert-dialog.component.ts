@@ -9,14 +9,12 @@ import { Alert } from '~web/alert/interfaces/alert';
 })
 export class AlertDialogComponent<T = any> implements OnInit {
 
-  readonly isBodyTemplateRef: boolean;
   readonly color: string;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public message: Alert<T>
+    @Inject(MAT_DIALOG_DATA) public alert: Alert<T>
   ) {
-    this.isBodyTemplateRef = (this.message.body instanceof TemplateRef);
-    this.color = `alert-${this.message.level}`;
+    this.color = `alert-${this.alert.level}`;
   }
 
   ngOnInit() {}

@@ -1,38 +1,40 @@
-<FlexboxLayout class="page">
-  <StackLayout class="nt-form" [formGroup]="loginForm">
-    <StackLayout class="nt-input">
-      <TextField formControlName="usernameEmail" [hint]="usernameEmailPlaceholder" keyboardType="email" autocorrect="false"></TextField>
-    </StackLayout>
-
-    <StackLayout class="nt-input" *ngIf="isLogin">
-      <TextField formControlName="password" hint="Password" secure="true" (returnPress)="submit()"></TextField>
-    </StackLayout>
-
-    <StackLayout *ngIf="isLogin; else passwordRecoveryTmpl" class="login-actions">
-      <Button text="Login" class="-primary" [disabled]="loginForm.invalid" (tap)="submit()"></Button>
-      <Label text="Forgot your password?" class="text-center" (tap)="forgotPassword()"></Label>
-    </StackLayout>
-    <ng-template #passwordRecoveryTmpl>
-      <StackLayout *ngIf="!messageSent; else msgSentTempl" class="login-actions">
-        <Button text="Send Email" class="-primary" [disabled]="loginForm.invalid" (tap)="submit()"></Button>
-        <Label text="Return to login" class="text-center" (tap)="returnToLogin()"></Label>
+<foodweb-app-page [hideActionBar]="true">
+  <FlexboxLayout class="page">
+    <StackLayout class="nt-form" [formGroup]="loginForm">
+      <StackLayout class="nt-input">
+        <TextField formControlName="usernameEmail" [hint]="usernameEmailPlaceholder" keyboardType="email" autocorrect="false"></TextField>
       </StackLayout>
-      <ng-template #msgSentTempl>
-        <StackLayout class="login-actions">
-          <Button text="Return to Login" class="-primary"></Button>
-          <Label text="Resend Email" class="text-center"></Label>
-        </StackLayout>
-      </ng-template>
-    </ng-template>
-  </StackLayout>
 
-  <Label [routerLink]="['/signup']" class="signup-link">
-    <FormattedString>
-      <Span text="Don't have an account? "></Span>
-      <Span text="Sign up" class="bold"></Span>
-    </FormattedString>
-  </Label>
-</FlexboxLayout>
+      <StackLayout class="nt-input" *ngIf="isLogin">
+        <TextField formControlName="password" hint="Password" secure="true" (returnPress)="submit()"></TextField>
+      </StackLayout>
+
+      <StackLayout *ngIf="isLogin; else passwordRecoveryTmpl" class="login-actions">
+        <Button text="Login" class="-primary" [disabled]="loginForm.invalid" (tap)="submit()"></Button>
+        <Label text="Forgot your password?" class="text-center" (tap)="forgotPassword()"></Label>
+      </StackLayout>
+      <ng-template #passwordRecoveryTmpl>
+        <StackLayout *ngIf="!messageSent; else msgSentTempl" class="login-actions">
+          <Button text="Send Email" class="-primary" [disabled]="loginForm.invalid" (tap)="submit()"></Button>
+          <Label text="Return to login" class="text-center" (tap)="returnToLogin()"></Label>
+        </StackLayout>
+        <ng-template #msgSentTempl>
+          <StackLayout class="login-actions">
+            <Button text="Return to Login" class="-primary"></Button>
+            <Label text="Resend Email" class="text-center"></Label>
+          </StackLayout>
+        </ng-template>
+      </ng-template>
+    </StackLayout>
+
+    <Label [routerLink]="['/signup']" class="signup-link">
+      <FormattedString>
+        <Span text="Don't have an account? "></Span>
+        <Span text="Sign up" class="bold"></Span>
+      </FormattedString>
+    </Label>
+  </FlexboxLayout>
+</foodweb-app-page>
 
 <!-- <form #loginFormDirective="ngForm" [formGroup]="loginForm" (submit)="submit()" class="login-container" [ngClass]="{ container: !insideDialog }">
   <img src="./assets/IconImgMd.png" *ngIf="!insideDialog" class="foodweb-img">

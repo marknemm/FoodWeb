@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { Feedback } from 'nativescript-feedback';
 import { Observable, of } from 'rxjs';
 import { AlertLevel, AppAlert, AppAlertConfig } from '~app/app-alert/interfaces/app-alert';
+import { AlertProcessor } from '~web/alert/classes/alert-processor';
 export * from '~app/app-alert/interfaces/app-alert';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AppAlertService {
+export class AppAlertService extends AlertProcessor {
 
   constructor(
     private _feedback: Feedback
-  ) {}
+  ) { super(); }
 
   /**
    * Displays a given simple message in either a non-blocking snackbar or blocking modal dialog.

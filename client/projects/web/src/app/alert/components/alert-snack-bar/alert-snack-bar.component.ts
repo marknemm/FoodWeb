@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, TemplateRef } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBarRef, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 import { Alert } from '~web/alert/interfaces/alert';
 
@@ -9,14 +9,10 @@ import { Alert } from '~web/alert/interfaces/alert';
 })
 export class AlertSnackBarComponent<T = any> implements OnInit {
 
-  readonly isBodyTemplateRef: boolean;
-
   constructor(
-    @Inject(MAT_SNACK_BAR_DATA) public message: Alert<T>,
+    @Inject(MAT_SNACK_BAR_DATA) public alert: Alert<T>,
     public matSnackBarRef: MatSnackBarRef<AlertSnackBarComponent<T>>
-  ) {
-    this.isBodyTemplateRef = (this.message.body instanceof TemplateRef);
-  }
+  ) {}
 
   ngOnInit() {}
 

@@ -1,19 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AppAlertSnackBarComponent } from './app-alert-snack-bar.component';
 
-describe('AppAlertSnackBarComponent', () => {
-  let component: AppAlertSnackBarComponent;
-  let fixture: ComponentFixture<AppAlertSnackBarComponent>;
+import { AppPageComponent } from './app-page.component';
+
+describe('AppPageComponent', () => {
+  let component: AppPageComponent;
+  let fixture: ComponentFixture<AppPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AppAlertSnackBarComponent ]
+      declarations: [ AppPageComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AppAlertSnackBarComponent);
+    fixture = TestBed.createComponent(AppPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

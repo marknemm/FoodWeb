@@ -1,12 +1,13 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RouterExtensions } from '@nativescript/angular';
-import { Observable, of } from 'rxjs';
+import { Observable, of, NEVER } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AppSessionService } from '~app/app-session/services/app-session/app-session.service';
 import { Account, AccountHelper, AppTokenLoginRequest, LoginRequest, LoginResponse } from '~shared';
 import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class AppAuthenticationService extends AuthenticationService {
     protected _alertQueueService: AlertQueueService,
     protected _httpClient: HttpClient,
     protected _router: RouterExtensions,
-    protected _sessionService: AppSessionService
+    protected _sessionService: AppSessionService,
+    private _httpResponseService: HttpResponseService,
   ) {
     super(_accountHelper, _alertQueueService, _httpClient, _sessionService);
   }
@@ -33,6 +35,7 @@ export class AppAuthenticationService extends AuthenticationService {
   login(usernameEmail: string, password: string, goHomeOnSuccess = false): Observable<Account> {
     const loginRequest: LoginRequest = { usernameEmail, password, isApp: true };
     return super._sendLoginRequest(loginRequest).pipe(
+      this._httpResponseService.handleHttpResponse<LoginResponse>(),
       map((response: LoginResponse) =>
         this._handleLoginSuccess(response, goHomeOnSuccess)
       )

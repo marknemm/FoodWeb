@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EMPTY, Observable, ObservableInput, Subject } from 'rxjs';
+import { AlertProcessor } from '~web/alert/classes/alert-processor';
 import { AlertLevel, RawAlertMessage, SimpleAlert } from '~web/alert/interfaces/simple-alert';
 import { RawAlertRefinerService } from '~web/alert/services/raw-alert-refiner/raw-alert-refiner.service';
 
@@ -13,7 +14,7 @@ export class AlertQueueService {
 
   private _alerts: SimpleAlert[] = [];
   private _alertAdded = new Subject<SimpleAlert>();
-  private _alertForwarded = new Subject<SimpleAlert>();
+  private _defaultAlertProcessor: AlertProcessor;
 
   constructor(
     private _rawAlertRefinerService: RawAlertRefinerService
@@ -26,14 +27,6 @@ export class AlertQueueService {
    */
   get alertAdded(): Observable<SimpleAlert> {
     return this._alertAdded.asObservable();
-  }
-
-  /**
-   * An observable that emits a FoodWeb alert which was added with default processing enabled, and should be forwarded
-   * to the default alert processor service immediately (not added to queue).
-   */
-  get alertForwarded(): Observable<SimpleAlert> {
-    return this._alertForwarded.asObservable();
   }
 
   /**
@@ -71,8 +64,8 @@ export class AlertQueueService {
    * consumed from the alert queue and displayed as a top-level non-blocking alert message.
    */
   private _processSimpleAlert(simpleAlert: SimpleAlert, defaultProcessing: boolean): void {
-    if (defaultProcessing) {
-      this._alertForwarded.next(simpleAlert);
+    if (defaultProcessing && this._defaultAlertProcessor) {
+      this._defaultAlertProcessor.displayAlert(simpleAlert);
     } else {
       this._alerts.push(simpleAlert);
       this._alertAdded.next(simpleAlert);
@@ -100,5 +93,15 @@ export class AlertQueueService {
    */
   peek(): SimpleAlert {
     return this._alerts[0];
+  }
+
+  /**
+   * Registers a default (top-level) alert processor which monitors alerts that have been processed by the AlertQueueService
+   * that have been marked for default processing. Whenever an alert is added with default processing enabled, it will be
+   * immediately consumed and displayed via an associated top-level non-blocking alert UI element.
+   * @param alertProcessor The default alert processor that is to be registered.
+   */
+  registerDefaultAlertProcessor(alertProcessor: AlertProcessor): void {
+    this._defaultAlertProcessor = alertProcessor;
   }
 }

@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AlertSnackBarComponent } from './alert-snack-bar.component';
 
 describe('AlertSnackBarComponent', () => {

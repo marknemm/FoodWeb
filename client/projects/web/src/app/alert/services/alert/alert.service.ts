@@ -3,20 +3,21 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AlertProcessor } from '~web/alert/classes/alert-processor';
 import { AlertDialogComponent } from '~web/alert/components/alert-dialog/alert-dialog.component';
 import { AlertSnackBarComponent } from '~web/alert/components/alert-snack-bar/alert-snack-bar.component';
-import { Alert, AlertAction, AlertConfig, AlertLevel, AlertMessage } from '~web/alert/interfaces/alert';
+import { Alert, AlertAction, AlertConfig, AlertLevel } from '~web/alert/interfaces/alert';
 export * from '~web/alert/interfaces/alert';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlertService {
+export class AlertService extends AlertProcessor {
 
   constructor(
     protected _matDialog: MatDialog,
     protected _matSnackBar: MatSnackBar
-  ) {}
+  ) { super(); }
 
   /**
    * Displays a given simple message in either a non-blocking snackbar or blocking modal dialog.
@@ -24,7 +25,7 @@ export class AlertService {
    * @param level The level of the message to display (determines theming of blocking dialog or non-blocking snackbar).
    * @param blocking Whether or not the message should be blocking (in a modal dialog). Defaults to false for non-blocking.
    */
-  displaySimpleMessage(message: AlertMessage, level: AlertLevel, blocking = false): void {
+  displaySimpleMessage(message: string, level: AlertLevel, blocking = false): void {
     this.displayAlert({ message, level, blocking});
   }
 

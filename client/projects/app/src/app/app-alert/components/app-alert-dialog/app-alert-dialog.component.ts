@@ -1,5 +1,4 @@
-import { Component, Inject, OnInit, TemplateRef } from '@angular/core';
-import { Alert } from '~web/alert/interfaces/alert';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'foodweb-app-alert-dialog',
@@ -8,11 +7,9 @@ import { Alert } from '~web/alert/interfaces/alert';
 })
 export class AppAlertDialogComponent<T = any> implements OnInit {
 
-  readonly isBodyTemplateRef: boolean;
   readonly color: string;
 
   constructor() {
-    // this.isBodyTemplateRef = (this.message.body instanceof TemplateRef);
     // this.color = `alert-${this.message.level}`;
   }
 
