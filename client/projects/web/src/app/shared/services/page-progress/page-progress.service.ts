@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
-import { Router, Event } from '@angular/router';
-import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
+import { Event, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -9,28 +7,20 @@ import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
 export class PageProgressService {
 
   backdropColor: string;
-  backdropOpacity: number;
-  backdropVisible: boolean;
   blockingColor: string;
-  blockingStrokeWidth: number;
   diameter: number;
-  mode: ProgressSpinnerMode;
+  excludeBackdrop: boolean;
   nonBlockingColor: string;
-  nonBlockingStrokeWidth: number;
   trigger: boolean;
   value: number;
 
-  private _blocking: boolean;
-  private _blockingProgressWidth: string;
-  private _color: string;
-  private _strokeWidth: number;
+  protected _blocking: boolean;
+  protected _color: string;
+  protected _strokeWidth: number;
 
   constructor(
-    protected _leftNavService: LeftNavService,
     router: Router,
   ) {
-    this._leftNavService.openedChanged.subscribe(this._onLeftNavOpenedChanged.bind(this));
-    this._onLeftNavOpenedChanged(this._leftNavService.opened);
     this._listenForRouteChange(router);
     this.reset();
   }
@@ -42,11 +32,6 @@ export class PageProgressService {
   set blocking(blocking: boolean) {
     this._blocking = blocking;
     this._color = (this._blocking ? this.blockingColor : this.nonBlockingColor);
-    this._strokeWidth = (this._blocking ? this.blockingStrokeWidth : this.nonBlockingStrokeWidth);
-  }
-
-  get blockingProgressWidth(): string {
-    return this._blockingProgressWidth;
   }
 
   get color(): string {
@@ -72,27 +57,17 @@ export class PageProgressService {
   }
 
   reset(): void {
-    this.backdropColor = 'lightgray';
-    this.backdropOpacity = 0.5;
-    this.backdropVisible = true;
-    this.blockingColor = 'primary';
-    this.blockingStrokeWidth = 7;
+    this.backdropColor = 'rgba(211, 211, 211, .5)';
+    this.blockingColor = '';
     this.diameter = 150;
-    this.mode = 'indeterminate';
-    this.nonBlockingColor = 'accent';
-    this.nonBlockingStrokeWidth = 2;
+    this.excludeBackdrop = false;
+    this.nonBlockingColor = '';
     this.trigger = false;
-    this.value = undefined;
     this.blocking = false;
+    this.value = undefined;
   }
 
-  private _onLeftNavOpenedChanged(opened: boolean): void {
-    this._blockingProgressWidth = (opened && this._leftNavService.mode === 'side') ?
-      `calc(100vw - 180px)` :
-      '100vw';
-  }
-
-  private _listenForRouteChange(router: Router): void {
+  protected _listenForRouteChange(router: Router): void {
     router.events.subscribe((event: Event) => {
       if (event instanceof PageTransitionEvent) {
         this.trigger = false;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RouterExtensions } from '@nativescript/angular';
 import { isAndroid, isIOS } from '@nativescript/core';
 import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left-nav.service';
@@ -12,6 +12,8 @@ export class AppActionBarComponent implements OnInit {
 
   readonly isAndroid: boolean = isAndroid;
   readonly isIOS: boolean = isIOS;
+
+  @Input() pageTitle = 'FoodWeb';
 
   constructor(
     public leftNavService: AppLeftNavService,

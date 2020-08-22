@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { isAndroid, isIOS, Page } from '@nativescript/core';
 import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left-nav.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
@@ -16,15 +16,13 @@ export class AppPageComponent implements OnInit, OnChanges {
   @Input() hideActionBar = false;
   @Input() pageTitle = 'FoodWeb';
 
+  @HostBinding() readonly class = 'app-page';
+
   constructor(
     public leftNavService: AppLeftNavService,
+    public page: Page,
     public pageProgressService: PageProgressService,
-    public page: Page
   ) {}
-
-  get showBlockingPageProgress(): boolean {
-    return !!(this.pageProgressService.blocking && this.pageProgressService.trigger);
-  }
 
   ngOnInit() {}
 

@@ -17,6 +17,10 @@ export class LeftNavComponent implements OnInit {
     public pageProgressService: PageProgressService
   ) {}
 
+  get pageProgressColor(): string {
+    return (this.pageProgressService.color || 'accent');
+  }
+
   ngOnInit() {
     this.leftNavService.initDrawerContent(this.drawerContent);
   }

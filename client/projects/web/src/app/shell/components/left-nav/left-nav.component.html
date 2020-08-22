@@ -7,18 +7,13 @@
     <ng-content select=".left-nav-items"></ng-content>
   </mat-drawer>
   <mat-drawer-content #drawerContent>
-    <div *ngIf="pageProgressService.showBlockingProgress" class="blocking-page-progress-indicator" [style.width]="pageProgressService.blockingProgressWidth">
+    <div *ngIf="pageProgressService.showBlockingProgress" class="blocking-page-progress-indicator">
       <foodweb-progress-indicator
         [backdropColor]="pageProgressService.backdropColor"
-        [backdropOpacity]="pageProgressService.backdropOpacity"
-        [backdropVisible]="pageProgressService.backdropVisible"
         [blocking]="pageProgressService.blocking"
-        [color]="pageProgressService.color"
+        [color]="pageProgressColor"
         [diameter]="pageProgressService.diameter"
-        [mode]="pageProgressService.mode"
-        [strokeWidth]="pageProgressService.strokeWidth"
-        [trigger]="pageProgressService.trigger"
-        [value]="pageProgressService.value">
+        [trigger]="pageProgressService.trigger">
       </foodweb-progress-indicator>
     </div>
     <div class="page-content">
