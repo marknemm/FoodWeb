@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
 import { AppAlertService } from '~app/app-alert/services/app-alert/app-alert.service';
 import { AppAuthenticationService } from '~app/app-session/services/app-authentication/app-authentication.service';
 import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left-nav.service';
@@ -18,9 +18,11 @@ export class AppComponent {
     alertQueueService: AlertQueueService,
     authService: AppAuthenticationService,
     jsonDateReviver: JSONDateReviver,
+    viewContainerRef: ViewContainerRef,
   ) {
     jsonDateReviver.initJSONDateReviver();
+    alertService.defaultViewContainerRef = viewContainerRef;
     alertQueueService.registerDefaultAlertProcessor(alertService);
-    authService.refreshSessionStatus().subscribe();
+    authService.refreshSessionStatus();
   }
 }

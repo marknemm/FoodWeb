@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalDialogParams } from '@nativescript/angular';
+import { AppAlert } from '~app/app-alert/interfaces/app-alert';
 
 @Component({
   selector: 'foodweb-app-alert-dialog',
@@ -7,12 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppAlertDialogComponent<T = any> implements OnInit {
 
-  readonly color: string;
+  readonly alert: AppAlert;
 
-  constructor() {
-    // this.color = `alert-${this.message.level}`;
+  constructor(
+    private _params: ModalDialogParams
+  ) {
+    this.alert = _params.context;
   }
 
   ngOnInit() {}
+
+  close(value?: T): void {
+    this._params.closeCallback(value);
+  }
 
 }

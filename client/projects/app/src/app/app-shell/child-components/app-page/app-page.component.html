@@ -1,13 +1,15 @@
 <foodweb-app-action-bar [pageTitle]="pageTitle"></foodweb-app-action-bar>
 
-<ng-content></ng-content>
+<GridLayout class="app-page-content">
+  <ng-content></ng-content>
 
-<foodweb-app-progress-indicator
-  [backdropColor]="pageProgressService.backdropColor"
-  [blocking]="pageProgressService.blocking"
-  [color]="pageProgressService.color"
-  [diameter]="pageProgressService.diameter"
-  [excludeBackdrop]="pageProgressService.excludeBackdrop"
-  [trigger]="pageProgressService.trigger"
-  [value]="pageProgressService.value"
-></foodweb-app-progress-indicator>
+  <foodweb-app-progress-indicator
+    [backdropColor]="pageProgressService.backdropColor"
+    [blocking]="pageProgressService.blocking"
+    [color]="pageProgressService.color"
+    [diameter]="pageProgressService.diameter"
+    [excludeBackdrop]="pageProgressService.excludeBackdrop"
+    [trigger]="pageProgressService.trigger"
+    [value]="pageProgressService.value"
+  ></foodweb-app-progress-indicator>
+</GridLayout>

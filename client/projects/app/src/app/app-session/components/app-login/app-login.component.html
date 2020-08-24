@@ -1,8 +1,8 @@
 <foodweb-app-page [hideActionBar]="true">
-  <FlexboxLayout class="page">
+  <FlexboxLayout class="login-page">
     <StackLayout class="nt-form" [formGroup]="loginForm">
       <StackLayout class="nt-input">
-        <TextField formControlName="usernameEmail" [hint]="usernameEmailPlaceholder" keyboardType="email" autocorrect="false"></TextField>
+        <TextField formControlName="usernameEmail" [hint]="usernameEmailPlaceholder" autocapitalizationType="none" keyboardType="email" autocorrect="false"></TextField>
       </StackLayout>
 
       <StackLayout class="nt-input" *ngIf="isLogin">

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { NativeScriptCommonModule } from '@nativescript/angular';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ModalDialogService, NativeScriptCommonModule } from '@nativescript/angular';
 import { Feedback } from 'nativescript-feedback';
 import { AppAlertDialogComponent } from './components/app-alert-dialog/app-alert-dialog.component';
 
@@ -14,7 +14,12 @@ import { AppAlertDialogComponent } from './components/app-alert-dialog/app-alert
     AppAlertDialogComponent,
   ],
   providers: [
-    Feedback
-  ]
+    Feedback,
+    ModalDialogService
+  ],
+  entryComponents: [
+    AppAlertDialogComponent
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppAlertModule {}

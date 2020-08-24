@@ -1,11 +1,10 @@
-<AbsoluteLayout *ngIf="showProgressBar">
-  <Progress
-    class="progress-bar"
-    maxValue="100"
-    [color]="color"
-    [value]="value"
-  ></Progress>
-</AbsoluteLayout>
+<Progress
+  *ngIf="showProgressBar"
+  class="progress-bar"
+  maxValue="100"
+  [color]="color"
+  [value]="value"
+></Progress>
 
 <AbsoluteLayout
   class="progress-spinner-backdrop"

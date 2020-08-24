@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, HostBinding } from '@angular/core';
+import { isIOS } from '@nativescript/core';
 
 @Component({
   selector: 'foodweb-app-progress-indicator',

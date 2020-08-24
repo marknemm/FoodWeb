@@ -123,11 +123,22 @@
       "pythonPath": "c:/python27/python.exe"
     },
     {
-      "type": "android-webview",
+      "name": "Attach on Android",
+      "type": "nativescript",
       "request": "attach",
-      "name": "Attach to Android WebView",
-      "application": "com.wnyfoodweb.foodweb",
-      "webRoot": "${workspaceRoot}\\client"
+      "platform": "android",
+      "appRoot": "${workspaceRoot}/client",
+      "sourceMaps": true,
+      "watch": false
+    },
+    {
+      "name": "Attach on iOS",
+      "type": "nativescript",
+      "request": "attach",
+      "platform": "ios",
+      "appRoot": "${workspaceRoot}/client",
+      "sourceMaps": true,
+      "watch": false
     }
   ],
   "compounds": [
