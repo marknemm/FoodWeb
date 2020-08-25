@@ -38,10 +38,8 @@ export class AdminDonationFormComponent implements OnInit {
       ? this._confirmDialogService.displayConfirmDialog(
           'Are you sure you wish to discard your changes?',
           'Confirm Cancel Donation Edit',
-          [
-            { text: 'No', value: false, color: 'warn' },
-            { text: 'Yes', value: true, cdkFocusPrimary: true }
-          ]
+          'Yes',
+          'No'
         )
       : of(true);
     confirm$.subscribe((cancelEdit: boolean) =>

@@ -130,7 +130,8 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
       this._confirmDialogService.displayConfirmDialog(
         'Are you sure you wish to cancel your changes? You will lose all unsaved changes.',
         'Confirm Cancel',
-        [{ text: 'Yes', value: true, cdkFocusPrimary: true }, { text: 'No', value: false, color: 'warn' }]
+        'Yes',
+        'No'
       ) :
       of(true);
   }

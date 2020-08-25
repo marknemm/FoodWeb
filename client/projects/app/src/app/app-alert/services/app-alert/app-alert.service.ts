@@ -65,7 +65,7 @@ export class AppAlertService extends AlertProcessor {
    */
   private _displayBlockingAlert<T>(config: AppAlertConfig): Observable<T> {
     return from(
-      this._modalDialogService.showModal(AppAlertDialogComponent, { context: config.context, viewContainerRef: config.viewContainerRef, fullscreen: false })
+      this._modalDialogService.showModal(AppAlertDialogComponent, config)
     );
   }
 

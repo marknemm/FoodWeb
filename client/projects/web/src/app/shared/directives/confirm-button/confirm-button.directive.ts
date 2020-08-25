@@ -30,7 +30,7 @@ export class ConfirmButtonDirective {
   private _genConfirmObs(): Observable<boolean> {
     return (this.confirmCondition)
       ? this._confirmDialogService.displayConfirmDialog(this.confirmMessage, this.confirmTitle)
-      : of(true)
+      : of(true);
   }
 
 }

@@ -1,24 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { AppAlert, AppAlertAction, AppAlertConfig, AppAlertService } from '~app/app-shared/services/app-alert/app-alert.service';
+import { confirm } from '@nativescript/core';
+import { from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppConfirmDialogService {
 
-  private readonly _defaultActions: AppAlertAction<boolean>[] = [
-    { text: 'Cancel', value: false, color: 'red' },
-    { text: 'Confirm', value: true, focusPrimary: true }
-  ];
+  constructor() {}
 
-  constructor(
-    private _alertService: AppAlertService
-  ) {}
-
-  displayConfirmDialog(message: string, title?: string, actions: AppAlertAction<any>[] = this._defaultActions): Observable<any> {
-    const alert: AppAlert<boolean> = { message, title, level: 'info', actions, blocking: true };
-    const config: AppAlertConfig = { cancelable: false };
-    return this._alertService.displayAlert(alert, config);
+  displayConfirmDialog(message: string, title?: string, confirmTxt?: string, cancelTxt?: string): Observable<boolean> {
+    return from(
+      confirm({
+        title,
+        message,
+        cancelButtonText: cancelTxt ? cancelTxt : 'Cancel',
+        okButtonText: confirmTxt ? confirmTxt : 'Confirm',
+        cancelable: false
+      })
+    );
   }
 }
