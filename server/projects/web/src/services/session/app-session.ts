@@ -45,7 +45,6 @@ export async function appTokenLogin(appSessionToken: string): Promise<LoginRespo
   try {
     const appSessionEntity: AppSessionEntity = await getRepository(AppSessionEntity).findOne({ appSessionToken });
     if (appSessionEntity) {
-      saveAppSessionToken(appSessionEntity.account);
       return { account: appSessionEntity.account, appSessionToken };
     }
     throw new Error('Mobile app session token not found');

@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AppAuthenticationService } from '~app/app-session/services/app-authentication/app-authentication.service';
 
 @Component({
   selector: 'foodweb-app-home',
@@ -9,18 +7,8 @@ import { AppAuthenticationService } from '~app/app-session/services/app-authenti
 })
 export class AppHomeComponent implements OnInit {
 
-  constructor(
-    private _activatedRoute: ActivatedRoute,
-    private _authService: AppAuthenticationService
-  ) {}
+  constructor() {}
 
-  ngOnInit() {
-    if (!!this._activatedRoute.snapshot.params['login']) {
-      // Logout if directed to '/home/login' with an impersonationToken query param present.
-      if (!!this._activatedRoute.snapshot.queryParams['impersonationToken']) {
-        this._authService.logout();
-      }
-    }
-  }
+  ngOnInit() {}
 
 }

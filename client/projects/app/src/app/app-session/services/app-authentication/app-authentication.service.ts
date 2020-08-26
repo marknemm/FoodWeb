@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RouterExtensions } from '@nativescript/angular';
-import { Observable, of, NEVER } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AppSessionService } from '~app/app-session/services/app-session/app-session.service';
 import { Account, AccountHelper, AppTokenLoginRequest, LoginRequest, LoginResponse } from '~shared';
@@ -18,7 +18,7 @@ export class AppAuthenticationService extends AuthenticationService {
     protected _accountHelper: AccountHelper,
     protected _alertQueueService: AlertQueueService,
     protected _httpClient: HttpClient,
-    protected _router: RouterExtensions,
+    protected _routerExt: RouterExtensions,
     protected _sessionService: AppSessionService,
     private _httpResponseService: HttpResponseService,
   ) {
@@ -50,9 +50,11 @@ export class AppAuthenticationService extends AuthenticationService {
    */
   protected _handleLoginSuccess(response: LoginResponse, goHomeOnSuccess = false): Account {
     const account: Account = super._handleLoginSuccess(response);
-    this._sessionService.saveAppSessionToken(response.appSessionToken);
+    if (response.appSessionToken) {
+      this._sessionService.saveAppSessionToken(response.appSessionToken);
+    }
     if (goHomeOnSuccess) {
-      this._router.navigate(['/home']);
+      this._routerExt.navigate(['/home'], { clearHistory: true });
     }
     return account;
   }
@@ -99,8 +101,8 @@ export class AppAuthenticationService extends AuthenticationService {
    * Logs the user out and returns the user to the login page.
    */
   logout(): void {
-    this._router.navigate(['/login']);
     super.logout();
     this._sessionService.deleteAppSessionToken();
+    this._routerExt.navigate(['login'], { clearHistory: true });
   }
 }
