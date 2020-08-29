@@ -53,8 +53,7 @@ export class AdminAccountCreateComponent implements OnInit, OnDestroy {
    * Creates the account.
    */
   createAccount(): void {
-    this.adminAccountForm.markAllAsTouched();
-    if (this.adminAccountForm.valid) {
+    if (this.adminAccountForm.checkValidity()) {
       const account: Account = this.adminAccountForm.toAccount();
       const password: string = this.adminAccountForm.password;
       const accountCreateOpts: AccountCreateOptions = this.adminAccountForm.accountCreateOptions;

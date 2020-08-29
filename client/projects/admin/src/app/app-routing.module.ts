@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminBootstrapService } from './admin-bootstrap/services/admin-bootstrap/admin-bootstrap.service';
+import { AdminConsoleComponent } from './admin-console/components/admin-console/admin-console.component';
 import { AdminShellComponent } from './admin-shell/components/admin-shell/admin-shell.component';
-import { AdminConsoleComponent } from './components/admin-console/admin-console.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'console' },

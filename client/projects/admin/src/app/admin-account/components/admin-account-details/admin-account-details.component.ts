@@ -12,10 +12,7 @@ import { SignupVerificationService } from '~web/signup/services/signup-verificat
 @Component({
   selector: 'foodweb-admin-account-details',
   templateUrl: './admin-account-details.component.html',
-  styleUrls: [
-    '../../../../../../web/src/app/account/components/account-details/account-details.component.scss',
-    './admin-account-details.component.scss'
-  ]
+  styleUrls: ['./admin-account-details.component.scss']
 })
 export class AdminAccountDetailsComponent extends AccountDetailsComponent implements OnInit {
 

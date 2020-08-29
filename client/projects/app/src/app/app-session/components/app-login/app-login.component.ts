@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppAuthenticationService } from '~app/app-session/services/app-authentication/app-authentication.service';
 import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left-nav.service';
@@ -12,7 +12,7 @@ export { LoginFormChange };
   templateUrl: './app-login.component.html',
   styleUrls: ['./app-login.component.scss']
 })
-export class AppLoginComponent extends LoginBaseComponent implements OnInit, OnDestroy {
+export class AppLoginComponent extends LoginBaseComponent implements OnInit {
 
   constructor(
     private _leftNavService: AppLeftNavService,
@@ -27,9 +27,5 @@ export class AppLoginComponent extends LoginBaseComponent implements OnInit, OnD
   ngOnInit() {
     super.ngOnInit();
     this._leftNavService.lock();
-  }
-
-  ngOnDestroy() {
-    this._leftNavService.unlock();
   }
 }

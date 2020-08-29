@@ -1,11 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { AccountHelper, DeliveryHelper, DonationHelper, JSONDateReviver, OperationHoursHelper } from '~shared';
 import { AlertModule } from '~web/alert/alert.module';
-import { MaterialModule } from '~web/material.module';
 import { EditSaveButtonComponent } from './child-components/edit-save-button/edit-save-button.component';
 import { PaginatorComponent } from './child-components/paginator/paginator.component';
 import { ProgressIndicatorComponent } from './child-components/progress-indicator/progress-indicator.component';
@@ -32,9 +37,15 @@ import { ReturnLinkDirective } from './directives/return-link/return-link.direct
     RouterModule.forChild([]),
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
-    MaterialModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
     NgxMaterialTimepickerModule,
+    ReactiveFormsModule,
     AlertModule,
   ],
   exports: [
@@ -48,13 +59,6 @@ import { ReturnLinkDirective } from './directives/return-link/return-link.direct
     FragmentAccordianDirective,
     YesNoComponent,
     SearchBarComponent
-  ],
-  providers: [
-    AccountHelper,
-    OperationHoursHelper,
-    DonationHelper,
-    DeliveryHelper,
-    JSONDateReviver
   ]
 })
 export class SharedModule {}

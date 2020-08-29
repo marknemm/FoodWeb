@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 
 @Directive({
-  selector: '[foodWebConfirmButton]'
+  selector: '[foodwebConfirmButton]'
 })
 export class ConfirmButtonDirective {
 

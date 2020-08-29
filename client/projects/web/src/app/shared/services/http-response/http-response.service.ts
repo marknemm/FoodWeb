@@ -27,6 +27,16 @@ export class HttpResponseService {
     return !!this._loadingRecords.get(httpResponse$);
   }
 
+  /**
+   * Handles an HTTP response based on given options.
+   * Some examples of the handling include:
+   * - Triggering a blocking page progress indicator until a response is received.
+   * - Processing and displaying HTTP error responses via a non-blocking warnig alert.
+   * - Forwarding the response value to a configured immutable store (See ImmutableStore for more details).
+   * - Displaying a configured non-blocking success alert message upon reception of a success response.
+   * @param opts An optional set of HTTP response handler options. See HttpResponseHandlerOptions for default values.
+   * @return A pipeable rxjs operator function.
+   */
   handleHttpResponse<T>(opts: HttpResponseHandlerOptions<T> = {}): OperatorFunction<any, T> {
     return (httpResponse$: Observable<T>): Observable<T> => {
       opts = this._fillDefaultHttpHandlerOpts(opts);

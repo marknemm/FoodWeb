@@ -1,12 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AccountModule } from '~web/account/account.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
-import { DonationDeliverySharedModule } from '~web/donation-delivery-shared/donation-delivery-shared.module';
+import { DonationSharedModule } from '~web/donation-shared/donation-shared.module';
 import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { MapModule } from '~web/map/map.module';
-import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { DeliveryDonationInfoComponent } from './child-components/delivery-donation-info/delivery-donation-info.component';
 import { DeliveryFiltersComponent } from './child-components/delivery-filters/delivery-filters.component';
@@ -31,19 +35,19 @@ import { DeliveryDetailsRouterLinkPipe } from './pipes/delivery-details-router-l
   ],
   imports: [
     DeliveryRoutingModule,
-    AccountModule,
     CommonModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    AccountSharedModule,
     DateTimeModule,
-    DonationDeliverySharedModule,
+    DonationSharedModule,
     FilteredListModule,
     MapModule,
-    MaterialModule,
-    ReactiveFormsModule,
     SharedModule
-  ],
-  exports: [
-    DeliveryDetailsRouterLinkPipe,
-    DeliveryTeaserComponent
   ]
 })
 export class DeliveryModule {}

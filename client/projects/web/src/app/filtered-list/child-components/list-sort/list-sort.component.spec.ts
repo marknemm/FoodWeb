@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+
 import { ListSortComponent } from './list-sort.component';
 
 describe('ListSortComponent', () => {
@@ -9,7 +9,7 @@ describe('ListSortComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ListSortComponent ],
-      imports: [IonicModule.forRoot()]
+
     }).compileComponents();
 
     fixture = TestBed.createComponent(ListSortComponent);

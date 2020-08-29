@@ -4,7 +4,7 @@ import { AdminDonationClaimService } from '~admin/admin-donation/services/admin-
 import { DeliveryHelper, Donation, DonationHelper, DonationStatus } from '~shared';
 import { DeliveryScheduleService } from '~web/delivery/services/delivery-schedule/delivery-schedule.service';
 import { DeliveryStatusUpdateService } from '~web/delivery/services/delivery-status-update/delivery-status-update.service';
-import { DonationActionsService } from '~web/donation-delivery-shared/services/donation-actions/donation-actions.service';
+import { DonationActionsService } from '~web/donation-shared/services/donation-actions/donation-actions.service';
 import { DonationDeleteService } from '~web/donation/services/donation-delete/donation-delete.service';
 
 @Injectable({

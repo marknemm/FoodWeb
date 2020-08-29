@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { AccountModule } from '~web/account/account.module';
-import { MaterialModule } from '~web/material.module';
+import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { AgreementBulletPointsComponent } from './child-components/agreement-bullet-points/agreement-bullet-points.component';
 import { SignupVerificationComponent } from './components/signup-verification/signup-verification.component';
@@ -16,19 +18,18 @@ import { SignupRoutingModule } from './signup-routing.module';
     SignupComponent,
     SignupVerificationComponent,
     TermsConditionsDialogComponent,
-    AgreementBulletPointsComponent
+    AgreementBulletPointsComponent,
   ],
   imports: [
     SignupRoutingModule,
     CommonModule,
     ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDialogModule,
     NgxMaterialTimepickerModule,
-    MaterialModule,
     SharedModule,
-    AccountModule
-  ],
-  exports: [
-    SignupComponent
+    AccountSharedModule,
   ]
 })
 export class SignupModule {}

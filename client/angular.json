@@ -25,7 +25,7 @@
             "index": "projects/admin/src/index.html",
             "main": "projects/admin/src/main.ts",
             "polyfills": "projects/admin/src/polyfills.ts",
-            "tsConfig": "projects/admin/tsconfig.json",
+            "tsConfig": "projects/admin/tsconfig.app.json",
             "allowedCommonJsDependencies": [
               "event-source-polyfill",
               "google-polyline",
@@ -54,7 +54,7 @@
             },
             "fileReplacements": [
               {
-                "replace": "src/environments/environment.ts",
+                "replace": "projects/web/src/environments/environment.ts",
                 "with": "projects/admin/src/environments/environment.ts"
               }
             ]
@@ -67,7 +67,7 @@
                   "with": "projects/admin/src/environments/environment.hmr.ts"
                 },
                 {
-                  "replace": "src/environments/environment.ts",
+                  "replace": "projects/web/src/environments/environment.ts",
                   "with": "projects/admin/src/environments/environment.hmr.ts"
                 }
               ]
@@ -79,7 +79,7 @@
                   "with": "projects/admin/src/environments/environment.prod.ts"
                 },
                 {
-                  "replace": "src/environments/environment.ts",
+                  "replace": "projects/web/src/environments/environment.ts",
                   "with": "projects/admin/src/environments/environment.prod.ts"
                 }
               ],
@@ -152,7 +152,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/admin/tsconfig.json",
+              "projects/admin/tsconfig.app.json",
               "projects/admin/tsconfig.spec.json",
               "projects/admin/e2e/tsconfig.json"
             ],

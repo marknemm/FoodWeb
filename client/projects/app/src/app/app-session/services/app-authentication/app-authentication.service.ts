@@ -4,6 +4,7 @@ import { RouterExtensions } from '@nativescript/angular';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AppSessionService } from '~app/app-session/services/app-session/app-session.service';
+import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left-nav.service';
 import { Account, AccountHelper, AppTokenLoginRequest, LoginRequest, LoginResponse } from '~shared';
 import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
@@ -18,6 +19,7 @@ export class AppAuthenticationService extends AuthenticationService {
     protected _accountHelper: AccountHelper,
     protected _alertQueueService: AlertQueueService,
     protected _httpClient: HttpClient,
+    protected _leftNavService: AppLeftNavService,
     protected _routerExt: RouterExtensions,
     protected _sessionService: AppSessionService,
     private _httpResponseService: HttpResponseService,
@@ -50,9 +52,8 @@ export class AppAuthenticationService extends AuthenticationService {
    */
   protected _handleLoginSuccess(response: LoginResponse, goHomeOnSuccess = false): Account {
     const account: Account = super._handleLoginSuccess(response);
-    if (response.appSessionToken) {
-      this._sessionService.saveAppSessionToken(response.appSessionToken);
-    }
+    this._sessionService.saveAppSessionToken(response.appSessionToken);
+    this._leftNavService.unlock();
     if (goHomeOnSuccess) {
       this._routerExt.navigate(['/home'], { clearHistory: true });
     }

@@ -24,6 +24,6 @@ export class AdminSessionModule {
         // In base web code, anywhere where SessionService is provided, provide AppSessionService instead.
         { provide: SessionService, useExisting: AdminSessionService }
       ]
-    }
+    };
   }
 }

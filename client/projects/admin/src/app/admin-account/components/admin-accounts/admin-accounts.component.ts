@@ -7,10 +7,7 @@ import { AccountReadService } from '~web/account/services/account-read/account-r
 @Component({
   selector: 'foodweb-admin-accounts',
   templateUrl: './admin-accounts.component.html',
-  styleUrls: [
-    '../../../../../../web/src/app/account/components/accounts/accounts.component.scss',
-    './admin-accounts.component.scss'
-  ]
+  styleUrls: ['./admin-accounts.component.scss']
 })
 export class AdminAccountsComponent extends AccountsComponent {
 

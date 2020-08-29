@@ -30,7 +30,7 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
   }
 
   private _initStyles(): void {
-    const containerStyles: CSSStyleDeclaration = this.container.style
+    const containerStyles: CSSStyleDeclaration = this.container.style;
     containerStyles.transition = `height ${this.duration}s ease-in-out`;
     this.form.style.transition = `opacity ${this.duration}s ease-in-out`;
     this.display.style.transition = `opacity ${this.duration}s ease-in-out`;

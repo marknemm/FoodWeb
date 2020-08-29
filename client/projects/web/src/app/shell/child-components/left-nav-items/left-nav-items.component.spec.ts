@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+
 
 import { LeftNavItemsComponent } from './left-nav-items.component';
 
@@ -10,7 +10,7 @@ describe('LeftNavItemsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ LeftNavItemsComponent ],
-      imports: [IonicModule.forRoot()]
+
     }).compileComponents();
 
     fixture = TestBed.createComponent(LeftNavItemsComponent);

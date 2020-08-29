@@ -1,7 +1,7 @@
 import { AbstractControlOptions, AsyncValidatorFn, FormBuilder, FormGroup, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { TypedAbstractControl } from '~web/data-structure/typed-abstract-control';
 import { takeUntil } from 'rxjs/operators';
+import { TypedAbstractControl } from '~web/data-structure/typed-abstract-control';
 
 export class TypedFormGroup<T> extends FormGroup {
 
@@ -57,6 +57,11 @@ export class TypedFormGroup<T> extends FormGroup {
     return this.get(name).valueChanges.pipe(
       takeUntil(destroy$)
     );
+  }
+
+  checkValidity(): boolean {
+    this.markAllAsTouched();
+    return this.valid;
   }
 }
 

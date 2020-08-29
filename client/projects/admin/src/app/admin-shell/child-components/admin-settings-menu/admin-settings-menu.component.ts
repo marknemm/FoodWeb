@@ -5,10 +5,7 @@ import { SessionService } from '~web/session/services/session/session.service';
 @Component({
   selector: 'foodweb-admin-settings-menu',
   templateUrl: './admin-settings-menu.component.html',
-  styleUrls: [
-    '../../../../../../web/src/app/shell/child-components/settings-menu/settings-menu.component.scss',
-    './admin-settings-menu.component.scss'
-  ],
+  styleUrls: ['./admin-settings-menu.component.scss'],
 })
 export class AdminSettingsMenuComponent implements OnInit {
 

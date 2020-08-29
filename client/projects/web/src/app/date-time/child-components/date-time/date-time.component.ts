@@ -1,6 +1,7 @@
-import { Component, forwardRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
-import { ErrorStateMatcher, FloatLabelType } from '@angular/material/core';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { FloatLabelType } from '@angular/material/form-field';
 import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
 import { DateTimeForm } from '~web/date-time/forms/date-time.form';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
@@ -14,7 +15,7 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
     { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeComponent), multi: true }
   ])
 })
-export class DateTimeComponent extends FormComponentBase<Date> implements OnChanges, Validator {
+export class DateTimeComponent extends FormComponentBase<Date> implements OnInit, OnChanges, Validator {
 
   @Input() allowClear = false;
   @Input() allowUndefTime = false;
@@ -34,7 +35,7 @@ export class DateTimeComponent extends FormComponentBase<Date> implements OnChan
   @Input() minDate = new Date();
   @Input() minDateWidth = '';
   @Input() minutesGap = 5;
-  @Input() primaryLabel = ''
+  @Input() primaryLabel = '';
   @Input() timePlaceholder = 'Time';
 
   /**

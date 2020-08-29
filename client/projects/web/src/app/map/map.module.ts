@@ -6,7 +6,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
-import { DirectionsExtractor, MapWaypointConverter } from '~shared';
 import { DirectionStepsComponent } from './child-components/direction-steps/direction-steps.component';
 import { MapMarkerInfoComponent } from './child-components/map-marker-info/map-marker-info.component';
 import { MapOptionsComponent } from './child-components/map-options/map-options.component';
@@ -34,10 +33,6 @@ import { DirectionStepsExtractorPipe } from './pipes/direction-steps-extractor/d
     DirectionStepsComponent,
     MapComponent,
     MapOptionsComponent
-  ],
-  providers: [
-    MapWaypointConverter,
-    DirectionsExtractor
   ]
 })
 export class MapModule {}

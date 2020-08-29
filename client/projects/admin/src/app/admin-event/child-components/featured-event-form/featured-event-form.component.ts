@@ -31,8 +31,7 @@ export class FeaturedEventFormComponent implements OnInit, OnChanges {
   }
 
   onSubmit(): void {
-    this.featuredEventForm.markAllAsTouched();
-    if (this.featuredEventForm.valid) {
+    if (this.featuredEventForm.checkValidity()) {
       this.save.emit(this.featuredEventForm.submitValue);
     }
   }

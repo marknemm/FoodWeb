@@ -2,9 +2,7 @@
   <mat-card>
     <mat-card-title>Signup Verification {{ verifySuccess ? 'Successful' : errMessage ? 'Failed' : '' }}</mat-card-title>
     <mat-card-content>
-      <div *ngIf="signupVerificationService.loading" class="progress-spinner-container">
-        <mat-progress-spinner color="primary" mode="indeterminate" class="progress-spinner"></mat-progress-spinner>
-      </div>
+      <foodweb-progress-indicator [trigger]="signupVerificationService.loading" [blocking]="true"></foodweb-progress-indicator>
       <div *ngIf="verifySuccess">
         <p>Signup verification was successful! You can now take full advantage of the Food Web platform.</p>
         <p>Click <a [routerLink]="['/home']">here</a> to return to the home page.</p>

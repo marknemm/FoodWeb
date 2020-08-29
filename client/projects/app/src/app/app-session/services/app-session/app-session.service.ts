@@ -26,7 +26,9 @@ export class AppSessionService extends SessionService {
    * @param token The app session token to save.
    */
   saveAppSessionToken(token: string): void {
-    this.save('appSessionToken', token);
+    if (token) {
+      this.save('appSessionToken', token);
+    }
   }
 
   /**

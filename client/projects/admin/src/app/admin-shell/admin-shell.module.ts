@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AccountModule } from '~web/account/account.module';
-import { ShellModule } from '~web/shell/shell.module';
-import { HeaderComponent } from '~web/shell/components/header/header.component';
-import { LeftNavComponent } from '~web/shell/components/left-nav/left-nav.component';
-import { MaterialModule } from '~web/material.module';
+import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { SharedModule } from '~web/shared/shared.module';
+import { ShellModule } from '~web/shell/shell.module';
 import { AdminHeaderActionsComponent } from './child-components/admin-header-actions/admin-header-actions.component';
 import { AdminLeftNavItemsComponent } from './child-components/admin-left-nav-items/admin-left-nav-items.component';
 import { AdminSettingsMenuComponent } from './child-components/admin-settings-menu/admin-settings-menu.component';
@@ -18,21 +18,21 @@ import { AdminShellComponent } from './components/admin-shell/admin-shell.compon
     AdminShellComponent,
     AdminHeaderActionsComponent,
     AdminLeftNavItemsComponent,
-    AdminSettingsMenuComponent
+    AdminSettingsMenuComponent,
   ],
   imports: [
-    AccountModule,
+    AccountSharedModule,
     ShellModule,
     CommonModule,
     FontAwesomeModule,
-    MaterialModule,
+    MatIconModule,
+    MatListModule,
+    MatMenuModule,
     RouterModule,
-    SharedModule
+    SharedModule,
   ],
   exports: [
-    AdminShellComponent,
-    HeaderComponent,
-    LeftNavComponent
+    ShellModule,
   ]
 })
 export class AdminShellModule {}

@@ -1,0 +1,91 @@
+<form [formGroup]="formGroup" class="donate-form" (submit)="onSubmit()">
+
+  <mat-card class="donate-card">
+    <mat-card-title>Donation Information</mat-card-title>
+    <mat-card-content>
+      <foodweb-account-select formControlName="donorAccount" accountType="Donor" placeholder="Donor Organization" filterPlaceholder="Search Donors..."></foodweb-account-select>
+      <foodweb-donation-form formGroupName="donateForm"></foodweb-donation-form>
+    </mat-card-content>
+  </mat-card>
+
+  <ng-container formGroupName="donateForm">
+    <mat-card class="donate-card">
+      <mat-card-title>Pickup Window</mat-card-title>
+      <mat-card-content>
+        <foodweb-date-time-range formGroupName="pickupWindow" [editing]="true" [minDate]="minDate"></foodweb-date-time-range>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="donate-card">
+      <mat-card-title>Contact Info</mat-card-title>
+      <mat-card-content>
+        <foodweb-contact-info [editing]="true" formGroupName="donorContactOverride"></foodweb-contact-info>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+
+  <mat-card class="donate-card">
+    <mat-card-title>Donation Claim</mat-card-title>
+    <mat-card-content>
+      <foodweb-account-select formControlName="receiverAccount" accountType="Receiver" placeholder="Receiver Organization" filterPlaceholder="Search Receivers..."></foodweb-account-select>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="donate-card" formGroupName="delivery" *ngIf="formGroup.receiverAccount">
+    <mat-card-title>Delivery</mat-card-title>
+    <mat-card-content>
+      <foodweb-account-select formControlName="volunteerAccount" accountType="Volunteer" placeholder="Volunteer" filterPaceholder="Search Volunteers..."></foodweb-account-select>
+      <ng-container *ngIf="formGroup.volunteerAccount">
+        <div class="block-label">Delivery Pickup Window</div>
+        <foodweb-date-time-range
+          formGroupName="pickupWindow"
+          [dateTimeRangeRadioConfig]="{
+            title: 'Choose a Delivery Pickup Window',
+            rangeWindow: formGroup.donateForm.pickupWindow,
+            allowPast: true
+          }"
+          [editing]="true"
+        ></foodweb-date-time-range>
+
+        <div class="block-label">Delivery Steps</div>
+        <foodweb-date-time
+          formControlName="startTime"
+          datePlaceholder="Start Date"
+          timePlaceholder="Start Time"
+          [allowClear]="true"
+          [minDate]="formGroup.deliveryForm.pickupWindow?.startDateTime"
+          [defaultDate]="formGroup.deliveryForm.pickupWindow?.startDateTime"
+          [defaultTime]="formGroup.deliveryForm.pickupWindow?.startDateTime | foodwebFormatTime"
+          [editing]="true">
+        </foodweb-date-time>
+        <foodweb-date-time
+          formControlName="pickupTime"
+          datePlaceholder="Pickup Date"
+          timePlaceholder="Pickup Time"
+          [allowClear]="true"
+          [minDate]="formGroup.deliveryForm.startTime"
+          [defaultDate]="formGroup.deliveryForm.startTime"
+          [defaultTime]="formGroup.deliveryForm.startTime | foodwebFormatTime"
+          [editing]="true"
+        ></foodweb-date-time>
+        <foodweb-date-time
+          formControlName="dropOffTime"
+          datePlaceholder="Drop-off Date"
+          timePlaceholder="Drop-off Time"
+          [allowClear]="true"
+          [minDate]="formGroup.deliveryForm.pickupTime"
+          [defaultDate]="formGroup.deliveryForm.pickupTime"
+          [defaultTime]="formGroup.deliveryForm.pickupTime | foodwebFormatTime"
+          [editing]="true"
+        ></foodweb-date-time>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="action-footer align-right">
+    <mat-slide-toggle formControlName="sendNotifications" class="send-notifications-toggle">Send Notifications</mat-slide-toggle>
+    <button mat-button type="button" color="warn" *ngIf="showCancelButton" (click)="onCancel()">{{ cancelButtonTxt }}</button>
+    <button mat-raised-button type="submit" color="primary">{{ submitButtonTxt }}</button>
+  </div>
+
+</form>

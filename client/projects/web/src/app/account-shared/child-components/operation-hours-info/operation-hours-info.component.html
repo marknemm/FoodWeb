@@ -1,0 +1,61 @@
+<div class="operation-hours-container" [ngClass]="{ 'limited': operationHoursLimited }" [formGroup]="formGroup" [foodwebDisplayEditTransition]="editing"
+  [form]="operationHoursForm" [display]="operationHoursDisplay" [heightRecalcAtMs]="[0, 50, 100, 150, 200, 250]" [recalcTrigger]="formGroup.valueChanges">
+  <div #operationHoursForm class="operation-hours-form">
+    <mat-slide-toggle formControlName="limitOperationHours" class="limit-availability-toggle fill">
+      Limit Availability
+    </mat-slide-toggle>
+    <div class="row operation-hours-grid">
+      <div class="col-lg-6">
+        <div *ngFor="let operationHoursForm of operationHoursFormArr.controls | slice : 0 : getColSplitIdx(operationHoursFormArr.controls)" class="operation-hours-form-container">
+          <div class="delete-container">
+            <foodweb-operation-hours [formGroup]="operationHoursForm" [editing]="editing"></foodweb-operation-hours>
+            <button mat-icon-button color="warn" type="button" class="delete-button" (click)="operationHoursFormArr.remove(operationHoursForm, confirmDialogService)">
+              <mat-icon [inline]="true">clear</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div *ngFor="let operationHoursForm of operationHoursFormArr.controls | slice : getColSplitIdx(operationHoursFormArr.controls)" class="operation-hours-form-container">
+          <div class="delete-container">
+            <foodweb-operation-hours [formGroup]="operationHoursForm" [editing]="editing"></foodweb-operation-hours>
+            <button mat-icon-button color="warn" type="button" class="delete-button" (click)="operationHoursFormArr.remove(operationHoursForm, confirmDialogService)">
+              <mat-icon [inline]="true">clear</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="add-button-container" *ngIf="editing && operationHoursLimited">
+      <button mat-button type="button" color="primary" class="no-pad" (click)="operationHoursFormArr.addBlankEntry()" [disabled]="formGroup.invalid">
+        <mat-icon>add</mat-icon>
+        <span>Add</span>
+      </button>
+    </div>
+  </div>
+
+  <div #operationHoursDisplay class="operation-hours-display" [ngClass]="{ 'contains-wed': containsWed }">
+    <div *ngIf="!operationHoursArr?.length; limitedAvailabilityTmpl">Availability Not Limited</div>
+    <ng-template #limitedAvailabilityTmpl>
+      <table>
+        <tr *ngFor="let operationHours of operationHoursArr | slice : 0 : getColSplitIdx(operationHoursArr, 2)">
+          <ng-container *ngTemplateOutlet="operationHourDisplayRowTmpl; context: { operationHours: operationHours }"></ng-container>
+        </tr>
+      </table>
+      <table>
+        <tr *ngFor="let operationHours of operationHoursArr | slice : getColSplitIdx(operationHoursArr, 2)">
+          <ng-container *ngTemplateOutlet="operationHourDisplayRowTmpl; context: { operationHours: operationHours }"></ng-container>
+        </tr>
+      </table>
+
+      <ng-template #operationHourDisplayRowTmpl let-operationHours="operationHours">
+        <td>
+          <div class="inline-label">{{ operationHours.weekday }}:</div>
+        </td>
+        <td>{{ operationHours.startTime | foodwebFormatTime }}</td>
+        <td>&nbsp;-&nbsp;</td>
+        <td>{{ operationHours.endTime | foodwebFormatTime }}</td>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

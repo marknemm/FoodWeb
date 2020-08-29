@@ -26,9 +26,7 @@ export class LeftNavItemsComponent implements OnInit {
   ngOnInit() {}
 
   _onNavigate(): void {
-    if (this._leftNavService.mode === 'over') {
-      this._leftNavService.toggle();
-    }
+    this._leftNavService.toggle();
   }
 
 }

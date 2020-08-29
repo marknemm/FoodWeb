@@ -4,8 +4,10 @@
     <mat-progress-spinner
       [color]="color"
       [diameter]="diameter"
+      [strokeWidth]="strokeWidth"
       [style.marginTop.px]="-diameter / 2" style.left="calc(50% - {{ diameter / 2 }}px)"
-      class="progress-spinner"></mat-progress-spinner>
+      class="progress-spinner"
+      mode="indeterminate"></mat-progress-spinner>
   </ng-container>
   <ng-container *ngIf="!blocking">
     <mat-progress-bar [color]="color" [mode]="progressBarMode" [value]="value" class="progress-bar"></mat-progress-bar>

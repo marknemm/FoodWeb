@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { AccountHelper, DeliveryHelper, DonationHelper } from '~shared';
-import { DonationAction, DonationActionsService } from '~web/donation-delivery-shared/services/donation-actions/donation-actions.service';
+import { DonationAction, DonationActionsService } from '~web/donation-shared/services/donation-actions/donation-actions.service';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
 

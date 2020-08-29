@@ -13,7 +13,7 @@ import { LocalStorageBucket, LocalStorageCacheService } from '~web/shared/servic
 export class DirectionsService {
 
   static readonly DEFAULT_POLYLINE_COLORS: string[] = ['green', 'rgb(247, 148, 7)', 'blue', 'purple', 'cyan', 'red'];
-  private static readonly DIRECTIONS_CACHE_KEY = 'foodWebDirectionsStore';
+  private static readonly DIRECTIONS_CACHE_KEY = 'foodwebDirectionsStore';
 
   readonly url = `${environment.server}/map`;
   private readonly _directionsCache: LocalStorageBucket<Waypoint[], Directions>;

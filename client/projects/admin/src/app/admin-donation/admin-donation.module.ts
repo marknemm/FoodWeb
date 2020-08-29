@@ -1,39 +1,40 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AccountModule } from '~web/account/account.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { AdminAccountSharedModule } from '~admin/admin-account-shared/admin-account-shared.module';
+import { AdminDonationSharedModule } from '~admin/admin-donation-shared/admin-donation-shared.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
 import { DonationRoutingModule } from '~web/donation/donation-routing.module';
 import { DonationModule } from '~web/donation/donation.module';
-import { DonorModule } from '~web/donor/donor.module';
-import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { AdminDonationRoutingModule } from './admin-donation-routing.module';
-import { AdminDonationFormComponent } from './child-components/admin-donation-form/admin-donation-form.component';
 import { AdminCreateDonationComponent } from './components/admin-create-donation/admin-create-donation.component';
 import { AdminEditDonationComponent } from './components/admin-edit-donation/admin-edit-donation.component';
 
 @NgModule({
   declarations: [
     AdminCreateDonationComponent,
-    AdminDonationFormComponent,
-    AdminEditDonationComponent
+    AdminEditDonationComponent,
   ],
   imports: [
     AdminDonationRoutingModule,
     DonationRoutingModule,
-    AccountModule,
+    AdminAccountSharedModule,
+    AdminDonationSharedModule,
     CommonModule,
     DateTimeModule,
     DonationModule,
-    DonorModule,
-    MaterialModule,
+    MatButtonModule,
+    MatCardModule,
+    MatSlideToggleModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
   ],
   exports: [
-    // Works as if we are extending the base Web DonationModule.
-    DonationModule
+    DonationModule, // Works as if we are extending the base Web DonationModule.
   ]
 })
 export class AdminDonationModule {}

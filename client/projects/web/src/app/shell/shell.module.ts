@@ -1,10 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AccountModule } from '~web/account/account.module';
-import { MaterialModule } from '~web/material.module';
-import { NotificationModule } from '~web/notification/notification.module';
+import { AccountSharedModule } from '~web/account-shared/account-shared.module';
+import { NotificationSharedModule } from '~web/notification-shared/notification-shared.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { HeaderActionsComponent } from './child-components/header-actions/header-actions.component';
 import { HeaderNavigationComponent } from './child-components/header-navigation/header-navigation.component';
@@ -31,16 +37,21 @@ import { ShellComponent } from './components/shell/shell.component';
   imports: [
     CommonModule,
     RouterModule,
-    MaterialModule,
+    MatBadgeModule,
+    MatButtonModule,
+    MatIconModule,
+    MatListModule,
+    MatMenuModule,
+    MatSidenavModule,
+    MatToolbarModule,
     SharedModule,
-    NotificationModule,
+    NotificationSharedModule,
     FontAwesomeModule,
-    AccountModule
+    AccountSharedModule
   ],
   exports: [
-    ShellComponent,
     HeaderComponent,
-    LeftNavComponent
+    LeftNavComponent,
   ]
 })
 export class ShellModule {}

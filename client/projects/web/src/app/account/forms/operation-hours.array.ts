@@ -1,7 +1,7 @@
 import { Observable, of } from 'rxjs';
 import { Constants, OperationHours, Weekday } from '~shared';
 import { TypedFormArray } from '~web/data-structure/typed-form-array';
-import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
+import { ConfirmDialog } from '~web/shared/interfaces/confirm-dialog';
 import { OperationHoursForm } from './operation-hours.form';
 
 export class OperationHoursArray extends TypedFormArray<OperationHours> {
@@ -38,10 +38,10 @@ export class OperationHoursArray extends TypedFormArray<OperationHours> {
     this.push({ weekday: <any>'', startTime: '', endTime: '' });
   }
 
-  remove(operationHoursForm: OperationHoursForm, confirmDialogService?: ConfirmDialogService): void {
+  remove(operationHoursForm: OperationHoursForm, confirmDialog?: ConfirmDialog): void {
     const idx: number = this.controls.indexOf(operationHoursForm);
     if (idx >= 0) {
-      this._getDeleteConfirmation(idx, confirmDialogService).subscribe(
+      this._getDeleteConfirmation(idx, confirmDialog).subscribe(
         (confirm: boolean) => {
           if (confirm) {
             this.removeAt(idx);
@@ -51,11 +51,11 @@ export class OperationHoursArray extends TypedFormArray<OperationHours> {
     }
   }
 
-  private _getDeleteConfirmation(idx: number, confirmDialogService: ConfirmDialogService): Observable<boolean> {
+  private _getDeleteConfirmation(idx: number, confirmDialog: ConfirmDialog): Observable<boolean> {
     const confirmMsg = 'Are you sure you wish to delete the operation hours?';
     let deleteConfirmation$: Observable<boolean> = of(true);
-    if (confirmDialogService && this.at(idx).value.startTime && this.at(idx).value.endTime) {
-      deleteConfirmation$ = confirmDialogService.displayConfirmDialog(confirmMsg, 'Confirm Delete');
+    if (confirmDialog && this.at(idx).value.startTime && this.at(idx).value.endTime) {
+      deleteConfirmation$ = confirmDialog.displayConfirmDialog(confirmMsg, 'Confirm Delete');
     }
     return deleteConfirmation$;
   }

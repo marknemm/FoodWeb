@@ -56,6 +56,6 @@ export class OperationHoursForm extends TypedFormGroup<OperationHours> {
         }
         return (control && control.invalid && control.touched);
       }
-    }
+    };
   }
 }

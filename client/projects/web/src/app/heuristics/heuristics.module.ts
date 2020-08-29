@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MaterialModule } from '~web/material.module';
+import { MatCardModule } from '@angular/material/card';
 import { SharedModule } from '~web/shared/shared.module';
 import { GeneralStatsCardComponent } from './child-components/general-stats-card/general-stats-card.component';
 
@@ -10,7 +10,7 @@ import { GeneralStatsCardComponent } from './child-components/general-stats-card
   ],
   imports: [
     CommonModule,
-    MaterialModule,
+    MatCardModule,
     SharedModule
   ],
   exports: [

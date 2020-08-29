@@ -8,17 +8,13 @@ import { Subject, Observable } from 'rxjs';
 export class LeftNavService {
 
   sticky = false;
+  mode: 'side' | 'over' = 'over';
 
   private _opened: boolean;
-  private _mode: 'side' | 'over';
   private _openedChanged = new Subject<boolean>();
   private _drawerContent: MatDrawerContent;
 
   constructor() {}
-
-  get mode(): 'side' | 'over' {
-    return this._mode;
-  }
 
   get opened(): boolean {
     return this._opened;

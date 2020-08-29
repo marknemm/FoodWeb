@@ -8,11 +8,12 @@ import { ProgressBarMode } from '@angular/material/progress-bar';
 })
 export class ProgressIndicatorComponent implements OnInit, OnChanges {
 
-  @Input() backdropColor = 'lightgray';
+  @Input() backdropColor = 'rgba(211, 211, 211, .5)';
   @Input() blocking = false;
   @Input() color = 'primary';
   @Input() diameter = 100;
   @Input() excludeBackdrop = false;
+  @Input() strokeWidth: number;
   @Input() trigger = false;
   @Input() value: number;
 

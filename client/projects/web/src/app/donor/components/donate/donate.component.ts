@@ -42,8 +42,7 @@ export class DonateComponent implements OnInit {
    * Submits the donation to be created on the server.
    */
   donate(): void {
-    this.formGroup.markAllAsTouched();
-    if (this.formGroup.valid) {
+    if (this.formGroup.checkValidity()) {
       const donationSaveData: DonationSaveData = this.formGroup.toDonationSaveData();
       this._donationSaveService.createDonation(donationSaveData).subscribe((savedDonation: Donation) => {
         this.savedDonation = savedDonation;

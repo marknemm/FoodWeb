@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+
 
 import { DeliveryTeaserComponent } from './delivery-teaser.component';
 
@@ -10,7 +10,7 @@ describe('DeliveryTeaserComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ DeliveryTeaserComponent ],
-      imports: [IonicModule.forRoot()]
+
     }).compileComponents();
 
     fixture = TestBed.createComponent(DeliveryTeaserComponent);
