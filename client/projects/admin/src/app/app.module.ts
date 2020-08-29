@@ -30,10 +30,10 @@ import { AppComponent } from './app.component';
     AppComponent,
   ],
   imports: [
+    AppRoutingModule,
     AdminShellModule,
     AdminSessionModule.forRoot(),
     AdminConsoleModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
     FontAwesomeModule,
@@ -48,7 +48,7 @@ import { AppComponent } from './app.component';
   ],
   providers: [
     // Define basic app tokens, interceptors, and config.
-    { provide: 'Window', useValue: window },
+    { provide: Window, useValue: window },
     { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top', duration: 5000 } },
     // In base web code, anywhere where DonationActionsService is provided, provide AdminDonationActionsService instead.

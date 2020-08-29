@@ -8,7 +8,7 @@
       (search)="filterAccounts(accountFilters.filtersForm.toAccountReadRequest())"
     ></foodweb-search-bar>
 
-    <a [routerLink]="['/account/compose-message']" queryParamsHandling="preserve" class="compose-message-link">
+    <a [routerLink]="['/account', 'compose-message']" queryParamsHandling="preserve" class="compose-message-link">
       <button mat-button type="button" matTooltip="Compose Message">
         <mat-icon>email</mat-icon>
       </button>

@@ -6,6 +6,7 @@ import { AdminAccountMessageComponent } from './components/admin-account-message
 import { AdminAccountsComponent } from './components/admin-accounts/admin-accounts.component';
 
 const routes: Routes = [
+  { path: 'my', component: AdminAccountDetailsComponent },
   { path: 'compose-message', component: AdminAccountMessageComponent },
   { path: 'create', component: AdminAccountCreateComponent },
   { path: 'create/:accountType', component: AdminAccountCreateComponent },

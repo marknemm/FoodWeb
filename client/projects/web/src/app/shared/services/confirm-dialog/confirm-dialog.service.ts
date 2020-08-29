@@ -22,13 +22,14 @@ export class ConfirmDialogService implements ConfirmDialog {
    */
   displayConfirmDialog(message: string, title?: string, confirmTxt?: string, cancelTxt?: string): Observable<boolean> {
     const cancel: AlertAction<boolean> = {
+      color: 'warn',
       text: cancelTxt ? cancelTxt : 'Cancel',
-      value: false
+      value: false,
     };
     const confirm: AlertAction<boolean> = {
+      cdkFocusPrimary: true,
       text: confirmTxt ? confirmTxt : 'Confirm',
       value: true,
-      cdkFocusPrimary: true
     };
 
     return this._alertService.displayAlert({
@@ -36,7 +37,7 @@ export class ConfirmDialogService implements ConfirmDialog {
       title,
       level: 'info',
       actions: [cancel, confirm],
-      blocking: true
+      blocking: true,
     }, { disableClose: true });
   }
 }

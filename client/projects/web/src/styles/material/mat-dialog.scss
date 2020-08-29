@@ -11,8 +11,10 @@
     }
 
     .mat-toolbar:first-child {
-      margin: -24px -24px 12px -24px;
       width: calc(100% + 48px);
+      margin: -24px -24px 12px;
+      padding-left: 24px;
+      padding-right: 24px;
       max-height: 60px;
       border-top-left-radius: inherit;
       border-top-right-radius: inherit;

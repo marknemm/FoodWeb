@@ -11,7 +11,7 @@ export class IeAlertService {
   ) {}
 
   showIEWarning(): void {
-    if (window.document['documentMode']) { // If IE feature exists.
+    if (document['documentMode']) { // If IE feature exists.
       this._alertService.displayAlert({
         title: 'Internet Explorer Detected',
         message: `

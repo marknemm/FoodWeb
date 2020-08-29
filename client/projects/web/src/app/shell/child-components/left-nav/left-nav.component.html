@@ -1,6 +1,6 @@
 <mat-drawer-container class="left-nav-container">
   <mat-drawer
-    mode="Over"
+    [mode]="leftNavService.mode"
     [ngClass]="{ sticky: leftNavService.sticky }"
     [opened]="leftNavService.opened"
     (openedChange)="leftNavService.opened = $event">

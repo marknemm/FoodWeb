@@ -20,6 +20,7 @@ import { ConfirmButtonDirective } from './directives/confirm-button/confirm-butt
 import { DisplayEditTransitionDirective } from './directives/display-edit-transition/display-edit-transition.directive';
 import { FragmentAccordianDirective } from './directives/fragment-accordian/fragment-accordian.directive';
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
+import { WindowSizeDirective } from './directives/window-size/window-size.directive';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ReturnLinkDirective } from './directives/return-link/return-link.direct
     DisplayEditTransitionDirective,
     FragmentAccordianDirective,
     YesNoComponent,
-    SearchBarComponent
+    SearchBarComponent,
+    WindowSizeDirective
   ],
   imports: [
     RouterModule.forChild([]),

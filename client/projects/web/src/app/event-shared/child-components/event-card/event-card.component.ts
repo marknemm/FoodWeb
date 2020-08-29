@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FeaturedEvent } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { EventRegistrationForm } from '~web/event/forms/event-registration.form';
@@ -26,10 +26,10 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   constructor(
     public eventRegistrationService: RegisterEventService,
-    @Inject('Window') public window: Window,
+    public window: Window,
     private _dateTimeService: DateTimeService,
+    private _mapAppLinkService: MapAppLinkService,
     private _sessionService: SessionService,
-    private _mapAppLinkService: MapAppLinkService
   ) { }
 
   get directionsHref(): string {

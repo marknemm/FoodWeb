@@ -19,13 +19,16 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
 
   private _destory$ = new Subject();
 
-  constructor(elementRef: ElementRef) {
+  constructor(
+    private _window: Window,
+    elementRef: ElementRef
+  ) {
     this.container = elementRef.nativeElement;
   }
 
   ngOnInit() {
     this._recalcContainerHeight = this._recalcContainerHeight.bind(this);
-    window.addEventListener('resize', this._recalcContainerHeight);
+    this._window.addEventListener('resize', this._recalcContainerHeight);
     this._initStyles();
   }
 
@@ -82,7 +85,7 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
   }
 
   ngOnDestroy() {
-    window.removeEventListener('resize', this._recalcContainerHeight);
+    this._window.removeEventListener('resize', this._recalcContainerHeight);
     this._destory$.next();
   }
 }

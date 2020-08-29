@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { catchError, finalize } from 'rxjs/operators';
 import { environment } from '~admin/../environments/environment';
 import { Account, ImpersonateTokenResponse } from '~shared';
@@ -19,7 +19,7 @@ export class ImpersonateService {
     private _alertQueueService: AlertQueueService,
     private _httpClient: HttpClient,
     private _pageProgressService: PageProgressService,
-    @Inject('Window') private _window: Window
+    private _window: Window,
   ) {}
 
   /**

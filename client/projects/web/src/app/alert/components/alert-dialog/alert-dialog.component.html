@@ -1,7 +1,7 @@
 <div class="alert-dialog-container">
   <mat-toolbar [color]="color" *ngIf="alert.title">
     <h1 mat-dialog-title>{{ alert.title }}</h1>
-    <button mat-icon-button type="button" class="close-button" mat-dialog-close>
+    <button mat-icon-button *ngIf="!dialogRef.disableClose" type="button" class="close-button" mat-dialog-close>
       <mat-icon aria-label="Close">close</mat-icon>
     </button>
   </mat-toolbar>

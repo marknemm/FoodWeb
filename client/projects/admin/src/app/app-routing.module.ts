@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminBootstrapService } from './admin-bootstrap/services/admin-bootstrap/admin-bootstrap.service';
-import { AdminConsoleComponent } from './admin-console/components/admin-console/admin-console.component';
-import { AdminShellComponent } from './admin-shell/components/admin-shell/admin-shell.component';
+import { AdminBootstrapService } from '~admin/admin-bootstrap/services/admin-bootstrap/admin-bootstrap.service';
+import { AdminConsoleComponent } from '~admin/admin-console/components/admin-console/admin-console.component';
+import { AdminShellComponent } from '~admin/admin-shell/components/admin-shell/admin-shell.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'console' },
   { path: 'login', pathMatch: 'full', redirectTo: 'bootstrap/login' },
-  { path: 'bootstrap', loadChildren: () => import('src/app/admin-bootstrap/admin-bootstrap.module').then(mod => mod.AdminBootstrapModule) },
+  { path: 'bootstrap', loadChildren: () => import('~admin/admin-bootstrap/admin-bootstrap.module').then(mod => mod.AdminBootstrapModule) },
   {
     path: '',
     component: AdminShellComponent,

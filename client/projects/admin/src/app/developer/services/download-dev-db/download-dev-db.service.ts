@@ -12,7 +12,7 @@ export class DownloadDevDbService {
 
   constructor(
     public httpResponseService: HttpResponseService,
-    private _httpClient: HttpClient
+    private _httpClient: HttpClient,
   ) {}
 
   /**
@@ -26,7 +26,7 @@ export class DownloadDevDbService {
       ).subscribe((fileBlob: any) => {
         // Requires entire file to be loaded in memory, kind of hacky, but works for now...
         const downloadLink = document.createElement('a');
-        downloadLink.href = window.URL.createObjectURL(fileBlob);
+        downloadLink.href = URL.createObjectURL(fileBlob);
         downloadLink.download = 'dev-db-init.pgsql';
         downloadLink.click();
       });

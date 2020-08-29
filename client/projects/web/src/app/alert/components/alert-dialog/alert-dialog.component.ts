@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit, TemplateRef } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Alert } from '~web/alert/interfaces/alert';
 
 @Component({
@@ -12,7 +12,8 @@ export class AlertDialogComponent<T = any> implements OnInit {
   readonly color: string;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public alert: Alert<T>
+    @Inject(MAT_DIALOG_DATA) public alert: Alert<T>,
+    public dialogRef: MatDialogRef<AlertDialogComponent>,
   ) {
     this.color = `alert-${this.alert.level}`;
   }

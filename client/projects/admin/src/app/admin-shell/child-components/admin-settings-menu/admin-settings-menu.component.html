@@ -1,20 +1,16 @@
 <span *ngIf="sessionService.loggedIn" class="settings-button-container" matTooltip="Settings">
-  <button mat-button type="button" class="settings-button" [matMenuTriggerFor]="settingsMenu">
-    <foodweb-profile-img width="28px" height="100%" [imgUrl]="sessionService.account.profileImgUrl"></foodweb-profile-img>
+  <button mat-icon-button type="button" class="settings-button" matTooltip="Settings" [matMenuTriggerFor]="settingsMenu">
+    <foodweb-profile-img height="100%" [imgUrl]="sessionService.account.profileImgUrl"></foodweb-profile-img>
   </button>
 </span>
 
-<mat-menu #settingsMenu="matMenu" panelClass="settings-menu">
-  <mat-action-list class="settings-menu-content">
-    <a [routerLink]="['/account/my']" class="account">
-      <button mat-list-item type="button">
-        <mat-icon>supervisor_account</mat-icon> Account
-      </button>
+<mat-menu #settingsMenu="matMenu" class="header-submenu">
+  <mat-nav-list>
+    <a mat-list-item [routerLink]="['/account/my']" class="account">
+      <mat-icon>supervisor_account</mat-icon> Account
     </a>
-    <a [routerLink]="['/']" (click)="authService.logout()" class="logout">
-      <button mat-list-item type="button">
-        <mat-icon>power_settings_new</mat-icon> Logout
-      </button>
+    <a mat-list-item [routerLink]="['/']" (click)="authService.logout()" class="logout">
+      <mat-icon>power_settings_new</mat-icon> Logout
     </a>
-  </mat-action-list>
+  </mat-nav-list>
 </mat-menu>

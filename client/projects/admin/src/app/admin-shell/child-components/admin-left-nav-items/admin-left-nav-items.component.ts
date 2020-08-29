@@ -17,7 +17,10 @@ export class AdminLeftNavItemsComponent implements OnInit {
     private _leftNavService: LeftNavService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this._leftNavService.mode = 'side';
+    this._leftNavService.toggle();
+  }
 
   _onNavigate(): void {
     if (this._leftNavService.mode === 'over') {

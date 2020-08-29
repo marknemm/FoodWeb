@@ -40,7 +40,7 @@
               "projects/admin/src/assets"
             ],
             "styles": [
-              "styles/styles.scss",
+              "projects/web/src/styles/styles.scss",
               "projects/admin/src/styles/admin-styles.scss",
               "./node_modules/quill/dist/quill.core.css",
               "./node_modules/quill/dist/quill.bubble.css",
@@ -48,7 +48,7 @@
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "styles",
+                "projects/web/src/styles",
                 "projects/admin/src/styles"
               ]
             },
@@ -136,12 +136,12 @@
               "assets"
             ],
             "styles": [
-              "styles/styles.scss",
+              "projects/web/src/styles/styles.scss",
               "projects/admin/src/styles/admin-styles.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "styles",
+                "projects/web/src/styles",
                 "projects/admin/src/styles"
               ]
             },
@@ -229,12 +229,10 @@
               "projects/web/src/assets"
             ],
             "styles": [
-              "styles/styles.scss",
-              "projects/web/src/styles/main-styles.scss"
+              "projects/web/src/styles/styles.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "styles",
                 "projects/web/src/styles"
               ]
             },
@@ -408,13 +406,11 @@
               "src/assets"
             ],
             "styles": [
-              "styles/styles.scss",
-              "src/styles/main-styles.scss"
+              "projects/web/src/styles/styles.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "styles",
-                "src/styles"
+                "projects/web/src/styles"
               ]
             },
             "scripts": []

@@ -14,12 +14,12 @@ import { NotificationSharedModule } from '~web/notification-shared/notification-
 import { SharedModule } from '~web/shared/shared.module';
 import { HeaderActionsComponent } from './child-components/header-actions/header-actions.component';
 import { HeaderNavigationComponent } from './child-components/header-navigation/header-navigation.component';
+import { HeaderComponent } from './child-components/header/header.component';
 import { LeftNavItemsComponent } from './child-components/left-nav-items/left-nav-items.component';
+import { LeftNavComponent } from './child-components/left-nav/left-nav.component';
 import { LoginMenuComponent } from './child-components/login-menu/login-menu.component';
 import { NotificationsMenuComponent } from './child-components/notifications-menu/notifications-menu.component';
 import { SettingsMenuComponent } from './child-components/settings-menu/settings-menu.component';
-import { HeaderComponent } from './components/header/header.component';
-import { LeftNavComponent } from './components/left-nav/left-nav.component';
 import { ShellComponent } from './components/shell/shell.component';
 
 @NgModule({

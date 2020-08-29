@@ -4,7 +4,7 @@
   <hr>
   <div id="account-section" class="row console-cards" role="region" aria-labelledby="account-section-label">
     <div class="card-cell col-md-4 col-6">
-      <a [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Donor' }" class="card-link">
+      <a [routerLink]="['/account', 'list']" [queryParams]="{ accountType: 'Donor' }" class="card-link">
         <mat-card matRipple>
           <mat-card-title class="align-center">Search Donors</mat-card-title>
           <mat-card-content>
@@ -14,7 +14,7 @@
       </a>
     </div>
     <div class="card-cell col-md-4 col-6">
-      <a [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Receiver' }" class="card-link">
+      <a [routerLink]="['/account', 'list']" [queryParams]="{ accountType: 'Receiver' }" class="card-link">
         <mat-card matRipple>
           <mat-card-title class="align-center">Search Receivers</mat-card-title>
           <mat-card-content>
@@ -24,7 +24,7 @@
       </a>
     </div>
     <div class="card-cell col-md-4 col-6">
-      <a [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Volunteer' }" class="card-link">
+      <a [routerLink]="['/account', 'list']" [queryParams]="{ accountType: 'Volunteer' }" class="card-link">
         <mat-card matRipple>
           <mat-card-title class="align-center">Search Volunteers</mat-card-title>
           <mat-card-content>
@@ -34,7 +34,7 @@
       </a>
     </div>
     <div class="card-cell col-md-4 col-6">
-      <a [routerLink]="['/account/list']" class="card-link">
+      <a [routerLink]="['/account', 'list']" class="card-link">
         <mat-card matRipple>
           <mat-card-title class="align-center">Search Accounts</mat-card-title>
           <mat-card-content>
@@ -44,7 +44,7 @@
       </a>
     </div>
     <div class="card-cell col-md-4 col-6">
-      <a [routerLink]="['/account/compose-message']" class="card-link">
+      <a [routerLink]="['/account', 'compose-message']" class="card-link">
         <mat-card matRipple>
           <mat-card-title class="align-center">Message Accounts</mat-card-title>
           <mat-card-content>
@@ -54,7 +54,7 @@
       </a>
     </div>
     <div class="card-cell col-md-4 col-6">
-      <a [routerLink]="['/account/create']" class="card-link">
+      <a [routerLink]="['/account', 'create']" class="card-link">
         <mat-card matRipple>
           <mat-card-title class="align-center">Create Account</mat-card-title>
           <mat-card-content>
@@ -69,7 +69,7 @@
   <hr>
   <div id="donation-section" class="row console-cards" role="region" aria-labelledby="donation-section-label">
     <div class="card-cell col-md-4 col-6">
-      <a [routerLink]="['/donation/list']" class="card-link">
+      <a [routerLink]="['/donation', 'list']" class="card-link">
         <mat-card matRipple>
           <mat-card-title class="align-center">Search Donations</mat-card-title>
           <mat-card-content>
@@ -79,7 +79,7 @@
       </a>
     </div>
     <div class="card-cell col-md-4 col-6">
-      <a [routerLink]="['/delivery/list']" class="card-link">
+      <a [routerLink]="['/delivery', 'list']" class="card-link">
         <mat-card matRipple>
           <mat-card-title class="align-center">Search Deliveries</mat-card-title>
           <mat-card-content>
@@ -89,7 +89,7 @@
       </a>
     </div>
     <div class="card-cell col-md-4 col-6">
-      <a [routerLink]="['/donation/create']" class="card-link">
+      <a [routerLink]="['/donation', 'create']" class="card-link">
         <mat-card matRipple>
           <mat-card-title class="align-center">Create Donation</mat-card-title>
           <mat-card-content>
@@ -104,7 +104,7 @@
   <hr>
   <div id="event-section" class="row console-cards" role="region" aria-labelledby="event-section-label">
     <div class="card-cell col-md-4 col-6">
-      <a [routerLink]="['/event/list']" class="card-link">
+      <a [routerLink]="['/event', 'list']" class="card-link">
         <mat-card matRipple>
           <mat-card-title class="align-center">Search Events</mat-card-title>
           <mat-card-content>
@@ -114,7 +114,7 @@
       </a>
     </div>
     <div class="card-cell col-md-4 col-6">
-      <a [routerLink]="['/event/create']" class="card-link">
+      <a [routerLink]="['/event', 'create']" class="card-link">
         <mat-card matRipple>
           <mat-card-title class="align-center">Create Event</mat-card-title>
           <mat-card-content>

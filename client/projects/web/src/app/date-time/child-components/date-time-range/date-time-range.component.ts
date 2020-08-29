@@ -66,6 +66,6 @@ export class DateTimeRangeComponent extends FormComponentBase<DateTimeRange> imp
     this.dateTimeRangeRadioConfig.initValue = this.formGroup.value;
     DateTimeRangeRadioDialogComponent.open(this._matDialog, this.dateTimeRangeRadioConfig).subscribe(
       (dateTimeRange: DateTimeRange) => this.formGroup.patchValue(dateTimeRange)
-    )
+    );
   }
 }

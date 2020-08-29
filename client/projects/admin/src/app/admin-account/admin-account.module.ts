@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormField } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -15,7 +15,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { QuillModule } from 'ngx-quill';
 import { AdminAccountSharedModule } from '~admin/admin-account-shared/admin-account-shared.module';
-import { AccountRoutingModule } from '~web/account/account-routing.module';
 import { AccountModule } from '~web/account/account.module';
 import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { SharedModule } from '~web/shared/shared.module';
@@ -36,7 +35,6 @@ import { AdminAccountsComponent } from './components/admin-accounts/admin-accoun
   ],
   imports: [
     AdminAccountRoutingModule,
-    AccountRoutingModule,
     CommonModule,
     AccountModule,
     AdminAccountSharedModule,
@@ -46,7 +44,7 @@ import { AdminAccountsComponent } from './components/admin-accounts/admin-accoun
     MatCardModule,
     MatDividerModule,
     MatExpansionModule,
-    MatFormField,
+    MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatSelectModule,
@@ -58,8 +56,7 @@ import { AdminAccountsComponent } from './components/admin-accounts/admin-accoun
     SharedModule,
   ],
   exports: [
-    // Works as if we are extending the base Web AccountModule.
-    AccountModule,
+    AccountModule, // Works as if we are extending the base Web AccountModule.
   ]
 })
 export class AdminAccountModule {}
