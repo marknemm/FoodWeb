@@ -14,7 +14,8 @@ export class LeftNavComponent implements OnInit {
 
   constructor(
     public leftNavService: LeftNavService,
-    public pageProgressService: PageProgressService
+    public pageProgressService: PageProgressService,
+    public window: Window,
   ) {}
 
   ngOnInit() {

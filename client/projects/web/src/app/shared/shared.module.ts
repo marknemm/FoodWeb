@@ -24,19 +24,19 @@ import { WindowSizeDirective } from './directives/window-size/window-size.direct
 
 @NgModule({
   declarations: [
-    ProgressIndicatorComponent,
-    EditSaveButtonComponent,
-    PaginatorComponent,
-    ReturnLinkDirective,
     ConfirmButtonDirective,
     DisplayEditTransitionDirective,
+    EditSaveButtonComponent,
     FragmentAccordianDirective,
-    YesNoComponent,
+    PaginatorComponent,
+    ProgressIndicatorComponent,
+    ReturnLinkDirective,
     SearchBarComponent,
-    WindowSizeDirective
+    WindowSizeDirective,
+    YesNoComponent,
   ],
   imports: [
-    RouterModule.forChild([]),
+    AlertModule,
     CommonModule,
     FormsModule,
     MatButtonModule,
@@ -48,19 +48,20 @@ import { WindowSizeDirective } from './directives/window-size/window-size.direct
     MatProgressSpinnerModule,
     NgxMaterialTimepickerModule,
     ReactiveFormsModule,
-    AlertModule,
+    RouterModule.forChild([]),
   ],
   exports: [
     AlertModule,
-    ProgressIndicatorComponent,
-    EditSaveButtonComponent,
-    PaginatorComponent,
-    ReturnLinkDirective,
     ConfirmButtonDirective,
     DisplayEditTransitionDirective,
+    EditSaveButtonComponent,
     FragmentAccordianDirective,
+    PaginatorComponent,
+    ProgressIndicatorComponent,
+    ReturnLinkDirective,
+    SearchBarComponent,
+    WindowSizeDirective,
     YesNoComponent,
-    SearchBarComponent
   ]
 })
 export class SharedModule {}

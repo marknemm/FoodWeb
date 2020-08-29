@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { MatDrawerContent } from '@angular/material/sidenav';
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LeftNavService {
 
+  readonly windowSizeThreshPx = 991;
+
   sticky = false;
   mode: 'side' | 'over' = 'over';
 
-  private _opened: boolean;
+  private _opened = false;
   private _openedChanged = new Subject<boolean>();
   private _drawerContent: MatDrawerContent;
 
@@ -45,5 +47,16 @@ export class LeftNavService {
     if (this._drawerContent) {
       this._drawerContent.getElementRef().nativeElement.scrollTo({ top: 0, behavior: scrollBehavior });
     }
+  }
+
+  deriveStateFromWindowSize(widthPx: number): 'side' | 'over' {
+    if (widthPx > this.windowSizeThreshPx && this.mode !== 'side') {
+      this.mode = 'side';
+      this._setOpened(true);
+    } else if (widthPx <= this.windowSizeThreshPx && this.mode !== 'over') {
+      this.mode = 'over';
+      this._setOpened(false);
+    }
+    return this.mode;
   }
 }

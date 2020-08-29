@@ -1,4 +1,4 @@
-<mat-drawer-container class="left-nav-container">
+<mat-drawer-container class="left-nav-container" [foodwebWindowSize]="leftNavService.windowSizeThreshPx" (thresholdCross)="leftNavService.deriveStateFromWindowSize(window.innerWidth)">
   <mat-drawer
     [mode]="leftNavService.mode"
     [ngClass]="{ sticky: leftNavService.sticky }"
