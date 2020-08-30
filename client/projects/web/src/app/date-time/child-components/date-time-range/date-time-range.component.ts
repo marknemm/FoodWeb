@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
+import { FormBaseComponent, valueAccessorProvider } from '~web/data-structure/form-base-component';
 import { DateTimeRangeRadioConfig, DateTimeRangeRadioDialogComponent } from '~web/date-time/components/date-time-range-radio-dialog/date-time-range-radio-dialog.component';
 import { DateTimeRange, DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
@@ -11,7 +11,7 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
   styleUrls: ['./date-time-range.component.scss'],
   providers: valueAccessorProvider(DateTimeRangeComponent)
 })
-export class DateTimeRangeComponent extends FormComponentBase<DateTimeRange> implements OnChanges {
+export class DateTimeRangeComponent extends FormBaseComponent<DateTimeRange> implements OnChanges {
 
   @Input() formGroup = new DateTimeRangeForm();
   @Input() allowClear = false;

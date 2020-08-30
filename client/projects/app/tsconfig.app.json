@@ -9,6 +9,7 @@
     },
     "sourceMap": true,
     "types": [
+      "googlemaps",
       "node"
     ]
   },

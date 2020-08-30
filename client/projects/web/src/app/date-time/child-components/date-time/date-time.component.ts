@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from '
 import { NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
-import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
+import { FormBaseComponent, valueAccessorProvider } from '~web/data-structure/form-base-component';
 import { DateTimeForm } from '~web/date-time/forms/date-time.form';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
@@ -15,7 +15,7 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
     { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeComponent), multi: true }
   ])
 })
-export class DateTimeComponent extends FormComponentBase<Date> implements OnInit, OnChanges, Validator {
+export class DateTimeComponent extends FormBaseComponent<Date> implements OnInit, OnChanges, Validator {
 
   @Input() allowClear = false;
   @Input() allowUndefTime = false;

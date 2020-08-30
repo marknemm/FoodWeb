@@ -1,29 +1,17 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { PasswordForm } from '~web/password/forms/password.form';
+import { Component } from '@angular/core';
+import { valueAccessorProvider } from '~web/data-structure/form-base-component';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { PasswordBaseComponent } from './password.base.component';
 
 @Component({
   selector: 'foodweb-password',
   templateUrl: './password.component.html',
-  styleUrls: ['./password.component.scss']
+  styleUrls: ['./password.component.scss'],
+  providers: valueAccessorProvider(PasswordComponent)
 })
-export class PasswordComponent implements OnInit, OnChanges {
+export class PasswordComponent extends PasswordBaseComponent {
 
-  @Input() editing = false;
-  @Input() formGroup: PasswordForm;
-
-  private _passwordLabel: string;
-
-  constructor() {}
-
-  get passwordLabel(): string {
-    return this._passwordLabel;
-  }
-
-  ngOnInit() {
-    this._passwordLabel = (this.formGroup.formMode === 'Account' ? 'New Password' : 'Password');
-  }
-
-  ngOnChanges() {
-    this.formGroup = this.formGroup ? this.formGroup : new PasswordForm();
+  constructor(formHelperService: FormHelperService) {
+    super(formHelperService);
   }
 }

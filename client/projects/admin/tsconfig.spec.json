@@ -9,6 +9,7 @@
     },
     "strict": false,
     "types": [
+      "googlemaps",
       "jasmine",
       "node"
     ]

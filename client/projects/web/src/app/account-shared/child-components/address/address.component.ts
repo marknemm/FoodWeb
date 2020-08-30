@@ -1,40 +1,17 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ContactInfo } from '~shared';
+import { Component } from '@angular/core';
 import { MapAppLinkService } from '~web/map/services/map-app-link/map-app-link.service';
+import { AddressBaseComponent } from './address.base.component';
 
 @Component({
   selector: 'foodweb-address',
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss']
 })
-export class AddressComponent implements OnInit, OnChanges {
-
-  @Input() contactInfo: ContactInfo;
-  @Input() mapAnchorType: MapAnchorType = 'Directions';
-
-  private _mapAnchor = '';
+export class AddressComponent extends AddressBaseComponent {
 
   constructor(
-    private _mapAppLinkService: MapAppLinkService
-  ) {}
-
-  get mapAnchor(): string {
-    return this._mapAnchor;
+    protected _mapAppLinkService: MapAppLinkService
+  ) {
+    super(_mapAppLinkService);
   }
-
-  ngOnInit() {}
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.contactInfo || changes.mapAnchorType) {
-      switch (this.mapAnchorType) {
-        case 'Directions':  this._mapAnchor = this._mapAppLinkService.genDirectionHref(['My+Location', this.contactInfo]);  break;
-        case 'Location':    this._mapAnchor = this._mapAppLinkService.genLocationHref(this.contactInfo);                    break;
-        case 'None':
-        default:            this._mapAnchor = '';
-      }
-    }
-  }
-
 }
-
-export type MapAnchorType = 'Directions' | 'Location' | 'None';

@@ -1,20 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ReceiverForm } from '~web/account/forms/receiver.form';
+import { Component } from '@angular/core';
+import { valueAccessorProvider } from '~web/data-structure/form-base-component';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { ReceiverBaseComponent } from './receiver.base.component';
 
 @Component({
   selector: 'foodweb-receiver',
   templateUrl: './receiver.component.html',
-  styleUrls: ['./receiver.component.scss']
+  styleUrls: ['./receiver.component.scss'],
+  providers: valueAccessorProvider(ReceiverComponent)
 })
-export class ReceiverComponent implements OnInit {
+export class ReceiverComponent extends ReceiverBaseComponent {
 
-  @Input() editing = false;
-  @Input() formGroup: ReceiverForm;
-
-  constructor() {}
-
-  ngOnInit() {
-    this.formGroup = this.formGroup ? this.formGroup : new ReceiverForm();
+  constructor(formHelperService: FormHelperService) {
+    super(formHelperService);
   }
-
 }

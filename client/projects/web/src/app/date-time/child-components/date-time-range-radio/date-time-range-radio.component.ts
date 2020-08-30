@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
+import { FormBaseComponent, valueAccessorProvider } from '~web/data-structure/form-base-component';
 import { TypedFormControl } from '~web/data-structure/typed-form-control';
 import { DateTimeRange, DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
@@ -10,7 +10,7 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
   styleUrls: ['./date-time-range-radio.component.scss'],
   providers: valueAccessorProvider(DateTimeRangeRadioComponent)
 })
-export class DateTimeRangeRadioComponent extends FormComponentBase<DateTimeRange> implements OnChanges {
+export class DateTimeRangeRadioComponent extends FormBaseComponent<DateTimeRange> implements OnChanges {
 
   @Input() ariaLabel: string;
   @Input() rangeWindow: DateTimeRange;

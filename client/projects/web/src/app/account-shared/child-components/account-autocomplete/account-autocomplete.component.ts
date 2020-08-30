@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { AccountAutocompleteItem, AccountHelper, AccountType } from '~shared';
 import { AccountAutocompleteService } from '~web/account-shared/services/account-autocomplete/account-autocomplete.service';
-import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
+import { FormBaseComponent, valueAccessorProvider } from '~web/data-structure/form-base-component';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
@@ -15,7 +15,7 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
     FormHelperService
   ]
 })
-export class AccountAutocompleteComponent extends FormComponentBase<string> {
+export class AccountAutocompleteComponent extends FormBaseComponent<string> {
 
   @Input() accountType: AccountType;
   @Input() placeholder = 'Search Accounts...';

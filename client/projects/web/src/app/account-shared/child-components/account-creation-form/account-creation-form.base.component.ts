@@ -8,6 +8,8 @@ import { AccountForm } from '~web/account/forms/account.form';
 @Component({ template: '' })
 export class AccountCreationFormBaseComponent implements OnInit, OnDestroy {
 
+  readonly AccountType = AccountType;
+
   @Input() accountForm: AccountForm;
   @Input() accountTypeSelTitle = 'Select The Account Type';
   @Input() formTitle: string;
@@ -24,6 +26,12 @@ export class AccountCreationFormBaseComponent implements OnInit, OnDestroy {
 
   get accountType(): AccountType {
     return this.accountForm.get('accountType').value;
+  }
+
+  get operationHoursDescription(): string {
+    return (this.accountType === AccountType.Receiver)
+      ? 'Optionally limit the times you will be considered available to receive deliveries.'
+      : 'Optionally limit the times you will be considered available to perform deliveries.';
   }
 
   get operationHoursFullWidth(): boolean {

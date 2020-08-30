@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { FloatLabelType } from '@angular/material/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FloatLabelType } from '@angular/material/form-field';
 import { AccountAutocompleteItem, AccountHelper, AccountType, DeepReadonly } from '~shared';
 import { AccountAutocompleteService } from '~web/account-shared/services/account-autocomplete/account-autocomplete.service';
-import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
+import { FormBaseComponent, valueAccessorProvider } from '~web/data-structure/form-base-component';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
 import { TypedFormControl } from '~web/data-structure/typed-form-control';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
@@ -13,7 +13,7 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
   styleUrls: ['./account-select.component.scss'],
   providers: valueAccessorProvider(AccountSelectComponent).concat([AccountAutocompleteService])
 })
-export class AccountSelectComponent extends FormComponentBase<AccountAutocompleteItem> {
+export class AccountSelectComponent extends FormBaseComponent<AccountAutocompleteItem> implements OnInit {
 
   @Input() accountType: AccountType;
   @Input() filterPlaceholder = 'Search Accounts...';

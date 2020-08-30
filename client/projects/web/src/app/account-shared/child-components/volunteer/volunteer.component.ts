@@ -1,19 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { VolunteerForm } from '~web/account/forms/volunteer.form';
+import { Component } from '@angular/core';
+import { valueAccessorProvider } from '~web/data-structure/form-base-component';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { VolunteerBaseComponent } from './volunteer.base.component';
 
 @Component({
   selector: 'foodweb-volunteer',
   templateUrl: './volunteer.component.html',
-  styleUrls: ['./volunteer.component.scss']
+  styleUrls: ['./volunteer.component.scss'],
+  providers: valueAccessorProvider(VolunteerComponent)
 })
-export class VolunteerComponent implements OnInit {
+export class VolunteerComponent extends VolunteerBaseComponent {
 
-  @Input() editing = false;
-  @Input() formGroup: VolunteerForm;
-
-  constructor() {}
-
-  ngOnInit() {
-    this.formGroup = this.formGroup ? this.formGroup : new VolunteerForm();
+  constructor(formHelperService: FormHelperService) {
+    super(formHelperService);
   }
 }

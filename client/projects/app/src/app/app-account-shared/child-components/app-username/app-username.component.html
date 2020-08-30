@@ -1,0 +1,8 @@
+<StackLayout>
+  <Label *ngIf="true" text="Username:"></Label>
+  <TextField *ngIf="editing; else readonly" [formControl]="formControl" autocapitalizationType="none" hint="Enter a username/email" keyboardType="email"></TextField>
+
+  <ng-template #readonly>
+    <Label [text]="formControl.value"></Label>
+  </ng-template>
+</StackLayout>

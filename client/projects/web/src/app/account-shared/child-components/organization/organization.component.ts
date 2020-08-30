@@ -1,33 +1,17 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { AccountType } from '~shared';
-import { OrganizationForm } from '~web/account/forms/organization.form';
+import { Component } from '@angular/core';
+import { valueAccessorProvider } from '~web/data-structure/form-base-component';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { OrganizationBaseComponent } from './organization.base.component';
 
 @Component({
   selector: 'foodweb-organization',
   templateUrl: './organization.component.html',
-  styleUrls: ['./organization.component.scss']
+  styleUrls: ['./organization.component.scss'],
+  providers: valueAccessorProvider(OrganizationComponent)
 })
-export class OrganizationComponent implements OnInit {
+export class OrganizationComponent extends OrganizationBaseComponent {
 
-  @Input() accountType: AccountType;
-  @Input() editing = false;
-  @Input() formGroup: OrganizationForm;
-
-  private _deliveryInstrLabel = '';
-
-  constructor() {}
-
-  get deliveryInstrLabel(): string {
-    return this._deliveryInstrLabel;
-  }
-
-  ngOnInit() {}
-
-  ngOnChanges(changes: SimpleChanges) {
-    this.formGroup = this.formGroup ? this.formGroup : new OrganizationForm();
-    if (changes.accountType) {
-      const accountMod: string = (this.accountType === AccountType.Donor) ? 'pickups' : 'deliveries';
-      this._deliveryInstrLabel = `Please leave instructions for donation ${accountMod} here`;
-    }
+  constructor(formHelperService: FormHelperService) {
+    super(formHelperService);
   }
 }

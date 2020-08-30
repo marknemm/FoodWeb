@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ErrorStateMatcher, FloatLabelType } from '@angular/material/core';
-import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
+import { FormBaseComponent, valueAccessorProvider } from '~web/data-structure/form-base-component';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
   styleUrls: ['./date.component.scss'],
   providers: valueAccessorProvider(DateComponent)
 })
-export class DateComponent extends FormComponentBase<Date> {
+export class DateComponent extends FormBaseComponent<Date> {
 
   @Input() allowClear = false;
   @Input() bold = false;

@@ -1,9 +1,9 @@
 <div class="username-container">
   <mat-form-field *ngIf="editing" class="username-input fill">
-    <input matInput [formControl]="usernameCtrl" placeholder="Username" type="text">
+    <input matInput [formControl]="formControl" placeholder="Username" type="text">
   </mat-form-field>
 
   <div *ngIf="!editing" class="username-display">
-    {{ usernameCtrl.value }}
+    {{ formControl.value }}
   </div>
 </div>

@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Account, AccountHelper, AccountType } from '~shared';
-import { MapAnchorType } from '~web/account-shared/child-components/address/address.component';
+import { MapAnchorType } from '~web/map/interfaces/map';
 
 @Component({
   selector: 'foodweb-account-teaser',

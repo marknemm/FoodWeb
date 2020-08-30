@@ -14,7 +14,11 @@
       "~app/*": ["projects/app/src/app/*"],
       "~shared": ["projects/app/src/shared"],
       "~web/*": ["projects/web/src/app/*"]
-    }
+    },
+    "types": [
+      "googlemaps",
+      "node"
+    ]
   },
   "include": [
     "projects/app/src/types/*",

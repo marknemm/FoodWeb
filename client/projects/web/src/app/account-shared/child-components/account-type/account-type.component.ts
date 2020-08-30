@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { AccountType } from '~shared';
-import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
+import { Component } from '@angular/core';
+import { valueAccessorProvider } from '~web/data-structure/form-base-component';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { AccountTypeBaseComponent } from './account-type.base.component';
 
 @Component({
   selector: 'foodweb-account-type',
@@ -10,20 +10,12 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
   styleUrls: ['./account-type.component.scss'],
   providers: valueAccessorProvider(AccountTypeComponent)
 })
-export class AccountTypeComponent extends FormComponentBase<AccountType> {
-
-  @Input() editing = false;
+export class AccountTypeComponent extends AccountTypeBaseComponent {
 
   constructor(
     public constantsService: ConstantsService,
     formHelperService: FormHelperService
   ) {
-    super(formHelperService);
-  }
-
-  accountTypeClick(accountType: AccountType): void {
-    if (this.editing) {
-      this.formControl.setValue(accountType);
-    }
+    super(constantsService, formHelperService);
   }
 }

@@ -1,0 +1,44 @@
+
+
+<!-- <div [formGroup]="formGroup" class="operation-hours-form">
+  <div class="weekday-field" [style.width]="weekdayWidth" [style.padding]="weekdayPadding">
+    <mat-form-field class="fill no-pad" floatLabel="never">
+      <mat-select placeholder="Weekday" class="accent" formControlName="weekday">
+        <mat-option *ngFor="let weekday of constantsService.WEEKDAYS; let i = index" [value]="weekday">{{ weekday }}</mat-option>
+        <mat-option [value]="undefined">--</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="time-fields-container">
+    <div class="time-field" [style.width]="timeWidth">
+      <foodweb-time
+        [allowClear]="allowClear"
+        [defaultTime]="getDefaultStartTime(formGroup)"
+        [editing]="editing"
+        [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
+        [minutesGap]="minutesGap"
+        [preventOverlayClick]="!allowOverlayClick"
+        formControlName="startTime"
+        placeholder="Start Time"
+      ></foodweb-time>
+    </div>
+    <div class="time-field" [style.width]="timeWidth">
+      <foodweb-time
+        [allowClear]="allowClear"
+        [defaultTime]="getDefaultEndTime(formGroup)"
+        [editing]="editing"
+        [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
+        [minutesGap]="minutesGap"
+        [preventOverlayClick]="!allowOverlayClick"
+        formControlName="endTime"
+        placeholder="End Time"
+      ></foodweb-time>
+    </div>
+  </div>
+  <mat-error *ngIf="formGroup.hasError('timeRangeOrder')" class="operation-hours-error">
+    {{ formGroup.getError('timeRangeOrder') }}
+  </mat-error>
+  <mat-error *ngIf="formGroup.hasError('allOrNothing')" class="operation-hours-error">
+    {{ formGroup.getError('allOrNothing') }}
+  </mat-error>
+</div> -->

@@ -1,7 +1,9 @@
 <foodweb-app-action-bar [pageTitle]="pageTitle"></foodweb-app-action-bar>
 
 <GridLayout class="app-page-content">
-  <ng-content></ng-content>
+  <ScrollView orientation="vertical">
+    <ng-content></ng-content>
+  </ScrollView>
 
   <foodweb-app-progress-indicator
     [backdropColor]="pageProgressService.backdropColor"

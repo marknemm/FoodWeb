@@ -1,0 +1,13 @@
+<StackLayout *ngIf="editing; else readonlyTmpl" [formGroup]="formGroup">
+  <Label text="Automatically Accept Donations:"></Label>
+  <Switch formControlName="autoReceiver"></Switch>
+</StackLayout>
+
+<ng-template #readonlyTmpl>
+  <Label>
+    <FormattedString>
+      <Span text="Automatically Accept Donations:" class="inline-label"></Span>
+      <span [text]="formGroup.get('autoReceiver').value ? 'Yes' : 'No'"></span>
+    </FormattedString>
+  </Label>
+</ng-template>

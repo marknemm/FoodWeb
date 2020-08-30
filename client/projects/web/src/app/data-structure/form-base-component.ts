@@ -1,4 +1,4 @@
-import { Directive, forwardRef, Input, OnDestroy, OnInit, Provider, Type } from '@angular/core';
+import { Component, forwardRef, Input, OnDestroy, OnInit, Provider, Type } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -11,8 +11,8 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
  * Base class that implements fundamental ControlValueAccessor functionality.
  * It also initializes a TypedFormControl or TypedFormGroup based off of input bindings that are set on the derived component.
  */
-@Directive()
-export abstract class FormComponentBase<T> implements OnInit, OnDestroy, ControlValueAccessor {
+@Component({ template: '' })
+export abstract class FormBaseComponent<T> implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Input() formControlName = '';
   @Input() formGroupName = '';
@@ -32,22 +32,42 @@ export abstract class FormComponentBase<T> implements OnInit, OnDestroy, Control
   ) {}
 
   /**
+   * The active abstract control derived within this form component base; either a FormGroup or FormControl.
+   * @throws An error when accessed if an abstract control was never set on this component.
+   */
+  get activeAbstractControl(): TypedAbstractControl<T> {
+    const abstractControl: TypedAbstractControl<T> = (this._formGroup) ? this._formGroup : this._formControl;
+    if (!abstractControl) {
+      throw new Error('FormBaseComponent never initialized its internal formGroup/formControl. Did you forget to call super.ngOnInit()?');
+    }
+    return abstractControl;
+  }
+
+  /**
    * Whether or not the derived active abstract control (either formGroup or formControl) was supplied as an input binding.
    */
   get controlInputBound(): boolean {
     return this._controlInputBound;
   }
 
+  /**
+   * The form control that is set on the component.
+   * @throws An error when accessed if the form control was never initialized on the component.
+   */
   get formControl(): TypedFormControl<T> {
     if (!this._formControl) {
-      throw new Error('FormComponentBase never intialized its internal formControl. Did you forget to call super.ngOnInit()?');
+      throw new Error('FormBaseComponent never intialized its internal formControl. Did you forget to call super.ngOnInit()?');
     }
     return this._formControl;
   }
 
+  /**
+   * The form group that is set on the component.
+   * @throws An error when accessed if the form group was never initialized on the component.
+   */
   get formGroup(): TypedFormGroup<T> {
     if (!this._formGroup) {
-      throw new Error('FormComponentBase never intialized its internal formGroup. Did you forget to call super.ngOnInit()?');
+      throw new Error('FormBaseComponent never intialized its internal formGroup. Did you forget to call super.ngOnInit()?');
     }
     return this._formGroup;
   }
@@ -67,17 +87,6 @@ export abstract class FormComponentBase<T> implements OnInit, OnDestroy, Control
     return this._onTouchedCb;
   }
 
-  /**
-   * The active abstract control derived within this form component base; either a FormGroup or FormControl.
-   */
-  get activeAbstractControl(): TypedAbstractControl<T> {
-    const abstractControl: TypedAbstractControl<T> = (this._formGroup) ? this._formGroup : this._formControl;
-    if (!abstractControl) {
-      throw new Error('FormComponentBase never initialized its internal formGroup/formControl. Did you forget to call super.ngOnInit()?');
-    }
-    return abstractControl;
-  }
-
   ngOnInit() {
     this._controlInputBound = !!(this.formGroupName || this._formGroup || this.formControlName || this._formControl);
     this._formControl = this._formControl ? this._formControl : new TypedFormControl<T>(); // Set default for fallback if cannot derive.
@@ -86,7 +95,7 @@ export abstract class FormComponentBase<T> implements OnInit, OnDestroy, Control
   }
 
   ngOnDestroy() {
-    this._destroy$.next();
+    this._destroy$.next(); // Cleanup form related RxJS subscriptions.
   }
 
   /**
@@ -142,9 +151,9 @@ export abstract class FormComponentBase<T> implements OnInit, OnDestroy, Control
 /**
  * Generates a basic component level providers array containing NG_VALUE_ACCESSOR and FormHelperService providers.
  * @param component The component type.
- * @return The basic component level providers array for components that extend FormComponentBase.
+ * @return The basic component level providers array for components that extend FormBaseComponent.
  */
-export function valueAccessorProvider(component: Type<FormComponentBase<any>>): Provider[] {
+export function valueAccessorProvider(component: Type<FormBaseComponent<any>>): Provider[] {
   return [
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => component), multi: true },
     FormHelperService

@@ -1,0 +1,47 @@
+<StackLayout *ngIf="editing; else readonlyTmpl" [formGroup]="formGroup">
+  <Label text="Full Name:"></Label>
+  <TextField formControlName="fullName" autocapitalizationType="words"></TextField>
+  <Label *ngIf="formGroup.get('fullName').hasError('pattern')" text="Both first name and surname are required."></Label>
+</StackLayout>
+
+<ng-template #readonlyTmpl>
+  <Label>
+    <FormattedString>
+      <Span text="Full Name:" class="inline-label"></Span>
+      <span text="{{ formGroup.get('fullName').value }}"></span>
+    </FormattedString>
+  </Label>
+</ng-template>
+
+<!-- <div class="volunteer-container" [foodwebDisplayEditTransition]="editing" [form]="formGroup" [display]="volunteerDisplay">
+  <div #volunteerForm class="row volunteer-form" [formGroup]="formGroup" [attr.aria-hidden]="!editing">
+    <div class="col-sm-6">
+      <mat-form-field class="fill">
+        <input matInput placeholder="First Name" formControlName="firstName" type="text" autocomplete="off">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Last Name" formControlName="lastName" type="text" autocomplete="off">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div #volunteerDisplay class="volunteer-display row" [attr.aria-hidden]="editing">
+    <div class="col-sm-6">
+      <div class="inline-label">Name:</div>
+      <div class="d-inline-block">{{ formGroup.get('firstName').value }} {{ formGroup.get('lastName').value }}</div>
+    </div>
+    <div class="col-sm-6">
+      <div class="inline-label">Attended Training:</div>
+      <div class="d-inline-block">
+        <span *ngIf="formGroup.get('signedAgreement').value" class="check-yes">
+          <mat-icon>check</mat-icon> <span>Yes</span>
+        </span>
+        <span *ngIf="!formGroup.get('signedAgreement').value" class="cross-no">
+          <mat-icon>close</mat-icon> <span>No</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div> -->

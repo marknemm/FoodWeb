@@ -16,9 +16,7 @@
           matTextareaAutosize matAutosizeMinRows="1" class="organization-info-ctrl"></textarea>
       </mat-form-field>
 
-      <ng-container *ngIf="accountType === 'Receiver'">
-        <foodweb-receiver [formGroup]="formGroup.get('receiver')" [editing]="editing"></foodweb-receiver>
-      </ng-container>
+      <foodweb-receiver *ngIf="isReceiver" formGroupName="receiver" [editing]="editing"></foodweb-receiver>
     </div>
   </div>
 
@@ -32,14 +30,11 @@
       <div class="d-inline-block">{{ formGroup.get('description').value }}</div>
     </div>
     <div *ngIf="formGroup.get('deliveryInstructions').value" class="col-sm-12">
-      <div *ngIf="accountType === 'Donor'; else receiverBlock" class="inline-label">Instructions for Pickup:</div>
-      <ng-template #receiverBlock>
-        <div class="inline-label">Instructions for Drop-Off:</div>
-      </ng-template>
+      <div class="inline-label">{{ readonlyDeliveryInstrLabel }}</div>
       <div class="d-inline-block">{{ formGroup.get('deliveryInstructions').value }}</div>
     </div>
-    <div *ngIf="accountType === 'Receiver'" class="col-sm-12">
-      <foodweb-receiver [formGroup]="formGroup.get('receiver')"></foodweb-receiver>
+    <div *ngIf="isReceiver" class="col-sm-12">
+      <foodweb-receiver formGroupName="receiver"></foodweb-receiver>
     </div>
   </div>
 </div>

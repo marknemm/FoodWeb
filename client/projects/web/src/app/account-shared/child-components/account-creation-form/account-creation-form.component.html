@@ -61,8 +61,7 @@
           <span *ngIf="accountType === 'Volunteer'">Delivery Availability</span>
         </mat-card-title>
         <mat-card-subtitle>
-          <span *ngIf="accountType === 'Receiver'">Optionally limit the times you will be considered available to receive deliveries.</span>
-          <span *ngIf="accountType === 'Volunteer'">Optionally limit the times you will be considered available to perform deliveries.</span>
+          <span>{{ operationHoursDescription }}</span>
           <br><span> You can update this setting any time under your account.</span>
         </mat-card-subtitle>
         <mat-card-content>
