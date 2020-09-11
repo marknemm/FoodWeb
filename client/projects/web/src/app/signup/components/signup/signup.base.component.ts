@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AccountType } from '~shared';
 import { AccountForm } from '~web/account/forms/account.form';
@@ -7,13 +7,15 @@ import { SignupVerificationService } from '~web/signup/services/signup-verificat
 import { SignupService } from '~web/signup/services/signup/signup.service';
 
 @Component({ template: '' })
-export abstract class SignupBaseComponent {
+export abstract class SignupBaseComponent implements OnInit {
 
   constructor(
     public sessionService: SessionService,
     public signupVerificationService: SignupVerificationService,
     protected _signupService: SignupService
   ) {}
+
+  ngOnInit() {}
 
   signup(accountForm: AccountForm): void {
     if (accountForm.checkValidity()) {

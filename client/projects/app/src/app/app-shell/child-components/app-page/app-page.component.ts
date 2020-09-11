@@ -14,6 +14,7 @@ export class AppPageComponent implements OnInit, OnChanges {
   readonly isIOS: boolean = isIOS;
 
   @Input() hideActionBar = false;
+  @Input() inScrollView = true;
   @Input() pageTitle = 'FoodWeb';
 
   @HostBinding() readonly class = 'app-page';

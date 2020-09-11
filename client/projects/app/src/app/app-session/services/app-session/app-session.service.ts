@@ -39,6 +39,7 @@ export class AppSessionService extends SessionService {
   }
 
   /**
+   * @override
    * Performs the raw (most basic) level of the load operation (interacts directly with native API).
    * @param key The key of the data to load.
    */
@@ -47,6 +48,7 @@ export class AppSessionService extends SessionService {
   }
 
   /**
+   * @override
    * Performs the raw (most basic) level of the save operation (interacts directly with native API).
    * @param key The key of the data to save.
    * @param jsonData The JSON/string data to save.
@@ -56,6 +58,7 @@ export class AppSessionService extends SessionService {
   }
 
   /**
+   * @override
    * Performs the raw (most basic) level of the delete operation (interacts directly with native API).
    * @param key The key of the session data to delete.
    */

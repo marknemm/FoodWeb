@@ -30,7 +30,7 @@
       <div class="d-inline-block">{{ formGroup.get('description').value }}</div>
     </div>
     <div *ngIf="formGroup.get('deliveryInstructions').value" class="col-sm-12">
-      <div class="inline-label">{{ readonlyDeliveryInstrLabel }}</div>
+      <div class="inline-label">{{ deliveryInstrLabel }}</div>
       <div class="d-inline-block">{{ formGroup.get('deliveryInstructions').value }}</div>
     </div>
     <div *ngIf="isReceiver" class="col-sm-12">

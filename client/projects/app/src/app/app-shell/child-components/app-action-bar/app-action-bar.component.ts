@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { RouterExtensions } from '@nativescript/angular';
 import { isAndroid, isIOS } from '@nativescript/core';
+import { AppBackService } from '~app/app-shared/services/app-back/app-back.service';
 import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left-nav.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class AppActionBarComponent implements OnInit {
   @Input() pageTitle = 'FoodWeb';
 
   constructor(
+    public backService: AppBackService,
     public leftNavService: AppLeftNavService,
     public router: RouterExtensions,
   ) {}

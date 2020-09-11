@@ -1,12 +1,23 @@
 <StackLayout *ngIf="editing; else readonlyTmpl" [formGroup]="formGroup" class="organization-container">
-  <Label text="Organization Name:"></Label>
-  <TextField formControlName="name" autocapitalizationType="words"></TextField>
+  <foodweb-app-text-field *ngIf="true"
+    autocapitalizationType="words"
+    formControlName="name"
+    label="Organization Name:"
+  ></foodweb-app-text-field>
 
-  <Label text="Organization Info:"></Label>
-  <TextView formControlName="description" autocapitalizationType="sentences" hint="Tell us about your organization..."></TextView>
+  <foodweb-app-text-view *ngIf="true"
+    autocapitalizationType="sentences"
+    formControlName="description"
+    hint="Tell us about your organization..."
+    label="Organization Info:"
+  ></foodweb-app-text-view>
 
-  <Label [text]="deliveryInstrLabel"></Label>
-  <TextView formControlName="deliveryInstructions" autocapitalizationType="sentences" hint="Enter all information for volunteer deliverers here..."></TextView>
+  <foodweb-app-text-view *ngIf="true"
+    [label]="deliveryInstrLabel"
+    autocapitalizationType="sentences"
+    formControlName="deliveryInstructions"
+    hint="Enter all information for volunteer deliverers here..."
+  ></foodweb-app-text-view>
 
   <foodweb-app-receiver *ngIf="isReceiver" formGroupName="receiver" [editing]="true"></foodweb-app-receiver>
 </StackLayout>
@@ -28,7 +39,7 @@
 
   <Label>
     <FormattedString>
-      <Span [text]="readonlyDeliveryInstrLabel" class="inline-label"></Span>
+      <Span [text]="deliveryInstrLabel" class="inline-label"></Span>
       <span [text]="formGroup.get('description').value"></span>
     </FormattedString>
   </Label>

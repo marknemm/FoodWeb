@@ -1,0 +1,10 @@
+<StackLayout margin="24" horizontalAlignment="center">
+
+  <TimePicker #timePicker verticalAlignment="center"></TimePicker>
+
+  <StackLayout orientation="horizontal" marginTop="12" horizontalAlignment="center">
+    <Button text="cancel" (tap)="modalDialogParams.closeCallback()"></Button>
+    <Button text="ok" (tap)="modalDialogParams.closeCallback(timePicker.time)"></Button>
+  </StackLayout>
+
+</StackLayout>

@@ -1,5 +1,5 @@
 <ActionBar>
-  <NavigationButton *ngIf="isIOS"></NavigationButton>
+  <NavigationButton *ngIf="isIOS" [visibility]="backService.disableBack ? 'collapsed' : 'visible'"></NavigationButton>
 
   <ng-container *ngIf="!leftNavService.isLocked">
     <NavigationButton icon="res://menu" *ngIf="isAndroid" (tap)="leftNavService.toggle()"></NavigationButton>

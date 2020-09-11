@@ -1,7 +1,7 @@
-<StackLayout *ngIf="editing; else readonlyTmpl" [formGroup]="formGroup">
-  <Label text="Automatically Accept Donations:"></Label>
-  <Switch formControlName="autoReceiver"></Switch>
-</StackLayout>
+<GridLayout *ngIf="editing; else readonlyTmpl" [formGroup]="formGroup" class="nt-input -sides" rows="auto">
+  <Label text="Automatically Accept Donations:" row="0" col="0"></Label>
+  <Switch formControlName="autoReceiver" horizontalAlignment="right" row="0" col="1"></Switch>
+</GridLayout>
 
 <ng-template #readonlyTmpl>
   <Label>

@@ -13,9 +13,9 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
 export class AppAccountTypeComponent extends AccountTypeBaseComponent {
 
   readonly accountTypeGridCells = [
-    { row: 0, col: 0 },
-    { row: 0, col: 1 },
-    { row: 1, col: 0 },
+    { row: 0, col: 0, icon: 'card_giftcard' },
+    { row: 0, col: 1, icon: 'shopping_basket' },
+    { row: 1, col: 0, icon: 'directions_car' },
   ];
 
   constructor(

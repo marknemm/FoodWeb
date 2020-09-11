@@ -56,18 +56,22 @@ export class AccountCreationFormBaseComponent implements OnInit, OnDestroy {
       takeUntil(this._destroy$)
     ).subscribe((accountType: AccountType) => {
       if (!this._activatedRoute.snapshot.url.toString().match(`${accountType}$`)) {
-        this._router.navigate(['.', accountType], { relativeTo: this._activatedRoute });
+        this._router.navigate(['.', accountType], {
+          relativeTo: this._activatedRoute,
+          queryParamsHandling: 'preserve'
+        });
       }
     });
   }
 
   protected _listenAccountTypeRoute(): void {
-    this._activatedRoute.paramMap.subscribe((routeParams: ParamMap) => {
-      const accountTypeParam = <AccountType>routeParams.get('accountType');
-      if (accountTypeParam) {
-        this.accountForm.get('accountType').setValue(accountTypeParam);
-      }
-    });
+    this._activatedRoute.paramMap.subscribe((routeParams: ParamMap) =>
+      this._onAccountTypeRoute(<AccountType>routeParams.get('accountType'))
+    );
+  }
+
+  protected _onAccountTypeRoute(accountType: AccountType): void {
+    this.accountForm.get('accountType').setValue(accountType, { emitEvent: false });
   }
 
 }

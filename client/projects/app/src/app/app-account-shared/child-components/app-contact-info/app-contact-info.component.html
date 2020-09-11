@@ -1,23 +1,40 @@
 <StackLayout *ngIf="editing; else readonlyTmpl" [formGroup]="formGroup">
-  <Label text="Email:"></Label>
-  <TextField formControlName="email" autocapitalizationType="none" keyboardType="email"></TextField>
+  <foodweb-app-text-field *ngIf="true"
+    formControlName="email"
+    keyboardType="email"
+    label="Email:"
+  ></foodweb-app-text-field>
   <Label *ngIf="formGroup.get('email').hasError('email')" text="Not a valid email address"></Label>
 
-  <Label text="Phone Number:"></Label>
-  <TextField formControlName="phoneNumber" autocapitalizationType="none" keyboardType="phone"></TextField>
+  <foodweb-app-text-field *ngIf="true"
+    formControlName="phoneNumber"
+    keyboardType="phone"
+    label="Phone Number:"
+  ></foodweb-app-text-field>
   <Label *ngIf="formGroup.get('phoneNumber').hasError('pattern')" text="Not a valid phone number"></Label>
 
-  <Label text="Street Address:"></Label>
-  <TextField formControlName="streetAddress" autocapitalizationType="words"></TextField>
+  <foodweb-app-text-field *ngIf="true"
+    autocapitalizationType="words"
+    formControlName="streetAddress"
+    label="Street Address:"
+  ></foodweb-app-text-field>
 
-  <Label text="City:"></Label>
-  <TextField formControlName="city" autocapitalizationType="words"></TextField>
+  <foodweb-app-text-field *ngIf="true"
+    autocapitalizationType="words"
+    formControlName="city"
+    label="City:"
+  ></foodweb-app-text-field>
 
-  <Label text="State/Province:"></Label>
-  <TextField formControlName="stateProvince" autocapitalizationType="words"></TextField>
+  <foodweb-app-text-field *ngIf="true"
+    autocapitalizationType="words"
+    formControlName="stateProvince"
+    label="State/Province:"
+  ></foodweb-app-text-field>
 
-  <Label text="Postal Code:"></Label>
-  <TextField formControlName="postalCode" autocapitalizationType="none"></TextField>
+  <foodweb-app-text-field *ngIf="true"
+    formControlName="postalCode"
+    label="Postal Code:"
+  ></foodweb-app-text-field>
   <Label *ngIf="formGroup.get('postalCode').hasError('pattern')" text="Not a valid postal code"></Label>
 </StackLayout>
 
@@ -45,27 +62,3 @@
   <Label text="Address:"></Label>
   <foodweb-app-address [contactInfo]="contactInfo" [mapAnchorType]="addressAnchorType"></foodweb-app-address>
 </ng-template>
-
-<!-- <div #contactInfoDisplay class="contact-info-display row">
-    <ng-container *ngIf="contactInfo">
-      <ng-container *ngIf="addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
-      <div class="col-sm-6" *ngIf="!hideEmail && contactInfo.email">
-        <div class="inline-label">Email:</div>
-        <div class="d-inline-block">
-          <a class="email" href="mailto:{{ contactInfo.email }}">
-            {{ contactInfo.email }}
-          </a>
-        </div>
-      </div>
-      <div class="col-sm-6" *ngIf="!hidePhone && contactInfo.phoneNumber">
-        <div class="inline-label">Phone Number:</div>
-        <div class="d-inline-block">
-          <a class="phone-number" href="tel:{{ contactInfo.phoneNumber }}">
-            {{ contactInfo.phoneNumber }}
-          </a>
-        </div>
-      </div>
-      <ng-container *ngIf="!addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
-    </ng-container>
-  </div>
-</div>-->

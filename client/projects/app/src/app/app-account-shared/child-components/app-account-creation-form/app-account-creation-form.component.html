@@ -1,39 +1,79 @@
-<StackLayout [formGroup]="accountForm">
-  <Label [text]="accountType ? formTitle : accountTypeSelTitle"></Label>
-  <foodweb-app-account-type [editing]="!accountType" formControlName="accountType" class="account-type"></foodweb-app-account-type>
-
-  <ng-container *ngIf="accountType">
-    <StackLayout class="hr"></StackLayout>
-    <Label text="Login Credentials"></Label>
-    <foodweb-app-username formControlName="username" [editing]="true"></foodweb-app-username>
-    <foodweb-app-password formGroupName="password" [editing]="true"></foodweb-app-password>
-
-    <ng-container *ngIf="accountType !== AccountType.Volunteer; else volunteerTmpl">
-      <StackLayout class="hr"></StackLayout>
+<Tabs #tabs [formGroup]="accountForm" [selectedIndex]="tabIdx" (selectedIndexChanged)="toTab(tabs.selectedIndex)" class="nt-form">
+  <TabStrip *ngIf="accountType" class="tab-strip">
+    <TabStripItem *ngIf="true">
+      <Label text="Account"></Label>
+    </TabStripItem>
+    <TabStripItem *ngIf="accountType !== AccountType.Volunteer">
       <Label text="Organization"></Label>
-      <foodweb-app-organization formGroupName="organization" [editing]="true"></foodweb-app-organization>
-    </ng-container>
+    </TabStripItem>
+    <TabStripItem *ngIf="true">
+      <Label text="Contact"></Label>
+    </TabStripItem>
+    <TabStripItem *ngIf="accountType !== AccountType.Donor">
+      <Label text="Availability"></Label>
+    </TabStripItem>
+  </TabStrip>
 
-    <ng-template #volunteerTmpl>
-      <StackLayout class="hr"></StackLayout>
-      <Label text="Volunteer Info"></Label>
-      <foodweb-app-volunteer formGroupName="volunteer" [editing]="true"></foodweb-app-volunteer>
-    </ng-template>
+  <TabContentItem *ngIf="true">
+    <ScrollView>
+      <StackLayout class="tab-content account">
+        <Label *ngIf="!accountType" text="Select Your Account Type" class="h2 text-center account-type-label"></Label>
+        <foodweb-app-account-type *ngIf="true" [editing]="!accountType" formControlName="accountType" class="account-type"></foodweb-app-account-type>
+        <Button *ngIf="!accountType; else accountTmpl" text="Return to Login" (tap)="backToLoginPage()" class="-primary"></Button>
+        <ng-template #accountTmpl>
+          <foodweb-app-username formControlName="username" [editing]="true"></foodweb-app-username>
+          <foodweb-app-password formGroupName="password" [editing]="true"></foodweb-app-password>
+          <GridLayout rows="auto" columns="*,*" class="tab-actions">
+            <Button text="Back" (tap)="backToAccountTypeSel()" row="0" col="0" class="-primary"></Button>
+            <Button text="Next" (tap)="nextTab()" row="0" col="1" class="-primary"></Button>
+          </GridLayout>
+        </ng-template>
+      </StackLayout>
+    </ScrollView>
+  </TabContentItem>
 
-    <foodweb-app-contact-info *ngIf="true" formGroupName="contactInfo" [editing]="true"></foodweb-app-contact-info>
+  <TabContentItem *ngIf="accountType !== AccountType.Volunteer">
+    <ScrollView>
+      <StackLayout class="tab-content organization">
+        <foodweb-app-organization formGroupName="organization" [accountType]="accountType" [editing]="true"></foodweb-app-organization>
+        <GridLayout rows="auto" columns="*,*" class="tab-actions">
+          <Button text="Back" (tap)="prevTab()" row="0" col="0" class="-primary"></Button>
+          <Button text="Next" (tap)="nextTab()" row="0" col="1" class="-primary"></Button>
+        </GridLayout>
+      </StackLayout>
+    </ScrollView>
+  </TabContentItem>
 
-    <ng-container *ngIf="accountType !== AccountType.Donor">
-      <StackLayout class="hr"></StackLayout>
-      <Label text="Donation Delivery Availability"></Label>
-      <Label [text]="operationHoursDescription"></Label>
-      <Label text="You can update this setting any time under your account settings."></Label>
-      <foodweb-app-operation-hours-info formGroupName="operationHours" [editing]="true"></foodweb-app-operation-hours-info>
-    </ng-container>
+  <TabContentItem *ngIf="true">
+    <ScrollView>
+      <StackLayout class="tab-content contact">
+        <foodweb-app-volunteer *ngIf="accountType === AccountType.Volunteer" formGroupName="volunteer" [editing]="true"></foodweb-app-volunteer>
+        <foodweb-app-contact-info *ngIf="true" formGroupName="contactInfo" [editing]="true"></foodweb-app-contact-info>
+        <GridLayout *ngIf="true" rows="auto" columns="*,*" class="tab-actions">
+          <Button text="Back" (tap)="prevTab()" row="0" col="0" class="-primary"></Button>
+          <Button *ngIf="accountType !== AccountType.Donor; else submitButtonTmpl" text="Next" (tap)="nextTab()" row="0" col="1" class="-primary"></Button>
+          <ng-template #submitButtonTmpl>
+            <Button text="Submit" (tap)="createAccount.emit(accountForm)" row="0" col="1" class="-primary"></Button>
+          </ng-template>
+        </GridLayout>
+      </StackLayout>
+    </ScrollView>
+  </TabContentItem>
 
-    <Button *ngIf="true" [text]="submitButtonTxt" (tap)="createAccount.emit(accountForm)"></Button>
-  </ng-container>
-</StackLayout>
-
+  <TabContentItem *ngIf="accountType !== AccountType.Donor">
+    <ScrollView>
+      <StackLayout class="tab-content availability">
+        <Label [text]="operationHoursDescription"></Label>
+        <Label text="You can update this setting any time under your account settings."></Label>
+        <foodweb-app-operation-hours-info formGroupName="operationHours" [editing]="true"></foodweb-app-operation-hours-info>
+        <GridLayout rows="auto" columns="*,*" class="tab-actions">
+          <Button text="Back" (tap)="prevTab()" row="0" col="0" class="-primary"></Button>
+          <Button text="Submit" (tap)="createAccount.emit(accountForm)" row="0" col="1" class="-primary"></Button>
+        </GridLayout>
+      </StackLayout>
+    </ScrollView>
+  </TabContentItem>
+</Tabs>
 
 <!-- <form [formGroup]="accountForm" class="account-creation-form" (submit)="createAccount.emit(accountForm)">
   <div class="align-center">

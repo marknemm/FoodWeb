@@ -1,40 +1,62 @@
-// Font icon class
-.fab {
-  font-family: "Font Awesome 5 Brands", "fa-brands-400";
-  font-weight: 400;
-}
+@import "~@nativescript/theme/core";
+@import "~@nativescript/theme/blue";
 
-.fas {
-  font-family: "Font Awesome 5 Free", "fa-solid-900";
-  font-weight: 900;
-}
-
-.far {
-  font-family: "Font Awesome 5 Free", "fa-regular-400";
-  font-weight: 400;
-}
-
-// Common page class
-.page__content {
-  &-icon,
-  &-placeholder {
-    color: const(grey);
-    font-size: 20;
-    vertical-align: center;
-  }
-
-  &-icon {
-    font-size: 72;
-    vertical-align: top;
-    margin-top: 20%;
-  }
-}
-
-// Drawer navigation custom styles
-.nt-drawer__header-image {
-  color: const(grey);
-}
+@import "constants.scss";
+@import "drawer.scss";
+@import "icon.scss";
+@import "page.scss";
+@import "text-input.scss";
 
 .bold {
   font-weight: bold;
+}
+
+.bolder {
+  font-weight: bolder;
+}
+
+.boldest {
+  font-weight: 900;
+}
+
+.donor {
+  color: $donor-color;
+}
+
+.donor-fill {
+  background-color: $donor-color;
+  color: black;
+}
+
+.donor-border {
+  border-width: 1;
+  border-color: $donor-color;
+}
+
+.receiver {
+  color: $receiver-color;
+}
+
+.receiver-fill {
+  background-color: $receiver-color;
+  color: black;
+}
+
+.receiver-border {
+  border-width: 1px;
+  border-color: $receiver-color;
+}
+
+.volunteer {
+  color: $volunteer-color;
+}
+
+.volunteer-fill {
+  background-color: $volunteer-color;
+  color: white;
+}
+
+.volunteer-border {
+  border-width: 1;
+  border-color: $volunteer-color;
 }

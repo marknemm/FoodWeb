@@ -1,8 +1,14 @@
 <StackLayout>
-  <Label *ngIf="true" text="Username:"></Label>
-  <TextField *ngIf="editing; else readonly" [formControl]="formControl" autocapitalizationType="none" hint="Enter a username/email" keyboardType="email"></TextField>
+  <foodweb-app-text-field
+    *ngIf="editing; else readonlyTmpl"
+    [formControl]="formControl"
+    autocorrect="false"
+    hint="Enter a username/email..."
+    keyboardType="email"
+    label="Username:"
+  ></foodweb-app-text-field>
 
-  <ng-template #readonly>
+  <ng-template #readonlyTmpl>
     <Label [text]="formControl.value"></Label>
   </ng-template>
 </StackLayout>

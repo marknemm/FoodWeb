@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Application } from '@nativescript/core';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,13 @@ export class AppLeftNavService {
     this._setOpened(false);
     this.radSideDrawer.gesturesEnabled = false;
     this._isLocked = true;
+  }
+
+  lockUntil(obs$: Observable<any>): void {
+    this._isLocked = true;
+    obs$.pipe(take(1)).subscribe(
+      () => this._isLocked = false
+    );
   }
 
   unlock(): void {

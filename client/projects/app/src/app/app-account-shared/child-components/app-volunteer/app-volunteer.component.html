@@ -1,6 +1,10 @@
 <StackLayout *ngIf="editing; else readonlyTmpl" [formGroup]="formGroup">
-  <Label text="Full Name:"></Label>
-  <TextField formControlName="fullName" autocapitalizationType="words"></TextField>
+  <foodweb-app-text-field *ngIf="true"
+    autocapitalizationType="words"
+    autocorrect="false"
+    formControlName="fullName"
+    label="Full Name:"
+  ></foodweb-app-text-field>
   <Label *ngIf="formGroup.get('fullName').hasError('pattern')" text="Both first name and surname are required."></Label>
 </StackLayout>
 

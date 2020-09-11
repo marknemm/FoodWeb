@@ -1,35 +1,39 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NativeScriptCommonModule, NativeScriptFormsModule } from '@nativescript/angular';
+import { AppDateTimeModule } from '~app/app-date-time/app-date-time.module';
+import { AppSharedModule } from '~app/app-shared/app-shared.module';
 import { AppAccountCreationFormComponent } from './child-components/app-account-creation-form/app-account-creation-form.component';
 import { AppAccountTypeComponent } from './child-components/app-account-type/app-account-type.component';
-import { AppUsernameComponent } from './child-components/app-username/app-username.component';
-import { AppPasswordComponent } from './child-components/app-password/app-password.component';
-import { AppVolunteerComponent } from './child-components/app-volunteer/app-volunteer.component';
-import { AppOrganizationComponent } from './child-components/app-organization/app-organization.component';
+import { AppAddressComponent } from './child-components/app-address/app-address.component';
 import { AppContactInfoComponent } from './child-components/app-contact-info/app-contact-info.component';
 import { AppOperationHoursInfoComponent } from './child-components/app-operation-hours-info/app-operation-hours-info.component';
-import { AppReceiverComponent } from './child-components/app-receiver/app-receiver.component';
 import { AppOperationHoursComponent } from './child-components/app-operation-hours/app-operation-hours.component';
-import { AppAddressComponent } from './child-components/app-address/app-address.component';
+import { AppOrganizationComponent } from './child-components/app-organization/app-organization.component';
+import { AppPasswordComponent } from './child-components/app-password/app-password.component';
 import { AppProfileImgComponent } from './child-components/app-profile-img/app-profile-img.component';
+import { AppReceiverComponent } from './child-components/app-receiver/app-receiver.component';
+import { AppUsernameComponent } from './child-components/app-username/app-username.component';
+import { AppVolunteerComponent } from './child-components/app-volunteer/app-volunteer.component';
 
 @NgModule({
   declarations: [
     AppAccountCreationFormComponent,
     AppAccountTypeComponent,
-    AppUsernameComponent,
-    AppPasswordComponent,
-    AppVolunteerComponent,
-    AppOrganizationComponent,
-    AppContactInfoComponent,
-    AppOperationHoursInfoComponent,
-    AppReceiverComponent,
-    AppOperationHoursComponent,
     AppAddressComponent,
+    AppContactInfoComponent,
+    AppOrganizationComponent,
+    AppOperationHoursComponent,
+    AppOperationHoursInfoComponent,
+    AppPasswordComponent,
     AppProfileImgComponent,
+    AppReceiverComponent,
+    AppUsernameComponent,
+    AppVolunteerComponent,
   ],
   imports: [
+    AppDateTimeModule,
+    AppSharedModule,
     NativeScriptCommonModule,
     NativeScriptFormsModule,
     ReactiveFormsModule,

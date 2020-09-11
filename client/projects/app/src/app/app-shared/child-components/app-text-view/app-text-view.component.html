@@ -1,0 +1,31 @@
+<StackLayout class="nt-input">
+  <Label *ngIf="label"
+    #labelRef
+    [text]="label"
+  ></Label>
+
+  <TextView *ngIf="true"
+    #textViewRef
+    [autocapitalizationType]="autocapitalizationType"
+    [autocorrect]="autocorrect"
+    [editable]="editable"
+    [formControl]="formControl"
+    [hint]="hint"
+    [keyboardType]="keyboardType"
+    [letterSpacing]="letterSpacing"
+    [lineHeight]="lineHeight"
+    [maxLength]="maxLength"
+    [returnKeyType]="returnKeyType"
+    [secure]="secure"
+    [text]="text"
+    [textAlignment]="textAlignment"
+    [textDecoration]="textDecoration"
+    [textTransform]="textTransform"
+    [whiteSpace]="whiteSpace"
+    (blur)="blur.emit($event)"
+    (focus)="focusOut.emit($event)"
+    (returnPress)="returnPress.emit($event)"
+    (tap)="textFieldTap.emit($event)"
+    (textChange)="textChange.emit($event)"
+  ></TextView>
+</StackLayout>

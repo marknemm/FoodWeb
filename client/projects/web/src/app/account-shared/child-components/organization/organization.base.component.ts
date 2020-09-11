@@ -12,7 +12,6 @@ export class OrganizationBaseComponent extends FormBaseComponent<Organization> i
   @Input() editing = false;
 
   protected _deliveryInstrLabel = '';
-  protected _readonlyDeliveryInstrLabel = '';
 
   constructor(formHelperService: FormHelperService) {
     super(formHelperService);
@@ -26,17 +25,10 @@ export class OrganizationBaseComponent extends FormBaseComponent<Organization> i
     return this.accountType === AccountType.Receiver;
   }
 
-  get readonlyDeliveryInstrLabel(): string {
-    return this._readonlyDeliveryInstrLabel;
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes.accountType) {
-      const accountMod: string = (this.accountType === AccountType.Donor) ? 'pickups' : 'deliveries';
-      this._deliveryInstrLabel = `Please leave instructions for donation ${accountMod} here`;
-      this._readonlyDeliveryInstrLabel = (this.accountType === AccountType.Donor)
-        ? 'Instructions for Pickup:'
-        : 'Instructions for Drop-Off';
+      const accountMod: string = (this.accountType === AccountType.Donor) ? 'Pickup' : 'Delivery';
+      this._deliveryInstrLabel = `Donation ${accountMod} Instructions:`;
     }
   }
 }

@@ -1,1 +1,15 @@
-/* Add mobile styles for the component here.  */
+.tab-content {
+  margin-top: 18;
+
+  &.account {
+    margin-top: 0;
+  }
+
+  .tab-actions {
+    margin-top: 10;
+  }
+}
+
+.account-type-label {
+  margin-top: 15;
+}

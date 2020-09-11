@@ -1,13 +1,21 @@
 <foodweb-app-page [hideActionBar]="true">
   <FlexboxLayout class="login-page">
     <StackLayout class="nt-form" [formGroup]="loginForm">
-      <StackLayout class="nt-input">
-        <TextField formControlName="usernameEmail" [hint]="usernameEmailPlaceholder" autocapitalizationType="none" keyboardType="email" autocorrect="false"></TextField>
-      </StackLayout>
+      <foodweb-app-text-field
+        [hint]="usernameEmailPlaceholder"
+        autocorrect="false"
+        formControlName="usernameEmail"
+        keyboardType="email"
+      ></foodweb-app-text-field>
 
-      <StackLayout class="nt-input" *ngIf="isLogin">
-        <TextField formControlName="password" hint="Password" secure="true" (returnPress)="submit()"></TextField>
-      </StackLayout>
+      <foodweb-app-text-field *ngIf="isLogin"
+        autocorrect="false"
+        formControlName="password"
+        hint="Password"
+        keyboardType="email"
+        secure="true"
+        (returnPress)="submit()"
+      ></foodweb-app-text-field>
 
       <StackLayout *ngIf="isLogin; else passwordRecoveryTmpl" class="login-actions">
         <Button text="Login" class="-primary" [disabled]="loginForm.invalid" (tap)="submit()"></Button>

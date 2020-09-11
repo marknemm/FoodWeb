@@ -10,6 +10,10 @@ import { AppShellModule } from '~app/app-shell/app-shell.module';
 import { AppComponent } from '~app/app.component';
 import { AppHomeComponent } from '~app/components/app-home/app-home.component';
 import { AccountHelper, DeliveryHelper, DonationHelper, JSONDateReviver, OperationHoursHelper } from '~shared';
+import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
+import { SessionService } from '~web/session/services/session/session.service';
+import { AppAuthenticationService } from './app-session/services/app-authentication/app-authentication.service';
+import { AppSessionService } from './app-session/services/app-session/app-session.service';
 
 @NgModule({
   declarations: [
@@ -28,6 +32,8 @@ import { AccountHelper, DeliveryHelper, DonationHelper, JSONDateReviver, Operati
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AppSessionMonitorService, multi: true },
+    { provide: AuthenticationService, useClass: AppAuthenticationService },
+    { provide: SessionService, useClass: AppSessionService },
     AccountHelper,
     DeliveryHelper,
     DonationHelper,
