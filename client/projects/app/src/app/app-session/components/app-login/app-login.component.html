@@ -1,19 +1,27 @@
-<foodweb-app-page [hideActionBar]="true">
+<foodweb-app-page pageTitle="FoodWeb Login">
   <FlexboxLayout class="login-page">
     <StackLayout class="nt-form" [formGroup]="loginForm">
+      <Image src=""></Image>
+
       <foodweb-app-text-field
         [hint]="usernameEmailPlaceholder"
         autocorrect="false"
         formControlName="usernameEmail"
         keyboardType="email"
+        [isReturnKeyTypeDone]="!isLogin"
+        [nextFocus]="passwordTextField"
+        (done)="submit()"
       ></foodweb-app-text-field>
 
-      <foodweb-app-text-field *ngIf="isLogin"
+      <foodweb-app-text-field
+        #passwordTextField
         autocorrect="false"
         formControlName="password"
         hint="Password"
         keyboardType="email"
         secure="true"
+        returnKeyType="done"
+        [visible]="isLogin"
         (returnPress)="submit()"
       ></foodweb-app-text-field>
 

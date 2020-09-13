@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RouterExtensions } from '@nativescript/angular';
+import { Focusable } from '~app/app-shared/interfaces/focusable';
 import { AppBackService } from '~app/app-shared/services/app-back/app-back.service';
 import { AccountCreationFormBaseComponent } from '~web/account-shared/child-components/account-creation-form/account-creation-form.base.component';
 
@@ -35,6 +36,11 @@ export class AppAccountCreationFormComponent extends AccountCreationFormBaseComp
 
   nextTab(): void {
     this.toTab(this._tabIdx + 1);
+  }
+
+  nextTabAndFocus(focusable: Focusable): void {
+    this.nextTab();
+    focusable.focus();
   }
 
   prevTab(): void {

@@ -1,41 +1,64 @@
 <StackLayout *ngIf="editing; else readonlyTmpl" [formGroup]="formGroup">
-  <foodweb-app-text-field *ngIf="true"
+  <foodweb-app-text-field
+    #emailField
     formControlName="email"
     keyboardType="email"
     label="Email:"
-  ></foodweb-app-text-field>
-  <Label *ngIf="formGroup.get('email').hasError('email')" text="Not a valid email address"></Label>
+    [nextFocus]="phoneNumberField">
+    <Label *ngIf="formGroup.get('email').hasError('email')" text="Not a valid email address" class="text-danger"></Label>
+  </foodweb-app-text-field>
 
-  <foodweb-app-text-field *ngIf="true"
+  <foodweb-app-text-field
+    #phoneNumberField
     formControlName="phoneNumber"
     keyboardType="phone"
     label="Phone Number:"
-  ></foodweb-app-text-field>
-  <Label *ngIf="formGroup.get('phoneNumber').hasError('pattern')" text="Not a valid phone number"></Label>
+    [nextFocus]="streetAddressField">
+    <Label *ngIf="formGroup.get('phoneNumber').hasError('pattern')" text="Not a valid phone number" class="text-danger"></Label>
+  </foodweb-app-text-field>
 
-  <foodweb-app-text-field *ngIf="true"
+  <foodweb-app-text-field
+    #streetAddressField
     autocapitalizationType="words"
     formControlName="streetAddress"
     label="Street Address:"
+    [nextFocus]="cityField"
   ></foodweb-app-text-field>
 
-  <foodweb-app-text-field *ngIf="true"
-    autocapitalizationType="words"
-    formControlName="city"
-    label="City:"
-  ></foodweb-app-text-field>
+  <GridLayout rows="*" columns="*,auto,auto">
+    <foodweb-app-text-field
+      #cityField
+      autocapitalizationType="words"
+      formControlName="city"
+      label="City:"
+      row="0"
+      col="0"
+      [nextFocus]="stateField"
+    ></foodweb-app-text-field>
 
-  <foodweb-app-text-field *ngIf="true"
-    autocapitalizationType="words"
-    formControlName="stateProvince"
-    label="State/Province:"
-  ></foodweb-app-text-field>
+    <foodweb-app-text-field
+      #stateField
+      autocapitalizationType="words"
+      formControlName="stateProvince"
+      label="State/Province:"
+      row="0"
+      col="1"
+      width="45"
+      [nextFocus]="postalField"
+    ></foodweb-app-text-field>
 
-  <foodweb-app-text-field *ngIf="true"
-    formControlName="postalCode"
-    label="Postal Code:"
-  ></foodweb-app-text-field>
-  <Label *ngIf="formGroup.get('postalCode').hasError('pattern')" text="Not a valid postal code"></Label>
+    <foodweb-app-text-field
+      #postalField
+      formControlName="postalCode"
+      label="Postal Code:"
+      [returnKeyType]="finalReturnKeyType"
+      (returnPress)="finalReturnPress.emit()"
+      row="0"
+      col="2"
+      width="40">
+      <Label *ngIf="formGroup.get('postalCode').hasError('pattern')" text="Not a valid postal code" class="text-danger"></Label>
+    </foodweb-app-text-field>
+  </GridLayout>
 </StackLayout>
 
 <ng-template #readonlyTmpl>

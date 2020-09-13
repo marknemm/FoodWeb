@@ -5,12 +5,14 @@ import { AppAlertModule } from '~app/app-alert/app-alert.module';
 import { AppProgressIndicatorComponent } from './child-components/app-progress-indicator/app-progress-indicator.component';
 import { AppTextFieldComponent } from './child-components/app-text-field/app-text-field.component';
 import { AppTextViewComponent } from './child-components/app-text-view/app-text-view.component';
+import { AppVisibleDirective } from './directives/app-visible/app-visible.directive';
 
 @NgModule({
   declarations: [
     AppProgressIndicatorComponent,
     AppTextFieldComponent,
     AppTextViewComponent,
+    AppVisibleDirective,
   ],
   imports: [
     NativeScriptCommonModule,
@@ -23,6 +25,7 @@ import { AppTextViewComponent } from './child-components/app-text-view/app-text-
     AppProgressIndicatorComponent,
     AppTextFieldComponent,
     AppTextViewComponent,
+    AppVisibleDirective,
   ],
   schemas: [
     NO_ERRORS_SCHEMA

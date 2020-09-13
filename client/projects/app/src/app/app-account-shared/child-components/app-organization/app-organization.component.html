@@ -1,18 +1,23 @@
 <StackLayout *ngIf="editing; else readonlyTmpl" [formGroup]="formGroup" class="organization-container">
-  <foodweb-app-text-field *ngIf="true"
+  <foodweb-app-text-field
+    #organizationNameField
     autocapitalizationType="words"
     formControlName="name"
     label="Organization Name:"
+    [nextFocus]="descriptionField"
   ></foodweb-app-text-field>
 
-  <foodweb-app-text-view *ngIf="true"
+  <foodweb-app-text-view
+    #descriptionField
     autocapitalizationType="sentences"
     formControlName="description"
     hint="Tell us about your organization..."
     label="Organization Info:"
+    [nextFocus]="instructionsField"
   ></foodweb-app-text-view>
 
-  <foodweb-app-text-view *ngIf="true"
+  <foodweb-app-text-view
+    #instructionsField
     [label]="deliveryInstrLabel"
     autocapitalizationType="sentences"
     formControlName="deliveryInstructions"

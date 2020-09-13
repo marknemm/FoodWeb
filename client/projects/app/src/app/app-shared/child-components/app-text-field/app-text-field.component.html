@@ -1,11 +1,12 @@
-<StackLayout class="nt-input">
-  <Label *ngIf="label"
+<StackLayout class="nt-input" [foodwebAppVisibile]="visible">
+  <Label
     #labelRef
+    [foodwebAppVisibile]="label"
     [text]="label"
     [ngClass]="{ 'text-danger': formControl.touched && formControl.invalid }"
   ></Label>
 
-  <TextField *ngIf="true"
+  <TextField
     #textFieldRef
     [autocapitalizationType]="autocapitalizationType"
     [autocorrect]="autocorrect"
@@ -25,7 +26,7 @@
     [whiteSpace]="whiteSpace"
     (blur)="blur.emit($event)"
     (focus)="focusOut.emit($event)"
-    (returnPress)="returnPress.emit($event)"
+    (returnPress)="onReturnPress($event)"
     (tap)="textFieldTap.emit($event)"
     (textChange)="textChange.emit($event)"
   ></TextField>

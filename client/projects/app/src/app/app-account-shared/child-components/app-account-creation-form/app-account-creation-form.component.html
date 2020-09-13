@@ -21,8 +21,8 @@
         <foodweb-app-account-type *ngIf="true" [editing]="!accountType" formControlName="accountType" class="account-type"></foodweb-app-account-type>
         <Button *ngIf="!accountType; else accountTmpl" text="Return to Login" (tap)="backToLoginPage()" class="-primary"></Button>
         <ng-template #accountTmpl>
-          <foodweb-app-username formControlName="username" [editing]="true"></foodweb-app-username>
-          <foodweb-app-password formGroupName="password" [editing]="true"></foodweb-app-password>
+          <foodweb-app-username formControlName="username" [editing]="true" (finalReturnPress)="passwordGroup.focus()"></foodweb-app-username>
+          <foodweb-app-password #passwordGroup formGroupName="password" [editing]="true" (finalReturnPress)="nextTab()"></foodweb-app-password>
           <GridLayout rows="auto" columns="*,*" class="tab-actions">
             <Button text="Back" (tap)="backToAccountTypeSel()" row="0" col="0" class="-primary"></Button>
             <Button text="Next" (tap)="nextTab()" row="0" col="1" class="-primary"></Button>
@@ -35,7 +35,7 @@
   <TabContentItem *ngIf="accountType !== AccountType.Volunteer">
     <ScrollView>
       <StackLayout class="tab-content organization">
-        <foodweb-app-organization formGroupName="organization" [accountType]="accountType" [editing]="true"></foodweb-app-organization>
+        <foodweb-app-organization formGroupName="organization" [accountType]="accountType" [editing]="true" (finalReturnPress)="nextTab()"></foodweb-app-organization>
         <GridLayout rows="auto" columns="*,*" class="tab-actions">
           <Button text="Back" (tap)="prevTab()" row="0" col="0" class="-primary"></Button>
           <Button text="Next" (tap)="nextTab()" row="0" col="1" class="-primary"></Button>
@@ -48,10 +48,15 @@
     <ScrollView>
       <StackLayout class="tab-content contact">
         <foodweb-app-volunteer *ngIf="accountType === AccountType.Volunteer" formGroupName="volunteer" [editing]="true"></foodweb-app-volunteer>
-        <foodweb-app-contact-info *ngIf="true" formGroupName="contactInfo" [editing]="true"></foodweb-app-contact-info>
+        <foodweb-app-contact-info *ngIf="true"
+          formGroupName="contactInfo"
+          [editing]="true"
+          [finalReturnKeyType]="(isDonor) ? 'done' : 'next'"
+          (finalReturnPress)="(isDonor) ? nextTab() : createAccount.emit(accountForm)"
+        ></foodweb-app-contact-info>
         <GridLayout *ngIf="true" rows="auto" columns="*,*" class="tab-actions">
           <Button text="Back" (tap)="prevTab()" row="0" col="0" class="-primary"></Button>
-          <Button *ngIf="accountType !== AccountType.Donor; else submitButtonTmpl" text="Next" (tap)="nextTab()" row="0" col="1" class="-primary"></Button>
+          <Button *ngIf="!isDonor; else submitButtonTmpl" text="Next" (tap)="nextTab()" row="0" col="1" class="-primary"></Button>
           <ng-template #submitButtonTmpl>
             <Button text="Submit" (tap)="createAccount.emit(accountForm)" row="0" col="1" class="-primary"></Button>
           </ng-template>

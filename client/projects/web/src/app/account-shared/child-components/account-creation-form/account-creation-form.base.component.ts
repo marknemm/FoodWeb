@@ -28,6 +28,18 @@ export class AccountCreationFormBaseComponent implements OnInit, OnDestroy {
     return this.accountForm.get('accountType').value;
   }
 
+  get isDonor(): boolean {
+    return this.accountType === AccountType.Donor;
+  }
+
+  get isReceiver(): boolean {
+    return this.accountType === AccountType.Receiver;
+  }
+
+  get isVolunteer(): boolean {
+    return this.accountType === AccountType.Volunteer;
+  }
+
   get operationHoursDescription(): string {
     return (this.accountType === AccountType.Receiver)
       ? 'Optionally limit the times you will be considered available to receive deliveries.'

@@ -1,14 +1,14 @@
 <StackLayout>
   <foodweb-app-text-field
-    *ngIf="editing; else readonlyTmpl"
+    #usernameField
+    [visible]="editing"
     [formControl]="formControl"
     autocorrect="false"
     hint="Enter a username/email..."
     keyboardType="email"
     label="Username:"
+    (returnPress)="finalReturnPress.emit()"
   ></foodweb-app-text-field>
 
-  <ng-template #readonlyTmpl>
-    <Label [text]="formControl.value"></Label>
-  </ng-template>
+  <Label *ngIf="!editing" [text]="formControl.value"></Label>
 </StackLayout>

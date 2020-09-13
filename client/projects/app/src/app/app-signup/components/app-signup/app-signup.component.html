@@ -1,4 +1,4 @@
-<foodweb-app-page pageTitle="FoodWeb Signup" [inScrollView]="false">
+<foodweb-app-page pageTitle="FoodWeb Signup">
   <foodweb-app-account-creation-form
     *ngIf="!sessionService.loggedIn"
     (createAccount)="signup($event)"

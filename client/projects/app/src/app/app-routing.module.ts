@@ -10,8 +10,8 @@ export const routes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: '/home' },
     { path: 'home', component: AppHomeComponent },
   ]},
-  // { path: 'login', component: AppLoginComponent },
-  { path: 'login', loadChildren: () => import('~app/app-signup/app-signup.module').then(mod => mod.AppSignupModule) },
+  { path: 'login', component: AppLoginComponent },
+  // { path: 'login', loadChildren: () => import('~app/app-signup/app-signup.module').then(mod => mod.AppSignupModule) },
   { path: 'signup', loadChildren: () => import('~app/app-signup/app-signup.module').then(mod => mod.AppSignupModule) },
 ];
 
