@@ -6,12 +6,17 @@
 
   .nt-form {
     flex-grow: 1;
-    vertical-align: middle;
+    vertical-align: top;
     width: 100%;
-    padding: 0 30px;
+    padding: 30 15;
+
+    .login-image {
+      width: 260;
+      height: 260;
+    }
 
     .login-actions {
-      margin-top: 80px;
+      margin-top: 20;
     }
   }
 
