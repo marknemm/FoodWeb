@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { valueAccessorProvider } from '~web/data-structure/form-base-component';
+import { formProvider } from '~web/data-structure/form-base-component';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 import { AccountTypeBaseComponent } from './account-type.base.component';
@@ -8,7 +8,7 @@ import { AccountTypeBaseComponent } from './account-type.base.component';
   selector: 'foodweb-account-type',
   templateUrl: './account-type.component.html',
   styleUrls: ['./account-type.component.scss'],
-  providers: valueAccessorProvider(AccountTypeComponent)
+  providers: formProvider(AccountTypeComponent)
 })
 export class AccountTypeComponent extends AccountTypeBaseComponent {
 

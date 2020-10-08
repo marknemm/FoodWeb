@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AccountType } from '~shared';
-import { AccountForm } from '~web/account/forms/account.form';
+import { AccountForm } from '~web/account-shared/forms/account.form';
 
 @Component({ template: '' })
 export class AccountCreationFormBaseComponent implements OnInit, OnDestroy {
@@ -52,7 +52,7 @@ export class AccountCreationFormBaseComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (!this.accountForm) {
-      this.accountForm = new AccountForm({ formMode: 'Signup' }, this._destroy$);
+      this.accountForm = new AccountForm(this._destroy$, { formMode: 'Signup' });
     }
     this._listenAccountTypeSelect();
     this._listenAccountTypeRoute();
@@ -83,7 +83,7 @@ export class AccountCreationFormBaseComponent implements OnInit, OnDestroy {
   }
 
   protected _onAccountTypeRoute(accountType: AccountType): void {
-    this.accountForm.get('accountType').setValue(accountType, { emitEvent: false });
+    this.accountForm.get('accountType').setValue(accountType);
   }
 
 }

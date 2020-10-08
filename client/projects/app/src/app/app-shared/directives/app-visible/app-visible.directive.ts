@@ -1,5 +1,5 @@
 import { Directive, ElementRef, Input } from '@angular/core';
-import { ProxyViewContainer, Visibility } from '@nativescript/core';
+import { ProxyViewContainer } from '@nativescript/core';
 
 @Directive({
   // tslint:disable-next-line: directive-selector
@@ -11,12 +11,12 @@ export class AppVisibleDirective {
     private _elementRef: ElementRef<ProxyViewContainer>
   ) {}
 
-  @Input('foodwebAppVisibile') set visible(visible: boolean | Visibility) {
+  @Input('foodwebAppVisibile') set visible(visible: VisibleInput) {
     const nativeElement: ProxyViewContainer = this._elementRef.nativeElement;
 
     if (visible === 'hidden') {
       nativeElement.visibility = 'hidden';
-    } else if (visible == null || (visible && visible !== 'collapse')) {
+    } else if (visible == null || (visible && visible !== 'collapse' && visible !== 'false')) {
       nativeElement.visibility = 'visible';
     } else {
       nativeElement.visibility = 'collapse';

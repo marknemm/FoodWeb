@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, finalize } from 'rxjs/operators';
-import { environment } from '~admin/../environments/environment';
+import { environment } from '~admin-env/environment';
 import { Account, ImpersonateTokenResponse } from '~shared';
 import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { AlertService } from '~web/alert/services/alert/alert.service';

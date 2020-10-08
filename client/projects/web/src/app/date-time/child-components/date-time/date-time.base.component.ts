@@ -1,29 +1,30 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ValidationErrors, Validator } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
+import _ from '~lodash-mixins';
 import { FormBaseComponent } from '~web/data-structure/form-base-component';
+import { TFormControl } from '~web/data-structure/t-form-control';
 import { DateTimeForm } from '~web/date-time/forms/date-time.form';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({ template: '' })
-export class DateTimeBaseComponent extends FormBaseComponent<Date> implements OnInit, OnChanges, Validator {
+export class DateTimeBaseComponent extends FormBaseComponent<Date> implements OnInit, Validator {
 
-  @Input() allowClear = false;
-  @Input() allowUndefTime = false;
-  @Input() boldDate = false;
-  @Input() boldTime = false;
-  @Input() dateTime: Date;
+  @Input() allowClear: BooleanInput = false;
+  @Input() allowUndefTime: BooleanInput = false;
+  @Input() boldDate: BooleanInput = false;
+  @Input() boldTime: BooleanInput = false;
   @Input() datePlaceholder = 'Date';
   @Input() defaultDate: 'Now' | Date;
   @Input() defaultTime = '12:00 pm';
-  @Input() editing = false;
+  @Input() editable: BooleanInput = false;
   @Input() errorStateMatcher: ErrorStateMatcher;
-  @Input() excludeDateDisplay = false;
-  @Input() excludeTimeDisplay = false;
+  @Input() excludeDateDisplay: BooleanInput = false;
+  @Input() excludeTimeDisplay: BooleanInput = false;
   @Input() floatLabels: FloatLabelType = 'auto';
-  @Input() inlineFields = true;
+  @Input() inlineFields: BooleanInput = true;
   @Input() maxDate: Date;
   @Input() minDate = new Date();
   @Input() minDateWidth = '';
@@ -41,16 +42,15 @@ export class DateTimeBaseComponent extends FormBaseComponent<Date> implements On
     formHelperService: FormHelperService,
     dateTimeService: DateTimeService
   ) {
-    super(formHelperService);
+    super(new TFormControl<Date>(), formHelperService);
     this.dateTimeForm = new DateTimeForm(dateTimeService);
   }
 
   ngOnInit() {
-    super.ngOnInit();
     const required: boolean = this._deriveFormControlState();
     this.dateTimeForm.init({ defaultDate: this.defaultDate, required });
     this.onValueChanges(this.dateTimeForm).subscribe(
-      () => this.onChangeCb(this.dateTimeForm.toDate(this.allowUndefTime))
+      () => this.onChangeCb(this.dateTimeForm.toDate(_.toBoolean(this.allowUndefTime)))
     );
   }
 
@@ -63,12 +63,6 @@ export class DateTimeBaseComponent extends FormBaseComponent<Date> implements On
     this._formHelperService.onMarkAsTouched(this.formControl, () => this.dateTimeForm.markAllAsTouched());
     this._formHelperService.onMarkAsPristine(this.formControl, () => this.dateTimeForm.markAsPristine());
     return this._formHelperService.hasRequiredValidator(this.formControl);
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.dateTime) {
-      setTimeout(() => this.writeValue(this.dateTime));
-    }
   }
 
   /**

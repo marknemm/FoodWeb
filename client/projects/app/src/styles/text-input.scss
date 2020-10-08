@@ -1,3 +1,5 @@
+@import "constants.scss";
+
 TextField,
 TextView {
   placeholder-color: #999;
@@ -5,6 +7,6 @@ TextView {
 
 .nt-input {
   .text-danger {
-    color: #cc0011;
+    color: $ns-danger-color;
   }
 }

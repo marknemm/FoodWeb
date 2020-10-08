@@ -1,58 +1,25 @@
-<GridLayout>
-  <foodweb-app-text-field #timeTextField *ngIf="editing; else readonlyTmpl"
-    [text]="formControl.value | foodwebFormatTime"
-    [hint]="placeholder"
-    (tap)="showTimeDialog(timeTextField)"
-    editable="false"
-    keyboardType="datetime"
-  ></foodweb-app-text-field>
+<GridLayout [foodwebAppVisibile]="visible">
+  <foodweb-app-focus-mask
+    #focusMask
+    [visible]="editable"
+    (focusTap)="showTimeDialog(timeTextField)">
+    <foodweb-app-text-field
+      #timeTextField
+      editable="false"
+      keyboardType="datetime"
+      [hint]="placeholder"
+      [label]="label"
+      [text]="formControl.value | foodwebFormatTime"
+      (tap)="showTimeDialog(timeTextField)"
+    ></foodweb-app-text-field>
+  </foodweb-app-focus-mask>
 
-  <ng-template #readonlyTmpl>
-    <Label>
-      <FormattedString>
-        <Span
-          [ngClass]="{ bold: bold }"
-          [text]="timeDisplay | foodwebFormatTime"
-        ></Span>
-      </FormattedString>
-    </Label>
-  </ng-template>
+  <Label [foodwebAppVisibile]="!editable">
+    <FormattedString>
+      <Span
+        [ngClass]="{ bold: bold }"
+        [text]="timeDisplay | foodwebFormatTime"
+      ></Span>
+    </FormattedString>
+  </Label>
 </GridLayout>
-
-<!-- <div *ngIf="editing; else displayTmpl" class="time-edit">
-  <mat-form-field [floatLabel]="floatLabels" class="fill">
-    <input matInput
-      [errorStateMatcher]="errorStateMatcher"
-      [formControl]="formControl"
-      [placeholder]="placeholder"
-      [ngxTimepicker]="timePicker"
-      (blur)="onTouchedCb()"
-      autocomplete="off"
-      readonly="true">
-    <button mat-icon-button matSuffix
-      *ngIf="showClearButton"
-      (click)="clearTime($event)"
-      color="warn"
-      type="button">
-      <mat-icon>clear</mat-icon>
-    </button>
-    <button mat-icon-button matSuffix
-      [disabled]="formControl?.disabled"
-      (click)="timePicker.open()"
-      aria-label="Open Time Dialog"
-      type="button">
-      <mat-icon>alarm</mat-icon>
-    </button>
-    <ngx-material-timepicker #timePicker
-      [defaultTime]="defaultTime"
-      [minutesGap]="minutesGap"
-      [preventOverlayClick]="preventOverlayClick"
-    ></ngx-material-timepicker>
-  </mat-form-field>
-</div>
-
-<ng-template #displayTmpl>
-  <span [ngClass]="{ bold: bold }" class="time-display">
-    {{ timeDisplay }}
-  </span>
-</ng-template> -->

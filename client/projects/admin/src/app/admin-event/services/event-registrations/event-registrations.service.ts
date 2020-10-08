@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { environment } from '~admin/../environments/environment';
+import { environment } from '~admin-env/environment';
 import { FeaturedEvent } from '~shared';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';

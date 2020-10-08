@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { AccountHelper, DeliveryHelper, DirectionsExtractor, DonationHelper, JSONDateReviver, MapWaypointConverter, OperationHoursHelper } from '~shared';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { AppRoutingModule } from '~web/app-routing.module';
 import { AppComponent } from '~web/app.component';
 import { HomeModule } from '~web/home/home.module';

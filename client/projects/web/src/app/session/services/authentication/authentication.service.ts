@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, finalize, map, mergeMap, takeUntil } from 'rxjs/operators';
 import { AccountHelper, ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { Account, SessionService } from '../session/session.service';
 

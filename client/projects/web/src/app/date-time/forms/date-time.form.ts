@@ -1,6 +1,6 @@
 import { formatDate } from '@angular/common';
 import { Validators } from '@angular/forms';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 
 export interface DateTimeFormConfig {
@@ -14,7 +14,7 @@ export interface DateTimeFormT {
   time: string;
 }
 
-export class DateTimeForm extends TypedFormGroup<DateTimeFormT> {
+export class DateTimeForm extends TFormGroup<DateTimeFormT> {
 
   private _required: boolean;
 

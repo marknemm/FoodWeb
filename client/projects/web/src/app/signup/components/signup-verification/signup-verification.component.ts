@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NEVER, Observable, ObservableInput } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
 import { SessionService } from '~web/session/services/session/session.service';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';

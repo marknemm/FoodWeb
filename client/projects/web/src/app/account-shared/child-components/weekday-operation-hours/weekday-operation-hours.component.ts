@@ -1,0 +1,11 @@
+import { Component } from '@angular/core';
+import { formProvider } from '~web/data-structure/form-base-component';
+import { WeekdayOperationHoursBaseComponent } from './weekday-operation-hours.base.component';
+
+@Component({
+  selector: 'foodweb-weekday-operation-hours',
+  templateUrl: './weekday-operation-hours.component.html',
+  styleUrls: ['./weekday-operation-hours.component.scss'],
+  providers: formProvider(WeekdayOperationHoursComponent)
+})
+export class WeekdayOperationHoursComponent extends WeekdayOperationHoursBaseComponent {}

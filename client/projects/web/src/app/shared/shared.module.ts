@@ -21,6 +21,7 @@ import { DisplayEditTransitionDirective } from './directives/display-edit-transi
 import { FragmentAccordianDirective } from './directives/fragment-accordian/fragment-accordian.directive';
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
 import { WindowSizeDirective } from './directives/window-size/window-size.directive';
+import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { WindowSizeDirective } from './directives/window-size/window-size.direct
     ProgressIndicatorComponent,
     ReturnLinkDirective,
     SearchBarComponent,
+    ToBooleanPipe,
     WindowSizeDirective,
     YesNoComponent,
   ],
@@ -60,6 +62,7 @@ import { WindowSizeDirective } from './directives/window-size/window-size.direct
     ProgressIndicatorComponent,
     ReturnLinkDirective,
     SearchBarComponent,
+    ToBooleanPipe,
     WindowSizeDirective,
     YesNoComponent,
   ]

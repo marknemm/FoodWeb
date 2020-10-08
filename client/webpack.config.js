@@ -376,7 +376,13 @@ module.exports = env => {
       new webpack.NormalModuleReplacementPlugin(/environment$/, (resource) => {
         resource.request = resource.request.replace(/~web/, '~app');
         resource.request = resource.request.replace(/projects\/web/, 'projects/app');
-        resource.request = resource.request.replace(/environment$/, `environment.${env.environment || ''}`);
+        if (env.environment) {
+          resource.request = resource.request.replace(/environment$/, `environment.${env.environment || ''}`);
+        } else if (env.android) {
+          resource.request = resource.request.replace(/environment$/, `environment.android`);
+        } else if (env.ios) {
+          resource.request = resource.request.replace(/environment$/, `environment.ios`);
+        }
       }),
       // Remove all files from the out dir.
       new CleanWebpackPlugin({

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '~admin/../environments/environment';
+import { environment } from '~admin-env/environment';
 import { AccountCreateOptions } from '~admin/admin-account/forms/admin-account.form';
 import { Account, AdminAccountCreateRequest } from '~shared';
 import { ImmutableStore } from '~web/data-structure/immutable-store';

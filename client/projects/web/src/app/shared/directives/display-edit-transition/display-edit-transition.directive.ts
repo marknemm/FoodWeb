@@ -8,10 +8,10 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDestroy {
 
-  @Input('foodwebDisplayEditTransition') editing = false;
-  @Input() form: HTMLElement;
+  @Input('foodwebDisplayEditTransition') editable = false;
   @Input() display: HTMLElement;
   @Input() duration = 0.25;
+  @Input() form: HTMLElement;
   @Input() heightRecalcAtMs: number[];
   @Input() recalcTrigger: Observable<any>;
 
@@ -27,6 +27,14 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
   }
 
   ngOnInit() {
+    // Ensure all required inputs have been bound.
+    if (!this.display) {
+      throw new Error(`'display' input property is required for foodwebDisplayEditTransition directive on: ${this.container.innerHTML}`);
+    }
+    if (!this.form) {
+      throw new Error(`'form' input property is required for foodwebDisplayEditTransition directive on: ${this.container.innerHTML}`);
+    }
+
     this._recalcContainerHeight = this._recalcContainerHeight.bind(this);
     this._window.addEventListener('resize', this._recalcContainerHeight);
     this._initStyles();
@@ -40,7 +48,7 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.editing || changes.form || changes.display) {
+    if (changes.editable || changes.form || changes.display) {
       this.recalcStyles();
     }
     if (changes.recalcTrigger) {
@@ -52,8 +60,8 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
     const initContainerOverflow = this.container.style.overflow;
     this.container.style.overflow = 'hidden';
     setTimeout(() => this.container.style.overflow = initContainerOverflow, this.duration * 1000);
-    this._recalcStylesFor(this.form.style, this.editing);
-    this._recalcStylesFor(this.display.style, !this.editing);
+    this._recalcStylesFor(this.form.style, this.editable);
+    this._recalcStylesFor(this.display.style, !this.editable);
     const heightRecalcAtMs = this.heightRecalcAtMs ? this.heightRecalcAtMs : [0];
     heightRecalcAtMs.forEach((subMs: number) => {
       setTimeout(() => this._recalcContainerHeight(), subMs);
@@ -61,7 +69,7 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
   }
 
   private _recalcContainerHeight(): void {
-    const containerHeight: number = (this.editing)
+    const containerHeight: number = (this.editable)
       ? this.form.offsetHeight
       : this.display.offsetHeight;
     this.container.style.height = `${containerHeight}px`;

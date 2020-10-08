@@ -1,4 +1,4 @@
-<div *ngIf="editing; else readonlyTmpl" class="date-edit">
+<div *ngIf="editable | toBoolean; else readonlyTmpl" class="date-edit">
   <mat-form-field [floatLabel]="floatLabels" (click)="datePicker.open()" class="fill">
     <input matInput
       [errorStateMatcher]="errorStateMatcher"
@@ -23,7 +23,7 @@
 </div>
 
 <ng-template #readonlyTmpl>
-  <span [ngClass]="{ bold: bold }" [style.minWidth]="minWidth" class="date-display">
-    {{ dateDisplay | foodwebFormatDate }}
+  <span [ngClass]="{ bold: bold | toBoolean }" [style.minWidth]="minWidth" class="date-display">
+    {{ value | foodwebFormatDate }}
   </span>
 </ng-template>

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { EventRegistration, EventRegistrationCreateRequest, FeaturedEvent } from '~shared';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 
 @Injectable({

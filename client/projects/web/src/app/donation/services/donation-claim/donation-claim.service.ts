@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Donation, DonationClaimRequest } from '~shared';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({

@@ -1,10 +1,10 @@
 import { AbstractControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AccountAutocompleteItem, AdminDeliverySaveData, DateTimeRange, Delivery } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 import { DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
 
-export class AdminDeliveryForm extends TypedFormGroup<AdminDeliveryFormT> {
+export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
 
   constructor(
     destroy$: Observable<any>,

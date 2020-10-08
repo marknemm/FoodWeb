@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { AccountAutocompleteItem, AccountHelper, AccountType } from '~shared';
 import { AccountAutocompleteService } from '~web/account-shared/services/account-autocomplete/account-autocomplete.service';
-import { FormBaseComponent, valueAccessorProvider } from '~web/data-structure/form-base-component';
+import { FormBaseComponent, formProvider } from '~web/data-structure/form-base-component';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
+import { TFormControl } from '~web/data-structure/t-form-control';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
   templateUrl: './account-autocomplete.component.html',
   styleUrls: ['./account-autocomplete.component.scss'],
   providers: [
-    valueAccessorProvider(AccountAutocompleteComponent),
+    formProvider(AccountAutocompleteComponent),
     AccountAutocompleteService,
     FormHelperService
   ]
@@ -25,7 +26,7 @@ export class AccountAutocompleteComponent extends FormBaseComponent<string> {
     private _accountAutocompleteService: AccountAutocompleteService,
     formHelperService: FormHelperService
   ) {
-    super(formHelperService);
+    super(new TFormControl<string>(), formHelperService);
   }
 
   get accountAutocompleteStore(): ImmutableStore<AccountAutocompleteItem[]> {

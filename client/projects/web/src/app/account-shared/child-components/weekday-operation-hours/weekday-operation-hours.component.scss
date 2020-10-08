@@ -1,0 +1,53 @@
+@import "constants.scss";
+
+:host {
+  $add-remove-button-size: 30px;
+  $add-button-font-size: 24px;
+  $remove-button-font-size: 18px;
+
+  .weekday-header {
+    .add-time-range {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: $add-remove-button-size;
+      height: $add-remove-button-size;
+      color: $primary-darker;
+      margin-top: -5px;
+
+      .mat-icon {
+        font-size: $add-button-font-size;
+        line-height: $add-button-font-size;
+        vertical-align: -2px;
+      }
+    }
+  }
+
+  .time-range-list {
+    margin: 0;
+    padding: 0;
+
+    .time-range-item {
+      list-style: none;
+
+      .foodweb-time-range {
+        display: inline-block;
+        width: calc(100% - #{$add-remove-button-size});
+        padding-right: 10px;
+      }
+
+      .remove-time-range {
+        width: $add-remove-button-size;
+        height: $add-remove-button-size;
+        color: $warn;
+        vertical-align: -5px;
+
+        .mat-icon {
+          font-size: $remove-button-font-size;
+          line-height: $remove-button-font-size;
+          vertical-align: 1px;
+        }
+      }
+    }
+  }
+}

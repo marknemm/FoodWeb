@@ -12,7 +12,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class ProfileImgComponent implements OnInit, ControlValueAccessor {
 
   @Input() editable = false;
-  @Input() editing = false;
   @Input() width = '150px';
   @Input() height = '150px';
   @Input() imgUrl = '';

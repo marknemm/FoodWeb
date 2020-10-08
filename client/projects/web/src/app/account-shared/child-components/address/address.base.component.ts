@@ -6,7 +6,7 @@ import { MapAppLinkService } from '~web/map/services/map-app-link/map-app-link.s
 @Component({ template: '' })
 export class AddressBaseComponent implements OnInit, OnChanges {
 
-  @Input() contactInfo: ContactInfo;
+  @Input() value: ContactInfo;
   @Input() mapAnchorType: MapAnchorType = 'Directions';
 
   protected _mapAnchor = '';
@@ -24,8 +24,8 @@ export class AddressBaseComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.contactInfo || changes.mapAnchorType) {
       switch (this.mapAnchorType) {
-        case 'Directions':  this._mapAnchor = this._mapAppLinkService.genDirectionHref(['My+Location', this.contactInfo]);  break;
-        case 'Location':    this._mapAnchor = this._mapAppLinkService.genLocationHref(this.contactInfo);                    break;
+        case 'Directions':  this._mapAnchor = this._mapAppLinkService.genDirectionHref(['My+Location', this.value]);  break;
+        case 'Location':    this._mapAnchor = this._mapAppLinkService.genLocationHref(this.value);                    break;
         case 'None':
         default:            this._mapAnchor = '';
       }

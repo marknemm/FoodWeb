@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Account, AccountSectionUpdateReqeust, PasswordUpdateRequest } from '~shared';
-import { environment } from '~web/../environments/environment';
-import { PasswordFormT } from '~web/account/forms/account.form';
+import { environment } from '~web-env/environment';
+import { PasswordFormT } from '~web/account-shared/forms/account.form';
 import { SessionService } from '~web/session/services/session/session.service';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 

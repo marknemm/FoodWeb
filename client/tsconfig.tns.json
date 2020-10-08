@@ -12,8 +12,11 @@
     ],
     "paths": {
       "~app/*": ["projects/app/src/app/*"],
+      "~app-env/*": ["projects/app/src/environments/*"],
+      "~lodash-mixins": ["projects/web/src/lodash-mixins"],
       "~shared": ["projects/app/src/shared"],
-      "~web/*": ["projects/web/src/app/*"]
+      "~web/*": ["projects/web/src/app/*"],
+      "~web-env/*": ["projects/web/src/environments/*"]
     },
     "types": [
       "googlemaps",

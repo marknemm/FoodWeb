@@ -1,4 +1,47 @@
+<StackLayout [formGroup]="formGroup">
+  <Label [text]=""></Label>
+  <foodweb-app-select
+    editable="false"
+    formControlName="weekday"
+    hint="Weekday"
+    hintIsDialogTitle="true"
+    [items]="constantsService.WEEKDAYS"></foodweb-app-select>
 
+  <GridLayout rows="auto" columns="*,*,45" class="time-range">
+    <foodweb-app-time
+      editable="true"
+      formControlName="startTime"
+      hint="Start Time"
+      hintIsDialogTitle="true"
+      row="0"
+      col="0"
+      [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
+      [defaultTime]="getDefaultStartTime(formGroup)"
+      [minutesGap]="minutesGap"></foodweb-app-time>
+
+    <foodweb-app-time
+      editable="true"
+      formControlName="endTime"
+      hint="End Time"
+      hintIsDialogTitle="true"
+      row="0"
+      col="1"
+      [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
+      [defaultTime]="getDefaultEndTime(formGroup)"
+      [minutesGap]="minutesGap"></foodweb-app-time>
+
+    <Button text="-" class="minus-button" row="0" col="2" width="20" height="20"></Button>
+  </GridLayout>
+
+  <Label
+    foodwebAppVisibile="formGroup.hasError('timeRangeOrder')"
+    class="text-danger"
+    [textContent]="formGroup.getError('timeRangeOrder')"></Label>
+  <Label
+    foodwebAppVisibile="formGroup.hasError('allOrNothing')"
+    class="text-danger"
+    [textContent]="formGroup.getError('allOrNothing')"></Label>
+</StackLayout>
 
 <!-- <div [formGroup]="formGroup" class="operation-hours-form">
   <div class="weekday-field" [style.width]="weekdayWidth" [style.padding]="weekdayPadding">
@@ -14,7 +57,7 @@
       <foodweb-time
         [allowClear]="allowClear"
         [defaultTime]="getDefaultStartTime(formGroup)"
-        [editing]="editing"
+        [editable]="editable"
         [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
         [minutesGap]="minutesGap"
         [preventOverlayClick]="!allowOverlayClick"
@@ -26,7 +69,7 @@
       <foodweb-time
         [allowClear]="allowClear"
         [defaultTime]="getDefaultEndTime(formGroup)"
-        [editing]="editing"
+        [editable]="editable"
         [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
         [minutesGap]="minutesGap"
         [preventOverlayClick]="!allowOverlayClick"

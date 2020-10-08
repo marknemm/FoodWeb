@@ -1,10 +1,20 @@
-<StackLayout margin="24" horizontalAlignment="center">
+<StackLayout class="dialog-panel">
 
-  <DatePicker #datePicker verticalAlignment="center"></DatePicker>
+  <Label [text]="title" class="dialog-title"></Label>
 
-  <StackLayout orientation="horizontal" marginTop="12" horizontalAlignment="center">
-    <Button text="cancel" (tap)="modalDialogParams.closeCallback()"></Button>
-    <Button text="ok" (tap)="modalDialogParams.closeCallback(datePicker.date)"></Button>
-  </StackLayout>
+  <!-- *ngIf="true": Fix strange custom dialog bug where elements don't fully initialize or initialize correctly -->
+  <ng-container *ngIf="true">
+    <StackLayout class="dialog-content">
+      <DatePicker #datePicker
+        [date]="date"
+        [maxDate]="maxDate"
+        [minDate]="minDate"></DatePicker>
+    </StackLayout>
+
+    <StackLayout class="dialog-actions">
+      <Button text="cancel" (tap)="modalDialogParams.closeCallback()" class="-primary"></Button>
+      <Button text="ok" (tap)="modalDialogParams.closeCallback(datePicker.date)" class="-primary"></Button>
+    </StackLayout>
+  </ng-container>
 
 </StackLayout>

@@ -2,12 +2,12 @@
   <Label *ngIf="primaryLabel" [text]="primaryLabel" class="primary-label"></Label>
 
   <foodweb-app-date
-    *ngIf="editing || !excludeDateDisplay"
+    *ngIf="editable || !excludeDateDisplay"
     [allowClear]="allowClear"
     [bold]="boldDate"
     [date]="dateTime"
     [defaultDate]="defaultDate"
-    [editing]="editing"
+    [editable]="editable"
     [errorStateMatcher]="errorStateMatcher"
     [floatLabels]="floatLabels"
     [maxDate]="maxDate"
@@ -20,11 +20,11 @@
   ></foodweb-app-date>
 
   <foodweb-app-time
-    *ngIf="editing || !excludeTimeDisplay"
+    *ngIf="editable || !excludeTimeDisplay"
     [allowClear]="allowClear"
     [bold]="boldTime"
     [defaultTime]="defaultTime"
-    [editing]="editing"
+    [editable]="editable"
     [errorStateMatcher]="errorStateMatcher"
     [floatLabels]="floatLabels"
     [minutesGap]="minutesGap"

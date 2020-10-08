@@ -1,8 +1,8 @@
 import { Validators } from '@angular/forms';
 import { ContactInfo, Validation } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 
-export class ContactInfoForm extends TypedFormGroup<ContactInfo> {
+export class ContactInfoForm extends TFormGroup<ContactInfo> {
 
   constructor(contactInfo?: Partial<ContactInfo>) {
     super({

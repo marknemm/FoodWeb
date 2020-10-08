@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { DateTimeRange, DeliveryScheduleRequest, Donation } from '~shared';
 import { DateTimeRangeRadioConfig, DateTimeRangeRadioDialogComponent } from '~web/date-time/components/date-time-range-radio-dialog/date-time-range-radio-dialog.component';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
@@ -48,9 +48,9 @@ export class DeliveryScheduleService {
    */
   protected _showPickupWindowDialog(donation: Donation): Observable<DateTimeRange> {
     const scheduleDialogData: DateTimeRangeRadioConfig = {
-      title: 'Estimate Your Pickup Window',
       rangeWindowStart: donation.pickupWindowStart,
-      rangeWindowEnd: donation.pickupWindowEnd
+      rangeWindowEnd: donation.pickupWindowEnd,
+      title: 'Estimate Your Pickup Window',
     };
     return DateTimeRangeRadioDialogComponent.open(this._matDialog, scheduleDialogData);
   }

@@ -5,7 +5,7 @@ import { cloneDeep } from 'lodash-es';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Donation, DonationReadRequest, ListResponse } from '~shared';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 export { Donation };
 

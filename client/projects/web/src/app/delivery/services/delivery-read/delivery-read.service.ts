@@ -5,7 +5,7 @@ import { cloneDeep } from 'lodash-es';
 import { Observable } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { Donation, DonationReadRequest, ListResponse } from '~shared';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 

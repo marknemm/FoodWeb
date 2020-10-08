@@ -6,12 +6,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { DateTimeModule } from '~web/date-time/date-time.module';
 import { SharedModule } from '~web/shared/shared.module';
@@ -31,6 +33,7 @@ import { ProfileImgComponent } from './child-components/profile-img/profile-img.
 import { ReceiverComponent } from './child-components/receiver/receiver.component';
 import { UsernameComponent } from './child-components/username/username.component';
 import { VolunteerComponent } from './child-components/volunteer/volunteer.component';
+import { WeekdayOperationHoursComponent } from './child-components/weekday-operation-hours/weekday-operation-hours.component';
 import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
 
 @NgModule({
@@ -52,6 +55,7 @@ import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
     ReceiverComponent,
     UsernameComponent,
     VolunteerComponent,
+    WeekdayOperationHoursComponent,
   ],
   imports: [
     CommonModule,
@@ -60,6 +64,7 @@ import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
     MatButtonModule,
     MatCardModule,
     MatDialogModule,
+    MatDividerModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -67,6 +72,7 @@ import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
     MatSelectModule,
     MatSlideToggleModule,
     MatToolbarModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     RouterModule.forChild([]),
     DateTimeModule,

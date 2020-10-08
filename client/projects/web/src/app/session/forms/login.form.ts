@@ -1,12 +1,12 @@
 import { Validators } from '@angular/forms';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 
 export interface LoginFormT {
   usernameEmail: string;
   password: string;
 }
 
-export class LoginForm extends TypedFormGroup<LoginFormT> {
+export class LoginForm extends TFormGroup<LoginFormT> {
 
   constructor() {
     super({

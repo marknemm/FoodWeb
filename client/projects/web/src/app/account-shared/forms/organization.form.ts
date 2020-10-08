@@ -1,10 +1,10 @@
 import { Validators } from '@angular/forms';
 import { Organization } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 import { DonorForm } from './donor.form';
 import { ReceiverForm } from './receiver.form';
 
-export class OrganizationForm extends TypedFormGroup<Organization> {
+export class OrganizationForm extends TFormGroup<Organization> {
 
   constructor(organization?: Partial<Organization>) {
     super({

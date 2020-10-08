@@ -96,7 +96,7 @@ export class DateTimeService extends DateTimeHelper {
   }
 
   genDateTimeRangeIncrements(rangeToSplit: DateTimeRange, stepMins = 15, allowPast = false): DateTimeRange[] {
-    if (!rangeToSplit) return [];
+    if (!rangeToSplit) { return []; }
     const timeRanges: DateTimeRange[] = [];
     const curDateTime = new Date();
     let startDateTime: Date = (allowPast || curDateTime < rangeToSplit.startDateTime)

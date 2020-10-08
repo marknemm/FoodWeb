@@ -9,7 +9,7 @@ import { NotificationSettingsForm } from '~web/account/forms/notification-settin
 })
 export class NotificationSettingsComponent implements OnInit {
 
-  @Input() editing = false;
+  @Input() editable = false;
   @Input() formGroup: NotificationSettingsForm;
   @Input() notificationSettings: Partial<NotificationSettings>;
   @Input() accountType: AccountType;

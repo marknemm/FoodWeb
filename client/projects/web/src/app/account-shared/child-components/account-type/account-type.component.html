@@ -1,7 +1,7 @@
-<div class="account-type-selections" [ngClass]="{ 'edit': editing, 'display': !editing }">
+<div class="account-type-selections" [ngClass]="{ 'edit': editable, 'display': !editable }">
   <button mat-button
     *ngFor="let accountType of constantsService.ACCOUNT_TYPES"
-    [disabled]="!editing"
+    [disabled]="!editable"
     [ngClass]="{ selected: accountType === formControl.value }"
     (click)="accountTypeClick(accountType)"
     (blur)="onTouchedCb()">

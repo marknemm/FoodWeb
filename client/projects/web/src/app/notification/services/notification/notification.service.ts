@@ -10,7 +10,7 @@ import {
   NotificationUpdateRequest,
   ServerSentEventType
 } from '~shared';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { ServerSentEventSourceService } from '~web/notification/services/server-sent-event-source/server-sent-event-source.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';

@@ -4,7 +4,7 @@
     "directive-selector": [
       true,
       "attribute",
-      "foodweb-app",
+      "foodwebApp",
       "camelCase"
     ],
     "component-selector": [

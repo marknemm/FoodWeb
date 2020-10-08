@@ -1,9 +1,9 @@
 import { Validators } from '@angular/forms';
 import { Account, AccountHelper, EventRegistration, Validation } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 import { SessionService } from '~web/session/services/session/session.service';
 
-export class EventRegistrationForm extends TypedFormGroup<EventRegistration> {
+export class EventRegistrationForm extends TFormGroup<EventRegistration> {
 
   constructor(sessionService: SessionService) {
     super({

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 
 @Injectable({

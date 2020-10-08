@@ -13,3 +13,13 @@
 .account-type-label {
   margin-top: 15;
 }
+
+.availability-instr {
+  color: #666;
+  padding: 0 16;
+
+  &.update-later {
+    margin-top: 12;
+    margin-bottom: 8;
+  }
+}

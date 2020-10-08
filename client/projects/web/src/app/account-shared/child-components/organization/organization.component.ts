@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { valueAccessorProvider } from '~web/data-structure/form-base-component';
+import { formProvider } from '~web/data-structure/form-base-component';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 import { OrganizationBaseComponent } from './organization.base.component';
 
@@ -7,7 +7,7 @@ import { OrganizationBaseComponent } from './organization.base.component';
   selector: 'foodweb-organization',
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss'],
-  providers: valueAccessorProvider(OrganizationComponent)
+  providers: formProvider(OrganizationComponent)
 })
 export class OrganizationComponent extends OrganizationBaseComponent {
 

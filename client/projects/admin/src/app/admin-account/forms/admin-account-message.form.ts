@@ -1,8 +1,8 @@
 import { Validators } from '@angular/forms';
 import { SendMessageRequest } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 
-export class AdminAccountMessageForm extends TypedFormGroup<SendMessageRequest> {
+export class AdminAccountMessageForm extends TFormGroup<SendMessageRequest> {
 
   constructor(sendMessageReq?: Partial<SendMessageRequest>) {
     super({

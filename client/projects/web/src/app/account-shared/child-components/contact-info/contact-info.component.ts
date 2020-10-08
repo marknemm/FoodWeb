@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { valueAccessorProvider } from '~web/data-structure/form-base-component';
+import { formProvider } from '~web/data-structure/form-base-component';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 import { ContactInfoBaseComponent } from './contact-info.base.component';
 
@@ -7,7 +7,7 @@ import { ContactInfoBaseComponent } from './contact-info.base.component';
   selector: 'foodweb-contact-info',
   templateUrl: './contact-info.component.html',
   styleUrls: ['./contact-info.component.scss'],
-  providers: valueAccessorProvider(ContactInfoComponent)
+  providers: formProvider(ContactInfoComponent)
 })
 export class ContactInfoComponent extends ContactInfoBaseComponent {
 

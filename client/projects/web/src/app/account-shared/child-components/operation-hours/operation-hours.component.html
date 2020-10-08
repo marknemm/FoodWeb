@@ -12,10 +12,10 @@
       <foodweb-time
         [allowClear]="allowClear"
         [defaultTime]="getDefaultStartTime(formGroup)"
-        [editing]="editing"
+        [editable]="editable"
         [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
         [minutesGap]="minutesGap"
-        [preventOverlayClick]="!allowOverlayClick"
+        [preventOverlayClick]="!(allowOverlayClick | toBoolean)"
         formControlName="startTime"
         placeholder="Start Time"
       ></foodweb-time>
@@ -24,10 +24,10 @@
       <foodweb-time
         [allowClear]="allowClear"
         [defaultTime]="getDefaultEndTime(formGroup)"
-        [editing]="editing"
+        [editable]="editable"
         [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
         [minutesGap]="minutesGap"
-        [preventOverlayClick]="!allowOverlayClick"
+        [preventOverlayClick]="!(allowOverlayClick | toBoolean)"
         formControlName="endTime"
         placeholder="End Time"
       ></foodweb-time>

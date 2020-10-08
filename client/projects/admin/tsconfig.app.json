@@ -4,8 +4,11 @@
     "baseUrl": "./",
     "paths": {
       "~admin/*": ["src/app/*"],
+      "~admin-env/*": ["src/environments/*"],
+      "~lodash-mixins": ["../web/src/lodash-mixins"],
       "~shared": ["src/shared"],
-      "~web/*": ["../web/src/app/*"]
+      "~web/*": ["../web/src/app/*"],
+      "~web-env/*": ["../web/src/environments/*"]
     },
     "sourceMap": true,
     "types": [

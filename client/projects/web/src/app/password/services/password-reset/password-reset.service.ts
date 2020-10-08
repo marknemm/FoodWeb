@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { catchError, finalize, mergeMap } from 'rxjs/operators';
 import { Account, PasswordResetRequest } from '~shared';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';

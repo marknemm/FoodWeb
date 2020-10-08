@@ -1,7 +1,7 @@
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 import { MapOptions } from '~web/map/interfaces/map';
 
-export class MapOptionsForm extends TypedFormGroup<MapOptions> {
+export class MapOptionsForm extends TFormGroup<MapOptions> {
 
   constructor(options?: Partial<MapOptions>) {
     super({

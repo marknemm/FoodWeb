@@ -1,7 +1,7 @@
 import { Donor } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 
-export class DonorForm extends TypedFormGroup<Donor> {
+export class DonorForm extends TFormGroup<Donor> {
 
   constructor(donor?: Partial<Donor>) {
     super({ id: undefined });

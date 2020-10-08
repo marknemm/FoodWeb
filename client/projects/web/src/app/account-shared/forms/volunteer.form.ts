@@ -1,8 +1,8 @@
 import { Validators } from '@angular/forms';
 import { Volunteer } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 
-export class VolunteerForm extends TypedFormGroup<VolunteerFormT> {
+export class VolunteerForm extends TFormGroup<VolunteerFormT> {
 
   constructor(volunteer?: Partial<VolunteerFormT>) {
     super({

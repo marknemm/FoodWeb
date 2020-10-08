@@ -3,8 +3,10 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
+      "~lodash-mixins": ["src/lodash-mixins"],
+      "~shared": ["src/shared"],
       "~web/*": ["src/app/*"],
-      "~shared": ["src/shared"]
+      "~web-env/*": ["src/environments/*"]
     },
     "sourceMap": true,
     "types": [

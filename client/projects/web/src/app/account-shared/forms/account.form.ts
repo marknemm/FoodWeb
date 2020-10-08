@@ -1,21 +1,21 @@
 import { Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Account, AccountType, NotificationSettings, OperationHours } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { Account, AccountType, NotificationSettings, OperationHours, TimeRange } from '~shared';
+import { ContactInfoForm } from '~web/account-shared/forms/contact-info.form';
+import { OperationHoursInfoForm } from '~web/account-shared/forms/operation-hours-info.form';
+import { OrganizationForm } from '~web/account-shared/forms/organization.form';
+import { VolunteerForm } from '~web/account-shared/forms/volunteer.form';
+import { NotificationSettingsForm } from '~web/account/forms/notification-settings.form';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 import { PasswordForm, PasswordFormT } from '~web/password/forms/password.form';
-import { ContactInfoForm } from './contact-info.form';
-import { NotificationSettingsForm } from './notification-settings.form';
-import { OperationHoursInfoForm } from './operation-hours-info.form';
-import { OrganizationForm } from './organization.form';
-import { VolunteerForm } from './volunteer.form';
 export { PasswordFormT };
 
-export class AccountForm extends TypedFormGroup<AccountFormT> {
+export class AccountForm extends TFormGroup<AccountFormT> {
 
   constructor(
-    config: AccountFormConfig = {},
-    destory$: Observable<any>
+    destory$: Observable<any>,
+    config: AccountFormConfig = {}
   ) {
     super({
       id: undefined,
@@ -31,9 +31,9 @@ export class AccountForm extends TypedFormGroup<AccountFormT> {
     });
 
     // Listen for accountType value to update.
-    this.get('accountType').valueChanges.pipe(
-      takeUntil(destory$)
-    ).subscribe(this._onAccountTypeUpdate.bind(this));
+    this.onValueChanges('accountType', destory$).subscribe(
+      this._onAccountTypeUpdate.bind(this)
+    );
 
     // Initialize the form value if provided.
     if (config.value) {
@@ -105,7 +105,13 @@ export interface AccountFormT extends Omit<Account, 'operationHours'> {
 
 export interface OperationHoursInfo {
   limitOperationHours: boolean;
-  operationHours: OperationHours[];
+  Sunday: TimeRange[];
+  Monday: TimeRange[];
+  Tuesday: TimeRange[];
+  Wednesday: TimeRange[];
+  Thursday: TimeRange[];
+  Friday: TimeRange[];
+  Saturday: TimeRange[];
 }
 
 export type AccountFormKey = keyof AccountFormT;

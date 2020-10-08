@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FilteredListService } from '~web/filtered-list/services/filtered-list/filtered-list.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { FilteredListService } from '~web/filtered-list/services/filtered-list/f
   templateUrl: './filtered-list.component.html',
   styleUrls: ['./filtered-list.component.scss']
 })
-export class FilteredListComponent implements OnInit {
+export class FilteredListComponent implements OnInit, OnChanges {
 
   @Input() excludePaginator = false;
   @Input() listItemsLabel = '';

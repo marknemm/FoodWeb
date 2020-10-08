@@ -44,7 +44,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
       takeUntil(this._destroy$)
     ).subscribe((options: MapOptions) =>
       this.refreshMap(options)
-    )
+    );
   }
 
   ngOnChanges(changes: SimpleChanges) {

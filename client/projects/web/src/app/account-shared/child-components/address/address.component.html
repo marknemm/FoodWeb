@@ -4,11 +4,11 @@
 
 <ng-template #addressContent>
   <div class="address d-inline-block">
-    <div *ngIf="contactInfo.streetAddress">{{ contactInfo.streetAddress }}</div>
+    <div *ngIf="value.streetAddress">{{ value.streetAddress }}</div>
     <div>
-      <div class="d-inline-block" *ngIf="contactInfo.city">{{ contactInfo.city }},&nbsp;</div>
-      <div class="d-inline-block" *ngIf="contactInfo.stateProvince">{{ contactInfo.stateProvince }}&nbsp;</div>
-      <div class="d-inline-block" *ngIf="contactInfo.postalCode">{{ contactInfo.postalCode }}</div>
+      <div class="d-inline-block" *ngIf="value.city">{{ value.city }},&nbsp;</div>
+      <div class="d-inline-block" *ngIf="value.stateProvince">{{ value.stateProvince }}&nbsp;</div>
+      <div class="d-inline-block" *ngIf="value.postalCode">{{ value.postalCode }}</div>
     </div>
   </div>
 <ng-template>

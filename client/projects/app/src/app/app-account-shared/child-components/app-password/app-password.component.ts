@@ -1,24 +1,31 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { AppTextFieldComponent } from '~app/app-shared/child-components/app-text-field/app-text-field.component';
-import { Focusable } from '~app/app-shared/interfaces/focusable';
+import { AppFocusService, Focusable, FocusableComponent } from '~app/app-shared/services/app-focus/app-focus.service';
 import { PasswordBaseComponent } from '~web/account-shared/child-components/password/password.base.component';
-import { valueAccessorProvider } from '~web/data-structure/form-base-component';
+import { formProvider } from '~web/data-structure/form-base-component';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'foodweb-app-password',
   templateUrl: './app-password.component.html',
   styleUrls: ['./app-password.component.scss'],
-  providers: valueAccessorProvider(AppPasswordComponent)
+  providers: formProvider(AppPasswordComponent)
 })
-export class AppPasswordComponent extends PasswordBaseComponent implements Focusable {
+export class AppPasswordComponent extends PasswordBaseComponent implements FocusableComponent {
+
+  @Input() nextFocus: Focusable;
+
+  @Output() finalReturnPress = new EventEmitter<boolean>();
+  // tslint:disable-next-line: no-output-rename
+  @Output('focus') focusOutput = new EventEmitter();
 
   @ViewChild('oldPasswordField', { static: true }) oldPasswordField: AppTextFieldComponent;
   @ViewChild('passwordField', { static: true }) passwordField: AppTextFieldComponent;
 
-  @Output() finalReturnPress = new EventEmitter<boolean>();
-
-  constructor(formHelperService: FormHelperService) {
+  constructor(
+    private _focusService: AppFocusService,
+    formHelperService: FormHelperService
+  ) {
     super(formHelperService);
   }
 
@@ -28,7 +35,7 @@ export class AppPasswordComponent extends PasswordBaseComponent implements Focus
       : this.passwordField;
   }
 
-  focus(): void {
-    this.firstFocusable.focus();
+  focus(): boolean {
+    return this._focusService.focus(this, this.firstFocusable);
   }
 }

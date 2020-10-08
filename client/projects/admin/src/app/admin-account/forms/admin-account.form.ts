@@ -1,15 +1,15 @@
 import { Observable } from 'rxjs';
 import { Account } from '~shared';
-import { AccountForm, AccountFormConfig, AccountFormT, PasswordFormT } from '~web/account/forms/account.form';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { AccountForm, AccountFormConfig, AccountFormT, PasswordFormT } from '~web/account-shared/forms/account.form';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 export { PasswordFormT };
 
-export class AdminAccountForm extends TypedFormGroup<AdminAccountFormT> {
+export class AdminAccountForm extends TFormGroup<AdminAccountFormT> {
 
   constructor(config: AccountFormConfig, destroy$: Observable<any>) {
     super({
       account: new AccountForm(config, destroy$),
-      accountCreateOptions: new TypedFormGroup<AccountCreateOptions>({
+      accountCreateOptions: new TFormGroup<AccountCreateOptions>({
         autoGenPassword: false,
         autoVerify: false
       })
@@ -20,8 +20,8 @@ export class AdminAccountForm extends TypedFormGroup<AdminAccountFormT> {
     return <AccountForm>this.get('account');
   }
 
-  get accountCreateOptionsForm(): TypedFormGroup<AccountCreateOptions> {
-    return <TypedFormGroup<AccountCreateOptions>>this.get('accountCreateOptions');
+  get accountCreateOptionsForm(): TFormGroup<AccountCreateOptions> {
+    return <TFormGroup<AccountCreateOptions>>this.get('accountCreateOptions');
   }
 
   get accountCreateOptions(): AccountCreateOptions {

@@ -2,16 +2,16 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FloatLabelType } from '@angular/material/form-field';
 import { AccountAutocompleteItem, AccountHelper, AccountType, DeepReadonly } from '~shared';
 import { AccountAutocompleteService } from '~web/account-shared/services/account-autocomplete/account-autocomplete.service';
-import { FormBaseComponent, valueAccessorProvider } from '~web/data-structure/form-base-component';
+import { FormBaseComponent, formProvider } from '~web/data-structure/form-base-component';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
-import { TypedFormControl } from '~web/data-structure/typed-form-control';
+import { TFormControl } from '~web/data-structure/t-form-control';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'foodweb-account-select',
   templateUrl: './account-select.component.html',
   styleUrls: ['./account-select.component.scss'],
-  providers: valueAccessorProvider(AccountSelectComponent).concat([AccountAutocompleteService])
+  providers: formProvider(AccountSelectComponent).concat([AccountAutocompleteService])
 })
 export class AccountSelectComponent extends FormBaseComponent<AccountAutocompleteItem> implements OnInit {
 
@@ -20,14 +20,14 @@ export class AccountSelectComponent extends FormBaseComponent<AccountAutocomplet
   @Input() floatLabel: FloatLabelType = 'auto';
   @Input() placeholder = 'Select an Account';
 
-  readonly filterCtrl = new TypedFormControl<string>();
+  readonly filterCtrl = new TFormControl<string>();
 
   constructor(
     public accountHelper: AccountHelper,
     public accountAutocompleteService: AccountAutocompleteService,
     formHelperService: FormHelperService
   ) {
-    super(formHelperService);
+    super(new TFormControl<AccountAutocompleteItem>(), formHelperService);
   }
 
   /**
@@ -38,7 +38,6 @@ export class AccountSelectComponent extends FormBaseComponent<AccountAutocomplet
   }
 
   ngOnInit() {
-    super.ngOnInit();
     this.syncFilterStr();
   }
 

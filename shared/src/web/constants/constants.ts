@@ -5,7 +5,7 @@ import { DonationStatus, DONATION_STATUSES, DONATION_TYPES } from '../interfaces
 import { NotificationType, NOTIFICATION_TYPES } from '../interfaces/notification/notification';
 
 export class Constants {
-  
+
   readonly ACCOUNT_TYPES = ACCOUNT_TYPES;
 
   readonly AUDIT_EVENT_TYPES: AuditEventType[] = [

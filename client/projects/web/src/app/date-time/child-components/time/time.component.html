@@ -1,4 +1,4 @@
-<div *ngIf="editing; else displayTmpl" class="time-edit">
+<div *ngIf="editable | toBoolean; else displayTmpl" class="time-edit">
   <mat-form-field [floatLabel]="floatLabels" class="fill">
     <input matInput
       [errorStateMatcher]="errorStateMatcher"
@@ -23,15 +23,15 @@
       <mat-icon>alarm</mat-icon>
     </button>
     <ngx-material-timepicker #timePicker
-      [defaultTime]="defaultTime"
+      [defaultTime]="defaultTime | foodwebFormatTime"
       [minutesGap]="minutesGap"
-      [preventOverlayClick]="preventOverlayClick"
+      [preventOverlayClick]="preventOverlayClick | toBoolean"
     ></ngx-material-timepicker>
   </mat-form-field>
 </div>
 
 <ng-template #displayTmpl>
-  <span [ngClass]="{ bold: bold }" class="time-display">
-    {{ timeDisplay }}
+  <span *ngIf="value" [ngClass]="{ bold: bold | toBoolean }" class="time-display">
+    {{ value }}
   </span>
 </ng-template>

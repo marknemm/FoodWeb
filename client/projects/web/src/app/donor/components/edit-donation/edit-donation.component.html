@@ -10,21 +10,21 @@
   <mat-card>
     <mat-card-title>Pickup Window</mat-card-title>
     <mat-card-content>
-      <foodweb-date-time-range [formGroup]="editForm.get('pickupWindow')" [editing]="true"></foodweb-date-time-range>
+      <foodweb-date-time-range [formGroup]="editForm.get('pickupWindow')" [editable]="true"></foodweb-date-time-range>
     </mat-card-content>
   </mat-card>
 
   <mat-card>
     <mat-card-title>Contact Info</mat-card-title>
     <mat-card-content>
-      <foodweb-contact-info [formGroup]="editForm.get('donorContactOverride')" [editing]="true"></foodweb-contact-info>
+      <foodweb-contact-info [formGroup]="editForm.get('donorContactOverride')" [editable]="true"></foodweb-contact-info>
     </mat-card-content>
   </mat-card>
 
   <div class="align-right">
     <foodweb-edit-save-button
       [useButtonText]="true"
-      [editing]="true"
+      [editable]="true"
       [disableSave]="!editForm.valid"
       [control]="editForm"
       (edit)="cancelEdit()"

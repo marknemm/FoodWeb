@@ -1,21 +1,24 @@
-<GridLayout>
-  <foodweb-app-text-field *ngIf="editing; else readonlyTmpl"
-    #dateTextField
-    [text]="formControl.value | foodwebFormatDate"
-    [hint]="placeholder"
-    (tap)="showDateDialog(dateTextField)"
-    editable="false"
-    keyboardType="datetime"
-  ></foodweb-app-text-field>
+<GridLayout [foodwebAppVisibile]="visible">
+  <foodweb-app-focus-mask
+    #focusMask
+    [visible]="editable"
+    (focusTap)="showDateDialog(dateTextField)">
+    <foodweb-app-text-field
+      #dateTextField
+      editable="false"
+      keyboardType="datetime"
+      [hint]="placeholder"
+      [label]="label"
+      [text]="formControl.value | foodwebFormatDate"
+    ></foodweb-app-text-field>
+  </foodweb-app-focus-mask>
 
-  <ng-template #readonlyTmpl>
-    <Label>
-      <FormattedString>
-        <Span
-          [ngClass]="{ bold: bold }"
-          [text]="dateDisplay | foodwebFormatDate"
-        ></Span>
-      </FormattedString>
-    </Label>
-  </ng-template>
+  <Label foodwebAppVisibile="!editable">
+    <FormattedString>
+      <Span
+        [ngClass]="{ bold: bold }"
+        [text]="dateDisplay | foodwebFormatDate"
+      ></Span>
+    </FormattedString>
+  </Label>
 </GridLayout>

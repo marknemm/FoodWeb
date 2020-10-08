@@ -1,4 +1,4 @@
-<div class="contact-info-container" [foodwebDisplayEditTransition]="editing" [form]="contactInfoForm" [display]="contactInfoDisplay">
+<div class="contact-info-container" [foodwebDisplayEditTransition]="editable" [form]="contactInfoForm" [display]="contactInfoDisplay">
   <div #contactInfoForm class="row contact-info-form" [formGroup]="formGroup">
     <div class="col-sm-6" *ngIf="formGroup.get('email')">
       <mat-form-field class="fill">
@@ -42,32 +42,30 @@
   </div>
 
   <div #contactInfoDisplay class="contact-info-display row">
-    <ng-container *ngIf="contactInfo">
-      <ng-container *ngIf="addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
-      <div class="col-sm-6" *ngIf="!hideEmail && contactInfo.email">
-        <div class="inline-label">Email:</div>
-        <div class="d-inline-block">
-          <a class="email" href="mailto:{{ contactInfo.email }}">
-            {{ contactInfo.email }}
-          </a>
-        </div>
+    <ng-container *ngIf="addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
+    <div class="col-sm-6" *ngIf="!hideEmail && value.email">
+      <div class="inline-label">Email:</div>
+      <div class="d-inline-block">
+        <a class="email" href="mailto:{{ value.email }}">
+          {{ value.email }}
+        </a>
       </div>
-      <div class="col-sm-6" *ngIf="!hidePhone && contactInfo.phoneNumber">
-        <div class="inline-label">Phone Number:</div>
-        <div class="d-inline-block">
-          <a class="phone-number" href="tel:{{ contactInfo.phoneNumber }}">
-            {{ contactInfo.phoneNumber }}
-          </a>
-        </div>
+    </div>
+    <div class="col-sm-6" *ngIf="!hidePhone && value.phoneNumber">
+      <div class="inline-label">Phone Number:</div>
+      <div class="d-inline-block">
+        <a class="phone-number" href="tel:{{ value.phoneNumber }}">
+          {{ value.phoneNumber }}
+        </a>
       </div>
-      <ng-container *ngIf="!addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
-    </ng-container>
+    </div>
+    <ng-container *ngIf="!addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
   </div>
 </div>
 
 <ng-template #addressTmpl>
-  <div *ngIf="!hideAddress && contactInfo.streetAddress" [ngClass]="addressColSize">
+  <div *ngIf="!hideAddress && value.streetAddress" [ngClass]="addressColSize">
     <div class="inline-label">Address:</div>
-    <foodweb-address [contactInfo]="contactInfo" [mapAnchorType]="addressAnchorType"></foodweb-address>
+    <foodweb-address [value]="value" [mapAnchorType]="addressAnchorType"></foodweb-address>
   </div>
 </ng-template>

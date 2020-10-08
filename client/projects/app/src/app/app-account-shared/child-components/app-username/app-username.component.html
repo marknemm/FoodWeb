@@ -1,7 +1,7 @@
 <StackLayout>
   <foodweb-app-text-field
     #usernameField
-    [visible]="editing"
+    [visible]="editable"
     [formControl]="formControl"
     autocorrect="false"
     hint="Enter a username/email..."
@@ -10,5 +10,5 @@
     (returnPress)="finalReturnPress.emit()"
   ></foodweb-app-text-field>
 
-  <Label *ngIf="!editing" [text]="formControl.value"></Label>
+  <Label *ngIf="!editable" [text]="formControl.value"></Label>
 </StackLayout>

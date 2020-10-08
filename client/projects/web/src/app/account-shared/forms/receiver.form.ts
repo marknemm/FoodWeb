@@ -1,7 +1,7 @@
 import { Receiver } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 
-export class ReceiverForm extends TypedFormGroup<Receiver> {
+export class ReceiverForm extends TFormGroup<Receiver> {
 
   constructor(receiver?: Partial<Receiver>) {
     super({

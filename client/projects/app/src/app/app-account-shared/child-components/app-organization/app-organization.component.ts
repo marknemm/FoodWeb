@@ -1,27 +1,34 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { AppTextFieldComponent } from '~app/app-shared/child-components/app-text-field/app-text-field.component';
-import { Focusable } from '~app/app-shared/interfaces/focusable';
+import { AppFocusService, Focusable, FocusableComponent } from '~app/app-shared/services/app-focus/app-focus.service';
 import { OrganizationBaseComponent } from '~web/account-shared/child-components/organization/organization.base.component';
-import { valueAccessorProvider } from '~web/data-structure/form-base-component';
+import { formProvider } from '~web/data-structure/form-base-component';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'foodweb-app-organization',
   templateUrl: './app-organization.component.html',
   styleUrls: ['./app-organization.component.scss'],
-  providers: valueAccessorProvider(AppOrganizationComponent)
+  providers: formProvider(AppOrganizationComponent)
 })
-export class AppOrganizationComponent extends OrganizationBaseComponent implements Focusable {
+export class AppOrganizationComponent extends OrganizationBaseComponent implements FocusableComponent {
 
-  @Output() finalReturnPress = new EventEmitter<void>();
+  @Input() nextFocus: Focusable;
+
+  @Output() finalReturnPress = new EventEmitter();
+  // tslint:disable-next-line: no-output-rename
+  @Output('focus') focusOutput = new EventEmitter();
 
   @ViewChild('organizationNameField', { static: true }) firstFocusable: AppTextFieldComponent;
 
-  constructor(formHelperService: FormHelperService) {
+  constructor(
+    private _focusService: AppFocusService,
+    formHelperService: FormHelperService,
+  ) {
     super(formHelperService);
   }
 
-  focus(): void {
-    this.firstFocusable.focus();
+  focus(): boolean {
+    return this._focusService.focus(this, this.firstFocusable);
   }
 }

@@ -1,24 +1,28 @@
-<StackLayout *ngIf="editing; else readonlyTmpl" [formGroup]="formGroup">
-  <foodweb-app-text-field *ngIf="true"
+<StackLayout
+  [formGroup]="formGroup"
+  [foodwebAppVisibile]="editable">
+  <foodweb-app-text-field
+    #fullNameField
     autocapitalizationType="words"
     autocorrect="false"
     formControlName="fullName"
     label="Full Name:"
-  ></foodweb-app-text-field>
-  <Label *ngIf="formGroup.get('fullName').hasError('pattern')" text="Both first name and surname are required."></Label>
+    [nextFocus]="nextFocus"
+    (returnPress)="finalReturnPress.emit()"></foodweb-app-text-field>
+  <Label
+    text="Both first name and surname are required."
+    [foodwebAppVisibile]="formGroup.get('fullName').hasError('pattern')"></Label>
 </StackLayout>
 
-<ng-template #readonlyTmpl>
-  <Label>
-    <FormattedString>
-      <Span text="Full Name:" class="inline-label"></Span>
-      <span text="{{ formGroup.get('fullName').value }}"></span>
-    </FormattedString>
-  </Label>
-</ng-template>
+<Label [foodwebAppVisibile]="!editable">
+  <FormattedString>
+    <Span text="Full Name:" class="inline-label"></Span>
+    <span text="{{ formGroup.get('fullName').value }}"></span>
+  </FormattedString>
+</Label>
 
-<!-- <div class="volunteer-container" [foodwebDisplayEditTransition]="editing" [form]="formGroup" [display]="volunteerDisplay">
-  <div #volunteerForm class="row volunteer-form" [formGroup]="formGroup" [attr.aria-hidden]="!editing">
+<!-- <div class="volunteer-container" [foodwebDisplayEditTransition]="editable" [form]="formGroup" [display]="volunteerDisplay">
+  <div #volunteerForm class="row volunteer-form" [formGroup]="formGroup" [attr.aria-hidden]="!editable">
     <div class="col-sm-6">
       <mat-form-field class="fill">
         <input matInput placeholder="First Name" formControlName="firstName" type="text" autocomplete="off">
@@ -31,7 +35,7 @@
     </div>
   </div>
 
-  <div #volunteerDisplay class="volunteer-display row" [attr.aria-hidden]="editing">
+  <div #volunteerDisplay class="volunteer-display row" [attr.aria-hidden]="editable">
     <div class="col-sm-6">
       <div class="inline-label">Name:</div>
       <div class="d-inline-block">{{ formGroup.get('firstName').value }} {{ formGroup.get('lastName').value }}</div>

@@ -1,0 +1,16 @@
+.dialog-panel {
+  background: white;
+  height: 350;
+  margin: 10;
+
+  .dialog-title {
+    margin-top: 20;
+    text-align: center;
+  }
+
+  .dialog-actions {
+    horizontal-alignment: center;
+    margin-top: 12;
+    orientation: horizontal;
+  }
+}

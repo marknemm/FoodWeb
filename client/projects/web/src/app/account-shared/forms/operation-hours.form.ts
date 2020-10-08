@@ -1,9 +1,9 @@
 import { FormControl, FormGroupDirective, NgForm, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { OperationHours, Weekday } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 
-export class OperationHoursForm extends TypedFormGroup<OperationHours> {
+export class OperationHoursForm extends TFormGroup<OperationHours> {
 
   readonly timeRangeErrStateMatcher: ErrorStateMatcher;
 

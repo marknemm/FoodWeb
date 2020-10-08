@@ -13,4 +13,31 @@ export class AppDateDialogComponent implements OnInit {
   ) {}
 
   ngOnInit() {}
+
+  get context(): AppDateDialogContext {
+    return this.modalDialogParams.context;
+  }
+
+  get date(): Date {
+    return this.context.date;
+  }
+
+  get maxDate(): Date {
+    return this.context.maxDate;
+  }
+
+  get minDate(): Date {
+    return this.context.minDate;
+  }
+
+  get title(): string {
+    return this.context.title;
+  }
+}
+
+export interface AppDateDialogContext {
+  date: Date;
+  maxDate: Date;
+  minDate: Date;
+  title: string;
 }

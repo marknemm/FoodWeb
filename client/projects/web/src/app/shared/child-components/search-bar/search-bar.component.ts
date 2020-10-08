@@ -1,6 +1,6 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 
 @Component({
   selector: 'foodweb-search-bar',
@@ -16,7 +16,7 @@ export class SearchBarComponent implements OnInit, ControlValueAccessor {
 
   @Output() search = new EventEmitter<string>();
 
-  readonly searchForm = new TypedFormGroup<{ searchQuery: string }>({
+  readonly searchForm = new TFormGroup<{ searchQuery: string }>({
     searchQuery: ''
   });
 

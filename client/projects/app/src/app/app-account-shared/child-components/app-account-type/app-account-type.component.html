@@ -1,7 +1,7 @@
 <StackLayout>
   <Button
     *ngFor="let accountType of constantsService.ACCOUNT_TYPES; let idx = index"
-    [isEnabled]="editing || accountType === formControl.value"
+    [isEnabled]="editable || accountType === formControl.value"
     [ngClass]="{ selected: accountType === formControl.value }"
     (blur)="onTouchedCb()"
     (tap)="accountTypeClick(accountType)"

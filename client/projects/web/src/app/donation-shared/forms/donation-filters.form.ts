@@ -1,8 +1,8 @@
 import { DonationReadRequest } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 export { DonationReadRequest };
 
-export class DonationFiltersForm extends TypedFormGroup<DonationReadRequest> {
+export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
 
   constructor(filters?: Partial<DonationReadRequest>) {
     super({

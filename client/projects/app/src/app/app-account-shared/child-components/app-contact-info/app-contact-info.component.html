@@ -1,4 +1,4 @@
-<StackLayout *ngIf="editing; else readonlyTmpl" [formGroup]="formGroup">
+<StackLayout [foodwebAppVisibile]="editable" [formGroup]="formGroup">
   <foodweb-app-text-field
     #emailField
     formControlName="email"
@@ -61,7 +61,7 @@
   </GridLayout>
 </StackLayout>
 
-<ng-template #readonlyTmpl>
+<StackLayout *ngIf="!editable && contactInfo">
   <ng-container *ngIf="addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
 
   <Label *ngIf="!hideEmail && contactInfo.email">
@@ -79,7 +79,7 @@
   </Label>
 
   <ng-container *ngIf="!addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
-</ng-template>
+</StackLayout>
 
 <ng-template #addressTmpl>
   <Label text="Address:"></Label>

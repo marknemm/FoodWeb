@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AccountType } from '~shared';
-import { AccountForm } from '~web/account/forms/account.form';
+import { AccountForm } from '~web/account-shared/forms/account.form';
 import { SessionService } from '~web/session/services/session/session.service';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 import { SignupService } from '~web/signup/services/signup/signup.service';

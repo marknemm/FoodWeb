@@ -1,0 +1,21 @@
+<foodweb-app-focus-mask
+  #focusMask
+  [enabled]="enabled"
+  [visible]="visible"
+  (focusTap)="onFocusTap()">
+  <foodweb-app-text-field
+    #textField
+    autoCorrect="false"
+    editable="false"
+    [hint]="hint"
+    [label]="label"
+    [letterSpacing]="letterSpacing"
+    [lineHeight]="lineHeight"
+    [requiredErrMsg]="requireErrMsg"
+    [text]="selectedItemName"
+    [textAlignment]="textAlignment"
+    [textDecoration]="textDecoration"
+    [textTransform]="textTransform"
+    [whiteSpace]="whiteSpace"
+  ></foodweb-app-text-field>
+</foodweb-app-focus-mask>

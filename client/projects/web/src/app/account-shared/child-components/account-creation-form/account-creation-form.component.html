@@ -3,7 +3,7 @@
     <div class="page-title block-label signup-header">
       {{ accountType ? formTitle : accountTypeSelTitle }}
     </div>
-    <foodweb-account-type [editing]="!accountType" formControlName="accountType" class="account-type"></foodweb-account-type>
+    <foodweb-account-type [editable]="!accountType" formControlName="accountType" class="account-type"></foodweb-account-type>
   </div>
 
   <hr *ngIf="accountType">
@@ -16,13 +16,13 @@
           <mat-card-content>
             <div class="row">
               <div class="col-sm-12">
-                <foodweb-username [editing]="true" formControlName="username"></foodweb-username>
+                <foodweb-username [editable]="true" formControlName="username"></foodweb-username>
               </div>
               <div class="col-sm-12">
                 <ng-content select=".password-options"></ng-content>
               </div>
               <div class="col-sm-12">
-                <foodweb-password [editing]="true" [formGroup]="accountForm.get('password')"></foodweb-password>
+                <foodweb-password [editable]="true" [formGroup]="accountForm.get('password')"></foodweb-password>
               </div>
             </div>
           </mat-card-content>
@@ -31,14 +31,14 @@
         <mat-card *ngIf="accountType !== 'Volunteer'">
           <mat-card-title class="block-label">Organization</mat-card-title>
           <mat-card-content>
-            <foodweb-organization [accountType]="accountType" [editing]="true" [formGroup]="accountForm.get('organization')"></foodweb-organization>
+            <foodweb-organization [accountType]="accountType" [editable]="true" [formGroup]="accountForm.get('organization')"></foodweb-organization>
           </mat-card-content>
         </mat-card>
 
         <mat-card *ngIf="accountType === 'Volunteer'">
           <mat-card-title>Volunteer Info</mat-card-title>
           <mat-card-content>
-            <foodweb-volunteer [editing]="true" [formGroup]="accountForm.get('volunteer')"></foodweb-volunteer>
+            <foodweb-volunteer [editable]="true" [formGroup]="accountForm.get('volunteer')"></foodweb-volunteer>
           </mat-card-content>
         </mat-card>
       </div>
@@ -46,7 +46,7 @@
         <mat-card>
           <mat-card-title class="block-label">Contact Info</mat-card-title>
           <mat-card-content>
-            <foodweb-contact-info [editing]="true" [formGroup]="accountForm.get('contactInfo')"></foodweb-contact-info>
+            <foodweb-contact-info [editable]="true" [formGroup]="accountForm.get('contactInfo')"></foodweb-contact-info>
           </mat-card-content>
         </mat-card>
       </div>
@@ -65,7 +65,7 @@
           <br><span> You can update this setting any time under your account.</span>
         </mat-card-subtitle>
         <mat-card-content>
-          <foodweb-operation-hours-info [editing]="true" [formGroup]="accountForm.get('operationHours')"></foodweb-operation-hours-info>
+          <foodweb-operation-hours-info [editable]="true" [formGroup]="accountForm.get('operationHours')"></foodweb-operation-hours-info>
         </mat-card-content>
       </mat-card>
     </div>

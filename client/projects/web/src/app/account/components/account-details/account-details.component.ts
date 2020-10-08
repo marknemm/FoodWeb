@@ -3,7 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Account, AccountHelper, AccountType, DonationReadRequest } from '~shared';
-import { AccountForm, AccountFormKey } from '~web/account/forms/account.form';
+import { AccountForm, AccountFormKey } from '~web/account-shared/forms/account.form';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
 import { PasswordFormT } from '~web/password/forms/password.form';
@@ -59,7 +59,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.accountForm = new AccountForm({ formMode: 'Account' }, this._destroy$);
+    this.accountForm = new AccountForm(this._destroy$, { formMode: 'Account' });
     this._listenAccountChange();
   }
 

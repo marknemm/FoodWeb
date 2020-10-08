@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, Subscriber } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Account, DirectionsExtractor, Donation, MapRoute, MapRouteReadRequest, WaypointSegment } from '~shared';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { Directions, LatLng, LatLngLiteral, MapOptions, Polyline, Waypoint } from '~web/map/interfaces/map';
 import { LocalStorageBucket, LocalStorageCacheService } from '~web/shared/services/local-storage-cache/local-storage-cache.service';
 

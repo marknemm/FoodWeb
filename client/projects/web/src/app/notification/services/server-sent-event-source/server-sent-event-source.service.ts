@@ -3,7 +3,7 @@ import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { ServerSentEventType } from '~shared';
-import { environment } from '~web/../environments/environment';
+import { environment } from '~web-env/environment';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 
 const EventSource = NativeEventSource || EventSourcePolyfill;

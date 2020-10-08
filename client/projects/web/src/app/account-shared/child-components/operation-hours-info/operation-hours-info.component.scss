@@ -76,10 +76,14 @@
           padding-bottom: 0px;
         }
 
-        td:first-child {
-          box-sizing: border-box;
-          min-width: 74px;
-          padding-right: 5px;
+        td {
+          vertical-align: top;
+
+          &:first-child {
+            box-sizing: border-box;
+            min-width: 74px;
+            padding-right: 5px;
+          }
         }
       }
     }

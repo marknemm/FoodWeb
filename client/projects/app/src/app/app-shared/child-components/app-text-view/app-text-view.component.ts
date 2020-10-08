@@ -1,18 +1,19 @@
-import { Component, ElementRef, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { AutocapitalizationType, Label, ReturnKeyType, TextTransform, TextView, Visibility } from '@nativescript/core';
+import { Component, ElementRef, EventEmitter, HostBinding, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AutocapitalizationType, Label, ReturnKeyType, TextTransform, TextView } from '@nativescript/core';
 import { KeyboardType } from '@nativescript/core/ui/enums';
 import { TextAlignment, TextDecoration, WhiteSpace } from '@nativescript/core/ui/text-base';
-import { Focusable } from '~app/app-shared/interfaces/focusable';
-import { FormBaseComponent, valueAccessorProvider } from '~web/data-structure/form-base-component';
+import { AppFocusService, Focusable, FocusableComponent } from '~app/app-shared/services/app-focus/app-focus.service';
+import { FormBaseComponent, formProvider } from '~web/data-structure/form-base-component';
+import { TFormControl } from '~web/data-structure/t-form-control';
 import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'foodweb-app-text-view',
   templateUrl: './app-text-view.component.html',
   styleUrls: ['./app-text-view.component.scss'],
-  providers: valueAccessorProvider(AppTextViewComponent)
+  providers: formProvider(AppTextViewComponent)
 })
-export class AppTextViewComponent extends FormBaseComponent<string> implements OnInit, OnChanges, Focusable {
+export class AppTextViewComponent extends FormBaseComponent<string> implements OnChanges, FocusableComponent {
 
   @Input() autocapitalizationType: AutocapitalizationType = 'none';
   @Input() autocorrect: BooleanInput = true;
@@ -31,13 +32,13 @@ export class AppTextViewComponent extends FormBaseComponent<string> implements O
   @Input() textAlignment: TextAlignment = 'left';
   @Input() textDecoration: TextDecoration = 'none';
   @Input() textTransform: TextTransform = 'none';
-  @Input() visible: Visibility | boolean = 'visible';
+  @Input() visible: VisibleInput = 'visible';
   @Input() whiteSpace: WhiteSpace = 'normal';
 
   @Output() blur = new EventEmitter();
   @Output() done = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
-  @Output('focus') focusOut = new EventEmitter();
+  @Output('focus') focusOutput = new EventEmitter();
   @Output() returnPress = new EventEmitter();
   @Output() textChange = new EventEmitter();
   @Output() textFieldTap = new EventEmitter();
@@ -47,32 +48,36 @@ export class AppTextViewComponent extends FormBaseComponent<string> implements O
 
   @HostBinding() readonly class = 'foodweb-app-text-view';
 
-  constructor(formHelperService: FormHelperService) {
-    super(formHelperService);
+  constructor(
+    private _focusService: AppFocusService,
+    formHelperService: FormHelperService,
+  ) {
+    super(new TFormControl<string>(), formHelperService);
+  }
+
+  get focusElement(): Focusable {
+    return this.textViewRef.nativeElement;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    super.ngOnChanges(changes);
     if (changes.isReturnKeyTypeDone && this.isReturnKeyTypeDone != null) {
       this.returnKeyType = (this.isReturnKeyTypeDone ? 'done' : 'next');
     }
-  }
-
-  ngOnInit() {
-    super.ngOnInit();
-  }
-
-  focus(): boolean {
-    return this.textViewRef.nativeElement.focus();
   }
 
   dismissSoftInput(): void {
     this.textViewRef.nativeElement.dismissSoftInput();
   }
 
+  focus(): boolean {
+    return this._focusService.focus(this, this.textViewRef.nativeElement);
+  }
+
   onReturnPress(event: any): void {
     this.returnPress.emit(event);
     if (this.returnKeyType === 'next') {
-      this.nextFocus?.focus();
+      this._focusService.focusNext(this, true);
     } else if (this.returnKeyType === 'done') {
       this.done.emit();
     }

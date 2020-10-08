@@ -1,53 +1,59 @@
-<Button text="app-date-time-range works!" class="btn btn-primary"></Button>
+<StackLayout [formGroup]="formGroup" [foodwebAppVisibile]="editable">
+  <GridLayout rows="auto" columns="*,*">
+    <foodweb-app-date-time
+      #startDateTime
+      formControlName="startDateTime"
+      [allowClear]="allowClear"
+      [allowUndefTime]="allowUndefTime"
+      [editable]="true"
+      [datePlaceholder]="startDatePlaceholder"
+      [timePlaceholder]="startTimePlaceholder"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [floatLabels]="floatLabels"
+      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
+      (ngModelChange)="formGroup.fillMissingRangePart()"></foodweb-app-date-time>
 
-<!-- <div [formGroup]="formGroup" *ngIf="editing" class="date-time-range-form row">
-  <div class="date-time-field col-sm-12">
-    <foodweb-date-time
-     #startDateTime
-     formControlName="startDateTime"
-     [allowClear]="allowClear"
-     [allowUndefTime]="allowUndefTime"
-     [editing]="true"
-     [datePlaceholder]="startDatePlaceholder"
-     [timePlaceholder]="startTimePlaceholder"
-     [minDate]="minDate"
-     [maxDate]="maxDate"
-     [floatLabels]="floatLabels"
-     [errorStateMatcher]="formGroup.rangeErrStateMatcher"
-     (ngModelChange)="formGroup.fillMissingRangePart()">
-    </foodweb-date-time>
-  </div>
-  <div class="date-time-field col-sm-12">
-    <foodweb-date-time
-     #endDateTime
-     formControlName="endDateTime"
-     [allowClear]="allowClear"
-     [allowUndefTime]="allowUndefTime"
-     [editing]="true"
-     [datePlaceholder]="endDatePlaceholder"
-     [timePlaceholder]="endTimePlaceholder"
-     [minDate]="minDate"
-     [maxDate]="maxDate"
-     [floatLabels]="floatLabels"
-     [errorStateMatcher]="formGroup.rangeErrStateMatcher"
-     (ngModelChange)="formGroup.fillMissingRangePart()">
-    </foodweb-date-time>
-    <mat-error *ngIf="formGroup.hasError('dateTimeRangeOrder')" class="range-order-err">
-      End date-time must be later than start date-time
-    </mat-error>
-  </div>
-  <div
-    *ngIf="dateTimeRangeRadioConfig && this.formGroup.enabled"
-    class="date-time-range-radio-intercept"
-    (click)="openDateTimeRangeRadio($event)"
-  ></div>
-</div>
+    <foodweb-app-date-time
+      #endDateTime
+      formControlName="endDateTime"
+      [allowClear]="allowClear"
+      [allowUndefTime]="allowUndefTime"
+      [editable]="true"
+      [datePlaceholder]="endDatePlaceholder"
+      [timePlaceholder]="endTimePlaceholder"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [floatLabels]="floatLabels"
+      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
+      (ngModelChange)="formGroup.fillMissingRangePart()"></foodweb-app-date-time>
+  </GridLayout>
 
-<div *ngIf="!editing" class="date-time-range-display">
-  <foodweb-date-time [boldTime]="boldTime" [excludeTimeDisplay]="startEndDateSame" [dateTime]="start" [editing]="false"></foodweb-date-time>
-  <span class="d-inline-block">
-    <foodweb-date-time *ngIf="startEndDateSame" [boldTime]="boldTime" [excludeDateDisplay]="true" [dateTime]="start" [editing]="false"></foodweb-date-time>
-    <span class="display-to"> -- </span>
-    <foodweb-date-time [boldTime]="boldTime" [excludeDateDisplay]="startEndDateSame" [dateTime]="end" [editing]="false"></foodweb-date-time>
-  </span>
-</div> -->
+  <Label
+    text="End date-time must be later than start date-time"
+    class="text-danger"
+    [foodwebAppVisibile]="formGroup.hasError('dateTimeRangeOrder')"></Label>
+</StackLayout>
+
+<StackLayout [foodwebAppVisibile]="!editable">
+  <foodweb-app-date-time
+    [boldTime]="boldTime"
+    [dateTime]="start"
+    [editable]="false"
+    [excludeTimeDisplay]="startEndDateSame"></foodweb-app-date-time>
+  <!-- Wrap time range below date when showing a range where start & end date is same. -->
+  <StackLayout orientation="horizontal">
+    <foodweb-app-time
+      [bold]="boldTime"
+      [time]="start | foodwebFormatTime"
+      [editable]="false"
+      [excludeDateDisplay]="true"
+      [visible]="startEndDateSame"></foodweb-app-time>
+    <Label text=" -- "></Label>
+    <foodweb-app-date-time
+      [boldTime]="boldTime"
+      [dateTime]="end"
+      [editable]="false"
+      [excludeDateDisplay]="startEndDateSame"></foodweb-app-date-time>
+  </StackLayout>
+</StackLayout>
