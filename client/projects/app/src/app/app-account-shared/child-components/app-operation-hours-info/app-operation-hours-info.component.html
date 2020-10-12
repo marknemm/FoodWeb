@@ -5,7 +5,11 @@
   </GridLayout>
 
   <StackLayout [foodwebAppVisibile]="true">
-    <foodweb-app-operation-hours [formGroup]="operationHoursForm" *ngFor="let operationHoursForm of operationHoursFormArr.controls"></foodweb-app-operation-hours>
+    <foodweb-weekday-operation-hours
+      *ngFor="let weekday of constantsService.WEEKDAYS"
+      [weekday]="weekday"
+      [formArrayName]="weekday"
+      [editable]="editable"></foodweb-weekday-operation-hours>
   </StackLayout>
 </StackLayout>
 

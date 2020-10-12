@@ -3,12 +3,12 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "node",
-    "target": "es2015",
+    "target": "ES2015",
     "lib": [
-      "es2018",
-      "es2017",
-      "dom",
-      "es6"
+      "ES2018",
+      "ES2017",
+      "DOM",
+      "ES6"
     ],
     "paths": {
       "~app/*": ["projects/app/src/app/*"],

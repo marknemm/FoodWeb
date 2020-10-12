@@ -10,19 +10,19 @@
     <div class="delivery-display row">
       <div class="col-sm-6">
         <div class="inline-label">Delivery Window Start:</div>
-        <div><foodweb-date-time [dateTime]="donation.pickupWindowStart" [boldTime]="true"></foodweb-date-time></div>
+        <div><foodweb-date-time [value]="donation.pickupWindowStart" [boldTime]="true"></foodweb-date-time></div>
       </div>
       <div class="col-sm-6">
         <div class="inline-label">Delivery Window End:</div>
-        <div><foodweb-date-time [dateTime]="donation.pickupWindowEnd" [boldTime]="true"></foodweb-date-time></div>
+        <div><foodweb-date-time [value]="donation.pickupWindowEnd" [boldTime]="true"></foodweb-date-time></div>
       </div>
       <div class="col-sm-6">
         <div class="inline-label">Pick-up:</div>
-        <br><foodweb-address [contactInfo]="donation.donorAccount.contactInfo"></foodweb-address>
+        <br><foodweb-address [value]="donation.donorAccount.contactInfo"></foodweb-address>
       </div>
       <div class="col-sm-6">
         <div class="inline-label">Drop-off:</div>
-        <br><foodweb-address [contactInfo]="donation.claim.receiverAccount.contactInfo"></foodweb-address>
+        <br><foodweb-address [value]="donation.claim.receiverAccount.contactInfo"></foodweb-address>
       </div>
     </div>
   </mat-card-content>

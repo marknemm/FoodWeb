@@ -85,7 +85,7 @@ export class AppTimeComponent extends TimeBaseComponent implements FocusableComp
     return {
       minuteInterval: this.minutesGap,
       time: this._dateTimeService.timeStrToDate(
-        this.formControl.value ? this.formControl.value : this.defaultTime
+        this.value ? this.value : this.defaultTime
       ),
       title
     };

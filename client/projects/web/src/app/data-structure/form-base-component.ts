@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnChanges, OnDestroy, Provider, SimpleChanges, Type } from '@angular/core';
+import { Component, Directive, forwardRef, Input, OnChanges, OnDestroy, Provider, SimpleChanges, Type } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -25,8 +25,8 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
  * @param FA The type of this component's `formArray`. Defaults to `A` if A extends `TFormArray<ExtractArrayType<T>>`.
  * @param FC The type of this component's `formControl`. Defaults to `A` if A extends `TFormControl<T>`.
  */
-@Component({ template: '' })
-// tslint:disable-next-line: class-name
+@Directive()
+// tslint:disable-next-line: directive-class-suffix
 abstract class _FormBaseComponent<
   T,
   V = ExtractControlType<T>,

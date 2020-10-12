@@ -205,8 +205,11 @@ export class DateTimeHelper {
    * @param timeStr The time string to convert.
    * @return The Date object result.
    */
-  timeStrToDate(timeStr: string): Date {
+  timeStrToDate(timeStr: Date | string): Date {
     const date = new Date();
+    if (timeStr instanceof Date) {
+      return timeStr;
+    }
     if (timeStr) {
       timeStr = timeStr.toLowerCase();
       let timeSplits: string[] = timeStr.split(/[ap ]/);

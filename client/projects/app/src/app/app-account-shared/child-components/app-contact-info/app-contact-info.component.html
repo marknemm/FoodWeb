@@ -61,20 +61,20 @@
   </GridLayout>
 </StackLayout>
 
-<StackLayout *ngIf="!editable && contactInfo">
+<StackLayout *ngIf="!editable && value">
   <ng-container *ngIf="addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
 
-  <Label *ngIf="!hideEmail && contactInfo.email">
+  <Label *ngIf="!hideEmail && value.email">
     <FormattedString>
       <Span text="Email:" class="inline-label"></Span>
-      <span [text]="contactInfo.email" (tap)="openEmail()"></span>
+      <span [text]="value.email" (tap)="openEmail()"></span>
     </FormattedString>
   </Label>
 
-  <Label *ngIf="!hidePhone && contactInfo.phoneNumber">
+  <Label *ngIf="!hidePhone && value.phoneNumber">
     <FormattedString>
       <Span text="Phone Number:" class="inline-label"></Span>
-      <span [text]="contactInfo.phoneNumber" (tap)="openPhoneCall()"></span>
+      <span [text]="value.phoneNumber" (tap)="openPhoneCall()"></span>
     </FormattedString>
   </Label>
 
@@ -83,5 +83,5 @@
 
 <ng-template #addressTmpl>
   <Label text="Address:"></Label>
-  <foodweb-app-address [contactInfo]="contactInfo" [mapAnchorType]="addressAnchorType"></foodweb-app-address>
+  <foodweb-app-address [value]="value" [mapAnchorType]="addressAnchorType"></foodweb-app-address>
 </ng-template>

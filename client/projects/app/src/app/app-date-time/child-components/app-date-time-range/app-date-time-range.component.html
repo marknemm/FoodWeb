@@ -38,21 +38,21 @@
 <StackLayout [foodwebAppVisibile]="!editable">
   <foodweb-app-date-time
     [boldTime]="boldTime"
-    [dateTime]="start"
+    [dateTime]="value.startDateTime"
     [editable]="false"
     [excludeTimeDisplay]="startEndDateSame"></foodweb-app-date-time>
   <!-- Wrap time range below date when showing a range where start & end date is same. -->
   <StackLayout orientation="horizontal">
     <foodweb-app-time
       [bold]="boldTime"
-      [time]="start | foodwebFormatTime"
+      [value]="value.startDateTime | foodwebFormatTime"
       [editable]="false"
       [excludeDateDisplay]="true"
       [visible]="startEndDateSame"></foodweb-app-time>
     <Label text=" -- "></Label>
     <foodweb-app-date-time
       [boldTime]="boldTime"
-      [dateTime]="end"
+      [dateTime]="value.endDateTime"
       [editable]="false"
       [excludeDateDisplay]="startEndDateSame"></foodweb-app-date-time>
   </StackLayout>

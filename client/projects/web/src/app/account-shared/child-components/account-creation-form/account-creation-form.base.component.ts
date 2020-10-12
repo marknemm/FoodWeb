@@ -67,7 +67,7 @@ export class AccountCreationFormBaseComponent implements OnInit, OnDestroy {
     this.accountForm.get('accountType').valueChanges.pipe(
       takeUntil(this._destroy$)
     ).subscribe((accountType: AccountType) => {
-      if (!this._activatedRoute.snapshot.url.toString().match(`${accountType}$`)) {
+      if (accountType && !this._activatedRoute.snapshot.url.toString().match(`${accountType}$`)) {
         this._router.navigate(['.', accountType], {
           relativeTo: this._activatedRoute,
           queryParamsHandling: 'preserve'

@@ -35,14 +35,14 @@ export class AppContactInfoComponent extends ContactInfoBaseComponent implements
    * Opens the user's default mail client to email a user associated with this contact info.
    */
   openEmail(): void {
-    openUrl(`mailto:${this.contactInfo.email}`);
+    openUrl(`mailto:${this.value.email}`);
   }
 
   /**
    * Opens a phone interface to make a phone call to the user associated with this contact info.
    */
   openPhoneCall(): void {
-    dial(this.contactInfo.phoneNumber, true);
+    dial(this.value.phoneNumber, true);
   }
 
   focus(): boolean {

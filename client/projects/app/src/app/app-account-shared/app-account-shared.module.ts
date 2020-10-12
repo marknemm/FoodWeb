@@ -15,6 +15,7 @@ import { AppProfileImgComponent } from './child-components/app-profile-img/app-p
 import { AppReceiverComponent } from './child-components/app-receiver/app-receiver.component';
 import { AppUsernameComponent } from './child-components/app-username/app-username.component';
 import { AppVolunteerComponent } from './child-components/app-volunteer/app-volunteer.component';
+import { AppWeekdayOperationHoursComponent } from './child-components/app-weekday-operation-hours/app-weekday-operation-hours.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { AppVolunteerComponent } from './child-components/app-volunteer/app-volu
     AppReceiverComponent,
     AppUsernameComponent,
     AppVolunteerComponent,
+    AppWeekdayOperationHoursComponent,
   ],
   imports: [
     AppDateTimeModule,

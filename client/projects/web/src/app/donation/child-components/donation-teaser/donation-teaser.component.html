@@ -14,11 +14,11 @@
       </div>
       <div class="col-sm-6">
         <div class="inline-label">Pickup Window Start:</div>
-        <div><foodweb-date-time [dateTime]="(donation | pickupWindow).startDateTime" [boldTime]="true"></foodweb-date-time></div>
+        <div><foodweb-date-time [value]="(donation | pickupWindow).startDateTime" [boldTime]="true"></foodweb-date-time></div>
       </div>
       <div class="col-sm-6">
         <div class="inline-label">Pickup Window End:</div>
-        <div><foodweb-date-time [dateTime]="(donation | pickupWindow).endDateTime" [boldTime]="true"></foodweb-date-time></div>
+        <div><foodweb-date-time [value]="(donation | pickupWindow).endDateTime" [boldTime]="true"></foodweb-date-time></div>
       </div>
     </div>
   </mat-card-content>
