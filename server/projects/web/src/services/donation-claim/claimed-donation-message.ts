@@ -33,7 +33,7 @@ export async function sendClaimedDonationMessages(donation: DonationEntity): Pro
         notificationType: NotificationType.ClaimDonation,
         notificationLink: `/donation/details/${donation.id}`,
         title: `Donation Claimed`,
-        icon: donation.claim.receiverAccount.profileImgUrl,
+        icon: donation.claim.receiverAccount.profileImg,
         body: `
           Donation claimed by <strong>${receiverName}</strong>:<br>
           <i>${donation.description}</i>

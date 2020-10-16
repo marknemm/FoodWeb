@@ -1,6 +1,6 @@
 <mat-card id="donation-{{ donation.id }}" class="donation-teaser">
   <mat-card-header>
-    <img mat-card-avatar [src]="donation.donorAccount.profileImgUrl" alt="{{ donation | donationMemberName : AccountType.Donor }} Profile Image">
+    <foodweb-profile-img mat-card-avatar [value]="donation.donorAccount.profileImg"></foodweb-profile-img>
     <mat-card-title>{{ donation | donationMemberName : AccountType.Donor }}</mat-card-title>
     <mat-card-subtitle>
       <foodweb-donation-status [donationStatus]="donation.donationStatus" class="donation-status"></foodweb-donation-status>

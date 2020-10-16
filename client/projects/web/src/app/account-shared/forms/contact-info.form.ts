@@ -12,7 +12,12 @@ export class ContactInfoForm extends TFormGroup<ContactInfo> {
       streetAddress: ['', Validators.required],
       city: ['', Validators.required],
       stateProvince: ['', Validators.required],
-      postalCode: ['', [Validators.required, Validators.pattern(Validation.POSTAL_CODE_REGEX)]]
+      postalCode: ['', [Validators.required, Validators.pattern(Validation.POSTAL_CODE_REGEX)]],
+      location: undefined,
+      timezone: undefined,
+      enableEmail: undefined,
+      enablePushNotification: undefined,
+      notifyForEachDonation: undefined
     });
     if (contactInfo) {
       this.patchValue(contactInfo);

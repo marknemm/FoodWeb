@@ -217,7 +217,7 @@ async function _sendClaimReassignedMessages(donationDiff: UpdateDiff<DonationEnt
         notificationType: NotificationType.ClaimReassigned,
         notificationLink: `donation/details/${donationDiff.new.id}`,
         title: 'Donation Claim Reassigned',
-        icon: receiverAccount.profileImgUrl,
+        icon: receiverAccount.profileImg,
         body: `
           Donation claim reassigned to <strong>${receiverName}</strong>.<br>
           <i>${donationDiff.new.description}</i>
@@ -248,7 +248,7 @@ async function _sendClaimReassignedMessages(donationDiff: UpdateDiff<DonationEnt
         notificationType: NotificationType.UnclaimDonation,
         notificationLink: `/donation/details/${donationDiff.new.id}`,
         title: `Donation Unclaimed`,
-        icon: oldReceiverAccount.profileImgUrl,
+        icon: oldReceiverAccount.profileImg,
         body: `
           Donation claim removed by FoodWeb admin.<br>
           <i>${donationDiff.new.description}</i>
@@ -297,7 +297,7 @@ async function _sendDeliveryReassignedMessages(donationDiff: UpdateDiff<Donation
         notificationType: NotificationType.DeliveryReassigned,
         notificationLink: `donation/details/${donationDiff.new.id}`,
         title: 'Delivery Reassigned',
-        icon: volunteerAccount.profileImgUrl,
+        icon: volunteerAccount.profileImg,
         body: `
           Donation delivery reassigned to <strong>${delivererName}</strong>.<br>
           <i>${donationDiff.new.description}</i>
@@ -323,7 +323,7 @@ async function _sendDeliveryReassignedMessages(donationDiff: UpdateDiff<Donation
         notificationType: NotificationType.CancelDelivery,
         notificationLink: `donation/details/${donationDiff.new.id}`,
         title: 'Delivery Cancelled',
-        icon: oldVolunteerAccount.profileImgUrl,
+        icon: oldVolunteerAccount.profileImg,
         body: `
           Donation delivery has been cancelled by a FoodWeb admin.<br>
           <i>${donationDiff.new.description}</i>

@@ -1,7 +1,7 @@
 import { Component, Directive, forwardRef, Input, OnChanges, OnDestroy, Provider, SimpleChanges, Type } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Observable, Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, of, Subject, Subscription } from 'rxjs';
+import { startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { ExtractArrayType, ExtractControlType } from '~web/data-structure/generics';
 import { TAbstractControl, UpdateValueOptions } from '~web/data-structure/t-abstract-control';
 import { TFormArray } from '~web/data-structure/t-form-array';
@@ -25,8 +25,7 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
  * @param FA The type of this component's `formArray`. Defaults to `A` if A extends `TFormArray<ExtractArrayType<T>>`.
  * @param FC The type of this component's `formControl`. Defaults to `A` if A extends `TFormControl<T>`.
  */
-@Directive()
-// tslint:disable-next-line: directive-class-suffix
+@Directive() // tslint:disable-next-line: all
 abstract class _FormBaseComponent<
   T,
   V = ExtractControlType<T>,
@@ -36,6 +35,7 @@ abstract class _FormBaseComponent<
   FC extends TFormControl<V> = A extends TFormControl<V> ? A : undefined
 > implements OnChanges, OnDestroy, ControlValueAccessor {
 
+  @Input() editable: BooleanInput = false;
   @Input() formArrayName = '';
   @Input() formControlName = '';
   @Input() formGroupName = '';
@@ -211,9 +211,14 @@ abstract class _FormBaseComponent<
         this._prevAbstractCtrl = this.activeAbstractControl;
         this.value = this.activeAbstractControl.value;
         this._valueChangeSubscription.unsubscribe(); // Ensure we cleanup previous subscription if form control has changed.
-        this._valueChangeSubscription = this.onValueChanges().subscribe(
-          () => this.value = this.activeAbstractControl.value
-        );
+        this._valueChangeSubscription = this.onValueChanges().subscribe((value: V) => {
+          this.value = value;
+          // If the abstract control is not being directly passed in via input binding,
+          // then  must go through traditional means to propegate form change to model (e.g. [(ngModel)] binding is used).
+          if (!this.controlInputBound) {
+            this.onChangeCb(value);
+          }
+        });
       }
     }
   }
@@ -226,7 +231,7 @@ abstract class _FormBaseComponent<
   }
 
   /**
-   * Writes a given value to the underlying active abstract control; either formGroup or formControl.
+   * Writes a given value to the underlying active abstract control; either `formArray`, `formControl`, or `formGroup`.
    * @param value The value to write.
    * @param options Options for the write operation (See AbstractControl.setValue for more details).
    */
@@ -240,7 +245,7 @@ abstract class _FormBaseComponent<
 
   /**
    * Registers a given on change callback function, which should be invoked whenever a change is detected in the
-   * underlying active abstract control; either formGroup or formControl.
+   * underlying active abstract control; either `formArray`, `formControl`, or `formGroup`.
    * @param onChangeCb The on change callback function.
    */
   registerOnChange(onChangeCb: (value: V) => void): void {
@@ -257,7 +262,7 @@ abstract class _FormBaseComponent<
   }
 
   /**
-   * Sets the disabled state of the underlying active abstract control; either formGroup or formControl.
+   * Sets the disabled state of the underlying active abstract control; either `formArray`, `formControl`, or `formGroup`.
    * @param isDisabled Whether or not disable should be set.
    */
   setDisabledState(isDisabled: boolean): void {
@@ -267,7 +272,21 @@ abstract class _FormBaseComponent<
   }
 
   /**
-   * Listens for value changes to occur within a given abstract control.
+   * Gets an observable that immediately emits the current value and listens for value changes to occur within a given abstract control.
+   * @param ctrl The abstract control that will be monitored for value changes.
+   * If not set, then defaults to this form base component's active abstract control.
+   * @return An observable that emits the current value and any additional value changes.
+   * Will automatically be unsubscribed from when component is destroyed.
+   */
+  monitorValue<P = V>(ctrl: TAbstractControl<P> & AbstractControl = <any>this.activeAbstractControl): Observable<P> {
+    return ctrl.valueChanges.pipe(
+      startWith(ctrl.value),
+      takeUntil(this._destroy$)
+    );
+  }
+
+  /**
+   * Gets an observable that listens for value changes to occur within a given abstract control.
    * @param ctrl The abstract control that will be monitored for value changes.
    * If not set, then defaults to this form base component's active abstract control.
    * @return An observable that emits any value changes. Will automatically be unsubscribed from when component is destroyed.

@@ -43,7 +43,7 @@
 
   <div #contactInfoDisplay class="contact-info-display row">
     <ng-container *ngIf="addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
-    <div class="col-sm-6" *ngIf="!hideEmail && value.email">
+    <div class="col-sm-7" *ngIf="!hideEmail && value.email">
       <div class="inline-label">Email:</div>
       <div class="d-inline-block">
         <a class="email" href="mailto:{{ value.email }}">
@@ -51,7 +51,7 @@
         </a>
       </div>
     </div>
-    <div class="col-sm-6" *ngIf="!hidePhone && value.phoneNumber">
+    <div class="col-sm-5" *ngIf="!hidePhone && value.phoneNumber">
       <div class="inline-label">Phone Number:</div>
       <div class="d-inline-block">
         <a class="phone-number" href="tel:{{ value.phoneNumber }}">

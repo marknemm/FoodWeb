@@ -1,7 +1,6 @@
 import { Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { Account, AccountType, NotificationSettings, OperationHours, TimeRange } from '~shared';
+import { Account, AccountType, NotificationSettings, TimeRange } from '~shared';
 import { ContactInfoForm } from '~web/account-shared/forms/contact-info.form';
 import { OperationHoursInfoForm } from '~web/account-shared/forms/operation-hours-info.form';
 import { OrganizationForm } from '~web/account-shared/forms/organization.form';
@@ -20,14 +19,14 @@ export class AccountForm extends TFormGroup<AccountFormT> {
     super({
       id: undefined,
       accountType: [undefined, Validators.required],
-      username: ['', Validators.required],
-      profileImgUrl: '',
-      organization: new OrganizationForm(),
-      volunteer: new VolunteerForm(),
       contactInfo: new ContactInfoForm(),
       notificationSettings: new NotificationSettingsForm(),
+      password: new PasswordForm({ formMode: config.formMode }),
+      profileImg: '',
       operationHours: new OperationHoursInfoForm(),
-      password: new PasswordForm({ formMode: config.formMode })
+      organization: new OrganizationForm(),
+      username: ['', Validators.required],
+      volunteer: new VolunteerForm(),
     });
 
     // Listen for accountType value to update.

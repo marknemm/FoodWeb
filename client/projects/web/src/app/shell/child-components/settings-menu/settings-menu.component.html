@@ -1,5 +1,5 @@
 <button mat-icon-button type="button" class="settings-button" matTooltip="Settings" [matMenuTriggerFor]="settingsMenu">
-  <foodweb-profile-img height="100%" [imgUrl]="sessionService.account.profileImgUrl"></foodweb-profile-img>
+  <foodweb-profile-img [value]="sessionService.account.profileImg"></foodweb-profile-img>
 </button>
 
 <mat-menu #settingsMenu="matMenu" class="header-submenu">

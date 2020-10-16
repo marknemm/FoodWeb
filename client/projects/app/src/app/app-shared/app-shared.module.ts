@@ -2,6 +2,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NativeScriptCommonModule, NativeScriptFormsModule } from '@nativescript/angular';
 import { AppAlertModule } from '~app/app-alert/app-alert.module';
+import { ToBooleanPipe } from '~web/shared/pipes/to-boolean/to-boolean.pipe';
 import { AppFocusMaskComponent } from './child-components/app-focus-mask/app-focus-mask.component';
 import { AppProgressIndicatorComponent } from './child-components/app-progress-indicator/app-progress-indicator.component';
 import { AppSelectDialogComponent } from './child-components/app-select-dialog/app-select-dialog.component';
@@ -21,6 +22,7 @@ import { AppVisibleDirective } from './directives/app-visible/app-visible.direct
     AppTextFieldComponent,
     AppTextViewComponent,
     AppVisibleDirective,
+    ToBooleanPipe,
   ],
   imports: [
     NativeScriptCommonModule,
@@ -37,6 +39,7 @@ import { AppVisibleDirective } from './directives/app-visible/app-visible.direct
     AppTextFieldComponent,
     AppTextViewComponent,
     AppVisibleDirective,
+    ToBooleanPipe,
   ],
   schemas: [
     NO_ERRORS_SCHEMA

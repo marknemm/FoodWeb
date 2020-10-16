@@ -8,7 +8,9 @@
         </div>
       </ng-container>
     </div>
-    <foodweb-profile-img formControlName="profileImgUrl" [editable]="hasAccountOwnership"></foodweb-profile-img>
+    <div class="profile-img-container">
+      <foodweb-profile-img formControlName="profileImg" [editable]="hasAccountOwnership"></foodweb-profile-img>
+    </div>
   </div>
 
   <div class="account-type">

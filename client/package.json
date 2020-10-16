@@ -17,7 +17,7 @@
     "admin:start:docker": "npm run build:prep && node ./build-util/initial-install.js && ng serve --project admin --port=4201 --source-map --host 0.0.0.0 --disableHostCheck=true",
     "admin:test": "npm run build:prep && npm run admin:lint && ng test --project admin --watch=false --code-coverage --source-map",
     "admin:test:watch": "npm run build:prep && ng test --project admin --code-coverage --source-map",
-    "app:android": "nsc run android --no-hmr",
+    "app:android": "nsc debug android --no-hmr",
     "app:build": "npm run build:prep && ionic cordova build --prod --release",
     "app:clean": "ns clean",
     "app:device:prepare:watch": "run-p app:ng:device:build:watch watch",
@@ -57,6 +57,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/marknemm/FoodWeb.git"
+  },
+  "nativescript": {
+    "id": "org.nativescript.foodweb"
   },
   "private": true,
   "dependencies": {
@@ -105,9 +108,9 @@
   },
   "devDependencies": {
     "@angular/compiler-cli": "^10.1.0",
-    "@nativescript/android": "^7.0.0",
+    "@nativescript/android": "7.0.0",
     "@nativescript/ios": "^7.0.1",
-    "@nativescript/schematics": "^10.0.2",
+    "@nativescript/schematics": "^10.1.0",
     "@nativescript/tslint-rules": "0.0.5",
     "@nativescript/types": "^7.0.1",
     "@nativescript/webpack": "^3.0.1",

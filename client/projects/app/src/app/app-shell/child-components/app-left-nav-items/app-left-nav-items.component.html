@@ -1,7 +1,7 @@
 <StackLayout row="0" class="nt-drawer__header">
-  <Image class="nt-drawer__header-image fas t-36" src="font://&#xf2bd;"></Image>
-  <Label class="nt-drawer__header-brand" text="User Name"></Label>
-  <Label class="nt-drawer__header-footnote" text="username@mail.com"></Label>
+  <Image class="nt-drawer__header-image fas t-36" [src]="sessionService.accountProfileImg"></Image>
+  <Label class="nt-drawer__header-brand" [text]="sessionService.accountName"></Label>
+  <Label class="nt-drawer__header-footnote" [text]="sessionService.accountEmail"></Label>
 </StackLayout>
 
 <ScrollView row="1" class="nt-drawer__body">

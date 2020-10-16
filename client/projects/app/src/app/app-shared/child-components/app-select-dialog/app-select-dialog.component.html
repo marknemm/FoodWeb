@@ -2,21 +2,18 @@
 
   <Label [text]="title" class="dialog-title"></Label>
 
-  <!-- *ngIf="true": Fix strange custom dialog bug where elements don't fully initialize or initialize correctly -->
-  <ng-container *ngIf="true">
-    <StackLayout class="dialog-content">
-      <ListPicker
-        #listPicker
-        [items]="items"
-        [selectedIndex]="selectedIndex"
-        (selectedIndexChange)="onSelectedIndexChange(listPicker.selectedIndex)"
-      ></ListPicker>
-    </StackLayout>
+  <StackLayout class="dialog-content">
+    <ListPicker
+      #listPicker
+      [items]="items"
+      [selectedIndex]="selectedIndex"
+      (selectedIndexChange)="onSelectedIndexChange(listPicker.selectedIndex)"
+    ></ListPicker>
+  </StackLayout>
 
-    <StackLayout class="dialog-actions">
-      <Button text="cancel" (tap)="close()" class="-primary"></Button>
-      <Button text="ok" (tap)="close(listPicker.selectedIndex)" class="-primary"></Button>
-    </StackLayout>
-  </ng-container>
+  <StackLayout class="dialog-actions">
+    <Button text="cancel" (tap)="close()" class="-primary"></Button>
+    <Button text="ok" (tap)="close(listPicker.selectedIndex)" class="-primary"></Button>
+  </StackLayout>
 
 </StackLayout>

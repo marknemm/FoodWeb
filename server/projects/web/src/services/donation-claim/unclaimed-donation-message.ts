@@ -72,13 +72,13 @@ async function _sendNotificationToDonor(donation: DonationEntity): Promise<void>
       notificationType: NotificationType.UnclaimDonation,
       notificationLink: `/donation/details/${donation.id}`,
       title: `Donation Unclaimed`,
-      icon: donation.claim.receiverAccount.profileImgUrl,
+      icon: donation.claim.receiverAccount.profileImg,
       body: `
         Donation unclaimed by <strong>${receiverName}</strong>.<br>
         <i>${donation.description}</i>
       `
     }
-  ).catch(console.error)
+  ).catch(console.error);
 }
 
 /**
@@ -94,7 +94,7 @@ async function _sendNotificationToDeliverer(donation: DonationEntity): Promise<v
       notificationType: NotificationType.UnclaimDonation,
       notificationLink: `/donation/details/${donation.id}`,
       title: `Donation Unclaimed`,
-      icon: donation.claim.receiverAccount.profileImgUrl,
+      icon: donation.claim.receiverAccount.profileImg,
       body: `
         Delivery Cancelled by <strong>${receiverName}</strong>.<br>
         <i>${donation.description}</i>

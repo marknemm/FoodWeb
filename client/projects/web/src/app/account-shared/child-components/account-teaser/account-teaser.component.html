@@ -1,6 +1,6 @@
 <mat-card class="account-teaser">
   <mat-card-header [ngClass]="{ 'no-subtitle': !hasSubtitle }">
-    <img mat-card-avatar [src]="account.profileImgUrl" alt="Receiver Icon">
+    <foodweb-profile-img mat-card-avatar [value]="account.profileImg"></foodweb-profile-img>
     <mat-card-title>{{ customTitle ? customTitle : accountName }}</mat-card-title>
     <mat-card-subtitle *ngIf="hasSubtitle">
       <a *ngIf="hasEmailSubtitle; else nonEmailSubtitle" href="mailto:{{ account.contactInfo.email }}">

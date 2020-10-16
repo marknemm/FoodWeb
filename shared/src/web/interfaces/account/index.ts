@@ -1,5 +1,6 @@
 export * from './account-autocomplete-item';
 export * from './account-autocomplete-request';
+export * from './account-profile-img-placeholder';
 export * from './account-read-filters';
 export * from './account-read-request';
 export * from './account-section-update-request';

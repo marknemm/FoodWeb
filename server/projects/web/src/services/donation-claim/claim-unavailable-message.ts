@@ -72,7 +72,7 @@ async function _sendMessageToRecipients(donation: DonationEntity, recipients: Ac
         notificationType: NotificationType.ClaimDonation,
         notificationLink: `/donation/details/${donation.id}`,
         title: `Donation No Longer Available`,
-        icon: donation.donorAccount.profileImgUrl,
+        icon: donation.donorAccount.profileImg,
         body: `
           Donation has either been claimed or deleted:<br>
           <i>${donation.description}</i>

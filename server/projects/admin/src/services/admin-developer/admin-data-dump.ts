@@ -282,7 +282,7 @@ async function replaceVolunteerNames(queryRunner: QueryRunner): Promise<void> {
         WHERE   "Volunteer"."id" = ${volunteer.id};
 
         UPDATE  "Account"
-        SET     "profileImgUrl" = './assets/${lastNames[nameIdx].charAt(0)}.svg'
+        SET     "profileImg"   = './assets/${lastNames[nameIdx].charAt(0)}.svg'
         WHERE   "Account"."id" = ${volunteer.accountId}
       `;
 

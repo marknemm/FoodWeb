@@ -17,9 +17,6 @@ import { AppAlertDialogComponent } from './components/app-alert-dialog/app-alert
     Feedback,
     ModalDialogService
   ],
-  entryComponents: [
-    AppAlertDialogComponent
-  ],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppAlertModule {}

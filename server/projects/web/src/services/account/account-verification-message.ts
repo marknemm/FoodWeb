@@ -24,7 +24,7 @@ export async function sendAccountVerificationMessage(newAccountData: NewAccountD
           Please check your email for an account verification link.
         `
       }
-    ).catch(console.error)
+    ).catch (console.error)
   );
 
   await Promise.all(messagePromises);

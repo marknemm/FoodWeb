@@ -8,7 +8,7 @@ FROM
       "account"."id" AS "account_id",
       "account"."accountType" AS "account_accountType",
       "account"."username" AS "account_username",
-      "account"."profileImgUrl" AS "account_profileImgUrl",
+      "account"."profileImg" AS "account_profileImg",
       "account"."lastSeenNotificationId" AS "account_lastSeenNotificationId",
       "account"."updateTimestamp" AS "account_updateTimestamp",
       "account"."createTimestamp" AS "account_createTimestamp",
@@ -55,7 +55,7 @@ FROM
           "claim"."receiverAccountId" = "account"."id"
           AND "autoClaimHistory"."timestamp" >= (NOW() - INTERVAL '48 HOURS')
       ) AS "auto_claim_count",
-      RANDOM AS "random" 
+      RANDOM AS "random"
     FROM "Account" "account"
       INNER JOIN "ContactInfo" "contactInfo" ON "contactInfo"."id"="account"."contactInfoId"
       LEFT JOIN "Organization" "organization" ON "organization"."accountId"="account"."id"

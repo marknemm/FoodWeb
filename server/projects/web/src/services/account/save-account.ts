@@ -2,7 +2,7 @@ import { plainToClass } from 'class-transformer';
 import { QueryFailedError } from 'typeorm';
 import { AccountEntity, ContactInfoEntity, OperationHoursEntity, UnverifiedAccountEntity } from '~entity';
 import { OrmEntityManager, OrmRepository } from '~orm';
-import { AccountHelper, AccountSectionUpdateReqeust, AccountUpdateRequest, OperationHoursHelper, SignupRequest } from '~shared';
+import { AccountHelper, AccountSectionUpdateReqeust, AccountType, AccountUpdateRequest, OperationHoursHelper, SignupRequest } from '~shared';
 import { geocode, geoTimezone } from '~web/helpers/map/geocoder';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { FoodWebError } from '~web/helpers/response/foodweb-error';
@@ -47,7 +47,7 @@ function _updateNotificationsSettings(
 ): Promise<UpdateDiff<AccountEntity>> {
   // Shallow copy orignal account to set update field(s).
   const account: AccountEntity = Object.assign(new AccountEntity(), myAccount);
-  const notificationSettingsUpdate = <ContactInfoEntity> updateReq.accountSection;
+  const notificationSettingsUpdate = <ContactInfoEntity>updateReq.accountSection;
   account.contactInfo = Object.assign(new ContactInfoEntity(), account.contactInfo);
   account.contactInfo.enableEmail = notificationSettingsUpdate.enableEmail;
   account.contactInfo.enablePushNotification = notificationSettingsUpdate.enablePushNotification;
@@ -99,7 +99,7 @@ function _validateAccount(account: AccountEntity): void {
 }
 
 function _ensureEitherOrganizationOrVolunteer(account: AccountEntity): void {
-  if (account.accountType === 'Volunteer') {
+  if (account.accountType === AccountType.Volunteer) {
     account.organization = null;
   } else {
     account.volunteer = null;
@@ -109,18 +109,17 @@ function _ensureEitherOrganizationOrVolunteer(account: AccountEntity): void {
 
 function _ensureEitherDonorOrReceiver(account: AccountEntity): void {
   if (account.organization) {
-    (account.accountType === 'Donor')
+    (account.accountType === AccountType.Donor)
       ? account.organization.receiver = null
       : account.organization.donor = null;
   }
 }
 
 function _ensureAccountHasProfileImg(account: AccountEntity): void {
-  if (!account.profileImgUrl || /^\.?\/assets\/[A-Z]\.svg$/.test(account.profileImgUrl)) {
-    const firstLetter: string = (account.accountType === 'Volunteer')
+  if (!account.profileImg || account.profileImg.length === 1) {
+    account.profileImg = (account.accountType === 'Volunteer')
       ? account.volunteer.lastName.charAt(0).toUpperCase()
       : account.organization.name.charAt(0).toUpperCase();
-    account.profileImgUrl = `./assets/${firstLetter}.svg`;
   }
 }
 

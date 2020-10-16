@@ -44,7 +44,7 @@ export async function sendDonationDeleteMessages(donation: DonationEntity): Prom
         {
           notificationType: NotificationType.RemoveDonation,
           title: `Donation Deleted`,
-          icon: donation.donorAccount.profileImgUrl,
+          icon: donation.donorAccount.profileImg,
           body: `
             Claimed Donation Deleted by <strong>${donorName}</strong>.<br>
             <i>${donation.description}</i>
@@ -61,7 +61,7 @@ export async function sendDonationDeleteMessages(donation: DonationEntity): Prom
         {
           notificationType: NotificationType.RemoveDonation,
           title: `Donation Deleted`,
-          icon: donation.donorAccount.profileImgUrl,
+          icon: donation.donorAccount.profileImg,
           body: `
             Delivery Cancelled by <strong>${donorName}</strong>.<br>
             <i>${donation.description}</i>

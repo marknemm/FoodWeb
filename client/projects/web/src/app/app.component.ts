@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
 import { JSONDateReviver } from '~shared';
 import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { AlertService } from '~web/alert/services/alert/alert.service';
 import { IeAlertService } from '~web/alert/services/ie-alert/ie-alert.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
-import { IconService } from '~web/shared/services/icon/icon.service';
 
 @Component({
   selector: 'foodweb-root',
@@ -17,11 +17,11 @@ export class AppComponent {
     alertQueueService: AlertQueueService,
     alertService: AlertService,
     authService: AuthenticationService,
-    iconService: IconService,
     ieAlert: IeAlertService,
     jsonDateReviver: JSONDateReviver,
+    matIconReg: MatIconRegistry,
   ) {
-    iconService.init();
+    matIconReg.registerFontClassAlias('fontawesome', 'fa');
     ieAlert.showIEWarning();
     jsonDateReviver.initJSONDateReviver();
     alertQueueService.registerDefaultAlertProcessor(alertService);

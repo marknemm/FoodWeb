@@ -10,6 +10,7 @@ import { AppDateTimeRangeComponent } from './child-components/app-date-time-rang
 import { AppDateTimeComponent } from './child-components/app-date-time/app-date-time.component';
 import { AppDateComponent } from './child-components/app-date/app-date.component';
 import { AppTimeDialogComponent } from './child-components/app-time-dialog/app-time-dialog.component';
+import { AppTimeRangeComponent } from './child-components/app-time-range/app-time-range.component';
 import { AppTimeComponent } from './child-components/app-time/app-time.component';
 
 @NgModule({
@@ -19,6 +20,7 @@ import { AppTimeComponent } from './child-components/app-time/app-time.component
     AppDateTimeComponent,
     AppDateTimeRangeComponent,
     AppTimeComponent,
+    AppTimeRangeComponent,
     FormatDatePipe,
     FormatDateTimePipe,
     FormatTimePipe,
@@ -34,6 +36,7 @@ import { AppTimeComponent } from './child-components/app-time/app-time.component
     AppDateTimeComponent,
     AppDateTimeRangeComponent,
     AppTimeComponent,
+    AppTimeRangeComponent,
     FormatDatePipe,
     FormatDateTimePipe,
     FormatTimePipe,

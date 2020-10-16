@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class addEnumValues1593355055014 implements MigrationInterface {
-  name = 'test1593355055014'
+  name = 'test1593355055014';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TYPE "public"."account_accounttype_enum" RENAME TO "Account_accounttype_enum_old"`);

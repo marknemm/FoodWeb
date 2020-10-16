@@ -43,7 +43,7 @@
   ></div>
 </div>
 
-<ng-container #readonlyDateTimeRange>
+<ng-template #readonlyDateTimeRange>
   <div class="date-time-range-display">
     <foodweb-date-time [boldTime]="boldTime" [excludeTimeDisplay]="startEndDateSame" [value]="value.startDateTime" [editable]="false"></foodweb-date-time>
     <!-- For no display of end date due to same begin and end date, make sure we group times together so they end up on same line if line break occurs. -->
@@ -53,4 +53,4 @@
       <foodweb-date-time [boldTime]="boldTime" [excludeDateDisplay]="startEndDateSame" [value]="value.endDateTime" [editable]="false"></foodweb-date-time>
     </span>
   </div>
-</ng-container>
+</ng-template>

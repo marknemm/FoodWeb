@@ -25,10 +25,27 @@ export class SessionService {
   }
 
   /**
-   * The ID of the current user's account. undefined if the user is not logged in.
+   * The email of the current user's account. An empty string if the user is not logged in.
+   */
+  get accountEmail(): string {
+    return (this.account?.contactInfo.email ?? '');
+  }
+
+  /**
+   * The profile image of the current user's account.
+   * If the user is logged in, will either be a URL for the explicitly set profile image,
+   * or a single letter to act as profile image placeholder.
+   * An empty string if the user is not logged in.
+   */
+  get accountProfileImg(): string {
+    return (this.account?.profileImg ?? '');
+  }
+
+  /**
+   * The ID of the current user's account. null/undefined if the user is not logged in.
    */
   get accountId(): number {
-    return (this.account ? this.account.id : undefined);
+    return this.account?.id;
   }
 
   /**
@@ -148,7 +165,7 @@ export class SessionService {
    * Saves session data to persistent storage and a cache.
    * @param key The key of the data to save.
    * @param data The data to save.
-   * @param noCacheWrite Optionally set to try if the data should not be cached.
+   * @param noCacheWrite Optionally set to true if the data should not be cached.
    */
   save(key: string, data: any, noCacheWrite = false): void {
     const jsonData: string = JSON.stringify(data);

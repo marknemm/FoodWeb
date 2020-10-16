@@ -1,5 +1,20 @@
 <label class="profile-img" for="profile-img-input" matRipple [matRippleDisabled]="!editable" [ngClass]="{ editable: editable }">
-  <img [src]="imgUrl" [style.width]="width" [style.height]="height" alt="Profile Image">
+  <div #placeholderDiv
+    *ngIf="usePlaceholder; else profileImgTmpl"
+    [style.backgroundColor]="placeholder.backgroundColor"
+    [style.color]="placeholder.color"
+    [style.font-size.px]="calcPlaceholderFontSizePx(placeholderDiv.offsetHeight)"
+    [style.line-height.px]="calcPlaceholderFontSizePx(placeholderDiv.offsetHeight)"
+    [style.padding-bottom.px]="calcPlaceholderPaddingPx(placeholderDiv.offsetHeight)"
+    [style.padding-top.px]="calcPlaceholderPaddingPx(placeholderDiv.offsetHeight)"
+    class="profile-img-placeholder">
+    {{ placeholder.letter }}
+  </div>
+
+  <ng-template #profileImgTmpl>
+    <img [src]="value" [style.width]="width" [style.height]="height" alt="Profile Image">
+  </ng-template>
+
   <ng-container *ngIf="editable">
     <div class="edit-background"></div>
     <div class="edit-text">

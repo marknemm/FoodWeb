@@ -23,6 +23,10 @@ export abstract class DateTimeRangeBaseComponent extends FormBaseComponent<DateT
   }
 
   get startEndDateSame(): boolean {
-    return (this.value.startDateTime?.getTime() === this.value.endDateTime?.getTime());
+    return (
+      this.value.startDateTime?.getFullYear() === this.value.endDateTime?.getFullYear()
+      && this.value.startDateTime?.getMonth() === this.value.endDateTime?.getMonth()
+      && this.value.startDateTime?.getDate() === this.value.endDateTime?.getDate()
+    );
   }
 }

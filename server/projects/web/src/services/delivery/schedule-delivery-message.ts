@@ -1,5 +1,5 @@
 import { AccountEntity, DonationEntity } from '~entity';
-import { Donation, DonationHelper } from '~shared';
+import { DonationHelper } from '~shared';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
 import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
 import { sendDeliveryUnavailableMessages } from './delivery-unavailable-message';
@@ -28,7 +28,7 @@ export async function sendDeliveryScheduledMessages(donation: DonationEntity): P
         notificationType: NotificationType.ScheduleDelivery,
         notificationLink: `/donation/details/${donation.id}`,
         title: 'Delivery Scheduled',
-        icon: donation.claim.delivery.volunteerAccount.profileImgUrl,
+        icon: donation.claim.delivery.volunteerAccount.profileImg,
         body: `
           Donation pickup scheduled by <strong>${delivererName}</strong>.<br>
           <i>${donation.description}</i>
@@ -44,7 +44,7 @@ export async function sendDeliveryScheduledMessages(donation: DonationEntity): P
         notificationType: NotificationType.ScheduleDelivery,
         notificationLink: `/donation/details/${donation.id}`,
         title: 'Delivery Scheduled',
-        icon: donation.claim.delivery.volunteerAccount.profileImgUrl,
+        icon: donation.claim.delivery.volunteerAccount.profileImg,
         body: `
           Donation delivery scheduled by <strong>${delivererName}</strong>.<br>
           <i>${donation.description}</i>

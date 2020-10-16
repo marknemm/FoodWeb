@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class featuredEvent1581473265479 implements MigrationInterface {
-  name = 'featuredEvent1581473265479'
+  name = 'featuredEvent1581473265479';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     const alreadyCreated: boolean = (await queryRunner.query(

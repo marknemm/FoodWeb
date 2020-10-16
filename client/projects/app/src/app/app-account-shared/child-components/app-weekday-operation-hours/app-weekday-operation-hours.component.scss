@@ -1,1 +1,40 @@
-/* Add mobile styles for the component here.  */
+@import "../../../../styles/constants.scss";
+
+.operation-hours-form {
+  width: 100%;
+
+  .weekday-header {
+    width  : 100%;
+    padding: 0 16;
+
+    .add-time-range {
+      color       : $primary;
+      margin-right: -10;
+    }
+  }
+
+  .time-range-list {
+    .time-range {
+      max-width: calc(100% - 30);
+    }
+
+    .remove-time-range {
+      color       : $ns-danger-color;
+      margin-left : 0;
+      margin-right: 10;
+      margin-top  : 6;
+    }
+  }
+
+  .add-time-range,
+  .remove-time-range {
+    border       : none;
+    border-radius: 50%;
+    box-shadow   : none;
+    font-size    : 22;
+    font-weight  : bold;
+    height       : 30;
+    line-height  : 22;
+    width        : 30;
+  }
+}

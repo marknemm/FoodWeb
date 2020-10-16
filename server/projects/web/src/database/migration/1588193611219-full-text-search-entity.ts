@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class fullTextSearchEntity1588193611219 implements MigrationInterface {
-  name = 'fullTextSearchEntity1588193611219'
+  name = 'fullTextSearchEntity1588193611219';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     const alreadyCreated: boolean = (await queryRunner.query(

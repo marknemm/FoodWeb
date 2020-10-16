@@ -7,9 +7,9 @@ import { broadcastEmail, MailTransporter } from '~web/helpers/messaging/email';
 import { broadcastNotification, NotificationType } from '~web/helpers/messaging/notification';
 import { queryDonations } from '~web/services/donation/read-donations';
 
-const _reminderIntervalMins = 10; // Job will be scheduled to run every 10 minutes.
 const _dateTimeHelper = new DateTimeHelper();
 const _donationHelper = new DonationHelper();
+const _reminderIntervalMins = 10; // Job will be scheduled to run every 10 minutes.
 
 _sendDeliveryReminders()
   .then(() => process.exit())
@@ -35,7 +35,7 @@ async function _sendDeliveryReminders(): Promise<void> {
       const queryResult: QueryResult<DonationEntity> = await queryDonations({ page: page++, limit }).modQuery(
         (queryBuilder: OrmSelectQueryBuilder<DonationEntity>) =>
           queryBuilder.andWhere('delivery.pickupWindowStart >= :earliestDeliveryWindowStart', { earliestDeliveryWindowStart })
-                      .andWhere('delivery.pickupWindowStart <= :latestDeliveryWindowStart', { latestDeliveryWindowStart })
+            .andWhere('delivery.pickupWindowStart <= :latestDeliveryWindowStart', { latestDeliveryWindowStart })
       ).exec();
       await _sendAllDeliveryReminderMessages(queryResult.entities, hour);
       totalDonations = queryResult.totalCount;
@@ -94,13 +94,13 @@ async function _sendDeliveryReminderMessages(donation: DonationEntity, hour: num
         notificationType: NotificationType.DeliveryReminder,
         notificationLink: `delivery/details/${donation.id}`,
         title: 'Delivery Reminder',
-        icon: volunteerAccount.profileImgUrl,
+        icon: volunteerAccount.profileImg,
         body: `
-          Delivery will occur ${hour === 24 ? 'tomorrow': 'today'} between:
+          Delivery will occur ${hour === 24 ? 'tomorrow' : 'today'} between:
           <br><strong>${deliveryTimeStartStr}</strong> - <strong>${deliveryTimeEndStr}</strong>
         `
       }
-    ).catch(console.error)
+    ).catch (console.error)
   );
 
   await Promise.all(messagePromises);

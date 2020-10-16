@@ -1,15 +1,15 @@
-<StackLayout [formGroup]="formGroup" [ngClass]="{ limited: operationHoursLimited }">
+<StackLayout [formGroup]="formGroup">
   <GridLayout class="nt-input -sides auto-accept-toggle" rows="auto">
     <Label text="Limit Availability Times:" row="0" col="0"></Label>
     <Switch formControlName="limitOperationHours" horizontalAlignment="right" row="0" col="1"></Switch>
   </GridLayout>
 
-  <StackLayout [foodwebAppVisibile]="true">
-    <foodweb-weekday-operation-hours
+  <StackLayout *ngIf="operationHoursLimited">
+    <foodweb-app-weekday-operation-hours
       *ngFor="let weekday of constantsService.WEEKDAYS"
       [weekday]="weekday"
       [formArrayName]="weekday"
-      [editable]="editable"></foodweb-weekday-operation-hours>
+      [editable]="editable"></foodweb-app-weekday-operation-hours>
   </StackLayout>
 </StackLayout>
 
