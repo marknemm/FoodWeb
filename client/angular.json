@@ -154,24 +154,11 @@
           "options": {
             "tsConfig": [
               "projects/admin/tsconfig.app.json",
-              "projects/admin/tsconfig.spec.json",
-              "projects/admin/e2e/tsconfig.json"
+              "projects/admin/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
             ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/admin/e2e/protractor.conf.js",
-            "devServerTarget": "admin:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "admin:serve:production"
-            }
           }
         }
       }
@@ -185,6 +172,20 @@
         },
         "@schematics/angular:directive": {
           "prefix": "foodweb"
+        }
+      },
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/app/tsconfig.app.json",
+              "projects/app/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
         }
       },
       "root": "projects/app",
@@ -422,9 +423,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json",
-              "e2e/tsconfig.json"
+              "projects/web/tsconfig.app.json",
+              "projects/web/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

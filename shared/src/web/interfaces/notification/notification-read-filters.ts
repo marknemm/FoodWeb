@@ -1,4 +1,4 @@
-import { NotificationType } from "./notification";
+import { NotificationType } from './notification';
 
 export interface NotificationReadFilters {
   id?: number;

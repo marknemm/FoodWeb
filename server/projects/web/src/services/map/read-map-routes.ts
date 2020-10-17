@@ -37,7 +37,7 @@ export function findMapRoute(orig: MapRouteEndpoint, dest: MapRouteEndpoint): Pr
       endLng: routeEndpointToLocation(dest).coordinates[0],
       endLat: routeEndpointToLocation(dest).coordinates[1]
     }
-  ).getOne()
+  ).getOne();
 }
 
 /**

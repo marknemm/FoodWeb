@@ -6,7 +6,7 @@ describe('DeleteFeaturedEventService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: DeleteFeaturedEventService = TestBed.get(DeleteFeaturedEventService);
+    const service: DeleteFeaturedEventService = TestBed.inject(DeleteFeaturedEventService);
     expect(service).toBeTruthy();
   });
 });

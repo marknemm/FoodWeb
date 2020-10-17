@@ -95,7 +95,7 @@ function _attemptRetry(latLngWaypoints: LatLngLiteral[], retryCnt: number): Prom
   return new Promise((resolve: (result: any) => void) => {
     setTimeout(() => {
       resolve(_queryDirections(latLngWaypoints, retryCnt));
-    }, 500 * retryCnt)
+    }, 500 * retryCnt);
   });
 }
 

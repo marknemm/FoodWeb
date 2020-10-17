@@ -145,7 +145,7 @@ export async function adminUpdateDonation(updateReq: AdminDonationSaveRequest): 
       plainToClass(DonationEntity, donationSaveData)
     );
     await _delClaimIfUnclaimed(manager, originalDonation, savedDonation);
-    await _delDeliveryIfUnscheduled(manager, originalDonation ,savedDonation);
+    await _delDeliveryIfUnscheduled(manager, originalDonation , savedDonation);
     return savedDonation;
   });
 

@@ -1,8 +1,8 @@
-import { NewAccountData } from "~admin/services/admin-account/admin-save-account";
-import { AccountEntity } from "~entity";
-import { AdminAccountCreateOptions } from "~shared";
-import { MailTransporter, sendEmail } from "~web/helpers/messaging/email";
-import { sendAccountVerificationEmail } from "~web/services/account/account-verification-message";
+import { NewAccountData } from '~admin/services/admin-account/admin-save-account';
+import { AccountEntity } from '~entity';
+import { AdminAccountCreateOptions } from '~shared';
+import { MailTransporter, sendEmail } from '~web/helpers/messaging/email';
+import { sendAccountVerificationEmail } from '~web/services/account/account-verification-message';
 
 /**
  * Sends account creation messages for newly created accounts.

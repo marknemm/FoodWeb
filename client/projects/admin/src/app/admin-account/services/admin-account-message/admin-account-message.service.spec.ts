@@ -6,7 +6,7 @@ describe('AdminAccountMessageService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: AdminAccountMessageService = TestBed.get(AdminAccountMessageService);
+    const service: AdminAccountMessageService = TestBed.inject(AdminAccountMessageService);
     expect(service).toBeTruthy();
   });
 });

@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { EditFeaturedEventComponent } from './edit-featured-event.component';
 
 describe('EditFeaturedEventComponent', () => {
   let component: EditFeaturedEventComponent;
   let fixture: ComponentFixture<EditFeaturedEventComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ EditFeaturedEventComponent ],
     }).compileComponents();

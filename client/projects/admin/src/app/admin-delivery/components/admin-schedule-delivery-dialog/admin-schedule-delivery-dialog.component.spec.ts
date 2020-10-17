@@ -1,12 +1,12 @@
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import 'jasmine';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AdminScheduleDeliveryDialogComponent } from './admin-schedule-delivery-dialog.component';
 
 describe('AdminScheduleDeliveryDialogComponent', () => {
   let component: AdminScheduleDeliveryDialogComponent;
   let fixture: ComponentFixture<AdminScheduleDeliveryDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AdminScheduleDeliveryDialogComponent ]
     }).compileComponents();

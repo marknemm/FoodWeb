@@ -38,7 +38,7 @@ export function queryFullAccounts(request: AccountReadRequest, myAccount?: Accou
 }
 
 async function _readAccount(idOrUsername: number | string, myAccount: Account, fullAccount: boolean): Promise<AccountEntity> {
-  let readRequest: AccountReadRequest = { page: 1, limit: 1 };
+  const readRequest: AccountReadRequest = { page: 1, limit: 1 };
   (typeof idOrUsername === 'number')
     ? readRequest.id = idOrUsername
     : readRequest.username = idOrUsername;
@@ -81,7 +81,7 @@ function _genJoins(queryBuilder: OrmSelectQueryBuilder<AccountEntity>): OrmSelec
     .leftJoinAndSelect('organization.receiver', 'receiver')
     .leftJoinAndSelect('organization.donor', 'donor')
     .leftJoinAndSelect('account.volunteer', 'volunteer')
-    .leftJoinAndMapMany('account.operationHours', 'account.operationHours', 'operationHours')
+    .leftJoinAndMapMany('account.operationHours', 'account.operationHours', 'operationHours');
 }
 
 function _genWhereCondition(
@@ -109,18 +109,18 @@ function _genOperationHoursCondition(
   // Check for any overlap (invert condition where op hours are completely after or before donation window).
   if (filters.operationHoursWeekday || filters.operationHoursStartTime || filters.operationHoursEndTime) {
     let operationHoursCondition = '';
-    let operationHoursBindings: Partial<OperationHours> = {};
+    const operationHoursBindings: Partial<OperationHours> = {};
 
     if (filters.operationHoursWeekday) {
       operationHoursCondition += 'operationHours.weekday = :weekday ';
       operationHoursBindings.weekday = filters.operationHoursWeekday;
     }
     if (filters.operationHoursStartTime) {
-      operationHoursCondition += 'AND operationHours.endTime > :startTime '
+      operationHoursCondition += 'AND operationHours.endTime > :startTime ';
       operationHoursBindings.startTime = filters.operationHoursStartTime;
     }
     if (filters.operationHoursEndTime) {
-      operationHoursCondition += 'AND operationHours.startTime < :endTime '
+      operationHoursCondition += 'AND operationHours.startTime < :endTime ';
       operationHoursBindings.endTime = filters.operationHoursEndTime;
     }
     operationHoursCondition = operationHoursCondition.replace(/^AND/, '').trim();

@@ -25,7 +25,7 @@ export function recaptcha(request: Request, response: Response, next: NextFuncti
   }
 
   // If we are sent form data from some autonomous system or bot, it will be rejected.
-  request.body = { 'g-recaptcha-response': reqBody.recaptchaScore }
+  request.body = { 'g-recaptcha-response': reqBody.recaptchaScore };
   _recpatchaV3.verify(request, (err: string, data: RecaptchaResponseDataV3) => {
     if (!err) {
       request.body = reqBody;
@@ -40,5 +40,5 @@ export function recaptcha(request: Request, response: Response, next: NextFuncti
 
 function _handleRejection(response: Response, err?: string) {
   if (err) { console.error(err); }
-  response.status(500).send({ message: 'Request rejected due to failed reCAPTCHA test.' })
+  response.status(500).send({ message: 'Request rejected due to failed reCAPTCHA test.' });
 }

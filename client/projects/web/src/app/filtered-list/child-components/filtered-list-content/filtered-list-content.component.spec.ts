@@ -1,12 +1,12 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FilteredListContentComponent } from './filtered-list-content.component';
 
 describe('FilteredListContentComponent', () => {
   let component: FilteredListContentComponent;
   let fixture: ComponentFixture<FilteredListContentComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ FilteredListContentComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],

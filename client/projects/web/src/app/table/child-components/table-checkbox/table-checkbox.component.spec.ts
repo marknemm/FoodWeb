@@ -9,7 +9,7 @@ describe('TableCheckboxComponent', () => {
   let component: TableCheckboxComponent;
   let fixture: ComponentFixture<TableCheckboxComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         TableCheckboxComponent,

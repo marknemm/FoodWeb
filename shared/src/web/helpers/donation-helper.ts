@@ -120,7 +120,7 @@ export class DonationHelper {
       return 'Pickup window start is required';
     }
     if (!pickupWindowEnd) {
-      return 'Pickup window end is required'
+      return 'Pickup window end is required';
     }
     if (pickupWindowStart >= pickupWindowEnd) {
       return 'Pickup window start time must be later than end time';
@@ -325,4 +325,8 @@ export class DonationHelper {
   }
 }
 
-export type DonationAccounts = { donorAccount: Account, receiverAccount: Account, volunteerAccount: Account }
+export interface DonationAccounts {
+  donorAccount: Account;
+  receiverAccount: Account;
+  volunteerAccount: Account;
+}

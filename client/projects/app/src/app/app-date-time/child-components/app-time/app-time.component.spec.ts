@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AppTimeComponent } from './app-time.component';
 
@@ -6,7 +6,7 @@ describe('AppTimeComponent', () => {
   let component: AppTimeComponent;
   let fixture: ComponentFixture<AppTimeComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AppTimeComponent ]
     })

@@ -97,7 +97,7 @@ function _attemptRetry(origins: string[], destinations: string[], retryCnt: numb
   return new Promise((resolve: (result: any) => void) => {
     setTimeout(() => {
       resolve(_getDistanceTimeMatrix(origins, destinations, retryCnt));
-    }, 500 * retryCnt)
+    }, 500 * retryCnt);
   });
 }
 
@@ -146,8 +146,8 @@ export interface DistanceTimeQuery {
  * A distance-time query result.
  */
 export interface DistanceTimeQueryResult {
-  origin: ContactInfo | String;
-  destination: ContactInfo | String;
+  origin: ContactInfo | string;
+  destination: ContactInfo | string;
   distance: string;
   distanceMi: number;
   duration: string;

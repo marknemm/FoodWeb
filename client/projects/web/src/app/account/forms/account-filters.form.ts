@@ -82,7 +82,7 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
       const valueCopy = Object.assign({}, value);
       valueCopy.operationHours = {};
       if (valueCopy.operationHoursWeekday) {
-        valueCopy.operationHours.weekday = valueCopy.operationHoursWeekday
+        valueCopy.operationHours.weekday = valueCopy.operationHoursWeekday;
       }
       if (valueCopy.operationHoursStartTime) {
         valueCopy.operationHours.startTime = valueCopy.operationHoursStartTime;

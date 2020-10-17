@@ -14,7 +14,7 @@ export function postProcessSaveEntities<E>(
     entities.map(async (result: E, i: number) =>
       postProcessSaveEntity(entityMeta, result, saveOpTypes[i], options)
     )
-  )
+  );
 }
 
 export function postProcessSaveEntity<E>(

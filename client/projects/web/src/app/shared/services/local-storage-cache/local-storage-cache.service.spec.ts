@@ -6,7 +6,7 @@ describe('LocalStorageCacheService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: LocalStorageCacheService = TestBed.get(LocalStorageCacheService);
+    const service: LocalStorageCacheService = TestBed.inject(LocalStorageCacheService);
     expect(service).toBeTruthy();
   });
 });

@@ -6,7 +6,7 @@ describe('AccountAutocompleteService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: AccountAutocompleteService = TestBed.get(AccountAutocompleteService);
+    const service: AccountAutocompleteService = TestBed.inject(AccountAutocompleteService);
     expect(service).toBeTruthy();
   });
 });

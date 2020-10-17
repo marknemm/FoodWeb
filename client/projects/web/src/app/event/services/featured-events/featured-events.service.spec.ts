@@ -6,7 +6,7 @@ describe('FeaturedEventsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: FeaturedEventsService = TestBed.get(FeaturedEventsService);
+    const service: FeaturedEventsService = TestBed.inject(FeaturedEventsService);
     expect(service).toBeTruthy();
   });
 });

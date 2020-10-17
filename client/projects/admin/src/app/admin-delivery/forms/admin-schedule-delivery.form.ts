@@ -21,5 +21,5 @@ export class AdminScheduleDeliveryForm extends TFormGroup<DeliveryFormT> {
 
 export interface DeliveryFormT {
   volunteerAccount: Account;
-  pickupWindow: DateTimeRange
+  pickupWindow: DateTimeRange;
 }

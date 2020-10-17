@@ -84,7 +84,9 @@ export function handlePostAccountVerify(req: Request, res: Response) {
   verifyAccount(account, verificationReq)
     .then(_handleAccountVerificationResult.bind(this, req, res))
     .catch(genErrorResponseRethrow.bind(this, res))
-    .then((account: AccountEntity) => saveAudit(AuditEventType.VerifyAccount, account, account, verificationReq.recaptchaScore))
+    .then((verifiedAccount: AccountEntity) =>
+      saveAudit(AuditEventType.VerifyAccount, verifiedAccount, verifiedAccount, verificationReq.recaptchaScore)
+    )
     .catch((err: Error) => console.error(err));
 }
 

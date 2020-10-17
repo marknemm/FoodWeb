@@ -11,7 +11,6 @@ _deletePasswordReset()
     process.exit(1);
   });
 
-
 async function _deletePasswordReset(): Promise<void> {
   const connection: Connection = await initOrm();
   const nowMs = new Date().getTime();

@@ -1,6 +1,6 @@
 import { OrmEntityMetadata } from '../entity-metadata/orm-entity-metadata';
 
-export enum SaveOpType { Unknown, Insert, Update };
+export enum SaveOpType { Unknown, Insert, Update }
 
 export function deriveSaveOpType<E>(entityMeta: OrmEntityMetadata, entity: E): SaveOpType {
   // If the entity has primary keys, then start with the assumption that we are doing an update.

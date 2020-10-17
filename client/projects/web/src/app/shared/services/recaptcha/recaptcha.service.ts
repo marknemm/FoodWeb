@@ -2,7 +2,7 @@ import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } fro
 import { Injectable } from '@angular/core';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { EMPTY, Observable } from 'rxjs';
-import { catchError, flatMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { environment } from '~web-env/environment';
 
 /**
@@ -40,7 +40,7 @@ export class RecaptchaService implements HttpInterceptor {
           next.handle(req);
           return EMPTY;
         }),
-        flatMap((recaptchaScore: string) => {
+        switchMap((recaptchaScore: string) => {
           (!req.body)
             ? req = req.clone({ body: { recaptchaScore } })
             : req.body.recaptchaScore = recaptchaScore;

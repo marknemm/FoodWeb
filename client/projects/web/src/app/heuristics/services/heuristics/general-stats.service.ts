@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { never, Observable, timer } from 'rxjs';
-import { catchError, finalize, flatMap } from 'rxjs/operators';
+import { NEVER, Observable, timer } from 'rxjs';
+import { catchError, finalize, switchMap } from 'rxjs/operators';
 import { GeneralStats } from '~shared';
 import { environment } from '~web-env/environment';
 export { GeneralStats };
@@ -25,7 +25,7 @@ export class GeneralStatsService {
 
   watchGeneralStats(refreshInterval = 30000): Observable<GeneralStats> {
     return timer(0, refreshInterval).pipe(
-      flatMap(() => this.getGeneralStats())
+      switchMap(() => this.getGeneralStats())
     );
   }
 
@@ -35,8 +35,8 @@ export class GeneralStatsService {
       finalize(() => this._loadingGeneralStats = false),
       catchError((err: HttpErrorResponse) => {
         console.error(err);
-        return never();
+        return NEVER;
       })
-    )
+    );
   }
 }

@@ -82,7 +82,7 @@ export class OperationHoursHelper {
       weekday: <Weekday>this._dateTimeHelper.toLocalWeekdayStr(dateTimeRange.startDateTime, timezone),
       startTime: this._dateTimeHelper.toLocalTimeStr(dateTimeRange.startDateTime, timezone),
       endTime: this._dateTimeHelper.toLocalTimeStr(dateTimeRange.endDateTime, timezone)
-    }
+    };
     return operationHours;
   }
 }

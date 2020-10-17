@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { AdminShellComponent } from './admin-shell.component';
 
 describe('AdminShellComponent', () => {
   let component: AdminShellComponent;
   let fixture: ComponentFixture<AdminShellComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AdminShellComponent ]
     }).compileComponents();

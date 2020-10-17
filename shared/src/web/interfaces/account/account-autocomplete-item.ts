@@ -1,11 +1,11 @@
-import { AccountType } from "./account";
+import { AccountType } from './account';
 
 export interface AccountAutocompleteItem {
   id?: number;
   accountType: AccountType;
-  contactInfo: ContactInfoAutocompleteItem,
-  organization?: OrganizationAutocompleteItem,
-  volunteer?: VolunteerAutocompleteItem
+  contactInfo: ContactInfoAutocompleteItem;
+  organization?: OrganizationAutocompleteItem;
+  volunteer?: VolunteerAutocompleteItem;
 }
 
 export interface ContactInfoAutocompleteItem {

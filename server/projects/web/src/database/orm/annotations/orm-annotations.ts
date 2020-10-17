@@ -7,11 +7,11 @@ export function OrmEntity(tableName?: string, options?: EntityOptions): Function
     const entityMeta = OrmEntityMetadata.getInstance(ctor);
     entityMeta.tableName = tableName;
     Entity(tableName, options)(ctor); // Call TypeORM annotation method.
-  }
+  };
 }
 
 export function OrmPrimaryColumn(): Function {
-  return (object: Object, propertyName: string) => {
+  return (object: {}, propertyName: string) => {
     const entityMeta = OrmEntityMetadata.getInstance(object.constructor);
     entityMeta.primaryKeys.push(new PrimaryKey(propertyName, false));
     PrimaryGeneratedColumn()(object, propertyName); // Call TypeORM annotation method.
@@ -19,7 +19,7 @@ export function OrmPrimaryColumn(): Function {
 }
 
 export function OrmPrimaryGeneratedColumn(): Function {
-  return (object: Object, propertyName: string) => {
+  return (object: {}, propertyName: string) => {
     const entityMeta = OrmEntityMetadata.getInstance(object.constructor);
     entityMeta.primaryKeys.push(new PrimaryKey(propertyName, true));
     PrimaryGeneratedColumn()(object, propertyName); // Call TypeORM annotation method.

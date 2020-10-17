@@ -117,7 +117,7 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
         }
         this.edit.emit(editable);
       }
-    })
+    });
   }
 
   /**

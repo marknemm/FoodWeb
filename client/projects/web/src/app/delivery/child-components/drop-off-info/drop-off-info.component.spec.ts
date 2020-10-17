@@ -1,12 +1,12 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { DropOffInfoComponent } from './drop-off-info.component';
 
 describe('DropOffInfoComponent', () => {
   let component: DropOffInfoComponent;
   let fixture: ComponentFixture<DropOffInfoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DropOffInfoComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],

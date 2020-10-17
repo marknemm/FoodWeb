@@ -20,7 +20,7 @@ function handleGetFeaturedEvent(req: Request, res: Response) {
   const featuredEventId: number = Number.parseInt(req.params.id, 10);
   readFeaturedEvent(featuredEventId)
     .then((featuredEvent: FeaturedEvent) => {
-      res.send(featuredEvent)
+      res.send(featuredEvent);
     })
     .catch(genErrorResponse.bind(this, res));
 }

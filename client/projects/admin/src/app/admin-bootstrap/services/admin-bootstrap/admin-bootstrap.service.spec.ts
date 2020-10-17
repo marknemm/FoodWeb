@@ -6,7 +6,7 @@ describe('AdminBootstrapService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: AdminBootstrapService = TestBed.get(AdminBootstrapService);
+    const service: AdminBootstrapService = TestBed.inject(AdminBootstrapService);
     expect(service).toBeTruthy();
   });
 });

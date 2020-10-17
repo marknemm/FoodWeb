@@ -1,12 +1,12 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ListFiltersFooterComponent } from './list-filters-footer.component';
 
 describe('ListFiltersFooterComponent', () => {
   let component: ListFiltersFooterComponent;
   let fixture: ComponentFixture<ListFiltersFooterComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ListFiltersFooterComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],

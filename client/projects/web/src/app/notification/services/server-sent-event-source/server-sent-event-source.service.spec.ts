@@ -5,7 +5,7 @@ describe('ServerSentEventSourceService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ServerSentEventSourceService = TestBed.get(ServerSentEventSourceService);
+    const service: ServerSentEventSourceService = TestBed.inject(ServerSentEventSourceService);
     expect(service).toBeTruthy();
   });
 });

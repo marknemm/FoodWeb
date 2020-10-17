@@ -41,7 +41,7 @@ export class PasswordForm extends TFormGroup<PasswordFormT> {
         }
         return (control && control.invalid && control.touched);
       }
-    }
+    };
   }
 }
 

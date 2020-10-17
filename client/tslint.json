@@ -17,7 +17,6 @@
     "no-host-metadata-property": true,
     "no-input-rename": true,
     "no-output-rename": true,
-    "no-use-before-declare": false,
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,

@@ -49,7 +49,7 @@ async function adminHandlePostDonationClaim(req: Request, res: Response) {
   try {
     const receiverAccount: AccountEntity = await adminReadAccount(claimReq.receiverAccountId);
     claimedDonation = await claimDonation(claimReq, receiverAccount);
-    res.send(claimedDonation)
+    res.send(claimedDonation);
   } catch (err) {
     return genErrorResponseRethrow(res, err);
   }
