@@ -52,7 +52,7 @@ export class AccountCreationFormBaseComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (!this.accountForm) {
-      this.accountForm = new AccountForm(this._destroy$, { formMode: 'Signup' });
+      this.accountForm = new AccountForm({ destroy$: this._destroy$, formMode: 'Signup' });
     }
     this._listenAccountTypeSelect();
     this._listenAccountTypeRoute();

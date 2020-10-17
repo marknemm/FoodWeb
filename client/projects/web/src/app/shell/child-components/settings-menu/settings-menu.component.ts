@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { faGifts } from '@fortawesome/free-solid-svg-icons';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
@@ -9,6 +9,9 @@ import { SessionService } from '~web/session/services/session/session.service';
   styleUrls: ['./settings-menu.component.scss']
 })
 export class SettingsMenuComponent implements OnInit {
+
+  @HostBinding()
+  class = 'foodweb-settings-menu';
 
   faGifts = faGifts;
 

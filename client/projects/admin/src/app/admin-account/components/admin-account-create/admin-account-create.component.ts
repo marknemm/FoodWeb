@@ -18,7 +18,7 @@ export class AdminAccountCreateComponent implements OnInit, OnDestroy {
 
   adminAccountForm: AdminAccountForm;
 
-  private _destory$ = new Subject();
+  private _destroy$ = new Subject();
 
   constructor(
     public sessionService: AdminSessionService,
@@ -31,7 +31,7 @@ export class AdminAccountCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.adminAccountForm = new AdminAccountForm({ formMode: 'Signup' }, this._destory$);
+    this.adminAccountForm = new AdminAccountForm({ destroy$: this._destroy$, formMode: 'Signup' });
     this._listenAutoGenPassChange();
   }
 
@@ -41,7 +41,7 @@ export class AdminAccountCreateComponent implements OnInit, OnDestroy {
    */
   private _listenAutoGenPassChange(): void {
     this.adminAccountForm.accountCreateOptionsForm.get('autoGenPassword').valueChanges.pipe(
-      takeUntil(this._destory$)
+      takeUntil(this._destroy$)
     ).subscribe((autoGen: boolean) => {
       (autoGen)
         ? this.adminAccountForm.accountForm.get('password').disable()
@@ -62,7 +62,7 @@ export class AdminAccountCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._destory$.next();
+    this._destroy$.next();
   }
 
 }

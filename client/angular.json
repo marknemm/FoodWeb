@@ -42,6 +42,7 @@
             "styles": [
               "projects/web/src/styles/styles.scss",
               "projects/admin/src/styles/admin-styles.scss",
+              "./node_modules/material-design-icons/iconfont/material-icons.css",
               "./node_modules/quill/dist/quill.core.css",
               "./node_modules/quill/dist/quill.bubble.css",
               "./node_modules/quill/dist/quill.snow.css"
@@ -229,7 +230,8 @@
               "projects/web/src/assets"
             ],
             "styles": [
-              "projects/web/src/styles/styles.scss"
+              "projects/web/src/styles/styles.scss",
+              "./node_modules/material-design-icons/iconfont/material-icons.css"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [

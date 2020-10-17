@@ -38,7 +38,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     this.savePassword = this.savePassword.bind(this);
   }
 
-  get originalAccount(): Account{
+  get originalAccount(): Account {
     return this._originalAccount;
   }
 
@@ -59,7 +59,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.accountForm = new AccountForm(this._destroy$, { formMode: 'Account' });
+    this.accountForm = new AccountForm({ destroy$: this._destroy$, formMode: 'Account' });
     this._listenAccountChange();
   }
 
