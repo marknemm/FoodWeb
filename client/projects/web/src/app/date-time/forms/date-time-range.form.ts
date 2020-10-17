@@ -69,6 +69,6 @@ export class DateTimeRangeForm extends TFormGroup<DateTimeRange> {
         }
         return (control && control.invalid && control.touched);
       }
-    }
+    };
   }
 }

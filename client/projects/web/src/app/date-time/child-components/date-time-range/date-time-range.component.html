@@ -1,34 +1,34 @@
 <div [formGroup]="formGroup" *ngIf="editable | toBoolean; else readonlyDateTimeRange" class="date-time-range-form row">
   <div class="date-time-field col-sm-12">
     <foodweb-date-time
-     #startDateTime
-     formControlName="startDateTime"
-     [allowClear]="allowClear"
-     [allowUndefTime]="allowUndefTime"
-     [editable]="true"
-     [datePlaceholder]="startDatePlaceholder"
-     [timePlaceholder]="startTimePlaceholder"
-     [minDate]="minDate"
-     [maxDate]="maxDate"
-     [floatLabels]="floatLabels"
-     [errorStateMatcher]="formGroup.rangeErrStateMatcher"
-     (ngModelChange)="formGroup.fillMissingRangePart()">
+      #startDateTime
+      formControlName="startDateTime"
+      [allowClear]="allowClear"
+      [allowUndefTime]="allowUndefTime"
+      [editable]="true"
+      [datePlaceholder]="startDatePlaceholder"
+      [timePlaceholder]="startTimePlaceholder"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [floatLabels]="floatLabels"
+      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
+      (ngModelChange)="formGroup.fillMissingRangePart()">
     </foodweb-date-time>
   </div>
   <div class="date-time-field col-sm-12">
     <foodweb-date-time
-     #endDateTime
-     formControlName="endDateTime"
-     [allowClear]="allowClear"
-     [allowUndefTime]="allowUndefTime"
-     [editable]="true"
-     [datePlaceholder]="endDatePlaceholder"
-     [timePlaceholder]="endTimePlaceholder"
-     [minDate]="minDate"
-     [maxDate]="maxDate"
-     [floatLabels]="floatLabels"
-     [errorStateMatcher]="formGroup.rangeErrStateMatcher"
-     (ngModelChange)="formGroup.fillMissingRangePart()">
+      #endDateTime
+      formControlName="endDateTime"
+      [allowClear]="allowClear"
+      [allowUndefTime]="allowUndefTime"
+      [editable]="true"
+      [datePlaceholder]="endDatePlaceholder"
+      [timePlaceholder]="endTimePlaceholder"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [floatLabels]="floatLabels"
+      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
+      (ngModelChange)="formGroup.fillMissingRangePart()">
     </foodweb-date-time>
     <mat-error *ngIf="formGroup.hasError('dateTimeRangeOrder')" class="range-order-err">
       End date-time must be later than start date-time

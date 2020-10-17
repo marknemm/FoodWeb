@@ -49,9 +49,6 @@ export class DateTimeBaseComponent extends FormBaseComponent<Date> implements On
   ngOnInit() {
     const required: boolean = this._deriveFormControlState();
     this.dateTimeForm.init({ defaultDate: this.defaultDate, required });
-    this.onValueChanges(this.dateTimeForm).subscribe(
-      () => this.onChangeCb(this.dateTimeForm.toDate(_.toBoolean(this.allowUndefTime)))
-    );
   }
 
   /**

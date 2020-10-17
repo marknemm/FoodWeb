@@ -17,6 +17,6 @@ export class ClaimReqHistoryEntity {
   @ManyToOne(() => DonationEntity, { onDelete: 'CASCADE' })
   donation?: DonationEntity;
 
-  @ManyToOne(() => AccountEntity, { onDelete: 'CASCADE' })
+  @ManyToOne(() => AccountEntity, { onDelete: 'CASCADE', eager: true })
   receiverAccount: AccountEntity;
 }

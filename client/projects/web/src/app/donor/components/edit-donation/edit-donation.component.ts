@@ -36,6 +36,10 @@ export class EditDonationComponent implements OnInit {
     return this._editForm;
   }
 
+  get originalDonation(): Donation {
+    return this._originalDonation;
+  }
+
   ngOnInit() {
     this._editForm = new DonateForm(this._dateTimeService, { safetyChecklistInit: true });
     this._listenDonationChange();
@@ -52,7 +56,7 @@ export class EditDonationComponent implements OnInit {
     this._pageProgressService.reset();
     this._donationNotFound = !donation;
     this._originalDonation = donation;
-    this._donationDetailsUrl = `/donation/details/${this._originalDonation.id}`;
+    this._donationDetailsUrl = `/donation/details/${this.originalDonation.id}`;
     if (!this._donationNotFound) {
       this.editForm.patchFromDonation(donation);
       this.editForm.markAsPristine();
@@ -62,7 +66,7 @@ export class EditDonationComponent implements OnInit {
 
   saveDonation(): void {
     const donationUpdate: DonationSaveData = this.editForm.toDonationSaveData();
-    this._donationSaveService.updateDonation(this._originalDonation, donationUpdate).subscribe(
+    this._donationSaveService.updateDonation(this.originalDonation, donationUpdate).subscribe(
       (savedDonation: Donation) => this._router.navigate([this._donationDetailsUrl], { state: savedDonation })
     );
   }

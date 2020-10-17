@@ -172,10 +172,7 @@ export class DonationHelper {
     if (donation.donationStatus === DonationStatus.Unmatched) {
       return 'You cannot unclaimed a donation that has not been claimed';
     }
-    if (!actingAccount) {
-      return 'You do not own the donation claim';
-    }
-    if (actingAccount.id !== donation.claim.receiverAccount.id && actingAccount.id !== donation.donorAccount.id) {
+    if (!actingAccount || actingAccount.id !== donation.claim.receiverAccount.id) {
       return 'You do not own the donation claim';
     }
     if (this.isDonationStatusLaterThan(donation, DonationStatus.Scheduled)) {
