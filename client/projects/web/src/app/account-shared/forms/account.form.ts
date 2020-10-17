@@ -12,10 +12,7 @@ export { PasswordFormT };
 
 export class AccountForm extends TFormGroup<AccountFormT> {
 
-  constructor(
-    destory$: Observable<any>,
-    config: AccountFormConfig = {}
-  ) {
+  constructor(config: AccountFormConfig) {
     super({
       id: undefined,
       accountType: [undefined, Validators.required],
@@ -30,7 +27,7 @@ export class AccountForm extends TFormGroup<AccountFormT> {
     });
 
     // Listen for accountType value to update.
-    this.onValueChanges('accountType', destory$).subscribe(
+    this.onValueChanges('accountType', config.destroy$).subscribe(
       this._onAccountTypeUpdate.bind(this)
     );
 
@@ -92,8 +89,9 @@ export class AccountForm extends TFormGroup<AccountFormT> {
 export type AccountFormMode = 'Account' | 'Signup';
 
 export interface AccountFormConfig {
-  value?: Partial<AccountFormT & Account>;
+  destroy$: Observable<any>;
   formMode?: AccountFormMode;
+  value?: Partial<AccountFormT & Account>;
 }
 
 export interface AccountFormT extends Omit<Account, 'operationHours'> {

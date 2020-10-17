@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs';
 import { Account } from '~shared';
 import { AccountForm, AccountFormConfig, AccountFormT, PasswordFormT } from '~web/account-shared/forms/account.form';
 import { TFormGroup } from '~web/data-structure/t-form-group';
@@ -6,9 +5,9 @@ export { PasswordFormT };
 
 export class AdminAccountForm extends TFormGroup<AdminAccountFormT> {
 
-  constructor(config: AccountFormConfig, destroy$: Observable<any>) {
+  constructor(config: AccountFormConfig) {
     super({
-      account: new AccountForm(config, destroy$),
+      account: new AccountForm(config),
       accountCreateOptions: new TFormGroup<AccountCreateOptions>({
         autoGenPassword: false,
         autoVerify: false
