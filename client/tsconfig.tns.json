@@ -1,0 +1,39 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ES2015",
+    "lib": [
+      "ES2018",
+      "ES2017",
+      "DOM",
+      "ES6"
+    ],
+    "paths": {
+      "~app/*": ["projects/app/src/app/*"],
+      "~app-env/*": ["projects/app/src/environments/*"],
+      "~lodash-mixins": ["projects/web/src/lodash-mixins"],
+      "~shared": ["projects/app/src/shared"],
+      "~web/*": ["projects/web/src/app/*"],
+      "~web-env/*": ["projects/web/src/environments/*"]
+    },
+    "types": [
+      "googlemaps",
+      "node"
+    ]
+  },
+  "include": [
+    "projects/app/src/types/*",
+    "projcets/web/src/types/*",
+    "projects/app/src/environments/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "platforms",
+    "e2e"
+  ],
+  "files": [
+    "projects/app/src/main.ts"
+  ]
+}

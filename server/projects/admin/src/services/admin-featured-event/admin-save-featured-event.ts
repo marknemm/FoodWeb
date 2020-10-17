@@ -1,7 +1,7 @@
 import { FeaturedEvent, FeaturedEventEntity } from '~entity';
 import { getOrmRepository, OrmEntityManager } from '~orm';
 import { DateTimeHelper } from '~shared';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 
 const _dateTimeHelper = new DateTimeHelper();
 

@@ -6,12 +6,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
-import { DirectionsExtractor, MapWaypointConverter } from '~shared';
-import { DirectionStepsExtractorPipe } from '~web/map/direction-steps-extractor/direction-steps-extractor.pipe';
-import { DirectionStepsComponent } from '~web/map/direction-steps/direction-steps.component';
-import { MapMarkerInfoComponent } from '~web/map/map-marker-info/map-marker-info.component';
-import { MapOptionsComponent } from '~web/map/map-options/map-options.component';
-import { MapComponent } from '~web/map/map/map.component';
+import { DirectionStepsComponent } from './child-components/direction-steps/direction-steps.component';
+import { MapMarkerInfoComponent } from './child-components/map-marker-info/map-marker-info.component';
+import { MapOptionsComponent } from './child-components/map-options/map-options.component';
+import { MapComponent } from './child-components/map/map.component';
+import { DirectionStepsExtractorPipe } from './pipes/direction-steps-extractor/direction-steps-extractor.pipe';
 
 @NgModule({
   declarations: [
@@ -34,10 +33,6 @@ import { MapComponent } from '~web/map/map/map.component';
     DirectionStepsComponent,
     MapComponent,
     MapOptionsComponent
-  ],
-  providers: [
-    MapWaypointConverter,
-    DirectionsExtractor
   ]
 })
 export class MapModule {}

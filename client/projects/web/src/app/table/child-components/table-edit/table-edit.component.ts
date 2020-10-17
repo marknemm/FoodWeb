@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { TableDataSource } from '~web/table/table-data-source';
+import { TableDataSource } from '~web/table/interfaces/table-data-source';
 export { TableDataSource };
 
 @Component({
-  selector: 'food-web-table-edit',
+  selector: 'foodweb-table-edit',
   templateUrl: './table-edit.component.html',
   styleUrls: ['./table-edit.component.scss']
 })

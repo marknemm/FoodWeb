@@ -8,22 +8,19 @@
   "files": [],
   "references": [
     {
-      "path": "./projects/admin/tsconfig.json"
+      "path": "./projects/admin/tsconfig.app.json"
     },
     {
       "path": "./projects/admin/tsconfig.spec.json"
     },
     {
-      "path": "./projects/app/tsconfig.json"
-    },
-    {
-      "path": "./projects/app/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/web/tsconfig.json"
+      "path": "./projects/web/tsconfig.app.json"
     },
     {
       "path": "./projects/web/tsconfig.spec.json"
+    },
+    {
+      "path": "./tsconfig.tns.json"
     }
   ]
 }

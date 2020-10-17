@@ -1,8 +1,8 @@
 import { Account, DateTimeRange } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 import { Validators } from '@angular/forms';
 
-export class AdminScheduleDeliveryForm extends TypedFormGroup<DeliveryFormT> {
+export class AdminScheduleDeliveryForm extends TFormGroup<DeliveryFormT> {
   constructor() {
     super({
       volunteerAccount: [null, Validators.required],

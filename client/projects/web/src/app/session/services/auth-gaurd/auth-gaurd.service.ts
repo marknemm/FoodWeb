@@ -3,9 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { CanActivate } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { LoginDialogComponent } from '~web/session/login-dialog/login-dialog.component';
-import { SessionService } from '~web/session/session/session.service';
-import { AlertService } from '~web/shared/alert/alert.service';
+import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
+import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +13,9 @@ import { AlertService } from '~web/shared/alert/alert.service';
 export class AuthGaurdService implements CanActivate {
 
   constructor(
-    private _sessionService: SessionService,
+    private _alertQueueService: AlertQueueService,
     private _matDialog: MatDialog,
-    private _alertService: AlertService
+    private _sessionService: SessionService,
   ) {}
 
   canActivate(): Observable<boolean> {
@@ -36,7 +36,7 @@ export class AuthGaurdService implements CanActivate {
 
   private _handleLoginResult(loggedIn: boolean): boolean {
     if (!loggedIn) {
-      this._alertService.displaySimpleMessage('Login required', 'danger');
+      this._alertQueueService.add('Login required');
     }
     return loggedIn;
   }

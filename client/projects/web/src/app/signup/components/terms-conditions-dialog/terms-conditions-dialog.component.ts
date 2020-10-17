@@ -4,11 +4,11 @@ import { Observable } from 'rxjs';
 import { AccountType } from '~shared';
 
 export interface TermsConditionsDialogConfig {
-  accountType: AccountType
+  accountType: AccountType;
 }
 
 @Component({
-  selector: 'food-web-terms-conditions-dialog',
+  selector: 'foodweb-terms-conditions-dialog',
   templateUrl: './terms-conditions-dialog.component.html',
   styleUrls: ['./terms-conditions-dialog.component.scss']
 })

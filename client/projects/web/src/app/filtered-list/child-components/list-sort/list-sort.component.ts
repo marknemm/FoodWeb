@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { SortByOpt } from '~web/filtered-list/sort-by-opt';
+import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
 export { SortByOpt };
 
 @Component({
-  selector: 'food-web-list-sort',
+  selector: 'foodweb-list-sort',
   templateUrl: './list-sort.component.html',
   styleUrls: ['./list-sort.component.scss'],
 })

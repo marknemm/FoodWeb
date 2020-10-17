@@ -70,7 +70,7 @@ async function _messagePotentialDeliverers(donation: DonationEntity, potentialDe
         notificationType: NotificationType.ClaimDonation,
         notificationLink: `/delivery/details/${donation.id}`,
         title: 'Delivery Requested',
-        icon: donation.donorAccount.profileImgUrl,
+        icon: donation.donorAccount.profileImg,
         body: `
           Delivery requested from <strong>${donorName}</strong> to <strong>${receiverName}</strong>.
         `
@@ -97,6 +97,6 @@ async function _saveDeliveryReqHistories(donation: DonationEntity, accounts: Acc
     ({ id: undefined, donation, volunteerAccount })
   );
   return getConnection().transaction(async (manager: EntityManager) => {
-    await manager.getRepository(DeliveryReqHistoryEntity).save(deliveryReqHistories)
+    await manager.getRepository(DeliveryReqHistoryEntity).save(deliveryReqHistories);
   });
 }

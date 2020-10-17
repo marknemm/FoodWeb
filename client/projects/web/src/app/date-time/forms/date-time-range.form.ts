@@ -1,18 +1,18 @@
 import { AbstractControl, FormControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DateTimeHelper } from '~shared';
-import { TypedFormControl } from '~web/data-structure/typed-form-control';
-import { TypedFormControlMembers, TypedFormGroup } from '~web/data-structure/typed-form-group';
-import { DateTimeRange } from '~web/date-time/date-time/date-time.service';
+import { TFormControl } from '~web/data-structure/t-form-control';
+import { TFormControlMembers, TFormGroup } from '~web/data-structure/t-form-group';
+import { DateTimeRange } from '~web/date-time/services/date-time/date-time.service';
 export { DateTimeRange };
 
-export class DateTimeRangeForm extends TypedFormGroup<DateTimeRange> {
+export class DateTimeRangeForm extends TFormGroup<DateTimeRange> {
 
   readonly rangeErrStateMatcher: ErrorStateMatcher;
 
   private _dateTimeHelper = new DateTimeHelper();
 
-  constructor(controls?: TypedFormControlMembers<DateTimeRange>) {
+  constructor(controls?: TFormControlMembers<DateTimeRange>) {
     super({
       startDateTime: controls?.startDateTime,
       endDateTime: controls?.endDateTime
@@ -37,7 +37,7 @@ export class DateTimeRangeForm extends TypedFormGroup<DateTimeRange> {
   public fillMissingRangePart(): void {
     // Auto-fill endDateTime if startDateTime is non-empty, and endDateTime is empty.
     if (this.startDateTime && !this.endDateTime) {
-      (<TypedFormControl<Date>>this.get('endDateTime')).setValue(
+      (<TFormControl<Date>>this.get('endDateTime')).setValue(
         this._dateTimeHelper.addHours(this.startDateTime, 1),
         { emitEvent: false, emitViewToModelChange: false }
       );
@@ -45,7 +45,7 @@ export class DateTimeRangeForm extends TypedFormGroup<DateTimeRange> {
 
     // Auto-fill startDateTime if endDateTime is non-empty, and startDateTime is empty.
     if (!this.startDateTime && this.endDateTime) {
-      (<TypedFormControl<Date>>this.get('startDateTime')).setValue(
+      (<TFormControl<Date>>this.get('startDateTime')).setValue(
         this._dateTimeHelper.addHours(this.endDateTime, -1),
         <any>{ emitEvent: false, emitViewToModelChange: false }
       );
@@ -69,6 +69,6 @@ export class DateTimeRangeForm extends TypedFormGroup<DateTimeRange> {
         }
         return (control && control.invalid && control.touched);
       }
-    }
+    };
   }
 }

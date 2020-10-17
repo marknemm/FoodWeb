@@ -1,0 +1,36 @@
+<div class="alert-dialog-container">
+  <mat-toolbar [color]="color" *ngIf="alert.title">
+    <h1 mat-dialog-title>{{ alert.title }}</h1>
+    <button mat-icon-button *ngIf="!dialogRef.disableClose" type="button" class="close-button" mat-dialog-close>
+      <mat-icon aria-label="Close">close</mat-icon>
+    </button>
+  </mat-toolbar>
+  <button mat-icon-button *ngIf="!alert.title" type="button" class="close-button" mat-dialog-close>
+    <mat-icon aria-label="Close">close</mat-icon>
+  </button>
+
+  <div mat-dialog-content class="alert-dialog-body" [innerHTML]="alert.message"></div>
+
+  <div mat-dialog-actions>
+    <div class="align-right">
+      <ng-container *ngFor="let action of alert.actions">
+        <button mat-button *ngIf="action.buttonType === 'mat-button' && action.cdkFocusPrimary" cdkFocusInitial
+        type="button" [color]="action.color" [mat-dialog-close]="action.value">
+          <span [innerHTML]="action.text"></span>
+        </button>
+        <button mat-button *ngIf="action.buttonType === 'mat-button' && !action.cdkFocusPrimary"
+        type="button" [color]="action.color" [mat-dialog-close]="action.value">
+          <span [innerHTML]="action.text"></span>
+        </button>
+        <button mat-raised-button *ngIf="action.buttonType === 'mat-raised-button' && action.cdkFocusPrimary" cdkFocusInitial
+        type="button" [color]="action.color" [mat-dialog-close]="action.value">
+          <span [innerHTML]="action.text"></span>
+        </button>
+        <button mat-raised-button *ngIf="action.buttonType === 'mat-raised-button' && !action.cdkFocusPrimary"
+        type="button" [color]="action.color" [mat-dialog-close]="action.value">
+          <span [innerHTML]="action.text"></span>
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</div>

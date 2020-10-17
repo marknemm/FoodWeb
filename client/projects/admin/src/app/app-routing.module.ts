@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminAppShellComponent } from '~admin/admin-app-shell/admin-app-shell/admin-app-shell.component';
-import { AdminBootstrapService } from '~admin/admin-bootstrap/admin-bootstrap/admin-bootstrap.service';
-import { AdminConsoleComponent } from '~admin/components/admin-console/admin-console.component';
+import { AdminBootstrapService } from '~admin/admin-bootstrap/services/admin-bootstrap/admin-bootstrap.service';
+import { AdminConsoleComponent } from '~admin/admin-console/components/admin-console/admin-console.component';
+import { AdminShellComponent } from '~admin/admin-shell/components/admin-shell/admin-shell.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'console' },
   { path: 'login', pathMatch: 'full', redirectTo: 'bootstrap/login' },
-  { path: 'bootstrap', loadChildren: () => import('src/app/admin-bootstrap/admin-bootstrap.module').then(mod => mod.AdminBootstrapModule) },
+  { path: 'bootstrap', loadChildren: () => import('~admin/admin-bootstrap/admin-bootstrap.module').then(mod => mod.AdminBootstrapModule) },
   {
     path: '',
-    component: AdminAppShellComponent,
+    component: AdminShellComponent,
     canActivate: [AdminBootstrapService],
     children: [
       { path: 'account', loadChildren: () => import('~admin/admin-account/admin-account.module').then(mod => mod.AdminAccountModule) },

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AccountType, Donation } from '~shared';
 
 @Component({
-  selector: 'food-web-donation-teaser',
+  selector: 'foodweb-donation-teaser',
   templateUrl: './donation-teaser.component.html',
   styleUrls: ['./donation-teaser.component.scss'],
 })

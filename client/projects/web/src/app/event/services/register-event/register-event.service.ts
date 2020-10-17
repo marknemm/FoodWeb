@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { EventRegistration, EventRegistrationCreateRequest, FeaturedEvent } from '~shared';
-import { environment } from '~web/environments/environment';
-import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
+import { environment } from '~web-env/environment';
+import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class RegisterEventService {
 
   constructor(
     private _httpClient: HttpClient,
-    private _errorHandlerService: ErrorHandlerService
+    private _alertQueueService: AlertQueueService
   ) {}
 
   get loading(): boolean {
@@ -29,7 +29,7 @@ export class RegisterEventService {
     const eventRegistrationReq: EventRegistrationCreateRequest = { eventRegistration: <EventRegistration>eventRegistration };
     this._loading = true;
     return this._httpClient.post(this.url, eventRegistrationReq, { withCredentials: true }).pipe(
-      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
+      catchError((err: HttpErrorResponse) => this._alertQueueService.add(err)),
       finalize(() => this._loading = false)
     );
   }

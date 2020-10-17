@@ -3,7 +3,7 @@ import { getRepository, Repository } from 'typeorm';
 import { AccountEntity, AppSessionEntity } from '~entity';
 import { getOrmRepository } from '~orm';
 import { LoginResponse } from '~shared';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 
 /**
  * Saves a long-lived mobile app session token (entity) for a given account.
@@ -45,7 +45,6 @@ export async function appTokenLogin(appSessionToken: string): Promise<LoginRespo
   try {
     const appSessionEntity: AppSessionEntity = await getRepository(AppSessionEntity).findOne({ appSessionToken });
     if (appSessionEntity) {
-      saveAppSessionToken(appSessionEntity.account);
       return { account: appSessionEntity.account, appSessionToken };
     }
     throw new Error('Mobile app session token not found');

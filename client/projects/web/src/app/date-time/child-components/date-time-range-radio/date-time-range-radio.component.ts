@@ -1,16 +1,16 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormComponentBase, valueAccessorProvider } from '~web/data-structure/form-component-base';
-import { TypedFormControl } from '~web/data-structure/typed-form-control';
-import { DateTimeRange, DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { FormHelperService } from '~web/shared/form-helper/form-helper.service';
+import { FormBaseComponent, formProvider } from '~web/data-structure/form-base-component';
+import { TFormControl } from '~web/data-structure/t-form-control';
+import { DateTimeRange, DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
-  selector: 'food-web-date-time-range-radio',
+  selector: 'foodweb-date-time-range-radio',
   templateUrl: './date-time-range-radio.component.html',
   styleUrls: ['./date-time-range-radio.component.scss'],
-  providers: valueAccessorProvider(DateTimeRangeRadioComponent)
+  providers: formProvider(DateTimeRangeRadioComponent)
 })
-export class DateTimeRangeRadioComponent extends FormComponentBase<DateTimeRange> implements OnChanges {
+export class DateTimeRangeRadioComponent extends FormBaseComponent<DateTimeRange> implements OnChanges {
 
   @Input() ariaLabel: string;
   @Input() rangeWindow: DateTimeRange;
@@ -24,7 +24,7 @@ export class DateTimeRangeRadioComponent extends FormComponentBase<DateTimeRange
    * An internally used form control keeping track of the index of the selected date-time range.
    * Externally, any form control bound to this component (via formControl) will be updated to the actual date-time range at the index.
    */
-  readonly selIdxFormCtrl = new TypedFormControl<number>();
+  readonly selIdxFormCtrl = new TFormControl<number>();
 
   private _dateTimeRanges: DateTimeRange[] = [];
 
@@ -32,7 +32,7 @@ export class DateTimeRangeRadioComponent extends FormComponentBase<DateTimeRange
     private _dateTimeService: DateTimeService,
     formHelperService: FormHelperService
   ) {
-    super(formHelperService);
+    super(new TFormControl<DateTimeRange>(), formHelperService);
   }
 
   /**
@@ -43,11 +43,22 @@ export class DateTimeRangeRadioComponent extends FormComponentBase<DateTimeRange
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    super.ngOnChanges(changes);
     if (changes.rangeWindow || changes.rangeWindowStart || changes.rangeWindowEnd || changes.rangeMins) {
-      if ((changes.rangeWindowStart || changes.rangeWindowEnd) && this.rangeWindowStart && this.rangeWindowEnd) {
-        this.rangeWindow = { startDateTime: this.rangeWindowStart, endDateTime: this.rangeWindowEnd };
-      }
+      this._genRangeWindowFromEndpoints();
       this._dateTimeRanges = this._dateTimeService.genDateTimeRangeIncrements(this.rangeWindow, this.stepMins, this.allowPast);
+    }
+  }
+
+  /**
+   * Generates a rangeWindow input from rangeWindowStart & rangeWindowEnd endpoints if both are present.
+   */
+  private _genRangeWindowFromEndpoints(): void {
+    if (this.rangeWindowStart && this.rangeWindowEnd) {
+      this.rangeWindow = {
+        startDateTime: this.rangeWindowStart,
+        endDateTime: this.rangeWindowEnd
+      };
     }
   }
 
@@ -57,13 +68,22 @@ export class DateTimeRangeRadioComponent extends FormComponentBase<DateTimeRange
    */
   writeValue(range: DateTimeRange): void {
     if (range && this.dateTimeRanges.length) {
-      const selDateTimeRangeIdx: number = this.dateTimeRanges.findIndex(
-        (rangeOpt: DateTimeRange) => rangeOpt.startDateTime.getTime() === range.startDateTime.getTime()
-                                  && rangeOpt.endDateTime.getTime() === range.endDateTime.getTime()
-      );
+      const selDateTimeRangeIdx: number = this._getDateTimeRangeIdx(range);
       this.selIdxFormCtrl.setValue(selDateTimeRangeIdx);
     } else {
       this.selIdxFormCtrl.setValue(null);
     }
+  }
+
+  /**
+   * Gets the index of a given date-time range within the dateTimeRanges array.
+   * @param range The date-time range to get the index of.
+   * @return The index of the date-time range. If not found, then -1.
+   */
+  private _getDateTimeRangeIdx(range: DateTimeRange): number {
+    return this.dateTimeRanges.findIndex((rangeOpt: DateTimeRange) =>
+         rangeOpt.startDateTime.getTime() === range.startDateTime.getTime()
+      && rangeOpt.endDateTime.getTime() === range.endDateTime.getTime()
+    );
   }
 }

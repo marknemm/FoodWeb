@@ -1,6 +1,6 @@
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 
-export class EventIdentifierForm extends TypedFormGroup<{ eventIdentifierStr: string }> {
+export class EventIdentifierForm extends TFormGroup<{ eventIdentifierStr: string }> {
 
   constructor(eventIdentifierStr = '') {
     super({ eventIdentifierStr });

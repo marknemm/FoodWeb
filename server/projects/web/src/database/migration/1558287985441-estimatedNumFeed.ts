@@ -1,5 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class estimatedNumFeed1558287985441 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {

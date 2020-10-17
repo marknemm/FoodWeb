@@ -2,11 +2,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, ObservableInput, OperatorFunction } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
-import { AlertService } from '~web/shared/alert/alert.service';
-import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
-import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
-import { HttpResponseHandlerOptions } from './http-response-handler-options';
-export { HttpResponseHandlerOptions };
+import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
+import { HttpResponseHandlerOptions } from '~web/shared/interfaces/http-response-handler-options';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+export * from '~web/shared/interfaces/http-response-handler-options';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +15,7 @@ export class HttpResponseService {
   private _loadingRecords = new Map<Observable<any>, boolean>();
 
   constructor(
-    private _alertService: AlertService,
-    private _errorHandlerService: ErrorHandlerService,
+    private _alertQueueService: AlertQueueService,
     private _pageProgressService: PageProgressService
   ) {}
 
@@ -29,6 +27,16 @@ export class HttpResponseService {
     return !!this._loadingRecords.get(httpResponse$);
   }
 
+  /**
+   * Handles an HTTP response based on given options.
+   * Some examples of the handling include:
+   * - Triggering a blocking page progress indicator until a response is received.
+   * - Processing and displaying HTTP error responses via a non-blocking warnig alert.
+   * - Forwarding the response value to a configured immutable store (See ImmutableStore for more details).
+   * - Displaying a configured non-blocking success alert message upon reception of a success response.
+   * @param opts An optional set of HTTP response handler options. See HttpResponseHandlerOptions for default values.
+   * @return A pipeable rxjs operator function.
+   */
   handleHttpResponse<T>(opts: HttpResponseHandlerOptions<T> = {}): OperatorFunction<any, T> {
     return (httpResponse$: Observable<T>): Observable<T> => {
       opts = this._fillDefaultHttpHandlerOpts(opts);
@@ -38,7 +46,7 @@ export class HttpResponseService {
         catchError((err: HttpErrorResponse) => this._handleHttpErrorResponse(err, opts)),
         finalize(() => this._setLoadingStatus(httpResponse$, opts, false))
       );
-    }
+    };
   }
 
   private _fillDefaultHttpHandlerOpts<T>(opts: HttpResponseHandlerOptions<T>): HttpResponseHandlerOptions<T> {
@@ -71,7 +79,7 @@ export class HttpResponseService {
 
     // Display a success alert message if one is configured.
     if (opts.successMessage) {
-      this._alertService.displaySimpleMessage(opts.successMessage, 'success');
+      this._alertQueueService.add(opts.successMessage, 'success');
     }
   }
 
@@ -82,6 +90,6 @@ export class HttpResponseService {
     }
 
     // Otherwise, perform default error handling, which will complete observable without emitting a value.
-    return this._errorHandlerService.handleError(err);
+    return this._alertQueueService.add(err);
   }
 }

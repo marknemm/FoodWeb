@@ -73,7 +73,7 @@ async function _sendMessageToRecipients(donation: DonationEntity, recipients: Ac
         notificationType: NotificationType.ClaimDonation,
         notificationLink: `/delivery/details/${donation.id}`,
         title: `Delivery No Longer Available`,
-        icon: donation.donorAccount.profileImgUrl,
+        icon: donation.donorAccount.profileImg,
         body: `
           Delivery has either been scheduled or deleted:<br>
           <i>${donation.description}</i>

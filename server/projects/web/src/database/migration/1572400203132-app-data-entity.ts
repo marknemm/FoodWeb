@@ -1,5 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class appDataEntity1572400203132 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {

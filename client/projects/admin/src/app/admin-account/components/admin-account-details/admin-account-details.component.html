@@ -1,18 +1,18 @@
 <form [formGroup]="accountForm" *ngIf="originalAccount" class="account-form page container">
   <div class="account-main align-center">
     <div class="page-title block-label">
-      <food-web-username *ngIf="hasAccountOwnership" formControlName="username"></food-web-username>
+      <foodweb-username *ngIf="hasAccountOwnership" formControlName="username"></foodweb-username>
       <ng-container *ngIf="!hasAccountOwnership">
         <div *ngIf="originalAccount.organization">
           {{ originalAccount.organization.name }}
         </div>
       </ng-container>
     </div>
-    <food-web-profile-img formControlName="profileImgUrl" [editable]="hasAccountOwnership"></food-web-profile-img>
+    <foodweb-profile-img formControlName="profileImg" [editable]="hasAccountOwnership"></foodweb-profile-img>
   </div>
 
   <div class="account-type">
-    <food-web-account-type formControlName="accountType"></food-web-account-type>
+    <foodweb-account-type formControlName="accountType"></foodweb-account-type>
   </div>
 
   <div class="admin-actions align-right">
@@ -26,7 +26,7 @@
     <button mat-button type="button" (click)="signupVerificationService.resendVerificationEmail()">Resend Verification Email</button>
   </p>
 
-  <mat-accordion [multi]="true" displayMode="flat" foodWebFragmentAccordian defaultPanelId="primary">
+  <mat-accordion [multi]="true" displayMode="flat" foodwebFragmentAccordian defaultPanelId="primary">
     <mat-expansion-panel id="primary">
       <mat-expansion-panel-header>
         Primary
@@ -34,11 +34,11 @@
       <div class="row account-section-content">
         <div class="col-xl-6">
           <mat-card *ngIf="accountType !== 'Volunteer'">
-            <food-web-edit-save-button #organizationSaveEdit [hidden]="!hasAccountOwnership" [control]="accountForm.get('organization')" [saveCb]="genSectionSaveCb('organization')">
-            </food-web-edit-save-button>
+            <foodweb-edit-save-button #organizationSaveEdit [hidden]="!hasAccountOwnership" [control]="accountForm.get('organization')" [saveCb]="genSectionSaveCb('organization')">
+            </foodweb-edit-save-button>
             <mat-card-title class="block-label">Organization</mat-card-title>
             <mat-card-content>
-              <food-web-organization [formGroup]="accountForm.get('organization')" [accountType]="accountType" [editing]="organizationSaveEdit.editing"></food-web-organization>
+              <foodweb-organization [formGroup]="accountForm.get('organization')" [accountType]="accountType" [editable]="organizationSaveEdit.editable"></foodweb-organization>
               <div *ngIf="originalAccount" class="see-donations-link">
                 <a [routerLink]="['/donation/list']" [queryParams]="seeDonationsLinkParams">See Donations</a>
               </div>
@@ -46,11 +46,11 @@
           </mat-card>
 
           <mat-card *ngIf="accountType === 'Volunteer'">
-            <food-web-edit-save-button #volunteerSaveEdit [hidden]="!hasAccountOwnership" [control]="accountForm.get('volunteer')" [saveCb]="genSectionSaveCb('volunteer')">
-            </food-web-edit-save-button>
+            <foodweb-edit-save-button #volunteerSaveEdit [hidden]="!hasAccountOwnership" [control]="accountForm.get('volunteer')" [saveCb]="genSectionSaveCb('volunteer')">
+            </foodweb-edit-save-button>
             <mat-card-title class="block-label">Volunteer Info</mat-card-title>
             <mat-card-content>
-              <food-web-admin-volunteer [formGroup]="accountForm.get('volunteer')" [editing]="volunteerSaveEdit.editing"></food-web-admin-volunteer>
+              <foodweb-admin-volunteer [formGroup]="accountForm.get('volunteer')" [editable]="volunteerSaveEdit.editable"></foodweb-admin-volunteer>
               <div *ngIf="originalAccount" class="see-donations-link">
                 <a [routerLink]="['/delivery/list']" [queryParams]="seeDonationsLinkParams">See Deliveries</a>
               </div>
@@ -59,12 +59,12 @@
         </div>
         <div class="col-xl-6">
           <mat-card>
-            <food-web-edit-save-button #contactInfoSaveEdit [hidden]="!hasAccountOwnership" [control]="accountForm.get('contactInfo')" [saveCb]="genSectionSaveCb('contactInfo')">
-            </food-web-edit-save-button>
+            <foodweb-edit-save-button #contactInfoSaveEdit [hidden]="!hasAccountOwnership" [control]="accountForm.get('contactInfo')" [saveCb]="genSectionSaveCb('contactInfo')">
+            </foodweb-edit-save-button>
             <mat-card-title class="block-label">Contact Info</mat-card-title>
             <mat-card-content>
-              <food-web-contact-info [formGroup]="accountForm.get('contactInfo')" [contactInfo]="originalAccount?.contactInfo" [editing]="contactInfoSaveEdit.editing">
-              </food-web-contact-info>
+              <foodweb-contact-info [formGroup]="accountForm.get('contactInfo')" [contactInfo]="originalAccount?.contactInfo" [editable]="contactInfoSaveEdit.editable">
+              </foodweb-contact-info>
             </mat-card-content>
           </mat-card>
         </div>
@@ -78,25 +78,25 @@
       <mat-divider></mat-divider>
       <div class="row account-section-content">
         <div class="col-sm-12">
-          <mat-card class="operation-hours-card" [ngClass]="{ 'full-width': operationHoursSaveEdit.editing }">
-            <food-web-edit-save-button #operationHoursSaveEdit
+          <mat-card class="operation-hours-card" [ngClass]="{ 'full-width': operationHoursSaveEdit.editable }">
+            <foodweb-edit-save-button #operationHoursSaveEdit
               [hidden]="!hasAccountOwnership"
               [control]="accountForm.get('operationHours')"
               [saveCb]="genSectionSaveCb('operationHours')"
-            ></food-web-edit-save-button>
+            ></foodweb-edit-save-button>
             <mat-card-title class="block-label">
               Delivery Availability
             </mat-card-title>
-            <mat-card-subtitle *ngIf="operationHoursSaveEdit.editing">
+            <mat-card-subtitle *ngIf="operationHoursSaveEdit.editable">
               <span *ngIf="accountType === 'Receiver'">Optionally limit the times you will be considered available to receive deliveries.</span>
               <span *ngIf="accountType === 'Volunteer'">Optionally limit the times you will be considered available to perform deliveries.</span>
             </mat-card-subtitle>
             <mat-card-content>
-              <food-web-operation-hours-info
+              <foodweb-operation-hours-info
                 [operationHoursArr]="originalAccount.operationHours"
                 [formGroup]="accountForm.get('operationHours')"
-                [editing]="operationHoursSaveEdit.editing"
-              ></food-web-operation-hours-info>
+                [editable]="operationHoursSaveEdit.editable"
+              ></foodweb-operation-hours-info>
             </mat-card-content>
           </mat-card>
         </div>
@@ -111,21 +111,21 @@
       <div class="row account-section-content">
         <div class="col-sm-12">
           <mat-card class="notification-settings-card">
-            <food-web-edit-save-button #notificationSettingsSaveEdit
+            <foodweb-edit-save-button #notificationSettingsSaveEdit
               [hidden]="!hasAccountOwnership"
               [control]="accountForm.get('notificationSettings')"
               [saveCb]="genSectionSaveCb('notificationSettings')"
-            ></food-web-edit-save-button>
+            ></foodweb-edit-save-button>
             <mat-card-title class="block-label">
               Notification Settings
             </mat-card-title>
             <mat-card-content>
-              <food-web-notifications-settings
+              <foodweb-notifications-settings
                 [accountType]="originalAccount.accountType"
                 [notificationSettings]="originalAccount.contactInfo"
                 [formGroup]="accountForm.get('notificationSettings')"
-                [editing]="notificationSettingsSaveEdit.editing"
-              ></food-web-notifications-settings>
+                [editable]="notificationSettingsSaveEdit.editable"
+              ></foodweb-notifications-settings>
             </mat-card-content>
           </mat-card>
         </div>
@@ -140,11 +140,11 @@
       <div class="row account-section-content">
         <div class="col-sm-12">
           <mat-card class="password-card">
-            <food-web-edit-save-button #passwordSaveEdit [editing]="true" [control]="accountForm.get('password')" [noCancelEdit]="true" [saveCb]="savePassword">
-            </food-web-edit-save-button>
+            <foodweb-edit-save-button #passwordSaveEdit [editable]="true" [control]="accountForm.get('password')" [noCancelEdit]="true" [saveCb]="savePassword">
+            </foodweb-edit-save-button>
             <mat-card-title class="block-label">Change Password</mat-card-title>
             <mat-card-content>
-              <food-web-admin-password [formGroup]="accountForm.get('password')" [editing]="passwordSaveEdit.editing"></food-web-admin-password>
+              <foodweb-admin-password [formGroup]="accountForm.get('password')" [editable]="passwordSaveEdit.editable"></foodweb-admin-password>
             </mat-card-content>
           </mat-card>
         </div>

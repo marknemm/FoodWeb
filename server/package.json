@@ -1,5 +1,5 @@
 {
-  "name": "food-web-server",
+  "name": "foodweb-server",
   "version": "1.0.0",
   "license": "MIT",
   "main": "dist/server/projects/web/src/index.js",

@@ -3,7 +3,7 @@ import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity, PasswordEntity } from '~entity';
 import { AccountHelper, PasswordUpdateRequest } from '~shared';
 import { getPasswordId } from '~web/helpers/misc/password-match';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 
 const _accountHelper = new AccountHelper();
 

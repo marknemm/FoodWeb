@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AdminDonationClaimService } from '~admin/admin-donation/admin-donation-claim/admin-donation-claim.service';
+import { AdminDonationClaimService } from '~admin/admin-donation/services/admin-donation-claim/admin-donation-claim.service';
 import { DeliveryHelper, Donation, DonationHelper, DonationStatus } from '~shared';
-import { DeliveryScheduleService } from '~web/delivery/delivery-schedule/delivery-schedule.service';
-import { DeliveryStatusUpdateService } from '~web/delivery/delivery-status-update/delivery-status-update.service';
-import { DonationActionsService } from '~web/donation-delivery-shared/donation-actions/donation-actions.service';
-import { DonationDeleteService } from '~web/donation/donation-delete/donation-delete.service';
+import { DeliveryScheduleService } from '~web/delivery/services/delivery-schedule/delivery-schedule.service';
+import { DeliveryStatusUpdateService } from '~web/delivery/services/delivery-status-update/delivery-status-update.service';
+import { DonationActionsService } from '~web/donation-shared/services/donation-actions/donation-actions.service';
+import { DonationDeleteService } from '~web/donation/services/donation-delete/donation-delete.service';
 
 @Injectable({
   providedIn: 'root'

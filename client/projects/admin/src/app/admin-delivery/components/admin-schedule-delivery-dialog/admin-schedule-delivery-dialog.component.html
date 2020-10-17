@@ -4,26 +4,26 @@
       Select the volunteer account that will schedule the delivery:
     </p>
 
-    <food-web-account-select
+    <foodweb-account-select
       formControlName="volunteerAccount"
       accountType="Volunteer"
       floatLabel="never"
       placeholder="Volunteer Account"
       filterPlaceholder="Seach Volunteer Accounts..."
-    ></food-web-account-select>
+    ></foodweb-account-select>
 
     <p class="dialog-message">
       Select the pickup window for the delivery:
     </p>
 
-    <food-web-date-time-range-radio
+    <foodweb-date-time-range-radio
       formControlName="pickupWindow"
       ariaLabel="Select delivery pickup window"
       [stepMins]="config.stepMins"
       [rangeWindowStart]="config.donation?.pickupWindowStart"
       [rangeWindowEnd]="config.donation?.pickupWindowEnd"
       [allowPast]="true">
-    </food-web-date-time-range-radio>
+    </foodweb-date-time-range-radio>
   </mat-dialog-content>
 
   <mat-dialog-actions>

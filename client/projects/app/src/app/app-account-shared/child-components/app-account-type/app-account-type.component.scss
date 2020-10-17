@@ -1,0 +1,27 @@
+@import "../../../../styles/constants.scss";
+
+StackLayout {
+  horizontal-alignment: center;
+  margin: 10 0;
+  orientation: horizontal;
+  text-align: center;
+
+  Button {
+    height: 130;
+    width: 100;
+
+    .header {
+      font-size: 18;
+      font-weight: bold;
+      height: 50;
+    }
+
+    .vert-space {
+      font-size: 2;
+    }
+
+    .mdi {
+      font-size: 80;
+    }
+  }
+}

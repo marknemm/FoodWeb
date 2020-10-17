@@ -28,9 +28,9 @@ async function execOrmCli() {
 
 /**
  * Executes the TypeORM CLI with a configuration for docker.
- * @param tsconfigPathname The pathname for the tsconfig.json file that shall be configured for ts-node exec.
- * @param typeOrmCliPath The TypeORM CLI node_modules path.
- * @param typeOrmArgs The TypeORM CLI execution arguments.
+ * @param {string} tsconfigPathname The pathname for the tsconfig.json file that shall be configured for ts-node exec.
+ * @param {string} typeOrmCliPath The TypeORM CLI node_modules path.
+ * @param {string} typeOrmArgs The TypeORM CLI execution arguments.
  */
 function execDockerOrmCli(tsconfigPathname, typeOrmCliPath, typeOrmArgs) {
   const dockerOrmConfigPathname = createDockerOrmConfig();

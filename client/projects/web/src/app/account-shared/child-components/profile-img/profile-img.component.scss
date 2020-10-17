@@ -1,0 +1,88 @@
+@import "constants.scss";
+
+:host {
+  .profile-img {
+    border-radius : 50%;
+    cursor        : inherit;
+    height        : 100%;
+    margin-bottom : 0;
+    position      : relative;
+    vertical-align: top;
+    width         : 100%;
+
+    &.editable {
+      cursor: pointer;
+    }
+
+    img {
+      border  : 2px solid #e4e4e4;
+      display : inline-block;
+      margin  : 0;
+      position: relative;
+    }
+
+    .profile-img-placeholder {
+      text-align: center;
+      font-size : 140%;
+      height    : 100%;
+      width     : 100%;
+    }
+
+    $edit-transition-time: 0.5s;
+    $edit-transition     : opacity $edit-transition-time,
+    top $edit-transition-time;
+
+    .edit-background,
+    .edit-text {
+      border-top-left-radius : inherit;
+      border-top-right-radius: inherit;
+      height                 : 25%;
+      left                   : 0px;
+      opacity                : 0;
+      overflow               : hidden;
+      position               : absolute;
+      transition             : $edit-transition;
+      -webkit-transition     : $edit-transition;
+      top                    : -25%;
+      width                  : 100%;
+    }
+
+    .edit-background {
+      background-color: #e4e4e4;
+      z-index         : 1;
+    }
+
+    .edit-text {
+      margin-top   : calc(12.5% - 10px);
+      text-overflow: ellipsis;
+      word-wrap    : none;
+      z-index      : 2;
+
+      mat-icon {
+        font-size     : 18px;
+        margin-left   : -5px;
+        vertical-align: -3px;
+      }
+    }
+
+    &:hover {
+
+      .edit-background,
+      .edit-text {
+        top: 0px;
+      }
+
+      .edit-background {
+        opacity: 0.75;
+      }
+
+      .edit-text {
+        opacity: 1;
+      }
+    }
+  }
+
+  #profile-img-input {
+    display: none;
+  }
+}

@@ -1,5 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class donationWindowTimes1558199226376 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {

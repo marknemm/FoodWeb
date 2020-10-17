@@ -1,0 +1,45 @@
+@import "../constants.scss";
+
+.mat-drawer-container {
+  height: calc(100vh - #{$header-height});
+
+  @media only screen and (max-width: $md) {
+    height: calc(100vh - #{$header-height-mobile});
+  }
+
+  .mat-drawer {
+    width: $left-nav-width;
+    min-height: 100%;
+    box-shadow: 1px 0px 5px 1px rgba(0, 0, 0, 0.5);
+  }
+
+  .mat-drawer-content {
+    background-color: $content-background;
+    height: 100%;
+
+    .page-title {
+      font: 500 28px Avenir;
+      margin-bottom: 10px;
+      text-align: center;
+      color: $accent;
+
+      @media only screen and (max-width: $md) {
+        font-size: 24px;
+      }
+
+      @media only screen and (max-width: $sm) {
+        font-size: 20px;
+      }
+    }
+
+    .page .page-title {
+      @media only screen and (max-width: $sm) {
+        margin-top: -8px;
+      }
+    }
+
+    @media only screen and (max-width: $md) {
+      min-height: calc(100vh - #{$header-height-mobile});
+    }
+  }
+}

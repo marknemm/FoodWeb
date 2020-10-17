@@ -1,9 +1,9 @@
 import { AccountReadRequest, AccountType, OperationHours } from '~shared';
-import { OperationHoursForm } from '~web/account/operation-hours.form';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { OperationHoursForm } from '~web/account-shared/forms/operation-hours.form';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 export { AccountReadRequest };
 
-export class AccountFiltersForm extends TypedFormGroup<AccountFiltersFormT> {
+export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
 
   constructor(filters?: Partial<AccountFiltersFormT>) {
     super({

@@ -1,14 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Donation, DonationSaveData } from '~shared';
-import { DateTimeRangeComponent } from '~web/date-time/date-time-range/date-time-range.component';
-import { DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { DonationSaveService } from '~web/donation/donation-save/donation-save.service';
-import { DonateForm } from '~web/donor/donate.form';
-import { SessionService } from '~web/session/session/session.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { DateTimeRangeComponent } from '~web/date-time/child-components/date-time-range/date-time-range.component';
+import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
+import { DonateForm } from '~web/donor/forms/donate.form';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
-  selector: 'food-web-donate',
+  selector: 'foodweb-donate',
   templateUrl: './donate.component.html',
   styleUrls: ['./donate.component.scss']
 })
@@ -29,12 +28,10 @@ export class DonateComponent implements OnInit {
   constructor(
     public sessionService: SessionService,
     private _donationSaveService: DonationSaveService,
-    private _dateTimeService: DateTimeService,
-    private _pageTitleService: PageTitleService
+    private _dateTimeService: DateTimeService
   ) {}
 
   ngOnInit() {
-    this._pageTitleService.title = 'Donate';
     this.formGroup = new DonateForm(
       this._dateTimeService,
       { donorAccount: this.sessionService.account, safetyChecklistInit: false }
@@ -45,8 +42,7 @@ export class DonateComponent implements OnInit {
    * Submits the donation to be created on the server.
    */
   donate(): void {
-    this.formGroup.markAllAsTouched();
-    if (this.formGroup.valid) {
+    if (this.formGroup.checkValidity()) {
       const donationSaveData: DonationSaveData = this.formGroup.toDonationSaveData();
       this._donationSaveService.createDonation(donationSaveData).subscribe((savedDonation: Donation) => {
         this.savedDonation = savedDonation;

@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { AdminDonationSaveService } from '~admin/admin-donation/admin-donation-save/admin-donation-save.service';
 import { AdminDonationForm } from '~admin/admin-donation/forms/admin-donation.form';
+import { AdminDonationSaveService } from '~admin/admin-donation/services/admin-donation-save/admin-donation-save.service';
 import { Donation } from '~shared';
-import { DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { SessionService } from '~web/session/session/session.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
-  selector: 'food-web-admin-create-donation',
+  selector: 'foodweb-admin-create-donation',
   templateUrl: './admin-create-donation.component.html',
   styleUrls: ['./admin-create-donation.component.scss'],
 })
@@ -19,7 +18,6 @@ export class AdminCreateDonationComponent implements OnInit, OnDestroy {
   private _savedDonation: Donation = null;
 
   constructor(
-    public pageTitleService: PageTitleService,
     public sessionService: SessionService,
     private _dateTimeService: DateTimeService,
     private _donationSaveService: AdminDonationSaveService
@@ -41,7 +39,6 @@ export class AdminCreateDonationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.pageTitleService.title = 'Create Donation';
     this._formGroup = new AdminDonationForm(this._dateTimeService, this._destroy$);
   }
 

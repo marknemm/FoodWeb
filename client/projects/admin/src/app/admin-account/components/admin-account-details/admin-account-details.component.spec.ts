@@ -1,6 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-
 import { AdminAccountDetailsComponent } from './admin-account-details.component';
 
 describe('AdminAccountDetailsComponent', () => {
@@ -9,8 +7,7 @@ describe('AdminAccountDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminAccountDetailsComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ AdminAccountDetailsComponent ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminAccountDetailsComponent);

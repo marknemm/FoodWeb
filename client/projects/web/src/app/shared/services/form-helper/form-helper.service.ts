@@ -42,7 +42,7 @@ export class FormHelperService {
    */
   onMarkAsTouched(abstractControl: AbstractControl, touchedCb: () => void): void {
     const origMarkAsTouched: Function = abstractControl.markAsTouched;
-    abstractControl.markAsTouched = function () {
+    abstractControl.markAsTouched = () => {
       origMarkAsTouched.apply(abstractControl, arguments);
       touchedCb();
     };
@@ -55,7 +55,7 @@ export class FormHelperService {
    */
   onMarkAsPristine(abstractControl: AbstractControl, pristineCb: () => void): void {
     const origMarkAsPristine: Function = abstractControl.markAsPristine;
-    abstractControl.markAsPristine = function () {
+    abstractControl.markAsPristine = () => {
       origMarkAsPristine.apply(abstractControl, arguments);
       pristineCb();
     };

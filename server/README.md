@@ -114,7 +114,7 @@ Run `npm run typeorm:migration:revert` to revert the latest TypeORM migration un
 
 Run `npm run pg:initialize` To destroy the data and schema within your development foodweb database, and initialize it with standard data.
 
-Run `npm run pg:dump` to dump out a SQL script that can be used to restore the current state of your development foodweb database. Optionally accepts a single argument specifying th e name of the output file. Defaults to 'default'. All dump files are placed under **server/database-util/dump**.
+Run `npm run pg:dump` to dump out a SQL script that can be used to restore the current state of your development foodweb database. Optionally accepts a single argument specifying the name of the output file. Defaults to 'default'. All dump files are placed under **server/database-util/dump**.
 
 Run `npm run pg:destory` to destroy the data and schema within your development foodweb database.
 

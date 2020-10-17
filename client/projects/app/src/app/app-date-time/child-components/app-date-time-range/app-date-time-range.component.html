@@ -1,0 +1,59 @@
+<StackLayout [formGroup]="formGroup" [foodwebAppVisibile]="editable">
+  <GridLayout rows="auto" columns="*,*">
+    <foodweb-app-date-time
+      #startDateTime
+      formControlName="startDateTime"
+      [allowClear]="allowClear"
+      [allowUndefTime]="allowUndefTime"
+      [editable]="true"
+      [datePlaceholder]="startDatePlaceholder"
+      [timePlaceholder]="startTimePlaceholder"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [floatLabels]="floatLabels"
+      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
+      (ngModelChange)="formGroup.fillMissingRangePart()"></foodweb-app-date-time>
+
+    <foodweb-app-date-time
+      #endDateTime
+      formControlName="endDateTime"
+      [allowClear]="allowClear"
+      [allowUndefTime]="allowUndefTime"
+      [editable]="true"
+      [datePlaceholder]="endDatePlaceholder"
+      [timePlaceholder]="endTimePlaceholder"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [floatLabels]="floatLabels"
+      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
+      (ngModelChange)="formGroup.fillMissingRangePart()"></foodweb-app-date-time>
+  </GridLayout>
+
+  <Label
+    text="End date-time must be later than start date-time"
+    class="text-danger"
+    [foodwebAppVisibile]="formGroup.hasError('dateTimeRangeOrder')"></Label>
+</StackLayout>
+
+<StackLayout [foodwebAppVisibile]="!editable">
+  <foodweb-app-date-time
+    [boldTime]="boldTime"
+    [dateTime]="value.startDateTime"
+    [editable]="false"
+    [excludeTimeDisplay]="startEndDateSame"></foodweb-app-date-time>
+  <!-- Wrap time range below date when showing a range where start & end date is same. -->
+  <StackLayout orientation="horizontal">
+    <foodweb-app-time
+      [bold]="boldTime"
+      [value]="value.startDateTime | foodwebFormatTime"
+      [editable]="false"
+      [excludeDateDisplay]="true"
+      [visible]="startEndDateSame"></foodweb-app-time>
+    <Label text=" -- "></Label>
+    <foodweb-app-date-time
+      [boldTime]="boldTime"
+      [dateTime]="value.endDateTime"
+      [editable]="false"
+      [excludeDateDisplay]="startEndDateSame"></foodweb-app-date-time>
+  </StackLayout>
+</StackLayout>

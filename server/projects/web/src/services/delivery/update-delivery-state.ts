@@ -3,7 +3,7 @@ import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity, DeliveryEntity, DonationEntity } from '~entity';
 import { DateTimeHelper, DeliveryHelper, DeliveryStateChangeRequest, DonationHelper, DonationStatus } from '~shared';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { DeliveryStatusChangeSaveData, DonationStatusChangeSaveData } from '~web/interfaces/delivery/delivery-status-change-save-data';
 import { cancelDelivery } from '~web/services/delivery/cancel-delivery';
 import { readDonation } from '~web/services/donation/read-donations';

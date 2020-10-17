@@ -6,9 +6,9 @@
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
-    "target": "es2015",
+    "target": "ES2015",
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
@@ -18,14 +18,13 @@
       "node_modules/@types"
     ],
     "types": [
-      "node",
-      "cordova",
-      "cordova-plugin-device/types",
-      "phonegap-plugin-push/types"
+      "node"
     ],
     "lib": [
       "es2018",
-      "dom"
+      "es2017",
+      "dom",
+      "es6"
     ]
   },
   "angularCompilerOptions": {

@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { DeliveryHelper, Donation, DonationHelper, DonationReadRequest, ListResponse } from '~shared';
-import { DeliveryReadService } from '~web/delivery/delivery-read/delivery-read.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { DeliveryReadService } from '~web/delivery/services/delivery-read/delivery-read.service';
 import { switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'food-web-deliveries',
+  selector: 'foodweb-deliveries',
   templateUrl: './deliveries.component.html',
   styleUrls: ['./deliveries.component.scss']
 })
@@ -17,12 +16,12 @@ export class DeliveriesComponent implements OnInit {
   private _activeFilters: DonationReadRequest = {};
   private _donations: Donation[] = [];
   private _myDeliveries = false;
+  private _pageTitle = 'Deliveries';
   private _totalCount = 0;
 
   constructor(
     public deliveryHelper: DeliveryHelper,
     public donationHelper: DonationHelper,
-    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _deliveryReadService: DeliveryReadService,
     private _router: Router
@@ -40,12 +39,17 @@ export class DeliveriesComponent implements OnInit {
     return this._myDeliveries;
   }
 
+  get pageTitle(): string {
+    return this._pageTitle;
+  }
+
   get totalCount(): number {
     return this._totalCount;
   }
 
   ngOnInit() {
     this._myDeliveries = this._router.url.indexOf('/my') >= 0;
+    this._pageTitle = (this._myDeliveries ? 'My Deliveries' : 'Deliveries');
     this._activatedRoute.queryParams.pipe(
       switchMap((params: Params) => {
         this._activeFilters = params;

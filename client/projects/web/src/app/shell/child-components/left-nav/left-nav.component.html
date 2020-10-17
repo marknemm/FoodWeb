@@ -1,0 +1,23 @@
+<mat-drawer-container class="left-nav-container" [foodwebWindowSize]="windowSizeThreshPx" (thresholdCross)="leftNavService.deriveStateFromWindowSize(window.innerWidth)">
+  <mat-drawer
+    [mode]="leftNavService.mode"
+    [ngClass]="{ sticky: leftNavService.sticky }"
+    [opened]="leftNavService.opened"
+    (openedChange)="leftNavService.opened = $event">
+    <ng-content select=".left-nav-items"></ng-content>
+  </mat-drawer>
+  <mat-drawer-content #drawerContent>
+    <div *ngIf="pageProgressService.showBlockingProgress" class="blocking-page-progress-indicator">
+      <foodweb-progress-indicator
+        [backdropColor]="pageProgressService.backdropColor"
+        [blocking]="pageProgressService.blocking"
+        [color]="pageProgressService.color"
+        [diameter]="pageProgressService.diameter"
+        [trigger]="pageProgressService.trigger">
+      </foodweb-progress-indicator>
+    </div>
+    <div class="page-content">
+      <ng-content></ng-content>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

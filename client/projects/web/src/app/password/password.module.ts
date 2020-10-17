@@ -1,26 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule } from '~web/material.module';
-import { PasswordResetComponent } from '~web/password/password-reset/password-reset.component';
-import { PasswordRoutingModule } from '~web/password/password-routing.module';
-import { PasswordComponent } from '~web/password/password/password.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { SharedModule } from '~web/shared/shared.module';
+import { PasswordResetComponent } from './components/password-reset/password-reset.component';
+import { PasswordRoutingModule } from './password-routing.module';
 
 @NgModule({
   declarations: [
     PasswordResetComponent,
-    PasswordComponent
   ],
   imports: [
     PasswordRoutingModule,
     CommonModule,
-    MaterialModule,
+    MatButtonModule,
+    MatCardModule,
     ReactiveFormsModule,
-    SharedModule
-  ],
-  exports: [
-    PasswordComponent
+    SharedModule,
+    AccountSharedModule,
   ]
 })
 export class PasswordModule {}

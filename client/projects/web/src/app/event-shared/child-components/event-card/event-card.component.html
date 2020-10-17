@@ -1,0 +1,70 @@
+<mat-card *ngIf="featuredEvent" class="event-card">
+  <mat-card-header class="event-header">
+    <div mat-card-avatar class="event-avatar">
+      <mat-icon class="event-icon">event</mat-icon>
+      <div class="event-day">{{ featuredEvent.date | date: 'dd' }}</div>
+    </div>
+    <mat-card-title class="event-title">
+      {{ featuredEvent.title }}
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p class="event-description" [innerHTML]="featuredEvent.description" *ngIf="featuredEvent.description"></p>
+    <p class="event-time" *ngIf="featuredEvent.date">
+      <mat-icon>access_time</mat-icon>
+      <span>
+        {{ featuredEvent.date | date: 'EEEE, MMMM d' }}<br>
+        {{ featuredEvent.date | date: 'shortTime' }}
+        <ng-container *ngIf="endTime">
+          - {{ endTime | date: 'shortTime' }}
+        </ng-container>
+      </span>
+    </p>
+    <p class="event-location" *ngIf="featuredEvent.streetAddress || featuredEvent.city || featuredEvent.stateProvince || featuredEvent.postalCode">
+      <mat-icon>location_on</mat-icon>
+      <a [href]="directionsHref" target="_blank">
+        <ng-container *ngIf="featuredEvent.streetAddress">{{ featuredEvent.streetAddress }}<br></ng-container>
+        <ng-container *ngIf="featuredEvent.city">
+          {{ featuredEvent.city }}<ng-container *ngIf="featuredEvent.stateProvince || featuredEvent.postalCode">,</ng-container>
+        </ng-container>
+        <ng-container *ngIf="featuredEvent.stateProvince"> {{ featuredEvent.stateProvince }}</ng-container>
+        <ng-container *ngIf="featuredEvent.postalCode"> {{ featuredEvent.postalCode }}</ng-container>
+      </a>
+    </p>
+    <div class="event-action-container" *ngIf="featuredEvent.signupTitle && !signupComplete">
+      <foodweb-progress-indicator [trigger]="eventRegistrationService.loading" [blocking]="true"></foodweb-progress-indicator>
+      <mat-expansion-panel (afterExpand)="onSignupPanelExpanded()">
+        <mat-expansion-panel-header #expansionHeader [ngClass]="{ 'green-glow': signupPanelShouldGlow }">
+          {{ featuredEvent.signupTitle }}
+        </mat-expansion-panel-header>
+        <form [formGroup]="formGroup" *ngIf="formGroup" (ngSubmit)="submitSignup()">
+          <div>
+            <mat-form-field class="fill">
+              <input matInput formControlName="fullName" placeholder="Full Name" type="text">
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="fill">
+              <input matInput formControlName="email" placeholder="Email" type="email">
+              <mat-error *ngIf="formGroup.get('email').hasError('email')">Invalid email address</mat-error>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="fill">
+              <input matInput formControlName="phoneNumber" placeholder="Phone Number" type="text">
+              <mat-error *ngIf="formGroup.get('phoneNumber').hasError('pattern')">Invalid phone number</mat-error>
+            </mat-form-field>
+          </div>
+          <button mat-raised-button type="submit" color="primary" class="event-button">
+            Submit Signup
+          </button>
+        </form>
+      </mat-expansion-panel>
+    </div>
+    <p *ngIf="signupComplete" class="signup-complete-message" [innerHTML]="featuredEvent.signupCompleteMsg"></p>
+    <p *ngIf="linkToEventsPage" class="events-page-link align-center">
+      <a [routerLink]="['/event/list']">See All Future Events</a>
+    </p>
+  </mat-card-content>
+  <ng-content></ng-content>
+</mat-card>

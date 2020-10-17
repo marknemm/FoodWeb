@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'food-web-yes-no',
+  selector: 'foodweb-yes-no',
   templateUrl: './yes-no.component.html',
   styleUrls: ['./yes-no.component.scss'],
 })

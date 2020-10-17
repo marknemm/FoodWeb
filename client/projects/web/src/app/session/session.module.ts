@@ -1,11 +1,17 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from '~web/material.module';
-import { LoginDialogComponent } from '~web/session/login-dialog/login-dialog.component';
-import { LoginComponent } from '~web/session/login/login.component';
 import { SharedModule } from '~web/shared/shared.module';
+import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -14,13 +20,16 @@ import { SharedModule } from '~web/shared/shared.module';
   ],
   imports: [
     CommonModule,
+    HttpClientModule,
     RouterModule,
     ReactiveFormsModule,
-    MaterialModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatToolbarModule,
     SharedModule
-  ],
-  exports: [
-    LoginDialogComponent
   ]
 })
 export class SessionModule {}

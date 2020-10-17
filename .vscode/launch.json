@@ -33,27 +33,7 @@
       "urlFilter": "http://localhost:4201/*",
       "webRoot": "${workspaceRoot}\\client",
       "trace": true,
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///../web/*": "${workspaceRoot}\\client\\projects\\web\\*",
-        "webpack:///./*": "${workspaceRoot}\\client\\projects\\admin\\*",
-        "webpack:///C:*": "C:/*"
-      }
-    },
-    {
-      "name": "Client App Attach",
-      "type": "chrome",
-      "request": "attach",
-      "port": 9222,
-      "urlFilter": "http://localhost:8100/*",
-      "webRoot": "${workspaceRoot}\\client",
-      "trace": true,
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///../web/*": "${workspaceRoot}\\client\\projects\\web\\*",
-        "webpack:///./*": "${workspaceRoot}\\client\\projects\\app\\*",
-        "webpack:///C:*": "C:/*"
-      }
+      "sourceMaps": true
     },
     {
       "name": "Client Web Attach",
@@ -63,11 +43,7 @@
       "urlFilter": "http://localhost:4200/*",
       "webRoot": "${workspaceRoot}\\client",
       "trace": true,
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///.*": "${workspaceRoot}\\client\\projects\\web\\*",
-        "webpack:///C:*": "C:/*"
-      }
+      "sourceMaps": true
     },
     {
       "name": "Server Test",
@@ -122,12 +98,42 @@
       "program": "${file}",
       "pythonPath": "c:/python27/python.exe"
     },
+
     {
-      "type": "android-webview",
+      "name": "Launch on Android",
+      "type": "nativescript",
+      "request": "launch",
+      "platform": "android",
+      "appRoot": "${workspaceRoot}/client",
+      "sourceMaps": true,
+      "watch": true
+    },
+    {
+      "name": "Launch on iOS",
+      "type": "nativescript",
+      "request": "launch",
+      "platform": "ios",
+      "appRoot": "${workspaceRoot}/client",
+      "sourceMaps": true,
+      "watch": true
+    },
+    {
+      "name": "Attach on Android",
+      "type": "nativescript",
       "request": "attach",
-      "name": "Attach to Android WebView",
-      "application": "com.wnyfoodweb.foodweb",
-      "webRoot": "${workspaceRoot}\\client"
+      "platform": "android",
+      "appRoot": "${workspaceRoot}/client",
+      "sourceMaps": true,
+      "watch": false
+    },
+    {
+      "name": "Attach on iOS",
+      "type": "nativescript",
+      "request": "attach",
+      "platform": "ios",
+      "appRoot": "${workspaceRoot}/client",
+      "sourceMaps": true,
+      "watch": false
     }
   ],
   "compounds": [

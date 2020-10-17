@@ -1,0 +1,22 @@
+<Progress
+  *ngIf="showProgressBar"
+  class="progress-bar"
+  maxValue="100"
+  [color]="color"
+  [value]="value"
+></Progress>
+
+<AbsoluteLayout
+  class="progress-spinner-backdrop"
+  [backgroundColor]="backdropColor"
+  [visibility]="showBackdrop ? 'visible' : 'collapsed'"
+  (tap)="onProgressOverlayTap()"
+></AbsoluteLayout>
+
+<ActivityIndicator
+  class="progress-spinner"
+  [busy]="showProgressSpinner"
+  [color]="color"
+  [height]="diameter"
+  [width]="diameter"
+></ActivityIndicator>

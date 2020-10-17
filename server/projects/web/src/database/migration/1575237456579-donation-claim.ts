@@ -1,6 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { DistanceTimeQueryResult, getDrivingDistTime } from '~web/helpers/map/distance-time';
 
+// tslint:disable-next-line: class-name
 export class donationClaim1575237456579 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {
@@ -21,8 +22,8 @@ export class donationClaim1575237456579 implements MigrationInterface {
       INNER JOIN  "ContactInfo" AS "receiverContactInfo" ON "receiverContactInfo"."id" = "receiverAccount"."contactInfoId"
     `);
     for (const result of results) {
-      const origin: string = `${result.donorLat},${result.donorLon}`;
-      const destination: string = `${result.receiverLat},${result.receiverLon}`;
+      const origin = `${result.donorLat},${result.donorLon}`;
+      const destination = `${result.receiverLat},${result.receiverLon}`;
       const drivingDistTime: DistanceTimeQueryResult[] = await getDrivingDistTime([{ origin, destination }]);
       await queryRunner.query(`
         INSERT INTO "DonationClaim" ("donationId", "receiverAccountId", "distanceMiToReceiver", "durationMinToReceiver")

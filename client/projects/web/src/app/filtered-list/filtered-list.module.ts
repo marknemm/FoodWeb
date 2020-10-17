@@ -7,15 +7,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
-import { FilteredListContentComponent } from '~web/filtered-list/filtered-list-content/filtered-list-content.component';
-import { ListFiltersFooterComponent } from '~web/filtered-list/list-filters-footer/list-filters-footer.component';
-import { ListSortComponent } from '~web/filtered-list/list-sort/list-sort.component';
-import { ListFiltersTitleComponent } from '~web/filtered-list/list-filters-title/list-filters-title.component';
-import { ListFiltersComponent } from '~web/filtered-list/list-filters/list-filters.component';
-import { FilteredListTitleComponent } from '~web/filtered-list/filtered-list-title/filtered-list-title.component';
-import { FilteredListToolbarComponent } from '~web/filtered-list/filtered-list-toolbar/filtered-list-toolbar.component';
-import { FilteredListComponent } from '~web/filtered-list/filtered-list/filtered-list.component';
 import { SharedModule } from '~web/shared/shared.module';
+import { FilteredListContentComponent } from './child-components/filtered-list-content/filtered-list-content.component';
+import { FilteredListTitleComponent } from './child-components/filtered-list-title/filtered-list-title.component';
+import { FilteredListToolbarComponent } from './child-components/filtered-list-toolbar/filtered-list-toolbar.component';
+import { FilteredListComponent } from './child-components/filtered-list/filtered-list.component';
+import { ListFiltersFooterComponent } from './child-components/list-filters-footer/list-filters-footer.component';
+import { ListFiltersTitleComponent } from './child-components/list-filters-title/list-filters-title.component';
+import { ListFiltersComponent } from './child-components/list-filters/list-filters.component';
+import { ListSortComponent } from './child-components/list-sort/list-sort.component';
 
 @NgModule({
   declarations: [

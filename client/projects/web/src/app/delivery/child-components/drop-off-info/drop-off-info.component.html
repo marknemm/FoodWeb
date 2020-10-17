@@ -8,11 +8,11 @@
       </div>
       <div class="col-12">
         <div class="inline-label">Drop-off Window:</div>
-        <food-web-date-time-range class="d-inline-block" [range]="donation | dropOffWindow" [boldTime]="true"></food-web-date-time-range>
+        <foodweb-date-time-range class="d-inline-block" [value]="donation | dropOffWindow" [boldTime]="true"></foodweb-date-time-range>
       </div>
       <div *ngIf="donation.claim.delivery?.dropOffTime" class="col-sm-6">
         <div class="inline-label">Dropped Off:</div>
-        <food-web-date-time class="d-inline-block" [dateTime]="donation.claim.delivery.dropOffTime" [boldTime]="true"></food-web-date-time>
+        <foodweb-date-time class="d-inline-block" [value]="donation.claim.delivery.dropOffTime" [boldTime]="true"></foodweb-date-time>
       </div>
     </div>
   </mat-card-content>

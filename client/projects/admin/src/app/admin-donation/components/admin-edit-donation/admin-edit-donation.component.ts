@@ -1,16 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { AdminDonationSaveService } from '~admin/admin-donation/admin-donation-save/admin-donation-save.service';
-import { AdminDonationForm } from '~admin/admin-donation/admin-donation.form';
+import { AdminDonationForm } from '~admin/admin-donation/forms/admin-donation.form';
+import { AdminDonationSaveService } from '~admin/admin-donation/services/admin-donation-save/admin-donation-save.service';
 import { Donation } from '~shared';
-import { DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { DonationReadService } from '~web/donation/donation-read/donation-read.service';
-import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
 @Component({
-  selector: 'food-web-admin-edit-donation',
+  selector: 'foodweb-admin-edit-donation',
   templateUrl: './admin-edit-donation.component.html',
   styleUrls: ['./admin-edit-donation.component.scss'],
 })
@@ -23,7 +22,6 @@ export class AdminEditDonationComponent implements OnInit, OnDestroy {
   private _originalDonation: Donation;
 
   constructor(
-    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _adminDonationSaveService: AdminDonationSaveService,
     private _dateTimeService: DateTimeService,
@@ -41,7 +39,6 @@ export class AdminEditDonationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.pageTitleService.title = 'Edit Donation';
     this._formGroup = new AdminDonationForm(this._dateTimeService, this._destroy$);
     this._listenDonationChange();
   }

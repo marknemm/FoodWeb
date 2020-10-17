@@ -37,7 +37,7 @@ export async function sendDeliveryCancelledMessages(unscheduleDiff: UpdateDiff<D
         notificationType: NotificationType.CancelDelivery,
         notificationLink: `donation/details/${unscheduleDiff.new.id}`,
         title: 'Delivery Cancelled',
-        icon: volunteerAccount.profileImgUrl,
+        icon: volunteerAccount.profileImg,
         body: `
           Donation delivery cancelled by <strong>${delivererName}</strong>.<br>
           <i>${unscheduleDiff.new.description}</i>

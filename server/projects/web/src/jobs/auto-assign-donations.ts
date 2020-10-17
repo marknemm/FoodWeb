@@ -11,10 +11,10 @@ import { sendDeliveryAvailableMessages } from '~web/services/delivery/delivery-a
 import { claimDonation } from '~web/services/donation-claim/claim-donation';
 import { queryDonations } from '~web/services/donation/read-donations';
 
-const _runTimestamp = new Date();
 const _dateTimeHelper = new DateTimeHelper();
 const _donationHelper = new DonationHelper();
 const _operationHoursHelper = new OperationHoursHelper();
+const _runTimestamp = new Date();
 
 _autoAssignDonations()
   .then(() => process.exit())
@@ -123,21 +123,19 @@ async function _findAutoReceiver(donation: DonationEntity): Promise<AccountEntit
       // Override ORDER BY clause to sort receivers by the number of auto-claims that they have received in the past 2 days.
       // We want to auto-assign donations to receivers that have gotten the fewest auto receives in the past 2 days.
       queryBuilder.addSelect((subQueryBuilder: SelectQueryBuilder<DonationEntity>) => {
-          subQueryBuilder.select('COUNT(autoClaimHistory.id)', 'auto_claim_count')
-            .from(AutoClaimHistoryEntity, 'autoClaimHistory')
-            .innerJoin(DonationClaimEntity, 'claim', '"autoClaimHistory"."claimId" = claim.id')
-            .where('claim.receiverAccount = account.id')
-            .andWhere(`autoClaimHistory.timestamp >= (NOW() - INTERVAL '48 HOURS')`);
-          return subQueryBuilder;
-        }, 'auto_claim_count'
+        subQueryBuilder.select('COUNT(autoClaimHistory.id)', 'auto_claim_count')
+          .from(AutoClaimHistoryEntity, 'autoClaimHistory')
+          .innerJoin(DonationClaimEntity, 'claim', '"autoClaimHistory"."claimId" = claim.id')
+          .where('claim.receiverAccount = account.id')
+          .andWhere(`autoClaimHistory.timestamp >= (NOW() - INTERVAL '48 HOURS')`);
+        return subQueryBuilder;
+      }, 'auto_claim_count'
       ).addSelect('RANDOM()', 'random')
-       .orderBy('auto_claim_count', 'ASC')
-       .addOrderBy('random');
+        .orderBy('auto_claim_count', 'ASC')
+        .addOrderBy('random');
     }).exec();
   return queryResult.entities[0];
 }
-
-
 
 /**
  * Records an auto-assignment record for a given donation.
@@ -183,7 +181,7 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
       'donation-assigned',
       extraVars
     ).catch(console.error)
-  )
+  );
 
   messagePromises.push(
     sendNotification(
@@ -192,7 +190,7 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
         notificationType: NotificationType.ClaimDonation,
         notificationLink: `/donation/details/${donation.id}`,
         title: `Donation Claimed`,
-        icon: donation.claim.receiverAccount.profileImgUrl,
+        icon: donation.claim.receiverAccount.profileImg,
         body: `
           Donation claimed by <strong>${receiverName}</strong>.<br>
           <i>${donation.description}</i>
@@ -208,7 +206,7 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
         notificationType: NotificationType.ClaimDonation,
         notificationLink: `/donation/details/${donation.id}`,
         title: `Auto-Assigned Donation`,
-        icon: donation.donorAccount.profileImgUrl,
+        icon: donation.donorAccount.profileImg,
         body: `
           Auto-Assigned Donation from <strong>${donorName}</strong>.<br>
           <i>${donation.description}</i>

@@ -1,8 +1,9 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import geoTz = require('geo-tz');
 
+// tslint:disable-next-line: class-name
 export class eventRegistrationTimezone1581885804732 implements MigrationInterface {
-  name = 'eventRegistrationTimezone1581885804732'
+  name = 'eventRegistrationTimezone1581885804732';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     const alreadyCreated: boolean = (await queryRunner.query(

@@ -5,34 +5,34 @@
     margin-bottom: 20px;
 
     .username-title {
-      font-weight: bold;
-      font-size: 24px;
+      font-weight  : bold;
+      font-size    : 24px;
       margin-bottom: 10px;
     }
 
-    .profile-img-card {
-      display: inline-block;
-      text-align: center;
-      margin-bottom: 0px;
-      padding: 0px;
+    .profile-img-container {
+      display       : inline-block;
+      text-align    : center;
+      margin-bottom : 0px;
+      padding       : 0px;
       vertical-align: top;
-      width: 150px;
-      height: 150px;
+      width         : 150px;
+      height        : 150px;
     }
   }
 
   .account-type {
-    text-align: center;
+    text-align   : center;
     margin-bottom: 6px;
   }
 
   .account-not-verified {
-    text-align: center;
-    color: $warn;
+    text-align : center;
+    color      : $warn;
     font-weight: bold;
 
     button {
-      color: #007BFF;
+      color  : #007BFF;
       padding: 0 10px;
     }
   }
@@ -40,20 +40,21 @@
   .mat-accordion {
     .mat-expansion-panel {
       background-color: transparent;
-      box-shadow: none;
-  
+      box-shadow      : none;
+
       .mat-expansion-panel-header {
         background-color: rgba(0, 0, 0, 0.04);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-        border-left: 1px solid rgba(0, 0, 0, 0.05);
-        border-right: 1px solid rgba(0, 0, 0, 0.05);
-        border-top: 1px solid rgba(0, 0, 0, 0.045);
-        max-height: 48px;
-        font-size: 16px;
-        font-weight: bold;
-        color: $accent-darker;
-  
-        &:hover, &:focus {
+        border-bottom   : 1px solid rgba(0, 0, 0, 0.07);
+        border-left     : 1px solid rgba(0, 0, 0, 0.05);
+        border-right    : 1px solid rgba(0, 0, 0, 0.05);
+        border-top      : 1px solid rgba(0, 0, 0, 0.045);
+        max-height      : 48px;
+        font-size       : 16px;
+        font-weight     : bold;
+        color           : $accent-darker;
+
+        &:hover,
+        &:focus {
           background-color: rgba(0, 0, 0, 0.06);
         }
       }
@@ -61,16 +62,16 @@
       .mat-divider {
         display: none;
       }
-  
+
       .mat-card-title {
-        margin-top: 0;
+        margin-top   : 0;
         margin-bottom: 15px;
       }
-  
+
       .account-section-content {
         margin: 20px 0 -16px -38px;
-        width: calc(100% + 76px);
-  
+        width : calc(100% + 76px);
+
         @media only screen and (max-width: $mat-mobile) {
           margin-bottom: -4px;
         }
@@ -87,7 +88,7 @@
 
         .mat-divider {
           display: block;
-          margin: 22px -20px;
+          margin : 22px -20px;
         }
       }
     }
@@ -101,17 +102,18 @@
     }
 
     @media only screen and (max-width: $lg) {
-      max-width: 200%; /* Allow size to go beyond width of container so that it can be placed over parent padding. */
+      max-width: 200%;
+      /* Allow size to go beyond width of container so that it can be placed over parent padding. */
     }
   }
 
   .operation-hours-card,
   .notification-settings-card,
   .password-card {
-    max-width: 554px;
-    margin-left: auto;
+    max-width   : 554px;
+    margin-left : auto;
     margin-right: auto;
-    overflow: hidden;
+    overflow    : hidden;
   }
 
   mat-divider {
@@ -127,8 +129,8 @@
   }
 
   .account-not-found {
-    font-size: 24px;
+    font-size  : 24px;
     font-weight: bold;
-    text-align: center;
+    text-align : center;
   }
 }

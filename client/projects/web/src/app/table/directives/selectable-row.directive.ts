@@ -1,16 +1,16 @@
 import { Directive, HostListener, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { TableDataSource, TableSelectionType } from '~web/table/table-data-source';
+import { TableDataSource, TableSelectionType } from '~web/table/interfaces/table-data-source';
 export { TableSelectionType };
 
 @Directive({
-  selector: '[foodWebSelectableRow]'
+  selector: '[foodwebSelectableRow]'
 })
 export class SelectableRowDirective<T = any> implements OnChanges {
 
   /**
    * The row object bound to the host row.
    */
-  @Input('foodWebSelectableRow') row: T;
+  @Input('foodwebSelectableRow') row: T;
   /**
    * The data source for the host table.
    */

@@ -1,0 +1,12 @@
+@import "constants.scss";
+
+TextField,
+TextView {
+  placeholder-color: #999;
+}
+
+.nt-input {
+  .text-danger {
+    color: $ns-danger-color;
+  }
+}

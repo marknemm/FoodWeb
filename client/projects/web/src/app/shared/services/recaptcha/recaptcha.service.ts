@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, flatMap } from 'rxjs/operators';
-import { environment } from '~web/environments/environment';
+import { environment } from '~web-env/environment';
 
 /**
  * Http Headers used for a request that shouldn't have client-side RECAPTCHA processing done on it.

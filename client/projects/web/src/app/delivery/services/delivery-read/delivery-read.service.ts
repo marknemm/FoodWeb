@@ -5,9 +5,9 @@ import { cloneDeep } from 'lodash-es';
 import { Observable } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { Donation, DonationReadRequest, ListResponse } from '~shared';
-import { environment } from '~web/environments/environment';
-import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
-import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
+import { environment } from '~web-env/environment';
+import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class DeliveryReadService {
     private _httpClient: HttpClient,
     private _router: Router,
     private _pageProgressService: PageProgressService,
-    private _errorHandlerService: ErrorHandlerService
+    private _alertQueueService: AlertQueueService
   ) {}
 
   updateURLQueryString(filters: DonationReadRequest, activatedRoute: ActivatedRoute): void {
@@ -67,7 +67,7 @@ export class DeliveryReadService {
     const params = new HttpParams({ fromObject: <any>request });
     this._pageProgressService.activate(true);
     return this._httpClient.get<ListResponse<Donation>>(getUrl, { params, withCredentials: true }).pipe(
-      catchError((err: HttpErrorResponse) => this._errorHandlerService.handleError(err)),
+      catchError((err: HttpErrorResponse) => this._alertQueueService.add(err)),
       finalize(() => this._pageProgressService.reset())
     );
   }

@@ -1,20 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppShellComponent } from '~web/app-shell/app-shell/app-shell.component';
-import { AboutComponent } from '~web/components/about/about.component';
-import { HomeComponent } from '~web/components/home/home.component';
+import { HomeComponent } from '~web/home/components/home/home.component';
+import { ShellComponent } from '~web/shell/components/shell/shell.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
-  // Redirects from old app structure.
-  { path: 'notifications', pathMatch: 'full', redirectTo: 'notification/list/my' },
-  { path: 'signup-verification', pathMatch: 'full', redirectTo: 'signup/verification' },
-  { path: 'donation-details/:id', pathMatch: 'full', redirectTo: 'donation/details/:id' },
   {
     path: '',
-    component: AppShellComponent,
+    component: ShellComponent,
     children: [
-      { path: 'about', component: AboutComponent },
+      { path: 'about', loadChildren: () => import ('~web/about/about.module').then(mod => mod.AboutModule) },
       { path: 'account', loadChildren: () => import('~web/account/account.module').then(mod => mod.AccountModule) },
       { path: 'delivery', loadChildren: () => import('~web/delivery/delivery.module').then(mod => mod.DeliveryModule) },
       { path: 'donation', loadChildren: () => import('~web/donation/donation.module').then(mod => mod.DonationModule) },

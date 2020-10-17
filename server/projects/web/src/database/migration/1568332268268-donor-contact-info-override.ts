@@ -1,5 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class donorContactInfoOverride1568332268268 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {
@@ -51,7 +52,7 @@ export class donorContactInfoOverride1568332268268 implements MigrationInterface
     await queryRunner.query('ALTER TABLE "ContactInfo" ADD "accountId" integer');
     await queryRunner.query(`ALTER TABLE "ContactInfo" ADD CONSTRAINT "REL_6908e72e533a706c1d61f85dab" UNIQUE ("accountId")`);
     await queryRunner.query(`ALTER TABLE "ContactInfo" ADD CONSTRAINT "FK_6908e72e533a706c1d61f85dab7" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
-    await queryRunner.query(`UPDATE "ContactInfo" SET "accountId" = (SELECT "id" FROM "Account" WHERE "Account"."contactInfoId" = "ContactInfo"."id")`)
+    await queryRunner.query(`UPDATE "ContactInfo" SET "accountId" = (SELECT "id" FROM "Account" WHERE "Account"."contactInfoId" = "ContactInfo"."id")`);
     await queryRunner.query(`ALTER TABLE "Donation" DROP CONSTRAINT "FK_d801d8ac724b6529fe5b438dca2"`);
     await queryRunner.query(`ALTER TABLE "Donation" DROP CONSTRAINT "UQ_d801d8ac724b6529fe5b438dca2"`);
     await queryRunner.query(`ALTER TABLE "Donation" DROP COLUMN "donorContactOverrideId"`);

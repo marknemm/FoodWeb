@@ -1,0 +1,71 @@
+<div class="contact-info-container" [foodwebDisplayEditTransition]="editable" [form]="contactInfoForm" [display]="contactInfoDisplay">
+  <div #contactInfoForm class="row contact-info-form" [formGroup]="formGroup">
+    <div class="col-sm-6" *ngIf="formGroup.get('email')">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Email" formControlName="email" type="email">
+        <mat-error *ngIf="formGroup.get('email').hasError('email')">
+          Not a valid email address
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6" *ngIf="formGroup.get('phoneNumber')">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Phone Number" formControlName="phoneNumber" type="tel">
+        <mat-error *ngIf="formGroup.get('phoneNumber').hasError('pattern')">
+          Not a valid phone number
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-12" *ngIf="formGroup.get('streetAddress')">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Street Address" formControlName="streetAddress" type="text">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6" *ngIf="formGroup.get('city')">
+      <mat-form-field class="fill">
+        <input matInput placeholder="City" formControlName="city" type="text">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-3" *ngIf="formGroup.get('stateProvince')">
+      <mat-form-field class="fill">
+        <input matInput placeholder="State/Province" formControlName="stateProvince" type="text">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-3"  *ngIf="formGroup.get('postalCode')">
+      <mat-form-field class="fill">
+        <input matInput placeholder="Zip/Postal Code" formControlName="postalCode" type="text">
+        <mat-error *ngIf="formGroup.get('postalCode').hasError('pattern')">
+          Not a valid postal code
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div #contactInfoDisplay class="contact-info-display row">
+    <ng-container *ngIf="addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
+    <div class="col-sm-7" *ngIf="!hideEmail && value.email">
+      <div class="inline-label">Email:</div>
+      <div class="d-inline-block">
+        <a class="email" href="mailto:{{ value.email }}">
+          {{ value.email }}
+        </a>
+      </div>
+    </div>
+    <div class="col-sm-5" *ngIf="!hidePhone && value.phoneNumber">
+      <div class="inline-label">Phone Number:</div>
+      <div class="d-inline-block">
+        <a class="phone-number" href="tel:{{ value.phoneNumber }}">
+          {{ value.phoneNumber }}
+        </a>
+      </div>
+    </div>
+    <ng-container *ngIf="!addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
+  </div>
+</div>
+
+<ng-template #addressTmpl>
+  <div *ngIf="!hideAddress && value.streetAddress" [ngClass]="addressColSize">
+    <div class="inline-label">Address:</div>
+    <foodweb-address [value]="value" [mapAnchorType]="addressAnchorType"></foodweb-address>
+  </div>
+</ng-template>

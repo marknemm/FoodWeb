@@ -3,7 +3,7 @@ import { AccountEntity, AppSessionEntity, UnverifiedAccountEntity } from '~entit
 import { QueryResult } from '~orm';
 import { LoginRequest, LoginResponse } from '~shared';
 import { checkPasswordMatch } from '~web/helpers/misc/password-match';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { saveAppSessionToken } from '~web/services/session/app-session';
 import { readFullAccount, readFullAccounts } from '../account/read-accounts';
 

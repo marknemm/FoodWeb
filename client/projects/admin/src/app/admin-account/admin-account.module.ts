@@ -1,21 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { QuillModule } from 'ngx-quill';
-import { AdminAccountCreateComponent } from '~admin/admin-account/admin-account-create/admin-account-create.component';
-import { AdminAccountDetailsComponent } from '~admin/admin-account/admin-account-details/admin-account-details.component';
-import { AdminAccountFiltersComponent } from '~admin/admin-account/admin-account-filters/admin-account-filters.component';
-import { AdminAccountMessageComponent } from '~admin/admin-account/admin-account-message/admin-account-message.component';
-import { AdminAccountsComponent } from '~admin/admin-account/admin-accounts/admin-accounts.component';
-import { AdminVolunteerComponent } from '~admin/admin-account/admin-volunteer/admin-volunteer.component';
-import { AdminPasswordModule } from '~admin/admin-password/admin-password.module';
-import { AccountRoutingModule } from '~web/account/account-routing.module';
+import { AdminAccountSharedModule } from '~admin/admin-account-shared/admin-account-shared.module';
 import { AccountModule } from '~web/account/account.module';
 import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
-import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { AdminAccountRoutingModule } from './admin-account-routing.module';
+import { AdminAccountFiltersComponent } from './child-components/admin-account-filters/admin-account-filters.component';
+import { AdminAccountCreateComponent } from './components/admin-account-create/admin-account-create.component';
+import { AdminAccountDetailsComponent } from './components/admin-account-details/admin-account-details.component';
+import { AdminAccountMessageComponent } from './components/admin-account-message/admin-account-message.component';
+import { AdminAccountsComponent } from './components/admin-accounts/admin-accounts.component';
 
 @NgModule({
   declarations: [
@@ -24,24 +32,31 @@ import { AdminAccountRoutingModule } from './admin-account-routing.module';
     AdminAccountFiltersComponent,
     AdminAccountMessageComponent,
     AdminAccountsComponent,
-    AdminVolunteerComponent
   ],
   imports: [
     AdminAccountRoutingModule,
-    AccountRoutingModule,
     CommonModule,
     AccountModule,
-    AdminPasswordModule,
+    AdminAccountSharedModule,
     FilteredListModule,
     FontAwesomeModule,
-    MaterialModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSlideToggleModule,
+    MatTooltipModule,
     QuillModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
   ],
   exports: [
-    // Works as if we are extending the base Web AccountModule.
-    AccountModule
+    AccountModule, // Works as if we are extending the base Web AccountModule.
   ]
 })
 export class AdminAccountModule {}

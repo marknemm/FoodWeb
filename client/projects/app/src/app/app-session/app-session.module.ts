@@ -1,29 +1,22 @@
-import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { AppSessionService } from '~app/app-session/app-session/app-session.service';
-import { SessionModule } from '~web/session/session.module';
-import { SessionService } from '~web/session/session/session.service';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NativeScriptCommonModule, NativeScriptFormsModule, NativeScriptRouterModule } from '@nativescript/angular';
+import { AppSharedModule } from '~app/app-shared/app-shared.module';
+import { AppShellModule } from '~app/app-shell/app-shell.module';
+import { AppLoginComponent } from './components/app-login/app-login.component';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule,
-    SessionModule
+  declarations: [
+    AppLoginComponent
   ],
-  exports: [
-    // Works as if we are extending the base Web SessionModule.
-    SessionModule
-  ]
+  imports: [
+    NativeScriptCommonModule,
+    NativeScriptFormsModule,
+    NativeScriptRouterModule.forChild([]),
+    ReactiveFormsModule,
+    AppSharedModule,
+    AppShellModule,
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
-export class AppSessionModule {
-
-  static forRoot(): ModuleWithProviders<AppSessionModule> {
-    return {
-      ngModule: AppSessionModule,
-      providers: [
-        // In base web code, anywhere where SessionService is provided, provide AppSessionService instead.
-        { provide: SessionService, useExisting: AppSessionService }
-      ]
-    }
-  }
-}
+export class AppSessionModule {}

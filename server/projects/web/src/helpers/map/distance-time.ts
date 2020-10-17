@@ -2,7 +2,7 @@ import * as GoogleMaps from '@google/maps';
 import { ClientResponse, DistanceMatrixResponse, GoogleMapsClientWithPromise } from '@google/maps';
 import 'dotenv';
 import { ContactInfo } from '~shared';
-import { FoodWebError } from '../response/food-web-error';
+import { FoodWebError } from '../response/foodweb-error';
 
 const _distanceTimeClient: GoogleMapsClientWithPromise = GoogleMaps.createClient({
   key: process.env.DISTANCE_TIME_API_KEY,

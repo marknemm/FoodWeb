@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '~admin-env/environment';
 import { AdminDonationForm } from '~admin/admin-donation/forms/admin-donation.form';
-import { environment } from '~admin/environments/environment';
 import { AdminDonationSaveRequest, Donation } from '~shared';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'

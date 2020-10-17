@@ -1,11 +1,14 @@
+import { AccountProfileImgPlaceholder } from '../interfaces/account/account-profile-img-placeholder';
 import { Validation } from '../constants/validation';
 import { Account, AccountType, ContactInfo, OperationHours, Organization, Volunteer } from '../interfaces/account/account';
 import { AccountAutocompleteItem } from '../interfaces/account/account-autocomplete-item';
 import { ValidationHelper } from './validation-helper';
+import { Constants } from '../constants/constants';
 export { Account };
 
 export class AccountHelper {
 
+  private _constants = new Constants();
   private _validationHelper = new ValidationHelper();
 
   isDonor(account: Account): boolean {
@@ -37,6 +40,16 @@ export class AccountHelper {
         : `${account.volunteer.firstName} ${account.volunteer.lastName}`;
     }
     return '';
+  }
+
+  accountProfileImgPlaceholder(account: Account): AccountProfileImgPlaceholder {
+    if (account && !account.profileImg) {
+      const firstLetter: string = (account.accountType === 'Volunteer')
+        ? account.volunteer.lastName.charAt(0).toUpperCase()
+        : account.organization.name.charAt(0).toUpperCase();
+      return this._constants.ACCOUNT_PROFILE_IMG_PLACEHOLDERS[firstLetter];
+    }
+    return { color: '', backgroundColor: '', letter: '' };
   }
 
   accountDetailsRouterLink(account: Account): string[] {
@@ -83,13 +96,13 @@ export class AccountHelper {
     const baseDigits: string[] = basePhoneNumber.match(/\d/g);
 
     // Only continue with formatting if we can isolate a phone number with 7 or 10 base digits; if continue, we may ruin the number.
-    if (baseDigits && (baseDigits.length == 10 || baseDigits.length == 7)) {
-      const areaCodeNumber: string = (baseDigits.length == 10)
+    if (baseDigits && (baseDigits.length === 10 || baseDigits.length === 7)) {
+      const areaCodeNumber: string = (baseDigits.length === 10)
         ? `(${baseDigits.slice(0, 3).join('')})`
         : '';
 
       // Now we can finally extract the actual basePhoneNumber (no country/area code or extension).
-      basePhoneNumber = (baseDigits.length == 10)
+      basePhoneNumber = (baseDigits.length === 10)
         ? baseDigits.slice(3, 10).join('')
         : baseDigits.join('');
 

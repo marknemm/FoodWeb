@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ListResponse, Notification } from '~shared';
-import { NotificationService } from '~web/notification/notification/notification.service';
+import { NotificationService } from '~web/notification/services/notification/notification.service';
 
 @Component({
-  selector: 'food-web-notifications',
+  selector: 'foodweb-notifications',
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.scss']
 })

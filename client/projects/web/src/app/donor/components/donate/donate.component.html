@@ -15,28 +15,28 @@
     <mat-card class="donate-card">
       <mat-card-title>Donation Information</mat-card-title>
       <mat-card-content>
-        <food-web-donation-form [formGroup]="formGroup" *ngIf="!savedDonation"></food-web-donation-form>
+        <foodweb-donation-form [formGroup]="formGroup" *ngIf="!savedDonation"></foodweb-donation-form>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="donate-card">
       <mat-card-title>Pickup Window</mat-card-title>
       <mat-card-content>
-        <food-web-date-time-range #pickupWindowRange formGroupName="pickupWindow" [editing]="true"></food-web-date-time-range>
+        <foodweb-date-time-range #pickupWindowRange formGroupName="pickupWindow" [editable]="true"></foodweb-date-time-range>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="donate-card">
       <mat-card-title>Contact Info</mat-card-title>
       <mat-card-content>
-        <food-web-contact-info [editing]="true" formGroupName="donorContactOverride"></food-web-contact-info>
+        <foodweb-contact-info [editable]="true" formGroupName="donorContactOverride"></foodweb-contact-info>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="donate-card">
       <mat-card-title>Food Safety Checklist</mat-card-title>
       <mat-card-content>
-        <food-web-food-safety-checklist formControlName="safetyChecklist"></food-web-food-safety-checklist>
+        <foodweb-food-safety-checklist formControlName="safetyChecklist"></foodweb-food-safety-checklist>
         <mat-error class="safety-checklist-err" *ngIf="formGroup.get('safetyChecklist').touched && formGroup.get('safetyChecklist').hasError('required')">
           Safety Checklist Required
         </mat-error>

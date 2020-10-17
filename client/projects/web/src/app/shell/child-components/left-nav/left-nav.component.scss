@@ -1,0 +1,17 @@
+@import "constants.scss";
+
+.left-nav-container {
+  .blocking-page-progress-indicator {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    min-height: 100vh;
+    height: 100%;
+    width: 100vw;
+  }
+
+  .page-content {
+    min-height: 100%;
+    position: relative;
+  }
+}

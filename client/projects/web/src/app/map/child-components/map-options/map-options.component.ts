@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MapOptionsForm } from '~web/map/forms/map-options.form';
 
 @Component({
-  selector: 'food-web-map-options',
+  selector: 'foodweb-map-options',
   templateUrl: './map-options.component.html',
   styleUrls: ['./map-options.component.scss'],
 })

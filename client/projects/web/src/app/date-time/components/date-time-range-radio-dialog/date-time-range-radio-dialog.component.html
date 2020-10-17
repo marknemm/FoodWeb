@@ -2,7 +2,7 @@
   <h1 mat-dialog-title>{{ config.title }}</h1>
 
   <mat-dialog-content>
-    <food-web-date-time-range-radio
+    <foodweb-date-time-range-radio
       name="Date Time Select"
       [(ngModel)]="selectedDateTime"
       [ariaLabel]="config.title"
@@ -11,7 +11,7 @@
       [rangeWindowStart]="config.rangeWindowStart"
       [rangeWindowEnd]="config.rangeWindowEnd"
       [allowPast]="config.allowPast">
-    </food-web-date-time-range-radio>
+    </foodweb-date-time-range-radio>
   </mat-dialog-content>
 
   <mat-dialog-actions>

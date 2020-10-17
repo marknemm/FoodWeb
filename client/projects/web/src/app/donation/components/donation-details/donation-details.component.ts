@@ -2,13 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { AccountHelper, DeliveryHelper, DonationHelper } from '~shared';
-import { DonationAction, DonationActionsService } from '~web/donation-delivery-shared/donation-actions/donation-actions.service';
-import { Donation, DonationReadService } from '~web/donation/donation-read/donation-read.service';
-import { SessionService } from '~web/session/session/session.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { DonationAction, DonationActionsService } from '~web/donation-shared/services/donation-actions/donation-actions.service';
+import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
-  selector: 'food-web-donation-details',
+  selector: 'foodweb-donation-details',
   templateUrl: './donation-details.component.html',
   styleUrls: ['./donation-details.component.scss']
 })
@@ -25,7 +24,6 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
     public accountHelper: AccountHelper,
     public donationHelper: DonationHelper,
     public deliveryHelper: DeliveryHelper,
-    public pageTitleService: PageTitleService,
     public sessionService: SessionService,
     private _activatedRoute: ActivatedRoute,
     private _donationActionsService: DonationActionsService,
@@ -59,7 +57,7 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _listenAccountChange(): void {
-    this.sessionService.onLogin(this._destroy$).subscribe(() =>
+    this.sessionService.onAccountSave(this._destroy$).subscribe(() =>
       this._updateDonationPrivileges(this._donation)
     );
   }

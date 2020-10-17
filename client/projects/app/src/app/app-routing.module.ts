@@ -1,38 +1,22 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AppBootstrapService } from '~app/app-bootstrap/app-bootstrap/app-bootstrap.service';
-import { AppShellComponent } from '~web/app-shell/app-shell/app-shell.component';
-import { AboutComponent } from '~web/components/about/about.component';
-import { HomeComponent } from '~web/components/home/home.component';
+import { Routes } from '@angular/router';
+import { NativeScriptRouterModule } from '@nativescript/angular';
+import { AppLoginComponent } from '~app/app-session/components/app-login/app-login.component';
+import { AppAuthGuardService } from '~app/app-session/services/app-auth-guard/app-auth-guard.service';
+import { AppHomeComponent } from '~app/components/app-home/app-home.component';
 
-const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'home' },
-  // Redirect web login/signup to app routes.
-  { path: 'login', pathMatch: 'full', redirectTo: 'bootstrap/login' },
-  { path: 'signup', pathMatch: 'full', redirectTo: 'bootstrap/signup' },
-  { path: 'signup/:accountType', redirectTo: 'bootstrap/signup/:accountType' },
-  { path: 'bootstrap', loadChildren: () => import('./app-bootstrap/app-bootstrap.module').then(mod => mod.AppBootstrapModule) },
-  {
-    path: '',
-    component: AppShellComponent,
-    canActivate: [AppBootstrapService],
-    children: [
-      { path: 'home', component: HomeComponent },
-      { path: 'home/:login', component: HomeComponent },
-      { path: 'about', component: AboutComponent },
-      { path: 'account', loadChildren: () => import('~web/account/account.module').then(mod => mod.AccountModule) },
-      { path: 'password', loadChildren: () => import('~web/password/password.module').then(mod => mod.PasswordModule) },
-      { path: 'donation', loadChildren: () => import('~web/donation/donation.module').then(mod => mod.DonationModule) },
-      { path: 'donor', loadChildren: () => import('~web/donor/donor.module').then(mod => mod.DonorModule) },
-      { path: 'delivery', loadChildren: () => import('~web/delivery/delivery.module').then(mod => mod.DeliveryModule) },
-      { path: 'notification', loadChildren: () => import('~web/notification/notification.module').then(mod => mod.NotificationModule) },
-      { path: 'event', loadChildren: () => import('~web/event/event.module').then(mod => mod.EventModule) }
-    ]
-  },
+export const routes: Routes = [
+  { path: '', canActivate: [AppAuthGuardService], children: [
+    { path: '', pathMatch: 'full', redirectTo: '/home' },
+    { path: 'home', component: AppHomeComponent },
+  ]},
+  { path: 'login', component: AppLoginComponent },
+  // { path: 'login', loadChildren: () => import('~app/app-signup/app-signup.module').then(mod => mod.AppSignupModule) },
+  { path: 'signup', loadChildren: () => import('~app/app-signup/app-signup.module').then(mod => mod.AppSignupModule) },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })],
-  exports: [RouterModule]
+  imports: [NativeScriptRouterModule.forRoot(routes)],
+  exports: [NativeScriptRouterModule]
 })
 export class AppRoutingModule {}

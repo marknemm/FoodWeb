@@ -1,6 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-
 import { AdminEditDonationComponent } from './admin-edit-donation.component';
 
 describe('AdminEditDonationComponent', () => {
@@ -9,8 +7,7 @@ describe('AdminEditDonationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminEditDonationComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ AdminEditDonationComponent ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminEditDonationComponent);

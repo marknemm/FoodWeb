@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+
 
 import { DateComponent } from './date.component';
 
@@ -10,7 +10,7 @@ describe('DateComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ DateComponent ],
-      imports: [IonicModule.forRoot()]
+
     }).compileComponents();
 
     fixture = TestBed.createComponent(DateComponent);

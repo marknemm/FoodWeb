@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Account, AccountVerificationRequest } from '~shared';
-import { environment } from '~web/environments/environment';
-import { SessionService } from '~web/session/session/session.service';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { environment } from '~web-env/environment';
+import { SessionService } from '~web/session/services/session/session.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +50,7 @@ export class SignupVerificationService {
     const request: AccountVerificationRequest = { verificationToken };
     return this._httpClient.post<Account>(`${this.url}/verify`, request, { withCredentials: true }).pipe(
       this._httpResponseService.handleHttpResponse<Account>({ handleErrorResponse: false, showPageProgressOnLoad: false }),
-      tap((account: Account) => this._sessionService.account = account)
+      tap((account: Account) => this._sessionService.saveAccount(account))
     );
   }
 }

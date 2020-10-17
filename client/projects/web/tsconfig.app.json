@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "~lodash-mixins": ["src/lodash-mixins"],
+      "~shared": ["src/shared"],
+      "~web/*": ["src/app/*"],
+      "~web-env/*": ["src/environments/*"]
+    },
+    "sourceMap": true,
+    "types": [
+      "googlemaps",
+      "node"
+    ]
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/types/*"
+  ]
+}

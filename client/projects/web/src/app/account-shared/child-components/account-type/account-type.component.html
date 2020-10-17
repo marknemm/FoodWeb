@@ -1,0 +1,20 @@
+<div class="account-type-selections" [ngClass]="{ 'edit': editable, 'display': !editable }">
+  <button mat-button
+    *ngFor="let accountType of constantsService.ACCOUNT_TYPES"
+    [disabled]="!editable"
+    [ngClass]="{ selected: accountType === formControl.value }"
+    (click)="accountTypeClick(accountType)"
+    (blur)="onTouchedCb()">
+    <mat-card>
+      <mat-card-title>
+        <mat-toolbar [color]="accountType | lowercase">{{ accountType }}</mat-toolbar>
+      </mat-card-title>
+      <mat-card-content>
+        <mat-icon [color]="accountType | lowercase">
+          {{ constantsService.ACCOUNT_TYPE_ICONS[accountType] }}
+        </mat-icon>
+      </mat-card-content>
+      <div class="not-selected-mask"></div>
+    </mat-card>
+  </button>
+</div>

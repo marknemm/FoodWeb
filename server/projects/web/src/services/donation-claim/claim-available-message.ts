@@ -71,7 +71,7 @@ async function _messagePotentialReceivers(donation: DonationEntity, potentialRec
         notificationType: NotificationType.Donate,
         notificationLink: `/donation/details/${donation.id}`,
         title: 'Donation Available',
-        icon: donation.donorAccount.profileImgUrl,
+        icon: donation.donorAccount.profileImg,
         body: `
           New donation from <strong>${donorName}</strong>.<br>
           <i>${donation.description}</i>
@@ -99,6 +99,6 @@ async function _saveClaimReqHistories(donation: DonationEntity, accounts: Accoun
     ({ id: undefined, donation, receiverAccount })
   );
   return getConnection().transaction(async (manager: EntityManager) => {
-    await manager.getRepository(ClaimReqHistoryEntity).save(claimReqHistories)
+    await manager.getRepository(ClaimReqHistoryEntity).save(claimReqHistories);
   });
 }

@@ -1,0 +1,19 @@
+<StackLayout class="dialog-panel">
+
+  <Label [text]="title" class="dialog-title"></Label>
+
+  <StackLayout class="dialog-content">
+    <ListPicker
+      #listPicker
+      [items]="items"
+      [selectedIndex]="selectedIndex"
+      (selectedIndexChange)="onSelectedIndexChange(listPicker.selectedIndex)"
+    ></ListPicker>
+  </StackLayout>
+
+  <StackLayout class="dialog-actions">
+    <Button text="cancel" (tap)="close()" class="-primary"></Button>
+    <Button text="ok" (tap)="close(listPicker.selectedIndex)" class="-primary"></Button>
+  </StackLayout>
+
+</StackLayout>

@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 import { CreateFeaturedEventComponent } from './create-featured-event.component';
 
 describe('CreateFeaturedEventComponent', () => {
@@ -9,7 +8,6 @@ describe('CreateFeaturedEventComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ CreateFeaturedEventComponent ],
-      imports: [IonicModule.forRoot()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreateFeaturedEventComponent);

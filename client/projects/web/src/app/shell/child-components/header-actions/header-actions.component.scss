@@ -1,0 +1,7 @@
+@import "constants.scss";
+
+.header-actions {
+  > *:not(:first-child) {
+    margin-left: 5px;
+  }
+}

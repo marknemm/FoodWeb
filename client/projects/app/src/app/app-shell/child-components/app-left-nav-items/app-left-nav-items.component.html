@@ -1,0 +1,41 @@
+<StackLayout row="0" class="nt-drawer__header">
+  <Image class="nt-drawer__header-image fas t-36" [src]="sessionService.accountProfileImg"></Image>
+  <Label class="nt-drawer__header-brand" [text]="sessionService.accountName"></Label>
+  <Label class="nt-drawer__header-footnote" [text]="sessionService.accountEmail"></Label>
+</StackLayout>
+
+<ScrollView row="1" class="nt-drawer__body">
+  <StackLayout>
+    <GridLayout columns="auto, *" class="nt-drawer__list-item" [nsRouterLink]="['home']" pageTransition="slide" (tap)="leftNavService.toggle()">
+      <Label col="0" text="&#xf015;" class="nt-icon fas"></Label>
+      <Label col="1" text="Home" class="p-r-10"></Label>
+    </GridLayout>
+
+    <GridLayout columns="auto, *" class="nt-drawer__list-item" [nsRouterLink]="['home']" (tap)="leftNavService.toggle()">
+      <Label col="0" text="&#xf1ea;" class="nt-icon far"></Label>
+      <Label col="1" text="Browse" class="p-r-10"></Label>
+    </GridLayout>
+
+    <GridLayout columns="auto, *" class="nt-drawer__list-item" [nsRouterLink]="['home']" (tap)="leftNavService.toggle()">
+      <Label col="0" text="&#xf002;" class="nt-icon fas"></Label>
+      <Label col="1" text="Search" class="p-r-10"></Label>
+    </GridLayout>
+
+    <GridLayout columns="auto, *" class="nt-drawer__list-item" [nsRouterLink]="['home']" (tap)="leftNavService.toggle()">
+      <Label col="0" text="&#xf005;" class="nt-icon fas"></Label>
+      <Label col="1" text="Featured" class="p-r-10"></Label>
+    </GridLayout>
+
+    <StackLayout class="hr"></StackLayout>
+
+    <GridLayout columns="auto, *" class="nt-drawer__list-item" [nsRouterLink]="['home']" (tap)="leftNavService.toggle()">
+      <Label col="0" text="&#xf013;" class="nt-icon fas"></Label>
+      <Label col="1" text="Settings" class="p-r-10"></Label>
+    </GridLayout>
+
+    <GridLayout columns="auto, *" class="nt-drawer__list-item" (tap)="authenticationServce.logout()">
+      <Label col="0" text="&#xf011;" class="nt-icon fas"></Label>
+      <Label col="1" text="Logout" class="p-r-10"></Label>
+    </GridLayout>
+  </StackLayout>
+</ScrollView>

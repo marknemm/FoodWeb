@@ -1,12 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router, Params } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
-import { Donation, DonationReadRequest, ListResponse } from '~shared';
-import { environment } from '~web/environments/environment';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
 import { cloneDeep } from 'lodash-es';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { Donation, DonationReadRequest, ListResponse } from '~shared';
+import { environment } from '~web-env/environment';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 export { Donation };
 
 @Injectable({
@@ -22,7 +22,8 @@ export class DonationReadService {
   constructor(
     private _httpClient: HttpClient,
     private _httpResponseService: HttpResponseService,
-    private _router: Router
+    private _router: Router,
+    private _window: Window,
   ) {}
 
   updateURLQueryString(filters: DonationReadRequest, activatedRoute: ActivatedRoute): void {
@@ -41,7 +42,7 @@ export class DonationReadService {
 
   listenDonationQueryChange(activatedRoute: ActivatedRoute): Observable<Donation> {
     return activatedRoute.paramMap.pipe(
-      flatMap((paramMap: ParamMap) => {
+      switchMap((paramMap: ParamMap) => {
         const id: number = (paramMap.has('id') ? parseInt(paramMap.get('id'), 10) : undefined);
         return this.getDonation(id);
       })
@@ -50,8 +51,8 @@ export class DonationReadService {
 
   getDonation(id: number): Observable<Donation> {
     // Attempt to get donation from window state history.
-    if ( window.history.state?.donation?.id === id) {
-      return of(window.history.state.donation);
+    if (this._window.history.state?.donation?.id === id) {
+      return of(this._window.history.state.donation);
     }
     // Get donation from server.
     const url = `${this.url}/${id}`;

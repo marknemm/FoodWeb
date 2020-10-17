@@ -1,5 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class pushNotification1572811012800 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {
@@ -19,7 +20,7 @@ export class pushNotification1572811012800 implements MigrationInterface {
           "body"="notificationBody",
           "icon"="notificationIconUrl"
     `);
-    await queryRunner.query(`ALTER TABLE "Notification" ALTER COLUMN "title" SET NOT NULL;`)
+    await queryRunner.query(`ALTER TABLE "Notification" ALTER COLUMN "title" SET NOT NULL;`);
     await queryRunner.query(`ALTER TABLE "Notification" DROP CONSTRAINT "FK_50d77c6e8a08d79b09300b129d2"`);
     await queryRunner.query(`ALTER TABLE "Notification" DROP COLUMN "notificationDetailId"`);
     await queryRunner.query(`ALTER TABLE "Notification" DROP COLUMN "notificationIconUrl"`);
@@ -41,7 +42,7 @@ export class pushNotification1572811012800 implements MigrationInterface {
           "notificationSubtitle"="subtitle",
           "notificationBody"="body",
           "notificationIconUrl"="icon"
-    `)
+    `);
     await queryRunner.query(`ALTER TABLE "Notification" DROP COLUMN "custom"`);
     await queryRunner.query(`ALTER TABLE "Notification" DROP COLUMN "tag"`);
     await queryRunner.query(`ALTER TABLE "Notification" DROP COLUMN "action"`);

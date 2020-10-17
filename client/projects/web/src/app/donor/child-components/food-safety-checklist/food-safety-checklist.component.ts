@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'food-web-food-safety-checklist',
+  selector: 'foodweb-food-safety-checklist',
   templateUrl: './food-safety-checklist.component.html',
   styleUrls: ['./food-safety-checklist.component.scss'],
   providers: [

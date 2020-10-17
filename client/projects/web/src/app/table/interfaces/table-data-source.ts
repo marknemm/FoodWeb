@@ -1,8 +1,8 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
-import { TableColumn } from '~web/table/table-column';
 import { DeepReadonly } from '~shared';
+import { TableColumn } from '~web/table/interfaces/table-column';
 export { TableColumn };
 
 /**

@@ -1,7 +1,7 @@
 import { AccountEntity, ContactInfoEntity, DonationEntity } from '~entity';
 import { OrmEntityManager } from '~orm';
 import { DonationDeleteRequest, DonationHelper } from '~shared';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { sendDeliveryUnavailableMessages } from '../delivery/delivery-unavailable-message';
 import { sendClaimUnavailableMessages } from '../donation-claim/claim-unavailable-message';
 import { readDonation } from './read-donations';

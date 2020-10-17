@@ -1,0 +1,13 @@
+<GridLayout rows="auto" [foodwebAppVisibile]="visible">
+
+  <ng-content></ng-content>
+
+  <AbsoluteLayout
+    #absoluteLayoutRef
+    width="100%"
+    [foodwebAppAndroidFocusable]="enabled"
+    (blur)="blur.emit()"
+    (tap)="onTap()"
+  ></AbsoluteLayout>
+
+</GridLayout>

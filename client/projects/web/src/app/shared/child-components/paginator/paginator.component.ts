@@ -1,16 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { LeftNavService } from '~web/app-shell/left-nav/left-nav.service';
+import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
 
 @Component({
-  selector: 'food-web-paginator',
+  selector: 'foodweb-paginator',
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.scss']
 })
-export class PaginatorComponent implements OnInit {
+export class PaginatorComponent implements OnInit, OnDestroy {
 
   @Input() length: number;
   @Input() page: number;
@@ -34,8 +34,8 @@ export class PaginatorComponent implements OnInit {
   }
 
   private _initPageParams(): void {
-    let pageIndex: number = (this.page ? this.page - 1 : null);
-    let pageSize: number = (this.limit ? this.limit : null);
+    const pageIndex: number = (this.page ? this.page - 1 : null);
+    const pageSize: number = (this.limit ? this.limit : null);
     if (pageIndex || pageSize) {
       this.onPageEvent({ pageIndex, pageSize, length: pageSize });
     }

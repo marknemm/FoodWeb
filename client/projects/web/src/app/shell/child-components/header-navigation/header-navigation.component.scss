@@ -1,0 +1,10 @@
+@import "constants.scss";
+
+.header-navigation {
+  box-sizing: border-box;
+  padding: 0 60px;
+
+  @media only screen and (max-width: $md) {
+    display: none;
+  }
+}

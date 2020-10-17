@@ -4,8 +4,7 @@
       <tr>
         <td class="inline-label">Number of Donations:</td>
         <td class="stat-value">
-          <food-web-progress-indicator [trigger]="!showStatValues"
-            [blocking]="true" [backdropVisible]="false" [diameter]="18" [strokeWidth]="2"></food-web-progress-indicator>
+          <foodweb-progress-indicator [trigger]="!showStatValues" [blocking]="true" [diameter]="18" [strokeWidth]="2" backdropColor="transparent"></foodweb-progress-indicator>
           <ng-container *ngIf="showStatValues">
             <ng-container *ngIf="generalStats">{{ generalStats.totalDonations }}</ng-container>
             <ng-container *ngIf="!generalStats">N/A</ng-container>
@@ -15,8 +14,7 @@
       <tr>
         <td class="inline-label">Total Meals Delivered:</td>
         <td class="stat-value">
-          <food-web-progress-indicator [trigger]="!showStatValues"
-            [blocking]="true" [backdropVisible]="false" [diameter]="18" [strokeWidth]="2"></food-web-progress-indicator>
+          <foodweb-progress-indicator [trigger]="!showStatValues" [blocking]="true" [diameter]="18" [strokeWidth]="2" backdropColor="transparent"></foodweb-progress-indicator>
           <ng-container *ngIf="showStatValues">
             <ng-container *ngIf="generalStats">{{ generalStats.totalMeals }}</ng-container>
             <ng-container *ngIf="!generalStats">N/A</ng-container>

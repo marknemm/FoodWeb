@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AdminSessionService } from '~admin/admin-session/admin-session/admin-session.service';
+import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +12,8 @@ export class AdminBootstrapService implements CanActivate {
   private _loginSubscription = new Subscription();
 
   constructor(
-    private _router: Router,
-    private _sessionService: AdminSessionService
+    private _authService: AuthenticationService,
+    private _router: Router
   ) {}
 
   listenSessionStateChange(): void {
@@ -23,7 +23,7 @@ export class AdminBootstrapService implements CanActivate {
 
   private _listenForLogin(): void {
     this._loginSubscription.unsubscribe();
-    this._loginSubscription = this._sessionService.login$.subscribe(() => {
+    this._loginSubscription = this._authService.login$.subscribe(() => {
       this._loginSubscription.unsubscribe();
       if (this._router.url.indexOf('/login') >= 0) {
         this._router.navigate(['/']);
@@ -32,7 +32,7 @@ export class AdminBootstrapService implements CanActivate {
   }
 
   private _listenForLogout(): void {
-    this._sessionService.logout$.subscribe(() => {
+    this._authService.logout$.subscribe(() => {
       this._listenForLogin();
       this._router.navigate(['/login']);
     });
@@ -44,12 +44,12 @@ export class AdminBootstrapService implements CanActivate {
    */
   canActivate(): Promise<boolean> {
     // Contact server via session refresh request to see if user is logged in.
-    return this._sessionService.refreshSessionStatus().pipe(
+    return this._authService.refreshSessionStatus().pipe(
       map(() => {
-        if (!this._sessionService.loggedIn) {
+        if (!this._authService.loggedIn) {
           this._router.navigate(['/login']);
         }
-        return this._sessionService.loggedIn;
+        return this._authService.loggedIn;
       })
     ).toPromise();
   }

@@ -1,5 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class delivererPickupWindow1560901490595 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {

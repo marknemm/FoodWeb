@@ -1,0 +1,14 @@
+<a [href]="mapAnchor" target="_blank" class="address-anchor" *ngIf="!!mapAnchor; else addressContent">
+  <ng-container [ngTemplateOutlet]="addressContent"></ng-container>
+</a>
+
+<ng-template #addressContent>
+  <div class="address d-inline-block">
+    <div *ngIf="value.streetAddress">{{ value.streetAddress }}</div>
+    <div>
+      <div class="d-inline-block" *ngIf="value.city">{{ value.city }},&nbsp;</div>
+      <div class="d-inline-block" *ngIf="value.stateProvince">{{ value.stateProvince }}&nbsp;</div>
+      <div class="d-inline-block" *ngIf="value.postalCode">{{ value.postalCode }}</div>
+    </div>
+  </div>
+<ng-template>

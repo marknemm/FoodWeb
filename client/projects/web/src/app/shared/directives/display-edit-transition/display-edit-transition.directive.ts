@@ -3,15 +3,15 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Directive({
-  selector: '[foodWebDisplayEditTransition]',
+  selector: '[foodwebDisplayEditTransition]',
   exportAs: 'editDisplayTransition'
 })
 export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDestroy {
 
-  @Input('foodWebDisplayEditTransition') editing = false;
-  @Input() form: HTMLElement;
+  @Input('foodwebDisplayEditTransition') editable = false;
   @Input() display: HTMLElement;
   @Input() duration = 0.25;
+  @Input() form: HTMLElement;
   @Input() heightRecalcAtMs: number[];
   @Input() recalcTrigger: Observable<any>;
 
@@ -19,25 +19,36 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
 
   private _destory$ = new Subject();
 
-  constructor(elementRef: ElementRef) {
+  constructor(
+    private _window: Window,
+    elementRef: ElementRef
+  ) {
     this.container = elementRef.nativeElement;
   }
 
   ngOnInit() {
+    // Ensure all required inputs have been bound.
+    if (!this.display) {
+      throw new Error(`'display' input property is required for foodwebDisplayEditTransition directive on: ${this.container.innerHTML}`);
+    }
+    if (!this.form) {
+      throw new Error(`'form' input property is required for foodwebDisplayEditTransition directive on: ${this.container.innerHTML}`);
+    }
+
     this._recalcContainerHeight = this._recalcContainerHeight.bind(this);
-    window.addEventListener('resize', this._recalcContainerHeight);
+    this._window.addEventListener('resize', this._recalcContainerHeight);
     this._initStyles();
   }
 
   private _initStyles(): void {
-    const containerStyles: CSSStyleDeclaration = this.container.style
+    const containerStyles: CSSStyleDeclaration = this.container.style;
     containerStyles.transition = `height ${this.duration}s ease-in-out`;
     this.form.style.transition = `opacity ${this.duration}s ease-in-out`;
     this.display.style.transition = `opacity ${this.duration}s ease-in-out`;
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.editing || changes.form || changes.display) {
+    if (changes.editable || changes.form || changes.display) {
       this.recalcStyles();
     }
     if (changes.recalcTrigger) {
@@ -49,8 +60,8 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
     const initContainerOverflow = this.container.style.overflow;
     this.container.style.overflow = 'hidden';
     setTimeout(() => this.container.style.overflow = initContainerOverflow, this.duration * 1000);
-    this._recalcStylesFor(this.form.style, this.editing);
-    this._recalcStylesFor(this.display.style, !this.editing);
+    this._recalcStylesFor(this.form.style, this.editable);
+    this._recalcStylesFor(this.display.style, !this.editable);
     const heightRecalcAtMs = this.heightRecalcAtMs ? this.heightRecalcAtMs : [0];
     heightRecalcAtMs.forEach((subMs: number) => {
       setTimeout(() => this._recalcContainerHeight(), subMs);
@@ -58,7 +69,7 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
   }
 
   private _recalcContainerHeight(): void {
-    const containerHeight: number = (this.editing)
+    const containerHeight: number = (this.editable)
       ? this.form.offsetHeight
       : this.display.offsetHeight;
     this.container.style.height = `${containerHeight}px`;
@@ -82,7 +93,7 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
   }
 
   ngOnDestroy() {
-    window.removeEventListener('resize', this._recalcContainerHeight);
+    this._window.removeEventListener('resize', this._recalcContainerHeight);
     this._destory$.next();
   }
 }

@@ -1,21 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AdminSessionService } from '~admin/admin-session/admin-session/admin-session.service';
-import { ImpersonateService } from '~admin/admin-session/impersonate/impersonate.service';
+import { AdminSessionService } from '~admin/admin-session/services/admin-session/admin-session.service';
+import { ImpersonateService } from '~admin/admin-session/services/impersonate/impersonate.service';
 import { AccountHelper } from '~shared';
-import { AccountDetailsComponent } from '~web/account/account-details/account-details.component';
-import { AccountReadService } from '~web/account/account-read/account-read.service';
-import { AccountSaveService } from '~web/account/account-save/account-save.service';
-import { PasswordForm } from '~web/password/password.form';
-import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
+import { AccountDetailsComponent } from '~web/account/components/account-details/account-details.component';
+import { AccountReadService } from '~web/account/services/account-read/account-read.service';
+import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
+import { PasswordForm } from '~web/password/forms/password.form';
+import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
 @Component({
-  selector: 'food-web-admin-account-details',
+  selector: 'foodweb-admin-account-details',
   templateUrl: './admin-account-details.component.html',
-  styleUrls: [
-    '../../../../../../web/src/app/account/components/account-details/account-details.component.scss',
-    './admin-account-details.component.scss'
-  ]
+  styleUrls: ['./admin-account-details.component.scss']
 })
 export class AdminAccountDetailsComponent extends AccountDetailsComponent implements OnInit {
 

@@ -2,7 +2,7 @@ import { genSalt, hash } from 'bcrypt';
 import { exec, ExecException } from 'child_process';
 import 'dotenv';
 import { Connection, createConnection, getConnection, QueryRunner } from 'typeorm';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import _ = require('lodash');
 import path = require('path');
 
@@ -282,7 +282,7 @@ async function replaceVolunteerNames(queryRunner: QueryRunner): Promise<void> {
         WHERE   "Volunteer"."id" = ${volunteer.id};
 
         UPDATE  "Account"
-        SET     "profileImgUrl" = './assets/${lastNames[nameIdx].charAt(0)}.svg'
+        SET     "profileImg"   = './assets/${lastNames[nameIdx].charAt(0)}.svg'
         WHERE   "Account"."id" = ${volunteer.accountId}
       `;
 

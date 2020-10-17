@@ -1,0 +1,40 @@
+<StackLayout class="nt-input" [foodwebAppVisibile]="visible">
+  <Label
+    #labelRef
+    [foodwebAppVisibile]="label"
+    [text]="label"
+    [ngClass]="{ 'text-danger': formControl.touched && formControl.invalid }"
+  ></Label>
+
+  <TextField
+    #textFieldRef
+    [autocapitalizationType]="autocapitalizationType"
+    [autocorrect]="autocorrect"
+    [editable]="editable"
+    [formControl]="formControl"
+    [hint]="hint"
+    [keyboardType]="keyboardType"
+    [letterSpacing]="letterSpacing"
+    [lineHeight]="lineHeight"
+    [maxLength]="maxLength"
+    [returnKeyType]="returnKeyType"
+    [secure]="secure"
+    [text]="text"
+    [textAlignment]="textAlignment"
+    [textDecoration]="textDecoration"
+    [textTransform]="textTransform"
+    [whiteSpace]="whiteSpace"
+    (blur)="blur.emit($event)"
+    (focus)="focusOutput.emit($event)"
+    (returnPress)="onReturnPress($event)"
+    (tap)="textFieldTap.emit($event)"
+    (textChange)="textChange.emit($event)"
+  ></TextField>
+
+  <ng-container *ngIf="formControl.touched">
+    <Label *ngIf="formControl.hasError('required') && requireErrMsg; else otherErrs" [text]="requireErrMsg" class="text-danger"></Label>
+    <ng-template #otherErrs>
+      <ng-content select=".text-danger"></ng-content>
+    </ng-template>
+  </ng-container>
+</StackLayout>

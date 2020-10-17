@@ -1,9 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AccountHelper } from '~shared';
-import { SessionService } from '~web/session/session/session.service';
-import { AlertService } from '~web/shared/alert/alert.service';
-import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.service';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,16 +8,13 @@ import { ErrorHandlerService } from '~web/shared/error-handler/error-handler.ser
 export class AdminSessionService extends SessionService {
 
   constructor(
-    protected _accountHelper: AccountHelper,
-    protected _alertService: AlertService,
-    protected _errorHandlerService: ErrorHandlerService,
-    protected _httpClient: HttpClient
+    protected _accountHelper: AccountHelper
   ) {
-    super(_accountHelper, _alertService, _errorHandlerService, _httpClient);
+    super(_accountHelper);
   }
 
   /**
-   * @override Since admins have owenership of all accounts, this will always return true.
+   * Since admins have ownership of all accounts, this will always return true.
    */
   hasAccountOwnership(accountId: number): boolean {
     return true;
@@ -33,6 +27,6 @@ export class AdminSessionService extends SessionService {
    * @return true if it is the admin's account, false if not.
    */
   isMyAccount(accountId: number): boolean {
-    return this._accountHelper.doesAccountIdMatch(this._account, accountId);
+    return this._accountHelper.doesAccountIdMatch(this.account, accountId);
   }
 }

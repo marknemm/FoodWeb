@@ -1,7 +1,7 @@
 import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity, DonationClaimEntity, DonationEntity } from '~entity';
 import { DateTimeHelper, DonationClaimHelper, DonationClaimRequest, DonationHelper, DonationStatus, Donation, ContactInfo } from '~shared';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { ClaimedDonationSaveData, DonationClaimSaveData } from '~web/interfaces/donation-claim/donation-claim-save-data';
 import { readDonation } from '~web/services/donation/read-donations';
 import { genMapRoute } from '~web/services/map/read-map-routes';

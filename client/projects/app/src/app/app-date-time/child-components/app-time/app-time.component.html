@@ -1,0 +1,25 @@
+<GridLayout [foodwebAppVisibile]="visible">
+  <foodweb-app-focus-mask
+    #focusMask
+    [visible]="editable"
+    (focusTap)="showTimeDialog(timeTextField)">
+    <foodweb-app-text-field
+      #timeTextField
+      editable="false"
+      keyboardType="datetime"
+      [hint]="placeholder"
+      [label]="label"
+      [text]="formControl.value | foodwebFormatTime"
+      (tap)="showTimeDialog(timeTextField)"
+    ></foodweb-app-text-field>
+  </foodweb-app-focus-mask>
+
+  <Label [foodwebAppVisibile]="!editable">
+    <FormattedString>
+      <Span
+        [ngClass]="{ bold: bold }"
+        [text]="value | foodwebFormatTime"
+      ></Span>
+    </FormattedString>
+  </Label>
+</GridLayout>

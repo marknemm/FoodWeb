@@ -1,7 +1,7 @@
 <form [formGroup]="filtersForm" class="delivery-filters" (ngSubmit)="filter.emit(filtersForm.value)">
-  <food-web-list-filters-title [primary]="true">
+  <foodweb-list-filters-title [primary]="true">
     Delivery Filters
-  </food-web-list-filters-title>
+  </foodweb-list-filters-title>
 
   <mat-form-field class="fill">
     <mat-select placeholder="Donation Status" formControlName="donationStatus">
@@ -32,38 +32,38 @@
     <input matInput placeholder="Receiver Organization" formControlName="receiverOrganizationName">
   </mat-form-field>
 
-  <food-web-list-filters-title>
+  <foodweb-list-filters-title>
     Delivery Window Filters
-  </food-web-list-filters-title>
+  </foodweb-list-filters-title>
 
   <div class="row">
     <div class="col-12">
-      <food-web-date-time
+      <foodweb-date-time
         [allowClear]="true"
         [allowUndefTime]="true"
-        [editing]="true"
+        [editable]="true"
         [inlineFields]="true"
         [minDate]="null"
         floatLabels="never"
         formControlName="deliveryWindowOverlapStart"
         primaryLabel="Overlap Start"
-      ></food-web-date-time>
+      ></foodweb-date-time>
     </div>
     <div class="col-12">
-      <food-web-date-time
+      <foodweb-date-time
         [allowClear]="true"
         [allowUndefTime]="true"
-        [editing]="true"
+        [editable]="true"
         [inlineFields]="true"
         [minDate]="null"
         floatLabels="never"
         formControlName="deliveryWindowOverlapEnd"
         primaryLabel="Overlap End"
-      ></food-web-date-time>
+      ></foodweb-date-time>
     </div>
   </div>
 
-  <food-web-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></food-web-list-sort>
+  <foodweb-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></foodweb-list-sort>
 
-  <food-web-list-filters-footer (clear)="filtersForm.reset()"></food-web-list-filters-footer>
+  <foodweb-list-filters-footer (clear)="filtersForm.reset()"></foodweb-list-filters-footer>
 </form>

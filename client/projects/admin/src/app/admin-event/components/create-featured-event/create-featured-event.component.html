@@ -1,19 +1,19 @@
 <div class="create-event page">
   <div class="row">
     <div class="col-md-6" [hidden]="eventCreateComplete">
-      <food-web-featured-event-form #formComponent
+      <foodweb-admin-featured-event-form #formComponent
         formTitle="Create Event"
         [featuredEvent]="savedFeaturedEvent"
         [excludeDelete]="true"
         (save)="createEvent($event)"
-      ></food-web-featured-event-form>
+      ></foodweb-admin-featured-event-form>
     </div>
     <div class="event-demo col-md-6">
-      <food-web-admin-event-card
+      <foodweb-admin-event-card
         [featuredEvent]="formComponent.featuredEventForm.value"
         [hideActions]="!eventCreateComplete"
         [hideDelete]="true"
-      ></food-web-admin-event-card>
+      ></foodweb-admin-event-card>
     </div>
   </div>
 </div>

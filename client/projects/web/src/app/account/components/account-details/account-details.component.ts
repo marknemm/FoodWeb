@@ -1,18 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Account, AccountHelper, AccountType, DonationReadRequest } from '~shared';
-import { AccountReadService } from '~web/account/account-read/account-read.service';
-import { AccountSaveService } from '~web/account/account-save/account-save.service';
-import { AccountForm, AccountFormKey } from '~web/account/account.form';
-import { PasswordFormT } from '~web/password/password.form';
-import { SessionService } from '~web/session/session/session.service';
+import { AccountForm, AccountFormKey } from '~web/account-shared/forms/account.form';
+import { AccountReadService } from '~web/account/services/account-read/account-read.service';
+import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
+import { PasswordFormT } from '~web/password/forms/password.form';
+import { SessionService } from '~web/session/services/session/session.service';
 import { SaveCb } from '~web/shared/child-components/edit-save-button/edit-save-button.component';
-import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
+import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
 @Component({
-  selector: 'food-web-account-details',
+  selector: 'foodweb-account-details',
   templateUrl: './account-details.component.html',
   styleUrls: ['./account-details.component.scss']
 })
@@ -38,7 +38,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     this.savePassword = this.savePassword.bind(this);
   }
 
-  get originalAccount(): Account{
+  get originalAccount(): Account {
     return this._originalAccount;
   }
 
@@ -51,7 +51,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   get hasAccountOwnership(): boolean {
-    return this._hasAccountOwnership
+    return this._hasAccountOwnership;
   }
 
   get seeDonationsLinkParams(): DonationReadRequest {
@@ -59,7 +59,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.accountForm = new AccountForm({ formMode: 'Account' }, this._destroy$);
+    this.accountForm = new AccountForm({ destroy$: this._destroy$, formMode: 'Account' });
     this._listenAccountChange();
   }
 

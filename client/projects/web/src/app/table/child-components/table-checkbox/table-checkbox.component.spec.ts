@@ -2,7 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { async, ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MockComponent } from 'ng-mocks';
-import { TableSelectionType } from '~web/table/table-data-source';
+import { TableSelectionType } from '~web/table/interfaces/table-data-source';
 import { TableCheckboxComponent } from './table-checkbox.component';
 
 describe('TableCheckboxComponent', () => {

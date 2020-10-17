@@ -1,0 +1,29 @@
+<mat-card class="account-teaser">
+  <mat-card-header [ngClass]="{ 'no-subtitle': !hasSubtitle }">
+    <foodweb-profile-img mat-card-avatar [value]="account.profileImg"></foodweb-profile-img>
+    <mat-card-title>{{ customTitle ? customTitle : accountName }}</mat-card-title>
+    <mat-card-subtitle *ngIf="hasSubtitle">
+      <a *ngIf="hasEmailSubtitle; else nonEmailSubtitle" href="mailto:{{ account.contactInfo.email }}">
+        {{ account.contactInfo.email }}
+      </a>
+      <ng-template #nonEmailSubtitle>{{ accountName }}</ng-template>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-content></ng-content>
+    <foodweb-contact-info
+      [addressAnchorType]="addressAnchorType"
+      [addressFirst]="addressFirst"
+      [hideAddress]="hideAddress"
+      [hideEmail]="hasEmailSubtitle"
+      [value]="account.contactInfo"
+    ></foodweb-contact-info>
+  </mat-card-content>
+  <mat-card-actions>
+    <div class="align-right">
+      <a [routerLink]="accountRouterLink" [state]="{ account: account }" class="no-hover">
+        <button mat-raised-button class="compact" type="button" color="primary">View Account</button>
+      </a>
+    </div>
+  </mat-card-actions>
+</mat-card>

@@ -1,7 +1,7 @@
 import { AccountEntity } from '~entity';
 import { genPagination, genSimpleWhereConditions, getOrmRepository, OrmSelectQueryBuilder, preprocessFullTextQuery, QueryMod, QueryResult } from '~orm';
 import { Account, AccountHelper, AccountReadFilters, AccountReadRequest, AccountSortBy, OperationHours, SortOptions } from '~shared';
-import { LoginRequiredError } from '~web/helpers/response/food-web-error';
+import { LoginRequiredError } from '~web/helpers/response/foodweb-error';
 
 const _accountHelper = new AccountHelper();
 

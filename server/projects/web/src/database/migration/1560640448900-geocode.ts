@@ -1,6 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { ContactInfo, geocode, GeographyLocation } from '~web/helpers/map/geocoder';
 
+// tslint:disable-next-line: class-name
 export class geocode1560640448900 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {
@@ -12,7 +13,7 @@ export class geocode1560640448900 implements MigrationInterface {
     const contactInfoArr: ContactInfo[] = await queryRunner.query('SELECT * FROM "ContactInfo"');
     for (const contactInfo of contactInfoArr) {
       const location: GeographyLocation = await geocode(contactInfo).catch(
-        () => { return { type: 'Point', coordinates: [0, 0] }; } // If fake address encountered, gen fake coordinates
+        () => ({ type: 'Point', coordinates: [0, 0] }) // If fake address encountered, gen fake coordinates
       );
       await queryRunner.query(
         `UPDATE "ContactInfo" SET location = ST_SETSRID(ST_MAKEPOINT($1, $2), 4326) WHERE id = $3`,

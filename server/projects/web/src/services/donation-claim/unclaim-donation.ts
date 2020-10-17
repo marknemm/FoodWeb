@@ -2,7 +2,7 @@ import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity, DonationClaimEntity, DonationEntity } from '~entity';
 import { DonationHelper, DonationStatus, DonationUnclaimRequest } from '~shared';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { readDonation } from '../donation/read-donations';
 
 const _donationHelper = new DonationHelper();

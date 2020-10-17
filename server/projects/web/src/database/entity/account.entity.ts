@@ -25,7 +25,7 @@ export class AccountEntity implements Account {
   username: string;
 
   @Column()
-  profileImgUrl: string;
+  profileImg: string;
 
   @Column({ default: -1 })
   lastSeenNotificationId: number;

@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class dropOffWindow1578276029608 implements MigrationInterface {
-  name = 'dropOffWindow1578276029608'
+  name = 'dropOffWindow1578276029608';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     const alreadyCreated: boolean = (await queryRunner.query(

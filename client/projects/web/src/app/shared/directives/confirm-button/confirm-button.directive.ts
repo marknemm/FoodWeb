@@ -1,9 +1,9 @@
 import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.service';
+import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 
 @Directive({
-  selector: '[foodWebConfirmButton]'
+  selector: '[foodwebConfirmButton]'
 })
 export class ConfirmButtonDirective {
 
@@ -30,7 +30,7 @@ export class ConfirmButtonDirective {
   private _genConfirmObs(): Observable<boolean> {
     return (this.confirmCondition)
       ? this._confirmDialogService.displayConfirmDialog(this.confirmMessage, this.confirmTitle)
-      : of(true)
+      : of(true);
   }
 
 }

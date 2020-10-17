@@ -1,0 +1,49 @@
+<div [formGroup]="formGroup" *ngIf="editable | toBoolean; else readonlyTimeRange" class="time-range-form row">
+  <div class="time-field col-sm-6" [style.width]="timeWidth">
+    <foodweb-time
+      #startTime
+      formControlName="startTime"
+      [allowClear]="allowClear"
+      [editable]="true"
+      [defaultTime]="defaultStartTime"
+      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
+      [floatLabels]="floatLabels"
+      [minutesGap]="minutesGap"
+      [placeholder]="startPlaceholder"
+      [preventOverlayClick]="preventOverlayClick"
+      (ngModelChange)="formGroup.fillMissingRangePart()">
+    </foodweb-time>
+  </div>
+  <div class="time-field col-sm-6" [style.width]="timeWidth">
+    <foodweb-time
+      #endTime
+      formControlName="endTime"
+      [allowClear]="allowClear"
+      [editable]="true"
+      [defaultTime]="defaultEndTime"
+      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
+      [floatLabels]="floatLabels"
+      [minutesGap]="minutesGap"
+      [placeholder]="endPlaceholder"
+      [preventOverlayClick]="preventOverlayClick"
+      (ngModelChange)="formGroup.fillMissingRangePart()">
+    </foodweb-time>
+  </div>
+  <mat-error *ngIf="formGroup.hasError('timeRangeOrder')" class="range-order-err col-12">
+    {{ formGroup.getError('timeRangeOrder') }}
+  </mat-error>
+</div>
+
+<ng-template #readonlyTimeRange>
+  <div class="time-range-display">
+    <foodweb-time
+      [bold]="bold"
+      [editable]="false"
+      [value]="value.startTime"></foodweb-time>
+    <span class="display-to"> - </span>
+    <foodweb-time
+      [bold]="bold"
+      [editable]="false"
+      [value]="value.endTime"></foodweb-time>
+  </div>
+</ng-template>

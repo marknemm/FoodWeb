@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DonationReadRequest, DonationSortBy, DonationStatus } from '~shared';
-import { DonationFiltersForm } from '~web/donation-delivery-shared/donation-filters.form';
-import { SortByOpt } from '~web/filtered-list/sort-by-opt';
-import { ConstantsService } from '~web/shared/constants/constants.service';
+import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
+import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
+import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
-  selector: 'food-web-delivery-filters',
+  selector: 'foodweb-delivery-filters',
   templateUrl: './delivery-filters.component.html',
   styleUrls: ['./delivery-filters.component.scss'],
 })

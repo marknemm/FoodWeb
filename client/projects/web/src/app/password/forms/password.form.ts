@@ -1,9 +1,9 @@
 import { FormControl, FormGroupDirective, NgForm, Validators, AbstractControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Validation } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 
-export class PasswordForm extends TypedFormGroup<PasswordFormT> {
+export class PasswordForm extends TFormGroup<PasswordFormT> {
 
   readonly passwordMatchErrStateMatcher: ErrorStateMatcher;
   readonly formMode: PasswordFormMode;

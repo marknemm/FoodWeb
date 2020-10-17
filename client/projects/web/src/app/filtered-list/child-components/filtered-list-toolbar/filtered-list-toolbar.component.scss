@@ -8,6 +8,10 @@
     width: 100%;
     font-weight: bold;
 
+    @media only screen and (max-width: $sm) {
+      margin-bottom: 0;
+    }
+
     > tr > td {
       vertical-align: top;
 
@@ -20,7 +24,7 @@
 
         .filter-button {
           vertical-align: top;
-          margin-top: 1px;
+          margin-top: -2px;
           min-width: 0;
           padding-left: 5px;
           padding-right: 5px;
@@ -29,15 +33,19 @@
             font-size: 25px;
             color: $accent-darker;
           }
+
+          @media only screen and (max-width: $sm) {
+            margin-top: -5px;
+          }
+
+          @media only screen and (max-width: $mat-mobile) {
+            margin-top: -6px;
+          }
         }
       }
 
-      @media only screen and (max-width: $mat-mobile) {
+      @media only screen and (max-width: $md) {
         padding-top: 0;
-
-        &:last-child .filter-button {
-          margin-top: 4px;
-        }
       }
     }
   }

@@ -1,0 +1,13 @@
+<GridLayout *ngIf="editable; else readonlyTmpl" [formGroup]="formGroup" class="nt-input -sides" rows="auto">
+  <Label text="Automatically Accept Donations:" row="0" col="0"></Label>
+  <Switch formControlName="autoReceiver" horizontalAlignment="right" row="0" col="1"></Switch>
+</GridLayout>
+
+<ng-template #readonlyTmpl>
+  <Label>
+    <FormattedString>
+      <Span text="Automatically Accept Donations:" class="inline-label"></Span>
+      <span [text]="formGroup.get('autoReceiver').value ? 'Yes' : 'No'"></span>
+    </FormattedString>
+  </Label>
+</ng-template>

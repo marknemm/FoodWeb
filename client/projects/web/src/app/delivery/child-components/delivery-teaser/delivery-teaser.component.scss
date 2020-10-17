@@ -15,7 +15,7 @@
       text-overflow: ellipsis;
     }
 
-    food-web-address {
+    foodweb-address {
       padding-left: 7px;
     }
   }
@@ -23,5 +23,9 @@
   .mat-card-actions {
     padding-top: 0;
     margin-top: -16px;
+
+    button {
+      font-weight: 500;
+    }
   }
 }

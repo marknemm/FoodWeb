@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class cascadeClaimDeliveryDelete1578805610851 implements MigrationInterface {
-  name = 'cascadeClaimDeliveryDelete1578805610851'
+  name = 'cascadeClaimDeliveryDelete1578805610851';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`ALTER TABLE "Delivery" DROP CONSTRAINT "FK_938d39366adb780438836faec34"`, undefined);

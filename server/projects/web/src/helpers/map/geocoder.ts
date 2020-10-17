@@ -1,7 +1,7 @@
 import 'dotenv';
 import { Entry, Geocoder, Location, Providers, Query } from 'node-geocoder';
 import { ContactInfo, GeographyLocation } from '~shared';
-import { FoodWebError } from '../response/food-web-error';
+import { FoodWebError } from '../response/foodweb-error';
 import NodeGeocoder = require('node-geocoder');
 import geoTz = require('geo-tz');
 export { ContactInfo, GeographyLocation };

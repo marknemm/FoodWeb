@@ -1,22 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AccountModule } from '~web/account/account.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
-import { DeliveriesComponent } from '~web/delivery/deliveries/deliveries.component';
-import { DeliveryDetailsRouterLinkPipe } from '~web/delivery/delivery-details-router-link/delivery-details-router-link.pipe';
-import { DeliveryDetailsComponent } from '~web/delivery/delivery-details/delivery-details.component';
-import { DeliveryDonationInfoComponent } from '~web/delivery/delivery-donation-info/delivery-donation-info.component';
-import { DeliveryFiltersComponent } from '~web/delivery/delivery-filters/delivery-filters.component';
-import { DeliveryRoutingModule } from '~web/delivery/delivery-routing.module';
-import { DeliveryTeaserComponent } from '~web/delivery/delivery-teaser/delivery-teaser.component';
-import { DropOffInfoComponent } from '~web/delivery/drop-off-info/drop-off-info.component';
-import { PickupInfoComponent } from '~web/delivery/pickup-info/pickup-info.component';
-import { DonationDeliverySharedModule } from '~web/donation-delivery-shared/donation-delivery-shared.module';
+import { DonationSharedModule } from '~web/donation-shared/donation-shared.module';
 import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { MapModule } from '~web/map/map.module';
-import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
+import { DeliveryDonationInfoComponent } from './child-components/delivery-donation-info/delivery-donation-info.component';
+import { DeliveryFiltersComponent } from './child-components/delivery-filters/delivery-filters.component';
+import { DeliveryTeaserComponent } from './child-components/delivery-teaser/delivery-teaser.component';
+import { DropOffInfoComponent } from './child-components/drop-off-info/drop-off-info.component';
+import { PickupInfoComponent } from './child-components/pickup-info/pickup-info.component';
+import { DeliveriesComponent } from './components/deliveries/deliveries.component';
+import { DeliveryDetailsComponent } from './components/delivery-details/delivery-details.component';
+import { DeliveryRoutingModule } from './delivery-routing.module';
+import { DeliveryDetailsRouterLinkPipe } from './pipes/delivery-details-router-link/delivery-details-router-link.pipe';
 
 @NgModule({
   declarations: [
@@ -31,19 +35,19 @@ import { SharedModule } from '~web/shared/shared.module';
   ],
   imports: [
     DeliveryRoutingModule,
-    AccountModule,
     CommonModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    AccountSharedModule,
     DateTimeModule,
-    DonationDeliverySharedModule,
+    DonationSharedModule,
     FilteredListModule,
     MapModule,
-    MaterialModule,
-    ReactiveFormsModule,
     SharedModule
-  ],
-  exports: [
-    DeliveryDetailsRouterLinkPipe,
-    DeliveryTeaserComponent
   ]
 })
 export class DeliveryModule {}

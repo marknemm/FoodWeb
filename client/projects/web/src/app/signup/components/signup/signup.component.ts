@@ -1,49 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, of } from 'rxjs';
-import { Account, AccountType } from '~shared';
-import { AccountForm } from '~web/account/account.form';
-import { SessionService } from '~web/session/session/session.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
-import { SignupVerificationService } from '~web/signup/signup-verification/signup-verification.service';
-import { SignupService } from '~web/signup/signup/signup.service';
-import { TermsConditionsDialogComponent } from '~web/signup/terms-conditions-dialog/terms-conditions-dialog.component';
+import { Observable } from 'rxjs';
+import { AccountType } from '~shared';
+import { SessionService } from '~web/session/services/session/session.service';
+import { TermsConditionsDialogComponent } from '~web/signup/components/terms-conditions-dialog/terms-conditions-dialog.component';
+import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
+import { SignupService } from '~web/signup/services/signup/signup.service';
+import { SignupBaseComponent } from './signup.base.component';
 
 @Component({
-  selector: 'food-web-signup',
+  selector: 'foodweb-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent extends SignupBaseComponent implements OnInit {
 
   constructor(
     public sessionService: SessionService,
     public signupVerificationService: SignupVerificationService,
+    protected _signupService: SignupService,
     private _matDialog: MatDialog,
-    private _pageTitleService: PageTitleService,
-    private _signupService: SignupService
-  ) {}
-
-  ngOnInit() {
-    this._pageTitleService.title = 'Signup';
+  ) {
+    super(sessionService, signupVerificationService, _signupService);
   }
 
-  signup(accountForm: AccountForm): void {
-    accountForm.markAllAsTouched();
-    if (accountForm.valid) {
-      const accountType: AccountType = accountForm.get('accountType').value;
-      this._genAgreementObs(accountType).subscribe((agreed: boolean) => {
-        const account: Account = accountForm.toAccount();
-        const password: string = accountForm.password;
-        this._signupService.createAccount(account, password, agreed);
-      });
-    }
-  }
+  ngOnInit() {}
 
-  private _genAgreementObs(accountType: AccountType): Observable<boolean> {
-    return (accountType === 'Receiver')
-      ? of(true)
-      : TermsConditionsDialogComponent.open(this._matDialog, { accountType });
+  protected _genAgreementObs(accountType: AccountType): Observable<boolean> {
+    return TermsConditionsDialogComponent.open(this._matDialog, { accountType });
   }
 
 }

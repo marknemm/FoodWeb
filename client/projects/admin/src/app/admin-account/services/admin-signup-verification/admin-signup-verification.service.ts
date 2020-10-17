@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AdminSessionService } from '~admin/admin-session/services/admin-session/admin-session.service';
 import { Account, DeepReadonly } from '~shared';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
 @Injectable({

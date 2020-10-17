@@ -1,0 +1,11 @@
+<div class="alert-snack-bar-container">
+  <button mat-icon-button type="button" class="close-button" (click)="matSnackBarRef.dismiss()">
+    <mat-icon aria-label="Close" [inline]="true">close</mat-icon>
+  </button>
+  <span [innerHTML]="alert.message"></span>
+  <div class="alert-snack-bar-action" *ngIf="alert.primaryAction">
+    <button mat-button type="button" (click)="matSnackBarRef.dismissWithAction()">
+      <span [innerHTML]="alert.primaryAction.text"></span>
+    </button>
+  </div>
+</div>

@@ -5,8 +5,8 @@ import { broadcastNotification, NotificationType } from '~web/helpers/messaging/
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { sendDeliveryCancelledMessages } from './cancel-delivery-message';
 
-const _donationHelper = new DonationHelper();
 const _dateTimeHelper = new DateTimeHelper();
+const _donationHelper = new DonationHelper();
 
 /**
  * Sends delivery state advanced messages to each user associated with the given donation (donor, receiver, & volunteer).
@@ -57,7 +57,7 @@ export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity
         notificationType: NotificationType.DeliveryStateAdvance,
         notificationLink: `/donation/details/${donation.id}`,
         title: `Delivery ${advanceAction}`,
-        icon: volunteerAccount.profileImgUrl,
+        icon: volunteerAccount.profileImg,
         body: `
           Delivery Has Been <strong>${advanceAction}</strong> by <strong>${delivererName}</strong>.<br>
           <i>${donation.description}</i>
@@ -141,7 +141,7 @@ async function _sendDeliveryStateUndoMessages(donation: DonationEntity): Promise
         notificationType: NotificationType.DeliveryStateUndo,
         notificationLink: `/donation/details/${donation.id}`,
         title: `Delivery Reverted to ${donation.donationStatus}`,
-        icon: volunteerAccount.profileImgUrl,
+        icon: volunteerAccount.profileImg,
         body: `
           Delivery Status has been reverted to ${donation.donationStatus} by ${delivererName}.<br>
           <i>${donation.description}</i>

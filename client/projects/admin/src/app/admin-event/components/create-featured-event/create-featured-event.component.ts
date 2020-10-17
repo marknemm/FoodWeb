@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CreateFeaturedEventService } from '~admin/admin-event/create-featured-event/create-featured-event.service';
+import { CreateFeaturedEventService } from '~admin/admin-event/services/create-featured-event/create-featured-event.service';
 import { FeaturedEvent } from '~shared';
 
 @Component({
-  selector: 'food-web-create-featured-event',
+  selector: 'foodweb-admin-create-featured-event',
   templateUrl: './create-featured-event.component.html',
   styleUrls: ['./create-featured-event.component.scss'],
 })

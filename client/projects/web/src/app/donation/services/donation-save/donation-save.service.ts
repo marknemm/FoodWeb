@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Donation, DonationSaveData, DonationSaveRequest } from '~shared';
-import { environment } from '~web/environments/environment';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { environment } from '~web-env/environment';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 export { Donation };
 
 @Injectable({

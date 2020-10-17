@@ -1,11 +1,13 @@
 {
   "extends": [
-    "../tslint.json"
+    "../tslint.json",
+    "@nativescript/tslint-rules"
   ],
   "rulesDirectory": [
     "node_modules/codelyzer"
   ],
   "rules": {
+    "adjacent-overload-signatures": false,
     "deprecation": {
       "severity": "warning"
     },
@@ -15,9 +17,11 @@
     "no-host-metadata-property": true,
     "no-input-rename": true,
     "no-output-rename": true,
+    "no-use-before-declare": false,
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
-    "directive-class-suffix": true
+    "directive-class-suffix": true,
+    "prefer-mapped-imports": false
   }
 }

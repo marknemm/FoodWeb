@@ -1,10 +1,10 @@
 import { Validators } from '@angular/forms';
 import { FeaturedEvent } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 import { ErrorStateMatcher } from '@angular/material/core';
 export { FeaturedEvent };
 
-export class FeaturedEventForm extends TypedFormGroup<FeaturedEvent> {
+export class FeaturedEventForm extends TFormGroup<FeaturedEvent> {
 
   /**
    * Ensures that the date-time component's error state updates when form submit is attempted.

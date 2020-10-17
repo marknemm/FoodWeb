@@ -1,0 +1,37 @@
+<GridLayout [formGroup]="dateTimeForm" columns="*,*" rows="auto">
+  <Label *ngIf="primaryLabel" [text]="primaryLabel" class="primary-label"></Label>
+
+  <foodweb-app-date
+    *ngIf="editable || !excludeDateDisplay"
+    [allowClear]="allowClear"
+    [bold]="boldDate"
+    [value]="value"
+    [defaultDate]="defaultDate"
+    [editable]="editable"
+    [errorStateMatcher]="errorStateMatcher"
+    [floatLabels]="floatLabels"
+    [maxDate]="maxDate"
+    [minDate]="minDate"
+    [minWidth]="minDateWidth"
+    [placeholder]="datePlaceholder"
+    col="0"
+    formControlName="date"
+    row="0"
+  ></foodweb-app-date>
+
+  <foodweb-app-time
+    *ngIf="editable || !excludeTimeDisplay"
+    [allowClear]="allowClear"
+    [bold]="boldTime"
+    [defaultTime]="defaultTime"
+    [editable]="editable"
+    [errorStateMatcher]="errorStateMatcher"
+    [floatLabels]="floatLabels"
+    [minutesGap]="minutesGap"
+    [placeholder]="timePlaceholder"
+    [value]="value | foodwebFormatTime"
+    col="1"
+    formControlName="time"
+    row="0"
+  ></foodweb-app-time>
+</GridLayout>

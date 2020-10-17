@@ -1,0 +1,19 @@
+<div class="notification-container">
+  <button mat-list-item
+    (click)="notificationService.handleNotificationSelect(notification)"
+    [ngClass]="{
+      'unread': !notification.read,
+      'auto-height': !max2Lines
+    }"
+    class="notification"
+  >
+    <foodweb-profile-img mat-list-icon *ngIf="notification.icon" [value]="notification.icon" class="icon"></foodweb-profile-img>
+    <div mat-line class="title" *ngIf="notification.title" [innerHTML]="notification.title"></div>
+    <div mat-line class="subtitle" *ngIf="notification.subtitle" [innerHTML]="notification.subtitle"></div>
+    <p #body mat-line class="body" [ngClass]="{ 'fade-bottom': shouldFadeBottom(body) }"
+      [innerHTML]="notification.body" *ngIf="notification.body"></p>
+  </button>
+  <button mat-icon-button [disableRipple]="true" class="flagged-indicator" (click)="handleFlaggedIndicatorClick($event)">
+    <mat-icon>{{ notification.flagged ? 'star' : 'star_border' }}</mat-icon>
+  </button>
+</div>

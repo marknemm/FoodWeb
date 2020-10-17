@@ -1,0 +1,16 @@
+<StackLayout>
+  <Button
+    *ngFor="let accountType of constantsService.ACCOUNT_TYPES; let idx = index"
+    [isEnabled]="editable || accountType === formControl.value"
+    [ngClass]="{ selected: accountType === formControl.value }"
+    (blur)="onTouchedCb()"
+    (tap)="accountTypeClick(accountType)"
+    androidElevation="0"
+    textWrap="true">
+    <FormattedString>
+      <Span [text]="accountType" class="header"></Span>
+      <span text="&#x000a;&#x000a;" class="vert-space"></span>
+      <Span [text]="accountTypeGridCells[idx].icon" class="mdi {{ accountType | lowercase }}"></Span>
+    </FormattedString>
+  </Button>
+</StackLayout>

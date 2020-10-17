@@ -1,22 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { AccountModule } from '~web/account/account.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
-import { DonationDeliverySharedModule } from '~web/donation-delivery-shared/donation-delivery-shared.module';
-import { DonationDetailsRouterLinkPipe } from '~web/donation/donation-details-router-link/donation-details-router-link.pipe';
-import { DonationDetailsComponent } from '~web/donation/donation-details/donation-details.component';
-import { DonationFiltersComponent } from '~web/donation/donation-filters/donation-filters.component';
-import { DonationRoutingModule } from '~web/donation/donation-routing.module';
-import { DonationTeaserComponent } from '~web/donation/donation-teaser/donation-teaser.component';
-import { DonationsComponent } from '~web/donation/donations/donations.component';
-import { PrimaryDonationInfoComponent } from '~web/donation/primary-donation-info/primary-donation-info.component';
-import { DonorModule } from '~web/donor/donor.module';
+import { DonationSharedModule } from '~web/donation-shared/donation-shared.module';
 import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { MapModule } from '~web/map/map.module';
-import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
+import { DonationFiltersComponent } from './child-components/donation-filters/donation-filters.component';
+import { DonationTeaserComponent } from './child-components/donation-teaser/donation-teaser.component';
+import { PrimaryDonationInfoComponent } from './child-components/primary-donation-info/primary-donation-info.component';
+import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
+import { DonationsComponent } from './components/donations/donations.component';
+import { DonationRoutingModule } from './donation-routing.module';
+import { DonationDetailsRouterLinkPipe } from './pipes/donation-details-router-link/donation-details-router-link.pipe';
 
 @NgModule({
   declarations: [
@@ -29,21 +33,21 @@ import { SharedModule } from '~web/shared/shared.module';
   ],
   imports: [
     DonationRoutingModule,
-    AccountModule,
     CommonModule,
+    ReactiveFormsModule,
+    AccountSharedModule,
     DateTimeModule,
-    DonationDeliverySharedModule,
-    DonorModule,
+    DonationSharedModule,
     FilteredListModule,
     MapModule,
-    MaterialModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
     MatSidenavModule,
-    ReactiveFormsModule,
+    MatSlideToggleModule,
     SharedModule
-  ],
-  exports: [
-    DonationDetailsRouterLinkPipe,
-    DonationTeaserComponent
   ]
 })
 export class DonationModule {}

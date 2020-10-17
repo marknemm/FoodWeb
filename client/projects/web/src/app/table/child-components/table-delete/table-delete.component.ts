@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.service';
-import { TableDataSource } from '~web/table/table-data-source';
+import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
+import { TableDataSource } from '~web/table/interfaces/table-data-source';
 export { TableDataSource };
 
 @Component({
-  selector: 'food-web-table-delete',
+  selector: 'foodweb-table-delete',
   templateUrl: './table-delete.component.html',
   styleUrls: ['./table-delete.component.scss']
 })

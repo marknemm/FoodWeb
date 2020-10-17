@@ -2,15 +2,14 @@ import { formatDate } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
-import { EventIdentifierForm } from '~admin/admin-event/event-identifier.form';
-import { EventRegistrationsService } from '~admin/admin-event/event-registrations/event-registrations.service';
+import { EventIdentifierForm } from '~admin/admin-event/forms/event-identifier.form';
+import { EventRegistrationsService } from '~admin/admin-event/services/event-registrations/event-registrations.service';
 import { DeepReadonly, EventRegistration, FeaturedEvent } from '~shared';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
-import { TableDataSource } from '~web/table/table-data-source';
+import { TableDataSource } from '~web/table/interfaces/table-data-source';
 
 @Component({
-  selector: 'food-web-event-registrations',
+  selector: 'foodweb-admin-event-registrations',
   templateUrl: './event-registrations.component.html',
   styleUrls: ['./event-registrations.component.scss']
 })
@@ -27,7 +26,6 @@ export class EventRegistrationsComponent implements OnInit, OnDestroy {
 
   constructor(
     public eventRegistrationService: EventRegistrationsService,
-    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
   ) {}
 

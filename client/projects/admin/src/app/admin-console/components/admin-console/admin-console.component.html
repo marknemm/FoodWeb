@@ -1,0 +1,142 @@
+<div class="home page">
+
+  <div id="account-section-label" class="section-label">Account</div>
+  <hr>
+  <div id="account-section" class="row console-cards" role="region" aria-labelledby="account-section-label">
+    <div class="card-cell col-md-4 col-6">
+      <a [routerLink]="['/account', 'list']" [queryParams]="{ accountType: 'Donor' }" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Search Donors</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon" color="donor">{{ constantsService.ACCOUNT_TYPE_ICONS['Donor'] }}</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+    <div class="card-cell col-md-4 col-6">
+      <a [routerLink]="['/account', 'list']" [queryParams]="{ accountType: 'Receiver' }" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Search Receivers</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon" color="receiver">{{ constantsService.ACCOUNT_TYPE_ICONS['Receiver'] }}</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+    <div class="card-cell col-md-4 col-6">
+      <a [routerLink]="['/account', 'list']" [queryParams]="{ accountType: 'Volunteer' }" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Search Volunteers</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon" color="volunteer">{{ constantsService.ACCOUNT_TYPE_ICONS['Volunteer'] }}</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+    <div class="card-cell col-md-4 col-6">
+      <a [routerLink]="['/account', 'list']" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Search Accounts</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon">people_alt</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+    <div class="card-cell col-md-4 col-6">
+      <a [routerLink]="['/account', 'compose-message']" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Message Accounts</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon">email</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+    <div class="card-cell col-md-4 col-6">
+      <a [routerLink]="['/account', 'create']" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Create Account</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon">person_add</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+  </div>
+
+  <div id="donation-section-label" class="section-label">Donation</div>
+  <hr>
+  <div id="donation-section" class="row console-cards" role="region" aria-labelledby="donation-section-label">
+    <div class="card-cell col-md-4 col-6">
+      <a [routerLink]="['/donation', 'list']" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Search Donations</mat-card-title>
+          <mat-card-content>
+            <fa-icon [icon]="faGifts" class="fill-icon"></fa-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+    <div class="card-cell col-md-4 col-6">
+      <a [routerLink]="['/delivery', 'list']" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Search Deliveries</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon">pin_drop</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+    <div class="card-cell col-md-4 col-6">
+      <a [routerLink]="['/donation', 'create']" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Create Donation</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon">post_add</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+  </div>
+
+  <div id="event-section-label" class="section-label">Event</div>
+  <hr>
+  <div id="event-section" class="row console-cards" role="region" aria-labelledby="event-section-label">
+    <div class="card-cell col-md-4 col-6">
+      <a [routerLink]="['/event', 'list']" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Search Events</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon">event</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+    <div class="card-cell col-md-4 col-6">
+      <a [routerLink]="['/event', 'create']" class="card-link">
+        <mat-card matRipple>
+          <mat-card-title class="align-center">Create Event</mat-card-title>
+          <mat-card-content>
+            <fa-icon [icon]="faCalendarPlus" class="fill-icon"></fa-icon>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+  </div>
+
+  <div id="developer-section-label" class="section-label">Developer</div>
+  <hr>
+  <div id="developer-section" class="row console-cards" role="region" aria-labelledby="developer-section-label">
+    <div class="card-cell col-md-4 col-6">
+      <button mat-button class="card-button" (click)="downloadDevDbService.downloadDevDb()" [disabled]="downloadDevDbService.httpResponseService.loading">
+        <mat-card>
+          <mat-card-title class="align-center">Download Dev DB</mat-card-title>
+          <mat-card-content>
+            <mat-icon class="fill-icon">storage</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </button>
+    </div>
+  </div>
+</div>

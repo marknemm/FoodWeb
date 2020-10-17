@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges } from '@angular/core';
-import { FeaturedEventForm } from '~admin/admin-event/featured-event.form';
+import { FeaturedEventForm } from '~admin/admin-event/forms/featured-event.form';
 import { FeaturedEvent } from '~shared';
 
 @Component({
-  selector: 'food-web-featured-event-form',
+  selector: 'foodweb-admin-featured-event-form',
   templateUrl: './featured-event-form.component.html',
   styleUrls: ['./featured-event-form.component.scss'],
 })
@@ -31,8 +31,7 @@ export class FeaturedEventFormComponent implements OnInit, OnChanges {
   }
 
   onSubmit(): void {
-    this.featuredEventForm.markAllAsTouched();
-    if (this.featuredEventForm.valid) {
+    if (this.featuredEventForm.checkValidity()) {
       this.save.emit(this.featuredEventForm.submitValue);
     }
   }

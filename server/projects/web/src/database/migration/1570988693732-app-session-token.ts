@@ -1,5 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class appSessionToken1570988693732 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {

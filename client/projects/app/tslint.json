@@ -4,13 +4,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      "foodwebApp",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      "foodweb-app",
       "kebab-case"
     ]
   }

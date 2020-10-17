@@ -1,0 +1,76 @@
+@import "constants.scss";
+
+.about {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+
+  .mission-statement {
+    font-size: 20px;
+    color: $accent;
+    text-align: center;
+    margin: 5px 0 30px;
+
+    @media only screen and (max-width: $sm) {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+  }
+
+  .origin-story-container {
+    margin-bottom: 40px;
+
+    .desktop-origin-story-title {
+      color: $accent;
+      font: 500 20px Avenir;
+      margin-bottom: 10px;
+    }
+
+    .mobile-origin-story-title {
+      display: none;
+      text-align: center;
+    }
+
+    hr {
+      display: none;
+      opacity: 0.3;
+    }
+
+    .origin-story-img {
+      display: block;
+      float: left;
+      margin-left: -3px;
+      margin-right: 10px;
+    }
+
+    @media only screen and (max-width: $md) {
+      .desktop-origin-story-title {
+        display: none;
+      }
+
+      .mobile-origin-story-title {
+        display: block;
+      }
+
+      hr {
+        display: block;
+      }
+
+      .origin-story-img {
+        float: none;
+        width: 100%;
+        max-width: 270px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 12px;
+      }
+    }
+  }
+
+  .our-team-container {
+    .mat-card-subtitle {
+      font-weight: bold;
+      margin-top: -8px;
+    }
+  }
+}

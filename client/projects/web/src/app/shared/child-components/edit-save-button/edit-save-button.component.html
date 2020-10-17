@@ -1,5 +1,5 @@
 <div class="edit-save-button-container">
-  <ng-container *ngIf="!editing">
+  <ng-container *ngIf="!editable">
     <button mat-icon-button *ngIf="!useButtonText" type="button" color="primary" class="edit-button" matTooltip="Edit" (click)="setEditing(true)">
       <mat-icon>edit</mat-icon>
     </button>
@@ -7,7 +7,7 @@
       {{ editText }}
     </button>
   </ng-container>
-  <ng-container *ngIf="editing">
+  <ng-container *ngIf="editable">
     <ng-container *ngIf="!useButtonText">
       <button mat-icon-button type="button" *ngIf="!noCancelEdit" color="warn" class="cancel-button" matTooltip="Cancel Edit" (click)="setEditing(false)">
         <mat-icon>cancel</mat-icon>

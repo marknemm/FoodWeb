@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DonationSaveData } from '~shared';
-import { DateTimeService } from '~web/date-time/date-time/date-time.service';
-import { Donation, DonationReadService } from '~web/donation/donation-read/donation-read.service';
-import { DonationSaveService } from '~web/donation/donation-save/donation-save.service';
-import { DonateForm } from '~web/donor/donate.form';
-import { PageProgressService } from '~web/shared/page-progress/page-progress.service';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
+import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
+import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
+import { DonateForm } from '~web/donor/forms/donate.form';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
 @Component({
-  selector: 'food-web-edit-donation',
+  selector: 'foodweb-edit-donation',
   templateUrl: './edit-donation.component.html',
   styleUrls: ['./edit-donation.component.scss'],
 })
@@ -21,7 +20,6 @@ export class EditDonationComponent implements OnInit {
   private _donationDetailsUrl = '';
 
   constructor(
-    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _dateTimeService: DateTimeService,
     private _donationReadService: DonationReadService,
@@ -38,8 +36,11 @@ export class EditDonationComponent implements OnInit {
     return this._editForm;
   }
 
+  get originalDonation(): Donation {
+    return this._originalDonation;
+  }
+
   ngOnInit() {
-    this.pageTitleService.title = 'Edit Donation';
     this._editForm = new DonateForm(this._dateTimeService, { safetyChecklistInit: true });
     this._listenDonationChange();
   }
@@ -55,7 +56,7 @@ export class EditDonationComponent implements OnInit {
     this._pageProgressService.reset();
     this._donationNotFound = !donation;
     this._originalDonation = donation;
-    this._donationDetailsUrl = `/donation/details/${this._originalDonation.id}`;
+    this._donationDetailsUrl = `/donation/details/${this.originalDonation.id}`;
     if (!this._donationNotFound) {
       this.editForm.patchFromDonation(donation);
       this.editForm.markAsPristine();
@@ -65,7 +66,7 @@ export class EditDonationComponent implements OnInit {
 
   saveDonation(): void {
     const donationUpdate: DonationSaveData = this.editForm.toDonationSaveData();
-    this._donationSaveService.updateDonation(this._originalDonation, donationUpdate).subscribe(
+    this._donationSaveService.updateDonation(this.originalDonation, donationUpdate).subscribe(
       (savedDonation: Donation) => this._router.navigate([this._donationDetailsUrl], { state: savedDonation })
     );
   }

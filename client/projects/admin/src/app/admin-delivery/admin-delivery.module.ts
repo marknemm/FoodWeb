@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AdminScheduleDeliveryDialogComponent } from '~admin/admin-delivery/admin-schedule-delivery-dialog/admin-schedule-delivery-dialog.component';
-import { AccountModule } from '~web/account/account.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AdminAccountSharedModule } from '~admin/admin-account-shared/admin-account-shared.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
 import { DeliveryRoutingModule } from '~web/delivery/delivery-routing.module';
 import { DeliveryModule } from '~web/delivery/delivery.module';
-import { MaterialModule } from '~web/material.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { AdminDeliveryRoutingModule } from './admin-delivery-routing.module';
+import { AdminScheduleDeliveryDialogComponent } from './components/admin-schedule-delivery-dialog/admin-schedule-delivery-dialog.component';
 
 @NgModule({
   declarations: [
@@ -17,10 +18,11 @@ import { AdminDeliveryRoutingModule } from './admin-delivery-routing.module';
   imports: [
     AdminDeliveryRoutingModule,
     DeliveryRoutingModule,
-    AccountModule,
+    AdminAccountSharedModule,
     CommonModule,
     DateTimeModule,
-    MaterialModule,
+    MatButtonModule,
+    MatDialogModule,
     ReactiveFormsModule,
     SharedModule
   ],

@@ -1,7 +1,7 @@
 import { AccountEntity } from '~entity';
 import { ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
 import { RedisStore } from '~web/helpers/misc/redis-store';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { ImpersonateRecord } from '~web/interfaces/impersonate-record';
 import { readFullAccount } from '~web/services/account/read-accounts';
 import { login } from '~web/services/session/session';

@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { faFlask } from '@fortawesome/free-solid-svg-icons';
-import { AdminAccountMessageForm } from '~admin/admin-account/admin-account-message.form';
-import { AdminAccountMessageService } from '~admin/admin-account/admin-account-message/admin-account-message.service';
+import { AdminAccountMessageForm } from '~admin/admin-account/forms/admin-account-message.form';
+import { AdminAccountMessageService } from '~admin/admin-account/services/admin-account-message/admin-account-message.service';
 import { AccountReadFilters, AccountReadRequest } from '~shared';
-import { PageTitleService } from '~web/shared/page-title/page-title.service';
 
 @Component({
-  selector: 'food-web-compose-message',
+  selector: 'foodweb-admin-compose-message',
   templateUrl: './admin-account-message.component.html',
   styleUrls: ['./admin-account-message.component.scss'],
 })
@@ -23,7 +22,6 @@ export class AdminAccountMessageComponent implements OnInit {
   constructor(
     private _accountMessageService: AdminAccountMessageService,
     private _activatedRoute: ActivatedRoute,
-    private _pageTitleService: PageTitleService,
     private _router: Router
   ) {}
 
@@ -32,7 +30,6 @@ export class AdminAccountMessageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._pageTitleService.title = 'Compose Message';
     this._activatedRoute.queryParams.subscribe((params: Params) => this._activeFilters = params);
   }
 

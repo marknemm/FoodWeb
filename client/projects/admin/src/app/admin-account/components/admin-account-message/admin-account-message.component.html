@@ -16,7 +16,7 @@
             <fa-icon [icon]="faFlask"></fa-icon>
           </button>
           <button mat-icon-button
-            foodWebConfirmButton
+            foodwebConfirmButton
             type="button"
             class="send-message-button"
             matTooltip="Send Message"
@@ -31,8 +31,8 @@
     </form>
   </mat-sidenav-content>
   <mat-sidenav [opened]="accountFiltersOpened" (openedChange)="accountFiltersOpened = $event" mode="over" position="end" [autoFocus]="false">
-    <food-web-list-filters>
-      <food-web-admin-account-filters [activeFilters]="activeFilters" [omitSorting]="true" (filter)="updateAccountFilters($event)"></food-web-admin-account-filters>
-    </food-web-list-filters>
+    <foodweb-list-filters>
+      <foodweb-admin-account-filters [activeFilters]="activeFilters" [omitSorting]="true" (filter)="updateAccountFilters($event)"></foodweb-admin-account-filters>
+    </foodweb-list-filters>
   </mat-sidenav>
 </mat-sidenav-container>

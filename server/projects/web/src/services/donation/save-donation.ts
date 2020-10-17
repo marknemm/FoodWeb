@@ -4,7 +4,7 @@ import { OrmEntityManager } from '~orm';
 import { AccountHelper, ContactInfo, DonationHelper, DonationSaveData, DonationSaveRequest, DonationStatus } from '~shared';
 import { geocode, geoTimezone } from '~web/helpers/map/geocoder';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
-import { FoodWebError } from '~web/helpers/response/food-web-error';
+import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { readDonation } from '~web/services/donation/read-donations';
 import { genMapRoute } from '~web/services/map/read-map-routes';
 

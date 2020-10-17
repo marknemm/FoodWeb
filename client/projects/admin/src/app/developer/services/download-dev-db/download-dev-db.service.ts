@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '~admin/environments/environment';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { environment } from '~admin-env/environment';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class DownloadDevDbService {
 
   constructor(
     public httpResponseService: HttpResponseService,
-    private _httpClient: HttpClient
+    private _httpClient: HttpClient,
   ) {}
 
   /**
@@ -26,7 +26,7 @@ export class DownloadDevDbService {
       ).subscribe((fileBlob: any) => {
         // Requires entire file to be loaded in memory, kind of hacky, but works for now...
         const downloadLink = document.createElement('a');
-        downloadLink.href = window.URL.createObjectURL(fileBlob);
+        downloadLink.href = URL.createObjectURL(fileBlob);
         downloadLink.download = 'dev-db-init.pgsql';
         downloadLink.click();
       });

@@ -1,0 +1,128 @@
+@import "constants.scss";
+
+$site-title-font-size: 42px;
+$site-title-font-size-md: 30px;
+$site-title-font-size-sm: 24px;
+
+header {
+  position: relative;
+  display: block;
+  z-index: 20;
+  box-shadow: 0 1px 5px 1px rgba(0, 0, 0, 0.5);
+
+  @media only screen and (max-width: $md) {
+    position: sticky;
+  }
+
+  .mat-toolbar {
+    position: relative;
+    background: $primary;
+    height: $header-height;
+
+    @media only screen and (max-width: $md) {
+      height: $header-height-mobile;
+      padding: 0 15px;
+      background: $primary;
+    }
+
+    .site-icon {
+      height: $site-title-font-size + 5px;
+      width: auto;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-crisp-edges;
+      image-rendering: -webkit-optimize-contrast;
+      -ms-interpolation-mode: nearest-neighbor;
+      margin-top: -4px;
+      margin-right: 12px;
+
+      @media only screen and (max-width: $md) {
+        display: none;
+      }
+    }
+
+    .sidenav-toggle-button {
+      position: absolute;
+      display: none;
+      height: $header-height-mobile;
+      line-height: $header-height-mobile;
+      vertical-align: top;
+      outline: none;
+      padding: 0;
+
+      .site-icon {
+        display: inline-block;
+        height: calc(100% - 13px);
+        margin-top: -2px;
+        margin-right: 6px;
+      }
+
+      .mat-icon {
+        margin-top: -3px;
+      }
+
+      @media only screen and (max-width: $md) {
+        position: absolute;
+        display: inline-block;
+      }
+
+      @media only screen and (max-width: $mat-mobile) {
+        left: 5px;
+      }
+    }
+
+    .site-title {
+      display: inline-block;
+      font: $site-title-font-size Muna;
+      height: $site-title-font-size;
+      line-height: $site-title-font-size;
+      color: $accent-darker;
+      margin-top: 4px;
+
+      &:hover {
+        text-decoration: none;
+      }
+
+      @media only screen and (max-width: $md) {
+        font-size: $site-title-font-size-md;
+        line-height: $site-title-font-size-md;
+        height: $site-title-font-size-md;
+        width: 100%;
+        text-align: center;
+        margin-top: 5px;
+      }
+
+      @media only screen and (max-width: $sm) {
+        font-size: $site-title-font-size-sm;
+        font-weight: bold;
+        line-height: $site-title-font-size-sm;
+        height: $site-title-font-size-sm;
+      }
+    }
+
+    .header-navigation-container {
+      @media only screen and (max-width: $md) {
+        display: none;
+      }
+    }
+
+    .header-actions-container {
+      position: absolute;
+      right: 16px;
+
+      @media only screen and (max-width: $md) {
+        right: 13px;
+      }
+
+      @media only screen and (max-width: $mat-mobile) {
+        right: 3px;
+      }
+    }
+
+    .non-blocking-page-progress-indicator {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+    }
+  }
+}

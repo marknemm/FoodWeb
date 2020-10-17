@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class claimDeliveryReqHistory1578251033011 implements MigrationInterface {
-  name = 'claimDeliveryReqHistory1578251033011'
+  name = 'claimDeliveryReqHistory1578251033011';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     const alreadyCreated: boolean = (await queryRunner.query(

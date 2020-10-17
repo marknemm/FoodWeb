@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { ConfirmDialogService } from '~web/shared/confirm-dialog/confirm-dialog.service';
+import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 
 @Component({
-  selector: 'food-web-edit-save-button',
+  selector: 'foodweb-edit-save-button',
   templateUrl: './edit-save-button.component.html',
   styleUrls: ['./edit-save-button.component.scss']
 })
@@ -13,7 +13,7 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
   @Input() cancelText = 'Cancel';
   @Input() control: AbstractControl;
   @Input() disableSave = false;
-  @Input() editing = false;
+  @Input() editable = false;
   @Input() editText = 'Edit';
   @Input() noCancelEdit = false;
   @Input() saveText = 'Save';
@@ -54,7 +54,7 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
 
   /**
    * Emits a save event if the associated form is valid and dirty.
-   * If the form is valid and not dirty, then it sets the editing state to false.
+   * If the form is valid and not dirty, then it sets the editable state to false.
    */
   saveValue(): void {
     (this.control)
@@ -79,7 +79,7 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
         });
       }
     } else {
-      // Simply set editing to false if there have been no updates.
+      // Simply set editable to false if there have been no updates.
       this.setEditing(false);
     }
   }
@@ -99,23 +99,23 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
   }
 
   /**
-   * Sets and emits the new editing state.
-   * @param editing The editing state to set.
+   * Sets and emits the new editable state.
+   * @param editable The editable state to set.
    * @param force If set to true, then forces the setting of the edit state.
    * This means that the user will not be asked to confirm the change. Default is false.
    */
-  setEditing(editing: boolean, force = false): void {
-    const confirm$: Observable<boolean> = (this.editing && !editing && !force)
+  setEditing(editable: boolean, force = false): void {
+    const confirm$: Observable<boolean> = (this.editable && !editable && !force)
       ? this._getCancelEditConfirmObs()
       : of(true);
     // Wait for user to confirm cancel of edit if the associated form is dirty.
     confirm$.subscribe((confirm: boolean) => {
       if (confirm) {
-        this.editing = editing;
+        this.editable = editable;
         if (this.control && this.saveCb) {
           this._resetAbstractControl();
         }
-        this.edit.emit(editing);
+        this.edit.emit(editable);
       }
     })
   }
@@ -130,7 +130,8 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
       this._confirmDialogService.displayConfirmDialog(
         'Are you sure you wish to cancel your changes? You will lose all unsaved changes.',
         'Confirm Cancel',
-        [{ text: 'Yes', value: true, cdkFocusPrimary: true }, { text: 'No', value: false, color: 'warn' }]
+        'Yes',
+        'No'
       ) :
       of(true);
   }
@@ -140,7 +141,7 @@ export class EditSaveButtonComponent<T = any> implements OnChanges {
    */
   private _resetAbstractControl(): void {
     if (this.control) {
-      this.control.patchValue(this._lastSaveValue);
+      this.control.setValue(this._lastSaveValue);
       this.control.markAsUntouched();
       this.control.markAsPristine();
     }

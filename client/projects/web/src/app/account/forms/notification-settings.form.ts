@@ -1,7 +1,7 @@
 import { NotificationSettings } from '~shared';
-import { TypedFormGroup } from '~web/data-structure/typed-form-group';
+import { TFormGroup } from '~web/data-structure/t-form-group';
 
-export class NotificationSettingsForm extends TypedFormGroup<NotificationSettings> {
+export class NotificationSettingsForm extends TFormGroup<NotificationSettings> {
 
   constructor(notificationSettings?: Partial<NotificationSettings>) {
     super({

@@ -1,10 +1,10 @@
 <div class="signup page container">
-  <food-web-account-creation-form
+  <foodweb-account-creation-form
     *ngIf="!sessionService.loggedIn"
     (createAccount)="signup($event)"
     accountTypeSelTitle="Select Your Account Type"
     submitButtonTxt="Signup">
-  </food-web-account-creation-form>
+  </foodweb-account-creation-form>
 
   <mat-card *ngIf="sessionService.loggedIn">
     <mat-card-title>Welcome to FoodWeb!</mat-card-title>

@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Account, AccountSectionUpdateReqeust, PasswordUpdateRequest } from '~shared';
-import { PasswordFormT } from '~web/account/account.form';
-import { environment } from '~web/environments/environment';
-import { SessionService } from '~web/session/session/session.service';
-import { HttpResponseService } from '~web/shared/http-response/http-response.service';
+import { environment } from '~web-env/environment';
+import { PasswordFormT } from '~web/account-shared/forms/account.form';
+import { SessionService } from '~web/session/services/session/session.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +46,7 @@ export class AccountSaveService {
    */
   private _updateAccountSessionData(savedAccount: Account): void {
     if (savedAccount.id === this._sessionService.account.id) {
-      this._sessionService.account = savedAccount;
+      this._sessionService.saveAccount(savedAccount);
     }
   }
 

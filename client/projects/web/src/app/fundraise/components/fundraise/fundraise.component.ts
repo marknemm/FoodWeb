@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'food-web-fundraise',
+  selector: 'foodweb-fundraise',
   templateUrl: './fundraise.component.html',
   styleUrls: ['./fundraise.component.scss'],
 })

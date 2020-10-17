@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FundraiseRoutingModule } from '~web/fundraise/fundraise.routing.module';
-import { FundraiseComponent } from '~web/fundraise/fundraise/fundraise.component';
+import { FundraiseComponent } from './components/fundraise/fundraise.component';
+import { FundraiseRoutingModule } from './fundraise.routing.module';
 
 @NgModule({
   declarations: [
