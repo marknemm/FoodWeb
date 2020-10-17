@@ -4,12 +4,7 @@
       <mat-icon>home</mat-icon> <span>Home</span>
     </button>
   </a>
-  <a *ngIf="sessionService.isDonor" [routerLink]="['/donor/donate']">
-    <button mat-button type="button">
-      <fa-icon [icon]="faHandHoldingHeart"></fa-icon> <span>Donate</span>
-    </button>
-  </a>
-  <button mat-button type="button" *ngIf="sessionService.isReceiver" [matMenuTriggerFor]="donationsMenu">
+  <button mat-button type="button" *ngIf="sessionService.isDonor || sessionService.isReceiver" [matMenuTriggerFor]="donationsMenu">
     <fa-icon [icon]="faGifts"></fa-icon> <span>Donations</span>
   </button>
   <button mat-button type="button" *ngIf="sessionService.isVolunteer" [matMenuTriggerFor]="deliveriesMenu">
@@ -26,21 +21,28 @@
 </span>
 
 <mat-menu #donationsMenu="matMenu" class="header-submenu">
-  <a mat-list-item [routerLink]="['/donation/list/my']">
-    <fa-icon [icon]="faGifts"></fa-icon> <span>My Donations</span>
-  </a>
-  <a mat-list-item [routerLink]="['/donation/list']" [queryParams]="donationHelper.findDonationsQueryParams(sessionService.account)">
-    <mat-icon>search</mat-icon> <span>Find Donations</span>
-  </a>
+  <mat-nav-list>
+    <a mat-list-item *ngIf="sessionService.isDonor; else findDonationsTmpl" [routerLink]="['/donor/donate']">
+      <fa-icon [icon]="faHandHoldingHeart"></fa-icon> <span>Donate</span>
+    </a>
+    <ng-template #findDonationsTmpl>
+      <a mat-list-item [routerLink]="['/donation/list']" [queryParams]="donationHelper.findDonationsQueryParams(sessionService.account)">
+        <mat-icon>search</mat-icon> <span>Find Donations</span>
+      </a>
+    </ng-template>
+    <a mat-list-item [routerLink]="['/donation/list/my']">
+      <fa-icon [icon]="faGifts"></fa-icon> <span>My Donations</span>
+    </a>
+  </mat-nav-list>
 </mat-menu>
 
 <mat-menu #deliveriesMenu="matMenu" class="header-submenu">
   <mat-nav-list>
-    <a mat-list-item [routerLink]="['/delivery/list/my']">
-      <mat-icon>my_location</mat-icon> <span>My Deliveries</span>
-    </a>
     <a mat-list-item [routerLink]="['/delivery/list']" [queryParams]="donationHelper.findDonationsQueryParams(sessionService.account)">
       <mat-icon>search</mat-icon> <span>Find Delivery</span>
+    </a>
+    <a mat-list-item [routerLink]="['/delivery/list/my']">
+      <mat-icon>my_location</mat-icon> <span>My Deliveries</span>
     </a>
   </mat-nav-list>
 </mat-menu>

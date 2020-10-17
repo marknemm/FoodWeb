@@ -56,7 +56,7 @@ export class ProfileImgComponent extends FormBaseComponent<string> implements On
   }
 
   calcPlaceholderPaddingPx(placeholderHeightPx: number): number {
-    return Math.floor(placeholderHeightPx * 0.2);
+    return Math.ceil(placeholderHeightPx * 0.2);
   }
 }
 
