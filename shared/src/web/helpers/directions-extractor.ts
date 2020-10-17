@@ -94,7 +94,7 @@ export class DirectionsExtractor {
           lng: (<any>step.start_location).lng()
         }
         : step.start_location,
-    }
+    };
   }
 
   /**

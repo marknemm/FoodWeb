@@ -6,7 +6,7 @@ describe('MapViewportService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MapViewportService = TestBed.get(MapViewportService);
+    const service: MapViewportService = TestBed.inject(MapViewportService);
     expect(service).toBeTruthy();
   });
 });

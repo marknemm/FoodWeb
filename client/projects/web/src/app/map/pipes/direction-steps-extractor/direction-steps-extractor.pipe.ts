@@ -14,7 +14,7 @@ export class DirectionStepsExtractorPipe implements PipeTransform {
         : directions.waypointSegments;
       targetDirSegs.forEach((directionSeg: WaypointSegment) =>
         directionSeg.steps.forEach((step: StepSegment) => {
-          directionSteps.push(step.htmlInstructions)
+          directionSteps.push(step.htmlInstructions);
         })
       );
     }

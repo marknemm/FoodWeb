@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatButton, MatIcon, MatTooltip } from '@angular/material';
 import { MockComponent, MockDirective } from 'ng-mocks';
 import { of } from 'rxjs';
@@ -10,7 +10,7 @@ describe('TableDeleteComponent', () => {
   let fixture: ComponentFixture<TableDeleteComponent>;
   let mockConfirmDialogService: jasmine.SpyObj<ConfirmDialogService>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     mockConfirmDialogService = jasmine.createSpyObj<ConfirmDialogService>(['open']);
     mockConfirmDialogService.open.and.returnValue(of(true));
     TestBed.configureTestingModule({

@@ -58,7 +58,7 @@ export class DirectionsService {
    */
   private _getDirectionsToDonor(donation: Donation, potentialVolunteer: Account): Observable<Directions> {
     if (donation.claim && donation.claim.delivery) {
-      return of(donation.claim.delivery.routeToDonor.directions)
+      return of(donation.claim.delivery.routeToDonor.directions);
     } else if (!potentialVolunteer) {
       return of({ distanceMi: 0, durationMin: 0, encodedPolyline: '', waypointSegments: [] });
     }
@@ -72,7 +72,7 @@ export class DirectionsService {
       destLng: `${donorCoords[0]}`
     };
 
-    const params = new HttpParams({ fromObject: <any>request })
+    const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<MapRoute>(
       `${this.url}/route`, { params, withCredentials: true }
     ).pipe(

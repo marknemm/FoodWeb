@@ -19,7 +19,7 @@
     "job:auto-assign-donations": "node ./dist/server/jobs/src/auto-assign-donations.js",
     "job:delete-password-reset": "node ./dist/server/jobs/src/delete-password-reset.js",
     "job:send-delivery-reminders": "node ./dist/server/jobs/src/delete-password-reset.js",
-    "lint": "tslint -p ./projects/web/tsconfig.json",
+    "lint": "tslint -p ./projects/admin/tsconfig.json && tslint -p ./projects/web/tsconfig.json",
     "pg:destroy": "node ./database-util/js/pg-exec.js -a -f ./database-util/sql/destroy-db.pgsql",
     "pg:dump": "node ./database-util/js/pg-dump.js",
     "pg:initialize": "npm run pg:destroy && node ./database-util/js/pg-initialize.js",

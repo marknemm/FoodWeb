@@ -72,7 +72,7 @@ export interface TableColumn<T = any> {
   /**
    * A callback method that shall be called whenever the column cells' checkboxes' checked-state changes.
    */
-  cellCheckboxCb?: (row: DeepReadonly<T>, name: string, checked: boolean) => void,
+  cellCheckboxCb?: (row: DeepReadonly<T>, name: string, checked: boolean) => void;
   /**
    * Applies a data transform function to the data that is to be displayed in a default cell template.
    * The function takes as input the row, and it should output the value to display in the cell.

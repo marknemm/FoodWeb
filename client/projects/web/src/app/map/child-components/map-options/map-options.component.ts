@@ -14,7 +14,7 @@ export class MapOptionsComponent implements OnInit {
 
   ngOnInit() {}
 
-  get originDonorRouteName(): string{
+  get originDonorRouteName(): string {
     return this.optionsForm.get('useVolunteerCurrentPos').value
       ? 'Current Location to Donor'
       : 'Home to Donor';

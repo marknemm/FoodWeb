@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ProfileImgComponent } from './profile-img.component';
 
@@ -6,7 +6,7 @@ describe('ProfileImgComponent', () => {
   let component: ProfileImgComponent;
   let fixture: ComponentFixture<ProfileImgComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ProfileImgComponent ]
     })

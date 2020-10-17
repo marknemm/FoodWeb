@@ -6,7 +6,7 @@ describe('SessionMonitorService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: SessionMonitorService = TestBed.get(SessionMonitorService);
+    const service: SessionMonitorService = TestBed.inject(SessionMonitorService);
     expect(service).toBeTruthy();
   });
 });

@@ -1,12 +1,12 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { SettingsMenuComponent } from './settings-menu.component';
 
 describe('SettingsMenuComponent', () => {
   let component: SettingsMenuComponent;
   let fixture: ComponentFixture<SettingsMenuComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SettingsMenuComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],

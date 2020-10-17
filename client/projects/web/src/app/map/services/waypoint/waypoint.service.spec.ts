@@ -6,7 +6,7 @@ describe('WaypointService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: WaypointService = TestBed.get(WaypointService);
+    const service: WaypointService = TestBed.inject(WaypointService);
     expect(service).toBeTruthy();
   });
 });

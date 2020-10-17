@@ -179,7 +179,7 @@ export class LocalStorageBucket<K = any, V = any> {
    */
   hasItem(key: K): boolean {
     // NOTE: This will copy the item to the in-memory cache if it does not exist there.
-    return (this._memCacheStore.has(JSON.stringify(key)) || this._getSavedItem(key) != null)
+    return (this._memCacheStore.has(JSON.stringify(key)) || this._getSavedItem(key) != null);
   }
 
   /**

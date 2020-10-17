@@ -5,7 +5,7 @@ describe('HttpResponseService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: HttpResponseService = TestBed.get(HttpResponseService);
+    const service: HttpResponseService = TestBed.inject(HttpResponseService);
     expect(service).toBeTruthy();
   });
 });

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { FilteredListToolbarComponent } from './filtered-list-toolbar.component';
 
@@ -6,7 +6,7 @@ describe('FilteredListToolbarComponent', () => {
   let component: FilteredListToolbarComponent;
   let fixture: ComponentFixture<FilteredListToolbarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ FilteredListToolbarComponent ],
 

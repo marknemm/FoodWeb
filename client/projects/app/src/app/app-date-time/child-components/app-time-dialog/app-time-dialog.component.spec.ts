@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AppTimeDialogComponent } from './app-time-dialog.component';
 
@@ -6,7 +6,7 @@ describe('AppTimeDialogComponent', () => {
   let component: AppTimeDialogComponent;
   let fixture: ComponentFixture<AppTimeDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AppTimeDialogComponent ]
     })

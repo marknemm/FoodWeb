@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { AdminPasswordComponent } from './admin-password.component';
 
 describe('AdminPasswordComponent', () => {
   let component: AdminPasswordComponent;
   let fixture: ComponentFixture<AdminPasswordComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AdminPasswordComponent ],
     }).compileComponents();

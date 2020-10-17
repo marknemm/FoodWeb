@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { FoodSafetyChecklistComponent } from './food-safety-checklist.component';
 
@@ -6,7 +6,7 @@ describe('FoodSafetyChecklistComponent', () => {
   let component: FoodSafetyChecklistComponent;
   let fixture: ComponentFixture<FoodSafetyChecklistComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ FoodSafetyChecklistComponent ]
     })

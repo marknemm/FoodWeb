@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { AdminLeftNavItemsComponent } from './admin-left-nav-items.component';
 
 describe('AdminLeftNavItemsComponent', () => {
   let component: AdminLeftNavItemsComponent;
   let fixture: ComponentFixture<AdminLeftNavItemsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AdminLeftNavItemsComponent ],
     }).compileComponents();

@@ -170,7 +170,7 @@ export class TableComponent<T = any> implements OnChanges, AfterContentInit, OnD
    */
   private _setFooterRowDef(): void {
     this._prevFooterRowDefs.forEach((def: MatFooterRowDef) => this.matTable.removeFooterRowDef(def));
-    this.footerRowDefs.forEach((def: MatFooterRowDef) => this.matTable.addFooterRowDef(def))
+    this.footerRowDefs.forEach((def: MatFooterRowDef) => this.matTable.addFooterRowDef(def));
     this._prevFooterRowDefs = this.footerRowDefs.toArray();
   }
 

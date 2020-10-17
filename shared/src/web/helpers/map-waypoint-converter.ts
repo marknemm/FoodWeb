@@ -5,7 +5,7 @@ import { LatLngLiteral, Waypoint } from '../interfaces/map/map';
  * Performs various (Map) Waypoint conversion operations.
  */
 export class MapWaypointConverter {
-  
+
   /**
    * Converts map waypoints to GPS (lat-lng) coordinates.
    * @param waypoints The map waypoints that are to be converted.

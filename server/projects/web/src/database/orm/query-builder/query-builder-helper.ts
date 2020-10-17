@@ -46,7 +46,7 @@ export interface GenSimpleWhereOptions {
    * Defaults to false. When set, any string filter values that are used for equal or in comparison are first converted
    * to lower case. Also, the associated columns' values are converted to lower case.
    */
-  convertToLowerCase?: boolean
+  convertToLowerCase?: boolean;
   /**
    * Defaults to true. When set, any filter values that are strings that contain comma separated
    * lists will be used to generate an 'IN()' SQL condition instead of one of strict equality.
@@ -112,7 +112,7 @@ function _genSimpleNonNullCondition<T, F>(
 
   return (splitFilterOnComma)
     ? _genSimpleInListCondition(queryBuilder, tableAlias, filters, filterProp, options)
-    : _genSimpleEqualCondition(queryBuilder, tableAlias, filters, filterProp, options)
+    : _genSimpleEqualCondition(queryBuilder, tableAlias, filters, filterProp, options);
 }
 
 function _genSimpleInListCondition<T, F>(

@@ -6,7 +6,7 @@ describe('UsernameRecoveryService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: UsernameRecoveryService = TestBed.get(UsernameRecoveryService);
+    const service: UsernameRecoveryService = TestBed.inject(UsernameRecoveryService);
     expect(service).toBeTruthy();
   });
 });

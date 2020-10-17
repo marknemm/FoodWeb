@@ -59,7 +59,7 @@ export class WaypointService {
       });
     }).pipe(
       map((latLngLiterals: LatLngLiteral[]) => {
-        return this._genWaypointMarkers(waypointAccounts, latLngLiterals, clientWaypoints)
+        return this._genWaypointMarkers(waypointAccounts, latLngLiterals, clientWaypoints);
       })
     );
   }

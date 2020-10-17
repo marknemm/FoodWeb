@@ -17,7 +17,7 @@ function _simplifyFindOneArgs<E>(
   const findOnePreproc: FindOnePreprocessResult<E> = {};
   if (_isArgFindOneId(idOrOptionsOrConditions)) {
     findOnePreproc.conditions = {};
-    const primaryKey: PrimaryKey = entityMeta.primaryKeys[0]
+    const primaryKey: PrimaryKey = entityMeta.primaryKeys[0];
     findOnePreproc[primaryKey.property] = idOrOptionsOrConditions;
   } else if (!idOrOptionsOrConditions || (!idOrOptionsOrConditions['where'] && !idOrOptionsOrConditions['select'])) {
     findOnePreproc.conditions = <FindConditions<E>>idOrOptionsOrConditions;
@@ -34,8 +34,8 @@ function _isArgFindOneId<E>(idOrOptionsOrConditions: OrmFindOneId | FindOneOptio
 }
 
 export interface FindOnePreprocessResult<E> {
-  conditions?: FindConditions<E>,
-  options?: FindOneOptions<E>
+  conditions?: FindConditions<E>;
+  options?: FindOneOptions<E>;
 }
 
 export type OrmFindOneId = string | number | Date;

@@ -5,7 +5,7 @@ describe('RegisterEventService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: RegisterEventService = TestBed.get(RegisterEventService);
+    const service: RegisterEventService = TestBed.inject(RegisterEventService);
     expect(service).toBeTruthy();
   });
 });

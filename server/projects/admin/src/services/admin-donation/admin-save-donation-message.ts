@@ -224,7 +224,7 @@ async function _sendClaimReassignedMessages(donationDiff: UpdateDiff<DonationEnt
         `
       }
     )
-  )
+  );
 
   // Simply message old receiver that their claim has been removed.
   messagePromises.push(

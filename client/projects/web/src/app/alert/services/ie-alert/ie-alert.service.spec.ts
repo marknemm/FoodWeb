@@ -6,7 +6,7 @@ describe('IeAlertService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: IeAlertService = TestBed.get(IeAlertService);
+    const service: IeAlertService = TestBed.inject(IeAlertService);
     expect(service).toBeTruthy();
   });
 });

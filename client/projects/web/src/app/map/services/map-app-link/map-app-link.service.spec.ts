@@ -5,7 +5,7 @@ describe('MapAppLinkService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MapAppLinkService = TestBed.get(MapAppLinkService);
+    const service: MapAppLinkService = TestBed.inject(MapAppLinkService);
     expect(service).toBeTruthy();
   });
 });

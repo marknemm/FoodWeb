@@ -11,7 +11,7 @@ describe('TableTitleComponent', () => {
   let component: TableTitleComponent;
   let fixture: ComponentFixture<TableTitleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         TableTitleComponent,

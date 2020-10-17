@@ -1,12 +1,12 @@
 import 'jasmine';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { DateTimeRangeRadioDialogComponent } from './date-time-range-radio-dialog.component';
 
 describe('DateTimeRangeRadioDialogComponent', () => {
   let component: DateTimeRangeRadioDialogComponent;
   let fixture: ComponentFixture<DateTimeRangeRadioDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DateTimeRangeRadioDialogComponent ]
     })

@@ -47,6 +47,6 @@ export class AdminDeliveryScheduleService extends DeliveryScheduleService {
             }
           : null
       )
-    )
+    );
   }
 }

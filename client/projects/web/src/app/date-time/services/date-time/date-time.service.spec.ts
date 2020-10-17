@@ -8,7 +8,7 @@ describe('TimeRangeService', () => {
     TestBed.configureTestingModule({
       providers: [TimeRangeService]
     });
-    service = TestBed.get(TimeRangeService);
+    service = TestBed.inject(TimeRangeService);
   });
 
   it('should be created', () => {

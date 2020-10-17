@@ -6,7 +6,7 @@ describe('AdminSignupVerificationService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: AdminSignupVerificationService = TestBed.get(AdminSignupVerificationService);
+    const service: AdminSignupVerificationService = TestBed.inject(AdminSignupVerificationService);
     expect(service).toBeTruthy();
   });
 });

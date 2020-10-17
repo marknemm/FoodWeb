@@ -17,8 +17,8 @@ export class RedisStore {
     url: process.env.REDIS_URL,
     password: process.env.REDIS_PASSWORD,
     retry_strategy: (retryOpts: RetryStrategyOptions) => {
-      if (retryOpts.error && retryOpts.error.code === "ECONNREFUSED") {
-        return new Error("The server refused the connection");
+      if (retryOpts.error && retryOpts.error.code === 'ECONNREFUSED') {
+        return new Error('The server refused the connection');
       }
       if (retryOpts.attempt > 10) {
         return undefined;

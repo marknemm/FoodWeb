@@ -7,7 +7,7 @@ describe('TableContainerComponent', () => {
   let component: TableContainerComponent;
   let fixture: ComponentFixture<TableContainerComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ TableContainerComponent ]
     })

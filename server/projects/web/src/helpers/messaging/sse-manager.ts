@@ -71,7 +71,7 @@ class SSEManager {
    */
   removeConnection(account: Account): void {
     if (this._connections.has(account.id)) {
-      if (!this._connections.get(account.id).res.finished) {
+      if (!this._connections.get(account.id).res.writableEnded) {
         this._connections.get(account.id).res.end();
       }
       this._connections.delete(account.id);

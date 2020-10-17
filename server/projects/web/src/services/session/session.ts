@@ -37,7 +37,7 @@ export async function login(loginRequest: LoginRequest): Promise<LoginResponse> 
  */
 async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> {
   // Try to get account via email address.
-  let queryResult: QueryResult<AccountEntity> = await readFullAccounts({ email: usernameEmail, page: 1, limit: 2 }, null);
+  const queryResult: QueryResult<AccountEntity> = await readFullAccounts({ email: usernameEmail, page: 1, limit: 2 }, null);
   if (queryResult.totalCount > 1) {
     throw new FoodWebError('More than one account shares the given email. Please provide a username instead.', 401);
   }

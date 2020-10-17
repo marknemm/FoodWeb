@@ -1,5 +1,5 @@
 import 'jasmine';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AccountSelectComponent } from './account-select.component';
 
@@ -7,7 +7,7 @@ describe('AccountSelectComponent', () => {
   let component: AccountSelectComponent;
   let fixture: ComponentFixture<AccountSelectComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AccountSelectComponent ],
 

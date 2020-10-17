@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MapMarkerInfoComponent } from './map-marker-info.component';
 
@@ -7,7 +7,7 @@ describe('MapMarkerInfoComponent', () => {
   let component: MapMarkerInfoComponent;
   let fixture: ComponentFixture<MapMarkerInfoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MapMarkerInfoComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
