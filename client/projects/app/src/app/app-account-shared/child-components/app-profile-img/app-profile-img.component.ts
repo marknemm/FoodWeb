@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { FormBaseComponent, formProvider } from '~web/data-structure/form-base-component';
+import { Component, OnInit } from '@angular/core';
+import { ProfileImgBaseComponent } from '~web/account-shared/child-components/profile-img/profile-img.base.component';
+import { formProvider } from '~web/data-structure/form-base-component';
 
 @Component({
   selector: 'foodweb-app-profile-img',
@@ -7,4 +8,4 @@ import { FormBaseComponent, formProvider } from '~web/data-structure/form-base-c
   styleUrls: ['./app-profile-img.component.scss'],
   providers: formProvider(AppProfileImgComponent)
 })
-export class AppProfileImgComponent extends FormBaseComponent<string> {}
+export class AppProfileImgComponent extends ProfileImgBaseComponent implements OnInit {}
