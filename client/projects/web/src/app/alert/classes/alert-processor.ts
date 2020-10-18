@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { SimpleAlert, AlertLevel } from '~web/alert/interfaces/simple-alert';
+import { AlertBase, AlertLevel } from '~web/alert/interfaces/alert-base';
 
 export abstract class AlertProcessor {
 
@@ -17,5 +17,5 @@ export abstract class AlertProcessor {
    * @param config The optional alert display configuration.
    * @return An observable that emits the alert UI element closes.
    */
-  abstract displayAlert<T>(alert: SimpleAlert, config?: any): Observable<T>;
+  abstract displayAlert<T>(alert: AlertBase, config?: any): Observable<T>;
 }

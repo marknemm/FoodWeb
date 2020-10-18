@@ -55,7 +55,7 @@ export class AlertService extends AlertProcessor {
     }
 
     alert.primaryAction = alert.actions.filter(
-      (response: AlertAction) => response.cdkFocusPrimary
+      (response: AlertAction) => response.focusPrimary
     )[0];
     if (!alert.primaryAction) {
       alert.primaryAction = alert.actions[0];

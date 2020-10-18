@@ -9,6 +9,7 @@ export const routes: Routes = [
   { path: '', canActivate: [AppAuthGuardService], children: [
     { path: '', pathMatch: 'full', redirectTo: '/home' },
     { path: 'home', component: AppHomeComponent },
+    { path: 'account', loadChildren: () => import('~app/app-account/app-account.module').then(mod => mod.AppAccountModule) },
   ]},
   { path: 'login', component: AppLoginComponent },
   // { path: 'login', loadChildren: () => import('~app/app-signup/app-signup.module').then(mod => mod.AppSignupModule) },

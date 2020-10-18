@@ -3,6 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NativeScriptCommonModule, NativeScriptFormsModule } from '@nativescript/angular';
 import { AppAlertModule } from '~app/app-alert/app-alert.module';
 import { ToBooleanPipe } from '~web/shared/pipes/to-boolean/to-boolean.pipe';
+import { AppEditSaveButtonComponent } from './child-components/app-edit-save-button/app-edit-save-button.component';
 import { AppFocusMaskComponent } from './child-components/app-focus-mask/app-focus-mask.component';
 import { AppProgressIndicatorComponent } from './child-components/app-progress-indicator/app-progress-indicator.component';
 import { AppSelectDialogComponent } from './child-components/app-select-dialog/app-select-dialog.component';
@@ -15,6 +16,7 @@ import { AppVisibleDirective } from './directives/app-visible/app-visible.direct
 @NgModule({
   declarations: [
     AppAndroidFocusableDirective,
+    AppEditSaveButtonComponent,
     AppFocusMaskComponent,
     AppProgressIndicatorComponent,
     AppSelectComponent,
@@ -33,6 +35,7 @@ import { AppVisibleDirective } from './directives/app-visible/app-visible.direct
   exports: [
     AppAlertModule,
     AppAndroidFocusableDirective,
+    AppEditSaveButtonComponent,
     AppFocusMaskComponent,
     AppProgressIndicatorComponent,
     AppSelectComponent,

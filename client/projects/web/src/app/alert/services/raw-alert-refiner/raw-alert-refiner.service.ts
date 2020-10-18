@@ -1,25 +1,22 @@
-import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RawAlertMessage, SimpleAlert, AlertLevel } from '~web/alert/interfaces/simple-alert';
+import { Injectable } from '@angular/core';
+import { AlertBase, AlertLevel, RawAlertMessage } from '~web/alert/interfaces/alert-base';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RawAlertRefinerService {
 
-  constructor() {}
-
   /**
    * Refines a given raw alert message.
    * @param rawAlertMessage The raw alert message that is to be refined.
    * @param level The level that shall be assigned to the alert message.
-   * @return The refined simple alert message.
+   * @return The refined alert object.
    */
-  refineRawAlert(rawAlertMessage: RawAlertMessage, level: AlertLevel): SimpleAlert {
-    return {
-      message: this._deriveAlertMessage(rawAlertMessage),
-      level
-    };
+  refineRawAlert(rawAlertMessage: AlertBase | RawAlertMessage, level: AlertLevel): AlertBase {
+    return (typeof rawAlertMessage === 'string' || rawAlertMessage instanceof Error || rawAlertMessage instanceof HttpErrorResponse)
+      ? { message: this._deriveAlertMessage(rawAlertMessage), level }
+      : rawAlertMessage;
   }
 
   /**

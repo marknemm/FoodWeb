@@ -21,7 +21,7 @@ export class IeAlertService {
         `,
         level: 'warn',
         blocking: true,
-        actions: [{ value: 'Ok', cdkFocusPrimary: true }]
+        actions: [{ value: 'Ok', focusPrimary: true }]
       }, { disableClose: false });
     }
   }
