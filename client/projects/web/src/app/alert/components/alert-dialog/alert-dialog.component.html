@@ -14,19 +14,19 @@
   <div mat-dialog-actions>
     <div class="align-right">
       <ng-container *ngFor="let action of alert.actions">
-        <button mat-button *ngIf="action.buttonType === 'mat-button' && action.cdkFocusPrimary" cdkFocusInitial
+        <button mat-button *ngIf="action.buttonType === 'mat-button' && action.focusPrimary" cdkFocusInitial
         type="button" [color]="action.color" [mat-dialog-close]="action.value">
           <span [innerHTML]="action.text"></span>
         </button>
-        <button mat-button *ngIf="action.buttonType === 'mat-button' && !action.cdkFocusPrimary"
+        <button mat-button *ngIf="action.buttonType === 'mat-button' && !action.focusPrimary"
         type="button" [color]="action.color" [mat-dialog-close]="action.value">
           <span [innerHTML]="action.text"></span>
         </button>
-        <button mat-raised-button *ngIf="action.buttonType === 'mat-raised-button' && action.cdkFocusPrimary" cdkFocusInitial
+        <button mat-raised-button *ngIf="action.buttonType === 'mat-raised-button' && action.focusPrimary" cdkFocusInitial
         type="button" [color]="action.color" [mat-dialog-close]="action.value">
           <span [innerHTML]="action.text"></span>
         </button>
-        <button mat-raised-button *ngIf="action.buttonType === 'mat-raised-button' && !action.cdkFocusPrimary"
+        <button mat-raised-button *ngIf="action.buttonType === 'mat-raised-button' && !action.focusPrimary"
         type="button" [color]="action.color" [mat-dialog-close]="action.value">
           <span [innerHTML]="action.text"></span>
         </button>

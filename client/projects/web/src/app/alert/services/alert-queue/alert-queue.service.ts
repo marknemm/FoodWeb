@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EMPTY, Observable, ObservableInput, Subject } from 'rxjs';
 import { AlertProcessor } from '~web/alert/classes/alert-processor';
-import { AlertLevel, RawAlertMessage, SimpleAlert } from '~web/alert/interfaces/simple-alert';
+import { AlertBase, AlertLevel, RawAlertMessage } from '~web/alert/interfaces/alert-base';
 import { RawAlertRefinerService } from '~web/alert/services/raw-alert-refiner/raw-alert-refiner.service';
 
 /**
@@ -12,8 +12,8 @@ import { RawAlertRefinerService } from '~web/alert/services/raw-alert-refiner/ra
 })
 export class AlertQueueService {
 
-  private _alerts: SimpleAlert[] = [];
-  private _alertAdded = new Subject<SimpleAlert>();
+  private _alerts: AlertBase[] = [];
+  private _alertAdded = new Subject<AlertBase>();
   private _defaultAlertProcessor: AlertProcessor;
 
   constructor(
@@ -25,14 +25,14 @@ export class AlertQueueService {
   /**
    * An observable that emits a FoodWeb alert whenever it is added.
    */
-  get alertAdded(): Observable<SimpleAlert> {
+  get alertAdded(): Observable<AlertBase> {
     return this._alertAdded.asObservable();
   }
 
   /**
    * A readonly array of all of the queued FoodWeb alerts.
    */
-  get alerts(): ReadonlyArray<SimpleAlert> {
+  get alerts(): ReadonlyArray<AlertBase> {
     return this._alerts;
   }
 
@@ -44,39 +44,22 @@ export class AlertQueueService {
   }
 
   /**
-   * Adds a given alert to the alert queue. May also immediately forward the alert message to a top-level default alert processor
-   * if defaultProcessing is enabled.
+   * Adds a given alert to the alert queue for later processing.
    * @param rawAlertMessage The raw alert message that shall be refined and processed by the queue.
    * @param level The level to be assigned to the alert. Deaults to 'danger'.
-   * @param defaultProcessing Whether or not this alert should go through default processing, meaning that it will be immediately
-   * consumed from the alert queue and displayed as a top-level non-blocking alert message. Default is true.
    */
-  add(rawAlertMessage: RawAlertMessage, level: AlertLevel = 'danger', defaultProcessing = true): ObservableInput<never> {
-    const simpleAlert: SimpleAlert = this._rawAlertRefinerService.refineRawAlert(rawAlertMessage, level);
-    this._processSimpleAlert(simpleAlert, defaultProcessing);
+  add(rawAlertMessage: RawAlertMessage, level: AlertLevel = 'danger'): ObservableInput<never> {
+    const alert: AlertBase = this._rawAlertRefinerService.refineRawAlert(rawAlertMessage, level);
+    this._alerts.push(alert);
+    this._alertAdded.next(alert);
     return EMPTY;
-  }
-
-  /**
-   * Processes a given newly created SimpleAlert based off of the balue of a gien defaultProcessing flag.
-   * @param SimpleAlert The alert message that is to be processed.
-   * @param defaultProcessing Whether or not this alert should go through default processing, meaning that it will be immediately
-   * consumed from the alert queue and displayed as a top-level non-blocking alert message.
-   */
-  private _processSimpleAlert(simpleAlert: SimpleAlert, defaultProcessing: boolean): void {
-    if (defaultProcessing && this._defaultAlertProcessor) {
-      this._defaultAlertProcessor.displayAlert(simpleAlert);
-    } else {
-      this._alerts.push(simpleAlert);
-      this._alertAdded.next(simpleAlert);
-    }
   }
 
   /**
    * Deques a processed FoodWeb alert from the queue.
    * @return The dequed FoodWeb alert.
    */
-  deque(): SimpleAlert {
+  deque(): AlertBase {
     return this._alerts.shift();
   }
 
@@ -91,8 +74,39 @@ export class AlertQueueService {
    * Peeks at the next FoodWeb alert within the queue without dequeuing it.
    * @return The next FoodWeb alert.
    */
-  peek(): SimpleAlert {
+  peek(): AlertBase {
     return this._alerts[0];
+  }
+
+  /**
+   * Processes a given alert immediately via either the registered default alert processor.
+   * @param alert The alert that shall be processed.
+   * @param config The optional configuration for the alert.
+   * @return An observable that emits the resulting value from the alert once it is closed.
+   */
+  processImmediately<T = any>(alert: AlertBase, config?: any): Observable<T>;
+
+  /**
+   * Processes a given raw alert message immediately via either the registered default alert processor.
+   * @param rawAlertMessage The raw alert message that shall be processed.
+   * @param level The optional level for the alert message. Defaults to `danger`.
+   * @param config The optional configuration for the alert.
+   * @return An observable that emits the resulting value from the alert once it is closed.
+   */
+  processImmediately<T = any>(rawAlertMessage: RawAlertMessage, level?: AlertLevel, config?: any): Observable<T>;
+
+  processImmediately<T = any>(
+    alert: AlertBase | RawAlertMessage,
+    levelOrConfig?: any,
+    config?: any,
+  ): Observable<T> {
+    alert = this._rawAlertRefinerService.refineRawAlert(alert, levelOrConfig);
+
+    if (!config && typeof levelOrConfig !== 'string') {
+      config = levelOrConfig;
+    }
+
+    return this._defaultAlertProcessor.displayAlert(<AlertBase>alert, config);
   }
 
   /**
