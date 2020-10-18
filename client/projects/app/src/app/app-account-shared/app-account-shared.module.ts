@@ -42,6 +42,18 @@ import { AppWeekdayOperationHoursComponent } from './child-components/app-weekda
   ],
   exports: [
     AppAccountCreationFormComponent,
+    AppAccountTypeComponent,
+    AppAddressComponent,
+    AppContactInfoComponent,
+    AppOrganizationComponent,
+    AppOperationHoursComponent,
+    AppOperationHoursInfoComponent,
+    AppPasswordComponent,
+    AppProfileImgComponent,
+    AppReceiverComponent,
+    AppUsernameComponent,
+    AppVolunteerComponent,
+    AppWeekdayOperationHoursComponent,
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

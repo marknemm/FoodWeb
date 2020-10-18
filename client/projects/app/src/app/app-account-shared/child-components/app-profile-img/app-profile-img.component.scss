@@ -1,1 +1,17 @@
-/* Add mobile styles for the component here.  */
+@import "../../../../styles/constants.scss";
+
+:host {
+  height: 100%;
+  width : 100%;
+
+  .profile-img-container {
+
+    &,
+    Label,
+    Image {
+      border-radius: 50%;
+      height       : 100%;
+      width        : 100%;
+    }
+  }
+}
