@@ -1,7 +1,7 @@
-import { Component, Directive, forwardRef, Input, OnChanges, OnDestroy, Provider, SimpleChanges, Type } from '@angular/core';
+import { Component, Directive, forwardRef, Input, OnChanges, OnDestroy, Provider, SimpleChange, SimpleChanges, Type } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Observable, of, Subject, Subscription } from 'rxjs';
-import { startWith, switchMap, takeUntil } from 'rxjs/operators';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { startWith, takeUntil } from 'rxjs/operators';
 import { ExtractArrayType, ExtractControlType } from '~web/data-structure/generics';
 import { TAbstractControl, UpdateValueOptions } from '~web/data-structure/t-abstract-control';
 import { TFormArray } from '~web/data-structure/t-form-array';
@@ -35,21 +35,32 @@ abstract class _FormBaseComponent<
   FC extends TFormControl<V> = A extends TFormControl<V> ? A : undefined
 > implements OnChanges, OnDestroy, ControlValueAccessor {
 
+  /**
+   * A flag that determines if this component should currently be editable, or display only.
+   */
   @Input() editable: BooleanInput = false;
+
+  /**
+   * The value of the contained active `TAbstractControl`.
+   * Any changes to this input data will result in an update to the abstract control's raw value, and vice-versa.
+   */
+  @Input() value: V;
+
+  // These inputs are used in conjunction with the FormHelper service to lookup `AbstractControl` instances by name,
+  // which are present within a `FormGroup` that is bound to an encompassing `[formGroup]` or `formGroupName` directive
+  // in the surrounding HTML.
   @Input() formArrayName = '';
   @Input() formControlName = '';
   @Input() formGroupName = '';
-  @Input() value: V;
-  @Input() set formArray(array: FA) { this._formArray = array; }
-  @Input() set formControl(control: FC) { this._formControl = control; }
-  @Input() set formGroup(group: FG) { this._formGroup = group; }
+
+  // These inputs are an alternative to the 'name' version, where the `AbstractControl` is passed directly in.
+  @Input() formArray: FA;
+  @Input() formControl: FC;
+  @Input() formGroup: FG;
 
   protected _destroy$ = new Subject();
 
-  private _controlInputBound = false;
-  private _formArray: FA;
-  private _formControl: FC;
-  private _formGroup: FG;
+  private _abstractCtrlDerivedFromInputs = false;
   private _prevAbstractCtrl: A;
   private _valueChangeSubscription = new Subscription();
   private _onChangeCb: (value: V) => void = () => {};
@@ -64,7 +75,9 @@ abstract class _FormBaseComponent<
   constructor(
     protected _defaultControl: A,
     protected _formHelperService: FormHelperService,
-  ) {}
+  ) {
+    this._setDefaultAbstractControl(); // Default initialize the active abstract control.
+  }
 
   /**
    * The active `TAbstractControl` derived within this form component base;
@@ -72,60 +85,21 @@ abstract class _FormBaseComponent<
    * @throws An error when accessed if an abstract control was never set on this component.
    */
   get activeAbstractControl(): A {
-    const abstractControl: A = <any>(
-      (this._formGroup)
-        ? this._formGroup
-        : (this._formArray)
-            ? this._formArray
-            : this._formControl
+    return <any>(
+      (this.formGroup)
+        ? this.formGroup
+        : (this.formArray)
+            ? this.formArray
+            : this.formControl
     );
-    if (!abstractControl) {
-      throw new Error(
-        'FormBaseComponent never initialized its internal form array/control/group. Did you forget to call super.ngOnChanges()?'
-      );
-    }
-    return abstractControl;
   }
 
   /**
-   * Whether or not the derived `TAbstractControl` was supplied as an input binding.
-   * (e.g. `formArray`, `formArrayName`, `formControl`, `formControlName`, `formGroup`, or `formGroupName` is truthy).
+   * Whether or not the derived `TAbstractControl` was derived from a component input binding.
+   * (e.g. `formArray`, `formArrayName`, `formControl`, `formControlName`, `formGroup`, or `formGroupName`).
    */
-  get controlInputBound(): boolean {
-    return this._controlInputBound;
-  }
-
-  /**
-   * The `TFormArray` that is set on the component.
-   * @throws An error when accessed if the form array was never initialized on the component.
-   */
-  get formArray(): FA {
-    if (!this._formArray) {
-      throw new Error('FormBaseComponent never initialized its internal formArray. Did you forget to call super.ngOnChanges()?');
-    }
-    return this._formArray;
-  }
-
-  /**
-   * The `TFormControl` that is set on the component.
-   * @throws An error when accessed if the form control was never initialized on the component.
-   */
-  get formControl(): FC {
-    if (!this._formControl) {
-      throw new Error('FormBaseComponent never intialized its internal formControl. Did you forget to call super.ngOnChanges()?');
-    }
-    return this._formControl;
-  }
-
-  /**
-   * The `TFormGroup` that is set on the component.
-   * @throws An error when accessed if the form group was never initialized on the component.
-   */
-  get formGroup(): FG {
-    if (!this._formGroup) {
-      throw new Error('FormBaseComponent never intialized its internal formGroup. Did you forget to call super.ngOnChanges()?');
-    }
-    return this._formGroup;
+  get abstractCtrlDerivedFromInputs(): boolean {
+    return this._abstractCtrlDerivedFromInputs;
   }
 
   /**
@@ -133,7 +107,7 @@ abstract class _FormBaseComponent<
    * (e.g. `formArray`, `formControl`, or `formGroup` is truthy).
    */
   get hasAbstractControl(): boolean {
-    return !!(this._formArray || this._formControl || this._formGroup);
+    return !!(this.formArray || this.formControl || this.formGroup);
   }
 
   /**
@@ -142,7 +116,7 @@ abstract class _FormBaseComponent<
    * @return The current raw value.
    */
   getRawValue(): V {
-    return (this.controlInputBound)
+    return (this.hasAbstractControl)
       ? (this.activeAbstractControl instanceof FormControl)
         ? this.activeAbstractControl.value
         : (<any>this.activeAbstractControl).getRawValue()
@@ -167,6 +141,7 @@ abstract class _FormBaseComponent<
   /**
    * On input binding changes (including initialization), derives the `TAbstractControl` that is to be used.
    * If no such abstract control can be derived from the updated state of input values, then the default one is used.
+   * Also, synchronizes the `value` input with the current raw value of the derived active abstract control and vice-versa.
    * @param changes The detected simple input binding changes.
    */
   ngOnChanges(changes: SimpleChanges) {
@@ -178,48 +153,73 @@ abstract class _FormBaseComponent<
 
     // If an input was set which can be used to derive the contained abstract control, then attempt to derive.
     if (isAbstractCtrlChange) {
-      this._controlInputBound = !!(
-        this.formControlName || this._formControl
-        || this.formArrayName || this._formArray
-        || this.formGroupName || this._formGroup
-      );
-      this._formControl = this._formControl ? this._formControl : <FC>new TFormControl<V>(); // Set default for fallback if cannot derive.
-      this._formGroup = this._formHelperService.deriveAbstractControl(this.formGroupName, this._formGroup);
-      this._formArray = this._formHelperService.deriveAbstractControl(this.formArrayName, this._formArray);
-      this._formControl = this._formHelperService.deriveAbstractControl(this.formControlName, this._formControl);
+      this._deriveAbstractControlFromInputs();
     }
 
-    // If no abstract control can be derived, then use the default control input into constructor.
+    // If no abstract control has been derived, then use the default control that was supplied as a constructor argument.
     if (!this.hasAbstractControl) {
-      if (this._defaultControl instanceof TFormArray) {
-        this._formArray = <any>this._defaultControl;
-      } else if (this._defaultControl instanceof TFormControl) {
-        this._formControl = <any>this._defaultControl;
-      } else if (this._defaultControl instanceof TFormGroup) {
-        this._formGroup = <any>this._defaultControl;
-      }
+      this._setDefaultAbstractControl();
     }
 
+    // Based off of change to value input and/or abstract control input(s),
+    // synchronize the data in the value input with the raw value in the active abstract control.
     if (this.hasAbstractControl) {
-      // If the value input is updated, propegate the change to the set abstract control.
-      if (changes.value && (!changes.value.firstChange || this.value != null)) {
-        this.activeAbstractControl.setValue(this.value);
-      }
+      this._syncValueWithAbstractControl(changes.value);
+    }
+  }
 
-      // If the contained abstract control has been initialized or updated, then sync value input with its value changes.
-      if (this.activeAbstractControl !== this._prevAbstractCtrl) {
-        this._prevAbstractCtrl = this.activeAbstractControl;
-        this.value = this.activeAbstractControl.value;
-        this._valueChangeSubscription.unsubscribe(); // Ensure we cleanup previous subscription if form control has changed.
-        this._valueChangeSubscription = this.onValueChanges().subscribe((value: V) => {
-          this.value = value;
-          // If the abstract control is not being directly passed in via input binding,
-          // then  must go through traditional means to propegate form change to model (e.g. [(ngModel)] binding is used).
-          if (!this.controlInputBound) {
-            this.onChangeCb(value);
-          }
-        });
-      }
+  /**
+   * Derives the active abstract control from associated component inputs.
+   * Examples of such inputs are `formArray`, `formArrayName`, `formControl`, `formControlName`, `formGroup`, and `formGroupName`.
+   */
+  private _deriveAbstractControlFromInputs(): void {
+    this.formGroup = this._formHelperService.deriveAbstractControl(this.formGroupName, this.formGroup);
+    this.formArray = this._formHelperService.deriveAbstractControl(this.formArrayName, this.formArray);
+    this.formControl = this._formHelperService.deriveAbstractControl(this.formControlName, this.formControl);
+    this._abstractCtrlDerivedFromInputs = !!(this.formGroup || this.formArray || this.formControl);
+  }
+
+  /**
+   * Sets the active `TAbstractControl` to the default one which was supplied as a constructor argument.
+   */
+  private _setDefaultAbstractControl(): void {
+    if (this._defaultControl instanceof TFormArray) {
+      this.formArray = <any>this._defaultControl;
+    } else if (this._defaultControl instanceof TFormControl) {
+      this.formControl = <any>this._defaultControl;
+    } else if (this._defaultControl instanceof TFormGroup) {
+      this.formGroup = <any>this._defaultControl;
+    }
+  }
+
+  /**
+   * Synchronizes the `value` component input with the raw value present in the contained active `TAbstractControl`.
+   * Also, monitors for changes in the active abstract control, and propegates any changes to the value component input.
+   *
+   * Note that any changes to the value component input will propegate to the active abstract control
+   * via the `ngOnChanges` component lifecycle hook.
+   */
+  private _syncValueWithAbstractControl(valueChange: SimpleChange): void {
+    // If the value component input is updated or initialized with non-null data, propegate the change to the set abstract control.
+    if (valueChange && (!valueChange.firstChange || this.value != null)) {
+      this.activeAbstractControl.setValue(this.value);
+    }
+
+    // If the contained abstract control has been updated, then sync the value component input with its raw value
+    if (this.activeAbstractControl !== this._prevAbstractCtrl) {
+      this._prevAbstractCtrl = this.activeAbstractControl;
+      this.value = this.activeAbstractControl.value;
+
+      // Listen for any future changes to the abstract control's value, and sync the value component input with it.
+      this._valueChangeSubscription.unsubscribe(); // Ensure we cleanup previous subscription if form control has changed.
+      this._valueChangeSubscription = this.onValueChanges().subscribe((value: V) => {
+        this.value = value;
+        // If the abstract control is not being directly passed in or derived via input binding,
+        // then must go through traditional means to propegate form change to model (e.g. [(ngModel)] binding is used).
+        if (!this.abstractCtrlDerivedFromInputs) {
+          this.onChangeCb(value);
+        }
+      });
     }
   }
 
@@ -228,22 +228,27 @@ abstract class _FormBaseComponent<
    */
   ngOnDestroy() {
     this._destroy$.next(); // Cleanup form related RxJS subscriptions.
+    if (this.activeAbstractControl?.destroy) {
+      this.activeAbstractControl.destroy();
+    }
   }
 
   /**
+   * @override
    * Writes a given value to the underlying active abstract control; either `formArray`, `formControl`, or `formGroup`.
    * @param value The value to write.
    * @param options Options for the write operation (See AbstractControl.setValue for more details).
    */
   writeValue(value: V, options?: UpdateValueOptions): void {
     // Only set the underlying control's value if it was not supplied via an input binding.
-    // This implies that there is no encompassing from group which has supplied the derived component with its form control.
-    if (!this.controlInputBound) {
+    // If it was set via an input binding, then external changes to the passed in control's value will automatically be applied.
+    if (!this.abstractCtrlDerivedFromInputs) {
       this.activeAbstractControl.setValue(value, options);
     }
   }
 
   /**
+   * @override
    * Registers a given on change callback function, which should be invoked whenever a change is detected in the
    * underlying active abstract control; either `formArray`, `formControl`, or `formGroup`.
    * @param onChangeCb The on change callback function.
@@ -253,6 +258,7 @@ abstract class _FormBaseComponent<
   }
 
   /**
+   * @override
    * Registers a given on touched callback function, which should be invoked whenever a blur event is detected
    * in the underlying view element.
    * @param onTouchedCb The on touched callback function.
@@ -262,21 +268,25 @@ abstract class _FormBaseComponent<
   }
 
   /**
+   * @override
    * Sets the disabled state of the underlying active abstract control; either `formArray`, `formControl`, or `formGroup`.
    * @param isDisabled Whether or not disable should be set.
    */
   setDisabledState(isDisabled: boolean): void {
-    if (!this.controlInputBound) {
+    // Only set the underlying control's disabled state if it was not supplied via an input binding.
+    // If it was set via an input binding, then external changes to the passed in control's disabled state will automatically be applied.
+    if (!this.abstractCtrlDerivedFromInputs) {
       (isDisabled) ? this.activeAbstractControl.disable() : this.activeAbstractControl.enable();
     }
   }
 
   /**
-   * Gets an observable that immediately emits the current value and listens for value changes to occur within a given abstract control.
-   * @param ctrl The abstract control that will be monitored for value changes.
+   * Gets an observable that immediately emits the current value and listens for value changes to occur within a given abstract control,
+   * or the contained active abstract control.
+   * @param ctrl The optional abstract control that will be monitored for value changes.
    * If not set, then defaults to this form base component's active abstract control.
    * @return An observable that emits the current value and any additional value changes.
-   * Will automatically be unsubscribed from when component is destroyed.
+   * Will automatically be unsubscribed from when this component is destroyed.
    */
   monitorValue<P = V>(ctrl: TAbstractControl<P> & AbstractControl = <any>this.activeAbstractControl): Observable<P> {
     return ctrl.valueChanges.pipe(
@@ -286,10 +296,11 @@ abstract class _FormBaseComponent<
   }
 
   /**
-   * Gets an observable that listens for value changes to occur within a given abstract control.
-   * @param ctrl The abstract control that will be monitored for value changes.
+   * Gets an observable that listens for value changes to occur within a given abstract control,
+   * or the contained active abstract control.
+   * @param ctrl The optional abstract control that will be monitored for value changes.
    * If not set, then defaults to this form base component's active abstract control.
-   * @return An observable that emits any value changes. Will automatically be unsubscribed from when component is destroyed.
+   * @return An observable that emits any value changes. Will automatically be unsubscribed from when this component is destroyed.
    */
   onValueChanges<P = V>(ctrl: TAbstractControl<P> & AbstractControl = <any>this.activeAbstractControl): Observable<P> {
     return ctrl.valueChanges.pipe(takeUntil(this._destroy$));
