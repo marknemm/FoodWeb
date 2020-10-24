@@ -15,9 +15,9 @@ export class ContactInfoForm extends TFormGroup<ContactInfo> {
       postalCode: ['', [Validators.required, Validators.pattern(Validation.POSTAL_CODE_REGEX)]],
       location: undefined,
       timezone: undefined,
-      enableEmail: undefined,
-      enablePushNotification: undefined,
-      notifyForEachDonation: undefined
+      enableEmail: true,
+      enablePushNotification: true,
+      notifyForEachDonation: true
     });
     if (contactInfo) {
       this.patchValue(contactInfo);
