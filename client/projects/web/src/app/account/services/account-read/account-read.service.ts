@@ -20,7 +20,6 @@ export class AccountReadService {
     private _httpClient: HttpClient,
     private _router: Router,
     private _sessionService: SessionService,
-    private _window: Window,
   ) {}
 
   updateURLQueryString(filters: AccountReadRequest, activatedRoute: ActivatedRoute): void {
@@ -56,11 +55,6 @@ export class AccountReadService {
     // Attempt to get account from session storage.
     if (id == null) {
       return of(this._sessionService.account);
-    }
-
-    // Attempt to get account from window state history.
-    if (this._window.history.state?.account?.id === id) {
-      return of(this._window.history.state.account);
     }
 
     // Get account from server.
