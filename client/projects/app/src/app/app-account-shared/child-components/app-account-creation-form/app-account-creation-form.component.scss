@@ -1,6 +1,6 @@
-.tab-content {
-  margin-top: 18;
+@import "../../../../styles/constants.scss";
 
+TabContentItem > ScrollView > StackLayout {
   &.account {
     margin-top: 0;
   }
