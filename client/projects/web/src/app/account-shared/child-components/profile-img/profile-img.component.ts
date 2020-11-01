@@ -10,6 +10,10 @@ import { ProfileImgBaseComponent } from './profile-img.base.component';
 })
 export class ProfileImgComponent extends ProfileImgBaseComponent {
 
+  get placeholderPadding(): number {
+    return Math.ceil(this.size * (1 - this.fontSizeRatio) / 2);
+  }
+
   onSelectFile(event: HTMLInputEvent) {
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
@@ -17,14 +21,6 @@ export class ProfileImgComponent extends ProfileImgBaseComponent {
       reader.onload = (progressEvent: ProgressEvent) =>
         this.formControl.setValue((<any>progressEvent.target).result);
     }
-  }
-
-  calcPlaceholderFontSizePx(placeholderHeightPx: number): number {
-    return Math.floor(placeholderHeightPx - (placeholderHeightPx * 0.4));
-  }
-
-  calcPlaceholderPaddingPx(placeholderHeightPx: number): number {
-    return Math.ceil(placeholderHeightPx * 0.2);
   }
 }
 

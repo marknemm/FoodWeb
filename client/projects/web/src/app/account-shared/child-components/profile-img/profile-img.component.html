@@ -1,12 +1,13 @@
 <label class="profile-img" for="profile-img-input" matRipple [matRippleDisabled]="!editable" [ngClass]="{ editable: editable }">
-  <div #placeholderDiv
+  <div
     *ngIf="usePlaceholder; else profileImgTmpl"
     [style.backgroundColor]="placeholder.backgroundColor"
     [style.color]="placeholder.color"
-    [style.font-size.px]="calcPlaceholderFontSizePx(placeholderDiv.offsetHeight)"
-    [style.line-height.px]="calcPlaceholderFontSizePx(placeholderDiv.offsetHeight)"
-    [style.padding-bottom.px]="calcPlaceholderPaddingPx(placeholderDiv.offsetHeight)"
-    [style.padding-top.px]="calcPlaceholderPaddingPx(placeholderDiv.offsetHeight)"
+    [style.font-size.px]="fontSize"
+    [style.height.px]="size"
+    [style.line-height.px]="fontSize"
+    [style.padding.px]="placeholderPadding"
+    [style.width.px]="size"
     class="profile-img-placeholder">
     {{ placeholder.letter }}
   </div>

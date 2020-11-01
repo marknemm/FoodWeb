@@ -1,7 +1,5 @@
 <StackLayout row="0" class="nt-drawer__header">
-  <StackLayout class="nt-drawer__header-image fas t-36">
-    <foodweb-app-profile-img [value]="sessionService.accountProfileImg"></foodweb-app-profile-img>
-  </StackLayout>
+  <foodweb-app-profile-img [value]="sessionService.accountProfileImg" [size]="100"></foodweb-app-profile-img>
   <Label class="nt-drawer__header-brand" [text]="sessionService.accountName"></Label>
   <Label class="nt-drawer__header-footnote" [text]="sessionService.accountEmail"></Label>
 </StackLayout>

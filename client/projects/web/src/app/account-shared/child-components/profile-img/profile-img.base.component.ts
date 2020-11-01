@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { AccountProfileImgPlaceholder } from '~shared';
 import { FormBaseComponent } from '~web/data-structure/form-base-component';
 import { TFormControl } from '~web/data-structure/t-form-control';
@@ -8,8 +8,13 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
 @Component({ template: '' })
 export class ProfileImgBaseComponent extends FormBaseComponent<string> implements OnInit {
 
+  // Default is 40 (px) b/c mat-card-avatar defaults to this size.
+  @Input() size = 40;
+
   @HostBinding()
-  readonly class = '.profile-img';
+  readonly class = 'foodweb-profile-img';
+
+  protected readonly fontSizeRatio = 0.75;
 
   protected _placeholder: AccountProfileImgPlaceholder = { backgroundColor: '', color: '', letter: '' };
 
@@ -18,6 +23,10 @@ export class ProfileImgBaseComponent extends FormBaseComponent<string> implement
     formHelperService: FormHelperService
   ) {
     super(new TFormControl<string>(), formHelperService);
+  }
+
+  get fontSize(): number {
+    return Math.floor(this.size * this.fontSizeRatio);
   }
 
   get placeholder(): AccountProfileImgPlaceholder {
