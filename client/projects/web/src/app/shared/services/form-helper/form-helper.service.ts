@@ -17,7 +17,7 @@ export class FormHelperService {
    * @return The derived abstract control.
    */
   deriveAbstractControl<T extends AbstractControl>(controlName: string, control: T): T {
-    return (controlName)
+    return (this._controlContainer && controlName)
       ? <T>this._controlContainer.control.get(controlName)
       : control;
   }

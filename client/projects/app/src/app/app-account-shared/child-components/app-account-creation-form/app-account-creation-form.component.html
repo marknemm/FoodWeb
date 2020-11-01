@@ -1,4 +1,4 @@
-<Tabs #tabs [formGroup]="accountForm" [selectedIndex]="tabsService.tabIdx" (selectedIndexChanged)="tabsService.toTab(tabs.selectedIndex)" class="nt-form">
+<Tabs #tabs [formGroup]="formGroup" [selectedIndex]="tabsService.tabIdx" (selectedIndexChanged)="tabsService.toTab(tabs.selectedIndex)" class="nt-form">
   <TabStrip *ngIf="accountType" class="tab-strip">
     <TabStripItem *ngIf="true">
       <Label text="Account"></Label>
@@ -69,12 +69,12 @@
           formGroupName="contactInfo"
           [editable]="true"
           [finalReturnKeyType]="(isDonor) ? 'done' : 'next'"
-          (finalReturnPress)="(isDonor) ? createAccount.emit(accountForm) : tabsService.nextTab()"></foodweb-app-contact-info>
+          (finalReturnPress)="(isDonor) ? createAccount.emit(formGroup) : tabsService.nextTab()"></foodweb-app-contact-info>
         <GridLayout rows="auto" columns="*,*" class="tab-actions">
           <Button text="Back" (tap)="tabsService.prevTab()" row="0" col="0" class="-primary"></Button>
           <Button *ngIf="!isDonor; else submitButtonTmpl" text="Next" (tap)="tabsService.nextTab()" row="0" col="1" class="-primary"></Button>
           <ng-template #submitButtonTmpl>
-            <Button text="Submit" (tap)="createAccount.emit(accountForm)" row="0" col="1" class="-primary"></Button>
+            <Button text="Submit" (tap)="createAccount.emit(formGroup)" row="0" col="1" class="-primary"></Button>
           </ng-template>
         </GridLayout>
       </StackLayout>
@@ -89,7 +89,7 @@
         <foodweb-app-operation-hours-info formGroupName="operationHours" [editable]="true"></foodweb-app-operation-hours-info>
         <GridLayout rows="auto" columns="*,*" class="tab-actions">
           <Button text="Back" (tap)="tabsService.prevTab()" row="0" col="0" class="-primary"></Button>
-          <Button text="Submit" (tap)="createAccount.emit(accountForm)" row="0" col="1" class="-primary"></Button>
+          <Button text="Submit" (tap)="createAccount.emit(formGroup)" row="0" col="1" class="-primary"></Button>
         </GridLayout>
       </StackLayout>
     </ScrollView>

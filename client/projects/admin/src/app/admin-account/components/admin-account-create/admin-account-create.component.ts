@@ -1,37 +1,36 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { AccountCreateOptions, AdminAccountForm } from '~admin/admin-account/forms/admin-account.form';
 import { AdminAccountCreateService } from '~admin/admin-account/services/admin-account-create/admin-account-create.service';
 import { AdminSignupVerificationService } from '~admin/admin-account/services/admin-signup-verification/admin-signup-verification.service';
 import { AdminSessionService } from '~admin/admin-session/services/admin-session/admin-session.service';
 import { Account } from '~shared';
+import { FormBaseComponent, formProvider } from '~web/data-structure/form-base-component';
 import { ImmutableStore } from '~web/data-structure/immutable-store';
+import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({
   selector: 'foodweb-admin-create-account',
   templateUrl: './admin-account-create.component.html',
   styleUrls: ['./admin-account-create.component.scss'],
-  providers: [AdminAccountCreateService]
+  providers: [formProvider(AdminAccountCreateComponent), AdminAccountCreateService]
 })
-export class AdminAccountCreateComponent implements OnInit, OnDestroy {
-
-  adminAccountForm: AdminAccountForm;
-
-  private _destroy$ = new Subject();
+export class AdminAccountCreateComponent extends FormBaseComponent<AdminAccountForm> implements OnInit {
 
   constructor(
     public sessionService: AdminSessionService,
     public signupVerificationService: AdminSignupVerificationService,
-    private _createAccountService: AdminAccountCreateService
-  ) {}
+    private _createAccountService: AdminAccountCreateService,
+    formHelperService: FormHelperService
+  ) {
+    super(new AdminAccountForm({ formMode: 'Signup' }), formHelperService);
+  }
 
   get createdAccountStore(): ImmutableStore<Account> {
     return this._createAccountService.createdAccountStore;
   }
 
   ngOnInit() {
-    this.adminAccountForm = new AdminAccountForm({ destroy$: this._destroy$, formMode: 'Signup' });
     this._listenAutoGenPassChange();
   }
 
@@ -40,29 +39,25 @@ export class AdminAccountCreateComponent implements OnInit, OnDestroy {
    * On change, updates the enable/disable state of the form's password fields.
    */
   private _listenAutoGenPassChange(): void {
-    this.adminAccountForm.accountCreateOptionsForm.get('autoGenPassword').valueChanges.pipe(
-      takeUntil(this._destroy$)
-    ).subscribe((autoGen: boolean) => {
-      (autoGen)
-        ? this.adminAccountForm.accountForm.get('password').disable()
-        : this.adminAccountForm.accountForm.get('password').enable();
-    });
+    this.formGroup.accountCreateOptionsForm.onValueChanges('autoGenPassword').subscribe(
+      (autoGen: boolean) => {
+        (autoGen)
+          ? this.formGroup.accountForm.get('password').disable()
+          : this.formGroup.accountForm.get('password').enable();
+      }
+    );
   }
 
   /**
    * Creates the account.
    */
   createAccount(): void {
-    if (this.adminAccountForm.checkValidity()) {
-      const account: Account = this.adminAccountForm.toAccount();
-      const password: string = this.adminAccountForm.password;
-      const accountCreateOpts: AccountCreateOptions = this.adminAccountForm.accountCreateOptions;
+    if (this.formGroup.checkValidity()) {
+      const account: Account = this.formGroup.toAccount();
+      const password: string = this.formGroup.password;
+      const accountCreateOpts: AccountCreateOptions = this.formGroup.accountCreateOptions;
       this._createAccountService.createAccount(account, password, accountCreateOpts).subscribe();
     }
-  }
-
-  ngOnDestroy() {
-    this._destroy$.next();
   }
 
 }
