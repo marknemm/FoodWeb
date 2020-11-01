@@ -1,0 +1,48 @@
+<!-- <google-map
+  [height]="height"
+  [width]="width"
+  [center]="mapService.mapCenter"
+  [options]="options"
+>
+  <map-marker #marker
+    *ngFor="let waypointMarker of mapService.waypointMarkers"
+    [label]="waypointMarker.label"
+    [position]="waypointMarker.latLng"
+    [title]="waypointMarker.title"
+    (mapClick)="openInfoWindow(marker, waypointMarker)"
+  ></map-marker>
+
+  <map-polyline
+    *ngFor="let polyline of mapService.mapPolylines"
+    [path]="polyline.path"
+    [options]="polyline.options"
+  ></map-polyline>
+
+  <map-info-window>
+    <foodweb-map-marker-info [waypointMarker]="selWaypointMarker"></foodweb-map-marker-info>
+  </map-info-window>
+</google-map>
+
+<ng-container *ngIf="!displayMapOnly">
+  <div class="map-navigation-container">
+    <a [href]="mapService.directionsHref" target="_blank">
+      <button mat-button color="primary" type="button">Open Map Navigation</button>
+    </a>
+  </div>
+  <mat-accordion displayMode="flat">
+    <ng-container *ngIf="mapService.waypointMarkers.length > 2">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>Map Options</mat-expansion-panel-header>
+        <foodweb-map-options [optionsForm]="optionsForm"></foodweb-map-options>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>Directions to Donor</mat-expansion-panel-header>
+        <foodweb-direction-steps [directions]="mapService.directions" filter="Donor"></foodweb-direction-steps>
+      </mat-expansion-panel>
+    </ng-container>
+    <mat-expansion-panel *ngIf="mapService.waypointMarkers.length > 1">
+      <mat-expansion-panel-header>Directions to Receiver</mat-expansion-panel-header>
+      <foodweb-direction-steps [directions]="mapService.directions" filter="Receiver"></foodweb-direction-steps>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ng-container> -->

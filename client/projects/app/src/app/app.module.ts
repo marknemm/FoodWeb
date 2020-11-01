@@ -10,7 +10,7 @@ import { AppErrorHandlerService } from '~app/app-shared/services/app-error-handl
 import { AppShellModule } from '~app/app-shell/app-shell.module';
 import { AppComponent } from '~app/app.component';
 import { AppHomeComponent } from '~app/components/app-home/app-home.component';
-import { AccountHelper, DeliveryHelper, DonationHelper, JSONDateReviver, OperationHoursHelper } from '~shared';
+import { AccountHelper, DeliveryHelper, DonationHelper, JSONDateReviver, MapWaypointConverter, OperationHoursHelper } from '~shared';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
 import { AppAuthenticationService } from './app-session/services/app-authentication/app-authentication.service';
@@ -40,6 +40,7 @@ import { AppSessionService } from './app-session/services/app-session/app-sessio
     DeliveryHelper,
     DonationHelper,
     JSONDateReviver,
+    MapWaypointConverter,
     OperationHoursHelper,
   ],
   bootstrap: [AppComponent],
