@@ -1,0 +1,12 @@
+@import "constants.scss";
+
+/* Fixes a styling error introduced by latest nativescript theme.
+ * See: https://github.com/NativeScript/theme/issues/264 */
+TextView.ng-valid,
+TextField.ng-valid,
+PickerField.ng-valid,
+DatePickerField.ng-valid,
+TimePickerField.ng-valid,
+RadAutoCompleteTextView.ng-valid{
+  margin-bottom: 0;
+}
