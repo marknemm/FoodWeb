@@ -1,4 +1,13 @@
-
+<StackLayout *ngIf="value" class="address">
+  <Label *ngIf="value.streetAddress" [text]="value.streetAddress"></Label>
+  <Label>
+    <FormattedString>
+      <Span *ngIf="value.city" [text]="value.city"></Span>
+      <Span *ngIf="value.stateProvince" [text]="value.stateProvince"></Span>
+      <Span *ngIf="value.postalCode" [text]="value.postalCode"></Span>
+    </FormattedString>
+  </Label>
+</StackLayout>
 
 <!-- <a [href]="mapAnchor" target="_blank" class="address-anchor" *ngIf="!!mapAnchor; else addressContent">
   <ng-container [ngTemplateOutlet]="addressContent"></ng-container>
