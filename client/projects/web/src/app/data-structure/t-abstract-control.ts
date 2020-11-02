@@ -11,6 +11,7 @@ export abstract class TAbstractControl<T> extends AbstractControl {
   readonly value: T;
   readonly valueChanges: Observable<T>;
 
+  abstract destroy?(): void;
   abstract setValue(value: Partial<T>, options?: UpdateValueOptions): void;
   abstract patchValue(value: Partial<T>, options?: UpdateValueOptions): void;
 }
