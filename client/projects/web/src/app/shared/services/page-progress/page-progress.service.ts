@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Event, Router } from '@angular/router';
+import { Event, NavigationEnd, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -69,7 +69,7 @@ export class PageProgressService {
 
   protected _listenForRouteChange(router: Router): void {
     router.events.subscribe((event: Event) => {
-      if (event instanceof PageTransitionEvent) {
+      if (event instanceof NavigationEnd) {
         this.trigger = false;
       }
     });
