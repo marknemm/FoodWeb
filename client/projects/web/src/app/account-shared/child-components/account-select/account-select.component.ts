@@ -2,10 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FloatLabelType } from '@angular/material/form-field';
 import { AccountAutocompleteItem, AccountHelper, AccountType, DeepReadonly } from '~shared';
 import { AccountAutocompleteService } from '~web/account-shared/services/account-autocomplete/account-autocomplete.service';
-import { FormBaseComponent, formProvider } from '~web/data-structure/form-base-component';
-import { ImmutableStore } from '~web/data-structure/immutable-store';
-import { TFormControl } from '~web/data-structure/t-form-control';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
+import { ImmutableStore } from '~web/shared/classes/immutable-store';
 
 @Component({
   selector: 'foodweb-account-select',

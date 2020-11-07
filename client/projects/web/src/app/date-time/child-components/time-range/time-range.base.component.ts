@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { FormBaseComponent } from '~web/data-structure/form-base-component';
 import { TimeRangeForm } from '~web/date-time/forms/time-range.form';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormBaseComponent, FormHelperService } from '~web/forms';
 
 @Component({ template: '' })
 export abstract class TimeRangeBaseComponent extends FormBaseComponent<TimeRangeForm> {

@@ -1,8 +1,8 @@
 import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormArray, ValidatorFn } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FormState, TAbstractControl, UpdateValueOptions } from '~web/data-structure/t-abstract-control';
-import { ExtractControlType } from './generics';
+import { FormState, TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
+import { ExtractControlType } from '~web/forms/interfaces/extract-control-type';
 import { TFormControl } from './t-form-control';
 import { TFormGroup } from './t-form-group';
 

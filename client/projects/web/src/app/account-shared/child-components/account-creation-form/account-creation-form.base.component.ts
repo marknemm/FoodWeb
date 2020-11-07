@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AccountType } from '~shared';
 import { AccountForm } from '~web/account-shared/forms/account.form';
-import { FormBaseComponent } from '~web/data-structure/form-base-component';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormBaseComponent, FormHelperService } from '~web/forms';
 
 @Component({ template: '' })
 export class AccountCreationFormBaseComponent extends FormBaseComponent<AccountForm> implements OnInit {

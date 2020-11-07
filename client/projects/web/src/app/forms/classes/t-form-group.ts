@@ -1,7 +1,7 @@
 import { AbstractControlOptions, AsyncValidatorFn, FormBuilder, FormGroup, ValidatorFn } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FormState, TAbstractControl, UpdateValueOptions } from '~web/data-structure/t-abstract-control';
+import { FormState, TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
 
 /**
  * A typed version of the built-in `FormGroup`.

@@ -2,9 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
 import _ from '~lodash-mixins';
-import { FormBaseComponent } from '~web/data-structure/form-base-component';
-import { TFormControl } from '~web/data-structure/t-form-control';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
 
 @Component({ template: '' })
 export class DateBaseComponent extends FormBaseComponent<Date> {

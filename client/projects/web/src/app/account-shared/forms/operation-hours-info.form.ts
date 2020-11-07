@@ -1,7 +1,7 @@
 import { OperationHours } from '~shared';
 import { OperationHoursInfo } from '~web/account-shared/forms/account.form';
-import { TFormGroup } from '~web/data-structure/t-form-group';
 import { TimeRangeArray } from '~web/date-time/forms/time-range.array';
+import { TFormGroup } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 export class OperationHoursInfoForm extends TFormGroup<OperationHoursInfo> {

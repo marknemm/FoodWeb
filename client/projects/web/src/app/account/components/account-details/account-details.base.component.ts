@@ -6,11 +6,9 @@ import { Account, AccountHelper, AccountType, DonationReadRequest } from '~share
 import { AccountForm, AccountFormKey } from '~web/account-shared/forms/account.form';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
-import { FormBaseComponent } from '~web/data-structure/form-base-component';
+import { FormBaseComponent, FormHelperService } from '~web/forms';
 import { PasswordFormT } from '~web/password/forms/password.form';
 import { SessionService } from '~web/session/services/session/session.service';
-import { SaveCb } from '~web/shared/child-components/edit-save-button/edit-save-button.base.component';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
 @Component({ template: '' })

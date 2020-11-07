@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { formProvider } from '~web/data-structure/form-base-component';
 import { DateTimeRangeBaseComponent } from '~web/date-time/child-components/date-time-range/date-time-range.base.component';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormHelperService, formProvider } from '~web/forms';
 
 @Component({
   selector: 'foodweb-app-date-time-range',

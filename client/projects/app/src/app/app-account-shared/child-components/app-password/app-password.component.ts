@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core
 import { AppTextFieldComponent } from '~app/app-shared/child-components/app-text-field/app-text-field.component';
 import { AppFocusService, Focusable, FocusableComponent } from '~app/app-shared/services/app-focus/app-focus.service';
 import { PasswordBaseComponent } from '~web/account-shared/child-components/password/password.base.component';
-import { formProvider } from '~web/data-structure/form-base-component';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormHelperService, formProvider } from '~web/forms';
 
 @Component({
   selector: 'foodweb-app-password',

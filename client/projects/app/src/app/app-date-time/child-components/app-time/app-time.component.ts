@@ -5,10 +5,9 @@ import { AppFocusMaskComponent } from '~app/app-shared/child-components/app-focu
 import { AppTextFieldComponent } from '~app/app-shared/child-components/app-text-field/app-text-field.component';
 import { AppFocusService, Focusable, FocusableComponent } from '~app/app-shared/services/app-focus/app-focus.service';
 import _ from '~lodash-mixins';
-import { formProvider } from '~web/data-structure/form-base-component';
 import { TimeBaseComponent } from '~web/date-time/child-components/time/time.base.component';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormHelperService, formProvider } from '~web/forms';
 
 @Component({
   selector: 'foodweb-app-time',

@@ -1,9 +1,8 @@
 import { FormControl, ValidatorFn } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DateTimeHelper, TimeRange } from '~shared';
-import { TFormControl } from '~web/data-structure/t-form-control';
-import { TFormControlMembers, TFormGroup } from '~web/data-structure/t-form-group';
 import { DateTimeRange } from '~web/date-time/services/date-time/date-time.service';
+import { TFormControl, TFormControlMembers, TFormGroup } from '~web/forms';
 export { DateTimeRange };
 
 export class TimeRangeForm extends TFormGroup<TimeRange> {

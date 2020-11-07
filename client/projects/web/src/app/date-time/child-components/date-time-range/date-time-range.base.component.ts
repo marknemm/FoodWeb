@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { FormBaseComponent } from '~web/data-structure/form-base-component';
 import { DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormBaseComponent, FormHelperService } from '~web/forms';
 
 @Component({ template: '' })
 export abstract class DateTimeRangeBaseComponent extends FormBaseComponent<DateTimeRangeForm> implements OnChanges {

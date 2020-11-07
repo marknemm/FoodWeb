@@ -3,9 +3,7 @@ import { AutocapitalizationType, Label, ReturnKeyType, TextTransform, TextView }
 import { KeyboardType } from '@nativescript/core/ui/enums';
 import { TextAlignment, TextDecoration, WhiteSpace } from '@nativescript/core/ui/text-base';
 import { AppFocusService, Focusable, FocusableComponent } from '~app/app-shared/services/app-focus/app-focus.service';
-import { FormBaseComponent, formProvider } from '~web/data-structure/form-base-component';
-import { TFormControl } from '~web/data-structure/t-form-control';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
 
 @Component({
   selector: 'foodweb-app-text-view',

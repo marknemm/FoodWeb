@@ -6,9 +6,8 @@ import { AccountHelper } from '~shared';
 import { AccountDetailsComponent } from '~web/account/components/account-details/account-details.component';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
-import { formProvider } from '~web/data-structure/form-base-component';
+import { FormHelperService, formProvider } from '~web/forms';
 import { PasswordForm } from '~web/password/forms/password.form';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
 @Component({

@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
 import { AccountCreateOptions, AdminAccountForm } from '~admin/admin-account/forms/admin-account.form';
 import { AdminAccountCreateService } from '~admin/admin-account/services/admin-account-create/admin-account-create.service';
 import { AdminSignupVerificationService } from '~admin/admin-account/services/admin-signup-verification/admin-signup-verification.service';
 import { AdminSessionService } from '~admin/admin-session/services/admin-session/admin-session.service';
 import { Account } from '~shared';
-import { FormBaseComponent, formProvider } from '~web/data-structure/form-base-component';
-import { ImmutableStore } from '~web/data-structure/immutable-store';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { ImmutableStore } from '~web/shared/classes/immutable-store';
 
 @Component({
   selector: 'foodweb-admin-create-account',

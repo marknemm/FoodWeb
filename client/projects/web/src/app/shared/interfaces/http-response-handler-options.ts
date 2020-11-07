@@ -1,4 +1,4 @@
-import { ImmutableStore } from '~web/data-structure/immutable-store';
+import { ImmutableStore } from '~web/shared/classes/immutable-store';
 
 /**
  * Options configuration for the HTTP response handler within the HttpResponseService.

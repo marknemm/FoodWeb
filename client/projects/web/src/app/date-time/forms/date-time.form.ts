@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { Validators } from '@angular/forms';
-import { TFormGroup } from '~web/data-structure/t-form-group';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { TFormGroup } from '~web/forms';
 
 export interface DateTimeFormConfig {
   dateTime?: DateTimeFormT;

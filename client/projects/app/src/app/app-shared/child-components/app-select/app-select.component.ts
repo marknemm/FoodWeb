@@ -7,9 +7,7 @@ import { AppTextFieldComponent } from '~app/app-shared/child-components/app-text
 import { RawSelectItem, SelectItem } from '~app/app-shared/interfaces/select-item';
 import { AppFocusService, Focusable, FocusableComponent } from '~app/app-shared/services/app-focus/app-focus.service';
 import _ from '~lodash-mixins';
-import { FormBaseComponent, formProvider } from '~web/data-structure/form-base-component';
-import { TFormControl } from '~web/data-structure/t-form-control';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
 export * from '~app/app-shared/interfaces/select-item';
 
 @Component({

@@ -3,9 +3,9 @@ import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AdminDeliveryForm, AdminDeliveryFormT } from '~admin/admin-delivery/forms/admin-delivery.form';
 import { AccountAutocompleteItem, Donation, DonationSaveData } from '~shared';
-import { TFormGroup } from '~web/data-structure/t-form-group';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { DonateForm, DonationFormT } from '~web/donor/forms/donate.form';
+import { TFormGroup } from '~web/forms';
 
 export class AdminDonationForm extends TFormGroup<AdminDonationFormT> {
 

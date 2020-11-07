@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PasswordComponent } from '~web/account-shared/child-components/password/password.component';
-import { formProvider } from '~web/data-structure/form-base-component';
+import { formProvider } from '~web/forms';
 
 @Component({
   selector: 'foodweb-admin-password',

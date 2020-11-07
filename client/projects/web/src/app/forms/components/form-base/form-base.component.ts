@@ -2,12 +2,12 @@ import { Component, Directive, forwardRef, Input, OnChanges, OnDestroy, Provider
 import { AbstractControl, ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
-import { ExtractArrayType, ExtractControlType } from '~web/data-structure/generics';
-import { TAbstractControl, UpdateValueOptions } from '~web/data-structure/t-abstract-control';
-import { TFormArray } from '~web/data-structure/t-form-array';
-import { TFormControl } from '~web/data-structure/t-form-control';
-import { TFormGroup } from '~web/data-structure/t-form-group';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
+import { TFormArray } from '~web/forms/classes/t-form-array';
+import { TFormControl } from '~web/forms/classes/t-form-control';
+import { TFormGroup } from '~web/forms/classes/t-form-group';
+import { ExtractControlType } from '~web/forms/interfaces/extract-control-type';
+import { FormHelperService } from '~web/forms/services/form-helper/form-helper.service';
 
 /**
  * Base class that implements fundamental ControlValueAccessor functionality.

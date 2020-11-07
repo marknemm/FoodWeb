@@ -1,7 +1,7 @@
 import { Validators } from '@angular/forms';
-import { FeaturedEvent } from '~shared';
-import { TFormGroup } from '~web/data-structure/t-form-group';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { FeaturedEvent } from '~shared';
+import { TFormGroup } from '~web/forms';
 export { FeaturedEvent };
 
 export class FeaturedEventForm extends TFormGroup<FeaturedEvent> {
