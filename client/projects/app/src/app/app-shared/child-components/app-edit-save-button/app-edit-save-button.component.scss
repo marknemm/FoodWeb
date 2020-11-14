@@ -1,1 +1,28 @@
-@import "../../../../styles/constants.scss";
+@import "constants.scss";
+
+.edit-save-button-container {
+  orientation: horizontal;
+
+  .btn {
+    border-radius: 100%;
+    width        : 20;
+    padding      : 0;
+    margin       : 0 0 0 5;
+
+    &.text {
+      width: auto
+    }
+
+    &.edit-button {
+      color: $primary;
+    }
+
+    &.save-button {
+      color: $primary;
+    }
+
+    &.cancel-button {
+      color: $warn;
+    }
+  }
+}

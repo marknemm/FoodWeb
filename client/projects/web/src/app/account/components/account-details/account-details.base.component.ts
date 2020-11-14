@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { Account, AccountHelper, AccountType, DonationReadRequest } from '~shared';
 import { AccountForm, AccountFormKey } from '~web/account-shared/forms/account.form';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
@@ -9,7 +8,6 @@ import { AccountSaveService } from '~web/account/services/account-save/account-s
 import { FormBaseComponent, FormHelperService } from '~web/forms';
 import { PasswordFormT } from '~web/password/forms/password.form';
 import { SessionService } from '~web/session/services/session/session.service';
-import { SaveCb } from '~web/shared/child-components/edit-save-button/edit-save-button.base.component';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
 @Component({ template: '' })
@@ -106,32 +104,26 @@ export class AccountDetailsBaseComponent extends FormBaseComponent<AccountForm> 
     );
   }
 
-  genSectionSaveCb(sectionName: AccountFormKey): SaveCb {
-    return () => this._saveAccountSection(sectionName);
-  }
-
-  private _saveAccountSection(sectionName: AccountFormKey): Observable<boolean> {
+  saveAccountSection(sectionName: AccountFormKey, successCb: () => void): void {
     const account: Account = this.formGroup.toAccount();
-    return this._accountSaveService.updateAccountSection(account, <keyof Account>sectionName).pipe(
-      map((savedAccount: Account) =>
-        this._handleSaveSuccess(sectionName, savedAccount) // Implicit return true.
-      )
+    this._accountSaveService.updateAccountSection(account, <keyof Account>sectionName).subscribe(
+      (savedAccount: Account) => this._handleSaveSuccess(sectionName, savedAccount, successCb)
     );
   }
 
-  savePassword(): Observable<boolean> {
+  savePassword(successCb: () => void): void {
     const passwordUpdate: PasswordFormT = this.formGroup.passwordFormValue;
-    return this._accountSaveService.updatePassword(this._originalAccount, passwordUpdate).pipe(
-      map(() => this._handleSaveSuccess('password', this.originalAccount)) // Implicit return true.
+    this._accountSaveService.updatePassword(this._originalAccount, passwordUpdate).subscribe(
+      () => this._handleSaveSuccess('password', this.originalAccount, successCb)
     );
   }
 
-  private _handleSaveSuccess(sectionName: AccountFormKey, savedAccount: Account): true {
+  private _handleSaveSuccess(sectionName: AccountFormKey, savedAccount: Account, successCb: () => void): void {
     this._originalAccount = savedAccount;
     const accountSectionPatch: Partial<Account> = {};
     (<any>accountSectionPatch)[sectionName] = savedAccount[<keyof Account>sectionName];
     this.formGroup.patchValue(accountSectionPatch);
-    return true;
+    successCb();
   }
 
 }
