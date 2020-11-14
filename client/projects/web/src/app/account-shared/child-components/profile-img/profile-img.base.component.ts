@@ -1,5 +1,6 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { AccountProfileImgPlaceholder } from '~shared';
+import { Convert } from '~web/component-decorators';
 import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
@@ -7,7 +8,8 @@ import { ConstantsService } from '~web/shared/services/constants/constants.servi
 export class ProfileImgBaseComponent extends FormBaseComponent<string> implements OnInit {
 
   // Default is 40 (px) b/c mat-card-avatar defaults to this size.
-  @Input() size = 40;
+  @Convert()
+  @Input() size: number = 40;
 
   @HostBinding()
   readonly class = 'foodweb-profile-img';

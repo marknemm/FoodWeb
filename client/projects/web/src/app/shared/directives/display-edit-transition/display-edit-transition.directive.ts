@@ -1,6 +1,7 @@
 import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Convert } from '~web/component-decorators';
 
 @Directive({
   selector: '[foodwebDisplayEditTransition]',
@@ -8,9 +9,11 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDestroy {
 
-  @Input('foodwebDisplayEditTransition') editable = false;
+  @Convert()
+  @Input('foodwebDisplayEditTransition') editable: boolean = false;
   @Input() display: HTMLElement;
-  @Input() duration = 0.25;
+  @Convert()
+  @Input() duration: number = 0.25;
   @Input() form: HTMLElement;
   @Input() heightRecalcAtMs: number[];
   @Input() recalcTrigger: Observable<any>;

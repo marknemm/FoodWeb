@@ -4,7 +4,7 @@ import { AppTimeDialogComponent, AppTimeDialogContext } from '~app/app-date-time
 import { AppFocusMaskComponent } from '~app/app-shared/child-components/app-focus-mask/app-focus-mask.component';
 import { AppTextFieldComponent } from '~app/app-shared/child-components/app-text-field/app-text-field.component';
 import { AppFocusService, Focusable, FocusableComponent } from '~app/app-shared/services/app-focus/app-focus.service';
-import _ from '~lodash-mixins';
+import { Convert } from '~web/component-decorators';
 import { TimeBaseComponent } from '~web/date-time/child-components/time/time.base.component';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { FormHelperService, formProvider } from '~web/forms';
@@ -18,17 +18,14 @@ import { FormHelperService, formProvider } from '~web/forms';
 export class AppTimeComponent extends TimeBaseComponent implements FocusableComponent {
 
   @Input() dialogTitle = '';
-  @Input() hintIsDialogTitle: BooleanInput = false;
+  @Convert()
+  @Input() hintIsDialogTitle: boolean = false;
   @Input() label = '';
   @Input() nextFocus: Focusable;
   @Input() visible: VisibleInput;
 
-  @Input() set hint(value: string) {
-    this.placeholder = value;
-  }
-  get hint(): string {
-    return this.placeholder;
-  }
+  @Input() set hint(value: string) { this.placeholder = value; }
+           get hint(): string      { return this.placeholder; }
 
   @Input() set minuteInterval(minutes: number) {
     this.minutesGap = minutes;
@@ -76,7 +73,7 @@ export class AppTimeComponent extends TimeBaseComponent implements FocusableComp
   }
 
   private _genTimeDialogContext(): AppTimeDialogContext {
-    const hintIsDialogTitle = _.toBoolean(this.hintIsDialogTitle);
+    const hintIsDialogTitle = this.hintIsDialogTitle;
     const title: string = (this.dialogTitle)
       ? this.dialogTitle
       : (hintIsDialogTitle) ? this.hint : this.label;

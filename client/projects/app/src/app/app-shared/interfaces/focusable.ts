@@ -1,8 +1,8 @@
 import { EventEmitter } from '@angular/core';
 
 export interface FocusableComponent extends Focusable {
-  enabled?: BooleanInput;
-  editable?: BooleanInput;
+  enabled?: boolean;
+  editable?: boolean;
   visible?: VisibleInput;
   nextFocus: Focusable;
 

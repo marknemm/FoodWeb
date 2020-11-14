@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
+import { Convert } from '~web/component-decorators';
 import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 
 @Component({ template: '' })
@@ -8,12 +9,16 @@ export class EditSaveButtonBaseComponent<T = any> implements OnChanges {
 
   @Input() cancelText = 'Cancel';
   @Input() control: AbstractControl;
-  @Input() disableSave = false;
-  @Input() editable = false;
+  @Convert()
+  @Input() disableSave: boolean = false;
+  @Convert()
+  @Input() editable: boolean = false;
   @Input() editText = 'Edit';
-  @Input() noCancelEdit = false;
+  @Convert()
+  @Input() noCancelEdit: boolean = false;
   @Input() saveText = 'Save';
-  @Input() useButtonText = false;
+  @Convert()
+  @Input() useButtonText: boolean = false;
 
   /**
    * A callback function that will be called whenever the associated data should be saved.

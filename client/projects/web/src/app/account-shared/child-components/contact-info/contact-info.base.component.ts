@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ContactInfoForm } from '~web/account-shared/forms/contact-info.form';
+import { Convert } from '~web/component-decorators';
 import { FormBaseComponent, FormHelperService } from '~web/forms';
 import { MapAnchorType } from '~web/map/interfaces/map';
 
@@ -7,12 +8,16 @@ import { MapAnchorType } from '~web/map/interfaces/map';
 export class ContactInfoBaseComponent extends FormBaseComponent<ContactInfoForm> {
 
   @Input() addressAnchorType: MapAnchorType = 'Directions';
-  @Input() addressFirst = false;
-  @Input() editable = false;
-  @Input() hideAddress = false;
-  @Input() hideEmail = false;
-  @Input() hidePhone = false;
-  @Input() includeMap = false;
+  @Convert()
+  @Input() addressFirst: boolean = false;
+  @Convert()
+  @Input() hideAddress: boolean = false;
+  @Convert()
+  @Input() hideEmail: boolean = false;
+  @Convert()
+  @Input() hidePhone: boolean = false;
+  @Convert()
+  @Input() includeMap: boolean = false;
 
   constructor(formHelperService: FormHelperService) {
     super(new ContactInfoForm(), formHelperService);

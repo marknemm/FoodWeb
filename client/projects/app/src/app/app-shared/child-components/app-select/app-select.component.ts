@@ -6,7 +6,7 @@ import { AppSelectDialogComponent, AppSelectDialogContext } from '~app/app-share
 import { AppTextFieldComponent } from '~app/app-shared/child-components/app-text-field/app-text-field.component';
 import { RawSelectItem, SelectItem } from '~app/app-shared/interfaces/select-item';
 import { AppFocusService, Focusable, FocusableComponent } from '~app/app-shared/services/app-focus/app-focus.service';
-import _ from '~lodash-mixins';
+import { Convert } from '~web/component-decorators';
 import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
 export * from '~app/app-shared/interfaces/select-item';
 
@@ -19,29 +19,28 @@ export * from '~app/app-shared/interfaces/select-item';
 export class AppSelectComponent<T = any> extends FormBaseComponent<TFormControl<T>> implements OnInit, OnChanges, FocusableComponent {
 
   @Input() dialogTitle = ''; // Will default to label when supplied to select dialog.
-  @Input() enabled: BooleanInput = true;
+  @Convert()
+  @Input() editable: boolean = true;
   @Input() hint = '';
-  @Input() hintIsDialogTitle: BooleanInput = false;
-  @Input() isReturnKeyTypeDone = false;
+  @Convert()
+  @Input() hintIsDialogTitle: boolean = false;
+  @Convert()
+  @Input() isReturnKeyTypeDone: boolean = false;
   @Input() items: RawSelectItem<T>[] = [];
-  @Input() letterSpacing = 0;
+  @Convert()
+  @Input() letterSpacing: number = 0;
   @Input() label = '';
+  @Convert()
   @Input() lineHeight: number;
   @Input() nextFocus: Focusable;
   @Input() requireErrMsg = 'Required';
+  @Convert()
   @Input() selectedIndex: number;
   @Input() textAlignment: TextAlignment = 'left';
   @Input() textDecoration: TextDecoration = 'none';
   @Input() textTransform: TextTransform = 'none';
   @Input() visible: VisibleInput = 'visible';
   @Input() whiteSpace: WhiteSpace = 'normal';
-
-  @Input() set editable(value: BooleanInput) {
-    this.enabled = value;
-  }
-  get editable(): BooleanInput {
-    return this.enabled;
-  }
 
   @Output() blur = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
@@ -131,10 +130,9 @@ export class AppSelectComponent<T = any> extends FormBaseComponent<TFormControl<
   }
 
   private _genSelectDialogContext(): AppSelectDialogContext {
-    const hintIsDialogTitle = _.toBoolean(this.hintIsDialogTitle);
     const title: string = (this.dialogTitle)
       ? this.dialogTitle
-      : (hintIsDialogTitle) ? this.hint : this.label;
+      : (this.hintIsDialogTitle) ? this.hint : this.label;
 
     return {
       items: this._getItemNames(),

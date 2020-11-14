@@ -2,6 +2,7 @@ import { Component, Directive, forwardRef, Input, OnChanges, OnDestroy, Provider
 import { AbstractControl, ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
+import { Convert } from '~web/component-decorators';
 import { TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
 import { TFormArray } from '~web/forms/classes/t-form-array';
 import { TFormControl } from '~web/forms/classes/t-form-control';
@@ -38,7 +39,8 @@ abstract class _FormBaseComponent<
   /**
    * A flag that determines if this component should currently be editable, or display only.
    */
-  @Input() editable: BooleanInput = false;
+  @Convert()
+  @Input() editable: boolean = false;
 
   /**
    * The value of the contained active `TAbstractControl`.

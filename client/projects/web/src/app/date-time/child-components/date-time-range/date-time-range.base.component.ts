@@ -1,21 +1,28 @@
 import { Component, Input, OnChanges } from '@angular/core';
+import { Convert } from '~web/component-decorators';
 import { DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
 import { FormBaseComponent, FormHelperService } from '~web/forms';
 
 @Component({ template: '' })
 export abstract class DateTimeRangeBaseComponent extends FormBaseComponent<DateTimeRangeForm> implements OnChanges {
 
-  @Input() allowClear: BooleanInput = false;
-  @Input() allowUndefTime: BooleanInput = false;
-  @Input() editable: BooleanInput = false;
   @Input() startDatePlaceholder = 'Start Date';
   @Input() startTimePlaceholder = 'Start Time';
   @Input() endDatePlaceholder = 'End Date';
   @Input() endTimePlaceholder = 'End Time';
-  @Input() minDate = new Date();
+
+  @Convert()
+  @Input() allowClear: boolean = false;
+  @Convert()
+  @Input() allowUndefTime: boolean = false;
+  @Convert()
+  @Input() minDate: Date = new Date();
+  @Convert()
   @Input() maxDate: Date;
-  @Input() floatLabels: BooleanInput = true;
-  @Input() boldTime: BooleanInput = false;
+  @Convert()
+  @Input() floatLabels: boolean = true;
+  @Convert()
+  @Input() boldTime: boolean = false;
 
   constructor(formHelperService: FormHelperService) {
     super(new DateTimeRangeForm(), formHelperService);

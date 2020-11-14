@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ValidationErrors, Validator } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
+import { DateConverter,Convert } from '~web/component-decorators';
 import { DateTimeForm } from '~web/date-time/forms/date-time.form';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
@@ -9,23 +10,33 @@ import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
 @Component({ template: '' })
 export class DateTimeBaseComponent extends FormBaseComponent<Date> implements OnInit, Validator {
 
-  @Input() allowClear: BooleanInput = false;
-  @Input() allowUndefTime: BooleanInput = false;
-  @Input() boldDate: BooleanInput = false;
-  @Input() boldTime: BooleanInput = false;
+  @Convert()
+  @Input() allowClear: boolean = false;
+  @Convert()
+  @Input() allowUndefTime: boolean = false;
+  @Convert()
+  @Input() boldDate: boolean = false;
+  @Convert()
+  @Input() boldTime: boolean = false;
   @Input() datePlaceholder = 'Date';
+  @Convert(DateConverter)
   @Input() defaultDate: 'Now' | Date;
   @Input() defaultTime = '12:00 pm';
-  @Input() editable: BooleanInput = false;
   @Input() errorStateMatcher: ErrorStateMatcher;
-  @Input() excludeDateDisplay: BooleanInput = false;
-  @Input() excludeTimeDisplay: BooleanInput = false;
+  @Convert()
+  @Input() excludeDateDisplay: boolean = false;
+  @Convert()
+  @Input() excludeTimeDisplay: boolean = false;
   @Input() floatLabels: FloatLabelType = 'auto';
-  @Input() inlineFields: BooleanInput = true;
+  @Convert()
+  @Input() inlineFields: boolean = true;
+  @Convert()
   @Input() maxDate: Date;
-  @Input() minDate = new Date();
+  @Convert()
+  @Input() minDate: Date = new Date();
   @Input() minDateWidth = '';
-  @Input() minutesGap = 5;
+  @Convert()
+  @Input() minutesGap: number = 5;
   @Input() primaryLabel = '';
   @Input() timePlaceholder = 'Time';
 

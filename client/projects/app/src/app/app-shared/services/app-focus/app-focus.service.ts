@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Focusable, FocusableComponent } from '~app/app-shared/interfaces/focusable';
-import _ from '~lodash-mixins';
 export * from '~app/app-shared/interfaces/focusable';
 
 /**
@@ -41,15 +40,11 @@ export class AppFocusService {
    * @return Whether or not the component can currently receive focus.
    */
   private _canFocus(focusableComponent: FocusableComponent): boolean {
-    const invisible: boolean = focusableComponent.visible && (
+    const invisible: boolean = focusableComponent.visible === false || (
          focusableComponent.visible === 'collapse'
       || focusableComponent.visible === 'hidden'
     );
-    // Must check if explicitely enabled or disabled. Can be undefined otherwise, which will not impact ability to focus.
-    const enabled: boolean = _.toBoolean(focusableComponent.enabled);
-    const disabled: boolean = (focusableComponent.enabled === false || focusableComponent.enabled === 'false');
-    const editable: boolean = _.toBoolean(focusableComponent.editable);
-    return (!invisible && !disabled && (enabled || editable));
+    return (!invisible && focusableComponent.enabled && focusableComponent.editable);
   }
 
   /**

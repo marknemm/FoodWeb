@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Account, AccountHelper, AccountType } from '~shared';
+import { Convert } from '~web/component-decorators';
 import { MapAnchorType } from '~web/map/interfaces/map';
 
 @Component({
@@ -11,9 +12,12 @@ export class AccountTeaserComponent implements OnInit, OnChanges {
 
   @Input() account: Account;
   @Input() addressAnchorType: MapAnchorType;
+  @Convert()
   @Input() addressFirst = false;
   @Input() customTitle: string;
+  @Convert()
   @Input() hideAddress = false;
+  @Convert()
   @Input() hasEmailSubtitle = false;
 
   private _accountName = '';

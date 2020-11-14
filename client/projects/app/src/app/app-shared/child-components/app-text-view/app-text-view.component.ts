@@ -1,8 +1,9 @@
-import { Component, ElementRef, EventEmitter, HostBinding, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, HostBinding, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { AutocapitalizationType, Label, ReturnKeyType, TextTransform, TextView } from '@nativescript/core';
 import { KeyboardType } from '@nativescript/core/ui/enums';
 import { TextAlignment, TextDecoration, WhiteSpace } from '@nativescript/core/ui/text-base';
 import { AppFocusService, Focusable, FocusableComponent } from '~app/app-shared/services/app-focus/app-focus.service';
+import { Convert } from '~web/component-decorators';
 import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
 
 @Component({
@@ -14,18 +15,25 @@ import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from
 export class AppTextViewComponent extends FormBaseComponent<string> implements OnChanges, FocusableComponent {
 
   @Input() autocapitalizationType: AutocapitalizationType = 'none';
-  @Input() autocorrect: BooleanInput = true;
-  @Input() editable: BooleanInput = true;
+  @Convert()
+  @Input() autocorrect: boolean = true;
+  @Convert()
+  @Input() editable: boolean = true;
   @Input() hint = '';
-  @Input() isReturnKeyTypeDone = false;
+  @Convert()
+  @Input() isReturnKeyTypeDone: boolean = false;
   @Input() keyboardType: KeyboardType;
-  @Input() letterSpacing = 0;
+  @Convert()
+  @Input() letterSpacing: number = 0;
   @Input() label = '';
+  @Convert()
   @Input() lineHeight: number;
-  @Input() maxLength = 999999999;
+  @Convert()
+  @Input() maxLength: number = 999999999;
   @Input() nextFocus: Focusable;
   @Input() returnKeyType: ReturnKeyType;
-  @Input() secure: BooleanInput = false;
+  @Convert()
+  @Input() secure: boolean = false;
   @Input() text = '';
   @Input() textAlignment: TextAlignment = 'left';
   @Input() textDecoration: TextDecoration = 'none';

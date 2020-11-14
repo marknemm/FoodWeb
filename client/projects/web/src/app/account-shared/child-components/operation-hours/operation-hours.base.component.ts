@@ -1,14 +1,17 @@
 import { Component, Input } from '@angular/core';
 import { OperationHoursForm } from '~web/account-shared/forms/operation-hours.form';
+import { Convert } from '~web/component-decorators';
 import { FormBaseComponent, FormHelperService } from '~web/forms';
 
 @Component({ template: '' })
 export class OperationHoursBaseComponent extends FormBaseComponent<OperationHoursForm> {
 
-  @Input() allowClear: BooleanInput = false;
-  @Input() editable: BooleanInput = false;
-  @Input() minutesGap = 5;
-  @Input() allowOverlayClick: BooleanInput = false;
+  @Convert()
+  @Input() allowClear: boolean = false;
+  @Convert()
+  @Input() minutesGap: number = 5;
+  @Convert()
+  @Input() allowOverlayClick: boolean = false;
   @Input() timeWidth = '110px';
   @Input() weekdayPadding = '0 20px 0 0';
   @Input() weekdayWidth = '125px';

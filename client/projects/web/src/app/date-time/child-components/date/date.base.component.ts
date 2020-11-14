@@ -1,19 +1,22 @@
 import { Component, Input } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
-import _ from '~lodash-mixins';
+import { Convert } from '~web/component-decorators';
 import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
 
 @Component({ template: '' })
 export class DateBaseComponent extends FormBaseComponent<Date> {
 
-  @Input() allowClear: BooleanInput = false;
-  @Input() bold: BooleanInput = false;
+  @Convert()
+  @Input() allowClear: boolean = false;
+  @Convert()
+  @Input() bold: boolean = false;
   @Input() defaultDate = '';
-  @Input() editable: BooleanInput = false;
   @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() floatLabels: FloatLabelType = 'auto';
+  @Convert()
   @Input() maxDate: Date;
+  @Convert()
   @Input() minDate: Date;
   @Input() minWidth = '';
   @Input() placeholder = '';
@@ -28,7 +31,7 @@ export class DateBaseComponent extends FormBaseComponent<Date> {
    * Whether or not to show the clear button for the date input field.
    */
   get showClearButton(): boolean {
-    return (_.toBoolean(this.allowClear) && this.formControl?.value && this.formControl.enabled);
+    return (this.allowClear && this.formControl?.value && this.formControl.enabled);
   }
 
   /**
