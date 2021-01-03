@@ -1,8 +1,8 @@
 import { plainToClass } from 'class-transformer';
 import { QueryFailedError } from 'typeorm';
-import { AccountEntity, ContactInfoEntity, OperationHoursEntity, UnverifiedAccountEntity } from '~entity';
+import { AccountEntity, OperationHoursEntity, UnverifiedAccountEntity } from '~entity';
 import { OrmEntityManager, OrmRepository } from '~orm';
-import { AccountHelper, AccountSectionUpdateReqeust, AccountType, AccountUpdateRequest, OperationHoursHelper, SignupRequest } from '~shared';
+import { AccountHelper, AccountType, AccountUpdateRequest, OperationHoursHelper, SignupRequest } from '~shared';
 import { geocode, geoTimezone } from '~web/helpers/map/geocoder';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { FoodWebError } from '~web/helpers/response/foodweb-error';
@@ -26,33 +26,6 @@ export async function createAccount(request: SignupRequest): Promise<NewAccountD
 
   createdAccount.verified = false;
   return { account: createdAccount, unverifiedAccount };
-}
-
-export function updateAccountSection(
-  updateReq: AccountSectionUpdateReqeust,
-  myAccount: AccountEntity
-): Promise<UpdateDiff<AccountEntity>> {
-  if (updateReq.accountSectionName === 'notificationSettings') {
-    return _updateNotificationsSettings(updateReq, myAccount);
-  }
-  // Shallow copy orignal account to set update field(s).
-  const account: AccountEntity = Object.assign(new AccountEntity(), myAccount);
-  (<any>account)[updateReq.accountSectionName] = updateReq.accountSection;
-  return updateAccount({ account }, myAccount);
-}
-
-function _updateNotificationsSettings(
-  updateReq: AccountSectionUpdateReqeust,
-  myAccount: AccountEntity
-): Promise<UpdateDiff<AccountEntity>> {
-  // Shallow copy orignal account to set update field(s).
-  const account: AccountEntity = Object.assign(new AccountEntity(), myAccount);
-  const notificationSettingsUpdate = <ContactInfoEntity>updateReq.accountSection;
-  account.contactInfo = Object.assign(new ContactInfoEntity(), account.contactInfo);
-  account.contactInfo.enableEmail = notificationSettingsUpdate.enableEmail;
-  account.contactInfo.enablePushNotification = notificationSettingsUpdate.enablePushNotification;
-  account.contactInfo.notifyForEachDonation = notificationSettingsUpdate.notifyForEachDonation;
-  return updateAccount({ account }, myAccount);
 }
 
 export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: AccountEntity): Promise<UpdateDiff<AccountEntity>> {

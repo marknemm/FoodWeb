@@ -1,19 +1,12 @@
-export const DateConverter = (value: any) => {
-  if (!value || value instanceof Date) {
-    return value;
-  }
+import { DateTimeHelper } from '~shared';
 
-  let date: Date;
-  if (typeof value === 'number') {
-    date = new Date(value);
-  } else if (typeof value === 'string' && value === 'now') {
-    date = new Date();
-  } else {
-    date = new Date(value.toString());
-  }
+const _dateTimeHelper = new DateTimeHelper();
+
+export const DateConverter = (value: any) => {
+  const date: Date = _dateTimeHelper.toDate(value);
 
   // If value could not be successfully converted to a date, then return value as-is.
-  return (isNaN(date.getTime()))
+  return (!date || isNaN(date.getTime()))
     ? value
     : date;
 };

@@ -34,6 +34,7 @@ import { ShellModule } from '~web/shell/shell.module';
     { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top', duration: 5000 } },
     { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.recaptchaSiteKey },
+    { provide: 'Window',  useValue: window },
     // Provide classes from root shared project.
     AccountHelper,
     DeliveryHelper,

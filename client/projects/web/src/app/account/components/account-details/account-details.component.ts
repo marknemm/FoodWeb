@@ -8,4 +8,8 @@ import { AccountDetailsBaseComponent } from './account-details.base.component';
   styleUrls: ['./account-details.component.scss'],
   providers: formProvider(AccountDetailsComponent)
 })
-export class AccountDetailsComponent extends AccountDetailsBaseComponent {}
+export class AccountDetailsComponent extends AccountDetailsBaseComponent {
+  readonly contactInfoFields = ['contactInfo.email', 'contactInfo.phoneNumber', 'contactInfo.streetAddress',
+                                'contactInfo.city', 'contactInfo.stateProvince', 'contactInfo.postalCode'];
+  readonly notificationFields = ['contactInfo.enableEmail', 'contactInfo.enablePushNotification', 'contactInfo.notifyForEachDonation'];
+}

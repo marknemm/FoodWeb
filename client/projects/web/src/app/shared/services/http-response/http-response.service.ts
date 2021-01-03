@@ -79,7 +79,7 @@ export class HttpResponseService {
 
     // Display a success alert message if one is configured.
     if (opts.successMessage) {
-      this._alertQueueService.add(opts.successMessage, 'success');
+      this._alertQueueService.processImmediately(opts.successMessage, 'success');
     }
   }
 
@@ -90,6 +90,6 @@ export class HttpResponseService {
     }
 
     // Otherwise, perform default error handling, which will complete observable without emitting a value.
-    return this._alertQueueService.add(err);
+    return this._alertQueueService.processImmediately(err, 'danger');
   }
 }

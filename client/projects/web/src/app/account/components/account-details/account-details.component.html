@@ -32,7 +32,7 @@
       <div class="row account-section-content">
         <div class="col-xl-6">
           <mat-card *ngIf="accountType !== 'Volunteer'">
-            <foodweb-edit-save-button #organizationSaveEdit [hidden]="!hasAccountOwnership" [control]="formGroup.get('organization')" (save)="saveAccountSection('organization', $event)">
+            <foodweb-edit-save-button #organizationSaveEdit [hidden]="!hasAccountOwnership" [control]="formGroup.get('organization')" (save)="saveAccountFields(['organization'], $event)">
             </foodweb-edit-save-button>
             <mat-card-title class="block-label">Organization</mat-card-title>
             <mat-card-content>
@@ -45,7 +45,7 @@
           </mat-card>
 
           <mat-card *ngIf="accountType === 'Volunteer'">
-            <foodweb-edit-save-button #volunteerSaveEdit [hidden]="!hasAccountOwnership" [control]="formGroup.get('volunteer')" (save)="saveAccountSection('volunteer', $event)">
+            <foodweb-edit-save-button #volunteerSaveEdit [hidden]="!hasAccountOwnership" [control]="formGroup.get('volunteer')" (save)="saveAccountFields(['volunteer'], $event)">
             </foodweb-edit-save-button>
             <mat-card-title class="block-label">Volunteer Info</mat-card-title>
             <mat-card-content>
@@ -61,7 +61,7 @@
             <foodweb-edit-save-button #contactInfoSaveEdit
               [hidden]="!hasAccountOwnership"
               [control]="formGroup.get('contactInfo')"
-              (save)="saveAccountSection('contactInfo')">
+              (save)="saveAccountFields(contactInfoFields, $event)">
             </foodweb-edit-save-button>
             <mat-card-title class="block-label">Contact Info</mat-card-title>
             <mat-card-content>
@@ -86,7 +86,7 @@
             <foodweb-edit-save-button #operationHoursSaveEdit
               [hidden]="!hasAccountOwnership"
               [control]="formGroup.get('operationHours')"
-              (save)="saveAccountSection('operationHours')"
+              (save)="saveAccountFields(['operationHours'], $event)"
             ></foodweb-edit-save-button>
             <mat-card-title class="block-label">
               Delivery Availability
@@ -116,7 +116,7 @@
             <foodweb-edit-save-button #notificationSettingsSaveEdit
               [hidden]="!hasAccountOwnership"
               [control]="formGroup.get('notificationSettings')"
-              (save)="saveAccountSection('notificationSettings', $event)"
+              (save)="saveAccountFields(notificationFields, $event)"
             ></foodweb-edit-save-button>
             <mat-card-title class="block-label">
               Notification Settings

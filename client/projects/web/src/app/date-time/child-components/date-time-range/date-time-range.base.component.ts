@@ -16,20 +16,20 @@ export abstract class DateTimeRangeBaseComponent extends FormBaseComponent<DateT
   @Convert()
   @Input() allowUndefTime: boolean = false;
   @Convert()
-  @Input() minDate: Date = new Date();
-  @Convert()
-  @Input() maxDate: Date;
+  @Input() boldTime: boolean = false;
   @Convert()
   @Input() floatLabels: boolean = true;
   @Convert()
-  @Input() boldTime: boolean = false;
+  @Input() maxDate: Date;
+  @Convert()
+  @Input() minDate: Date = new Date();
 
   constructor(formHelperService: FormHelperService) {
     super(new DateTimeRangeForm(), formHelperService);
   }
 
   get startEndDateSame(): boolean {
-    return (
+    return !this.value || (
       this.value.startDateTime?.getFullYear() === this.value.endDateTime?.getFullYear()
       && this.value.startDateTime?.getMonth() === this.value.endDateTime?.getMonth()
       && this.value.startDateTime?.getDate() === this.value.endDateTime?.getDate()

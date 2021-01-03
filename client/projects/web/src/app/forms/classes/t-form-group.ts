@@ -130,7 +130,11 @@ export class TFormGroup<T> extends FormGroup {
    * @return An observable that emits the value of this form group whenever its value changes.
    * This observable will automatically be completed when the `destroy$` input emits.
    */
-  onValueChanges(destroy$?: Observable<any>): Observable<T>;
+  onValueChanges(destroy$: Observable<any> = this._destroy$): Observable<T> {
+    return this.valueChanges.pipe(
+      takeUntil(destroy$)
+    );
+  }
 
   /**
    * Gets an observable that emits the value of a target `TAbstractControl` within this `TFormGroup`
@@ -142,16 +146,11 @@ export class TFormGroup<T> extends FormGroup {
    * @return An observable that emits the value of the target control whenever its value changes.
    * This observable will automatically be completed when the `destroy$` input emits.
    */
-  onValueChanges<K extends Extract<keyof T, string>>(name: K, destroy$?: Observable<any>): Observable<T[K]>;
-
-  onValueChanges<K extends Extract<keyof T, string>>(
-    name?: K,
+  onControlValueChanges<K extends Extract<keyof T, string>>(
+    name: K,
     destroy$: Observable<any> = this._destroy$
-  ): Observable<T | T[K]> {
-    const valueChanges$: Observable<T | T[K]> = (name)
-      ? this.get(name).valueChanges
-      : this.valueChanges;
-    return valueChanges$.pipe(
+  ): Observable<T[K]> {
+    return this.get(name).valueChanges.pipe(
       takeUntil(destroy$)
     );
   }
