@@ -13,8 +13,10 @@ import { AppHomeComponent } from '~app/components/app-home/app-home.component';
 import { AccountHelper, DeliveryHelper, DonationHelper, JSONDateReviver, MapWaypointConverter, OperationHoursHelper } from '~shared';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
+import { ScreenSizeService } from '~web/shared/services/screen-size/screen-size.service';
 import { AppAuthenticationService } from './app-session/services/app-authentication/app-authentication.service';
 import { AppSessionService } from './app-session/services/app-session/app-session.service';
+import { AppScreenSizeService } from './app-shared/services/app-screen-size/app-screen-size.service';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { AppSessionService } from './app-session/services/app-session/app-sessio
     { provide: AuthenticationService, useClass: AppAuthenticationService },
     { provide: ErrorHandler, useClass: AppErrorHandlerService },
     { provide: SessionService, useClass: AppSessionService },
+    { provide: ScreenSizeService, useClass: AppScreenSizeService },
     AccountHelper,
     DeliveryHelper,
     DonationHelper,

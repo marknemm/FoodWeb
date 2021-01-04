@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { formProvider } from '~web/data-structure/form-base-component';
+import { formProvider } from '~web/forms';
 import { AccountCreationFormBaseComponent } from './account-creation-form.base.component';
 
 @Component({

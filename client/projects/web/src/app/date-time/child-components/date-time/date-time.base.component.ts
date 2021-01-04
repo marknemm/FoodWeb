@@ -2,33 +2,41 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ValidationErrors, Validator } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
-import _ from '~lodash-mixins';
-import { FormBaseComponent } from '~web/data-structure/form-base-component';
-import { TFormControl } from '~web/data-structure/t-form-control';
+import { Convert } from '~web/component-decorators';
 import { DateTimeForm } from '~web/date-time/forms/date-time.form';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
 
 @Component({ template: '' })
 export class DateTimeBaseComponent extends FormBaseComponent<Date> implements OnInit, Validator {
 
-  @Input() allowClear: BooleanInput = false;
-  @Input() allowUndefTime: BooleanInput = false;
-  @Input() boldDate: BooleanInput = false;
-  @Input() boldTime: BooleanInput = false;
+  @Convert()
+  @Input() allowClear: boolean = false;
+  @Convert()
+  @Input() allowUndefTime: boolean = false;
+  @Convert()
+  @Input() boldDate: boolean = false;
+  @Convert()
+  @Input() boldTime: boolean = false;
   @Input() datePlaceholder = 'Date';
-  @Input() defaultDate: 'Now' | Date;
+  @Convert()
+  @Input() defaultDate: Date;
   @Input() defaultTime = '12:00 pm';
-  @Input() editable: BooleanInput = false;
   @Input() errorStateMatcher: ErrorStateMatcher;
-  @Input() excludeDateDisplay: BooleanInput = false;
-  @Input() excludeTimeDisplay: BooleanInput = false;
+  @Convert()
+  @Input() excludeDateDisplay: boolean = false;
+  @Convert()
+  @Input() excludeTimeDisplay: boolean = false;
   @Input() floatLabels: FloatLabelType = 'auto';
-  @Input() inlineFields: BooleanInput = true;
+  @Convert()
+  @Input() inlineFields: boolean = true;
+  @Convert()
   @Input() maxDate: Date;
-  @Input() minDate = new Date();
+  @Convert()
+  @Input() minDate: Date = new Date();
   @Input() minDateWidth = '';
-  @Input() minutesGap = 5;
+  @Convert()
+  @Input() minutesGap: number = 5;
   @Input() primaryLabel = '';
   @Input() timePlaceholder = 'Time';
 
@@ -47,19 +55,12 @@ export class DateTimeBaseComponent extends FormBaseComponent<Date> implements On
   }
 
   ngOnInit() {
-    const required: boolean = this._deriveFormControlState();
+    this._formHelperService.mapControlStatuses(this.formControl, this.dateTimeForm);
+    this.dateTimeForm.onValueChanges(this._destroy$).subscribe(() =>
+      this.onChangeCb(this.dateTimeForm.toDate())
+    );
+    const required: boolean = this._formHelperService.hasRequiredValidator(this.formControl);
     this.dateTimeForm.init({ defaultDate: this.defaultDate, required });
-  }
-
-  /**
-   * Derives form control state (such as validation, touched, dirty) for the internal date time form
-   * based off of the externally exposed form control.
-   * @return Whether or not the date-time value is required.
-   */
-  private _deriveFormControlState(): boolean {
-    this._formHelperService.onMarkAsTouched(this.formControl, () => this.dateTimeForm.markAllAsTouched());
-    this._formHelperService.onMarkAsPristine(this.formControl, () => this.dateTimeForm.markAsPristine());
-    return this._formHelperService.hasRequiredValidator(this.formControl);
   }
 
   /**
@@ -71,7 +72,7 @@ export class DateTimeBaseComponent extends FormBaseComponent<Date> implements On
   }
 
   /**
-   * Validates the date time form.
+   * Validates the date time form. Provided using the `NG_VALIDATORS` InjectionToken in component providers array.
    * @return Any validation errors that are present in the date time form; null if none are present.
    */
   validate(): ValidationErrors {
@@ -80,6 +81,7 @@ export class DateTimeBaseComponent extends FormBaseComponent<Date> implements On
 
   /**
    * @override
+   * Sets the disabled state of the contained date & time fields.
    * @param isDisabled The disabled state to set.
    */
   setDisabledState(isDisabled: boolean): void {

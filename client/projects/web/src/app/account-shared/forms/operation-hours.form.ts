@@ -1,7 +1,7 @@
 import { FormControl, FormGroupDirective, NgForm, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { OperationHours, Weekday } from '~shared';
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 
 export class OperationHoursForm extends TFormGroup<OperationHours> {
 

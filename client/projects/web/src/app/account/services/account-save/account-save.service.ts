@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Account, AccountSectionUpdateReqeust, PasswordUpdateRequest } from '~shared';
+import { Account, AccountUpdateRequest, PasswordUpdateRequest } from '~shared';
 import { environment } from '~web-env/environment';
 import { PasswordFormT } from '~web/account-shared/forms/account.form';
 import { SessionService } from '~web/session/services/session/session.service';
@@ -23,20 +24,39 @@ export class AccountSaveService {
 
   /**
    * Updates a given account section within a given account.
-   * @param account The account that is to have its section updated.
-   * @param sectionName The name of the account section/property that is to be updated.
+   * @param originalAccount The original account prior to any updates.
+   * @param updateData The raw account update form data.
+   * @param updateFields The names of the account fields that should be updated. Supports dot-notation for nested fields.
    * @return An observable that emits the updated account once the server operation completes.
    */
-  updateAccountSection(account: Account, sectionName: keyof Account): Observable<Account> {
-    const url = `${this.url}/${account.id}/section`;
-    const accountSectionUpdtReq: AccountSectionUpdateReqeust = {
-      accountSectionName: sectionName,
-      accountSection: account[sectionName]
-    };
+  updateAccountFields(originalAccount: Account, updateData: Account, fields: string[]): Observable<Account> {
+    const url = `${this.url}/${originalAccount.id}`;
+
+    // Generate the account update that shall be saved on the server.
+    const accountUpdate = <Account>this.mergeAccountUpdateFields(updateData, _.cloneDeep(originalAccount), fields);
+    const accountSectionUpdtReq: AccountUpdateRequest = { account: accountUpdate };
+
+    // Send the account update request to the server.
     return this._httpClient.put<Account>(url, accountSectionUpdtReq, { withCredentials: true }).pipe(
       tap((savedAccount: Account) => this._updateAccountSessionData(savedAccount)),
       this._httpRepsonseService.handleHttpResponse({ successMessage: 'Account update successful' })
     );
+  }
+
+  /**
+   * Merges a given list of account update fields from a given src account to a dest account.
+   * @param src The source account that shall have its fields merged into dest.
+   * @param dest The dest account that will be internally modified by the merge.
+   * @param fields The names of the account fields that should be merged. Supports dot-notation for nested fields.
+   * @return The dest account.
+   */
+  mergeAccountUpdateFields(src: Partial<Account>, dest: Partial<Account>, fields: string[]): Partial<Account> {
+    if (fields) {
+      for (const field of fields) {
+        _.set(dest, field, _.get(src, field));
+      }
+    }
+    return dest;
   }
 
   /**

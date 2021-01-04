@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, HostBinding } from '@angular/core';
-import { isIOS } from '@nativescript/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Convert } from '~web/component-decorators';
 
 @Component({
   selector: 'foodweb-app-progress-indicator',
@@ -9,12 +9,17 @@ import { isIOS } from '@nativescript/core';
 export class AppProgressIndicatorComponent implements OnInit {
 
   @Input() backdropColor = 'rgba(211, 211, 211, .5)';
-  @Input() blocking = false;
+  @Convert()
+  @Input() blocking: boolean = false;
   @Input() color: string;
-  @Input() diameter = 100;
-  @Input() excludeBackdrop = false;
-  @Input() trigger = false;
-  @Input() value = 0;
+  @Convert()
+  @Input() diameter: number = 100;
+  @Convert()
+  @Input() excludeBackdrop: boolean = false;
+  @Convert()
+  @Input() trigger: boolean = false;
+  @Convert()
+  @Input() value: number = 0;
 
   @HostBinding() readonly class = 'app-progress-indicator';
 

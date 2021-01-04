@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { VolunteerComponent } from '~web/account-shared/child-components/volunteer/volunteer.component';
-import { formProvider } from '~web/data-structure/form-base-component';
+import { formProvider } from '~web/forms';
 
 @Component({
   selector: 'foodweb-admin-volunteer',

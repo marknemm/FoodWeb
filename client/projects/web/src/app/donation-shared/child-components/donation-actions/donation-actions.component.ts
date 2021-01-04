@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Account, DeliveryHelper, Donation, DonationStatus } from '~shared';
+import { Convert } from '~web/component-decorators';
 import { DonationAction, DonationActionsService } from '~web/donation-shared/services/donation-actions/donation-actions.service';
 
 @Component({
@@ -12,10 +13,13 @@ export class DonationActionsComponent implements OnChanges {
 
   @Input() donation: Donation;
   @Input() donationUpdateForm: FormGroup;
-  @Input() hideActionHints = false;
+  @Convert()
+  @Input() hideActionHints: boolean = false;
   @Input() myAccount: Account;
-  @Input() valid = true;
-  @Input() allowAllEditActions = false;
+  @Convert()
+  @Input() valid: boolean = true;
+  @Convert()
+  @Input() allowAllEditActions: boolean = false;
 
   @Output() action = new EventEmitter<DonationAction>();
 

@@ -1,29 +1,35 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { FormBaseComponent } from '~web/data-structure/form-base-component';
+import { Convert } from '~web/component-decorators';
 import { DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormBaseComponent, FormHelperService } from '~web/forms';
 
 @Component({ template: '' })
 export abstract class DateTimeRangeBaseComponent extends FormBaseComponent<DateTimeRangeForm> implements OnChanges {
 
-  @Input() allowClear: BooleanInput = false;
-  @Input() allowUndefTime: BooleanInput = false;
-  @Input() editable: BooleanInput = false;
   @Input() startDatePlaceholder = 'Start Date';
   @Input() startTimePlaceholder = 'Start Time';
   @Input() endDatePlaceholder = 'End Date';
   @Input() endTimePlaceholder = 'End Time';
-  @Input() minDate = new Date();
+
+  @Convert()
+  @Input() allowClear: boolean = false;
+  @Convert()
+  @Input() allowUndefTime: boolean = false;
+  @Convert()
+  @Input() boldTime: boolean = false;
+  @Convert()
+  @Input() floatLabels: boolean = true;
+  @Convert()
   @Input() maxDate: Date;
-  @Input() floatLabels: BooleanInput = true;
-  @Input() boldTime: BooleanInput = false;
+  @Convert()
+  @Input() minDate: Date = new Date();
 
   constructor(formHelperService: FormHelperService) {
     super(new DateTimeRangeForm(), formHelperService);
   }
 
   get startEndDateSame(): boolean {
-    return (
+    return !this.value || (
       this.value.startDateTime?.getFullYear() === this.value.endDateTime?.getFullYear()
       && this.value.startDateTime?.getMonth() === this.value.endDateTime?.getMonth()
       && this.value.startDateTime?.getDate() === this.value.endDateTime?.getDate()

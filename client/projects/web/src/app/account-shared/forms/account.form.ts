@@ -5,7 +5,7 @@ import { OperationHoursInfoForm } from '~web/account-shared/forms/operation-hour
 import { OrganizationForm } from '~web/account-shared/forms/organization.form';
 import { VolunteerForm } from '~web/account-shared/forms/volunteer.form';
 import { NotificationSettingsForm } from '~web/account/forms/notification-settings.form';
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 import { PasswordForm, PasswordFormT } from '~web/password/forms/password.form';
 export { PasswordFormT };
 
@@ -26,7 +26,7 @@ export class AccountForm extends TFormGroup<AccountFormT> {
     });
 
     // Listen for accountType value to update.
-    this.onValueChanges('accountType').subscribe(
+    this.onControlValueChanges('accountType').subscribe(
       this._onAccountTypeUpdate.bind(this)
     );
 

@@ -1,6 +1,6 @@
 import { Component, HostBinding, Input } from '@angular/core';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormHelperService } from '~web/forms';
 import { TimeRangeBaseComponent } from './time-range.base.component';
 
 @Component({

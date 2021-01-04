@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { EventIdentifierForm } from '~admin/admin-event/forms/event-identifier.form';
 import { EventRegistrationsService } from '~admin/admin-event/services/event-registrations/event-registrations.service';
 import { DeepReadonly, EventRegistration, FeaturedEvent } from '~shared';
-import { ImmutableStore } from '~web/data-structure/immutable-store';
+import { ImmutableStore } from '~web/shared/classes/immutable-store';
 import { TableDataSource } from '~web/table/interfaces/table-data-source';
 
 @Component({

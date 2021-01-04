@@ -29,15 +29,10 @@ export class AppDateDialogComponent implements OnInit {
   get minDate(): Date {
     return this.context.minDate;
   }
-
-  get title(): string {
-    return this.context.title;
-  }
 }
 
 export interface AppDateDialogContext {
   date: Date;
   maxDate: Date;
   minDate: Date;
-  title: string;
 }

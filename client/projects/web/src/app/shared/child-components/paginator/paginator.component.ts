@@ -1,8 +1,9 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Convert } from '~web/component-decorators';
 import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
 
 @Component({
@@ -12,8 +13,11 @@ import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
 })
 export class PaginatorComponent implements OnInit, OnDestroy {
 
+  @Convert()
   @Input() length: number;
+  @Convert()
   @Input() page: number;
+  @Convert()
   @Input() limit: number;
 
   private _destory$ = new Subject();

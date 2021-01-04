@@ -1,6 +1,6 @@
 import { AccountReadRequest, AccountType, OperationHours } from '~shared';
 import { OperationHoursForm } from '~web/account-shared/forms/operation-hours.form';
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 export { AccountReadRequest };
 
 export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
