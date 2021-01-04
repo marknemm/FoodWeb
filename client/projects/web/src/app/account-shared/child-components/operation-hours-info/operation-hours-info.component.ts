@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { formProvider } from '~web/data-structure/form-base-component';
+import { FormHelperService, formProvider } from '~web/forms';
 import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 import { OperationHoursInfoBaseComponent } from './operation-hours-info.base.component';
 
 @Component({

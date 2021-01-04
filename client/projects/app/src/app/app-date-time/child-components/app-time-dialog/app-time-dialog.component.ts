@@ -25,14 +25,9 @@ export class AppTimeDialogComponent implements OnInit {
   get time(): Date {
     return this.context.time;
   }
-
-  get title(): string {
-    return this.context.title;
-  }
 }
 
 export interface AppTimeDialogContext {
   minuteInterval: number;
   time: Date;
-  title: string;
 }

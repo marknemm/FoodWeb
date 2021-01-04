@@ -1,4 +1,4 @@
-<mat-card id="donation-{{ donation.id }}" class="donation-teaser">
+<mat-card id="donation-{{ donation.id }}" class="teaser donation-teaser">
   <mat-card-header>
     <foodweb-profile-img mat-card-avatar [value]="donation.donorAccount.profileImg"></foodweb-profile-img>
     <mat-card-title>{{ donation | donationMemberName : AccountType.Donor }}</mat-card-title>
@@ -23,10 +23,8 @@
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <div class="align-right">
-      <a [routerLink]="donation | donationDetailsRouterLink" [state]="{ donation: donation }" class="no-hover">
-        <button mat-raised-button type="button" class="compact" color="primary">View Donation</button>
-      </a>
-    </div>
+    <a [routerLink]="donation | donationDetailsRouterLink" [state]="{ donation: donation }" class="no-hover">
+      <button mat-raised-button type="button" class="compact" color="primary">View Donation</button>
+    </a>
   </mat-card-actions>
 </mat-card>

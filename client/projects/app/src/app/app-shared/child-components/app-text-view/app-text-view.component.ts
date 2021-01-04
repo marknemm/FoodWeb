@@ -1,11 +1,10 @@
-import { Component, ElementRef, EventEmitter, HostBinding, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, HostBinding, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { AutocapitalizationType, Label, ReturnKeyType, TextTransform, TextView } from '@nativescript/core';
 import { KeyboardType } from '@nativescript/core/ui/enums';
 import { TextAlignment, TextDecoration, WhiteSpace } from '@nativescript/core/ui/text-base';
 import { AppFocusService, Focusable, FocusableComponent } from '~app/app-shared/services/app-focus/app-focus.service';
-import { FormBaseComponent, formProvider } from '~web/data-structure/form-base-component';
-import { TFormControl } from '~web/data-structure/t-form-control';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { Convert } from '~web/component-decorators';
+import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
 
 @Component({
   selector: 'foodweb-app-text-view',
@@ -16,18 +15,28 @@ import { FormHelperService } from '~web/shared/services/form-helper/form-helper.
 export class AppTextViewComponent extends FormBaseComponent<string> implements OnChanges, FocusableComponent {
 
   @Input() autocapitalizationType: AutocapitalizationType = 'none';
-  @Input() autocorrect: BooleanInput = true;
-  @Input() editable: BooleanInput = true;
+  @Convert()
+  @Input() autocorrect: boolean = true;
+  @Convert()
+  @Input() editable: boolean = true;
+  @Convert()
+  @Input() editableToggle: boolean = false;
   @Input() hint = '';
-  @Input() isReturnKeyTypeDone = false;
+  @Convert()
+  @Input() isReturnKeyTypeDone: boolean = false;
   @Input() keyboardType: KeyboardType;
-  @Input() letterSpacing = 0;
   @Input() label = '';
+  @Convert()
+  @Input() letterSpacing: number = 0;
+  @Convert()
   @Input() lineHeight: number;
-  @Input() maxLength = 999999999;
+  @Convert()
+  @Input() maxLength: number = 999999999;
   @Input() nextFocus: Focusable;
+  @Input() requiredErrorMsg = 'Required';
   @Input() returnKeyType: ReturnKeyType;
-  @Input() secure: BooleanInput = false;
+  @Convert()
+  @Input() secure: boolean = false;
   @Input() text = '';
   @Input() textAlignment: TextAlignment = 'left';
   @Input() textDecoration: TextDecoration = 'none';
@@ -37,13 +46,16 @@ export class AppTextViewComponent extends FormBaseComponent<string> implements O
 
   @Output() blur = new EventEmitter();
   @Output() done = new EventEmitter();
+  @Output() edit = new EventEmitter<boolean>();
   // tslint:disable-next-line: no-output-rename
   @Output('focus') focusOutput = new EventEmitter();
   @Output() returnPress = new EventEmitter();
+  @Output() save = new EventEmitter<() => void>();
   @Output() textChange = new EventEmitter();
   @Output() textFieldTap = new EventEmitter();
 
   @ViewChild('labelRef', { static: true }) labelRef: ElementRef<Label>;
+  @ViewChild('readonlyRef', { static: true }) readonlyRef: ElementRef<Label>;
   @ViewChild('textViewRef', { static: true }) textViewRef: ElementRef<TextView>;
 
   @HostBinding() readonly class = 'foodweb-app-text-view';
@@ -55,10 +67,47 @@ export class AppTextViewComponent extends FormBaseComponent<string> implements O
     super(new TFormControl<string>(), formHelperService);
   }
 
+  /**
+   * The ngClass object for the GridLayout contained within this component.
+   */
+  get gridNgClass(): any {
+    return {
+      editable: this.editable,
+      error: this.errorsVisible
+    };
+  }
+
+  /**
+   * Whether or not text view error messages are visible.
+   */
+  get errorsVisible(): boolean {
+    return (this.editable && this.formControl.touched && this.formControl.invalid);
+  }
+
+  /**
+   * Whether or not the text view is focusable.
+   */
+  get focusable(): boolean {
+    return this._focusService.isFocusable([this.editable, this.visible]);
+  }
+
+  /**
+   * The focusable element contained within this text view component (e.g. the native TextView).
+   */
   get focusElement(): Focusable {
     return this.textViewRef.nativeElement;
   }
 
+  /**
+   * Whether or not the required error message is visible.
+   */
+  get requiredErrorVisible(): boolean {
+    return (this.formControl.hasError('required') && !!this.requiredErrorMsg);
+  }
+
+  /**
+   * @inheritdoc
+   */
   ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);
     if (changes.isReturnKeyTypeDone && this.isReturnKeyTypeDone != null) {
@@ -66,20 +115,42 @@ export class AppTextViewComponent extends FormBaseComponent<string> implements O
     }
   }
 
+  /**
+   * Hides the soft input method, usually a soft keyboard.
+   */
   dismissSoftInput(): void {
     this.textViewRef.nativeElement.dismissSoftInput();
   }
 
+  /**
+   * @inheritdoc
+   */
   focus(): boolean {
     return this._focusService.focus(this, this.textViewRef.nativeElement);
   }
 
+  /**
+   * Hanldes return press events, which occur on a device's soft keyboard.
+   * @param event The key return press event.
+   */
   onReturnPress(event: any): void {
     this.returnPress.emit(event);
     if (this.returnKeyType === 'next') {
       this._focusService.focusNext(this, true);
     } else if (this.returnKeyType === 'done') {
       this.done.emit();
+    }
+  }
+
+  /**
+   * Sets the editable state of the text view.
+   * @param editable The editable state to set.
+   */
+  setEditable(editable: boolean): void {
+    this.editable = editable;
+    this.edit.emit(editable);
+    if (editable) {
+      setTimeout(() => this.focus());
     }
   }
 }

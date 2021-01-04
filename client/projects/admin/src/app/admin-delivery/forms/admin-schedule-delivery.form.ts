@@ -1,6 +1,6 @@
-import { Account, DateTimeRange } from '~shared';
-import { TFormGroup } from '~web/data-structure/t-form-group';
 import { Validators } from '@angular/forms';
+import { Account, DateTimeRange } from '~shared';
+import { TFormGroup } from '~web/forms';
 
 export class AdminScheduleDeliveryForm extends TFormGroup<DeliveryFormT> {
   constructor() {

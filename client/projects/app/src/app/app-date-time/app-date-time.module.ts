@@ -1,6 +1,6 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NativeScriptCommonModule } from '@nativescript/angular';
+import { NativeScriptCommonModule, NativeScriptFormsModule } from '@nativescript/angular';
 import { AppSharedModule } from '~app/app-shared/app-shared.module';
 import { FormatDateTimePipe } from '~web/date-time/pipes/format-date-time/format-date-time.pipe';
 import { FormatDatePipe } from '~web/date-time/pipes/format-date/format-date.pipe';
@@ -29,6 +29,7 @@ import { AppTimeComponent } from './child-components/app-time/app-time.component
   imports: [
     AppSharedModule,
     NativeScriptCommonModule,
+    NativeScriptFormsModule,
     ReactiveFormsModule,
   ],
   exports: [

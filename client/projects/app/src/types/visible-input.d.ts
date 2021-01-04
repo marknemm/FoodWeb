@@ -1,1 +1,1 @@
-type VisibleInput = BooleanInput | 'visible' | 'hidden' | 'collapse';
+type VisibleInput = true | false | 'true' | 'false' | 'visible' | 'hidden' | 'collapse';

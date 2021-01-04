@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { Convert } from '~web/component-decorators';
 import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 import { TableDataSource } from '~web/table/interfaces/table-data-source';
 export { TableDataSource };
@@ -23,7 +24,8 @@ export class TableDeleteComponent<T = any> implements OnInit {
    * Whether or not the button is disabled.
    * Default is false.
    */
-  @Input() disabled = false;
+  @Convert()
+  @Input() disabled: boolean = false;
   /**
    * The text to display on the responsive large screen (1200px) button.
    * Default value is 'Delete Row'.
@@ -40,7 +42,8 @@ export class TableDeleteComponent<T = any> implements OnInit {
    * trash-bin icon and text on a large (desktop) screen. Once the screen size goes below the large
    * (1200px) threshold, it will only contain the trash-bin icon. Default value is false.
    */
-  @Input() responsive = false;
+  @Convert()
+  @Input() responsive: boolean = false;
   /**
    * The title used for the delete confirmation dialog box. Default is 'Delete Confirmation'.
    */

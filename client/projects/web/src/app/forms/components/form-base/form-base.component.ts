@@ -2,12 +2,13 @@ import { Component, Directive, forwardRef, Input, OnChanges, OnDestroy, Provider
 import { AbstractControl, ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
-import { ExtractArrayType, ExtractControlType } from '~web/data-structure/generics';
-import { TAbstractControl, UpdateValueOptions } from '~web/data-structure/t-abstract-control';
-import { TFormArray } from '~web/data-structure/t-form-array';
-import { TFormControl } from '~web/data-structure/t-form-control';
-import { TFormGroup } from '~web/data-structure/t-form-group';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { Convert } from '~web/component-decorators';
+import { TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
+import { TFormArray } from '~web/forms/classes/t-form-array';
+import { TFormControl } from '~web/forms/classes/t-form-control';
+import { TFormGroup } from '~web/forms/classes/t-form-group';
+import { ExtractControlType } from '~web/forms/interfaces/extract-control-type';
+import { FormHelperService } from '~web/forms/services/form-helper/form-helper.service';
 
 /**
  * Base class that implements fundamental ControlValueAccessor functionality.
@@ -38,7 +39,8 @@ abstract class _FormBaseComponent<
   /**
    * A flag that determines if this component should currently be editable, or display only.
    */
-  @Input() editable: BooleanInput = false;
+  @Convert()
+  @Input() editable: boolean = false;
 
   /**
    * The value of the contained active `TAbstractControl`.
@@ -202,7 +204,7 @@ abstract class _FormBaseComponent<
   private _syncValueWithAbstractControl(valueChange: SimpleChange): void {
     // If the value component input is updated or initialized with non-null data, propegate the change to the set abstract control.
     if (valueChange && (!valueChange.firstChange || this.value != null)) {
-      this.activeAbstractControl.setValue(this.value);
+      this.activeAbstractControl.setValue(this.value, { emitEvent: false });
     }
 
     // If the contained abstract control has been updated, then sync the value component input with its raw value

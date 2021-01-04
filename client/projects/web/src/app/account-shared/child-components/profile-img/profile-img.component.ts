@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { formProvider } from '~web/data-structure/form-base-component';
+import { formProvider } from '~web/forms';
 import { ProfileImgBaseComponent } from './profile-img.base.component';
 
 @Component({
@@ -11,7 +11,7 @@ import { ProfileImgBaseComponent } from './profile-img.base.component';
 export class ProfileImgComponent extends ProfileImgBaseComponent {
 
   get placeholderPadding(): number {
-    return Math.ceil(this.size * (1 - this.fontSizeRatio) / 2);
+    return Math.ceil(this.currentSize * (1 - this.fontSizeRatio) / 2);
   }
 
   onSelectFile(event: HTMLInputEvent) {

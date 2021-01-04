@@ -2,7 +2,7 @@ import express = require('express');
 import { Request, Response } from 'express';
 import { AccountEntity, PasswordResetEntity, UnverifiedAccountEntity } from '~entity';
 import { QueryResult } from '~orm';
-import { Account, AccountAutocompleteItem, AccountAutocompleteRequest, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest, SignupRequest } from '~shared';
+import { Account, AccountAutocompleteItem, AccountAutocompleteRequest, AccountReadRequest, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest, SignupRequest } from '~shared';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { genListResponse } from '~web/helpers/response/list-response';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
@@ -11,7 +11,7 @@ import { genAccountAutocomplete } from '~web/services/account/account-autocomple
 import { recreateUnverifiedAccount, verifyAccount } from '~web/services/account/account-verification';
 import { sendAccountVerificationEmail, sendAccountVerificationMessage } from '~web/services/account/account-verification-message';
 import { readAccount, readAccounts } from '~web/services/account/read-accounts';
-import { createAccount, NewAccountData, updateAccount, updateAccountSection } from '~web/services/account/save-account';
+import { createAccount, NewAccountData, updateAccount } from '~web/services/account/save-account';
 import { sendUsernameRecoveryEmail } from '~web/services/account/username-recovery-message';
 import { AuditEventType, saveAudit, saveUpdateAudit } from '~web/services/audit/save-audit';
 import { sendPasswordResetEmail, sendPasswordResetSuccessEmail } from '~web/services/password/password-reset-message';
@@ -98,18 +98,6 @@ export function handlePostAccount(req: Request, res: Response) {
     .then((account: AccountEntity) => { res.send(account); return account; })
     .catch(genErrorResponseRethrow.bind(this, res))
     .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, signupRequest.recaptchaScore))
-    .catch((err: Error) => console.error(err));
-}
-
-router.put('/:id/section', ensureSessionActive, handlePutAccountSection);
-export function handlePutAccountSection(req: Request, res: Response) {
-  const updateReq: AccountSectionUpdateReqeust = req.body;
-  updateAccountSection(updateReq, req.session.account)
-    .then(_handleAccountSaveResult.bind(this, req, res))
-    .catch(genErrorResponseRethrow.bind(this, res))
-    .then((accountDiff: UpdateDiff<AccountEntity>) =>
-      saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff, updateReq.recaptchaScore)
-    )
     .catch((err: Error) => console.error(err));
 }
 

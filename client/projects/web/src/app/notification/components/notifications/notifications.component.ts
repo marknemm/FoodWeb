@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ListResponse, Notification } from '~shared';
+import { Convert } from '~web/component-decorators';
 import { NotificationService } from '~web/notification/services/notification/notification.service';
 
 @Component({
@@ -10,7 +11,8 @@ import { NotificationService } from '~web/notification/services/notification/not
 })
 export class NotificationsComponent implements OnInit {
 
-  @Input() notificationsMenu = false;
+  @Convert()
+  @Input() notificationsMenu: boolean = false;
 
   private _notifications: Notification[] = [];
   private _totalCount = 0;

@@ -1,4 +1,4 @@
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 import { MapOptions } from '~web/map/interfaces/map';
 
 export class MapOptionsForm extends TFormGroup<MapOptions> {
