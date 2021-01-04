@@ -1,4 +1,4 @@
-<Tabs #tabs [formGroup]="accountForm" [selectedIndex]="tabsService.tabIdx" (selectedIndexChanged)="tabsService.toTab(tabs.selectedIndex)" class="nt-form">
+<Tabs #tabs [formGroup]="formGroup" [selectedIndex]="tabsService.tabIdx" (selectedIndexChanged)="tabsService.toTab(tabs.selectedIndex)" class="nt-form">
   <TabStrip *ngIf="accountType" class="tab-strip">
     <TabStripItem *ngIf="true">
       <Label text="Account"></Label>
@@ -22,14 +22,14 @@
         <Button *ngIf="!accountType; else accountTmpl" text="Return to Login" (tap)="backToLoginPage()" class="-primary"></Button>
         <ng-template #accountTmpl>
           <foodweb-app-username
+            editable="true"
             formControlName="username"
-            [editable]="true"
             [nextFocus]="passwordGroup"
             (finalReturnPress)="passwordGroup.focus()"></foodweb-app-username>
           <foodweb-app-password
             #passwordGroup
+            editable="true"
             formGroupName="password"
-            [editable]="true"
             (finalReturnPress)="tabsService.nextTab()"></foodweb-app-password>
           <GridLayout rows="auto" columns="*,*" class="tab-actions">
             <Button text="Back" (tap)="backToAccountTypeSel()" row="0" col="0" class="-primary"></Button>
@@ -44,9 +44,9 @@
     <ScrollView>
       <StackLayout class="organization">
         <foodweb-app-organization
+          editable="true"
           formGroupName="organization"
           [accountType]="accountType"
-          [editable]="true"
           (finalReturnPress)="tabsService.nextTab()"></foodweb-app-organization>
         <GridLayout rows="auto" columns="*,*" class="tab-actions">
           <Button text="Back" (tap)="tabsService.prevTab()" row="0" col="0" class="-primary"></Button>
@@ -60,21 +60,21 @@
     <ScrollView>
       <StackLayout class="contact">
         <foodweb-app-volunteer
-          [hidden]="accountType !== AccountType.Volunteer"
+          *ngIf="accountType === AccountType.Volunteer"
           formGroupName="volunteer"
-          [editable]="true"
+          editable="true"
           [nextFocus]="contactInfo"></foodweb-app-volunteer>
         <foodweb-app-contact-info
           #contactInfo
+          editable="true"
           formGroupName="contactInfo"
-          [editable]="true"
           [finalReturnKeyType]="(isDonor) ? 'done' : 'next'"
-          (finalReturnPress)="(isDonor) ? createAccount.emit(accountForm) : tabsService.nextTab()"></foodweb-app-contact-info>
+          (finalReturnPress)="(isDonor) ? createAccount.emit(formGroup) : tabsService.nextTab()"></foodweb-app-contact-info>
         <GridLayout rows="auto" columns="*,*" class="tab-actions">
           <Button text="Back" (tap)="tabsService.prevTab()" row="0" col="0" class="-primary"></Button>
           <Button *ngIf="!isDonor; else submitButtonTmpl" text="Next" (tap)="tabsService.nextTab()" row="0" col="1" class="-primary"></Button>
           <ng-template #submitButtonTmpl>
-            <Button text="Submit" (tap)="createAccount.emit(accountForm)" row="0" col="1" class="-primary"></Button>
+            <Button text="Submit" (tap)="createAccount.emit(formGroup)" row="0" col="1" class="-primary"></Button>
           </ng-template>
         </GridLayout>
       </StackLayout>
@@ -86,10 +86,10 @@
       <StackLayout class="availability">
         <Label [text]="operationHoursDescription" textWrap="true" class="availability-instr"></Label>
         <Label text="You can update this setting any time under your account settings." textWrap="true" class="availability-instr update-later"></Label>
-        <foodweb-app-operation-hours-info formGroupName="operationHours" [editable]="true"></foodweb-app-operation-hours-info>
+        <foodweb-app-operation-hours-info editable="true" formGroupName="operationHours"></foodweb-app-operation-hours-info>
         <GridLayout rows="auto" columns="*,*" class="tab-actions">
           <Button text="Back" (tap)="tabsService.prevTab()" row="0" col="0" class="-primary"></Button>
-          <Button text="Submit" (tap)="createAccount.emit(accountForm)" row="0" col="1" class="-primary"></Button>
+          <Button text="Submit" (tap)="createAccount.emit(formGroup)" row="0" col="1" class="-primary"></Button>
         </GridLayout>
       </StackLayout>
     </ScrollView>

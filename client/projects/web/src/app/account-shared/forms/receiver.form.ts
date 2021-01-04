@@ -1,5 +1,5 @@
 import { Receiver } from '~shared';
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 
 export class ReceiverForm extends TFormGroup<Receiver> {
 

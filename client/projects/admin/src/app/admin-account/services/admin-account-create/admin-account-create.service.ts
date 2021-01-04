@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '~admin-env/environment';
 import { AccountCreateOptions } from '~admin/admin-account/forms/admin-account.form';
 import { Account, AdminAccountCreateRequest } from '~shared';
-import { ImmutableStore } from '~web/data-structure/immutable-store';
+import { ImmutableStore } from '~web/shared/classes/immutable-store';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({

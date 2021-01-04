@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
+import { Convert } from '~web/component-decorators';
 import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 
 @Component({ template: '' })
@@ -8,26 +9,26 @@ export class EditSaveButtonBaseComponent<T = any> implements OnChanges {
 
   @Input() cancelText = 'Cancel';
   @Input() control: AbstractControl;
-  @Input() disableSave = false;
-  @Input() editable = false;
+  @Convert()
+  @Input() disableSave: boolean = false;
+  @Convert()
+  @Input() editable: boolean = false;
   @Input() editText = 'Edit';
-  @Input() noCancelEdit = false;
+  @Convert()
+  @Input() noCancelEdit: boolean = false;
   @Input() saveText = 'Save';
-  @Input() useButtonText = false;
-
-  /**
-   * A callback function that will be called whenever the associated data should be saved.
-   */
-  @Input() saveCb: SaveCb<T> = null;
+  @Convert()
+  @Input() useButtonText: boolean = false;
 
   /**
    * Emits the edit state whenever a change is made to it.
    */
   @Output() edit = new EventEmitter<boolean>();
   /**
-   * Emits whenever the save button has been selected.
+   * Emits a save success callback function whenever the save button has been selected.
+   * Upon successful save by an external entity, the save callback should be invoked to update the edit state.
    */
-  @Output() save = new EventEmitter();
+  @Output() save = new EventEmitter<() => void>();
 
   protected _lastSaveValue: T;
 
@@ -38,7 +39,7 @@ export class EditSaveButtonBaseComponent<T = any> implements OnChanges {
   /**
    * Whether or not the save button is disabled.
    */
-  get isSaveDisabled(): boolean {
+  get saveDisabled(): boolean {
     return (this.control && this.control.invalid) || this.disableSave;
   }
 
@@ -55,7 +56,7 @@ export class EditSaveButtonBaseComponent<T = any> implements OnChanges {
   saveValue(): void {
     (this.control)
       ? this._saveValueFormControl()
-      : this._saveNoFormControl();
+      : this.save.emit(() => this._handleSaveSuccess());
   }
 
   /**
@@ -63,57 +64,51 @@ export class EditSaveButtonBaseComponent<T = any> implements OnChanges {
    */
   protected _saveValueFormControl(): void {
     // Return immediately without saving if form control is invalid.
+    this.control.markAsTouched();
     if (this.control.invalid) { return; }
-    if (this.control.dirty) {
-      this.save.emit();
-      if (this.saveCb) {
-        this.saveCb(this.control.value).subscribe((success: boolean) => {
-          if (success) {
-            this._lastSaveValue = this.control.value;
-            this.setEditing(false, true);
-          }
-        });
-      }
-    } else {
-      // Simply set editable to false if there have been no updates.
-      this.setEditing(false);
-    }
+
+    // Only emit a save event if changes have been made. Otherwise, simply consider save success.
+    (this.control.dirty)
+      ? this.save.emit(() => this._handleSaveSuccess())
+      : this._handleSaveSuccess();
   }
 
-  /**
-   * Simply invokes the save callback without a defined value when no form control is set.
-   */
-  protected _saveNoFormControl(): void {
-    this.save.emit();
-    if (this.saveCb) {
-      this.saveCb(undefined).subscribe((success: boolean) => {
-        if (success) {
-          this.setEditing(false, true);
-        }
-      });
+  protected _handleSaveSuccess(): void {
+    if (this.control) {
+      this._lastSaveValue = this.control.value;
     }
+    this.setEditingNoConfirm(false);
   }
 
   /**
    * Sets and emits the new editable state.
+   * Displays a confirm dialog when changing editable state from true to false.
    * @param editable The editable state to set.
-   * @param force If set to true, then forces the setting of the edit state.
-   * This means that the user will not be asked to confirm the change. Default is false.
    */
-  setEditing(editable: boolean, force = false): void {
-    const confirm$: Observable<boolean> = (this.editable && !editable && !force)
+  setEditing(editable: boolean): void {
+    const confirm$: Observable<boolean> = (this.editable && !editable)
       ? this._getCancelEditConfirmObs()
       : of(true);
+
     // Wait for user to confirm cancel of edit if the associated form is dirty.
     confirm$.subscribe((confirm: boolean) => {
       if (confirm) {
-        this.editable = editable;
-        if (this.control && this.saveCb) {
-          this._resetAbstractControl();
-        }
-        this.edit.emit(editable);
+        this.setEditingNoConfirm(editable);
       }
     });
+  }
+
+  /**
+   * Sets and emits the new editable state.
+   * Does not display a confirm dialog when changing editable state from true to false.
+   * @param editable The editable state to set.
+   */
+  setEditingNoConfirm(editable: boolean): void {
+    this.editable = editable;
+    if (this.control) {
+      this._resetAbstractControl();
+    }
+    this.edit.emit(editable);
   }
 
   /**
@@ -143,11 +138,3 @@ export class EditSaveButtonBaseComponent<T = any> implements OnChanges {
     }
   }
 }
-
-/**
- * A save callback function.
- * @param value The value to be saved.
- * @return An observable that should emit true once the value has been successfully saved.
- * It is expected to emit false or an error if the save fails.
- */
-export type SaveCb<T = any> = (value: T) => Observable<boolean>;

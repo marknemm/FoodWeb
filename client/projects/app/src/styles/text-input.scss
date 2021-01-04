@@ -3,6 +3,10 @@
 TextField,
 TextView {
   placeholder-color: #999;
+
+  &.ng-valid {
+    margin-bottom: 0;
+  }
 }
 
 .nt-input {

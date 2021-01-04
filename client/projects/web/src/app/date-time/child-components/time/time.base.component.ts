@@ -1,23 +1,26 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
-import _ from '~lodash-mixins';
-import { FormBaseComponent } from '~web/data-structure/form-base-component';
-import { TFormControl } from '~web/data-structure/t-form-control';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { DateConverter, Convert } from '~web/component-decorators';
+import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
 
 @Component({ template: '' })
 export class TimeBaseComponent extends FormBaseComponent<string> implements OnInit, OnChanges {
 
-  @Input() allowClear: BooleanInput = false;
-  @Input() bold: BooleanInput = false;
-  @Input() defaultTime: string | Date =  '';
-  @Input() editable: BooleanInput = false;
   @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() floatLabels: FloatLabelType = 'auto';
-  @Input() minutesGap = 5;
   @Input() placeholder = '';
-  @Input() preventOverlayClick: BooleanInput = false;
+
+  @Convert()
+  @Input() allowClear: boolean = false;
+  @Convert()
+  @Input() bold: boolean = false;
+  @Convert(DateConverter)
+  @Input() defaultTime: string | Date =  '';
+  @Convert()
+  @Input() minutesGap: number = 5;
+  @Convert()
+  @Input() preventOverlayClick: boolean = false;
 
   constructor(formHelperService: FormHelperService) {
     super(new TFormControl<string>(), formHelperService);
@@ -27,7 +30,7 @@ export class TimeBaseComponent extends FormBaseComponent<string> implements OnIn
    * Whether or not to show the clear button for the time input field.
    */
   get showClearButton(): boolean {
-    return (_.toBoolean(this.allowClear) && this.formControl?.value && this.formControl.enabled);
+    return (this.allowClear && this.formControl?.value && this.formControl.enabled);
   }
 
   ngOnInit() {

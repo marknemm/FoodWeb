@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Focusable, FocusableComponent } from '~app/app-shared/interfaces/focusable';
-import _ from '~lodash-mixins';
+import { AppVisibilityService } from '../app-visibility/app-visibility.service';
 export * from '~app/app-shared/interfaces/focusable';
 
 /**
@@ -11,7 +11,9 @@ export * from '~app/app-shared/interfaces/focusable';
 })
 export class AppFocusService {
 
-  constructor() {}
+  constructor(
+    private _visiblityService: AppVisibilityService
+  ) {}
 
   /**
    * Applies focus to a given focusable component.
@@ -22,7 +24,7 @@ export class AppFocusService {
    */
   focus(focusableComponent: FocusableComponent, focusTarget: Focusable): boolean {
     let focusSuccess = false;
-    if (this._canFocus(focusableComponent)) {
+    if (focusableComponent.focusable) {
       focusSuccess = focusTarget.focus();
     }
 
@@ -31,25 +33,6 @@ export class AppFocusService {
       ? focusableComponent.focusOutput.emit()
       : this.focusNext(focusableComponent, true);
     return focusSuccess;
-  }
-
-  /**
-   * Checks if a given focusable component can currently receive focus.
-   * In order to be able to receive focus, the component must not be hidden, must not be excplicitly disabled,
-   * and must either be explicitly enabled or have its editable flag set to true.
-   * @param focusableComponent The focusable component to check.
-   * @return Whether or not the component can currently receive focus.
-   */
-  private _canFocus(focusableComponent: FocusableComponent): boolean {
-    const invisible: boolean = focusableComponent.visible && (
-         focusableComponent.visible === 'collapse'
-      || focusableComponent.visible === 'hidden'
-    );
-    // Must check if explicitely enabled or disabled. Can be undefined otherwise, which will not impact ability to focus.
-    const enabled: boolean = _.toBoolean(focusableComponent.enabled);
-    const disabled: boolean = (focusableComponent.enabled === false || focusableComponent.enabled === 'false');
-    const editable: boolean = _.toBoolean(focusableComponent.editable);
-    return (!invisible && !disabled && (enabled || editable));
   }
 
   /**
@@ -64,5 +47,16 @@ export class AppFocusService {
       focusableComponent.blur?.emit();
     }
     return !!focusSuccess;
+  }
+
+  /**
+   * Generates focusable state based off of a given list of focus flags.
+   * @param focusFlags A list of flags that will be used to generate the focusable state.
+   * @return The focusable state.
+   */
+  isFocusable(focusFlags: (boolean | VisibleInput)[]): boolean {
+    return focusFlags.reduce((prev: boolean, current: boolean | VisibleInput) =>
+      prev && (current === true || this._visiblityService.isVisible(current))
+    , true);
   }
 }

@@ -1,6 +1,6 @@
 import { Validators } from '@angular/forms';
 import { Volunteer } from '~shared';
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 
 export class VolunteerForm extends TFormGroup<VolunteerFormT> {
 

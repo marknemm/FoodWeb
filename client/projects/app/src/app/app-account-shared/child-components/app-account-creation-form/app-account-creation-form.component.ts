@@ -4,12 +4,13 @@ import { RouterExtensions } from '@nativescript/angular';
 import { AppBackService } from '~app/app-shared/services/app-back/app-back.service';
 import { AppTabsService } from '~app/app-shared/services/app-tabs/app-tabs.service';
 import { AccountCreationFormBaseComponent } from '~web/account-shared/child-components/account-creation-form/account-creation-form.base.component';
+import { FormHelperService, formProvider } from '~web/forms';
 
 @Component({
   selector: 'foodweb-app-account-creation-form',
   templateUrl: './app-account-creation-form.component.html',
   styleUrls: ['./app-account-creation-form.component.scss'],
-  providers: [AppTabsService]
+  providers: [formProvider(AppAccountCreationFormComponent), AppTabsService]
 })
 export class AppAccountCreationFormComponent extends AccountCreationFormBaseComponent implements OnInit {
 
@@ -18,8 +19,9 @@ export class AppAccountCreationFormComponent extends AccountCreationFormBaseComp
     protected _activatedRoute: ActivatedRoute,
     private _backService: AppBackService,
     private _routerExt: RouterExtensions,
+    formHelperService: FormHelperService,
   ) {
-    super(_activatedRoute, _routerExt.router);
+    super(_activatedRoute, _routerExt.router, formHelperService);
   }
 
   ngOnInit() {

@@ -1,6 +1,6 @@
 import { Validators } from '@angular/forms';
 import { Account, AccountHelper, EventRegistration, Validation } from '~shared';
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
 
 export class EventRegistrationForm extends TFormGroup<EventRegistration> {

@@ -1,5 +1,5 @@
 import { TimeRange } from '~shared';
-import { TFormArray } from '~web/data-structure/t-form-array';
+import { TFormArray } from '~web/forms';
 import { TimeRangeForm } from './time-range.form';
 
 export class TimeRangeArray extends TFormArray<TimeRangeForm> {
