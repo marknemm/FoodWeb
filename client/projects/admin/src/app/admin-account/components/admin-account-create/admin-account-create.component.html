@@ -1,33 +1,37 @@
-<div class="create-account page container" [formGroup]="adminAccountForm.get('accountCreateOptions')">
-  <foodweb-account-creation-form *ngIf="!(createdAccountStore.value$ | async); else accountCreatedTmpl" [accountForm]="adminAccountForm.accountForm" (createAccount)="createAccount()">
-    <mat-slide-toggle
-      class="password-options"
-      formControlName="autoGenPassword"
-      matTooltip="Auto-generates a password for the created account, and sends it to the registered email address.">
-      Auto Generate Password
-    </mat-slide-toggle>
+<div class="create-account page container" [formGroup]="formGroup">
+  <foodweb-account-creation-form *ngIf="!(createdAccountStore.value$ | async); else accountCreatedTmpl" formGroupName="account" (createAccount)="createAccount()">
+    <div [formGroup]="formGroup.get('accountCreateOptions')" class="account-verification-options align-right">
+      <p>
+        <mat-slide-toggle
+          class="password-options"
+          formControlName="autoGenPassword"
+          matTooltip="Auto-generates a password for the created account, and sends it to the registered email address.">
+          Auto Generate Password
+        </mat-slide-toggle>
+      </p>
 
-    <div class="account-verification-options align-right">
-      <mat-slide-toggle
-        formControlName="autoVerify"
-        matTooltip="Auto-verifies the created account, and prevents an account verification email from being sent.">
-        Auto Verify Account
-      </mat-slide-toggle>
+      <p>
+        <mat-slide-toggle
+          formControlName="autoVerify"
+          matTooltip="Auto-verifies the created account, and prevents an account verification email from being sent.">
+          Auto Verify Account
+        </mat-slide-toggle>
+      </p>
     </div>
   </foodweb-account-creation-form>
 
   <ng-template #accountCreatedTmpl>
     <mat-card>
       <mat-card-title>Account Creation Successful!</mat-card-title>
-      <p *ngIf="!adminAccountForm.accountCreateOptions.autoVerify">
+      <p *ngIf="!formGroup.accountCreateOptions.autoVerify">
         An account verification email has been sent for the newly created account.
       </p>
-      <p *ngIf="adminAccountForm.accountCreateOptions.autoVerify && adminAccountForm.accountCreateOptions.autoGenPassword">
+      <p *ngIf="formGroup.accountCreateOptions.autoVerify && formGroup.accountCreateOptions.autoGenPassword">
         An auto-generate password email has been sent for the newly created account.
       </p>
       <mat-card-content>
         <div class="signup-success-button-container align-right">
-          <button mat-button *ngIf="!adminAccountForm.accountCreateOptions.autoVerify"
+          <button mat-button *ngIf="!formGroup.accountCreateOptions.autoVerify"
             color="accent" type="button" (click)="signupVerificationService.resendVerificationEmailFor(createdAccountStore.value)">
             Resend Verification Email
           </button>

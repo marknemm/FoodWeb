@@ -186,18 +186,34 @@ export class DateTimeHelper {
   }
 
   /**
-   * Converts a given date/time string to a Date object.
-   * Does nothing to the input if given a
+   * Converts a given date/time string, timestamp, or object to a Date object.
+   * If the non-null input cannot be converted to a date, then an invalid date object is returned.
+   * If given null/undefined input, then simply returns the input.
    * @param date The date/time string to convert.
    * @return The Date object result.
    */
-  toDate(date: string | Date): Date {
+  toDate(date: any): Date {
+    if (date instanceof Date) {
+      return date;
+    }
+
     if (typeof date === 'string') {
+      if (date === 'now') {
+        return new Date();
+      }
+
       return /[\/-]/.test(date)
         ? new Date(date)
         : this.timeStrToDate(date);
     }
-    return date;
+
+    if (typeof date === 'number') {
+      return new Date(date);
+    }
+
+    return date
+      ? new Date(date.toString())
+      : <Date>date;
   }
 
   /**

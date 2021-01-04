@@ -31,6 +31,7 @@
       autocapitalizationType="words"
       formControlName="city"
       label="City:"
+      orientation="vertical"
       row="0"
       col="0"
       [nextFocus]="stateField"
@@ -41,6 +42,7 @@
       autocapitalizationType="words"
       formControlName="stateProvince"
       label="State/Province:"
+      orientation="vertical"
       row="0"
       col="1"
       width="45"
@@ -51,11 +53,12 @@
       #postalField
       formControlName="postalCode"
       label="Postal Code:"
-      [returnKeyType]="finalReturnKeyType"
-      (returnPress)="finalReturnPress.emit()"
+      orientation="vertical"
       row="0"
       col="2"
-      width="40">
+      width="40"
+      [returnKeyType]="finalReturnKeyType"
+      (returnPress)="finalReturnPress.emit()">
       <Label *ngIf="formGroup.get('postalCode').hasError('pattern')" text="Not a valid postal code" class="text-danger"></Label>
     </foodweb-app-text-field>
   </GridLayout>
@@ -64,17 +67,17 @@
 <StackLayout *ngIf="!editable && value">
   <ng-container *ngIf="addressFirst" [ngTemplateOutlet]="addressTmpl"></ng-container>
 
-  <Label *ngIf="!hideEmail && value.email">
+  <Label *ngIf="!hideEmail && value.email" (tap)="openEmail()">
     <FormattedString>
-      <Span text="Email:" class="inline-label"></Span>
-      <span [text]="value.email" (tap)="openEmail()"></span>
+      <Span text="Email: " class="inline-label"></Span>
+      <span [text]="value.email"></span>
     </FormattedString>
   </Label>
 
-  <Label *ngIf="!hidePhone && value.phoneNumber">
+  <Label *ngIf="!hidePhone && value.phoneNumber" (tap)="openPhoneCall()">
     <FormattedString>
-      <Span text="Phone Number:" class="inline-label"></Span>
-      <span [text]="value.phoneNumber" (tap)="openPhoneCall()"></span>
+      <Span text="Phone Number: " class="inline-label"></Span>
+      <span [text]="value.phoneNumber"></span>
     </FormattedString>
   </Label>
 
@@ -82,6 +85,8 @@
 </StackLayout>
 
 <ng-template #addressTmpl>
-  <Label text="Address:"></Label>
-  <foodweb-app-address [value]="value" [mapAnchorType]="addressAnchorType"></foodweb-app-address>
+  <StackLayout>
+    <Label text="Address:" class="inline-label"></Label>
+    <foodweb-app-address [value]="value" [mapAnchorType]="addressAnchorType"></foodweb-app-address>
+  </StackLayout>
 </ng-template>

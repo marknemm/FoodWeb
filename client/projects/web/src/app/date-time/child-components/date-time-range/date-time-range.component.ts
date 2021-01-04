@@ -1,9 +1,8 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DateTimeRange } from '~shared';
-import { formProvider } from '~web/data-structure/form-base-component';
 import { DateTimeRangeRadioConfig, DateTimeRangeRadioDialogComponent } from '~web/date-time/components/date-time-range-radio-dialog/date-time-range-radio-dialog.component';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormHelperService, formProvider } from '~web/forms';
 import { DateTimeRangeBaseComponent } from './date-time-range.base.component';
 
 @Component({

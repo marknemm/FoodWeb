@@ -1,12 +1,11 @@
 import { Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { Account, AccountType, NotificationSettings, TimeRange } from '~shared';
 import { ContactInfoForm } from '~web/account-shared/forms/contact-info.form';
 import { OperationHoursInfoForm } from '~web/account-shared/forms/operation-hours-info.form';
 import { OrganizationForm } from '~web/account-shared/forms/organization.form';
 import { VolunteerForm } from '~web/account-shared/forms/volunteer.form';
 import { NotificationSettingsForm } from '~web/account/forms/notification-settings.form';
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 import { PasswordForm, PasswordFormT } from '~web/password/forms/password.form';
 export { PasswordFormT };
 
@@ -27,7 +26,7 @@ export class AccountForm extends TFormGroup<AccountFormT> {
     });
 
     // Listen for accountType value to update.
-    this.onValueChanges('accountType', config.destroy$).subscribe(
+    this.onControlValueChanges('accountType').subscribe(
       this._onAccountTypeUpdate.bind(this)
     );
 
@@ -89,7 +88,6 @@ export class AccountForm extends TFormGroup<AccountFormT> {
 export type AccountFormMode = 'Account' | 'Signup';
 
 export interface AccountFormConfig {
-  destroy$: Observable<any>;
   formMode?: AccountFormMode;
   value?: Partial<AccountFormT & Account>;
 }

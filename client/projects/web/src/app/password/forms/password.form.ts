@@ -1,7 +1,7 @@
 import { FormControl, FormGroupDirective, NgForm, Validators, AbstractControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Validation } from '~shared';
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 
 export class PasswordForm extends TFormGroup<PasswordFormT> {
 

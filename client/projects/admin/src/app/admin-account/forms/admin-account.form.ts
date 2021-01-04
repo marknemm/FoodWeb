@@ -1,6 +1,6 @@
 import { Account } from '~shared';
 import { AccountForm, AccountFormConfig, AccountFormT, PasswordFormT } from '~web/account-shared/forms/account.form';
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 export { PasswordFormT };
 
 export class AdminAccountForm extends TFormGroup<AdminAccountFormT> {

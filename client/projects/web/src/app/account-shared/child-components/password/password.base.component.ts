@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBaseComponent } from '~web/data-structure/form-base-component';
+import { FormBaseComponent, FormHelperService } from '~web/forms';
 import { PasswordForm } from '~web/password/forms/password.form';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({ template: '' })
 export class PasswordBaseComponent extends FormBaseComponent<PasswordForm> implements OnInit {

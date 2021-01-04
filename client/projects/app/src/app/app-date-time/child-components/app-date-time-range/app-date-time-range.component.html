@@ -1,31 +1,45 @@
 <StackLayout [formGroup]="formGroup" [foodwebAppVisibile]="editable">
-  <GridLayout rows="auto" columns="*,*">
-    <foodweb-app-date-time
-      #startDateTime
+  <GridLayout [rows]="rowsSchema" columns="*">
+    <StackLayout *ngIf="primaryLabel" class="primary-label-container nt-input" column="0" row="0">
+      <Label [text]="primaryLabel" class="primary-label"></Label>
+    </StackLayout>
+
+    <foodweb-app-date-time #startDateTime
+      column="0"
       formControlName="startDateTime"
+      orientation="vertical"
       [allowClear]="allowClear"
       [allowUndefTime]="allowUndefTime"
-      [editable]="true"
+      [dateLabel]="startDateLabel"
       [datePlaceholder]="startDatePlaceholder"
-      [timePlaceholder]="startTimePlaceholder"
-      [minDate]="minDate"
-      [maxDate]="maxDate"
       [floatLabels]="floatLabels"
+      [editable]="true"
       [errorStateMatcher]="formGroup.rangeErrStateMatcher"
+      [maxDate]="maxDate"
+      [minDate]="minDate"
+      [primaryLabel]="startDateTimeLabel"
+      [row]="startDateTimeRow"
+      [timeLabel]="startTimeLabel"
+      [timePlaceholder]="startTimePlaceholder"
       (ngModelChange)="formGroup.fillMissingRangePart()"></foodweb-app-date-time>
 
-    <foodweb-app-date-time
-      #endDateTime
+    <foodweb-app-date-time #endDateTime
+      column="0"
       formControlName="endDateTime"
+      orientation="vertical"
       [allowClear]="allowClear"
       [allowUndefTime]="allowUndefTime"
-      [editable]="true"
+      [dateLabel]="endDateLabel"
       [datePlaceholder]="endDatePlaceholder"
-      [timePlaceholder]="endTimePlaceholder"
-      [minDate]="minDate"
-      [maxDate]="maxDate"
-      [floatLabels]="floatLabels"
+      [editable]="true"
       [errorStateMatcher]="formGroup.rangeErrStateMatcher"
+      [floatLabels]="floatLabels"
+      [maxDate]="maxDate"
+      [minDate]="minDate"
+      [primaryLabel]="endDateTimeLabel"
+      [row]="endDateTimeRow"
+      [timeLabel]="endTimeLabel"
+      [timePlaceholder]="endTimePlaceholder"
       (ngModelChange)="formGroup.fillMissingRangePart()"></foodweb-app-date-time>
   </GridLayout>
 
@@ -38,21 +52,21 @@
 <StackLayout [foodwebAppVisibile]="!editable">
   <foodweb-app-date-time
     [boldTime]="boldTime"
-    [dateTime]="value.startDateTime"
+    [dateTime]="value?.startDateTime"
     [editable]="false"
     [excludeTimeDisplay]="startEndDateSame"></foodweb-app-date-time>
   <!-- Wrap time range below date when showing a range where start & end date is same. -->
   <StackLayout orientation="horizontal">
     <foodweb-app-time
       [bold]="boldTime"
-      [value]="value.startDateTime | foodwebFormatTime"
+      [value]="value?.startDateTime | foodwebFormatTime"
       [editable]="false"
       [excludeDateDisplay]="true"
       [visible]="startEndDateSame"></foodweb-app-time>
     <Label text=" -- "></Label>
     <foodweb-app-date-time
       [boldTime]="boldTime"
-      [dateTime]="value.endDateTime"
+      [dateTime]="value?.endDateTime"
       [editable]="false"
       [excludeDateDisplay]="startEndDateSame"></foodweb-app-date-time>
   </StackLayout>

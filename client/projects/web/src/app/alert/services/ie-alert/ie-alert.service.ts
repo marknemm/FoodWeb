@@ -17,7 +17,7 @@ export class IeAlertService {
         message: `
           We have detected that you are using Internet Explorer, which is not supported by FoodWeb.
           Please switch to another browser such as <strong>Microsoft Edge</strong>, <strong>Safari</strong>,
-          or <strong>Google Chrome</strong>.
+          <strong>Mozilla Firefox</strong>, or <strong>Google Chrome</strong>.
         `,
         level: 'warn',
         blocking: true,

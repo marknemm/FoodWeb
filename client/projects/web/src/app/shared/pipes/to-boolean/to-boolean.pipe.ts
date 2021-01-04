@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import _ from '~lodash-mixins';
 
 @Pipe({
   name: 'toBoolean'
@@ -7,11 +6,15 @@ import _ from '~lodash-mixins';
 export class ToBooleanPipe implements PipeTransform {
 
   /**
-   * Transforms a given boolean input or string value to a boolean.
-   * @param input The boolean input to transform.
+   * Transforms a given value to a boolean.
+   * If the value is a string containing 'false', then will resolve to false.
+   * If the value is anything else, then will resolve to whether or not the value is truthy.
+   * @param value The value to transform into a boolean.
    * @return The boolean transformation result.
    */
-  transform(input: BooleanInput | string): boolean {
-    return _.toBoolean(input);
+  transform(value: any): boolean {
+    return (typeof value === 'string')
+      ? (value !== 'false')
+      : !!value;
   }
 }

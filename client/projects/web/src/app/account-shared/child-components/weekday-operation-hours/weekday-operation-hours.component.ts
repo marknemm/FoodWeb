@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { formProvider } from '~web/data-structure/form-base-component';
+import { formProvider } from '~web/forms';
 import { WeekdayOperationHoursBaseComponent } from './weekday-operation-hours.base.component';
 
 @Component({

@@ -1,1 +1,5 @@
-/* Add mobile styles for the component here.  */
+@import "constants.scss";
+
+.text-danger {
+  margin-left: $input-gutter-width;
+}

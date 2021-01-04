@@ -1,6 +1,7 @@
 import { Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { isAndroid, isIOS, Page } from '@nativescript/core';
 import { AppLeftNavService } from '~app/app-shell/services/app-left-nav/app-left-nav.service';
+import { Convert } from '~web/component-decorators';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 
 @Component({
@@ -13,7 +14,8 @@ export class AppPageComponent implements OnInit, OnChanges {
   readonly isAndroid: boolean = isAndroid;
   readonly isIOS: boolean = isIOS;
 
-  @Input() hideActionBar = false;
+  @Convert()
+  @Input() hideActionBar: boolean = false;
   @Input() pageTitle = 'FoodWeb';
 
   @HostBinding() readonly class = 'app-page';
