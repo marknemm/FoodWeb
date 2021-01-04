@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDrawerContent } from '@angular/material/sidenav';
-import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
+import { Convert } from '~web/component-decorators';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
 
 @Component({
   selector: 'foodweb-left-nav',
@@ -17,6 +18,7 @@ export class LeftNavComponent implements OnInit {
    * the leftnav will be in over mode. Otherwise, it will be in side mode.
    * If not set, then the leftnav will always be in over mode.
    */
+  @Convert()
   @Input() windowSizeThreshPx: number;
 
   constructor(

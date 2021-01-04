@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Convert } from '~web/component-decorators';
 import { TableDataSource } from '~web/table/interfaces/table-data-source';
 
 @Component({
@@ -23,7 +24,8 @@ export class TableTitleComponent<T = any> {
    * Determines whether or not to include a filter search field.
    * Default is true for include.
    */
-  @Input() includeSearch = true;
+  @Convert()
+  @Input() includeSearch: boolean = true;
   /**
    * The search placeholder. Default value is 'Search...'.
    */
@@ -36,16 +38,19 @@ export class TableTitleComponent<T = any> {
    * The debounce time for the filter (in ms).
    * Default value is 0ms.
    */
-  @Input() searchDebounceTime = 0;
+  @Convert()
+  @Input() searchDebounceTime: number = 0;
   /**
    * Whether or not the default form members of the table title are disabled. Default is false.
    */
-  @Input() disabled = false;
+  @Convert()
+  @Input() disabled: boolean = false;
   /**
    * Whether or not the table filter input is collapsible. In desktop mode, hovering over the search icon will expand the input.
    * In mobile mode, tapping the search icon will expand the input. Default is true.
    */
-  @Input() collapsibleFilter = true;
+  @Convert()
+  @Input() collapsibleFilter: boolean = true;
   /**
    * The icon used for the table search/filter.
    */

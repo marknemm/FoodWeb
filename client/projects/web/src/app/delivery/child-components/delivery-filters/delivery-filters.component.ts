@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DonationReadRequest, DonationSortBy, DonationStatus } from '~shared';
+import { Convert } from '~web/component-decorators';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
 import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
@@ -12,7 +13,8 @@ import { ConstantsService } from '~web/shared/services/constants/constants.servi
 export class DeliveryFiltersComponent implements OnInit, OnChanges {
 
   @Input() activeFilters: DonationReadRequest = {};
-  @Input() myDeliveries = false;
+  @Convert()
+  @Input() myDeliveries: boolean = false;
 
   @Output() filter = new EventEmitter<DonationReadRequest>();
 

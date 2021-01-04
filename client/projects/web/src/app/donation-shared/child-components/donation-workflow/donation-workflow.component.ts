@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Account, Donation, DonationHelper, DonationStatus } from '~shared';
+import { Convert } from '~web/component-decorators';
 import { DonationAction } from '~web/donation-shared/services/donation-actions/donation-actions.service';
 
 @Component({
@@ -56,7 +57,8 @@ export class DonationWorkflowComponent implements OnChanges {
   @Input() donation: Donation;
   @Input() donationUpdateForm: FormGroup;
   @Input() myAccount: Account;
-  @Input() showAllStatuses = false;
+  @Convert()
+  @Input() showAllStatuses: boolean = false;
 
   @Output() action = new EventEmitter<DonationAction>();
 

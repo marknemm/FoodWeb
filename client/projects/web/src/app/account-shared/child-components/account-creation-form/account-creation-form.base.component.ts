@@ -1,31 +1,30 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { AccountType } from '~shared';
 import { AccountForm } from '~web/account-shared/forms/account.form';
+import { FormBaseComponent, FormHelperService } from '~web/forms';
 
 @Component({ template: '' })
-export class AccountCreationFormBaseComponent implements OnInit, OnDestroy {
+export class AccountCreationFormBaseComponent extends FormBaseComponent<AccountForm> implements OnInit {
 
   readonly AccountType = AccountType;
 
-  @Input() accountForm: AccountForm;
   @Input() accountTypeSelTitle = 'Select The Account Type';
   @Input() formTitle: string;
   @Input() submitButtonTxt = 'Create Account';
 
   @Output() createAccount = new EventEmitter<AccountForm>();
 
-  protected _destroy$ = new Subject();
-
   constructor(
     protected _activatedRoute: ActivatedRoute,
     protected _router: Router,
-  ) {}
+    formHelperService: FormHelperService,
+  ) {
+    super(new AccountForm({ formMode: 'Signup' }), formHelperService);
+  }
 
   get accountType(): AccountType {
-    return this.accountForm.get('accountType').value;
+    return this.formGroup.get('accountType').value;
   }
 
   get isDonor(): boolean {
@@ -47,26 +46,17 @@ export class AccountCreationFormBaseComponent implements OnInit, OnDestroy {
   }
 
   get operationHoursFullWidth(): boolean {
-    return this.accountForm.get('operationHours').value.limitOperationHours;
+    return this.formGroup.get('operationHours').value.limitOperationHours;
   }
 
   ngOnInit() {
-    if (!this.accountForm) {
-      this.accountForm = new AccountForm({ destroy$: this._destroy$, formMode: 'Signup' });
-    }
     this._listenAccountTypeSelect();
     this._listenAccountTypeRoute();
   }
 
-  ngOnDestroy() {
-    this._destroy$.next();
-  }
-
   protected _listenAccountTypeSelect(): void {
     // When accountType form field is updated, we must update route so user can rely on back button / link directly to correct signup.
-    this.accountForm.get('accountType').valueChanges.pipe(
-      takeUntil(this._destroy$)
-    ).subscribe((accountType: AccountType) => {
+    this.formGroup.onControlValueChanges('accountType').subscribe((accountType: AccountType) => {
       if (accountType && !this._activatedRoute.snapshot.url.toString().match(`${accountType}$`)) {
         this._router.navigate(['.', accountType], {
           relativeTo: this._activatedRoute,
@@ -83,7 +73,7 @@ export class AccountCreationFormBaseComponent implements OnInit, OnDestroy {
   }
 
   protected _onAccountTypeRoute(accountType: AccountType): void {
-    this.accountForm.get('accountType').setValue(accountType);
+    this.formGroup.get('accountType').setValue(accountType);
   }
 
 }

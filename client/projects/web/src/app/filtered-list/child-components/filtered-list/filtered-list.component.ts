@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Convert } from '~web/component-decorators';
 import { FilteredListService } from '~web/filtered-list/services/filtered-list/filtered-list.service';
 
 @Component({
@@ -8,8 +9,10 @@ import { FilteredListService } from '~web/filtered-list/services/filtered-list/f
 })
 export class FilteredListComponent implements OnInit, OnChanges {
 
-  @Input() excludePaginator = false;
+  @Convert()
+  @Input() excludePaginator: boolean = false;
   @Input() listItemsLabel = '';
+  @Convert()
   @Input() totalCount: number;
 
   @Input() set filtersOpened(open: boolean) {

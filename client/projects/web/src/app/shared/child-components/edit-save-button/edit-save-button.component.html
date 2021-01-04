@@ -12,7 +12,7 @@
       <button mat-icon-button type="button" *ngIf="!noCancelEdit" color="warn" class="cancel-button" matTooltip="Cancel Edit" (click)="setEditing(false)">
         <mat-icon>cancel</mat-icon>
       </button>
-      <button mat-icon-button type="submit" color="primary" class="save-button" (click)="saveValue()" matTooltip="Save Edit" [disabled]="isSaveDisabled">
+      <button mat-icon-button type="submit" color="primary" class="save-button" (click)="saveValue()" matTooltip="Save Edit" [disabled]="saveDisabled">
         <mat-icon>save</mat-icon>
       </button>
     </ng-container>
@@ -20,7 +20,7 @@
       <button mat-button type="button" *ngIf="!noCancelEdit" color="warn" class="cancel-button" (click)="setEditing(false)">
         {{ cancelText }}
       </button>
-      <button mat-raised-button type="submit" color="primary" class="save-button" (click)="saveValue()" [disabled]="isSaveDisabled">
+      <button mat-raised-button type="submit" color="primary" class="save-button" (click)="saveValue()" [disabled]="saveDisabled">
         {{ saveText }}
       </button>
     </ng-container>

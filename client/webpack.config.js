@@ -344,7 +344,18 @@ module.exports = env => {
         {
           test: /\.scss$/,
           exclude: /[\/|\\]app\.scss$/,
-          use: ['raw-loader', 'resolve-url-loader', 'sass-loader']
+          use: [
+            'raw-loader',
+            'resolve-url-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                sassOptions: {
+                  includePaths: [`${appFullPath}/styles`]
+                }
+              }
+            }
+          ]
         },
 
         {

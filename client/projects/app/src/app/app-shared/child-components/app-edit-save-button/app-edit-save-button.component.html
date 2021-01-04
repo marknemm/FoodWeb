@@ -1,30 +1,31 @@
-<Button text="app-edit-save-button works!" class="btn btn-primary"></Button>
+<StackLayout class="edit-save-button-container">
+  <ng-container *ngIf="!editable; else editableTmpl">
+    <Button *ngIf="!useButtonText; else editButtonTxtTmpl" class="btn edit-button" (tap)="setEditing(true)">
+      <FormattedString>
+        <Span text="&#xf044;" class="nt-icon fas"></Span>
+      </FormattedString>
+    </Button>
+    <ng-template #editButtonTxtTmpl>
+      <Button [text]="editText" class="btn edit-button text" (tap)="setEditing(true)"></Button>
+    </ng-template>
+  </ng-container>
+  <ng-template #editableTmpl>
+    <ng-container *ngIf="!useButtonText; else cancelSaveButtonTxtTmpl">
+      <Button *ngIf="!noCancelEdit" class="btn cancel-button" (tap)="setEditing(false)">
+        <FormattedString>
+          <Span text="&#xf057;" class="nt-icon fas"></Span>
+        </FormattedString>
+      </Button>
+      <Button class="btn save-button" (tap)="saveValue()">
+        <FormattedString>
+          <Span text="&#xf0c7;" class="nt-icon fas"></Span>
+        </FormattedString>
+      </Button>
+    </ng-container>
 
-<!-- <div class="edit-save-button-container">
-  <ng-container *ngIf="!editable">
-    <button mat-icon-button *ngIf="!useButtonText" type="button" color="primary" class="edit-button" matTooltip="Edit" (click)="setEditing(true)">
-      <mat-icon>edit</mat-icon>
-    </button>
-    <button mat-raised-button *ngIf="useButtonText" type="button" color="primary" class="edit-button" (click)="setEditing(true)">
-      {{ editText }}
-    </button>
-  </ng-container>
-  <ng-container *ngIf="editable">
-    <ng-container *ngIf="!useButtonText">
-      <button mat-icon-button type="button" *ngIf="!noCancelEdit" color="warn" class="cancel-button" matTooltip="Cancel Edit" (click)="setEditing(false)">
-        <mat-icon>cancel</mat-icon>
-      </button>
-      <button mat-icon-button type="submit" color="primary" class="save-button" (click)="saveValue()" matTooltip="Save Edit" [disabled]="isSaveDisabled">
-        <mat-icon>save</mat-icon>
-      </button>
-    </ng-container>
-    <ng-container *ngIf="useButtonText">
-      <button mat-button type="button" *ngIf="!noCancelEdit" color="warn" class="cancel-button" (click)="setEditing(false)">
-        {{ cancelText }}
-      </button>
-      <button mat-raised-button type="submit" color="primary" class="save-button" (click)="saveValue()" [disabled]="isSaveDisabled">
-        {{ saveText }}
-      </button>
-    </ng-container>
-  </ng-container>
-</div> -->
+    <ng-template #cancelSaveButtonTxtTmpl>
+      <Button *ngIf="!noCancelEdit" [text]="cancelText" class="btn cancel-button text" (tap)="setEditing(false)"></Button>
+      <Button [text]="saveText" class="btn save-button text" (tap)="saveValue()"></Button>
+    </ng-template>
+  </ng-template>
+</StackLayout>

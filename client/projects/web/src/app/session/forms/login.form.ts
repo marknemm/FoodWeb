@@ -1,5 +1,5 @@
 import { Validators } from '@angular/forms';
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 
 export interface LoginFormT {
   usernameEmail: string;

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileImgBaseComponent } from '~web/account-shared/child-components/profile-img/profile-img.base.component';
-import { formProvider } from '~web/data-structure/form-base-component';
+import { formProvider } from '~web/forms';
 
 @Component({
   selector: 'foodweb-app-profile-img',
