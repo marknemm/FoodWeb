@@ -28,6 +28,10 @@ export class AppVolunteerComponent extends VolunteerBaseComponent implements Foc
     super(formHelperService);
   }
 
+  get focusable(): boolean {
+    return this.editable;
+  }
+
   focus(): boolean {
     return this._focusService.focus(this, this.firstFocusable);
   }

@@ -1,6 +1,8 @@
-import { Directive, EventEmitter, Output, Input, OnInit, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
+import { Directive, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Convert } from '~web/component-decorators';
 import { ThresholdSide } from '~web/shared/interfaces/threshold-side';
+import { ScreenSizeService } from '~web/shared/services/screen-size/screen-size.service';
 export { ThresholdSide };
 
 /**
@@ -11,6 +13,7 @@ export { ThresholdSide };
 })
 export class WindowSizeDirective implements OnInit, OnChanges, OnDestroy {
 
+  private _destroy$ = new Subject();
   private _thresholdSide: ThresholdSide;
 
   /**
@@ -26,13 +29,15 @@ export class WindowSizeDirective implements OnInit, OnChanges, OnDestroy {
   @Output() thresholdCross = new EventEmitter<ThresholdSide>();
 
   constructor(
-    private _window: Window,
+    private _screenSizeService: ScreenSizeService
   ) {
     this._windowResizeHandler = this._windowResizeHandler.bind(this);
   }
 
   ngOnInit() {
-    this._window.addEventListener('resize', this._windowResizeHandler);
+    this._screenSizeService.onResize(this._destroy$).subscribe(
+      () => this._windowResizeHandler()
+    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -42,7 +47,7 @@ export class WindowSizeDirective implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._window.removeEventListener('resize', this._windowResizeHandler);
+    this._destroy$.next(); // Cleanup any RxJS subscriptions.
   }
 
   /**

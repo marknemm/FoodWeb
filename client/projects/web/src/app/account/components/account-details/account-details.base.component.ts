@@ -104,25 +104,29 @@ export class AccountDetailsBaseComponent extends FormBaseComponent<AccountForm> 
     );
   }
 
-  saveAccountSection(sectionName: AccountFormKey, successCb: () => void): void {
+  saveAccountFields(fields: string[], successCb: () => void): void {
     const account: Account = this.formGroup.toAccount();
-    this._accountSaveService.updateAccountSection(account, <keyof Account>sectionName).subscribe(
-      (savedAccount: Account) => this._handleSaveSuccess(sectionName, savedAccount, successCb)
+    this._accountSaveService.updateAccountFields(this.originalAccount, account, fields).subscribe(
+      (savedAccount: Account) => this._handleSaveSuccess(savedAccount, fields, successCb)
     );
   }
 
   savePassword(successCb: () => void): void {
     const passwordUpdate: PasswordFormT = this.formGroup.passwordFormValue;
     this._accountSaveService.updatePassword(this._originalAccount, passwordUpdate).subscribe(
-      () => this._handleSaveSuccess('password', this.originalAccount, successCb)
+      () => {
+        this.formGroup.get('password').setValue({ password: '', oldPassword: '', confirmPassword: '' });
+        this._handleSaveSuccess(this.originalAccount, [], successCb);
+      }
     );
   }
 
-  private _handleSaveSuccess(sectionName: AccountFormKey, savedAccount: Account, successCb: () => void): void {
+  private _handleSaveSuccess(savedAccount: Account, fields: string[], successCb: () => void): void {
     this._originalAccount = savedAccount;
-    const accountSectionPatch: Partial<Account> = {};
-    (<any>accountSectionPatch)[sectionName] = savedAccount[<keyof Account>sectionName];
-    this.formGroup.patchValue(accountSectionPatch);
+    // Write saved values back to the account update form group (server may have modified or filled some values).
+    this.formGroup.patchValue(
+      this._accountSaveService.mergeAccountUpdateFields(savedAccount, {}, fields)
+    );
     successCb();
   }
 

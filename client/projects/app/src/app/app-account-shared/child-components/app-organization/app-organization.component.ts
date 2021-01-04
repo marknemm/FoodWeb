@@ -27,6 +27,10 @@ export class AppOrganizationComponent extends OrganizationBaseComponent implemen
     super(formHelperService);
   }
 
+  get focusable(): boolean {
+    return this.editable;
+  }
+
   focus(): boolean {
     return this._focusService.focus(this, this.firstFocusable);
   }

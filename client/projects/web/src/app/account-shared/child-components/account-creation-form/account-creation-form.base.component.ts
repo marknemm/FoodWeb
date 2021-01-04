@@ -56,7 +56,7 @@ export class AccountCreationFormBaseComponent extends FormBaseComponent<AccountF
 
   protected _listenAccountTypeSelect(): void {
     // When accountType form field is updated, we must update route so user can rely on back button / link directly to correct signup.
-    this.formGroup.onValueChanges('accountType').subscribe((accountType: AccountType) => {
+    this.formGroup.onControlValueChanges('accountType').subscribe((accountType: AccountType) => {
       if (accountType && !this._activatedRoute.snapshot.url.toString().match(`${accountType}$`)) {
         this._router.navigate(['.', accountType], {
           relativeTo: this._activatedRoute,

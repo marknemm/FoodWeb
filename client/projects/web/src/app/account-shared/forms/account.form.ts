@@ -26,7 +26,7 @@ export class AccountForm extends TFormGroup<AccountFormT> {
     });
 
     // Listen for accountType value to update.
-    this.onValueChanges('accountType').subscribe(
+    this.onControlValueChanges('accountType').subscribe(
       this._onAccountTypeUpdate.bind(this)
     );
 

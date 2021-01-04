@@ -11,7 +11,8 @@ export class DateBaseComponent extends FormBaseComponent<Date> {
   @Input() allowClear: boolean = false;
   @Convert()
   @Input() bold: boolean = false;
-  @Input() defaultDate = '';
+  @Convert()
+  @Input() defaultDate: Date;
   @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() floatLabels: FloatLabelType = 'auto';
   @Convert()

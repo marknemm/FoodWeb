@@ -2,6 +2,7 @@ import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChang
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Convert } from '~web/component-decorators';
+import { ScreenSizeService } from '~web/shared/services/screen-size/screen-size.service';
 
 @Directive({
   selector: '[foodwebDisplayEditTransition]',
@@ -23,7 +24,7 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
   private _destory$ = new Subject();
 
   constructor(
-    private _window: Window,
+    private _screenSizeService: ScreenSizeService,
     elementRef: ElementRef
   ) {
     this.container = elementRef.nativeElement;
@@ -38,8 +39,9 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
       throw new Error(`'form' input property is required for foodwebDisplayEditTransition directive on: ${this.container.innerHTML}`);
     }
 
-    this._recalcContainerHeight = this._recalcContainerHeight.bind(this);
-    this._window.addEventListener('resize', this._recalcContainerHeight);
+    this._screenSizeService.onResize(this._destory$).subscribe(
+      () => this._recalcContainerHeight
+    );
     this._initStyles();
   }
 
@@ -96,7 +98,6 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
   }
 
   ngOnDestroy() {
-    this._window.removeEventListener('resize', this._recalcContainerHeight);
     this._destory$.next();
   }
 }

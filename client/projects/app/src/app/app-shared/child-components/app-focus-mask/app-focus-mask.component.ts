@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { AbsoluteLayout } from '@nativescript/core';
 import { AppFocusService, Focusable, FocusableComponent } from '~app/app-shared/services/app-focus/app-focus.service';
 import { Convert } from '~web/component-decorators';
@@ -8,7 +8,7 @@ import { Convert } from '~web/component-decorators';
   templateUrl: './app-focus-mask.component.html',
   styleUrls: ['./app-focus-mask.component.scss']
 })
-export class AppFocusMaskComponent implements FocusableComponent, OnChanges {
+export class AppFocusMaskComponent implements FocusableComponent {
 
   @Convert()
   @Input() enabled: boolean = true;
@@ -23,30 +23,12 @@ export class AppFocusMaskComponent implements FocusableComponent, OnChanges {
 
   @ViewChild('absoluteLayoutRef', { static: true }) absoluteLayoutRef: ElementRef<AbsoluteLayout>;
 
-  private _preHiddenEnabled: boolean;
-
   constructor(
     private _focusService: AppFocusService
   ) {}
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.visible) {
-      this._syncEnabledStateWithVisible();
-    }
-  }
-
-  /**
-   * Synchronizes the enabled state for this component with its visibility state.
-   * Whenever this component is made invisble, then it is also disabled.
-   * Whenever it is made visible, it re-instates its original enabled state.
-   */
-  private _syncEnabledStateWithVisible(): void {
-    if (this.visible && this.visible !== 'collapse' && this.visible !== 'hidden' && this.visible !== 'false') {
-      this.enabled = (this._preHiddenEnabled != null) ? this._preHiddenEnabled : this.enabled;
-    } else {
-      this._preHiddenEnabled = this.enabled;
-      this.enabled = false;
-    }
+  get focusable(): boolean {
+    return this._focusService.isFocusable([this.enabled, this.visible]);
   }
 
   /**
@@ -54,11 +36,11 @@ export class AppFocusMaskComponent implements FocusableComponent, OnChanges {
    * @return Whether or not focus was successfully applied.
    */
   focus(): boolean {
-    if (this.enabled) {
+    if (this.focusable) {
       this._focusService.focus(this, this.absoluteLayoutRef.nativeElement);
       this.onFocus();
     }
-    return this.enabled;
+    return this.focusable;
   }
 
   /**
@@ -66,7 +48,7 @@ export class AppFocusMaskComponent implements FocusableComponent, OnChanges {
    * Additonally, emits a focusTap output when focusable.
    */
   onFocus(): void {
-    if (this.enabled) {
+    if (this.focusable) {
       this.focusOutput.emit();
       this.focusTap.emit(false);
     }
@@ -78,7 +60,7 @@ export class AppFocusMaskComponent implements FocusableComponent, OnChanges {
    */
   onTap(): void {
     this.tap.emit();
-    if (this.enabled) {
+    if (this.focusable) {
       this.focusTap.emit(true);
     }
   }

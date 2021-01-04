@@ -31,6 +31,7 @@
       autocapitalizationType="words"
       formControlName="city"
       label="City:"
+      orientation="vertical"
       row="0"
       col="0"
       [nextFocus]="stateField"
@@ -41,6 +42,7 @@
       autocapitalizationType="words"
       formControlName="stateProvince"
       label="State/Province:"
+      orientation="vertical"
       row="0"
       col="1"
       width="45"
@@ -51,11 +53,12 @@
       #postalField
       formControlName="postalCode"
       label="Postal Code:"
-      [returnKeyType]="finalReturnKeyType"
-      (returnPress)="finalReturnPress.emit()"
+      orientation="vertical"
       row="0"
       col="2"
-      width="40">
+      width="40"
+      [returnKeyType]="finalReturnKeyType"
+      (returnPress)="finalReturnPress.emit()">
       <Label *ngIf="formGroup.get('postalCode').hasError('pattern')" text="Not a valid postal code" class="text-danger"></Label>
     </foodweb-app-text-field>
   </GridLayout>
