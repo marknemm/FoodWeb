@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
+import { Convert } from '~web/component-decorators';
 
 @Component({
   selector: 'foodweb-progress-indicator',
@@ -9,12 +10,18 @@ import { ProgressBarMode } from '@angular/material/progress-bar';
 export class ProgressIndicatorComponent implements OnInit, OnChanges {
 
   @Input() backdropColor = 'rgba(211, 211, 211, .5)';
-  @Input() blocking = false;
+  @Convert()
+  @Input() blocking: boolean = false;
   @Input() color = 'primary';
-  @Input() diameter = 100;
-  @Input() excludeBackdrop = false;
+  @Convert()
+  @Input() diameter: number = 100;
+  @Convert()
+  @Input() excludeBackdrop: boolean = false;
+  @Convert()
   @Input() strokeWidth: number;
-  @Input() trigger = false;
+  @Convert()
+  @Input() trigger: boolean = false;
+  @Convert()
   @Input() value: number;
 
   private _progressBarMode: ProgressBarMode = 'indeterminate';

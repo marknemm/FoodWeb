@@ -1,4 +1,4 @@
-<mat-card class="account-teaser">
+<mat-card class="teaser account-teaser">
   <mat-card-header [ngClass]="{ 'no-subtitle': !hasSubtitle }">
     <foodweb-profile-img mat-card-avatar [value]="account.profileImg"></foodweb-profile-img>
     <mat-card-title>{{ customTitle ? customTitle : accountName }}</mat-card-title>
@@ -20,10 +20,8 @@
     ></foodweb-contact-info>
   </mat-card-content>
   <mat-card-actions>
-    <div class="align-right">
-      <a [routerLink]="accountRouterLink" [state]="{ account: account }" class="no-hover">
-        <button mat-raised-button class="compact" type="button" color="primary">View Account</button>
-      </a>
-    </div>
+    <a [routerLink]="accountRouterLink" [state]="{ account: account }" class="no-hover">
+      <button mat-raised-button class="compact" type="button" color="primary">View Account</button>
+    </a>
   </mat-card-actions>
 </mat-card>

@@ -1,5 +1,5 @@
 import { NotificationSettings } from '~shared';
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 
 export class NotificationSettingsForm extends TFormGroup<NotificationSettings> {
 

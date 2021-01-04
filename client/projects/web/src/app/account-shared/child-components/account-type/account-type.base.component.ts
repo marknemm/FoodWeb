@@ -1,15 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { AccountType } from '~shared';
-import { FormBaseComponent } from '~web/data-structure/form-base-component';
-import { TFormControl } from '~web/data-structure/t-form-control';
+import { Convert } from '~web/component-decorators';
+import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
 
 @Component({ template: '' })
 export abstract class AccountTypeBaseComponent extends FormBaseComponent<AccountType> {
 
   readonly AccountType = AccountType;
 
+  @Convert()
   @Input() editable = false;
 
   constructor(

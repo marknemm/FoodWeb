@@ -14,9 +14,9 @@
     [foodwebAppVisibile]="formGroup.get('fullName').hasError('pattern')"></Label>
 </StackLayout>
 
-<Label [foodwebAppVisibile]="!editable">
+<Label [foodwebAppVisibile]="!editable" class="readonly-textfield">
   <FormattedString>
-    <Span text="Full Name:" class="inline-label"></Span>
+    <Span text="Full Name: " class="inline-label"></Span>
     <span text="{{ formGroup.get('fullName').value }}"></span>
   </FormattedString>
 </Label>

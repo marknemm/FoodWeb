@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Convert } from '~web/component-decorators';
 import { FilteredListService } from '~web/filtered-list/services/filtered-list/filtered-list.service';
 
 @Component({
@@ -8,7 +9,8 @@ import { FilteredListService } from '~web/filtered-list/services/filtered-list/f
 })
 export class ListFiltersTitleComponent implements OnInit {
 
-  @Input() primary = false;
+  @Convert()
+  @Input() primary: boolean = false;
 
   constructor(
     public filteredListService: FilteredListService

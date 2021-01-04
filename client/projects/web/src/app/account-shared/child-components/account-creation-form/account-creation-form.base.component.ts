@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AccountType } from '~shared';
 import { AccountForm } from '~web/account-shared/forms/account.form';
-import { FormBaseComponent } from '~web/data-structure/form-base-component';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormBaseComponent, FormHelperService } from '~web/forms';
 
 @Component({ template: '' })
 export class AccountCreationFormBaseComponent extends FormBaseComponent<AccountForm> implements OnInit {
@@ -57,7 +56,7 @@ export class AccountCreationFormBaseComponent extends FormBaseComponent<AccountF
 
   protected _listenAccountTypeSelect(): void {
     // When accountType form field is updated, we must update route so user can rely on back button / link directly to correct signup.
-    this.formGroup.onValueChanges('accountType').subscribe((accountType: AccountType) => {
+    this.formGroup.onControlValueChanges('accountType').subscribe((accountType: AccountType) => {
       if (accountType && !this._activatedRoute.snapshot.url.toString().match(`${accountType}$`)) {
         this._router.navigate(['.', accountType], {
           relativeTo: this._activatedRoute,

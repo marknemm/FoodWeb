@@ -1,11 +1,9 @@
 import { AbstractControl } from '@angular/forms';
-import { TAbstractControl } from './t-abstract-control';
+import { TAbstractControl } from '~web/forms/classes/t-abstract-control';
 
-// tslint:disable-next-line: array-type
-export type ExtractArrayType<T> = T extends Array<infer U>
-  ? U
-  : never;
-
+/**
+ * A type extension that is used to extract the type of a TAbstractControl.
+ */
 export type ExtractControlType<T> = T extends TAbstractControl<infer U>
   ? U
   : T extends AbstractControl

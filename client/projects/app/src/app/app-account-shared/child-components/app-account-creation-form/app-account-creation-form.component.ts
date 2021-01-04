@@ -4,8 +4,7 @@ import { RouterExtensions } from '@nativescript/angular';
 import { AppBackService } from '~app/app-shared/services/app-back/app-back.service';
 import { AppTabsService } from '~app/app-shared/services/app-tabs/app-tabs.service';
 import { AccountCreationFormBaseComponent } from '~web/account-shared/child-components/account-creation-form/account-creation-form.base.component';
-import { formProvider } from '~web/data-structure/form-base-component';
-import { FormHelperService } from '~web/shared/services/form-helper/form-helper.service';
+import { FormHelperService, formProvider } from '~web/forms';
 
 @Component({
   selector: 'foodweb-app-account-creation-form',

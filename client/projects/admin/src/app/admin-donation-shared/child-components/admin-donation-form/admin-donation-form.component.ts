@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AdminDonationForm } from '~admin/admin-donation/forms/admin-donation.form';
+import { Convert } from '~web/component-decorators';
 import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class AdminDonationFormComponent implements OnInit {
 
   @Input() cancelButtonTxt = 'Cancel';
   @Input() formGroup: AdminDonationForm;
+  @Convert()
   @Input() showCancelButton = false;
   @Input() submitButtonTxt = 'Submit';
 

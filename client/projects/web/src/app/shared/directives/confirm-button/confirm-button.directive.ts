@@ -1,5 +1,6 @@
 import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { Convert } from '~web/component-decorators';
 import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 
 @Directive({
@@ -7,7 +8,8 @@ import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confir
 })
 export class ConfirmButtonDirective {
 
-  @Input() confirmCondition = true;
+  @Convert()
+  @Input() confirmCondition: boolean = true;
   @Input() confirmTitle = 'Confirm Action';
   @Input() confirmMessage = 'Please confirm that you wish to continue.';
 

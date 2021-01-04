@@ -6,11 +6,11 @@
   </mat-card-header>
   <mat-card-content>
     <div class="row">
-      <div class="meal-count col-lg-2 col-md-3 col-sm-4 col-6">
+      <div class="meal-count col-6">
         <span class="inline-label">Meal Count:</span>
         <span>{{ donation.estimatedNumFeed }}</span>
       </div>
-      <div *ngIf="myDonation" class="monetary-value col-md-2 col-sm-4 col-6">
+      <div *ngIf="myDonation" class="monetary-value col-6">
         <span class="inline-label">Value:</span>
         <span>${{ donation.estimatedValue | number:'1.2-2' }}</span>
       </div>

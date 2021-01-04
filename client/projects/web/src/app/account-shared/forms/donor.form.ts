@@ -1,5 +1,5 @@
 import { Donor } from '~shared';
-import { TFormGroup } from '~web/data-structure/t-form-group';
+import { TFormGroup } from '~web/forms';
 
 export class DonorForm extends TFormGroup<Donor> {
 

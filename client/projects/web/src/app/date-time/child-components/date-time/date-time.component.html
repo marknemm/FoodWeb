@@ -1,13 +1,13 @@
-<div [formGroup]="dateTimeForm" [ngClass]="{ 'editable': editable | toBoolean, 'inline-fields': inlineFields | toBoolean }" class="date-time-form">
+<div [formGroup]="dateTimeForm" [ngClass]="{ 'editable': editable, 'inline-fields': inlineFields }" class="date-time-form">
   <div *ngIf="primaryLabel" class="primary-label">
     {{ primaryLabel }}
   </div>
 
   <foodweb-date
-    *ngIf="(editable | toBoolean) || !(excludeDateDisplay | toBoolean)"
+    *ngIf="editable || !excludeDateDisplay"
+    formControlName="date"
     [allowClear]="allowClear"
     [bold]="boldDate"
-    [value]="value"
     [defaultDate]="defaultDate"
     [editable]="editable"
     [errorStateMatcher]="errorStateMatcher"
@@ -16,11 +16,12 @@
     [minDate]="minDate"
     [minWidth]="minDateWidth"
     [placeholder]="datePlaceholder"
-    formControlName="date"
-  ></foodweb-date>
+    [value]="value"
+    ></foodweb-date>
 
   <foodweb-time
-    *ngIf="(editable | toBoolean) || !(excludeTimeDisplay | toBoolean)"
+    *ngIf="editable || !excludeTimeDisplay"
+    formControlName="time"
     [allowClear]="allowClear"
     [bold]="boldTime"
     [defaultTime]="defaultTime"
@@ -30,6 +31,5 @@
     [minutesGap]="minutesGap"
     [placeholder]="timePlaceholder"
     [value]="value | foodwebFormatTime"
-    formControlName="time"
   ></foodweb-time>
 </div>

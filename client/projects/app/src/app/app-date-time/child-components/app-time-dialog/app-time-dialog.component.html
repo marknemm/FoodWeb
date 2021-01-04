@@ -1,17 +1,15 @@
-<StackLayout class="dialog-panel">
+<GridLayout rows="*,auto" columns="*" class="dialog-panel">
 
-  <Label [text]="title" class="dialog-title"></Label>
-
-  <StackLayout class="dialog-content">
-    <TimePicker
-      #timePicker
-      class="time-picker"
+  <StackLayout class="dialog-content" column="0" row="0">
+    <!-- iosPreferredDatePickerStyle="inline (3)" -->
+    <TimePicker #timePicker
+      iosPreferredDatePickerStyle="3"
       [time]="time"></TimePicker>
   </StackLayout>
 
-  <StackLayout class="dialog-actions">
+  <StackLayout class="dialog-actions" column="0" row="1">
     <Button text="cancel" (tap)="modalDialogParams.closeCallback()" class="-primary"></Button>
     <Button text="ok" (tap)="modalDialogParams.closeCallback(timePicker.time)" class="-primary"></Button>
   </StackLayout>
 
-</StackLayout>
+</GridLayout>
