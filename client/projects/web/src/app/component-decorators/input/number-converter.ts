@@ -1,4 +1,4 @@
 export const NumberConverter = (value: any) =>
-  (value == null || typeof value === 'number')
-    ? value
-    : parseFloat(value.toString());
+  (typeof value === 'string')
+    ? parseFloat(value.toString())
+    : value;

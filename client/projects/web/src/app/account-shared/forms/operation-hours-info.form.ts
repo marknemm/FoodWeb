@@ -1,4 +1,4 @@
-import { OperationHours } from '~shared';
+import { OperationHours, Weekday } from '~shared';
 import { OperationHoursInfo } from '~web/account-shared/forms/account.form';
 import { TimeRangeArray } from '~web/date-time/forms/time-range.array';
 import { TFormGroup } from '~web/forms';
@@ -48,12 +48,18 @@ export class OperationHoursInfoForm extends TFormGroup<OperationHoursInfo> {
     super.setValue(opHoursInfo);
   }
 
+  doesWeekdayHaveHours(weekday: Weekday): boolean {
+    const weekdayArr = <TimeRangeArray>this.get(weekday);
+    const firstTimeRange = weekdayArr?.at(0)?.value;
+    return !!(firstTimeRange?.startTime && firstTimeRange?.endTime);
+  }
+
   private _updateTimeRangeCountOnChange(): void {
     this.valueChanges.subscribe(() => {
       this._timeRangeCount = 0;
       this._weekdayCount = 0;
       for (const weekday of this._constantsService.WEEKDAYS) {
-        if (this.get(weekday)?.value) {
+        if (this.doesWeekdayHaveHours(weekday)) {
           this._timeRangeCount += this.get(weekday).value.length;
           this._weekdayCount++;
         }

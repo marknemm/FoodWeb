@@ -30,6 +30,17 @@ export class AppContactInfoComponent extends ContactInfoBaseComponent implements
     super(formHelperService);
   }
 
+  get focusable(): boolean {
+    return this.editable;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  focus(): boolean {
+    return this._focusService.focus(this, this.firstFocusable);
+  }
+
   /**
    * Opens the user's default mail client to email a user associated with this contact info.
    */
@@ -42,9 +53,5 @@ export class AppContactInfoComponent extends ContactInfoBaseComponent implements
    */
   openPhoneCall(): void {
     dial(this.value.phoneNumber, true);
-  }
-
-  focus(): boolean {
-    return this._focusService.focus(this, this.firstFocusable);
   }
 }

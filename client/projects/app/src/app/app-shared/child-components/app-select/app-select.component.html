@@ -1,21 +1,38 @@
-<foodweb-app-focus-mask
-  #focusMask
-  [enabled]="editable"
-  [visible]="visible"
-  (focusTap)="onFocusTap()">
-  <foodweb-app-text-field
-    #textField
-    autoCorrect="false"
-    editable="false"
-    [hint]="hint"
-    [label]="label"
-    [letterSpacing]="letterSpacing"
-    [lineHeight]="lineHeight"
-    [requiredErrMsg]="requireErrMsg"
-    [text]="selectedItemName"
-    [textAlignment]="textAlignment"
-    [textDecoration]="textDecoration"
-    [textTransform]="textTransform"
-    [whiteSpace]="whiteSpace"
-  ></foodweb-app-text-field>
-</foodweb-app-focus-mask>
+<GridLayout columns="*" rows="auto" [foodwebAppVisibile]="visible">
+  <foodweb-app-focus-mask #focusMask
+    column="0"
+    row="0"
+    [enabled]="editable"
+    (focusTap)="onFocusTap()">
+    <!-- Make readonly with editable style so that only focus mask can get focus (important on Android) -->
+    <foodweb-app-text-field #textField
+      autoCorrect="false"
+      editable="false"
+      [formControl]="formControl"
+      [hint]="hint"
+      [inlineColumnsSchema]="inlineColumnSchema"
+      [label]="label"
+      [letterSpacing]="letterSpacing"
+      [lineHeight]="lineHeight"
+      [orientation]="currentOrientation"
+      [readonlyKeepEditableStyles]="textFieldHasEditableStyles"
+      [requiredErrorMsg]="requiredErrorMsg"
+      [textAlignment]="textAlignment"
+      [textDecoration]="textDecoration"
+      [textOverride]="selectedItemName"
+      [textTransform]="textTransform"
+      [whiteSpace]="whiteSpace">
+      <StackLayout class="error">
+        <ng-content select=".error"></ng-content>
+      </StackLayout>
+    </foodweb-app-text-field>
+  </foodweb-app-focus-mask>
+
+  <StackLayout *ngIf="editableToggle" class="editable-toggle-container pull-right" column="0" row="0">
+    <foodweb-app-edit-save-button
+      [control]="formControl"
+      [editable]="editable"
+      (edit)="setEditable($event)"
+      (save)="save.emit($event)"></foodweb-app-edit-save-button>
+  </StackLayout>
+</GridLayout>

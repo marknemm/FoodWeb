@@ -34,6 +34,10 @@ export class AppPasswordComponent extends PasswordBaseComponent implements Focus
       : this.passwordField;
   }
 
+  get focusable(): boolean {
+    return this.editable;
+  }
+
   focus(): boolean {
     return this._focusService.focus(this, this.firstFocusable);
   }

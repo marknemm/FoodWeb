@@ -27,6 +27,10 @@ export class AppUsernameComponent extends UsernameBaseComponent implements Focus
     super(formHelperService);
   }
 
+  get focusable(): boolean {
+    return this.editable;
+  }
+
   focus(): boolean {
     return this._focusService.focus(this, this.firstFocusable);
   }

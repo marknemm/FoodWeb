@@ -8,9 +8,10 @@ import { DateTimeBaseComponent } from './date-time.base.component';
   selector: 'foodweb-date-time',
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.scss'],
-  providers: formProvider(DateTimeComponent).concat([
+  providers: [
+    formProvider(DateTimeComponent),
     { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeComponent), multi: true }
-  ])
+  ]
 })
 export class DateTimeComponent extends DateTimeBaseComponent {
 

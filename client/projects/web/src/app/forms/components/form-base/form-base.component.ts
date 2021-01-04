@@ -204,7 +204,7 @@ abstract class _FormBaseComponent<
   private _syncValueWithAbstractControl(valueChange: SimpleChange): void {
     // If the value component input is updated or initialized with non-null data, propegate the change to the set abstract control.
     if (valueChange && (!valueChange.firstChange || this.value != null)) {
-      this.activeAbstractControl.setValue(this.value);
+      this.activeAbstractControl.setValue(this.value, { emitEvent: false });
     }
 
     // If the contained abstract control has been updated, then sync the value component input with its raw value

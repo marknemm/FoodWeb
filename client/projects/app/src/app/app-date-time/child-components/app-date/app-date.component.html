@@ -1,24 +1,40 @@
-<GridLayout [foodwebAppVisibile]="visible">
-  <foodweb-app-focus-mask
-    #focusMask
-    [visible]="editable"
+<GridLayout columns="*" rows="auto" [foodwebAppVisibile]="visible">
+  <foodweb-app-focus-mask #focusMask
+    column="0"
+    row="0"
+    [enabled]="editable"
     (focusTap)="showDateDialog(dateTextField)">
-    <foodweb-app-text-field
-      #dateTextField
+    <!-- Make readonly with editable style so that only focus mask can get focus (important on Android) -->
+    <foodweb-app-text-field #dateTextField
+      autoCorrect="false"
       editable="false"
       keyboardType="datetime"
-      [hint]="placeholder"
+      [displayValue]="value | foodwebFormatDate"
+      [formControl]="formControl"
+      [hint]="hint"
+      [inlineColumnsSchema]="inlineColumnSchema"
       [label]="label"
-      [text]="formControl.value | foodwebFormatDate"
-    ></foodweb-app-text-field>
+      [letterSpacing]="letterSpacing"
+      [lineHeight]="lineHeight"
+      [orientation]="currentOrientation"
+      [readonlyKeepEditableStyles]="textFieldHasEditableStyles"
+      [requiredErrorMsg]="requiredErrorMsg"
+      [textAlignment]="textAlignment"
+      [textDecoration]="textDecoration"
+      [textOverride]="formControl.value | foodwebFormatDate"
+      [textTransform]="textTransform"
+      [whiteSpace]="whiteSpace">
+      <StackLayout class="error">
+        <ng-content select=".error"></ng-content>
+      </StackLayout>
+    </foodweb-app-text-field>
   </foodweb-app-focus-mask>
 
-  <Label foodwebAppVisibile="!editable">
-    <FormattedString>
-      <Span
-        [ngClass]="{ bold: bold }"
-        [text]="value | foodwebFormatDate"
-      ></Span>
-    </FormattedString>
-  </Label>
+  <StackLayout *ngIf="editableToggle" class="editable-toggle-container pull-right" column="0" row="0">
+    <foodweb-app-edit-save-button
+      [control]="formControl"
+      [editable]="editable"
+      (edit)="setEditable($event)"
+      (save)="save.emit($event)"></foodweb-app-edit-save-button>
+  </StackLayout>
 </GridLayout>
