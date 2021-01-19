@@ -46,7 +46,7 @@ export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
   }
 
   private _listenForVolunteerAccountChange(destroy$: Observable<any>): void {
-    this.onValueChanges('volunteerAccount', destroy$).subscribe(
+    this.onControlValueChanges('volunteerAccount', destroy$).subscribe(
       () => this._onVolunteerAccountChange()
     );
     this._onVolunteerAccountChange();
@@ -65,7 +65,7 @@ export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
   }
 
   private _listenForStartTimeChange(destroy$: Observable<any>): void {
-    this.onValueChanges('startTime', destroy$).subscribe(
+    this.onControlValueChanges('startTime', destroy$).subscribe(
       () => this._onStartTimeChange()
     );
     this._onStartTimeChange();
@@ -79,7 +79,7 @@ export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
   }
 
   private _listenForPickupTimeChange(destroy$: Observable<any>): void {
-    this.onValueChanges('pickupTime', destroy$).subscribe(
+    this.onControlValueChanges('pickupTime', destroy$).subscribe(
       () => this._onPickupTimeChange()
     );
     this._onPickupTimeChange();

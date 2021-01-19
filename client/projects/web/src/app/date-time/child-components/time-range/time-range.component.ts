@@ -1,12 +1,12 @@
 import { Component, HostBinding, Input } from '@angular/core';
-import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormHelperService } from '~web/forms';
+import { FormHelperService, formProvider } from '~web/forms';
 import { TimeRangeBaseComponent } from './time-range.base.component';
 
 @Component({
   selector: 'foodweb-time-range',
   templateUrl: './time-range.component.html',
-  styleUrls: ['./time-range.component.scss']
+  styleUrls: ['./time-range.component.scss'],
+  providers: formProvider(TimeRangeComponent)
 })
 export class TimeRangeComponent extends TimeRangeBaseComponent {
 
@@ -15,9 +15,8 @@ export class TimeRangeComponent extends TimeRangeBaseComponent {
   @HostBinding() class = 'foodweb-time-range';
 
   constructor(
-    protected _dateTimeService: DateTimeService,
     formHelperService: FormHelperService
   ) {
-    super(_dateTimeService, formHelperService);
+    super(formHelperService);
   }
 }

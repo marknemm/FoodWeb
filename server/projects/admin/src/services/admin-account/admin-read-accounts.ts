@@ -1,7 +1,7 @@
 import { Account, AccountEntity, AccountType } from '~entity';
-import { UnverifiedAccountEntity } from '~entity';
-import { OrmSelectQueryBuilder, QueryMod, QueryResult } from '~orm';
-import { AccountReadFilters, AccountReadRequest } from '~shared';
+import { OrmSelectQueryBuilder, QueryMod } from '~orm';
+import { AccountReadRequest } from '~shared';
+import { ListResponsePromise } from '~web/helpers/response/list-response';
 import { queryFullAccounts, readFullAccount } from '~web/services/account/read-accounts';
 
 /**
@@ -20,7 +20,7 @@ export function adminReadAccount(idOrUsername: number | string, myAccount?: Acco
  * @param myAccount The account of the user issuing the request.
  * @return A promise that resolves to the query result of the account read.
  */
-export function adminReadAccounts(request: AccountReadRequest, myAccount: Account): Promise<QueryResult<AccountEntity>> {
+export function adminReadAccounts(request: AccountReadRequest, myAccount: Account): ListResponsePromise<AccountEntity> {
   return adminQueryAccounts(request, myAccount).exec();
 }
 
@@ -45,7 +45,7 @@ export function adminQueryAccounts(request: AccountReadRequest, myAccount?: Acco
  */
 function _genAdminWhereConditions(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
-  filters: AccountReadFilters
+  filters: AccountReadRequest
 ): OrmSelectQueryBuilder<AccountEntity> {
   queryBuilder = _genAccountVerifiedCondition(queryBuilder, filters);
   queryBuilder = _genSignedAgreementCondition(queryBuilder, filters);
@@ -60,7 +60,7 @@ function _genAdminWhereConditions(
  */
 function _genAccountVerifiedCondition(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
-  filters: AccountReadFilters
+  filters: AccountReadRequest
 ): OrmSelectQueryBuilder<AccountEntity> {
   if (filters.verified != null) {
     const accountVerified = (filters.verified === 'true');
@@ -81,7 +81,7 @@ function _genAccountVerifiedCondition(
  */
 function _genSignedAgreementCondition(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
-  filters: AccountReadFilters
+  filters: AccountReadRequest
 ): OrmSelectQueryBuilder<AccountEntity> {
   if (filters.signedAgreement != null && (!filters.accountType || filters.accountType === AccountType.Volunteer)) {
     queryBuilder = queryBuilder.andWhere(`volunteer.signedAgreement = :signedAgreement`, { signedAgreement: filters.signedAgreement });

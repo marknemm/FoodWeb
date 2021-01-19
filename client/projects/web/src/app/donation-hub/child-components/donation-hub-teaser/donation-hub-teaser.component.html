@@ -1,0 +1,23 @@
+<mat-card id="donation-hub-{{ donationHub.id }}" class="teaser donation-hub-teaser">
+  <mat-card-header>
+    <foodweb-profile-img mat-card-avatar [value]="donationHub.volunteerAccount.profileImg"></foodweb-profile-img>
+    <mat-card-title>{{ donationHub.volunteerAccount | foodwebAccountName }}</mat-card-title>
+    <mat-card-subtitle>{{ donationHub.volunteerAccount.contactInfo.email }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="donation-hub-display row">
+      <div class="col-md-6 col-12">
+        <foodweb-contact-info [value]="donationHub.contactOverride" hideEmail="true" hidePhone="true"></foodweb-contact-info>
+      </div>
+      <div class="col-md-6 col-12">
+        <div class="inline-label">Drop-Off Window:</div>
+        <div><foodweb-date-time-range boldTime="true" [startDateTime]="donationHub.dropOffWindowStart" [endDateTime]="donationHub.dropOffWindowEnd"></foodweb-date-time-range></div>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <a [routerLink]="['/donation-hub', 'details', donationHub.id]" class="no-hover">
+      <button mat-raised-button type="button" class="compact" color="primary">View Donation Hub</button>
+    </a>
+  </mat-card-actions>
+</mat-card>

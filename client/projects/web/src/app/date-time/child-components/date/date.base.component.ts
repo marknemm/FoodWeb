@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { DateFilterFn } from '@angular/material/datepicker';
 import { FloatLabelType } from '@angular/material/form-field';
 import { Convert } from '~web/component-decorators';
 import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
@@ -11,6 +12,7 @@ export class DateBaseComponent extends FormBaseComponent<Date> {
   @Input() allowClear: boolean = false;
   @Convert()
   @Input() bold: boolean = false;
+  @Input() dateFilter: DateFilterFn<Date>;
   @Convert()
   @Input() defaultDate: Date;
   @Input() errorStateMatcher: ErrorStateMatcher;
@@ -25,7 +27,7 @@ export class DateBaseComponent extends FormBaseComponent<Date> {
   constructor(
     formHelperService: FormHelperService
   ) {
-    super(new TFormControl<Date>(), formHelperService);
+    super(() => new TFormControl<Date>(), formHelperService);
   }
 
   /**

@@ -9,6 +9,6 @@ export class UsernameBaseComponent extends FormBaseComponent<string> {
   @Input() editable: boolean = false;
 
   constructor(formHelperService: FormHelperService) {
-    super(new TFormControl<string>(), formHelperService);
+    super(() => new TFormControl<string>(), formHelperService);
   }
 }

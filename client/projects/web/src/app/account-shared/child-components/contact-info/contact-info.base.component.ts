@@ -20,7 +20,7 @@ export class ContactInfoBaseComponent extends FormBaseComponent<ContactInfoForm>
   @Input() includeMap: boolean = false;
 
   constructor(formHelperService: FormHelperService) {
-    super(new ContactInfoForm(), formHelperService);
+    super(() => new ContactInfoForm(), formHelperService);
   }
 
   get addressColSize(): string {

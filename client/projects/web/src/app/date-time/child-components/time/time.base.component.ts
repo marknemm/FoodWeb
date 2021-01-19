@@ -1,11 +1,11 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
-import { DateConverter, Convert } from '~web/component-decorators';
+import { Convert, DateConverter } from '~web/component-decorators';
 import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
 
 @Component({ template: '' })
-export class TimeBaseComponent extends FormBaseComponent<string> implements OnInit, OnChanges {
+export class TimeBaseComponent extends FormBaseComponent<string> implements OnInit {
 
   @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() floatLabels: FloatLabelType = 'auto';
@@ -16,14 +16,22 @@ export class TimeBaseComponent extends FormBaseComponent<string> implements OnIn
   @Convert()
   @Input() bold: boolean = false;
   @Convert(DateConverter)
-  @Input() defaultTime: string | Date =  '';
+  @Input() defaultTime: string | Date =  '12:00 pm';
   @Convert()
   @Input() minutesGap: number = 5;
   @Convert()
   @Input() preventOverlayClick: boolean = false;
 
   constructor(formHelperService: FormHelperService) {
-    super(new TFormControl<string>(), formHelperService);
+    super(() => new TFormControl<string>(), formHelperService);
+  }
+
+  /**
+   * If the current value of this time control is empty, then uses the `defaultTime` input binding.
+   * Otherwise, uses the current value.
+   */
+  get activeDefaultTime(): string | Date {
+    return (this.value ? this.value : this.defaultTime);
   }
 
   /**
@@ -33,19 +41,7 @@ export class TimeBaseComponent extends FormBaseComponent<string> implements OnIn
     return (this.allowClear && this.formControl?.value && this.formControl.enabled);
   }
 
-  ngOnInit() {
-    // Always sync defaultTime with currently set non-null value.
-    this.onValueChanges().subscribe(() =>
-      this.defaultTime = this.value ?? this.defaultTime
-    );
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    super.ngOnChanges(changes);
-    if (changes.defaultTime && this.formControl.value) {
-      this.defaultTime = this.formControl.value;
-    }
-  }
+  ngOnInit() {}
 
   /**
    * Clears the time input field.

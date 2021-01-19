@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import * as _ from 'lodash';
+import { cloneDeep, get, set } from 'lodash-es';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Account, AccountUpdateRequest, PasswordUpdateRequest } from '~shared';
@@ -33,7 +33,7 @@ export class AccountSaveService {
     const url = `${this.url}/${originalAccount.id}`;
 
     // Generate the account update that shall be saved on the server.
-    const accountUpdate = <Account>this.mergeAccountUpdateFields(updateData, _.cloneDeep(originalAccount), fields);
+    const accountUpdate = <Account>this.mergeAccountUpdateFields(updateData, cloneDeep(originalAccount), fields);
     const accountSectionUpdtReq: AccountUpdateRequest = { account: accountUpdate };
 
     // Send the account update request to the server.
@@ -53,7 +53,7 @@ export class AccountSaveService {
   mergeAccountUpdateFields(src: Partial<Account>, dest: Partial<Account>, fields: string[]): Partial<Account> {
     if (fields) {
       for (const field of fields) {
-        _.set(dest, field, _.get(src, field));
+        set(dest, field, get(src, field));
       }
     }
     return dest;

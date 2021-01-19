@@ -52,7 +52,7 @@ export async function sendNotification(account: AccountEntity, notification: Not
 async function _getPushTargets(accounts: AccountEntity[] | AccountEntity): Promise<AppDataEntity[]> {
   accounts = (accounts instanceof Array) ? accounts : [accounts];
   const accountIds: number[] = accounts.map((account: AccountEntity) => account.id);
-  return (await readAppData({ accountIds, page: 1, limit: 1000 })).entities;
+  return (await readAppData({ accountIds, page: 1, limit: 1000 })).list;
 }
 
 /**

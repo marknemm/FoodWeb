@@ -8,15 +8,11 @@
 
       <ng-content select="foodweb-filtered-list-content"></ng-content>
 
-      <div *ngIf="totalCount; else noneFound" class="foodweb-paginator-container">
-        <foodweb-paginator *ngIf="!excludePaginator" [length]="totalCount"></foodweb-paginator>
-      </div>
+      <ng-content select="foodweb-filtered-list-empty"></ng-content>
 
-      <ng-template #noneFound>
-        <p class="none-found">
-          Could not find any {{ listItemsLabel }}
-        </p>
-      </ng-template>
+      <ng-content select="foodweb-paginator"></ng-content>
+
+      <ng-content></ng-content>
 
     </div>
   </mat-sidenav-content>

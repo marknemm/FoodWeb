@@ -1,0 +1,17 @@
+@import "constants.scss";
+
+.drop-off-info {
+  .mat-card-content {
+    > div {
+      margin-bottom: 12px;
+
+      &:first-child {
+        margin-top: 12px;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

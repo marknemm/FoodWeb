@@ -25,7 +25,7 @@ export class AccountSelectComponent extends FormBaseComponent<AccountAutocomplet
     public accountAutocompleteService: AccountAutocompleteService,
     formHelperService: FormHelperService
   ) {
-    super(new TFormControl<AccountAutocompleteItem>(), formHelperService);
+    super(() => new TFormControl<AccountAutocompleteItem>(), formHelperService);
   }
 
   /**

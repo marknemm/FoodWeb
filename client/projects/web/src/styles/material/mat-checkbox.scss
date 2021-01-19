@@ -3,5 +3,12 @@
 .mat-checkbox {
   .mat-checkbox-layout {
     white-space: normal;
+
+    .mat-checkbox-inner-container {
+      vertical-align: top;
+      margin-top: 0;
+      margin-bottom: 0;
+      top: 4px;
+    }
   }
 }

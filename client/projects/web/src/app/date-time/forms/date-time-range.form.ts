@@ -29,6 +29,14 @@ export class DateTimeRangeForm extends TFormGroup<DateTimeRange> {
     return this.get('endDateTime').value;
   }
 
+  get startEndDateSame(): boolean {
+    return !this.value || (
+      this.value.startDateTime?.getFullYear() === this.value.endDateTime?.getFullYear()
+      && this.value.startDateTime?.getMonth() === this.value.endDateTime?.getMonth()
+      && this.value.startDateTime?.getDate() === this.value.endDateTime?.getDate()
+    );
+  }
+
   /**
    * Fills in a missing part of the date-time range if one is present without the other.
    * Simply sets the missing part an hour away from the present part.

@@ -28,6 +28,10 @@ export class OperationHoursInfoForm extends TFormGroup<OperationHoursInfo> {
     this._updateTimeRangeCountOnChange();
   }
 
+  get operationHoursLimited(): boolean {
+    return this.get('limitOperationHours').value;
+  }
+
   get timeRangeCount(): number {
     return this._timeRangeCount;
   }

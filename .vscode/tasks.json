@@ -124,6 +124,13 @@
       "problemMatcher": []
     },
     {
+      "label": "Docker FoodWeb Services: Start",
+      "type": "shell",
+      "command": "docker-compose up -d foodweb-services",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
       "label": "Docker FoodWeb: Reinstall Dependencies",
       "type": "shell",
       "dependsOn": [

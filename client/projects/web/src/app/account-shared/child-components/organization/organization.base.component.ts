@@ -12,7 +12,7 @@ export class OrganizationBaseComponent extends FormBaseComponent<OrganizationFor
   protected _deliveryInstrLabel = '';
 
   constructor(formHelperService: FormHelperService) {
-    super(new OrganizationForm(), formHelperService);
+    super(() => new OrganizationForm(), formHelperService);
   }
 
   get deliveryInstrLabel(): string {

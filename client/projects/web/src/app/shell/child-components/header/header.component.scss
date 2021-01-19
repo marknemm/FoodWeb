@@ -32,7 +32,7 @@ header {
       image-rendering: -o-crisp-edges;
       image-rendering: -webkit-optimize-contrast;
       -ms-interpolation-mode: nearest-neighbor;
-      margin-top: -4px;
+      margin-top: -6px;
       margin-right: 12px;
 
       @media only screen and (max-width: $md) {
@@ -76,7 +76,6 @@ header {
       height: $site-title-font-size;
       line-height: $site-title-font-size;
       color: $accent-darker;
-      margin-top: 4px;
 
       &:hover {
         text-decoration: none;
@@ -88,7 +87,6 @@ header {
         height: $site-title-font-size-md;
         width: 100%;
         text-align: center;
-        margin-top: 5px;
       }
 
       @media only screen and (max-width: $sm) {

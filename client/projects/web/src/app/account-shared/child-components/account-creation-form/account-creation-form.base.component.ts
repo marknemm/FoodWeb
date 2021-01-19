@@ -20,7 +20,7 @@ export class AccountCreationFormBaseComponent extends FormBaseComponent<AccountF
     protected _router: Router,
     formHelperService: FormHelperService,
   ) {
-    super(new AccountForm({ formMode: 'Signup' }), formHelperService);
+    super(() => new AccountForm({ formMode: 'Signup' }), formHelperService);
   }
 
   get accountType(): AccountType {

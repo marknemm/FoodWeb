@@ -16,7 +16,7 @@ export abstract class AccountTypeBaseComponent extends FormBaseComponent<Account
     public constantsService: ConstantsService,
     formHelperService: FormHelperService
   ) {
-    super(new TFormControl<AccountType>(), formHelperService);
+    super(() => new TFormControl<AccountType>(), formHelperService);
   }
 
   accountTypeClick(accountType: AccountType): void {

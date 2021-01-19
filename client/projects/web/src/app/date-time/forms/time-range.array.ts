@@ -14,25 +14,27 @@ export class TimeRangeArray extends TFormArray<TimeRangeForm> {
     }
   }
 
-  // remove(operationHoursForm: OperationHoursForm, confirmDialog?: ConfirmDialog): void {
-  //   const idx: number = this.controls.indexOf(operationHoursForm);
-  //   if (idx >= 0) {
-  //     this._getDeleteConfirmation(idx, confirmDialog).subscribe(
-  //       (confirm: boolean) => {
-  //         if (confirm) {
-  //           this.removeAt(idx);
-  //         }
-  //       }
-  //     );
-  //   }
-  // }
+  /**
+   * Checks if the element at a given index may be removed.
+   * @param idx The index to check.
+   * @return true if it may be removed, false if not.
+   */
+  canRemoveAt(idx: number): boolean {
+    return (idx < this.length && (this.length > 1 || !!this.at(idx).startTime || !!this.at(idx).endTime));
+  }
 
-  // private _getDeleteConfirmation(idx: number, confirmDialog: ConfirmDialog): Observable<boolean> {
-  //   const confirmMsg = 'Are you sure you wish to delete the operation hours?';
-  //   let deleteConfirmation$: Observable<boolean> = of(true);
-  //   if (confirmDialog && this.at(idx).value.startTime && this.at(idx).value.endTime) {
-  //     deleteConfirmation$ = confirmDialog.displayConfirmDialog(confirmMsg, 'Confirm Delete');
-  //   }
-  //   return deleteConfirmation$;
-  // }
+  /**
+   * @override
+   * Removes an element in this form array at a given index.
+   * Ensures that there is always at least one element remaining in the array for data entry.
+   * @param idx The index of the item to remove.
+   * @return The removed item.
+   */
+  removeAt(idx: number): TimeRangeForm {
+    const removed: TimeRangeForm = super.removeAt(idx);
+    if (this.length === 0) {
+      this.push();
+    }
+    return removed;
+  }
 }

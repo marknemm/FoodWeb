@@ -94,7 +94,7 @@ function inlineFileCss(inTmplPath, inCssPath, outTmplPath) {
  * Copies the template precompile result from /dist to /admin-dist if it exists for dev mode.
  */
 function copyResultToAdminDist() {
-  const adminDistServerPath = distServerPath.replace('/dist', '/admin-dist');
+  const adminDistServerPath = distServerPath.replace(`${path.sep}dist`, `${path.sep}admin-dist`);
   const adminDistTemplatesPath = path.join(adminDistServerPath, 'templates');
   if (fs.existsSync(adminDistServerPath)) {
     fs.copySync(distTemplatesPath, adminDistTemplatesPath, { overwrite: true });

@@ -1,9 +1,13 @@
-.login-menu-button {
-  margin-top: -3px;
+@import "constants.scss";
 
+.login-menu-button {
   .mat-icon {
     font-size: 35px;
     vertical-align: -13px;
     margin-left: -10px;
+  }
+
+  @media only screen and (max-width: $md) {
+    margin-top: -3px;
   }
 }

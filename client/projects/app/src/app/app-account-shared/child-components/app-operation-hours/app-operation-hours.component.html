@@ -38,9 +38,9 @@
     class="text-danger"
     [textContent]="formGroup.getError('timeRangeOrder')"></Label>
   <Label
-    foodwebAppVisibile="formGroup.hasError('allOrNothing')"
+    foodwebAppVisibile="formGroup.hasError('groupRequired')"
     class="text-danger"
-    [textContent]="formGroup.getError('allOrNothing')"></Label>
+    [textContent]="formGroup.getError('groupRequired')"></Label>
 </StackLayout>
 
 <!-- <div [formGroup]="formGroup" class="operation-hours-form">
@@ -81,7 +81,7 @@
   <mat-error *ngIf="formGroup.hasError('timeRangeOrder')" class="operation-hours-error">
     {{ formGroup.getError('timeRangeOrder') }}
   </mat-error>
-  <mat-error *ngIf="formGroup.hasError('allOrNothing')" class="operation-hours-error">
-    {{ formGroup.getError('allOrNothing') }}
+  <mat-error *ngIf="formGroup.hasError('groupRequired')" class="operation-hours-error">
+    {{ formGroup.getError('groupRequired') }}
   </mat-error>
 </div> -->

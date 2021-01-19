@@ -36,7 +36,7 @@ export class DateTimeRangeRadioComponent extends FormBaseComponent<DateTimeRange
     private _dateTimeService: DateTimeService,
     formHelperService: FormHelperService
   ) {
-    super(new TFormControl<DateTimeRange>(), formHelperService);
+    super(() => new TFormControl<DateTimeRange>(), formHelperService);
   }
 
   /**

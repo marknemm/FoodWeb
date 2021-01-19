@@ -26,7 +26,7 @@
     "pg:make-timestamps-relevant": "node ./database-util/js/pg-exec.js -f ./database-util/sql/make-timestamps-relevant.pgsql",
     "pg:restore": "npm run pg:destroy && node ./database-util/js/pg-restore.js",
     "start": "npm run start:prep && tsc-watch -p ./projects/web/tsconfig.json --noClear --onFirstSuccess \"nodemon -e .js,.hbs,.css --watch ./dist/server/projects/web/src/ --watch ./dist/shared/src/ --watch ./templates/ --watch ./projects/web/.env --inspect ./dist/server/projects/web/src/index.js\"",
-    "start:docker": "npm run start:prep && tsc-watch -p ./projects/web/tsconfig.json --noClear --onFirstSuccess \"nodemon -e .js,.hbs,.css --watch ./dist/server/projects/web/src/ --watch ./dist/shared/src/ --watch ./templates/ --inspect=0.0.0.0:9229 ./dist/server/projects/web/src/index.js\"",
+    "start:docker": "npm run start:prep && tsc-watch -p ./projects/web/tsconfig.json --noClear --onFirstSuccess \"nodemon -L -e .js,.hbs,.css --watch ./dist/server/projects/web/src/ --watch ./dist/shared/src/ --watch ./templates/ --inspect=0.0.0.0:9229 ./dist/server/projects/web/src/index.js\"",
     "start:prep": "node ./build-util/initial-install.js web && rimraf ./dist/*",
     "templates:precompile": "node ./templates/precompile-templates.js",
     "test": "npm run lint && ts-mocha -p ./projects/web/tsconfig.spec.json ./src/**/*.ts",

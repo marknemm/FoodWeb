@@ -1,11 +1,12 @@
-<foodweb-filtered-list class="donations" listItemsLabel="Donations" [totalCount]="totalCount">
-  <foodweb-filtered-list-title>{{ pageTitle }}</foodweb-filtered-list-title>
+<foodweb-filtered-list class="donations">
 
-  <foodweb-filtered-list-toolbar>
+  <foodweb-filtered-list-title>{{ myDonations ? 'My Donations' : 'Donations' }}</foodweb-filtered-list-title>
+
+  <foodweb-filtered-list-toolbar listItemsLabel="Donations">
     <foodweb-search-bar
       placeholder="Search Donations..."
-      [formControl]="donationFilters.filtersForm.get('fullTextQuery')"
-      (search)="filterDonations(donationFilters.filtersForm.value)"
+      [formControl]="filtersForm.get('fullTextQuery')"
+      (search)="updateFilterQueryParams(filtersForm.value)"
     ></foodweb-search-bar>
   </foodweb-filtered-list-toolbar>
 
@@ -15,7 +16,18 @@
     </div>
   </foodweb-filtered-list-content>
 
+  <foodweb-filtered-list-empty *ngIf="noneFound">
+    Could Not Find Any Donations
+  </foodweb-filtered-list-empty>
+
+  <foodweb-paginator [length]="totalCount"></foodweb-paginator>
+
   <foodweb-list-filters>
-    <foodweb-donation-filters #donationFilters [activeFilters]="activeFilters" (filter)="filterDonations($event)"></foodweb-donation-filters>
+    <foodweb-donation-filters
+      [formGroup]="filtersForm"
+      (clear)="filtersForm.resetFacetFilters()"
+      (filter)="updateFilterQueryParams($event)"
+    ></foodweb-donation-filters>
   </foodweb-list-filters>
+
 </foodweb-filtered-list>

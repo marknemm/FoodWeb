@@ -24,7 +24,7 @@ export class AccountAutocompleteComponent extends FormBaseComponent<string> {
     private _accountAutocompleteService: AccountAutocompleteService,
     formHelperService: FormHelperService
   ) {
-    super(new TFormControl<string>(), formHelperService);
+    super(() => new TFormControl<string>(), formHelperService);
   }
 
   get accountAutocompleteStore(): ImmutableStore<AccountAutocompleteItem[]> {

@@ -41,7 +41,7 @@ export class DateTimeBaseComponent extends FormBaseComponent<Date> implements On
   @Input() timePlaceholder = 'Time';
 
   /**
-   * Acts an an internal form group. The form control exposed to the outside will gather this form's data
+   * Acts an an internal form group. The formControl exposed to the outside will gather this form's data
    * together as a single Date value.
    */
   readonly dateTimeForm: DateTimeForm;
@@ -50,7 +50,7 @@ export class DateTimeBaseComponent extends FormBaseComponent<Date> implements On
     formHelperService: FormHelperService,
     dateTimeService: DateTimeService
   ) {
-    super(new TFormControl<Date>(), formHelperService);
+    super(() => new TFormControl<Date>(), formHelperService);
     this.dateTimeForm = new DateTimeForm(dateTimeService);
   }
 

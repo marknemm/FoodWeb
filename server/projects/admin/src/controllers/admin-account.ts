@@ -2,15 +2,13 @@ import express = require('express');
 import { Request, Response } from 'express';
 import { adminSendAccountCreateMessages } from '~admin/services/admin-account/admin-account-create-messages';
 import { adminReadAccount, adminReadAccounts } from '~admin/services/admin-account/admin-read-accounts';
-import { adminCreateAccount, adminUpdateAccount, adminUpdateAccountSection, NewAccountData } from '~admin/services/admin-account/admin-save-account';
+import { adminCreateAccount, adminUpdateAccount, NewAccountData } from '~admin/services/admin-account/admin-save-account';
 import { adminSendMessage, adminTestMessage } from '~admin/services/admin-account/admin-send-message-to-accounts';
 import { adminUpdatePassword } from '~admin/services/admin-password/admin-save-password';
 import { Account, AccountEntity } from '~entity';
-import { QueryResult } from '~orm';
-import { AccountReadFilters, AccountReadRequest, AccountSectionUpdateReqeust, AccountUpdateRequest, AdminAccountCreateRequest, PasswordUpdateRequest, SendMessageRequest } from '~shared';
+import { AccountReadRequest, AccountUpdateRequest, AdminAccountCreateRequest, ListResponse, PasswordUpdateRequest, SendMessageRequest } from '~shared';
 import { handleGetAccountAutocomplete, handleGetRecoverUsername, handleGetResendMyVerificationEmail, handleGetResetPassword, handlePostAccountVerify, handlePutResetPassword } from '~web/controllers/account';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
-import { genListResponse } from '~web/helpers/response/list-response';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { recreateUnverifiedAccount } from '~web/services/account/account-verification';
 import { sendAccountVerificationEmail } from '~web/services/account/account-verification-message';
@@ -23,8 +21,8 @@ function handleGetAccounts(req: Request, res: Response) {
   const readRequest: AccountReadRequest = req.query;
   const myAccount: Account = (req.session ? req.session.account : null);
   adminReadAccounts(readRequest, myAccount)
-    .then((queryResult: QueryResult<AccountEntity>) =>
-      res.send(genListResponse(queryResult, readRequest))
+    .then((listRes: ListResponse<AccountEntity>) =>
+      res.send(listRes)
     )
     .catch(genErrorResponse.bind(this, res));
 }
@@ -73,7 +71,7 @@ function handlePostAccount(req: Request, res: Response) {
 router.post('/send-message', handlePostAccountMessage);
 function handlePostAccountMessage(req: Request, res: Response) {
   const sendMessageReq: SendMessageRequest = req.body;
-  const accountFilters: AccountReadFilters = req.query;
+  const accountFilters: AccountReadRequest = req.query;
   adminSendMessage(sendMessageReq, accountFilters, req.session.account)
     .then(() => res.send())
     .catch(genErrorResponse.bind(this, res));
@@ -85,19 +83,6 @@ function handlePostAccountTestMessage(req: Request, res: Response) {
   adminTestMessage(sendMessageReq, req.session.account)
     .then(() => res.send())
     .catch(genErrorResponse.bind(this, res));
-}
-
-router.put('/:id/section', handlePutAccountSection);
-function handlePutAccountSection(req: Request, res: Response) {
-  const accountId: number = Number.parseInt(req.params.id, 10);
-  const updateReq: AccountSectionUpdateReqeust = req.body;
-  adminUpdateAccountSection(accountId, updateReq)
-    .then(_handleAccountSaveResult.bind(this, req, res))
-    .catch(genErrorResponseRethrow.bind(this, res))
-    .then((accountDiff: UpdateDiff<AccountEntity>) =>
-      saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff, updateReq.recaptchaScore)
-    )
-    .catch((err: Error) => console.error(err));
 }
 
 router.put('/:id/password', handlePutPassword);

@@ -1,11 +1,11 @@
-<foodweb-filtered-list class="accounts" listItemsLabel="Accounts" [totalCount]="totalCount">
+<foodweb-filtered-list class="accounts">
   <foodweb-filtered-list-title>{{ pageTitle }}</foodweb-filtered-list-title>
 
-  <foodweb-filtered-list-toolbar>
+  <foodweb-filtered-list-toolbar listItemsLabel="Accounts">
     <foodweb-search-bar
       placeholder="Search Accounts..."
-      [formControl]="accountFilters.filtersForm.get('fullTextQuery')"
-      (search)="filterAccounts(accountFilters.filtersForm.toAccountReadRequest())"
+      [formControl]="filtersForm.get('fullTextQuery')"
+      (search)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
     ></foodweb-search-bar>
 
     <a [routerLink]="['/account', 'compose-message']" queryParamsHandling="preserve" class="compose-message-link">
@@ -21,7 +21,18 @@
     </div>
   </foodweb-filtered-list-content>
 
+  <foodweb-filtered-list-empty *ngIf="noneFound">
+    Could Not Find Any Accounts
+  </foodweb-filtered-list-empty>
+
+  <foodweb-paginator [length]="totalCount"></foodweb-paginator>
+
   <foodweb-list-filters>
-    <foodweb-admin-account-filters #accountFilters [activeFilters]="activeFilters" (filter)="filterAccounts($event)"></foodweb-admin-account-filters>
+    <foodweb-admin-account-filters
+      [formGroup]="filtersForm"
+      (clear)="filtersForm.resetFacetFilters({ resetAccountType: true })"
+      (filter)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
+    ></foodweb-admin-account-filters>
   </foodweb-list-filters>
+
 </foodweb-filtered-list>

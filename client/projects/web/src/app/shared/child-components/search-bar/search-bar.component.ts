@@ -1,54 +1,23 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { TFormGroup } from '~web/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
 
 @Component({
   selector: 'foodweb-search-bar',
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.scss'],
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SearchBarComponent), multi: true }
-  ]
+  providers: formProvider(SearchBarComponent)
 })
-export class SearchBarComponent implements OnInit, ControlValueAccessor {
+export class SearchBarComponent extends FormBaseComponent<string> implements OnInit {
 
   @Input() placeholder = 'Search...';
 
   @Output() search = new EventEmitter<string>();
 
-  readonly searchForm = new TFormGroup<{ searchQuery: string }>({
-    searchQuery: ''
-  });
-
-  private _onChangeCb: (searchQuery: string) => void = () => {};
-  private _onTouchedCb: () => void = () => {};
-
-  constructor() {}
-
-  get onChangeCb(): (searchQuery: string) => void {
-    return this._onChangeCb;
-  }
-
-  get onTouchedCb(): () => void {
-    return this._onTouchedCb;
+  constructor(
+    formHelperService: FormHelperService
+  ) {
+    super(() => new TFormControl<string>(), formHelperService);
   }
 
   ngOnInit() {}
-
-  writeValue(searchQuery: string): void {
-    this.searchForm.patchValue({ searchQuery });
-  }
-
-  registerOnChange(onChangeCb: (searchQuery: string) => void): void {
-    this._onChangeCb = onChangeCb;
-  }
-
-  registerOnTouched(onTouchedCb: () => void): void {
-    this._onTouchedCb = onTouchedCb;
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    (isDisabled) ? this.searchForm.disable() : this.searchForm.enable();
-  }
-
 }

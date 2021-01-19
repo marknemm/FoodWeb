@@ -66,9 +66,7 @@ services:
       - "5000:5000"
       - "9229:9229"
     depends_on:
-      - fake-smtp-server
-      - postgres
-      - redis
+      - foodweb-services
     command: bash -c "npm run start:docker"
     volumes:
       # Exclude the following directories from shared volume by overwriting with blank directory
@@ -83,10 +81,14 @@ services:
       - "5001:5001"
       - "9230:9230"
     depends_on:
-      - fake-smtp-server
+      - foodweb-services
+    command: bash -c "npm run admin:start:docker"
+
+  foodweb-services:
+    extends: "fake-smtp-server"
+    depends_on:
       - postgres
       - redis
-    command: bash -c "npm run admin:start:docker"
 
   fake-smtp-server:
     image: "reachfive/fake-smtp-server"
@@ -133,4 +135,4 @@ networks:
 
 volumes:
   pgdata:
-    external: true
+    external: false

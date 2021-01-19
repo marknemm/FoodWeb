@@ -185,6 +185,10 @@ a.no-hover {
   }
 }
 
+.warn {
+  color: $warn;
+}
+
 @media only screen and (max-width: $md) {
   .d-inline-block.desktop {
     display: block !important;

@@ -1,14 +1,15 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
-import { cloneDeep } from 'lodash-es';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { Donation, DonationReadRequest, ListResponse } from '~shared';
 import { environment } from '~web-env/environment';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 export { Donation };
 
+/**
+ * A service responsible for reading donations from the server.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -26,29 +27,18 @@ export class DonationReadService {
     private _window: Window,
   ) {}
 
-  updateURLQueryString(filters: DonationReadRequest, activatedRoute: ActivatedRoute): void {
-    // Convert dates into raw ISO strings.
-    for (const filtKey in filters) {
-      if (filters[filtKey] instanceof Date) {
-        filters[filtKey] = (<Date>filters[filtKey]).toISOString();
-      }
-    }
-
-    this._router.navigate([], {
-      relativeTo: activatedRoute,
-      queryParams: filters
-    });
+  /**
+   * Whether or not a donation read request is loading.
+   */
+  get loading(): boolean {
+    return this._httpResponseService.loading;
   }
 
-  listenDonationQueryChange(activatedRoute: ActivatedRoute): Observable<Donation> {
-    return activatedRoute.paramMap.pipe(
-      switchMap((paramMap: ParamMap) => {
-        const id: number = (paramMap.has('id') ? parseInt(paramMap.get('id'), 10) : undefined);
-        return this.getDonation(id);
-      })
-    );
-  }
-
+  /**
+   * Gets a single donation from the server based off of a given donation ID.
+   * @param id The ID of the donation to retrieve.
+   * @return An observable that emits the retrieved donation.
+   */
   getDonation(id: number): Observable<Donation> {
     // Attempt to get donation from window state history.
     if (this._window.history.state?.donation?.id === id) {
@@ -61,22 +51,32 @@ export class DonationReadService {
     );
   }
 
-  handleDonationsQueryChange(params: Params): Observable<ListResponse<Donation>> {
+  /**
+   * Gets a list of donations from the server based off of a given donation read request.
+   * If it is detected that the user is on a `/my` route, then their donations will be retrieved.
+   * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @return An observable that emits a list response containing the retrieved donations.
+   */
+  getDonations(request: DonationReadRequest): Observable<ListResponse<Donation>> {
     const myDonations: boolean = (this._router.url.indexOf('my') >= 0);
-    const request: DonationReadRequest = cloneDeep(params);
-    request.page = (params.page ? parseInt(params.page, 10) : 1);
-    request.limit = (params.limit ? parseInt(params.limit, 10) : 10);
     return this._getDonations(request, myDonations);
   }
 
+  /**
+   * Gets a list of the user's donations from the server based off of a given donation read request.
+   * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @return An observable that emits a list response containing the retrieved donations belonging to the current user.
+   */
   getMyDonations(request: DonationReadRequest): Observable<ListResponse<Donation>> {
     return this._getDonations(request, true);
   }
 
-  getDonations(request: DonationReadRequest): Observable<ListResponse<Donation>> {
-    return this._getDonations(request, false);
-  }
-
+  /**
+   * Gets a list of donations from the server based off of a given donation read request.
+   * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @param myDonations Whether or not to retrieve donations that only belong to the current user.
+   * @return An observable that emits a list response containing the retrieved donations.
+   */
   private _getDonations(request: DonationReadRequest, myDonations: boolean): Observable<ListResponse<Donation>> {
     const getUrl: string = this.url + (myDonations ? '/my' : '');
     request.page = request.page ? request.page : 1;

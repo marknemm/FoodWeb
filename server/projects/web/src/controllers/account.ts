@@ -1,10 +1,8 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { AccountEntity, PasswordResetEntity, UnverifiedAccountEntity } from '~entity';
-import { QueryResult } from '~orm';
-import { Account, AccountAutocompleteItem, AccountAutocompleteRequest, AccountReadRequest, AccountUpdateRequest, AccountVerificationRequest, PasswordResetRequest, PasswordUpdateRequest, SignupRequest } from '~shared';
+import { Account, AccountAutocompleteItem, AccountAutocompleteRequest, AccountReadRequest, AccountUpdateRequest, AccountVerificationRequest, ListResponse, PasswordResetRequest, PasswordUpdateRequest, SignupRequest } from '~shared';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
-import { genListResponse } from '~web/helpers/response/list-response';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { ensureSessionActive } from '~web/middlewares/session.middleware';
 import { genAccountAutocomplete } from '~web/services/account/account-autocomplete';
@@ -25,9 +23,7 @@ export function handleGetAccounts(req: Request, res: Response) {
   const readRequest: AccountReadRequest = req.query;
   const myAccount: Account = (req.session ? req.session.account : null);
   readAccounts(readRequest, myAccount)
-    .then((queryResult: QueryResult<AccountEntity>) =>
-      res.send(genListResponse(queryResult, readRequest))
-    )
+    .then((listRes: ListResponse<AccountEntity>) => res.send(listRes))
     .catch(genErrorResponse.bind(this, res));
 }
 
@@ -43,7 +39,7 @@ router.get('/recover-username', handleGetRecoverUsername);
 export function handleGetRecoverUsername(req: Request, res: Response) {
   const email: string = req.query.email;
   readAccounts({ email, page: 0, limit: 1000 }, null)
-    .then((queryResult: QueryResult<AccountEntity>) => sendUsernameRecoveryEmail(queryResult.entities))
+    .then((listRes: ListResponse<AccountEntity>) => sendUsernameRecoveryEmail(listRes.list))
     .then(() => res.send())
     .catch(genErrorResponse.bind(this, res));
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Convert } from '~web/component-decorators';
 import { DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
 import { FormBaseComponent, FormHelperService } from '~web/forms';
@@ -23,16 +23,35 @@ export abstract class DateTimeRangeBaseComponent extends FormBaseComponent<DateT
   @Input() maxDate: Date;
   @Convert()
   @Input() minDate: Date = new Date();
+  @Convert()
+  @Input() startDateTime: Date;
+  @Convert()
+  @Input() endDateTime: Date;
 
   constructor(formHelperService: FormHelperService) {
-    super(new DateTimeRangeForm(), formHelperService);
+    super(() => new DateTimeRangeForm(), formHelperService);
   }
 
-  get startEndDateSame(): boolean {
-    return !this.value || (
-      this.value.startDateTime?.getFullYear() === this.value.endDateTime?.getFullYear()
-      && this.value.startDateTime?.getMonth() === this.value.endDateTime?.getMonth()
-      && this.value.startDateTime?.getDate() === this.value.endDateTime?.getDate()
-    );
+  ngOnChanges(changes: SimpleChanges) {
+    super.ngOnChanges(changes);
+    this._syncValueDateTimeEnds(changes);
+  }
+
+  /**
+   * Synchronizes the `value` input with the `startDateTime` and `endDateTime` inputs.
+   * startDateTime & endDateTime take precedence over value.
+   * @param changes The simple chagnes that have been detected in the component input bindings.
+   */
+  private _syncValueDateTimeEnds(changes: SimpleChanges): void {
+    if (changes.startDateTime && (!changes.startDateTime.firstChange || this.startDateTime)) {
+      this.formGroup.setValue({ startDateTime: this.startDateTime, endDateTime: this.value?.endDateTime });
+    }
+    if (changes.endDateTime && (!changes.endDateTime.firstChange || this.endDateTime)) {
+      this.formGroup.setValue({ startDateTime: this.value?.startDateTime, endDateTime: this.endDateTime });
+    }
+    if (changes.value && (!changes.value.firstChange || this.value)) {
+      this.startDateTime = this.value?.startDateTime;
+      this.endDateTime = this.value?.endDateTime;
+    }
   }
 }

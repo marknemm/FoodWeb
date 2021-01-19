@@ -1,7 +1,6 @@
 import { adminReadAccounts } from '~admin/services/admin-account/admin-read-accounts';
 import { Account, AccountEntity } from '~entity';
-import { QueryResult } from '~orm';
-import { AccountReadFilters, AccountReadRequest, SendMessageRequest } from '~shared';
+import { AccountReadRequest, ListResponse, SendMessageRequest } from '~shared';
 import { broadcastEmail, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
 
 /**
@@ -11,7 +10,11 @@ import { broadcastEmail, MailTransporter, sendEmail } from '~web/helpers/messagi
  * @param myAccount The account of the admin user submitting the request.
  * @return A promise that resolves once the operation completes.
  */
-export async function adminSendMessage(sendMessageReq: SendMessageRequest, accountFilters: AccountReadFilters, myAccount: Account): Promise<void> {
+export async function adminSendMessage(
+  sendMessageReq: SendMessageRequest,
+  accountFilters: AccountReadRequest,
+  myAccount: Account
+): Promise<void> {
   const limit = 300;
   let page = 1;
   let numQueried: number;
@@ -20,9 +23,9 @@ export async function adminSendMessage(sendMessageReq: SendMessageRequest, accou
     const readRequest: AccountReadRequest = accountFilters;
     readRequest.page = page++;
     readRequest.limit = limit;
-    const queryResult: QueryResult<AccountEntity> = await adminReadAccounts(readRequest, myAccount);
-    numQueried = queryResult.entities.length;
-    await _messageTargetAccounts(sendMessageReq, queryResult.entities);
+    const listRes: ListResponse<AccountEntity> = await adminReadAccounts(readRequest, myAccount);
+    numQueried = listRes.list.length;
+    await _messageTargetAccounts(sendMessageReq, listRes.list);
   } while (numQueried === limit);
 }
 

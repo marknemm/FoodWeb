@@ -17,6 +17,7 @@ export class PaginatorComponent implements OnInit, OnDestroy {
   @Input() length: number;
   @Convert()
   @Input() page: number;
+  @Input() pageSizeOptions: number[] = [10, 20, 50];
   @Convert()
   @Input() limit: number;
 

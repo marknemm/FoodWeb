@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -14,6 +15,7 @@ import { AlertModule } from '~web/alert/alert.module';
 import { EditSaveButtonComponent } from './child-components/edit-save-button/edit-save-button.component';
 import { PaginatorComponent } from './child-components/paginator/paginator.component';
 import { ProgressIndicatorComponent } from './child-components/progress-indicator/progress-indicator.component';
+import { RequirementsChecklistComponent } from './child-components/requirements-checklist/requirements-checklist.component';
 import { SearchBarComponent } from './child-components/search-bar/search-bar.component';
 import { YesNoComponent } from './child-components/yes-no/yes-no.component';
 import { ConfirmButtonDirective } from './directives/confirm-button/confirm-button.directive';
@@ -31,6 +33,7 @@ import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
     FragmentAccordianDirective,
     PaginatorComponent,
     ProgressIndicatorComponent,
+    RequirementsChecklistComponent,
     ReturnLinkDirective,
     SearchBarComponent,
     ToBooleanPipe,
@@ -42,6 +45,7 @@ import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
     CommonModule,
     FormsModule,
     MatButtonModule,
+    MatCheckboxModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -60,6 +64,7 @@ import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
     FragmentAccordianDirective,
     PaginatorComponent,
     ProgressIndicatorComponent,
+    RequirementsChecklistComponent,
     ReturnLinkDirective,
     SearchBarComponent,
     ToBooleanPipe,

@@ -11,6 +11,7 @@ export class FilteredListToolbarComponent implements OnInit {
 
   @Convert()
   @Input() excludeFilterButton: boolean = false;
+  @Input() listItemsLabel = '';
 
   constructor(
     public filteredListService: FilteredListService

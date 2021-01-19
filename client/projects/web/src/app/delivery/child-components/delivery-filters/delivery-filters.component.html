@@ -1,4 +1,4 @@
-<form [formGroup]="filtersForm" class="delivery-filters" (ngSubmit)="filter.emit(filtersForm.value)">
+<form [formGroup]="formGroup" class="delivery-filters" (ngSubmit)="filter.emit(formGroup.value)">
   <foodweb-list-filters-title [primary]="true">
     Delivery Filters
   </foodweb-list-filters-title>
@@ -63,7 +63,7 @@
     </div>
   </div>
 
-  <foodweb-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></foodweb-list-sort>
+  <foodweb-list-sort [formGroup]="formGroup" [sortByOpts]="sortByOpts"></foodweb-list-sort>
 
-  <foodweb-list-filters-footer (clear)="filtersForm.reset()"></foodweb-list-filters-footer>
+  <foodweb-list-filters-footer (clear)="clear.emit()"></foodweb-list-filters-footer>
 </form>

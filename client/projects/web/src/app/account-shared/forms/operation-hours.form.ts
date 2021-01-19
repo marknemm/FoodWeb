@@ -1,32 +1,32 @@
-import { FormControl, FormGroupDirective, NgForm, ValidatorFn, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { OperationHours, Weekday } from '~shared';
-import { TFormGroup } from '~web/forms';
+import { OperationHours } from '~shared';
+import { GroupRequiredValidationMode, groupRequiredValidator, TFormControlMembers, TFormGroup } from '~web/forms';
 
 export class OperationHoursForm extends TFormGroup<OperationHours> {
 
   readonly timeRangeErrStateMatcher: ErrorStateMatcher;
 
-  constructor(operationHours?: Partial<OperationHours>, disableAllOrNothingValidation = false) {
+  constructor(operationHours: TFormControlMembers<OperationHours> = {}, validationMode: GroupRequiredValidationMode = 'allOrNothing') {
     super({
-      id: undefined,
-      weekday: undefined,
-      startTime: '',
-      endTime: ''
+      id: operationHours?.id,
+      weekday: operationHours?.weekday,
+      startTime: operationHours?.startTime ?? '',
+      endTime: operationHours?.endTime ?? ''
     });
-    this._initFormValidators(disableAllOrNothingValidation);
+    this.setValidators([
+      this._timeRangeOrderValidator.bind(this),
+      groupRequiredValidator(this, validationMode, { id: true })
+    ]);
     this.timeRangeErrStateMatcher = this._genTimeRangeErrStateMatcher();
-    if (operationHours) {
-      this.patchValue(operationHours);
-    }
   }
 
-  private _initFormValidators(disableAllOrNothingValidation: boolean): void {
-    const validators: ValidatorFn[] = [this._timeRangeOrderValidator];
-    if (!disableAllOrNothingValidation) {
-      validators.push(this._allOrNothingOpHoursValidator);
-    }
-    this.setValidators(validators);
+  get startTime(): string {
+    return this.get('startTime').value;
+  }
+
+  get endTime(): string {
+    return this.get('endTime').value;
   }
 
   private _timeRangeOrderValidator(form: AbstractControl): { timeRangeOrder: string } | null {
@@ -34,15 +34,6 @@ export class OperationHoursForm extends TFormGroup<OperationHours> {
     const endTime: string = form.get('endTime').value;
     return (startTime && endTime && new Date(`1/1/2000 ${startTime}`) >= new Date(`1/1/2000 ${endTime}`))
       ? { timeRangeOrder: 'Start time must be earlier than end time' }
-      : null;
-  }
-
-  private _allOrNothingOpHoursValidator(form: AbstractControl): { allOrNothing: string } | null {
-    const weekday: Weekday = form.get('weekday').value;
-    const startTime: string = form.get('startTime').value;
-    const endTime: string = form.get('endTime').value;
-    return ((startTime && (!endTime || !weekday)) || (endTime && (!startTime || !weekday)))
-      ? { allOrNothing: 'Must fill in all fields' }
       : null;
   }
 

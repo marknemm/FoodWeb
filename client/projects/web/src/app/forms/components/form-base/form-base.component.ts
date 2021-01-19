@@ -1,5 +1,5 @@
 import { Component, Directive, forwardRef, Input, OnChanges, OnDestroy, Provider, SimpleChange, SimpleChanges, Type } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { Convert } from '~web/component-decorators';
@@ -60,6 +60,16 @@ abstract class _FormBaseComponent<
   @Input() formControl: FC;
   @Input() formGroup: FG;
 
+  /**
+   * A flag that turns on debug mode logging when set to true.
+   */
+  @Convert()
+  @Input() debugMode: boolean = false;
+  /**
+   * A special name given to this FormBaseComponent instance, which will be displayed in all debug log messages.
+   */
+  @Input() debugName = '';
+
   protected _destroy$ = new Subject();
 
   private _abstractCtrlDerivedFromInputs = false;
@@ -69,16 +79,22 @@ abstract class _FormBaseComponent<
   private _onTouchedCb = () => {};
 
   /**
-   * @param _defaultControl The default `TAbstractControl` that is to be used if no from control input bindings are set.
-   * (e.g. `formArray`, `formArrayName`, `formControl`, `formControlName`, `formGroup`, and `formGroupName` are all falsy)
+   * @param _defaultCtrlInit A lazy initializer function for the default `TAbstractControl` that is to be used if no from
+   * control input bindings are set. Will be invoked within the first call to the ngOnChanges function.
+   * (e.g. `formArray`, `formArrayName`, `formControl`, `formControlName`, `formGroup`, and `formGroupName` inputs are all falsy)
    * @param _formHelperService The `FormHelperService` provided by the derived component, via `formProvider()`,
    * which is used to get instances of abstract controls from their names (e.g. `formArrayName`, `formControlName`, or `formGroupName`).
+   * @param initImmediately Optionally set to true if the contained `TAbstractControl` should be default initialized immediately.
+   * Otherwise, it will be initialized within the `ngOnChanges` hook. Note, top-level routable components MUST set this to true.
    */
   constructor(
-    protected _defaultControl: A,
+    protected _defaultCtrlInit: () => A,
     protected _formHelperService: FormHelperService,
+    initImmediately = false
   ) {
-    this._setDefaultAbstractControl(); // Default initialize the active abstract control.
+    if (initImmediately) {
+      this._initDefaultAbstractControl();
+    }
   }
 
   /**
@@ -147,6 +163,7 @@ abstract class _FormBaseComponent<
    * @param changes The detected simple input binding changes.
    */
   ngOnChanges(changes: SimpleChanges) {
+    this._debugLog('Input changes detected', changes);
     const isAbstractCtrlChange = !!(
       changes.formControlName || changes.formControl
       || changes.formArrayName || changes.formArray
@@ -160,7 +177,7 @@ abstract class _FormBaseComponent<
 
     // If no abstract control has been derived, then use the default control that was supplied as a constructor argument.
     if (!this.hasAbstractControl) {
-      this._setDefaultAbstractControl();
+      this._initDefaultAbstractControl();
     }
 
     // Based off of change to value input and/or abstract control input(s),
@@ -179,18 +196,25 @@ abstract class _FormBaseComponent<
     this.formArray = this._formHelperService.deriveAbstractControl(this.formArrayName, this.formArray);
     this.formControl = this._formHelperService.deriveAbstractControl(this.formControlName, this.formControl);
     this._abstractCtrlDerivedFromInputs = !!(this.formGroup || this.formArray || this.formControl);
+    this.hasAbstractControl
+      ? this._debugLog('Derived abstract control from component inputs', this.activeAbstractControl)
+      : this._debugLog('Could not derive abstract control from component inputs');
   }
 
   /**
-   * Sets the active `TAbstractControl` to the default one which was supplied as a constructor argument.
+   * Initializes the active `TAbstractControl` to the default one which was supplied via a constructor argument.
    */
-  private _setDefaultAbstractControl(): void {
-    if (this._defaultControl instanceof TFormArray) {
-      this.formArray = <any>this._defaultControl;
-    } else if (this._defaultControl instanceof TFormControl) {
-      this.formControl = <any>this._defaultControl;
-    } else if (this._defaultControl instanceof TFormGroup) {
-      this.formGroup = <any>this._defaultControl;
+  private _initDefaultAbstractControl(): void {
+    const defaultCtrl: A = this._defaultCtrlInit ? this._defaultCtrlInit() : <any>new TFormControl();
+    if (defaultCtrl instanceof FormArray) {
+      this.formArray = <any>defaultCtrl;
+      this._debugLog('Initialized default FormArray', this.formArray);
+    } else if (defaultCtrl instanceof FormControl) {
+      this.formControl = <any>defaultCtrl;
+      this._debugLog('Initialized default FormControl', this.formControl);
+    } else if (defaultCtrl instanceof FormGroup) {
+      this.formGroup = <any>defaultCtrl;
+      this._debugLog('Initialized default FormGroup', this.formGroup);
     }
   }
 
@@ -205,6 +229,7 @@ abstract class _FormBaseComponent<
     // If the value component input is updated or initialized with non-null data, propegate the change to the set abstract control.
     if (valueChange && (!valueChange.firstChange || this.value != null)) {
       this.activeAbstractControl.setValue(this.value, { emitEvent: false });
+      this._debugLog('Set abstract control to the currently bound value input', this.activeAbstractControl.value);
     }
 
     // If the contained abstract control has been updated, then sync the value component input with its raw value
@@ -216,12 +241,31 @@ abstract class _FormBaseComponent<
       this._valueChangeSubscription.unsubscribe(); // Ensure we cleanup previous subscription if form control has changed.
       this._valueChangeSubscription = this.onValueChanges().subscribe((value: V) => {
         this.value = value;
+        this._debugLog('Set the value input to the current value of the contained abstract control', this.value);
         // If the abstract control is not being directly passed in or derived via input binding,
         // then must go through traditional means to propegate form change to model (e.g. [(ngModel)] binding is used).
         if (!this.abstractCtrlDerivedFromInputs) {
           this.onChangeCb(value);
+          this._debugLog('Invoking onChangeCb with value', this.value);
         }
       });
+    }
+  }
+
+  /**
+   * A convenience method for outputting debug log messages.
+   * @param messages The message(s) that are to be logged.
+   */
+  private _debugLog(...messages: any[]): void {
+    if (this.debugMode) {
+      for (const message of messages) {
+        if (typeof message === 'string') {
+          const debugStart: string = this.debugName ? `${this.debugName}:: ` : '';
+          console.log(`${debugStart}${message}`);
+        } else {
+          console.log(message);
+        }
+      }
     }
   }
 
@@ -237,7 +281,11 @@ abstract class _FormBaseComponent<
 
   /**
    * @override
-   * Writes a given value to the underlying active abstract control; either `formArray`, `formControl`, or `formGroup`.
+   * A default implementation of the `ControlValueAccessor` interface's writeValue signature.
+   * Used by the native Angular Forms module to write a value to this component's internal `AbstractControl`.
+   *
+   * Note, this should NOT be called directly, and is only intended for use by the native framework.
+   * Instead, set the value directly on the control itself.
    * @param value The value to write.
    * @param options Options for the write operation (See AbstractControl.setValue for more details).
    */
@@ -246,6 +294,7 @@ abstract class _FormBaseComponent<
     // If it was set via an input binding, then external changes to the passed in control's value will automatically be applied.
     if (!this.abstractCtrlDerivedFromInputs) {
       this.activeAbstractControl.setValue(value, options);
+      this._debugLog('Set the value of the contained abstract control', value, options);
     }
   }
 
@@ -271,7 +320,11 @@ abstract class _FormBaseComponent<
 
   /**
    * @override
-   * Sets the disabled state of the underlying active abstract control; either `formArray`, `formControl`, or `formGroup`.
+   * A default implementation of the `ControlValueAccessor` interface's writeValue signature.
+   * Used by the native Angular Forms module to set the disabled state of this component's internal `AbstractControl`.
+   *
+   * Note, this should NOT be called directly, and is only intended for use by the native framework.
+   * Instead, set the disabled state directly on the control itself.
    * @param isDisabled Whether or not disable should be set.
    */
   setDisabledState(isDisabled: boolean): void {
@@ -279,6 +332,7 @@ abstract class _FormBaseComponent<
     // If it was set via an input binding, then external changes to the passed in control's disabled state will automatically be applied.
     if (!this.abstractCtrlDerivedFromInputs) {
       (isDisabled) ? this.activeAbstractControl.disable() : this.activeAbstractControl.enable();
+      this._debugLog(`Set the disabled state of the contained abstract control to ${isDisabled}`);
     }
   }
 

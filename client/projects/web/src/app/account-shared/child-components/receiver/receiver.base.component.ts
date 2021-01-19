@@ -10,6 +10,6 @@ export class ReceiverBaseComponent extends FormBaseComponent<ReceiverForm> {
   @Input() editable: boolean = false;
 
   constructor(formHelperService: FormHelperService) {
-    super(new ReceiverForm(), formHelperService);
+    super(() => new ReceiverForm(), formHelperService);
   }
 }

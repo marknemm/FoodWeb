@@ -1,5 +1,6 @@
 export * from './annotations/orm-annotations';
 export * from './annotations/query-hook-annotations';
+export * from './find/find-helper';
 export * from './orm-entity-manager';
 export * from './orm-init';
 export * from './orm-repository';

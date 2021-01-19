@@ -1,0 +1,15 @@
+<div class="requirements-checklist" [ngClass]="ngErrorClass">
+
+  <div [formGroup]="checklistForm">
+    <div *ngFor="let checklistMember of checklistMembers; let i=index">
+      <mat-checkbox formControlName="check{{i}}">{{ checklistMember }}</mat-checkbox>
+    </div>
+  </div>
+
+  <hr>
+
+  <mat-checkbox [checked]="checklistForm.valid" (change)="toggleSelectAll($event.checked)">
+    <strong>{{ checkAll }}</strong>
+  </mat-checkbox>
+
+</div>

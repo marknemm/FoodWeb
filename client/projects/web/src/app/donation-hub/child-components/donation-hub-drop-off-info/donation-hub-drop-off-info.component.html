@@ -1,0 +1,24 @@
+<mat-card class="drop-off-info">
+  <mat-card-title>
+    Drop-Off Info
+  </mat-card-title>
+
+  <mat-card-content>
+    <div>
+      <div class="inline-label">Time Window:</div>
+      <div>
+        <foodweb-date-time-range
+          class="d-inline-block"
+          [startDateTime]="donationHub.dropOffWindowStart"
+          [endDateTime]="donationHub.dropOffWindowEnd"
+          [boldTime]="true">
+        </foodweb-date-time-range>
+      </div>
+    </div>
+
+    <div>
+      <div class="inline-label">Instructions:</div>
+      <span>{{ donationHub.dropOffInstructions }}</span>
+    </div>
+  </mat-card-content>
+</mat-card>

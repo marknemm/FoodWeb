@@ -1,0 +1,34 @@
+<div class="donation-hub-details page">
+  <div *ngIf="!donationNotFound; else notFoundTmpl" class="page-title block-label">
+    Donation Hub Details
+  </div>
+  <ng-template #notFoundTmpl>
+    <div class="page-title block-label">
+      <strong>Donation hub not found</strong>
+    </div>
+  </ng-template>
+
+  <ng-container *ngIf="donationHub">
+
+    <div class="row">
+      <div class="donation-hub-recipient col-md-6">
+        <foodweb-account-teaser [account]="donationHub.volunteerAccount" customTitle="Hub Recipient"></foodweb-account-teaser>
+      </div>
+
+      <div *ngIf="donationHub.receiverAccount" class="charity-recipient col-md-6">
+        <foodweb-account-teaser [account]="donationHub.receiverAccount" customTitle="Charity Recipient"></foodweb-account-teaser>
+      </div>
+
+      <div class="drop-off-info col-md-6">
+        <foodweb-donation-hub-drop-off-info [donationHub]="donationHub"></foodweb-donation-hub-drop-off-info>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <foodweb-donation-hub-actions
+    [donationHub]="donationHub"
+    [privileges]="privileges"
+    (delete)="deleteDonationHub()"
+  ></foodweb-donation-hub-actions>
+</div>

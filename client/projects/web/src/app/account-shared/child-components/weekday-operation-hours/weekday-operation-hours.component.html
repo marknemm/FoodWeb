@@ -1,7 +1,7 @@
 <div class="operation-hours-form">
   <div class="weekday-header">
     <div class="block-label">{{ weekday }}</div>
-    <button mat-icon-button (click)="addTimeRange()" class="add-time-range" matTooltip="Add Hours" type="button">
+    <button mat-icon-button (click)="formArray.push()" class="add-time-range" matTooltip="Add Hours" type="button">
       <mat-icon>add</mat-icon>
     </button>
   </div>
@@ -18,7 +18,7 @@
         [minutesGap]="minutesGap"
         [preventOverlayClick]="!allowOverlayClick"
         [timeWidth]="timeWidth"></foodweb-time-range>
-      <button mat-icon-button *ngIf="canShowRemoveButton(idx)" (click)="removeTimeRange(idx)" class="remove-time-range" matTooltip="Remove Hours" type="button">
+      <button mat-icon-button *ngIf="formArray.canRemoveAt(idx)" (click)="formArray.removeAt(idx)" class="remove-time-range" matTooltip="Remove Hours" type="button">
         <mat-icon>close</mat-icon>
       </button>
     </li>

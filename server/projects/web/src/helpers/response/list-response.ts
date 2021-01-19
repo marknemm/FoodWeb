@@ -1,21 +1,30 @@
-import { ListResponse, PagingParams } from '~shared';
-import { QueryResult } from '~orm';
+import { ListResponse, ReadRequest } from '~shared';
 
 /**
  * Generates a (client ready) generic list response from given query data.
- * @param queryResult The query result from which to generate the list response.
- * @param filters The fitlers that were used for the associated query.
- * @param pagingParams The paging parameters that were used for the associated query.
+ * @param list The list that is to be wrapped in a ListResponse.
+ * @param totalCount The total count of items stored in the database. Note that this may not be the lenght of `list` if pagination is used.
+ * @param filters The filters and/or paging params that were used for the associated query.
  * @return The generated list response.
  */
-export function genListResponse<T>(queryResult: QueryResult<T>, filters: any, pagingParams: PagingParams = filters): ListResponse<T> {
+export function genListResponse<T, F extends ReadRequest>(list: T[], totalCount: number, filters: F = <F>{}): ListResponse<T> {
   return {
-    list: queryResult.entities,
-    totalCount: queryResult.totalCount,
+    list,
+    totalCount,
     filters,
-    page: pagingParams.page,
-    limit: pagingParams.limit,
-    startRank: (pagingParams.page - 1) * pagingParams.limit,
-    endRank: (pagingParams.page - 1) * pagingParams.limit + pagingParams.limit - 1
+    page: (filters.page ? filters.page : 1),
+    limit: (filters.limit ? filters.limit : Number.MAX_SAFE_INTEGER),
+    startRank: (filters.page != null && filters.limit != null)
+      ? (filters.page - 1) * filters.limit
+      : 0,
+    endRank: (filters.page != null && filters.limit != null)
+      ? (filters.page - 1) * filters.limit + filters.limit - 1
+      : list.length - 1
   };
 }
+
+/**
+ * An async Promise wrapper around `ListResponse`.
+ * @see ListResponse
+ */
+export type ListResponsePromise<T> = Promise<ListResponse<T>>;

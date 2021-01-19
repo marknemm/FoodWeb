@@ -65,6 +65,15 @@ export class DateTimeService extends DateTimeHelper {
     return this._constantsService.WEEKDAYS[weekdayIdx];
   }
 
+  combineDateTime(date: Date, time: Date | string): Date {
+    time = this.timeStrToDate(time);
+    const dateTime = new Date(date.getTime());
+    dateTime.setHours(time.getHours());
+    dateTime.setMinutes(time.getMinutes());
+    dateTime.setSeconds(time.getSeconds());
+    return dateTime;
+  }
+
   genDateRangeFromAvailability(account: Account): DateTimeRange {
     const dateRange: DateTimeRange = {
       startDateTime: this.dateCeil5Mins(this.formatCurrentDateTime()),

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { Donation } from '~shared';
 import { DonationAction, DonationActionsService } from '~web/donation-shared/services/donation-actions/donation-actions.service';
 import { DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
+import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
   selector: 'foodweb-delivery-details',
@@ -22,7 +24,8 @@ export class DeliveryDetailsComponent implements OnInit {
     public sessionService: SessionService,
     protected _activatedRoute: ActivatedRoute,
     protected _donationActionsService: DonationActionsService,
-    protected _donationReadService: DonationReadService
+    protected _donationReadService: DonationReadService,
+    protected _urlQueryService: UrlQueryService
   ) {}
 
   get deliveryNotFound(): boolean {
@@ -57,9 +60,9 @@ export class DeliveryDetailsComponent implements OnInit {
   }
 
   private _listenDonationChange(): void {
-    this._donationReadService.listenDonationQueryChange(this._activatedRoute).subscribe(
-      (donation: Donation) => setTimeout(() => this._updateDonation(donation))
-    );
+    this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
+      switchMap((id: number) => this._donationReadService.getDonation(id))
+    ).subscribe((donation: Donation) => this._updateDonation(donation));
   }
 
   private _updateDonation(donation: Donation): void {

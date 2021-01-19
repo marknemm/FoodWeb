@@ -32,7 +32,10 @@
       <div class="row account-section-content">
         <div class="col-xl-6">
           <mat-card *ngIf="accountType !== 'Volunteer'">
-            <foodweb-edit-save-button #organizationSaveEdit [hidden]="!hasAccountOwnership" [control]="formGroup.get('organization')" (save)="saveAccountFields(['organization'], $event)">
+            <foodweb-edit-save-button #organizationSaveEdit
+              [hidden]="!hasAccountOwnership"
+              [control]="formGroup.get('organization')"
+              (save)="saveAccountFields(['organization'], $event)">
             </foodweb-edit-save-button>
             <mat-card-title class="block-label">Organization</mat-card-title>
             <mat-card-content>
@@ -45,7 +48,10 @@
           </mat-card>
 
           <mat-card *ngIf="accountType === 'Volunteer'">
-            <foodweb-edit-save-button #volunteerSaveEdit [hidden]="!hasAccountOwnership" [control]="formGroup.get('volunteer')" (save)="saveAccountFields(['volunteer'], $event)">
+            <foodweb-edit-save-button #volunteerSaveEdit
+              [hidden]="!hasAccountOwnership"
+              [control]="formGroup.get('volunteer')"
+              (save)="saveAccountFields(['volunteer'], $event)">
             </foodweb-edit-save-button>
             <mat-card-title class="block-label">Volunteer Info</mat-card-title>
             <mat-card-content>
@@ -142,7 +148,11 @@
       <div class="row account-section-content">
         <div class="col-sm-12">
           <mat-card class="password-card">
-            <foodweb-edit-save-button #passwordSaveEdit [editable]="true" [control]="formGroup.get('password')" [noCancelEdit]="true" (save)="savePassword($event)">
+            <foodweb-edit-save-button #passwordSaveEdit
+              [editable]="true"
+              [control]="formGroup.get('password')"
+              [noCancelEdit]="true"
+              (save)="savePassword($event)">
             </foodweb-edit-save-button>
             <mat-card-title class="block-label">Change Password</mat-card-title>
             <mat-card-content>

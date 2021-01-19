@@ -1,10 +1,8 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { AccountEntity, DonationEntity } from '~entity';
-import { QueryResult } from '~orm';
-import { DeliveryScheduleRequest, DeliveryStateChangeRequest, DonationReadRequest } from '~shared';
+import { DeliveryScheduleRequest, DeliveryStateChangeRequest, DonationReadRequest, ListResponse } from '~shared';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
-import { genListResponse } from '~web/helpers/response/list-response';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { ensureAccountVerified, ensureSessionActive } from '~web/middlewares/session.middleware';
 import { saveDeliveryAdvanceAudit, saveDeliveryScheduleAudit, saveDeliveryUndoAudit } from '~web/services/audit/save-delivery-audit';
@@ -20,9 +18,7 @@ router.get('/', handleGetDeliveries);
 export function handleGetDeliveries(req: Request, res: Response) {
   const readRequest: DonationReadRequest = req.query;
   readDonationsWithDeliveries(readRequest)
-    .then((queryResult: QueryResult<DonationEntity>) =>
-      res.send(genListResponse(queryResult, readRequest))
-    )
+    .then((listRes: ListResponse<DonationEntity>) => res.send(listRes))
     .catch(genErrorResponse.bind(this, res));
 }
 
@@ -30,9 +26,7 @@ router.get('/my', ensureSessionActive, ensureAccountVerified, handleGetMyDeliver
 export function handleGetMyDeliveries(req: Request, res: Response) {
   const readRequest: DonationReadRequest = req.query;
   readMyDeliveries(readRequest, req.session.account)
-    .then((queryResult: QueryResult<DonationEntity>) =>
-      res.send(genListResponse(queryResult, readRequest))
-    )
+    .then((listRes: ListResponse<DonationEntity>) => res.send(listRes))
     .catch(genErrorResponse.bind(this, res));
 }
 
@@ -40,9 +34,7 @@ router.get('/unscheduled', handleGetUnscheduledDeliveries);
 export function handleGetUnscheduledDeliveries(req: Request, res: Response) {
   const readRequest: DonationReadRequest = req.query;
   readUnscheduledDeliveries(readRequest, req.session.account)
-    .then((queryResult: QueryResult<DonationEntity>) =>
-      res.send(genListResponse(queryResult, readRequest))
-    )
+    .then((listRes: ListResponse<DonationEntity>) => res.send(listRes))
     .catch(genErrorResponse.bind(this, res));
 }
 

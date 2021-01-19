@@ -10,11 +10,11 @@ $icon-size      : 38px;
   vertical-align: top;
 
   @media screen and (max-width: $md) {
-    margin-top: 1px;
+    margin-top: -1px;
   }
 
-  @media screen and (max-width: $mat-mobile) {
-    top: 0;
+  @media screen and (max-width: $sm) {
+    margin-top: 0;
   }
 
   button.mat-button.notifications-button {

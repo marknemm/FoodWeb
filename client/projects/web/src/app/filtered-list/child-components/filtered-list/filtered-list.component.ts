@@ -1,26 +1,21 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Convert } from '~web/component-decorators';
+import { Component, Input, OnInit } from '@angular/core';
 import { FilteredListService } from '~web/filtered-list/services/filtered-list/filtered-list.service';
 
+/**
+ * A filtered list container component that surrounds various parts of a filtered list page.
+ */
 @Component({
   selector: 'foodweb-filtered-list',
   templateUrl: './filtered-list.component.html',
   styleUrls: ['./filtered-list.component.scss']
 })
-export class FilteredListComponent implements OnInit, OnChanges {
+export class FilteredListComponent implements OnInit {
 
-  @Convert()
-  @Input() excludePaginator: boolean = false;
-  @Input() listItemsLabel = '';
-  @Convert()
-  @Input() totalCount: number;
-
-  @Input() set filtersOpened(open: boolean) {
-    this.filteredListService.opened = open;
-  }
-  get filtersOpened(): boolean {
-    return this.filteredListService.opened;
-  }
+  /**
+   * The opened state of the filters right drawer.
+   */
+  @Input() set filtersOpened(open: boolean) { this.filteredListService.opened = open; }
+  get filtersOpened(): boolean              { return this.filteredListService.opened; }
 
   constructor(
     public filteredListService: FilteredListService
@@ -30,12 +25,4 @@ export class FilteredListComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {}
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.listItemsLabel) {
-      // Set on shared service so other transcluded list coponents may access the list items label.
-      this.filteredListService.listItemsLabel = this.listItemsLabel;
-    }
-  }
-
 }

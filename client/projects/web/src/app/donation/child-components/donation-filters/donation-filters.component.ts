@@ -1,18 +1,19 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { DonationSortBy } from '~shared';
-import { DonationFiltersForm, DonationReadRequest } from '~web/donation-shared/forms/donation-filters.form';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { DonationReadRequest, DonationSortBy } from '~shared';
+import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
 import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
+import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
   selector: 'foodweb-donation-filters',
   templateUrl: './donation-filters.component.html',
   styleUrls: ['./donation-filters.component.scss'],
+  providers: formProvider(DonationFiltersComponent)
 })
-export class DonationFiltersComponent implements OnInit, OnChanges {
+export class DonationFiltersComponent extends FormBaseComponent<DonationFiltersForm> implements OnInit {
 
-  @Input() activeFilters: DonationReadRequest = {};
-
+  @Output() clear = new EventEmitter<void>();
   @Output() filter = new EventEmitter<DonationReadRequest>();
 
   /**
@@ -28,15 +29,11 @@ export class DonationFiltersComponent implements OnInit, OnChanges {
   readonly filtersForm = new DonationFiltersForm();
 
   constructor(
-    public constantsService: ConstantsService
-  ) {}
-
-  ngOnInit() {}
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.activeFilters) {
-      this.filtersForm.patchValue(this.activeFilters);
-    }
+    public constantsService: ConstantsService,
+    formHelperService: FormHelperService
+  ) {
+    super(() => new DonationFiltersForm(), formHelperService);
   }
 
+  ngOnInit() {}
 }

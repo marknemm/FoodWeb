@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '~admin-env/environment';
-import { AccountReadFilters, SendMessageRequest } from '~shared';
+import { AccountReadRequest, SendMessageRequest } from '~shared';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
@@ -23,7 +23,7 @@ export class AdminAccountMessageService {
    * @param accountFilters The account filters.
    * @return An observable that emits when the operation completes.
    */
-  sendMessage(sendMessageReq: SendMessageRequest, accountFilters: AccountReadFilters): Observable<void> {
+  sendMessage(sendMessageReq: SendMessageRequest, accountFilters: AccountReadRequest): Observable<void> {
     const url = `${this.url}/send-message`;
     const params = new HttpParams({ fromObject: <any>accountFilters });
     return this._httpClient.post(url, sendMessageReq, { withCredentials: true, params }).pipe(

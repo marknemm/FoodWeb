@@ -1,5 +1,8 @@
-import { AppDataReadFilters } from './app-data-read-filters';
-import { PagingParams } from '../notification/notification-read-request';
-export { AppDataReadFilters };
+import { ReadRequest } from '../read-request';
 
-export interface AppDataReadRequest extends AppDataReadFilters, PagingParams {}
+/**
+ * A read request for app data.
+ */
+export interface AppDataReadRequest extends ReadRequest {
+  accountIds: number[];
+}

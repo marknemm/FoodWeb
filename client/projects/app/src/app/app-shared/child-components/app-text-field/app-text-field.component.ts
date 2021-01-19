@@ -78,7 +78,7 @@ export class AppTextFieldComponent extends FormBaseComponent<string> implements 
     private _focusService: AppFocusService,
     formHelperService: FormHelperService,
   ) {
-    super(new TFormControl<string>(), formHelperService);
+    super(() => new TFormControl<string>(), formHelperService);
   }
 
   /**

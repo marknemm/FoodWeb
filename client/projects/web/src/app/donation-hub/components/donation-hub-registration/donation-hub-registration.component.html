@@ -1,0 +1,84 @@
+<form [formGroup]="formGroup" class="donation-hub-registration-form page" (submit)="register()">
+
+  <div class="donation-hub-registration-title page-title block-label">
+    Donation Hub Registration
+  </div>
+
+  <mat-card>
+    <mat-card-title>
+      Take A Moment To Ensure You Are Ready
+    </mat-card-title>
+
+    <mat-card-content>
+      <foodweb-requirements-checklist
+        formControlName="readyChecklist"
+        [checklistMembers]="readyChecklistMembers"
+        checkAll="I am completely ready.">
+      </foodweb-requirements-checklist>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-title>
+      Let Us Know Your Availabililty
+    </mat-card-title>
+
+    <mat-card-content>
+      <div class="row">
+        <div class="col-12">
+          Choose a date that you will be willing to be an intermediate drop-off location for sandwiches:
+        </div>
+        <div class="col-md-6 col-12">
+          <foodweb-date
+            floatLabels="never"
+            formControlName="dropOffDate"
+            editable="true"
+            placeholder="Drop-off Date"
+            [dateFilter]="filterDateSaturday"
+            [minDate]="minRegisterDate"
+          ></foodweb-date>
+        </div>
+      </div>
+
+      <div>
+        Tell us what times you will be available to accept donation drop-offs:
+        <foodweb-time-range formGroupName="dropOffTimeRange" editable="true"></foodweb-time-range>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-title>Give Volunteers Drop-Off Instructions</mat-card-title>
+    <mat-card-content>
+      <mat-form-field class="fill" floatLabel="never">
+        <textarea matInput formControlName="dropOffInstructions" placeholder="Drop-Off Instructions"></textarea>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-title>Contact Info</mat-card-title>
+    <mat-card-content>
+      <foodweb-contact-info editable="true" formGroupName="contactOverride"></foodweb-contact-info>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-title>
+      Please Agree To Our Volunteer Guidelines
+    </mat-card-title>
+
+    <mat-card-content>
+      <foodweb-requirements-checklist
+        formControlName="agreementChecklist"
+        [checklistMembers]="agreementChecklistMembers"
+        checkAll="I agree to all above."
+      ></foodweb-requirements-checklist>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="action-footer align-right">
+    <button mat-raised-button type="submit" color="primary">Register</button>
+  </div>
+
+</form>

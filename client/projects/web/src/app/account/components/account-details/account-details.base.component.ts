@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { Account, AccountHelper, AccountType, DonationReadRequest } from '~shared';
-import { AccountForm, AccountFormKey } from '~web/account-shared/forms/account.form';
+import { AccountForm } from '~web/account-shared/forms/account.form';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
 import { FormBaseComponent, FormHelperService } from '~web/forms';
 import { PasswordFormT } from '~web/password/forms/password.form';
 import { SessionService } from '~web/session/services/session/session.service';
+import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
 @Component({ template: '' })
@@ -18,6 +19,7 @@ export class AccountDetailsBaseComponent extends FormBaseComponent<AccountForm> 
   protected _originalAccount: Account;
   protected _accountNotFound = false;
   protected _hasAccountOwnership = false;
+  protected _myAccount = false;
   protected _seeDonationsLinkParams: DonationReadRequest;
 
   constructor(
@@ -28,9 +30,10 @@ export class AccountDetailsBaseComponent extends FormBaseComponent<AccountForm> 
     protected _accountSaveService: AccountSaveService,
     protected _activatedRoute: ActivatedRoute,
     protected _router: Router,
+    protected _urlQueryService: UrlQueryService,
     formHelperService: FormHelperService
   ) {
-    super(new AccountForm({ formMode: 'Account' }), formHelperService);
+    super(() => new AccountForm({ formMode: 'Account' }), formHelperService, true);
     this.savePassword = this.savePassword.bind(this);
   }
 
@@ -61,14 +64,19 @@ export class AccountDetailsBaseComponent extends FormBaseComponent<AccountForm> 
   }
 
   ngOnInit() {
-    this._listenAccountChange();
+    (this._router.url.indexOf('/my') >= 0)
+      ? this._handleAccountChange(this.sessionService.account)
+      : this._listenAccountChange();
   }
 
   private _listenAccountChange(): void {
-    this._activatedRoute.params.pipe(
-      switchMap((params: Params) => this._accountReadService.handleAccountQueryChange(params))
-    ).subscribe((account: Account) => {
-      this._hasAccountOwnership = false;
+    this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
+      switchMap((id: number) => this._accountReadService.getAccount(id))
+    ).subscribe((account: Account) => this._handleAccountChange(account));
+  }
+
+  private _handleAccountChange(account: Account): void {
+    this._hasAccountOwnership = false;
       this._accountNotFound = !account;
       if (!this._accountNotFound) {
         this._originalAccount = account;
@@ -77,7 +85,6 @@ export class AccountDetailsBaseComponent extends FormBaseComponent<AccountForm> 
         this.formGroup.patchValue(account);
       }
       this._renavigateToAccountDetailsPage();
-    });
   }
 
   private _genSeeDonationLinkParams(account: Account): DonationReadRequest {

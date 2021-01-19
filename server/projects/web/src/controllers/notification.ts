@@ -1,10 +1,8 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { NotificationEntity } from '~entity';
-import { QueryResult } from '~orm';
-import { LastSeenNotificationUpdateRequest, NotificationReadRequest, NotificationUpdateRequest } from '~shared';
+import { LastSeenNotificationUpdateRequest, ListResponse, NotificationReadRequest, NotificationUpdateRequest } from '~shared';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
-import { genListResponse } from '~web/helpers/response/list-response';
 import { genErrorResponse } from '~web/middlewares/response-error.middleware';
 import { ensureSessionActive } from '~web/middlewares/session.middleware';
 import { readNotifications } from '~web/services/notification/read-notifications';
@@ -16,9 +14,7 @@ router.get('/', ensureSessionActive, handleGetNotifications);
 export function handleGetNotifications(req: Request, res: Response) {
   const readRequest: NotificationReadRequest = req.query;
   readNotifications(readRequest, req.session.account)
-    .then((queryResult: QueryResult<NotificationEntity>) =>
-      res.send(genListResponse(queryResult, readRequest))
-    )
+    .then((listRes: ListResponse<NotificationEntity>) => res.send(listRes))
     .catch(genErrorResponse.bind(this, res));
 }
 

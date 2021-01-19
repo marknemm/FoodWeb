@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 require('./jobs-config');
 import { AccountEntity, DonationEntity } from '~entity';
-import { initOrm, OrmSelectQueryBuilder, QueryResult } from '~orm';
-import { DateTimeHelper, DonationHelper } from '~shared';
+import { initOrm, OrmSelectQueryBuilder } from '~orm';
+import { DateTimeHelper, DonationHelper, ListResponse } from '~shared';
 import { broadcastEmail, MailTransporter } from '~web/helpers/messaging/email';
 import { broadcastNotification, NotificationType } from '~web/helpers/messaging/notification';
 import { queryDonations } from '~web/services/donation/read-donations';
@@ -32,13 +32,13 @@ async function _sendDeliveryReminders(): Promise<void> {
     let totalDonations = (limit * page) + 1; // +1 to trigger first loop.
 
     while (page * limit < totalDonations) {
-      const queryResult: QueryResult<DonationEntity> = await queryDonations({ page: page++, limit }).modQuery(
+      const listRes: ListResponse<DonationEntity> = await queryDonations({ page: page++, limit }).modQuery(
         (queryBuilder: OrmSelectQueryBuilder<DonationEntity>) =>
           queryBuilder.andWhere('delivery.pickupWindowStart >= :earliestDeliveryWindowStart', { earliestDeliveryWindowStart })
             .andWhere('delivery.pickupWindowStart <= :latestDeliveryWindowStart', { latestDeliveryWindowStart })
       ).exec();
-      await _sendAllDeliveryReminderMessages(queryResult.entities, hour);
-      totalDonations = queryResult.totalCount;
+      await _sendAllDeliveryReminderMessages(listRes.list, hour);
+      totalDonations = listRes.totalCount;
     }
   }
 }

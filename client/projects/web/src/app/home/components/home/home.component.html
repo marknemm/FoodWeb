@@ -4,16 +4,33 @@
       <ng-container [ngTemplateOutlet]="traningSignupTmpl"></ng-container>
     </span>
 
-    <mat-card>
+    <mat-card class="donation-hub-new-feature">
       <mat-card-title class="block-label">
-        COVID-19 Update
+        Volunteer Donation Hubs - <strong class="warn">NEW</strong>
       </mat-card-title>
       <mat-card-content>
-        <p>
-          <strong>FoodWeb donations and deliveries are suspended until further notice</strong> due to the concerns surrounding the COVID-19 outbreak.
-          We apologize for any inconvenience, and look forward to starting back up when safe to do so.
-        </p>
-        <p>Thank you for your support and understanding!</p>
+        <div class="intro-block">
+          We are coordinating weekly sandwich drives on our website.
+          If you are free to participate, please view the following links:
+        </div>
+        <table>
+          <tr>
+            <td>
+              <strong><a [routerLink]="['/donation-hub', 'register']">Register</a></strong>
+            </td>
+            <td>
+              | Use your home as a temporary sandwhich drop-off hub for a selected time duration.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong><a [routerLink]="['/donation-hub', 'list']">Search</a></strong>
+            </td>
+            <td>
+              | Browse donation hubs where you can donate sandwhiches.
+            </td>
+          </tr>
+        </table>
       </mat-card-content>
     </mat-card>
 
