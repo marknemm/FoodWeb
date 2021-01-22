@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormHelperService, formProvider } from '~web/forms';
-import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { OperationHoursInfoBaseComponent } from './operation-hours-info.base.component';
 
@@ -13,7 +12,6 @@ import { OperationHoursInfoBaseComponent } from './operation-hours-info.base.com
 export class OperationHoursInfoComponent extends OperationHoursInfoBaseComponent {
 
   constructor(
-    public confirmDialogService: ConfirmDialogService,
     public constantsService: ConstantsService,
     formHelperService: FormHelperService,
   ) {

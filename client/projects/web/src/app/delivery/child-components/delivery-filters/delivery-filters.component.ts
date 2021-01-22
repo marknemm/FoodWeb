@@ -3,19 +3,21 @@ import { DonationReadRequest, DonationSortBy, DonationStatus } from '~shared';
 import { Convert } from '~web/component-decorators';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
 import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
+import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
   selector: 'foodweb-delivery-filters',
   templateUrl: './delivery-filters.component.html',
   styleUrls: ['./delivery-filters.component.scss'],
+  providers: formProvider(DeliveryFiltersComponent)
 })
-export class DeliveryFiltersComponent implements OnInit, OnChanges {
+export class DeliveryFiltersComponent extends FormBaseComponent<DonationFiltersForm> implements OnInit, OnChanges {
 
-  @Input() activeFilters: DonationReadRequest = {};
   @Convert()
   @Input() myDeliveries: boolean = false;
 
+  @Output() clear = new EventEmitter<void>();
   @Output() filter = new EventEmitter<DonationReadRequest>();
 
   /**
@@ -28,13 +30,14 @@ export class DeliveryFiltersComponent implements OnInit, OnChanges {
     { name: 'Receiver Organization', value: 'receiverOrganizationName' }
   ];
 
-  readonly filtersForm = new DonationFiltersForm();
-
   private _donationStatuses: DonationStatus[];
 
   constructor(
-    public constantsService: ConstantsService
-  ) {}
+    public constantsService: ConstantsService,
+    formHelperService: FormHelperService
+  ) {
+    super(() => new DonationFiltersForm(), formHelperService);
+  }
 
   get donationStatuses(): DonationStatus[] {
     return this._donationStatuses;
@@ -46,9 +49,7 @@ export class DeliveryFiltersComponent implements OnInit, OnChanges {
     if (changes.myDeliveries) {
       this._donationStatuses = this.constantsService.getDeliveryStatuses(!this.myDeliveries);
     }
-    if (changes.activeFilters) {
-      this.filtersForm.patchValue(this.activeFilters);
-    }
+    super.ngOnChanges(changes);
   }
 
 }

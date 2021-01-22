@@ -5,6 +5,6 @@ import { FormBaseComponent, FormHelperService } from '~web/forms';
 @Component({ template: '' })
 export class VolunteerBaseComponent extends FormBaseComponent<VolunteerForm> {
   constructor(formHelperService: FormHelperService) {
-    super(new VolunteerForm(), formHelperService);
+    super(() => new VolunteerForm(), formHelperService);
   }
 }

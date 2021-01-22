@@ -8,6 +8,7 @@ import { AccountReadService } from '~web/account/services/account-read/account-r
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
 import { FormHelperService, formProvider } from '~web/forms';
 import { PasswordForm } from '~web/password/forms/password.form';
+import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
 @Component({
@@ -27,10 +28,11 @@ export class AdminAccountDetailsComponent extends AccountDetailsComponent implem
     protected _accountSaveService: AccountSaveService,
     protected _activatedRoute: ActivatedRoute,
     protected _router: Router,
+    protected _urlQueryService: UrlQueryService,
     formHelperService: FormHelperService,
   ) {
     super(sessionService, accountHelper, signupVerificationService, _accountReadService,
-          _accountSaveService, _activatedRoute, _router, formHelperService);
+          _accountSaveService, _activatedRoute, _router, _urlQueryService, formHelperService);
   }
 
   ngOnInit() {

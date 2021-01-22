@@ -36,7 +36,7 @@
     <mat-card class="donate-card">
       <mat-card-title>Food Safety Checklist</mat-card-title>
       <mat-card-content>
-        <foodweb-food-safety-checklist formControlName="safetyChecklist"></foodweb-food-safety-checklist>
+        <foodweb-requirements-checklist formControlName="safetyChecklist" [checklistMembers]="foodSafetyChecklistMembers" checkAll="All food safety requirements are met"></foodweb-requirements-checklist>
         <mat-error class="safety-checklist-err" *ngIf="formGroup.get('safetyChecklist').touched && formGroup.get('safetyChecklist').hasError('required')">
           Safety Checklist Required
         </mat-error>

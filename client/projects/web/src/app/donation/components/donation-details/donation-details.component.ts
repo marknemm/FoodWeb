@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { AccountHelper, DeliveryHelper, DonationHelper } from '~shared';
 import { DonationAction, DonationActionsService } from '~web/donation-shared/services/donation-actions/donation-actions.service';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
+import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
   selector: 'foodweb-donation-details',
@@ -28,7 +30,8 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
     private _activatedRoute: ActivatedRoute,
     private _donationActionsService: DonationActionsService,
     private _donationReadService: DonationReadService,
-    private _router: Router
+    private _router: Router,
+    private _urlQueryService: UrlQueryService
   ) {}
 
   get donation(): Donation {
@@ -75,9 +78,9 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _listenDonationChange(): void {
-    this._donationReadService.listenDonationQueryChange(this._activatedRoute).subscribe(
-      (donation: Donation) => setTimeout(() => this._updateDonation(donation))
-    );
+    this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
+      switchMap((id: number) => this._donationReadService.getDonation(id))
+    ).subscribe((donation: Donation) => this._updateDonation(donation));
   }
 
   private _updateDonation(donation: Donation): void {

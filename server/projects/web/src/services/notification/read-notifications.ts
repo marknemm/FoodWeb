@@ -1,7 +1,8 @@
 import { FindConditions, getRepository, In, MoreThan } from 'typeorm';
 import { AccountEntity, NotificationEntity } from '~entity';
-import { QueryResult } from '~orm';
-import { Account, NotificationReadFilters, NotificationReadRequest, NotificationType } from '~shared';
+import { genSkip, genTake } from '~orm';
+import { Account, NotificationReadRequest, NotificationType } from '~shared';
+import { genListResponse, ListResponsePromise } from '~web/helpers/response/list-response';
 
 /**
  * Reads notifications from the database.
@@ -9,14 +10,14 @@ import { Account, NotificationReadFilters, NotificationReadRequest, Notification
  * @param myAccount The account of the current user.
  * @return A promise that resolves to the notifications query result.
  */
-export async function readNotifications(request: NotificationReadRequest, myAccount: AccountEntity): Promise<QueryResult<NotificationEntity>> {
+export async function readNotifications(request: NotificationReadRequest, myAccount: AccountEntity): ListResponsePromise<NotificationEntity> {
   const [notifications, totalCount]: [NotificationEntity[], number] = await getRepository(NotificationEntity).findAndCount({
     where: _genFindConditions(request, myAccount),
-    skip: request.page && request.limit ? (request.page - 1) * request.limit : 0,
-    take: request.limit ? request.limit : 10,
+    skip: genSkip(request),
+    take: genTake(request, 10),
     order: { flagged: 'DESC', id: 'DESC' } // Get flagged & latest notifications first.
   });
-  return { entities: notifications, totalCount };
+  return genListResponse(notifications, totalCount, request);
 }
 
 /**
@@ -25,26 +26,26 @@ export async function readNotifications(request: NotificationReadRequest, myAcco
  * @param myAccount The account of the user to fetch the notifications for.
  * @return The generated find conditions.
  */
-function _genFindConditions(filters: NotificationReadFilters, myAccount: AccountEntity): FindConditions<NotificationEntity> {
+function _genFindConditions(request: NotificationReadRequest, myAccount: AccountEntity): FindConditions<NotificationEntity> {
   const conditions: FindConditions<NotificationEntity> = {};
   conditions.account = myAccount;
-  if (filters.id != null) {
-    conditions.id = filters.id;
+  if (request.id != null) {
+    conditions.id = request.id;
   }
-  if (filters.flagged != null) {
-    conditions.flagged = filters.flagged;
+  if (request.flagged != null) {
+    conditions.flagged = request.flagged;
   }
-  if (filters.read != null) {
-    conditions.read = filters.read;
+  if (request.read != null) {
+    conditions.read = request.read;
   }
-  if (filters.unseen && filters.id == null) {
+  if (request.unseen && request.id == null) {
     conditions.id = MoreThan(myAccount.lastSeenNotificationId);
   }
-  if (filters.notificationType != null) {
+  if (request.notificationType != null) {
     // notificationType query param can either be a single NotificationType or comma separated list.
-    conditions.notificationType = (filters.notificationType && (<string>filters.notificationType).indexOf(',') >= 0)
-      ? In((<string>filters.notificationType).split(','))
-      : <NotificationType>filters.notificationType;
+    conditions.notificationType = (request.notificationType && (<string>request.notificationType).indexOf(',') >= 0)
+      ? In((<string>request.notificationType).split(','))
+      : <NotificationType>request.notificationType;
   }
   return conditions;
 }

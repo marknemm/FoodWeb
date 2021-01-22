@@ -7,7 +7,8 @@ export class ValidationHelper {
    * Performs a given list of validation queries on the top level properties of a given object.
    * @param obj The object that will have validaiton done on its top level properties.
    * @param validationQueries The list of validation queries which specify required and/or regex validation that should be
-   * performed on specified top level properties of the obj argument.
+   * performed on specified top level properties of the obj argument. If a property name is only provided in place of a validation
+   * query, then it is assumed that the property is required.
    * @return A string specifying the required or regex validation error message. If no error is present, then an empty string.
    */
   validateProps<T, K extends Extract<keyof T, string>>(obj: T, validationQueries: (ValidationQuery<T> | K)[]): string {

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
-import { Account, AccountHelper, AccountReadFilters, AccountType, ListResponse } from '~shared';
-import { AccountFiltersFormT } from '~web/account/forms/account-filters.form';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Account, AccountHelper, AccountReadRequest, AccountType, ListResponse } from '~shared';
+import { AccountFiltersForm, AccountFiltersFormT } from '~web/account/forms/account-filters.form';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
+import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
   selector: 'foodweb-accounts',
@@ -13,23 +13,25 @@ import { AccountReadService } from '~web/account/services/account-read/account-r
 export class AccountsComponent implements OnInit {
 
   protected _accounts: Account[] = [];
-  protected _activeFilters: AccountReadFilters = {};
   protected _pageTitle = 'Accounts';
   protected _totalCount = 0;
+
+  readonly filtersForm = new AccountFiltersForm();
 
   constructor(
     public accountHelper: AccountHelper,
     protected _accountReadService: AccountReadService,
     protected _activatedRoute: ActivatedRoute,
-    protected _router: Router
+    protected _router: Router,
+    protected _urlQueryService: UrlQueryService
   ) {}
 
   get accounts(): Account[] {
     return this._accounts;
   }
 
-  get activeFilters(): AccountReadFilters {
-    return this._activeFilters;
+  get noneFound(): boolean {
+    return (!this._accountReadService.loading && this.totalCount === 0);
   }
 
   get pageTitle(): string {
@@ -41,21 +43,22 @@ export class AccountsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._listenAccountsQueryChange();
     this._setPageTitle();
+    this._urlQueryService.listenQueryParamsChange<AccountReadRequest>(this._activatedRoute).subscribe(
+      (request: AccountReadRequest) => this.handleQueryParamsChanged(request)
+    );
   }
 
-  protected _listenAccountsQueryChange(): void {
-    this._activatedRoute.queryParams.pipe(
-      switchMap((params: Params) => {
-        this._activeFilters = params;
-        return this._accountReadService.handleAccountsQueryChange(params);
-      })
-    ).subscribe((response: ListResponse<Account>) => {
+  updateFilterQueryParams(filters: AccountReadRequest): void {
+    this._urlQueryService.updateUrlQueryString(filters, this._activatedRoute);
+  }
+
+  handleQueryParamsChanged(request: AccountReadRequest): void {
+    this.filtersForm.reset(request);
+    this._accountReadService.getAccounts(request).subscribe((response: ListResponse<Account>) => {
       this._setPageTitle();
       this._accounts = response.list;
       this._totalCount = response.totalCount;
-      this._activeFilters = this._activatedRoute.snapshot.queryParams;
     });
   }
 
@@ -63,9 +66,4 @@ export class AccountsComponent implements OnInit {
     const accountType = <AccountType>this._activatedRoute.snapshot.queryParamMap.get('accountType');
     this._pageTitle = (accountType ? `${accountType}s` : 'Accounts');
   }
-
-  filterAccounts(filters: AccountFiltersFormT): void {
-    this._accountReadService.updateURLQueryString(filters, this._activatedRoute);
-  }
-
 }

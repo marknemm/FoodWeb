@@ -55,7 +55,6 @@ export class DonationWorkflowComponent implements OnChanges {
   ];
 
   @Input() donation: Donation;
-  @Input() donationUpdateForm: FormGroup;
   @Input() myAccount: Account;
   @Convert()
   @Input() showAllStatuses: boolean = false;

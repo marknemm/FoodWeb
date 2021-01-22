@@ -12,8 +12,7 @@
       [floatLabels]="floatLabels"
       [minutesGap]="minutesGap"
       [placeholder]="startPlaceholder"
-      [preventOverlayClick]="preventOverlayClick"
-      (ngModelChange)="formGroup.fillMissingRangePart()">
+      [preventOverlayClick]="preventOverlayClick">
     </foodweb-app-time>
     <foodweb-app-time
       #endTime
@@ -27,8 +26,7 @@
       [floatLabels]="floatLabels"
       [minutesGap]="minutesGap"
       [placeholder]="endPlaceholder"
-      [preventOverlayClick]="preventOverlayClick"
-      (ngModelChange)="formGroup.fillMissingRangePart()">
+      [preventOverlayClick]="preventOverlayClick">
     </foodweb-app-time>
   </GridLayout>
   <Label

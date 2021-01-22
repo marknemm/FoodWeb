@@ -2,8 +2,8 @@
 require('./jobs-config');
 import { SelectQueryBuilder } from 'typeorm';
 import { AccountEntity, AccountType, AutoClaimHistoryEntity, DonationClaimEntity, DonationEntity } from '~entity';
-import { getOrmRepository, initOrm, QueryResult } from '~orm';
-import { AccountReadRequest, DateTimeHelper, DonationHelper, DonationReadRequest, DonationStatus, OperationHours, OperationHoursHelper } from '~shared';
+import { getOrmRepository, initOrm } from '~orm';
+import { AccountReadRequest, DateTimeHelper, DonationHelper, DonationReadRequest, DonationStatus, ListResponse, OperationHours, OperationHoursHelper } from '~shared';
 import { genDonationEmailSubject, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
 import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
 import { queryAccounts } from '~web/services/account/read-accounts';
@@ -40,10 +40,10 @@ async function _autoAssignDonations(): Promise<void> {
       limit,
       donationStatus: DonationStatus.Unmatched
     };
-    const queryResult: QueryResult<DonationEntity> = await queryDonations(readRequest)
+    const listRes: ListResponse<DonationEntity> = await queryDonations(readRequest)
       .modQuery(_addElapsedTimeFilter).exec();
-    await _autoAssignReceivers(queryResult.entities);
-    totalDonations = queryResult.totalCount;
+    await _autoAssignReceivers(listRes.list);
+    totalDonations = listRes.totalCount;
   }
 }
 
@@ -118,7 +118,7 @@ async function _findAutoReceiver(donation: DonationEntity): Promise<AccountEntit
     operationHoursStartTime: operationHours.startTime,
     operationHoursEndTime: operationHours.endTime
   };
-  const queryResult: QueryResult<AccountEntity> = await queryAccounts(readRequest, donation.donorAccount)
+  const listRes: ListResponse<AccountEntity> = await queryAccounts(readRequest, donation.donorAccount)
     .modQuery((queryBuilder: SelectQueryBuilder<AccountEntity>) => {
       // Override ORDER BY clause to sort receivers by the number of auto-claims that they have received in the past 2 days.
       // We want to auto-assign donations to receivers that have gotten the fewest auto receives in the past 2 days.
@@ -134,7 +134,7 @@ async function _findAutoReceiver(donation: DonationEntity): Promise<AccountEntit
         .orderBy('auto_claim_count', 'ASC')
         .addOrderBy('random');
     }).exec();
-  return queryResult.entities[0];
+  return listRes.list[0];
 }
 
 /**

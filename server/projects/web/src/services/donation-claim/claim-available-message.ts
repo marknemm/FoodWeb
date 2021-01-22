@@ -1,7 +1,6 @@
 import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity, ClaimReqHistoryEntity, DonationEntity } from '~entity';
-import { QueryResult } from '~orm';
-import { AccountReadRequest, AccountType, DonationHelper, NotificationType, OperationHours, OperationHoursHelper } from '~shared';
+import { AccountReadRequest, AccountType, DonationHelper, ListResponse, NotificationType, OperationHours, OperationHoursHelper } from '~shared';
 import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
 import { broadcastNotification } from '~web/helpers/messaging/notification';
 import { readAccounts } from '../account/read-accounts';
@@ -32,9 +31,9 @@ export async function sendClaimAvailableMessages(donation: DonationEntity): Prom
       operationHoursStartTime: operationHours.startTime,
       operationHoursEndTime: operationHours.endTime
     };
-    const queryResult: QueryResult<AccountEntity> = await readAccounts(readRequest, donation.donorAccount);
-    numQueried = queryResult.entities.length;
-    await _messagePotentialReceivers(donation, queryResult.entities);
+    const listRes: ListResponse<AccountEntity> = await readAccounts(readRequest, donation.donorAccount);
+    numQueried = listRes.list.length;
+    await _messagePotentialReceivers(donation, listRes.list);
   } while (numQueried === limit);
 
   return donation;

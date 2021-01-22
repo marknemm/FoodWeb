@@ -17,30 +17,14 @@ export class OperationHoursBaseComponent extends FormBaseComponent<OperationHour
   @Input() weekdayWidth = '125px';
 
   constructor(formHelperService: FormHelperService) {
-    super(new OperationHoursForm(), formHelperService);
+    super(() => new OperationHoursForm(), formHelperService);
   }
 
-  /**
-   * Gets the default start time to set in the ngx material timepicker popup modal.
-   * @param operationHoursForm The opeartion hours form.
-   * @return The default start time string.
-   */
-  getDefaultStartTime(operationHoursForm: OperationHoursForm): string {
-    const curStartTimeVal: string = operationHoursForm.get('startTime').value;
-    return (curStartTimeVal)
-      ? curStartTimeVal
-      : '9:00 AM';
+  get defaultStartTime(): string {
+    return (this.formGroup.startTime ? this.formGroup.startTime : '9:00 AM');
   }
 
-  /**
-   * Gets the default end time to set in the ngx material timepicker popup modal.
-   * @param operationHoursForm The opeartion hours form.
-   * @return The default end time string.
-   */
-  getDefaultEndTime(operationHoursForm: OperationHoursForm): string {
-    const curEndTimeVal: string = operationHoursForm.get('endTime').value;
-    return (curEndTimeVal)
-      ? curEndTimeVal
-      : '5:00 PM';
+  get defaultEndTime(): string  {
+    return (this.formGroup.endTime ? this.formGroup.endTime : '5:00 PM');
   }
 }

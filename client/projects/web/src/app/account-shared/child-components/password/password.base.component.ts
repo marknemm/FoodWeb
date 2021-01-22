@@ -10,7 +10,7 @@ export class PasswordBaseComponent extends FormBaseComponent<PasswordForm> imple
   protected _passwordLabel: string;
 
   constructor(formHelperService: FormHelperService) {
-    super(new PasswordForm(), formHelperService);
+    super(() => new PasswordForm(), formHelperService);
   }
 
   get passwordLabel(): string {

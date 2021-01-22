@@ -1,11 +1,12 @@
-<foodweb-filtered-list class="deliveries" listItemsLabel="Deliveries" [totalCount]="totalCount">
-  <foodweb-filtered-list-title>{{ pageTitle }}</foodweb-filtered-list-title>
+<foodweb-filtered-list class="deliveries">
 
-  <foodweb-filtered-list-toolbar>
+  <foodweb-filtered-list-title>{{ myDeliveries ? 'My Deliveries' : 'Deliveries' }}</foodweb-filtered-list-title>
+
+  <foodweb-filtered-list-toolbar listItemsLabel="Deliveries">
     <foodweb-search-bar
       placeholder="Search Deliveries..."
-      [formControl]="deliveryFilters.filtersForm.get('fullTextQuery')"
-      (search)="filterDeliveries(deliveryFilters.filtersForm.value)"
+      [formControl]="filtersForm.get('fullTextQuery')"
+      (search)="updateFilterQueryParams(filtersForm.value)"
     ></foodweb-search-bar>
   </foodweb-filtered-list-toolbar>
 
@@ -15,11 +16,19 @@
     </div>
   </foodweb-filtered-list-content>
 
+  <foodweb-filtered-list-empty *ngIf="noneFound">
+    Could Not Find Any Deliveries
+  </foodweb-filtered-list-empty>
+
+  <foodweb-paginator [length]="totalCount"></foodweb-paginator>
+
   <foodweb-list-filters>
-    <foodweb-delivery-filters #deliveryFilters
-      [activeFilters]="activeFilters"
+    <foodweb-delivery-filters
+      [formGroup]="filtersForm"
       [myDeliveries]="myDeliveries"
-      (filter)="filterDeliveries($event)"
+      (clear)="filtersForm.resetFacetFilters()"
+      (filter)="updateFilterQueryParams($event)"
     ></foodweb-delivery-filters>
   </foodweb-list-filters>
+
 </foodweb-filtered-list>

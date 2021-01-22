@@ -1,20 +1,19 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AccountReadRequest, AccountSortBy, AccountType } from '~shared';
-import { AccountFiltersForm, AccountFiltersFormT } from '~web/account/forms/account-filters.form';
+import { AccountFiltersForm } from '~web/account/forms/account-filters.form';
 import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
+import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
 
 @Component({
   selector: 'foodweb-account-filters',
   templateUrl: './account-filters.component.html',
   styleUrls: ['./account-filters.component.scss'],
+  providers: formProvider(AccountFiltersComponent)
 })
-export class AccountFiltersComponent implements OnInit, OnChanges {
+export class AccountFiltersComponent extends FormBaseComponent<AccountFiltersForm> implements OnInit {
 
-  @Input() activeFilters: AccountFiltersFormT = {};
-
+  @Output() clear = new EventEmitter<void>();
   @Output() filter = new EventEmitter<AccountReadRequest>();
-
-  readonly filtersForm = new AccountFiltersForm();
 
   /**
    * Options for sorting dropdown.
@@ -24,33 +23,27 @@ export class AccountFiltersComponent implements OnInit, OnChanges {
     { name: 'Email Address', value: 'email' }
   ];
 
-  constructor() {}
-
-  get isDonorAccountType(): boolean {
-    return (this.filtersForm.get('accountType').value === AccountType.Donor);
+  constructor(
+    formHelperService: FormHelperService
+  ) {
+    super(() => new AccountFiltersForm(), formHelperService);
   }
 
-  get isReceiverAccountType(): boolean {
-    return (this.filtersForm.get('accountType').value === AccountType.Receiver);
+  ngOnInit() {
+    // Make sure we update the sort by first option name based on the current accountType filter value.
+    this._updateSortByAccountType(this.formGroup.get('accountType').value);
+    this.formGroup.onControlValueChanges('accountType').subscribe(
+      this._updateSortByAccountType.bind(this)
+    );
   }
 
-  get isVolunteerAccountType(): boolean {
-    return (this.filtersForm.get('accountType').value === AccountType.Volunteer);
+  /**
+   * Updates the sort by first option name based on the account type filter value.
+   * @param accountType The current account type filter value.
+   */
+  private _updateSortByAccountType(accountType: AccountType): void {
+    this.sortByOpts[0].name = accountType
+      ? (this.formGroup.isVolunteerAccountType ? 'Volunteer Name' : 'Organization Name')
+      : 'Organization/Volunteer Name';
   }
-
-  get isOrganizationAccountType(): boolean {
-    return (this.isDonorAccountType || this.isReceiverAccountType);
-  }
-
-  ngOnInit() {}
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.activeFilters) {
-      this.filtersForm.patchValue(this.activeFilters);
-      this.sortByOpts[0].name = this.filtersForm.get('accountType').value
-        ? (this.isVolunteerAccountType ? 'Volunteer Name' : 'Organization Name')
-        : 'Organization/Volunteer Name';
-    }
-  }
-
 }

@@ -1,0 +1,17 @@
+<foodweb-filtered-list class="donation-hubs">
+
+  <foodweb-filtered-list-title>Donation Hubs</foodweb-filtered-list-title>
+
+  <foodweb-filtered-list-content>
+    <div class="col-lg-6" *ngFor="let donationHub of donationHubs">
+      <foodweb-donation-hub-teaser [donationHub]="donationHub"></foodweb-donation-hub-teaser>
+    </div>
+  </foodweb-filtered-list-content>
+
+  <foodweb-filtered-list-empty *ngIf="noneFound">
+    Could Not Find Any Donation Hubs
+  </foodweb-filtered-list-empty>
+
+  <foodweb-paginator [length]="totalCount"></foodweb-paginator>
+
+</foodweb-filtered-list>

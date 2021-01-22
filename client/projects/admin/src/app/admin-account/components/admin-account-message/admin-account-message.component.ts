@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { faFlask } from '@fortawesome/free-solid-svg-icons';
 import { AdminAccountMessageForm } from '~admin/admin-account/forms/admin-account-message.form';
 import { AdminAccountMessageService } from '~admin/admin-account/services/admin-account-message/admin-account-message.service';
-import { AccountReadFilters, AccountReadRequest } from '~shared';
+import { AccountReadRequest } from '~shared';
+import { AccountFiltersForm } from '~web/account/forms/account-filters.form';
+import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
   selector: 'foodweb-admin-compose-message',
@@ -14,6 +16,7 @@ export class AdminAccountMessageComponent implements OnInit {
 
   readonly accountMessageForm = new AdminAccountMessageForm();
   readonly faFlask = faFlask;
+  readonly filtersForm = new AccountFiltersForm();
 
   accountFiltersOpened = false;
 
@@ -22,7 +25,7 @@ export class AdminAccountMessageComponent implements OnInit {
   constructor(
     private _accountMessageService: AdminAccountMessageService,
     private _activatedRoute: ActivatedRoute,
-    private _router: Router
+    private _urlQueryService: UrlQueryService
   ) {}
 
   get activeFilters(): AccountReadRequest {
@@ -35,7 +38,7 @@ export class AdminAccountMessageComponent implements OnInit {
 
   sendMessage(): void {
     if (this.accountMessageForm.valid) {
-      const accountFilters: AccountReadFilters = this._activatedRoute.snapshot.queryParams;
+      const accountFilters: AccountReadRequest = this._activatedRoute.snapshot.queryParams;
       this._accountMessageService.sendMessage(this.accountMessageForm.value, accountFilters).subscribe(() => {});
     }
   }
@@ -44,12 +47,8 @@ export class AdminAccountMessageComponent implements OnInit {
     this._accountMessageService.testMessage(this.accountMessageForm.value).subscribe(() => {});
   }
 
-  updateAccountFilters(filters: AccountReadFilters): void {
-    this._router.navigate([], {
-      relativeTo: this._activatedRoute,
-      queryParams: filters
-    });
+  updateFilterQueryParams(filters: AccountReadRequest): void {
     this.accountFiltersOpened = false;
+    this._urlQueryService.updateUrlQueryString(filters, this._activatedRoute);
   }
-
 }

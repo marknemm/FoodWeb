@@ -13,6 +13,7 @@ const routes: Routes = [
       { path: 'account', loadChildren: () => import('~web/account/account.module').then(mod => mod.AccountModule) },
       { path: 'delivery', loadChildren: () => import('~web/delivery/delivery.module').then(mod => mod.DeliveryModule) },
       { path: 'donation', loadChildren: () => import('~web/donation/donation.module').then(mod => mod.DonationModule) },
+      { path: 'donation-hub', loadChildren: () => import('~web/donation-hub/donation-hub.module').then(mod => mod.DonationHubModule) },
       { path: 'donor', loadChildren: () => import('~web/donor/donor.module').then(mod => mod.DonorModule) },
       { path: 'event', loadChildren: () => import('~web/event/event.module').then(mod => mod.EventModule) },
       { path: 'fundraise', loadChildren: () => import('~web/fundraise/fundraise.module').then(mod => mod.FundraiseModule) },

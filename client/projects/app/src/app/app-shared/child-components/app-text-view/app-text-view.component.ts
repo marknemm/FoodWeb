@@ -64,7 +64,7 @@ export class AppTextViewComponent extends FormBaseComponent<string> implements O
     private _focusService: AppFocusService,
     formHelperService: FormHelperService,
   ) {
-    super(new TFormControl<string>(), formHelperService);
+    super(() => new TFormControl<string>(), formHelperService);
   }
 
   /**

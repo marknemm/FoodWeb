@@ -1,14 +1,15 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { cloneDeep } from 'lodash-es';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
 import { Donation, DonationReadRequest, ListResponse } from '~shared';
 import { environment } from '~web-env/environment';
-import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
-import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
+/**
+ * A service responsible for reading (donation) deliveries from the server.
+ * Note that a delivery is contained within a donation, and the entire donation is retrieved.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -21,54 +22,63 @@ export class DeliveryReadService {
 
   constructor(
     private _httpClient: HttpClient,
-    private _router: Router,
-    private _pageProgressService: PageProgressService,
-    private _alertQueueService: AlertQueueService
+    private _httpResponseService: HttpResponseService,
+    private _router: Router
   ) {}
 
-  updateURLQueryString(filters: DonationReadRequest, activatedRoute: ActivatedRoute): void {
-    // Convert dates into raw ISO strings.
-    for (const filtKey in filters) {
-      if (filters[filtKey] instanceof Date) {
-        filters[filtKey] = (<Date>filters[filtKey]).toISOString();
-      }
-    }
-
-    this._router.navigate([], {
-      relativeTo: activatedRoute,
-      queryParams: filters
-    });
+  /**
+   * Whether or not a delivery read request is loading.
+   */
+  get loading(): boolean {
+    return this._httpResponseService.loading;
   }
 
-  handleDeliveriesQueryChange(params: Params): Observable<ListResponse<Donation>> {
-    const filters: DonationReadRequest = cloneDeep(params);
-    filters.page = (params.page ? parseInt(params.page, 10) : 1);
-    filters.limit = (params.limit ? parseInt(params.limit, 10) : 10);
-
+  /**
+   * Gets a list of (donation) deliveries from the server based off of a given donation read request.
+   * If it is detected that the user is on a `/my` route, then their deliveries will be retrieved.
+   * If it is detected that the user is on a `/unscheduled` route, then only unscheduled deliveries will be retrieved.
+   * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @return An observable that emits a list response containing the retrieved (donation) deliveries.
+   */
+  getDeliveries(request: DonationReadRequest): Observable<ListResponse<Donation>> {
     return (this._router.url.indexOf('my') >= 0)
-      ? this.getMyDeliveries(filters)
+      ? this.getMyDeliveries(request)
       : (this._router.url.indexOf('unscheduled') >= 0)
-        ? this.getUnscheduledDeliveries(filters)
-        : this._getDeliveries(filters);
+        ? this.getUnscheduledDeliveries(request)
+        : this._getDeliveries(request);
   }
 
+  /**
+   * Gets a list of the user's (donation) deliveries from the server based off of a given donation read request.
+   * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @return An observable that emits a list response containing the retrieved (donation) deliveries belonging to the current user.
+   */
   getMyDeliveries(request: DonationReadRequest): Observable<ListResponse<Donation>> {
     return this._getDeliveries(request, '/my');
   }
 
+  /**
+   * Gets a list of unscheduled (donation) deliveries from the server based off of a given donation read request.
+   * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @return An observable that emits a list response containing the retrieved unscheduled (donation) deliveries.
+   */
   getUnscheduledDeliveries(request: DonationReadRequest): Observable<ListResponse<Donation>> {
     return this._getDeliveries(request, '/unscheduled');
   }
 
-  private _getDeliveries(request: DonationReadRequest, subRoute = ''): Observable<ListResponse<Donation>> {
+  /**
+   * Gets a list of (donation) deliveries from the server based off of a given donation read request.
+   * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @param subRoute The optional sub-route that is to be used for delivery retrieval (can be `/my` or `/unscheduled`).
+   * @return An observable that emits a list response containing the retrieved (donation) deliveries.
+   */
+  private _getDeliveries(request: DonationReadRequest, subRoute: '/my' | '/unscheduled' | '' = ''): Observable<ListResponse<Donation>> {
     const getUrl: string = (this.url + subRoute);
     request.page = request.page ? request.page : 1;
     request.limit = request.limit ? request.limit : 10;
     const params = new HttpParams({ fromObject: <any>request });
-    this._pageProgressService.activate(true);
     return this._httpClient.get<ListResponse<Donation>>(getUrl, { params, withCredentials: true }).pipe(
-      catchError((err: HttpErrorResponse) => this._alertQueueService.add(err)),
-      finalize(() => this._pageProgressService.reset())
+      this._httpResponseService.handleHttpResponse()
     );
   }
 }

@@ -1,9 +1,7 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { EventRegistrationEntity } from '~entity';
-import { QueryResult } from '~orm';
-import { EventRegistrationCreateRequest, FeaturedEvent, FeaturedEventRequest } from '~shared';
-import { genListResponse } from '~web/helpers/response/list-response';
+import { EventRegistrationCreateRequest, FeaturedEvent, FeaturedEventRequest, ListResponse } from '~shared';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { sendEventRegistrationMessage } from '~web/services/featured-event/event-registration-message';
 import { readFeaturedEvents } from '~web/services/featured-event/read-featured-events';
@@ -15,9 +13,8 @@ router.get('/', handleGetFeaturedEvents);
 export function handleGetFeaturedEvents(req: Request, res: Response) {
   const eventRequest: FeaturedEventRequest = req.query;
   readFeaturedEvents(eventRequest)
-    .then((queryResult: QueryResult<FeaturedEvent>) =>
-      res.send(genListResponse(queryResult, eventRequest))
-    ).catch(genErrorResponse.bind(this, res));
+    .then((listRes: ListResponse<FeaturedEvent>) => res.send(listRes))
+    .catch(genErrorResponse.bind(this, res));
 }
 
 router.post('/registration', handlePostFeaturedEventRegistration);

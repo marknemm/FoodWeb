@@ -1,0 +1,25 @@
+<div *ngIf="donationHub" class="action-footer align-right">
+  <button mat-raised-button
+    *ngIf="privileges.delete"
+    type="button"
+    color="warn"
+    class="delete-button"
+    (clickConfirm)="delete.emit()"
+    foodwebConfirmButton
+    confirmTitle="Confirm Delete"
+    confirmMessage="Are you sure you want to permanently delete your donation hub?">
+    Delete
+  </button>
+
+  <a *ngIf="privileges.edit" [routerLink]="['/donation-hub', 'edit', donationHub.id]" [state]="{ donationHub: donationHub }">
+    <button mat-raised-button type="button" color="primary" class="edit-button">
+      Edit
+    </button>
+  </a>
+
+  <a *ngIf="privileges.donate" [routerLink]="['/donation-hub', 'donate', donationHub.id]" [state]="{ donationHub: donationHub }">
+    <button mat-raised-button type="button" color="primary" class="edit-button">
+      Donate
+    </button>
+  </a>
+</div>

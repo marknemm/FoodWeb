@@ -11,7 +11,7 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
       accountType: undefined,
       email: undefined,
       fullTextQuery: undefined,
-      operationHours: new OperationHoursForm(undefined, true),
+      operationHours: new OperationHoursForm(undefined, 'none'),
       organizationName: undefined,
       signedAgreement: undefined,
       sortBy: undefined,
@@ -24,6 +24,22 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
     if (filters) {
       this.patchValue(filters);
     }
+  }
+
+  get isDonorAccountType(): boolean {
+    return (this.get('accountType').value === AccountType.Donor);
+  }
+
+  get isReceiverAccountType(): boolean {
+    return (this.get('accountType').value === AccountType.Receiver);
+  }
+
+  get isVolunteerAccountType(): boolean {
+    return (this.get('accountType').value === AccountType.Volunteer);
+  }
+
+  get isOrganizationAccountType(): boolean {
+    return (this.isDonorAccountType || this.isReceiverAccountType);
   }
 
   /**
@@ -61,6 +77,14 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
     if (!options?.resetAccountType && !value?.accountType) {
       this.get('accountType').setValue(accountType);
     }
+  }
+
+  /**
+   * Resets the value of all of the facet filters (while keeping the value of the `fullTextQuery` field).
+   * @param options The reset options.
+   */
+  resetFacetFilters(options?: { resetAccountType?: boolean, onlySelf?: boolean, emitEvent?: boolean }): void {
+    this.reset({ fullTextQuery: this.get('fullTextQuery').value }, options);
   }
 
   /**

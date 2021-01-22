@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 import { DonationSaveData } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
 import { DonateForm } from '~web/donor/forms/donate.form';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
   selector: 'foodweb-edit-donation',
@@ -25,7 +27,8 @@ export class EditDonationComponent implements OnInit {
     private _donationReadService: DonationReadService,
     private _donationSaveService: DonationSaveService,
     private _pageProgressService: PageProgressService,
-    private _router: Router
+    private _router: Router,
+    private _urlQueryService: UrlQueryService
   ) {}
 
   get donationNotFound(): boolean {
@@ -47,12 +50,12 @@ export class EditDonationComponent implements OnInit {
 
   private _listenDonationChange(): void {
     this._pageProgressService.activate(true);
-    this._donationReadService.listenDonationQueryChange(this._activatedRoute).subscribe(
-      (donation: Donation) => setTimeout(() => this._updateDonation(donation))
-    );
+    this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
+      switchMap((id: number) => this._donationReadService.getDonation(id))
+    ).subscribe((donation: Donation) => this._setDonationData(donation));
   }
 
-  private _updateDonation(donation: Donation): void {
+  private _setDonationData(donation: Donation): void {
     this._pageProgressService.reset();
     this._donationNotFound = !donation;
     this._originalDonation = donation;

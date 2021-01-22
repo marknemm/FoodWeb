@@ -1,10 +1,8 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { AccountEntity, DonationEntity } from '~entity';
-import { QueryResult } from '~orm';
-import { DonationClaimRequest, DonationDeleteRequest, DonationReadRequest, DonationSaveRequest, DonationUnclaimRequest } from '~shared';
+import { DonationClaimRequest, DonationDeleteRequest, DonationReadRequest, DonationSaveRequest, DonationUnclaimRequest, ListResponse } from '~shared';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
-import { genListResponse } from '~web/helpers/response/list-response';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
 import { ensureAccountVerified, ensureSessionActive } from '~web/middlewares/session.middleware';
 import { saveDonationClaimAudit, saveDonationCreateAudit, saveDonationDeleteAudit, saveDonationUnclaimAudit, saveDonationUpdateAudit } from '~web/services/audit/save-donation-audit';
@@ -26,8 +24,8 @@ router.get('/', handleGetDonations);
 export function handleGetDonations(req: Request, res: Response) {
   const readRequest: DonationReadRequest = req.query;
   readDonations(readRequest)
-    .then((queryResult: QueryResult<DonationEntity>) =>
-      res.send(genListResponse(queryResult, readRequest))
+    .then((listRes: ListResponse<DonationEntity>) =>
+      res.send(listRes)
     )
     .catch(genErrorResponse.bind(this, res));
 }
@@ -36,8 +34,8 @@ router.get('/my', ensureSessionActive, handleGetMyDonations);
 export function handleGetMyDonations(req: Request, res: Response) {
   const readRequest: DonationReadRequest = req.query;
   readMyDonations(readRequest, req.session.account)
-    .then((queryResult: QueryResult<DonationEntity>) =>
-      res.send(genListResponse(queryResult, readRequest))
+    .then((listRes: ListResponse<DonationEntity>) =>
+      res.send(listRes)
     )
     .catch(genErrorResponse.bind(this, res));
 }

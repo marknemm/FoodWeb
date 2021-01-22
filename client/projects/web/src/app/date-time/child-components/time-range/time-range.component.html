@@ -10,8 +10,7 @@
       [floatLabels]="floatLabels"
       [minutesGap]="minutesGap"
       [placeholder]="startPlaceholder"
-      [preventOverlayClick]="preventOverlayClick"
-      (ngModelChange)="formGroup.fillMissingRangePart()">
+      [preventOverlayClick]="preventOverlayClick">
     </foodweb-time>
   </div>
   <div class="time-field col-sm-6" [style.width]="timeWidth">
@@ -25,8 +24,7 @@
       [floatLabels]="floatLabels"
       [minutesGap]="minutesGap"
       [placeholder]="endPlaceholder"
-      [preventOverlayClick]="preventOverlayClick"
-      (ngModelChange)="formGroup.fillMissingRangePart()">
+      [preventOverlayClick]="preventOverlayClick">
     </foodweb-time>
   </div>
   <mat-error *ngIf="formGroup.hasError('timeRangeOrder')" class="range-order-err col-12">
@@ -35,7 +33,7 @@
 </div>
 
 <ng-template #readonlyTimeRange>
-  <div class="time-range-display">
+  <div *ngIf="value" class="time-range-display">
     <foodweb-time
       [bold]="bold"
       [editable]="false"

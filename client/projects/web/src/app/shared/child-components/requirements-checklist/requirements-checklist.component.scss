@@ -1,0 +1,7 @@
+@import "constants.scss";
+
+.requirements-checklist.error {
+  .mat-checkbox.ng-invalid {
+    color: $warn;
+  }
+}

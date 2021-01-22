@@ -1,7 +1,8 @@
 import { AccountEntity } from '~entity';
-import { genPagination, genSimpleWhereConditions, getOrmRepository, OrmSelectQueryBuilder, preprocessFullTextQuery, QueryMod, QueryResult } from '~orm';
-import { Account, AccountHelper, AccountReadFilters, AccountReadRequest, AccountSortBy, OperationHours, SortOptions } from '~shared';
+import { genPagination, genSimpleWhereConditions, getOrmRepository, OrmSelectQueryBuilder, preprocessFullTextQuery, QueryMod } from '~orm';
+import { Account, AccountHelper, AccountReadRequest, ListResponse, OperationHours } from '~shared';
 import { LoginRequiredError } from '~web/helpers/response/foodweb-error';
+import { genListResponse, ListResponsePromise } from '~web/helpers/response/list-response';
 
 const _accountHelper = new AccountHelper();
 
@@ -9,7 +10,7 @@ export function readAccount(idOrUsername: number | string, myAccount?: Account):
   return _readAccount(idOrUsername, myAccount, false);
 }
 
-export function readAccounts(request: AccountReadRequest, myAccount: Account): Promise<QueryResult<AccountEntity>> {
+export function readAccounts(request: AccountReadRequest, myAccount: Account): ListResponsePromise<AccountEntity> {
   return _readAccounts(request, myAccount, false);
 }
 
@@ -17,23 +18,23 @@ export function readFullAccount(idOrUsername: number | string, myAccount?: Accou
   return _readAccount(idOrUsername, myAccount, true);
 }
 
-export function readFullAccounts(request: AccountReadRequest, myAccount: Account): Promise<QueryResult<AccountEntity>> {
+export function readFullAccounts(request: AccountReadRequest, myAccount: Account): ListResponsePromise<AccountEntity> {
   return _readAccounts(request, myAccount, true);
 }
 
 export function queryAccounts(request: AccountReadRequest, myAccount?: Account): QueryMod<AccountEntity> {
   const queryBuilder: OrmSelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
-  return new QueryMod<AccountEntity, QueryResult<AccountEntity>>(
+  return new QueryMod<AccountEntity>(
     queryBuilder,
-    () => _execAccountQuery(queryBuilder, myAccount, false)
+    () => _execAccountQuery(queryBuilder, myAccount, false, request)
   );
 }
 
 export function queryFullAccounts(request: AccountReadRequest, myAccount?: Account): QueryMod<AccountEntity> {
   const queryBuilder: OrmSelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
-  return new QueryMod<AccountEntity, QueryResult<AccountEntity>>(
+  return new QueryMod<AccountEntity>(
     queryBuilder,
-    () => _execAccountQuery(queryBuilder, myAccount, true)
+    () => _execAccountQuery(queryBuilder, myAccount, true, request)
   );
 }
 
@@ -42,23 +43,24 @@ async function _readAccount(idOrUsername: number | string, myAccount: Account, f
   (typeof idOrUsername === 'number')
     ? readRequest.id = idOrUsername
     : readRequest.username = idOrUsername;
-  const queryResult: QueryResult<AccountEntity> = await _readAccounts(readRequest, myAccount, fullAccount);
-  return queryResult.entities[0];
+  const listRes: ListResponse<AccountEntity> = await _readAccounts(readRequest, myAccount, fullAccount);
+  return listRes.list[0];
 }
 
-function _readAccounts(request: AccountReadRequest, myAccount: Account, fullAccount: boolean): Promise<QueryResult<AccountEntity>> {
+function _readAccounts(request: AccountReadRequest, myAccount: Account, fullAccount: boolean): ListResponsePromise<AccountEntity> {
   const queryBuilder: OrmSelectQueryBuilder<AccountEntity> = _buildQuery(request, myAccount);
-  return _execAccountQuery(queryBuilder, myAccount, fullAccount);
+  return _execAccountQuery(queryBuilder, myAccount, fullAccount, request);
 }
 
 async function _execAccountQuery(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
   myAccount: Account,
-  fullAccount: boolean
-): Promise<QueryResult<AccountEntity>> {
+  fullAccount: boolean,
+  request: AccountReadRequest
+): ListResponsePromise<AccountEntity> {
   const [accounts, totalCount]: [AccountEntity[], number] = await queryBuilder.getManyAndCount();
   _postProcessAccounts(accounts, myAccount, fullAccount);
-  return { entities: accounts, totalCount };
+  return genListResponse(accounts, totalCount, request);
 }
 
 function _buildQuery(request: AccountReadRequest, myAccount: Account): OrmSelectQueryBuilder<AccountEntity> {
@@ -86,7 +88,7 @@ function _genJoins(queryBuilder: OrmSelectQueryBuilder<AccountEntity>): OrmSelec
 
 function _genWhereCondition(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
-  filters: AccountReadFilters,
+  filters: AccountReadRequest,
   myAccount: Account
 ): OrmSelectQueryBuilder<AccountEntity> {
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'account', filters, ['id', 'username', 'accountType']);
@@ -104,7 +106,7 @@ function _genWhereCondition(
 
 function _genOperationHoursCondition(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
-  filters: AccountReadFilters,
+  filters: AccountReadRequest,
 ): OrmSelectQueryBuilder<AccountEntity> {
   // Check for any overlap (invert condition where op hours are completely after or before donation window).
   if (filters.operationHoursWeekday || filters.operationHoursStartTime || filters.operationHoursEndTime) {
@@ -135,7 +137,7 @@ function _genOperationHoursCondition(
 
 function _genDistanceCondition(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
-  filters: AccountReadFilters,
+  filters: AccountReadRequest,
   myAccount: Account
 ): OrmSelectQueryBuilder<AccountEntity> {
   if (filters.distanceRangeMi != null) {
@@ -155,7 +157,7 @@ function _genDistanceCondition(
 
 function _genFullTextCondition(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
-  filters: AccountReadFilters)
+  filters: AccountReadRequest)
 : OrmSelectQueryBuilder<AccountEntity> {
   if (filters.fullTextQuery?.trim()) {
     const fullTextQuery: string = preprocessFullTextQuery(filters.fullTextQuery);
@@ -166,7 +168,7 @@ function _genFullTextCondition(
 
 function _genOrdering(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
-  sortOpts: SortOptions<AccountSortBy>
+  sortOpts: AccountReadRequest
 ): OrmSelectQueryBuilder<AccountEntity> {
   queryBuilder = _orderByQueryArg(queryBuilder, sortOpts);
   queryBuilder = _orderByDefault(queryBuilder, sortOpts);
@@ -175,7 +177,7 @@ function _genOrdering(
 
 function _orderByQueryArg(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
-  sortOpts: SortOptions<AccountSortBy>
+  sortOpts: AccountReadRequest
 ): OrmSelectQueryBuilder<AccountEntity> {
   const sortOrder: 'ASC' | 'DESC' = sortOpts.sortOrder ? sortOpts.sortOrder : 'DESC';
   if (sortOpts.sortBy) {
@@ -194,7 +196,7 @@ function _orderByQueryArg(
 
 function _orderByDefault(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
-  sortOpts: SortOptions<AccountSortBy>
+  sortOpts: AccountReadRequest
 ): OrmSelectQueryBuilder<AccountEntity> {
   if (sortOpts.sortBy !== 'name') {
     queryBuilder

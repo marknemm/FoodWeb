@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Index, JoinColumn, OneToMany, OneToOne, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Index, JoinColumn, ManyToMany, OneToMany, OneToOne, UpdateDateColumn } from 'typeorm';
 import { Account, AccountType, Constants, OperationHoursHelper } from '~shared';
 import { OrmAfterLoad, OrmEntity, OrmPrimaryGeneratedColumn } from '~orm';
 import { AppDataEntity } from './app-data.entity';
@@ -30,7 +30,7 @@ export class AccountEntity implements Account {
   @Column({ default: -1 })
   lastSeenNotificationId: number;
 
-  @OneToOne((type) => ContactInfoEntity, (contactInfo) => contactInfo.account, { cascade: true, eager: true })
+  @OneToOne((type) => ContactInfoEntity, { cascade: true, eager: true })
   @JoinColumn()
   contactInfo: ContactInfoEntity;
 

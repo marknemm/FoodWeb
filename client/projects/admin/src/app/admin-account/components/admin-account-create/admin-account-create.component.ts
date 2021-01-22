@@ -21,7 +21,7 @@ export class AdminAccountCreateComponent extends FormBaseComponent<AdminAccountF
     private _createAccountService: AdminAccountCreateService,
     formHelperService: FormHelperService
   ) {
-    super(new AdminAccountForm({ formMode: 'Signup' }), formHelperService);
+    super(() => new AdminAccountForm({ formMode: 'Signup' }), formHelperService, true);
   }
 
   get createdAccountStore(): ImmutableStore<Account> {
@@ -37,7 +37,7 @@ export class AdminAccountCreateComponent extends FormBaseComponent<AdminAccountF
    * On change, updates the enable/disable state of the form's password fields.
    */
   private _listenAutoGenPassChange(): void {
-    this.formGroup.accountCreateOptionsForm.onValueChanges('autoGenPassword').subscribe(
+    this.formGroup.accountCreateOptionsForm.onControlValueChanges('autoGenPassword').subscribe(
       (autoGen: boolean) => {
         (autoGen)
           ? this.formGroup.accountForm.get('password').disable()

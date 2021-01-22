@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
 import {
   LastSeenNotificationUpdateRequest, ListResponse, Notification,
-  NotificationReadFilters,
   NotificationReadRequest, NotificationsAvailableEvent,
   NotificationUpdateRequest,
   ServerSentEventType
@@ -73,7 +72,7 @@ export class NotificationService {
   listenNotificationsQueryChange(activatedRoute: ActivatedRoute): Observable<ListResponse<Notification>> {
     return activatedRoute.queryParamMap.pipe(
       switchMap((params: ParamMap) => {
-        const filters: NotificationReadFilters = {};
+        const filters: NotificationReadRequest = {};
         params.keys.forEach((paramKey: string) => {
           if (paramKey !== 'page' && paramKey !== 'limit') {
             filters[paramKey] = params.get(paramKey);
@@ -86,13 +85,12 @@ export class NotificationService {
     );
   }
 
-  getNotifications(filters: NotificationReadFilters, page: number, limit: number): Observable<ListResponse<Notification>> {
+  getNotifications(filters: NotificationReadRequest, page: number, limit: number): Observable<ListResponse<Notification>> {
     this._pageProgressService.activate(true);
     return this._getNotifications(filters, page, limit);
   }
 
-  private _getNotifications(filters: NotificationReadFilters, page: number, limit: number): Observable<ListResponse<Notification>> {
-    const request = <NotificationReadRequest>filters;
+  private _getNotifications(request: NotificationReadRequest, page: number, limit: number): Observable<ListResponse<Notification>> {
     request.page = (page >= 0 ? page : 1);
     request.limit = (limit >= 0 ? limit : 10);
     const params = new HttpParams({ fromObject: <any>request });

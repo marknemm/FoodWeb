@@ -9,6 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '~web/shared/shared.module';
 import { FilteredListContentComponent } from './child-components/filtered-list-content/filtered-list-content.component';
+import { FilteredListEmptyComponent } from './child-components/filtered-list-empty/filtered-list-empty.component';
 import { FilteredListTitleComponent } from './child-components/filtered-list-title/filtered-list-title.component';
 import { FilteredListToolbarComponent } from './child-components/filtered-list-toolbar/filtered-list-toolbar.component';
 import { FilteredListComponent } from './child-components/filtered-list/filtered-list.component';
@@ -26,7 +27,8 @@ import { ListSortComponent } from './child-components/list-sort/list-sort.compon
     ListSortComponent,
     ListFiltersTitleComponent,
     FilteredListTitleComponent,
-    FilteredListToolbarComponent
+    FilteredListToolbarComponent,
+    FilteredListEmptyComponent
   ],
   imports: [
     CommonModule,
@@ -42,12 +44,13 @@ import { ListSortComponent } from './child-components/list-sort/list-sort.compon
   exports: [
     FilteredListComponent,
     FilteredListContentComponent,
+    FilteredListEmptyComponent,
+    FilteredListTitleComponent,
+    FilteredListToolbarComponent,
     ListFiltersFooterComponent,
     ListFiltersComponent,
     ListSortComponent,
     ListFiltersTitleComponent,
-    FilteredListTitleComponent,
-    FilteredListToolbarComponent
   ]
 })
 export class FilteredListModule {}

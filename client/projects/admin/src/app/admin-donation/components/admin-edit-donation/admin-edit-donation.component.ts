@@ -1,12 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { AdminDonationForm } from '~admin/admin-donation/forms/admin-donation.form';
 import { AdminDonationSaveService } from '~admin/admin-donation/services/admin-donation-save/admin-donation-save.service';
 import { Donation } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
   selector: 'foodweb-admin-edit-donation',
@@ -27,7 +29,8 @@ export class AdminEditDonationComponent implements OnInit, OnDestroy {
     private _dateTimeService: DateTimeService,
     private _donationReadService: DonationReadService,
     private _pageProgressService: PageProgressService,
-    private _router: Router
+    private _router: Router,
+    private _urlQueryService: UrlQueryService
   ) {}
 
   get donationNotFound(): boolean {
@@ -45,12 +48,12 @@ export class AdminEditDonationComponent implements OnInit, OnDestroy {
 
   private _listenDonationChange(): void {
     this._pageProgressService.activate(true);
-    this._donationReadService.listenDonationQueryChange(this._activatedRoute).subscribe(
-      (donation: Donation) => this._updateDonation(donation)
-    );
+    this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
+      switchMap((id: number) => this._donationReadService.getDonation(id))
+    ).subscribe((donation: Donation) => this._setDonationData(donation));
   }
 
-  private _updateDonation(donation: Donation): void {
+  private _setDonationData(donation: Donation): void {
     this._pageProgressService.reset();
     this._donationNotFound = !donation;
     this._originalDonation = donation;

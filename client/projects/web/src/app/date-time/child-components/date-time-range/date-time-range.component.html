@@ -42,13 +42,13 @@
 </div>
 
 <ng-template #readonlyDateTimeRange>
-  <div class="date-time-range-display">
-    <foodweb-date-time editable="false" [boldTime]="boldTime" [excludeTimeDisplay]="startEndDateSame" [value]="value?.startDateTime"></foodweb-date-time>
+  <div *ngIf="value" class="date-time-range-display">
+    <foodweb-date-time editable="false" [boldTime]="boldTime" [excludeTimeDisplay]="formGroup.startEndDateSame" [value]="value.startDateTime"></foodweb-date-time>
     <!-- For no display of end date due to same begin and end date, make sure we group times together so they end up on same line if line break occurs. -->
     <span class="d-inline-block">
-      <foodweb-date-time *ngIf="startEndDateSame" editable="false" [boldTime]="boldTime" [excludeDateDisplay]="true" [value]="value?.startDateTime"></foodweb-date-time>
+      <foodweb-date-time *ngIf="formGroup.startEndDateSame" editable="false" [boldTime]="boldTime" [excludeDateDisplay]="true" [value]="value.startDateTime"></foodweb-date-time>
       <span class="display-to"> -- </span>
-      <foodweb-date-time editable="false" [boldTime]="boldTime" [excludeDateDisplay]="startEndDateSame" [value]="value?.endDateTime"></foodweb-date-time>
+      <foodweb-date-time editable="false" [boldTime]="boldTime" [excludeDateDisplay]="formGroup.startEndDateSame" [value]="value.endDateTime"></foodweb-date-time>
     </span>
   </div>
 </ng-template>

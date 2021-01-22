@@ -1,5 +1,13 @@
-import { PagingParams } from '../paging-params';
-import { NotificationReadFilters } from './notification-read-filters';
-export { NotificationReadFilters, PagingParams };
+import { ReadRequest } from '../read-request';
+import { NotificationType } from './notification';
 
-export type NotificationReadRequest = NotificationReadFilters & PagingParams;
+/**
+ * A read request for notifications.
+ */
+export interface NotificationReadRequest extends ReadRequest {
+  id?: number;
+  notificationType?: NotificationType | string;
+  unseen?: boolean;
+  read?: boolean;
+  flagged?: boolean;
+}

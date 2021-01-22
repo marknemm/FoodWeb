@@ -17,7 +17,7 @@ export class DonationEntity implements Donation {
   @ManyToOne((type) => AccountEntity, { eager: true })
   donorAccount: AccountEntity;
 
-  @OneToOne((type) => ContactInfoEntity, (contactInfo) => contactInfo.donation, { nullable: true, eager: true, cascade: true })
+  @OneToOne((type) => ContactInfoEntity, { nullable: true, eager: true, cascade: true })
   @JoinColumn()
   donorContactOverride?: ContactInfoEntity;
 

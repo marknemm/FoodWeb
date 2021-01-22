@@ -9,7 +9,6 @@ import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
 import { DonationSharedModule } from '~web/donation-shared/donation-shared.module';
 import { SharedModule } from '~web/shared/shared.module';
-import { FoodSafetyChecklistComponent } from './child-components/food-safety-checklist/food-safety-checklist.component';
 import { DonateComponent } from './components/donate/donate.component';
 import { EditDonationComponent } from './components/edit-donation/edit-donation.component';
 import { DonorRoutingModule } from './donor-routing.module';
@@ -17,8 +16,7 @@ import { DonorRoutingModule } from './donor-routing.module';
 @NgModule({
   declarations: [
     DonateComponent,
-    EditDonationComponent,
-    FoodSafetyChecklistComponent
+    EditDonationComponent
   ],
   imports: [
     DonorRoutingModule,

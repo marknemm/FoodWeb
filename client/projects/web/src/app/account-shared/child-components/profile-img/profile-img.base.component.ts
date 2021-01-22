@@ -25,7 +25,7 @@ export class ProfileImgBaseComponent extends FormBaseComponent<string> implement
     protected _screenSizeService: ScreenSizeService,
     formHelperService: FormHelperService
   ) {
-    super(new TFormControl<string>(), formHelperService);
+    super(() => new TFormControl<string>(), formHelperService);
   }
 
   /**

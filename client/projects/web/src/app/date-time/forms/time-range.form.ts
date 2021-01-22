@@ -1,8 +1,8 @@
-import { FormControl, ValidatorFn } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DateTimeHelper, TimeRange } from '~shared';
 import { DateTimeRange } from '~web/date-time/services/date-time/date-time.service';
-import { TFormControl, TFormControlMembers, TFormGroup } from '~web/forms';
+import { GroupRequiredValidationMode, groupRequiredValidator, TFormControl, TFormControlMembers, TFormGroup } from '~web/forms';
 export { DateTimeRange };
 
 export class TimeRangeForm extends TFormGroup<TimeRange> {
@@ -11,19 +11,17 @@ export class TimeRangeForm extends TFormGroup<TimeRange> {
 
   private _dateTimeHelper = new DateTimeHelper();
 
-  constructor(controls?: TFormControlMembers<TimeRange>, disableAllOrNothingValidation = false) {
+  constructor(controls: TFormControlMembers<TimeRange> = {}, validationMode: GroupRequiredValidationMode = 'allOrNothing') {
     super({
-      startTime: controls?.startTime,
-      endTime: controls?.endTime
+      startTime: controls?.startTime ?? '',
+      endTime: controls?.endTime ?? ''
     });
-    this.fillMissingRangePart();
 
-    // Initailize form-wide validation.
-    const validators: ValidatorFn[] = [this._timeRangeOrderValidator.bind(this)];
-    if (!disableAllOrNothingValidation) {
-      validators.push(this._allOrNothingOpHoursValidator.bind(this));
-    }
-    this.setValidators(validators);
+    // init form top-level validators.
+    this.setValidators([
+      this._timeRangeOrderValidator.bind(this),
+      groupRequiredValidator(this, validationMode)
+    ]);
     this.rangeErrStateMatcher = this._genTimeRangeErrStateMatcher();
   }
 
@@ -42,30 +40,6 @@ export class TimeRangeForm extends TFormGroup<TimeRange> {
   }
 
   /**
-   * Fills in a missing part of the time range if one is present without the other.
-   * Simply sets the missing part an hour away from the present part.
-   */
-  public fillMissingRangePart(): void {
-    // Auto-fill endTime if startTime is non-empty, and endTime is empty.
-    if (this.startTime && !this.endTime) {
-      const defaultEndDateTime: Date = this._dateTimeHelper.addHours(this.endTime, -1);
-      (<TFormControl<string>>this.get('endTime')).setValue(
-        this._dateTimeHelper.toLocalTimeStr(defaultEndDateTime),
-        { emitEvent: false, emitViewToModelChange: false }
-      );
-    }
-
-    // Auto-fill startTime if endTime is non-empty, and startTime is empty.
-    if (!this.startTime && this.endTime) {
-      const defaultStartDateTime: Date = this._dateTimeHelper.addHours(this.endTime, -1);
-      (<TFormControl<string>>this.get('startTime')).setValue(
-        this._dateTimeHelper.toLocalTimeStr(defaultStartDateTime),
-        <any>{ emitEvent: false, emitViewToModelChange: false }
-      );
-    }
-  }
-
-  /**
    * Validates that this form group's `startTime` value is earlier than its `endTime` value.
    * Will automatically pass validation if either value is missing.
    * @return The validation error object if an error is present, otherwise null.
@@ -73,23 +47,9 @@ export class TimeRangeForm extends TFormGroup<TimeRange> {
   private _timeRangeOrderValidator(): { timeRangeOrder: string } {
     const startTime: string = this.get('startTime').value;
     const endTime: string = this.get('endTime').value;
-    if (!startTime || !endTime || this._dateTimeHelper.compare(startTime, endTime) < 0) {
-      return null;
-    }
-    return { timeRangeOrder: 'Start time must be earlier than end time' };
-  }
-
-  /**
-   * Validates that this form group's `startTime` and `endTime` fields are either both present
-   * or both absent.
-   * @return The validation error object if an error is present, otherwise null.
-   */
-  private _allOrNothingOpHoursValidator(): { allOrNothing: string } | null {
-    const startTime: string = this.get('startTime').value;
-    const endTime: string = this.get('endTime').value;
-    return ((startTime && !endTime) || (!startTime && endTime))
-      ? { allOrNothing: 'Must fill in all fields' }
-      : null;
+    return (!startTime || !endTime || this._dateTimeHelper.compare(startTime, endTime) < 0)
+      ? null
+      : { timeRangeOrder: 'Start time must be earlier than end time' };
   }
 
   /**
@@ -104,10 +64,12 @@ export class TimeRangeForm extends TFormGroup<TimeRange> {
         const controlInvalid = (control && control.invalid);
         return (
           this.hasError('timeRangeOrder')                       // Make both inputs look invalid.
-          || (this.hasError('allOrNothing') && controlTouched)  // Make missing input look invalid.
+          || (this.hasError('groupRequired') && controlTouched)  // Make missing input look invalid.
           || (controlInvalid && controlTouched)                 // Pass through regular validity check for input.
         );
       }
     };
   }
 }
+
+export type RequiredValidationType = 'all' | 'allOrNothing' | 'none';

@@ -1,10 +1,10 @@
 import { randomBytes } from 'crypto';
 import { AccountEntity } from '~entity';
-import { AdminAccountCreateRequest, AccountSectionUpdateReqeust, AccountUpdateRequest } from '~shared';
+import { AccountUpdateRequest, AdminAccountCreateRequest } from '~shared';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { verifyAccount } from '~web/services/account/account-verification';
 import { readFullAccount } from '~web/services/account/read-accounts';
-import { createAccount, NewAccountData, updateAccount, updateAccountSection } from '~web/services/account/save-account';
+import { createAccount, NewAccountData, updateAccount } from '~web/services/account/save-account';
 export { NewAccountData };
 
 /**
@@ -52,18 +52,4 @@ async function autoVerifyAccountIfConfig(createReq: AdminAccountCreateRequest, n
 export async function adminUpdateAccount(accountId: number, updateReq: AccountUpdateRequest): Promise<UpdateDiff<AccountEntity>> {
   const origAccount: AccountEntity = await readFullAccount(accountId);
   return updateAccount(updateReq, origAccount);
-}
-
-/**
- * Updates one of an account's sections based off of a given account ID and update request.
- * @param accountId The ID of the account that is to have one of its sections updated.
- * @param updateReq The account update request.
- * @return A promise that resolves to the account update diff.
- */
-export async function adminUpdateAccountSection(
-  accountId: number,
-  updateReq: AccountSectionUpdateReqeust
-): Promise<UpdateDiff<AccountEntity>> {
-  const origAccount: AccountEntity = await readFullAccount(accountId);
-  return updateAccountSection(updateReq, origAccount);
 }

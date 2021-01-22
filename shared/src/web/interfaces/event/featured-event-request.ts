@@ -1,8 +1,7 @@
-import { PagingParams } from '../paging-params';
-import { SortOptions } from '../sort-options';
-import { FeaturedEventFilters } from './featured-event-filters';
-export { FeaturedEventFilters };
+import { ReadRequest } from '../read-request';
 
-export interface FeaturedEventRequest extends FeaturedEventFilters, PagingParams, SortOptions<FeaturedEventSortBy> {}
+export interface FeaturedEventRequest extends ReadRequest<FeaturedEventSortBy> {
+  includePastEvents?: boolean;
+}
 
 export type FeaturedEventSortBy = 'date';

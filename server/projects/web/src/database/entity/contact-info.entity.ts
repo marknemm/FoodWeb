@@ -3,6 +3,7 @@ import { ContactInfo, GeographyLocation } from '~shared';
 import { OrmEntity, OrmPrimaryGeneratedColumn } from '~orm';
 import { AccountEntity } from './account.entity';
 import { DonationEntity } from './donation.entity';
+import { DonationHubEntity } from './donation-hub.entity';
 
 @OrmEntity('ContactInfo')
 export class ContactInfoEntity implements ContactInfo {
@@ -45,10 +46,4 @@ export class ContactInfoEntity implements ContactInfo {
 
   @Column({ default: true }) // TODO: Change to false in the future when we have a lot more activity!!!
   notifyForEachDonation: boolean;
-
-  @OneToOne((type) => AccountEntity, (account) => account.contactInfo)
-  account?: AccountEntity;
-
-  @OneToOne((type) => DonationEntity, (donation) => donation.donorContactOverride)
-  donation?: DonationEntity;
 }

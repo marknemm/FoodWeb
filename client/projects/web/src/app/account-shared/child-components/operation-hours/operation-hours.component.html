@@ -11,7 +11,7 @@
     <div class="time-field" [style.width]="timeWidth">
       <foodweb-time
         [allowClear]="allowClear"
-        [defaultTime]="getDefaultStartTime(formGroup)"
+        [defaultTime]="defaultStartTime"
         [editable]="editable"
         [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
         [minutesGap]="minutesGap"
@@ -23,7 +23,7 @@
     <div class="time-field" [style.width]="timeWidth">
       <foodweb-time
         [allowClear]="allowClear"
-        [defaultTime]="getDefaultEndTime(formGroup)"
+        [defaultTime]="defaultEndTime"
         [editable]="editable"
         [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
         [minutesGap]="minutesGap"
@@ -36,7 +36,7 @@
   <mat-error *ngIf="formGroup.hasError('timeRangeOrder')" class="operation-hours-error">
     {{ formGroup.getError('timeRangeOrder') }}
   </mat-error>
-  <mat-error *ngIf="formGroup.hasError('allOrNothing')" class="operation-hours-error">
-    {{ formGroup.getError('allOrNothing') }}
+  <mat-error *ngIf="formGroup.hasError('groupRequired')" class="operation-hours-error">
+    {{ formGroup.getError('groupRequired') }}
   </mat-error>
 </div>

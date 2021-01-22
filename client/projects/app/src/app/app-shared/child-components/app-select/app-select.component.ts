@@ -71,7 +71,7 @@ export class AppSelectComponent<T = any> extends FormBaseComponent<TFormControl<
     private _viewContainerRef: ViewContainerRef,
     formHelperService: FormHelperService
   ) {
-    super(new TFormControl<T>(), formHelperService);
+    super(() => new TFormControl<T>(), formHelperService);
   }
 
   /**

@@ -1,14 +1,15 @@
 import { AccountEntity, DonationEntity } from '~entity';
-import { genPagination, genSimpleWhereConditions, getOrmRepository, OrmRepository, OrmSelectQueryBuilder, QueryMod, QueryResult, preprocessFullTextQuery } from '~orm';
-import { DonationFilters, DonationReadRequest, DonationSortBy, DonationStatus, SortOptions } from '~shared';
+import { genPagination, genSimpleWhereConditions, getOrmRepository, OrmRepository, OrmSelectQueryBuilder, preprocessFullTextQuery, QueryMod } from '~orm';
+import { DonationReadRequest, DonationStatus, ListResponse } from '~shared';
+import { genListResponse, ListResponsePromise } from '~web/helpers/response/list-response';
 
 export async function readDonation(id: number, donationRepo?: OrmRepository<DonationEntity>): Promise<DonationEntity> {
   const readRequest: DonationReadRequest = { id, page: 1, limit: 1 };
-  const queryResult: QueryResult<DonationEntity> = await readDonations(readRequest, donationRepo);
-  return queryResult.entities[0];
+  const listRes: ListResponse<DonationEntity> = await readDonations(readRequest, donationRepo);
+  return listRes.list[0];
 }
 
-export function readMyDonations(request: DonationReadRequest, myAccount: AccountEntity): Promise<QueryResult<DonationEntity>> {
+export function readMyDonations(request: DonationReadRequest, myAccount: AccountEntity): ListResponsePromise<DonationEntity> {
   _fillMyAccountRequestFilter(request, myAccount);
   return readDonations(request);
 }
@@ -31,9 +32,9 @@ function _fillMyAccountRequestFilter(request: DonationReadRequest, myAccount: Ac
 export function readDonations(
   request: DonationReadRequest,
   donationRepo: OrmRepository<DonationEntity> = getOrmRepository(DonationEntity)
-): Promise<QueryResult<DonationEntity>> {
+): ListResponsePromise<DonationEntity> {
   const queryBuilder: OrmSelectQueryBuilder<DonationEntity> = _buildQuery(donationRepo, request);
-  return _execDonationQuery(queryBuilder);
+  return _execDonationQuery(queryBuilder, request);
 }
 
 export function queryDonations(request: DonationReadRequest): QueryMod<DonationEntity> {
@@ -41,13 +42,16 @@ export function queryDonations(request: DonationReadRequest): QueryMod<DonationE
   const queryBuilder: OrmSelectQueryBuilder<DonationEntity> = _buildQuery(donationRepo, request);
   return new QueryMod<DonationEntity>(
     queryBuilder,
-    () => _execDonationQuery(queryBuilder)
+    () => _execDonationQuery(queryBuilder, request)
   );
 }
 
-async function _execDonationQuery(queryBuilder: OrmSelectQueryBuilder<DonationEntity>): Promise<QueryResult<DonationEntity>> {
+async function _execDonationQuery(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  request: DonationReadRequest
+): ListResponsePromise<DonationEntity> {
   const [donations, totalCount]: [DonationEntity[], number] = await queryBuilder.getManyAndCount();
-  return { entities: donations, totalCount };
+  return genListResponse(donations, totalCount, request);
 }
 
 function _buildQuery(donationRepo: OrmRepository<DonationEntity>, request: DonationReadRequest): OrmSelectQueryBuilder<DonationEntity> {
@@ -97,7 +101,7 @@ function _genJoins(queryBuilder: OrmSelectQueryBuilder<DonationEntity>): OrmSele
 
 function _genWhereCondition(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
+  filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   const simpleDonationWhereProps = ['id', 'donationType', 'donationStatus'];
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'donation', filters, simpleDonationWhereProps);
@@ -110,7 +114,7 @@ function _genWhereCondition(
 
 function _genAccountConditions(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
+  filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   queryBuilder = _genDonorConditions(queryBuilder, filters);
   queryBuilder = _genReceiverConditions(queryBuilder, filters);
@@ -120,7 +124,7 @@ function _genAccountConditions(
 
 function _genDonorConditions(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
+  filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   queryBuilder = _genDonorAccountIdCondition(queryBuilder, filters);
   queryBuilder = _genDonorNameCondition(queryBuilder, filters);
@@ -130,7 +134,7 @@ function _genDonorConditions(
 
 function _genDonorAccountIdCondition(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
+  filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   if (filters.donorAccountId != null) {
     queryBuilder = queryBuilder.andWhere('donorAccount.id = :donorId', { donorId: filters.donorAccountId });
@@ -140,7 +144,7 @@ function _genDonorAccountIdCondition(
 
 function _genDonorNameCondition(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
+  filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   const simpleDonationWhereProps = ['donorLastName', 'donorFirstName'];
   queryBuilder = genSimpleWhereConditions(queryBuilder, 'donation', filters, simpleDonationWhereProps, { convertToLowerCase: true });
@@ -149,7 +153,7 @@ function _genDonorNameCondition(
 
 function _genDonorOrgNameCondition(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
+  filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   filters.donorOrganizationName = filters.donorOrganizationName?.trim();
   if (filters.donorOrganizationName) {
@@ -163,7 +167,7 @@ function _genDonorOrgNameCondition(
 
 function _genReceiverConditions(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
+  filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   queryBuilder = _genReceiverAccountIdCondition(queryBuilder, filters);
   queryBuilder = _genReceiverOrgNameCondition(queryBuilder, filters);
@@ -172,7 +176,7 @@ function _genReceiverConditions(
 
 function _genReceiverAccountIdCondition(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
+  filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   if (filters.receiverAccountId != null) {
     queryBuilder = queryBuilder.andWhere('receiverAccount.id = :receiverId', { receiverId: filters.receiverAccountId });
@@ -182,7 +186,7 @@ function _genReceiverAccountIdCondition(
 
 function _genReceiverOrgNameCondition(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
+  filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   filters.receiverOrganizationName = filters.receiverOrganizationName?.trim();
   if (filters.receiverOrganizationName) {
@@ -196,7 +200,7 @@ function _genReceiverOrgNameCondition(
 
 function _genVolunteerConditions(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
+  filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   if (filters.delivererAccountId != null) {
     queryBuilder = queryBuilder.andWhere('delivererAccount.id = :delivererId', { delivererId: filters.delivererAccountId });
@@ -206,7 +210,7 @@ function _genVolunteerConditions(
 
 function _genDeliveryWindowConditions(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
+  filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   // WARNING: This condition may slow down the query when we have a lot of records. Refactor in future if necessary!
   if (filters.deliveryWindowOverlapStart) {
@@ -234,7 +238,7 @@ function _genDeliveryWindowConditions(
 
 function _genDonationExpiredCondition(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters
+  filters: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   const expired: boolean = (filters.expired === 'true');
   if (!expired && filters.id == null) {
@@ -246,7 +250,7 @@ function _genDonationExpiredCondition(
 
 function _genFullTextCondition(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  filters: DonationFilters)
+  filters: DonationReadRequest)
 : OrmSelectQueryBuilder<DonationEntity> {
   if (filters.fullTextQuery?.trim()) {
     const fullTextQuery: string = preprocessFullTextQuery(filters.fullTextQuery);
@@ -263,7 +267,7 @@ function _genFullTextCondition(
 
 function _genOrdering(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  sortOpts: SortOptions<DonationSortBy>
+  sortOpts: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   queryBuilder = _orderByCompleteLast(queryBuilder, sortOpts);
   queryBuilder = _orderByQueryArg(queryBuilder, sortOpts);
@@ -273,7 +277,7 @@ function _genOrdering(
 
 function _orderByCompleteLast(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  sortOpts: SortOptions<DonationSortBy>
+  sortOpts: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   if (sortOpts.sortBy !== 'donationStatus') {
     queryBuilder.addOrderBy(`donation.complete`);
@@ -283,7 +287,7 @@ function _orderByCompleteLast(
 
 function _orderByQueryArg(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  sortOpts: SortOptions<DonationSortBy>
+  sortOpts: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   const sortOrder: 'ASC' | 'DESC' = sortOpts.sortOrder ? sortOpts.sortOrder : 'DESC';
   if (sortOpts.sortBy) {
@@ -300,7 +304,7 @@ function _orderByQueryArg(
 
 function _orderByDefault(
   queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
-  sortOpts: SortOptions<DonationSortBy>
+  sortOpts: DonationReadRequest
 ): OrmSelectQueryBuilder<DonationEntity> {
   // Always include donation pickup/delivery window ordering.
   if (sortOpts.sortBy !== 'deliveryWindowStart') {

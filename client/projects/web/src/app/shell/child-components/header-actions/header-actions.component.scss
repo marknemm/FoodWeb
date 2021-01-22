@@ -1,13 +1,13 @@
 @import "constants.scss";
 
 .header-actions {
-  > *:not(:first-child) {
-    margin-left: 5px;
-  }
+  > * {
+    &:not(:first-child) {
+      margin-left: 5px;
+    }
 
-  .foodweb-settings-menu {
     @media only screen and (max-width: $md) {
-      vertical-align: -2px;
+      vertical-align: -4px;
     }
   }
 }

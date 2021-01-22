@@ -8,7 +8,7 @@
       row="0" col="1"
       text="+"
       class="add-time-range"
-      (tap)="addTimeRange()"></Button>
+      (tap)="formArray.push()"></Button>
   </GridLayout>
 
   <StackLayout class="time-range-list">
@@ -27,10 +27,10 @@
         [timeWidth]="timeWidth"></foodweb-app-time-range>
       <StackLayout row="0" col="1">
         <Button
-          [foodwebAppVisibile]="canShowRemoveButton(idx)"
+          [foodwebAppVisibile]="formArray.canRemoveAt(idx)"
           text="-"
           class="remove-time-range"
-          (tap)="removeTimeRange(idx)"></Button>
+          (tap)="formArray.removeAt(idx)"></Button>
       </StackLayout>
     </GridLayout>
   </StackLayout>

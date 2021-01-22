@@ -1,6 +1,7 @@
 <div *ngIf="editable | toBoolean; else readonlyTmpl" class="date-edit">
   <mat-form-field [floatLabel]="floatLabels" (click)="datePicker.open()" class="fill">
     <input matInput
+      [matDatepickerFilter]="dateFilter"
       [errorStateMatcher]="errorStateMatcher"
       [formControl]="formControl"
       [matDatepicker]="datePicker"
@@ -18,7 +19,7 @@
       <mat-icon>clear</mat-icon>
     </button>
     <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
-    <mat-datepicker touchUi #datePicker ></mat-datepicker>
+    <mat-datepicker #datePicker></mat-datepicker>
   </mat-form-field>
 </div>
 

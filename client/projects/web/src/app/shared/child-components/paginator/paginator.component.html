@@ -3,7 +3,7 @@
     color="primary"
     [pageIndex]="page - 1"
     [pageSize]="limit"
-    [pageSizeOptions]="[10, 20, 50]"
+    [pageSizeOptions]="pageSizeOptions"
     [showFirstLastButtons]="true"
     [length]="length"
     (page)="onPageEvent($event)">

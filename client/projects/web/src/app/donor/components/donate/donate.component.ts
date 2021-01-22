@@ -13,6 +13,15 @@ import { SessionService } from '~web/session/services/session/session.service';
 })
 export class DonateComponent implements OnInit {
 
+  readonly foodSafetyChecklistMembers = [
+    'Food Storage Area is Clean and Orderly',
+    'Proper personal hygiene observed while prepping food',
+    'Perishable food has been kept at appropriate temperatures',
+    'No bulging or leaking cans or packaging',
+    'No mold or rot on bread or produce',
+    'Food does not appear to be going bad',
+  ];
+
   /**
    * Reactive form model used for donation.
    */

@@ -32,7 +32,12 @@
   </mat-sidenav-content>
   <mat-sidenav [opened]="accountFiltersOpened" (openedChange)="accountFiltersOpened = $event" mode="over" position="end" [autoFocus]="false">
     <foodweb-list-filters>
-      <foodweb-admin-account-filters [activeFilters]="activeFilters" [omitSorting]="true" (filter)="updateAccountFilters($event)"></foodweb-admin-account-filters>
+      <foodweb-admin-account-filters
+        [formGroup]="filtersForm"
+        [omitSorting]="true"
+        (clear)="filtersForm.resetFacetFilters({ resetAccountType: true })"
+        (filter)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
+      ></foodweb-admin-account-filters>
     </foodweb-list-filters>
   </mat-sidenav>
 </mat-sidenav-container>

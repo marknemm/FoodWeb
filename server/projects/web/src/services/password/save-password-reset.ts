@@ -1,8 +1,7 @@
 import { randomBytes } from 'crypto';
 import { EntityManager, getConnection, getRepository } from 'typeorm';
 import { AccountEntity, PasswordResetEntity } from '~entity';
-import { QueryResult } from '~orm';
-import { PasswordResetRequest } from '~shared';
+import { ListResponse, PasswordResetRequest } from '~shared';
 import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { readAccount, readAccounts } from '../account/read-accounts';
 import { savePassword } from './save-password';
@@ -28,14 +27,14 @@ export async function savePasswordResetToken(usernameEmail: string): Promise<Pas
  */
 async function _findAccount(usernameEmail: string): Promise<AccountEntity> {
   // Try to get account via email match.
-  const queryResult: QueryResult<AccountEntity> = await readAccounts({ email: usernameEmail, page: 1, limit: 2 }, null);
-  if (queryResult.totalCount > 1) {
+  const listRes: ListResponse<AccountEntity> = await readAccounts({ email: usernameEmail, page: 1, limit: 2 }, null);
+  if (listRes.totalCount > 1) {
     throw new FoodWebError('Cannot get a unique account with the given email. Try a username instead.');
   }
 
   // If email match didn't work, then try to get account via username match.
-  const account: AccountEntity = (queryResult.totalCount === 1)
-    ? queryResult.entities[0]
+  const account: AccountEntity = (listRes.totalCount === 1)
+    ? listRes.list[0]
     : await readAccount(usernameEmail);
   if (!account) {
     throw new FoodWebError('Account not found. Be sure to enter a valid username.');

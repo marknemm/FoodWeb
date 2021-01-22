@@ -2,6 +2,9 @@ import { DonationReadRequest } from '~shared';
 import { TFormGroup } from '~web/forms';
 export { DonationReadRequest };
 
+/**
+ * A donation filters form that is used to genereate filter query parameters for a list of donations/deliveries.
+ */
 export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
 
   constructor(filters?: Partial<DonationReadRequest>) {
@@ -37,5 +40,12 @@ export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
 
   set expired(value: boolean) {
     this.get('expired').setValue(value ? 'true' : undefined);
+  }
+
+  /**
+   * Resets the value of all of the facet filters (while keeping the value of the `fullTextQuery` field).
+   */
+  resetFacetFilters(): void {
+    this.reset({ fullTextQuery: this.get('fullTextQuery').value });
   }
 }
