@@ -18,6 +18,8 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class DonationHubEditComponent extends FormBaseComponent<DonationHubForm> implements OnInit {
 
+  readonly minRegisterDate = new Date();
+
   private _donationHubNotFound = false;
   private _originalDonationHub: DonationHub;
 

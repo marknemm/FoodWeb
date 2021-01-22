@@ -54,7 +54,7 @@
     [boldTime]="boldTime"
     [dateTime]="value?.startDateTime"
     [editable]="false"
-    [excludeTimeDisplay]="startEndDateSame"></foodweb-app-date-time>
+    [excludeTimeDisplay]="formGroup.startEndDateSame"></foodweb-app-date-time>
   <!-- Wrap time range below date when showing a range where start & end date is same. -->
   <StackLayout orientation="horizontal">
     <foodweb-app-time
@@ -62,12 +62,12 @@
       [value]="value?.startDateTime | foodwebFormatTime"
       [editable]="false"
       [excludeDateDisplay]="true"
-      [visible]="startEndDateSame"></foodweb-app-time>
+      [visible]="formGroup.startEndDateSame"></foodweb-app-time>
     <Label text=" -- "></Label>
     <foodweb-app-date-time
       [boldTime]="boldTime"
       [dateTime]="value?.endDateTime"
       [editable]="false"
-      [excludeDateDisplay]="startEndDateSame"></foodweb-app-date-time>
+      [excludeDateDisplay]="formGroup.startEndDateSame"></foodweb-app-date-time>
   </StackLayout>
 </StackLayout>

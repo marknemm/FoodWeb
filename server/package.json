@@ -6,6 +6,7 @@
   "scripts": {
     "admin:build": "rimraf ./dist/* && tsc -p ./projects/admin/tsconfig.json && npm run templates:precompile",
     "admin:build:watch": "rimraf ./dist/* && tsc-watch -p ./projects/admin/tsconfig.json",
+    "admin:lint": "tslint -p ./projects/admin/tsconfig.json",
     "admin:start": "npm run admin:start:prep && tsc-watch -p ./projects/admin/tsconfig.localdev.json --noClear --onFirstSuccess \"nodemon -e .js,.hbs,.css --watch ./admin-dist/server/projects/web/src/ --watch ./admin-dist/server/projects/admin/src/ --watch ./admin-dist/server/database/src/ --watch ./admin-dist/shared/src/ --watch ./templates/ --watch ./projects/admin/.env --inspect=127.0.0.1:9230 ./admin-dist/server/projects/admin/src/index.js\"",
     "admin:start:docker": "npm run admin:start:prep && tsc-watch -p ./projects/admin/tsconfig.localdev.json --noClear --onFirstSuccess \"nodemon -e .js,.hbs,.css --watch ./admin-dist/server/projects/web/src/ --watch ./admin-dist/server/projects/admin/src/ --watch ./admin-dist/server/database/src/ --watch ./admin-dist/shared/src/ --watch ./templates/ --inspect=0.0.0.0:9230 ./admin-dist/server/projects/admin/src/index.js\"",
     "admin:start:prep": "node ./build-util/initial-install.js admin && rimraf ./admin-dist/* ",
@@ -14,17 +15,17 @@
     "clean": "rimraf ./dist/* ./coverage ./ormlogs.log",
     "clean:all": "npm run clean && npm run clean:dump && rimraf ./node_modules",
     "clean:dump": "rimraf ./database-util/dump/*",
-    "install:all": "npm run install:shared && npm install",
     "install:shared": "cd ../shared && npm install && cd ../server",
     "job:auto-assign-donations": "node ./dist/server/jobs/src/auto-assign-donations.js",
     "job:delete-password-reset": "node ./dist/server/jobs/src/delete-password-reset.js",
     "job:send-delivery-reminders": "node ./dist/server/jobs/src/delete-password-reset.js",
-    "lint": "tslint -p ./projects/admin/tsconfig.json && tslint -p ./projects/web/tsconfig.json",
+    "lint": "npm run admin:lint && npm run web:lint",
     "pg:destroy": "node ./database-util/js/pg-exec.js -a -f ./database-util/sql/destroy-db.pgsql",
     "pg:dump": "node ./database-util/js/pg-dump.js",
     "pg:initialize": "npm run pg:destroy && node ./database-util/js/pg-initialize.js",
     "pg:make-timestamps-relevant": "node ./database-util/js/pg-exec.js -f ./database-util/sql/make-timestamps-relevant.pgsql",
     "pg:restore": "npm run pg:destroy && node ./database-util/js/pg-restore.js",
+    "postinstall": "npm run install:shared",
     "start": "npm run start:prep && tsc-watch -p ./projects/web/tsconfig.json --noClear --onFirstSuccess \"nodemon -e .js,.hbs,.css --watch ./dist/server/projects/web/src/ --watch ./dist/shared/src/ --watch ./templates/ --watch ./projects/web/.env --inspect ./dist/server/projects/web/src/index.js\"",
     "start:docker": "npm run start:prep && tsc-watch -p ./projects/web/tsconfig.json --noClear --onFirstSuccess \"nodemon -L -e .js,.hbs,.css --watch ./dist/server/projects/web/src/ --watch ./dist/shared/src/ --watch ./templates/ --inspect=0.0.0.0:9229 ./dist/server/projects/web/src/index.js\"",
     "start:prep": "node ./build-util/initial-install.js web && rimraf ./dist/*",
@@ -36,7 +37,8 @@
     "typeorm:migration:create": "npm run start:prep && npm run pg:dump && npm run typeorm:cli -- migration:create -n",
     "typeorm:migration:generate": "npm run start:prep && npm run pg:dump && npm run build && npm run typeorm:cli -- migration:generate -n",
     "typeorm:migration:revert": "npm run start:prep && npm run pg:dump && npm run typeorm:cli -- migration:revert",
-    "typeorm:migration:run": "npm run start:prep && npm run pg:dump && npm run typeorm:cli -- migration:run"
+    "typeorm:migration:run": "npm run start:prep && npm run pg:dump && npm run typeorm:cli -- migration:run",
+    "web:lint": "tslint -p ./projects/web/tsconfig.json"
   },
   "private": true,
   "dependencies": {

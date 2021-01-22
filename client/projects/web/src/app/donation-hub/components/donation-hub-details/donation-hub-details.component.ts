@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
   templateUrl: './donation-hub-details.component.html',
   styleUrls: ['./donation-hub-details.component.scss']
 })
-export class DonationHubDetailsComponent implements OnInit {
+export class DonationHubDetailsComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject();
   private _donationHub: DonationHub;

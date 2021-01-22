@@ -36,12 +36,11 @@
     "build:watch": "npm run build:prep && ng build --watch",
     "clean": "rimraf ./dist ./www ./platforms ./plugins ./coverage",
     "clean:all": "npm run clean && rimraf ./node_modules && npm run app:clean",
-    "install:all": "npm run install:shared && npm install",
     "install:shared": "cd ../shared && npm install && cd ../client",
     "lint": "ng lint",
     "ng": "ng",
     "ngcc": "ngcc --properties es2015 module main --first-only",
-    "postinstall": "npm run ngcc",
+    "postinstall": "npm run ngcc && npm run install:shared",
     "preview": "tns preview",
     "start": "npm run build:prep && ng serve --source-map",
     "start:docker": "npm run build:prep && node ./build-util/initial-install.js && ng serve --source-map --host 0.0.0.0 --disableHostCheck=true",
@@ -49,7 +48,8 @@
     "start:offline": "ng serve --configuration=offline",
     "test": "npm run build:prep && npm run web:lint && ng test --watch=false --code-coverage --source-map",
     "test:watch": "npm run build:prep && ng test --code-coverage --source-map",
-    "watch": "npm-watch"
+    "watch": "npm-watch",
+    "web:lint": "ng lint --project web"
   },
   "watch": {
     "app:prepare": "./www"

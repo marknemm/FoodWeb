@@ -19,7 +19,7 @@
     "clean:all": "cd ./client && npm run clean:all && cd ../server && npm run clean:all && cd ../shared && npm run clean:all && cd../ && rimraf ./node_modules",
     "debug": "concurrently \"cd ./client && npm run build:watch\" \"cd ./server && npm run debug\"",
     "lint": "cd ./client && npm run lint && cd ../server && npm run lint && cd ../",
-    "postinstall": "cd ./shared && npm install && cd ../client && npm install && cd ../server && npm install && cd ../",
+    "postinstall": "cd ./client && npm install && cd ../server && npm install && cd ../",
     "heroku-postbuild": "cd ./client && npm run build:env && cd ../server && npm run build && cd ../",
     "test": "npm run lint && cd ./client && npm run test && cd ../server && npm run test && cd ../"
   },

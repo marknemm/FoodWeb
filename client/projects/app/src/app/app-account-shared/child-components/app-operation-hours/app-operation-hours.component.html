@@ -16,7 +16,7 @@
       row="0"
       col="0"
       [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
-      [defaultTime]="getDefaultStartTime(formGroup)"
+      [defaultTime]="defaultStartTime"
       [minutesGap]="minutesGap"></foodweb-app-time>
 
     <foodweb-app-time
@@ -27,7 +27,7 @@
       row="0"
       col="1"
       [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
-      [defaultTime]="getDefaultEndTime(formGroup)"
+      [defaultTime]="defaultEndTime"
       [minutesGap]="minutesGap"></foodweb-app-time>
 
     <Button text="-" class="minus-button" row="0" col="2" width="20" height="20"></Button>

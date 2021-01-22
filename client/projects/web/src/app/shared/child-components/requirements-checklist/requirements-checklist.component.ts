@@ -49,7 +49,9 @@ export class RequirementsChecklistComponent extends FormBaseComponent<boolean> i
 
   toggleSelectAll(selectAll: boolean): void {
     for (const controlName in this.checklistForm.controls) {
-      this.checklistForm.get(controlName).setValue(selectAll);
-    };
+      if (this.checklistForm.controls.hasOwnProperty(controlName)) {
+        this.checklistForm.get(controlName).setValue(selectAll);
+      }
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// tslint:disable-next-line: class-name
 export class createDonationHub1610666743628 implements MigrationInterface {
   name = 'createDonationHub1610666743628';
 

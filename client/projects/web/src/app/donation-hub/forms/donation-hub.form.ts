@@ -3,7 +3,7 @@ import { Account, ContactInfo, DonationHub, TimeRange } from '~shared';
 import { ContactInfoForm } from '~web/account-shared/forms/contact-info.form';
 import { TimeRangeForm } from '~web/date-time/forms/time-range.form';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormState, TFormGroup, UpdateValueOptions } from '~web/forms';
+import { TFormGroup, UpdateValueOptions } from '~web/forms';
 
 export class DonationHubForm extends TFormGroup<DonationHubFormT> {
 
@@ -20,14 +20,14 @@ export class DonationHubForm extends TFormGroup<DonationHubFormT> {
       dropOffTimeRange: new TimeRangeForm(undefined, 'all'),
       readyChecklist: [false, DonationHubForm._genChecklistValidators(config)]
     });
-    this._deriveValuesFromAccount(config.account)
+    this._deriveValuesFromAccount(config.account);
     if (config.value) {
       this.patchValue(config.value);
     }
   }
 
   private static _genChecklistValidators(config: DonationHubFormConfig): ValidatorFn[] {
-    return config.omitChecklists ? [] : [Validators.requiredTrue]
+    return config.omitChecklists ? [] : [Validators.requiredTrue];
   }
 
   private _deriveValuesFromAccount(account: Account): void {
