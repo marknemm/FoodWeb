@@ -143,14 +143,14 @@
     {
       "label": "Docker FoodWeb: Reinstall Client Dependencies",
       "type": "shell",
-      "command": "docker exec -it foodweb bash -c 'npm run install:all'",
+      "command": "docker exec -it foodweb bash -c 'npm install'",
       "group": "none",
       "problemMatcher": []
     },
     {
       "label": "Docker FoodWeb: Reinstall Server Dependencies",
       "type": "shell",
-      "command": "docker exec -it foodweb-server bash -c 'npm run install:all'",
+      "command": "docker exec -it foodweb-server bash -c 'npm install'",
       "group": "none",
       "problemMatcher": []
     },
@@ -167,7 +167,7 @@
     {
       "label": "Docker FoodWeb App: Reinstall Client Dependencies",
       "type": "shell",
-      "command": "docker exec -it foodweb-app bash -c 'npm run install:all'",
+      "command": "docker exec -it foodweb-app bash -c 'npm install'",
       "group": "none",
       "problemMatcher": []
     },
@@ -184,14 +184,14 @@
     {
       "label": "Docker FoodWeb Admin: Reinstall Client Dependencies",
       "type": "shell",
-      "command": "docker exec -it foodweb-admin bash -c 'npm run install:all'",
+      "command": "docker exec -it foodweb-admin bash -c 'npm install'",
       "group": "none",
       "problemMatcher": []
     },
     {
       "label": "Docker FoodWeb Admin: Reinstall Server Dependencies",
       "type": "shell",
-      "command": "docker exec -it foodweb-admin-server bash -c 'npm run install:all'",
+      "command": "docker exec -it foodweb-admin-server bash -c 'npm install'",
       "group": "none",
       "problemMatcher": []
     },
