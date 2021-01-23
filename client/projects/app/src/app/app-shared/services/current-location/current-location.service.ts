@@ -8,19 +8,19 @@ import { LatLngLiteral } from '~shared';
 })
 export class CurrentLocationService {
 
-  private _watchPosition$: Subject<Position> = null;
+  private _watchPosition$: Subject<GeolocationPosition> = null;
   private _watchId: number = null;
 
   constructor() {}
 
-  getCurrentPosition(): Observable<Position> {
-    return new Observable((subscriber: Subscriber<Position>) =>
+  getCurrentPosition(): Observable<GeolocationPosition> {
+    return new Observable((subscriber: Subscriber<GeolocationPosition>) =>
       navigator.geolocation.getCurrentPosition(
-        (position: Position) => {
+        (position: GeolocationPosition) => {
           subscriber.next(position);
           subscriber.complete();
         },
-        (err: PositionError) => subscriber.error(err),
+        (err: GeolocationPositionError) => subscriber.error(err),
         { enableHighAccuracy: true }
       )
     );
@@ -32,12 +32,12 @@ export class CurrentLocationService {
     );
   }
 
-  watchPosition(): Observable<Position> {
+  watchPosition(): Observable<GeolocationPosition> {
     if (!this._watchPosition$) {
       this._watchPosition$ = new Subject();
       this._watchId = navigator.geolocation.watchPosition(
-        (position: Position) => this._watchPosition$.next(position),
-        (err: PositionError) => this._watchPosition$.error(err),
+        (position: GeolocationPosition) => this._watchPosition$.next(position),
+        (err: GeolocationPositionError) => this._watchPosition$.error(err),
         { enableHighAccuracy: true }
       );
     }
@@ -59,7 +59,7 @@ export class CurrentLocationService {
     }
   }
 
-  positionToLatLngLiteral(position: Position): LatLngLiteral {
+  positionToLatLngLiteral(position: GeolocationPosition): LatLngLiteral {
     return { lat: position.coords.latitude, lng: position.coords.longitude };
   }
 }
