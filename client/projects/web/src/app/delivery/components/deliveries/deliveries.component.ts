@@ -56,7 +56,7 @@ export class DeliveriesComponent implements OnInit {
 
   handleQueryParamsChanged(request: DonationReadRequest): void {
     this.filtersForm.reset(request);
-    this._deliveryReadService.getMyDeliveries(request).subscribe((response: ListResponse<Donation>) => {
+    this._deliveryReadService.getDeliveries(request).subscribe((response: ListResponse<Donation>) => {
       this._donations = response.list;
       this._totalCount = response.totalCount;
     });
