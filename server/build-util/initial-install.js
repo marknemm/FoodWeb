@@ -14,7 +14,7 @@ let execResult;
 // If node_modules dependencies do not exist, then perform a complete install.
 const nodeModulesDir = path.join(serverRootDir, 'node_modules');
 if (!fs.existsSync(nodeModulesDir) || !fs.readdirSync(nodeModulesDir).length) {
-  execResult = execSync('npm run install:all');
+  execResult = execSync('npm install');
   console.log(execResult.toString());
 }
 

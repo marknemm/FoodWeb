@@ -1,7 +1,7 @@
 import { Account, Directions, Waypoint } from '~shared';
 export { Directions, Waypoint };
 
-export type ClientWaypoint = 'My+Location' | Position | Waypoint;
+export type ClientWaypoint = 'My+Location' | GeolocationPosition | Waypoint;
 
 export interface DeliveryMapOptions {
   useVolunteerCurrentPos?: boolean;

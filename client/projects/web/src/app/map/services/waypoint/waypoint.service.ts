@@ -113,8 +113,8 @@ export class WaypointService {
    * @return The lat-lng conversion result.
    */
   private _waypointToLatLngLiteral(waypoint: ClientWaypoint): LatLngLiteral {
-    if ((<Position>waypoint).coords) {
-      return this._currentLocationService.positionToLatLngLiteral(<Position>waypoint);
+    if ((<GeolocationPosition>waypoint).coords) {
+      return this._currentLocationService.positionToLatLngLiteral(<GeolocationPosition>waypoint);
     }
     return this._mapWaypointConverter.waypointToLatLngLiteral(<Waypoint>waypoint);
   }
