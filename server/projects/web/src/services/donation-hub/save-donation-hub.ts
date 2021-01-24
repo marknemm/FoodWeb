@@ -15,8 +15,11 @@ const _accountHelper = new AccountHelper();
  * @return A promise that resolves to the newly created donation hub.
  */
 export async function createDonationHub(donationHub: DonationHub, myAccount: AccountEntity): Promise<DonationHubEntity> {
+  const preppedDonationHub: DonationHubEntity = await _prepareDonationHub(donationHub, myAccount);
+  validateDonationHub(preppedDonationHub);
+
   return getConnection().transaction(async (manager: EntityManager) =>
-    _saveDonationHub(manager, donationHub, myAccount)
+    manager.getRepository(DonationHubEntity).save(preppedDonationHub)
   );
 }
 
@@ -27,25 +30,16 @@ export async function createDonationHub(donationHub: DonationHub, myAccount: Acc
  * @return A promise that resolves to the updated donation hub.
  */
 export async function updateDonationHub(donationHub: DonationHub, myAccount: AccountEntity): Promise<DonationHubEntity> {
-  validateDonationHubUpdatePrivilege(donationHub, myAccount);
-  return getConnection().transaction(async (manager: EntityManager) => {
-    const savedDonationHub: DonationHubEntity = await _saveDonationHub(manager, donationHub, myAccount);
-    return manager.getRepository(DonationHubEntity).findOne({ id: savedDonationHub.id });
-  });
-}
-
-/**
- * Saves a given donation hub. The save operation serves as both a create & update operation.
- * @param manager The entity manager that will be used for the database save transaction.
- * @param donationHub The donation hub that is to be saved.
- * @param myAccount The account of the user who is saving the donation hub.
- * @return A promise that resolves to the saved donation hub.
- */
-async function _saveDonationHub(manager: EntityManager, donationHub: DonationHub, myAccount?: AccountEntity): Promise<DonationHubEntity> {
-  const donationHubRepo: Repository<DonationHubEntity> = manager.getRepository(DonationHubEntity);
   const preppedDonationHub: DonationHubEntity = await _prepareDonationHub(donationHub, myAccount);
-  validateDonationHub(preppedDonationHub);
-  return await donationHubRepo.save(preppedDonationHub);
+  validateDonationHub(preppedDonationHub, true); // true for require 'id' field.
+  validateDonationHubUpdatePrivilege(preppedDonationHub, myAccount);
+
+  return getConnection().transaction(async (manager: EntityManager) => {
+    const donationHubRepo: Repository<DonationHubEntity> = manager.getRepository(DonationHubEntity);
+    const savedDonationHub: DonationHubEntity = await donationHubRepo.save(preppedDonationHub);
+    // Must re-query for whole donation hub since update only reads updated fields.
+    return donationHubRepo.findOne({ id: savedDonationHub.id });
+  });
 }
 
 /**

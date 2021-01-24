@@ -122,6 +122,15 @@ export class TFormGroup<T> extends FormGroup {
     return super.getRawValue();
   }
 
+  mapProperties<TF, TT>(from: Partial<TF>, to: Partial<TT> = {}, omitProps: (keyof TF)[] = []): Partial<TT> {
+    for (const propKey in from) {
+      if (from.hasOwnProperty(propKey) && omitProps.indexOf(propKey) < 0) {
+        to[<any>propKey] = from[propKey];
+      }
+    }
+    return to;
+  }
+
   /**
    * Gets an observable that emits the value of this `TFormGroup` whenever its value changes in the UI or programmatically.
    * Also, emits an event each time you call `enable()` or `disable()` on this form group without configuring `emitEvent: false`.

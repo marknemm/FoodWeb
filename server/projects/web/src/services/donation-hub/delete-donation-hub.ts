@@ -16,8 +16,8 @@ export async function deleteDonationHub(donationHubId: number, myAccount: Accoun
   validateDonationHubModPrivilege(donationHub.volunteerAccount.id, myAccount);
 
   await OrmEntityManager.transaction(async (manager: OrmEntityManager) => {
-    manager.getRepository(DonationHubEntity).remove(donationHub);
-    _removeContactOverride(donationHub, manager);
+    await manager.getRepository(DonationHubEntity).remove(donationHub);
+    await _removeContactOverride(donationHub, manager);
   });
 
   return donationHub;

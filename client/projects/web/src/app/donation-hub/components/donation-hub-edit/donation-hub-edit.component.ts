@@ -67,6 +67,6 @@ export class DonationHubEditComponent extends FormBaseComponent<DonationHubForm>
   }
 
   filterDateSaturday(date: Date): boolean {
-    return (date.getDay() === 6);
+    return (date && date.getDay() === 6);
   }
 }

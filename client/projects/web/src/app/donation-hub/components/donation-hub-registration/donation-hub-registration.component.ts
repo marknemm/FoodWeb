@@ -54,6 +54,6 @@ export class DonationHubRegistrationComponent extends FormBaseComponent<Donation
   }
 
   filterDateSaturday(date: Date): boolean {
-    return (date.getDay() === 6);
+    return (date && date.getDay() === 6);
   }
 }
