@@ -24,7 +24,11 @@ export async function validateDonationHubPledgeUpdatePrivilege(donationHubPledge
     .innerJoin('donationHubPledge.account', 'account')
     .where('donationHubPledge.id = :donationHubPledgeId', { donationHubPledgeId: donationHubPledge.id })
     .getRawOne();
-  if (donationHubPledgeAccountData.accountId !== myAccount.id) {
-    throw new FoodWebError('You do not have permission to update this donation hub pledge');
+  validateDonationHubPledgeModPrivilege(donationHubPledgeAccountData.accountId, myAccount);
+}
+
+export function validateDonationHubPledgeModPrivilege(donationHubPledgeAccountId, myAccount: Account): void {
+  if (donationHubPledgeAccountId !== myAccount.id) {
+    throw new FoodWebError('You do not have permission to delete/update this donation hub pledge');
   }
 }

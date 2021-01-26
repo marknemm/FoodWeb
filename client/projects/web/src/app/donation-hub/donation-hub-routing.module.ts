@@ -1,18 +1,27 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGaurdService } from '~web/session/services/auth-gaurd/auth-gaurd.service';
-import { DonationHubDetailsComponent } from './components/donation-hub-details/donation-hub-details.component';
-import { DonationHubDonateComponent } from './components/donation-hub-donate/donation-hub-donate.component';
+import { DonationHubCreateComponent } from './components/donation-hub-create/donation-hub-create.component';
 import { DonationHubEditComponent } from './components/donation-hub-edit/donation-hub-edit.component';
-import { DonationHubRegistrationComponent } from './components/donation-hub-registration/donation-hub-registration.component';
-import { DonationHubsComponent } from './components/donation-hubs/donation-hubs.component';
+import { DonationHubListComponent } from './components/donation-hub-list/donation-hub-list.component';
+import { DonationHubPledgeCreateComponent } from './components/donation-hub-pledge-create/donation-hub-pledge-create.component';
+import { DonationHubPledgeEditComponent } from './components/donation-hub-pledge-edit/donation-hub-pledge-edit.component';
+import { DonationHubPledgeComponent } from './components/donation-hub-pledge/donation-hub-pledge.component';
+import { DonationHubComponent } from './components/donation-hub/donation-hub.component';
 
 const routes: Routes = [
-  { path: 'details/:id', component: DonationHubDetailsComponent },
-  { path: 'donate/:id', component: DonationHubDonateComponent, canActivate: [AuthGaurdService] },
-  { path: 'edit/:id', component: DonationHubEditComponent, canActivate: [AuthGaurdService] },
-  { path: 'list', component: DonationHubsComponent },
-  { path: 'register', component: DonationHubRegistrationComponent, canActivate: [AuthGaurdService] }
+  { path: 'create', component: DonationHubCreateComponent, canActivate: [AuthGaurdService] },
+  { path: 'list', component: DonationHubListComponent },
+  { path: 'my', component: DonationHubListComponent },
+  { path: ':id', children: [
+    { path: '', component: DonationHubComponent },
+    { path: 'edit', component: DonationHubEditComponent, canActivate: [AuthGaurdService] },
+    { path: 'pledge/create', component: DonationHubPledgeCreateComponent, canActivate: [AuthGaurdService] }
+  ]},
+  { path: 'pledge/:id', children: [
+    { path: '', component: DonationHubPledgeComponent },
+    { path: 'edit', component: DonationHubPledgeEditComponent, canActivate: [AuthGaurdService] }
+  ]}
 ];
 
 @NgModule({

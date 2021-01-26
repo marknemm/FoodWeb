@@ -4,33 +4,42 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
 import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { SharedModule } from '~web/shared/shared.module';
+import { TableModule } from '~web/table/table.module';
 import { DonationHubActionsComponent } from './child-components/donation-hub-actions/donation-hub-actions.component';
 import { DonationHubDropOffInfoComponent } from './child-components/donation-hub-drop-off-info/donation-hub-drop-off-info.component';
+import { DonationHubPledgeTableComponent } from './child-components/donation-hub-pledge-table/donation-hub-pledge-table.component';
 import { DonationHubTeaserComponent } from './child-components/donation-hub-teaser/donation-hub-teaser.component';
-import { DonationHubDetailsComponent } from './components/donation-hub-details/donation-hub-details.component';
-import { DonationHubRegistrationComponent } from './components/donation-hub-registration/donation-hub-registration.component';
-import { DonationHubsComponent } from './components/donation-hubs/donation-hubs.component';
-import { DonationHubRoutingModule } from './donation-hub-routing.module';
+import { DonationHubCreateComponent } from './components/donation-hub-create/donation-hub-create.component';
 import { DonationHubEditComponent } from './components/donation-hub-edit/donation-hub-edit.component';
-import { DonationHubDonateComponent } from './components/donation-hub-donate/donation-hub-donate.component';
+import { DonationHubListComponent } from './components/donation-hub-list/donation-hub-list.component';
+import { DonationHubPledgeCreateComponent } from './components/donation-hub-pledge-create/donation-hub-pledge-create.component';
+import { DonationHubPledgeEditComponent } from './components/donation-hub-pledge-edit/donation-hub-pledge-edit.component';
+import { DonationHubPledgeComponent } from './components/donation-hub-pledge/donation-hub-pledge.component';
+import { DonationHubComponent } from './components/donation-hub/donation-hub.component';
+import { DonationHubRoutingModule } from './donation-hub-routing.module';
 
 @NgModule({
   declarations: [
-    DonationHubRegistrationComponent,
-    DonationHubDetailsComponent,
-    DonationHubsComponent,
-    DonationHubTeaserComponent,
+    DonationHubComponent,
     DonationHubActionsComponent,
+    DonationHubCreateComponent,
     DonationHubDropOffInfoComponent,
     DonationHubEditComponent,
-    DonationHubDonateComponent
+    DonationHubListComponent,
+    DonationHubPledgeComponent,
+    DonationHubPledgeCreateComponent,
+    DonationHubPledgeEditComponent,
+    DonationHubTeaserComponent,
+    DonationHubPledgeTableComponent,
   ],
   imports: [
     DonationHubRoutingModule,
@@ -42,10 +51,13 @@ import { DonationHubDonateComponent } from './components/donation-hub-donate/don
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
+    MatExpansionModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatSelectModule,
     SharedModule,
+    TableModule,
   ]
 })
 export class DonationHubModule {}

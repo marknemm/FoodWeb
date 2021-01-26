@@ -1,5 +1,6 @@
+import { SelectQueryBuilder } from 'typeorm';
 import { AccountEntity } from '~entity';
-import { genPagination, genSimpleWhereConditions, getOrmRepository, OrmSelectQueryBuilder, preprocessFullTextQuery, QueryMod } from '~orm';
+import { addPagination, addWhere, getOrmRepository, OrmSelectQueryBuilder, preprocessFullTextQuery, QueryMod } from '~orm';
 import { Account, AccountHelper, AccountReadRequest, ListResponse, OperationHours } from '~shared';
 import { LoginRequiredError } from '~web/helpers/response/foodweb-error';
 import { genListResponse, ListResponsePromise } from '~web/helpers/response/list-response';
@@ -20,6 +21,29 @@ export function readFullAccount(idOrUsername: number | string, myAccount?: Accou
 
 export function readFullAccounts(request: AccountReadRequest, myAccount: Account): ListResponsePromise<AccountEntity> {
   return _readAccounts(request, myAccount, true);
+}
+
+/**
+ * Adds default account associations with a given account alias to a given select query builder.
+ * (e.g. Account, ContactInfo, Organization, Volunteer)
+ * @param queryBuilder The query builder that the account associates will be added to.
+ * @param joinField The join field that will be used to reference the account relation.
+ * @param accountAlias The alias that shall be used for the account relation.
+ * The alias will also be used for contactInfo, organization, and volunteer relations.
+ * For example if given the alias receiverAccount, then receiverContactInfo, receiverOrganization,
+ * and receiverVolunteer will be used for the other relations.
+ */
+export function addDefaultAccountAssociations<T>(
+  queryBuilder: SelectQueryBuilder<T>,
+  joinField: string,
+  accountAlias: string
+): SelectQueryBuilder<T> {
+  const aliasBase: string = accountAlias.replace('Account', '');
+  queryBuilder.leftJoinAndSelect(joinField, accountAlias);
+  queryBuilder.leftJoinAndSelect(`${accountAlias}.contactInfo`, `${aliasBase}ContactInfo`);
+  queryBuilder.leftJoinAndSelect(`${accountAlias}.organization`, `${aliasBase}Organization`);
+  queryBuilder.leftJoinAndSelect(`${accountAlias}.volunteer`, `${aliasBase}Volunteer`);
+  return queryBuilder;
 }
 
 export function queryAccounts(request: AccountReadRequest, myAccount?: Account): QueryMod<AccountEntity> {
@@ -65,14 +89,14 @@ async function _execAccountQuery(
 
 function _buildQuery(request: AccountReadRequest, myAccount: Account): OrmSelectQueryBuilder<AccountEntity> {
   let queryBuilder: OrmSelectQueryBuilder<AccountEntity> = getOrmRepository(AccountEntity).createQueryBuilder('account');
-  queryBuilder = _genJoins(queryBuilder);
-  queryBuilder = _genWhereCondition(queryBuilder, request, myAccount);
-  queryBuilder = _genOrdering(queryBuilder, request);
-  queryBuilder = genPagination(queryBuilder, request);
+  queryBuilder = _addAssociations(queryBuilder);
+  queryBuilder = _addFilters(queryBuilder, request, myAccount);
+  queryBuilder = _addOrdering(queryBuilder, request);
+  queryBuilder = addPagination(queryBuilder, request);
   return queryBuilder;
 }
 
-function _genJoins(queryBuilder: OrmSelectQueryBuilder<AccountEntity>): OrmSelectQueryBuilder<AccountEntity> {
+function _addAssociations(queryBuilder: OrmSelectQueryBuilder<AccountEntity>): OrmSelectQueryBuilder<AccountEntity> {
   return queryBuilder
     .innerJoin(
       'FullTextSearch', 'fullTextSearch',
@@ -86,25 +110,25 @@ function _genJoins(queryBuilder: OrmSelectQueryBuilder<AccountEntity>): OrmSelec
     .leftJoinAndMapMany('account.operationHours', 'account.operationHours', 'operationHours');
 }
 
-function _genWhereCondition(
+function _addFilters(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
   filters: AccountReadRequest,
   myAccount: Account
 ): OrmSelectQueryBuilder<AccountEntity> {
-  queryBuilder = genSimpleWhereConditions(queryBuilder, 'account', filters, ['id', 'username', 'accountType']);
-  queryBuilder = genSimpleWhereConditions(queryBuilder, 'contactInfo', filters, ['email']);
+  queryBuilder = addWhere(queryBuilder, 'account', filters, ['id', 'username', 'accountType']);
+  queryBuilder = addWhere(queryBuilder, 'contactInfo', filters, ['email']);
   const orgNameFilt = { name: filters.organizationName };
-  queryBuilder = genSimpleWhereConditions(queryBuilder, 'organization', orgNameFilt, ['name'], { convertToLowerCase: true });
+  queryBuilder = addWhere(queryBuilder, 'organization', orgNameFilt, ['name'], { convertToLowerCase: true });
   const volunteerNameFilt = { lastName: filters.volunteerLastName, firstName: filters.volunteerFirstName };
-  queryBuilder = genSimpleWhereConditions(queryBuilder, 'volunteer', volunteerNameFilt, ['lastName', 'firstName'], { convertToLowerCase: true });
-  queryBuilder = genSimpleWhereConditions(queryBuilder, 'receiver', filters, ['autoReceiver']);
-  queryBuilder = _genOperationHoursCondition(queryBuilder, filters);
-  queryBuilder = _genDistanceCondition(queryBuilder, filters, myAccount);
-  queryBuilder = _genFullTextCondition(queryBuilder, filters);
+  queryBuilder = addWhere(queryBuilder, 'volunteer', volunteerNameFilt, ['lastName', 'firstName'], { convertToLowerCase: true });
+  queryBuilder = addWhere(queryBuilder, 'receiver', filters, ['autoReceiver']);
+  queryBuilder = _addOperationHoursCondition(queryBuilder, filters);
+  queryBuilder = _addDistanceCondition(queryBuilder, filters, myAccount);
+  queryBuilder = _addFullTextCondition(queryBuilder, filters);
   return queryBuilder;
 }
 
-function _genOperationHoursCondition(
+function _addOperationHoursCondition(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
   filters: AccountReadRequest,
 ): OrmSelectQueryBuilder<AccountEntity> {
@@ -135,7 +159,7 @@ function _genOperationHoursCondition(
   return queryBuilder;
 }
 
-function _genDistanceCondition(
+function _addDistanceCondition(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
   filters: AccountReadRequest,
   myAccount: Account
@@ -155,7 +179,7 @@ function _genDistanceCondition(
   return queryBuilder;
 }
 
-function _genFullTextCondition(
+function _addFullTextCondition(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
   filters: AccountReadRequest)
 : OrmSelectQueryBuilder<AccountEntity> {
@@ -166,7 +190,7 @@ function _genFullTextCondition(
   return queryBuilder;
 }
 
-function _genOrdering(
+function _addOrdering(
   queryBuilder: OrmSelectQueryBuilder<AccountEntity>,
   sortOpts: AccountReadRequest
 ): OrmSelectQueryBuilder<AccountEntity> {

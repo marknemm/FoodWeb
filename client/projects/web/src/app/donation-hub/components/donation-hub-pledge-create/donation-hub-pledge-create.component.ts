@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { DonationHubDonateForm } from '~web/donation-hub/forms/donation-hub-donate.form';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DonationHubPledge } from '~shared';
+import { DonationHubPledgeForm } from '~web/donation-hub/forms/donation-hub-pledge.form';
 import { DonationHubPledgeCreateService } from '~web/donation-hub/services/donation-hub-pledge-create/donation-hub-pledge-create.service';
 import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
 
 @Component({
-  selector: 'foodweb-donation-hub-donate',
-  templateUrl: './donation-hub-donate.component.html',
-  styleUrls: ['./donation-hub-donate.component.scss'],
-  providers: formProvider(DonationHubDonateComponent)
+  selector: 'foodweb-donation-hub-pledge-create',
+  templateUrl: './donation-hub-pledge-create.component.html',
+  styleUrls: ['./donation-hub-pledge-create.component.scss'],
+  providers: formProvider(DonationHubPledgeCreateComponent)
 })
-export class DonationHubDonateComponent extends FormBaseComponent<DonationHubDonateForm> implements OnInit {
+export class DonationHubPledgeCreateComponent extends FormBaseComponent<DonationHubPledgeForm> implements OnInit {
 
   readonly agreementChecklistMembers = [
     'I will follow all standard safety precautions when handling food, including washing my hands and/or wearing gloves, tying long hair back, and working in a clean and sanitized space away from any other food and beverage products.',
@@ -25,9 +26,10 @@ export class DonationHubDonateComponent extends FormBaseComponent<DonationHubDon
   constructor(
     formHelperService: FormHelperService,
     private _activatedRoute: ActivatedRoute,
-    private _pledgeCreateService: DonationHubPledgeCreateService
+    private _pledgeCreateService: DonationHubPledgeCreateService,
+    private _router: Router
   ) {
-    super(() => new DonationHubDonateForm(), formHelperService, true);
+    super(() => new DonationHubPledgeForm(), formHelperService, true);
   }
 
   ngOnInit() {}
@@ -35,7 +37,9 @@ export class DonationHubDonateComponent extends FormBaseComponent<DonationHubDon
   donate(): void {
     if (this.formGroup.checkValidity()) {
       const donationHubId: number = parseInt(this._activatedRoute.snapshot.paramMap.get('id'), 10);
-      this._pledgeCreateService.createDonationPledge(this.formGroup.value, donationHubId).subscribe(() => {});
+      this._pledgeCreateService.createDonationPledge(this.formGroup.value, donationHubId).subscribe((pledge: DonationHubPledge) =>
+        this._router.navigate(['/donation-hub', 'pledge', pledge.id])
+      );
     }
   }
 }

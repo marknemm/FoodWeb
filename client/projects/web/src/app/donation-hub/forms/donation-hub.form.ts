@@ -71,7 +71,7 @@ export class DonationHubForm extends TFormGroup<DonationHubFormT> {
 
   toDonationHub(): DonationHub {
     // Map over all properties that have a direct 1-1 mapping.
-    const donationHub: Partial<DonationHub> = this.mapProperties(this.value, {}, ['dropOffTimeRange']);;
+    const donationHub: Partial<DonationHub> = this.mapProperties(this.value, {}, ['dropOffTimeRange']);
     // Map over the 'dropOffTimeRange' FormGroup to the individual 'dropOffWindow*' properties in the DonationHub model.
     donationHub.dropOffWindowStart = this._dateTimeService.combineDateTime(this.value.dropOffDate, this.value.dropOffTimeRange.startTime);
     donationHub.dropOffWindowEnd = this._dateTimeService.combineDateTime(this.value.dropOffDate, this.value.dropOffTimeRange.endTime);
