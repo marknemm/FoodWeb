@@ -1,0 +1,13 @@
+<foodweb-table-container class="donation-hub-pledge-table-container">
+  <foodweb-progress-indicator [trigger]="loading" class="datatable-progress"></foodweb-progress-indicator>
+  <foodweb-table mat-table matSort [dataSource]="dataSource" (selectionChange)="onSelectionChange($event)">
+    <ng-container matColumnDef="donor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Donor</th>
+      <td mat-cell *matCellDef="let row">
+        <a [routerLink]="['/account', 'details', row.account.id]" (click)="$event.stopPropagation()">
+          {{ row.account | foodwebAccountName }}
+        </a>
+      </td>
+    </ng-container>
+  </foodweb-table>
+</foodweb-table-container>

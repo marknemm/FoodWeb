@@ -1,6 +1,6 @@
 <div class="donation-hub-details page">
   <div *ngIf="!donationHubNotFound; else notFoundTmpl" class="page-title block-label">
-    Donation Hub Details
+    Donation Hub
   </div>
   <ng-template #notFoundTmpl>
     <div class="page-title block-label">
@@ -23,6 +23,16 @@
         <foodweb-donation-hub-drop-off-info [donationHub]="donationHub"></foodweb-donation-hub-drop-off-info>
       </div>
     </div>
+
+    <mat-expansion-panel class="donation-pledges-expansion-panel" (opened)="onDonationPledgesOpened()">
+      <mat-expansion-panel-header>Donation Pledges</mat-expansion-panel-header>
+      <foodweb-donation-hub-pledge-table
+        [loading]="loadingPledges"
+        [pledges]="pledges"
+        selection="true"
+        (select)="onDonationHubPledgeSelect($event)"
+      ></foodweb-donation-hub-pledge-table>
+    </mat-expansion-panel>
 
   </ng-container>
 

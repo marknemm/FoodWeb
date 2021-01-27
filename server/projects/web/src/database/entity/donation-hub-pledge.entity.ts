@@ -16,10 +16,10 @@ export class DonationHubPledgeEntity implements DonationHubPledge {
   @Column()
   foodCount: number;
 
-  @ManyToOne((type) => AccountEntity)
+  @ManyToOne((type) => AccountEntity, { eager: true })
   account?: AccountEntity;
 
-  @ManyToOne((type) => DonationHubEntity, (donationHub) => donationHub.pledges, { onDelete: 'CASCADE' })
+  @ManyToOne((type) => DonationHubEntity, (donationHub) => donationHub.pledges, { eager: true, onDelete: 'CASCADE' })
   donationHub?: DonationHubEntity;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })

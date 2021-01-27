@@ -50,7 +50,7 @@ export class ValidationHelper {
   private _testRequiredValidation<T>(validationQuery: ValidationQuery<T>, value: any): string {
     // Fields are empty if they are null/undefined, an empty string, or a string with only whitespace.
     if (validationQuery.required && (value == null || (typeof value === 'string' && value.trim() === ''))) {
-      return (validationQuery.requiredErrMsg || validationQuery.errMsg || `Invlalid ${this._getErrPropName(validationQuery)}`);
+      return (validationQuery.requiredErrMsg || validationQuery.errMsg || `${this._getErrPropName(validationQuery)} field required`);
     }
   }
 

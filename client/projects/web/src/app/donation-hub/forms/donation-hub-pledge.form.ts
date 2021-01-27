@@ -2,9 +2,9 @@ import { Validators } from '@angular/forms';
 import { DonationHubPledge } from '~shared';
 import { TFormGroup } from '~web/forms';
 
-export class DonationHubDonateForm extends TFormGroup<DonationHubDonateFormT> {
+export class DonationHubPledgeForm extends TFormGroup<DonationHubPledgeFormT> {
 
-  constructor(value?: DonationHubDonateFormT) {
+  constructor(value?: DonationHubPledgeFormT) {
     super({
       agreementChecklist: [false, Validators.requiredTrue],
       foodType: ['', Validators.required],
@@ -16,6 +16,6 @@ export class DonationHubDonateForm extends TFormGroup<DonationHubDonateFormT> {
   }
 }
 
-export interface DonationHubDonateFormT extends DonationHubPledge {
+export interface DonationHubPledgeFormT extends DonationHubPledge {
   agreementChecklist: boolean;
 }

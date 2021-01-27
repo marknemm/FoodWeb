@@ -11,13 +11,13 @@
     Delete
   </button>
 
-  <a *ngIf="privileges.edit" [routerLink]="['/donation-hub', 'edit', donationHub.id]" [state]="{ donationHub: donationHub }">
+  <a *ngIf="privileges.edit" [routerLink]="['/donation-hub', donationHub.id, 'edit']" [state]="{ donationHub: donationHub }">
     <button mat-raised-button type="button" color="primary" class="edit-button">
       Edit
     </button>
   </a>
 
-  <a *ngIf="privileges.donate" [routerLink]="['/donation-hub', 'donate', donationHub.id]" [state]="{ donationHub: donationHub }">
+  <a *ngIf="privileges.donate" [routerLink]="['/donation-hub', donationHub.id, 'pledge', 'create']" [state]="{ donationHub: donationHub }">
     <button mat-raised-button type="button" color="primary" class="edit-button">
       Donate
     </button>

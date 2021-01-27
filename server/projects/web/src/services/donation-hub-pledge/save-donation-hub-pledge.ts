@@ -30,7 +30,7 @@ export async function createDonationHubPledge(
  * @param myAccount The account of the user who is updating the donation hub pledge.
  * @return A promise that resolves to the updated donation hub pledge.
  */
-export async function updateDonationHub(
+export async function updateDonationHubPledge(
   donationHubPledge: DonationHubPledge,
   donationHubId: number,
   myAccount: AccountEntity

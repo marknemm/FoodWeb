@@ -9,7 +9,7 @@ It is comprised of 3 core node projects:
 
 ## Setup Methods
 
-There are 3 possible setup methods. You can only work with 1. It is recommended that you proceed with the **Docker Setup** method.
+There are 2 possible setup methods. You can only work with 1. It is recommended that you proceed with the **Docker Setup** method.
 
 Concerning the generation of API keys, you may either ask the FoodWeb team for a private key, or you may generate your own. **Ensure that you do not disclose these API keys to the public!**
 
@@ -17,7 +17,7 @@ Concerning the generation of API keys, you may either ask the FoodWeb team for a
 
 ### Docker Setup
 
-This is the simplest setup. If using **Windows 10 Home Edition** Refer to the **Docker Toolbox Setup** section.
+This is the simplest setup. If using **Windows 10 Home Edition** make sure you follow any instructions pertaining to setting up WSL.
 
 #### Required Downloads:
 
@@ -33,30 +33,6 @@ This is the simplest setup. If using **Windows 10 Home Edition** Refer to the **
       - **DIRECTIONS_API_KEY**
       - **GEOCODER_API_KEY**
   4. Start developing!
-
-
-
-### Docker Toolbox Setup
-
-This is a legacy setup for **Windows 10 Home Edition** users. It is recommended that you either upgrade to Windows 10 Pro Edition or dual boot your machine with a Linux distribution to avoid performance and usage pitfalls of Docker Toolbox.
-
-#### Required Downloads:
-
-  - [Docker Toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/)
-  
-#### Directions:
-
-  1. After booting up Docker Toolbox, open up **Oracle Virtual Box**, find the running VM that is likely named *default*. Stop the VM, and open its settings.
-  2. Under System settings, increase the Base Memory to at least **4096 MB**, and preferrably to **8192 MB**.
-  3. Switch to the Processor tab, and maximize the number of processors to the highest 'green value'. Hit Ok to confirm the settings.
-  4. Restart Docker Toolbox, and show the terminal for rebooted VM.
-  5. Enter the following command to increase the number of code change watchers allowed: `echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p`.
-  6. Pull/Build all docker images and spin-up all containers via: `docker-compose up -d foodweb`.
-  7. Update the generated **/server/projects/web/.env** file by setting the following variables to valid API keys:
-      - **DISTANCE_TIME_API_KEY**
-      - **DIRECTIONS_API_KEY**
-      - **GEOCODER_API_KEY**
-  8. Start developing!
 
 
 ### Local Setup

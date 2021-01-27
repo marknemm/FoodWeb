@@ -8,12 +8,12 @@ import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
-  selector: 'foodweb-donation-hub-registration',
-  templateUrl: './donation-hub-registration.component.html',
-  styleUrls: ['./donation-hub-registration.component.scss'],
-  providers: formProvider(DonationHubRegistrationComponent)
+  selector: 'foodweb-donation-hub-create',
+  templateUrl: './donation-hub-create.component.html',
+  styleUrls: ['./donation-hub-create.component.scss'],
+  providers: formProvider(DonationHubCreateComponent)
 })
-export class DonationHubRegistrationComponent extends FormBaseComponent<DonationHubForm> implements OnInit {
+export class DonationHubCreateComponent extends FormBaseComponent<DonationHubForm> implements OnInit {
 
   readonly minRegisterDate = new Date();
 
@@ -48,12 +48,12 @@ export class DonationHubRegistrationComponent extends FormBaseComponent<Donation
   register(): void {
     if (this.formGroup.checkValidity()) {
       this._donationHubCreateService.createDonationHub(this.formGroup.toDonationHub()).subscribe((donationHub: DonationHub) =>
-        this._router.navigate(['/donation-hub', 'details', donationHub.id])
+        this._router.navigate(['/donation-hub', donationHub.id])
       );
     }
   }
 
   filterDateSaturday(date: Date): boolean {
-    return (date.getDay() === 6);
+    return (date && date.getDay() === 6);
   }
 }

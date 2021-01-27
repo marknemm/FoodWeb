@@ -8,11 +8,11 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
  * A list of donation hub drop-off point teasers.
  */
 @Component({
-  selector: 'foodweb-donation-hubs',
-  templateUrl: './donation-hubs.component.html',
-  styleUrls: ['./donation-hubs.component.scss']
+  selector: 'foodweb-donation-hub-list',
+  templateUrl: './donation-hub-list.component.html',
+  styleUrls: ['./donation-hub-list.component.scss']
 })
-export class DonationHubsComponent implements OnInit {
+export class DonationHubListComponent implements OnInit {
 
   private _activeFilters: DonationHubReadRequest = {};
   private _donationHubs: DonationHub[] = [];

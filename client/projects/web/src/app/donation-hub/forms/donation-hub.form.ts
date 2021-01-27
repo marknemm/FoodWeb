@@ -50,29 +50,32 @@ export class DonationHubForm extends TFormGroup<DonationHubFormT> {
     super.setValue(this._fromDonationHub(value), options);
   }
 
-  private _fromDonationHub(donationHub: Partial<DonationHubFormT> | Partial<DonationHub>): DonationHubFormT {
-    return ((<DonationHub>donationHub).dropOffWindowStart)
-      ? {
-        agreementChecklist: this.value.agreementChecklist,
-        contactOverride: donationHub.contactOverride,
-        dropOffDate: (<DonationHub>donationHub).dropOffWindowStart,
-        dropOffInstructions: donationHub.dropOffInstructions,
-        dropOffTimeRange: {
-          startTime: this._dateTimeService.toTimeStr((<DonationHub>donationHub).dropOffWindowStart),
-          endTime: this._dateTimeService.toTimeStr((<DonationHub>donationHub).dropOffWindowEnd)
-        },
-        readyChecklist: this.value.readyChecklist
-      }
-      : <DonationHubFormT>donationHub;
+  private _fromDonationHub(donationHub: Partial<DonationHubFormT> | Partial<DonationHub>): Partial<DonationHubFormT> {
+    if (!(<DonationHub>donationHub).dropOffWindowStart) {
+      return <DonationHubFormT>donationHub;
+    }
+
+    // Map over all direct 1-1 properties from the given donation hub to the raw form value.
+    const donationHubFormVal: Partial<DonationHubFormT> = this.mapProperties(
+      <DonationHub>donationHub, this.getRawValue(), ['dropOffWindowStart', 'dropOffWindowEnd']
+    );
+    // Map over the individual 'dropOffWindow*' proerties in the DonationHub model to the single 'dropOffTimeRange' value in the form.
+    donationHubFormVal.dropOffDate = (<DonationHub>donationHub).dropOffWindowStart;
+    donationHubFormVal.dropOffTimeRange = {
+      startTime: this._dateTimeService.toTimeStr((<DonationHub>donationHub).dropOffWindowStart),
+      endTime: this._dateTimeService.toTimeStr((<DonationHub>donationHub).dropOffWindowEnd)
+    };
+
+    return donationHubFormVal;
   }
 
   toDonationHub(): DonationHub {
-    return {
-      contactOverride: this.value.contactOverride,
-      dropOffWindowStart: this._dateTimeService.combineDateTime(this.value.dropOffDate, this.value.dropOffTimeRange.startTime),
-      dropOffWindowEnd: this._dateTimeService.combineDateTime(this.value.dropOffDate, this.value.dropOffTimeRange.endTime),
-      dropOffInstructions: this.value.dropOffInstructions
-    };
+    // Map over all properties that have a direct 1-1 mapping.
+    const donationHub: Partial<DonationHub> = this.mapProperties(this.value, {}, ['dropOffTimeRange']);
+    // Map over the 'dropOffTimeRange' FormGroup to the individual 'dropOffWindow*' properties in the DonationHub model.
+    donationHub.dropOffWindowStart = this._dateTimeService.combineDateTime(this.value.dropOffDate, this.value.dropOffTimeRange.startTime);
+    donationHub.dropOffWindowEnd = this._dateTimeService.combineDateTime(this.value.dropOffDate, this.value.dropOffTimeRange.endTime);
+    return <DonationHub>donationHub;
   }
 }
 
