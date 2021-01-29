@@ -8,7 +8,7 @@ import { genErrorResponse } from '~web/middlewares/response-error.middleware';
 import { ensureSessionActive } from '~web/middlewares/session.middleware';
 import { deleteDonationHubPledge } from '~web/services/donation-hub-pledge/delete-donation-hub-pledge';
 import { readDonationHubPledge, readDonationHubPledges, readPledgesUnderDonationHub } from '~web/services/donation-hub-pledge/read-donation-hub-pledges';
-import { createDonationHubPledge } from '~web/services/donation-hub-pledge/save-donation-hub-pledge';
+import { createDonationHubPledge, updateDonationHubPledge } from '~web/services/donation-hub-pledge/save-donation-hub-pledge';
 import { deleteDonationHub } from '~web/services/donation-hub/delete-donation-hub';
 import { readDonationHub, readDonationHubs } from '~web/services/donation-hub/read-donation-hubs';
 import { createDonationHub, updateDonationHub } from '~web/services/donation-hub/save-donation-hub';
@@ -70,8 +70,17 @@ export function handlePostDonationHubPledge(req: Request, res: Response) {
   const donationHubId: number = parseInt(req.params.id, 10);
   const donationHubPledge: DonationHubPledge = req.body;
   const account: AccountEntity = req.session.account;
-  createDonationHubPledge(donationHubPledge, donationHubId, account)
+  createDonationHubPledge(donationHubPledge, account, donationHubId)
     .then((savedDonationHubPledge: DonationHubPledge) => res.send(savedDonationHubPledge))
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.put('/pledge/:id', ensureSessionActive, handlePutDonationHubPledge);
+export function handlePutDonationHubPledge(req: Request, res: Response) {
+  const pledge: DonationHubPledge = req.body;
+  const account: AccountEntity = req.session.account;
+  updateDonationHubPledge(pledge, account)
+    .then((savedPledge: DonationHubPledgeEntity) => res.send(savedPledge))
     .catch(genErrorResponse.bind(this, res));
 }
 

@@ -1,6 +1,6 @@
 <div *ngIf="donationHub" class="action-footer align-right">
   <button mat-raised-button
-    *ngIf="privileges.delete"
+    *ngIf="canModify"
     type="button"
     color="warn"
     class="delete-button"
@@ -11,13 +11,13 @@
     Delete
   </button>
 
-  <a *ngIf="privileges.edit" [routerLink]="['/donation-hub', donationHub.id, 'edit']" [state]="{ donationHub: donationHub }">
+  <a *ngIf="canModify" [routerLink]="['/donation-hub', donationHub.id, 'edit']" [state]="{ donationHub: donationHub }">
     <button mat-raised-button type="button" color="primary" class="edit-button">
       Edit
     </button>
   </a>
 
-  <a *ngIf="privileges.donate" [routerLink]="['/donation-hub', donationHub.id, 'pledge', 'create']" [state]="{ donationHub: donationHub }">
+  <a *ngIf="canDonate" [routerLink]="['/donation-hub', donationHub.id, 'pledge', 'create']" [state]="{ donationHub: donationHub }">
     <button mat-raised-button type="button" color="primary" class="edit-button">
       Donate
     </button>

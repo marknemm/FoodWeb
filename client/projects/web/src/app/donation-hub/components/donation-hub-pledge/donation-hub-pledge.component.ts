@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { DonationHubPledge } from '~shared';
+import { DonationHubPledgeDeleteService } from '~web/donation-hub/services/donation-hub-pledge-delete/donation-hub-pledge-delete.service';
 import { DonationHubPledgeReadService } from '~web/donation-hub/services/donation-hub-pledge-read/donation-hub-pledge-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
@@ -20,11 +21,16 @@ export class DonationHubPledgeComponent implements OnInit, OnDestroy {
 
   constructor(
     private _activatedRoute: ActivatedRoute,
+    private _donationHubPledgeDeleteService: DonationHubPledgeDeleteService,
     private _donationHubPledgeReadService: DonationHubPledgeReadService,
     private _router: Router,
     private _sessionService: SessionService,
     private _urlQueryService: UrlQueryService
   ) {}
+
+  get canModify(): boolean {
+    return (this.donationHubPledge?.account?.id === this._sessionService.account?.id);
+  }
 
   get donationHubPledge(): DonationHubPledge {
     return this._donationHubPledge;
@@ -34,19 +40,8 @@ export class DonationHubPledgeComponent implements OnInit, OnDestroy {
     return this._donationHubPledgeNotFound;
   }
 
-  // get privileges(): DonationHubPrivileges {
-  //   return this._privileges;
-  // }
-
   ngOnInit() {
-    this._listenAccountChange();
     this._listenDonationHubPledgeChange();
-  }
-
-  private _listenAccountChange(): void {
-    // this._sessionService.onAccountSave(this._destroy$).subscribe(() =>
-    //   this._privileges = this._donationHubPrivilegesService.determinePrivileges(this.donationHub)
-    // );
   }
 
   private _listenDonationHubPledgeChange(): void {
@@ -55,16 +50,15 @@ export class DonationHubPledgeComponent implements OnInit, OnDestroy {
     ).subscribe((donationHubPledge: DonationHubPledge) => {
       this._donationHubPledgeNotFound = !donationHubPledge;
       this._donationHubPledge = donationHubPledge;
-      // this._privileges = this._donationHubPledgePrivilegesService.determinePrivileges(donationHubPledge);
     });
   }
 
   deleteDonationHubPledge(): void {
-    // if (this.privileges.delete) {
-    //   this.donationHubPledgeDeleteService.deleteDonationHubPledge(this.donationHubPledge).subscribe(() =>
-    //     this._router.navigate(['/home'])
-    //   );
-    // }
+    if (this.canModify) {
+      this._donationHubPledgeDeleteService.deleteDonationPledge(this.donationHubPledge).subscribe(() =>
+        this._router.navigate(['/donation-hub', this.donationHubPledge.donationHub.id])
+      );
+    }
   }
 
   ngOnDestroy() {

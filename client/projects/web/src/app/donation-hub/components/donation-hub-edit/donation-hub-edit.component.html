@@ -6,7 +6,7 @@
 
   <ng-template #notFoundTmpl>
     <div class="page-title block-label">
-      <strong>Donation not found</strong>
+      <strong>Donation Hub not found</strong>
     </div>
   </ng-template>
 
@@ -58,7 +58,7 @@
     </mat-card>
 
     <div class="action-footer align-right">
-      <a [routerLink]="['/donation-hub', 'details', originalDonationHub.id]">
+      <a [routerLink]="['/donation-hub', originalDonationHub.id]">
         <button mat-button type="button" color="warn">Cancel</button>
       </a>
       <button mat-raised-button type="submit" color="primary">Save</button>

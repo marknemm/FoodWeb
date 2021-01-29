@@ -33,6 +33,7 @@ export class DonationHubPledgeReadService {
    * @return An observable that emits the retrieved donation hub pledge.
    */
   getDonationHubPledge(id: number): Observable<DonationHubPledge> {
+    console.log(id);
     const readUrl = `${this.url}/${id}`;
     return this._httpClient.get<DonationHubPledge>(readUrl, { withCredentials: true }).pipe(
       this._httpResponseService.handleHttpResponse()

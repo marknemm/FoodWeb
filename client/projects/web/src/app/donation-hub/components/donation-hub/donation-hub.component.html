@@ -37,8 +37,9 @@
   </ng-container>
 
   <foodweb-donation-hub-actions
+    [canDonate]="canDonate"
+    [canModify]="canModify"
     [donationHub]="donationHub"
-    [privileges]="privileges"
     (delete)="deleteDonationHub()"
   ></foodweb-donation-hub-actions>
 </div>
