@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
 import { Convert } from '~web/component-decorators';
 
@@ -23,6 +23,8 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges {
   @Input() trigger: boolean = false;
   @Convert()
   @Input() value: number;
+
+  @HostBinding() readonly class = 'progress-indicator';
 
   private _progressBarMode: ProgressBarMode = 'indeterminate';
 

@@ -34,12 +34,15 @@
       ></foodweb-donation-hub-pledge-table>
     </mat-expansion-panel>
 
-  </ng-container>
+    <foodweb-donation-hub-actions
+      [canDonate]="canDonate"
+      [canModify]="canModify"
+      [canViewDonation]="canViewPledge"
+      [donationHub]="donationHub"
+      [loading]="loadingActions"
+      [myPledge]="myPledge"
+      (delete)="deleteDonationHub()"
+    ></foodweb-donation-hub-actions>
 
-  <foodweb-donation-hub-actions
-    [canDonate]="canDonate"
-    [canModify]="canModify"
-    [donationHub]="donationHub"
-    (delete)="deleteDonationHub()"
-  ></foodweb-donation-hub-actions>
+  </ng-container>
 </div>

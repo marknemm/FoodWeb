@@ -7,7 +7,7 @@ import { DonationHubEntity } from '~web/database/entity/donation-hub.entity';
 import { genErrorResponse } from '~web/middlewares/response-error.middleware';
 import { ensureSessionActive } from '~web/middlewares/session.middleware';
 import { deleteDonationHubPledge } from '~web/services/donation-hub-pledge/delete-donation-hub-pledge';
-import { readDonationHubPledge, readDonationHubPledges, readPledgesUnderDonationHub } from '~web/services/donation-hub-pledge/read-donation-hub-pledges';
+import { readDonationHubPledge, readDonationHubPledges, readMyPledgeUnderDonationHub, readPledgesUnderDonationHub } from '~web/services/donation-hub-pledge/read-donation-hub-pledges';
 import { createDonationHubPledge, updateDonationHubPledge } from '~web/services/donation-hub-pledge/save-donation-hub-pledge';
 import { deleteDonationHub } from '~web/services/donation-hub/delete-donation-hub';
 import { readDonationHub, readDonationHubs } from '~web/services/donation-hub/read-donation-hubs';
@@ -50,9 +50,18 @@ export function handleGetDonationHub(req: Request, res: Response) {
 router.get('/:id/pledge', handleGetPledgesUnderDonationHub);
 export function handleGetPledgesUnderDonationHub(req: Request, res: Response) {
   const donationHubPledgeReq: DonationHubPledgeReadRequest = req.body;
-  const id: number = parseInt(req.params.id, 10);
-  readPledgesUnderDonationHub(id, donationHubPledgeReq)
+  const donationHubId: number = parseInt(req.params.id, 10);
+  readPledgesUnderDonationHub(donationHubId, donationHubPledgeReq)
     .then((listRes: ListResponse<DonationHubPledgeEntity>) => res.send(listRes))
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.get('/:id/pledge/my', ensureSessionActive, handleGetMyPledgeUnderDonationHub);
+export function handleGetMyPledgeUnderDonationHub(req: Request, res: Response) {
+  const donationHubId: number = parseInt(req.params.id, 10);
+  const account: AccountEntity = req.session.account;
+  readMyPledgeUnderDonationHub(donationHubId, account)
+    .then((donationHubPledge: DonationHubPledgeEntity) => res.send(donationHubPledge))
     .catch(genErrorResponse.bind(this, res));
 }
 

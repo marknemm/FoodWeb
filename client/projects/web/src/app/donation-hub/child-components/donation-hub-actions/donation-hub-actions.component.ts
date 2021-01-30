@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DonationHub } from '~shared';
+import { DonationHub, DonationHubPledge } from '~shared';
 import { Convert } from '~web/component-decorators';
 
 @Component({
@@ -13,7 +13,12 @@ export class DonationHubActionsComponent implements OnInit {
   @Input() canDonate: boolean = false;
   @Convert()
   @Input() canModify: boolean = false;
+  @Convert()
+  @Input() canViewDonation: boolean = false;
   @Input() donationHub: DonationHub;
+  @Convert()
+  @Input() loading: boolean = false;
+  @Input() myPledge: DonationHubPledge;
 
   @Output() delete = new EventEmitter<void>();
 

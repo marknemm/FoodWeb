@@ -1,6 +1,7 @@
 import { getRepository, Repository, SelectQueryBuilder } from 'typeorm';
+import { AccountEntity } from '~entity';
 import { addPagination, addWhere } from '~orm';
-import { DonationHubPledgeReadRequest, ListResponse } from '~shared';
+import { DonationHubPledge, DonationHubPledgeReadRequest, ListResponse } from '~shared';
 import { DonationHubPledgeEntity } from '~web/database/entity/donation-hub-pledge.entity';
 import { addOrder } from '~web/database/orm/query-builder/query-order';
 import { genListResponse, ListResponsePromise } from '~web/helpers/response/list-response';
@@ -12,7 +13,13 @@ import { addDefaultAccountAssociations } from '../account/read-accounts';
  * @return A promise that resolves to the retrieved donation hub pledge.
  */
 export async function readDonationHubPledge(id: number): Promise<DonationHubPledgeEntity> {
-  const readRequest: DonationHubPledgeReadRequest = { id, page: 1, limit: 1, loadDonationHub: true };
+  const readRequest: DonationHubPledgeReadRequest = { id, loadDonationHub: true, page: 1, limit: 1 };
+  const listRes: ListResponse<DonationHubPledgeEntity> = await readDonationHubPledges(readRequest);
+  return listRes.list[0];
+}
+
+export async function readMyPledgeUnderDonationHub(donationHubId: number, myAccount: AccountEntity): Promise<DonationHubPledge> {
+  const readRequest: DonationHubPledgeReadRequest = { donationHubId, accountId: myAccount.id, loadDonationHub: true, page: 1, limit: 1 };
   const listRes: ListResponse<DonationHubPledgeEntity> = await readDonationHubPledges(readRequest);
   return listRes.list[0];
 }
@@ -70,8 +77,12 @@ function _addFilters(
 ): SelectQueryBuilder<DonationHubPledgeEntity> {
   queryBuilder = addWhere(queryBuilder, 'donationHubPledge', request, ['id']);
 
+  if (request.accountId) {
+    queryBuilder.andWhere('pledgeAccount.id = :pledgeAccountId', { pledgeAccountId: request.accountId });
+  }
+
   if (request.donationHubId) {
-    queryBuilder.andWhere('donationHub.id = :id', { id: request.donationHubId });
+    queryBuilder.andWhere('donationHub.id = :donationHubId', { donationHubId: request.donationHubId });
   }
 
   return queryBuilder;

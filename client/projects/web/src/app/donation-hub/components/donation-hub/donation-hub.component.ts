@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Account, AccountType, DonationHub, DonationHubPledge, ListResponse } from '~shared';
 import { DonationHubDeleteService } from '~web/donation-hub/services/donation-hub-delete/donation-hub-delete.service';
@@ -20,6 +20,7 @@ export class DonationHubComponent implements OnInit, OnDestroy {
   private _donationHub: DonationHub;
   private _donationHubNotFound = false;
   private _pledges: DonationHubPledge[] = [];
+  private _myPledge: DonationHubPledge;
 
   constructor(
     public donationHubDeleteService: DonationHubDeleteService,
@@ -36,7 +37,11 @@ export class DonationHubComponent implements OnInit, OnDestroy {
   }
 
   get canDonate(): boolean {
-    return (!this.canModify && this._sessionService.account?.accountType !== AccountType.Receiver);
+    return (!this.canModify && !this.canViewPledge && this._sessionService.account?.accountType !== AccountType.Receiver);
+  }
+
+  get canViewPledge(): boolean {
+    return !!this.myPledge;
   }
 
   get donationHub(): DonationHub {
@@ -47,12 +52,20 @@ export class DonationHubComponent implements OnInit, OnDestroy {
     return this._donationHubNotFound;
   }
 
+  get loadingActions(): boolean {
+    return this._donationHubPledgeReadService.isLoading(this._donationHubPledgeReadService.getMyPledgeUnderDonationHub);
+  }
+
   get loadingPledges(): boolean {
-    return this._donationHubPledgeReadService.loading;
+    return this._donationHubPledgeReadService.isLoading(this._donationHubPledgeReadService.getPledgesUnderDonationHub);
   }
 
   get myAccount(): Account {
     return this._sessionService.account;
+  }
+
+  get myPledge(): DonationHubPledge {
+    return this._myPledge;
   }
 
   get pledges(): DonationHubPledge[] {
@@ -65,11 +78,17 @@ export class DonationHubComponent implements OnInit, OnDestroy {
 
   private _listenDonationHubChange(): void {
     this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
-      switchMap((id: number) => this._donationHubReadService.getDonationHub(id))
-    ).subscribe((donationHub: DonationHub) => {
-      this._donationHubNotFound = !donationHub;
-      this._donationHub = donationHub;
-    });
+      switchMap((id: number) => this._donationHubReadService.getDonationHub(id)),
+      switchMap((donationHub: DonationHub) => {
+        this._donationHubNotFound = !donationHub;
+        this._donationHub = donationHub;
+        return this._sessionService.loggedIn
+          ? this._donationHubPledgeReadService.getMyPledgeUnderDonationHub(donationHub.id, { showPageProgressOnLoad: false })
+          : of(undefined);
+      })
+    ).subscribe((myPledge: DonationHubPledge) =>
+      this._myPledge = myPledge
+    );
   }
 
   deleteDonationHub(): void {
