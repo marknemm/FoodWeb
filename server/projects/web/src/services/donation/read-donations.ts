@@ -254,7 +254,7 @@ function _addFullTextCondition(
 : OrmSelectQueryBuilder<DonationEntity> {
   if (filters.fullTextQuery?.trim()) {
     const fullTextQuery: string = preprocessFullTextQuery(filters.fullTextQuery);
-    // NOTE: This portion of filter clause may prove to be very inefficienc. Must keep an eye on this...
+    // NOTE: This portion of filter clause may prove to be very inefficient. Must keep an eye on this...
     queryBuilder = queryBuilder.andWhere(`(
       TO_TSQUERY(:fullTextQuery) @@ donationFullTextSearch.fullText
       OR TO_TSQUERY(:fullTextQuery) @@ donorFullTextSearch.fullText

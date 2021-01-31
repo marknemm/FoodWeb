@@ -1,0 +1,18 @@
+<div *ngIf="donationHubPledge && canModify" class="action-footer align-right">
+  <button mat-raised-button
+    type="button"
+    color="warn"
+    class="delete-button"
+    (clickConfirm)="delete.emit()"
+    foodwebConfirmButton
+    confirmTitle="Confirm Delete"
+    confirmMessage="Are you sure you want to permanently delete your donation?">
+    Delete
+  </button>
+
+  <a [routerLink]="['/donation-hub', 'pledge', donationHubPledge.id, 'edit']" [state]="{ donationHubPledge: donationHubPledge }">
+    <button mat-raised-button type="button" color="primary" class="edit-button">
+      Edit
+    </button>
+  </a>
+</div>

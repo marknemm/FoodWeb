@@ -8,6 +8,9 @@
   <a mat-list-item *ngIf="sessionService.isDonor || sessionService.isReceiver" [routerLink]="['/donation/list/my']" (click)="_onNavigate()">
     <span><fa-icon [icon]="faGifts"></fa-icon> <span>My Donations</span></span>
   </a>
+  <a mat-list-item *ngIf="sessionService.isDonor || sessionService.isVolunteer" [routerLink]="['/donation-hub/list/my']" (click)="_onNavigate()">
+    <span><mat-icon>device_hub</mat-icon> <span>My Donation Hubs</span></span>
+  </a>
   <a mat-list-item *ngIf="sessionService.isVolunteer" [routerLink]="['/delivery/list/my']" (click)="_onNavigate()">
     <span><mat-icon>place</mat-icon> <span>My Deliveries</span></span>
   </a>

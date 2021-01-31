@@ -1,25 +1,37 @@
 <div *ngIf="donationHub" class="action-footer align-right">
-  <button mat-raised-button
-    *ngIf="privileges.delete"
-    type="button"
-    color="warn"
-    class="delete-button"
-    (clickConfirm)="delete.emit()"
-    foodwebConfirmButton
-    confirmTitle="Confirm Delete"
-    confirmMessage="Are you sure you want to permanently delete your donation hub?">
-    Delete
-  </button>
-
-  <a *ngIf="privileges.edit" [routerLink]="['/donation-hub', donationHub.id, 'edit']" [state]="{ donationHub: donationHub }">
-    <button mat-raised-button type="button" color="primary" class="edit-button">
-      Edit
+  <ng-container *ngIf="!loading; else loadingTmpl">
+    <button mat-raised-button
+      *ngIf="canModify"
+      type="button"
+      color="warn"
+      class="delete-button"
+      (clickConfirm)="delete.emit()"
+      foodwebConfirmButton
+      confirmTitle="Confirm Delete"
+      confirmMessage="Are you sure you want to permanently delete your donation hub?">
+      Delete
     </button>
-  </a>
 
-  <a *ngIf="privileges.donate" [routerLink]="['/donation-hub', donationHub.id, 'pledge', 'create']" [state]="{ donationHub: donationHub }">
-    <button mat-raised-button type="button" color="primary" class="edit-button">
-      Donate
-    </button>
-  </a>
+    <a *ngIf="canModify" [routerLink]="['/donation-hub', donationHub.id, 'edit']" [state]="{ donationHub: donationHub }">
+      <button mat-raised-button type="button" color="primary" class="edit-button">
+        Edit
+      </button>
+    </a>
+
+    <a *ngIf="canDonate" [routerLink]="['/donation-hub', donationHub.id, 'pledge', 'create']" [state]="{ donationHub: donationHub }">
+      <button mat-raised-button type="button" color="primary" class="donate-button">
+        Donate
+      </button>
+    </a>
+
+    <a *ngIf="canViewDonation && myPledge" [routerLink]="['/donation-hub', 'pledge', myPledge.id]" [state]="{ donationHubPledge: myPledge }">
+      <button mat-raised-button type="button" color="primary" class="view-donation-button">
+        View My Donation
+      </button>
+    </a>
+  </ng-container>
+
+  <ng-template #loadingTmpl>
+    <foodweb-progress-indicator *ngIf="loading" blocking="true" diameter="30" trigger="true"></foodweb-progress-indicator>
+  </ng-template>
 </div>

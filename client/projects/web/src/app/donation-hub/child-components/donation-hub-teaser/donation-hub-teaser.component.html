@@ -1,8 +1,8 @@
 <mat-card id="donation-hub-{{ donationHub.id }}" class="teaser donation-hub-teaser">
   <mat-card-header>
-    <foodweb-profile-img mat-card-avatar [value]="donationHub.volunteerAccount.profileImg"></foodweb-profile-img>
-    <mat-card-title>{{ donationHub.volunteerAccount | foodwebAccountName }}</mat-card-title>
-    <mat-card-subtitle>{{ donationHub.volunteerAccount.contactInfo.email }}</mat-card-subtitle>
+    <foodweb-profile-img mat-card-avatar [value]="hubAccount.profileImg"></foodweb-profile-img>
+    <mat-card-title>{{ hubAccount | foodwebAccountName }}</mat-card-title>
+    <mat-card-subtitle>{{ hubAccount.contactInfo.email }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <div class="donation-hub-display row">

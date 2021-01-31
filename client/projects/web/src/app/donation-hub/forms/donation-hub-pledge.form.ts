@@ -4,16 +4,22 @@ import { TFormGroup } from '~web/forms';
 
 export class DonationHubPledgeForm extends TFormGroup<DonationHubPledgeFormT> {
 
-  constructor(value?: DonationHubPledgeFormT) {
+  constructor(config: DonationHubPledgeFormConfig = {}) {
     super({
-      agreementChecklist: [false, Validators.requiredTrue],
+      id: undefined,
+      agreementChecklist: [false, (config.omitChecklist ? [] : [Validators.requiredTrue])],
       foodType: ['', Validators.required],
       foodCount: [null, [Validators.required, Validators.min(1)]]
     });
-    if (value) {
-      this.patchValue(value);
+    if (config.value) {
+      this.patchValue(config.value);
     }
   }
+}
+
+export interface DonationHubPledgeFormConfig {
+  omitChecklist?: boolean;
+  value?: DonationHubPledge | DonationHubPledgeFormT;
 }
 
 export interface DonationHubPledgeFormT extends DonationHubPledge {

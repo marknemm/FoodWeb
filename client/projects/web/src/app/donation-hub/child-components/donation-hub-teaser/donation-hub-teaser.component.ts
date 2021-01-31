@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DonationHub } from '~shared';
+import { Account, DonationHub } from '~shared';
 
 /**
  * A teaser for a donation hub.
@@ -14,6 +14,10 @@ export class DonationHubTeaserComponent implements OnInit {
   @Input() donationHub: DonationHub;
 
   constructor() {}
+
+  get hubAccount(): Account {
+    return this.donationHub?.volunteerAccount;
+  }
 
   ngOnInit() {}
 }

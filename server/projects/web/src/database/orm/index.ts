@@ -7,6 +7,7 @@ export * from './orm-repository';
 export * from './query-builder/orm-select-query-builder';
 export * from './query-builder/query-full-text';
 export * from './query-builder/query-mod';
+export * from './query-builder/query-order';
 export * from './query-builder/query-pagination';
 export * from './query-builder/query-where';
 export * from './save/orm-save-options';

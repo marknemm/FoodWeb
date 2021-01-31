@@ -1,0 +1,31 @@
+<mat-card id="donation-hub-pledge-{{ pledge.id }}" class="teaser donation-hub-pledge-teaser">
+  <mat-card-header>
+    <foodweb-profile-img mat-card-avatar [value]="featuredAccount.profileImg"></foodweb-profile-img>
+    <mat-card-title>{{ featuredAccount | foodwebAccountName }}</mat-card-title>
+    <mat-card-subtitle>{{ featuredAccount.contactInfo.email }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="donation-hub-pledge-display row">
+      <div class="col-md-6">
+        <div class="inline-label">Sandwich Type:</div>
+        <span>{{ pledge.foodType }}</span>
+      </div>
+      <div class="col-md-6">
+        <div class="inline-label">Sandwich Count:</div>
+        <span>{{ pledge.foodCount }}</span>
+      </div>
+      <div class="col-md-6">
+        <foodweb-contact-info [value]="donationHub.contactOverride" hideEmail="true" hidePhone="true"></foodweb-contact-info>
+      </div>
+      <div class="col-md-6">
+        <div class="inline-label">Drop-Off Window:</div>
+        <div><foodweb-date-time-range boldTime="true" [startDateTime]="donationHub.dropOffWindowStart" [endDateTime]="donationHub.dropOffWindowEnd"></foodweb-date-time-range></div>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <a [routerLink]="['/donation-hub', donationHub.id]" class="no-hover">
+      <button mat-raised-button type="button" class="compact" color="primary">View Donation Pledge</button>
+    </a>
+  </mat-card-actions>
+</mat-card>

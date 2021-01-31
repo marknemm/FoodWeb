@@ -12,6 +12,19 @@
 
     <div class="row">
       <div class="donation-hub col-md-6">
+        <mat-card>
+          <mat-card-title>Donation Info</mat-card-title>
+          <mat-card-content>
+            <div>
+              <div class="inline-label">Sandwich Type:</div>
+              <span>{{ donationHubPledge.foodType }}</span>
+            </div>
+            <div>
+              <div class="inline-label">Sandwich Count:</div>
+              <span>{{ donationHubPledge.foodCount }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
         <foodweb-donation-hub-teaser [donationHub]="donationHubPledge.donationHub"></foodweb-donation-hub-teaser>
       </div>
 
@@ -22,9 +35,9 @@
 
   </ng-container>
 
-  <!-- <foodweb-donation-hub-actions
-    [donatoinHubPledge]="donatoinHubPledge"
-    [privileges]="privileges"
-    (delete)="deleteDonatoinHubPledge()"
-  ></foodweb-donation-hub-actions> -->
+  <foodweb-donation-hub-pledge-actions
+    [donationHubPledge]="donationHubPledge"
+    [canModify]="canModify"
+    (delete)="deleteDonationHubPledge()"
+  ></foodweb-donation-hub-pledge-actions>
 </div>

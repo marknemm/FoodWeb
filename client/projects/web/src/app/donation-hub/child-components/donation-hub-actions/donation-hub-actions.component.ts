@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DonationHub } from '~shared';
-import { DonationHubPrivileges } from '~web/donation-hub/interfaces/donation-hub-privileges';
+import { DonationHub, DonationHubPledge } from '~shared';
+import { Convert } from '~web/component-decorators';
 
 @Component({
   selector: 'foodweb-donation-hub-actions',
@@ -9,8 +9,16 @@ import { DonationHubPrivileges } from '~web/donation-hub/interfaces/donation-hub
 })
 export class DonationHubActionsComponent implements OnInit {
 
+  @Convert()
+  @Input() canDonate: boolean = false;
+  @Convert()
+  @Input() canModify: boolean = false;
+  @Convert()
+  @Input() canViewDonation: boolean = false;
   @Input() donationHub: DonationHub;
-  @Input() privileges: DonationHubPrivileges = {};
+  @Convert()
+  @Input() loading: boolean = false;
+  @Input() myPledge: DonationHubPledge;
 
   @Output() delete = new EventEmitter<void>();
 

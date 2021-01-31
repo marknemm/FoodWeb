@@ -167,8 +167,8 @@ export class AppTextFieldComponent extends FormBaseComponent<string> implements 
    */
   get rowsSchema(): string {
     return (this.orientationHorizontal || !this.label)
-      ? '*'
-      : '*,*';
+      ? 'auto'
+      : 'auto,auto';
   }
 
   /**

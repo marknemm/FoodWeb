@@ -7,10 +7,10 @@ import { DonationHubEntity } from '~web/database/entity/donation-hub.entity';
 import { genErrorResponse } from '~web/middlewares/response-error.middleware';
 import { ensureSessionActive } from '~web/middlewares/session.middleware';
 import { deleteDonationHubPledge } from '~web/services/donation-hub-pledge/delete-donation-hub-pledge';
-import { readDonationHubPledge, readDonationHubPledges, readPledgesUnderDonationHub } from '~web/services/donation-hub-pledge/read-donation-hub-pledges';
-import { createDonationHubPledge } from '~web/services/donation-hub-pledge/save-donation-hub-pledge';
+import { readDonationHubPledge, readDonationHubPledges, readMyDonationHubPledges, readMyPledgeUnderDonationHub, readPledgesUnderDonationHub } from '~web/services/donation-hub-pledge/read-donation-hub-pledges';
+import { createDonationHubPledge, updateDonationHubPledge } from '~web/services/donation-hub-pledge/save-donation-hub-pledge';
 import { deleteDonationHub } from '~web/services/donation-hub/delete-donation-hub';
-import { readDonationHub, readDonationHubs } from '~web/services/donation-hub/read-donation-hubs';
+import { readDonationHub, readDonationHubs, readMyDonationHubs } from '~web/services/donation-hub/read-donation-hubs';
 import { createDonationHub, updateDonationHub } from '~web/services/donation-hub/save-donation-hub';
 
 export const router = express.Router();
@@ -23,10 +23,28 @@ export function handleGetDonationHubs(req: Request, res: Response) {
     .catch(genErrorResponse.bind(this, res));
 }
 
+router.get('/my', ensureSessionActive, handleGetMyDonationHubs);
+export function handleGetMyDonationHubs(req: Request, res: Response) {
+  const donationHubReq: DonationHubReadRequest = req.body;
+  const account: AccountEntity = req.session.account;
+  readMyDonationHubs(donationHubReq, account)
+    .then((listRes: ListResponse<DonationHubEntity>) => res.send(listRes))
+    .catch(genErrorResponse.bind(this, res));
+}
+
 router.get('/pledge', handleGetDonationHubPledges);
 export function handleGetDonationHubPledges(req: Request, res: Response) {
   const donationHubPledgeReq: DonationHubPledgeReadRequest = req.body;
   readDonationHubPledges(donationHubPledgeReq)
+    .then((listRes: ListResponse<DonationHubPledgeEntity>) => res.send(listRes))
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.get('/pledge/my', ensureSessionActive, handleGetMyDonationHubPledges);
+export function handleGetMyDonationHubPledges(req: Request, res: Response) {
+  const donationHubPledgeReq: DonationHubPledgeReadRequest = req.body;
+  const account: AccountEntity = req.session.account;
+  readMyDonationHubPledges(donationHubPledgeReq, account)
     .then((listRes: ListResponse<DonationHubPledgeEntity>) => res.send(listRes))
     .catch(genErrorResponse.bind(this, res));
 }
@@ -50,9 +68,18 @@ export function handleGetDonationHub(req: Request, res: Response) {
 router.get('/:id/pledge', handleGetPledgesUnderDonationHub);
 export function handleGetPledgesUnderDonationHub(req: Request, res: Response) {
   const donationHubPledgeReq: DonationHubPledgeReadRequest = req.body;
-  const id: number = parseInt(req.params.id, 10);
-  readPledgesUnderDonationHub(id, donationHubPledgeReq)
+  const donationHubId: number = parseInt(req.params.id, 10);
+  readPledgesUnderDonationHub(donationHubId, donationHubPledgeReq)
     .then((listRes: ListResponse<DonationHubPledgeEntity>) => res.send(listRes))
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.get('/:id/pledge/my', ensureSessionActive, handleGetMyPledgeUnderDonationHub);
+export function handleGetMyPledgeUnderDonationHub(req: Request, res: Response) {
+  const donationHubId: number = parseInt(req.params.id, 10);
+  const account: AccountEntity = req.session.account;
+  readMyPledgeUnderDonationHub(donationHubId, account)
+    .then((donationHubPledge: DonationHubPledgeEntity) => res.send(donationHubPledge))
     .catch(genErrorResponse.bind(this, res));
 }
 
@@ -70,8 +97,17 @@ export function handlePostDonationHubPledge(req: Request, res: Response) {
   const donationHubId: number = parseInt(req.params.id, 10);
   const donationHubPledge: DonationHubPledge = req.body;
   const account: AccountEntity = req.session.account;
-  createDonationHubPledge(donationHubPledge, donationHubId, account)
+  createDonationHubPledge(donationHubPledge, account, donationHubId)
     .then((savedDonationHubPledge: DonationHubPledge) => res.send(savedDonationHubPledge))
+    .catch(genErrorResponse.bind(this, res));
+}
+
+router.put('/pledge/:id', ensureSessionActive, handlePutDonationHubPledge);
+export function handlePutDonationHubPledge(req: Request, res: Response) {
+  const pledge: DonationHubPledge = req.body;
+  const account: AccountEntity = req.session.account;
+  updateDonationHubPledge(pledge, account)
+    .then((savedPledge: DonationHubPledgeEntity) => res.send(savedPledge))
     .catch(genErrorResponse.bind(this, res));
 }
 
