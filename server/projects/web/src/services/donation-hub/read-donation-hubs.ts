@@ -40,7 +40,7 @@ export async function readMyDonationHubs(
  */
 export async function readDonationHubs(request: DonationHubReadRequest): ListResponsePromise<DonationHubEntity> {
   const repository: Repository<DonationHubEntity> = getRepository(DonationHubEntity);
-  let queryBuilder: SelectQueryBuilder<DonationHubEntity> = repository.createQueryBuilder('donationHub');
+  const queryBuilder: SelectQueryBuilder<DonationHubEntity> = repository.createQueryBuilder('donationHub');
   _addRelations(queryBuilder);
   _addFilters(queryBuilder, request);
   _addSorting(queryBuilder, request);

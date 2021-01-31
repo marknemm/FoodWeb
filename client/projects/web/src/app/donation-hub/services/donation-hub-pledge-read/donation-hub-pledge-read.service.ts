@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DonationHubPledge, DonationHubPledgeReadRequest, ListResponse } from '~shared';
 import { environment } from '~web-env/environment';
@@ -17,7 +18,8 @@ export class DonationHubPledgeReadService {
 
   constructor(
     private _httpClient: HttpClient,
-    private _httpResponseService: HttpResponseService
+    private _httpResponseService: HttpResponseService,
+    private _router: Router
   ) {}
 
   /**
@@ -49,20 +51,49 @@ export class DonationHubPledgeReadService {
   }
 
   /**
+   * Gets a list of donation hubs from the server based off of a given donation hub read request.
+   * If it is detected that the user is on a `/my` route, then their donation hubs will be retrieved.
+   * @param request The donation hub read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @return An observable that emits a list response containing the retrieved donation hubs.
+   */
+  getDonationHubPledges(
+    request: DonationHubPledgeReadRequest,
+    opts: HttpResponseHandlerOptions<ListResponse<DonationHubPledge>> = {}
+  ): Observable<ListResponse<DonationHubPledge>> {
+    const myPledges: boolean = (this._router.url.indexOf('my') >= 0);
+    opts.loadingId = this.getDonationHubPledges;
+    return this._getDonationHubPledges(request, opts, myPledges);
+  }
+
+  /**
+   * Gets a list of the user's donation hubs from the server based off of a given donation hub read request.
+   * @param request The donation hub read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @return An observable that emits a list response containing the retrieved donation hubs belonging to the current user.
+   */
+  getMyDonationHubPledges(
+    request: DonationHubPledgeReadRequest,
+    opts: HttpResponseHandlerOptions<ListResponse<DonationHubPledge>> = {}
+  ): Observable<ListResponse<DonationHubPledge>> {
+    opts.loadingId = this.getMyDonationHubPledges;
+    return this._getDonationHubPledges(request, opts, true);
+  }
+
+  /**
    * Gets donation hub pledges form the server based off of a given donation hub read request.
    * @param request The donation hub pledge read request.
    * @param opts The optional HTTP response handler options.
    * @return An observable that emits the donation hub pledge list response from the server.
    */
-  getDonationHubPledges(
+  private _getDonationHubPledges(
     request: DonationHubPledgeReadRequest = {},
-    opts: HttpResponseHandlerOptions<ListResponse<DonationHubPledge>> = {}
+    opts: HttpResponseHandlerOptions<ListResponse<DonationHubPledge>>,
+    myPledges: boolean
   ): Observable<ListResponse<DonationHubPledge>> {
+    const readUrl: string = this.url + (myPledges ? '/my' : '');
     request.page = request.page ? request.page : 1;
     request.limit = request.limit ? request.limit : Number.MAX_SAFE_INTEGER;
     const params = new HttpParams({ fromObject: <any>request });
-    opts.loadingId = this.getDonationHubPledges;
-    return this._httpClient.get<ListResponse<DonationHubPledge>>(this.url, { params, withCredentials: true }).pipe(
+    return this._httpClient.get<ListResponse<DonationHubPledge>>(readUrl, { params, withCredentials: true }).pipe(
       this._httpResponseService.handleHttpResponse(opts)
     );
   }
