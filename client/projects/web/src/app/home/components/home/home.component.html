@@ -4,28 +4,37 @@
       <ng-container [ngTemplateOutlet]="traningSignupTmpl"></ng-container>
     </span>
 
-    <mat-card class="donation-hub-new-feature">
-      <mat-card-title class="block-label">
-        Volunteer Coordinated Donation Hubs - <strong class="warn">NEW</strong>
-      </mat-card-title>
-      <mat-card-content>
-        <div class="intro-block">
-          Our platform now allows our volunteers to coordinate weekly sandwich drives.
-          <p>To participate, please view the following links:</p>
-        </div>
-        <p>
-          <strong><a [routerLink]="['/donation-hub', 'create']">Register Hub</a></strong><br>
-          Use your home as a sandwhich drop-off hub for a selected period of time.
-          Afterwards, deliver the collected sandwiches to St. Luke's Mission of Mercy.
-        </p>
-        <p>
-          <strong><a [routerLink]="['/donation-hub', 'list']">Pledge Donation</a></strong><br>
-          Browse donation hubs where you can donate sandwhiches.
-        </p>
-      </mat-card-content>
-    </mat-card>
+    <ng-container *ngIf="donationHubFeatureVisible">
+      <mat-card class="donation-hub-new-feature">
+        <mat-card-title class="block-label">
+          Volunteer Coordinated Donation Hubs - <strong class="warn">NEW</strong>
+        </mat-card-title>
+        <mat-card-content>
+          <div class="intro-block">
+            Our platform now allows volunteers to coordinate weekly sandwich drives.
+            <div *ngIf="!sessionService.loggedIn">
+              To participate, <strong><a [routerLink]="['/home']" (click)="openLoginDialog()">login</a></strong> to your volunteer account.
+            </div>
+            <p *ngIf="sessionService.loggedIn">
+              To participate, please view the following links:
+            </p>
+          </div>
+          <ng-container *ngIf="sessionService.loggedIn">
+            <p>
+              <strong><a [routerLink]="['/donation-hub', 'create']">Register Hub</a></strong><br>
+              Use your home as a sandwhich drop-off hub for a selected period of time.
+              Afterwards, deliver the collected sandwiches to St. Luke's Mission of Mercy.
+            </p>
+            <p>
+              <strong><a [routerLink]="['/donation-hub', 'list']">Pledge Donation</a></strong><br>
+              Browse donation hubs where you can donate sandwhiches.
+            </p>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
 
-    <hr>
+      <hr>
+    </ng-container>
 
     <mat-card>
       <mat-card-title class="block-label">
