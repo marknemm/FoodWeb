@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DonationHub, DonationHubReadRequest, ListResponse } from '~shared';
 import { environment } from '~web-env/environment';
@@ -20,7 +21,8 @@ export class DonationHubReadService {
 
   constructor(
     private _httpClient: HttpClient,
-    private _httpResponseService: HttpResponseService
+    private _httpResponseService: HttpResponseService,
+    private _router: Router
   ) {}
 
   /**
@@ -43,15 +45,37 @@ export class DonationHubReadService {
   }
 
   /**
-   * Gets donation hubs form the server based off of a given donation hub read request.
-   * @param request The donation hub read request.
-   * @return An observable that emits the donation hub list response from the server.
+   * Gets a list of donation hubs from the server based off of a given donation hub read request.
+   * If it is detected that the user is on a `/my` route, then their donation hubs will be retrieved.
+   * @param request The donation hub read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @return An observable that emits a list response containing the retrieved donation hubs.
    */
   getDonationHubs(request: DonationHubReadRequest): Observable<ListResponse<DonationHub>> {
+    const myDonationHubs: boolean = (this._router.url.indexOf('my') >= 0);
+    return this._getDonationHubs(request, myDonationHubs);
+  }
+
+  /**
+   * Gets a list of the user's donation hubs from the server based off of a given donation hub read request.
+   * @param request The donation hub read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @return An observable that emits a list response containing the retrieved donation hubs belonging to the current user.
+   */
+  getMyDonationHubs(request: DonationHubReadRequest): Observable<ListResponse<DonationHub>> {
+    return this._getDonationHubs(request, true);
+  }
+
+  /**
+   * Gets donation hubs form the server based off of a given donation hub read request.
+   * @param request The donation hub read request.
+   * @param myDonationHubs Whether or not to retrieve donation hubs that only belong to the current user.
+   * @return An observable that emits the donation hub list response from the server.
+   */
+  _getDonationHubs(request: DonationHubReadRequest, myDonationHubs: boolean): Observable<ListResponse<DonationHub>> {
+    const readUrl = this.url + (myDonationHubs ? '/my' : '');
     request.page = request.page ? request.page : 1;
     request.limit = request.limit ? request.limit : 10;
     const params = new HttpParams({ fromObject: <any>request });
-    return this._httpClient.get<ListResponse<DonationHub>>(this.url, { params, withCredentials: true }).pipe(
+    return this._httpClient.get<ListResponse<DonationHub>>(readUrl, { params, withCredentials: true }).pipe(
       this._httpResponseService.handleHttpResponse()
     );
   }

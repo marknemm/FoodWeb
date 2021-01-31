@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Account, AccountType, DonationHub, DonationHubPledge, ListResponse } from '~shared';
 import { DonationHubDeleteService } from '~web/donation-hub/services/donation-hub-delete/donation-hub-delete.service';
@@ -32,12 +32,12 @@ export class DonationHubComponent implements OnInit, OnDestroy {
     private _urlQueryService: UrlQueryService
   ) {}
 
-  get canModify(): boolean {
-    return (this.donationHub?.volunteerAccount?.id === this._sessionService.account?.id);
-  }
-
   get canDonate(): boolean {
     return (!this.canModify && !this.canViewPledge && this._sessionService.account?.accountType !== AccountType.Receiver);
+  }
+
+  get canModify(): boolean {
+    return (this.donationHub?.volunteerAccount?.id === this._sessionService.account?.id);
   }
 
   get canViewPledge(): boolean {
@@ -73,22 +73,31 @@ export class DonationHubComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._listenAccountChange();
     this._listenDonationHubChange();
+  }
+
+  private _listenAccountChange(): void {
+    this._sessionService.onAccountSave(this._destroy$).subscribe(
+      () => this._refreshMyPledge()
+    );
   }
 
   private _listenDonationHubChange(): void {
     this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
       switchMap((id: number) => this._donationHubReadService.getDonationHub(id)),
-      switchMap((donationHub: DonationHub) => {
-        this._donationHubNotFound = !donationHub;
-        this._donationHub = donationHub;
-        return this._sessionService.loggedIn
-          ? this._donationHubPledgeReadService.getMyPledgeUnderDonationHub(donationHub.id, { showPageProgressOnLoad: false })
-          : of(undefined);
-      })
-    ).subscribe((myPledge: DonationHubPledge) =>
-      this._myPledge = myPledge
-    );
+    ).subscribe((donationHub: DonationHub) => {
+      this._donationHubNotFound = !donationHub;
+      this._donationHub = donationHub;
+      this._refreshMyPledge();
+    });
+  }
+
+  private _refreshMyPledge(): void {
+    const myPledgeUpdate$: Observable<DonationHubPledge> = (this.donationHub && this._sessionService.loggedIn)
+      ? this._donationHubPledgeReadService.getMyPledgeUnderDonationHub(this.donationHub.id, { showPageProgressOnLoad: false })
+      : of(undefined);
+    myPledgeUpdate$.subscribe((myPledge: DonationHubPledge) => this._myPledge = myPledge);
   }
 
   deleteDonationHub(): void {

@@ -1,6 +1,8 @@
 <foodweb-filtered-list class="donations">
 
-  <foodweb-filtered-list-title>{{ myDonations ? 'My Donations' : 'Donations' }}</foodweb-filtered-list-title>
+  <foodweb-filtered-list-title>
+    {{ myDonations ? 'My' : '' }} Donations
+  </foodweb-filtered-list-title>
 
   <foodweb-filtered-list-toolbar listItemsLabel="Donations">
     <foodweb-search-bar

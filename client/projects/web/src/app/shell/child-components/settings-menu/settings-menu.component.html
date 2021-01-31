@@ -10,9 +10,19 @@
     <a mat-list-item [routerLink]="['/donation/list/my']" *ngIf="!sessionService.isVolunteer">
       <fa-icon [icon]="faGifts"></fa-icon> My Donations
     </a>
-    <a mat-list-item [routerLink]="['/delivery/list/my']" *ngIf="sessionService.isVolunteer">
-      <mat-icon>my_location</mat-icon> My Deliveries
-    </a>
+    <ng-container *ngIf="sessionService.isVolunteer">
+      <mat-divider></mat-divider>
+      <a mat-list-item [routerLink]="['/delivery/list/my']">
+        <mat-icon>my_location</mat-icon> My Deliveries
+      </a>
+      <a mat-list-item [routerLink]="['/donation-hub/list/my']">
+        <mat-icon>device_hub</mat-icon> My Donation Hubs
+      </a>
+      <a mat-list-item [routerLink]="['/donation-hub/pledge/list/my']">
+        <fa-icon [icon]="faGifts"></fa-icon> My Donation Pledges
+      </a>
+    </ng-container>
+    <mat-divider></mat-divider>
     <a mat-list-item [routerLink]="['/home']" (click)="authService.logout()" class="logout">
       <mat-icon>power_settings_new</mat-icon> Logout
     </a>
