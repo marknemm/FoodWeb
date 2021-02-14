@@ -1,6 +1,10 @@
 <div class="home page has-side-content">
   <div class="main-content">
     <span class="d-lg-none">
+      <ng-container [ngTemplateOutlet]="loginSignupTmpl"></ng-container>
+    </span>
+
+    <span class="d-lg-none">
       <ng-container [ngTemplateOutlet]="traningSignupTmpl"></ng-container>
     </span>
 
@@ -84,6 +88,10 @@
 
   <div class="side-content">
     <span class="d-none d-lg-inline">
+      <ng-container [ngTemplateOutlet]="loginSignupTmpl"></ng-container>
+    </span>
+
+    <span class="d-none d-lg-inline">
       <ng-container [ngTemplateOutlet]="traningSignupTmpl"></ng-container>
     </span>
 
@@ -105,6 +113,15 @@
     <foodweb-general-stats-card></foodweb-general-stats-card>
   </div>
 </div>
+
+<ng-template #loginSignupTmpl>
+  <mat-card *ngIf="!sessionService.loggedIn">
+      <mat-card-content>
+        <button class="login-signup" mat-raised-button type="button" color="primary" (click)="openLoginDialog()">Login</button>
+        <a routerLink="/signup"><button class="login-signup" mat-raised-button type="button" color="primary">Signup</button></a>
+      </mat-card-content>
+    </mat-card>
+</ng-template>
 
 <ng-template #traningSignupTmpl>
   <foodweb-event-card [featuredEvent]="featuredEvent" [linkToEventsPage]="true"></foodweb-event-card>
