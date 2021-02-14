@@ -14,6 +14,10 @@ $side-container-max-width: 270px;
       width: $side-container-max-width;
       float: right;
     }
+    
+    .login-signup {
+      margin: 2% 4% 2% 4%;
+    }
 
     @media only screen and (max-width: 1060px) {
       .main-content {
