@@ -1,7 +1,7 @@
 import { AccountEntity, DonationEntity } from '~entity';
 import { DonationHelper } from '~shared';
-import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
-import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient, NotificationType } from '~web/helpers/messaging/notification';
 import { sendClaimUnavailableMessages } from './claim-unavailable-message';
 
 const _donationHelper = new DonationHelper();
@@ -12,22 +12,25 @@ const _donationHelper = new DonationHelper();
  * @return A promise that resolves to the newly claimed donation.
  */
 export async function sendClaimedDonationMessages(donation: DonationEntity): Promise<DonationEntity> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const messagePromises: Promise<any>[] = [];
   const accounts: AccountEntity[] = [donation.claim.receiverAccount, donation.donorAccount];
   const { donorName, receiverName } = _donationHelper.memberNames(donation);
 
   messagePromises.push(
-    broadcastEmail(
+    mailClient.broadcastEmail(
       MailTransporter.NOREPLY,
       accounts,
-      genDonationEmailSubject(donation),
+      _donationHelper.genDonationEmailSubject(donation),
       'donation-claimed',
       { donation, donorName, receiverName }
     ).catch(console.error)
   );
 
   messagePromises.push(
-    sendNotification(
+    notificationClient.sendNotification(
       donation.donorAccount,
       {
         notificationType: NotificationType.ClaimDonation,

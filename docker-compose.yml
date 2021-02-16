@@ -67,7 +67,7 @@ services:
       - "9229:9229"
     depends_on:
       - foodweb-services
-    command: bash -c "npm run start:docker"
+    command: bash -c "npm start web"
     volumes:
       # Exclude the following directories from shared volume by overwriting with blank directory
       - /usr/src/foodweb/server/projects/admin
@@ -82,7 +82,7 @@ services:
       - "9230:9230"
     depends_on:
       - foodweb-services
-    command: bash -c "npm run admin:start:docker"
+    command: bash -c "npm start admin"
 
   foodweb-services:
     extends: "fake-smtp-server"
@@ -117,6 +117,7 @@ services:
     shm_size: 256mb
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./server/tools/database/dump:/var/lib/postgresql/dump
 
   redis:
     image: "redis:5-alpine"

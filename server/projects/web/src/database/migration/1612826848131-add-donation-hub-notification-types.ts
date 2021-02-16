@@ -2,7 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // tslint:disable-next-line: class-name
 export class addDonationHubNotificationTypes1612826848131 implements MigrationInterface {
-  name = 'addDonationHubNotificationTypes1612826848132'
+  name = 'addDonationHubNotificationTypes1612826848132';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TYPE "public"."Notification_notificationtype_enum" RENAME TO "Notification_notificationtype_enum_old"`);

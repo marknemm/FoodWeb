@@ -2,65 +2,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Docker FoodWeb All: Start",
-      "type": "shell",
-      "dependsOn": [
-        "Docker FoodWeb: Start",
-        "Docker FoodWeb Admin: Start",
-        "Docker FoodWeb App: Start"
-      ],
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb All: Stop",
-      "type": "shell",
-      "dependsOn": [
-        "Docker FoodWeb: Stop",
-        "Docker FoodWeb Admin: Stop",
-        "Docker FoodWeb App: Stop"
-      ],
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb All: Reinstall Dependencies",
-      "type": "shell",
-      "dependsOn": [
-        "Docker FoodWeb: Reinstall Dependencies",
-        "Docker FoodWeb Admin: Reinstall Dependencies"
-      ],
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb: Start",
-      "type": "shell",
-      "command": "docker-compose up -d foodweb",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
       "label": "Docker FoodWeb: Start Server",
       "type": "shell",
       "command": "docker-compose up -d foodweb-server",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb: Stop",
-      "type": "shell",
-      "dependsOn": [
-        "Docker FoodWeb: Stop Client",
-        "Docker FoodWeb: Stop Server"
-      ],
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb: Stop Client",
-      "type": "shell",
-      "command": "docker-compose stop foodweb",
       "group": "none",
       "problemMatcher": []
     },
@@ -72,33 +16,9 @@
       "problemMatcher": []
     },
     {
-      "label": "Docker FoodWeb Admin: Start",
-      "type": "shell",
-      "command": "docker-compose up -d foodweb-admin",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
       "label": "Docker FoodWeb Admin: Start Server",
       "type": "shell",
       "command": "docker-compose up -d foodweb-admin-server",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb Admin: Stop",
-      "type": "shell",
-      "dependsOn": [
-        "Docker FoodWeb Admin: Stop Client",
-        "Docker FoodWeb Admin: Stop Server"
-      ],
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb Admin: Stop Client",
-      "type": "shell",
-      "command": "docker-compose stop foodweb-admin",
       "group": "none",
       "problemMatcher": []
     },
@@ -110,40 +30,9 @@
       "problemMatcher": []
     },
     {
-      "label": "Docker FoodWeb App: Start",
-      "type": "shell",
-      "command": "docker-compose up -d foodweb-app",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb App: Stop",
-      "type": "shell",
-      "command": "docker-compose stop foodweb-app",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
       "label": "Docker FoodWeb Services: Start",
       "type": "shell",
       "command": "docker-compose up -d foodweb-services",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb: Reinstall Dependencies",
-      "type": "shell",
-      "dependsOn": [
-        "Docker FoodWeb: Reinstall Client Dependencies",
-        "Docker FoodWeb: Reinstall Server Dependencies"
-      ],
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb: Reinstall Client Dependencies",
-      "type": "shell",
-      "command": "docker exec -it foodweb bash -c 'npm install'",
       "group": "none",
       "problemMatcher": []
     },
@@ -155,40 +44,6 @@
       "problemMatcher": []
     },
     {
-      "label": "Docker FoodWeb App: Reinstall Dependencies",
-      "type": "shell",
-      "dependsOn": [
-        "Docker FoodWeb App: Reinstall Client Dependencies",
-        "Docker FoodWeb: Reinstall Server Dependencies"
-      ],
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb App: Reinstall Client Dependencies",
-      "type": "shell",
-      "command": "docker exec -it foodweb-app bash -c 'npm install'",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb Admin: Reinstall Dependencies",
-      "type": "shell",
-      "dependsOn": [
-        "Docker FoodWeb Admin: Reinstall Client Dependencies",
-        "Docker FoodWeb Admin: Reinstall Server Dependencies"
-      ],
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb Admin: Reinstall Client Dependencies",
-      "type": "shell",
-      "command": "docker exec -it foodweb-admin bash -c 'npm install'",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
       "label": "Docker FoodWeb Admin: Reinstall Server Dependencies",
       "type": "shell",
       "command": "docker exec -it foodweb-admin-server bash -c 'npm install'",
@@ -196,73 +51,16 @@
       "problemMatcher": []
     },
     {
-      "label": "Docker FoodWeb: Reinitialize Postgres Database",
+      "label": "Postgres",
       "type": "shell",
-      "command": "docker exec -it foodweb-server bash -c 'npm run pg:initialize'",
+      "command": "cd ./server && npm run pg",
       "group": "none",
       "problemMatcher": []
     },
     {
-      "label": "Docker FoodWeb: Make Postgres Timestamps Relevant",
+      "label": "TypeORM",
       "type": "shell",
-      "command": "docker exec -it foodweb-server bash -c 'npm run pg:make-timestamps-relevant'",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb: Dump Postgres Database",
-      "type": "shell",
-      "command": "docker exec -it foodweb-server bash -c 'npm run pg:dump ${input:dumpFileName}'",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb: Restore Postgres Database",
-      "type": "shell",
-      "command": "docker exec -it foodweb-server bash -c 'npm run pg:restore ${input:restoreFileName}'",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb: Destroy Postgres Database",
-      "type": "shell",
-      "command": "docker exec -it foodweb-server bash -c 'npm run pg:destroy'",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb: Generate TypeORM Migration",
-      "type": "shell",
-      "command": "docker-compose run --rm foodweb-server bash -c 'npm run typeorm:migration:generate ${input:typeOrmMigrationName}'",
-      "group": "none",
-      "dependsOn": [
-        "Docker FoodWeb: Stop Server",
-        "Docker FoodWeb Admin: Stop Server"
-      ],
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb: Create TypeORM Migration",
-      "type": "shell",
-      "command": "docker-compose run --rm foodweb-server bash -c 'npm run typeorm:migration:create ${input:typeOrmMigrationName}'",
-      "group": "none",
-      "dependsOn": [
-        "Docker FoodWeb: Stop Server",
-        "Docker FoodWeb Admin: Stop Server"
-      ],
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb: Run TypeORM Migrations",
-      "type": "shell",
-      "command": "docker-compose run --rm foodweb-server bash -c 'npm run typeorm:migration:run'",
-      "group": "none",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docker FoodWeb: Revert TypeORM Migrations",
-      "type": "shell",
-      "command": "docker-compose run --rm foodweb-server bash -c 'npm run typeorm:migration:revert'",
+      "command": "cd ./server && npm run typeorm",
       "group": "none",
       "problemMatcher": []
     },
@@ -274,29 +72,5 @@
       "problemMatcher": []
     }
   ],
-  "inputs": [
-    {
-      "id": "typeOrmMigrationName",
-      "description": "Enter the new TypeORM migration name:",
-      "type": "promptString"
-    },
-    {
-      "id": "dumpFileName",
-      "description": "Enter the dump file name:",
-      "default": "",
-      "type": "promptString"
-    },
-    {
-      "id": "restoreFileName",
-      "description": "Enter the restore file name:",
-      "default": "",
-      "type": "promptString"
-    },
-    {
-      "id": "sqlExecOpts",
-      "description": "Enter the psql execution options:",
-      "default": "",
-      "type": "promptString"
-    }
-  ]
+  "inputs": []
 }

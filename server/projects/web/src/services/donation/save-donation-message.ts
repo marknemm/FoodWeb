@@ -1,6 +1,8 @@
-import { Donation } from '~shared';
-import { genDonationEmailSubject, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
+import { Donation, DonationHelper } from '~shared';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
+
+const _donationHelper = new DonationHelper();
 
 /**
  * Sends donation created message(s) to the donor.
@@ -8,10 +10,11 @@ import { UpdateDiff } from '~web/helpers/misc/update-diff';
  * @return A promsie that resolves to the newly created donation.
  */
 export async function sendDonationCreateMessages(donation: Donation): Promise<Donation> {
-  await sendEmail(
+  const mailClient: MailClient = await getMailClient();
+  await mailClient.sendEmail(
     MailTransporter.NOREPLY,
     donation.donorAccount,
-    genDonationEmailSubject(donation),
+    _donationHelper.genDonationEmailSubject(donation),
     'donation-create-success',
     { donation }
   ).catch(console.error);
@@ -25,10 +28,11 @@ export async function sendDonationCreateMessages(donation: Donation): Promise<Do
  */
 export async function sendDonationUpdateMessages(donationDiff: UpdateDiff<Donation>): Promise<Donation> {
   // Send e-mail to donorAccount linked directly to the donation.
-  await sendEmail(
+  const mailClient: MailClient = await getMailClient();
+  await mailClient.sendEmail(
     MailTransporter.NOREPLY,
     donationDiff.new.donorAccount,
-    genDonationEmailSubject(donationDiff.new),
+    _donationHelper.genDonationEmailSubject(donationDiff.new),
     'donation-update-success',
     {
       originalDonation: donationDiff.old,

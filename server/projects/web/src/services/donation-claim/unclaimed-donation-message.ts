@@ -1,9 +1,9 @@
 import { DonationEntity } from '~entity';
 import { Account, DonationHelper, NotificationType } from '~shared';
-import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
-import { sendNotification } from '~web/helpers/messaging/notification';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient } from '~web/helpers/messaging/notification';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
-import { sendDeliveryUnavailableMessages } from '../delivery/delivery-unavailable-message';
+import { sendDeliveryUnavailableMessages } from '~web/services/delivery/delivery-unavailable-message';
 
 const _donationHelper = new DonationHelper();
 
@@ -41,13 +41,14 @@ export async function sendUnclaimedDonationMessages(unclaimDiff: UpdateDiff<Dona
  * @return A promise that resolves once the operation completes.
  */
 async function _sendEmailToAllDonationAccounts(unclaimDiff: UpdateDiff<DonationEntity>): Promise<void> {
+  const mailClient: MailClient = await getMailClient();
   const donationAccounts: Account[] = _donationHelper.memberAccountsArr(unclaimDiff.old);
   const { donorName, receiverName, delivererName } = _donationHelper.memberNames(unclaimDiff.old);
 
-  await broadcastEmail(
+  await mailClient.broadcastEmail(
     MailTransporter.NOREPLY,
     donationAccounts,
-    genDonationEmailSubject(unclaimDiff.new),
+    _donationHelper.genDonationEmailSubject(unclaimDiff.new),
     'donation-unclaimed',
     {
       donation: unclaimDiff.new,
@@ -65,8 +66,9 @@ async function _sendEmailToAllDonationAccounts(unclaimDiff: UpdateDiff<DonationE
  * @return A promise that resolves once the operation completes.
  */
 async function _sendNotificationToDonor(donation: DonationEntity): Promise<void> {
+  const notificationClient: NotificationClient = getNotificationClient();
   const receiverName: string = _donationHelper.receiverName(donation);
-  await sendNotification(
+  await notificationClient.sendNotification(
     donation.donorAccount,
     {
       notificationType: NotificationType.UnclaimDonation,
@@ -87,8 +89,9 @@ async function _sendNotificationToDonor(donation: DonationEntity): Promise<void>
  * @return A promise that resolves once the operation completes.
  */
 async function _sendNotificationToDeliverer(donation: DonationEntity): Promise<void> {
+  const notificationClient: NotificationClient = getNotificationClient();
   const receiverName: string = _donationHelper.receiverName(donation);
-  await sendNotification(
+  await notificationClient.sendNotification(
     donation.claim.delivery.volunteerAccount,
     {
       notificationType: NotificationType.UnclaimDonation,

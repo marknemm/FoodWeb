@@ -1,9 +1,9 @@
 import { EntityManager, getConnection } from 'typeorm';
 import { AccountEntity, DeliveryReqHistoryEntity, DonationEntity } from '~entity';
 import { AccountReadRequest, AccountType, DonationHelper, ListResponse, NotificationType, OperationHours, OperationHoursHelper } from '~shared';
-import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
-import { broadcastNotification } from '~web/helpers/messaging/notification';
-import { readAccounts } from '../account/read-accounts';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient } from '~web/helpers/messaging/notification';
+import { readAccounts } from '~web/services/account/read-accounts';
 
 const _donationHelper = new DonationHelper();
 const _operationHoursHelper = new OperationHoursHelper();
@@ -44,6 +44,9 @@ export async function sendDeliveryAvailableMessages(donation: DonationEntity): P
  * @return A promise that resolves to void once all messages/notifications have been sent.
  */
 async function _messagePotentialDeliverers(donation: DonationEntity, potentialDeliverers: AccountEntity[]): Promise<void> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const messagePromises: Promise<any>[] = [];
   const donorName: string = _donationHelper.donorName(donation);
   const receiverName: string = _donationHelper.receiverName(donation);
@@ -53,17 +56,17 @@ async function _messagePotentialDeliverers(donation: DonationEntity, potentialDe
   );
 
   messagePromises.push(
-    broadcastEmail(
+    mailClient.broadcastEmail(
       MailTransporter.NOREPLY,
       notifyAccounts,
-      genDonationEmailSubject(donation),
+      _donationHelper.genDonationEmailSubject(donation),
       'delivery-available',
       { donation }
     )
   );
 
   messagePromises.push(
-    broadcastNotification(
+    notificationClient.broadcastNotification(
       notifyAccounts,
       {
         notificationType: NotificationType.ClaimDonation,

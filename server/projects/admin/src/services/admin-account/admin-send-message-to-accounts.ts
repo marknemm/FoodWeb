@@ -1,7 +1,7 @@
 import { adminReadAccounts } from '~admin/services/admin-account/admin-read-accounts';
 import { Account, AccountEntity } from '~entity';
 import { AccountReadRequest, ListResponse, SendMessageRequest } from '~shared';
-import { broadcastEmail, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
 
 /**
  * Sends a given (custom) message to accounts specified by a given set of account filters.
@@ -37,7 +37,8 @@ export async function adminSendMessage(
  */
 async function _messageTargetAccounts(sendMessageReq: SendMessageRequest, accounts: AccountEntity[]): Promise<void> {
   const messageBodyHTML: string = _trimMessageBodyHTML(sendMessageReq.messageBodyHTML);
-  await broadcastEmail(
+  const mailClient: MailClient = await getMailClient();
+  await mailClient.broadcastEmail(
     MailTransporter.NOREPLY,
     accounts,
     sendMessageReq.messageSubject,
@@ -65,7 +66,8 @@ function _trimMessageBodyHTML(messageBodyHTML: string): string {
  */
 export async function adminTestMessage(sendMessageReq: SendMessageRequest, myAccount: Account): Promise<void> {
   const messageBodyHTML: string = _trimMessageBodyHTML(sendMessageReq.messageBodyHTML);
-  return sendEmail(
+  const mailClient: MailClient = await getMailClient();
+  return mailClient.sendEmail(
     MailTransporter.NOREPLY,
     myAccount,
     `Test Message: ${sendMessageReq.messageSubject}`,

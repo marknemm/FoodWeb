@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
 import { Account, ImpersonateTokenResponse } from '~shared';
-import { RedisStore } from '~web/helpers/misc/redis-store';
+import { getRedisStore, RedisStore } from '~web/helpers/misc/redis-store';
 import { ImpersonateRecord } from '~web/interfaces/impersonate-record';
 
 /**
@@ -12,6 +12,7 @@ import { ImpersonateRecord } from '~web/interfaces/impersonate-record';
 export async function adminSaveImpersonationToken(targetAccountId: number, myAccount: Account): Promise<ImpersonateTokenResponse> {
   const impersonationToken: string = randomBytes(20).toString('hex');
   const impersonateRecord: ImpersonateRecord = { adminAccountId: myAccount.id, targetAccountId };
-  await RedisStore.getStore().set(impersonationToken, impersonateRecord);
+  const redisStore: RedisStore = await getRedisStore();
+  await redisStore.set(impersonationToken, impersonateRecord);
   return { impersonationToken };
 }

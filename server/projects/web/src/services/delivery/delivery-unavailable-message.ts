@@ -2,8 +2,8 @@ import { Not } from 'typeorm';
 import { AccountEntity, DeliveryReqHistoryEntity, DonationEntity } from '~entity';
 import { getOrmRepository, OrmEntityManager, OrmRepository } from '~orm';
 import { DonationHelper, NotificationType } from '~shared';
-import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
-import { broadcastNotification } from '~web/helpers/messaging/notification';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient } from '~web/helpers/messaging/notification';
 
 const _donationHelper = new DonationHelper();
 
@@ -53,21 +53,24 @@ export async function sendDeliveryUnavailableMessages(donation: DonationEntity, 
  * @return A promise that resolves once the operation completes.
  */
 async function _sendMessageToRecipients(donation: DonationEntity, recipients: AccountEntity[]): Promise<void> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const { donorName, receiverName, delivererName } = _donationHelper.memberNames(donation);
   const messagePromises: Promise<any>[] = [];
 
   messagePromises.push(
-    broadcastEmail(
+    mailClient.broadcastEmail(
       MailTransporter.NOREPLY,
       recipients,
-      genDonationEmailSubject(donation),
+      _donationHelper.genDonationEmailSubject(donation),
       'delivery-unavailable',
       { donation, donorName, receiverName, delivererName }
     )
   );
 
   messagePromises.push(
-    broadcastNotification(
+    notificationClient.broadcastNotification(
       recipients,
       {
         notificationType: NotificationType.ClaimDonation,

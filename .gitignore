@@ -58,6 +58,7 @@ testem.log
 /typings
 stellar.yaml
 dump.*
+!/server/tools/database/js/dump.js
 *.log
 log.txt
 /.sourcemaps

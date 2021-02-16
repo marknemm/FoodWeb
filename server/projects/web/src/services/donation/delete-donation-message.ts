@@ -1,11 +1,14 @@
 import { AccountEntity, DonationEntity } from '~entity';
 import { DonationHelper } from '~shared';
-import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
-import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient, NotificationType } from '~web/helpers/messaging/notification';
 
 const _donationHelper = new DonationHelper();
 
 export async function sendDonationDeleteMessages(donation: DonationEntity): Promise<void> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const messagePromises: Promise<any>[] = [];
   const emailAccounts: AccountEntity[] = [donation.donorAccount];
   const notificationAccounts: AccountEntity[] = [];
@@ -28,10 +31,10 @@ export async function sendDonationDeleteMessages(donation: DonationEntity): Prom
   }
 
   messagePromises.push(
-    broadcastEmail(
+    mailClient.broadcastEmail(
       MailTransporter.NOREPLY,
       emailAccounts,
-      genDonationEmailSubject(donation),
+      _donationHelper.genDonationEmailSubject(donation),
       'donation-deleted',
       { donation, donorName, receiverName, delivererName }
     ).catch(console.error)
@@ -39,7 +42,7 @@ export async function sendDonationDeleteMessages(donation: DonationEntity): Prom
 
   if (notificationAccounts.length > 0) {
     messagePromises.push(
-      sendNotification(
+      notificationClient.sendNotification(
         notificationAccounts[0],
         {
           notificationType: NotificationType.RemoveDonation,
@@ -56,7 +59,7 @@ export async function sendDonationDeleteMessages(donation: DonationEntity): Prom
 
   if (notificationAccounts.length > 1) {
     messagePromises.push(
-      sendNotification(
+      notificationClient.sendNotification(
         notificationAccounts[1],
         {
           notificationType: NotificationType.RemoveDonation,

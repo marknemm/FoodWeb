@@ -6,14 +6,14 @@ import { initOrm } from '~orm';
 import { AccountHelper, DateTimeHelper, ListResponse, NotificationType } from '~shared';
 import { DonationHubPledgeEntity } from '~web/database/entity/donation-hub-pledge.entity';
 import { DonationHubEntity } from '~web/database/entity/donation-hub.entity';
-import { MailTransporter, sendEmail } from '~web/helpers/messaging/email';
-import { sendNotification } from '~web/helpers/messaging/notification';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient } from '~web/helpers/messaging/notification';
 import { readDonationHubPledges } from '~web/services/donation-hub-pledge/read-donation-hub-pledges';
 import { queryDonationHubs } from '~web/services/donation-hub/read-donation-hubs';
 
 const _accountHelper = new AccountHelper();
 const _dateTimeHelper = new DateTimeHelper();
-const _reminderIntervalMins = 10000000000; // Job will be scheduled to run every 10 minutes.
+const _reminderIntervalMins = 10; // Job will be scheduled to run every 10 minutes.
 
 _sendDonationHubReminders()
   .then(() => process.exit())
@@ -43,7 +43,6 @@ async function _sendDonationHubReminders(): Promise<void> {
                       .andWhere('donationHub.dropOffWindowStart <= :latestDropOffWindowStart', { latestDropOffWindowStart })
       ).exec();
       totalDonationHubs = listRes.totalCount;
-      console.log(listRes.list);
       await _sendDonationHubMessageBatch(listRes.list, hour);
     }
   }
@@ -66,6 +65,9 @@ async function _sendDonationHubMessageBatch(donationHubs: DonationHubEntity[], h
 }
 
 async function _sendDonationHubMessage(donationHub: DonationHubEntity, hour: number): Promise<void> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const messagePromises: Promise<any>[] = [];
   const hubAccount: AccountEntity = donationHub.volunteerAccount;
   const hubAccountName: string = _accountHelper.accountName(hubAccount);
@@ -75,7 +77,7 @@ async function _sendDonationHubMessage(donationHub: DonationHubEntity, hour: num
   const dropOffTimeEndStr: string = _dateTimeHelper.toLocalTimeStr(donationHub.dropOffWindowEnd, timezone);
 
   messagePromises.push(
-    sendEmail(
+    mailClient.sendEmail(
       MailTransporter.NOREPLY,
       hubAccount,
       `Donation Hub Drop-Off Window Reminder for ${dropOffWindowStartStr}`,
@@ -85,7 +87,7 @@ async function _sendDonationHubMessage(donationHub: DonationHubEntity, hour: num
   );
 
   messagePromises.push(
-    sendNotification(
+    notificationClient.sendNotification(
       hubAccount,
       {
         notificationType: NotificationType.DonationHubReminder,
@@ -132,6 +134,9 @@ async function _sendDonationPledgeMessageBatch(donationPledges: DonationHubPledg
 }
 
 async function _sendDonationPledgeMessage(pledge: DonationHubPledgeEntity, hour: number) {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const donationHub: DonationHubEntity = pledge.donationHub;
   const messagePromises: Promise<any>[] = [];
   const hubAccount: AccountEntity = donationHub.volunteerAccount;
@@ -144,7 +149,7 @@ async function _sendDonationPledgeMessage(pledge: DonationHubPledgeEntity, hour:
   const dropOffTimeEndStr: string = _dateTimeHelper.toLocalTimeStr(donationHub.dropOffWindowEnd, timezone);
 
   messagePromises.push(
-    sendEmail(
+    mailClient.sendEmail(
       MailTransporter.NOREPLY,
       hubAccount,
       `Donation Pledge Drop-Off Window Reminder for ${dropOffWindowStartStr}`,
@@ -154,7 +159,7 @@ async function _sendDonationPledgeMessage(pledge: DonationHubPledgeEntity, hour:
   );
 
   messagePromises.push(
-    sendNotification(
+    notificationClient.sendNotification(
       hubAccount,
       {
         notificationType: NotificationType.DonationHubReminder,

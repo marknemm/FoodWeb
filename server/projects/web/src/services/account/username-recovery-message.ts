@@ -1,11 +1,12 @@
 import { AccountEntity, AccountType } from '~entity';
-import { MailTransporter, sendEmail } from '~web/helpers/messaging/email';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
 
 export async function sendUsernameRecoveryEmail(accounts: AccountEntity[]): Promise<void> {
   if (!accounts) { return; }
+  const mailClient: MailClient = await getMailClient();
   const account: AccountEntity = _getMostPersonalizedAccount(accounts);
   const usernames: { username: string }[] = _accountsToUsernames(accounts);
-  await sendEmail(
+  await mailClient.sendEmail(
     MailTransporter.NOREPLY,
     account,
     'Recover FoodWeb Username',

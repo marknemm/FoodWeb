@@ -105,6 +105,10 @@ table, tr, td {
   margin-bottom: 0px;
 }
 
+.donation-summary-table {
+  margin-bottom: 1rem;
+}
+
 .donation-summary-label {
   color: #795548;
   padding-right: 10px;

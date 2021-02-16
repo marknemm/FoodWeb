@@ -1,6 +1,6 @@
 import { AccountEntity } from '~entity';
 import { ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
-import { RedisStore } from '~web/helpers/misc/redis-store';
+import { getRedisStore, RedisStore } from '~web/helpers/misc/redis-store';
 import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { ImpersonateRecord } from '~web/interfaces/impersonate-record';
 import { readFullAccount } from '~web/services/account/read-accounts';
@@ -14,7 +14,7 @@ import { login } from '~web/services/session/session';
  * for the given admin account and impersonation record.
  */
 export async function impersonateLogin(impersonateRequest: ImpersonateRequest): Promise<LoginResponse> {
-  const redisStore: RedisStore = RedisStore.getStore();
+  const redisStore: RedisStore = await getRedisStore();
   const impersonateRecord: ImpersonateRecord = await redisStore.get(impersonateRequest.impersonationToken);
   await _ensureCanImpersonate(impersonateRequest, impersonateRecord);
   const impersonateResponse: LoginResponse = await _genImpersonateLoginResponse(impersonateRecord);

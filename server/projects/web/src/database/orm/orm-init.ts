@@ -1,5 +1,6 @@
 import 'dotenv';
 import { Connection, createConnection } from 'typeorm';
+import { getReachableUrl } from '~web/helpers/misc/url';
 import path = require('path');
 
 /**
@@ -7,13 +8,21 @@ import path = require('path');
  * TypeORM will also implicitly setup entity mappings & run any needed migrations.
  * @return A promise that resolves to a generated connection.
  */
-export function initOrm(): Promise<Connection> {
+export async function initOrm(): Promise<Connection> {
   const entitiesPath: string = path.join(global['serverDistDir'], 'projects', 'web', 'src', 'database', 'entity', '*.js');
   const migrationsPath: string = path.join(global['serverDistDir'], 'projects', 'web', 'src', 'database', 'migration', '*.js');
+
+  const port: number = (process.env.DATABASE_PORT)
+    ? parseInt(process.env.DATABASE_PORT, 10)
+    : 5432;
+
+  const dbHosts: string[] = [process.env.DATABASE_HOST, 'localhost', 'postgres'];
+  const host: string = await getReachableUrl(dbHosts, port);
+
   return createConnection({
     type: 'postgres',
-    host: process.env.DATABASE_HOST,
-    port: parseInt(process.env.DATABASE_PORT, 10),
+    host,
+    port,
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_DATABASE,

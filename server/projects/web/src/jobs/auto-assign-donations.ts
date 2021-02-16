@@ -4,8 +4,8 @@ import { SelectQueryBuilder } from 'typeorm';
 import { AccountEntity, AccountType, AutoClaimHistoryEntity, DonationClaimEntity, DonationEntity } from '~entity';
 import { getOrmRepository, initOrm } from '~orm';
 import { AccountReadRequest, DateTimeHelper, DonationHelper, DonationReadRequest, DonationStatus, ListResponse, OperationHours, OperationHoursHelper } from '~shared';
-import { genDonationEmailSubject, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
-import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient, NotificationType } from '~web/helpers/messaging/notification';
 import { queryAccounts } from '~web/services/account/read-accounts';
 import { sendDeliveryAvailableMessages } from '~web/services/delivery/delivery-available-message';
 import { claimDonation } from '~web/services/donation-claim/claim-donation';
@@ -158,13 +158,16 @@ async function _recordAutoAssignment(donation: DonationEntity): Promise<void> {
  * @return A promise that resolves when the operation finishes.
  */
 async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promise<void> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const messagePromises: Promise<any>[] = [];
   const { donorName, receiverName } = _donationHelper.memberNames(donation);
   const extraVars: any = { donation, donorName, receiverName };
-  const donationEmailSubject: string = genDonationEmailSubject(donation);
+  const donationEmailSubject: string = _donationHelper.genDonationEmailSubject(donation);
 
   messagePromises.push(
-    sendEmail(
+    mailClient.sendEmail(
       MailTransporter.NOREPLY,
       donation.donorAccount,
       donationEmailSubject,
@@ -174,7 +177,7 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
   );
 
   messagePromises.push(
-    sendEmail(
+    mailClient.sendEmail(
       MailTransporter.NOREPLY,
       donation.claim.receiverAccount,
       donationEmailSubject,
@@ -184,7 +187,7 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
   );
 
   messagePromises.push(
-    sendNotification(
+    notificationClient.sendNotification(
       donation.donorAccount,
       {
         notificationType: NotificationType.ClaimDonation,
@@ -200,7 +203,7 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
   );
 
   messagePromises.push(
-    sendNotification(
+    notificationClient.sendNotification(
       donation.claim.receiverAccount,
       {
         notificationType: NotificationType.ClaimDonation,
