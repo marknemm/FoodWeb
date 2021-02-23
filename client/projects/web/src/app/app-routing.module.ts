@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from '~web/home/components/home/home.component';
 import { ShellComponent } from '~web/shell/components/shell/shell.component';
+import { HubComponent } from './home/components/hub/hub.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
+  {path: 'hub', component: HubComponent},
   {
     path: '',
     component: ShellComponent,
@@ -19,6 +21,7 @@ const routes: Routes = [
       { path: 'fundraise', loadChildren: () => import('~web/fundraise/fundraise.module').then(mod => mod.FundraiseModule) },
       { path: 'home', component: HomeComponent },
       { path: 'home/:login', component: HomeComponent },
+      
       { path: 'notification', loadChildren: () => import('~web/notification/notification.module').then(mod => mod.NotificationModule) },
       { path: 'password', loadChildren: () => import('~web/password/password.module').then(mod => mod.PasswordModule) },
       { path: 'signup', loadChildren: () => import('~web/signup/signup.module').then(mod => mod.SignupModule) }

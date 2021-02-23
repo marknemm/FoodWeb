@@ -7,10 +7,12 @@ import { RouterModule } from '@angular/router';
 import { EventSharedModule } from '~web/event-shared/event-shared.module';
 import { HeuristicsModule } from '~web/heuristics/heuristics.module';
 import { HomeComponent } from './components/home/home.component';
+import { HubComponent } from './components/hub/hub.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
+    HubComponent,
   ],
   imports: [
     CommonModule,
