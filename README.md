@@ -194,6 +194,15 @@ Also, keep in mind that each node project within FoodWeb has separate npm script
 
 Run `npm install` to install all dependencies on your host machine.
 
+### Start All 
+  - Make sure docker is running
+  - Run docker-compose up -d foodweb-services on terminal
+  - Run cd ./server
+  - Run npm start
+  - In another terminal, run cd ./client
+  - Run npm start
+
+
 ### Start Web
 
 Run `npm start` to concurrently: 
