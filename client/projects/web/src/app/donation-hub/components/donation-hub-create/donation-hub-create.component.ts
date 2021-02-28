@@ -18,7 +18,7 @@ export class DonationHubCreateComponent extends FormBaseComponent<DonationHubFor
   readonly minRegisterDate = new Date();
 
   readonly agreementChecklistMembers = [
-    'I will refrigerate any sandwiches for donation to St. Luke’s from the time they are dropped off to my location until I transport them to St. Luke’s Mission for Mercy.',
+    'I will refrigerate or keep in cold storage space any sandwiches for donation to St. Luke’s from the time they are dropped off to my location until I transport them to St. Luke’s Mission for Mercy.',
     'I will follow all standard safety precautions when handling food, including wearing gloves when handling the sandwiches, tying long hair back (if applicable), and keeping the sandwiches away from other food and beverage products.',
     'I will notify FoodWeb, and will not handle any sandwiches or interact with any FoodWeb volunteer, if I display any symptoms of illness or COVID-19 (cough, fever, congestion, loss of taste/smell, etc.) on the day of the sandwich drive or 20 days before or after my participation.',
     'I will ensure that FoodWeb volunteers are able to drop-of sandwiches via a contactless manner.',
@@ -27,7 +27,7 @@ export class DonationHubCreateComponent extends FormBaseComponent<DonationHubFor
   ];
 
   readonly readyChecklistMembers = [
-    'Do you have sufficient refrigeration space to hold between 200-300 sandwiches?',
+    'Do you have sufficient refrigeration or cold storage space to hold between 200-300 sandwiches?',
     'After receiving the sandwiches, are you able to deliver them to St. Luke\'s Mission for Mercy?',
     'Do you have a valid driver\'s license?',
     'Do you have automotive insurance in accordance with NYS law?',

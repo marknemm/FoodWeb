@@ -9,7 +9,7 @@
   </button>
   <ng-container *ngIf="sessionService.isVolunteer">
     <button mat-button type="button" [matMenuTriggerFor]="donationHubsMenu">
-      <fa-icon [icon]="faGifts"></fa-icon> <span>Donation Hubs</span>
+      <fa-icon [icon]="faHamburger"></fa-icon> <span>Sandwich Army</span>
     </button>
     <button mat-button type="button" [matMenuTriggerFor]="deliveriesMenu">
       <mat-icon>place</mat-icon> <span>Deliveries</span>
@@ -64,10 +64,10 @@
 <mat-menu #donationHubsMenu="matMenu" class="header-submenu">
   <mat-nav-list>
     <a mat-list-item [routerLink]="['/donation-hub/create']">
-      <mat-icon>add_location</mat-icon> <span>Register Hub</span>
+      <mat-icon>add_location</mat-icon> <span>Register Drop-Off Hub</span>
     </a>
     <a mat-list-item [routerLink]="['/donation-hub/list/my']">
-      <mat-icon>device_hub</mat-icon> <span>My Donation Hubs</span>
+      <mat-icon>device_hub</mat-icon> <span>My Drop-Off Hubs</span>
     </a>
     <mat-divider></mat-divider>
     <a mat-list-item [routerLink]="['/donation-hub/list']">

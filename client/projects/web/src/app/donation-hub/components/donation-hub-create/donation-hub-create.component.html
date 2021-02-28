@@ -1,8 +1,18 @@
 <form [formGroup]="formGroup" class="donation-hub-registration-form page" (submit)="register()">
 
   <div class="donation-hub-registration-title page-title block-label">
-    Donation Hub Registration
+    Drop-Off Hub Registration
   </div>
+
+  <p class="standalone-statement">
+    “Drop-off hubs” will be designated locations for sandwich-makers to drop off their bagged lunches between <strong>12:30-2:30 pm</strong> on the date of the sandwich drive.
+    Volunteers from the hubs must transport the sandwiches to <strong>St. Luke’s Mission for Mercy</strong> before <strong>3:30 pm</strong>.
+  </p>
+
+  <p class="standalone-statement">
+    Drivers will go to the <strong>Good Shepherd House</strong>. It is located by turning left after entering St. Luke’s parking lot, turning left through a side road, and finally taking a quick left.
+    Drop off the sandwiches on the porch, and then call <strong>Gino</strong> at <strong><a href="tel:716-830-1413">(716) 830-1413</a></strong> to let him know to pick them up.
+  </p>
 
   <mat-card>
     <mat-card-title>
@@ -20,14 +30,11 @@
 
   <mat-card>
     <mat-card-title>
-      Let Us Know Your Availabililty
+      Let Us Know Your Availability
     </mat-card-title>
 
     <mat-card-content>
       <div class="row">
-        <div class="col-12">
-          Choose a date that you will be willing to be an intermediate drop-off location for sandwiches:
-        </div>
         <div class="col-md-6 col-12">
           <foodweb-date
             floatLabels="never"
@@ -39,19 +46,14 @@
           ></foodweb-date>
         </div>
       </div>
-
-      <div>
-        Tell us what times you will be available to accept donation drop-offs:
-        <foodweb-time-range formGroupName="dropOffTimeRange" editable="true"></foodweb-time-range>
-      </div>
     </mat-card-content>
   </mat-card>
 
   <mat-card>
-    <mat-card-title>Give Volunteers Drop-Off Instructions</mat-card-title>
+    <mat-card-title>Give Drop-Off Instructions</mat-card-title>
     <mat-card-content>
       <mat-form-field class="fill" floatLabel="never">
-        <textarea matInput formControlName="dropOffInstructions" placeholder="Drop-Off Instructions"></textarea>
+        <textarea matInput formControlName="dropOffInstructions" placeholder="e.g. Ring doorbell and leave the lunches on the porch."></textarea>
       </mat-form-field>
     </mat-card-content>
   </mat-card>

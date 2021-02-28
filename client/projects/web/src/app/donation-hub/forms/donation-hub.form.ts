@@ -17,7 +17,7 @@ export class DonationHubForm extends TFormGroup<DonationHubFormT> {
       contactOverride: new ContactInfoForm(),
       dropOffDate: [undefined, Validators.required],
       dropOffInstructions: ['', Validators.required],
-      dropOffTimeRange: new TimeRangeForm(undefined, 'all'),
+      dropOffTimeRange: new TimeRangeForm({ startTime: '12:30 PM', endTime: '2:30 PM' }, 'all'),
       readyChecklist: [false, DonationHubForm._genChecklistValidators(config)]
     });
     this._deriveValuesFromAccount(config.account);

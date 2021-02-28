@@ -194,3 +194,15 @@ a.no-hover {
     display: block !important;
   }
 }
+
+.standalone-statement {
+  font-size: 20px;
+  color: $accent;
+  text-align: center;
+  margin: 5px 0 30px;
+
+  @media only screen and (max-width: $sm) {
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+}
