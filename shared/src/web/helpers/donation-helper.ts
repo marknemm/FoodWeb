@@ -323,6 +323,15 @@ export class DonationHelper {
   hasDonorContactInfoOverride(donation: Partial<Donation>): boolean {
     return (donation?.donorContactOverride?.id !== donation?.donorAccount?.contactInfo?.id);
   }
+
+  /**
+   * Generates an email subject for a given donation.
+   * @param donation The donation for which to generate the email subject.
+   * @return The generated email subject.
+   */
+  genDonationEmailSubject(donation: Donation): string {
+    return `Donation: ${donation.description} (${donation.id})`;
+  }
 }
 
 export interface DonationAccounts {

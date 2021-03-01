@@ -1,7 +1,7 @@
 import { AccountEntity, DonationEntity } from '~entity';
 import { DonationHelper } from '~shared';
-import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
-import { broadcastNotification, NotificationType } from '~web/helpers/messaging/notification';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient, NotificationType } from '~web/helpers/messaging/notification';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
 
 const _donationHelper = new DonationHelper();
@@ -12,6 +12,9 @@ const _donationHelper = new DonationHelper();
  * @return A promise that resolves to the unscheduled (new) donation.
  */
 export async function sendDeliveryCancelledMessages(unscheduleDiff: UpdateDiff<DonationEntity>): Promise<DonationEntity> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const messagePromises: Promise<any>[] = [];
   const volunteerAccount: AccountEntity = unscheduleDiff.old.claim.delivery.volunteerAccount;
   const emailAccounts: AccountEntity[] = [unscheduleDiff.new.donorAccount, unscheduleDiff.new.claim.receiverAccount, volunteerAccount];
@@ -21,17 +24,17 @@ export async function sendDeliveryCancelledMessages(unscheduleDiff: UpdateDiff<D
   const delivererName: string = _donationHelper.delivererName(unscheduleDiff.old);
 
   messagePromises.push(
-    broadcastEmail(
+    mailClient.broadcastEmail(
       MailTransporter.NOREPLY,
       emailAccounts,
-      genDonationEmailSubject(unscheduleDiff.new),
+      _donationHelper.genDonationEmailSubject(unscheduleDiff.new),
       'delivery-cancelled',
       { donation: unscheduleDiff.new, donorName, receiverName, delivererName }
     ).catch(console.error)
   );
 
   messagePromises.push(
-    broadcastNotification(
+    notificationClient.broadcastNotification(
       notificationAccounts,
       {
         notificationType: NotificationType.CancelDelivery,

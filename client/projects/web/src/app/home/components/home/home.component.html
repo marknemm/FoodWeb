@@ -11,27 +11,32 @@
     <ng-container *ngIf="donationHubFeatureVisible">
       <mat-card class="donation-hub-new-feature">
         <mat-card-title class="block-label">
-          Volunteer Coordinated Donation Hubs - <strong class="warn">NEW</strong>
+          FoodWeb’s Sandwich Army - <strong class="warn">NEW</strong>
         </mat-card-title>
         <mat-card-content>
-          <div class="intro-block">
-            Our platform now allows volunteers to coordinate weekly sandwich drives.
+          <div class="donation-hub-intro-block">
+            <p>
+              FoodWeb’s Sandwich Army is a volunteer-driven effort to alleviate food insecurity during the pandemic through <strong>sandwich drives every Saturday</strong>!
+            </p>
             <div *ngIf="!sessionService.loggedIn">
               To participate, <strong><a [routerLink]="['/home']" (click)="openLoginDialog()">login</a></strong> to your volunteer account.
             </div>
-            <p *ngIf="sessionService.loggedIn">
-              To participate, please view the following links:
-            </p>
           </div>
+
           <ng-container *ngIf="sessionService.loggedIn">
+            <p class="donation-hub-signup-instructions">
+              Sign up to be a drop-off hub or a sandwich maker or both:
+            </p>
             <p>
-              <strong><a [routerLink]="['/donation-hub', 'create']">Register Hub</a></strong><br>
-              Use your home as a sandwhich drop-off hub for a selected period of time.
-              Afterwards, deliver the collected sandwiches to St. Luke's Mission of Mercy.
+              <strong><a [routerLink]="['/donation-hub', 'create']">Register Drop-Off Hub</a></strong><br>
+              Use your home as a donation drop-off hub for a specified time period on a Saturday.
+              Volunteers will pledge donations for drop-off at your residence.
+              After the time period, the lunches are to be transported to St. Luke's Mission for Mercy.
             </p>
             <p>
               <strong><a [routerLink]="['/donation-hub', 'list']">Pledge Donation</a></strong><br>
-              Browse donation hubs where you can donate sandwhiches.
+              Volunteers make bagged sandwich lunches consisting of a sandwich, a piece of fruit, and a snack.
+              The lunches are to be dropped-off at designated "drop-off hubs".
             </p>
           </ng-container>
         </mat-card-content>

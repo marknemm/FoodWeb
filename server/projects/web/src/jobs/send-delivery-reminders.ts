@@ -3,8 +3,8 @@ require('./jobs-config');
 import { AccountEntity, DonationEntity } from '~entity';
 import { initOrm, OrmSelectQueryBuilder } from '~orm';
 import { DateTimeHelper, DonationHelper, ListResponse } from '~shared';
-import { broadcastEmail, MailTransporter } from '~web/helpers/messaging/email';
-import { broadcastNotification, NotificationType } from '~web/helpers/messaging/notification';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient, NotificationType } from '~web/helpers/messaging/notification';
 import { queryDonations } from '~web/services/donation/read-donations';
 
 const _dateTimeHelper = new DateTimeHelper();
@@ -65,6 +65,9 @@ async function _sendAllDeliveryReminderMessages(donations: DonationEntity[], hou
 }
 
 async function _sendDeliveryReminderMessages(donation: DonationEntity, hour: number): Promise<void> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const messagePromises: Promise<any>[] = [];
   const volunteerAccount: AccountEntity = donation.claim.delivery.volunteerAccount;
   const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, volunteerAccount];
@@ -78,7 +81,7 @@ async function _sendDeliveryReminderMessages(donation: DonationEntity, hour: num
   const deliveryTimeEndStr: string = _dateTimeHelper.toLocalTimeStr(donation.claim.delivery.pickupWindowEnd, timezone);
 
   messagePromises.push(
-    broadcastEmail(
+    mailClient.broadcastEmail(
       MailTransporter.NOREPLY,
       emailAccounts,
       `Delivery Reminder for ${deliveryWindowStartStr}`,
@@ -88,7 +91,7 @@ async function _sendDeliveryReminderMessages(donation: DonationEntity, hour: num
   );
 
   messagePromises.push(
-    broadcastNotification(
+    notificationClient.broadcastNotification(
       notificationAccounts,
       {
         notificationType: NotificationType.DeliveryReminder,

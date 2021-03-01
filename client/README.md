@@ -9,42 +9,9 @@ It is composed of 3 projects:
 
 
 
-## Docker Commands
+## Recommended Run Methods
 
-All of the following Docker Commands can be run via VS Code tasks under the **Terminal** menu in the header.
-Feel free to lookup and use the raw docker commands by viewing **.vscode/tasks.json**.
-
-Also View the FoodWeb top-level [README.md](https://github.com/marknemm/FoodWeb/blob/master/README.md) for more available Docker commands.
-
-### Start Web
-
-Run the VS Code task `Docker FoodWeb: Start` to start the web client within the foodweb container.
-Additionally, performs initial dependency installation and bootstraps all related server technologies.
-Navigate to `http://localhost:4200` to view the web app.
-
-### Start App
-
-Run the VS Code task `Docker FoodWeb App: Start` to start the app (browser) client within the foodweb-app container.
-Additionally, performs initial dependency installation and bootstraps all related server technologies.
-Navigate to `http://localhost:8100` to view the mobile app.
-
-### Start Admin
-
-Run the VS Code task `Docker FoodWeb Admin: Start` to start the admin client within the foodweb-admin container.
-Additionally, performs initial dependency installation and bootstraps all related server technologies.
-Navigate to `http://localhost:4201` to view the admin app.
-
-### Reinstall Dependencies
-
-Run the VS Code task `Docker FoodWeb: Reinstall Client Dependencies` to reinstall client dependencies within a running foodweb container.
-
-### Reinstall App Dependencies
-
-Run the VS Code task `Docker FoodWeb App: Reinstall Client Dependencies` to reinstall client dependencies within a running foodweb-app container.
-
-### Reinstall Admin Dependencies
-
-Run the VS Code task `Docker FoodWeb Admin: Reinstall Client Dependencies` to reinstall client dependencies within a running foodweb-admin container.
+On both Mac & Windows, it is recommended that you run the Angular client server on your local machine. See `Start Web` & `Start Admin` under `NPM Scripts` below.
 
 
 

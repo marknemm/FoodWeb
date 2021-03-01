@@ -25,15 +25,14 @@ This is the simplest setup. If using **Windows 10 Home Edition** make sure you f
 
 #### Directions:
 
-  1. In Docker Settings under Resources -> File Sharing, ensure that you enable sharing of the **C drive**.
-  2. In Docker Settings under Resources -> Advanced, increase the number of CPUs and amount of memory as you see fit.
-  2. Pull/Build all docker images and spin-up all containers via: `docker-compose up -d foodweb`.
-  3. Update the generated **/server/projects/web/.env** file by setting the following variables to valid API keys:
+  1. Pull/Build all docker images and spin-up all containers via: `docker-compose up -d foodweb`.
+  2. Update the generated **/server/projects/web/.env** file by setting the following variables to valid API keys:
       - **DISTANCE_TIME_API_KEY**
       - **DIRECTIONS_API_KEY**
       - **GEOCODER_API_KEY**
-  4. Start developing!
+  3. Start developing!
 
+Note that it is also recommended that you at least install the psql CLI for PostgreSQL in order to execute commands and examine the database from your local machine; although, this is not required. Feel free to install [Postgresql Server](https://www.postgresql.org/download/) v11.6.
 
 ### Local Setup
 
@@ -62,6 +61,8 @@ This is the simplest setup. If using **Windows 10 Home Edition** make sure you f
   8. Run `npm start` to start both the /server and /client portions of FoodWeb.
   9. Start developing!
 
+
+
 ## App Development Setup
 
 In order to work on the NativeScript app, you must first prepare by installing the necessary tools and setting up required environment variables.
@@ -87,6 +88,8 @@ Note that you cannot develop for the iOS platform on a Windows machine, so you c
   3. Ensure that you open a new shell session, and run the command `nsc doctor` to determine if any more setup is necessary for your NativeScript iOS envrionment. This should also show you Android requirements that are not met. Those are covered in the previous section.
   4. Run `cd ./client` to move into this project's client directory. In here, run `npm start app:ios` to test out starting the FoodWeb app inside an iOS simulator.
 
+
+
 ## Recommended VS Code Extensions
 
   - **Angular Essentials**: Pick the highest version. Provides a ton of necessary support for Angular development such as **Angular Language Service** for template intellisence.
@@ -100,65 +103,9 @@ Note that you cannot develop for the iOS platform on a Windows machine, so you c
 
 
 
-## Docker Commands
+## Recommended Run Methods
 
-All of the following Docker Commands can be run via VS Code tasks under the **Terminal** menu in the header.
-Feel free to lookup and use the raw docker commands by viewing **.vscode/tasks.json**.
-
-Also, note that each node project within FoodWeb has specialilzed docker commands described in the projects' README.md files.
-
-### Start Web
-
-Run the VS Code task `Docker FoodWeb: Start` to:
-
-  - Perform an initial install of all dependencies.
-  - Start a postgres docker container which exposes port **5432**.
-  - Start a redis docker container which exposes port **6379**.
-  - Start a fake-smtp-server docker container which exposes a web interface on port **1080**, and SMTP server on port **1025**.
-  - Start a foodweb-server docker container which exposes a node.js app on port **5000** and a debugger on port **9229**.
-  - Start a foodweb docker container which exposes an Angular app on port **4200**.
-
-Navigate to `http://localhost:4200` to view the web app.
-
-### Start App
-
-Run the VS Code task `Docker FoodWeb App: Start` to:
-
-  - Perform an initial install of all dependencies.
-  - Start a postgres docker container which exposes port **5432**.
-  - Start a redis docker container which exposes port **6379**.
-  - Start a fake-smtp-server docker container which exposes a web interface on port **1080**, and SMTP server on port **1025**.
-  - Start a foodweb-server docker container which exposes a node.js app on port **5000** and a debugger on port **9229**.
-  - Start a foodweb-app docker container which exposes an Angular/Cordova (browser) app on port **8100**.
-
-Navigate to `http://localhost:8100` to view the mobile app in browser.
-Note that when running in browser, the app will not have access to mobile device capabilities (eg. push notifications).
-See [README.md](https://github.com/marknemm/FoodWeb/blob/master/client/README.md) for details concerning how to emulate/simulate the mobile app.
-
-### Start Admin
-
-Run the VS Code task `Docker FoodWeb Admin: Start` to:
-
-  - Perform an initial install of all dependencies.
-  - Start a postgres docker container which exposes port **5432**.
-  - Start a redis docker container which exposes port **6379**.
-  - Start a fake-smtp-server docker container which exposes a web interface on port **1080**, and SMTP server on port **1025**.
-  - Start a foodweb-admin-server docker container which exposes a node.js app on port **5001** and a debugger on port **9230**.
-  - Start a foodweb-admin docker container which exposes an Angular app on port **4201**.
-
-Navigate to `http://localhost:4201` to view the admin console.
-
-### Reinstall Dependencies
-
-Run the VS Code task `Docker FoodWeb: Reinstall Dependencies` to reinstall dependencies within a running foodweb container.
-
-### Reinstall Admin Dependencies
-
-Run the VS Code task `Docker FoodWeb Admin: Reinstall Dependencies` to reinstall dependencies within a running foodweb-admin container.
-
-### View Log Output
-
-Run the VS Code task `Docker Logs` to view & follow all Docker log output.
+See the **README.md** files under the `client` & `server` directories for the recommended run methods specific to the front-end & back-end respectively.
 
 
 
@@ -166,7 +113,7 @@ Run the VS Code task `Docker Logs` to view & follow all Docker log output.
 
 All of the following debugging options are defined in **.vscode/tasks.json**, and can be ran under the VS Code debugging tab.
 
-Also, keep in mind that each node project within FoodWeb has specialized debugging tasks defined.
+Also, keep in mind that each node project within FoodWeb has specialized debugging tasks defined. View the README.md files in the `client` and `server` directories for more details.
 
 ### Hybrid Attach
 
@@ -193,48 +140,6 @@ Also, keep in mind that each node project within FoodWeb has separate npm script
 ### Install Dependencies
 
 Run `npm install` to install all dependencies on your host machine.
-
-### Start All 
-  - Make sure docker is running
-  - Run docker-compose up -d foodweb-services on terminal
-  - Run cd ./server
-  - Run npm start
-  - In another terminal, run cd ./client
-  - Run npm start
-
-
-### Start Web
-
-Run `npm start` to concurrently: 
-
-  - Build & watch the web client source code.
-  - Build & watch the web server source code.
-  - Spin-up an **Angular dev** server on port **4200** that restarts whenever client code rebuilds.
-  - Spin-up a **nodemon** server on port **5000** that restarts whenever the server code rebuilds.
-
-Navigate to `http://localhost:4200` to view the web app.
-
-### Start App
-
-Run `npm run app:start` to concurrently:
-
-  - Build & watch the app client source code.
-  - Build & watch the web server source code.
-  - Spin-up an **Angular dev** server on port **8100** that restarts whenever the client code rebuilds.
-  - Spin-up a **nodemon** server on port **5000** that restarts whenever the server code rebuilds.
-
-Navigate to `http://localhost:8100` to view the mobile app in browser.
-
-### Start Admin
-
-Run `npm run admin:start` to concurrently:
-
-  - Build & watch the admin client source code.
-  - Build & watch the admin server source code.
-  - Spin-up an **Angular dev** server on port **4201** that restarts whenever the client code rebuilds.
-  - Spin-up a **nodemon** server on port **5001** that restarts whenever the server code rebuilds.
-
-Navigate to `http://localhost:4201` to view the admin console.
 
 ### Build Web
 

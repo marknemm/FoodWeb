@@ -1,43 +1,77 @@
 import redis = require('redis');
 import { RedisClient, RetryStrategyOptions } from 'redis';
 import { promisify } from 'util';
+import { getPort, getReachableUrl } from '~web/helpers/misc/url';
 
 /**
  * A simple Redis key-value store interface.
  */
 export class RedisStore {
 
-  private static _storeInstance: RedisStore = new RedisStore();
+  /**
+   * The singleton instance of this RedisStore.
+   */
+  private static _instance: RedisStore;
 
   /**
-   * A singleton instance of a raw redis client.
-   * Should generally be avoided in preference of 'store'. Exposed for the sake of flexibility.
+   * The raw redis client.
    */
-  readonly client: RedisClient = redis.createClient({
-    url: process.env.REDIS_URL,
-    password: process.env.REDIS_PASSWORD,
-    retry_strategy: (retryOpts: RetryStrategyOptions) => {
-      if (retryOpts.error && retryOpts.error.code === 'ECONNREFUSED') {
-        return new Error('The server refused the connection');
-      }
-      if (retryOpts.attempt > 10) {
-        return undefined;
-      }
-      return (retryOpts.attempt * 200); // Max out during attempt 10 at 2000ms.
-    }
-  });
+  private _client: RedisClient;
 
   /**
    * A singleton instance of a redis store.
    */
-  static getStore(): RedisStore {
-    return RedisStore._storeInstance;
+  static async getInstance(): Promise<RedisStore> {
+    if (!RedisStore._instance) {
+      RedisStore._instance = new RedisStore();
+      await RedisStore._instance._init();
+    }
+    return RedisStore._instance;
   }
 
   /**
-   * External code must use static methods to get/create an instance of RedisStore.
+   * Gets the redis URL.
+   * @return A promise that resolves to the redis URL.
+   */
+  static async getUrl(): Promise<string> {
+    // Check for a reachable redis host. First check the configured environment variable for the URL, then check common dev URLs.
+    const redisHosts: string[] = [process.env.REDIS_URL, 'localhost', 'redis'];
+    const redisPort: number = getPort(process.env.REDIS_URL, 6379);
+    const redisHost: string = await getReachableUrl(redisHosts, redisPort);
+    return `redis://${redisHost}:${redisPort}`;
+  }
+
+  /**
+   * Private constructor to enforce singleton instance.
    */
   private constructor() {}
+
+  /**
+   * The raw Redis client. Exposed for flexibility, but should generally use the `del`, `get`, and `set`
+   * methods within this wrapper class instead of this raw client.
+   */
+  get client(): RedisClient {
+    return this._client;
+  }
+
+  /**
+   * Initializes the RedisStore.
+   */
+  private async _init() {
+    this._client = redis.createClient({
+      url: await RedisStore.getUrl(),
+      password: process.env.REDIS_PASSWORD,
+      retry_strategy: (retryOpts: RetryStrategyOptions) => {
+        if (retryOpts.error && retryOpts.error.code === 'ECONNREFUSED') {
+          return new Error('The server refused the connection');
+        }
+        if (retryOpts.attempt > 10) {
+          return undefined;
+        }
+        return (retryOpts.attempt * 200); // Max out during attempt 10 at 2000ms.
+      }
+    });
+  }
 
   /**
    * Deletes an entry from this Redis key-value store.
@@ -73,4 +107,20 @@ export class RedisStore {
     const serializedValue: string = JSON.stringify(value);
     return <Promise<'OK'>> promisify(this.client.set).bind(this.client)(key, serializedValue);
   }
+}
+
+/**
+ * Generates/gets a singleton instance of the RedisStore.
+ * @return A promise that resolves to the RedisStore.
+ */
+export async function getRedisStore(): Promise<RedisStore> {
+  return await RedisStore.getInstance();
+}
+
+/**
+ * Gets the redis URL.
+ * @return A promise that resolves to the redis URL.
+ */
+export async function getRedisUrl(): Promise<string> {
+  return await RedisStore.getUrl();
 }

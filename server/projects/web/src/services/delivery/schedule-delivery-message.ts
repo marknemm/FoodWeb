@@ -1,28 +1,31 @@
 import { AccountEntity, DonationEntity } from '~entity';
 import { DonationHelper } from '~shared';
-import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
-import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient, NotificationType } from '~web/helpers/messaging/notification';
 import { sendDeliveryUnavailableMessages } from './delivery-unavailable-message';
 
 const _donationHelper = new DonationHelper();
 
 export async function sendDeliveryScheduledMessages(donation: DonationEntity): Promise<DonationEntity> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const messagePromises: Promise<any>[] = [];
   const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, donation.claim.delivery.volunteerAccount];
   const { donorName, receiverName, delivererName } = _donationHelper.memberNames(donation);
 
   messagePromises.push(
-    broadcastEmail(
+    mailClient.broadcastEmail(
       MailTransporter.NOREPLY,
       emailAccounts,
-      genDonationEmailSubject(donation),
+      _donationHelper.genDonationEmailSubject(donation),
       'delivery-scheduled',
       { donation, donorName, receiverName, delivererName }
     ).catch(console.error)
   );
 
   messagePromises.push(
-    sendNotification(
+    notificationClient.sendNotification(
       donation.donorAccount,
       {
         notificationType: NotificationType.ScheduleDelivery,
@@ -38,7 +41,7 @@ export async function sendDeliveryScheduledMessages(donation: DonationEntity): P
   );
 
   messagePromises.push(
-    sendNotification(
+    notificationClient.sendNotification(
       donation.claim.receiverAccount,
       {
         notificationType: NotificationType.ScheduleDelivery,

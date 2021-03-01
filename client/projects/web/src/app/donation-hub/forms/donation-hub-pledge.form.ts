@@ -9,11 +9,18 @@ export class DonationHubPledgeForm extends TFormGroup<DonationHubPledgeFormT> {
       id: undefined,
       agreementChecklist: [false, (config.omitChecklist ? [] : [Validators.requiredTrue])],
       foodType: ['', Validators.required],
-      foodCount: [null, [Validators.required, Validators.min(1)]]
+      foodCount: [null, [Validators.required, Validators.min(1), Validators.max(100)]]
     });
     if (config.value) {
       this.patchValue(config.value);
     }
+  }
+
+  /**
+   * Whether or not a food count range error is present.
+   */
+  get hasFoodCountRangeErr(): boolean {
+    return this.get('foodCount').hasError('min') || this.get('foodCount').hasError('max');
   }
 }
 

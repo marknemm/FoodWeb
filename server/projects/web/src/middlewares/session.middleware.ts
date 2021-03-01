@@ -1,47 +1,31 @@
-import { RedisStoreOptions } from 'connect-redis';
 import 'dotenv';
 import { NextFunction, Request, RequestHandler, Response } from 'express';
-import { MemoryStore, SessionOptions, Store } from 'express-session';
 import { Account } from '~shared';
+import { getRedisUrl } from '~web/helpers/misc/redis-store';
 import expressSession = require('express-session');
 import connectRedis = require('connect-redis');
 export { Account };
 
 /**
- * The options for express-session middleware & store.
+ * Generates the express session middleware request handler.
+ * @return the express session middleware request handler.
  */
-export const sessionOptions: SessionOptions = _genSessionOpts();
-/**
- * The express-session store. Will be a Redis Store if not in dev mode, otherwise will be a Memory Store.
- */
-export const sessionStore: Store | MemoryStore = sessionOptions.store;
-/**
- * The session request handler middleware.
- */
-export const session: RequestHandler = expressSession(sessionOptions);
-
-/**
- * Generates session options for session middleware bootstrap.
- * @return The generated session options.
- */
-function _genSessionOpts(): SessionOptions {
+export async function session(): Promise<RequestHandler> {
   const ttlMs: number = parseInt(process.env.SESSION_TTL_MS, 10);
-  const RedisStore = connectRedis(expressSession);
+  const RedisSessionStore = connectRedis(expressSession);
 
-  const redisOpts: RedisStoreOptions = {
-    url: process.env.REDIS_URL,
-    ttl: (ttlMs / 1000), // NOTE: Time-to-live here is in seconds!
-    pass: process.env.REDIS_PASSWORD,
-    logErrors: (process.env.LOG_CONSOLE_REDIS_ERRS === 'true')
-  };
-
-  return {
+  return expressSession({
     secret: process.env.SESSION_SECRET,
-    store: new RedisStore(redisOpts),
+    store: new RedisSessionStore({
+      url: await getRedisUrl(),
+      ttl: (ttlMs / 1000), // NOTE: Time-to-live here is in seconds!
+      pass: process.env.REDIS_PASSWORD,
+      logErrors: (process.env.LOG_CONSOLE_REDIS_ERRS === 'true')
+    }),
     saveUninitialized: false,
     resave: false,
     rolling: true,
-  };
+  });
 }
 
 /**

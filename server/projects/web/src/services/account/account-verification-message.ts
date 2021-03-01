@@ -1,6 +1,6 @@
 import { AccountEntity, UnverifiedAccountEntity } from '~entity';
-import { MailTransporter, sendEmail } from '~web/helpers/messaging/email';
-import { NotificationType, sendNotification } from '~web/helpers/messaging/notification';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient, NotificationType } from '~web/helpers/messaging/notification';
 import { NewAccountData } from './save-account';
 
 export async function sendAccountVerificationMessage(newAccountData: NewAccountData): Promise<AccountEntity> {
@@ -13,27 +13,17 @@ export async function sendAccountVerificationMessage(newAccountData: NewAccountD
   );
 
   messagePromises.push(
-    sendNotification(
-      account,
-      {
-        notificationType: NotificationType.Signup,
-        notificationLink: `/account/my`,
-        title: 'Welcome to FoodWeb!',
-        icon: './assets/IconImgSm.png',
-        body: `
-          Please check your email for an account verification link.
-        `
-      }
-    ).catch (console.error)
+    sendAccountVerificationNotification(account)
   );
 
   await Promise.all(messagePromises);
   return account;
 }
 
-export function sendAccountVerificationEmail(account: AccountEntity, unverifiedAccount: UnverifiedAccountEntity): Promise<void> {
+export async function sendAccountVerificationEmail(account: AccountEntity, unverifiedAccount: UnverifiedAccountEntity): Promise<void> {
+  const mailClient: MailClient = await getMailClient();
   const verificationToken: string = unverifiedAccount.verificationToken;
-  return sendEmail(
+  return mailClient.sendEmail(
     MailTransporter.NOREPLY,
     account,
     'Verify New FoodWeb Account',
@@ -41,4 +31,20 @@ export function sendAccountVerificationEmail(account: AccountEntity, unverifiedA
     { verificationToken },
     true
   ).catch(console.error);
+}
+
+export async function sendAccountVerificationNotification(account: AccountEntity): Promise<void> {
+  const notificationClient: NotificationClient = getNotificationClient();
+  notificationClient.sendNotification(
+    account,
+    {
+      notificationType: NotificationType.Signup,
+      notificationLink: `/account/my`,
+      title: 'Welcome to FoodWeb!',
+      icon: './assets/IconImgSm.png',
+      body: `
+        Please check your email for an account verification link.
+      `
+    }
+  ).catch (console.error);
 }

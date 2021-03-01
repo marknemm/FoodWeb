@@ -1,7 +1,7 @@
 import { AccountEntity, DonationEntity } from '~entity';
 import { DateTimeHelper, DonationHelper, DonationStatus } from '~shared';
-import { broadcastEmail, genDonationEmailSubject, MailTransporter } from '~web/helpers/messaging/email';
-import { broadcastNotification, NotificationType } from '~web/helpers/messaging/notification';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient, NotificationType } from '~web/helpers/messaging/notification';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { sendDeliveryCancelledMessages } from './cancel-delivery-message';
 
@@ -14,6 +14,9 @@ const _donationHelper = new DonationHelper();
  * @return A promise that resolves to the given donation.
  */
 export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity): Promise<DonationEntity> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const messagePromises: Promise<any>[] = [];
   const volunteerAccount: AccountEntity = donation.claim.delivery.volunteerAccount;
   const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, volunteerAccount];
@@ -32,10 +35,10 @@ export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity
   const dropOffWindowEndTime: string = _dateTimeHelper.toLocalTimeStr(donation.claim.delivery.dropOffWindowEnd, receiverTimezone);
 
   messagePromises.push(
-    broadcastEmail(
+    mailClient.broadcastEmail(
       MailTransporter.NOREPLY,
       emailAccounts,
-      genDonationEmailSubject(donation),
+      _donationHelper.genDonationEmailSubject(donation),
       emailTmpl,
       {
         donation,
@@ -51,7 +54,7 @@ export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity
   );
 
   messagePromises.push(
-    broadcastNotification(
+    notificationClient.broadcastNotification(
       notificationAccounts,
       {
         notificationType: NotificationType.DeliveryStateAdvance,
@@ -116,6 +119,9 @@ export async function sendDeliveryStateUndoMessages(undoDiff: UpdateDiff<Donatio
  * @return A promise that resolves to the given donation.
  */
 async function _sendDeliveryStateUndoMessages(donation: DonationEntity): Promise<DonationEntity> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const messagePromises: Promise<any>[] = [];
   const volunteerAccount: AccountEntity = donation.claim.delivery.volunteerAccount;
   const emailAccounts: AccountEntity[] = [donation.donorAccount, donation.claim.receiverAccount, volunteerAccount];
@@ -125,17 +131,17 @@ async function _sendDeliveryStateUndoMessages(donation: DonationEntity): Promise
   const delivererName: string = _donationHelper.delivererName(donation);
 
   messagePromises.push(
-    broadcastEmail(
+    mailClient.broadcastEmail(
       MailTransporter.NOREPLY,
       emailAccounts,
-      genDonationEmailSubject(donation),
+      _donationHelper.genDonationEmailSubject(donation),
       'delivery-status-undo',
       { donation, donorName, receiverName, delivererName }
     ).catch(console.error)
   );
 
   messagePromises.push(
-    broadcastNotification(
+    notificationClient.broadcastNotification(
       notificationAccounts,
       {
         notificationType: NotificationType.DeliveryStateUndo,

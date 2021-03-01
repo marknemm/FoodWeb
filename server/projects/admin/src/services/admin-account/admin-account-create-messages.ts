@@ -1,7 +1,7 @@
 import { NewAccountData } from '~admin/services/admin-account/admin-save-account';
 import { AccountEntity } from '~entity';
 import { AdminAccountCreateOptions } from '~shared';
-import { MailTransporter, sendEmail } from '~web/helpers/messaging/email';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
 import { sendAccountVerificationEmail } from '~web/services/account/account-verification-message';
 
 /**
@@ -33,10 +33,11 @@ export async function adminSendAccountCreateMessages(
  * @return A promise that resolves once the message(s) have been sent.
  */
 async function adminSendAutoGenPasswordEmail(autoVerify: boolean, newAccountData: NewAccountData, password: string): Promise<void> {
+  const mailClient: MailClient = await getMailClient();
   const verificationToken: string = (autoVerify ? undefined : newAccountData.unverifiedAccount.verificationToken);
   const emailSubject: string = (autoVerify ? 'Please Reset Your FoodWeb Password' : 'Verify New FoodWeb Account');
 
-  return sendEmail(
+  return mailClient.sendEmail(
     MailTransporter.NOREPLY,
     newAccountData.account,
     emailSubject,

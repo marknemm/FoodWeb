@@ -1,7 +1,7 @@
 import { AccountEntity, DonationEntity } from '~entity';
-import { Account, DonationHelper, DonationStatus, NotificationType, AccountType } from '~shared';
-import { broadcastEmail, genDonationEmailSubject, MailTransporter, sendEmail } from '~web/helpers/messaging/email';
-import { sendNotification, broadcastNotification } from '~web/helpers/messaging/notification';
+import { Account, AccountType, DonationHelper, DonationStatus, NotificationType } from '~shared';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
+import { getNotificationClient, NotificationClient } from '~web/helpers/messaging/notification';
 import { determineUpdateType, UpdateDiff, UpdateType } from '~web/helpers/misc/update-diff';
 import { sendDeliveryCancelledMessages } from '~web/services/delivery/cancel-delivery-message';
 import { sendDeliveryAvailableMessages } from '~web/services/delivery/delivery-available-message';
@@ -188,6 +188,9 @@ function _wasDeliveryStatusUpdated(oldDonation: DonationEntity, newDonation: Don
  * @return A promise that resolves once all messages have been sent.
  */
 async function _sendClaimReassignedMessages(donationDiff: UpdateDiff<DonationEntity>, volunteerUpdtType: UpdateType): Promise<void> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const messagePromises: Promise<any>[] = [];
   const receiverAccount: AccountEntity = donationDiff.new.claim.receiverAccount;
   const oldReceiverAccount: AccountEntity = donationDiff.old.claim.receiverAccount;
@@ -198,11 +201,11 @@ async function _sendClaimReassignedMessages(donationDiff: UpdateDiff<DonationEnt
   const receiverName: string = _donationHelper.receiverName(donationDiff.new);
   const delivererName: string = _donationHelper.delivererName(donationDiff.new);
   const oldReceiverName: string = _donationHelper.receiverName(donationDiff.old);
-  const donationEmailSubject: string = genDonationEmailSubject(donationDiff.new);
+  const donationEmailSubject: string = _donationHelper.genDonationEmailSubject(donationDiff.new);
 
   // Message all members of the updated donation concerning the claim re-assignment.
   messagePromises.push(
-    broadcastEmail(
+    mailClient.broadcastEmail(
       MailTransporter.NOREPLY,
       broadcastAccounts,
       donationEmailSubject,
@@ -211,7 +214,7 @@ async function _sendClaimReassignedMessages(donationDiff: UpdateDiff<DonationEnt
     ).catch(console.error)
   );
   messagePromises.push(
-    broadcastNotification(
+    notificationClient.broadcastNotification(
       broadcastAccounts,
       {
         notificationType: NotificationType.ClaimReassigned,
@@ -228,7 +231,7 @@ async function _sendClaimReassignedMessages(donationDiff: UpdateDiff<DonationEnt
 
   // Simply message old receiver that their claim has been removed.
   messagePromises.push(
-    sendEmail(
+    mailClient.sendEmail(
       MailTransporter.NOREPLY,
       oldReceiverAccount,
       donationEmailSubject,
@@ -242,7 +245,7 @@ async function _sendClaimReassignedMessages(donationDiff: UpdateDiff<DonationEnt
     ).catch(console.error)
   );
   messagePromises.push(
-    sendNotification(
+    notificationClient.sendNotification(
       oldReceiverAccount,
       {
         notificationType: NotificationType.UnclaimDonation,
@@ -268,6 +271,9 @@ async function _sendClaimReassignedMessages(donationDiff: UpdateDiff<DonationEnt
  * @return A promise that resolves once all messages have been sent.
  */
 async function _sendDeliveryReassignedMessages(donationDiff: UpdateDiff<DonationEntity>, receiverUpdtType: UpdateType): Promise<void> {
+  const mailClient: MailClient = await getMailClient();
+  const notificationClient: NotificationClient = getNotificationClient();
+
   const messagePromises: Promise<any>[] = [];
   const volunteerAccount: AccountEntity = donationDiff.new.claim.delivery.volunteerAccount;
   const oldVolunteerAccount: AccountEntity = donationDiff.old.claim.delivery.volunteerAccount;
@@ -278,11 +284,11 @@ async function _sendDeliveryReassignedMessages(donationDiff: UpdateDiff<Donation
   const receiverName: string = _donationHelper.receiverName(donationDiff.new);
   const delivererName: string = _donationHelper.delivererName(donationDiff.new);
   const oldDelivererName: string = _donationHelper.delivererName(donationDiff.old);
-  const donationEmailSubject: string = genDonationEmailSubject(donationDiff.new);
+  const donationEmailSubject: string = _donationHelper.genDonationEmailSubject(donationDiff.new);
 
   // Message all members of the updated donation concerning the delivery re-assignment.
   messagePromises.push(
-    broadcastEmail(
+    mailClient.broadcastEmail(
       MailTransporter.NOREPLY,
       broadcastAccounts,
       donationEmailSubject,
@@ -291,7 +297,7 @@ async function _sendDeliveryReassignedMessages(donationDiff: UpdateDiff<Donation
     ).catch(console.error)
   );
   messagePromises.push(
-    broadcastNotification(
+    notificationClient.broadcastNotification(
       broadcastAccounts,
       {
         notificationType: NotificationType.DeliveryReassigned,
@@ -308,7 +314,7 @@ async function _sendDeliveryReassignedMessages(donationDiff: UpdateDiff<Donation
 
   // Simply message old deliverer that their delivery has been cancelled.
   messagePromises.push(
-    sendEmail(
+    mailClient.sendEmail(
       MailTransporter.NOREPLY,
       oldVolunteerAccount,
       donationEmailSubject,
@@ -317,7 +323,7 @@ async function _sendDeliveryReassignedMessages(donationDiff: UpdateDiff<Donation
     )
   );
   messagePromises.push(
-    sendNotification(
+    notificationClient.sendNotification(
       oldVolunteerAccount,
       {
         notificationType: NotificationType.CancelDelivery,

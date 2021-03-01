@@ -29,6 +29,7 @@ import { DonationHubRoutingModule } from './donation-hub-routing.module';
 import { DonationHubPledgeActionsComponent } from './child-components/donation-hub-pledge-actions/donation-hub-pledge-actions.component';
 import { DonationHubPledgeListComponent } from './components/donation-hub-pledge-list/donation-hub-pledge-list.component';
 import { DonationHubPledgeTeaserComponent } from './child-components/donation-hub-pledge-teaser/donation-hub-pledge-teaser.component';
+import { DonationHubPledgeFormComponent } from './child-components/donation-hub-pledge-form/donation-hub-pledge-form.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { DonationHubPledgeTeaserComponent } from './child-components/donation-hu
     DonationHubPledgeActionsComponent,
     DonationHubPledgeListComponent,
     DonationHubPledgeTeaserComponent,
+    DonationHubPledgeFormComponent,
   ],
   imports: [
     DonationHubRoutingModule,

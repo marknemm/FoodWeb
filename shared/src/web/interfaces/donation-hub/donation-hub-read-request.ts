@@ -21,6 +21,10 @@ export interface DonationHubReadRequest extends ReadRequest<DonationHubSortBy> {
    */
   includeExpired?: boolean;
   /**
+   * Whether or not to load the donation pledges belonging to each loaded donation hub. Defaults to false.
+   */
+  loadPledges?: boolean;
+  /**
    * The ID of the volunteer account that owns/created this donation hub.
    */
   volunteerAccountId?: number;

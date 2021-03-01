@@ -12,16 +12,16 @@ import 'reflect-metadata';
 // Set important paths in global.
 const PRODUCTION: boolean = (process.env['PRODUCTION']  === 'true');
 const QA: boolean = (process.env['QA'] === 'true');
-global['rootDir'] = path.join(__dirname, '..', '..', '..', '..', '..', '..');
-global['serverDir'] = path.join(global['rootDir'], 'server');
-global['serverAdminDir'] = path.join(global['serverDir'], 'projects', 'admin');
-global['serverWebDir'] = path.join(global['serverDir'], 'projects', 'web');
-global['serverDbDumpDir'] = path.join(global['serverDir'], 'database-util', 'dump');
-global['clientDir'] = path.join(global['rootDir'], 'client');
-global['clientBuildDir'] = path.join(global['clientDir'], 'dist', 'admin');
-global['assetsDir'] = path.join(global['clientBuildDir'], 'assets');
-global['clientEmailDir'] = path.join(global['clientDir'], 'email');
-global['publicDir'] = path.join(global['rootDir'], 'public');
+global['rootDir']         = path.join(__dirname, '..', '..', '..', '..', '..', '..');
+global['serverDir']       = path.join(global['rootDir'], 'server');
+global['serverAdminDir']  = path.join(global['serverDir'], 'projects', 'admin');
+global['serverWebDir']    = path.join(global['serverDir'], 'projects', 'web');
+global['serverDbDumpDir'] = path.join(global['serverDir'], 'tools', 'database', 'dump');
+global['clientDir']       = path.join(global['rootDir'], 'client');
+global['clientBuildDir']  = path.join(global['clientDir'], 'dist', 'admin');
+global['assetsDir']       = path.join(global['clientBuildDir'], 'assets');
+global['clientEmailDir']  = path.join(global['clientDir'], 'email');
+global['publicDir']       = path.join(global['rootDir'], 'public');
 
 // Setup path alias resolution for JS.
 const tsconfigPathname: string = path.join(global['serverAdminDir'], 'tsconfig.json');
@@ -69,37 +69,40 @@ app.use(cors);
 app.use(compression());
 app.use(json());
 app.use(multer().any());
-app.use(session);
 app.use(recaptcha);
 app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));
 app.set('port', (process.env.PORT || process.env.SERVER_PORT || 5000));
 
-// Connect Express admin session sub-module controller. This will be the only un-authenticated route (for login).
-app.use('/server/session', sessionRouter);
-app.use('/server', ensureSessionAdmin, adminRouter);
+session()
+  .then(app.use.bind(app))
+  .then(initOrm)
+  .then(() => {
+    // Connect Express admin session sub-module controller. This will be the only un-authenticated route (for login).
+    app.use('/server/session', sessionRouter);
+    app.use('/server', ensureSessionAdmin, adminRouter);
 
-// Public Resource Route Handler (for local image hosting).
-app.get('/public/*', (request: Request, response: Response) => {
-  response.sendFile(path.resolve(global['rootDir'] + decodeURI(request.url)));
-});
+    // Public Resource Route Handler (for local image hosting).
+    app.get('/public/*', (request: Request, response: Response) =>
+      response.sendFile(path.resolve(global['rootDir'] + decodeURI(request.url)))
+    );
 
-// Food Web's Main Asset Files Such as Icon and Banner Images.
-app.get('/assets/*', (request: Request, response: Response) => {
-  const assetFile: string = request.url.split('/assets/')[1];
-  response.sendFile(path.resolve(global['assetsDir'], assetFile));
-});
+    // Food Web's Main Asset Files Such as Icon and Banner Images.
+    app.get('/assets/*', (request: Request, response: Response) => {
+      const assetFile: string = request.url.split('/assets/')[1];
+      response.sendFile(path.resolve(global['assetsDir'], assetFile));
+    });
 
-// All Remaining Routes Handler (for serving our main web page).
-app.get('*', (_: Request, response: Response) => {
-  response.sendFile(path.join(global['clientBuildDir'], 'index.html'));
-});
+    // All Remaining Routes Handler (for serving our main web page).
+    app.get('*', (_: Request, response: Response) =>
+      response.sendFile(path.join(global['clientBuildDir'], 'index.html'))
+    );
 
-initOrm().then(() =>
-  // Only start receiving requests once the database has initialized.
-  app.listen(app.get('port'), () =>
-    console.log(`Node app is running on port: ${app.get('port')}`)
-  )
-).catch(console.error);
+    // Only start receiving requests once the database has initialized.
+    app.listen(app.get('port'), () =>
+      console.log(`Node app is running on port: ${app.get('port')}`)
+    );
+  })
+  .catch(console.error);
 
 module.exports = app; // Make available for testing suites.

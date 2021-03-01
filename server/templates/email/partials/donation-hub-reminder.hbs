@@ -1,0 +1,86 @@
+{{#if isHubAccount }}
+  <div>This is a <strong>{{ hour }}-hour reminder</strong> for the start of your donation hub's drop-off window:</div>
+  <hr>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Drop-Off Window Start:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donationHub.dropOffWindowStart timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donationHub.dropOffWindowStart timezone }}</strong>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Drop-Off Window End:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donationHub.dropOffWindowEnd timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donationHub.dropOffWindowEnd timezone }}</strong>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
+  <p>
+    You can view the donation hub details
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-hub/{{ donationHub.id }}">here</a>.
+  </p>
+  <p>
+    Feel free to contact <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+{{else}}
+  <div>This is a <strong>{{ hour }}-hour reminder</strong> for you to drop off your donation:</div>
+  <p class="donation-description">{{ pledge.foodCount }} - {{ pledge.foodType }}</p>
+  <hr>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Drop-Off Location:
+    </div>
+    <div class="indented-data">
+      <div class="emphasize">
+        {{ hubAccountName }}
+      </div>
+      <div>{{ donationHub.contactOverride.streetAddress }}</div>
+      <div>
+        {{ donationHub.contactOverride.city }}, {{ donationHub.contactOverride.state }}
+        {{ donationHub.contactOverride.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
+
+  <div class="col-6">
+    <div class="inline-label">
+      Drop-Off Window Start:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donationHub.dropOffWindowStart timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donationHub.dropOffWindowStart timezone }}</strong>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Drop-Off Window End:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donationHub.dropOffWindowEnd timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donationHub.dropOffWindowEnd timezone }}</strong>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
+  <p>
+    You can view the donation hub details
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-hub/{{ donationHub.id }}">here</a>.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ donationHub.contactOverride.email }}">{{ hubAccountName }}</a>
+    or <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+{{/if}}

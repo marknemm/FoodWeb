@@ -1,6 +1,6 @@
-import { EventRegistrationEntity, FeaturedEventEntity } from '~entity';
-import { MailTransporter, sendEmail } from '~web/helpers/messaging/email';
+import { FeaturedEventEntity } from '~entity';
 import { DateTimeHelper } from '~shared';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
 
 const _dateTimeHelper = new DateTimeHelper();
 
@@ -9,15 +9,16 @@ const _dateTimeHelper = new DateTimeHelper();
  * @param featuredEvent The featured event that was cancelled.
  * @return A promise that resolves once all messages have been sent.
  */
-export function adminSendFeaturedEventCancelledMessages(featuredEvent: FeaturedEventEntity): Promise<any> {
+export async function adminSendFeaturedEventCancelledMessages(featuredEvent: FeaturedEventEntity): Promise<any> {
   const promises: Promise<void>[] = [];
+  const mailClient: MailClient = await getMailClient();
 
-  featuredEvent.registrations.forEach((eventRegistration: EventRegistrationEntity) => {
+  for (const eventRegistration of featuredEvent.registrations) {
     const eventDateStr: string = _dateTimeHelper.toLocalDateStr(featuredEvent.date, eventRegistration.timezone);
     const eventTimeStr: string = _dateTimeHelper.toLocalTimeStr(featuredEvent.date, eventRegistration.timezone);
 
     promises.push(
-      sendEmail(
+      mailClient.sendEmail(
         MailTransporter.NOREPLY,
         { name: eventRegistration.fullName, email: eventRegistration.email },
         `FoodWeb Event Cancelled: ${featuredEvent.title}`,
@@ -25,7 +26,7 @@ export function adminSendFeaturedEventCancelledMessages(featuredEvent: FeaturedE
         { eventRegistration, eventDateStr, eventTimeStr, featuredEvent }
       ).catch(console.error)
     );
-  });
+  }
 
   return Promise.all(promises);
 }
