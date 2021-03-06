@@ -3,7 +3,7 @@ import { EntityManager, getConnection, Repository } from 'typeorm';
 import { AccountEntity } from '~entity';
 import { DonationHub, DonationHubPledge } from '~shared';
 import { DonationHubPledgeEntity } from '~web/database/entity/donation-hub-pledge.entity';
-import { readDonationHubPledge, readDonationHubPledges } from './read-donation-hub-pledges';
+import { readDonationHubPledge } from './read-donation-hub-pledges';
 import { validateDonationHubPledge, validateDonationHubPledgeUpdatePrivilege } from './validate-donation-hub-pledge';
 
 /**
@@ -19,9 +19,10 @@ export async function createDonationHubPledge(
   donationHubId: number
 ): Promise<DonationHubPledgeEntity> {
   donationHubPledge.donationHub = <DonationHub>{ id: donationHubId };
-  return getConnection().transaction(async (manager: EntityManager) =>
+  const savedPledge: DonationHubPledgeEntity = await getConnection().transaction(async (manager: EntityManager) =>
     _saveDonationHubPledge(manager, donationHubPledge, myAccount)
   );
+  return readDonationHubPledge(savedPledge.id);
 }
 
 /**
@@ -34,13 +35,11 @@ export async function updateDonationHubPledge(
   donationHubPledge: DonationHubPledge,
   myAccount: AccountEntity
 ): Promise<DonationHubPledgeEntity> {
-  return getConnection().transaction(async (manager: EntityManager) => {
+  const savedPledge: DonationHubPledgeEntity = await getConnection().transaction(async (manager: EntityManager) => {
     validateDonationHubPledgeUpdatePrivilege(donationHubPledge, myAccount);
-    const savedDonationHubPledge: DonationHubPledgeEntity = await _saveDonationHubPledge(
-      manager, donationHubPledge, myAccount
-    );
-    return readDonationHubPledge(savedDonationHubPledge.id);
+    return _saveDonationHubPledge(manager, donationHubPledge, myAccount);
   });
+  return readDonationHubPledge(savedPledge.id);
 }
 
 /**

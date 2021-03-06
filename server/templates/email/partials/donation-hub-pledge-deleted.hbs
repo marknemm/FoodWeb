@@ -1,0 +1,66 @@
+<div>
+  <p>Your FoodWeb Sandwhich Army donation pledge has been deleted:</p>
+
+  <hr class="no-margin-top">
+
+  <div class="col-12">
+    <div>
+      <span class="inline-label">Sandwich Type:</span>
+      <span>{{ pledge.foodType }}</span>
+    </div>
+    <div>
+      <span class="inline-label">Sandwhich Count:</span>
+      <span>{{ pledge.foodCount }}</span>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
+
+  <div class="col-6">
+    <div class="inline-label">
+      Drop-Off Location:
+    </div>
+    <div class="indented-data">
+      <div class="emphasize">
+        {{ hubAccountName }}
+      </div>
+      <div>{{ donationHub.contactOverride.streetAddress }}</div>
+      <div>
+        {{ donationHub.contactOverride.city }}, {{ donationHub.contactOverride.state }}
+        {{ donationHub.contactOverride.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
+
+  <div class="col-6">
+    <div class="inline-label">
+      Drop-Off Window Start:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donationHub.dropOffWindowStart timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donationHub.dropOffWindowStart timezone }}</strong>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Drop-Off Window End:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donationHub.dropOffWindowEnd timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donationHub.dropOffWindowEnd timezone }}</strong>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
+  <p>
+    You can pledge another donation
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-hub/list">here</a>.
+  </p>
+  <p>
+    Feel free to contact
+    <a href="mailto:{{ env.SUPPORT_EMAIL }}">FoodWeb</a> with any questions.
+  </p>
+</div>
