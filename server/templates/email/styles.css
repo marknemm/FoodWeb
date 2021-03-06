@@ -29,6 +29,10 @@ table, tr, td {
   display: inline-block;
   vertical-align: top;
   width: 278px;
+}
+
+.col-6,
+.col-12 {
   margin-bottom: 1em;
 }
 
@@ -100,21 +104,21 @@ table, tr, td {
   color: #666;
 }
 
-.donation-summary-header {
+.summary-header {
   font-weight: bold;
   margin-bottom: 0px;
 }
 
-.donation-summary-table {
+.summary-table {
   margin-bottom: 1rem;
 }
 
-.donation-summary-label {
+.summary-label {
   color: #795548;
   padding-right: 10px;
 }
 
-.donation-summary-description {
+.summary-description {
   min-width: 300px;
 }
 

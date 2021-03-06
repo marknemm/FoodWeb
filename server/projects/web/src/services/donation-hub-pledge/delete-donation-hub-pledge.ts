@@ -12,12 +12,12 @@ import { validateDonationHubPledgeModPrivilege } from './validate-donation-hub-p
  * @throws FoodWebError if the current user is not authorized to delete the donation.
  */
 export async function deleteDonationHubPledge(donationHubPledgeId: number, myAccount: AccountEntity): Promise<DonationHubPledgeEntity> {
-  const donationHubPledge: DonationHubPledgeEntity = await readDonationHubPledge(donationHubPledgeId);
-  validateDonationHubPledgeModPrivilege(donationHubPledge.account.id, myAccount);
+  const pledge: DonationHubPledgeEntity = await readDonationHubPledge(donationHubPledgeId);
+  validateDonationHubPledgeModPrivilege(pledge.account.id, myAccount);
 
   await OrmEntityManager.transaction(async (manager: OrmEntityManager) =>
-    manager.getRepository(DonationHubPledgeEntity).remove(donationHubPledge)
+    manager.getRepository(DonationHubPledgeEntity).remove(pledge)
   );
 
-  return donationHubPledge;
+  return pledge;
 }

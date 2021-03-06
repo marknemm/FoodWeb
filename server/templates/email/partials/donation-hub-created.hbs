@@ -1,0 +1,48 @@
+<div>
+  <p>Thank-you for registering a new donation drop-off hub for the FoodWeb Sandwhich Army drive!</p>
+  <p>
+    You can view and edit your donation hub any time at this
+    <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-hub/{{ donationHub.id }}">link</a>.
+  </p>
+
+  <hr class="no-margin-top">
+
+  <div class="col-6">
+    <div class="inline-label">
+      Drop-Off Location:
+    </div>
+    <div class="indented-data">
+      <div>{{ donationHub.contactOverride.streetAddress }}</div>
+      <div>
+        {{ donationHub.contactOverride.city }}, {{ donationHub.contactOverride.state }}
+        {{ donationHub.contactOverride.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
+
+  <div class="col-6">
+    <div class="inline-label">
+      Drop-Off Window Start:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donationHub.dropOffWindowStart timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donationHub.dropOffWindowStart timezone }}</strong>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="inline-label">
+      Drop-Off Window End:
+    </div>
+    <div class="indented-data date-time">
+      <span class="date">{{toLocalDateStr donationHub.dropOffWindowEnd timezone }}</span>
+      <strong class="time">{{toLocalTimeStr donationHub.dropOffWindowEnd timezone }}</strong>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
+
+  <p>You will be sent a reminder 24 hours and 1 hour before the start of your hub's drop-off window.</p>
+</div>

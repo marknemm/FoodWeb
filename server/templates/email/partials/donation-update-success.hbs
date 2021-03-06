@@ -5,47 +5,47 @@
     <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ updatedDonation.id }}">link</a>.
   </p>
 
-  <p class="donation-summary-header">Original Donation:</p>
+  <p class="summary-header">Original Donation:</p>
   <table>
     <tr>
-      <td class="donation-summary-label">Donor:</td>
+      <td class="summary-label">Donor:</td>
       <td>{{ originalDonation.donorFirstName }} {{ originalDonation.donorLastName }}</td>
     </tr>
     <tr>
-      <td class="donation-summary-label">Type:</td>
+      <td class="summary-label">Type:</td>
       <td>{{ originalDonation.donationType }}</td>
     </tr>
     {{#if donation.estimatedValue }}
       <tr>
-        <td class="donation-summary-label">Value:</td>
+        <td class="summary-label">Value:</td>
         <td>${{ originalDonation.estimatedValue }}</td>
       </tr>
     {{/if}}
     <tr>
-      <td class="donation-summary-label">Description:</td>
-      <td class="donation-summary-description">{{ originalDonation.description }}</td>
+      <td class="summary-label">Description:</td>
+      <td class="summary-description">{{ originalDonation.description }}</td>
     </tr>
   </table>
 
-  <p class="donation-summary-header">Updated Donation:</p>
+  <p class="summary-header">Updated Donation:</p>
   <table>
     <tr>
-      <td class="donation-summary-label">Donor:</td>
+      <td class="summary-label">Donor:</td>
       <td>{{ updatedDonation.donorFirstName }} {{ updatedDonation.donorLastName }}</td>
     </tr>
     <tr>
-      <td class="donation-summary-label">Type:</td>
+      <td class="summary-label">Type:</td>
       <td>{{ updatedDonation.donationType }}</td>
     </tr>
     {{#if donation.estimatedValue }}
       <tr>
-        <td class="donation-summary-label">Value:</td>
+        <td class="summary-label">Value:</td>
         <td>${{ updatedDonation.estimatedValue }}</td>
       </tr>
     {{/if}}
     <tr>
-      <td class="donation-summary-label">Description:</td>
-      <td class="donation-summary-description">{{ updatedDonation.description }}</td>
+      <td class="summary-label">Description:</td>
+      <td class="summary-description">{{ updatedDonation.description }}</td>
     </tr>
   </table>
 

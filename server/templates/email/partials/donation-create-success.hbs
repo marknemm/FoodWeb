@@ -4,25 +4,25 @@
     You can view and edit your donation at this
     <a href="{{ env.SERVER_HOST_ADDRESS }}/donation/details/{{ donation.id }}">link</a>.
   </p>
-  <p class="donation-summary-header">Donation Summary:</p>
-  <table class="donation-summary-table">
+  <p class="summary-header">Donation Summary:</p>
+  <table class="summary-table">
     <tr>
-      <td class="donation-summary-label">Submitter:</td>
+      <td class="summary-label">Submitter:</td>
       <td>{{ donation.donorFirstName }} {{ donation.donorLastName }}</td>
     </tr>
     <tr>
-      <td class="donation-summary-label">Number of Meals:</td>
+      <td class="summary-label">Number of Meals:</td>
       <td>{{ donation.estimatedNumFeed }}</td>
     </tr>
     {{#if donation.estimatedValue }}
       <tr>
-        <td class="donation-summary-label">Value:</td>
+        <td class="summary-label">Value:</td>
         <td>${{ donation.estimatedValue }}</td>
       </tr>
     {{/if}}
     <tr>
-      <td class="donation-summary-label">Description:</td>
-      <td class="donation-summary-description">{{ donation.description }}</td>
+      <td class="summary-label">Description:</td>
+      <td class="summary-description">{{ donation.description }}</td>
     </tr>
   </table>
 </div>
