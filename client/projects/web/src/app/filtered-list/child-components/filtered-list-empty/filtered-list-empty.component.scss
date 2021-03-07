@@ -1,12 +1,16 @@
 @import "constants.scss";
 
-.empty-list {
+.list-empty-content {
   text-align: center;
-  font-weight: bold;
-  font-size: 20px;
-  color: $accent;
+  font-size: 18px;
+  font-style: italic;
+  color: #888;
+
+  &:empty {
+    display: none;
+  }
 
   @media only screen and (max-width: $mat-mobile) {
-    font-size: 18px;
+    font-size: 14px;
   }
 }

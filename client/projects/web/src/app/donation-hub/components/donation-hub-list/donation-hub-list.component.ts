@@ -55,6 +55,7 @@ export class DonationHubListComponent implements OnInit {
 
   handleQueryParamsChanged(request: ReadRequest): void {
     this._activeFilters = <DonationHubReadRequest>request;
+    this._activeFilters.excludeMyHubs = !this.myDonationHubs;
     this._donationHubReadService.getDonationHubs(this.activeFilters).subscribe((response: ListResponse<DonationHub>) => {
       this._donationHubs = response.list;
       this._totalCount = response.totalCount;

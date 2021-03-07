@@ -30,27 +30,32 @@ export async function readMyDonationHubs(
   account: AccountEntity
 ): ListResponsePromise<DonationHubEntity> {
   donationHubRequest.volunteerAccountId = account.id;
-  return readDonationHubs(donationHubRequest);
+  return readDonationHubs(donationHubRequest, account);
 }
 
 /**
  * Reads a list of donation hubs from the database.
  * @param request The request sent by the client specifying read filters & options.
+ * @param account The optional accoun to of the current user.
  * @return A promise that resolves to a `DonationHubEntity` list response.
  */
-export async function readDonationHubs(request: DonationHubReadRequest): ListResponsePromise<DonationHubEntity> {
-  return queryDonationHubs(request).exec();
+export async function readDonationHubs(
+  request: DonationHubReadRequest,
+  account?: AccountEntity
+): ListResponsePromise<DonationHubEntity> {
+  return queryDonationHubs(request, account).exec();
 }
 
 /**
  * Queries a list of donation hubs from the database, and exposes a query modifier that may be used to
  * modify the query before sending it to the database.
  * @param request The request sent by the client specifying read filters & options.
+ * @param account The optional account of the user issuing the query.
  * @return A query modifier which may be used to modify the query before reading donation hubs.
  */
-export function queryDonationHubs(request: DonationHubReadRequest): QueryMod<DonationHubEntity> {
+export function queryDonationHubs(request: DonationHubReadRequest, account?: AccountEntity): QueryMod<DonationHubEntity> {
   const repository: Repository<DonationHubEntity> = getRepository(DonationHubEntity);
-  const queryBuilder: SelectQueryBuilder<DonationHubEntity> = _buildQuery(repository, request);
+  const queryBuilder: SelectQueryBuilder<DonationHubEntity> = _buildQuery(repository, request, account);
   return new QueryMod<DonationHubEntity>(
     queryBuilder,
     async () => {
@@ -60,10 +65,14 @@ export function queryDonationHubs(request: DonationHubReadRequest): QueryMod<Don
   );
 }
 
-function _buildQuery(repository: Repository<DonationHubEntity>, request: DonationHubReadRequest): SelectQueryBuilder<DonationHubEntity> {
+function _buildQuery(
+  repository: Repository<DonationHubEntity>,
+  request: DonationHubReadRequest,
+  account: AccountEntity
+): SelectQueryBuilder<DonationHubEntity> {
   const queryBuilder: SelectQueryBuilder<DonationHubEntity> = repository.createQueryBuilder('donationHub');
   _addRelations(queryBuilder, request);
-  _addFilters(queryBuilder, request);
+  _addFilters(queryBuilder, request, account);
   _addSorting(queryBuilder, request);
   addPagination(queryBuilder, request);
   return queryBuilder;
@@ -72,26 +81,33 @@ function _buildQuery(repository: Repository<DonationHubEntity>, request: Donatio
 function _addRelations(queryBuilder: SelectQueryBuilder<DonationHubEntity>, request: DonationHubReadRequest): void {
   addDefaultAccountAssociations(queryBuilder, 'donationHub.volunteerAccount', 'hubAccount');
   queryBuilder.leftJoin('donationHub.contactOverride', 'contactOverride');
-  if (request.loadPledges) {
-    queryBuilder.leftJoinAndMapMany('donationHub.pledges', 'donationHub.pledges', 'pledge');
-    addDefaultAccountAssociations(queryBuilder, 'pledge.account', 'pledgeAccount');
-  }
+  (request.loadPledges) // Only select pledges if configured to do so in request.
+    ? queryBuilder.leftJoinAndMapMany('donationHub.pledges', 'donationHub.pledges', 'pledge')
+    : queryBuilder.leftJoin('donationHub.pledges', 'pledge');
+  addDefaultAccountAssociations(queryBuilder, 'pledge.account', 'pledgeAccount', !request.loadPledges);
 }
 
-function _addFilters(queryBuilder: SelectQueryBuilder<DonationHubEntity>, request: DonationHubReadRequest): void {
+function _addFilters(queryBuilder: SelectQueryBuilder<DonationHubEntity>, request: DonationHubReadRequest, account: AccountEntity): void {
   addWhere(queryBuilder, 'donationHub', request, ['id']);
 
   // If not looking for a specific donation hub, then apply all filters.
   if (!request.id) {
     if (request.volunteerAccountId) {
       queryBuilder.andWhere('hubAccount.id = :hubAccountId', { hubAccountId: request.volunteerAccountId });
+    } else if (request.excludeMyHubs && account) {
+      queryBuilder.andWhere('hubAccount.id <> :hubAccountId', { hubAccountId: account.id });
+      queryBuilder.andWhere('(pledgeAccount.id IS NULL OR pledgeAccount.id <> :pledgeAccountId)', { pledgeAccountId: account.id });
     }
 
     // If not given a specific drop-off window overlap start, then incorporate default expired exclusion filter.
     if (request.dropOffWindowOverlapStart) {
       queryBuilder.andWhere('donationHub.dropOffWindowEnd >= :windowStart', { windowStart: request.dropOffWindowOverlapStart });
     } else if (!request.includeExpired) {
-      queryBuilder.andWhere('donationHub.dropOffWindowEnd >= :windowStart', { windowStart: _dateTimeHelper.addHours(new Date(), -30) });
+      // If looking for hubs to donate to, expired ones should not show up. Else, give 30 hr buffer show recent expired.
+      const expireHrBuffer: number = (request.excludeMyHubs ? 0 : 30);
+      queryBuilder.andWhere('donationHub.dropOffWindowEnd >= :windowStart', {
+        windowStart: _dateTimeHelper.addHours(new Date(), -expireHrBuffer)
+      });
     }
 
     if (request.dropOffWindowOverlapEnd) {

@@ -16,6 +16,11 @@ export interface DonationHubReadRequest extends ReadRequest<DonationHubSortBy> {
    */
   dropOffWindowOverlapEnd?: Date | string;
   /**
+   * Whether or not hubs that are already associated with the current user shall be excluded.
+   * A hub is associated with the current user if they are the owner of the hub or if they have pledged a donation to the hub.
+   */
+  excludeMyHubs?: boolean;
+  /**
    * Whether or not expired donation hubs should be included. Defaults to false.
    * An expired donation hub is one which has had its drop-off window completely pass.
    */
