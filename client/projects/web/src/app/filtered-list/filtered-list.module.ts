@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '~web/shared/shared.module';
 import { FilteredListContentComponent } from './child-components/filtered-list-content/filtered-list-content.component';
 import { FilteredListEmptyComponent } from './child-components/filtered-list-empty/filtered-list-empty.component';
+import { FilteredListInstructionsComponent } from './child-components/filtered-list-instructions/filtered-list-instructions.component';
 import { FilteredListTitleComponent } from './child-components/filtered-list-title/filtered-list-title.component';
 import { FilteredListToolbarComponent } from './child-components/filtered-list-toolbar/filtered-list-toolbar.component';
 import { FilteredListComponent } from './child-components/filtered-list/filtered-list.component';
@@ -22,13 +23,14 @@ import { ListSortComponent } from './child-components/list-sort/list-sort.compon
   declarations: [
     FilteredListComponent,
     FilteredListContentComponent,
-    ListFiltersFooterComponent,
-    ListFiltersComponent,
-    ListSortComponent,
-    ListFiltersTitleComponent,
+    FilteredListEmptyComponent,
+    FilteredListInstructionsComponent,
     FilteredListTitleComponent,
     FilteredListToolbarComponent,
-    FilteredListEmptyComponent
+    ListFiltersComponent,
+    ListFiltersFooterComponent,
+    ListFiltersTitleComponent,
+    ListSortComponent,
   ],
   imports: [
     CommonModule,
@@ -39,18 +41,19 @@ import { ListSortComponent } from './child-components/list-sort/list-sort.compon
     MatTooltipModule,
     ReactiveFormsModule,
     RouterModule.forChild([]),
-    SharedModule
+    SharedModule,
   ],
   exports: [
     FilteredListComponent,
     FilteredListContentComponent,
     FilteredListEmptyComponent,
+    FilteredListInstructionsComponent,
     FilteredListTitleComponent,
     FilteredListToolbarComponent,
     ListFiltersFooterComponent,
     ListFiltersComponent,
-    ListSortComponent,
     ListFiltersTitleComponent,
+    ListSortComponent,
   ]
 })
 export class FilteredListModule {}

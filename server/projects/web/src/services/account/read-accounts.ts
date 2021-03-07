@@ -32,17 +32,28 @@ export function readFullAccounts(request: AccountReadRequest, myAccount: Account
  * The alias will also be used for contactInfo, organization, and volunteer relations.
  * For example if given the alias receiverAccount, then receiverContactInfo, receiverOrganization,
  * and receiverVolunteer will be used for the other relations.
+ * @param noSelect An optional boolean, which when set true, causes theis to add account joins/associations
+ * without adding the joined data to the select clause.
+ * @return The input select query builder with account joins/associations added.
  */
 export function addDefaultAccountAssociations<T>(
   queryBuilder: SelectQueryBuilder<T>,
   joinField: string,
-  accountAlias: string
+  accountAlias: string,
+  noSelect = false
 ): SelectQueryBuilder<T> {
   const aliasBase: string = accountAlias.replace('Account', '');
-  queryBuilder.leftJoinAndSelect(joinField, accountAlias);
-  queryBuilder.leftJoinAndSelect(`${accountAlias}.contactInfo`, `${aliasBase}ContactInfo`);
-  queryBuilder.leftJoinAndSelect(`${accountAlias}.organization`, `${aliasBase}Organization`);
-  queryBuilder.leftJoinAndSelect(`${accountAlias}.volunteer`, `${aliasBase}Volunteer`);
+  if (noSelect) {
+    queryBuilder.leftJoin(joinField, accountAlias);
+    queryBuilder.leftJoin(`${accountAlias}.contactInfo`, `${aliasBase}ContactInfo`);
+    queryBuilder.leftJoin(`${accountAlias}.organization`, `${aliasBase}Organization`);
+    queryBuilder.leftJoin(`${accountAlias}.volunteer`, `${aliasBase}Volunteer`);
+  } else {
+    queryBuilder.leftJoinAndSelect(joinField, accountAlias);
+    queryBuilder.leftJoinAndSelect(`${accountAlias}.contactInfo`, `${aliasBase}ContactInfo`);
+    queryBuilder.leftJoinAndSelect(`${accountAlias}.organization`, `${aliasBase}Organization`);
+    queryBuilder.leftJoinAndSelect(`${accountAlias}.volunteer`, `${aliasBase}Volunteer`);
+  }
   return queryBuilder;
 }
 

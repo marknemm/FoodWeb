@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
 export { SortByOpt };
@@ -14,6 +14,8 @@ export class ListSortComponent<T> implements OnInit {
   @Input() sortByFormControlName = 'sortBy';
   @Input() sortByOpts: SortByOpt<T>[] = [];
   @Input() sortOrderFormControlName = 'sortOrder';
+
+  @HostBinding() class = 'foodweb-list-sort';
 
   constructor() {}
 

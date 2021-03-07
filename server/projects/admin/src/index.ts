@@ -58,6 +58,8 @@ import { session } from '~web/middlewares/session.middleware';
 import { ensureSessionAdmin } from '~admin/middlewares/admin-session.middleware';
 import { router as sessionRouter } from '~admin/controllers/admin-session';
 import { router as adminRouter } from '~admin/controllers/admin';
+import boolParser = require('express-query-boolean');
+import intParser = require('express-query-int');
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
@@ -69,6 +71,8 @@ app.use(cors);
 app.use(compression());
 app.use(json());
 app.use(multer().any());
+app.use(boolParser());
+app.use(intParser());
 app.use(recaptcha);
 app.use(express.static(global['clientBuildDir']));
 app.use(express.static(global['publicDir']));

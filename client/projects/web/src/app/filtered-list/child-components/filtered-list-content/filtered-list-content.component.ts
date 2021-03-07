@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 
 @Component({
   selector: 'foodweb-filtered-list-content',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./filtered-list-content.component.scss'],
 })
 export class FilteredListContentComponent implements OnInit {
+
+  @HostBinding() class = 'foodweb-filtered-list-content';
 
   constructor() {}
 

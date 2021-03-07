@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostBinding } from '@angular/core';
 import { Convert } from '~web/component-decorators';
 import { FilteredListService } from '~web/filtered-list/services/filtered-list/filtered-list.service';
 
@@ -12,6 +12,8 @@ export class FilteredListToolbarComponent implements OnInit {
   @Convert()
   @Input() excludeFilterButton: boolean = false;
   @Input() listItemsLabel = '';
+
+  @HostBinding() class = 'foodweb-filtered-list-toolbar';
 
   constructor(
     public filteredListService: FilteredListService

@@ -21,10 +21,11 @@ export const router = express.Router();
 
 router.get('/', handleGetDonationHubs);
 export async function handleGetDonationHubs(req: Request, res: Response) {
-  const donationHubReq: DonationHubReadRequest = req.body;
+  const donationHubReq: DonationHubReadRequest = req.query;
+  const account: AccountEntity = req.session?.account;
 
   try {
-    res.send(await readDonationHubs(donationHubReq));
+    res.send(await readDonationHubs(donationHubReq, account));
   } catch (err) {
     genErrorResponse(res, err);
   }
@@ -32,7 +33,7 @@ export async function handleGetDonationHubs(req: Request, res: Response) {
 
 router.get('/my', ensureSessionActive, handleGetMyDonationHubs);
 export async function handleGetMyDonationHubs(req: Request, res: Response) {
-  const donationHubReq: DonationHubReadRequest = req.body;
+  const donationHubReq: DonationHubReadRequest = req.query;
   const account: AccountEntity = req.session.account;
 
   try {
@@ -44,7 +45,7 @@ export async function handleGetMyDonationHubs(req: Request, res: Response) {
 
 router.get('/pledge', handleGetDonationHubPledges);
 export async function handleGetDonationHubPledges(req: Request, res: Response) {
-  const donationHubPledgeReq: DonationHubPledgeReadRequest = req.body;
+  const donationHubPledgeReq: DonationHubPledgeReadRequest = req.query;
 
   try {
     res.send(await readDonationHubPledges(donationHubPledgeReq));
@@ -55,7 +56,7 @@ export async function handleGetDonationHubPledges(req: Request, res: Response) {
 
 router.get('/pledge/my', ensureSessionActive, handleGetMyDonationHubPledges);
 export async function handleGetMyDonationHubPledges(req: Request, res: Response) {
-  const donationHubPledgeReq: DonationHubPledgeReadRequest = req.body;
+  const donationHubPledgeReq: DonationHubPledgeReadRequest = req.query;
   const account: AccountEntity = req.session.account;
 
   try {
@@ -89,7 +90,7 @@ export async function handleGetDonationHub(req: Request, res: Response) {
 
 router.get('/:id/pledge', handleGetPledgesUnderDonationHub);
 export async function handleGetPledgesUnderDonationHub(req: Request, res: Response) {
-  const donationHubPledgeReq: DonationHubPledgeReadRequest = req.body;
+  const donationHubPledgeReq: DonationHubPledgeReadRequest = req.query;
   const donationHubId: number = parseInt(req.params.id, 10);
 
   try {

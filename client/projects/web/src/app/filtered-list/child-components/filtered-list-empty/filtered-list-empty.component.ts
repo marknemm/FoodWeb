@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 
 @Component({
   selector: 'foodweb-filtered-list-empty',
@@ -7,9 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FilteredListEmptyComponent implements OnInit {
 
-  constructor() { }
+  @HostBinding() class = 'foodweb-filtered-list-empty';
 
-  ngOnInit(): void {
-  }
+  constructor() {}
+
+  ngOnInit() {}
 
 }

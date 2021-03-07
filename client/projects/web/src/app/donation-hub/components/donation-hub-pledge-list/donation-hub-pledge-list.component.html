@@ -11,7 +11,13 @@
   </foodweb-filtered-list-content>
 
   <foodweb-filtered-list-empty *ngIf="noneFound">
-    Could Not Find Any Donation Pledges
+    <p *ngIf="!myPledges">
+      Could Not Find Any Donation Pledges.
+    </p>
+    <p *ngIf="myPledges">
+      Looks Like You Do Not Have Any Upcoming Donation Pledges.<br>
+      Feel Free to <a [routerLink]="['/donation-hub', 'list']" class="bold">Pledge</a> a Donation Any Time!
+    </p>
   </foodweb-filtered-list-empty>
 
   <foodweb-paginator [length]="totalCount"></foodweb-paginator>

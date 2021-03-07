@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { FilteredListService } from '~web/filtered-list/services/filtered-list/filtered-list.service';
 
 /**
@@ -16,6 +16,8 @@ export class FilteredListComponent implements OnInit {
    */
   @Input() set filtersOpened(open: boolean) { this.filteredListService.opened = open; }
   get filtersOpened(): boolean              { return this.filteredListService.opened; }
+
+  @HostBinding() class = 'foodweb-filtered-list';
 
   constructor(
     public filteredListService: FilteredListService
