@@ -31,6 +31,9 @@ export async function initOrm(): Promise<Connection> {
     migrationsRun: (process.env.DATABASE_SYNC !== 'true'),
     synchronize: (process.env.DATABASE_SYNC === 'true'),
     logging: (process.env.DATABASE_LOGGING === 'true'),
-    logger: process.env.DATABASE_LOGGER as any
+    logger: process.env.DATABASE_LOGGER as any,
+    ssl: (process.env.DATABASE_SSL === 'true')
+      ? { rejectUnauthorized: (process.env.DATABASE_REJECT_UNAUTHORIZED === 'true') }
+      : false
   });
 }
