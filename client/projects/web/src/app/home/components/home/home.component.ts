@@ -9,7 +9,7 @@ import { SessionService } from '~web/session/services/session/session.service';
 @Component({
   selector: 'foodweb-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
 
