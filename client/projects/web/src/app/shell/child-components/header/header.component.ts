@@ -9,7 +9,7 @@ import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
 })
 export class HeaderComponent implements OnInit {
 
-  @Input() siteIconUri = './assets/IconImgSm.png';
+  @Input() siteIconUri = './assets/icon-img-sm.png';
   @Input() siteTitle = 'FoodWeb';
 
   constructor(

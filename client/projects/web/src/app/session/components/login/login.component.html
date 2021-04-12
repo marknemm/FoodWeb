@@ -1,5 +1,5 @@
 <form #loginFormDirective="ngForm" [formGroup]="loginForm" (submit)="submit()" class="login-container" [ngClass]="{ container: !insideDialog }">
-  <img src="./assets/IconImgMd.png" *ngIf="!insideDialog" class="foodweb-img">
+  <img src="./assets/icon-img-md.png" *ngIf="!insideDialog" class="foodweb-img">
 
   <div *ngIf="!messageSent">
     <mat-form-field>

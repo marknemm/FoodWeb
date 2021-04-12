@@ -6,7 +6,6 @@ import { HubComponent } from './home/components/hub/hub.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
-  {path: 'hub', component: HubComponent},
   {
     path: '',
     component: ShellComponent,
@@ -21,6 +20,7 @@ const routes: Routes = [
       { path: 'fundraise', loadChildren: () => import('~web/fundraise/fundraise.module').then(mod => mod.FundraiseModule) },
       { path: 'home', component: HomeComponent },
       { path: 'home/:login', component: HomeComponent },
+      {path: 'hub', component: HubComponent},
       
       { path: 'notification', loadChildren: () => import('~web/notification/notification.module').then(mod => mod.NotificationModule) },
       { path: 'password', loadChildren: () => import('~web/password/password.module').then(mod => mod.PasswordModule) },

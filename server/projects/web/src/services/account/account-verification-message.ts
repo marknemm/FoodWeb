@@ -41,7 +41,7 @@ export async function sendAccountVerificationNotification(account: AccountEntity
       notificationType: NotificationType.Signup,
       notificationLink: `/account/my`,
       title: 'Welcome to FoodWeb!',
-      icon: './assets/IconImgSm.png',
+      icon: './assets/icon-img-sm.png',
       body: `
         Please check your email for an account verification link.
       `
