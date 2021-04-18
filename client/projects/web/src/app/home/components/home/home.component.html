@@ -1,29 +1,5 @@
 
-    <div class="wrapper">
-        <!-- header section -->
-        <!-- <section id="top">
-            <header> 
-            	<div class="container">   
-                    <div id="logo">
-                        <a href="#home"><img src="./assets/images/logo_top.png" class="logo_top" alt="" /></a>
-                    </div>
-                    <nav class="navmenu">
-                        <ul>
-                            <li class="scrollable active"><a href="#home">Home</a></li>
-                            <li class="scrollable"><a href="#about">About</a></li>
-                            <li class="scrollable"><a href="#community">Community</a></li>
-                            <li class="scrollable"><a href="#news">News</a></li>
-                            <li class="scrollable"><a href="#contact">Contact</a></li>
-                            <li class="scrollable"><a href="#contact">Donate</a></li>
-                            <li class="scrollable"><a href="#contact">Login</a></li>
-                        </ul>
-                    </nav>
-                    <div class="clear"></div>
-            	</div>
-            </header>               
-        </section> -->
-        <!-- //header section -->
-            
+    <div class="wrapper">            
         <!-- home content -->
         <section class="page_section" id="home">
         	<!--Slider-->
@@ -33,9 +9,23 @@
                 <div class="full_slider_caption fleft">
                     <div class="container">
                         <div class="slide_title_alt">Foob Web WNY</div>
+                        <!-- <div><img src="./assets/HeaderImg.jpg"></div> -->
+                        <ng-container *ngIf="generalStats">
+                            <div>
+                                Total Donations
+                                <span>{{ generalStats.totalDonations }}</span>
+                            </div>
+                            <div>
+                                Total Meals
+                                <span>{{ generalStats.totalMeals }}</span>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="!generalStats">
                         <div class="slide_title">FoodWeb donations and deliveries are suspended until further notice due to the concerns surrounding the COVID-19 outbreak. We apologize for any inconvenience, and look forward to starting back up when safe to do so.
 
                             Thank you for your support and understanding!</div>
+                        </ng-container>
                     </div>
 
                     <div class="container ban">
@@ -76,7 +66,8 @@
                 <div class="container">
                 <div class="row">
                     <h2>What is Food Web!</h2>
-                    <p class="about-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    <foodweb-general-stats-card></foodweb-general-stats-card>
+                    <p class="about-text">FoodWeb donations and deliveries are suspended until further notice due to the concerns surrounding the COVID-19 outbreak. We apologize for any inconvenience, and look forward to starting back up when safe to do so. Thank you for your support and understanding!</p>
                     <div class="col-md-6 bring-img"><img src="./assets/foodweb.jpeg" alt=""></div>
                     <div class="col-md-6">
                         <div>
@@ -92,41 +83,6 @@
                 </div> 
                 </div>
             </div>
-            <!-- <div class="block_header events">
-                <div class="container">
-                    <h2>Upcoming Events</h2>
-                    <p class="about-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="event-item">
-                                <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/events/img.jpg" height="240" width="370" alt=""></a></div>
-                                <div class="name">Some food event 1</div>
-                                <div class="date">On: <span>18th October 2021</span></div>
-                                <p>Aliquam erat volutpat. Aenean sagittis dui vestibulum quam accumsan viverra. Mauris velit dolor, posuere non tempor eu, faucibus commodo purus. </p>
-                                <a href="javascript:void(0);" class="shortcode_button">Learn More</a>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="event-item">
-                                <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/events/img1.jpg" height="240" width="370" alt=""></a></div>
-                                <div class="name">Some food event 2</div>
-                                <div class="date">On: <span>20th October 2021</span></div>
-                                <p>Aliquam erat volutpat. Aenean sagittis dui vestibulum quam accumsan viverra. Mauris velit dolor, posuere non tempor eu, faucibus commodo purus.</p>
-                                <a href="javascript:void(0);" class="shortcode_button">Learn More</a>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="event-item">
-                                <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/events/img2.jpg" height="240" width="370" alt=""></a></div>
-                                <div class="name">Some food event 3</div>
-                                <div class="date">On: <span>23th October 2021</span></div>
-                                <p>Aliquam erat volutpat. Aenean sagittis dui vestibulum quam accumsan viverra. Mauris velit dolor, posuere non tempor eu, faucibus commodo purus.  </p>
-                                <a href="javascript:void(0);" class="shortcode_button">Learn More</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
             <div class="block_header giving">
                 <div class="container">
                     <div class="row">
@@ -154,184 +110,38 @@
                             <div class="col-md-4">
                                 <div class="event-item">
                                     <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/events/img.jpg" height="240" width="370" alt=""></a></div>
-                                    <div class="name">Some food event 1</div>
-                                    <div class="date">On: <span>18th October 2021</span></div>
-                                    <p>Aliquam erat volutpat. Aenean sagittis dui vestibulum quam accumsan viverra. Mauris velit dolor, posuere non tempor eu, faucibus commodo purus. </p>
+                                    <div class="name">Sandwich Drive</div>
+                                    <div class="date">On: <span>April 17th 2021</span></div>
+                                    <p>FoodWeb's weekly sandwich drives to benefit St. Luke's Mission for Mercy continue on April 17. Please join FoodWeb in making sandwich lunches consisting of a sandwich (turkey, ham, bologna preferred), a piece of fruit, and a snack (cookie or chips) and putting it all in a Ziploc or lunch bag.  PLEASE LABEL the sandwiches so our volunteers can identify sandwiches containing perishable items.  You can drop off the sandwich lunches at any of the below drop-off centers between 1:30 pm – 2:30 pm on April 17(please note changed drop-off window).  Our volunteers will deliver to St. Luke’s.  </p>
                                     <a href="javascript:void(0);" class="shortcode_button">Learn More</a>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="event-item">
-                                    <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/events/img1.jpg" height="240" width="370" alt=""></a></div>
-                                    <div class="name">Some food event 2</div>
-                                    <div class="date">On: <span>20th October 2021</span></div>
-                                    <p>Aliquam erat volutpat. Aenean sagittis dui vestibulum quam accumsan viverra. Mauris velit dolor, posuere non tempor eu, faucibus commodo purus.</p>
+                                    <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/events/img.jpg" height="240" width="370" alt=""></a></div>
+                                    <div class="name">Sandwich Drive</div>
+                                    <div class="date">On: <span>April 10th 2021</span></div>
+                                    <p>FoodWeb's weekly sandwich drives to benefit St. Luke's Mission for Mercy continues on April 10. Please join FoodWeb in making sandwich lunches consisting of a sandwich (ham, turkey, bologna preferred), a piece of fruit, and a snack (cookie or chips) and putting it all in a Ziploc or lunch bag.  PLEASE LABEL the sandwiches so our volunteers can identify sandwiches containing perishable items.  </p>
                                     <a href="javascript:void(0);" class="shortcode_button">Learn More</a>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="event-item">
-                                    <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/events/img2.jpg" height="240" width="370" alt=""></a></div>
-                                    <div class="name">Some food event 3</div>
-                                    <div class="date">On: <span>23th October 2021</span></div>
-                                    <p>Aliquam erat volutpat. Aenean sagittis dui vestibulum quam accumsan viverra. Mauris velit dolor, posuere non tempor eu, faucibus commodo purus.  </p>
+                                    <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/events/img.jpg" height="240" width="370" alt=""></a></div>
+                                    <div class="name">Sandwich Drive</div>
+                                    <div class="date">On: <span>May 27th 2021</span></div>
+                                    <p>FoodWeb's weekly sandwich drives to benefit St. Luke's Mission for Mercy continue on March 27.  Please join FoodWeb in making sandwich lunches consisting of a sandwich (any kind, including peanut butter and jelly), a piece of fruit, and a snack (cookie or chips) and putting it all in a Ziploc or lunch bag.  PLEASE LABEL the sandwiches so our volunteers can identify sandwiches containing perishable items.  </p>
                                     <a href="javascript:void(0);" class="shortcode_button">Learn More</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                    <!-- <div class="col-md-12">
-                        <h2 class="alt">Latest News</h2>
-                        <div class="news-block">
-                            <div class="item">
-                                <div class="date">
-                                    <span>oct</span>
-                                    <em>30</em>
-                                </div>
-                                <div class="text">
-                                    <div class="title">Sed ut perspiciatis unde omnis iste natus</div>
-                                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla</p>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="item">
-                                <div class="date">
-                                    <span>oct</span>
-                                    <em>28</em>
-                                </div>
-                                <div class="text">
-                                    <div class="title">Lorem ipsum dolor sit amet, consectetur</div>
-                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non</p>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="item">
-                                <div class="date">
-                                    <span>oct</span>
-                                    <em>25</em>
-                                </div>
-                                <div class="text">
-                                    <div class="title">Neque porro quisquam est, qui dolorem ipsum</div>
-                                    <p>Зrovident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio iustio odio ducimus qui.</p>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                        </div>
-                    </div> -->
-                    <!-- <h2>Meet Our Team</h2>
-                    <p class="comm-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                    <div class="row pastors">
-                        <div class="col-md-3 item">
-                            <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/community/community-face.jpg" height="200" width="270" alt=""></a></div>
-                            <div class="info">
-                                <div class="name"><a href="javascript:void(0);">Shayan Ghose</a></div>
-                                <div class="post">Executive Chairperson</div>
-                                <p class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut lab.</p>
-                                <ul class="social-list">
-                                    <li class="facebook"><a href="javascript:void(0);"></a></li>
-                                    <li class="twitter"><a href="javascript:void(0);"></a></li>
-                                    <li class="google"><a href="javascript:void(0);"></a></li>
-                                    <li class="dribble"><a href="#javascript:void(0);"></a></li>
-                                    <li class="pinterest"><a href="javascript:void(0);"></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-3 item">
-                            <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/community/community-face1.jpg" height="200" width="270" alt=""></a></div>
-                            <div class="info">
-                                <div class="name"><a href="javascript:void(0);">Mark Nemmer</a></div>
-                                <div class="post">Vice Chairperson and CTO</div>
-                                <p class="text">Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia.</p>
-                                <ul class="social-list">
-                                    <li class="facebook"><a href="javascript:void(0);"></a></li>
-                                    <li class="twitter"><a href="javascript:void(0);"></a></li>
-                                    <li class="google"><a href="javascript:void(0);"></a></li>
-                                    <li class="dribble"><a href="#javascript:void(0);"></a></li>
-                                    <li class="pinterest"><a href="javascript:void(0);"></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-3 item">
-                            <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/community/community-face2.jpg" height="200" width="270" alt=""></a></div>
-                            <div class="info">
-                                <div class="name"><a href="javascript:void(0);">Andrew Freedman</a></div>
-                                <div class="post">Treasurer</div>
-                                <p class="text">Non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat.</p>
-                                <ul class="social-list">
-                                    <li class="facebook"><a href="javascript:void(0);"></a></li>
-                                    <li class="twitter"><a href="javascript:void(0);"></a></li>
-                                    <li class="google"><a href="javascript:void(0);"></a></li>
-                                    <li class="dribble"><a href="#javascript:void(0);"></a></li>
-                                    <li class="pinterest"><a href="javascript:void(0);"></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-3 item">
-                            <div class="img-wrap"><img src="./assets/images/community/community-face3.jpg" height="200" width="270" alt=""></div>
-                            <div class="info">
-                                <div class="name">Reena Dutta</div>
-                                <div class="post">Secretary</div>
-                                <p class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut lab. </p>
-                                <ul class="social-list">
-                                    <li class="facebook"><a href="javascript:void(0);"></a></li>
-                                    <li class="twitter"><a href="javascript:void(0);"></a></li>
-                                    <li class="google"><a href="javascript:void(0);"></a></li>
-                                    <li class="dribble"><a href="#javascript:void(0);"></a></li>
-                                    <li class="pinterest"><a href="javascript:void(0);"></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>    
             </div>	                                     
         
         <!-- <div class="container"><div class="row"><div class="section-separator"><div class="line"></div></div></div></div> -->
-       
-        <!-- portfolio content-->
-            <!-- <div class="block_header header_gallery">
-                <div class="container">
-                    <h2>Gallery</h2>
-                    <p class="gal-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                </div>
-            </div> -->
-            <!-- Portfolio -->     
-            <!-- <div class="portfolio-block">           
-             <div class="container">
-                 <ul class="portfolio-menu" id="filters">
-                     <li class="active"><a data-filter="*">All</a></li>
-                     <li><a data-filter=".sermon">Sermon</a></li>
-                     <li><a data-filter=".community">Community</a></li>
-                     <li><a data-filter=".church">Church</a></li>
-                     <li><a data-filter=".bible">Bible</a></li>
-                 </ul>
-             </div>
-             <div class="container">
-                 <div class="row">
-                     <div class="portfolio-list image-grid">
-                        <div class="col-md-4 item sermon church bible">
-                            <a href="./assets/images/portfolio/zoom/1.jpg" class="prettyPhoto" data-rel="prettyPhoto[portfolio55]"><span class="cover"></span><img src="./assets/images/portfolio/1.jpg" alt=""></a>
-                        </div>
-                        <div class="col-md-4 item community church">
-                            <a href="./assets/images/portfolio/zoom/2.jpg" class="prettyPhoto" data-rel="prettyPhoto[portfolio55]"><span class="cover"></span><img src="./assets/images/portfolio/2.jpg" alt=""></a>
-                        </div>
-                        <div class="col-md-4 item church">
-                            <a href="./assets/images/portfolio/zoom/3.jpg" class="prettyPhoto" data-rel="prettyPhoto[portfolio55]"><span class="cover"></span><img src="./assets/images/portfolio/3.jpg" alt=""></a>
-                        </div>
-                        <div class="col-md-4 item bible church">
-                            <a href="./assets/images/portfolio/zoom/4.jpg" class="prettyPhoto" data-rel="prettyPhoto[portfolio55]"><span class="cover"></span><img src="./assets/images/portfolio/4.jpg" alt=""></a>
-                        </div>
-                        <div class="col-md-4 item community">
-                            <a href="./assets/images/portfolio/zoom/5.jpg" class="prettyPhoto" data-rel="prettyPhoto[portfolio55]"><span class="cover"></span><img src="./assets/images/portfolio/5.jpg" alt=""></a>
-                        </div>
-                        <div class="col-md-4 item sermon community">
-                            <a href="./assets/images/portfolio/zoom/6.jpg" class="prettyPhoto" data-rel="prettyPhoto[portfolio55]"><span class="cover"></span><img src="./assets/images/portfolio/6.jpg" alt=""></a>
-                        </div>
-                     </div>
-                 </div>
-             </div>
-             <div class="app-item"><a class="add-item">load more</a></div>                                                                      
-             </div>  -->
+    
             <!-- //Portfolio -->
             <div class="block_header giving portfolio-free" style="text-align:center">
                 <div class="container">
@@ -351,61 +161,14 @@
             <div class="block_header news">
                 <div class="container">
                     <div class="row">
-                        <!-- <div class="col-md-6">
-                            <h2>Ministries</h2>
-                            <div class="news-tab-wrap">
-                                <ul class="news-tab">
-                                    <li class="active">Children Ministry</li>
-                                    <li>Ladies Ministry</li>
-                                    <li>Music Ministry</li>
-                                </ul>
-                                <div class="clear"></div>
-                                <div class="box visible">
-                                    <div class="img-wrap"><img src="./assets/images/news-tab-img.jpg" height="100" width="140" alt=""></div>
-                                    <span class="title">Children and Kids Only</span> <br>
-                                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non at Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus.
-                                    <div class="clear"></div>
-                                    <a href="javascript:void(0);" class="shortcode_button">Learn More</a>
-                                </div>
-                                <div class="box">
-                                    <div class="img-wrap"><img src="./assets/images/news-tab-img.jpg" height="100" width="140" alt=""></div>
-                                    <span class="title">Children and Kids Only</span> <br>
-                                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porta pellentesque nisi, ut mattis enim tempor sed. Integer luctus maximus mauris, blandit maximus est dignissim in. Curabitur efficitur arcu in lacus tempus efficitur. Nunc sed vehicula orci, sed facilisis lorem. In hac habitasse platea dictumst. Sed malesuada faucibus aliquet. Praesent eu rutrum purus. Donec quis lectus non erat rutrum rutrum a ac ante. Morbi nunc nunc, tempor at felis ac, sollicitudin mattis lectus. Ut sollicitudin sem ut lectus viverra, non aliquam turpis suscipit. Nullam vitae viverra velit. Ut ullamcorper in dui non varius. Sed ac elementum mauris, in efficitur tellus. Praesent eu rutrum purus. Donec quis lectus non erat rutrum rutrum a
-                                   <div class="clear"></div>
-                                    <a href="javascript:void(0);" class="shortcode_button">Learn More</a>
-                                </div>
-                                <div class="box">
-                                    <div class="img-wrap"><img src="./assets/images/news-tab-img.jpg" height="100" width="140" alt=""></div>
-                                    <span class="title">Children and Kids Only</span> <br>
-                                    Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque congue semper nisi. In vel malesuada augue. Sed sit amet quam dui. Curabitur aliquet eleifend gravida. Donec eget mollis turpis. Morbi condimentum augue vel arcu tempus, ut placerat ligula sodales. Sed porta consectetur finibus. Mauris augue quam, mattis sed massa id, porttitor efficitur risus. Vivamus semper finibus erat, nec pharetra nulla euismod eget. Aliquam erat volutpat. Aliquam augue libero, tempus nec nulla id, faucibus bibendum nunc. Maecenas ultrices pharetra nisl sed sodales. Nulla ultricies arcu a neque bibendum, quis tristique nulla rhoncus. Pellentesque sit amet magna maximus, ullamcorper erat. 
-                                    <div class="clear"></div>
-                                    <a href="javascript:void(0);" class="shortcode_button">Learn More</a>
-                                </div>
-                            </div>
-                        </div> -->
+
   
                     </div>
                 </div>
-                <!-- <div class="container"><div class="row"><div class="section-separator"><div class="line"></div></div></div></div> -->
             </div>
-            <!-- <div class="video-box">
-                <div class="container">
-                    <h2>Recent Sermon</h2>  
-                    <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p> 
-                    <div class="video-block">
-                        <script type="text/javascript">
-                            var video_url = '<iframe src="http://www.youtube.com/embed/hLF27FcNry0?autoplay=1" frameborder="0" allowfullscreen></iframe>';
-                        </script>
-                        <img src="./assets/images/video-img.jpg" class="video_bg" alt="">
-                        <div class="video_preview">
-                            <a class="btn-load-video" href="javascript:void(0);"></a>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-            </div>     -->
+
         </section>
-        <!-- <div class="container"><div class="row"><div class="section-separator"><div class="line"></div></div></div></div> -->
+    
         <!-- contact content -->
         <section class="page_section" id="contact">  
         	<div class="stretch contacts_block_bg">
@@ -452,9 +215,6 @@
                         <div class="title">Important Links</div>
                         <a [routerLink]="['/about']">About Us</a>
                         <a [routerLink]="['/fundraise']">Donate</a>
-                        <a [routerLink]="['/signup/volunteer']">Some link</a>
-                        <a [routerLink]="['/signup/volunteer']">Some link</a>
-                        <a [routerLink]="['/signup/volunteer']">Some link</a>
                         <!-- <p>Maecenas etos sit amet, consectetur adipiscing elit. Terminal volutpat rutrum metro <a href="javascript:void(0);">http://www.themedesigner.in</a> <br>2 hours ago</p>
                         <p>Ante tellus gravida mollis tellus neque vitae elit. Terminal volutpat rutrum metro <a href="javascript:void(0);">http://www.themedesigner.in</a> <br>2 hours ago</p> -->
                     </div>
@@ -483,4 +243,5 @@
         <!--//footer-->          
            
     </div><!-- //wrapper --> 
+
     <header class="fixed-menu"></header>
