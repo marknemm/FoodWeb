@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
+    "outDir": "../../dist/out-tsc",
     "paths": {
       "~lodash-mixins": ["src/lodash-mixins"],
       "~shared": ["src/shared"],
@@ -9,16 +10,8 @@
       "~web-env/*": ["src/environments/*"]
     },
     "sourceMap": true,
-    "types": [
-      "googlemaps",
-      "node"
-    ]
+    "types": ["googlemaps", "node"],
   },
-  "files": [
-    "src/main.ts",
-    "src/polyfills.ts"
-  ],
-  "include": [
-    "src/types/*"
-  ]
+  "files": ["src/main.ts", "src/polyfills.ts"],
+  "include": ["src/types/*"]
 }

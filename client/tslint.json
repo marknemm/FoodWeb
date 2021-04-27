@@ -3,7 +3,8 @@
     "../tslint.json"
   ],
   "rulesDirectory": [
-    "node_modules/codelyzer"
+    "node_modules/codelyzer",
+    "node_modules/@nrwl/workspace/src/tslint"
   ],
   "rules": {
     "adjacent-overload-signatures": false,
@@ -20,6 +21,20 @@
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
     "directive-class-suffix": true,
-    "prefer-mapped-imports": false
+    "prefer-mapped-imports": false,
+    "nx-enforce-module-boundaries": [
+      true,
+      {
+        "allow": [],
+        "depConstraints": [
+          {
+            "sourceTag": "*",
+            "onlyDependOnLibsWithTags": [
+              "*"
+            ]
+          }
+        ]
+      }
+    ]
   }
 }
