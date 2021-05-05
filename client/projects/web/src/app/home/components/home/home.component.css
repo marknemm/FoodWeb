@@ -339,18 +339,20 @@ a.menu_toggler {display:none;
 
 #bg_img {
 	height: 100%;
-	width: 100%;
-	background-size: cover;
-	filter: blur(8px);
-  -webkit-filter: blur(8px);
-	background-image: url("https://foodweb-images.s3.amazonaws.com/photo-1607227063002-677dc5fdf96f.jpeg");
+	background-size: contain;
+    background-repeat: no-repeat;
+    background-color: #010101;
+	background-position: right;
+	filter: blur(1px);
+  -webkit-filter: blur(1px);
+	background-image: url("https://images.unsplash.com/photo-1587015566802-5dc157c901cf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=933&q=80");
 }
 .full_slider.preloader {
 	/* background-image:url(../images/preloader.gif); */
 }
 .full_slider_caption {
     position:absolute;
-	top:32.4%;
+	top:12.4%;
 	left:0;
 	right:0;
 	text-align:center;
@@ -389,26 +391,23 @@ a.menu_toggler {display:none;
 }
 .slide_title {
 	padding: 18px 30px 21px 30px;
-	font-size:30px;
-	line-height:normal;
-	font-family: 'Open Sans', sans-serif;
-	color:#2d2e2e;	
-	float: left;
-	clear: both;
-	background: rgba(255, 255, 255, 0.58);
+    font-size: 30px;
+    line-height: normal;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    float: left;
+    clear: both;
 
 }
 .slide_title_alt {
-	margin-bottom: 10px;
-	padding: 24px 30px 15px 30px;
-	font-size:48px;
-	line-height:normal;
-	font-family: 'Open Sans', sans-serif;
-	font-weight:bold;
-	color:#66bb6a;	
-	float: left;
-	background: rgba(255, 255, 255, 0.58);
-
+    margin-bottom: 10px;
+    padding: 24px 30px 15px 30px;
+    font-size: 66px;
+    line-height: normal;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+    color: #66bb6a;
+    float: left;
 }
 .slide-logo {
 	padding-bottom:50px;	
@@ -447,7 +446,6 @@ a.menu_toggler {display:none;
 }
 .about-text {
 	padding:0 10px 45px 10px;
-	text-align: center;
 }
 .block_header.bring .col-md-6 .shortcode_button {
 		margin-top: 14px;
@@ -482,6 +480,38 @@ a.menu_toggler {display:none;
 #about .block_header.events .shortcode_button {
 	margin-top:4px;
 }
+
+.float_box {
+	display: flex;
+    width: 100%;
+    justify-content: space-around;
+    margin: 2em;
+}
+
+.circle
+    {
+		flex: 1 0 100%;
+		max-width: 200px;
+		height: 200px;
+		padding: 4em 1em;
+		border-radius: 250px;
+		font-size: 1em;
+		font-weight: bold;
+		color: white;
+		/* line-height: 200px; */
+		text-align: center;
+		/* background: white; */
+		border: 5px solid;
+    }
+
+	.circle span {
+		color: #66bb6a;
+		font-size: 2em;
+		padding: .2em;
+		display: block;
+	}
+  
+
 
 
 
@@ -552,51 +582,7 @@ h2 {
 	padding: 0 12px;
 	margin: 0 0 14px 0;
 }
-.pastors .social-list {
-	padding: 19px 0 14px 0;
-	border-top:1px solid #ddd;
-	text-align: center;
-}
-.pastors .social-list li {
-	padding: 0 5px;
-	display: inline-block;
-}
-.pastors .social-list li a {
-	width: 19px;
-	height: 18px;
-	/* background: url(../images/socials/sprite.png); */
-	display: inline-block;
-}
-.pastors .social-list li.facebook a {
-	background-position: 0 0;
-}
-.pastors .social-list li.facebook a:hover {
-	background-position: 0 -18px;
-}
-.pastors .social-list li.twitter a {
-	background-position: -19px 0;
-}
-.pastors .social-list li.twitter a:hover {
-	background-position: -19px -18px;
-}
-.pastors .social-list li.google a {
-	background-position: -38px 0;
-}
-.pastors .social-list li.google a:hover {
-	background-position: -38px -18px;
-}
-.pastors .social-list li.dribble a {
-	background-position: -57px 0;
-}
-.pastors .social-list li.dribble a:hover {
-	background-position: -57px -18px;
-}
-.pastors .social-list li.pinterest a {
-	background-position: -76px 0;
-}
-.pastors .social-list li.pinterest a:hover {
-	background-position: -76px -18px;
-}
+
 
 
 .header_gallery {
@@ -1477,14 +1463,14 @@ h6 {
 	.divider,
 	.slider_caption .triangle,
 	.slider_caption p {
-		display:none;
+		/* display:none; */
 	}
 	.isotope .isotope-item {
 		text-align: center;
 		width: 100%;
 	}
 	.full_slider_caption p {
-		display:none;
+		/* display:none; */
 	}
 	.slide_title {
 		font-size: 20px;
@@ -1767,9 +1753,10 @@ h6 {
 	.news-block .item .text {
 		width: 70% !important;
 	}
-	.banner-options {
+	.circle {
 		display: none;
 	}
+
 }
 @media only screen and (max-width: 860px) {
 	.banner-options {

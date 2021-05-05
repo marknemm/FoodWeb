@@ -1,0 +1,42 @@
+:host {
+    width: 100%;
+
+    form {
+        display: flex;
+        flex-wrap: wrap;
+
+        input {
+            flex: 1 0 40%;
+        }
+
+        input[type="text"],
+        textarea {
+            margin: 1em;
+            padding: 5px 10px;
+            height: 34px;
+            border:1px solid #dddddd;
+            outline:none;
+            border-radius:0;
+            -webkit-border-radius:0;
+            box-shadow:none;
+            font-size:14px;
+            color:#666666;
+            font-weight:400;
+            font-family: 'Open Sans', sans-serif;
+            line-height:normal;
+        }
+
+        textarea {
+            margin-bottom:17px;
+            height:151px;
+            width: 100%;
+            padding-top:5px;
+            overflow:hidden;
+            width: 100%;
+        }
+
+        .send_btn {
+            margin: 1em;
+        }
+    }
+}

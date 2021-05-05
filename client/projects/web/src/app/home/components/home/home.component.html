@@ -5,26 +5,22 @@
         	<!--Slider-->
             <div id="main_div">
                 <div id="bg_img"></div>
-                <!-- <img src="./assets/cover.jpeg" alt="" class="slide_bg" /> -->
                 <div class="full_slider_caption fleft">
                     <div class="container">
                         <div class="slide_title_alt">Foob Web WNY</div>
-                        <!-- <div><img src="./assets/HeaderImg.jpg"></div> -->
+
                         <ng-container *ngIf="generalStats">
-                            <div>
-                                Total Donations
-                                <span>{{ generalStats.totalDonations }}</span>
-                            </div>
-                            <div>
-                                Total Meals
-                                <span>{{ generalStats.totalMeals }}</span>
-                            </div>
+                        <div class="slide_title">
+                            <p>FoodWeb aims to reduce food waste by connecting donors, receivers, and volunteer drivers using state-of-the-art technology! Please join us in our attempt to make sure that excess food gets to those who need it!</p>
+                        </div>
+                        <div class="float_box">
+                        <ng-container *ngIf="generalStats">
+                            <div class="circle"> Total Donations
+                                <span>{{ generalStats.totalDonations }}</span></div>
+                            <div class="circle">Total Meals
+                                <span>{{ generalStats.totalMeals }}</span></div>
                         </ng-container>
-
-                        <ng-container *ngIf="!generalStats">
-                        <div class="slide_title">FoodWeb donations and deliveries are suspended until further notice due to the concerns surrounding the COVID-19 outbreak. We apologize for any inconvenience, and look forward to starting back up when safe to do so.
-
-                            Thank you for your support and understanding!</div>
+                        </div>
                         </ng-container>
                     </div>
 
@@ -66,7 +62,6 @@
                 <div class="container">
                 <div class="row">
                     <h2>What is Food Web!</h2>
-                    <foodweb-general-stats-card></foodweb-general-stats-card>
                     <p class="about-text">FoodWeb donations and deliveries are suspended until further notice due to the concerns surrounding the COVID-19 outbreak. We apologize for any inconvenience, and look forward to starting back up when safe to do so. Thank you for your support and understanding!</p>
                     <div class="col-md-6 bring-img"><img src="./assets/foodweb.jpeg" alt=""></div>
                     <div class="col-md-6">
@@ -139,8 +134,6 @@
                 </div>
                 </div>    
             </div>	                                     
-        
-        <!-- <div class="container"><div class="row"><div class="section-separator"><div class="line"></div></div></div></div> -->
     
             <!-- //Portfolio -->
             <div class="block_header giving portfolio-free" style="text-align:center">
@@ -148,14 +141,12 @@
                     <div class="row">
                         <div class="col-md-12"  style="text-align:center">
                         <h2  class="title"  style="text-align:center">Free This Weekend? Become a volunteer!</h2>
-                        <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
+                        <p>Interesting in helping with donation events? We are always looking for volunteers to help with deliverying meals to those in need! If you free to help start by creating an account by clicking the button below.</p>
                         <a [routerLink]="['/signup/volunteer']" class="shortcode_button">Create an account</a>
                         </div>
-                        <!-- <div class="col-md-2 hand"></div> -->
                     </div>
                 </div>
             </div>
-            <!-- <div class="container"><div class="row"><div class="section-separator"><div class="line"></div></div></div></div> -->
         </section>        
         <section class="page_section" id="news">
             <div class="block_header news">
@@ -180,20 +171,7 @@
                 </div>
                 <div class="container">
             		<div class="row">
-                    	<div class="contact_form">
-                            <div id="note"></div>
-                            <div id="fields"> 
-                                <form id="ajax-contact-form" action="#"> 
-                                <div class="col-md-4"><div class="input-wrap"><input type="text" name="name" value="" placeholder="Your Name*" /></div></div>
-                                <div class="col-md-4"><div class="input-wrap"><input type="text" name="email" value="" placeholder="Your Mail*" /></div></div>
-                                <div class="col-md-4"><div class="input-wrap"><input type="text" name="subject" value="" placeholder="Subject" /></div></div>
-                                <div class="col-md-12"><textarea name="message" id="message" placeholder="Enter Message Here*"></textarea></div>	
-                                <div class="submit-wrap">
-                                    <input type="submit" class="send_btn" value="Send Message">
-                                </div>
-                                </form> 
-                            </div>                                                       
-                        </div>
+                        <foodweb-support-info></foodweb-support-info>
             		</div>
             	</div>
             </div>
@@ -204,35 +182,15 @@
         <div class="footer">
         	<div class="container">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="title">Contact Info</div>
-                        <p>Maecenas etos sit amet, consectetur adipiscing elit. Terminal volutpat rutrum metro amet sollicitudin interdum at vero eos et accusamus et iusto odio.</p>
-                        <p>Phone: +1 (800) 756 547 12</p>
-                        <p>Address: 1684 Awesome Street, New York</p>
-                        <p>Email: <a href="mailto:#">info@lord’sgrace.com</a></p>
+                        <p>Nonprofit Organization</p>
+                        <p>Email: <a href="mailto:#">inquiries@wnyfoodweb.com</a></p>
                     </div>
-                    <div class="col-md-4 important_links">
+                    <div class="col-md-6 important_links">
                         <div class="title">Important Links</div>
                         <a [routerLink]="['/about']">About Us</a>
                         <a [routerLink]="['/fundraise']">Donate</a>
-                        <!-- <p>Maecenas etos sit amet, consectetur adipiscing elit. Terminal volutpat rutrum metro <a href="javascript:void(0);">http://www.themedesigner.in</a> <br>2 hours ago</p>
-                        <p>Ante tellus gravida mollis tellus neque vitae elit. Terminal volutpat rutrum metro <a href="javascript:void(0);">http://www.themedesigner.in</a> <br>2 hours ago</p> -->
-                    </div>
-                    <div class="col-md-4">
-                        <div class="title">Newsletter Signup</div>
-                        <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudian concetur sit amet einem tellus.</p>
-                        <div class="foot-letter-wrap">
-                            <input type="text" placeholder="Email address" value="" name="">
-                            <input type="submit" value="Go" name="">
-                        </div>
-                        <div class="clear"></div>
-                        <ul class="social-list">
-                            <li class="facebook"><a href="javascript:void(0);"></a></li>
-                            <li class="twitter"><a href="javascript:void(0);"></a></li>
-                            <li class="google"><a href="javascript:void(0);"></a></li>
-                            <li class="dribble"><a href="javascript:void(0);"></a></li>
-                            <li class="pinterest"><a href="javascript:void(0);"></a></li>
-                        </ul>
                     </div>
                 </div>
                 <div class="foot-bottom">

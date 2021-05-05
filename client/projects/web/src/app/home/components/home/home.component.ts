@@ -8,6 +8,7 @@ import { SessionService } from '~web/session/services/session/session.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralStats, GeneralStatsService } from '~web/heuristics/services/heuristics/general-stats.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'foodweb-home',
@@ -19,6 +20,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   private _featuredEvent: FeaturedEvent;
   private _generalStats: GeneralStats;
   private _destory$ = new Subject();
+  name = new FormControl('');;
+  email = new FormControl('');;
+  subject = new FormControl('');;
+  body = new FormControl('');;
 
   constructor(
     public sessionService: SessionService,
@@ -38,7 +43,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   get generalStats(): GeneralStats {
-    return this._generalStats;
+    return this._generalStats ?? {
+      totalDonations: 0,
+      totalMeals: 0
+    };
   }
 
   get showStatValues(): boolean {
@@ -69,6 +77,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this._destory$.next();
+  }
+
+  showFormData() {
+    console.log(this.name);
   }
 
 }
