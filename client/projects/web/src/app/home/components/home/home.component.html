@@ -30,21 +30,21 @@
                                 <!-- <div class="img-wrap"><img src="./assets/images/icons/ban-opt-icon2.png" height="80" width="80" alt=""></div> -->
                                 <div class="text">
                                     <div class="title">Become a Donor</div>
-                                    <p>Sign up to Donate food</p>
+                                    <p class="mobile-hide">Sign up to Donate food</p>
                                 </div>
                             </div>
                             <div class="item shortcode_button" [routerLink]="['/signup/receiver']">
                                 <!-- <div class="img-wrap"><img src="./assets/images/icons/ban-opt-icon2.png" height="80" width="80" alt=""></div> -->
                                 <div class="text">
                                     <div class="title">Become a Receiver</div>
-                                    <p>Sign up to Receive food</p>
+                                    <p class="mobile-hide">Sign up to Receive food</p>
                                 </div>
                             </div>
                             <div class="item shortcode_button" [routerLink]="['/signup/volunteer']">
                                 <!-- <div class="img-wrap"><img src="./assets/images/icons/ban-opt-icon2.png" height="80" width="80" alt=""></div> -->
                                 <div class="text">
                                     <div class="title">Become a Volunteer</div>
-                                    <p>Sign up to help deliver food</p>
+                                    <p class="mobile-hide">Sign up to help deliver food</p>
                                 </div>
                             </div>
                         </div>
@@ -100,42 +100,32 @@
                   <div class="block_header events">
                     <div class="container">
                         <h2>Upcoming Events</h2>
-                        <p class="about-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="event-item">
-                                    <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/events/img.jpg" height="240" width="370" alt=""></a></div>
-                                    <div class="name">Sandwich Drive</div>
-                                    <div class="date">On: <span>April 17th 2021</span></div>
-                                    <p>FoodWeb's weekly sandwich drives to benefit St. Luke's Mission for Mercy continue on April 17. Please join FoodWeb in making sandwich lunches consisting of a sandwich (turkey, ham, bologna preferred), a piece of fruit, and a snack (cookie or chips) and putting it all in a Ziploc or lunch bag.  PLEASE LABEL the sandwiches so our volunteers can identify sandwiches containing perishable items.  You can drop off the sandwich lunches at any of the below drop-off centers between 1:30 pm – 2:30 pm on April 17(please note changed drop-off window).  Our volunteers will deliver to St. Luke’s.  </p>
-                                    <a href="javascript:void(0);" class="shortcode_button">Learn More</a>
+                            <ng-container *ngIf="donations.length > 0">
+                                <div class="col-md-4" *ngFor="let donation of donations">
+                                    <div class="event-item">
+                                        <div class="img-wrap"><a [routerLink]="viewAccount(donation.id)"><img src="./assets/images/events/img.jpg" height="240" width="370" alt=""></a></div>
+                                        <div class="name">{{donation.donorAccount.organization.name}}</div>
+                                        <div class="date">Event Time: <span>{{donation.pickupWindowStart | date: 'MMM d,  h a'}} - {{donation.pickupWindowEnd | date: 'h a'}}</span></div>
+                                        <p>{{donation.description}}</p>
+                                        <a [routerLink]="viewAccount(donation.id)"  class="shortcode_button">View Event</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="event-item">
-                                    <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/events/img.jpg" height="240" width="370" alt=""></a></div>
-                                    <div class="name">Sandwich Drive</div>
-                                    <div class="date">On: <span>April 10th 2021</span></div>
-                                    <p>FoodWeb's weekly sandwich drives to benefit St. Luke's Mission for Mercy continues on April 10. Please join FoodWeb in making sandwich lunches consisting of a sandwich (ham, turkey, bologna preferred), a piece of fruit, and a snack (cookie or chips) and putting it all in a Ziploc or lunch bag.  PLEASE LABEL the sandwiches so our volunteers can identify sandwiches containing perishable items.  </p>
-                                    <a href="javascript:void(0);" class="shortcode_button">Learn More</a>
+                            </ng-container>
+
+                            <ng-container *ngIf="donations.length == 0" >
+                                <div class="right-alined">
+                                    <p>No events currently upcoming, Start an event today to help those in need!</p>
+                                    <a [routerLink]="['/signup/donor']"  class="shortcode_button">Create Event</a>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="event-item">
-                                    <div class="img-wrap"><a href="javascript:void(0);"><img src="./assets/images/events/img.jpg" height="240" width="370" alt=""></a></div>
-                                    <div class="name">Sandwich Drive</div>
-                                    <div class="date">On: <span>May 27th 2021</span></div>
-                                    <p>FoodWeb's weekly sandwich drives to benefit St. Luke's Mission for Mercy continue on March 27.  Please join FoodWeb in making sandwich lunches consisting of a sandwich (any kind, including peanut butter and jelly), a piece of fruit, and a snack (cookie or chips) and putting it all in a Ziploc or lunch bag.  PLEASE LABEL the sandwiches so our volunteers can identify sandwiches containing perishable items.  </p>
-                                    <a href="javascript:void(0);" class="shortcode_button">Learn More</a>
-                                </div>
-                            </div>
+                            </ng-container>
                         </div>
                     </div>
                 </div>
                 </div>    
             </div>	                                     
     
-            <!-- //Portfolio -->
+            <!-- //Call to action - volunteer -->
             <div class="block_header giving portfolio-free" style="text-align:center">
                 <div class="container">
                     <div class="row">
@@ -148,17 +138,6 @@
                 </div>
             </div>
         </section>        
-        <section class="page_section" id="news">
-            <div class="block_header news">
-                <div class="container">
-                    <div class="row">
-
-  
-                    </div>
-                </div>
-            </div>
-
-        </section>
     
         <!-- contact content -->
         <section class="page_section" id="contact">  
@@ -191,6 +170,9 @@
                         <div class="title">Important Links</div>
                         <a [routerLink]="['/about']">About Us</a>
                         <a [routerLink]="['/fundraise']">Donate</a>
+                        <a [routerLink]="['/signup/donor']">Become a donor</a>
+                        <a [routerLink]="['/signup/receiver']">Become a receiver</a>
+                        <a [routerLink]="['/signup/volunteer']">Become a volunteer</a>
                     </div>
                 </div>
                 <div class="foot-bottom">

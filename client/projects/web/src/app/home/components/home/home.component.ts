@@ -8,7 +8,8 @@ import { SessionService } from '~web/session/services/session/session.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralStats, GeneralStatsService } from '~web/heuristics/services/heuristics/general-stats.service';
-import { FormControl } from '@angular/forms';
+import { DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
+import { Donation, DonationReadRequest, ListResponse } from '~shared';
 
 @Component({
   selector: 'foodweb-home',
@@ -20,10 +21,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private _featuredEvent: FeaturedEvent;
   private _generalStats: GeneralStats;
   private _destory$ = new Subject();
-  name = new FormControl('');;
-  email = new FormControl('');;
-  subject = new FormControl('');;
-  body = new FormControl('');;
+  private _donations: Donation[] = [];
 
   constructor(
     public sessionService: SessionService,
@@ -31,8 +29,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     private _authService: AuthenticationService,
     private _featuredEventsService: FeaturedEventsService,
     private _matDialog: MatDialog,
-    public generalStatsService: GeneralStatsService
+    public generalStatsService: GeneralStatsService,
+    private _donationReadService: DonationReadService
   ) {}
+
+  get donations(): Donation[] {
+    return this._donations;
+  }
 
   get featuredEvent(): FeaturedEvent {
     return this._featuredEvent;
@@ -69,6 +72,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.generalStatsService.watchGeneralStats().pipe(
       takeUntil(this._destory$)
     ).subscribe((generalStats: GeneralStats) => this._generalStats = generalStats);
+
+    const request : DonationReadRequest = {
+      page: 1,
+      limit: 3,
+      upcoming: true
+    };
+
+    this._donationReadService.getDonations(request).subscribe((response: ListResponse<Donation>) => {
+      this._donations = response.list;
+    });
   }
 
   openLoginDialog(): void {
@@ -79,8 +92,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._destory$.next();
   }
 
-  showFormData() {
-    console.log(this.name);
+  viewAccount(id: number) :string {
+    return `/donation/details/${id}`;
   }
 
 }

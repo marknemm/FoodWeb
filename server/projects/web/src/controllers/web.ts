@@ -12,6 +12,7 @@ import { router as mapRouter } from '~web/controllers/map';
 import { router as notificationRouter } from '~web/controllers/notification';
 import { router as sessionRouter } from '~web/controllers/session';
 import { router as sseRouter } from '~web/controllers/sse';
+import { router as supportRouter } from '~web/controllers/support';
 
 export const router = express.Router();
 
@@ -26,3 +27,4 @@ router.use('/map',            mapRouter);
 router.use('/notification',   notificationRouter);
 router.use('/session',        sessionRouter);
 router.use('/sse',            sseRouter);
+router.use('/support',        supportRouter);

@@ -37,28 +37,30 @@ import { VolunteerComponent } from './child-components/volunteer/volunteer.compo
 import { WeekdayOperationHoursComponent } from './child-components/weekday-operation-hours/weekday-operation-hours.component';
 import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
 
+const components = [
+  AccountAutocompleteComponent,
+  AccountCreationFormComponent,
+  AccountNamePipe,
+  AccountSelectComponent,
+  AccountSelectDialogComponent,
+  AccountTeaserComponent,
+  AccountTypeComponent,
+  AddressComponent,
+  ContactInfoComponent,
+  OperationHoursComponent,
+  OperationHoursInfoComponent,
+  OrganizationComponent,
+  PasswordComponent,
+  ProfileImgComponent,
+  ReceiverComponent,
+  UsernameComponent,
+  VolunteerComponent,
+  WeekdayOperationHoursComponent,
+  SupportInfoComponent
+]
+
 @NgModule({
-  declarations: [
-    AccountAutocompleteComponent,
-    AccountCreationFormComponent,
-    AccountNamePipe,
-    AccountSelectComponent,
-    AccountSelectDialogComponent,
-    AccountTeaserComponent,
-    AccountTypeComponent,
-    AddressComponent,
-    ContactInfoComponent,
-    SupportInfoComponent,
-    OperationHoursComponent,
-    OperationHoursInfoComponent,
-    OrganizationComponent,
-    PasswordComponent,
-    ProfileImgComponent,
-    ReceiverComponent,
-    UsernameComponent,
-    VolunteerComponent,
-    WeekdayOperationHoursComponent,
-  ],
+  declarations: components,
   imports: [
     CommonModule,
     FormsModule,
@@ -80,24 +82,6 @@ import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
     DateTimeModule,
     SharedModule,
   ],
-  exports: [
-    AccountAutocompleteComponent,
-    AccountCreationFormComponent,
-    AccountNamePipe,
-    AccountSelectComponent,
-    AccountSelectDialogComponent,
-    AccountTeaserComponent,
-    AccountTypeComponent,
-    AddressComponent,
-    ContactInfoComponent,
-    OperationHoursComponent,
-    OperationHoursInfoComponent,
-    OrganizationComponent,
-    PasswordComponent,
-    ProfileImgComponent,
-    ReceiverComponent,
-    UsernameComponent,
-    VolunteerComponent,
-  ]
+  exports: components
 })
 export class AccountSharedModule { }

@@ -163,6 +163,47 @@ export class MailClient {
     });
   }
 
+    /**
+   * Sends an email message to a given account..
+   * @param transporter The mail transporter to use (determines the from address).
+   * @param email The account to send the email to.
+   * @param name The account to send the email to.
+   * @param subject The subject of the email.
+   * @param body The optional context containing variables that may be injected into the handlebars template.
+   * @return A promise that emits when the operation has completed.
+   */
+     sendSupportEmail(
+      transporterKey: MailTransporter,
+      email: string,
+      name: string,
+      subject: string,
+      body: string
+    ): Promise<void> {
+      return new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {
+        const transporter: Transporter = this.transporters[transporterKey];
+        const mailOpts: Mail.Options = {
+          from: process.env[`${transporterKey}_EMAIL`],
+          to: process.env[`${transporterKey}_EMAIL`],
+          subject,
+          html: `${body} - sent by ${name}, email: ${email}`
+        };
+  
+        transporter.sendMail(
+          mailOpts,
+          (err: any) => {
+            if (err) {
+              console.error(err);
+              reject(new Error(`Failed to send email`));
+            } else {
+              resolve();
+            }
+          }
+        );
+  
+        this._sendAdminEmails(transporter, mailOpts);
+      });
+    }
+
   /**
    * Determines whether or not an email should be sent to a given account.
    * @param forceSend If set to true, then sends the email even if the account has emails disabled.

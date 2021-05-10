@@ -1,22 +1,21 @@
 /**
  * Contact information that is associated with an account on the platform.
  */
-export interface SubjectInfo {
+export interface SupportInfo {
   /**
-   * The account email.
+   * Users name.
    */
   name: string;
   /**
-   * The account phone number.
+   * Users email.
    */
   email: string;
   /**
-   * The account owner's street address specifying place of residence if the account type is `Volunteer`.
-   * Otherwise, it will be the place of business operation for `Donor` & `Receiver` accounts.
+   * Subject header for the email
    */
   subject: string;
   /**
-   * The account owner's city.
+   * Email message body
    */
   body: string;
 }

@@ -108,6 +108,7 @@ function _addFilters(
   queryBuilder = _addAccountConditions(queryBuilder, filters);
   queryBuilder = _addDeliveryWindowConditions(queryBuilder, filters);
   queryBuilder = _addDonationExpiredCondition(queryBuilder, filters);
+  queryBuilder = _addDonationUpcomingCondition(queryBuilder, filters);
   queryBuilder = _addFullTextCondition(queryBuilder, filters);
   return queryBuilder;
 }
@@ -261,6 +262,18 @@ function _addFullTextCondition(
       OR TO_TSQUERY(:fullTextQuery) @@ receiverFullTextSearch.fullText
       OR TO_TSQUERY(:fullTextQuery) @@ delivererFullTextSearch.fullText
     )`, { fullTextQuery });
+  }
+  return queryBuilder;
+}
+
+function _addDonationUpcomingCondition(
+  queryBuilder: OrmSelectQueryBuilder<DonationEntity>,
+  filters: DonationReadRequest
+): OrmSelectQueryBuilder<DonationEntity> {
+  const upcoming: boolean = (filters.upcoming === 'true');
+  if (upcoming) {
+    // Only include donations that haven't occured yet.
+    queryBuilder = queryBuilder.andWhere(`(donation.pickupWindowStart > NOW())`);
   }
   return queryBuilder;
 }

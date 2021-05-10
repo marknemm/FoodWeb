@@ -11,4 +11,8 @@ export class SupportInfoComponent  {
 
   constructor() {
   }
+
+  ngOnInit() {}
+
+  sendEmail() {}
 }

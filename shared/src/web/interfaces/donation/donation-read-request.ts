@@ -61,6 +61,11 @@ export interface DonationReadRequest extends ReadRequest<DonationSortBy> {
    * Set to true if filtering donations belonging to current user.
    */
   myDonations?: boolean | string;
+
+  /**
+   * Set to true if filtering donations that haven't occured yet
+   */
+  upcoming?: boolean | string;
 }
 
-export type DonationSortBy = 'createTimestamp' | 'deliveryWindowStart' | 'donationStatus' | 'donorOrganizationName' | 'receiverOrganizationName';
+export type DonationSortBy = 'createTimestamp' | 'deliveryWindowStart' | 'donationStatus' | 'donorOrganizationName' | 'receiverOrganizationName' | 'pickupWindowStart';
