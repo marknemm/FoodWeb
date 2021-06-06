@@ -22,6 +22,7 @@ const routes: Routes = [
       { path: 'event', loadChildren: () => import('~admin/admin-event/admin-event.module').then(mod => mod.AdminEventModule) }
     ]
   },
+  { path: '**', redirectTo: 'console' }
 ];
 
 @NgModule({

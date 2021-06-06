@@ -37,7 +37,7 @@ export function handleGetAccountAutocomplete(req: Request, res: Response) {
 
 router.get('/recover-username', handleGetRecoverUsername);
 export function handleGetRecoverUsername(req: Request, res: Response) {
-  const email: string = req.query.email;
+  const email = <string>req.query.email;
   readAccounts({ email, page: 0, limit: 1000 }, null)
     .then((listRes: ListResponse<AccountEntity>) => sendUsernameRecoveryEmail(listRes.list))
     .then(() => res.send())
@@ -46,7 +46,7 @@ export function handleGetRecoverUsername(req: Request, res: Response) {
 
 router.get('/reset-password', handleGetResetPassword);
 export function handleGetResetPassword(req: Request, res: Response) {
-  const usernameEmail: string = req.query.usernameEmail;
+  const usernameEmail = <string>req.query.usernameEmail;
   savePasswordResetToken(usernameEmail)
     .then((passwordResetEntity: PasswordResetEntity) =>
       sendPasswordResetEmail(passwordResetEntity.account, passwordResetEntity.resetToken)
@@ -81,7 +81,7 @@ export function handlePostAccountVerify(req: Request, res: Response) {
     .then(_handleAccountVerificationResult.bind(this, req, res))
     .catch(genErrorResponseRethrow.bind(this, res))
     .then((verifiedAccount: AccountEntity) =>
-      saveAudit(AuditEventType.VerifyAccount, verifiedAccount, verifiedAccount, verificationReq.recaptchaScore)
+      saveAudit(AuditEventType.VerifyAccount, verifiedAccount, verifiedAccount)
     )
     .catch((err: Error) => console.error(err));
 }
@@ -93,7 +93,7 @@ export function handlePostAccount(req: Request, res: Response) {
     .then((newAccountData: NewAccountData) => sendAccountVerificationMessage(newAccountData))
     .then((account: AccountEntity) => { res.send(account); return account; })
     .catch(genErrorResponseRethrow.bind(this, res))
-    .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, signupRequest.recaptchaScore))
+    .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account))
     .catch((err: Error) => console.error(err));
 }
 
@@ -104,7 +104,7 @@ export function handlePutPassword(req: Request, res: Response) {
   updatePassword(updateReq, myAccount)
     .then(() => res.send({}))
     .catch(genErrorResponseRethrow.bind(this, res))
-    .then(() => saveUpdateAudit(AuditEventType.UpdatePassword, myAccount, { old: 'xxx', new: 'xxx' }, updateReq.recaptchaScore))
+    .then(() => saveUpdateAudit(AuditEventType.UpdatePassword, myAccount, { old: 'xxx', new: 'xxx' }))
     .catch((err: Error) => console.error(err));
 }
 
@@ -116,7 +116,7 @@ export function handlePutResetPassword(req: Request, res: Response) {
     .catch(genErrorResponseRethrow.bind(this, res))
     .then((account: AccountEntity) => sendPasswordResetSuccessEmail(account))
     .then(async (account: AccountEntity) => {
-      await saveUpdateAudit(AuditEventType.ResetPassword, account, { old: 'xxx', new: 'xxx' }, resetReq.recaptchaScore);
+      await saveUpdateAudit(AuditEventType.ResetPassword, account, { old: 'xxx', new: 'xxx' });
       return account;
     })
     .catch((err: Error) => console.error(err));
@@ -129,7 +129,7 @@ export function handlePutAccount(req: Request, res: Response) {
     .then(_handleAccountSaveResult.bind(this, req, res))
     .catch(genErrorResponseRethrow.bind(this, res))
     .then((accountDiff: UpdateDiff<AccountEntity>) =>
-      saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff, updateReq.recaptchaScore)
+      saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff)
     )
     .catch((err: Error) => console.error(err));
 }

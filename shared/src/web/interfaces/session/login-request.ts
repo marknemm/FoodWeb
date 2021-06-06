@@ -1,6 +1,4 @@
-import { WriteRequest } from '../write-request';
-
-export interface LoginRequest extends WriteRequest {
+export interface LoginRequest {
   usernameEmail: string;
   password: string;
   isApp?: boolean;

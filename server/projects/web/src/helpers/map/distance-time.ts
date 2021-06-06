@@ -1,14 +1,8 @@
-import * as GoogleMaps from '@google/maps';
-import { ClientResponse, DistanceMatrixResponse, GoogleMapsClientWithPromise } from '@google/maps';
-import 'dotenv';
+import { DistanceMatrixResponse, UnitSystem } from '@googlemaps/google-maps-services-js';
 import { ContactInfo } from '~shared';
+import { env } from '../globals/env';
 import { FoodWebError } from '../response/foodweb-error';
-
-const _distanceTimeClient: GoogleMapsClientWithPromise = GoogleMaps.createClient({
-  key: process.env.DISTANCE_TIME_API_KEY,
-  Promise
-});
-const _offlineMode: boolean = (process.env.OFFLINE_MODE === 'true');
+import { googleMapsClient } from './client';
 
 /**
  * Gets the driving distance and time between a list of orign to destination queries.
@@ -17,7 +11,7 @@ const _offlineMode: boolean = (process.env.OFFLINE_MODE === 'true');
  * @throws FoodWebError if the distance time query fails.
  */
 export async function getDrivingDistTime(distanceTimeQueries: DistanceTimeQuery[]): Promise<DistanceTimeQueryResult[]> {
-  if (_offlineMode) { return []; }
+  if (env.OFFLINE_MODE) { return []; }
   const origins: string[] = _extractOrigins(distanceTimeQueries);
   const destinations: string[] = _extractDestinations(distanceTimeQueries);
   const matrix: any = await _getDistanceTimeMatrix(origins, destinations);
@@ -32,18 +26,19 @@ export async function getDrivingDistTime(distanceTimeQueries: DistanceTimeQuery[
  * @return A promise that resolves to an array of the computed driving distances and times.
  * @throws FoodWebError if the distance time query fails.
  */
-export function _getDistanceTimeMatrix(origins: string[], destinations: string[], retryCnt = 0): Promise<DistanceMatrixResponse> {
-  return <Promise<DistanceMatrixResponse>>_distanceTimeClient
-    .distanceMatrix({ origins, destinations, units: 'imperial' })
-    .asPromise()
-    .then((result: ClientResponse<DistanceMatrixResponse>) => {
-      switch (result.json.status) {
-        case 'OK':                return result.json;
-        case 'OVER_QUERY_LIMIT':  return _attemptRetry(origins, destinations, retryCnt);
-        default:                  _handleGetDistanceTimeErr(new Error(result.json.status));
-      }
-    })
-    .catch(_handleGetDistanceTimeErr);
+export async function _getDistanceTimeMatrix(origins: string[], destinations: string[], retryCnt = 0): Promise<DistanceMatrixResponse> {
+  try {
+    const response: DistanceMatrixResponse = await googleMapsClient.distancematrix({
+      params: { key: env.DISTANCE_TIME_API_KEY, origins, destinations, units: UnitSystem.imperial }
+    });
+    switch (response.statusText) {
+      case 'OK':                return response;
+      case 'OVER_QUERY_LIMIT':  return _attemptRetry(origins, destinations, retryCnt);
+      default:                  _handleGetDistanceTimeErr(new Error(response.statusText));
+    }
+  } catch (err) {
+    _handleGetDistanceTimeErr(err);
+  }
 }
 
 /**
@@ -94,7 +89,7 @@ function _attemptRetry(origins: string[], destinations: string[], retryCnt: numb
   if (++retryCnt >= 5) {
     _handleGetDistanceTimeErr(new Error('OVER_QUERY_LIMIT'));
   }
-  return new Promise((resolve: (result: any) => void) => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve(_getDistanceTimeMatrix(origins, destinations, retryCnt));
     }, 500 * retryCnt);

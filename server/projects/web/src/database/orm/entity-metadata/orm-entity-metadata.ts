@@ -1,3 +1,4 @@
+import { EntityTarget } from 'typeorm';
 import { PrimaryKey } from './primary-key';
 import { QueryHookRegistry } from './query-hook-registry';
 
@@ -11,14 +12,14 @@ export class OrmEntityMetadata {
   private _queryHookRegistry = new QueryHookRegistry();
 
   private constructor(
-    public ctor: EntityConstructor
+    public ctor: EntityTarget<any>
   ) {}
 
   get queryHookRegistry(): QueryHookRegistry {
     return this._queryHookRegistry;
   }
 
-  static getInstance(ctor: EntityConstructor) {
+  static getInstance(ctor: EntityTarget<any>) {
     if (!ormEntityMetaMap.has(ctor)) {
       ormEntityMetaMap.set(ctor, new OrmEntityMetadata(ctor));
     }
@@ -26,6 +27,4 @@ export class OrmEntityMetadata {
   }
 }
 
-const ormEntityMetaMap = new Map<EntityConstructor, OrmEntityMetadata>();
-
-export type EntityConstructor = Function;
+const ormEntityMetaMap = new Map<EntityTarget<any>, OrmEntityMetadata>();

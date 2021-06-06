@@ -12,7 +12,6 @@ export const environment: FoodWebEnvironment = {
   mobile: false,
   offline: true,
   supportEmail: null,
-  recaptchaSiteKey: null,
   googleMapsJSApiKey: null,
   server: '/server'
 };

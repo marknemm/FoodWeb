@@ -1,5 +1,3 @@
-import { WriteRequest } from '../write-request';
-
-export interface AccountVerificationRequest extends WriteRequest {
+export interface AccountVerificationRequest {
   verificationToken: string;
 }

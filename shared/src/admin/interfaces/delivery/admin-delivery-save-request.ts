@@ -1,7 +1,6 @@
-import { WriteRequest } from '../../../web';
 import { AdminDeliverySaveData } from './admin-delivery-save-data';
 
-export interface AdminDeliverySaveRequest extends WriteRequest {
+export interface AdminDeliverySaveRequest {
   donationId: number;
   delivery: AdminDeliverySaveData;
   volunteerAccountId: number;

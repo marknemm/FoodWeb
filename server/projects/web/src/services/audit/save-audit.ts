@@ -7,8 +7,7 @@ export { AuditEntity, AuditEventType };
 export async function saveAudit<T>(
   eventType: AuditEventType,
   accounts: AccountEntity[] | AccountEntity,
-  newData: T,
-  recaptchaScore?: number
+  newData: T
 ): Promise<T> {
   accounts = (accounts instanceof Array) ? accounts :  [accounts];
   await _saveAudit({
@@ -16,8 +15,7 @@ export async function saveAudit<T>(
     timestamp: undefined,
     eventType,
     accounts,
-    data: { new: newData },
-    recaptchaScore
+    data: { new: newData }
   }).catch(_handleErr.bind(this)); // Log and swallow any Audit errors so that related requests still succeed.
   return newData;
 }
@@ -25,8 +23,7 @@ export async function saveAudit<T>(
 export async function saveUpdateAudit<T>(
   eventType: AuditEventType,
   accounts: AccountEntity[] | AccountEntity,
-  updateDiff: UpdateDiff<T>,
-  recaptchaScore?: number
+  updateDiff: UpdateDiff<T>
 ): Promise<UpdateDiff<T>> {
   accounts = (accounts instanceof Array) ? accounts :  [accounts];
   await _saveAudit({
@@ -35,7 +32,6 @@ export async function saveUpdateAudit<T>(
     eventType,
     accounts,
     data: updateDiff,
-    recaptchaScore
   }).catch(_handleErr.bind(this)); // Log and swallow any Audit errors so that related requests still succeed.
   return updateDiff;
 }

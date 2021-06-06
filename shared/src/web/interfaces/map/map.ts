@@ -1,4 +1,4 @@
-import { LatLngLiteral } from '@google/maps';
+import { LatLngLiteral } from '@googlemaps/google-maps-services-js';
 import { ContactInfo, GeographyLocation } from '../account';
 export { LatLngLiteral };
 

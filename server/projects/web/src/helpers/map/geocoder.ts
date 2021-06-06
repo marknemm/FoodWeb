@@ -1,25 +1,24 @@
-import 'dotenv';
 import { Entry, Geocoder, Location, Providers, Query } from 'node-geocoder';
 import { ContactInfo, GeographyLocation } from '~shared';
+import { env } from '../globals/env';
 import { FoodWebError } from '../response/foodweb-error';
 import NodeGeocoder = require('node-geocoder');
 import geoTz = require('geo-tz');
 export { ContactInfo, GeographyLocation };
 
 // Initial setup for geocoder.
-const _offlineMode = (process.env.OFFLINE_MODE === 'true');
 const _geocoder: Geocoder = NodeGeocoder({
-  provider: <Providers>process.env.GEOCODER_PROVIDER,
-  apiKey: process.env.GEOCODER_API_KEY,
-  // clientId: process.env.GEOCODER_CLIENT_ID,
-  httpAdapter: <'http' | 'https' | 'request'>process.env.GEOCODER_HTTP_ADAPTER,
-  formatter: process.env.GEOCODER_FORMATTER,
-  formatterPattern: process.env.GEOCODER_FORMATTER_PATTERN,
-  // email: process.env.GEOCODER_EMAIL,
-  // appId: process.env.GEOCODER_APP_ID,
-  // appCode: process.env.GEOCODER_APP_CODE,
-  // country: process.env.COUNTRY,
-  // state: process.env.STATE
+  provider: <Providers>env.GEOCODER_PROVIDER,
+  apiKey: env.GEOCODER_API_KEY,
+  // clientId: env.GEOCODER_CLIENT_ID,
+  httpAdapter: <'http' | 'https' | 'request'>env.GEOCODER_HTTP_ADAPTER,
+  formatter: env.GEOCODER_FORMATTER,
+  formatterPattern: env.GEOCODER_FORMATTER_PATTERN,
+  // email: env.GEOCODER_EMAIL,
+  // appId: env.GEOCODER_APP_ID,
+  // appCode: env.GEOCODER_APP_CODE,
+  // country: env.COUNTRY,
+  // state: env.STATE
 });
 
 /**
@@ -41,7 +40,7 @@ export async function geocode(contactInfo: ContactInfo | string): Promise<Geogra
 function _contactInfoToQuery(contactInfo: ContactInfo | string): Query | string {
   return (typeof contactInfo === 'string')
     ? contactInfo
-    : { address: contactInfo.streetAddress, zipcode: contactInfo.postalCode, country: process.env.COUNTRY };
+    : { address: contactInfo.streetAddress, zipcode: contactInfo.postalCode, country: env.COUNTRY };
 }
 
 /**
@@ -54,7 +53,7 @@ function _contactInfoToQuery(contactInfo: ContactInfo | string): Query | string 
  */
 async function _geocode(query: string | Query, retryCnt = 0): Promise<Location> {
   // Return a default set of (Buffalo, NY) GPS coordinates if in offline mode.
-  if (_offlineMode) {
+  if (env.OFFLINE_MODE) {
     return { lat: 43, lon: 73 };
   }
   let entries: Entry[] = [];

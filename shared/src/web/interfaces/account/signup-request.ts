@@ -1,8 +1,7 @@
-import { WriteRequest } from '../write-request';
 import { Account } from './account';
 export { Account };
 
-export interface SignupRequest extends WriteRequest {
+export interface SignupRequest {
   account: Account;
   password: string;
 }

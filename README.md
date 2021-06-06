@@ -61,34 +61,7 @@ Note that it is also recommended that you at least install the psql CLI for Post
   8. Run `npm start` to start both the /server and /client portions of FoodWeb.
   9. Start developing!
 
-
-
-## App Development Setup
-
-In order to work on the NativeScript app, you must first prepare by installing the necessary tools and setting up required environment variables.
-Note that you cannot develop for the iOS platform on a Windows machine, so you can skip any steps related to iOS setup.
-
-### Directions:
-
-  1. Globally install the latest NativeScript CLI via `npm install -g nativescript`.
-
-#### Android Directions:
-
-  1. Install [Android Studio](https://developer.android.com/studio/install).
-  2. Start **Android Studio** so that you are prompted to install the necessary emulator, tools, and AVD(s). Perform all necessary installs.
-  3. Set the envrionemnt variable **ANDROID_HOME** to the Android SDK directory that was installed in the previous step. On Windows, this path is usually `C:\Users\<username>\AppData\Local\Android\Sdk`. On Mac, this path is usually `~/Library/Android/sdk`.
-  4. Add the paths for typical Android SDK tools to your global environment **PATH** variable. The required paths should be `$ANDROID_HOME/tools`, `$ANDROID_HOME/tools/bin`, and `$ADNROID_HOME/platform-tools`.
-  5. Ensure that you open a new shell session, and run the command `nsc doctor` to determine if any more setup is necessary for your NativeScript Android environment. This should also show you iOS requirements that are not met. Those will be convered in the next section.
-  6. Run `cd ./client` to move into this project's client directory. In here, run `npm start app:android` to test out starting the FoodWeb app inside an Android emulator.
-
-#### iOS Directions:
-
-  1. Install **Xcode** via the App Store.
-  2. Start **Xcode** and follow any necessary steps that may prompt you for additional installs/actions.
-  3. Ensure that you open a new shell session, and run the command `nsc doctor` to determine if any more setup is necessary for your NativeScript iOS envrionment. This should also show you Android requirements that are not met. Those are covered in the previous section.
-  4. Run `cd ./client` to move into this project's client directory. In here, run `npm start app:ios` to test out starting the FoodWeb app inside an iOS simulator.
-
-
+  
 
 ## Recommended VS Code Extensions
 

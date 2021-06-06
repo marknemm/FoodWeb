@@ -8,8 +8,7 @@ export const environment: FoodWebAdminEnvironment = {
   mobile: false,
   offline: false,
   supportEmail: 'support@wnyfoodweb.com',
-  recaptchaSiteKey: '6LdJXagUAAAAAIWSTEbvcU1-HxB1WHrp3pcMS0Qj',
   googleMapsJSApiKey: 'AIzaSyDQdydkED1Z-nZvQXQQHlOYXnrmdqdFedA',
-  server: 'https://food-web-admin.herokuapp.com/server',
-  webServer: 'https://www.wnyfoodweb.com'
+  server: 'https://admin.wnyfoodweb.com/server',
+  webServer: 'https://www.wnyfoodweb.com/server'
 };

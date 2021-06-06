@@ -1,7 +1,6 @@
 import { LatLngLiteral } from '../map/map';
-import { WriteRequest } from '../write-request';
 
-export interface DeliveryStateChangeRequest extends WriteRequest {
+export interface DeliveryStateChangeRequest {
   donationId: number;
   currentLocation: LatLngLiteral;
   deliveryId?: number;

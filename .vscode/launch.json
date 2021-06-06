@@ -10,8 +10,8 @@
       "restart": true,
       "trace": true,
       "sourceMaps": true,
-      "localRoot": "${workspaceRoot}/server/admin-dist",
-      "remoteRoot": "/usr/src/foodweb/server/admin-dist"
+      "localRoot": "${workspaceRoot}/server/dist",
+      "remoteRoot": "/usr/src/foodweb/server/dist"
     },
     {
       "name": "Server Web Attach",
@@ -98,43 +98,6 @@
       "program": "${file}",
       "pythonPath": "c:/python27/python.exe"
     },
-
-    {
-      "name": "Launch on Android",
-      "type": "nativescript",
-      "request": "launch",
-      "platform": "android",
-      "appRoot": "${workspaceRoot}/client",
-      "sourceMaps": true,
-      "watch": true
-    },
-    {
-      "name": "Launch on iOS",
-      "type": "nativescript",
-      "request": "launch",
-      "platform": "ios",
-      "appRoot": "${workspaceRoot}/client",
-      "sourceMaps": true,
-      "watch": true
-    },
-    {
-      "name": "Attach on Android",
-      "type": "nativescript",
-      "request": "attach",
-      "platform": "android",
-      "appRoot": "${workspaceRoot}/client",
-      "sourceMaps": true,
-      "watch": false
-    },
-    {
-      "name": "Attach on iOS",
-      "type": "nativescript",
-      "request": "attach",
-      "platform": "ios",
-      "appRoot": "${workspaceRoot}/client",
-      "sourceMaps": true,
-      "watch": false
-    }
   ],
   "compounds": [
     {

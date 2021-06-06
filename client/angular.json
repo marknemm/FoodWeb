@@ -25,7 +25,7 @@
             "index": "projects/admin/src/index.html",
             "main": "projects/admin/src/main.ts",
             "polyfills": "projects/admin/src/polyfills.ts",
-            "tsConfig": "projects/admin/tsconfig.app.json",
+            "tsConfig": "projects/admin/tsconfig.json",
             "allowedCommonJsDependencies": [
               "event-source-polyfill",
               "google-polyline",
@@ -152,7 +152,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/admin/tsconfig.app.json",
+              "projects/admin/tsconfig.json",
               "projects/admin/tsconfig.spec.json"
             ],
             "exclude": [
@@ -160,37 +160,6 @@
             ]
           }
         }
-      }
-    },
-    "app": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "prefix": "foodweb",
-          "style": "scss"
-        },
-        "@schematics/angular:directive": {
-          "prefix": "foodweb"
-        }
-      },
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/app/tsconfig.app.json",
-              "projects/app/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      },
-      "root": "projects/app",
-      "sourceRoot": "projects/app/src",
-      "cli": {
-        "defaultCollection": "@nativescript/schematics"
       }
     },
     "web": {
@@ -215,7 +184,7 @@
             "index": "projects/web/src/index.html",
             "main": "projects/web/src/main.ts",
             "polyfills": "projects/web/src/polyfills.ts",
-            "tsConfig": "projects/web/tsconfig.app.json",
+            "tsConfig": "projects/web/tsconfig.json",
             "allowedCommonJsDependencies": [
               "event-source-polyfill",
               "google-polyline",
@@ -257,22 +226,6 @@
                 }
               ]
             },
-            "demo-no-recaptcha": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/web/src/environments/environment.demo-no-recaptcha.ts"
-                }
-              ]
-            },
             "es5": {
               "tsConfig": "tsconfig.es5.json"
             },
@@ -308,22 +261,6 @@
                 }
               ]
             },
-            "production-no-recaptcha": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/web/src/environments/environment.prod-no-recaptcha.ts"
-                }
-              ]
-            },
             "qa": {
               "optimization": true,
               "outputHashing": "all",
@@ -337,22 +274,6 @@
                 {
                   "replace": "projects/web/src/environments/environment.ts",
                   "with": "projects/web/src/environments/environment.qa.ts"
-                }
-              ]
-            },
-            "qa-no-recaptcha": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/web/src/environments/environment.qa-no-recaptcha.ts"
                 }
               ]
             }
@@ -416,7 +337,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/web/tsconfig.app.json",
+              "projects/web/tsconfig.json",
               "projects/web/tsconfig.spec.json"
             ],
             "exclude": [

@@ -3,15 +3,14 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "~entity/*": ["../../database/src/entity/*"],
-      "~orm": ["../../database/src/orm/index"],
-      "~shared": ["./src/shared"],
+      "~entity": ["./src/database/entity/index"],
+      "~orm": ["./src/database/orm/index"],
+      "~shared": ["../../../shared/src/web/index"],
       "~web/*": ["./src/*"]
-    },
-    "rootDirs": [
-      "./src/",
-      "../../database/src/",
-      "../../../shared/src/web"
-    ]
-  }
+    }
+  },
+  "include": [
+    "./src/**/*",
+    "../../../shared/src/web/**/*"
+  ]
 }

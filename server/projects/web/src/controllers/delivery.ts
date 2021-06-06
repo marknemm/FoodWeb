@@ -33,7 +33,7 @@ export function handleGetMyDeliveries(req: Request, res: Response) {
 router.get('/unscheduled', handleGetUnscheduledDeliveries);
 export function handleGetUnscheduledDeliveries(req: Request, res: Response) {
   const readRequest: DonationReadRequest = req.query;
-  readUnscheduledDeliveries(readRequest, req.session.account)
+  readUnscheduledDeliveries(readRequest)
     .then((listRes: ListResponse<DonationEntity>) => res.send(listRes))
     .catch(genErrorResponse.bind(this, res));
 }

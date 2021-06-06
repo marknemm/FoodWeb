@@ -1,6 +1,4 @@
-import { WriteRequest } from '../write-request';
-
-export interface PasswordResetRequest extends WriteRequest {
+export interface PasswordResetRequest {
   username: string;
   password: string;
   resetToken: string;

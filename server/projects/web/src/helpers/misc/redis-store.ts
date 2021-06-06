@@ -2,6 +2,7 @@ import redis = require('redis');
 import { RedisClient, RetryStrategyOptions } from 'redis';
 import { promisify } from 'util';
 import { getPort, getReachableUrl } from '~web/helpers/misc/url';
+import { env } from '../globals/env';
 
 /**
  * A simple Redis key-value store interface.
@@ -30,18 +31,6 @@ export class RedisStore {
   }
 
   /**
-   * Gets the redis URL.
-   * @return A promise that resolves to the redis URL.
-   */
-  static async getUrl(): Promise<string> {
-    // Check for a reachable redis host. First check the configured environment variable for the URL, then check common dev URLs.
-    const redisHosts: string[] = [process.env.REDIS_URL, 'localhost', 'redis'];
-    const redisPort: number = getPort(process.env.REDIS_URL, 6379);
-    const redisHost: string = await getReachableUrl(redisHosts, redisPort);
-    return `redis://${redisHost}:${redisPort}`;
-  }
-
-  /**
    * Private constructor to enforce singleton instance.
    */
   private constructor() {}
@@ -59,8 +48,8 @@ export class RedisStore {
    */
   private async _init() {
     this._client = redis.createClient({
-      url: await RedisStore.getUrl(),
-      password: process.env.REDIS_PASSWORD,
+      url: await this.getUrl(),
+      password: env.REDIS_PASSWORD,
       retry_strategy: (retryOpts: RetryStrategyOptions) => {
         if (retryOpts.error && retryOpts.error.code === 'ECONNREFUSED') {
           return new Error('The server refused the connection');
@@ -71,6 +60,21 @@ export class RedisStore {
         return (retryOpts.attempt * 200); // Max out during attempt 10 at 2000ms.
       }
     });
+  }
+
+  /**
+   * Gets the redis URL.
+   * @return A promise that resolves to the redis URL.
+   */
+  private async getUrl(): Promise<string> {
+    // Check for a reachable redis host. First check the configured environment variable for the URL, then check common dev URLs.
+    const redisHosts: string[] = [env.REDIS_URL, 'localhost', 'redis'];
+    const redisPort: number = getPort(env.REDIS_URL, 6379);
+    const redisHost: string = await getReachableUrl(redisHosts, redisPort);
+    const redisProtocol: string = (env.REDIS_SSL || env.PRODUCTION)
+      ? 'rediss://'
+      : 'redis://';
+    return `${redisProtocol}${redisHost}:${redisPort}`;
   }
 
   /**
@@ -115,12 +119,4 @@ export class RedisStore {
  */
 export async function getRedisStore(): Promise<RedisStore> {
   return await RedisStore.getInstance();
-}
-
-/**
- * Gets the redis URL.
- * @return A promise that resolves to the redis URL.
- */
-export async function getRedisUrl(): Promise<string> {
-  return await RedisStore.getUrl();
 }

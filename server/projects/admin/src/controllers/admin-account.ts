@@ -64,7 +64,7 @@ function handlePostAccount(req: Request, res: Response) {
     )
     .then((account: AccountEntity) => { res.send(account); return account; })
     .catch(genErrorResponseRethrow.bind(this, res))
-    .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account, createReq.recaptchaScore))
+    .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account))
     .catch((err: Error) => console.error(err));
 }
 
@@ -93,7 +93,7 @@ function handlePutPassword(req: Request, res: Response) {
   adminUpdatePassword(updateReq, accountId)
     .then(() => res.send({}))
     .catch(genErrorResponseRethrow.bind(this, res))
-    .then(() => saveUpdateAudit(AuditEventType.UpdatePassword, myAccount, { old: 'xxx', new: 'xxx' }, updateReq.recaptchaScore))
+    .then(() => saveUpdateAudit(AuditEventType.UpdatePassword, myAccount, { old: 'xxx', new: 'xxx' }))
     .catch((err: Error) => console.error(err));
 }
 
@@ -108,7 +108,7 @@ function handlePutAccount(req: Request, res: Response) {
     .then(_handleAccountSaveResult.bind(this, req, res))
     .catch(genErrorResponseRethrow.bind(this, res))
     .then((accountDiff: UpdateDiff<AccountEntity>) =>
-      saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff, updateReq.recaptchaScore)
+      saveUpdateAudit(AuditEventType.UpdateAccount, accountDiff.new, accountDiff)
     )
     .catch((err: Error) => console.error(err));
 }

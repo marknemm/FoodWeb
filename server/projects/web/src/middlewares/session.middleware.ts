@@ -1,7 +1,8 @@
-import 'dotenv';
 import { NextFunction, Request, RequestHandler, Response } from 'express';
+import { AccountEntity } from '~entity';
 import { Account } from '~shared';
-import { getRedisUrl } from '~web/helpers/misc/redis-store';
+import { env } from '~web/helpers/globals/env';
+import { getRedisStore, RedisStore } from '~web/helpers/misc/redis-store';
 import expressSession = require('express-session');
 import connectRedis = require('connect-redis');
 export { Account };
@@ -11,16 +12,15 @@ export { Account };
  * @return the express session middleware request handler.
  */
 export async function session(): Promise<RequestHandler> {
-  const ttlMs: number = parseInt(process.env.SESSION_TTL_MS, 10);
+  const redisStore: RedisStore = await getRedisStore();
   const RedisSessionStore = connectRedis(expressSession);
 
   return expressSession({
-    secret: process.env.SESSION_SECRET,
+    secret: env.SESSION_SECRET,
     store: new RedisSessionStore({
-      url: await getRedisUrl(),
-      ttl: (ttlMs / 1000), // NOTE: Time-to-live here is in seconds!
-      pass: process.env.REDIS_PASSWORD,
-      logErrors: (process.env.LOG_CONSOLE_REDIS_ERRS === 'true')
+      client: redisStore.client,
+      ttl: (env.SESSION_TTL_MS / 1000), // NOTE: Time-to-live here is in seconds!
+      logErrors: true
     }),
     saveUninitialized: false,
     resave: false,
@@ -57,5 +57,11 @@ export function ensureAccountVerified(request: Request, response: Response, next
     next(); // Call the next route handler.
   } else {
     response.status(403).send({ message: 'Account verification required to access this feature. Please check your e-mail for a FoodWeb Account Verification link.' });
+  }
+}
+
+declare module 'express-session' {
+  export interface SessionData {
+    account: AccountEntity;
   }
 }

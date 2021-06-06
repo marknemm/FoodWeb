@@ -1,6 +1,5 @@
 import { AppData } from './app-data';
-import { WriteRequest } from '../write-request';
 
-export interface AppDataSaveRequest extends WriteRequest {
+export interface AppDataSaveRequest {
   appData: AppData;
 }

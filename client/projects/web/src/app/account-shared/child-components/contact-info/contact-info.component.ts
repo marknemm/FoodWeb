@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormHelperService, formProvider } from '~web/forms';
+import { formProvider } from '~web/forms';
 import { ContactInfoBaseComponent } from './contact-info.base.component';
 
 @Component({
@@ -8,9 +8,4 @@ import { ContactInfoBaseComponent } from './contact-info.base.component';
   styleUrls: ['./contact-info.component.scss'],
   providers: formProvider(ContactInfoComponent)
 })
-export class ContactInfoComponent extends ContactInfoBaseComponent {
-
-  constructor(formHelperService: FormHelperService) {
-    super(formHelperService);
-  }
-}
+export class ContactInfoComponent extends ContactInfoBaseComponent {}

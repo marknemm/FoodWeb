@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "../../admin-dist/",
     "paths": {
       "~admin/*": ["./src/*"],
       "~entity": ["../web/src/database/entity/index"],

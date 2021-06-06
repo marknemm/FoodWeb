@@ -4,7 +4,7 @@
   height: calc(100vh - #{$header-height});
 
   @media only screen and (max-width: $md) {
-    height: calc(100vh - #{$header-height-mobile});
+    height: auto;
   }
 
   .mat-drawer {

@@ -2,6 +2,7 @@ const env = require('../util/env');
 const path = require('path');
 const spawn = require('../util/spawn');
 const { getOptionalArg } = require('../util/args');
+const { getProjectDir } = require('../util/project');
 const { selectProjectPrompt } = require('../util/prompt');
 const { promises: fs } = require('fs');
 
@@ -23,8 +24,7 @@ async function initProject(project) {
   env(project); // Be sure to init utilized .env based on selected project.
 
   // If '.env' file does not exist for the project that we are performing an initial install on, then generate it from '.env.example'.
-  const isWeb = (project === 'web');
-  const projectDir = (isWeb ? global['serverWebDir'] : global['serverAdminDir']);
+  const projectDir = getProjectDir(project);
   const dotEnvPathname = path.join(projectDir, '.env');
   const dotEnvExamplePathname = path.join(projectDir, '.env.example');
   await fs.stat(dotEnvPathname).catch(() =>

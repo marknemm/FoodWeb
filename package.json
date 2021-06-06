@@ -2,35 +2,30 @@
   "name": "foodweb",
   "version": "1.0.0",
   "license": "MIT",
+  "private": true,
   "main": "server/dist/server/src/index.js",
   "scripts": {
-    "admin:build": "cd ./client && npm run admin:build && cd ../server && npm run build admin && cd ../",
-    "admin:client:start": "cd ./client && npm run admin:start",
-    "admin:server:start": "cd ./server && npm run admin:start",
-    "admin:start": "run-p client:admin:start server:admin:start",
-    "app:client:start": "cd ./client && npm run app:start",
-    "app:start": "run-p client:start server:start",
-    "client:build": "cd ./client && npm run build && cd ../",
-    "client:start": "cd ./client && npm start",
-    "server:start": "cd ./server && npm start",
-    "start": "run-p client:start server:start",
-    "build": "cd ./client && npm run build && cd ../server && npm run build web && cd ../",
-    "clean": "cd ./client && npm run clean && cd ../server && npm run clean && cd ../shared && npm run clean && cd ../",
-    "clean:all": "cd ./client && npm run clean:all && cd ../server && npm run clean:all && cd ../shared && npm run clean:all && cd../ && rimraf ./node_modules",
-    "debug": "concurrently \"cd ./client && npm run build:watch\" \"cd ./server && npm run debug\"",
-    "lint": "cd ./client && npm run lint && cd ../server && npm run lint all && cd ../",
-    "postinstall": "cd ./server && npm install && cd ../client && npm install && cd ../",
-    "heroku-postbuild": "cd ./server && npm run build web && cd ../client && npm run build:env && cd ../",
-    "test": "npm run lint && cd ./client && npm run test && cd ../server && npm run test && cd ../"
+    "archive": "rimraf foodweb.zip && git archive -o foodweb.zip $(git stash create)",
+    "build": "cd ./server && npm run build web && cd ../client && npm run build && cd ../",
+    "clean": "cd ./server && npm run clean && cd ../client && npm run clean && cd ../shared && npm run clean && cd ../ && rimraf foodweb.zip && rimraf *.log",
+    "deploy": "npm run archive && eb deploy",
+    "lint": "cd ./server && npm run lint all && cd ../client && npm run lint && cd ../",
+    "logs": "tail -f web.log admin.log",
+    "prestart": "cd ./server && npm install && cd ../",
+    "start": "npm run stop && npm run start:web && npm run start:admin && npm run logs",
+    "start:admin": "cross-env ADMIN=true PORT=8081 forever start -a -l admin.log -o admin.log -e admin.log server/dist/server/projects/admin/src/index.js",
+    "start:web": "forever start -a -l web.log -o web.log -e web.log server/dist/server/projects/web/src/index.js",
+    "stop": "forever stopall && rimraf *.log",
+    "test": "npm run lint && cd ./server && npm run test && cd ../client && npm run test && cd ../"
   },
-  "private": true,
-  "devDependencies": {
-    "npm-run-all": "^4.1.5",
+  "dependencies": {
+    "concurrently": "^6.2.0",
+    "cross-env": "^7.0.3",
+    "forever": "^3.0.4",
     "rimraf": "^2.6.2"
   },
   "engines": {
-    "node": "12.16.1",
-    "npm": "6.13.4"
-  },
-  "dependencies": {}
+    "node": "14.16.0",
+    "npm": "7.8.0"
+  }
 }

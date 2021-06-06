@@ -12,6 +12,7 @@ header {
 
   @media only screen and (max-width: $md) {
     position: sticky;
+    top: 0;
   }
 
   .mat-toolbar {

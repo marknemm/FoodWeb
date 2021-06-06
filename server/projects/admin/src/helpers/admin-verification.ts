@@ -1,9 +1,5 @@
-import 'dotenv';
 import { Account } from '~shared';
-
-const _adminAccountIds: number[] = process.env.ADMIN_ACCOUNT_IDS.split(',').map(
-  (idStr: string) => Number.parseInt(idStr, 10)
-);
+import { env } from '~web/helpers/globals/env';
 
 /**
  * Verifies that a given account is an admin account.
@@ -12,6 +8,6 @@ const _adminAccountIds: number[] = process.env.ADMIN_ACCOUNT_IDS.split(',').map(
  */
 export function verifyAccountIsAdmin(account: Account): boolean {
   return (account)
-    ? (_adminAccountIds.indexOf(account.id) >= 0)
+    ? (env.ADMIN_ACCOUNT_IDS.indexOf(account.id) >= 0)
     : false;
 }

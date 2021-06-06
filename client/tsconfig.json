@@ -1,26 +1,40 @@
-/*
-  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
-  It is not intended to be used to perform a compilation.
-
-  To learn more about this file see: https://angular.io/config/solution-tsconfig.
-*/
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./projects/admin/tsconfig.app.json"
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "~lodash-mixins": ["projects/web/src/lodash-mixins"],
+      "~shared": ["projects/web/src/shared"],
+      "~web/*": ["projects/web/src/app/*"],
+      "~web-env/*": ["projects/web/src/environments/*"]
     },
-    {
-      "path": "./projects/admin/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/web/tsconfig.app.json"
-    },
-    {
-      "path": "./projects/web/tsconfig.spec.json"
-    },
-    {
-      "path": "./tsconfig.tns.json"
-    }
-  ]
+    "downlevelIteration": true,
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ES2015",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "strictNullChecks": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "types": [
+      "node"
+    ],
+    "lib": [
+      "es2018",
+      "es2017",
+      "dom",
+      "es6"
+    ]
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
 }

@@ -1,7 +1,7 @@
-import 'dotenv';
 import { Message, Sender } from 'node-gcm';
 import { AppData, Notification } from '~entity';
 import { toExternalUrl } from '~web/helpers/misc/url';
+import { env } from '../globals/env';
 
 /**
  * A push notification client that is used to send (mobile app) push notifications via Google Cloud Messaging (GCM).
@@ -16,7 +16,7 @@ export class PushNotificationClient {
   /**
    * A Google Cloud Messaging (GCM) Sender.
    */
-  private readonly _gcmSender = new Sender(process.env.FCM_SERVER_KEY);
+  private readonly _gcmSender = new Sender(env.FCM_SERVER_KEY);
 
   /**
    * Private constructor to enforce singleton instance.

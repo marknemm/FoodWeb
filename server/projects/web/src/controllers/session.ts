@@ -11,7 +11,7 @@ export const router: Router = express.Router();
 
 router.get('/', handleGetSession);
 export function handleGetSession(req: Request, res: Response) {
-  const account: AccountEntity = req.session['account'];
+  const account: AccountEntity = req.session.account;
   const loginResponse: LoginResponse = { account };
   if (account && req.query.isApp === 'true') {
     saveAppSessionToken(account)
@@ -62,6 +62,6 @@ export function handleDeleteSession(req: Request, res: Response) {
  */
 function _handleLoginSuccess(req: Request, res: Response, loginResponse: LoginResponse): void {
   // Set session on request object.
-  req.session['account'] = loginResponse.account;
+  req.session.account = <AccountEntity>loginResponse.account;
   res.send(loginResponse);
 }

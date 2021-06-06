@@ -15,4 +15,3 @@ export * from './notification';
 export * from './read-request';
 export * from './server-sent-event';
 export * from './session';
-export * from './write-request';

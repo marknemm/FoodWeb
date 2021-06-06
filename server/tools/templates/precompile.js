@@ -9,7 +9,7 @@ const srcEmailPartialsPath = path.join(srcEmailTemplatesPath, 'partials');
 const srcEmailCssPath = path.join(srcEmailTemplatesPath, 'styles.css');
 
 // Generate template dist paths.
-const distServerPath = path.join(global['serverWebDistDir'], 'server');
+const distServerPath = path.join(global['serverDistDir'], 'server');
 const distTemplatesPath = path.join(distServerPath, 'templates');
 const distEmailTemplatesPath = path.join(distTemplatesPath, 'email');
 const distEmailPartialsPath = path.join(distEmailTemplatesPath, 'partials');
@@ -26,7 +26,6 @@ function precompileTemplates() {
   inlinesToPerform.forEach(
     (inline) => inlineFileCss(inline.inTmplPath, inline.inCssPath, inline.outTmplPath)
   );
-  copyResultToAdminDist();
   console.log('Finished Precompiling Handlebars Templates.');
 }
 
@@ -34,7 +33,7 @@ function precompileTemplates() {
  * Creates precompiled template dist directories if they do not exist.
  */
 function createTemplatesDistIfNotExist() {
-  mkdirIfNotExist(global['serverWebDistDir']);
+  mkdirIfNotExist(global['serverDistDir']);
   mkdirIfNotExist(distServerPath);
   mkdirIfNotExist(distTemplatesPath);
   mkdirIfNotExist(distEmailTemplatesPath);
@@ -87,16 +86,6 @@ function inlineFileCss(inTmplPath, inCssPath, outTmplPath) {
   const cssToInline = fs.readFileSync(inCssPath, 'utf8');
   const inlinedTmpl = juice.inlineContent(tmplToInline, cssToInline);
   fs.writeFileSync(outTmplPath, inlinedTmpl);
-}
-
-/**
- * Copies the template precompile result from /dist to /admin-dist if it exists for dev mode.
- */
-function copyResultToAdminDist() {
-  const adminDistTemplatesPath = path.join(global['serverAdminDistDir'], 'server', 'templates');
-  if (fs.existsSync(global['serverAdminDistDir'])) {
-    fs.copySync(distTemplatesPath, adminDistTemplatesPath, { overwrite: true });
-  }
 }
 
 module.exports = precompileTemplates;

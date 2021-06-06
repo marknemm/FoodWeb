@@ -1,4 +1,3 @@
-import 'dotenv';
 import { Transporter } from 'nodemailer';
 import { Account, AccountType } from '~shared';
 import { getReachableUrl } from '~web/helpers/misc/url';
@@ -6,6 +5,7 @@ import { genHandlebarsTemplate } from './handlebars';
 import nodemailer = require('nodemailer');
 import mailgunTransport = require('nodemailer-mailgun-transport');
 import Mail = require('nodemailer/lib/mailer');
+import { env } from '../globals/env';
 
 /**
  * A mail client that is used to send emails.
@@ -44,18 +44,18 @@ export class MailClient {
    */
   private async _initTransporters(): Promise<void> {
     for (const transporterKey of [MailTransporter.NOREPLY, MailTransporter.SUPPORT]) {
-      const port: number = process.env[`${transporterKey}_PORT`]
-        ? parseInt(process.env[`${transporterKey}_PORT`], 10)
-        : 1025;
-      const smtpHosts: string[] = [process.env[`${transporterKey}_SERVER`], 'localhost', 'fake-smtp-server'];
+      const port: number = (typeof env[`${transporterKey}_PORT`] === 'string')
+        ? parseInt(env[`${transporterKey}_PORT`], 10)
+        : (env[`${transporterKey}_PORT`] ?? 1025);
+      const smtpHosts: string[] = [env[`${transporterKey}_SERVER`], 'localhost', 'fake-smtp-server'];
 
       // Can use mailgun or fallback to traditional SMTP mail client for development.
-      this.transporters[transporterKey] = (process.env.MAILGUN_API_KEY)
+      this.transporters[transporterKey] = (env.MAILGUN_API_KEY)
         ? nodemailer.createTransport(
             mailgunTransport({
               auth: {
-                api_key: process.env.MAILGUN_API_KEY,
-                domain: process.env.MAILGUN_DOMAIN
+                api_key: env.MAILGUN_API_KEY,
+                domain: env.MAILGUN_DOMAIN
               }
             })
           )
@@ -63,13 +63,14 @@ export class MailClient {
             host: await getReachableUrl(smtpHosts, port),
             port,
             pool: true,
-            secure: (process.env[`${transporterKey}_SECURE`] === 'true'),
+            secure: env[`${transporterKey}_SECURE`] && (env[`${transporterKey}_SECURE`] !== 'false'),
             auth: {
-              user: process.env[`${transporterKey}_USERNAME`],
-              pass: process.env[`${transporterKey}_PASSWORD`]
+              user: env[`${transporterKey}_USERNAME`],
+              pass: env[`${transporterKey}_PASSWORD`]
             },
             tls: {
-              rejectUnauthorized: (process.env[`${transporterKey}_TLS_REJECT_UNAUTHORIZED`] !== 'false')
+              rejectUnauthorized: env[`${transporterKey}_TLS_REJECT_UNAUTHORIZED`]
+                              && (env[`${transporterKey}_TLS_REJECT_UNAUTHORIZED`] !== 'false')
             }
           });
 
@@ -141,7 +142,7 @@ export class MailClient {
     return new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {
       const transporter: Transporter = this.transporters[transporterKey];
       const mailOpts: Mail.Options = {
-        from: process.env[`${transporterKey}_EMAIL`],
+        from: env[`${transporterKey}_EMAIL`],
         to: this._extractRecipientTo(recipient),
         subject,
         html: genHandlebarsTemplate('email-container', context)
@@ -186,7 +187,7 @@ export class MailClient {
     context = this._fillMissingAccountContext(context, <Account>recipient);
     context = this._fillMissingSimpleRecipientContext(context, <SimpleRecipient>recipient);
     context.emailContent = template;
-    context.env = (context.env ? context.env : process.env);
+    context.env = (context.env ? context.env : env);
     context.year = (context.year ? context.year : new Date().getFullYear());
     return context;
   }
@@ -259,8 +260,8 @@ export class MailClient {
    * @return The list of recipients of the email.
    */
   private _getAdminRecipients(to: string): string[] {
-    return (process.env.ADMIN_EMAILS)
-      ? process.env.ADMIN_EMAILS.trim().split(',').filter((email: string) => email !== to)
+    return (env.ADMIN_EMAILS)
+      ? env.ADMIN_EMAILS.filter((email: string) => email !== to)
       : [];
   }
 

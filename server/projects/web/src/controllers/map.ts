@@ -8,7 +8,7 @@ import { MapRouteReadRequest } from '~shared';
 export const router = express.Router();
 
 router.get('/route', handleGetMapRoute);
-export function handleGetMapRoute(req: Request, res: Response) {
+export function handleGetMapRoute(req: Request<any, any, any, MapRouteReadRequest>, res: Response) {
   const request: MapRouteReadRequest = req.query;
   genMapRoute(
     { coordinates: [Number.parseFloat(request.origLng), Number.parseFloat(request.origLat)], type: 'Point' },

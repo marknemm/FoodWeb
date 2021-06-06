@@ -1,5 +1,4 @@
-import { ClassType } from 'class-transformer/ClassTransformer';
-import { DeepPartial, getConnection, Repository, QueryRunner } from 'typeorm';
+import { DeepPartial, getConnection, Repository, QueryRunner, EntityTarget } from 'typeorm';
 import { OrmEntityMetadata } from './entity-metadata/orm-entity-metadata';
 import { ormFind, TypeOrmFindFn } from './find/orm-find';
 import { ormFindOne, TypeOrmFindOneFn } from './findOne/orm-find-one';
@@ -12,7 +11,7 @@ export { OrmSaveOptions };
 
 export abstract class OrmRepository<E, T extends DeepPartial<E> = DeepPartial<E>> extends Repository<E> {
 
-  static _createInstance<E, T>(repository: Repository<E>, EntityClass: ClassType<E>): OrmRepository<E> {
+  static _createInstance<E, T>(repository: Repository<E>, EntityClass: EntityTarget<E>): OrmRepository<E> {
     const entityMeta = OrmEntityMetadata.getInstance(EntityClass);
 
     const typeOrmCreateQueryBuilder: TypeOrmCreateQueryBuilderFn<E> = repository.createQueryBuilder.bind(repository);
@@ -40,7 +39,7 @@ export abstract class OrmRepository<E, T extends DeepPartial<E> = DeepPartial<E>
   abstract save(entities: (T | E)[], options?: OrmSaveOptions<E>): Promise<E[]>;
 }
 
-export function getOrmRepository<E>(EntityClass: ClassType<E>): OrmRepository<E> {
+export function getOrmRepository<E>(EntityClass: EntityTarget<E>): OrmRepository<E> {
   const repository: Repository<E> = getConnection().getRepository(EntityClass);
   return OrmRepository._createInstance(repository, EntityClass);
 }

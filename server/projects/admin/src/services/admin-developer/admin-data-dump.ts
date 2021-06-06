@@ -1,7 +1,8 @@
 import { genSalt, hash } from 'bcrypt';
 import { exec, ExecException } from 'child_process';
-import 'dotenv';
 import { Connection, createConnection, getConnection, QueryRunner } from 'typeorm';
+import { env } from '~web/helpers/globals/env';
+import { appPaths } from '~web/helpers/globals/paths';
 import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import _ = require('lodash');
 import path = require('path');
@@ -43,7 +44,7 @@ async function createDevDatabase(): Promise<string> {
 async function copyProdToDevDatabase(devDatabaseName: string): Promise<void> {
   const devDatabaseUrl: string = genDevDbUrl(devDatabaseName);
   return new Promise<void>((res, rej) =>
-    exec(`pg_dump ${process.env.DATABASE_URL} | psql ${devDatabaseUrl}`, (err: ExecException) => {
+    exec(`pg_dump ${env.DATABASE_URL} | psql ${devDatabaseUrl}`, (err: ExecException) => {
       if (err) {
         console.error(err.stack);
         rej(new FoodWebError('Copy of production database to dev unexpectedly failed.'));
@@ -60,7 +61,7 @@ async function copyProdToDevDatabase(devDatabaseName: string): Promise<void> {
  * @return The dev database URL.
  */
 function genDevDbUrl(devDatabaseName: string): string {
-  return process.env.DATABASE_URL.replace(`/${process.env.DATABASE_DATABASE}`, `/${devDatabaseName}`);
+  return env.DATABASE_URL.replace(`/${env.DATABASE_DATABASE}`, `/${devDatabaseName}`);
 }
 
 /**
@@ -111,10 +112,10 @@ function connectToDevDatabase(devDatabaseName: string): Promise<Connection> {
   return createConnection({
     name: devDatabaseName,
     type: 'postgres',
-    host: process.env.DATABASE_HOST,
-    port: Number.parseInt(process.env.DATABASE_PORT, 10),
-    username: process.env.DATABASE_USERNAME,
-    password: process.env.DATABASE_PASSWORD,
+    host: env.DATABASE_HOST,
+    port: env.DATABASE_PORT,
+    username: env.DATABASE_USERNAME,
+    password: env.DATABASE_PASSWORD,
     database: devDatabaseName,
     synchronize: false
   });
@@ -421,7 +422,7 @@ async function purgeEventRegistrations(queryRunner: QueryRunner): Promise<void> 
  */
 function dumpDevDatabase(devDatabaseName: string): Promise<string> {
   const devDatabaseUrl: string = genDevDbUrl(devDatabaseName);
-  const devDumpPathname: string = path.join(global['serverDbDumpDir'], `${devDatabaseName}.pgsql`);
+  const devDumpPathname: string = path.join(appPaths.serverDbDumpDir, `${devDatabaseName}.pgsql`);
   return new Promise<string>((res, rej) =>
     exec(`pg_dump ${devDatabaseUrl} > ${devDumpPathname}`, (err: ExecException) => {
       if (err) {

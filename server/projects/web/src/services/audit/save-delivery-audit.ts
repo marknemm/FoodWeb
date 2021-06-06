@@ -5,12 +5,12 @@ import { AuditEventType, getAuditAccounts, saveAudit, saveUpdateAudit } from './
 
 export function saveDeliveryScheduleAudit(scheduleReq: DeliveryScheduleRequest, scheduledDelivery: DonationEntity): Promise<DonationEntity> {
   const auditAccounts: AccountEntity[] = getAuditAccounts(scheduledDelivery);
-  return saveAudit(AuditEventType.ScheduleDelivery, auditAccounts, scheduledDelivery, scheduleReq.recaptchaScore);
+  return saveAudit(AuditEventType.ScheduleDelivery, auditAccounts, scheduledDelivery);
 }
 
 export function saveDeliveryAdvanceAudit(stateChangeReq: DeliveryStateChangeRequest, advancedDonation: DonationEntity): Promise<DonationEntity> {
   const auditAccounts: AccountEntity[] = getAuditAccounts(advancedDonation);
-  return saveAudit(AuditEventType.DeliveryStateAdvance, auditAccounts, advancedDonation, stateChangeReq.recaptchaScore);
+  return saveAudit(AuditEventType.DeliveryStateAdvance, auditAccounts, advancedDonation);
 }
 
 export function saveDeliveryUndoAudit(
@@ -21,5 +21,5 @@ export function saveDeliveryUndoAudit(
   const eventType: AuditEventType = (undoDiff.new.donationStatus !== DonationStatus.Matched)
     ? AuditEventType.DeliveryStateUndo
     : AuditEventType.CancelDelivery;
-  return saveUpdateAudit(eventType, auditAccounts, undoDiff, stateChangeReq.recaptchaScore);
+  return saveUpdateAudit(eventType, auditAccounts, undoDiff);
 }

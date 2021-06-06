@@ -1,7 +1,6 @@
 {
   "extends": [
-    "../tslint.json",
-    "@nativescript/tslint-rules"
+    "../tslint.json"
   ],
   "rulesDirectory": [
     "node_modules/codelyzer"

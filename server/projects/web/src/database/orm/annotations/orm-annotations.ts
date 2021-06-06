@@ -1,9 +1,10 @@
+import { ClassConstructor } from 'class-transformer';
 import { Entity, EntityOptions, PrimaryGeneratedColumn } from 'typeorm';
-import { EntityConstructor, OrmEntityMetadata } from '../entity-metadata/orm-entity-metadata';
+import { OrmEntityMetadata } from '../entity-metadata/orm-entity-metadata';
 import { PrimaryKey } from '../entity-metadata/primary-key';
 
 export function OrmEntity(tableName?: string, options?: EntityOptions): Function {
-  return (ctor: EntityConstructor) => {
+  return (ctor: ClassConstructor<any>) => {
     const entityMeta = OrmEntityMetadata.getInstance(ctor);
     entityMeta.tableName = tableName;
     Entity(tableName, options)(ctor); // Call TypeORM annotation method.

@@ -8,7 +8,6 @@ interface FoodWebAdminEnvironment {
   mobile: boolean;
   offline: boolean;
   supportEmail: string;
-  recaptchaSiteKey: string;
   googleMapsJSApiKey: string;
   server: string;
   webServer: string;

@@ -44,7 +44,7 @@ function _genFindConditions(request: NotificationReadRequest, myAccount: Account
   if (request.notificationType != null) {
     // notificationType query param can either be a single NotificationType or comma separated list.
     conditions.notificationType = (request.notificationType && (<string>request.notificationType).indexOf(',') >= 0)
-      ? In((<string>request.notificationType).split(','))
+      ? In(<NotificationType[]><unknown>(<string>request.notificationType).split(','))
       : <NotificationType>request.notificationType;
   }
   return conditions;

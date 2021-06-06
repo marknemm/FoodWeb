@@ -16,6 +16,10 @@ html, body {
   height: 100%;
   overflow: hidden;
 
+  @media only screen and (max-width: $md) {
+    overflow: auto;
+  }
+
   @media only screen and (max-width: $mat-mobile) {
     font-size: 13px;
   }

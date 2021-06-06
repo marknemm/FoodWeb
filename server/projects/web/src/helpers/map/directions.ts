@@ -1,14 +1,9 @@
-import * as GoogleMaps from '@google/maps';
-import { ClientResponse, DirectionsResponse, GoogleMapsClientWithPromise, LatLngLiteral } from '@google/maps';
-import 'dotenv';
-import { ContactInfo, Directions, DirectionsExtractor, GeographyLocation, MapRoute, MapWaypointConverter, Waypoint } from '~shared';
+import { DirectionsResponse, LatLng, UnitSystem } from '@googlemaps/google-maps-services-js';
+import { ContactInfo, Directions, DirectionsExtractor, GeographyLocation, LatLngLiteral, MapRoute, MapWaypointConverter, Waypoint } from '~shared';
+import { env } from '../globals/env';
 import { FoodWebError } from '../response/foodweb-error';
+import { googleMapsClient } from './client';
 
-const _directionsClient: GoogleMapsClientWithPromise = GoogleMaps.createClient({
-  key: process.env.DIRECTIONS_API_KEY,
-  Promise
-});
-const _offlineMode: boolean = (process.env.OFFLINE_MODE === 'true');
 const _waypointConverter = new MapWaypointConverter();
 const _directionsExtractor = new DirectionsExtractor();
 
@@ -48,7 +43,7 @@ export function routeEndpointToLocation(endpoint: MapRouteEndpoint): GeographyLo
  * @throws FoodWebError if the direcitons query fails.
  */
 export async function genDirections(directionWaypoints: Waypoint[]): Promise<Directions> {
-  if (_offlineMode) {
+  if (env.OFFLINE_MODE) {
     // If offline, simply return a dummy/empty value.
     return { distanceMi: 0, durationMin: 0, encodedPolyline: '', waypointSegments: [] };
   }
@@ -64,22 +59,23 @@ export async function genDirections(directionWaypoints: Waypoint[]): Promise<Dir
  * @return A promise that resolves to the raw directions response.
  * @throws FoodWebError if the direction query fails.
  */
-function _queryDirections(latLngWaypoints: LatLngLiteral[], retryCnt = 0): Promise<DirectionsResponse> {
-  const origin: LatLngLiteral = latLngWaypoints[0];
+async function _queryDirections(latLngWaypoints: LatLngLiteral[], retryCnt = 0): Promise<DirectionsResponse> {
+  const origin: LatLng = latLngWaypoints[0];
   const waypoints: LatLngLiteral[] = latLngWaypoints.slice(1, latLngWaypoints.length - 1);
   const destination: LatLngLiteral = latLngWaypoints[latLngWaypoints.length - 1];
 
-  return <Promise<DirectionsResponse>>_directionsClient
-    .directions({ origin, waypoints, destination, units: 'imperial' })
-    .asPromise()
-    .then((result: ClientResponse<DirectionsResponse>) => {
-      switch (result.json.status) {
-        case 'OK':                return result.json;
-        case 'OVER_QUERY_LIMIT':  return _attemptRetry(latLngWaypoints, retryCnt);
-        default:                  _handleGenDirectionsErr(new Error(result.json.status));
-      }
-    })
-    .catch(_handleGenDirectionsErr);
+  try {
+    const response: DirectionsResponse = await googleMapsClient.directions({
+      params: { key: env.DIRECTIONS_API_KEY, origin, waypoints, destination, units: UnitSystem.imperial }
+    });
+    switch (response.statusText) {
+      case 'OK':                return response;
+      case 'OVER_QUERY_LIMIT':  return _attemptRetry(latLngWaypoints, retryCnt);
+      default:                  _handleGenDirectionsErr(new Error(response.statusText));
+    }
+  } catch (err) {
+    _handleGenDirectionsErr(err);
+  }
 }
 
 /**
@@ -92,7 +88,7 @@ function _attemptRetry(latLngWaypoints: LatLngLiteral[], retryCnt: number): Prom
   if (++retryCnt >= 5) {
     _handleGenDirectionsErr(new Error('OVER_QUERY_LIMIT'));
   }
-  return new Promise((resolve: (result: any) => void) => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve(_queryDirections(latLngWaypoints, retryCnt));
     }, 500 * retryCnt);

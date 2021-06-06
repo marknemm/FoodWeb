@@ -1,5 +1,3 @@
-import { WriteRequest } from '../write-request';
-
-export interface LastSeenNotificationUpdateRequest extends WriteRequest {
+export interface LastSeenNotificationUpdateRequest {
   lastSeenNotificationId?: number;
 }

@@ -1,7 +1,6 @@
 import { DateTimeRange } from '../date-time/time';
-import { WriteRequest } from '../write-request';
 
-export interface DeliveryScheduleRequest extends WriteRequest {
+export interface DeliveryScheduleRequest {
   donationId: number;
   pickupWindow: DateTimeRange;
 }

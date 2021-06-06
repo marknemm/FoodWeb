@@ -46,7 +46,7 @@ export async function updateNotification(
   myAccount: AccountEntity,
   notificationUpdt: Notification
 ): Promise<UpdateDiff<NotificationEntity>> {
-  const oldNotification: NotificationEntity = await getOrmRepository(NotificationEntity).findOne({
+  const oldNotification: NotificationEntity = await getOrmRepository<NotificationEntity>(NotificationEntity).findOne({
     relations: ['account'],
     where: { id: notificationUpdt.id }
   });

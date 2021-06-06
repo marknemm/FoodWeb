@@ -5,6 +5,7 @@ import { adminSaveImpersonationToken } from '~admin/services/admin-session/admin
 import { ImpersonateTokenResponse, LoginRequest, LoginResponse } from '~shared';
 import { handleDeleteSession, handleGetSession } from '~web/controllers/session';
 import { genErrorResponse } from '~web/middlewares/response-error.middleware';
+import { AccountEntity } from '~entity';
 
 export const router = express.Router();
 
@@ -25,7 +26,7 @@ function handlePostSession(req: Request, res: Response) {
   adminLogin(loginRequest)
     .then((loginResponse: LoginResponse) => {
       // Set session on request object.
-      req.session['account'] = loginResponse.account;
+      req.session.account = <AccountEntity>loginResponse.account;
       res.send(loginResponse);
     }).catch(genErrorResponse.bind(this, res));
 }

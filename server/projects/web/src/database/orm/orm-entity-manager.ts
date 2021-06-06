@@ -1,5 +1,4 @@
-import { ClassType } from 'class-transformer/ClassTransformer';
-import { EntityManager, getConnection, Repository } from 'typeorm';
+import { EntityManager, EntityTarget, getConnection, Repository } from 'typeorm';
 import { OrmRepository } from './orm-repository';
 export { OrmRepository };
 
@@ -13,15 +12,15 @@ export abstract class OrmEntityManager extends EntityManager {
     });
   }
 
-  abstract getRepository<Entity>(target: ClassType<Entity>): OrmRepository<Entity>;
+  abstract getRepository<Entity>(target: EntityTarget<Entity>): OrmRepository<Entity>;
 }
 
 function _getRepository<Entity>(
   origGetRepository: OriginalGetRepositoryFn<Entity>,
-  EntityClass: ClassType<Entity>
+  EntityClass: EntityTarget<Entity>
 ): OrmRepository<Entity> {
   const repository: Repository<Entity> = origGetRepository(EntityClass);
   return OrmRepository._createInstance(repository, EntityClass);
 }
 
-type OriginalGetRepositoryFn<Entity> = (target: ClassType<Entity>) => Repository<Entity>;
+type OriginalGetRepositoryFn<Entity> = (target: EntityTarget<Entity>) => Repository<Entity>;

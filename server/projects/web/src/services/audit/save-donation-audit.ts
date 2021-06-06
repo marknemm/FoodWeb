@@ -5,12 +5,12 @@ import { AuditEventType, getAuditAccounts, saveAudit, saveUpdateAudit } from './
 
 export function saveDonationCreateAudit(createReq: DonationSaveRequest, donation: DonationEntity): Promise<DonationEntity> {
   const auditAccounts: AccountEntity[] = getAuditAccounts(donation);
-  return saveAudit(AuditEventType.Donate, auditAccounts, donation, createReq.recaptchaScore);
+  return saveAudit(AuditEventType.Donate, auditAccounts, donation);
 }
 
 export function saveDonationClaimAudit(claimReq: DonationClaimRequest, claimedDonation: DonationEntity): Promise<DonationEntity> {
   const auditAccounts: AccountEntity[] = getAuditAccounts(claimedDonation);
-  return saveAudit(AuditEventType.ClaimDonation, auditAccounts, claimedDonation, claimReq.recaptchaScore);
+  return saveAudit(AuditEventType.ClaimDonation, auditAccounts, claimedDonation);
 }
 
 export function saveDonationUpdateAudit(
@@ -18,12 +18,12 @@ export function saveDonationUpdateAudit(
   donationDiff: UpdateDiff<DonationEntity>
 ): Promise<UpdateDiff<DonationEntity>> {
   const auditAccounts: AccountEntity[] = getAuditAccounts(donationDiff.old);
-  return saveUpdateAudit(AuditEventType.UpdateDonation, auditAccounts, donationDiff, updateReq.recaptchaScore);
+  return saveUpdateAudit(AuditEventType.UpdateDonation, auditAccounts, donationDiff);
 }
 
 export function saveDonationDeleteAudit(deleteReq: DonationDeleteRequest, deletedDonation: DonationEntity): Promise<DonationEntity> {
   const auditAccounts: AccountEntity[] = getAuditAccounts(deletedDonation);
-  return saveAudit(AuditEventType.RemoveDonation, auditAccounts, deletedDonation, deleteReq.recaptchaScore);
+  return saveAudit(AuditEventType.RemoveDonation, auditAccounts, deletedDonation);
 }
 
 export function saveDonationUnclaimAudit(
@@ -31,5 +31,5 @@ export function saveDonationUnclaimAudit(
   unclaimDonationDiff: UpdateDiff<DonationEntity>
 ): Promise<UpdateDiff<DonationEntity>> {
   const auditAccounts: AccountEntity[] = getAuditAccounts(unclaimDonationDiff.old);
-  return saveUpdateAudit(AuditEventType.UnclaimDonation, auditAccounts, unclaimDonationDiff, unclaimReq.recaptchaScore);
+  return saveUpdateAudit(AuditEventType.UnclaimDonation, auditAccounts, unclaimDonationDiff);
 }

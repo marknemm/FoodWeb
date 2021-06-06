@@ -11,7 +11,6 @@
   },
   "include": [
     "./src/**/*",
-    "../../database/src/**/*",
     "../../../shared/src/web/**/*"
   ]
 }

@@ -6,7 +6,7 @@ services:
     image: foodweb
     build:
       context: .
-      dockerfile: ./client/Dockerfile
+    working_dir: /usr/src/foodweb/client
     networks:
       - foodweb
     volumes:
@@ -45,10 +45,10 @@ services:
     command: bash -c "npm run app:start:docker"
 
   foodweb-server-base:
-    image: foodweb-server
+    image: foodweb
     build:
       context: .
-      dockerfile: ./server/Dockerfile
+    working_dir: /usr/src/foodweb/server
     networks:
       - foodweb
     volumes:
@@ -68,10 +68,6 @@ services:
     depends_on:
       - foodweb-services
     command: bash -c "npm start web"
-    volumes:
-      # Exclude the following directories from shared volume by overwriting with blank directory
-      - /usr/src/foodweb/server/projects/admin
-      - /usr/src/foodweb/server/admin-dist
 
   foodweb-admin-server:
     extends: foodweb-server-base
@@ -102,7 +98,7 @@ services:
       - "1080:1080"
 
   postgres:
-    image: "mdillon/postgis:11"
+    image: "postgis/postgis"
     container_name: postgres
     logging:
       driver: none
@@ -120,7 +116,7 @@ services:
       - ./server/tools/database/dump:/var/lib/postgresql/dump
 
   redis:
-    image: "redis:5-alpine"
+    image: "redis"
     container_name: redis
     logging:
       driver: none

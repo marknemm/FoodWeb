@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { FormHelperService, formProvider } from '~web/forms';
-import { ConstantsService } from '~web/shared/services/constants/constants.service';
+import { formProvider } from '~web/forms';
 import { AccountTypeBaseComponent } from './account-type.base.component';
 
 @Component({
@@ -9,12 +8,4 @@ import { AccountTypeBaseComponent } from './account-type.base.component';
   styleUrls: ['./account-type.component.scss'],
   providers: formProvider(AccountTypeComponent)
 })
-export class AccountTypeComponent extends AccountTypeBaseComponent {
-
-  constructor(
-    public constantsService: ConstantsService,
-    formHelperService: FormHelperService
-  ) {
-    super(constantsService, formHelperService);
-  }
-}
+export class AccountTypeComponent extends AccountTypeBaseComponent {}

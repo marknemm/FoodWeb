@@ -1,5 +1,5 @@
-import 'dotenv';
 import isPortReachable = require('is-port-reachable');
+import { env } from '../globals/env';
 
 /**
  * Gets a hostname (excludes protocol & port) from a given URL.
@@ -12,6 +12,7 @@ export function getHostname(url: string): string {
     if (hostname) {
       return hostname;
     }
+    return url.replace(/:\d{4}$/, '');
   }
   return '';
 }
@@ -64,6 +65,6 @@ export async function getReachableUrl(hosts: string[], port: string | number): P
  */
 export function toExternalUrl(internalUrl: string): string {
   return internalUrl
-    ? internalUrl.replace(/\.?\//, `${process.env.PRODUCTION_HOST_ADDRESS}/`)
+    ? internalUrl.replace(/\.?\//, `${env.PRODUCTION_HOST_ADDRESS}/`)
     : internalUrl;
 }

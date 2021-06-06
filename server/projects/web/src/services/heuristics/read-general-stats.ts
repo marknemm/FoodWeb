@@ -1,7 +1,7 @@
-import 'dotenv';
 import { getRepository } from 'typeorm';
 import { DonationEntity } from '~entity';
 import { GeneralStats } from '~shared';
+import { env } from '~web/helpers/globals/env';
 
 /**
  * Reads event registrations from the database.
@@ -13,9 +13,9 @@ export async function readGeneralStats(): Promise<GeneralStats> {
     .addSelect('COALESCE(SUM(donation.estimatedNumFeed), 0)::INTEGER', 'totalMeals')
     .where('donation.donationStatus = \'Complete\'')
     .getRawOne();
-  if (process.env.UNRECORDED_DONATION_COUNT) {
-    stats.totalDonations += parseInt(process.env.UNRECORDED_DONATION_COUNT, 10);
-    stats.totalMeals += parseInt(process.env.UNRECORDED_MEAL_COUNT, 10);
+  if (env.UNRECORDED_DONATION_COUNT) {
+    stats.totalDonations += env.UNRECORDED_DONATION_COUNT;
+    stats.totalMeals += env.UNRECORDED_MEAL_COUNT;
   }
   return stats;
 }

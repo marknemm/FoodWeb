@@ -2,6 +2,7 @@ const env = require('../util/env');
 const spawn = require('../util/spawn');
 const path = require('path');
 const { getOptionalArg } = require('../util/args');
+const { getProjectDir } = require('../util/project');
 const { selectProjectPrompt, projectOptions } = require('../util/prompt');
 
 // Get the optional script `project` argument, and lint the project source code.
@@ -36,8 +37,7 @@ async function lintProject(project) {
  * @return {Promise<void>} A promise that resolves once the linter sub-process completes.
  */
 async function spawnLinter(project) {
-  const isWeb = (project === 'web');
-  const projectDir = (isWeb ? global['serverWebDir'] : global['serverAdminDir']);
+  const projectDir = getProjectDir(project);
   const tsconfigPathname = path.join(projectDir, 'tsconfig.json');
   await spawn('tslint', ['-p', tsconfigPathname]);
 }

@@ -24,6 +24,7 @@ const routes: Routes = [
       { path: 'signup', loadChildren: () => import('~web/signup/signup.module').then(mod => mod.SignupModule) }
     ]
   },
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({

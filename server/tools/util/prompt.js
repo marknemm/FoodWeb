@@ -1,4 +1,6 @@
+require('./constants');
 const prompts = require('prompts');
+const { getProjects } = require('./project');
 const { promises: fs } = require('fs');
 
 const projectOptions = ['web', 'admin'];
@@ -39,7 +41,7 @@ async function inputPrompt(message, defaultValue = '') {
  * @return {Promise<string>} A promise that resolves to the selected node project.
  */
 async function selectProjectPrompt(includeAll = false) {
-  return selectPrompt('Select a project', (includeAll ? ['all'] : []).concat(['web', 'admin']));
+  return selectPrompt('Select a project', await getProjects(includeAll));
 }
 
 /**

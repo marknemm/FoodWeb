@@ -1,5 +1,4 @@
-import { plainToClass } from 'class-transformer';
-import { ClassType } from 'class-transformer/ClassTransformer';
+import { ClassConstructor, plainToClass } from 'class-transformer';
 import { OrmEntityMetadata } from '../entity-metadata/orm-entity-metadata';
 import { QueryHookRegistry } from '../entity-metadata/query-hook-registry';
 import { deriveSaveOpType, SaveOpType } from './save-operation-type';
@@ -24,7 +23,7 @@ export async function preprocessSaveEntity<E, T>(entityMeta: OrmEntityMetadata, 
 }
 
 function _toClassInstance<E, T>(entityMeta: OrmEntityMetadata, entity: T): E {
-  const EntityType = <ClassType<E>> entityMeta.ctor;
+  const EntityType = <ClassConstructor<E>> entityMeta.ctor;
   return (entity instanceof EntityType)
     ? entity
     : <any>plainToClass(EntityType, entity);

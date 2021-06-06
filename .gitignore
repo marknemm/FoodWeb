@@ -1,40 +1,47 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # scratch space
-/**/scratch.*
+scratch.*
 
 # database dump binary
-/**/dump
+dump
 
 # compiled output
-/**/dist
-/**/admin-dist
-/**/www
+dist
+www
+*.zip
 
 # temp space
-/tmp
+tmp
 .tmp
 *.tmp
 *.tmp.*
 $RECYCLE.BIN/
 
 # resources
-/public
+public
 
 # dependencies
-**/node_modules
-**/__ngcc_entry_points__.json
+nodejs
+node_modules
+__ngcc_entry_points__.json
 
 # personal/sensitive data
-**/.env
-**/google-services.json
+.env
+*.env
+*.env.*
+env.js
+env.json
+env.yaml
+env.yml
+google-services.json
 app.yaml
 startup.sh
 nginx-ssl-setup.sh
-**/environment.device.ts
+environment.device.ts
 
 # IDEs and editors
-/.idea
+.idea
 .project
 .classpath
 .c9/
@@ -51,7 +58,7 @@ nginx-ssl-setup.sh
 # misc
 /.sass-cache
 /connect.lock
-**/coverage
+coverage
 /libpeerconnection.log
 npm-debug.log
 testem.log
@@ -74,13 +81,24 @@ log.txt
 Thumbs.db
 
 # ORM Files
-**/ormlogs.log
-**/docker-ormconfig.json
+ormlogs.log
+docker-ormconfig.json
 
 # Mobile build artifacts
-**/platforms
-**/plugins
+platforms
+plugins
 
 # ionic data
 UserInterfaceState.xcuserstate
 /.ionic
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# Serverless Deployment Files (AWS Lambda Functions)
+.serverless
+lambda-layers
+serverless_sdk
+s_*

@@ -5,7 +5,7 @@ const { getOptionalArg } = require('../util/args');
 const { getFileChoices, selectPrompt } = require('../util/prompt');
 
 // The directory that contains the available jobs that may be run.
-const jobsDir = path.join(global['serverWebDistDir'], 'server', 'projects', 'web', 'src', 'jobs');
+const jobsDir = path.join(global['serverDistDir'], 'server', 'projects', 'web', 'src', 'jobs');
 
 // Get the optional script `jobName` argument, and run the job.
 getOptionalArg('jobName')

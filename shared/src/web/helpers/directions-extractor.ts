@@ -1,4 +1,4 @@
-import { DirectionsResponse, DirectionsRoute, DirectionsStep, Distance, Duration, LatLngArray, RouteLeg } from '@google/maps';
+import { DirectionsResponse, DirectionsRoute, DirectionsStep, Distance, Duration, LatLngArray, RouteLeg } from '@googlemaps/google-maps-services-js';
 import { decode, encode } from 'google-polyline';
 import { Directions, StepSegment, WaypointSegment } from '../interfaces/map/map';
 export * from '../interfaces/map/map';
@@ -11,8 +11,8 @@ export class DirectionsExtractor {
    * @return The refined directions result.
    */
   extractDirections(response: DirectionsResponse): Directions {
-    if (response?.routes?.length > 0) {
-      const waypointSegments: WaypointSegment[] = this._extractWaypointSegments(response.routes[0]);
+    if (response?.data?.routes?.length > 0) {
+      const waypointSegments: WaypointSegment[] = this._extractWaypointSegments(response.data.routes[0]);
       let distanceMi = 0;
       let durationMin = 0;
       waypointSegments.forEach((seg: WaypointSegment) => {
@@ -22,7 +22,7 @@ export class DirectionsExtractor {
       return {
         distanceMi,
         durationMin,
-        encodedPolyline: response.routes[0].overview_polyline.points,
+        encodedPolyline: response.data.routes[0].overview_polyline.points,
         waypointSegments
       };
     }

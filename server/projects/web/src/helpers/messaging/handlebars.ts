@@ -1,8 +1,9 @@
+import fs = require('fs-extra');
 import handlebars = require('handlebars');
 import helpers = require('handlebars-helpers');
-import fs = require('fs-extra');
 import path = require('path');
 import { DateTimeHelper } from '~shared';
+import { appPaths } from '../globals/paths';
 
 const _dateTimeHelper = new DateTimeHelper();
 const _handlebarsTemplates: Map<string, handlebars.TemplateDelegate> = _initHandlebars();
@@ -51,7 +52,7 @@ function _registerHelpers(): void {
  * These can be injected into the main email template as the email body.
  */
 function _registerPartials(): void {
-  const partialsDir: string = path.join(global['emailTemplatesDir'], 'partials');
+  const partialsDir: string = path.join(appPaths.emailTemplatesDir, 'partials');
   const fileNames: string[] = fs.readdirSync(partialsDir);
 
   fileNames.forEach((fileName: string) => {
@@ -69,7 +70,7 @@ function _registerPartials(): void {
  * @return A map of the names of precompiled templates to precompiled form.
  */
 function _precompileTemplates(): Map<string, handlebars.TemplateDelegate> {
-  const emailContainerPath: string = path.join(global['emailTemplatesDir'], 'email-container.hbs');
+  const emailContainerPath: string = path.join(appPaths.emailTemplatesDir, 'email-container.hbs');
   const template: string = fs.readFileSync(emailContainerPath, 'utf8');
   return new Map([
     ['email-container', handlebars.compile(template)]

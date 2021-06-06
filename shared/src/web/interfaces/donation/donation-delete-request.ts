@@ -1,5 +1,3 @@
-import { WriteRequest } from '../write-request';
-
-export interface DonationDeleteRequest extends WriteRequest {
+export interface DonationDeleteRequest {
   donationId: number;
 }

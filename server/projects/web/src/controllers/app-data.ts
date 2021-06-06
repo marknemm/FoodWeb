@@ -18,7 +18,7 @@ export function handlePostAppData(req: Request, res: Response) {
   saveAppData(saveReq.appData, account)
     .then((appData: AppDataEntity) => { res.send(appData); return appData; })
     .catch(genErrorResponseRethrow.bind(this, res))
-    .then((appData: AppDataEntity) => saveAudit(AuditEventType.SaveAppData, account, appData, saveReq.recaptchaScore))
+    .then((appData: AppDataEntity) => saveAudit(AuditEventType.SaveAppData, account, appData))
     .catch((err: Error) => console.error(err));
 }
 

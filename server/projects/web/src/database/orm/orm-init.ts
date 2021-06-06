@@ -1,5 +1,6 @@
-import 'dotenv';
 import { Connection, createConnection } from 'typeorm';
+import { env } from '~web/helpers/globals/env';
+import { appPaths } from '~web/helpers/globals/paths';
 import { getReachableUrl } from '~web/helpers/misc/url';
 import path = require('path');
 
@@ -9,31 +10,27 @@ import path = require('path');
  * @return A promise that resolves to a generated connection.
  */
 export async function initOrm(): Promise<Connection> {
-  const entitiesPath: string = path.join(global['serverDistDir'], 'projects', 'web', 'src', 'database', 'entity', '*.js');
-  const migrationsPath: string = path.join(global['serverDistDir'], 'projects', 'web', 'src', 'database', 'migration', '*.js');
+  const entitiesPath: string = path.join(appPaths.serverDistDir, 'projects', 'web', 'src', 'database', 'entity', '*.js');
+  const migrationsPath: string = path.join(appPaths.serverDistDir, 'projects', 'web', 'src', 'database', 'migration', '*.js');
 
-  const port: number = (process.env.DATABASE_PORT)
-    ? parseInt(process.env.DATABASE_PORT, 10)
-    : 5432;
-
-  const dbHosts: string[] = [process.env.DATABASE_HOST, 'localhost', 'postgres'];
-  const host: string = await getReachableUrl(dbHosts, port);
+  const dbHosts: string[] = [env.DATABASE_HOST, 'localhost', 'postgres'];
+  const host: string = await getReachableUrl(dbHosts, env.DATABASE_PORT);
 
   return createConnection({
     type: 'postgres',
     host,
-    port,
-    username: process.env.DATABASE_USERNAME,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_DATABASE,
+    port: env.DATABASE_PORT,
+    username: env.DATABASE_USERNAME,
+    password: env.DATABASE_PASSWORD,
+    database: env.DATABASE_DATABASE,
     entities: [entitiesPath],
     migrations: [migrationsPath],
-    migrationsRun: (process.env.DATABASE_SYNC !== 'true'),
-    synchronize: (process.env.DATABASE_SYNC === 'true'),
-    logging: (process.env.DATABASE_LOGGING === 'true'),
-    logger: process.env.DATABASE_LOGGER as any,
-    ssl: (process.env.DATABASE_SSL === 'true')
-      ? { rejectUnauthorized: (process.env.DATABASE_REJECT_UNAUTHORIZED === 'true') }
+    migrationsRun: env.DATABASE_SYNC,
+    synchronize: env.DATABASE_SYNC,
+    logging: env.DATABASE_LOGGING,
+    logger: env.DATABASE_LOGGER as any,
+    ssl: env.DATABASE_SSL
+      ? { rejectUnauthorized: env.DATABASE_REJECT_UNAUTHORIZED }
       : false
   });
 }
