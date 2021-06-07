@@ -12,12 +12,9 @@ export class AccountTeaserComponent implements OnInit, OnChanges {
 
   @Input() account: Account;
   @Input() addressAnchorType: MapAnchorType;
-  @Convert()
   @Input() addressFirst = false;
   @Input() customTitle: string;
-  @Convert()
   @Input() hideAddress = false;
-  @Convert()
   @Input() hasEmailSubtitle = false;
 
   private _accountName = '';

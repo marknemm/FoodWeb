@@ -6,12 +6,9 @@ import { FormBaseComponent, FormHelperService } from '~web/forms';
 @Component({ template: '' })
 export class OperationHoursBaseComponent extends FormBaseComponent<OperationHoursForm> {
 
-  @Convert()
-  @Input() allowClear: boolean = false;
-  @Convert()
-  @Input() minutesGap: number = 5;
-  @Convert()
-  @Input() allowOverlayClick: boolean = false;
+  @Input() allowClear = false;
+  @Input() minutesGap = 5;
+  @Input() allowOverlayClick = false;
   @Input() timeWidth = '110px';
   @Input() weekdayPadding = '0 20px 0 0';
   @Input() weekdayWidth = '125px';

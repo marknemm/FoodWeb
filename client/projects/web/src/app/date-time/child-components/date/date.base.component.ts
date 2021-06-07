@@ -2,24 +2,18 @@ import { Component, Input } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DateFilterFn } from '@angular/material/datepicker';
 import { FloatLabelType } from '@angular/material/form-field';
-import { Convert } from '~web/component-decorators';
 import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
 
 @Component({ template: '' })
 export class DateBaseComponent extends FormBaseComponent<Date> {
 
-  @Convert()
   @Input() allowClear: boolean = false;
-  @Convert()
   @Input() bold: boolean = false;
   @Input() dateFilter: DateFilterFn<Date>;
-  @Convert()
   @Input() defaultDate: Date;
   @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() floatLabels: FloatLabelType = 'auto';
-  @Convert()
   @Input() maxDate: Date;
-  @Convert()
   @Input() minDate: Date;
   @Input() minWidth = '';
   @Input() placeholder = '';
