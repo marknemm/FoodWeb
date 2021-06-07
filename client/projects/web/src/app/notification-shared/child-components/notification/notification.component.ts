@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Notification } from '~shared';
-import { Convert } from '~web/component-decorators';
 import { NotificationService } from '~web/notification/services/notification/notification.service';
 
 @Component({
@@ -11,8 +10,7 @@ import { NotificationService } from '~web/notification/services/notification/not
 export class NotificationComponent implements OnInit {
 
   @Input() notification: Notification;
-  @Convert()
-  @Input() max2Lines: boolean = false;
+  @Input() max2Lines = false;
 
   constructor(
     public notificationService: NotificationService

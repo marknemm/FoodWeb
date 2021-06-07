@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { OperationHoursForm } from '~web/account-shared/forms/operation-hours.form';
-import { Convert } from '~web/component-decorators';
 import { FormBaseComponent, FormHelperService } from '~web/forms';
 
 @Component({ template: '' })

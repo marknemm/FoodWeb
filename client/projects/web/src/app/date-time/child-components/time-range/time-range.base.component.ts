@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { Convert, DateConverter } from '~web/component-decorators';
 import { TimeRangeForm } from '~web/date-time/forms/time-range.form';
 import { FormBaseComponent, FormHelperService } from '~web/forms';
 
@@ -9,20 +8,13 @@ export abstract class TimeRangeBaseComponent extends FormBaseComponent<TimeRange
   @Input() startPlaceholder = 'Start Time';
   @Input() endPlaceholder = 'End Time';
 
-  @Convert()
-  @Input() allowClear: boolean = false;
-  @Convert()
-  @Input() bold: boolean = false;
-  @Convert(DateConverter)
+  @Input() allowClear = false;
+  @Input() bold = false;
   @Input() defaultStartTime: string | Date = '12:00 pm';
-  @Convert(DateConverter)
   @Input() defaultEndTime: string | Date = '12:00 pm';
-  @Convert()
-  @Input() floatLabels: boolean = true;
-  @Convert()
-  @Input() minutesGap: number = 5;
-  @Convert()
-  @Input() preventOverlayClick: boolean = false;
+  @Input() floatLabels = true;
+  @Input() minutesGap = 5;
+  @Input() preventOverlayClick = false;
 
   constructor(
     formHelperService: FormHelperService

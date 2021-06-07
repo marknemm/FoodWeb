@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatSidenavContent } from '@angular/material/sidenav';
-import { Convert } from '~web/component-decorators';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
 
@@ -18,7 +17,6 @@ export class LeftNavComponent implements OnInit {
    * the leftnav will be in over mode. Otherwise, it will be in side mode.
    * If not set, then the leftnav will always be in over mode.
    */
-  @Convert()
   @Input() windowSizeThreshPx: number;
 
   constructor(

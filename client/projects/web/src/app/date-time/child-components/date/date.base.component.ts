@@ -7,8 +7,8 @@ import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
 @Component({ template: '' })
 export class DateBaseComponent extends FormBaseComponent<Date> {
 
-  @Input() allowClear: boolean = false;
-  @Input() bold: boolean = false;
+  @Input() allowClear = false;
+  @Input() bold = false;
   @Input() dateFilter: DateFilterFn<Date>;
   @Input() defaultDate: Date;
   @Input() errorStateMatcher: ErrorStateMatcher;

@@ -3,7 +3,6 @@ import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Donation } from '~shared';
-import { Convert } from '~web/component-decorators';
 import { MapOptionsForm } from '~web/map/forms/map-options.form';
 import { MapOptions, MapService, WaypointMarker } from '~web/map/services/map/map.service';
 
@@ -15,17 +14,13 @@ import { MapOptions, MapService, WaypointMarker } from '~web/map/services/map/ma
 })
 export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Convert()
-  @Input() displayMapOnly: boolean = false;
-  @Convert()
-  @Input() displayRouteToDonor: boolean = true;
-  @Convert()
-  @Input() displayRouteToReceiver: boolean = true;
+  @Input() displayMapOnly = false;
+  @Input() displayRouteToDonor = true;
+  @Input() displayRouteToReceiver = true;
   @Input() donation: Donation;
   @Input() height = '300px';
   @Input() options: google.maps.MapOptions = {};
-  @Convert()
-  @Input() useVolunteerCurrentPos: boolean = true;
+  @Input() useVolunteerCurrentPos = true;
   @Input() width = '100%';
 
   @ViewChild(GoogleMap, { static: true }) map: GoogleMap;

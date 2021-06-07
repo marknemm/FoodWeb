@@ -44,7 +44,7 @@ export class SessionMonitorService implements HttpInterceptor {
   private _promptLogin(error: any): Observable<ReAuthAttempt> {
     return LoginDialogComponent.open(this._matDialog, { disableClose: true }).pipe(
       map((loginAccount: Account) => {
-        const loggedIn: boolean = !!loginAccount;
+        const loggedIn = !!loginAccount;
         if (!loginAccount) {
           this._alertQueueService.add(error);
           this._authService.logout();

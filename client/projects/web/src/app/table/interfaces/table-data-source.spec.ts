@@ -17,7 +17,7 @@ describe('TableDataSource', () => {
       webuiDataSource = new TableDataSource([], [
         { name: 'firstName' },
         { name: 'last_name' },
-        { name: 'USAAlpha123', dataTransform: (row: any) => (row.USAAlpha123 === 'abc' ? '******' : 'xxxxxx') },
+        { name: 'USAAlpha123', dataTransform: (row: any) => (row['USAAlpha123'] === 'abc' ? '******' : 'xxxxxx') },
         { name: 'personNumber', visibleName: 'Person #' }
       ]);
     });

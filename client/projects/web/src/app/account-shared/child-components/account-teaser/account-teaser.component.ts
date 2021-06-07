@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Account, AccountHelper, AccountType } from '~shared';
-import { Convert } from '~web/component-decorators';
 import { MapAnchorType } from '~web/map/interfaces/map';
 
 @Component({

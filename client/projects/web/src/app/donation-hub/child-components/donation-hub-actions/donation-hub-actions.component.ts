@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DonationHub, DonationHubPledge } from '~shared';
-import { Convert } from '~web/component-decorators';
 
 @Component({
   selector: 'foodweb-donation-hub-actions',
@@ -9,15 +8,11 @@ import { Convert } from '~web/component-decorators';
 })
 export class DonationHubActionsComponent implements OnInit {
 
-  @Convert()
-  @Input() canDonate: boolean = false;
-  @Convert()
-  @Input() canModify: boolean = false;
-  @Convert()
-  @Input() canViewDonation: boolean = false;
+  @Input() canDonate = false;
+  @Input() canModify = false;
+  @Input() canViewDonation = false;
   @Input() donationHub: DonationHub;
-  @Convert()
-  @Input() loading: boolean = false;
+  @Input() loading = false;
   @Input() myPledge: DonationHubPledge;
 
   @Output() delete = new EventEmitter<void>();

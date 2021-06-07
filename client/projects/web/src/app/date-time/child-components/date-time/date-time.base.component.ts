@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ValidationErrors, Validator } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
-import { Convert } from '~web/component-decorators';
 import { DateTimeForm } from '~web/date-time/forms/date-time.form';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
@@ -10,33 +9,22 @@ import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
 @Component({ template: '' })
 export class DateTimeBaseComponent extends FormBaseComponent<Date> implements OnInit, Validator {
 
-  @Convert()
-  @Input() allowClear: boolean = false;
-  @Convert()
-  @Input() allowUndefTime: boolean = false;
-  @Convert()
-  @Input() boldDate: boolean = false;
-  @Convert()
-  @Input() boldTime: boolean = false;
+  @Input() allowClear = false;
+  @Input() allowUndefTime = false;
+  @Input() boldDate = false;
+  @Input() boldTime = false;
   @Input() datePlaceholder = 'Date';
-  @Convert()
   @Input() defaultDate: Date;
   @Input() defaultTime = '12:00 pm';
   @Input() errorStateMatcher: ErrorStateMatcher;
-  @Convert()
-  @Input() excludeDateDisplay: boolean = false;
-  @Convert()
-  @Input() excludeTimeDisplay: boolean = false;
+  @Input() excludeDateDisplay = false;
+  @Input() excludeTimeDisplay = false;
   @Input() floatLabels: FloatLabelType = 'auto';
-  @Convert()
-  @Input() inlineFields: boolean = true;
-  @Convert()
+  @Input() inlineFields = true;
   @Input() maxDate: Date;
-  @Convert()
   @Input() minDate: Date = new Date();
   @Input() minDateWidth = '';
-  @Convert()
-  @Input() minutesGap: number = 5;
+  @Input() minutesGap = 5;
   @Input() primaryLabel = '';
   @Input() timePlaceholder = 'Time';
 

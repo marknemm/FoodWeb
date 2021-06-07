@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FeaturedEvent } from '~shared';
-import { Convert } from '~web/component-decorators';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { EventRegistrationForm } from '~web/event/forms/event-registration.form';
 import { EventRegistrationService } from '~web/event/services/event-registration/event-registration.service';
@@ -16,8 +15,7 @@ import { SessionService } from '~web/session/services/session/session.service';
 export class EventCardComponent implements OnInit, OnChanges {
 
   @Input() event: FeaturedEvent;
-  @Convert()
-  @Input() linkToEventsPage: boolean = false;
+  @Input() linkToEventsPage = false;
 
   formGroup: EventRegistrationForm;
 

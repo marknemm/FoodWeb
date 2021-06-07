@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { OperationHours, Weekday } from '~shared';
-import { Convert } from '~web/component-decorators';
 import { TimeRangeArray } from '~web/date-time/forms/time-range.array';
 import { FormBaseComponent, FormHelperService } from '~web/forms';
 

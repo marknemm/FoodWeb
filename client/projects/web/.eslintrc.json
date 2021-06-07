@@ -8,31 +8,15 @@
         "plugin:@nrwl/nx/angular",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
-      "parserOptions": {
-        "project": ["projects/ionic/tsconfig.*?.json"]
-      },
+      "parserOptions": { "project": ["projects/web/tsconfig.eslint.json"] },
       "rules": {
         "@angular-eslint/directive-selector": [
           "error",
-          {
-            "type": "attribute",
-            "prefix": "web",
-            "style": "camelCase"
-          }
+          { "type": "attribute", "prefix": "foodweb", "style": "camelCase" }
         ],
         "@angular-eslint/component-selector": [
           "error",
-          {
-            "type": "element",
-            "prefix": "web",
-            "style": "kebab-case"
-          }
-        ],
-        "@angular-eslint/component-class-suffix": [
-          "error",
-          {
-            "suffixes": ["Page", "Component"]
-          }
+          { "type": "element", "prefix": "foodweb", "style": "kebab-case" }
         ],
         "@angular-eslint/no-empty-lifecycle-method": 0,
         "@angular-eslint/no-output-native": 0,
@@ -42,11 +26,6 @@
         "@typescript-eslint/no-explicit-any": 0,
         "no-prototype-builtins": 0
       }
-    },
-    {
-      "files": ["*.html"],
-      "extends": ["plugin:@nrwl/nx/angular-template"],
-      "rules": {}
     }
   ]
 }

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Convert } from '~web/component-decorators';
 import { TableDataSource } from '~web/table/interfaces/table-data-source';
 export { TableDataSource };
 
@@ -11,16 +10,14 @@ export { TableDataSource };
 export class TableAddComponent<T = any> implements OnInit {
 
   @Input() dataSource: TableDataSource<T>;
-  @Convert()
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
   @Input() buttonText = 'Add Row';
   @Input() tooltip: string;
-  @Convert()
-  @Input() responsive: boolean = false;
+  @Input() responsive = false;
 
-  // tslint:disable-next-line:no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('attr.aria-label') ariaLabel: string;
-  // tslint:disable-next-line:no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('attr.aria-labelledby') ariaLabelledby: string;
 
   @Output() add = new EventEmitter<void>();

@@ -26,9 +26,9 @@
             <foodweb-date
               floatLabels="never"
               formControlName="dropOffDate"
-              editable="true"
               placeholder="Drop-off Date"
               [dateFilter]="filterDateSaturday"
+              [editable]="true"
               [minDate]="minRegisterDate"
             ></foodweb-date>
           </div>
@@ -36,7 +36,7 @@
 
         <div>
           Tell us what times you will be available to accept donation drop-offs:
-          <foodweb-time-range formGroupName="dropOffTimeRange" editable="true"></foodweb-time-range>
+          <foodweb-time-range formGroupName="dropOffTimeRange" [editable]="true"></foodweb-time-range>
         </div>
       </mat-card-content>
     </mat-card>
@@ -53,7 +53,7 @@
     <mat-card>
       <mat-card-title>Contact Info</mat-card-title>
       <mat-card-content>
-        <foodweb-contact-info editable="true" formGroupName="contactOverride"></foodweb-contact-info>
+        <foodweb-contact-info formGroupName="contactOverride" [editable]="true"></foodweb-contact-info>
       </mat-card-content>
     </mat-card>
 

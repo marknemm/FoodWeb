@@ -3,7 +3,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Convert } from '~web/component-decorators';
 import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
 
 @Component({
@@ -13,12 +12,9 @@ import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
 })
 export class PaginatorComponent implements OnInit, OnDestroy {
 
-  @Convert()
   @Input() length: number;
-  @Convert()
   @Input() page: number;
   @Input() pageSizeOptions: number[] = [10, 20, 50];
-  @Convert()
   @Input() limit: number;
 
   private _destory$ = new Subject();

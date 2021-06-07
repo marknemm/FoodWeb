@@ -5,7 +5,6 @@ import { NEVER, Observable, ObservableInput } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Account } from '~shared';
 import { UsernameRecoveryService } from '~web/account/services/username-recovery/username-recovery.service';
-import { Convert } from '~web/component-decorators';
 import { PasswordResetService } from '~web/password/services/password-reset/password-reset.service';
 import { LoginForm } from '~web/session/forms/login.form';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
@@ -13,8 +12,7 @@ import { AuthenticationService } from '~web/session/services/authentication/auth
 @Component({ template: '' })
 export abstract class LoginBaseComponent implements OnInit {
 
-  @Convert()
-  @Input() insideDialog: boolean = false;
+  @Input() insideDialog = false;
 
   @Output() formChanged = new EventEmitter<LoginFormChange>();
   @Output() loggedIn = new EventEmitter<void>();

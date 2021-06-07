@@ -2,7 +2,6 @@ import { Component, Directive, forwardRef, Input, OnChanges, OnDestroy, Provider
 import { AbstractControl, ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
-import { Convert } from '~web/component-decorators';
 import { TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
 import { TFormArray } from '~web/forms/classes/t-form-array';
 import { TFormControl } from '~web/forms/classes/t-form-control';
@@ -26,7 +25,7 @@ import { FormHelperService } from '~web/forms/services/form-helper/form-helper.s
  * @param FA The type of this component's `formArray`. Defaults to `A` if A extends `TFormArray<ExtractArrayType<T>>`.
  * @param FC The type of this component's `formControl`. Defaults to `A` if A extends `TFormControl<T>`.
  */
-@Directive() // tslint:disable-next-line: all
+@Directive() // eslint-disable-next-line @angular-eslint/directive-class-suffix
 abstract class _FormBaseComponent<
   T,
   V = ExtractControlType<T>,
@@ -39,8 +38,7 @@ abstract class _FormBaseComponent<
   /**
    * A flag that determines if this component should currently be editable, or display only.
    */
-  @Convert()
-  @Input() editable: boolean = false;
+  @Input() editable = false;
 
   /**
    * The value of the contained active `TAbstractControl`.
@@ -63,8 +61,7 @@ abstract class _FormBaseComponent<
   /**
    * A flag that turns on debug mode logging when set to true.
    */
-  @Convert()
-  @Input() debugMode: boolean = false;
+  @Input() debugMode = false;
   /**
    * A special name given to this FormBaseComponent instance, which will be displayed in all debug log messages.
    */

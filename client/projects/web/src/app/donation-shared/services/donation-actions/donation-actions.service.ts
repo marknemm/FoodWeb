@@ -89,12 +89,12 @@ export class DonationActionsService {
   }
 
   protected _updateScheduleDeliveryAccess(donation: Donation, actingAccount: Account): void {
-    const scheduleAccess: boolean = !this._deliveryHelper.validateDeliverySchedulePrivilege(donation.donationStatus, actingAccount);
+    const scheduleAccess = !this._deliveryHelper.validateDeliverySchedulePrivilege(donation.donationStatus, actingAccount);
     this._setActionAccessFlag('ScheduleDelivery', scheduleAccess);
   }
 
   protected _updateAdvanceDeliveryStateAccess(donation: Donation, actingAccount: Account): void {
-    const advanceDeliveryStateAccess: boolean = !this._deliveryHelper.validateDeliveryAdvancePrivilege(
+    const advanceDeliveryStateAccess = !this._deliveryHelper.validateDeliveryAdvancePrivilege(
       donation.claim?.delivery,
       donation.donationStatus,
       actingAccount
