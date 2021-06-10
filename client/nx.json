@@ -10,9 +10,9 @@
   "affected": { "defaultBase": "master" },
   "npmScope": "web",
   "projects": {
-    "web": { "tags": [] },
     "admin": { "tags": [] },
-    "ionic": { "tags": [] }
+    "hybrid": { "tags": [] },
+    "web": { "tags": [] }
   },
   "workspaceLayout": {
     "appsDir": "projects"

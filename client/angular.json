@@ -328,33 +328,44 @@
         }
       }
     },
-    "ionic": {
+    "hybrid": {
       "projectType": "application",
       "root": ".",
-      "sourceRoot": "projects/ionic/src",
-      "prefix": "ionic",
+      "sourceRoot": "projects/hybrid/src",
+      "prefix": "hybrid",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ionic",
-            "index": "projects/ionic/src/index.html",
-            "main": "projects/ionic/src/main.ts",
-            "polyfills": "projects/ionic/src/polyfills.ts",
-            "tsConfig": "projects/ionic/tsconfig.json",
+            "outputPath": "dist/hybrid",
+            "index": "projects/hybrid/src/index.html",
+            "main": "projects/hybrid/src/main.ts",
+            "polyfills": "projects/hybrid/src/polyfills.ts",
+            "tsConfig": "projects/hybrid/tsconfig.json",
             "aot": true,
             "assets": [
-              "projects/ionic/src/assets",
+              "projects/hybrid/src/assets",
               {
                 "glob": "**/*.svg",
-                "input": "node_modules/ionicons/dist/ionicons/svg",
+                "input": "node_modules/hybridons/dist/hybridons/svg",
                 "output": "./svg"
               }
             ],
             "styles": [
-              "projects/ionic/src/styles.scss",
+              "projects/web/src/styles/styles.scss",
+              "projects/hybrid/src/styles/hybrid-styles.scss",
+              "./node_modules/material-design-icons/iconfont/material-icons.css"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/web/src/styles",
+                "projects/hybrid/src/styles"
+              ]
+            },
+            "fileReplacements": [
               {
-                "input": "projects\\ionic/src/theme/variables.scss"
+                "replace": "projects/web/src/environments/environment.ts",
+                "with": "projects/hybrid/src/environments/environment.ts"
               }
             ],
             "scripts": []
@@ -363,8 +374,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/ionic/src/environments/environment.ts",
-                  "with": "projects/ionic/src/environments/environment.prod.ts"
+                  "replace": "projects/hybrid/src/environments/environment.ts",
+                  "with": "projects/hybrid/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -392,35 +403,49 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ionic:build"
+            "browserTarget": "hybrid:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ionic:build:production"
+              "browserTarget": "hybrid:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ionic:build"
+            "browserTarget": "hybrid:build"
           }
         },
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "projects/ionic/src/**/*.ts",
-              "projects/ionic/src/**/*.html"
+              "projects/hybrid/src/**/*.ts",
+              "projects/hybrid/src/**/*.html"
             ]
           }
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/projects/ionic"],
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "jestConfig": "projects/ionic/jest.config.js",
-            "passWithNoTests": true
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "projects/admin/tsconfig.spec.json",
+            "karmaConfig": "projects/admin/karma.conf.js",
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": [
+              "projects/web/src/styles/styles.scss",
+              "projects/admin/src/styles/admin-styles.scss",
+              "./node_modules/material-design-icons/iconfont/material-icons.css"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/web/src/styles",
+                "projects/hybrid/src/styles"
+              ]
+            },
+            "scripts": []
           }
         },
         "cap": {

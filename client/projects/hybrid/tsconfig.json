@@ -1,0 +1,32 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "~hybrid/*": ["src/app/*"],
+      "~hybrid-env/*": ["src/environments/*"],
+      "~lodash-mixins": ["../web/src/lodash-mixins"],
+      "~shared": ["src/shared"],
+      "~web/*": ["../web/src/app/*"],
+      "~web-env/*": ["../web/src/environments/*"]
+    },
+    "sourceMap": true,
+    "types": [
+      "googlemaps",
+      "node"
+    ]
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "../web/src/**/*.d.ts"
+  ],
+  "exclude": [
+    "src/test.ts",
+    "src/**/*.spec.ts",
+    "src/environments/*.ts"
+  ]
+}

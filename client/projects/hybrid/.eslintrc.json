@@ -1,0 +1,38 @@
+{
+  "extends": ["../../.eslintrc.json"],
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": [
+        "plugin:@nrwl/nx/angular",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "parserOptions": {
+        "project": ["projects/hybrid/tsconfig.eslint.json"]
+      },
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          { "type": "attribute", "prefix": "foodwebHybrid", "style": "camelCase" }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          { "type": "element", "prefix": "foodweb-hybrid", "style": "kebab-case" }
+        ],
+        "@angular-eslint/no-empty-lifecycle-method": 0,
+        "@angular-eslint/no-output-native": 0,
+        "@angular-eslint/template/no-negated-async": 0,
+        "@typescript-eslint/ban-types": 0,
+        "@typescript-eslint/no-empty-function": 0,
+        "@typescript-eslint/no-explicit-any": 0,
+        "no-prototype-builtins": 0
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@nrwl/nx/angular-template"],
+      "rules": {}
+    }
+  ]
+}

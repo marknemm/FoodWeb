@@ -4,7 +4,7 @@ An **Angular** monorepo that relies mostly on **Angular Material** for UI compon
 It is composed of 3 projects:
 
   - **Web**: Located under **/client/projects/web**. Serves as the standared web interface's front-end. It also provides a common base for all other projects.
-  - **App**: Located under **/client/projects/app**. Serves as the mobile Android/IOS apps' front-end. It leverages **Cordova** & **Ionic** for mobile app features, and builds off of the capabilities of the Web project.
+  - **Hybrid**: Located under **/client/projects/hybrid**. Serves as the mobile Android/IOS apps' front-end. It leverages **Capacitor** & **Ionic** for mobile app features, and builds off of the capabilities of the Web project.
   - **Admin**: Located under **/client/projects/admin**. Serves as the admin console's front-end. It extends the capabilities of the Web project.
 
 
@@ -28,9 +28,9 @@ Run `npm install` to install all client dependencies.
 Run `npm start` to spin up an Angular 2 dev server.<br>
 Navigate to `http://localhost:4200`.
 
-### Start App
+### Start Hybrid
 
-Run `npm run app:start` to spin up an App Angular 2 dev server.<br>
+Run `npm run hybrid:start` to spin up an App Angular 2 dev server.<br>
 Navigate to `http://loclhost:8100`.
 
 ### Start Admin
@@ -38,23 +38,23 @@ Navigate to `http://loclhost:8100`.
 Run `npm run admin:start` to spin up an admin Angular 2 dev server.<br>
 Navigate to `http://localhost:4201`.
 
-### Prepare & Watch Emulated App
+### Prepare & Watch Emulated Hybrid App
 
-Run `npm run app:emu:prepare:watch` to concurrently build-watch the Angular source code, and prepare-watch the Angular build output (under client/www).<br>
+Run `npm run hybrid:emu:prepare:watch` to concurrently build-watch the Angular source code, and prepare-watch the Angular build output (under client/www).<br>
 Note that this will not account for any changes to plugin dependencies. A full build is necessary for platform/plugin initialization or changes.<br>
 Run/Install the platform output on an Android virtual device. For example, open `client/platforms/android` in Android Studio and hit run/debug.
 
-### Prepare & Watch Simulated App
+### Prepare & Watch Simulated Hybrid App
 
-Run `npm run app:prepare:watch` to concurrently build-watch the Angular source code, and prepare-watch the Angular build output (under client/www).<br>
+Run `npm run hybrid:prepare:watch` to concurrently build-watch the Angular source code, and prepare-watch the Angular build output (under client/www).<br>
 Note that this will not account for any changes to puglin dependencies. A full build is necessary for platform/plugin initialization or changes.<br>
 Run/Install the platform output on an iOS device simulator. For example, open `client/platforms/ios` in Xcode and hit run/debug.
 
-### Prepare & Watch Device App
+### Prepare & Watch Device Hybrid App
 
-NOTE: Before running this npm script, it is neccessary to follow the direcitons at the top of `client/projects/app/src/environments/environment.device.example.ts` in order to enable a connection between your smartphone and localhost on your development machine.
+NOTE: Before running this npm script, it is neccessary to follow the direcitons at the top of `client/projects/hybrid/src/environments/environment.device.example.ts` in order to enable a connection between your smartphone and localhost on your development machine.
 
-Run `npm run app:device:prepare:watch` to concurrently build-watch the Angular source code, and prepare-watch the Angular build output (under client/www).<br>
+Run `npm run hybrid:device:prepare:watch` to concurrently build-watch the Angular source code, and prepare-watch the Angular build output (under client/www).<br>
 Note that this will not account for any changes to puglin dependencies. A full build is necessary for platform/plugin initialization or changes.<br>
 Run/Install the platform output on a linked Android/iOS smartphone. For example, open `client/platforms/ios` in Xcode or `client/platforms/android` in Android Studio and hit run/debug.
 

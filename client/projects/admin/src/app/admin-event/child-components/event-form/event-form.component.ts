@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { EventForm } from '~admin/admin-event/forms/event.form';
 import { FeaturedEvent } from '~shared';
-import { Convert } from '~web/component-decorators';
 
 @Component({
   selector: 'foodweb-admin-event-form',
@@ -12,8 +11,7 @@ export class EventFormComponent implements OnInit, OnChanges {
 
   @Input() formTitle = '';
   @Input() event: Partial<FeaturedEvent>;
-  @Convert()
-  @Input() excludeDelete: boolean = false;
+  @Input() excludeDelete = false;
 
   @Output() delete = new EventEmitter<void>();
   @Output() save = new EventEmitter<FeaturedEvent>();
