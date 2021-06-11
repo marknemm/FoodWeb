@@ -1,11 +1,13 @@
 import { Column, CreateDateColumn, Index, JoinColumn, ManyToOne, OneToOne, UpdateDateColumn } from 'typeorm';
-import { Donation, DonationStatus, DONATION_STATUSES } from '~shared';
 import { OrmAfterLoad, OrmEntity, OrmPrimaryGeneratedColumn } from '~orm';
+import { Constants, Donation, DonationStatus } from '~shared';
 import { AccountEntity } from './account.entity';
 import { ContactInfoEntity } from './contact-info.entity';
 import { DonationClaimEntity } from './donation-claim.entity';
 import _ = require('lodash');
 export { Donation, DonationStatus };
+
+const _constants = new Constants();
 
 @OrmEntity('Donation')
 @Index('donorNameIdx', { synchronize: false })
@@ -48,7 +50,7 @@ export class DonationEntity implements Donation {
   @Column({ type: 'timestamp with time zone' })
   pickupWindowEnd: Date;
 
-  @Column({ type: 'enum', enum: DONATION_STATUSES, default: DONATION_STATUSES[0] })
+  @Column({ type: 'enum', enum: _constants.DONATION_STATUSES, default: _constants.DONATION_STATUSES[0] })
   donationStatus: DonationStatus;
 
   @Column({ default: false })

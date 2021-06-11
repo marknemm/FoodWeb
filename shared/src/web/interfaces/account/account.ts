@@ -65,10 +65,9 @@ export enum AccountType {
 }
 
 /**
- * A list of all possible account types.
+ * Category of an account, which contains AccountType members.
  */
-export const ACCOUNT_TYPES: AccountType[] = [
-  AccountType.Donor,
-  AccountType.Receiver,
-  AccountType.Volunteer
-];
+ export enum AccountCategory {
+  Business = 'Business',
+  Volunteer = 'Volunteer'
+}
