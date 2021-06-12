@@ -1,8 +1,5 @@
 <form [formGroup]="formGroup" class="account-creation-form" (submit)="createAccount.emit(formGroup)">
   <div class="align-center">
-    <div class="page-title block-label signup-header">
-      {{ accountType ? formTitle : accountTypeSelTitle }}
-    </div>
     <foodweb-account-type [editable]="!accountType" formControlName="accountType" class="account-type"></foodweb-account-type>
   </div>
 
@@ -74,10 +71,9 @@
 
     <ng-content></ng-content>
 
-    <div class="row submit-button-container">
-      <div class="col-xl-12 align-right">
-        <button mat-raised-button color="primary" type="submit">{{ submitButtonTxt }}</button>
-      </div>
+    <div class="form-footer-buttons">
+      <button mat-button color="warn" type="button" (click)="location.back()">Back</button>
+      <button mat-raised-button color="primary" type="submit">{{ submitButtonTxt }}</button>
     </div>
   </div>
 </form>

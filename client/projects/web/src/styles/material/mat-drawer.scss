@@ -17,27 +17,6 @@
     background-color: $content-background;
     height: 100%;
 
-    .page-title {
-      font: 500 28px Avenir;
-      margin-bottom: 10px;
-      text-align: center;
-      color: $accent;
-
-      @media only screen and (max-width: $md) {
-        font-size: 24px;
-      }
-
-      @media only screen and (max-width: $sm) {
-        font-size: 20px;
-      }
-    }
-
-    .page .page-title {
-      @media only screen and (max-width: $sm) {
-        margin-top: -8px;
-      }
-    }
-
     @media only screen and (max-width: $md) {
       min-height: calc(100vh - #{$header-height-mobile});
     }

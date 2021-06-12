@@ -1,65 +1,187 @@
-:host {
-  .account-type-selections {
-    position: relative;
-    display: inline-block;
-    vertical-align: top;
+@import "constants.scss";
+
+.account-type-selections {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+
+  &.edit {
+    button.selected {
+      @media only screen and (min-width: $sm + 1px) {
+        .mat-card {
+          min-width: 155px;
+          height: 155px;
+        }
+      }
+
+      &.volunteer {
+        box-shadow: 0px 10px 30px 10px rgb(255 0 0 / 20%),
+                    0px 2px 2px 0px rgb(255 0 0 / 14%),
+                    0px 2px 6px 0px rgb(255 0 0 / 12%);
+      }
+
+      &.business {
+        box-shadow: 0px 10px 30px 10px rgb(255 215 0 / 20%),
+                    0px 2px 2px 2px rgb(0 255 0 / 14%),
+                    0px 2px 6px 0px rgb(0 255 0 / 12%);
+      }
+
+      &.donor {
+        box-shadow: 0px 10px 30px 10px rgb(0 255 0 / 20%),
+                    0px 2px 2px 0px rgb(0 255 0 / 14%),
+                    0px 2px 6px 0px rgb(0 255 0 / 12%);
+      }
+
+      &.receiver {
+        box-shadow: 0px 10px 30px 10px rgb(255 215 0 / 20%),
+                    0px 2px 2px 0px rgb(255 215 0 / 14%),
+                    0px 2px 6px 0px rgb(255 215 0 / 12%);
+      }
+    }
+  }
+
+  &.display {
+    .not-selected-mask {
+      display: block;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.25);
+      border-radius: inherit;
+    }
 
     button {
-      display: inline-block;
-      padding: 0;
-      margin: 0px 16px 16px;
-
-      mat-card {
-        display: inline-block;
-        min-width: 150px;
-        height: 150px;
-        margin: 0;
-        text-align: center;
-        vertical-align: top;
-
-        mat-toolbar {
-          font-weight: bold;
+      &.selected {
+        .not-selected-mask {
+          display: none;
         }
+      }
 
-        mat-icon {
-          $icon-size: 60px;
-          font-size: $icon-size;
-          width: $icon-size;
-          height: $icon-size;
-          margin-top: 10px;
+      &:not(.selected) {
+        box-shadow: none;
+        border: 1px solid #e4e4e4;
+
+        @media only screen and (max-width: 410px) {
+          display: none;
         }
       }
     }
+  }
+}
 
-    &.display {
-      .not-selected-mask {
-        display: block;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.25);
-        border-radius: inherit;
+.account-types,
+.account-categories {
+  .section-title {
+    margin-top: 10px;
+  }
+
+  button {
+    display: inline-block;
+    padding: 0;
+    margin: 0px 16px 16px;
+
+    .mat-card {
+      display: inline-block;
+      min-width: 150px;
+      height: 150px;
+      margin: 0;
+      text-align: center;
+      vertical-align: top;
+
+      .mat-toolbar {
+        font-weight: bold;
       }
 
-      button {
-        &.selected {
-          .not-selected-mask {
-            display: none;
-          }
+      .mat-icon {
+        $icon-size: 60px;
+        font-size: $icon-size;
+        width: $icon-size;
+        height: $icon-size;
+        margin-top: 10px;
+      }
+    }
+
+    @media only screen and (max-width: $sm) {
+      margin-left: 5px;
+      margin-right: 5px;
+
+      .mat-card {
+        min-width: 135px;
+        height: 135px;
+
+        .mat-toolbar {
+          font-size: 18px;
         }
 
-        &:not(.selected) {
-          box-shadow: none;
-          border: 1px solid #e4e4e4;
-
-          @media only screen and (max-width: 410px) {
-            display: none;
-          }
+        .mat-icon {
+          margin-top: 4px;
         }
       }
+    }
+  }
+}
 
+.account-type-descr {
+  border: 3px ridge;
+  border-radius: 10px;
+  margin-top: 25px;
+  padding: 10px 10px;
+  background-color: white;
+  max-width: 500px;
+  text-align: left;
+  font-weight: 500;
+
+  &.donor {
+    border-color: $donor-color;
+
+    li:before {
+      color: $donor-color;
+    }
+  }
+
+  &.receiver {
+    border-color: $receiver-color;
+
+    li:before {
+      color: $receiver-color;
+    }
+  }
+
+  &.volunteer {
+    border-color: $volunteer-color;
+
+    li:before {
+      color: $volunteer-color;
+    }
+  }
+
+  h2 {
+    text-decoration: underline;
+    color: $accent;
+  }
+
+  ul {
+    margin-top: 4px;
+    padding-left: 20px;
+    list-style: none;
+
+    li:before {
+      content: "\2022";
+      font-weight: 900;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
+    }
+  }
+
+  .footer {
+    text-align: right;
+    margin-bottom: 10px;
+
+    button {
+      font-weight: bold;
     }
   }
 }

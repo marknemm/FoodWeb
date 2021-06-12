@@ -15,4 +15,11 @@
     background-color: inherit;
     color: $volunteer-color;
   }
+
+  &.mat-business {
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }

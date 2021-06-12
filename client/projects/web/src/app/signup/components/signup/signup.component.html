@@ -10,7 +10,7 @@
     <mat-card-title>Welcome to FoodWeb!</mat-card-title>
     <mat-card-content>
       <p>Please confirm your signup by following the link sent to your email.</p>
-      <div class="signup-success-button-container align-right">
+      <div class="form-footer-buttons">
         <button mat-button *ngIf="!sessionService.account.verified" color="accent" type="button" (click)="signupVerificationService.resendVerificationEmail()">
           Resend Verification Email
         </button>

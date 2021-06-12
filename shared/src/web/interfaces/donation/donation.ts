@@ -79,8 +79,6 @@ export interface Donation {
   createTimestamp?: Date;
 }
 
-export const DONATION_TYPES = ['Food', 'Merchandise', 'Cash', 'Service', 'Other'];
-
 export enum DonationStatus {
   Unmatched = 'Unmatched',
   Matched = 'Matched',
@@ -89,12 +87,3 @@ export enum DonationStatus {
   PickedUp = 'Picked Up',
   Complete = 'Complete'
 }
-
-export const DONATION_STATUSES: DonationStatus[] = [
-  DonationStatus.Unmatched,
-  DonationStatus.Matched,
-  DonationStatus.Scheduled,
-  DonationStatus.Started,
-  DonationStatus.PickedUp,
-  DonationStatus.Complete
-];
