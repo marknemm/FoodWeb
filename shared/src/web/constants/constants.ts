@@ -1,13 +1,27 @@
-import { ACCOUNT_TYPES } from '../interfaces/account/account';
+import { AccountCategory, AccountType } from '../interfaces/account/account';
 import { AccountProfileImgPlaceholder } from '../interfaces/account/account-profile-img-placeholder';
 import { Weekday } from '../interfaces/account/operation-hours';
 import { AuditEventType } from '../interfaces/audit/audit';
-import { DonationStatus, DONATION_STATUSES, DONATION_TYPES } from '../interfaces/donation/donation';
+import { DonationStatus } from '../interfaces/donation/donation';
 import { NotificationType, NOTIFICATION_TYPES } from '../interfaces/notification/notification';
 
 export class Constants {
 
-  readonly ACCOUNT_TYPES = ACCOUNT_TYPES;
+  readonly ACCOUNT_CATEGORIES: AccountCategory[] = [
+    AccountCategory.Volunteer,
+    AccountCategory.Business,
+  ];
+
+  readonly ACCOUNT_CATEGORY_MEMBERS = {
+    Business: [AccountType.Donor, AccountType.Receiver],
+    Volunteer: [AccountType.Volunteer]
+  };
+
+  readonly ACCOUNT_TYPES: AccountType[] = [
+    AccountType.Volunteer,
+    AccountType.Donor,
+    AccountType.Receiver
+  ];
 
   readonly AUDIT_EVENT_TYPES: AuditEventType[] = [
     AuditEventType.Signup,
@@ -26,9 +40,16 @@ export class Constants {
     AuditEventType.DeliveryStateUndo
   ];
 
-  readonly DONATION_STATUSES: DonationStatus[] = DONATION_STATUSES;
+  readonly DONATION_STATUSES: DonationStatus[] = [
+    DonationStatus.Unmatched,
+    DonationStatus.Matched,
+    DonationStatus.Scheduled,
+    DonationStatus.Started,
+    DonationStatus.PickedUp,
+    DonationStatus.Complete
+  ];
 
-  readonly DONATION_TYPES: string[] = DONATION_TYPES;
+  readonly DONATION_TYPES: string[] = ['Food', 'Merchandise', 'Cash', 'Service', 'Other'];
 
   readonly NOTIFICATION_TYPES: NotificationType[] = NOTIFICATION_TYPES;
 

@@ -82,7 +82,7 @@
     </mat-card-content>
   </mat-card>
 
-  <div class="action-footer align-right">
+  <div class="form-footer-buttons">
     <mat-slide-toggle formControlName="sendNotifications" class="send-notifications-toggle">Send Notifications</mat-slide-toggle>
     <button mat-button type="button" color="warn" *ngIf="showCancelButton" (click)="onCancel()">{{ cancelButtonTxt }}</button>
     <button mat-raised-button type="submit" color="primary">{{ submitButtonTxt }}</button>

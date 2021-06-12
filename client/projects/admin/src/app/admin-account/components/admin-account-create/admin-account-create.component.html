@@ -30,7 +30,7 @@
         An auto-generate password email has been sent for the newly created account.
       </p>
       <mat-card-content>
-        <div class="signup-success-button-container align-right">
+        <div class="form-footer-buttons">
           <button mat-button *ngIf="!formGroup.accountCreateOptions.autoVerify"
             color="accent" type="button" (click)="signupVerificationService.resendVerificationEmailFor(createdAccountStore.value)">
             Resend Verification Email

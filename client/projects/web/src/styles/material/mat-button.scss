@@ -10,6 +10,14 @@ button.mat-raised-button.compact {
   padding: 0px;
 }
 
+.form-footer-buttons {
+  text-align: right;
+
+  button {
+    margin-right: 5px;
+  }
+}
+
 @media only screen and (max-width: $mat-mobile) {
   button.mat-button,
   button.mat-raised-button {

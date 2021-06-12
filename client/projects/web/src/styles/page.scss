@@ -16,3 +16,38 @@
     }
   }
 }
+
+.page-title {
+  font: 600 28px Avenir;
+  margin-bottom: 15px;
+  text-align: center;
+  color: $accent;
+
+  @media only screen and (max-width: $md) {
+    font-size: 24px;
+  }
+
+  @media only screen and (max-width: $sm) {
+    font-size: 20px;
+  }
+}
+
+.page .page-title {
+  @media only screen and (max-width: $sm) {
+    margin-top: -8px;
+  }
+}
+
+h2.section-title {
+  font-size: 24px;
+  color: $accent;
+  margin-bottom: 15px;
+
+  @media only screen and (max-width: $md) {
+    font-size: 20px;
+  }
+
+  @media only screen and (max-width: $mat-mobile) {
+    font-size: 18px;
+  }
+}

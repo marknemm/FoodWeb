@@ -33,3 +33,10 @@
   background-color: $volunteer-color;
   color: white;
 }
+
+.mat-business {
+  background: -moz-linear-gradient(to right, $donor-color, $receiver-color);
+  background: -webkit-linear-gradient(to right, $donor-color, $receiver-color);
+  background: linear-gradient(to right, $donor-color, $receiver-color);
+  color: black;
+}

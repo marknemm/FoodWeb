@@ -31,7 +31,7 @@ $primary-darkest: map-get($primary-palette, 900);
 
 $accent: map-get($accent-palette, default);
 $accent-lightest: map-get($accent-palette, 100);
-$accent-lighter: map-get($accent-palette, lighter);
+$accent-lighter: map-get($accent-palette, 400);
 $accent-darker: map-get($accent-palette, darker);
 $accent-darkest: map-get($accent-palette, 900);
 
