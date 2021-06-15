@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Account, AccountHelper, AccountReadRequest, AccountType, ListResponse } from '~shared';
-import { AccountFiltersForm, AccountFiltersFormT } from '~web/account/forms/account-filters.form';
+import { AccountFiltersForm } from '~web/account/forms/account-filters.form';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
@@ -13,7 +14,6 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 export class AccountsComponent implements OnInit {
 
   protected _accounts: Account[] = [];
-  protected _pageTitle = 'Accounts';
   protected _totalCount = 0;
 
   readonly filtersForm = new AccountFiltersForm();
@@ -22,6 +22,7 @@ export class AccountsComponent implements OnInit {
     public accountHelper: AccountHelper,
     protected _accountReadService: AccountReadService,
     protected _activatedRoute: ActivatedRoute,
+    protected _pageTitleService: PageTitleService,
     protected _router: Router,
     protected _urlQueryService: UrlQueryService
   ) {}
@@ -32,10 +33,6 @@ export class AccountsComponent implements OnInit {
 
   get noneFound(): boolean {
     return (!this._accountReadService.loading && this.totalCount === 0);
-  }
-
-  get pageTitle(): string {
-    return this._pageTitle;
   }
 
   get totalCount(): number {
@@ -64,6 +61,6 @@ export class AccountsComponent implements OnInit {
 
   protected _setPageTitle(): void {
     const accountType = <AccountType>this._activatedRoute.snapshot.queryParamMap.get('accountType');
-    this._pageTitle = (accountType ? `${accountType}s` : 'Accounts');
+    this._pageTitleService.title = (accountType ? `${accountType}s` : 'Accounts');
   }
 }
