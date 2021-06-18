@@ -7,22 +7,28 @@
     <a mat-list-item [routerLink]="['/account/my']" class="account">
       <mat-icon>supervisor_account</mat-icon> Account
     </a>
-    <a mat-list-item [routerLink]="['/donation/list/my']" *ngIf="!sessionService.isVolunteer">
-      <fa-icon [icon]="faGifts"></fa-icon> My Donations
-    </a>
-    <ng-container *ngIf="sessionService.isVolunteer">
-      <mat-divider></mat-divider>
-      <a mat-list-item [routerLink]="['/delivery/list/my']">
-        <mat-icon>my_location</mat-icon> My Deliveries
-      </a>
-      <a mat-list-item [routerLink]="['/donation-hub/list/my']">
-        <mat-icon>device_hub</mat-icon> My Donation Hubs
-      </a>
-      <a mat-list-item [routerLink]="['/donation-hub/pledge/list/my']">
-        <fa-icon [icon]="faGifts"></fa-icon> My Donation Pledges
+
+    <ng-container *ngIf="!sessionService.isVolunteer">
+      <h2 class="submenu-heading">Donations</h2>
+      <a mat-list-item [routerLink]="['/donation/list/my']">
+        <fa-icon [icon]="faGifts"></fa-icon> My Donations
       </a>
     </ng-container>
-    <mat-divider></mat-divider>
+
+    <ng-container *ngIf="sessionService.isVolunteer">
+      <h2 class="submenu-heading">My Action Items</h2>
+      <a mat-list-item [routerLink]="['/donation-hub/list/my']">
+        <mat-icon>device_hub</mat-icon> Drop-Off Hubs
+      </a>
+      <a mat-list-item [routerLink]="['/donation-hub/pledge/list/my']">
+        <fa-icon [icon]="faGifts"></fa-icon> Donations
+      </a>
+      <a mat-list-item [routerLink]="['/delivery/list/my']">
+        <mat-icon>my_location</mat-icon> Deliveries
+      </a>
+    </ng-container>
+
+    <h2 class="submenu-heading">Status - Logged In</h2>
     <a mat-list-item [routerLink]="['/home']" (click)="authService.logout()" class="logout">
       <mat-icon>power_settings_new</mat-icon> Logout
     </a>

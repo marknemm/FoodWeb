@@ -1,0 +1,21 @@
+@import "constants.scss";
+
+.drop-off-hub-info-card {
+  .mat-card-title {
+    .mat-icon {
+      vertical-align: -5px;
+
+      @media only screen and (max-width: $mat-mobile) {
+        vertical-align: -6px;
+      }
+    }
+  }
+}
+
+.donation-pledge-info-card {
+  .mat-card-title {
+    .ng-fa-icon {
+      margin-right: 2px;
+    }
+  }
+}
