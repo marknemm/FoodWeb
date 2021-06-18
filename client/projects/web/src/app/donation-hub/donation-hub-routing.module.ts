@@ -8,9 +8,11 @@ import { DonationHubPledgeCreateComponent } from './components/donation-hub-pled
 import { DonationHubPledgeEditComponent } from './components/donation-hub-pledge-edit/donation-hub-pledge-edit.component';
 import { DonationHubPledgeListComponent } from './components/donation-hub-pledge-list/donation-hub-pledge-list.component';
 import { DonationHubPledgeComponent } from './components/donation-hub-pledge/donation-hub-pledge.component';
+import { DonationHubPortalComponent } from './components/donation-hub-portal/donation-hub-portal.component';
 import { DonationHubComponent } from './components/donation-hub/donation-hub.component';
 
 const routes: Routes = [
+  { path: 'portal', component: DonationHubPortalComponent },
   { path: 'create', component: DonationHubCreateComponent, canActivate: [AuthGaurdService] },
   { path: 'list', children: [
     { path: '', component: DonationHubListComponent },

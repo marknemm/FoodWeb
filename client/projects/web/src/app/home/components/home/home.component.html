@@ -1,10 +1,6 @@
 <div class="home page has-side-content">
   <div class="main-content">
     <span class="d-lg-none">
-      <ng-container [ngTemplateOutlet]="loginSignupTmpl"></ng-container>
-    </span>
-
-    <span class="d-lg-none">
       <ng-container [ngTemplateOutlet]="traningSignupTmpl"></ng-container>
     </span>
 
@@ -16,29 +12,25 @@
         <mat-card-content>
           <div class="donation-hub-intro-block">
             <p>
-              FoodWeb’s Sandwich Army is a volunteer-driven effort to alleviate food insecurity during the pandemic through <strong>sandwich drives every Saturday</strong>!
+              FoodWeb’s Sandwich Army is a volunteer-driven effort to alleviate food insecurity during the pandemic through
+              <strong>sandwich drives every Saturday</strong>!
             </p>
-            <div *ngIf="!sessionService.loggedIn">
-              To participate, <strong><a [routerLink]="['/home']" (click)="openLoginDialog()">login</a></strong> to your volunteer account.
-            </div>
           </div>
 
-          <ng-container *ngIf="sessionService.loggedIn">
-            <p class="donation-hub-signup-instructions">
-              Sign up to be a drop-off hub or a sandwich maker or both:
-            </p>
-            <p>
-              <strong><a [routerLink]="['/donation-hub', 'create']">Register Drop-Off Hub</a></strong><br>
-              Use your home as a donation drop-off hub for a specified time period on a Saturday.
-              Volunteers will pledge donations for drop-off at your residence.
-              After the time period, the lunches are to be transported to St. Luke's Mission for Mercy.
-            </p>
-            <p>
-              <strong><a [routerLink]="['/donation-hub', 'list']">Pledge Donation</a></strong><br>
-              Volunteers make bagged sandwich lunches consisting of a sandwich, a piece of fruit, and a snack.
-              The lunches are to be dropped-off at designated "drop-off hubs".
-            </p>
-          </ng-container>
+          <p>
+            <strong><a [routerLink]="['/donation-hub', 'create']">Register Drop-Off Hub</a></strong><br>
+            Use your home as a donation drop-off hub for a specified time period on a Saturday.
+            Volunteers will pledge donations for drop-off at your residence.
+            After the time period, the lunches are to be transported to St. Luke's Mission for Mercy.
+          </p>
+          <p>
+            <strong><a [routerLink]="['/donation-hub', 'list']">Pledge Donation</a></strong><br>
+            Volunteers make bagged sandwich lunches consisting of a sandwich, a piece of fruit, and a snack.
+            The lunches are to be dropped-off at designated "drop-off hubs".
+          </p>
+          <p class="sandwich-army-view-more">
+            <strong><a [routerLink]="['/donation-hub', 'portal']"><mat-icon>info</mat-icon>View more info</a></strong>
+          </p>
         </mat-card-content>
       </mat-card>
 
@@ -93,7 +85,12 @@
 
   <div class="side-content">
     <span class="d-none d-lg-inline">
-      <ng-container [ngTemplateOutlet]="loginSignupTmpl"></ng-container>
+      <mat-card *ngIf="!sessionService.loggedIn">
+        <mat-card-content>
+          <button class="login-signup" mat-raised-button type="button" color="primary" (click)="openLoginDialog()">Login</button>
+          <a routerLink="/signup"><button class="login-signup" mat-raised-button type="button" color="primary">Signup</button></a>
+        </mat-card-content>
+      </mat-card>
     </span>
 
     <span class="d-none d-lg-inline">
@@ -118,15 +115,6 @@
     <foodweb-general-stats-card></foodweb-general-stats-card>
   </div>
 </div>
-
-<ng-template #loginSignupTmpl>
-  <mat-card *ngIf="!sessionService.loggedIn">
-      <mat-card-content>
-        <button class="login-signup" mat-raised-button type="button" color="primary" (click)="openLoginDialog()">Login</button>
-        <a routerLink="/signup"><button class="login-signup" mat-raised-button type="button" color="primary">Signup</button></a>
-      </mat-card-content>
-    </mat-card>
-</ng-template>
 
 <ng-template #traningSignupTmpl>
   <foodweb-event-card [featuredEvent]="featuredEvent" [linkToEventsPage]="true"></foodweb-event-card>
