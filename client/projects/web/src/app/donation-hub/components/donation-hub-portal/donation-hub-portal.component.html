@@ -1,0 +1,70 @@
+<div class="donation-hub-portal page">
+  <div class="page-title">FoodWeb Sandwich Army</div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <mat-card class="drop-off-hub-info-card">
+        <mat-card-title>
+          <mat-icon>device_hub</mat-icon>
+          Drop-Off Hub
+        </mat-card-title>
+        <mat-card-content>
+          <p>
+            Every <strong>Saturday</strong>, we rely on volunteers to serve as donation drop-off hubs within the Sandwich Army.
+          </p>
+          <p>
+            You can <strong><a [routerLink]="['/donation-hub', 'create']">register</a></strong> your home as a drop-off hub,
+            and other volunteers will pledge donations to it.
+          </p>
+          <p>
+            You can easily monitor expected donation drop-offs &amp; edit or remove
+            <strong><a [routerLink]="['/donation-hub', 'list', 'my']">your Donation Drop-Off Hubs</a></strong>.
+          </p>
+          <p>
+            You will be sent <strong>reminder emails</strong> 24 hours and 1 hour before your hub's drop-off window.
+          </p>
+          <p>
+            After the drop-off window ends, you are expected to transport all sandwiches to the <strong>Good Shepherd House</strong>,
+            which is located at <strong>St. Luke's Mission for Mercy</strong>.
+          </p>
+          <p>
+            After delivering the sandwiches, you should notify <strong>Gino</strong> about the delivery at
+            <strong><a href="tel:716-830-1413">(716) 830-1413</a></strong>.
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="col-md-6">
+      <mat-card class="donation-pledge-info-card">
+        <mat-card-title>
+          <fa-icon [icon]="faHandHoldingHeart"></fa-icon>
+          Donation Pledge
+        </mat-card-title>
+        <mat-card-content>
+          <p>
+            You can pledge donations to our <strong><a [routerLink]="['/donation-hub', 'list']">Donation Drop-Off Hubs</a></strong>,
+            which should be available each <strong>Saturday</strong>.
+          </p>
+          <p>
+            You can easily view &amp; cancel <strong><a [routerLink]="['/donation-hub', 'pledge', 'list', 'my']">your Donation Pledges</a></strong>
+            whenever you wish.
+          </p>
+          <p>
+            You are expected to prepare and package all sandwiches before the drop-off window for your chosen hub.
+          </p>
+          <p>
+            You will be sent <strong>reminder emails</strong> 24 hours and 1 hour before your donation's drop-off window.
+          </p>
+          <p>
+            Please follow any instructions provided by the owner of the donation drop-off hub.
+          </p>
+          <p>
+            Feel free to contact the drop-off hub if you have any questions.
+            The hub's contact information can be seen when viewing <strong><a [routerLink]="['/donation-hub', 'pledge', 'list', 'my']">your Donation Pledges</a></strong>.
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

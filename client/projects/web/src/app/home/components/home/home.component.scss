@@ -14,7 +14,7 @@ $side-container-max-width: 270px;
       width: $side-container-max-width;
       float: right;
     }
-    
+
     .login-signup {
       display: inline-block;
       margin: 2% 0%;
@@ -44,6 +44,13 @@ $side-container-max-width: 270px;
 
   .donation-hub-signup-instructions {
     margin-bottom: 8px;
+  }
+
+  .sandwich-army-view-more {
+    .mat-icon {
+      vertical-align: -7px;
+      margin-right: 0.2em;
+    }
   }
 
   .stats-quote {
