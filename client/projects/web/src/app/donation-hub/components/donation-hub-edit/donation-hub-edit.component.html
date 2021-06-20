@@ -1,12 +1,12 @@
 <form [formGroup]="formGroup" class="donation-hub-registration-form page" (submit)="save()">
 
-  <div *ngIf="!donationHubNotFound; else notFoundTmpl" class="page-title block-label">
-    Donation Hub Edit
+  <div *ngIf="!donationHubNotFound; else notFoundTmpl" class="page-title">
+    {{ pageTitleService.title }}
   </div>
 
   <ng-template #notFoundTmpl>
-    <div class="page-title block-label">
-      <strong>Donation Hub not found</strong>
+    <div class="not-found">
+      Donation Hub not found
     </div>
   </ng-template>
 

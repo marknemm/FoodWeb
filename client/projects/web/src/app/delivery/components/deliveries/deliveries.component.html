@@ -1,10 +1,10 @@
 <foodweb-filtered-list class="deliveries">
 
-  <foodweb-filtered-list-title>{{ myDeliveries ? 'My Deliveries' : 'Deliveries' }}</foodweb-filtered-list-title>
+  <foodweb-filtered-list-title>{{ pageTitleService.title }}</foodweb-filtered-list-title>
 
   <foodweb-filtered-list-toolbar listItemsLabel="Deliveries">
     <foodweb-search-bar
-      placeholder="Search Deliveries..."
+      [placeholder]="searchPlaceholder"
       [formControl]="filtersForm.get('fullTextQuery')"
       (search)="updateFilterQueryParams(filtersForm.value)"
     ></foodweb-search-bar>

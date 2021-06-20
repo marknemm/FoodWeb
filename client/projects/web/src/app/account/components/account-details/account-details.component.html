@@ -1,170 +1,172 @@
-<form [formGroup]="formGroup" *ngIf="originalAccount" class="account-form page container">
-  <div class="account-main align-center">
-    <div class="page-title block-label">
-      <foodweb-username *ngIf="hasAccountOwnership" formControlName="username"></foodweb-username>
-      <ng-container *ngIf="!hasAccountOwnership">
-        <div *ngIf="originalAccount.organization">
-          {{ originalAccount.organization.name }}
-        </div>
-      </ng-container>
-    </div>
-    <div class="profile-img-container">
-      <foodweb-profile-img formControlName="profileImg" [editable]="hasAccountOwnership" [size]="150"></foodweb-profile-img>
-    </div>
+<div class="account-detials page">
+  <div *ngIf="accountNotFound" class="not-found">
+    Account not found
   </div>
 
-  <div class="account-type">
-    <foodweb-account-type formControlName="accountType"></foodweb-account-type>
-  </div>
-
-  <mat-divider></mat-divider>
-
-  <p *ngIf="hasAccountOwnership && originalAccount.verified === false" class="account-not-verified">
-    Account Not Verified:
-    <button mat-button type="button" (click)="signupVerificationService.resendVerificationEmail()">Resend Verification Email</button>
-  </p>
-
-  <mat-accordion [multi]="true" displayMode="flat" foodwebFragmentAccordian defaultPanelId="primary">
-    <mat-expansion-panel id="primary">
-      <mat-expansion-panel-header>
-        Primary
-      </mat-expansion-panel-header>
-      <div class="row account-section-content">
-        <div class="col-xl-6">
-          <mat-card *ngIf="accountType !== 'Volunteer'">
-            <foodweb-edit-save-button #organizationSaveEdit
-              [hidden]="!hasAccountOwnership"
-              [control]="formGroup.get('organization')"
-              (save)="saveAccountFields(['organization'], $event)">
-            </foodweb-edit-save-button>
-            <mat-card-title class="block-label">Organization</mat-card-title>
-            <mat-card-content>
-              <foodweb-organization formGroupName="organization" [accountType]="accountType" [editable]="organizationSaveEdit.editable"></foodweb-organization>
-              <div *ngIf="originalAccount" class="see-donations-link">
-                <a *ngIf="!hasAccountOwnership" [routerLink]="['/donation/list']" [queryParams]="seeDonationsLinkParams">See Donations</a>
-                <a *ngIf="hasAccountOwnership" [routerLink]="['/donation/list/my']">See My Donations</a>
-              </div>
-            </mat-card-content>
-          </mat-card>
-
-          <mat-card *ngIf="accountType === 'Volunteer'">
-            <foodweb-edit-save-button #volunteerSaveEdit
-              [hidden]="!hasAccountOwnership"
-              [control]="formGroup.get('volunteer')"
-              (save)="saveAccountFields(['volunteer'], $event)">
-            </foodweb-edit-save-button>
-            <mat-card-title class="block-label">Volunteer Info</mat-card-title>
-            <mat-card-content>
-              <foodweb-volunteer formGroupName="volunteer" [editable]="volunteerSaveEdit.editable"></foodweb-volunteer>
-              <div *ngIf="hasAccountOwnership && originalAccount" class="see-donations-link">
-                <a [routerLink]="['/delivery/list/my']">See My Deliveries</a>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-        <div class="col-xl-6">
-          <mat-card>
-            <foodweb-edit-save-button #contactInfoSaveEdit
-              [hidden]="!hasAccountOwnership"
-              [control]="formGroup.get('contactInfo')"
-              (save)="saveAccountFields(contactInfoFields, $event)">
-            </foodweb-edit-save-button>
-            <mat-card-title class="block-label">Contact Info</mat-card-title>
-            <mat-card-content>
-              <foodweb-contact-info
-                formGroupName="contactInfo"
-                [editable]="contactInfoSaveEdit.editable">
-              </foodweb-contact-info>
-            </mat-card-content>
-          </mat-card>
-        </div>
+  <form [formGroup]="formGroup" *ngIf="originalAccount" class="account-form">
+    <div class="account-main align-center">
+      <div class="page-title keep-mobile">
+        <foodweb-username *ngIf="hasAccountOwnership" formControlName="username"></foodweb-username>
+        <ng-container *ngIf="!hasAccountOwnership">
+          <div *ngIf="originalAccount.organization">
+            {{ originalAccount.organization.name }}
+          </div>
+        </ng-container>
       </div>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel id="availability" *ngIf="accountType && accountType !== 'Donor'">
-      <mat-expansion-panel-header>
-        Availability
-      </mat-expansion-panel-header>
-      <mat-divider></mat-divider>
-      <div class="row account-section-content">
-        <div class="col-sm-12">
-          <mat-card class="operation-hours-card" [ngClass]="{ 'full-width': operationHoursSaveEdit.editable }">
-            <foodweb-edit-save-button #operationHoursSaveEdit
-              [hidden]="!hasAccountOwnership"
-              [control]="formGroup.get('operationHours')"
-              (save)="saveAccountFields(['operationHours'], $event)"
-            ></foodweb-edit-save-button>
-            <mat-card-title class="block-label">
-              Delivery Availability
-            </mat-card-title>
-            <mat-card-subtitle *ngIf="operationHoursSaveEdit.editable">
-              <span>{{ operationHoursDescription }}</span>
-            </mat-card-subtitle>
-            <mat-card-content>
-              <foodweb-operation-hours-info
-                formGroupName="operationHours"
-                [editable]="operationHoursSaveEdit.editable"
-              ></foodweb-operation-hours-info>
-            </mat-card-content>
-          </mat-card>
-        </div>
+      <div class="profile-img-container">
+        <foodweb-profile-img formControlName="profileImg" [editable]="hasAccountOwnership" [size]="150"></foodweb-profile-img>
       </div>
-    </mat-expansion-panel>
+    </div>
 
-    <mat-expansion-panel *ngIf="hasAccountOwnership" id="notifications">
-      <mat-expansion-panel-header>
-        Notifications
-      </mat-expansion-panel-header>
-      <mat-divider></mat-divider>
-      <div class="row account-section-content">
-        <div class="col-sm-12">
-          <mat-card class="notification-settings-card">
-            <foodweb-edit-save-button #notificationSettingsSaveEdit
-              [hidden]="!hasAccountOwnership"
-              [control]="formGroup.get('notificationSettings')"
-              (save)="saveAccountFields(notificationFields, $event)"
-            ></foodweb-edit-save-button>
-            <mat-card-title class="block-label">
-              Notification Settings
-            </mat-card-title>
-            <mat-card-content>
-              <foodweb-notifications-settings
-                [accountType]="originalAccount.accountType"
-                [editable]="notificationSettingsSaveEdit.editable"
-                [formGroup]="formGroup.get('notificationSettings')"
-                [notificationSettings]="originalAccount.contactInfo"
-              ></foodweb-notifications-settings>
-            </mat-card-content>
-          </mat-card>
+    <div class="account-type">
+      <foodweb-account-type formControlName="accountType"></foodweb-account-type>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <p *ngIf="hasAccountOwnership && originalAccount.verified === false" class="account-not-verified">
+      Account Not Verified:
+      <button mat-button type="button" (click)="signupVerificationService.resendVerificationEmail()">Resend Verification Email</button>
+    </p>
+
+    <mat-accordion [multi]="true" displayMode="flat" foodwebFragmentAccordian defaultPanelId="primary">
+      <mat-expansion-panel id="primary">
+        <mat-expansion-panel-header>
+          Primary
+        </mat-expansion-panel-header>
+        <div class="row account-section-content">
+          <div class="col-xl-6">
+            <mat-card *ngIf="accountType !== 'Volunteer'">
+              <foodweb-edit-save-button #organizationSaveEdit
+                [hidden]="!hasAccountOwnership"
+                [control]="formGroup.get('organization')"
+                (save)="saveAccountFields(['organization'], $event)">
+              </foodweb-edit-save-button>
+              <mat-card-title class="block-label">Organization</mat-card-title>
+              <mat-card-content>
+                <foodweb-organization formGroupName="organization" [accountType]="accountType" [editable]="organizationSaveEdit.editable"></foodweb-organization>
+                <div *ngIf="originalAccount" class="see-donations-link">
+                  <a *ngIf="!hasAccountOwnership" [routerLink]="['/donation/list']" [queryParams]="seeDonationsLinkParams">See Donations</a>
+                  <a *ngIf="hasAccountOwnership" [routerLink]="['/donation/list/my']">See My Donations</a>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <mat-card *ngIf="accountType === 'Volunteer'">
+              <foodweb-edit-save-button #volunteerSaveEdit
+                [hidden]="!hasAccountOwnership"
+                [control]="formGroup.get('volunteer')"
+                (save)="saveAccountFields(['volunteer'], $event)">
+              </foodweb-edit-save-button>
+              <mat-card-title class="block-label">Volunteer Info</mat-card-title>
+              <mat-card-content>
+                <foodweb-volunteer formGroupName="volunteer" [editable]="volunteerSaveEdit.editable"></foodweb-volunteer>
+                <div *ngIf="hasAccountOwnership && originalAccount" class="see-donations-link">
+                  <a [routerLink]="['/delivery/list/my']">See My Deliveries</a>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div class="col-xl-6">
+            <mat-card>
+              <foodweb-edit-save-button #contactInfoSaveEdit
+                [hidden]="!hasAccountOwnership"
+                [control]="formGroup.get('contactInfo')"
+                (save)="saveAccountFields(contactInfoFields, $event)">
+              </foodweb-edit-save-button>
+              <mat-card-title class="block-label">Contact Info</mat-card-title>
+              <mat-card-content>
+                <foodweb-contact-info
+                  formGroupName="contactInfo"
+                  [editable]="contactInfoSaveEdit.editable">
+                </foodweb-contact-info>
+              </mat-card-content>
+            </mat-card>
+          </div>
         </div>
-      </div>
-    </mat-expansion-panel>
+      </mat-expansion-panel>
 
-    <mat-expansion-panel id="password" *ngIf="hasAccountOwnership">
-      <mat-expansion-panel-header>
-        Password
-      </mat-expansion-panel-header>
-      <mat-divider></mat-divider>
-      <div class="row account-section-content">
-        <div class="col-sm-12">
-          <mat-card class="password-card">
-            <foodweb-edit-save-button #passwordSaveEdit
-              [editable]="true"
-              [control]="formGroup.get('password')"
-              [noCancelEdit]="true"
-              (save)="savePassword($event)">
-            </foodweb-edit-save-button>
-            <mat-card-title class="block-label">Change Password</mat-card-title>
-            <mat-card-content>
-              <foodweb-password formGroupName="password" [editable]="passwordSaveEdit.editable"></foodweb-password>
-            </mat-card-content>
-          </mat-card>
+      <mat-expansion-panel id="availability" *ngIf="accountType && accountType !== 'Donor'">
+        <mat-expansion-panel-header>
+          Availability
+        </mat-expansion-panel-header>
+        <mat-divider></mat-divider>
+        <div class="row account-section-content">
+          <div class="col-sm-12">
+            <mat-card class="operation-hours-card" [ngClass]="{ 'full-width': operationHoursSaveEdit.editable }">
+              <foodweb-edit-save-button #operationHoursSaveEdit
+                [hidden]="!hasAccountOwnership"
+                [control]="formGroup.get('operationHours')"
+                (save)="saveAccountFields(['operationHours'], $event)"
+              ></foodweb-edit-save-button>
+              <mat-card-title class="block-label">
+                Delivery Availability
+              </mat-card-title>
+              <mat-card-subtitle *ngIf="operationHoursSaveEdit.editable">
+                <span>{{ operationHoursDescription }}</span>
+              </mat-card-subtitle>
+              <mat-card-content>
+                <foodweb-operation-hours-info
+                  formGroupName="operationHours"
+                  [editable]="operationHoursSaveEdit.editable"
+                ></foodweb-operation-hours-info>
+              </mat-card-content>
+            </mat-card>
+          </div>
         </div>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
-</form>
+      </mat-expansion-panel>
 
-<div *ngIf="accountNotFound" class="account-not-found disclaimer">
-  Account not found
+      <mat-expansion-panel *ngIf="hasAccountOwnership" id="notifications">
+        <mat-expansion-panel-header>
+          Notifications
+        </mat-expansion-panel-header>
+        <mat-divider></mat-divider>
+        <div class="row account-section-content">
+          <div class="col-sm-12">
+            <mat-card class="notification-settings-card">
+              <foodweb-edit-save-button #notificationSettingsSaveEdit
+                [hidden]="!hasAccountOwnership"
+                [control]="formGroup.get('notificationSettings')"
+                (save)="saveAccountFields(notificationFields, $event)"
+              ></foodweb-edit-save-button>
+              <mat-card-title class="block-label">
+                Notification Settings
+              </mat-card-title>
+              <mat-card-content>
+                <foodweb-notifications-settings
+                  [accountType]="originalAccount.accountType"
+                  [editable]="notificationSettingsSaveEdit.editable"
+                  [formGroup]="formGroup.get('notificationSettings')"
+                  [notificationSettings]="originalAccount.contactInfo"
+                ></foodweb-notifications-settings>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel id="password" *ngIf="hasAccountOwnership">
+        <mat-expansion-panel-header>
+          Password
+        </mat-expansion-panel-header>
+        <mat-divider></mat-divider>
+        <div class="row account-section-content">
+          <div class="col-sm-12">
+            <mat-card class="password-card">
+              <foodweb-edit-save-button #passwordSaveEdit
+                [editable]="true"
+                [control]="formGroup.get('password')"
+                [noCancelEdit]="true"
+                (save)="savePassword($event)">
+              </foodweb-edit-save-button>
+              <mat-card-title class="block-label">Change Password</mat-card-title>
+              <mat-card-content>
+                <foodweb-password formGroupName="password" [editable]="passwordSaveEdit.editable"></foodweb-password>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
 </div>

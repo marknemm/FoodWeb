@@ -3,7 +3,7 @@ import { FeaturedEvent } from '~shared';
 import { Convert } from '~web/component-decorators';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { EventRegistrationForm } from '~web/event/forms/event-registration.form';
-import { RegisterEventService } from '~web/event/services/register-event/register-event.service';
+import { EventRegistrationService } from '~web/event/services/event-registration/event-registration.service';
 import { MapAppLinkService } from '~web/map/services/map-app-link/map-app-link.service';
 import { SessionService } from '~web/session/services/session/session.service';
 
@@ -11,11 +11,11 @@ import { SessionService } from '~web/session/services/session/session.service';
   selector: 'foodweb-event-card',
   templateUrl: './event-card.component.html',
   styleUrls: ['./event-card.component.scss'],
-  providers: [RegisterEventService]
+  providers: [EventRegistrationService]
 })
 export class EventCardComponent implements OnInit, OnChanges {
 
-  @Input() featuredEvent: FeaturedEvent;
+  @Input() event: FeaturedEvent;
   @Convert()
   @Input() linkToEventsPage: boolean = false;
 
@@ -27,7 +27,7 @@ export class EventCardComponent implements OnInit, OnChanges {
   private _signupPanelShouldGlow = false;
 
   constructor(
-    public eventRegistrationService: RegisterEventService,
+    public eventRegistrationService: EventRegistrationService,
     public window: Window,
     private _dateTimeService: DateTimeService,
     private _mapAppLinkService: MapAppLinkService,
@@ -55,14 +55,14 @@ export class EventCardComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.featuredEvent && this.featuredEvent) {
+    if (changes.event && this.event) {
       setTimeout(() => {
-        this._signupPanelShouldGlow = (localStorage.getItem(`foodweb-event-selected-${this.featuredEvent.showUntil?.getTime()}`) !== 'true');
-        const fullAddress = `${this.featuredEvent.streetAddress}, ${this.featuredEvent.city} `
-          + `${this.featuredEvent.stateProvince}, ${this.featuredEvent.postalCode}`;
+        this._signupPanelShouldGlow = (localStorage.getItem(`foodweb-event-selected-${this.event.showUntil?.getTime()}`) !== 'true');
+        const fullAddress = `${this.event.streetAddress}, ${this.event.city} `
+          + `${this.event.stateProvince}, ${this.event.postalCode}`;
         this._directionsHref = this._mapAppLinkService.genDirectionHref(['My+Location', fullAddress]);
-        this._endTime = (this.featuredEvent.durationMins)
-          ? this._dateTimeService.addMinutes(this.featuredEvent.date, this.featuredEvent.durationMins)
+        this._endTime = (this.event.durationMins)
+          ? this._dateTimeService.addMinutes(this.event.date, this.event.durationMins)
           : null;
       });
     }
@@ -70,12 +70,12 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   onSignupPanelExpanded(): void {
     this._signupPanelShouldGlow = false;
-    localStorage.setItem(`foodweb-event-selected-${this.featuredEvent.showUntil?.getTime()}`, 'true');
+    localStorage.setItem(`foodweb-event-selected-${this.event.showUntil?.getTime()}`, 'true');
   }
 
   submitSignup(): void {
     if (this.formGroup.valid) {
-      this.eventRegistrationService.register(this.featuredEvent, this.formGroup.value).subscribe(
+      this.eventRegistrationService.register(this.event, this.formGroup.value).subscribe(
         () => this._signupComplete = true
       );
     }

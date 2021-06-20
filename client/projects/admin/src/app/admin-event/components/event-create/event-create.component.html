@@ -1,0 +1,19 @@
+<div class="create-event page">
+  <div class="row">
+    <div class="col-md-6" [hidden]="eventCreationComplete">
+      <foodweb-admin-event-form #formComponent
+        formTitle="Create Event"
+        [event]="savedEvent"
+        [excludeDelete]="true"
+        (save)="createEvent($event)"
+      ></foodweb-admin-event-form>
+    </div>
+    <div class="event-demo col-md-6">
+      <foodweb-admin-event-card
+        [event]="formComponent.eventForm.value"
+        [hideActions]="!eventCreationComplete"
+        [hideDelete]="true"
+      ></foodweb-admin-event-card>
+    </div>
+  </div>
+</div>

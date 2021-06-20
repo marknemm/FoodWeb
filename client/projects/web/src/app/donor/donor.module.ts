@@ -10,13 +10,13 @@ import { DateTimeModule } from '~web/date-time/date-time.module';
 import { DonationSharedModule } from '~web/donation-shared/donation-shared.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { DonateComponent } from './components/donate/donate.component';
-import { EditDonationComponent } from './components/edit-donation/edit-donation.component';
+import { DonationEditComponent } from './components/donation-edit/donation-edit.component';
 import { DonorRoutingModule } from './donor-routing.module';
 
 @NgModule({
   declarations: [
     DonateComponent,
-    EditDonationComponent
+    DonationEditComponent
   ],
   imports: [
     DonorRoutingModule,

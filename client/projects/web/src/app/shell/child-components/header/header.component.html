@@ -1,8 +1,11 @@
 <header>
   <mat-toolbar color="primary" class="main-header-section">
-    <a [routerLink]="['/']" class="site-title">
+    <a [routerLink]="['/']" class="site-icon-title">
       <img [src]="siteIconUri" alt="{{ siteTitle }} Icon" class="site-icon">
-      <span>{{ siteTitle }}</span>
+      <h1 class="site-title" [ngClass]="{ 'with-sub': !!pageTitleService.title }">
+        <div class="main">{{ siteTitle }}</div>
+        <div class="sub" *ngIf="pageTitleService.title">{{ pageTitleService.title }}</div>
+      </h1>
     </a>
 
     <button mat-button class="sidenav-toggle-button" (click)="leftNavService.toggle()" [attr.aria-expanded]="leftNavService.opened">

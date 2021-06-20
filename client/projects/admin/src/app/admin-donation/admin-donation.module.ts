@@ -11,13 +11,13 @@ import { DonationRoutingModule } from '~web/donation/donation-routing.module';
 import { DonationModule } from '~web/donation/donation.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { AdminDonationRoutingModule } from './admin-donation-routing.module';
-import { AdminCreateDonationComponent } from './components/admin-create-donation/admin-create-donation.component';
-import { AdminEditDonationComponent } from './components/admin-edit-donation/admin-edit-donation.component';
+import { AdminDonationCreateComponent } from './components/admin-donation-create/admin-donation-create.component';
+import { AdminDonationEditComponent } from './components/admin-donation-edit/admin-donation-edit.component';
 
 @NgModule({
   declarations: [
-    AdminCreateDonationComponent,
-    AdminEditDonationComponent,
+    AdminDonationCreateComponent,
+    AdminDonationEditComponent,
   ],
   imports: [
     AdminDonationRoutingModule,

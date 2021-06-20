@@ -1,16 +1,7 @@
 @import "constants.scss";
 
-.list-empty-content {
-  text-align: center;
-  font-size: 18px;
-  font-style: italic;
-  color: #888;
-
+.not-found {
   &:empty {
     display: none;
-  }
-
-  @media only screen and (max-width: $mat-mobile) {
-    font-size: 14px;
   }
 }

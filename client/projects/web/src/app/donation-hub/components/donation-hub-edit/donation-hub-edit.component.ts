@@ -8,6 +8,7 @@ import { DonationHubReadService } from '~web/donation-hub/services/donation-hub-
 import { DonationHubUpdateService } from '~web/donation-hub/services/donation-hub-update/donation-hub-update.service';
 import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class DonationHubEditComponent extends FormBaseComponent<DonationHubForm>
   private _originalDonationHub: DonationHub;
 
   constructor(
+    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _donationHubReadService: DonationHubReadService,
     private _donationHubUpdateService: DonationHubUpdateService,

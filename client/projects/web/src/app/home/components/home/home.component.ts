@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { FeaturedEvent, FeaturedEventsService } from '~web/event/services/featured-events/featured-events.service';
+import { FeaturedEvent, EventReadService } from '~web/event/services/event-read/event-read.service';
 import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
@@ -13,18 +13,18 @@ import { SessionService } from '~web/session/services/session/session.service';
 })
 export class HomeComponent implements OnInit {
 
-  private _featuredEvent: FeaturedEvent;
+  private _event: FeaturedEvent;
 
   constructor(
     public sessionService: SessionService,
     private _activatedRoute: ActivatedRoute,
     private _authService: AuthenticationService,
-    private _featuredEventsService: FeaturedEventsService,
+    private _eventReadService: EventReadService,
     private _matDialog: MatDialog,
   ) {}
 
-  get featuredEvent(): FeaturedEvent {
-    return this._featuredEvent;
+  get event(): FeaturedEvent {
+    return this._event;
   }
 
   get donationHubFeatureVisible(): boolean {
@@ -39,8 +39,8 @@ export class HomeComponent implements OnInit {
       }
       this.openLoginDialog();
     }
-    this._featuredEventsService.getNextFeaturedEvent().subscribe(
-      (featuredEvent: FeaturedEvent) => this._featuredEvent = featuredEvent
+    this._eventReadService.getNextEvent().subscribe(
+      (event: FeaturedEvent) => this._event = event
     );
   }
 

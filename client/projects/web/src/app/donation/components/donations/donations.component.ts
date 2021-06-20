@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DonationHelper, DonationReadRequest, ListResponse } from '~shared';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
@@ -20,11 +21,12 @@ export class DonationsComponent implements OnInit {
 
   constructor(
     public donationHelper: DonationHelper,
+    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _donationReadService: DonationReadService,
     private _router: Router,
     private _urlQueryService: UrlQueryService
-  ) {}
+  ) { }
 
   get donations(): Donation[] {
     return this._donations;

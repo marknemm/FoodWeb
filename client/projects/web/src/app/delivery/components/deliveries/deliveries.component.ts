@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DeliveryHelper, Donation, DonationHelper, DonationReadRequest, ListResponse } from '~shared';
 import { DeliveryReadService } from '~web/delivery/services/delivery-read/delivery-read.service';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
@@ -21,6 +22,7 @@ export class DeliveriesComponent implements OnInit {
   constructor(
     public deliveryHelper: DeliveryHelper,
     public donationHelper: DonationHelper,
+    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _deliveryReadService: DeliveryReadService,
     private _router: Router,
@@ -39,12 +41,21 @@ export class DeliveriesComponent implements OnInit {
     return (!this._deliveryReadService.loading && this.totalCount === 0);
   }
 
+  get searchPlaceholder(): string {
+    return (this._myDeliveries)
+      ? 'Search My Deliveries...'
+      : 'Search For Deliveries...';
+  }
+
   get totalCount(): number {
     return this._totalCount;
   }
 
   ngOnInit() {
     this._myDeliveries = this._router.url.indexOf('/my') >= 0;
+    this.pageTitleService.title = (this._myDeliveries)
+      ? 'My Deliveries'
+      : 'Schedule Deliveries';
     this._urlQueryService.listenQueryParamsChange<DonationReadRequest>(this._activatedRoute).subscribe(
       (request: DonationReadRequest) => this.handleQueryParamsChanged(request)
     );

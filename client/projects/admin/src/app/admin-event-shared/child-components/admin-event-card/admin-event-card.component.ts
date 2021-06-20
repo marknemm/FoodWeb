@@ -9,7 +9,7 @@ import { Convert } from '~web/component-decorators';
 })
 export class AdminEventCardComponent implements OnInit {
 
-  @Input() featuredEvent: FeaturedEvent;
+  @Input() event: FeaturedEvent;
   @Convert()
   @Input() hideActions = false;
   @Convert()

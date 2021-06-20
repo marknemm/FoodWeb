@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDrawerContent } from '@angular/material/sidenav';
+import { MatSidenavContent } from '@angular/material/sidenav';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class LeftNavService {
 
   private _opened = false;
   private _openedChanged = new Subject<boolean>();
-  private _drawerContent: MatDrawerContent;
+  private _sidenavContent: MatSidenavContent;
 
   constructor() {}
 
@@ -30,8 +30,8 @@ export class LeftNavService {
     return this._openedChanged.asObservable();
   }
 
-  initDrawerContent(drawerContent: MatDrawerContent): void {
-    this._drawerContent = drawerContent;
+  initSidenavContent(sidenavContent: MatSidenavContent): void {
+    this._sidenavContent = sidenavContent;
   }
 
   toggle(): void {
@@ -44,8 +44,8 @@ export class LeftNavService {
   }
 
   scrollContentToTop(scrollBehavior: ScrollBehavior = 'smooth'): void {
-    if (this._drawerContent) {
-      this._drawerContent.getElementRef().nativeElement.scrollTo({ top: 0, behavior: scrollBehavior });
+    if (this._sidenavContent) {
+      this._sidenavContent.getElementRef().nativeElement.scrollTo({ top: 0, behavior: scrollBehavior });
     }
   }
 

@@ -1,0 +1,15 @@
+<div class="edit-event page">
+  <div class="row">
+    <div class="col-md-6">
+      <foodweb-admin-event-form #formComponent
+        formTitle="Edit Event"
+        [event]="event"
+        (save)="saveEvent($event)"
+        (delete)="deleteEvent()"
+      ></foodweb-admin-event-form>
+    </div>
+    <div class="event-demo col-md-6">
+      <foodweb-admin-event-card [event]="formComponent.eventForm.value" [hideActions]="true"></foodweb-admin-event-card>
+    </div>
+  </div>
+</div>

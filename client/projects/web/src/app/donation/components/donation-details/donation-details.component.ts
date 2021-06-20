@@ -6,6 +6,7 @@ import { AccountHelper, DeliveryHelper, DonationHelper } from '~shared';
 import { DonationAction, DonationActionsService } from '~web/donation-shared/services/donation-actions/donation-actions.service';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
@@ -26,13 +27,14 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
     public accountHelper: AccountHelper,
     public donationHelper: DonationHelper,
     public deliveryHelper: DeliveryHelper,
+    public pageTitleService: PageTitleService,
     public sessionService: SessionService,
     private _activatedRoute: ActivatedRoute,
     private _donationActionsService: DonationActionsService,
     private _donationReadService: DonationReadService,
     private _router: Router,
     private _urlQueryService: UrlQueryService
-  ) {}
+  ) { }
 
   get donation(): Donation {
     return this._donation;
