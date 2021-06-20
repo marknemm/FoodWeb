@@ -11,7 +11,7 @@ import { PageProgressService } from '~web/shared/services/page-progress/page-pro
 @Injectable({
   providedIn: 'root'
 })
-export class DeleteFeaturedEventService {
+export class EventDeleteService {
 
   readonly url = `${environment.server}/featured-event`;
 

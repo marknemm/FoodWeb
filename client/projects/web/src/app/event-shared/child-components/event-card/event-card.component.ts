@@ -3,7 +3,7 @@ import { FeaturedEvent } from '~shared';
 import { Convert } from '~web/component-decorators';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { EventRegistrationForm } from '~web/event/forms/event-registration.form';
-import { RegisterEventService } from '~web/event/services/register-event/register-event.service';
+import { EventRegistrationService } from '~web/event/services/event-registration/event-registration.service';
 import { MapAppLinkService } from '~web/map/services/map-app-link/map-app-link.service';
 import { SessionService } from '~web/session/services/session/session.service';
 
@@ -11,7 +11,7 @@ import { SessionService } from '~web/session/services/session/session.service';
   selector: 'foodweb-event-card',
   templateUrl: './event-card.component.html',
   styleUrls: ['./event-card.component.scss'],
-  providers: [RegisterEventService]
+  providers: [EventRegistrationService]
 })
 export class EventCardComponent implements OnInit, OnChanges {
 
@@ -27,7 +27,7 @@ export class EventCardComponent implements OnInit, OnChanges {
   private _signupPanelShouldGlow = false;
 
   constructor(
-    public eventRegistrationService: RegisterEventService,
+    public eventRegistrationService: EventRegistrationService,
     public window: Window,
     private _dateTimeService: DateTimeService,
     private _mapAppLinkService: MapAppLinkService,

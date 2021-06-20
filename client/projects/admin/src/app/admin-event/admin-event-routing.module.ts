@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminEventsComponent } from './components/admin-events/admin-events.component';
-import { CreateFeaturedEventComponent } from './components/create-featured-event/create-featured-event.component';
-import { EditFeaturedEventComponent } from './components/edit-featured-event/edit-featured-event.component';
+import { EventCreateComponent } from './components/event-create/event-create.component';
+import { EventEditComponent } from './components/event-edit/event-edit.component';
 import { EventRegistrationsComponent } from './components/event-registrations/event-registrations.component';
 
 const routes: Routes = [
-  { path: 'create', component: CreateFeaturedEventComponent },
-  { path: 'edit/:id', component: EditFeaturedEventComponent },
+  { path: 'create', component: EventCreateComponent },
+  { path: 'edit/:id', component: EventEditComponent },
   { path: 'list', component: AdminEventsComponent },
   { path: 'registrations/:id', component: EventRegistrationsComponent }
 ];

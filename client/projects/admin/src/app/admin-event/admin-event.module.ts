@@ -12,18 +12,18 @@ import { EventModule } from '~web/event/event.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { TableModule } from '~web/table/table.module';
 import { AdminEventRoutingModule } from './admin-event-routing.module';
-import { FeaturedEventFormComponent } from './child-components/featured-event-form/featured-event-form.component';
+import { EventFormComponent } from './child-components/event-form/event-form.component';
 import { AdminEventsComponent } from './components/admin-events/admin-events.component';
-import { CreateFeaturedEventComponent } from './components/create-featured-event/create-featured-event.component';
-import { EditFeaturedEventComponent } from './components/edit-featured-event/edit-featured-event.component';
+import { EventCreateComponent } from './components/event-create/event-create.component';
+import { EventEditComponent } from './components/event-edit/event-edit.component';
 import { EventRegistrationsComponent } from './components/event-registrations/event-registrations.component';
 
 @NgModule({
   declarations: [
-    CreateFeaturedEventComponent,
-    EditFeaturedEventComponent,
+    EventCreateComponent,
+    EventEditComponent,
     EventRegistrationsComponent,
-    FeaturedEventFormComponent,
+    EventFormComponent,
     AdminEventsComponent,
   ],
   imports: [

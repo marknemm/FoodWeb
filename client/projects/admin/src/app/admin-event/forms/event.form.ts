@@ -4,7 +4,7 @@ import { FeaturedEvent } from '~shared';
 import { TFormGroup } from '~web/forms';
 export { FeaturedEvent };
 
-export class FeaturedEventForm extends TFormGroup<FeaturedEvent> {
+export class EventForm extends TFormGroup<FeaturedEvent> {
 
   /**
    * Ensures that the date-time component's error state updates when form submit is attempted.

@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { AdminEventsComponent } from './admin-events.component';
+import { EventFormComponent } from './event-form.component';
 
-describe('AdminEventsComponent', () => {
-  let component: AdminEventsComponent;
-  let fixture: ComponentFixture<AdminEventsComponent>;
+describe('EventFormComponent', () => {
+  let component: EventFormComponent;
+  let fixture: ComponentFixture<EventFormComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminEventsComponent ],
+      declarations: [ EventFormComponent ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AdminEventsComponent);
+    fixture = TestBed.createComponent(EventFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

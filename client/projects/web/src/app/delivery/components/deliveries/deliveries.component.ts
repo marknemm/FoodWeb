@@ -22,9 +22,9 @@ export class DeliveriesComponent implements OnInit {
   constructor(
     public deliveryHelper: DeliveryHelper,
     public donationHelper: DonationHelper,
+    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _deliveryReadService: DeliveryReadService,
-    private _pageTitleService: PageTitleService,
     private _router: Router,
     private _urlQueryService: UrlQueryService
   ) {}
@@ -53,7 +53,7 @@ export class DeliveriesComponent implements OnInit {
 
   ngOnInit() {
     this._myDeliveries = this._router.url.indexOf('/my') >= 0;
-    this._pageTitleService.title = (this._myDeliveries)
+    this.pageTitleService.title = (this._myDeliveries)
       ? 'My Deliveries'
       : 'Schedule Deliveries';
     this._urlQueryService.listenQueryParamsChange<DonationReadRequest>(this._activatedRoute).subscribe(
