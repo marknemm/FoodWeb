@@ -10,7 +10,7 @@ export { FeaturedEvent };
 @Injectable({
   providedIn: 'root'
 })
-export class FeaturedEventsService {
+export class EventReadService {
 
   readonly apiUrl = `${environment.server}/featured-event`;
 
@@ -32,9 +32,9 @@ export class FeaturedEventsService {
    * Gets the next (nearest) upcoming featured event.
    * @retun An observable the emits the next upcoming event. Emits null/undefined if one does not exist.
    */
-  getNextFeaturedEvent(): Observable<FeaturedEvent> {
+  getNextEvent(): Observable<FeaturedEvent> {
     const request: FeaturedEventRequest = { sortBy: 'date', sortOrder: 'ASC', page: 1, limit: 1 };
-    return this._getFeaturedEvents(request, false).pipe(
+    return this._getEvents(request, false).pipe(
       map((featuredEvents: FeaturedEvent[]) => featuredEvents[0])
     );
   }
@@ -44,8 +44,8 @@ export class FeaturedEventsService {
    * @param triggerPageProgress Whether or not to trigger page progress during load. Defaults to true.
    * @return An observable that emits a list of all of the upcoming featured events. Emits an empty array if there are none.
    */
-  getFeaturedEvents(triggerPageProgress = true): Observable<FeaturedEvent[]> {
-    return this._getFeaturedEvents(undefined, triggerPageProgress);
+  getEvents(triggerPageProgress = true): Observable<FeaturedEvent[]> {
+    return this._getEvents(undefined, triggerPageProgress);
   }
 
   /**
@@ -54,7 +54,7 @@ export class FeaturedEventsService {
    * @param triggerPageProgress Whether or not to trigger page progress during load.
    * @return An observable that emits a list of all of the upcoming featured events. Emits an empty array if there are none.
    */
-  private _getFeaturedEvents(request: FeaturedEventRequest = { sortBy: 'date', sortOrder: 'ASC' }, triggerPageProgress: boolean): Observable<FeaturedEvent[]> {
+  private _getEvents(request: FeaturedEventRequest = { sortBy: 'date', sortOrder: 'ASC' }, triggerPageProgress: boolean): Observable<FeaturedEvent[]> {
     const params = new HttpParams({ fromObject: <any>request });
     this._loading = true;
     if (triggerPageProgress) {

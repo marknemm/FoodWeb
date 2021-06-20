@@ -1,4 +1,4 @@
-<form [formGroup]="featuredEventForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
   <mat-card>
     <mat-card-title>{{ formTitle }}</mat-card-title>
     <mat-card-content>
@@ -14,7 +14,7 @@
             formControlName="date"
             [editable]="true"
             [inlineFields]="true"
-            [errorStateMatcher]="featuredEventForm.dateErrorStateMatcher"
+            [errorStateMatcher]="eventForm.dateErrorStateMatcher"
           ></foodweb-date-time>
         </div>
         <div class="col-sm-4">
@@ -42,14 +42,14 @@
         <div class="col-sm-3">
           <mat-form-field class="fill">
             <input matInput placeholder="Zip Code" formControlName="postalCode" type="text" required>
-            <mat-error *ngIf="featuredEventForm.get('postalCode').hasError('pattern')">
+            <mat-error *ngIf="eventForm.get('postalCode').hasError('pattern')">
               Not a valid postal code
             </mat-error>
           </mat-form-field>
         </div>
       </div>
-      <mat-slide-toggle [checked]="featuredEventForm.get('signupTitle').enabled" (change)="featuredEventForm.enableSignupFields($event.checked)">Has Registration</mat-slide-toggle>
-      <div *ngIf="featuredEventForm.get('signupTitle').enabled" class="signup-fields">
+      <mat-slide-toggle [checked]="eventForm.get('signupTitle').enabled" (change)="eventForm.enableSignupFields($event.checked)">Has Registration</mat-slide-toggle>
+      <div *ngIf="eventForm.get('signupTitle').enabled" class="signup-fields">
         <mat-form-field class="fill">
           <input matInput placeholder="Registration Title" formControlName="signupTitle" required>
         </mat-form-field>

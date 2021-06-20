@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FeaturedEvent, FeaturedEventsService } from '~web/event/services/featured-events/featured-events.service';
+import { FeaturedEvent, EventReadService } from '~web/event/services/event-read/event-read.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class EventsComponent implements OnInit {
 
   constructor(
     public pageTitleService: PageTitleService,
-    private _featuredEventsService: FeaturedEventsService
+    private _eventReadService: EventReadService
   ) {}
 
   get eventsNotFound(): boolean {
@@ -27,9 +27,9 @@ export class EventsComponent implements OnInit {
 
   ngOnInit() {
     this.pageTitleService.title = 'Featured Events';
-    this._featuredEventsService.getFeaturedEvents().subscribe(
-      (featuredEvents: FeaturedEvent[]) => {
-        this._events = featuredEvents;
+    this._eventReadService.getEvents().subscribe(
+      (events: FeaturedEvent[]) => {
+        this._events = events;
         this._eventsNotFound = (this.events.length === 0);
       }
     );

@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
@@ -12,7 +12,7 @@ export { FeaturedEvent };
 @Injectable({
   providedIn: 'root'
 })
-export class ReadFeaturedEventService {
+export class EventReadService {
 
   readonly url = `${environment.server}/featured-event`;
 
@@ -23,16 +23,16 @@ export class ReadFeaturedEventService {
     private _window: Window,
   ) {}
 
-  listenFeaturedEventQueryChange(activatedRoute: ActivatedRoute): Observable<FeaturedEvent> {
+  listenEventQueryChange(activatedRoute: ActivatedRoute): Observable<FeaturedEvent> {
     return activatedRoute.paramMap.pipe(
       switchMap((paramMap: ParamMap) => {
         const id: number = (paramMap.has('id') ? parseInt(paramMap.get('id'), 10) : undefined);
-        return this.findFeaturedEvent(id);
+        return this.findEvent(id);
       })
     );
   }
 
-  findFeaturedEvent(id: number): Observable<FeaturedEvent> {
+  findEvent(id: number): Observable<FeaturedEvent> {
     // Attempt to get featured event from window state history.
     if (this._window.history.state?.featuredEvent?.id === id) {
       return of(this._window.history.state.featuredEvent);

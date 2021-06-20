@@ -64,8 +64,10 @@ export class AccountsComponent implements OnInit {
     this.filtersForm.reset(request);
     this._accountReadService.getAccounts(request).subscribe((response: ListResponse<Account>) => {
       this._setPageTitle();
-      this._accounts = response.list;
-      this._totalCount = response.totalCount;
+      if (response) {
+        this._accounts = response.list;
+        this._totalCount = response.totalCount;
+      }
     });
   }
 

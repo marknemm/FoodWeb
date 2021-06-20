@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { DeleteFeaturedEventService } from '~admin/admin-event/services/delete-featured-event/delete-featured-event.service';
+import { EventDeleteService } from '~admin/admin-event/services/event-delete/event-delete.service';
 import { FeaturedEvent } from '~shared';
 import { EventsComponent } from '~web/event/components/events/events.component';
-import { FeaturedEventsService } from '~web/event/services/featured-events/featured-events.service';
+import { EventReadService } from '~web/event/services/event-read/event-read.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
@@ -13,15 +13,15 @@ import { PageTitleService } from '~web/shared/services/page-title/page-title.ser
 export class AdminEventsComponent extends EventsComponent {
 
   constructor(
-    featuredEventsService: FeaturedEventsService,
+    eventReadService: EventReadService,
     pageTitleService: PageTitleService,
-    private _deleteFeaturedEventService: DeleteFeaturedEventService
+    private _eventDelete: EventDeleteService
   ) {
-    super(pageTitleService, featuredEventsService);
+    super(pageTitleService, eventReadService);
   }
 
   deleteEvent(event: FeaturedEvent, idx: number): void {
-    this._deleteFeaturedEventService.deleteEvent(event).subscribe(
+    this._eventDelete.deleteEvent(event).subscribe(
       () => this.events.splice(idx, 1)
     );
   }

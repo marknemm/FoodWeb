@@ -9,7 +9,7 @@ import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.s
 @Injectable({
   providedIn: 'root'
 })
-export class RegisterEventService {
+export class EventRegistrationService {
 
   readonly url = `${environment.server}/featured-event/registration`;
 
