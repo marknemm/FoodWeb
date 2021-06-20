@@ -46,7 +46,7 @@ export class PageTitleService {
         ? `${word.slice(0, word.length - 1)}ies`
         : (word.lastIndexOf('s') === word.length - 1)
           ? `${word.slice(0, word.length - 1)}es`
-          : `${word}s`
+          : `${word}s`;
     }
     return word;
   }

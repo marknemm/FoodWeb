@@ -1,46 +1,40 @@
 @import "./constants.scss";
 
 .page {
-  position: relative;
+  position  : relative;
   box-sizing: border-box;
-  padding: $page-vert-pad $page-horz-pad;
+  padding   : $page-vert-pad $page-horz-pad;
 
   &:not(.container) {
-    max-width: 1140px;
-    margin-left: auto;
+    max-width   : 1140px;
+    margin-left : auto;
     margin-right: auto;
 
     @media only screen and (max-width: $mat-mobile) {
-      padding-left: $page-horz-pad-mobile;
+      padding-left : $page-horz-pad-mobile;
       padding-right: $page-horz-pad-mobile;
+    }
+  }
+
+  .page-title {
+    font         : 600 28px Avenir;
+    margin-bottom: 15px;
+    text-align   : center;
+    color        : $accent;
+
+    @media only screen and (max-width: $md) {
+      &:not(.keep-mobile) {
+        display: none;
+      }
+
+      font-size: 24px;
     }
   }
 }
 
-.page-title {
-  font: 600 28px Avenir;
-  margin-bottom: 15px;
-  text-align: center;
-  color: $accent;
-
-  @media only screen and (max-width: $md) {
-    font-size: 24px;
-  }
-
-  @media only screen and (max-width: $sm) {
-    font-size: 20px;
-  }
-}
-
-.page .page-title {
-  @media only screen and (max-width: $sm) {
-    margin-top: -8px;
-  }
-}
-
 h2.section-title {
-  font-size: 24px;
-  color: $accent;
+  font-size    : 24px;
+  color        : $accent;
   margin-bottom: 15px;
 
   @media only screen and (max-width: $md) {

@@ -11,11 +11,11 @@ import { PageProgressService } from '~web/shared/services/page-progress/page-pro
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
-  selector: 'foodweb-admin-edit-donation',
-  templateUrl: './admin-edit-donation.component.html',
-  styleUrls: ['./admin-edit-donation.component.scss'],
+  selector: 'foodweb-admin-donation-edit',
+  templateUrl: './admin-donation-edit.component.html',
+  styleUrls: ['./admin-donation-edit.component.scss'],
 })
-export class AdminEditDonationComponent implements OnInit, OnDestroy {
+export class AdminDonationEditComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject();
   private _donationDetailsUrl = '';

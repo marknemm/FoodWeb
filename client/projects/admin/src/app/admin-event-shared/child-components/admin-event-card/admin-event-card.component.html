@@ -1,4 +1,4 @@
-<foodweb-event-card [featuredEvent]="featuredEvent">
+<foodweb-event-card [event]="event">
   <mat-card-actions *ngIf="!hideActions">
     <div class="align-right">
       <button mat-button *ngIf="!hideDelete"
@@ -9,10 +9,10 @@
         confirmTitle="Confirm Delete"
         confirmMessage="Are you sure you want to permanently delete the event?"
       >Delete</button>
-      <a *ngIf="!hideEdit" class="edit-link" routerLink="/event/edit/{{ featuredEvent.id }}" [state]="{ featuredEvent: featuredEvent }">
+      <a *ngIf="!hideEdit" class="edit-link" routerLink="/event/edit/{{ event.id }}" [state]="{ event: event }">
         <button mat-raised-button type="button" color="primary">Edit</button>
       </a>
-      <a *ngIf="!hideViewRegistrations" class="view-registrations-link" routerLink="/event/registrations/{{ featuredEvent.id }}">
+      <a *ngIf="!hideViewRegistrations" class="view-registrations-link" routerLink="/event/registrations/{{ event.id }}">
         <button mat-raised-button type="button" color="primary">View Registrations</button>
       </a>
     </div>

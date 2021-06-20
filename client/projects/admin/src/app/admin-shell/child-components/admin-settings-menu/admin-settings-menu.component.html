@@ -1,8 +1,6 @@
-<span *ngIf="sessionService.loggedIn" class="settings-button-container" matTooltip="Settings">
-  <button mat-icon-button type="button" class="settings-button" matTooltip="Settings" [matMenuTriggerFor]="settingsMenu">
-    <foodweb-profile-img [value]="sessionService.accountProfileImg" [size]="28"></foodweb-profile-img>
-  </button>
-</span>
+<button mat-icon-button type="button" class="settings-button" matTooltip="Settings" [matMenuTriggerFor]="settingsMenu" *ngIf="sessionService.loggedIn">
+  <foodweb-profile-img [value]="sessionService.accountProfileImg" [size]="{ lg: 28, md: 23 }"></foodweb-profile-img>
+</button>
 
 <mat-menu #settingsMenu="matMenu" class="header-submenu">
   <mat-nav-list>

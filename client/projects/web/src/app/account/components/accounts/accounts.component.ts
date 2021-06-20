@@ -14,21 +14,28 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 export class AccountsComponent implements OnInit {
 
   protected _accounts: Account[] = [];
+  protected _accountType: AccountType;
   protected _totalCount = 0;
 
   readonly filtersForm = new AccountFiltersForm();
 
   constructor(
     public accountHelper: AccountHelper,
+    public pageTitleService: PageTitleService,
     protected _accountReadService: AccountReadService,
     protected _activatedRoute: ActivatedRoute,
-    protected _pageTitleService: PageTitleService,
     protected _router: Router,
     protected _urlQueryService: UrlQueryService
   ) {}
 
   get accounts(): Account[] {
     return this._accounts;
+  }
+
+  get searchPlaceholder(): string {
+    return (this._accountType)
+      ? `Search ${this._accountType}s...`
+      : 'Search Accounts...';
   }
 
   get noneFound(): boolean {
@@ -42,7 +49,10 @@ export class AccountsComponent implements OnInit {
   ngOnInit() {
     this._setPageTitle();
     this._urlQueryService.listenQueryParamsChange<AccountReadRequest>(this._activatedRoute).subscribe(
-      (request: AccountReadRequest) => this.handleQueryParamsChanged(request)
+      (request: AccountReadRequest) => {
+        this._accountType = request.accountType;
+        this.handleQueryParamsChanged(request);
+      }
     );
   }
 
@@ -61,6 +71,6 @@ export class AccountsComponent implements OnInit {
 
   protected _setPageTitle(): void {
     const accountType = <AccountType>this._activatedRoute.snapshot.queryParamMap.get('accountType');
-    this._pageTitleService.title = (accountType ? `${accountType}s` : 'Accounts');
+    this.pageTitleService.title = (accountType ? `${accountType}s` : 'Accounts');
   }
 }

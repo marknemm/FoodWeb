@@ -33,10 +33,10 @@
     <h2 class="submenu-heading">Deliveries</h2>
     <a mat-list-item [routerLink]="['/delivery', 'list']"
        [queryParams]="donationHelper.findDonationsQueryParams(sessionService.account)" (click)="_onNavigate()">
-      <mat-icon>search</mat-icon> <span>Find Delivery</span>
+      <mat-icon>schedule</mat-icon> <span>Schedule Delivery</span>
     </a>
     <a mat-list-item [routerLink]="['/delivery', 'list', 'my']" (click)="_onNavigate()">
-      <mat-icon>my_location</mat-icon> <span>My Deliveries</span>
+      <mat-icon>place</mat-icon> <span>My Deliveries</span>
     </a>
   </ng-container>
 

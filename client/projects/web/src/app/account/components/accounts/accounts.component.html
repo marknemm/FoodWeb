@@ -1,8 +1,12 @@
 <foodweb-filtered-list class="accounts">
 
+  <foodweb-filtered-list-title>
+    {{ pageTitleService.title }}
+  </foodweb-filtered-list-title>
+
   <foodweb-filtered-list-toolbar listItemsLabel="Accounts">
     <foodweb-search-bar
-      placeholder="Search Accounts..."
+      [placeholder]="searchPlaceholder"
       [formControl]="filtersForm.get('fullTextQuery')"
       (search)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
     ></foodweb-search-bar>

@@ -6,6 +6,7 @@ import { DonationHubForm } from '~web/donation-hub/forms/donation-hub.form';
 import { DonationHubCreateService } from '~web/donation-hub/services/donation-hub-create/donation-hub-create.service';
 import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-donation-hub-create',
@@ -34,16 +35,19 @@ export class DonationHubCreateComponent extends FormBaseComponent<DonationHubFor
   ];
 
   constructor(
+    public pageTitleService: PageTitleService,
+    private _donationHubCreateService: DonationHubCreateService,
+    private _router: Router,
     dateTimeService: DateTimeService,
     formHelperService: FormHelperService,
     sessionService: SessionService,
-    private _donationHubCreateService: DonationHubCreateService,
-    private _router: Router
   ) {
     super(() => new DonationHubForm(dateTimeService, { account: sessionService.account }), formHelperService, true);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.pageTitleService.title = 'Register Donation Hub';
+  }
 
   register(): void {
     if (this.formGroup.checkValidity()) {

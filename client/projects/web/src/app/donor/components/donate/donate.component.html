@@ -1,6 +1,6 @@
 <form [formGroup]="formGroup" class="donate-form page" [ngClass]="{ 'submitted': !!savedDonation }" (submit)="donate()">
 
-  <div class="donate-form-title page-title block-label">
+  <div class="donate-form-title page-title">
     {{ !savedDonation ? 'Donation Form' : 'Thank-you For Your Donation' }}
   </div>
 

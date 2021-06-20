@@ -1,4 +1,4 @@
-<div *ngIf="directions" class="direction-steps-container">
+<div *ngIf="directions && directions.waypointSegments?.length" class="direction-steps-container">
   <table class="direction-steps-summary">
     <tr>
       <td>Duration:</td>

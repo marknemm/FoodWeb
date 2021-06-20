@@ -4,6 +4,7 @@ import { DonationHubPledge } from '~shared';
 import { DonationHubPledgeForm } from '~web/donation-hub/forms/donation-hub-pledge.form';
 import { DonationHubPledgeCreateService } from '~web/donation-hub/services/donation-hub-pledge-create/donation-hub-pledge-create.service';
 import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-donation-hub-pledge-create',
@@ -25,6 +26,7 @@ export class DonationHubPledgeCreateComponent extends FormBaseComponent<Donation
 
   constructor(
     formHelperService: FormHelperService,
+    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _pledgeCreateService: DonationHubPledgeCreateService,
     private _router: Router
@@ -32,7 +34,9 @@ export class DonationHubPledgeCreateComponent extends FormBaseComponent<Donation
     super(() => new DonationHubPledgeForm(), formHelperService, true);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.pageTitleService.title = 'Pledge Donation';
+  }
 
   donate(): void {
     if (this.formGroup.checkValidity()) {

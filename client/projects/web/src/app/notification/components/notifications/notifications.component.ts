@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ListResponse, Notification } from '~shared';
 import { Convert } from '~web/component-decorators';
 import { NotificationService } from '~web/notification/services/notification/notification.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-notifications',
@@ -18,6 +19,7 @@ export class NotificationsComponent implements OnInit {
   private _totalCount = 0;
 
   constructor(
+    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _notificationService: NotificationService
   ) {}
@@ -31,6 +33,7 @@ export class NotificationsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.pageTitleService.title = 'Notifications';
     // Only listen for query parameter changes if we are on notifications page (not a menu off of header).
     if (!this.notificationsMenu) {
       this._notificationService.listenNotificationsQueryChange(this._activatedRoute).subscribe((response: ListResponse<Notification>) => {

@@ -1,22 +1,21 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { DonationEditComponent } from './donation-edit.component';
 
-import { EditDonationComponent } from './edit-donation.component';
-
-describe('EditDonationComponent', () => {
-  let component: EditDonationComponent;
-  let fixture: ComponentFixture<EditDonationComponent>;
+describe('DonationEditComponent', () => {
+  let component: DonationEditComponent;
+  let fixture: ComponentFixture<DonationEditComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditDonationComponent ],
+      declarations: [DonationEditComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditDonationComponent);
+    fixture = TestBed.createComponent(DonationEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,7 +1,13 @@
 <div class="donation-details page">
-  <div class="page-title block-label" *ngIf="donationNotFound">
-    <strong>Donation not found</strong>
+  <div *ngIf="!donationNotFound; else notFoundTmpl" class="page-title">
+    {{ pageTitleService.title }}
   </div>
+
+  <ng-template #notFoundTmpl>
+    <div class="not-found">
+      Donation not found
+    </div>
+  </ng-template>
 
   <ng-container *ngIf="donation">
 

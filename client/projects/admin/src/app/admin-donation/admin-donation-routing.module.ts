@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminCreateDonationComponent } from './components/admin-create-donation/admin-create-donation.component';
-import { AdminEditDonationComponent } from './components/admin-edit-donation/admin-edit-donation.component';
+import { AdminDonationCreateComponent } from './components/admin-donation-create/admin-donation-create.component';
+import { AdminDonationEditComponent } from './components/admin-donation-edit/admin-donation-edit.component';
 
 const routes: Routes = [
-  { path: 'create', component: AdminCreateDonationComponent },
-  { path: 'edit/:id', component: AdminEditDonationComponent }
+  { path: 'create', component: AdminDonationCreateComponent },
+  { path: 'edit/:id', component: AdminDonationEditComponent }
 ];
 
 @NgModule({

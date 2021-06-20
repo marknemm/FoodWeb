@@ -34,12 +34,12 @@ header {
     }
 
     .mat-icon {
-      font-size     : 30px;
+      font-size     : 32px;
       margin-left   : -6px;
       vertical-align: -10px;
 
       @media only screen and (max-width: $md) {
-        font-size     : 25px;
+        font-size     : 27px;
         margin-left   : -2px;
         vertical-align: -7px;
       }
@@ -63,8 +63,8 @@ header {
 
   .notifications-button-container {
     .mat-badge-content.mat-badge-active {
-      margin-right: 10px;
-      top         : 5px;
+      margin-right: 6px;
+      top         : 2px;
     }
   }
 

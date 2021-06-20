@@ -2,6 +2,14 @@
 
 $site-title-font-size-max: 42px;
 
+:host {
+  @media only screen and (max-width: $md) {
+    position: relative;
+    display: block;
+    padding-top: $header-height-mobile;
+  }
+}
+
 header {
   position: relative;
   display: block;
@@ -9,8 +17,9 @@ header {
   box-shadow: 0 1px 5px 1px rgba(0, 0, 0, 0.5);
 
   @media only screen and (max-width: $md) {
-    position: sticky;
+    position: fixed;
     top: 0;
+    width: 100vw;
   }
 
   .mat-toolbar {
@@ -110,8 +119,7 @@ header {
 
       &.with-sub {
         $site-title-font-size: 32px;
-        $site-title-font-size-md: 24px;
-        $site-title-font-size-sm: 22px;
+        $site-title-font-size-md: 20px;
 
         margin-top: -4px;
 
@@ -121,24 +129,19 @@ header {
           height: $site-title-font-size;
 
           @media only screen and (max-width: $md) {
+            text-align: center;
+            font-weight: bold;
             font-size: $site-title-font-size-md;
             line-height: $site-title-font-size-md;
             height: $site-title-font-size-md;
             width: 100%;
-            text-align: center;
-          }
-
-          @media only screen and (max-width: $sm) {
-            font-size: $site-title-font-size-sm;
-            font-weight: bold;
-            line-height: $site-title-font-size-sm + 1px;
-            height: $site-title-font-size-sm;
           }
         }
       }
 
       .sub {
         $site-title-sub-font-size: 16px;
+        $site-title-sub-font-size-md: 15px;
         color: $accent;
 
         font-weight: bold;
@@ -147,7 +150,10 @@ header {
         height: $site-title-sub-font-size;
 
         @media only screen and (max-width: $md) {
-          font-size: 15px;
+          text-align: center;
+          font-size: $site-title-sub-font-size-md;
+          line-height: $site-title-sub-font-size-md;
+          height: $site-title-sub-font-size-md;
         }
       }
 

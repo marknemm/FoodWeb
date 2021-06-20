@@ -1,12 +1,14 @@
-<mat-drawer-container class="left-nav-container" [foodwebWindowSize]="windowSizeThreshPx" (thresholdCross)="leftNavService.deriveStateFromWindowSize(window.innerWidth)">
-  <mat-drawer
+<mat-sidenav-container class="left-nav-container" [foodwebWindowSize]="windowSizeThreshPx" (thresholdCross)="leftNavService.deriveStateFromWindowSize(window.innerWidth)">
+  <mat-sidenav
     [mode]="leftNavService.mode"
     [ngClass]="{ sticky: leftNavService.sticky }"
+    [fixedInViewport]="true"
+    [fixedTopGap]="fixedTopGap"
     [opened]="leftNavService.opened"
     (openedChange)="leftNavService.opened = $event">
     <ng-content select=".left-nav-items"></ng-content>
-  </mat-drawer>
-  <mat-drawer-content #drawerContent>
+  </mat-sidenav>
+  <mat-sidenav-content #sidenavContent>
     <div *ngIf="pageProgressService.showBlockingProgress" class="blocking-page-progress-indicator">
       <foodweb-progress-indicator
         [backdropColor]="pageProgressService.backdropColor"
@@ -19,5 +21,5 @@
     <div class="page-content">
       <ng-content></ng-content>
     </div>
-  </mat-drawer-content>
-</mat-drawer-container>
+  </mat-sidenav-content>
+</mat-sidenav-container>

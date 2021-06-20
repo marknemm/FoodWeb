@@ -2,7 +2,7 @@
 
   <foodweb-filtered-list-toolbar listItemsLabel="Deliveries">
     <foodweb-search-bar
-      placeholder="Search Deliveries..."
+      [placeholder]="searchPlaceholder"
       [formControl]="filtersForm.get('fullTextQuery')"
       (search)="updateFilterQueryParams(filtersForm.value)"
     ></foodweb-search-bar>

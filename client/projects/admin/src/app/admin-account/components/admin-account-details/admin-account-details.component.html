@@ -1,6 +1,6 @@
 <form [formGroup]="formGroup" *ngIf="originalAccount" class="account-form page container">
   <div class="account-main align-center">
-    <div class="page-title block-label">
+    <div class="page-title">
       <foodweb-username *ngIf="hasAccountOwnership" formControlName="username"></foodweb-username>
       <ng-container *ngIf="!hasAccountOwnership">
         <div *ngIf="originalAccount.organization">
@@ -160,6 +160,6 @@
   </mat-accordion>
 </form>
 
-<div *ngIf="accountNotFound" class="account-not-found disclaimer">
+<div *ngIf="accountNotFound" class="not-found">
   Account not found
 </div>

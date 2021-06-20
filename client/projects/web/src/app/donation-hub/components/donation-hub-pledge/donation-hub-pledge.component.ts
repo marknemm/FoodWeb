@@ -6,6 +6,7 @@ import { DonationHubPledge } from '~shared';
 import { DonationHubPledgeDeleteService } from '~web/donation-hub/services/donation-hub-pledge-delete/donation-hub-pledge-delete.service';
 import { DonationHubPledgeReadService } from '~web/donation-hub/services/donation-hub-pledge-read/donation-hub-pledge-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class DonationHubPledgeComponent implements OnInit, OnDestroy {
   private _donationHubPledgeNotFound = false;
 
   constructor(
+    public pagetTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _donationHubPledgeDeleteService: DonationHubPledgeDeleteService,
     private _donationHubPledgeReadService: DonationHubPledgeReadService,
@@ -41,6 +43,7 @@ export class DonationHubPledgeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.pagetTitleService.title = 'Donation Pledge';
     this._listenDonationHubPledgeChange();
   }
 
