@@ -15,7 +15,7 @@ import { SessionService } from '~web/session/services/session/session.service';
 })
 export class EventCardComponent implements OnInit, OnChanges {
 
-  @Input() featuredEvent: FeaturedEvent;
+  @Input() event: FeaturedEvent;
   @Convert()
   @Input() linkToEventsPage: boolean = false;
 
@@ -55,14 +55,14 @@ export class EventCardComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.featuredEvent && this.featuredEvent) {
+    if (changes.event && this.event) {
       setTimeout(() => {
-        this._signupPanelShouldGlow = (localStorage.getItem(`foodweb-event-selected-${this.featuredEvent.showUntil?.getTime()}`) !== 'true');
-        const fullAddress = `${this.featuredEvent.streetAddress}, ${this.featuredEvent.city} `
-          + `${this.featuredEvent.stateProvince}, ${this.featuredEvent.postalCode}`;
+        this._signupPanelShouldGlow = (localStorage.getItem(`foodweb-event-selected-${this.event.showUntil?.getTime()}`) !== 'true');
+        const fullAddress = `${this.event.streetAddress}, ${this.event.city} `
+          + `${this.event.stateProvince}, ${this.event.postalCode}`;
         this._directionsHref = this._mapAppLinkService.genDirectionHref(['My+Location', fullAddress]);
-        this._endTime = (this.featuredEvent.durationMins)
-          ? this._dateTimeService.addMinutes(this.featuredEvent.date, this.featuredEvent.durationMins)
+        this._endTime = (this.event.durationMins)
+          ? this._dateTimeService.addMinutes(this.event.date, this.event.durationMins)
           : null;
       });
     }
@@ -70,12 +70,12 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   onSignupPanelExpanded(): void {
     this._signupPanelShouldGlow = false;
-    localStorage.setItem(`foodweb-event-selected-${this.featuredEvent.showUntil?.getTime()}`, 'true');
+    localStorage.setItem(`foodweb-event-selected-${this.event.showUntil?.getTime()}`, 'true');
   }
 
   submitSignup(): void {
     if (this.formGroup.valid) {
-      this.eventRegistrationService.register(this.featuredEvent, this.formGroup.value).subscribe(
+      this.eventRegistrationService.register(this.event, this.formGroup.value).subscribe(
         () => this._signupComplete = true
       );
     }

@@ -1,10 +1,10 @@
 <div class="donation-hub page">
-  <div *ngIf="!donationHubPledgeNotFound; else notFoundTmpl" class="page-title block-label">
-    Donation Hub Pledge
+  <div *ngIf="!donationHubPledgeNotFound; else notFoundTmpl" class="page-title">
+    {{ pagetTitleService.title }}
   </div>
   <ng-template #notFoundTmpl>
-    <div class="page-title block-label">
-      <strong>Donation hub pledge not found</strong>
+    <div class="not-found">
+      Donation Pledge not found
     </div>
   </ng-template>
 

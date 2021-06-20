@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DonationHub, DonationHubReadRequest, ListResponse, ReadRequest } from '~shared';
 import { DonationHubReadService } from '~web/donation-hub/services/donation-hub-read/donation-hub-read.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 /**
@@ -20,6 +21,7 @@ export class DonationHubListComponent implements OnInit {
   private _totalCount = 0;
 
   constructor(
+    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _donationHubReadService: DonationHubReadService,
     private _router: Router,
@@ -48,6 +50,9 @@ export class DonationHubListComponent implements OnInit {
 
   ngOnInit() {
     this._myDonationHubs = this._router.url.indexOf('/my') >= 0;
+    this.pageTitleService.title = (this._myDonationHubs)
+      ? 'My Donation Hubs'
+      : 'Pledge Donation';
     this._urlQueryService.listenQueryParamsChange<ReadRequest>(this._activatedRoute).subscribe(
       (request: ReadRequest) => this.handleQueryParamsChanged(request)
     );

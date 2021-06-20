@@ -17,7 +17,7 @@
       <mat-icon>breakfast_dining</mat-icon> <span>Sandwich Army</span>
     </button>
     <button mat-button type="button" [matMenuTriggerFor]="deliveriesMenu">
-      <mat-icon>place</mat-icon> <span>Deliveries</span>
+      <mat-icon>directions_car</mat-icon> <span>Deliveries</span>
     </button>
   </ng-container>
   <button mat-button type="button" [matMenuTriggerFor]="usersMenu">
@@ -47,10 +47,10 @@
 <mat-menu #deliveriesMenu="matMenu" class="header-submenu">
   <mat-nav-list>
     <a mat-list-item [routerLink]="['/delivery', 'list']" [queryParams]="donationHelper.findDonationsQueryParams(sessionService.account)">
-      <mat-icon>search</mat-icon> <span>Find Delivery</span>
+      <mat-icon>schedule</mat-icon> <span>Schedule Delivery</span>
     </a>
     <a mat-list-item [routerLink]="['/delivery', 'list', 'my']">
-      <mat-icon>my_location</mat-icon> <span>My Deliveries</span>
+      <mat-icon>place</mat-icon> <span>My Deliveries</span>
     </a>
   </mat-nav-list>
 </mat-menu>
@@ -72,7 +72,7 @@
       <mat-icon>api</mat-icon> <span>Portal</span>
     </a>
 
-    <h2 class="submenu-heading">Drop-Off Hubs</h2>
+    <h2 class="submenu-heading">Donation Hubs</h2>
     <a mat-list-item [routerLink]="['/donation-hub', 'create']">
       <mat-icon>app_registration</mat-icon> <span>Register</span>
     </a>

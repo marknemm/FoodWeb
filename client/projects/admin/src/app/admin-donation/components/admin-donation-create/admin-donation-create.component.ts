@@ -7,11 +7,11 @@ import { DateTimeService } from '~web/date-time/services/date-time/date-time.ser
 import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
-  selector: 'foodweb-admin-create-donation',
-  templateUrl: './admin-create-donation.component.html',
-  styleUrls: ['./admin-create-donation.component.scss'],
+  selector: 'foodweb-admin-donation-create',
+  templateUrl: './admin-donation-create.component.html',
+  styleUrls: ['./admin-donation-create.component.scss'],
 })
-export class AdminCreateDonationComponent implements OnInit, OnDestroy {
+export class AdminDonationCreateComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject();
   private _formGroup: AdminDonationForm;

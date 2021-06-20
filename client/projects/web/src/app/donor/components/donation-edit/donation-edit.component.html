@@ -1,10 +1,11 @@
 <form [formGroup]="editForm" class="edit-donation page">
-  <div *ngIf="!donationNotFound; else notFoundTmpl" class="page-title block-label">
-    Edit Donation
+  <div *ngIf="!donationNotFound; else notFoundTmpl" class="page-title">
+    {{ pageTitleService.title }}
   </div>
+
   <ng-template #notFoundTmpl>
-    <div class="page-title block-label">
-      <strong>Donation not found</strong>
+    <div class="not-found">
+      Donation not found
     </div>
   </ng-template>
 

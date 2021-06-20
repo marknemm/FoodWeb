@@ -1,0 +1,16 @@
+<div class="events page">
+  <div class="page-title">
+    <span class="page-title">Featured Events</span>
+  </div>
+
+  <div class="not-found" *ngIf="eventsNotFound">
+    Events not found
+  </div>
+
+  <div class="row" *ngIf="events">
+    <div *ngFor="let event of events; let idx = index" class="event col-lg-4 col-md-6">
+      <foodweb-admin-event-card [event]="event" (deleteEvent)="deleteEvent(event, idx)"></foodweb-admin-event-card>
+    </div>
+  </div>
+
+</div>

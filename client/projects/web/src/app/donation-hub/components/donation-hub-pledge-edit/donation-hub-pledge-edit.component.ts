@@ -6,6 +6,7 @@ import { DonationHubPledgeForm } from '~web/donation-hub/forms/donation-hub-pled
 import { DonationHubPledgeReadService } from '~web/donation-hub/services/donation-hub-pledge-read/donation-hub-pledge-read.service';
 import { DonationHubPledgeUpdateService } from '~web/donation-hub/services/donation-hub-pledge-update/donation-hub-pledge-update.service';
 import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class DonationHubPledgeEditComponent extends FormBaseComponent<DonationHu
   private _originalDonationHubPledge: DonationHubPledge;
 
   constructor(
+    public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
     private _donationHubPledgeReadService: DonationHubPledgeReadService,
     private _donationHubPledgeUpdateService: DonationHubPledgeUpdateService,
@@ -39,6 +41,7 @@ export class DonationHubPledgeEditComponent extends FormBaseComponent<DonationHu
   }
 
   ngOnInit() {
+    this.pageTitleService.title = 'Edit Donation Pledge';
     this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
       switchMap((id: number) => this._donationHubPledgeReadService.getDonationHubPledge(id))
     ).subscribe((pledge: DonationHubPledge) => this._setDonationHubPledgeData(pledge));

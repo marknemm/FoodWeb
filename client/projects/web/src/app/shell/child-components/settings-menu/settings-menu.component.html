@@ -18,13 +18,13 @@
     <ng-container *ngIf="sessionService.isVolunteer">
       <h2 class="submenu-heading">My Action Items</h2>
       <a mat-list-item [routerLink]="['/donation-hub/list/my']">
-        <mat-icon>device_hub</mat-icon> Drop-Off Hubs
+        <mat-icon>device_hub</mat-icon> Donation Hubs
       </a>
       <a mat-list-item [routerLink]="['/donation-hub/pledge/list/my']">
-        <fa-icon [icon]="faGifts"></fa-icon> Donations
+        <fa-icon [icon]="faGifts"></fa-icon> Donation Pledges
       </a>
       <a mat-list-item [routerLink]="['/delivery/list/my']">
-        <mat-icon>my_location</mat-icon> Deliveries
+        <mat-icon>place</mat-icon> Scheduled Deliveries
       </a>
     </ng-container>
 

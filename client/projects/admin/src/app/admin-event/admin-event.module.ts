@@ -13,10 +13,10 @@ import { SharedModule } from '~web/shared/shared.module';
 import { TableModule } from '~web/table/table.module';
 import { AdminEventRoutingModule } from './admin-event-routing.module';
 import { FeaturedEventFormComponent } from './child-components/featured-event-form/featured-event-form.component';
+import { AdminEventsComponent } from './components/admin-events/admin-events.component';
 import { CreateFeaturedEventComponent } from './components/create-featured-event/create-featured-event.component';
 import { EditFeaturedEventComponent } from './components/edit-featured-event/edit-featured-event.component';
 import { EventRegistrationsComponent } from './components/event-registrations/event-registrations.component';
-import { FeaturedEventsComponent } from './components/featured-events/featured-events.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,7 @@ import { FeaturedEventsComponent } from './components/featured-events/featured-e
     EditFeaturedEventComponent,
     EventRegistrationsComponent,
     FeaturedEventFormComponent,
-    FeaturedEventsComponent,
+    AdminEventsComponent,
   ],
   imports: [
     AdminEventRoutingModule,

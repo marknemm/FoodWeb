@@ -2,19 +2,43 @@
   <a mat-list-item [routerLink]="['/']" (click)="_onNavigate()">
     <span><mat-icon>settings_applications</mat-icon> <span>Admin Console</span></span>
   </a>
-  <a mat-list-item [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Donor' }" (click)="_onNavigate()">
+
+  <h2 class="submenu-heading">Accounts</h2>
+  <a mat-list-item [routerLink]="['/account', 'list']" [queryParams]="{ accountType: 'Donor' }" (click)="_onNavigate()">
     <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Donor'] }}</mat-icon> <span>Donors</span></span>
   </a>
-  <a mat-list-item [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Receiver' }" (click)="_onNavigate()">
+  <a mat-list-item [routerLink]="['/account', 'list']" [queryParams]="{ accountType: 'Receiver' }" (click)="_onNavigate()">
     <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Receiver'] }}</mat-icon> <span>Receivers</span></span>
   </a>
-  <a mat-list-item [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Volunteer' }" (click)="_onNavigate()">
+  <a mat-list-item [routerLink]="['/account', 'list']" [queryParams]="{ accountType: 'Volunteer' }" (click)="_onNavigate()">
     <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Volunteer'] }}</mat-icon> <span>Volunteers</span></span>
   </a>
-  <a mat-list-item [routerLink]="['/donation/list']" (click)="_onNavigate()">
+  <a mat-list-item [routerLink]="['/account', 'list']" (click)="_onNavigate()">
+    <span><mat-icon>people</mat-icon> <span>Search</span></span>
+  </a>
+  <a mat-list-item [routerLink]="['/account', 'compose-message']" (click)="_onNavigate()">
+    <span><mat-icon>email</mat-icon> <span>Message</span></span>
+  </a>
+  <a mat-list-item [routerLink]="['/account', 'create']" (click)="_onNavigate()">
+    <span><mat-icon>person_add</mat-icon> <span>Create</span></span>
+  </a>
+
+  <h2 class="submenu-heading">Donations</h2>
+  <a mat-list-item [routerLink]="['/donation', 'list']" (click)="_onNavigate()">
     <span><fa-icon [icon]="faGifts"></fa-icon> <span>Donations</span></span>
   </a>
-  <a mat-list-item [routerLink]="['/delivery/list']" (click)="_onNavigate()">
+  <a mat-list-item [routerLink]="['/delivery', 'list']" (click)="_onNavigate()">
     <span><mat-icon>pin_drop</mat-icon> <span>Deliveries</span></span>
+  </a>
+  <a mat-list-item [routerLink]="['/donation', 'create']" (click)="_onNavigate()">
+    <span><mat-icon>add_box</mat-icon> <span>Create</span></span>
+  </a>
+
+  <h2 class="submenu-heading">Events</h2>
+  <a mat-list-item [routerLink]="['/event', 'list']" (click)="_onNavigate()">
+    <span><mat-icon>event</mat-icon> <span>Search</span></span>
+  </a>
+  <a mat-list-item [routerLink]="['/event', 'create']" (click)="_onNavigate()">
+    <span><fa-icon [icon]="faCalendarPlus"></fa-icon> <span>Create</span></span>
   </a>
 </mat-nav-list>

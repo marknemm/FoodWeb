@@ -1,8 +1,6 @@
 <foodweb-filtered-list class="donation-hub-pledges">
 
-  <foodweb-filtered-list-title>
-    {{ myPledges ? 'My' : '' }} Donation Pledges
-  </foodweb-filtered-list-title>
+  <foodweb-filtered-list-title>{{ pageTitleService.title }}</foodweb-filtered-list-title>
 
   <foodweb-filtered-list-content>
     <div class="col-lg-6" *ngFor="let pledge of pledges">

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatDrawerContent } from '@angular/material/sidenav';
+import { MatSidenavContent } from '@angular/material/sidenav';
 import { Convert } from '~web/component-decorators';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
@@ -11,7 +11,7 @@ import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
 })
 export class LeftNavComponent implements OnInit {
 
-  @ViewChild('drawerContent', { static: true }) drawerContent: MatDrawerContent;
+  @ViewChild('sidnavContent', { static: true }) sidnavContent: MatSidenavContent;
 
   /**
    * A maximum width in pixels. When set, determines that when the window width is equal to or lower,
@@ -27,7 +27,11 @@ export class LeftNavComponent implements OnInit {
     public window: Window,
   ) {}
 
+  get fixedTopGap(): number {
+    return (this.window.innerWidth > 990) ? 60 : 40;
+  }
+
   ngOnInit() {
-    this.leftNavService.initDrawerContent(this.drawerContent);
+    this.leftNavService.initSidenavContent(this.sidnavContent);
   }
 }

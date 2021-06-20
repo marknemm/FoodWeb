@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { faGifts } from '@fortawesome/free-solid-svg-icons';
-import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
+import { faCalendarPlus, faGifts } from '@fortawesome/free-solid-svg-icons';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
+import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
 
 @Component({
   selector: 'foodweb-admin-left-nav-items',
@@ -10,6 +10,7 @@ import { ConstantsService } from '~web/shared/services/constants/constants.servi
 })
 export class AdminLeftNavItemsComponent implements OnInit {
 
+  faCalendarPlus = faCalendarPlus;
   faGifts = faGifts;
 
   constructor(

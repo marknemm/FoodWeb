@@ -1,7 +1,7 @@
 <form [formGroup]="formGroup" class="donation-hub-donate-form page" (submit)="donate()">
 
-  <div class="donation-hub-registration-title page-title block-label">
-    Donation Pledge
+  <div class="page-title">
+    {{ pageTitleService.title }}
   </div>
 
   <mat-card>

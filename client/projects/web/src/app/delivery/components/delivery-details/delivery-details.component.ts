@@ -6,6 +6,7 @@ import { Donation } from '~shared';
 import { DonationAction, DonationActionsService } from '~web/donation-shared/services/donation-actions/donation-actions.service';
 import { DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
@@ -21,12 +22,13 @@ export class DeliveryDetailsComponent implements OnInit {
   private _myDelivery = false;
 
   constructor(
+    public pageTitleService: PageTitleService,
     public sessionService: SessionService,
     protected _activatedRoute: ActivatedRoute,
     protected _donationActionsService: DonationActionsService,
     protected _donationReadService: DonationReadService,
     protected _urlQueryService: UrlQueryService
-  ) {}
+  ) { }
 
   get deliveryNotFound(): boolean {
     return this._deliveryNotFound;

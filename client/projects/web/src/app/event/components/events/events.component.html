@@ -1,11 +1,15 @@
-<div *ngIf="featuredEvents" class="events page">
-  <div class="page-title block-label">
-    Upcoming Events
+<div class="events page">
+  <div class="page-title">
+    {{ pageTitleService.title }}
   </div>
 
-  <div class="row">
-    <div *ngFor="let featuredEvent of featuredEvents" class="event col-lg-4 col-md-6">
-      <foodweb-event-card [featuredEvent]="featuredEvent"></foodweb-event-card>
+  <div class="not-found" *ngIf="eventsNotFound">
+    Events not found
+  </div>
+
+  <div class="row" *ngIf="events">
+    <div *ngFor="let event of events" class="event col-lg-4 col-md-6">
+      <foodweb-event-card [event]="event"></foodweb-event-card>
     </div>
   </div>
 

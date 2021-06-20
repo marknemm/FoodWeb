@@ -1,8 +1,6 @@
 <foodweb-filtered-list class="donation-hubs">
 
-  <foodweb-filtered-list-title>
-    {{ myDonationHubs ? 'My' : '' }} Donation Hubs
-  </foodweb-filtered-list-title>
+  <foodweb-filtered-list-title>{{ pageTitleService.title }}</foodweb-filtered-list-title>
 
   <foodweb-filtered-list-instructions *ngIf="!myDonationHubs && !noneFound">
     Choose a donation drop-off hub to pledge a donation to.

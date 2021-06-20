@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-donation-hub-portal',
@@ -10,8 +11,12 @@ export class DonationHubPortalComponent implements OnInit {
 
   readonly faHandHoldingHeart = faHandHoldingHeart;
 
-  constructor() {}
+  constructor(
+    private _pageTitleService: PageTitleService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this._pageTitleService.title = 'Sandwich Army';
+  }
 
 }
