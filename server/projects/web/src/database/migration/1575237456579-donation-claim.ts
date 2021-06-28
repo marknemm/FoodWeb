@@ -3,6 +3,7 @@ import { DistanceTimeQueryResult, getDrivingDistTime } from '~web/helpers/map/di
 
 // tslint:disable-next-line: class-name
 export class donationClaim1575237456579 implements MigrationInterface {
+  name = 'donationClaim1575237456579';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`ALTER TABLE "Account" DROP CONSTRAINT "FK_f3f5c02509d4f9b16cdebfd9bff"`);

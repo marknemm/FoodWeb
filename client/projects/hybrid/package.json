@@ -1,5 +1,5 @@
 {
-  "name": "ionic",
+  "name": "hybrid",
   "devDependencies": {
     "@capacitor/cli": "^2.4.5"
   }

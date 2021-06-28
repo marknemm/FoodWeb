@@ -1,5 +1,4 @@
 export * from './account';
-export * from './app-data';
 export * from './audit';
 export * from './date-time';
 export * from './delivery';
@@ -11,6 +10,7 @@ export * from './event';
 export * from './heuristics';
 export * from './list-response';
 export * from './map';
+export * from './mobile-device';
 export * from './notification';
 export * from './read-request';
 export * from './server-sent-event';

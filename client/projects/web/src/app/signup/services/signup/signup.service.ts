@@ -4,7 +4,7 @@ import { mergeMap } from 'rxjs/operators';
 import { Account, SignupRequest } from '~shared';
 import { environment } from '~web-env/environment';
 import { AccountForm } from '~web/account-shared/forms/account.form';
-import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
+import { AlertService } from '~web/alert/services/alert/alert.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
@@ -16,7 +16,7 @@ export class SignupService {
   readonly url = `${environment.server}/account`;
 
   constructor(
-    private _alertQueueService: AlertQueueService,
+    private _alertService: AlertService,
     private _authService: AuthenticationService,
     private _httpClient: HttpClient,
     private _httpResponseService: HttpResponseService,
@@ -33,7 +33,7 @@ export class SignupService {
         this._httpResponseService.handleHttpResponse()
       ).subscribe();
     } else {
-      this._alertQueueService.add('You must accept the terms and conditions to complete signup', 'warn');
+      this._alertService.displayMessage('You must accept the terms and conditions to complete signup', 'warn');
     }
   }
 }

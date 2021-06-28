@@ -1,20 +1,14 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { catchError, finalize, switchMap } from 'rxjs/operators';
-import {
-  LastSeenNotificationUpdateRequest, ListResponse, Notification,
-  NotificationReadRequest, NotificationsAvailableEvent,
-  NotificationUpdateRequest,
-  ServerSentEventType
-} from '~shared';
+import { finalize, switchMap } from 'rxjs/operators';
+import { LastSeenNotificationUpdateRequest, ListResponse, Notification, NotificationReadRequest, NotificationsAvailableEvent, NotificationUpdateRequest, ServerSentEventType } from '~shared';
 import { environment } from '~web-env/environment';
-import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
 import { ServerSentEventSourceService } from '~web/notification/services/server-sent-event-source/server-sent-event-source.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
-
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +22,8 @@ export class NotificationService {
 
   constructor(
     private _authService: AuthenticationService,
-    private _alertQueueService: AlertQueueService,
     private _httpClient: HttpClient,
+    private _httpResponseService: HttpResponseService,
     private _pageProgressService: PageProgressService,
     private _router: Router,
     private _sseSourceService: ServerSentEventSourceService
@@ -87,7 +81,9 @@ export class NotificationService {
 
   getNotifications(filters: NotificationReadRequest, page: number, limit: number): Observable<ListResponse<Notification>> {
     this._pageProgressService.activate(true);
-    return this._getNotifications(filters, page, limit);
+    return this._getNotifications(filters, page, limit).pipe(
+      finalize(() => this._pageProgressService.reset())
+    );
   }
 
   private _getNotifications(request: NotificationReadRequest, page: number, limit: number): Observable<ListResponse<Notification>> {
@@ -95,8 +91,7 @@ export class NotificationService {
     request.limit = (limit >= 0 ? limit : 10);
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Notification>>(this.url, { params, withCredentials: true }).pipe(
-      catchError((err: HttpErrorResponse) => this._alertQueueService.add(err)),
-      finalize(() => this._pageProgressService.reset())
+      this._httpResponseService.handleHttpResponse({ pageProgressBlocking: false })
     );
   }
 
@@ -114,7 +109,7 @@ export class NotificationService {
         lastSeenNotificationId: this._notificationsPreview[0].id
       };
       this._httpClient.put(`${this.url}/last-seen-notification`, lastSeenNotificationUpdateReq, { withCredentials: true }).pipe(
-        catchError((err: HttpErrorResponse) => this._alertQueueService.add(err))
+        this._httpResponseService.handleHttpResponse({ pageProgressBlocking: false })
       ).subscribe();
     }
   }
@@ -136,7 +131,7 @@ export class NotificationService {
   private _updateNotification(notification: Notification): void {
     const notificationUpdateRequest: NotificationUpdateRequest = { notification };
       this._httpClient.put(this.url, notificationUpdateRequest, { withCredentials: true }).pipe(
-        catchError((err: HttpErrorResponse) => this._alertQueueService.add(err))
+        this._httpResponseService.handleHttpResponse({ pageProgressBlocking: false })
       ).subscribe();
   }
 }

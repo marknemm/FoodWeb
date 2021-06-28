@@ -1,7 +1,12 @@
 {
-  "name": "ionic",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
+  "defaultProject": "hybrid",
+  "projects": {
+    "hybrid": {
+      "name": "hybrid",
+      "integrations": {
+        "capacitor": {}
+      },
+      "type": "angular"
+    }
+  }
 }

@@ -1,10 +1,10 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { EventRegistration, EventRegistrationCreateRequest, FeaturedEvent } from '~shared';
 import { environment } from '~web-env/environment';
-import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class EventRegistrationService {
 
   constructor(
     private _httpClient: HttpClient,
-    private _alertQueueService: AlertQueueService
+    private _httpResponseService: HttpResponseService
   ) {}
 
   get loading(): boolean {
@@ -29,7 +29,7 @@ export class EventRegistrationService {
     const eventRegistrationReq: EventRegistrationCreateRequest = { eventRegistration: <EventRegistration>eventRegistration };
     this._loading = true;
     return this._httpClient.post(this.url, eventRegistrationReq, { withCredentials: true }).pipe(
-      catchError((err: HttpErrorResponse) => this._alertQueueService.add(err)),
+      this._httpResponseService.handleHttpResponse({ pageProgressBlocking: false }),
       finalize(() => this._loading = false)
     );
   }

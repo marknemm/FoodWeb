@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Index, JoinColumn, ManyToMany, OneToMany, OneToOne, UpdateDateColumn } from 'typeorm';
 import { Account, AccountType, Constants, OperationHoursHelper } from '~shared';
 import { OrmAfterLoad, OrmEntity, OrmPrimaryGeneratedColumn } from '~orm';
-import { AppDataEntity } from './app-data.entity';
+import { MobileDeviceEntity } from './mobile-device.entity';
 import { ContactInfoEntity } from './contact-info.entity';
 import { OperationHoursEntity } from './operation-hours.entity';
 import { OrganizationEntity } from './organization.entity';
@@ -43,8 +43,8 @@ export class AccountEntity implements Account {
   @OneToMany((type) => OperationHoursEntity, (operationHours) => operationHours.account, { cascade: ['remove'], eager: true })
   operationHours: OperationHoursEntity[];
 
-  @OneToMany((type) => AppDataEntity, (appData) => appData.accountId, { cascade: ['remove'] })
-  appData: AppDataEntity;
+  @OneToMany((type) => MobileDeviceEntity, (mobileDevice) => mobileDevice.accountId, { cascade: ['remove'] })
+  mobileDevice: MobileDeviceEntity;
 
   @UpdateDateColumn({ type: 'timestamp with time zone' })
   updateTimestamp: Date;

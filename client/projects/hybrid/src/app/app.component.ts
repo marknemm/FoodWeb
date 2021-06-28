@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
-import { HybridDataService } from './hybrid-session/services/hybrid-data/hybrid-data.service';
+import { AuthenticationService } from '~hybrid/session/services/authentication/authentication.service';
+import { JSONDateReviver } from '~shared';
 
 @Component({
   selector: 'foodweb-hybrid-root',
@@ -10,10 +11,12 @@ import { HybridDataService } from './hybrid-session/services/hybrid-data/hybrid-
 export class AppComponent {
 
   constructor(
-    hybridDataService: HybridDataService,
+    authService: AuthenticationService,
+    jsonDateReviver: JSONDateReviver,
     matIconReg: MatIconRegistry,
   ) {
-    hybridDataService.init();
     matIconReg.registerFontClassAlias('fontawesome', 'fa');
+    jsonDateReviver.initJSONDateReviver();
+    authService.refreshSessionStatus().subscribe();
   }
 }

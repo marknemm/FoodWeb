@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // tslint:disable-next-line: class-name
 export class allowNulllableNotificationFields1564943729291 implements MigrationInterface {
+  name = 'allowNulllableNotificationFields1564943729291';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`ALTER TABLE "Notification" ALTER COLUMN "notificationIconUrl" DROP NOT NULL`);

@@ -1,32 +1,24 @@
 import express = require('express');
-import { AccountEntity } from '~entity';
 import { Request, Response, Router } from 'express';
-import { AppTokenLoginRequest, ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
+import { AccountEntity, PerpetualSessionEntity } from '~entity';
+import { ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
 import { genErrorResponse } from '~web/middlewares/response-error.middleware';
-import { appTokenLogin, saveAppSessionToken } from '~web/services/session/app-session';
-import { login, logout } from '~web/services/session/session';
 import { impersonateLogin } from '~web/services/session/impersonate';
+import { login, logout, perpetualTokenLogin } from '~web/services/session/session';
 
 export const router: Router = express.Router();
 
 router.get('/', handleGetSession);
 export function handleGetSession(req: Request, res: Response) {
+  const perpetualSessionToken = <string> req.query.perpetualSessionToken;
   const account: AccountEntity = req.session.account;
-  const loginResponse: LoginResponse = { account };
-  if (account && req.query.isApp === 'true') {
-    saveAppSessionToken(account)
-      .then((appSessionToken: string) => loginResponse.appSessionToken = appSessionToken)
-      .catch(genErrorResponse.bind(this, res));
+  if (!req.session.account && perpetualSessionToken) {
+    perpetualTokenLogin(perpetualSessionToken)
+      .then((loginResponse: LoginResponse) => _handleLoginSuccess(req, res, loginResponse))
+      .catch(() => res.send({}));
+  } else {
+    _handleLoginSuccess(req, res, { account, perpetualSession: req.session.perpetualSession });
   }
-  res.send(loginResponse);
-}
-
-router.post('/session-token', handlePostSessionToken);
-export function handlePostSessionToken(req: Request, res: Response) {
-  const loginRequest: AppTokenLoginRequest = req.body;
-  appTokenLogin(loginRequest.appSessionToken)
-    .then((loginResponse: LoginResponse) => _handleLoginSuccess(req, res, loginResponse))
-    .catch(genErrorResponse.bind(this, res));
 }
 
 router.post('/impersonate', handlePostImpersonate);
@@ -63,5 +55,6 @@ export function handleDeleteSession(req: Request, res: Response) {
 function _handleLoginSuccess(req: Request, res: Response, loginResponse: LoginResponse): void {
   // Set session on request object.
   req.session.account = <AccountEntity>loginResponse.account;
+  req.session.perpetualSession = <PerpetualSessionEntity>loginResponse.perpetualSession;
   res.send(loginResponse);
 }

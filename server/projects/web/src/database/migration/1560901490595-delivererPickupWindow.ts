@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // tslint:disable-next-line: class-name
 export class delivererPickupWindow1560901490595 implements MigrationInterface {
+  name = 'delivererPickupWindow1560901490595';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     const alreadyCreated: boolean = (await queryRunner.query(

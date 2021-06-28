@@ -1,11 +1,8 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, finalize } from 'rxjs/operators';
 import { environment } from '~admin-env/environment';
 import { Account, ImpersonateTokenResponse } from '~shared';
-import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
-import { AlertService } from '~web/alert/services/alert/alert.service';
-import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +12,8 @@ export class ImpersonateService {
   readonly url = `${environment.server}/session/impersonate-token`;
 
   constructor(
-    private _alertService: AlertService,
-    private _alertQueueService: AlertQueueService,
     private _httpClient: HttpClient,
-    private _pageProgressService: PageProgressService,
+    private _httpResponseService: HttpResponseService,
     private _window: Window,
   ) {}
 
@@ -29,12 +24,9 @@ export class ImpersonateService {
    */
   impersonateUser(account: Account): void {
     const url = `${this.url}/${account.id}`;
-    this._pageProgressService.activate(true);
     this._httpClient.get<ImpersonateTokenResponse>(url, { withCredentials: true }).pipe(
-      catchError((err: HttpErrorResponse) => this._alertQueueService.add(err)),
-      finalize(() => this._pageProgressService.reset())
+      this._httpResponseService.handleHttpResponse<ImpersonateTokenResponse>({ successMessage: 'User Impersonation Successful' })
     ).subscribe((response: ImpersonateTokenResponse) => {
-      this._alertService.displaySimpleMessage('User Impersonation Successful', 'success');
       this._window.open(`${environment.webServer}/home/login?impersonationToken=${response.impersonationToken}`, '_blank');
     });
   }

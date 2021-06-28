@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // tslint:disable-next-line: class-name
 export class donationWindowTimes1558199226376 implements MigrationInterface {
+  name = 'donationWindowTimes1558199226376';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     const alreadyCreated: boolean = (await queryRunner.query(

@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // tslint:disable-next-line: class-name
 export class appSessionToken1570988693732 implements MigrationInterface {
+  name = 'appSessionToken1570988693732';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`CREATE TABLE "AppSession" ("id" SERIAL NOT NULL, "appSessionToken" character varying NOT NULL, "createTimestamp" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updateTimestamp" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "accountId" integer NOT NULL, CONSTRAINT "REL_a5bf92aa3c976715684a272226" UNIQUE ("accountId"), CONSTRAINT "PK_06e3d692ecd443d27ceea01a755" PRIMARY KEY ("id"))`);

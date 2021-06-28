@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "main": "dist/server/projects/web/src/index.js",
+  "private": true,
   "scripts": {
     "build": "node ./tools/npm/build.js",
     "clean": "rimraf ./dist/* ./coverage ./ormlogs.log",
@@ -23,7 +24,6 @@
     "test:watch": "ts-mocha -p ./projects/web/tsconfig.spec.json ./src/**/*.ts",
     "typeorm": "node ./tools/npm/typeorm.js"
   },
-  "private": true,
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.1.16",
     "bcrypt": "^5.0.1",

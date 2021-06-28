@@ -1,6 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AccountProfileImgUrl1557632757037 implements MigrationInterface {
+  name = 'AccountProfileImgUrl1557632757037';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     const alreadyCreated: boolean = (await queryRunner.query(
