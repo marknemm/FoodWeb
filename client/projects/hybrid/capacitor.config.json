@@ -3,7 +3,7 @@
   "appName": "foodweb",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "../../dist/projects/hybrid",
+  "webDir": "../../dist/hybrid",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0

@@ -1,12 +1,7 @@
 {
-  "defaultProject": "hybrid",
-  "projects": {
-    "hybrid": {
-      "name": "hybrid",
-      "integrations": {
-        "capacitor": {}
-      },
-      "type": "angular"
-    }
-  }
+  "name": "hybrid",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
 }

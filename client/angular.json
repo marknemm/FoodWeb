@@ -330,7 +330,7 @@
     },
     "hybrid": {
       "projectType": "application",
-      "root": ".",
+      "root": "projects/hybrid",
       "sourceRoot": "projects/hybrid/src",
       "prefix": "hybrid",
       "architect": {
