@@ -381,6 +381,10 @@
                 {
                   "replace": "projects/hybrid/src/environments/environment.ts",
                   "with": "projects/hybrid/src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "projects/web/src/environments/environment.ts",
+                  "with": "projects/hybrid/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -400,6 +404,18 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
+                }
+              ]
+            },
+            "emu": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/hybrid/src/environments/environment.ts",
+                  "with": "projects/hybrid/src/environments/environment.emu.ts"
+                },
+                {
+                  "replace": "projects/web/src/environments/environment.ts",
+                  "with": "projects/hybrid/src/environments/environment.emu.ts"
                 }
               ]
             }
