@@ -17,7 +17,7 @@
           "prefix": "foodweb"
         }
       },
-      "root": ".",
+      "root": "projects/web",
       "sourceRoot": "projects/web/src",
       "prefix": "foodweb",
       "architect": {
@@ -197,7 +197,7 @@
     },
     "admin": {
       "projectType": "application",
-      "root": ".",
+      "root": "projects/admin",
       "sourceRoot": "projects/admin/src",
       "prefix": "admin",
       "architect": {
@@ -407,15 +407,15 @@
                 }
               ]
             },
-            "emu": {
+            "web": {
               "fileReplacements": [
                 {
                   "replace": "projects/hybrid/src/environments/environment.ts",
-                  "with": "projects/hybrid/src/environments/environment.emu.ts"
+                  "with": "projects/hybrid/src/environments/environment.web.ts"
                 },
                 {
                   "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/hybrid/src/environments/environment.emu.ts"
+                  "with": "projects/hybrid/src/environments/environment.web.ts"
                 }
               ]
             }
@@ -547,6 +547,38 @@
             },
             "android": {
               "cmd": "update android"
+            }
+          }
+        },
+        "run-android": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npx ionic cap run android --project='hybrid' -l --external",
+            "platform": "",
+            "cwd": "projects/hybrid"
+          },
+          "configurations": {
+            "android": {
+              "platform": "android"
+            },
+            "ios": {
+              "platform": "ios"
+            }
+          }
+        },
+        "run-ios": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "npx ionic cap run ios --project='hybrid' -l --external",
+            "platform": "",
+            "cwd": "projects/hybrid"
+          },
+          "configurations": {
+            "android": {
+              "platform": "android"
+            },
+            "ios": {
+              "platform": "ios"
             }
           }
         }

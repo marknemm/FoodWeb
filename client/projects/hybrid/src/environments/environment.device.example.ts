@@ -2,7 +2,7 @@
 // You can obtain your Wireless LAN adapter Wi-Fi IP address on windows via command line 'ipconfig'.
 // This environment may be used for dev testing of code that has been deployed to your Android/iOS device.
 
-export const environment: FoodWebAppEnvironment = {
+export const environment: FoodWebHybridEnvironment = {
   production: false,
   qa: false,
   demo: false,

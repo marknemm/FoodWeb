@@ -1,4 +1,4 @@
-interface FoodWebAppEnvironment {
+interface FoodWebHybridEnvironment {
   production: boolean;
   qa: boolean;
   demo: boolean;

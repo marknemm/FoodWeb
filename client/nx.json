@@ -10,8 +10,8 @@
   "affected": { "defaultBase": "master" },
   "npmScope": "web",
   "projects": {
-    "admin": { "tags": [] },
-    "hybrid": { "tags": [] },
+    "admin": { "tags": [], "implicitDependencies": ["web"] },
+    "hybrid": { "tags": [], "implicitDependencies": ["web"] },
     "web": { "tags": [] }
   },
   "workspaceLayout": {
