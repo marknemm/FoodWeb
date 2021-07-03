@@ -32,6 +32,6 @@
   </ng-container>
 
   <ng-template #loadingTmpl>
-    <foodweb-progress-indicator *ngIf="loading" blocking="true" diameter="30" trigger="true"></foodweb-progress-indicator>
+    <foodweb-progress-indicator *ngIf="loading" [blocking]="true" [diameter]="30" [trigger]="true"></foodweb-progress-indicator>
   </ng-template>
 </div>

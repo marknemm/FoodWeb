@@ -1,5 +1,4 @@
 import { Directive, HostListener, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Convert } from '~web/component-decorators';
 import { TableDataSource, TableSelectionType } from '~web/table/interfaces/table-data-source';
 export { TableSelectionType };
 
@@ -19,8 +18,7 @@ export class SelectableRowDirective<T = any> implements OnChanges {
   /**
    * Optionally set to true to disable selection of the host row.
    */
-  @Convert()
-  @Input() disableSelect: boolean = false;
+  @Input() disableSelect = false;
 
   ngOnChanges(changes: SimpleChanges) {
     // If changing from enabled to disabled, then make sure the host row is no longer selected

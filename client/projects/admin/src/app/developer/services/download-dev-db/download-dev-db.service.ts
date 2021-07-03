@@ -23,7 +23,7 @@ export class DownloadDevDbService {
       const headers = new HttpHeaders({ 'Content-Disposition': 'attachment' });
       this._httpClient.get(this.url, { withCredentials: true, headers, responseType: 'blob' }).pipe(
         this.httpResponseService.handleHttpResponse({ successMessage: 'Dev DB Download Successful', pageProgressBlocking: false })
-      ).subscribe((fileBlob: any) => {
+      ).subscribe((fileBlob: unknown) => {
         // Requires entire file to be loaded in memory, kind of hacky, but works for now...
         const downloadLink = document.createElement('a');
         downloadLink.href = URL.createObjectURL(fileBlob);

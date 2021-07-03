@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // tslint:disable-next-line: class-name
 export class relativeAssets1567466240130 implements MigrationInterface {
+  name = 'relativeAssets1567466240130';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`

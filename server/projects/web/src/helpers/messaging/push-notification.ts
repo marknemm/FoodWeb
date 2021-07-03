@@ -1,5 +1,5 @@
 import { Message, Sender } from 'node-gcm';
-import { AppData, Notification } from '~entity';
+import { MobileDevice, Notification } from '~entity';
 import { toExternalUrl } from '~web/helpers/misc/url';
 import { env } from '../globals/env';
 
@@ -40,7 +40,7 @@ export class PushNotificationClient {
    * @param notification The notification that is to be sent.
    * @return A promise that resolves to th e list of push notification results.
    */
-  async broadcastPushNotifications(pushTargets: AppData[], notification: Notification): Promise<void> {
+  async broadcastPushNotifications(pushTargets: MobileDevice[], notification: Notification): Promise<void> {
     const pushRegistrationIds: string[] = this._pushTargetsToPushRegistrationIds(pushTargets);
     const notificationMessage: Message = this._genNotificationMessage(notification);
     this._gcmSender.send(notificationMessage, pushRegistrationIds, () => {});
@@ -52,7 +52,7 @@ export class PushNotificationClient {
    * @param notification The notification that is to be sent.
    * @return A promise that resolves to the push notification result.
    */
-  async sendPushNotification(pushTarget: AppData, notification: Notification): Promise<void> {
+  async sendPushNotification(pushTarget: MobileDevice, notification: Notification): Promise<void> {
     const pushRegistrationIds: string[] = this._pushTargetsToPushRegistrationIds([pushTarget]);
     const notificationMessage: Message = this._genNotificationMessage(notification);
     this._gcmSender.send(notificationMessage, pushRegistrationIds, () => {});
@@ -63,8 +63,8 @@ export class PushNotificationClient {
    * @param pushTargets A list of the push notification targets.
    * @return The list of push notification registration IDs.
    */
-  private _pushTargetsToPushRegistrationIds(pushTargets: AppData[]): string[] {
-    return pushTargets.map((pushTarget: AppData) => pushTarget.pushRegistrationId);
+  private _pushTargetsToPushRegistrationIds(pushTargets: MobileDevice[]): string[] {
+    return pushTargets.map((pushTarget: MobileDevice) => pushTarget.pushRegistrationId);
   }
 
   /**

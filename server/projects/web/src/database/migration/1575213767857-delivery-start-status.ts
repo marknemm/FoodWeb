@@ -2,8 +2,13 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // tslint:disable-next-line: class-name
 export class deliveryStartStatus1575213767857 implements MigrationInterface {
+  name = 'deliveryStartStatus1575213767857';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
+    const alreadyCreated: boolean = (await queryRunner.query(
+      `SELECT 'Started'::name = any(enum_range(null::donation_donationstatus_enum)::name[])`
+    ))[0].column;
+    if (alreadyCreated) { return; }
     await queryRunner.query(`ALTER TYPE "donation_donationstatus_enum" RENAME TO "donation_donationstatus_enum_old"`);
     await queryRunner.query(`CREATE TYPE "donation_donationstatus_enum" AS ENUM('Unmatched', 'Matched', 'Scheduled', 'Started', 'Picked Up', 'Complete')`);
     await queryRunner.query(`ALTER TABLE "Donation" ALTER COLUMN "donationStatus" DROP DEFAULT`);

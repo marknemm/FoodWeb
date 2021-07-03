@@ -2,12 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "paths": {
-      "~lodash-mixins": ["projects/web/src/lodash-mixins"],
-      "~shared": ["projects/web/src/shared"],
-      "~web/*": ["projects/web/src/app/*"],
-      "~web-env/*": ["projects/web/src/environments/*"]
-    },
     "downlevelIteration": true,
     "declaration": false,
     "emitDecoratorMetadata": true,

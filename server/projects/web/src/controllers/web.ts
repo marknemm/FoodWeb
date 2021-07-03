@@ -2,7 +2,6 @@ import express = require('express');
 
 // NOTE: It is necessary to do an import ... require so tree shaking doesn't get rid of any controllers.
 import { router as accountRouter } from '~web/controllers/account';
-import { router as appDataRouter } from '~web/controllers/app-data';
 import { router as deliveryRouter } from '~web/controllers/delivery';
 import { router as donationRouter } from '~web/controllers/donation';
 import { router as donationHubRouter } from '~web/controllers/donation-hub';
@@ -16,7 +15,6 @@ import { router as sseRouter } from '~web/controllers/sse';
 export const router = express.Router();
 
 router.use('/account',        accountRouter);
-router.use('/app-data',       appDataRouter);
 router.use('/delivery',       deliveryRouter);
 router.use('/donation',       donationRouter);
 router.use('/donation-hub',   donationHubRouter);

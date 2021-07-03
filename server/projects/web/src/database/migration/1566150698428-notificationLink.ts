@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // tslint:disable-next-line: class-name
 export class notificationLink1566150698428 implements MigrationInterface {
+  name = 'notificationLink1566150698428';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`ALTER TABLE "Notification" ADD COLUMN IF NOT EXISTS "notificationLink" character varying`);

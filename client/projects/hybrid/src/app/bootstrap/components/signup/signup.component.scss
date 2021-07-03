@@ -1,0 +1,18 @@
+@import "constants.scss";
+
+.hybrid-signup-container {
+  background-color: $content-background;
+  min-height: 100vh;
+
+  .hybrid-signup-content {
+    padding: 10px 10px 30px;
+
+    .login-link {
+      margin-top: 10px;
+
+      &.align-right {
+        margin-top: 20px;
+      }
+    }
+  }
+}

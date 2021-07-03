@@ -1,6 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class Volunteer1557796559798 implements MigrationInterface {
+  name = 'Volunteer1557796559798';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     const alreadyCreated: boolean = (await queryRunner.query(`SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'Volunteer')`))[0].exists;

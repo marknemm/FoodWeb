@@ -1,0 +1,20 @@
+{
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": "*",
+    "tslint.json": "*",
+    ".eslintrc.json": "*",
+    "nx.json": "*",
+    "tsconfig.base.json": "*"
+  },
+  "affected": { "defaultBase": "master" },
+  "npmScope": "web",
+  "projects": {
+    "admin": { "tags": [], "implicitDependencies": ["web"] },
+    "hybrid": { "tags": [], "implicitDependencies": ["web"] },
+    "web": { "tags": [] }
+  },
+  "workspaceLayout": {
+    "appsDir": "projects"
+  }
+}

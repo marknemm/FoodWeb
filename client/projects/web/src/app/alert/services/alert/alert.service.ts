@@ -1,9 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarDismiss } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
+import { NEVER, Observable, ObservableInput } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AlertProcessor } from '~web/alert/classes/alert-processor';
 import { AlertDialogComponent } from '~web/alert/components/alert-dialog/alert-dialog.component';
 import { AlertSnackBarComponent } from '~web/alert/components/alert-snack-bar/alert-snack-bar.component';
 import { Alert, AlertAction, AlertConfig, AlertLevel } from '~web/alert/interfaces/alert';
@@ -12,12 +12,12 @@ export * from '~web/alert/interfaces/alert';
 @Injectable({
   providedIn: 'root'
 })
-export class AlertService extends AlertProcessor {
+export class AlertService {
 
   constructor(
     protected _matDialog: MatDialog,
     protected _matSnackBar: MatSnackBar
-  ) { super(); }
+  ) {}
 
   /**
    * Displays a given simple message in either a non-blocking snackbar or blocking modal dialog.
@@ -25,8 +25,21 @@ export class AlertService extends AlertProcessor {
    * @param level The level of the message to display (determines theming of blocking dialog or non-blocking snackbar).
    * @param blocking Whether or not the message should be blocking (in a modal dialog). Defaults to false for non-blocking.
    */
-  displaySimpleMessage(message: string, level: AlertLevel, blocking = false): void {
+  displayMessage(message: string, level: AlertLevel, blocking = false): void {
     this.displayAlert({ message, level, blocking});
+  }
+
+  /**
+   * Displays an alert message extracted from a given error in either a non-blocking snackbar or blocking modal dialog.
+   * @param error The error containing the alert message that should be displayed.
+   * @param level The level of the message to display (determines theming of blocking dialog or non-blocking snackbar).
+   * Defaults to `danger`.
+   * @param blocking Whether or not the message should be blocking (in a modal dialog). Defaults to false for non-blocking.
+   * @return `NEVER` in case this is the callback to a `catchError` rxjs pipe operator.
+   */
+  displayError(error: Error | HttpErrorResponse, level: AlertLevel = 'danger', blocking = false): ObservableInput<any> {
+    this.displayAlert({ message: this._extractErrorMessage(error), level, blocking });
+    return NEVER;
   }
 
   /**
@@ -41,6 +54,28 @@ export class AlertService extends AlertProcessor {
     return alert.blocking ?
       this._displayBlockingAlert<T>(alert, config) :
       this._displayNonBlockingAlert<T>(alert, config);
+  }
+
+  /**
+   * Extracts the Alert's message from a given error.
+   * @param error The error from which to extract the alert message.
+   * @return The extracted alert message.
+   */
+  private _extractErrorMessage(error: Error | HttpErrorResponse): string {
+    if (error instanceof Error) {
+      return (error.message ? error.message : 'An unexpected error has occured');
+    }
+    // Else dealing with HttpErrorResponse from here on..
+    if (error.error?.message) {
+      return error.error.message;
+    }
+    if (error.message) {
+      return error.message;
+    }
+    if (error.statusText) {
+      return error.statusText;
+    }
+    return 'An unexpected error has occured';
   }
 
   protected _preprocessAlertActions(alert: Alert): void {

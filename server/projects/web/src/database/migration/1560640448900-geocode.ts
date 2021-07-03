@@ -3,6 +3,7 @@ import { ContactInfo, geocode, GeographyLocation } from '~web/helpers/map/geocod
 
 // tslint:disable-next-line: class-name
 export class geocode1560640448900 implements MigrationInterface {
+  name = 'geocode1560640448900';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     const alreadyCreated: boolean = (await queryRunner.query(

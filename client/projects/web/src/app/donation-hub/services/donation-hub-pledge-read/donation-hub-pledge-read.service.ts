@@ -34,7 +34,7 @@ export class DonationHubPledgeReadService {
    * @param loadingFn The method within this service to check.
    * @return true if loading, false if not.
    */
-  isLoading(loadingFn: Function): boolean {
+  isLoading(loadingFn: any): boolean {
     return this._httpResponseService.isLoading(loadingFn);
   }
 

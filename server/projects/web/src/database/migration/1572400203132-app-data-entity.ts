@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // tslint:disable-next-line: class-name
 export class appDataEntity1572400203132 implements MigrationInterface {
+  name = 'appDataEntity1572400203132';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`CREATE TABLE "AppData" ("deviceUuid" character varying NOT NULL, "accountId" integer NOT NULL, "devicePlatform" character varying, "deviceModel" character varying, "deviceVersion" character varying, "deviceManufacturer" character varying, "deviceSerial" character varying, "deviceIsVirtual" boolean NOT NULL DEFAULT false, "pushRegistrationId" character varying, "createTimestamp" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "PK_6d319785ed3819f09f9f06e0a44" PRIMARY KEY ("deviceUuid", "accountId"))`);

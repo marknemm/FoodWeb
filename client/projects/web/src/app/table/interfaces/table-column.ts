@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SelectionModel } from '@angular/cdk/collections';
 import { TemplateRef } from '@angular/core';
 import { DeepReadonly } from '~shared';

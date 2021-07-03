@@ -33,10 +33,46 @@ jobs:
         run: cd ./client && npm install
       - name: Build Source Code
         if: steps.cache-build.outputs.cache-hit != 'true'
-        run: cd ./client && npm run admin:build
+        run: cd ./client && npm run build admin
       - name: Lint Source Code
         if: steps.cache-build.outputs.cache-hit != 'true'
-        run: cd ./client && npm run admin:lint
+        run: cd ./client && npm run lint admin
+
+  build_client_hybrid:
+    name: Build Client - Hybrid
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache Node Modules
+        uses: actions/cache@v2
+        env:
+          cache-name: npm-client
+        with:
+          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}
+      - name: Cache Build
+        id: cache-build
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-build-client-hybrid-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/angular.json', './client/**/tsconfig*', './client/package-lock.json', './client/projects/hybrid/**/*', './client/projects/web/**/*', './shared/**/*') }}
+          path: ./client/dist
+      - name: Install Node Modules
+        if: steps.cache-build.outputs.cache-hit != 'true'
+        run: cd ./client && npm install
+      - name: Build Source Code
+        if: steps.cache-build.outputs.cache-hit != 'true'
+        run: cd ./client && npm run build hybrid:all
+      - name: Lint Source Code
+        if: steps.cache-build.outputs.cache-hit != 'true'
+        run: cd ./client && npm run lint hybrid
 
   build_client_web:
     name: Build Client - Web
@@ -69,10 +105,10 @@ jobs:
         run: cd ./client && npm install
       - name: Build Source Code
         if: steps.cache-build.outputs.cache-hit != 'true'
-        run: cd ./client && npm run build
+        run: cd ./client && npm run build web
       - name: Lint Source Code
         if: steps.cache-build.outputs.cache-hit != 'true'
-        run: cd ./client && npm run web:lint
+        run: cd ./client && npm run lint web
 
   build_server_admin:
     name: Build Server - Admin

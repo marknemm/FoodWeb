@@ -1,7 +1,7 @@
 require('../util/env')();
-const spawn = require('../util/spawn');
+const spawn = require('../../../shared/tools/util/spawn');
 const path = require('path');
-const { getOptionalArg } = require('../util/args');
+const { getOptionalArg } = require('../../../shared/tools/util/args');
 const { getFileChoices, selectPrompt } = require('../util/prompt');
 
 // Get the optional script `command` argument, and run the pg command.

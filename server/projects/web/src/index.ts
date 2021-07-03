@@ -1,16 +1,14 @@
 import 'reflect-metadata';
 import { Application, Request, Response } from 'express';
-import { initEnv } from './helpers/globals/env';
 import { appPaths, initPaths } from './helpers/globals/paths';
 import express = require('express');
 import path = require('path');
 
 // Initialize all global path constants, path mappings, and environment variables for the Express app.
 initPaths('web', __dirname);
-initEnv();
 
-// These must be imported after loading .env into process since they require access to environment variables.
 import { env } from '~web/helpers/globals/env';
+// These must be imported after loading .env into process since they require access to environment variables.
 import { initOrm } from '~orm';
 import { router as webRouter } from '~web/controllers/web';
 import { initMiddleware } from './middlewares/init.middleware';

@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
 import { LeftNavComponent } from './left-nav.component';
 
 describe('LeftNavComponent', () => {

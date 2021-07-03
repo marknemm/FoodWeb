@@ -3,66 +3,15 @@ import { AccountProfileImgPlaceholder } from '../interfaces/account/account-prof
 import { Weekday } from '../interfaces/account/operation-hours';
 import { AuditEventType } from '../interfaces/audit/audit';
 import { DonationStatus } from '../interfaces/donation/donation';
-import { NotificationType, NOTIFICATION_TYPES } from '../interfaces/notification/notification';
+import { NotificationType } from '../interfaces/notification/notification';
 
 export class Constants {
 
-  readonly ACCOUNT_CATEGORIES: AccountCategory[] = [
-    AccountCategory.Volunteer,
-    AccountCategory.Business,
-  ];
-
+  readonly ACCOUNT_CATEGORIES: AccountCategory[] = Object.values(AccountCategory);
   readonly ACCOUNT_CATEGORY_MEMBERS = {
     Business: [AccountType.Donor, AccountType.Receiver],
     Volunteer: [AccountType.Volunteer]
   };
-
-  readonly ACCOUNT_TYPES: AccountType[] = [
-    AccountType.Volunteer,
-    AccountType.Donor,
-    AccountType.Receiver
-  ];
-
-  readonly AUDIT_EVENT_TYPES: AuditEventType[] = [
-    AuditEventType.Signup,
-    AuditEventType.VerifyAccount,
-    AuditEventType.RemoveUnverifiedAccount,
-    AuditEventType.UpdateAccount,
-    AuditEventType.UpdatePassword,
-    AuditEventType.ResetPassword,
-    AuditEventType.Donate,
-    AuditEventType.UpdateDonation,
-    AuditEventType.RemoveDonation,
-    AuditEventType.ClaimDonation,
-    AuditEventType.UnclaimDonation,
-    AuditEventType.ScheduleDelivery,
-    AuditEventType.DeliveryStateAdvance,
-    AuditEventType.DeliveryStateUndo
-  ];
-
-  readonly DONATION_STATUSES: DonationStatus[] = [
-    DonationStatus.Unmatched,
-    DonationStatus.Matched,
-    DonationStatus.Scheduled,
-    DonationStatus.Started,
-    DonationStatus.PickedUp,
-    DonationStatus.Complete
-  ];
-
-  readonly DONATION_TYPES: string[] = ['Food', 'Merchandise', 'Cash', 'Service', 'Other'];
-
-  readonly NOTIFICATION_TYPES: NotificationType[] = NOTIFICATION_TYPES;
-
-  readonly WEEKDAYS: Weekday[] = [
-    Weekday.Sunday,
-    Weekday.Monday,
-    Weekday.Tuesday,
-    Weekday.Wednesday,
-    Weekday.Thursday,
-    Weekday.Friday,
-    Weekday.Saturday
-  ];
-
   readonly ACCOUNT_PROFILE_IMG_PLACEHOLDERS: { [letter: string]: AccountProfileImgPlaceholder } = {
     A: { backgroundColor: '#00bfa5', color: '#fff', letter: 'A' },
     B: { backgroundColor: '#6200ea', color: '#fff', letter: 'B' },
@@ -91,5 +40,15 @@ export class Constants {
     Y: { backgroundColor: '#c51162', color: '#fff', letter: 'Y' },
     Z: { backgroundColor: '#2962ff', color: '#fff', letter: 'Z' },
   };
+  readonly ACCOUNT_TYPES: AccountType[] = Object.values(AccountType);
+
+  readonly AUDIT_EVENT_TYPES: AuditEventType[] = Object.values(AuditEventType);
+
+  readonly DONATION_STATUSES: DonationStatus[] = Object.values(DonationStatus);
+  readonly DONATION_TYPES: string[] = ['Food', 'Merchandise', 'Cash', 'Service', 'Other'];
+
+  readonly NOTIFICATION_TYPES: NotificationType[] = <NotificationType[]>Object.values(NotificationType);
+
+  readonly WEEKDAYS: Weekday[] = Object.values(Weekday);
 
 }

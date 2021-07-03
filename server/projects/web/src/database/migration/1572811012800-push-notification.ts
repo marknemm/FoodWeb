@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // tslint:disable-next-line: class-name
 export class pushNotification1572811012800 implements MigrationInterface {
+  name = 'pushNotification1572811012800';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`ALTER TABLE "Notification" ADD "title" character varying`);

@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { QueryList } from '@angular/core';
-import { async, ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatColumnDef, MatTableModule } from '@angular/material/table';
 import { MockComponent, MockDirective } from 'ng-mocks';

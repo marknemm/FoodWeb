@@ -30,6 +30,9 @@ import { SignupRoutingModule } from './signup-routing.module';
     NgxMaterialTimepickerModule,
     SharedModule,
     AccountSharedModule,
+  ],
+  exports: [
+    SignupComponent
   ]
 })
 export class SignupModule {}

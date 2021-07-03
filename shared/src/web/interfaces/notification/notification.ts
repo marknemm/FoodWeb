@@ -131,19 +131,3 @@ export enum NotificationType {
   DonationHubReminder = ('Donation Hub Reminder'),
   DonationPledgeReminder = ('Donation Pledge Reminder')
 }
-
-export const NOTIFICATION_TYPES: NotificationType[] = [
-  NotificationType.Signup,
-  NotificationType.Donate,
-  NotificationType.UpdateDonation,
-  NotificationType.RemoveDonation,
-  NotificationType.ClaimDonation,
-  NotificationType.ClaimReassigned,
-  NotificationType.UnclaimDonation,
-  NotificationType.ScheduleDelivery,
-  NotificationType.CancelDelivery,
-  NotificationType.DeliveryStateAdvance,
-  NotificationType.DeliveryStateUndo,
-  NotificationType.DeliveryReminder,
-  NotificationType.DeliveryReassigned
-];

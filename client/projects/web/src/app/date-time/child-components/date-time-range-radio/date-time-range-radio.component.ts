@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Convert } from '~web/component-decorators';
 import { DateTimeRange, DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
 
@@ -13,16 +12,11 @@ export class DateTimeRangeRadioComponent extends FormBaseComponent<DateTimeRange
 
   @Input() ariaLabel: string;
   @Input() rangeWindow: DateTimeRange;
-  @Convert()
   @Input() rangeWindowStart: Date;
-  @Convert()
   @Input() rangeWindowEnd: Date;
-  @Convert()
-  @Input() stepMins: number = 15;
-  @Convert()
-  @Input() allowPast: boolean = false;
-  @Convert()
-  @Input() excludeTopDivider: boolean = false;
+  @Input() stepMins = 15;
+  @Input() allowPast = false;
+  @Input() excludeTopDivider = false;
 
   /**
    * An internally used form control keeping track of the index of the selected date-time range.

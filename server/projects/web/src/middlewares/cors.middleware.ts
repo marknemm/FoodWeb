@@ -8,7 +8,7 @@ type OriginCallbackFn = (err: Error, allow?: boolean) => void;
 
 const corsOpts: CorsOptions = {
   origin: (origin: string, callback: OriginCallbackFn) => {
-    (!origin || env.CORS_WHITELIST.indexOf(origin) >= 0)
+    (!origin || env.DEVELOPMENT || env.CORS_WHITELIST.indexOf(origin) >= 0)
       ? callback(null, true)
       : callback(new FoodWebError(`Not allowed by CORS: ${origin}`, 302));
   },

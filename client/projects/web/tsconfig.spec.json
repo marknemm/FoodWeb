@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
     "paths": {
       "~lodash-mixins": ["src/lodash-mixins"],
       "~shared": ["src/shared"],

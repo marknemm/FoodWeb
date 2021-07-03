@@ -63,7 +63,7 @@ export class DonationHubEditComponent extends FormBaseComponent<DonationHubForm>
   save(): void {
     if (this.formGroup.checkValidity()) {
       this._donationHubUpdateService.updateDonationHub(this.formGroup.toDonationHub()).subscribe(
-        (donationHub: DonationHub) => this._router.navigate(['/donation-hub', 'details', donationHub.id])
+        (donationHub: DonationHub) => this._router.navigate(['/donation-hub', donationHub.id])
       );
     }
   }

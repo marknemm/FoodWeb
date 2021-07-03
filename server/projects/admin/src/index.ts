@@ -1,16 +1,14 @@
 import 'reflect-metadata';
 import { Application, Request, Response } from 'express';
 import { appPaths, initPaths } from '../../web/src/helpers/globals/paths'; // Cannot use ~web/ path map until initPaths is called.
-import { initEnv } from '../../web/src/helpers/globals/env'; // Cannot use ~web/ path map until initPaths is called.
 import express = require('express');
 import path = require('path');
 
 // Initialize all global path constants, path mappings, and environment variables for the Express app.
 initPaths('admin', __dirname);
-initEnv();
 
-// These must be imported after loading .env into process since they require access to environment variables.
 import { env } from '~web/helpers/globals/env';
+// These must be imported after loading .env into process since they require access to environment variables.
 import { initOrm } from '~orm';
 import { ensureSessionAdmin } from '~admin/middlewares/admin-session.middleware';
 import { router as sessionRouter } from '~admin/controllers/admin-session';

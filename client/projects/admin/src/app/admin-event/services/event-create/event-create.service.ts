@@ -1,12 +1,9 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError, finalize, map } from 'rxjs/operators';
 import { environment } from '~admin-env/environment';
 import { FeaturedEvent, FeaturedEventCreateRequest } from '~shared';
-import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
-import { AlertService } from '~web/alert/services/alert/alert.service';
-import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +13,8 @@ export class EventCreateService {
   readonly url = `${environment.server}/featured-event`;
 
   constructor(
-    private _alertSerivce: AlertService,
-    private _alertQueueService: AlertQueueService,
     private _httpClient: HttpClient,
-    private _pageProgressService: PageProgressService
+    private _httpResponseService: HttpResponseService,
   ) {}
 
   /**
@@ -29,22 +24,8 @@ export class EventCreateService {
    */
   createEvent(featuredEvent: FeaturedEvent): Observable<FeaturedEvent> {
     const request: FeaturedEventCreateRequest = { featuredEvent };
-    this._pageProgressService.activate(true);
-    return this._httpClient.post<FeaturedEvent>(this.url, request, { withCredentials: true })
-      .pipe(
-        map(this._showSuccessMessage.bind(this)),
-        catchError((err: HttpErrorResponse) => this._alertQueueService.add(err)),
-        finalize(() => this._pageProgressService.reset())
-      );
-  }
-
-  /**
-   * Displays a success message for a newly created featured event.
-   * @param featuredEvent The featured event to show the success message for.
-   * @return The input featured event.
-   */
-  private _showSuccessMessage(featuredEvent: FeaturedEvent): FeaturedEvent {
-    this._alertSerivce.displaySimpleMessage('Event Creation Successful', 'success');
-    return featuredEvent;
+    return this._httpClient.post<FeaturedEvent>(this.url, request, { withCredentials: true }).pipe(
+      this._httpResponseService.handleHttpResponse({ successMessage: 'Event Creation Successful' })
+    );
   }
 }

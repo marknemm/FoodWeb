@@ -1,8 +1,8 @@
 const env = require('../util/env');
 const cleanBuild = require('../util/clean-build');
 const path = require('path');
-const spawn = require('../util/spawn');
-const { getOptionalArg } = require('../util/args');
+const spawn = require('../../../shared/tools/util/spawn');
+const { getOptionalArg } = require('../../../shared/tools/util/args');
 const { getProjectDir } = require('../util/project');
 const { selectProjectPrompt } = require('../util/prompt');
 

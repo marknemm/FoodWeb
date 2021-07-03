@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, ObservableInput, OperatorFunction } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
-import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
+import { AlertService } from '~web/alert/services/alert/alert.service';
 import { HttpResponseHandlerOptions } from '~web/shared/interfaces/http-response-handler-options';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 export * from '~web/shared/interfaces/http-response-handler-options';
@@ -19,7 +19,7 @@ export class HttpResponseService {
   private _pageProgressLoadCnt = 0;
 
   constructor(
-    private _alertQueueService: AlertQueueService,
+    private _alertService: AlertService,
     private _pageProgressService: PageProgressService
   ) {}
 
@@ -112,7 +112,7 @@ export class HttpResponseService {
 
     // Display a success alert message if one is configured.
     if (opts.successMessage) {
-      this._alertQueueService.processImmediately(opts.successMessage, 'success');
+      this._alertService.displayMessage(opts.successMessage, 'success');
     }
   }
 
@@ -128,6 +128,6 @@ export class HttpResponseService {
     }
 
     // Otherwise, perform default error handling, which will complete observable without emitting a value.
-    return this._alertQueueService.processImmediately(err, 'danger');
+    return this._alertService.displayError(err, 'danger');
   }
 }

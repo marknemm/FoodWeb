@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import 'jasmine';
-import { AdminAccountCreateService } from './admin-account-create';
+import { AdminAccountCreateService } from './admin-account-create.service';
 
 describe('AdminAccountCreateService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

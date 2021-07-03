@@ -56,7 +56,7 @@ export class PageTitleService {
     const title: string = titleFrags.filter(
       (urlFrag: string) => !/^\d+$/.test(urlFrag)
     ).map(
-      (urlFrag: string) => urlFrag.split(/[\-|_]/)
+      (urlFrag: string) => urlFrag.split(/[-|_]/)
                                   .map((word: string) => word.substr(0, 1).toUpperCase() + word.substr(1))
                                   .join(' ')
     ).reverse()

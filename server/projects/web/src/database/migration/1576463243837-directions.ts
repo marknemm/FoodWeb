@@ -4,6 +4,7 @@ import { genDirections } from '~web/helpers/map/directions';
 
 // tslint:disable-next-line: class-name
 export class directions1576463243837 implements MigrationInterface {
+  name = 'directions1576463243837';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`ALTER TABLE "Delivery" ADD "distanceMiToDonor" real`);

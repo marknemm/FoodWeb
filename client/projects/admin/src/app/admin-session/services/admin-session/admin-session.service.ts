@@ -16,6 +16,7 @@ export class AdminSessionService extends SessionService {
   /**
    * Since admins have ownership of all accounts, this will always return true.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   hasAccountOwnership(accountId: number): boolean {
     return true;
   }
