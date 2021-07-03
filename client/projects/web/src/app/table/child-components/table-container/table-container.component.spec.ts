@@ -1,5 +1,5 @@
 import { QueryList } from '@angular/core';
-import { async, ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableContainerComponent } from './table-container.component';
 

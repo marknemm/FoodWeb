@@ -1,8 +1,8 @@
-import { AccountEntity, AppDataEntity, Notification, NotificationEntity, NotificationType } from '~entity';
+import { AccountEntity, MobileDeviceEntity, Notification, NotificationEntity, NotificationType } from '~entity';
 import { ServerSentEventType } from '~shared';
 import { getPushNotificationClient, PushNotificationClient } from '~web/helpers/messaging/push-notification';
 import { getSSEClient, SSE, SSEClient } from '~web/helpers/messaging/sse';
-import { readAppData } from '~web/services/app-data/read-app-data';
+import { readMobileDevice } from '~web/services/mobile-device/read-mobile-device';
 import { readUnseenNotificationsCount } from '~web/services/notification/read-notifications';
 import { createNotification } from '~web/services/notification/save-notification';
 export { Notification, NotificationType };
@@ -44,7 +44,7 @@ export class NotificationClient {
     // Only send push notifications to accounts that have it enabled.
     const pushClient: PushNotificationClient = getPushNotificationClient();
     const pushAccounts: AccountEntity[] = accounts.filter((account: AccountEntity) => account.contactInfo.enablePushNotification);
-    const pushTargets: AppDataEntity[] = await this._getPushTargets(pushAccounts);
+    const pushTargets: MobileDeviceEntity[] = await this._getPushTargets(pushAccounts);
     await pushClient.broadcastPushNotifications(pushTargets, notification);
     // Send Server Sent Event notifications to all accounts (will show up within in-app/website notifications menu).
     return (!notification.pushOnly)
@@ -63,7 +63,7 @@ export class NotificationClient {
     // If the user has disabled push notifications, then do not send.
     const pushClient: PushNotificationClient = getPushNotificationClient();
     if (!account.contactInfo.enablePushNotification) {
-      const pushTargets: AppDataEntity[] = await this._getPushTargets(account);
+      const pushTargets: MobileDeviceEntity[] = await this._getPushTargets(account);
       await pushClient.broadcastPushNotifications(pushTargets, notification);
     }
     // Send Server Sent Event notification (will show up within in-app/website notifications menu).
@@ -73,14 +73,14 @@ export class NotificationClient {
   }
 
   /**
-   * Gets the app data targets of a push notification.
+   * Gets the mobile device targets of a push notification.
    * @param accounts The accounts that are to be targeted by push notification.
-   * @return A promise that resolves to the app data targets.
+   * @return A promise that resolves to the mobile device targets.
    */
-  private async _getPushTargets(accounts: AccountEntity[] | AccountEntity): Promise<AppDataEntity[]> {
+  private async _getPushTargets(accounts: AccountEntity[] | AccountEntity): Promise<MobileDeviceEntity[]> {
     accounts = (accounts instanceof Array) ? accounts : [accounts];
     const accountIds: number[] = accounts.map((account: AccountEntity) => account.id);
-    return (await readAppData({ accountIds, page: 1, limit: 1000 })).list;
+    return (await readMobileDevice({ accountIds, page: 1, limit: 1000 })).list;
   }
 
   /**

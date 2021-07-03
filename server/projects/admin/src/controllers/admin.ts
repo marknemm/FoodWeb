@@ -4,7 +4,6 @@ import { router as deliveryRouter } from '~admin/controllers/admin-delivery';
 import { router as developerRouter } from '~admin/controllers/admin-developer';
 import { router as donationRouter } from '~admin/controllers/admin-donation';
 import { router as featuredEventRouter } from '~admin/controllers/admin-featured-event';
-import { router as appDataRouter } from '~web/controllers/app-data';
 import { router as heuristicsRouter } from '~web/controllers/heuristics';
 import { router as mapRouter } from '~web/controllers/map';
 import { router as notificationRouter } from '~web/controllers/notification';
@@ -13,7 +12,6 @@ import { router as sseRouter } from '~web/controllers/sse';
 export const router = express.Router();
 
 router.use('/account',        accountRouter);
-router.use('/app-data',       appDataRouter);
 router.use('/delivery',       deliveryRouter);
 router.use('/developer',      developerRouter);
 router.use('/donation',       donationRouter);

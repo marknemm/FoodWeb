@@ -35,9 +35,9 @@
           <foodweb-date
             floatLabels="never"
             formControlName="dropOffDate"
-            editable="true"
             placeholder="Drop-off Date"
             [dateFilter]="filterDateSaturday"
+            [editable]="true"
             [minDate]="minRegisterDate"
           ></foodweb-date>
         </div>
@@ -57,7 +57,7 @@
   <mat-card>
     <mat-card-title>Contact Info</mat-card-title>
     <mat-card-content>
-      <foodweb-contact-info editable="true" formGroupName="contactOverride"></foodweb-contact-info>
+      <foodweb-contact-info formGroupName="contactOverride" [editable]="true"></foodweb-contact-info>
     </mat-card-content>
   </mat-card>
 

@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { AccountFiltersComponent } from '~web/account/child-components/account-filters/account-filters.component';
-import { Convert } from '~web/component-decorators';
 import { FormHelperService, formProvider } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
@@ -12,8 +11,7 @@ import { ConstantsService } from '~web/shared/services/constants/constants.servi
 })
 export class AdminAccountFiltersComponent extends AccountFiltersComponent {
 
-  @Convert()
-  @Input() omitSorting: boolean = false;
+  @Input() omitSorting = false;
 
   constructor(
     public constantsService: ConstantsService,

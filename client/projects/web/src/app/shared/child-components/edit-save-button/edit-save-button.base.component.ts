@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { Convert } from '~web/component-decorators';
 import { ConfirmDialogService } from '~web/shared/services/confirm-dialog/confirm-dialog.service';
 
 @Component({ template: '' })
@@ -9,16 +8,12 @@ export class EditSaveButtonBaseComponent<T = any> implements OnChanges {
 
   @Input() cancelText = 'Cancel';
   @Input() control: AbstractControl;
-  @Convert()
-  @Input() disableSave: boolean = false;
-  @Convert()
-  @Input() editable: boolean = false;
+  @Input() disableSave = false;
+  @Input() editable = false;
   @Input() editText = 'Edit';
-  @Convert()
-  @Input() noCancelEdit: boolean = false;
+  @Input() noCancelEdit = false;
   @Input() saveText = 'Save';
-  @Convert()
-  @Input() useButtonText: boolean = false;
+  @Input() useButtonText = false;
 
   /**
    * Emits the edit state whenever a change is made to it.

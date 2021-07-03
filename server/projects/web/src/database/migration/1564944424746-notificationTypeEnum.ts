@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // tslint:disable-next-line: class-name
 export class notificationTypeEnum1564944424746 implements MigrationInterface {
+  name = 'notificationTypeEnum1564944424746';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     const alreadyCreated: boolean = (await queryRunner.query(

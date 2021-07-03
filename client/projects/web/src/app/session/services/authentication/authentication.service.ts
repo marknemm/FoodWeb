@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
-import { catchError, finalize, map, mergeMap, takeUntil } from 'rxjs/operators';
+import { catchError, finalize, map, switchMap, takeUntil } from 'rxjs/operators';
 import { AccountHelper, ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
 import { environment } from '~web-env/environment';
-import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
+import { AlertService } from '~web/alert/services/alert/alert.service';
 import { Account, SessionService } from '../session/session.service';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class AuthenticationService {
 
   constructor(
     protected _accountHelper: AccountHelper,
-    protected _alertQueueService: AlertQueueService,
+    protected _alertService: AlertService,
     protected _httpClient: HttpClient,
     protected _sessionService: SessionService
   ) {}
@@ -90,7 +90,7 @@ export class AuthenticationService {
   protected _handleLoginSuccess(response: LoginResponse, notifyUser = false): Account {
     this._sessionService.saveAccount(response.account);
     if (notifyUser) {
-      this._alertQueueService.add(`Welcome, ${this._accountHelper.accountName(response.account)}`, 'success');
+      this._alertService.displayMessage(`Welcome, ${this._accountHelper.accountName(response.account)}`, 'success');
     }
     this._login$.next(response.account);
     return response.account;
@@ -136,8 +136,10 @@ export class AuthenticationService {
    */
   refreshSessionStatus(): Observable<Account> {
     return this.checkIfUserLoggedIn().pipe(
-      mergeMap((response: LoginResponse) =>
-        this._handleSessionRefreshResponse(response)
+      switchMap((response: LoginResponse) =>
+        (response.account)
+          ? of(this._handleLoginSuccess(response))
+          : of(this._sessionRefreshLogout())
       )
     );
   }
@@ -154,19 +156,6 @@ export class AuthenticationService {
   }
 
   /**
-   * Handles a session refresh response.
-   * @param response The session refresh (login) response.
-   * @return An observable that resolves to the account after syncing the session state with the server.
-   * If the user has been logged out on the server, then it emits null.
-   */
-  protected _handleSessionRefreshResponse(response: LoginResponse): Observable<Account> {
-    // Sync client session with existing session on server.
-    return (response.account)
-      ? of(this._handleLoginSuccess(response))
-      : of(this._sessionRefreshLogout());
-  }
-
-  /**
    * Logs the user out as a result of a session refresh (sync with server logged out state),
    * and alerts them of the logout.
    * @return null, repressenting the new value for the client account session.
@@ -174,7 +163,7 @@ export class AuthenticationService {
   protected _sessionRefreshLogout(): null {
     if (this._sessionService.account) {
       this.logout();
-      this._alertQueueService.add('You have been logged out due to inactivity', 'warn');
+      this._alertService.displayMessage('You have been logged out due to inactivity', 'warn');
     }
     return null;
   }
@@ -186,14 +175,14 @@ export class AuthenticationService {
   logout(notifyUser = false): void {
     this._httpClient.delete<void>(this.url, { withCredentials: true }).pipe(
       catchError((err: HttpErrorResponse) =>
-        this._alertQueueService.add(err)
+        this._alertService.displayError(err)
       )
     ).subscribe();
 
     const account: Account = this._sessionService.account;
     this._sessionService.deleteAccount();
     if (notifyUser) {
-      this._alertQueueService.add('Logout successful', 'success');
+      this._alertService.displayMessage('Logout successful', 'success');
     }
     this._logout$.next(account);
   }

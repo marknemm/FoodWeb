@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // tslint:disable-next-line: class-name
 export class eventRegistration1566268190081 implements MigrationInterface {
+  name = 'eventRegistration1566268190081';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`CREATE TABLE "EventRegistration" ("id" SERIAL NOT NULL, "eventTitleDate" character varying NOT NULL, "fullName" character varying NOT NULL, "email" character varying NOT NULL, "phoneNumber" character varying NOT NULL, "accountId" integer, CONSTRAINT "PK_5b09ac0d2d829dfaf7a13f66721" PRIMARY KEY ("id"))`);

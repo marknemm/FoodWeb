@@ -1,11 +1,11 @@
 <div [formGroup]="formGroup" *ngIf="editable; else readonlyDateTimeRange" class="date-time-range-form row">
   <div class="date-time-field col-sm-12">
     <foodweb-date-time #startDateTime
-      editable="true"
       formControlName="startDateTime"
       [allowClear]="allowClear"
       [allowUndefTime]="allowUndefTime"
       [datePlaceholder]="startDatePlaceholder"
+      [editable]="true"
       [timePlaceholder]="startTimePlaceholder"
       [minDate]="minDate"
       [maxDate]="maxDate"
@@ -16,11 +16,11 @@
   </div>
   <div class="date-time-field col-sm-12">
     <foodweb-date-time #endDateTime
-      editable="true"
       formControlName="endDateTime"
       [allowClear]="allowClear"
       [allowUndefTime]="allowUndefTime"
       [datePlaceholder]="endDatePlaceholder"
+      [editable]="true"
       [timePlaceholder]="endTimePlaceholder"
       [minDate]="minDate"
       [maxDate]="maxDate"
@@ -43,12 +43,12 @@
 
 <ng-template #readonlyDateTimeRange>
   <div *ngIf="value" class="date-time-range-display">
-    <foodweb-date-time editable="false" [boldTime]="boldTime" [excludeTimeDisplay]="formGroup.startEndDateSame" [value]="value.startDateTime"></foodweb-date-time>
+    <foodweb-date-time [boldTime]="boldTime" [editable]="false" [excludeTimeDisplay]="formGroup.startEndDateSame" [value]="value.startDateTime"></foodweb-date-time>
     <!-- For no display of end date due to same begin and end date, make sure we group times together so they end up on same line if line break occurs. -->
     <span class="d-inline-block">
-      <foodweb-date-time *ngIf="formGroup.startEndDateSame" editable="false" [boldTime]="boldTime" [excludeDateDisplay]="true" [value]="value.startDateTime"></foodweb-date-time>
+      <foodweb-date-time *ngIf="formGroup.startEndDateSame" [boldTime]="boldTime" [editable]="false" [excludeDateDisplay]="true" [value]="value.startDateTime"></foodweb-date-time>
       <span class="display-to"> -- </span>
-      <foodweb-date-time editable="false" [boldTime]="boldTime" [excludeDateDisplay]="formGroup.startEndDateSame" [value]="value.endDateTime"></foodweb-date-time>
+      <foodweb-date-time [boldTime]="boldTime" [editable]="false" [excludeDateDisplay]="formGroup.startEndDateSame" [value]="value.endDateTime"></foodweb-date-time>
     </span>
   </div>
 </ng-template>

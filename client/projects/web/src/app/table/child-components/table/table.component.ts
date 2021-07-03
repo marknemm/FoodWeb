@@ -4,7 +4,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatColumnDef, MatFooterRowDef, MatHeaderRowDef, MatRowDef, MatTable } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Convert } from '~web/component-decorators';
 import { TableColumn, TableDataSource, TableSelectionType } from '~web/table/interfaces/table-data-source';
 export { TableColumn, TableDataSource, TableSelectionType };
 
@@ -22,13 +21,11 @@ export class TableComponent<T = any> implements OnChanges, AfterContentInit, OnD
   /**
    * Set to false if the table header should not be sticky. Default is true.
    */
-  @Convert()
-  @Input() stickyHeader: boolean = true;
+  @Input() stickyHeader = true;
   /**
    * Set to false if the table rows' action (button) column should not be sticky. Default is true.
    */
-  @Convert()
-  @Input() stickyRowActions: boolean = true;
+  @Input() stickyRowActions = true;
 
   /**
    * Emitted whenever there is a table row selection change. See Angular Material SelectionModel for details.

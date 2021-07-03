@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AlertActionBase } from '~web/alert/interfaces/alert-base';
-import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
+import { AlertAction, AlertService } from '~web/alert/services/alert/alert.service';
 import { ConfirmDialog } from '~web/shared/interfaces/confirm-dialog';
 
 @Injectable({
@@ -10,7 +9,7 @@ import { ConfirmDialog } from '~web/shared/interfaces/confirm-dialog';
 export class ConfirmDialogService implements ConfirmDialog {
 
   constructor(
-    private _alertQueue: AlertQueueService
+    private _alertService: AlertService
   ) {}
 
   /**
@@ -22,18 +21,18 @@ export class ConfirmDialogService implements ConfirmDialog {
    * @return An observable that resolves to the confirm dialog result; true for confirm, false for cancel.
    */
   displayConfirmDialog(message: string, title?: string, confirmTxt?: string, cancelTxt?: string): Observable<boolean> {
-    const cancel: AlertActionBase<boolean> = {
+    const cancel: AlertAction<boolean> = {
       color: 'warn',
       text: cancelTxt ? cancelTxt : 'Cancel',
       value: false,
     };
-    const confirm: AlertActionBase<boolean> = {
+    const confirm: AlertAction<boolean> = {
       focusPrimary: true,
       text: confirmTxt ? confirmTxt : 'Confirm',
       value: true,
     };
 
-    return this._alertQueue.processImmediately({
+    return this._alertService.displayAlert({
       message,
       title,
       level: 'info',

@@ -1,6 +1,5 @@
 import { Directive, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Convert } from '~web/component-decorators';
 import { ThresholdSide } from '~web/shared/interfaces/threshold-side';
 import { ScreenSizeService } from '~web/shared/services/screen-size/screen-size.service';
 export { ThresholdSide };
@@ -19,8 +18,7 @@ export class WindowSizeDirective implements OnInit, OnChanges, OnDestroy {
   /**
    * The window size threshold in pixels. Defaults to 767 (px) for mobile window width.
    */
-  @Convert()
-  @Input('foodwebWindowSize') thresholdPx: number = 767;
+  @Input('foodwebWindowSize') thresholdPx = 767;
 
   /**
    * Emitted whenever the window size threshold (thresholdPx) is crossed.

@@ -79,7 +79,7 @@ async function filterDevDatabase(devDatabaseName: string): Promise<void> {
     // REALLY IMPORTANT: purge/Change all of the very private data!!!
     await replaceDevPasswords(queryRunner);
     await purgeDevPassResetTokens(queryRunner);
-    await purgeDevAppSessionsData(queryRunner);
+    await purgeDevPerpetualSessionsData(queryRunner);
     await replaceDevPassVerificationTokens(queryRunner);
 
     // Perform all other filtering tasks of less importance.
@@ -135,7 +135,7 @@ async function createDevDbMetadata(queryRunner: QueryRunner): Promise<void> {
       "createTimestamp"                   TIMESTAMP NOT NULL DEFAULT NOW(),
       "replaceDevPasswords"               BOOLEAN   NOT NULL DEFAULT false,
       "purgeDevPassResetTokens"           BOOLEAN   NOT NULL DEFAULT false,
-      "purgeDevAppSessionsData"           BOOLEAN   NOT NULL DEFAULT false,
+      "purgeDevPerpetualSessionsData"     BOOLEAN   NOT NULL DEFAULT false,
       "replaceDevPassVerificationTokens"  BOOLEAN   NOT NULL DEFAULT false,
       "replaceVolunteerNames"             BOOLEAN   NOT NULL DEFAULT false,
       "replaceEmails"                     BOOLEAN   NOT NULL DEFAULT false,
@@ -187,13 +187,13 @@ async function purgeDevPassResetTokens(queryRunner: QueryRunner): Promise<void> 
  * @param queryRunner The dev database query runner.
  * @return A promise that resolves once this operation completes.
  */
-async function purgeDevAppSessionsData(queryRunner: QueryRunner): Promise<void> {
+async function purgeDevPerpetualSessionsData(queryRunner: QueryRunner): Promise<void> {
   await queryRunner.query(`
-    TRUNCATE "AppSession";
-    TRUNCATE "AppData";
+    TRUNCATE "PerpetualSession";
+    TRUNCATE "MobileDevice";
 
     UPDATE  "DevDbMetadata"
-    SET     "purgeDevAppSessionsData" = true;
+    SET     "purgeDevPerpetualSessionsData" = true;
   `);
 }
 

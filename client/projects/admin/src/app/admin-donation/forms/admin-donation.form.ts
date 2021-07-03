@@ -11,7 +11,7 @@ export class AdminDonationForm extends TFormGroup<AdminDonationFormT> {
 
   constructor(
     dateTimeService: DateTimeService,
-    destroy$: Observable<any>,
+    destroy$: Observable<unknown>,
     donation?: Donation
   ) {
     super({
@@ -61,7 +61,7 @@ export class AdminDonationForm extends TFormGroup<AdminDonationFormT> {
     return this.donateForm.toDonationSaveData();
   }
 
-  private _listenForDonorAccountChange(destroy$: Observable<any>): void {
+  private _listenForDonorAccountChange(destroy$: Observable<unknown>): void {
     this.get('donorAccount').valueChanges.pipe(
       takeUntil(destroy$)
     ).subscribe(
@@ -70,7 +70,7 @@ export class AdminDonationForm extends TFormGroup<AdminDonationFormT> {
     this.donateForm.deriveValuesFromDonorAccount(this.donorAccount);
   }
 
-  private _listenForReceiverAccountChange(destroy$: Observable<any>): void {
+  private _listenForReceiverAccountChange(destroy$: Observable<unknown>): void {
     this.get('receiverAccount').valueChanges.pipe(
       takeUntil(destroy$)
     ).subscribe(

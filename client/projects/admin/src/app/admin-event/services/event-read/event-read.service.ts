@@ -1,12 +1,11 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError, finalize, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { environment } from '~admin-env/environment';
 import { FeaturedEvent } from '~shared';
-import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
-import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 export { FeaturedEvent };
 
 @Injectable({
@@ -17,9 +16,8 @@ export class EventReadService {
   readonly url = `${environment.server}/featured-event`;
 
   constructor(
-    private _alertQueueService: AlertQueueService,
     private _httpClient: HttpClient,
-    private _pageProgressService: PageProgressService,
+    private _httpResponseService: HttpResponseService,
     private _window: Window,
   ) {}
 
@@ -39,10 +37,8 @@ export class EventReadService {
     }
     // Get featured event from server.
     const url = `${this.url}/${id}`;
-    this._pageProgressService.activate(true);
     return this._httpClient.get<FeaturedEvent>(url, { withCredentials: true }).pipe(
-      catchError((err: HttpErrorResponse) => this._alertQueueService.add(err)),
-      finalize(() => this._pageProgressService.reset())
+      this._httpResponseService.handleHttpResponse()
     );
   }
 

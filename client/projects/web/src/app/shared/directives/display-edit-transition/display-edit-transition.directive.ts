@@ -1,7 +1,6 @@
 import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Convert } from '~web/component-decorators';
 import { ScreenSizeService } from '~web/shared/services/screen-size/screen-size.service';
 
 @Directive({
@@ -10,11 +9,9 @@ import { ScreenSizeService } from '~web/shared/services/screen-size/screen-size.
 })
 export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDestroy {
 
-  @Convert()
-  @Input('foodwebDisplayEditTransition') editable: boolean = false;
+  @Input('foodwebDisplayEditTransition') editable = false;
   @Input() display: HTMLElement;
-  @Convert()
-  @Input() duration: number = 0.25;
+  @Input() duration = 0.25;
   @Input() form: HTMLElement;
   @Input() heightRecalcAtMs: number[];
   @Input() recalcTrigger: Observable<any>;

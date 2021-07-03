@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Convert } from '~web/component-decorators';
 
 @Component({
   selector: 'foodweb-yes-no',
@@ -9,8 +8,7 @@ import { Convert } from '~web/component-decorators';
 export class YesNoComponent implements OnInit {
 
   @Input() noTxt = 'No';
-  @Convert()
-  @Input() yes: boolean = false;
+  @Input() yes = false;
   @Input() yesTxt = 'Yes';
 
   constructor() {}

@@ -1,10 +1,10 @@
 require('../../util/env')();
 const commandExists = require('command-exists');
-const exec = require('../../util/exec');
+const exec = require('../../../../shared/tools/util/exec');
 const path = require('path');
 const { promises: fs } = require('fs');
 const { getDbConfig } = require('./client');
-const { getOptionalArg } = require('../../util/args');
+const { getOptionalArg } = require('../../../../shared/tools/util/args');
 const { inputPrompt } = require('../../util/prompt');
 
 // Get the optional script `dumpFileName` argument, and run pg dump.

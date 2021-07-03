@@ -1,6 +1,6 @@
 require('../../util/env')();
 const path = require('path');
-const { getOptionalArg } = require('../../util/args');
+const { getOptionalArg } = require('../../../../shared/tools/util/args');
 const { PgClient, connect } = require('./client');
 
 // Get absolute pathname to SQL util scripts used to initialize the dev DB.

@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { environment } from '~web-env/environment';
-import { AlertQueueService } from '~web/alert/services/alert-queue/alert-queue.service';
+import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class UsernameRecoveryService {
 
   constructor(
     private _httpClient: HttpClient,
-    private _alertQueueService: AlertQueueService
+    private _httpResponseService: HttpResponseService
   ) {}
 
   get loading(): boolean {
@@ -27,7 +27,7 @@ export class UsernameRecoveryService {
     const params = (new HttpParams()).set('email', email);
     this._loading = true;
     return this._httpClient.get<void>(this.url, { params, withCredentials: true }).pipe(
-      catchError((err: any) => this._alertQueueService.add(err)),
+      this._httpResponseService.handleHttpResponse<void>({ pageProgressBlocking: false }),
       finalize(() => this._loading = false)
     );
   }

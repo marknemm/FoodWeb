@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Donation } from '~shared';
-import { Convert } from '~web/component-decorators';
 
 @Component({
   selector: 'foodweb-primary-donation-info',
@@ -10,8 +9,7 @@ import { Convert } from '~web/component-decorators';
 export class PrimaryDonationInfoComponent implements OnInit {
 
   @Input() donation: Donation;
-  @Convert()
-  @Input() myDonation: boolean = false;
+  @Input() myDonation = false;
 
   constructor() {}
 

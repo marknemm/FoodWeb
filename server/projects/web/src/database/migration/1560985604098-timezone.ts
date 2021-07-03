@@ -3,6 +3,7 @@ import geoTz = require('geo-tz');
 
 // tslint:disable-next-line: class-name
 export class timezone1560985604098 implements MigrationInterface {
+  name = 'timezone1560985604098';
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     const alreadyCreated: boolean = (await queryRunner.query(

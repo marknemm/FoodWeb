@@ -1,9 +1,9 @@
 require('../util/env')();
 const isPortReachable = require('is-port-reachable');
 const path = require('path');
-const spawn = require('../util/spawn');
+const spawn = require('../../../shared/tools/util/spawn');
 const { promises: fs } = require('fs');
-const { getOptionalArg } = require('../util/args');
+const { getOptionalArg } = require('../../../shared/tools/util/args');
 const { selectPrompt, inputPrompt } = require('../util/prompt');
 
 const tsconfigPathname = path.join(global['serverWebDir'], 'tsconfig.json');

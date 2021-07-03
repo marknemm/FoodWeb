@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { Convert } from '~web/component-decorators';
 import { TableDataSource } from '~web/table/interfaces/table-data-source';
 
 @Component({
@@ -24,8 +23,7 @@ export class TableTitleComponent<T = any> {
    * Determines whether or not to include a filter search field.
    * Default is true for include.
    */
-  @Convert()
-  @Input() includeSearch: boolean = true;
+  @Input() includeSearch = true;
   /**
    * The search placeholder. Default value is 'Search...'.
    */
@@ -38,19 +36,16 @@ export class TableTitleComponent<T = any> {
    * The debounce time for the filter (in ms).
    * Default value is 0ms.
    */
-  @Convert()
-  @Input() searchDebounceTime: number = 0;
+  @Input() searchDebounceTime = 0;
   /**
    * Whether or not the default form members of the table title are disabled. Default is false.
    */
-  @Convert()
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
   /**
    * Whether or not the table filter input is collapsible. In desktop mode, hovering over the search icon will expand the input.
    * In mobile mode, tapping the search icon will expand the input. Default is true.
    */
-  @Convert()
-  @Input() collapsibleFilter: boolean = true;
+  @Input() collapsibleFilter = true;
   /**
    * The icon used for the table search/filter.
    */
@@ -63,7 +58,7 @@ export class TableTitleComponent<T = any> {
   /**
    * Debounce timer used for updating rawFilteredRows in updateFilteredRows method below.
    */
-  private _updateFiltTimer: any;
+  private _updateFiltTimer: NodeJS.Timeout;
 
   get searchFilterVisible(): boolean {
     return (this._showDatatableFilter || !this.collapsibleFilter);

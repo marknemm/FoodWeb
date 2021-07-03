@@ -1,6 +1,5 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { AccountProfileImgPlaceholder } from '~shared';
-import { Convert, NumberConverter } from '~web/component-decorators';
 import { FormBaseComponent, FormHelperService, TFormControl } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { ScreenSizeService, SizeThresholds } from '~web/shared/services/screen-size/screen-size.service';
@@ -9,7 +8,6 @@ import { ScreenSizeService, SizeThresholds } from '~web/shared/services/screen-s
 export class ProfileImgBaseComponent extends FormBaseComponent<string> implements OnInit {
 
   // Default is 40 (px) b/c mat-card-avatar defaults to this size.
-  @Convert(NumberConverter)
   @Input() size: SizeThresholds | number = 40;
 
   @HostBinding()

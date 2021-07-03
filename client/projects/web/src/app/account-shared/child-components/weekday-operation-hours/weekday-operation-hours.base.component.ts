@@ -1,21 +1,16 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { OperationHours, TimeRange, Weekday } from '~shared';
-import { Convert } from '~web/component-decorators';
+import { OperationHours, Weekday } from '~shared';
 import { TimeRangeArray } from '~web/date-time/forms/time-range.array';
 import { FormBaseComponent, FormHelperService } from '~web/forms';
 
 @Component({ template: '' })
 export class WeekdayOperationHoursBaseComponent extends FormBaseComponent<TimeRangeArray> implements OnChanges {
 
-  @Convert()
-  @Input() allowClear: boolean = false;
-  @Convert()
-  @Input() editable: boolean = false;
-  @Convert()
-  @Input() minutesGap: number = 5;
+  @Input() allowClear = false;
+  @Input() editable = false;
+  @Input() minutesGap = 5;
   @Input() operationHours: OperationHours;
-  @Convert()
-  @Input() allowOverlayClick: boolean = false;
+  @Input() allowOverlayClick = false;
   @Input() timeWidth = '110px';
   @Input() weekday: Weekday;
 

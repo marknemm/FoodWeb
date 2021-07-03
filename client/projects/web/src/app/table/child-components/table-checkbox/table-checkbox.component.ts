@@ -24,9 +24,9 @@ export class TableCheckboxComponent<T = any> implements OnInit, DoCheck {
    */
   @Input() column: TableColumn<T>;
 
-  // tslint:disable-next-line:no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('attr.aria-label') ariaLabel: string;
-  // tslint:disable-next-line:no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('attr.aria-labelledby') ariaLabelledby: string;
 
   /**

@@ -1,5 +1,4 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
-import { Convert } from '~web/component-decorators';
 import { FilteredListService } from '~web/filtered-list/services/filtered-list/filtered-list.service';
 
 @Component({
@@ -9,8 +8,7 @@ import { FilteredListService } from '~web/filtered-list/services/filtered-list/f
 })
 export class ListFiltersTitleComponent implements OnInit {
 
-  @Convert()
-  @Input() primary: boolean = false;
+  @Input() primary = false;
 
   @HostBinding() class = 'foodweb-list-filters-title';
 

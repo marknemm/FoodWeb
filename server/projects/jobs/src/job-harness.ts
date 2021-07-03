@@ -1,13 +1,12 @@
 import 'reflect-metadata';
 import path = require('path');
-import { env, initEnv } from '../../../projects/web/src/helpers/globals/env';
 import { initPaths } from '../../../projects/web/src/helpers/globals/paths';
 
 // Initialize all global path constants, path mappings, and environment variables for the Express app.
 initPaths('jobs', __dirname);
-initEnv();
 
 // Must be imported after loading .env into process since requires access to environment variables.
+import { env } from '~web/helpers/globals/env';
 import { initOrm } from '~orm';
 
 /**

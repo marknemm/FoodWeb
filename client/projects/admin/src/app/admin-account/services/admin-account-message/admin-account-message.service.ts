@@ -25,7 +25,7 @@ export class AdminAccountMessageService {
    */
   sendMessage(sendMessageReq: SendMessageRequest, accountFilters: AccountReadRequest): Observable<void> {
     const url = `${this.url}/send-message`;
-    const params = new HttpParams({ fromObject: <any>accountFilters });
+    const params = new HttpParams({ fromObject: <{ [param: string]: string }>accountFilters });
     return this._httpClient.post(url, sendMessageReq, { withCredentials: true, params }).pipe(
       this._httpResponseService.handleHttpResponse<void>({ successMessage: 'Message Successfully Sent' })
     );

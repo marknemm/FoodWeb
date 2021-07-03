@@ -1,7 +1,6 @@
 import { SelectionChange } from '@angular/cdk/collections';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { DonationHubPledge } from '~shared';
-import { Convert } from '~web/component-decorators';
 import { TableDataSource, TableSelectionType } from '~web/table/interfaces/table-data-source';
 
 @Component({
@@ -11,11 +10,9 @@ import { TableDataSource, TableSelectionType } from '~web/table/interfaces/table
 })
 export class DonationHubPledgeTableComponent implements OnChanges {
 
-  @Convert()
-  @Input() loading: boolean = false;
+  @Input() loading = false;
   @Input() pledges: DonationHubPledge[] = [];
-  @Convert()
-  @Input() selection: boolean = false;
+  @Input() selection = false;
 
   @Output() select = new EventEmitter<DonationHubPledge>();
 

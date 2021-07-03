@@ -1,5 +1,5 @@
 const path = require('path');
-const spawn = require('./spawn');
+const spawn = require('../../../shared/tools/util/spawn');
 
 /**
  * Cleans the build artifacts for a given server project.

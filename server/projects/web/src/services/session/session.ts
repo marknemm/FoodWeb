@@ -1,10 +1,11 @@
-import { getRepository } from 'typeorm';
-import { AccountEntity, AppSessionEntity, UnverifiedAccountEntity } from '~entity';
+import { randomBytes } from 'crypto';
+import { getRepository, Repository } from 'typeorm';
+import { AccountEntity, PerpetualSessionEntity, UnverifiedAccountEntity } from '~entity';
 import { ListResponse, LoginRequest, LoginResponse } from '~shared';
 import { checkPasswordMatch } from '~web/helpers/misc/password-match';
 import { FoodWebError } from '~web/helpers/response/foodweb-error';
-import { saveAppSessionToken } from '~web/services/session/app-session';
-import { readFullAccount, readFullAccounts } from '../account/read-accounts';
+import { readFullAccount, readFullAccounts } from '~web/services/account/read-accounts';
+import { saveMobileDevice } from '~web/services/mobile-device/save-mobile-device';
 
 /**
  * Performs the login for a given user.
@@ -17,7 +18,12 @@ export async function login(loginRequest: LoginRequest): Promise<LoginResponse> 
     const account: AccountEntity = await _getAccountEntity(loginRequest.usernameEmail);
     const validated: boolean = await checkPasswordMatch(account, loginRequest.password);
     if (validated) {
-      return _handleValidationSuccess(account, loginRequest.isApp);
+      const loginResponse: LoginResponse = { account };
+      if (loginRequest.mobileDevice) {
+        await saveMobileDevice(loginRequest.mobileDevice, account);
+        loginResponse.perpetualSession = await createPerpetualSession(account);
+      }
+      return loginResponse;
     }
     throw new Error('Password match validation failed');
   } catch (err) {
@@ -53,16 +59,39 @@ async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> 
 }
 
 /**
- * Handles validation success by generating a login response.
- * @param account The account that has been validated.
- * @param isApp Whether or not the client that requested validation is a mobile app.
- * @return A promise that resolves to the login response.
+ * Saves a long-lived perpetual session for a given account.
+ * @param account The account that the session is associated with.
+ * @return A promise that resolves to the long-lived app session.
  */
-async function _handleValidationSuccess(account: AccountEntity, isApp: boolean): Promise<LoginResponse> {
-  const appSessionToken: string = (isApp)
-    ? await saveAppSessionToken(account)
-    : null;
-  return { account, appSessionToken };
+ export async function createPerpetualSession(account: AccountEntity): Promise<PerpetualSessionEntity> {
+  const repository: Repository<PerpetualSessionEntity> = getRepository(PerpetualSessionEntity);
+  await repository.delete({ account });
+  const perpetualSession = new PerpetualSessionEntity(account);
+  let duplicateToken = false;
+  do {
+    perpetualSession.sessionToken = randomBytes(10).toString('hex'); // Gen 20 char token.
+    duplicateToken = (await repository.count({ sessionToken: perpetualSession.sessionToken })) !== 0;
+  } while (duplicateToken);
+  return await repository.save(perpetualSession);
+}
+
+/**
+ * Performs the login using a given long-lived perpetual session token.
+ * @param sessionToken The long-lived perpetual session token.
+ * @return A promise where on success it will provide the Account of the newly logged in user.
+ * @throws A FoodWebError with status 401 when the login fails.
+ */
+export async function perpetualTokenLogin(sessionToken: string): Promise<LoginResponse> {
+  try {
+    const perpetualSession: PerpetualSessionEntity = await getRepository(PerpetualSessionEntity).findOne({ sessionToken });
+    if (perpetualSession) {
+      return { account: perpetualSession.account, perpetualSession };
+    }
+    throw new Error('Mobile app session token not found');
+  } catch (err) {
+    console.error(err);
+    throw new FoodWebError('App authentication failed', 401);
+  }
 }
 
 /**
@@ -71,6 +100,6 @@ async function _handleValidationSuccess(account: AccountEntity, isApp: boolean):
  * @return A promise that resolves to void on completion.
  */
 export async function logout(account: AccountEntity): Promise<void> {
-  await getRepository(AppSessionEntity).delete({ account })
+  await getRepository(PerpetualSessionEntity).delete({ account })
     .catch((err: Error) => console.error(err));
 }

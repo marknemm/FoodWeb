@@ -7,7 +7,7 @@ import { TFormGroup } from '~web/forms';
 export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
 
   constructor(
-    destroy$: Observable<any>,
+    destroy$: Observable<unknown>,
     delivery?: Delivery
   ) {
     super({
@@ -45,7 +45,7 @@ export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
     return this.enabled ? this.value.dropOffTime : null;
   }
 
-  private _listenForVolunteerAccountChange(destroy$: Observable<any>): void {
+  private _listenForVolunteerAccountChange(destroy$: Observable<unknown>): void {
     this.onControlValueChanges('volunteerAccount', destroy$).subscribe(
       () => this._onVolunteerAccountChange()
     );
@@ -64,7 +64,7 @@ export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
     setTimeout(() => this._onStartTimeChange()); // Prevent ValueChangedAfterCheckedError.
   }
 
-  private _listenForStartTimeChange(destroy$: Observable<any>): void {
+  private _listenForStartTimeChange(destroy$: Observable<unknown>): void {
     this.onControlValueChanges('startTime', destroy$).subscribe(
       () => this._onStartTimeChange()
     );
@@ -78,7 +78,7 @@ export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
     this._onPickupTimeChange();
   }
 
-  private _listenForPickupTimeChange(destroy$: Observable<any>): void {
+  private _listenForPickupTimeChange(destroy$: Observable<unknown>): void {
     this.onControlValueChanges('pickupTime', destroy$).subscribe(
       () => this._onPickupTimeChange()
     );

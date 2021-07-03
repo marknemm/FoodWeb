@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "main": "dist/server/projects/web/src/index.js",
+  "private": true,
   "scripts": {
     "build": "node ./tools/npm/build.js",
     "clean": "rimraf ./dist/* ./coverage ./ormlogs.log",
@@ -11,7 +12,6 @@
     "init:install": "node ./tools/npm/init-install.js",
     "init:project": "node ./tools/npm/init-project.js",
     "install:shared": "cd ../shared && npm install && cd ../server",
-    "job": "node ./tools/npm/job.js",
     "lambda:pkg": "./tools/npm/lambda-pkg.sh",
     "lint": "node ./tools/npm/lint.js",
     "pg": "node ./tools/npm/pg.js",
@@ -23,7 +23,6 @@
     "test:watch": "ts-mocha -p ./projects/web/tsconfig.spec.json ./src/**/*.ts",
     "typeorm": "node ./tools/npm/typeorm.js"
   },
-  "private": true,
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.1.16",
     "bcrypt": "^5.0.1",

@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from '~web/home/components/home/home.component';
 import { ShellComponent } from '~web/shell/components/shell/shell.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
   {
     path: '',
@@ -16,7 +16,6 @@ const routes: Routes = [
       { path: 'donation-hub', loadChildren: () => import('~web/donation-hub/donation-hub.module').then(mod => mod.DonationHubModule) },
       { path: 'donor', loadChildren: () => import('~web/donor/donor.module').then(mod => mod.DonorModule) },
       { path: 'event', loadChildren: () => import('~web/event/event.module').then(mod => mod.EventModule) },
-      { path: 'fundraise', loadChildren: () => import('~web/fundraise/fundraise.module').then(mod => mod.FundraiseModule) },
       { path: 'home', component: HomeComponent },
       { path: 'home/:login', component: HomeComponent },
       { path: 'notification', loadChildren: () => import('~web/notification/notification.module').then(mod => mod.NotificationModule) },

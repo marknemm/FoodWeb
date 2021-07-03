@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Convert } from '~web/component-decorators';
 import { TableDataSource } from '~web/table/interfaces/table-data-source';
 export { TableDataSource };
 
@@ -12,15 +11,13 @@ export class TableEditComponent<T = any> implements OnInit {
 
   @Input() dataSource: TableDataSource<T>;
   @Input() row: T;
-  @Convert()
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
   @Input() buttonText = 'Edit Row';
   @Input() tooltip: string;
-  @Convert()
-  @Input() responsive: boolean = false;
-  // tslint:disable-next-line:no-input-rename
+  @Input() responsive = false;
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('attr.aria-label') ariaLabel: string;
-  // tslint:disable-next-line:no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('attr.aria-labelledby') ariaLabelledby: string;
 
   @Output() edit = new EventEmitter<T>();
