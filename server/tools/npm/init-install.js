@@ -1,5 +1,5 @@
 require('../util/env');
-const exec = require('../util/exec');
+const exec = require('../../../shared/tools/util/exec');
 const path = require('path');
 const { promises: fs } = require('fs');
 

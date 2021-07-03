@@ -6,15 +6,16 @@ const _spawn = require('child_process').spawn;
  * @param {string} cmd The command that is to be run in the child process.
  * @param {string[]} args A list of the arguments to the given command.
  * @param {string} startFinishTxt Optional text that will be appended to 'Starting ' & 'Finished ' log output.
+ * @param {string} cwd The current working directory that the spawn command should run in. Defaults to current directory (undefined).
  * @return {Promise<void>} A promise that resolves once the child process exits successfully.
  */
-async function spawn(cmd, args, startFinishTxt = '') {
+async function spawn(cmd, args, startFinishTxt = '', cwd = undefined) {
   cmd = await ensureCmdExists(cmd);
   if (startFinishTxt) {
     console.log(`Starting ${startFinishTxt}`);
   }
   console.log(`${cmd} ${args.join(' ')}`);
-  const childProcess = _spawn(cmd, args, { stdio: 'inherit' });
+  const childProcess = _spawn(cmd, args, { stdio: 'inherit', cwd });
   return new Promise((res, rej) =>
     childProcess.on('exit', (code) => {
       if (startFinishTxt) {

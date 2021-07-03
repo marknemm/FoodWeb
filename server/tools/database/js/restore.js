@@ -1,6 +1,6 @@
 require('../../util/env')();
 const path = require('path');
-const { getOptionalArg } = require('../../util/args');
+const { getOptionalArg } = require('../../../../shared/tools/util/args');
 const { getFileChoices, selectPrompt } = require('../../util/prompt');
 const { connect } = require('./client');
 

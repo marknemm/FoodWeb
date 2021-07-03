@@ -2,10 +2,10 @@ const env = require('../util/env');
 const cleanBuild = require('../util/clean-build');
 const commandExists = require('command-exists');
 const path = require('path');
-const sleep = require('../util/sleep');
-const spawn = require('../util/spawn');
-const { getHost } = require('../util/host');
-const { getOptionalArg } = require('../util/args');
+const sleep = require('../../../shared/tools/util/sleep');
+const spawn = require('../../../shared/tools/util/spawn');
+const { getHost } = require('../../../shared/tools/util/host');
+const { getOptionalArg } = require('../../../shared/tools/util/args');
 const { selectProjectPrompt } = require('../util/prompt');
 const { getProjectDir } = require('../util/project');
 

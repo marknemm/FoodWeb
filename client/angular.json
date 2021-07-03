@@ -549,38 +549,6 @@
               "cmd": "update android"
             }
           }
-        },
-        "run-android": {
-          "builder": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "npx ionic cap run android --project='hybrid' -l --external",
-            "platform": "",
-            "cwd": "projects/hybrid"
-          },
-          "configurations": {
-            "android": {
-              "platform": "android"
-            },
-            "ios": {
-              "platform": "ios"
-            }
-          }
-        },
-        "run-ios": {
-          "builder": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "npx ionic cap run ios --project='hybrid' -l --external",
-            "platform": "",
-            "cwd": "projects/hybrid"
-          },
-          "configurations": {
-            "android": {
-              "platform": "android"
-            },
-            "ios": {
-              "platform": "ios"
-            }
-          }
         }
       }
     }

@@ -1,5 +1,5 @@
 require('../../util/env')();
-const { getOptionalArg } = require('../../util/args');
+const { getOptionalArg } = require('../../../../shared/tools/util/args');
 const { inputPrompt } = require('../../util/prompt');
 const { connect } = require('./client');
 

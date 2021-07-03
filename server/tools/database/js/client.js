@@ -1,7 +1,7 @@
 require('../../util/env')();
 const { Client, ClientConfig, QueryResult } = require('pg');
 const { promises: fs } = require('fs');
-const { getHost } = require('../../util/host');
+const { getHost } = require('../../../../shared/tools/util/host');
 
 /**
  * A FoodWeb PostgreSQL Client that configures its own credentials based off of the web project's .env settings.
