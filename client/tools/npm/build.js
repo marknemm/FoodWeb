@@ -68,7 +68,7 @@ async function buildProject(project, platform) {
  */
 async function buildOneProject(project, platform, configuration) {
   if (!builtProjects.has(project)) { // Do not rebuild same project for multiple platforms.
-    await spawn('ng', ['build', '--prod', `--project=${project}`, `-c=${configuration}`]);
+    await spawn('ng', ['build', `--project=${project}`, `-c=${configuration}`]);
     builtProjects.set(project, true);
   }
   if (platform && platform !== 'web') {

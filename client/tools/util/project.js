@@ -51,10 +51,11 @@ function parseProjectInput(project) {
 /**
  * Generates a select prompt in stdin, which allows the user to select a client project.
  * @param {boolean} includeAll Whether or not to include an 'all' selection for all projects. Defaults to false.
+ * @param {string[]} exclude A list of projects to exclude from the prompt.
  * @return {Promise<string>} A promise that resolves to the selected client project.
  */
-async function selectProjectPrompt(includeAll = false) {
-  return selectPrompt('Select a project', getProjects(includeAll));
+async function selectProjectPrompt(includeAll = false, exclude = []) {
+  return selectPrompt('Select a project', getProjects(includeAll, exclude));
 }
 
 module.exports = {

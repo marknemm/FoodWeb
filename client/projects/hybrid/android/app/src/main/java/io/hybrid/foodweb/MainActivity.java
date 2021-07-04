@@ -1,4 +1,4 @@
-package io.hybrid.foodweb;
+package io.foodweb.hybrid;
 
 import com.getcapacitor.BridgeActivity;
 

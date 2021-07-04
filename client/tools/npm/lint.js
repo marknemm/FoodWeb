@@ -12,7 +12,7 @@ const args = yargs.command(`$0 [project]`, 'Lints a client Ng project.',
     })
   ).argv;
 
-// Get the optional script `project` argument, and lint the project source code.
+// Lint the project source code.
 lintProject(args.project)
   .catch(console.error)
   .finally(process.exit);

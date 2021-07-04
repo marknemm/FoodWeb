@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.hybrid.foodweb">
+    package="io.foodweb.hybrid">
 
     <application
         android:allowBackup="true"
@@ -13,7 +13,7 @@
 
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-            android:name="io.hybrid.foodweb.MainActivity"
+            android:name="io.foodweb.hybrid.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch"
             android:launchMode="singleTask">
