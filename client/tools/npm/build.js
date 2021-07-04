@@ -1,15 +1,28 @@
 require('../util/constants');
 const spawn = require('../../../shared/tools/util/spawn');
-const { getOptionalArg } = require('../../../shared/tools/util/args');
+const yargs = require('yargs');
 const { getProjects, parseProjectInput, selectProjectPrompt } = require('../util/project');
 const { getPlatforms, selectPlatformPrompt } = require('../util/platform');
 
 const builtProjects = new Map();
 
-// Get the optional script `project` argument, and build the project source.
-getOptionalArg('project')
-  .then(parseProjectInput)
-  .then((inputData) => buildProject(inputData.project, inputData.platform))
+// Parse command line arguments.
+const args = yargs.command(`$0 [project] [Options]`, 'Builds given Ng project(s).',
+  (yargs) =>
+    yargs.positional('Project', {
+      description: 'The Ng project to build. If not provided, then prompted.',
+      type: 'string'
+    })
+    .option('configuration', {
+      alias: 'c',
+      description: 'The Ng config to use when building the project.',
+      default: 'production'
+    })
+  ).argv;
+const projectData = parseProjectInput(args.project);
+
+// Build the project source.
+buildProject(projectData.project, projectData.platform)
   .catch(console.error)
   .finally(process.exit);
 
@@ -41,7 +54,7 @@ async function buildProject(project, platform) {
     }
 
     for (const buildPlatform of buildPlatforms) {
-      await buildOneProject(buildProject, buildPlatform);
+      await buildOneProject(buildProject, buildPlatform, args.configuration);
     }
   }
 }
@@ -50,11 +63,12 @@ async function buildProject(project, platform) {
  * Builds a single client project.
  * @param {string} project The client project to build.
  * @param {string} platform The platform for which to build the client project.
+ * @param {string} configuration The Ng config or env to use when building the project.
  * @return {Promise<void>} A promise that resolves once the build operation completes.
  */
-async function buildOneProject(project, platform) {
+async function buildOneProject(project, platform, configuration) {
   if (!builtProjects.has(project)) { // Do not rebuild same project for multiple platforms.
-    await spawn('ng', ['build', '--prod', `--project=${project}`]);
+    await spawn('ng', ['build', `--project=${project}`, `-c=${configuration}`]);
     builtProjects.set(project, true);
   }
   if (platform && platform !== 'web') {

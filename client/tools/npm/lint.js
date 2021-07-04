@@ -1,11 +1,19 @@
 require('../util/constants');
 const spawn = require('../../../shared/tools/util/spawn');
-const { getOptionalArg } = require('../../../shared/tools/util/args');
+const yargs = require('yargs');
 const { getProjects, selectProjectPrompt } = require('../util/project');
 
-// Get the optional script `project` argument, and lint the project source code.
-getOptionalArg('project')
-  .then(lintProject)
+// Parse command line arguments.
+const args = yargs.command(`$0 [project]`, 'Lints a client Ng project.',
+  (yargs) =>
+    yargs.positional('project', {
+      description: 'The Ng project to lint. If not provided, then prompted.',
+      type: 'string'
+    })
+  ).argv;
+
+// Lint the project source code.
+lintProject(args.project)
   .catch(console.error)
   .finally(process.exit);
 

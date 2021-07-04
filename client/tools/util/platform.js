@@ -18,10 +18,11 @@ const { selectPrompt } = require('../../../shared/tools/util/prompt');
 /**
  * Generates a select prompt in stdin, which allows the user to select a client platform.
  * @param {boolean} includeAll Whether or not to include an 'all' selection for all platforms. Defaults to false.
+ * @param {string[]} exclude A list of the platforms to exclude from the prompt.
  * @return {Promise<string>} A promise that resolves to the selected client platform.
  */
-async function selectPlatformPrompt(includeAll = false) {
-  return selectPrompt('Select a device platform', getPlatforms(includeAll));
+async function selectPlatformPrompt(includeAll = false, exclude = []) {
+  return selectPrompt('Select a device platform', getPlatforms(includeAll, exclude));
 }
 
 module.exports = {
