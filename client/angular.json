@@ -418,6 +418,18 @@
                   "with": "projects/hybrid/src/environments/environment.web.ts"
                 }
               ]
+            },
+            "device": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/hybrid/src/environments/environment.ts",
+                  "with": "projects/hybrid/src/environments/environment.device.ts"
+                },
+                {
+                  "replace": "projects/web/src/environments/environment.ts",
+                  "with": "projects/hybrid/src/environments/environment.device.ts"
+                }
+              ]
             }
           }
         },
@@ -429,6 +441,12 @@
           "configurations": {
             "production": {
               "browserTarget": "hybrid:build:production"
+            },
+            "web": {
+              "browserTarget": "hybrid:build:web"
+            },
+            "device": {
+              "browserTarget": "hybrid:build:device"
             }
           }
         },
