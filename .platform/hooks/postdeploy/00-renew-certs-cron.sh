@@ -10,7 +10,7 @@ mv /etc/nginx/conf.d/web.conf /etc/nginx/
 mv /etc/nginx/conf.d/admin.conf /etc/nginx
 
 # Generate & install new letsencrypt certs via certbot.
-certbot certonly -n -d www.wnyfoodweb.com -d admin.wnyfoodweb.com -d foodweb-env-1.eba-swceimpj.us-east-2.elasticbeanstalk.com --nginx --agree-tos --email foodweb.main@gmail.com
+certbot certonly -n -d www.wnyfoodweb.com -d admin.wnyfoodweb.com -d foodweb-env.eba-swceimpj.us-east-2.elasticbeanstalk.com --nginx --agree-tos --email foodweb.main@gmail.com
 
 # Perform nginx reload so that new certs are used.
 mv /etc/nginx/web.conf /etc/nginx/conf.d

@@ -278,7 +278,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: FoodWeb
-          environment_name: Foodweb-env-1
+          environment_name: Foodweb-env
           region: us-east-2
           version_label: ${{ steps.current-time.outputs.time }}--${{ steps.commit-hash.outputs.commit-hash }}
           deployment_package: foodweb.zip
