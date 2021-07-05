@@ -22,8 +22,8 @@ export class MobileDeviceService {
     // Get general device info, and then, register device for push notifications.
     Device.getInfo().then(async (device: DeviceInfo) => {
       const uuid: string = (await Device.getId()).uuid;
-      this._pushNotificationService.register().subscribe((pushRegistrationId: string) =>
-        ({
+      this._pushNotificationService.register().subscribe((pushRegistrationId: string) => {
+        mobileDeviceSubject.next({
           uuid,
           isVirtual: device.isVirtual,
           manufacturer: device.manufacturer,
@@ -33,10 +33,11 @@ export class MobileDeviceService {
           osVersion: device.osVersion,
           platform: device.platform,
           pushRegistrationId
-        })
-      );
+        });
+        mobileDeviceSubject.complete();
+      });
     })
 
-    return mobileDeviceSubject;
+    return mobileDeviceSubject.asObservable();
   }
 }
