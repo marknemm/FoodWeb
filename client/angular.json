@@ -407,15 +407,15 @@
                 }
               ]
             },
-            "web": {
+            "emu": {
               "fileReplacements": [
                 {
                   "replace": "projects/hybrid/src/environments/environment.ts",
-                  "with": "projects/hybrid/src/environments/environment.web.ts"
+                  "with": "projects/hybrid/src/environments/environment.emu.ts"
                 },
                 {
                   "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/hybrid/src/environments/environment.web.ts"
+                  "with": "projects/hybrid/src/environments/environment.emu.ts"
                 }
               ]
             },
@@ -442,8 +442,8 @@
             "production": {
               "browserTarget": "hybrid:build:production"
             },
-            "web": {
-              "browserTarget": "hybrid:build:web"
+            "emu": {
+              "browserTarget": "hybrid:build:emu"
             },
             "device": {
               "browserTarget": "hybrid:build:device"
