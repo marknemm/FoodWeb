@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { PushNotifications, PermissionStatus, Token } from '@capacitor/push-notifications';
-import { Observable, of, Subject } from 'rxjs';
+import { PermissionStatus, PushNotifications, Token } from '@capacitor/push-notifications';
+import { from, Observable, of, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,13 +8,20 @@ import { Observable, of, Subject } from 'rxjs';
 export class PushNotificationService {
 
   private _pushRegistrationId = '';
+  private _pushRegistrationSubject = new Subject<string>();
 
   constructor() {}
 
+  /**
+   * true if the device is registered with the FCM server for push notifications, false if not.
+   */
   get isRegistered(): boolean {
     return !!this._pushRegistrationId;
   }
 
+  /**
+   * The push notification registration ID. An empty string if not registered.
+   */
   get pushRegistrationId(): string {
     return this._pushRegistrationId;
   }
@@ -24,21 +31,16 @@ export class PushNotificationService {
    * @returns An observable that emits the push notification registration ID. An empty string if registration failed.
    */
   register(): Observable<string> {
-    const registerSubject = new Subject<string>();
-
     // Ensure only register once.
     if (this.isRegistered) {
       return of(this.pushRegistrationId);
     }
 
     // Setup listeners for push notification registration results.
-    PushNotifications.addListener('registration', (token: Token) => {
-      this._pushRegistrationId = token.value;
-      registerSubject.next(this._pushRegistrationId);
-    });
-    PushNotifications.addListener('registrationError', (err: Error) => {
+    PushNotifications.addListener('registration', (token: Token) => this._setPushRegistrationId(token.value));
+    PushNotifications.addListener('registrationError', (err: any) => {
       console.error(err);
-      registerSubject.next('');
+      this._setPushRegistrationId('');
     });
 
     // Request permission to setup push notifications, and register.
@@ -48,13 +50,23 @@ export class PushNotificationService {
             throw new Error('User declined receiving push notifications');
           }
       })
-      .then(() => PushNotifications.register())
+      .then(() => PushNotifications.register().then())
       .catch((err: Error) => {
         console.error(err);
-        registerSubject.next('');
+        this._setPushRegistrationId('');
       });
 
-    return registerSubject;
+    return this._pushRegistrationSubject.asObservable();
+  }
+
+  /**
+   * Sets a given push notification registration ID, and emits its value.
+   * @param id The push registration ID to set.
+   */
+  private _setPushRegistrationId(id: string) {
+    this._pushRegistrationId = id;
+    this._pushRegistrationSubject.next(this.pushRegistrationId);
+    this._pushRegistrationSubject.complete();
   }
 
   // private _listenForNotifications(): void {
