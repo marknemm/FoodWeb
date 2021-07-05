@@ -1,27 +1,29 @@
 import { Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
+import { Device, DeviceInfo } from '@capacitor/device';
+import { Observable, Subject } from 'rxjs';
+import { PushNotificationService } from '~hybrid/shared/services/push-notification/push-notification.service';
 import { MobileDevice } from '~shared';
-import { Device, DeviceInfo } from '@capacitor/device'
 
 @Injectable({
   providedIn: 'root'
 })
 export class MobileDeviceService {
 
-  constructor() {}
-
-  prepareMobileDevice(): Observable<MobileDevice> {
-    return null;
-  }
+  constructor(
+    private _pushNotificationService: PushNotificationService
+  ) {}
 
   /**
    * @returns An observable that emits information uniquely related to the user's mobile device.
    */
   getMobileDevice(): Observable<MobileDevice> {
-    return from(
-      Device.getInfo().then(async (device: DeviceInfo) => {
-        const uuid: string = (await Device.getId()).uuid;
-        return {
+    const mobileDeviceSubject = new Subject<MobileDevice>();
+
+    // Get general device info, and then, register device for push notifications.
+    Device.getInfo().then(async (device: DeviceInfo) => {
+      const uuid: string = (await Device.getId()).uuid;
+      this._pushNotificationService.register().subscribe((pushRegistrationId: string) =>
+        ({
           uuid,
           isVirtual: device.isVirtual,
           manufacturer: device.manufacturer,
@@ -30,8 +32,11 @@ export class MobileDeviceService {
           operatingSystem: device.operatingSystem,
           osVersion: device.osVersion,
           platform: device.platform,
-        };
-      })
-    );
+          pushRegistrationId
+        })
+      );
+    })
+
+    return mobileDeviceSubject;
   }
 }
