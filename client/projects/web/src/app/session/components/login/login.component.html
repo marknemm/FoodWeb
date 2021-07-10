@@ -3,8 +3,8 @@
 
   <div *ngIf="!messageSent">
     <mat-form-field>
-      <input matInput *ngIf="!insideDialog" type="text" [placeholder]="usernameEmailPlaceholder" formControlName="usernameEmail">
-      <input matInput *ngIf="insideDialog" type="text" [placeholder]="usernameEmailPlaceholder" formControlName="usernameEmail" cdkFocusInitial>
+      <input matInput *ngIf="!insideDialog" type="email" [placeholder]="usernameEmailPlaceholder" formControlName="usernameEmail">
+      <input matInput *ngIf="insideDialog" type="email" [placeholder]="usernameEmailPlaceholder" formControlName="usernameEmail" cdkFocusInitial>
     </mat-form-field>
     <mat-form-field *ngIf="isLogin">
       <input matInput type="password" placeholder="Password" formControlName="password">
