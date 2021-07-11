@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { AuthenticationService } from '~hybrid/session/services/authentication/authentication.service';
 import { JSONDateReviver } from '~shared';
 
@@ -18,5 +19,6 @@ export class AppComponent {
     matIconReg.registerFontClassAlias('fontawesome', 'fa');
     jsonDateReviver.initJSONDateReviver();
     authService.refreshSessionStatus().subscribe();
+    setTimeout(() => SplashScreen.hide(), 1500);
   }
 }
