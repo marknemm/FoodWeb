@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-paginator',
@@ -20,9 +20,9 @@ export class PaginatorComponent implements OnInit, OnDestroy {
   private _destory$ = new Subject();
 
   constructor(
-    private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    private _leftNavService: LeftNavService
+    private _router: Router,
+    private _shellService: ShellService
   ) {}
 
   ngOnInit() {
@@ -63,7 +63,7 @@ export class PaginatorComponent implements OnInit, OnDestroy {
         queryParams: { page, limit },
         queryParamsHandling: 'merge'
       }
-    ).then(() => this._leftNavService.scrollContentToTop());
+    ).then(() => this._shellService.scrollContentToTop());
   }
 
 }

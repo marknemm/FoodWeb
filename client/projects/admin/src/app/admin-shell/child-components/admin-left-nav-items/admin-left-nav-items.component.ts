@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { faCalendarPlus, faGifts } from '@fortawesome/free-solid-svg-icons';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
-import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-admin-left-nav-items',
@@ -15,17 +15,17 @@ export class AdminLeftNavItemsComponent implements OnInit {
 
   constructor(
     public constantsService: ConstantsService,
-    private _leftNavService: LeftNavService
+    private _shellService: ShellService
   ) {}
 
   ngOnInit() {
-    this._leftNavService.mode = 'side';
-    this._leftNavService.toggle();
+    this._shellService.leftNavMode = 'side';
+    this._shellService.toggleLeftNav();
   }
 
   _onNavigate(): void {
-    if (this._leftNavService.mode === 'over') {
-      this._leftNavService.toggle();
+    if (this._shellService.leftNavMode === 'over') {
+      this._shellService.toggleLeftNav();
     }
   }
 

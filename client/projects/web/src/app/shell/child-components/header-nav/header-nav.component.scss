@@ -1,0 +1,16 @@
+@import "constants.scss";
+
+.header-nav {
+  box-sizing: border-box;
+  padding: 0 60px;
+
+  @media only screen and (max-width: 1100px) {
+    .home-label {
+      display: none;
+    }
+  }
+
+  @media only screen and (max-width: $md) {
+    display: none;
+  }
+}

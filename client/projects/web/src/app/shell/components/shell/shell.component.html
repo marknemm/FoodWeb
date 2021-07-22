@@ -1,6 +1,8 @@
 <foodweb-header>
-  <foodweb-header-navigation></foodweb-header-navigation>
-  <foodweb-header-actions class="actions"></foodweb-header-actions>
+  <foodweb-header-nav class="header-nav"></foodweb-header-nav>
+  <foodweb-login-menu class="header-action" *ngIf="!sessionService.loggedIn"></foodweb-login-menu>
+  <foodweb-notifications-menu class="header-action" *ngIf="sessionService.loggedIn"></foodweb-notifications-menu>
+  <foodweb-settings-menu class="header-action" *ngIf="sessionService.loggedIn"></foodweb-settings-menu>
 </foodweb-header>
 <foodweb-left-nav>
   <foodweb-left-nav-items class="left-nav-items"></foodweb-left-nav-items>

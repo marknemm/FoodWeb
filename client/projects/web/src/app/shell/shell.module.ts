@@ -12,8 +12,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { NotificationSharedModule } from '~web/notification-shared/notification-shared.module';
 import { SharedModule } from '~web/shared/shared.module';
-import { HeaderActionsComponent } from './child-components/header-actions/header-actions.component';
-import { HeaderNavigationComponent } from './child-components/header-navigation/header-navigation.component';
+import { HeaderNavComponent } from './child-components/header-nav/header-nav.component';
 import { HeaderComponent } from './child-components/header/header.component';
 import { LeftNavItemsComponent } from './child-components/left-nav-items/left-nav-items.component';
 import { LeftNavComponent } from './child-components/left-nav/left-nav.component';
@@ -25,13 +24,12 @@ import { ShellComponent } from './components/shell/shell.component';
 @NgModule({
   declarations: [
     ShellComponent,
-    HeaderActionsComponent,
     HeaderComponent,
     LeftNavComponent,
     LeftNavItemsComponent,
     SettingsMenuComponent,
     NotificationsMenuComponent,
-    HeaderNavigationComponent,
+    HeaderNavComponent,
     LoginMenuComponent,
   ],
   imports: [

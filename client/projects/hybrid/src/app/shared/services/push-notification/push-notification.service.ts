@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PermissionStatus, PushNotifications, Token } from '@capacitor/push-notifications';
-import { from, Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

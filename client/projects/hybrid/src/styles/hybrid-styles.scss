@@ -1,1 +1,7 @@
 @import "constants.scss";
+@import "variables.scss";
+
+html.ios {
+  height: 100vh;
+  overflow: hidden;
+}

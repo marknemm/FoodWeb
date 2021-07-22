@@ -1,0 +1,36 @@
+@import "constants.scss";
+
+.mat-nav-list {
+  max-height: calc(100vh - #{$header-height});
+  overflow  : auto;
+
+  @media only screen and (max-width: $md) {
+    max-height: calc(100vh - #{$header-height-mobile});
+  }
+
+  a {
+    color: $accent-darkest;
+
+    .mat-icon,
+    .ng-fa-icon {
+      display   : inline-block;
+      width     : 30px;
+      box-sizing: border-box;
+    }
+
+    .mat-icon {
+      font-size     : 22px;
+      height        : 22px;
+      vertical-align: middle;
+      margin-top    : -4px;
+    }
+
+    .ng-fa-icon {
+      padding-left: 2px;
+    }
+
+    span {
+      display: inline-block;
+    }
+  }
+}

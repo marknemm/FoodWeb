@@ -1,0 +1,16 @@
+@import "constants.scss";
+
+:root {
+  // --ion-background-color: #66bb6a;
+  --ion-statusbar-padding: 0px;
+  --ion-color-primary: #66bb6a;
+  --ion-color-primary-contrast: #5d4037;
+}
+
+.ios ion-popover {
+  --width: 250px;
+
+  &.full-width {
+    --width: calc(100vw - 10px);
+  }
+}

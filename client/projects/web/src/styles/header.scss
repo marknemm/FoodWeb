@@ -1,6 +1,6 @@
 @import "./constants.scss";
 
-header {
+.header {
   .mat-button {
     color      : $accent-darkest;
     font-size  : 20px;
@@ -65,15 +65,6 @@ header {
     .mat-badge-content.mat-badge-active {
       margin-right: 6px;
       top         : 2px;
-    }
-  }
-
-  .header-actions-container {
-    display       : inline-block;
-    vertical-align: middle;
-
-    @media only screen and (max-width: $md) {
-      height: 100%;
     }
   }
 }

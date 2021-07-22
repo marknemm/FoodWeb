@@ -17,5 +17,8 @@
       ]
     }
   },
+  "ios": {
+    "contentInset": "automatic"
+  },
   "cordova": {}
 }

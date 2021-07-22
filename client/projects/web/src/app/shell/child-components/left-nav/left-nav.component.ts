@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatSidenavContent } from '@angular/material/sidenav';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
-import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-left-nav',
@@ -20,8 +20,8 @@ export class LeftNavComponent implements OnInit {
   @Input() windowSizeThreshPx: number;
 
   constructor(
-    public leftNavService: LeftNavService,
     public pageProgressService: PageProgressService,
+    public shellService: ShellService,
     public window: Window,
   ) {}
 
@@ -30,6 +30,6 @@ export class LeftNavComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.leftNavService.initSidenavContent(this.sidnavContent);
+    this.shellService.setMainContent(this.sidnavContent.getElementRef().nativeElement);
   }
 }

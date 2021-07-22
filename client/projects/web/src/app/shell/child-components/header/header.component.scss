@@ -6,7 +6,7 @@ $site-title-font-size-max: 42px;
   @media only screen and (max-width: $md) {
     position: relative;
     display: block;
-    padding-top: $header-height-mobile;
+    padding-bottom: $header-height-mobile;
   }
 }
 
@@ -162,7 +162,7 @@ header {
       }
     }
 
-    .header-navigation-container {
+    .header-nav-container {
       @media only screen and (max-width: $md) {
         display: none;
       }
@@ -170,7 +170,16 @@ header {
 
     .header-actions-container {
       position: absolute;
+      display: flex;
+      align-items: center;
       right: 16px;
+      height: 100%;
+
+      >* {
+        &:not(:first-child) {
+          margin-left: 5px;
+        }
+      }
 
       @media only screen and (max-width: $md) {
         right: 15px;

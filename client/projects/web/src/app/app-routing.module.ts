@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from '~web/home/components/home/home.component';
 import { ShellComponent } from '~web/shell/components/shell/shell.component';
 
-export const routes: Routes = [
+const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
   {
     path: '',
