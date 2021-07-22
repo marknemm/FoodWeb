@@ -18,13 +18,17 @@ export class NotificationsMenuComponent implements OnInit {
 
   constructor(
     public notificationService: NotificationService,
-    public popoverService: PopoverService
+    private _popoverService: PopoverService
   ) {}
 
   ngOnInit() {}
 
-  showMenu(event: Event): void {
+  present(event: Event): void {
     this.notificationService.updateSeenNotifications();
-    this.popoverService.showMenu(NotificationsMenuComponent, event, { cssClass: 'full-width' });
+    this._popoverService.present(NotificationsMenuComponent, event, { cssClass: 'full-width' });
+  }
+
+  dismiss(): void {
+    this._popoverService.dismiss(NotificationsMenuComponent);
   }
 }

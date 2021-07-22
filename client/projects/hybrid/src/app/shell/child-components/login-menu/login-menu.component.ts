@@ -31,8 +31,12 @@ export class LoginMenuComponent implements OnInit {
     LoginDialogComponent.openIfNotLoggedIn(this._sessionService, this._matDialog);
   }
 
-  showMenu(event: Event): void {
-    this._popoverService.showMenu(LoginMenuComponent, event);
+  present(event: Event): void {
+    this._popoverService.present(LoginMenuComponent, event);
+  }
+
+  dismiss(): void {
+    this._popoverService.dismiss(LoginMenuComponent);
   }
 
 }

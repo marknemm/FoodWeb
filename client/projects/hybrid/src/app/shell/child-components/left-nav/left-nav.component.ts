@@ -30,6 +30,6 @@ export class LeftNavComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.shellService.initLeftNav(this.leftNav);
+    this.shellService.setLeftNav(this.leftNav);
   }
 }

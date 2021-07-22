@@ -1,22 +1,22 @@
-<ion-button class="settings-button" (click)="showMenu($event)" *ngIf="!isMenu; else menu">
+<ion-button class="settings-button" (click)="present($event)" *ngIf="!isMenu; else menu">
   <foodweb-profile-img [value]="sessionService.account.profileImg" [size]="{ lg: 28, md: 23 }"></foodweb-profile-img>
 </ion-button>
 
 <ng-template #menu>
-  <ion-list>
+  <ion-list (click)="dismiss()">
     <ion-item [routerLink]="['/account', 'my']" [detailIcon]="person" lines="full">
       <ion-label>Account</ion-label>
     </ion-item>
 
     <ion-item-group *ngIf="!sessionService.isVolunteer">
-      <ion-item-divider>Donations</ion-item-divider>
+      <ion-item-divider (click)="$event.stopPropagation()">Donations</ion-item-divider>
       <ion-item [routerLink]="['/donation', 'list', 'my']" [detailIcon]="gift" lines="full">
         <ion-label>My Donations</ion-label>
       </ion-item>
     </ion-item-group>
 
     <ion-item-group *ngIf="sessionService.isVolunteer">
-      <ion-item-divider>My Action Items</ion-item-divider>
+      <ion-item-divider (click)="$event.stopPropagation()">My Action Items</ion-item-divider>
       <ion-item [routerLink]="['/donation-hub/list/my']" [detailIcon]="shareSocial" lines="full">
         <ion-label>Donation Hubs</ion-label>
       </ion-item>
@@ -29,7 +29,7 @@
     </ion-item-group>
 
     <ion-item-group>
-      <ion-item-divider>Status - Logged In</ion-item-divider>
+      <ion-item-divider (click)="$event.stopPropagation()">Status - Logged In</ion-item-divider>
       <ion-item [button]="true" [detailIcon]="power" (click)="authService.logout()" lines="full">
         <ion-label>Logout</ion-label>
       </ion-item>

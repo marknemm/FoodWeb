@@ -1,12 +1,12 @@
-<ion-button (click)="showMenu($event)" class="notifications-menu-button" *ngIf="!isMenu; else menu">
+<ion-button (click)="present($event)" class="notifications-menu-button" *ngIf="!isMenu; else menu">
   <ion-icon [icon]="notifications"></ion-icon>
   <ion-badge color="danger">000</ion-badge>
 </ion-button>
 
 <ng-template #menu>
-  <div class="notifications-menu-content">
+  <div class="notifications-menu-content" (click)="dismiss()">
     <ion-toolbar>
-      <ion-title>Notifications</ion-title>
+      <ion-title (click)="$event.stopPropagation()">Notifications</ion-title>
       <ion-buttons slot="end">
         <ion-button [routerLink]="['/account', 'my']" fragment="notifications" class="settings-button" color="dark" fill="clear" slot="end" size="small" shape="round">
           <ion-icon [icon]="cog"></ion-icon>

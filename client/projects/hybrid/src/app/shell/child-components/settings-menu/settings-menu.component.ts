@@ -17,11 +17,11 @@ export class SettingsMenuComponent implements OnInit {
   @Input()
   isMenu = false;
 
-  gift = gift;
-  location = location;
-  person = person;
-  power = power;
-  shareSocial = shareSocial;
+  readonly gift = gift;
+  readonly location = location;
+  readonly person = person;
+  readonly power = power;
+  readonly shareSocial = shareSocial;
 
   constructor(
     public authService: AuthenticationService,
@@ -31,7 +31,11 @@ export class SettingsMenuComponent implements OnInit {
 
   ngOnInit() {}
 
-  showMenu(event: Event): void {
-    this._popoverService.showMenu(SettingsMenuComponent, event);
+  present(event: Event): void {
+    this._popoverService.present(SettingsMenuComponent, event);
+  }
+
+  dismiss(): void {
+    this._popoverService.dismiss(SettingsMenuComponent);
   }
 }
