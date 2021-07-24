@@ -33,12 +33,16 @@ export class NotificationService {
     this._authService.logout$.subscribe(() => this._clearNotificationsData());
   }
 
-  get unseenNotificationsCount(): number {
-    return this._unseenNotificationsCount;
+  get hasUnseenNotifications(): boolean {
+    return (this._unseenNotificationsCount > 0);
   }
 
   get notificationsPreview(): Notification[] {
     return this._notificationsPreview;
+  }
+
+  get unseenNotificationsCount(): number {
+    return this._unseenNotificationsCount;
   }
 
   private _getNotificationsPreview(): void {

@@ -1,0 +1,33 @@
+@import "constants.scss";
+
+ion-toast {
+  --border-radius: 15px;
+
+  &::part(container) {
+    border-radius: var(--border-radius);
+  }
+
+  &.danger::part(container) {
+    background-color: $alert-danger-background;
+    color: $alert-danger-color;
+    border: 1px solid rgba($alert-danger-color, 0.1);
+  }
+
+  &.warn::part(container) {
+    background-color: $alert-warn-background;
+    color: $alert-warn-color;
+    border: 1px solid rgba($alert-warn-color, 0.1);
+  }
+
+  &.info::part(container) {
+    background-color: $alert-info-background;
+    color: $alert-info-color;
+    border: 1px solid rgba($alert-info-color, 0.1);
+  }
+
+  &.success::part(container) {
+    background-color: $alert-success-background;
+    color: $alert-success-color;
+    border: 1px solid rgba($alert-success-color, 0.1);
+  }
+}

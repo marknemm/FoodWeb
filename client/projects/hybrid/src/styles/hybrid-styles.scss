@@ -1,5 +1,7 @@
 @import "constants.scss";
 @import "variables.scss";
+@import "./ion-alert.scss";
+@import "./ion-toast.scss";
 
 html.ios {
   height: 100vh;

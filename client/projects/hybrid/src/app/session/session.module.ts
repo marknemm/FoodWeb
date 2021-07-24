@@ -23,7 +23,7 @@ export class SessionModule {
     return {
       ngModule: SessionModule,
       providers: [
-        // In base web code, anywhere where AuthenticationService is provided, provide HybridAuthenticationService instead.
+        // In base web code, anywhere where AuthenticationService is provided, provide Hybrid AuthenticationService instead.
         { provide: WebAuthenticationService, useExisting: AuthenticationService },
         { provide: WebSessionService, useExisting: SessionService },
       ]

@@ -6,8 +6,10 @@
 
     <a [routerLink]="['/']" class="site-icon-title">
       <ion-title class="site-title" [ngClass]="{ 'with-sub': !!pageTitleService.title }">
-        <div class="main">{{ siteTitle }}</div>
-        <div class="sub" *ngIf="pageTitleService.title">{{ pageTitleService.title }}</div>
+        <div class="site-title-inner">
+          <div class="main">{{ siteTitle }}</div>
+          <div class="sub" *ngIf="pageTitleService.title">{{ pageTitleService.title }}</div>
+        </div>
       </ion-title>
     </a>
 

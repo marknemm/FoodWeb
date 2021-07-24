@@ -78,6 +78,14 @@ $site-title-font-size-max: 42px;
       display: inline-block;
       color: $accent-darker;
 
+      .site-title-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: ($header-height-mobile - 5px);
+      }
+
       .main {
         $site-title-font-size: $site-title-font-size-max;
         $site-title-font-size-md: 30px;
