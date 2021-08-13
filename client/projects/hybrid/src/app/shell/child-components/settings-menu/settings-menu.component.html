@@ -4,33 +4,33 @@
 
 <ng-template #menu>
   <ion-list (click)="dismiss()">
-    <ion-item [routerLink]="['/account', 'my']" [detailIcon]="person" lines="full">
+    <ion-item [routerLink]="['/account', 'my']" detailIcon="person" lines="full">
       <ion-label>Account</ion-label>
     </ion-item>
 
     <ion-item-group *ngIf="!sessionService.isVolunteer">
       <ion-item-divider (click)="$event.stopPropagation()">Donations</ion-item-divider>
-      <ion-item [routerLink]="['/donation', 'list', 'my']" [detailIcon]="gift" lines="full">
+      <ion-item [routerLink]="['/donation', 'list', 'my']" detailIcon="gift" lines="full">
         <ion-label>My Donations</ion-label>
       </ion-item>
     </ion-item-group>
 
     <ion-item-group *ngIf="sessionService.isVolunteer">
       <ion-item-divider (click)="$event.stopPropagation()">My Action Items</ion-item-divider>
-      <ion-item [routerLink]="['/donation-hub/list/my']" [detailIcon]="shareSocial" lines="full">
+      <ion-item [routerLink]="['/donation-hub/list/my']" detailIcon="shareSocial" lines="full">
         <ion-label>Donation Hubs</ion-label>
       </ion-item>
-      <ion-item [routerLink]="['/donation-hub/pledge/list/my']" [detailIcon]="gift" lines="full">
+      <ion-item [routerLink]="['/donation-hub/pledge/list/my']" detailIcon="gift" lines="full">
         <ion-label>Donation Pledges</ion-label>
       </ion-item>
-      <ion-item [routerLink]="['/delivery/list/my']" [detailIcon]="location" lines="full">
+      <ion-item [routerLink]="['/delivery/list/my']" detailIcon="location" lines="full">
         <ion-label>Scheduled Deliveries</ion-label>
       </ion-item>
     </ion-item-group>
 
     <ion-item-group>
       <ion-item-divider (click)="$event.stopPropagation()">Status - Logged In</ion-item-divider>
-      <ion-item [button]="true" [detailIcon]="power" (click)="authService.logout()" lines="full">
+      <ion-item [button]="true" detailIcon="power" (click)="authService.logout()" lines="full">
         <ion-label>Logout</ion-label>
       </ion-item>
     </ion-item-group>

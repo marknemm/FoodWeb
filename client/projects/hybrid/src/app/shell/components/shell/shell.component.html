@@ -1,9 +1,5 @@
 <foodweb-hybrid-header>
-  <ion-back-button class="header-primary-button" defaultHref="/home" [icon]="arrowBack" text=""></ion-back-button>
-  <ion-menu-button class="header-primary-button" menu="left-nav"><ion-icon [icon]="menu"></ion-icon></ion-menu-button>
-  <foodweb-hybrid-login-menu class="header-secondary-button" *ngIf="!sessionService.loggedIn"></foodweb-hybrid-login-menu>
-  <foodweb-hybrid-notifications-menu class="header-secondary-button" *ngIf="sessionService.loggedIn"></foodweb-hybrid-notifications-menu>
-  <foodweb-hybrid-settings-menu class="header-secondary-button" *ngIf="sessionService.loggedIn"></foodweb-hybrid-settings-menu>
+  <ion-menu-button class="header-primary-button" menu="left-nav"><ion-icon icon="menu"></ion-icon></ion-menu-button>
 </foodweb-hybrid-header>
 
 <ion-content #mainScrollPane>

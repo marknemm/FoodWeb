@@ -1,0 +1,8 @@
+<ion-item *ngIf ="editable" formField [error]="formControl.invalid && formControl.touched" class="username-input fill">
+  <ion-label color="secondary">Username:</ion-label>
+  <ion-input type="email" inputmode="email" [formControl]="formControl" autocomplete="off"></ion-input>
+</ion-item>
+
+<div *ngIf="!editable" class="username-display">
+  {{ formControl.value }}
+</div>

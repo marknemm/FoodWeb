@@ -95,7 +95,7 @@ export class TFormGroup<T> extends FormGroup {
     if (!onlySelf) {
       // Trigger a call to destroy in all child TFormGroup controls as well.
       for (const controlName in this.controls) {
-        if (this.controls[controlName] instanceof TFormGroup) {
+        if (this.controls[controlName].destroy) {
           (<TFormGroup<any>>this.controls[controlName]).destroy();
         }
       }
@@ -305,3 +305,37 @@ export type TFormControlMembers<T> = {
     | [T[K], ValidatorFn]
     | [T[K], ValidatorFn[]]
 };
+
+// Enhance type declaration for FormGroup.
+declare module '@angular/forms' {
+  interface FormGroup {
+    checkValidity(): boolean;
+    destory(onlySelf?: boolean): void;
+    mapProperties<TF, TT>(from: Partial<TF>, to?: Partial<TT>, omitProps?: (keyof TF)[]): Partial<TT>;
+    onControlValueChanges(name: string, destroy$?: Observable<any>): Observable<any>;
+    onValueChanges(destroy$?: Observable<any>): Observable<any>;
+  }
+}
+
+// Add extra methods to basic FormGroup so that it is fully compaitble with TFormGroup.
+FormGroup.prototype.checkValidity = TFormGroup.prototype.checkValidity;
+FormGroup.prototype.destory = TFormGroup.prototype.destroy;
+FormGroup.prototype.mapProperties = TFormGroup.prototype.mapProperties;
+FormGroup.prototype.onControlValueChanges = TFormGroup.prototype.onControlValueChanges;
+FormGroup.prototype.onValueChanges = TFormGroup.prototype.onValueChanges;
+
+Object.defineProperty(FormGroup.prototype, '_destroySubject$', {
+  get: function(): Subject<any> {
+    if (!this.__destroySubject$) {
+      this.__destroySubject$ = new Subject();
+    }
+    return this.__destroySubject$;
+  },
+  set: function(destroySubject$: Subject<any>) {
+    this.__destroySubject$ = destroySubject$;
+  }
+});
+
+Object.defineProperty(FormGroup.prototype, '_destroy$', { get: function() {
+  return this._destroySubject$.asObservable();
+}});

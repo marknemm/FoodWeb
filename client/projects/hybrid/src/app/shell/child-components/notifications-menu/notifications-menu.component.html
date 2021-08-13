@@ -1,5 +1,5 @@
 <ion-button (click)="present($event)" class="notifications-menu-button" *ngIf="!isMenu; else menu">
-  <ion-icon [icon]="notifications"></ion-icon>
+  <ion-icon icon="notifications"></ion-icon>
   <ion-badge color="danger" *ngIf="notificationService.hasUnseenNotifications">
     {{ notificationService.unseenNotificationsCount| shortNum }}
   </ion-badge>
@@ -11,7 +11,7 @@
       <ion-title (click)="$event.stopPropagation()">Notifications</ion-title>
       <ion-buttons slot="end">
         <ion-button [routerLink]="['/account', 'my']" fragment="notifications" class="settings-button" color="dark" fill="clear" slot="end" size="small" shape="round">
-          <ion-icon [icon]="cog"></ion-icon>
+          <ion-icon icon="cog"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>

@@ -10,7 +10,7 @@ import { ShellService } from '~web/shell/services/shell/shell.service';
 })
 export class LeftNavComponent implements OnInit {
 
-  @ViewChild('sidnavContent', { static: true }) sidnavContent: MatSidenavContent;
+  @ViewChild('sidenavContent', { static: true }) sidnavContent: MatSidenavContent;
 
   /**
    * A maximum width in pixels. When set, determines that when the window width is equal to or lower,

@@ -1,5 +1,5 @@
 <div class="operation-hours-container" [ngClass]="{ 'limited': formGroup.operationHoursLimited }" [formGroup]="formGroup" [foodwebDisplayEditTransition]="editable"
-  [form]="operationHoursForm" [display]="operationHoursDisplay" [heightRecalcAtMs]="[0, 50, 100, 150, 200, 250]" [recalcTrigger]="formGroup.valueChanges">
+  [form]="operationHoursForm" [display]="operationHoursDisplay">
   <div #operationHoursForm class="operation-hours-form">
     <mat-slide-toggle formControlName="limitOperationHours" class="limit-availability-toggle fill">
       Limit Availability

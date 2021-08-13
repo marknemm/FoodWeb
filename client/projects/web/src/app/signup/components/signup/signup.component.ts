@@ -22,7 +22,7 @@ export class SignupComponent implements OnInit {
     private _matDialog: MatDialog,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit(): void {}
 
   signup(accountForm: AccountForm): void {
     if (accountForm.checkValidity()) {

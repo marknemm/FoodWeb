@@ -5,17 +5,20 @@
 	"npmClient": "npm",
 	"webDir": "../../dist/hybrid",
 	"plugins": {
-		"SplashScreen": {
-			"launchAutoHide": false,
-			"launchShowDuration": 3000
-		},
 		"PushNotifications": {
 			"presentationOptions": [
 				"badge",
 				"sound",
 				"alert"
 			]
+		},
+		"SplashScreen": {
+			"launchAutoHide": false,
+			"launchShowDuration": 3000
 		}
+	},
+	"ios": {
+		"contentInset": "automatic"
 	},
 	"cordova": {}
 }

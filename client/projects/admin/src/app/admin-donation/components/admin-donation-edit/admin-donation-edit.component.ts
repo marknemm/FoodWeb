@@ -54,7 +54,7 @@ export class AdminDonationEditComponent implements OnInit, OnDestroy {
   }
 
   private _setDonationData(donation: Donation): void {
-    this._pageProgressService.reset();
+    this._pageProgressService.deactivate();
     this._donationNotFound = !donation;
     this._originalDonation = donation;
     this._donationDetailsUrl = `/donation/details/${this._originalDonation.id}`;

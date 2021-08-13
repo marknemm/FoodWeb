@@ -23,4 +23,22 @@ export class ContactInfoForm extends TFormGroup<ContactInfo> {
       this.patchValue(contactInfo);
     }
   }
+
+  get emailErrorMsg(): string {
+    return this.get('email').hasError('email')
+      ? 'Not a valid email address'
+      : '';
+  }
+
+  get phoneNumberErrorMsg(): string {
+    return this.get('phoneNumber').hasError('pattern')
+      ? 'Not a valid phone number'
+      : '';
+  }
+
+  get postalCodeErrorMsg(): string {
+    return this.get('postalCode').hasError('pattern')
+      ? 'Not a valid zip code'
+      : '';
+  }
 }

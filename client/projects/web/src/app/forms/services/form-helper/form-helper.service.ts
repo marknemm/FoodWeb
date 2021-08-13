@@ -1,5 +1,5 @@
 import { Host, Injectable, Optional, SkipSelf } from '@angular/core';
-import { AbstractControl, ControlContainer } from '@angular/forms';
+import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
 
 @Injectable()
 export class FormHelperService {
@@ -8,6 +8,13 @@ export class FormHelperService {
     @Optional() @Host() @SkipSelf()
     private _controlContainer: ControlContainer,
   ) {}
+
+  /**
+   * The containing `FormGroup` of the control bound to the injected component.
+   */
+  get containingFormGroup(): FormGroup {
+    return (this._controlContainer.control instanceof FormGroup) ? this._controlContainer.control : null;
+  }
 
   /**
    * Derives an abstract control via a given control name and instance.
@@ -42,6 +49,8 @@ export class FormHelperService {
    * @param destControl The destination `AbstractControl` for the status mapping.
    */
   mapControlStatuses(sourceControl: AbstractControl, destControl: AbstractControl): void {
+    this.onDisable(sourceControl, () => destControl.disable());
+    this.onEnable(sourceControl, () => destControl.enable());
     this.onMarkAllAsTouched(sourceControl, () => destControl.markAllAsTouched());
     this.onMarkAsDirty(sourceControl, (opts: { onlySelf?: boolean }) => destControl.markAsDirty(opts));
     this.onMarkAsPending(sourceControl, (opts: { onlySelf?: boolean, emitEvent?: boolean }) => destControl.markAsPending(opts));
@@ -50,6 +59,37 @@ export class FormHelperService {
     this.onMarkAsUntouched(sourceControl, (opts: { onlySelf?: boolean }) => destControl.markAsUntouched(opts));
   }
 
+  /**
+   * Listens for disable to be invoked on a given abstract control, and then invokes a given callback function.
+   * @param abstractControl The abstract control.
+   * @param disableCb The callback function.
+   */
+   onDisable(abstractControl: AbstractControl, disableCb: () => void): void {
+    const origDisable: Function = abstractControl.disable.bind(abstractControl);
+    abstractControl.disable = () => {
+      origDisable.apply(abstractControl);
+      disableCb();
+    };
+  }
+
+  /**
+   * Listens for enable to be invoked on a given abstract control, and then invokes a given callback function.
+   * @param abstractControl The abstract control.
+   * @param enableCb The callback function.
+   */
+   onEnable(abstractControl: AbstractControl, enableCb: () => void): void {
+    const origEnable: Function = abstractControl.enable.bind(abstractControl);
+    abstractControl.enable = () => {
+      origEnable.apply(abstractControl);
+      enableCb();
+    };
+  }
+
+  /**
+   * Listens for markAllAsTouched to be invoked on a given abstract control, and then invokes a given callback function.
+   * @param abstractControl The abstract control.
+   * @param allTouchedCb The callback function.
+   */
   onMarkAllAsTouched(abstractControl: AbstractControl, allTouchedCb: () => void): void {
     const origMarkAllAsTouched: Function = abstractControl.markAllAsTouched.bind(abstractControl);
     abstractControl.markAllAsTouched = () => {
@@ -72,24 +112,11 @@ export class FormHelperService {
   }
 
   /**
-   * Listens for markAsTouched to be invoked on a given abstract control, and then invokes a given callback function.
-   * @param abstractControl The abstract control.
-   * @param touchedCb The callback function.
-   */
-  onMarkAsTouched(abstractControl: AbstractControl, touchedCb: (opts?: { onlySelf?: boolean }) => void): void {
-    const origMarkAsTouched: Function = abstractControl.markAsTouched.bind(abstractControl);
-    abstractControl.markAsTouched = (opts: { onlySelf?: boolean }) => {
-      origMarkAsTouched.apply(abstractControl, opts);
-      touchedCb(opts);
-    };
-  }
-
-  /**
    * Listens for markAsPending to be invoked on a given abstract control, and then invokes a given callback function.
    * @param abstractControl The abstract control.
    * @param pendingCb The callback function.
    */
-  onMarkAsPending(abstractControl: AbstractControl, pendingCb: (opts?: { onlySelf?: boolean, emitEvent?: boolean }) => void): void {
+   onMarkAsPending(abstractControl: AbstractControl, pendingCb: (opts?: { onlySelf?: boolean, emitEvent?: boolean }) => void): void {
     const origMarkAsPending: Function = abstractControl.markAsPending.bind(abstractControl);
     abstractControl.markAsPending = (opts: { onlySelf?: boolean, emitEvent?: boolean }) => {
       origMarkAsPending.apply(abstractControl, opts);
@@ -102,11 +129,24 @@ export class FormHelperService {
    * @param abstractControl The abstract control.
    * @param pristineCb The callback function.
    */
-  onMarkAsPristine(abstractControl: AbstractControl, pristineCb: (opts?: { onlySelf?: boolean }) => void): void {
+   onMarkAsPristine(abstractControl: AbstractControl, pristineCb: (opts?: { onlySelf?: boolean }) => void): void {
     const origMarkAsPristine: Function = abstractControl.markAsPristine.bind(abstractControl);
     abstractControl.markAsPristine = (opts: { onlySelf?: boolean }) => {
       origMarkAsPristine.apply(abstractControl, opts);
       pristineCb(opts);
+    };
+  }
+
+  /**
+   * Listens for markAsTouched to be invoked on a given abstract control, and then invokes a given callback function.
+   * @param abstractControl The abstract control.
+   * @param touchedCb The callback function.
+   */
+  onMarkAsTouched(abstractControl: AbstractControl, touchedCb: (opts?: { onlySelf?: boolean }) => void): void {
+    const origMarkAsTouched: Function = abstractControl.markAsTouched.bind(abstractControl);
+    abstractControl.markAsTouched = (opts: { onlySelf?: boolean }) => {
+      origMarkAsTouched.apply(abstractControl, opts);
+      touchedCb(opts);
     };
   }
 
@@ -122,4 +162,5 @@ export class FormHelperService {
       untouchedCb(opts);
     };
   }
+
 }

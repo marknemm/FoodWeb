@@ -1,0 +1,20 @@
+@import "variables.scss";
+
+ion-content {
+  --padding: 14px;
+  --padding-top: var(--padding);
+  --padding-bottom: var(--padding);
+  --padding-start: var(--padding);
+  --padding-end: var(--padding);
+  --background: #eee8e0;
+
+  &:first-child {
+    --padding-top: var(--padding) + var(--ion-safe-area-top);
+  }
+
+  &:last-child {
+    --padding-bottom: var(--padding) + var(--ion-safe-area-bottom);
+  }
+}
+
+

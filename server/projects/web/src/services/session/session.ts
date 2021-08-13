@@ -83,9 +83,11 @@ async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> 
  */
 export async function perpetualTokenLogin(sessionToken: string): Promise<LoginResponse> {
   try {
-    const perpetualSession: PerpetualSessionEntity = await getRepository(PerpetualSessionEntity).findOne({ sessionToken });
-    if (perpetualSession) {
-      return { account: perpetualSession.account, perpetualSession };
+    if (sessionToken) {
+      const perpetualSession: PerpetualSessionEntity = await getRepository(PerpetualSessionEntity).findOne({ sessionToken });
+      if (perpetualSession) {
+        return { account: perpetualSession.account, perpetualSession };
+      }
     }
     throw new Error('Mobile app session token not found');
   } catch (err) {

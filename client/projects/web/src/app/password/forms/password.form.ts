@@ -25,6 +25,12 @@ export class PasswordForm extends TFormGroup<PasswordFormT> {
     }
   }
 
+  get passwordErrorMsg(): string {
+    return this.get('password').hasError('pattern')
+      ? 'At least 6 characters required'
+      : '';
+  }
+
   private _validatePasswordMatch(form: AbstractControl): { passwordConfirmMatch: string } {
     const password: string = form.get('password').value;
     const confirmPassword: string = form.get('confirmPassword').value;

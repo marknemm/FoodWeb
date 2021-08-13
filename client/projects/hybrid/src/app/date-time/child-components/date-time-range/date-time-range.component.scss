@@ -1,0 +1,7 @@
+@import "variables.scss";
+
+.date-time-range-form {
+  .date-time-field:not(:first-child) {
+    margin-top: -10px;
+  }
+}

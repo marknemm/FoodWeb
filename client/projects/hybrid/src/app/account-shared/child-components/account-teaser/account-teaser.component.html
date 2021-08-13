@@ -1,0 +1,27 @@
+<ion-card class="teaser account-teaser">
+  <ion-card-header [ngClass]="{ 'no-subtitle': !hasSubtitle }">
+    <foodweb-profile-img ion-card-avatar [value]="account.profileImg"></foodweb-profile-img>
+    <ion-card-title>{{ customTitle ? customTitle : accountName }}</ion-card-title>
+    <ion-card-subtitle *ngIf="hasSubtitle">
+      <a *ngIf="hasEmailSubtitle; else nonEmailSubtitle" href="mailto:{{ account.contactInfo.email }}">
+        {{ account.contactInfo.email }}
+      </a>
+      <ng-template #nonEmailSubtitle>{{ accountName }}</ng-template>
+    </ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <ng-content></ng-content>
+    <foodweb-hybrid-contact-info
+      [addressAnchorType]="addressAnchorType"
+      [addressFirst]="addressFirst"
+      [hideAddress]="hideAddress"
+      [hideEmail]="hasEmailSubtitle"
+      [value]="account.contactInfo"
+    ></foodweb-hybrid-contact-info>
+  </ion-card-content>
+  <ion-footer>
+    <a [routerLink]="accountRouterLink" [state]="{ account: account }" class="no-hover">
+      <button mat-raised-button class="compact" type="button" color="primary">View Account</button>
+    </a>
+  </ion-footer>
+</ion-card>

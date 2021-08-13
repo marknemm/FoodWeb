@@ -6,7 +6,7 @@ import { TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstr
 import { TFormArray } from '~web/forms/classes/t-form-array';
 import { TFormControl } from '~web/forms/classes/t-form-control';
 import { TFormGroup } from '~web/forms/classes/t-form-group';
-import { ExtractControlType } from '~web/forms/interfaces/extract-control-type';
+import { DeriveAbstractControl, DeriveAbstractControlType, DeriveFormArrayType, DeriveFormControlType, DeriveFormGroupType } from '~web/forms/interfaces/template-type-util';
 import { FormHelperService } from '~web/forms/services/form-helper/form-helper.service';
 
 /**
@@ -26,13 +26,13 @@ import { FormHelperService } from '~web/forms/services/form-helper/form-helper.s
  * @param FC The type of this component's `formControl`. Defaults to `A` if A extends `TFormControl<T>`.
  */
 @Directive() // eslint-disable-next-line @angular-eslint/directive-class-suffix
-abstract class _FormBaseComponent<
-  T,
-  V = ExtractControlType<T>,
-  A extends TAbstractControl<V> = T extends TAbstractControl<V> ? T : TFormControl<V>,
-  FG extends TFormGroup<V> = A extends TFormGroup<V> ? A : undefined,
-  FA extends TFormArray<any, ExtractArrayType<V>> = A extends TFormArray<any, ExtractArrayType<V>> ? A : undefined,
-  FC extends TFormControl<V> = A extends TFormControl<V> ? A : undefined
+export abstract class _FormBaseComponent<
+  T, // Can be a raw value or some AbstractControl type.
+  V                                               = DeriveAbstractControlType<T>,
+  A extends TAbstractControl<V>                   = DeriveAbstractControl<T, V>,
+  FG extends TFormGroup<V>                        = DeriveFormGroupType<V, A>,
+  FA extends TFormArray<any, ExtractArrayType<V>> = DeriveFormArrayType<V, A>,
+  FC extends TFormControl<V>                      = DeriveFormControlType<V, A>
 > implements OnChanges, OnDestroy, ControlValueAccessor {
 
   /**
@@ -70,8 +70,10 @@ abstract class _FormBaseComponent<
   protected _destroy$ = new Subject();
 
   private _abstractCtrlDerivedFromInputs = false;
+  private _ngOnChangesInvoked = false;
   private _prevAbstractCtrl: A;
   private _valueChangeSubscription = new Subscription();
+  private _valuePropertyInputs: (keyof V)[] = [];
   private _onChangeCb: (value: V) => void = () => {};
   private _onTouchedCb = () => {};
 
@@ -92,6 +94,13 @@ abstract class _FormBaseComponent<
     if (initImmediately) {
       this._initDefaultAbstractControl();
     }
+
+    // Prevent hard to debug error that occurs when ngOnChanges has been overriden without calling super in a subclass!
+    setTimeout(() => {
+      if (!this._ngOnChangesInvoked) {
+        throw new Error('ngOnChanges has an override in a subclass that does not call `super.ngOnChanges(changes)`.')
+      }
+    }, 100); // 100 so hopefully shows as last error in console output.
   }
 
   /**
@@ -139,6 +148,14 @@ abstract class _FormBaseComponent<
   }
 
   /**
+   * Registers input binding fields that are to be synchronized with corresponding `value` properties on change (vice-versa).
+   * @param inputFields A list of input binding field names to be synchronized with corresponding `value` properties.
+   */
+   keepValuePropertyInputSync(inputFields: (keyof V)[]): void {
+    this._valuePropertyInputs = inputFields;
+  }
+
+  /**
    * The registered on change callback function that should be invoked with the updated value whenever a change is registered.
    * @param value The updated value.
    */
@@ -160,6 +177,7 @@ abstract class _FormBaseComponent<
    * @param changes The detected simple input binding changes.
    */
   ngOnChanges(changes: SimpleChanges) {
+    this._ngOnChangesInvoked = true;
     this._debugLog('Input changes detected', changes);
     const isAbstractCtrlChange = !!(
       changes.formControlName || changes.formControl
@@ -182,6 +200,7 @@ abstract class _FormBaseComponent<
     if (this.hasAbstractControl) {
       this._syncValueWithAbstractControl(changes.value);
     }
+    this._syncValuePropertyInputs(changes);
   }
 
   /**
@@ -246,6 +265,32 @@ abstract class _FormBaseComponent<
           this._debugLog('Invoking onChangeCb with value', this.value);
         }
       });
+    }
+  }
+
+  /**
+   * Synchronizes the `value` input with the component input bindings that are also properties within the value object.
+   * Individual input binding properties take precedence over the value binding.
+   * @param changes The simple chagnes that have been detected in the component input bindings.
+   */
+  private _syncValuePropertyInputs(changes: SimpleChanges): void {
+    if (!this._valuePropertyInputs?.length) return;
+    const hasValueChange = !!(changes.value && (!changes.value.firstChange || this.value));
+    this._debugLog('Syncing value input binding fields: ', this._valuePropertyInputs);
+
+    for (const inputFieldName of this._valuePropertyInputs) {
+      const inputFieldChange: SimpleChange = changes[<string>inputFieldName];
+      if (inputFieldChange && (!inputFieldChange.firstChange || inputFieldChange.currentValue)) {
+        this._debugLog(`Setting value.${inputFieldName} to the ${inputFieldName} input binding value: `, inputFieldChange.currentValue);
+        this.value[inputFieldName] = inputFieldChange.currentValue;
+      } else if (hasValueChange) {
+        this._debugLog(`Setting ${inputFieldName} input binding value to value.${inputFieldName}: `, this.value[inputFieldName]);
+        this[<string>inputFieldName] = this.value[inputFieldName];
+      }
+    }
+
+    if (this.hasAbstractControl) {
+      this.activeAbstractControl.patchValue(this.value, { emitEvent: false });
     }
   }
 

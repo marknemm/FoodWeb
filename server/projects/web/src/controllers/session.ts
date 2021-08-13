@@ -12,8 +12,8 @@ router.get('/', handleGetSession);
 export function handleGetSession(req: Request, res: Response) {
   const perpetualSessionToken = <string> req.query.perpetualSessionToken;
   const account: AccountEntity = req.session.account;
-  if (!req.session.account && perpetualSessionToken) {
-    perpetualTokenLogin(perpetualSessionToken)
+  if (!req.session.account) {
+    perpetualTokenLogin(perpetualSessionToken) // Attempt to re-establish session via perpetual session token.
       .then((loginResponse: LoginResponse) => _handleLoginSuccess(req, res, loginResponse))
       .catch(() => res.send({}));
   } else {

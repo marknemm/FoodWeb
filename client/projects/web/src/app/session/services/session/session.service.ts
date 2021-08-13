@@ -56,6 +56,13 @@ export class SessionService {
   }
 
   /**
+   * Whether or not the user is a business (donor/receiver).
+   */
+  get isBusiness(): boolean {
+    return (this.isDonor || this.isReceiver);
+  }
+
+  /**
    * Whether or not the user is a donor.
    */
   get isDonor(): boolean {

@@ -64,7 +64,7 @@ export class EventReadService {
       map((response: ListResponse<FeaturedEvent>) => response.list),
       finalize(() => {
         this._loading = false;
-        this._pageProgressService.reset();
+        this._pageProgressService.deactivate();
       })
     );
   }

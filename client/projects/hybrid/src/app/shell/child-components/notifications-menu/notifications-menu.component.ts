@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { cog, notifications } from 'ionicons/icons';
 import { PopoverService } from '~hybrid/shared/services/popover/popover.service';
 import { NotificationService } from '~web/notification/services/notification/notification.service';
 
@@ -9,9 +8,6 @@ import { NotificationService } from '~web/notification/services/notification/not
   styleUrls: ['./notifications-menu.component.scss'],
 })
 export class NotificationsMenuComponent implements OnInit {
-
-  readonly cog = cog;
-  readonly notifications = notifications;
 
   @Input()
   isMenu = false;

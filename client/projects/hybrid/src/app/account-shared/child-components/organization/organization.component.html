@@ -1,0 +1,41 @@
+<div class="organization-container" [formGroup]="formGroup" [foodwebDisplayEditTransition]="editable" [form]="organizationForm" [display]="organizationDisplay">
+  <div #organizationForm class="row organization-form" [attr.aria-hidden]="!editable">
+    <div class="col-sm-12">
+      <ion-item formField="name">
+        <ion-label color="secondary">Name:</ion-label>
+        <ion-input type="text" inputmode="text" formControlName="name" autocomplete="off"></ion-input>
+      </ion-item>
+    </div>
+    <div class="col-sm-12">
+      <ion-item formField="description">
+        <ion-label position="stacked" color="secondary">About Your Organization:</ion-label>
+        <ion-textarea type="text" inputmode="text" formControlName="description" [autoGrow]="true" [rows]="1"></ion-textarea>
+      </ion-item>
+
+      <ion-item formField="deliveryInstructions">
+        <ion-label position="stacked" color="secondary">{{ deliveryInstrLabel }}</ion-label>
+        <ion-textarea type="text" inputmode="text" formControlName="deliveryInstructions" [autoGrow]="true" [rows]="1"></ion-textarea>
+      </ion-item>
+
+      <foodweb-hybrid-receiver *ngIf="isReceiver" formGroupName="receiver" [editable]="editable"></foodweb-hybrid-receiver>
+    </div>
+  </div>
+
+  <div #organizationDisplay class="organization-display row">
+    <div class="col-sm-12">
+      <div class="inline-label">Organization Name:</div>
+      <div class="d-inline-block">{{ formGroup.get('name').value }}</div>
+    </div>
+    <div *ngIf="formGroup.get('description').value" class="col-sm-12">
+      <div class="inline-label">Organization Info:</div>
+      <div class="d-inline-block">{{ formGroup.get('description').value }}</div>
+    </div>
+    <div *ngIf="formGroup.get('deliveryInstructions').value" class="col-sm-12">
+      <div class="inline-label">{{ deliveryInstrLabel }}</div>
+      <div class="d-inline-block">{{ formGroup.get('deliveryInstructions').value }}</div>
+    </div>
+    <div *ngIf="isReceiver" class="col-sm-12">
+      <foodweb-receiver formGroupName="receiver"></foodweb-receiver>
+    </div>
+  </div>
+</div>

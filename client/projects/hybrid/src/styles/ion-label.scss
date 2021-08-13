@@ -1,0 +1,12 @@
+@import "variables.scss";
+
+ion-label {
+
+  &.label-stacked.sc-ion-label-ios-h {
+    font-size: 16px;
+  }
+
+  &.label-floating {
+    margin-top: 0;
+  }
+}

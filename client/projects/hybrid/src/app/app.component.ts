@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
+import { Capacitor } from '@capacitor/core';
+import { Keyboard } from '@capacitor/keyboard';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { arrowBack, menu } from 'ionicons/icons';
 import { AuthenticationService } from '~hybrid/session/services/authentication/authentication.service';
-import { JSONDateReviver } from '~shared';
 import { SessionService } from '~hybrid/session/services/session/session.service';
+import { JSONDateReviver } from '~shared';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { MobileDeviceService } from './shared/services/mobile-device/mobile-device.service';
 
 @Component({
   selector: 'foodweb-hybrid-root',
@@ -14,19 +16,26 @@ import { PageProgressService } from '~web/shared/services/page-progress/page-pro
 })
 export class AppComponent {
 
-  readonly arrowBack = arrowBack;
-  readonly menu = menu;
-
   constructor(
     public sessionService: SessionService,
     public pageProgressService: PageProgressService,
     authService: AuthenticationService,
     jsonDateReviver: JSONDateReviver,
     matIconReg: MatIconRegistry,
+    mobileDeviceService: MobileDeviceService
   ) {
     matIconReg.registerFontClassAlias('fontawesome', 'fa');
     jsonDateReviver.initJSONDateReviver();
     authService.refreshSessionStatus().subscribe();
-    setTimeout(() => SplashScreen.hide(), 1500);
+
+    if (!mobileDeviceService.web) {
+      Keyboard.setAccessoryBarVisible({ isVisible: true });
+      if (mobileDeviceService.ios) {
+        window.addEventListener('keyboardDidShow', () => {
+          setTimeout(() => document.activeElement.scrollIntoView({ block: 'center' }), 20);
+        });
+      }
+      setTimeout(() => SplashScreen.hide(), 1500);
+    }
   }
 }

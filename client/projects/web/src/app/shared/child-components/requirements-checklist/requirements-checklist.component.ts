@@ -19,7 +19,7 @@ export class RequirementsChecklistComponent extends FormBaseComponent<boolean> i
   constructor(
     formHelperService: FormHelperService
   ) {
-    super(() => new TFormControl(false), formHelperService);
+    super(() => new TFormControl<boolean>(false), formHelperService);
   }
 
   get ngErrorClass(): any {

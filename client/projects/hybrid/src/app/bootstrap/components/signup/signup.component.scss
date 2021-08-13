@@ -1,18 +1,21 @@
-@import "constants.scss";
+@import "variables.scss";
 
-.hybrid-signup-container {
-  background-color: $content-background;
-  min-height: 100vh;
+ion-content {
+}
 
-  .hybrid-signup-content {
-    padding: 10px 10px 30px;
+ion-footer {
+  padding: 20px 0;
+  border-top: 1px solid #ddd;
+  text-align: center;
 
-    .login-link {
-      margin-top: 10px;
+  .have-account-prompt {
+    font-size: 15px;
+    font-weight: bold;
+    color: $accent;
 
-      &.align-right {
-        margin-top: 20px;
-      }
+    + ion-button {
+      margin-top: -8px;
+      font-weight: bold;
     }
   }
 }

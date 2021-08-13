@@ -1,0 +1,28 @@
+<div class="volunteer-container" [foodwebDisplayEditTransition]="editable" [form]="volunteerForm" [display]="volunteerDisplay">
+  <div #volunteerForm class="row volunteer-form" [formGroup]="formGroup" [attr.aria-hidden]="!editable">
+    <div class="col-sm-12">
+      <ion-item formField="fullName" [errorMsg]="formGroup.fullNameErrorMsg">
+        <ion-label color="secondary">Full Name:</ion-label>
+        <ion-input type="text" inputmode="text" formControlName="fullName" autocomplete="off"></ion-input>
+      </ion-item>
+    </div>
+  </div>
+
+  <div #volunteerDisplay class="volunteer-display row" [attr.aria-hidden]="editable">
+    <div class="col-sm-6">
+      <div class="inline-label">Full Name:</div>
+      <div class="d-inline-block">{{ formGroup.get('fullName').value }}</div>
+    </div>
+    <div class="col-sm-6">
+      <div class="inline-label">Attended Training:</div>
+      <div class="d-inline-block">
+        <span *ngIf="formGroup.get('signedAgreement').value" class="check-yes">
+          <mat-icon>check</mat-icon> <span>Yes</span>
+        </span>
+        <span *ngIf="!formGroup.get('signedAgreement').value" class="cross-no">
+          <mat-icon>close</mat-icon> <span>No</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -11,9 +11,16 @@ export abstract class TAbstractControl<T> extends AbstractControl {
   readonly value: T;
   readonly valueChanges: Observable<T>;
 
-  abstract destroy?(): void;
+  abstract destroy(): void;
   abstract setValue(value: Partial<T>, options?: UpdateValueOptions): void;
   abstract patchValue(value: Partial<T>, options?: UpdateValueOptions): void;
+}
+
+// Enhance type declaration for AbstractControl.
+declare module '@angular/forms' {
+  interface AbstractControl {
+    destroy(): void;
+  }
 }
 
 export interface UpdateValueOptions {

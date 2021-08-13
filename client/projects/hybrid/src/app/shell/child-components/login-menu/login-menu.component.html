@@ -1,13 +1,13 @@
 <ion-button class="login-menu-button" (click)="present($event)" *ngIf="!isMenu; else menu">
-  <ion-icon [icon]="personCircle"></ion-icon>
+  <ion-icon icon="personCircle"></ion-icon>
 </ion-button>
 
 <ng-template #menu>
   <ion-list (click)="dismiss()">
-    <ion-item [button]="true" [detailIcon]="power" (click)="showLoginDialog()" lines="full">
+    <ion-item [button]="true" detailIcon="power" (click)="showLoginDialog()" lines="full">
       <ion-label>Login</ion-label>
     </ion-item>
-    <ion-item [routerLink]="['/signup']" [detailIcon]="personAdd" lines="full">
+    <ion-item [routerLink]="['/signup']" detailIcon="personAdd" lines="full">
       <ion-label>Signup</ion-label>
     </ion-item>
   </ion-list>

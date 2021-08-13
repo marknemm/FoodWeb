@@ -86,7 +86,7 @@ export class NotificationService {
   getNotifications(filters: NotificationReadRequest, page: number, limit: number): Observable<ListResponse<Notification>> {
     this._pageProgressService.activate(true);
     return this._getNotifications(filters, page, limit).pipe(
-      finalize(() => this._pageProgressService.reset())
+      finalize(() => this._pageProgressService.deactivate())
     );
   }
 
@@ -95,7 +95,7 @@ export class NotificationService {
     request.limit = (limit >= 0 ? limit : 10);
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Notification>>(this.url, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ pageProgressBlocking: false })
+      this._httpResponseService.handleHttpResponse({ showPageProgressOnLoad: false })
     );
   }
 

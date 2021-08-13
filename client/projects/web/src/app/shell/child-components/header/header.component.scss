@@ -1,4 +1,4 @@
-@import "constants.scss";
+@import "variables.scss";
 
 $site-title-font-size-max: 42px;
 
@@ -119,9 +119,7 @@ header {
 
       &.with-sub {
         $site-title-font-size: 32px;
-        $site-title-font-size-md: 20px;
-
-        margin-top: -4px;
+        $site-title-font-size-md: 17px;
 
         .main {
           font-size: $site-title-font-size;
@@ -141,7 +139,7 @@ header {
 
       .sub {
         $site-title-sub-font-size: 16px;
-        $site-title-sub-font-size-md: 15px;
+        $site-title-sub-font-size-md: 13px;
         color: $accent;
 
         font-weight: bold;

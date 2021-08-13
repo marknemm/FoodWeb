@@ -1,0 +1,24 @@
+@import "variables.scss";
+
+:root {
+  --ion-form-error-margin: 18px;
+}
+
+.ion-form-item {
+  margin-bottom: var(--ion-form-error-margin);
+
+  &.omit-error-margin {
+    margin-bottom: 0;
+
+    + .ion-form-error {
+      margin-top: 0;
+    }
+  }
+}
+
+.ion-form-error {
+  position: absolute;
+  color: $warn;
+  font-size: 11px;
+  margin-top: calc(var(--ion-form-error-margin) * -1);
+}

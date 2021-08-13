@@ -1,4 +1,4 @@
-@import "constants.scss";
+@import "variables.scss";
 
 .mat-card.primary-donation-info {
   position: relative;
@@ -7,10 +7,10 @@
     .mat-card-avatar {
       $width: 50px;
       $height: $width - 4px;
-  
+
       width: $width;
       height: $height;
-  
+
       @media only screen and (max-width: $mat-mobile) {
         width: $width - 5px;
         height: $height - 5px;

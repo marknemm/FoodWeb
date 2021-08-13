@@ -1,14 +1,16 @@
-import { AbstractControlOptions, AsyncValidatorFn, FormControl, ValidatorFn } from '@angular/forms';
+import { AbstractControlOptions, AsyncValidatorFn, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FormState, UpdateValueOptions } from './t-abstract-control';
+import { FormHelperService } from '../services/form-helper/form-helper.service';
+import { FormState, TAbstractControl, UpdateValueOptions } from './t-abstract-control';
 
 /**
  * A typed version of the built-in `FormControl`.
  * @extends FormControl
  * @param T The type of the contained data.
+ * @param A The alternative type of the contained data, which will be converted to type T.
  */
-export class TFormControl<T> extends FormControl {
+export class TFormControl<T, A = any> extends FormControl {
 
   /**
    * The current value contained within this `TFormControl`.
@@ -27,18 +29,36 @@ export class TFormControl<T> extends FormControl {
   private readonly _destroySubject$ = new Subject();
 
   /**
+   * A value converter object that is used to automatically convert a value that is set within `preConvertControl`
+   * to the expect value/format within this `TFormControl` and vice-versa.
+   */
+  private _valueConverter: ValueConverter<A, T>;
+
+  /**
    * Creates a new `TFormControl` instance.
    * @param formState The initial value, or an object that contains the initial value and disabled state.
    * @param validatorOrOpts A synchronous validator function, an array of such functions,
    * or an `AbstractControlOptions` object that contains validation functions and a validation trigger.
    * @param asyncValidator A single async validator or array of async validator functions.
+   * @param valueConverter A value converter that will be used to transform values set in `preConvertControl`
+   * to the value that will be present within this form control and vice-versa.
    */
   constructor(
     formState?: FormState<T>,
     validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions,
-    asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[]
+    asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[],
+    valueConverter?: ValueConverter<A, T>
   ) {
     super(formState, validatorOrOpts, asyncValidator);
+    this.registerValueConverter(valueConverter);
+  }
+
+  /**
+   * A form control that holds the result of an intermediate conversion if one is configured.
+   * For example, if a string -> number conversion is configured, then this will hold the string value.
+   */
+  get preConvertControl(): TAbstractControl<A> {
+    return this._valueConverter?.preConvertControl;
   }
 
   /**
@@ -84,6 +104,36 @@ export class TFormControl<T> extends FormControl {
   }
 
   /**
+   * Registers a value converter, which will be used to convert a value set within `preConvertControl`
+   * to a specific value/type that is expected in this form control and vice-versa.
+   * @param converter The value converter to register.
+   */
+  registerValueConverter(converter: ValueConverter<A, T>): void {
+    if (converter) {
+      // Set value converter, and initialize default `preConvertControl` if not provided.
+      this._valueConverter = converter;
+      if (!this._valueConverter.preConvertControl) {
+        this._valueConverter.preConvertControl = new TFormControl<A>();
+      }
+
+      // Use `FormHelperService` to map control statuses and validation over.
+      const formHelperService: FormHelperService = this._valueConverter.formHelperService;
+      formHelperService.mapControlStatuses(this, this.preConvertControl);
+      if (formHelperService.hasRequiredValidator(this) && !formHelperService.hasRequiredValidator(this.preConvertControl)) {
+        this.preConvertControl.setValidators(Validators.required);
+      }
+
+      // Perform the conversion whenever a change occurs in the `preConvertControl` or this control.
+      this.preConvertControl.valueChanges.pipe(takeUntil(this._destroy$)).subscribe((value: any) =>
+        this.setValue(this._valueConverter.convert(value))
+      );
+      this.onValueChanges().subscribe((value: any) =>
+        this.preConvertControl.setValue(this._valueConverter.unconvert(value), { emitEvent: false })
+      );
+    }
+  }
+
+  /**
    * Resets the form control to a specified value/state. Marks it `pristine` and `untouched`.
    * @param formState Resets the control with a value, or an object that defines the value and disabled state. Defaults to undefined.
    * @param options Configuration options that determine how the control propagates changes and emits events after the value changes.
@@ -118,3 +168,50 @@ export interface SetFormControlOptions extends UpdateValueOptions {
   emitModelToViewChange?: boolean;
   emitViewToModelChange?: boolean;
 }
+
+/**
+ * A value converter, which is used to automatically convert a value that is set within `preConvertControl`
+ * to the expect value/format within this `TFormControl` and vice-versa.
+ */
+export interface ValueConverter<A, T> {
+  convert: (value: A) => T;
+  unconvert: (value: T) => A;
+
+  formHelperService: FormHelperService,
+  preConvertControl?: TAbstractControl<A>;
+}
+
+// Enhance type declaration for FormControl.
+declare module '@angular/forms' {
+  interface FormControl {
+    readonly preConvertControl: TAbstractControl<any>;
+    destory(): void;
+    onValueChanges(destroy$?: Observable<any>): Observable<any>;
+    registerValueConverter(converter: ValueConverter<any, any>): void;
+  }
+}
+
+// Add extra methods to basic FormControl so that it is fully compaitble with TFormControl.
+FormControl.prototype.destory = TFormControl.prototype.destroy;
+FormControl.prototype.onValueChanges = TFormControl.prototype.onValueChanges;
+FormControl.prototype.registerValueConverter = TFormControl.prototype.registerValueConverter;
+
+Object.defineProperty(FormControl.prototype, 'preConvertControl', { get: function() {
+  return this._valueConverter?.preConvertControl;
+}});
+
+Object.defineProperty(FormControl.prototype, '_destroySubject$', {
+  get: function(): Subject<any> {
+    if (!this.__destroySubject$) {
+      this.__destroySubject$ = new Subject();
+    }
+    return this.__destroySubject$;
+  },
+  set: function(destroySubject$: Subject<any>) {
+    this.__destroySubject$ = destroySubject$;
+  }
+});
+
+Object.defineProperty(FormControl.prototype, '_destroy$', { get: function() {
+  return this._destroySubject$.asObservable();
+}});

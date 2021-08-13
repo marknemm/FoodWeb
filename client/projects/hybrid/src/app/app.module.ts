@@ -1,7 +1,6 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
@@ -24,14 +23,14 @@ import { SharedModule } from '~web/shared/shared.module';
     AppComponent
   ],
   imports: [
-    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
+    IonicModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    IonicModule.forRoot({ animated: true }),
     NgxMaterialTimepickerModule,
+    AppRoutingModule,
     SharedModule,
     ShellModule,
     AlertModule.forRoot(),
@@ -44,7 +43,6 @@ import { SharedModule } from '~web/shared/shared.module';
   providers: [
     // { provide: APP_INITIALIZER, useFactory: () => initializeApp, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: SessionMonitorService, multi: true },
-    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { horizontalPosition: 'right', verticalPosition: 'top', duration: 5000 } },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: Window, useValue: window },
     { provide: 'Window', useValue: window },

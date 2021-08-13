@@ -1,5 +1,4 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
-import { gift, location, person, power, shareSocial } from 'ionicons/icons';
 import { AuthenticationService } from '~hybrid/session/services/authentication/authentication.service';
 import { SessionService } from '~hybrid/session/services/session/session.service';
 import { PopoverService } from '~hybrid/shared/services/popover/popover.service';
@@ -16,12 +15,6 @@ export class SettingsMenuComponent implements OnInit {
 
   @Input()
   isMenu = false;
-
-  readonly gift = gift;
-  readonly location = location;
-  readonly person = person;
-  readonly power = power;
-  readonly shareSocial = shareSocial;
 
   constructor(
     public authService: AuthenticationService,

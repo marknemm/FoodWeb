@@ -96,6 +96,7 @@ import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
     ReceiverComponent,
     UsernameComponent,
     VolunteerComponent,
+    WeekdayOperationHoursComponent,
   ]
 })
 export class AccountSharedModule { }

@@ -1,9 +1,20 @@
-@import "constants.scss";
 @import "variables.scss";
 @import "./ion-alert.scss";
+@import "./ion-button.scss";
+@import "./ion-card.scss";
+@import "./ion-content.scss";
+@import "./ion-datetime.scss";
+@import "./ion-form.scss";
+@import "./ion-input.scss";
+@import "./ion-item.scss";
+@import "./ion-label.scss";
 @import "./ion-toast.scss";
 
 html.ios {
   height: 100vh;
   overflow: hidden;
+}
+
+hr {
+  background-color: rgba(0, 0, 0, .12);
 }

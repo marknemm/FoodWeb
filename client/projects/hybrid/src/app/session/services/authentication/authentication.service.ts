@@ -63,7 +63,7 @@ export class AuthenticationService extends WebAuthenticationService {
     const account: Account = super._handleLoginSuccess(response);
     this._sessionService.savePerpetualSession(response.perpetualSession);
     if (goHomeOnSuccess) {
-      this._router.navigate(['/home']);
+      this._router.navigate(['/tabs/home']);
     }
     return account;
   }
