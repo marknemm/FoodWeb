@@ -39,7 +39,6 @@ export class DateTimeComponent extends FormBaseComponent<Date> implements OnChan
   }
 
   ngOnInit() {
-    console.log('HERE: ', this.formControl);
     this.formControl.registerValueConverter({
       convert: (str: string) => str ? new Date(str) : null,
       unconvert: (date: Date) => date ? date.toISOString() : '',
@@ -49,8 +48,17 @@ export class DateTimeComponent extends FormBaseComponent<Date> implements OnChan
 
   ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);
+
     if (changes.excludeDate || changes.excludeTime) {
       this._refreshPickerFormat();
+    }
+
+    if (!this.maxDate) {
+      this.maxDate = new Date(new Date().getTime() + 1893417100000); // +100 years
+    }
+
+    if (!this.minDate) {
+      this.minDate = new Date(new Date().getTime() - 1893417100000); // -100 yeaers
     }
   }
 

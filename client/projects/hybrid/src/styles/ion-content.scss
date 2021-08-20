@@ -4,9 +4,11 @@ ion-content {
   --padding: 14px;
   --padding-top: var(--padding);
   --padding-bottom: var(--padding);
-  --padding-start: var(--padding);
-  --padding-end: var(--padding);
-  --background: #eee8e0;
+
+  &.pad-sides {
+    --padding-start: var(--padding);
+    --padding-end: var(--padding);
+  }
 
   &:first-child {
     --padding-top: var(--padding) + var(--ion-safe-area-top);
@@ -16,5 +18,3 @@ ion-content {
     --padding-bottom: var(--padding) + var(--ion-safe-area-bottom);
   }
 }
-
-

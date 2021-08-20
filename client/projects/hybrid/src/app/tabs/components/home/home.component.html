@@ -1,4 +1,6 @@
-<foodweb-hybrid-header [omitBackHref]="true">Home</foodweb-hybrid-header>
+<ion-header>
+  <foodweb-hybrid-header [hideBackHref]="true">Home</foodweb-hybrid-header>
+</ion-header>
 
 <ion-content class="home">
   <div class="main-content">
@@ -19,19 +21,19 @@
           </div>
 
           <p>
-            <strong><a [routerLink]="['/donation-hub', 'create']">Register Drop-Off Hub</a></strong><br>
+            <strong><a [routerLink]="['/', 'tabs', 'donation-hub', 'create']">Register Drop-Off Hub</a></strong><br>
             Use your home as a donation drop-off hub for a specified time period on a Saturday.
             Volunteers will pledge donations for drop-off at your residence.
             After the time period, the lunches are to be transported to St. Luke's Mission for Mercy.
           </p>
+
           <p>
-            <strong><a [routerLink]="['/donation-hub', 'list']">Pledge Donation</a></strong><br>
+            <strong><a [routerLink]="['/', 'tabs', 'donation-hub', 'list']">Pledge Donation</a></strong><br>
             Volunteers make bagged sandwich lunches consisting of a sandwich, a piece of fruit, and a snack.
             The lunches are to be dropped-off at designated "drop-off hubs".
           </p>
-          <p class="sandwich-army-view-more">
-            <strong><a [routerLink]="['/donation-hub', 'portal']"><ion-icon>info</ion-icon>View more info</a></strong>
-          </p>
+
+          <a class="call-to-action" [routerLink]="['/', 'tabs', 'donation-hub']"><strong>View more info</strong></a>
         </ion-card-content>
       </ion-card>
 

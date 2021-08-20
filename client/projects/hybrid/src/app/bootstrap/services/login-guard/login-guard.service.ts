@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SessionService } from '~hybrid/session/services/session/session.service';
@@ -12,7 +12,8 @@ export class LoginGuardService implements CanActivate {
 
   constructor(
     private _mobileDeviceService: MobileDeviceService,
-    private _sessionService: SessionService
+    private _router: Router,
+    private _sessionService: SessionService,
   ) {}
 
   /**
@@ -21,7 +22,13 @@ export class LoginGuardService implements CanActivate {
    */
   canActivate(): Observable<boolean> {
     return this._mobileDeviceService.getConnectionStatus().pipe(
-      map((status: ConnectionStatus) => (status.connected && !this._sessionService.loggedIn))
+      map((status: ConnectionStatus) => {
+        const activate = (status.connected && !this._sessionService.loggedIn);
+        if (!activate) {
+          this._router.navigate(['/tabs/home']);
+        }
+        return activate;
+      })
     );
   }
 

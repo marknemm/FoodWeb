@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import { PermissionStatus, PushNotifications, Token } from '@capacitor/push-notifications';
 import { Observable, of, Subject } from 'rxjs';
 
@@ -32,7 +33,7 @@ export class PushNotificationService {
    */
   register(): Observable<string> {
     // Ensure only register once.
-    if (this.isRegistered) {
+    if (this.isRegistered || !Capacitor.isNativePlatform()) {
       return of(this.pushRegistrationId);
     }
 

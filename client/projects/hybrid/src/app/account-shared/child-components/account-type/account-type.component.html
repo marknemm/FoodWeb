@@ -53,58 +53,64 @@
     </ion-button>
   </div>
 
-  <div class="account-type-descr {{ selAccountType | lowercase }}" *ngIf="showAccountTypeDescr">
-    <div *ngIf="selAccountType === AccountType.Volunteer" class="volunteer-descr">
-      <h2 class="section-title">Volunteer</h2>
+  <ion-card class="account-type-descr {{ selAccountType | lowercase }}" *ngIf="showAccountTypeDescr">
+    <ion-card-header>
+      <ion-card-title *ngIf="selAccountType === AccountType.Volunteer">
+        Volunteer
+      </ion-card-title>
+      <ion-card-title *ngIf="selAccountType === AccountType.Donor">
+        Donor Business
+      </ion-card-title>
+      <ion-card-title *ngIf="selAccountType === AccountType.Receiver">
+        Receiver Business
+      </ion-card-title>
+    </ion-card-header>
 
-      <p>
-        Our volunteers are the heart and soul of FoodWeb.
-        Your dedication and hard work make our mission possible.
-      </p>
+    <ion-card-content>
+      <ng-container *ngIf="selAccountType === AccountType.Volunteer">
+        <p>
+          Our volunteers are the heart and soul of FoodWeb.
+          Your dedication and hard work make our mission possible.
+        </p>
 
-      <div>
-        You can provide vital service to your community:
-        <ul>
-          <li>Enlist as a donation drop-off hub in the Sandwich Army.</li>
-          <li>Pledge a personal donation to the Sandwich Army.</li>
-          <li>Deliver donations between businesses & food pantries.</li>
-        </ul>
-      </div>
+        <div>
+          You can provide vital service to your community:
+          <ul>
+            <li>Enlist as a donation drop-off hub in the Sandwich Army.</li>
+            <li>Pledge a personal donation to the Sandwich Army.</li>
+            <li>Deliver donations between businesses & food pantries.</li>
+          </ul>
+        </div>
 
-      <p>
-        We welcome you to the FoodWeb team, and look forward to working with you!
-      </p>
-    </div>
+        <p>
+          We welcome you to the FoodWeb team, and look forward to working with you!
+        </p>
+      </ng-container>
 
-    <div *ngIf="selAccountType === AccountType.Donor" class="donor-descr">
-      <h2 class="section-title">Donor Business</h2>
+      <ng-container *ngIf="selAccountType === AccountType.Donor">
+        <p>
+          Local food pantries cherish every donation gifted by our donors.
+          Your generosity can inspire hope, and help your neighbors through their trying times.
+        </p>
 
-      <p>
-        Local food pantries cherish every donation gifted by our donors.
-        Your generosity can inspire hope, and help your neighbors through their trying times.
-      </p>
+        <p>
+          We personally thank you for taking steps to fight poverty and reduce food waste within your community!
+        </p>
+      </ng-container>
 
-      <p>
-        We personally thank you for taking steps to fight poverty and reduce food waste within your community!
-      </p>
-    </div>
+      <ng-container *ngIf="selAccountType === AccountType.Receiver">
+        <p>
+          Charitable organizations function as bastions of hope within the community.
+          Many of our neighbors rely on you for sustenance during their hard times.
+        </p>
 
-    <div *ngIf="selAccountType === AccountType.Receiver" class="receiver-descr">
-      <h2 class="section-title">Receiver Business</h2>
+        <p>
+          We have the deepest gratitude and admiration for your work, and look forward
+          to facilitating your mission.
+        </p>
+      </ng-container>
 
-      <p>
-        Charitable organizations function as bastions of hope within the community.
-        Many of our neighbors rely on you for sustenance during their hard times.
-      </p>
-
-      <p>
-        We have the deepest gratitude and admiration for your work, and look forward
-        to facilitating your mission.
-      </p>
-    </div>
-
-    <div class="footer">
       <ion-button color="primary" (click)="confirmSelection()" size="medium" expand="block">Continue</ion-button>
-    </div>
-  </div>
+    </ion-card-content>
+  </ion-card>
 </div>

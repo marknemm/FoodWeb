@@ -1,1 +1,41 @@
 @import "variables.scss";
+
+.primary-info {
+  --padding-top: 8px;
+  --padding-bottom: var(--padding-top);
+
+  margin-bottom: 30px;
+  border-top: 1px solid var(--ion-border-color);
+  border-bottom: 1px solid var(--ion-border-color);
+
+  .foodweb-profile-img {
+    width: 60px;
+    margin-right: 10px;
+  }
+
+  .account-descr {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.15;
+  }
+}
+
+.message-us,
+.about,
+.logout {
+  --detail-icon-opacity: 1;
+}
+
+.message-us,
+.about {
+  --detail-icon-color: var(--ion-color-primary);
+}
+
+.logout {
+  --detail-icon-color: var(--ion-color-danger);
+}

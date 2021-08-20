@@ -1,12 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { DateTimeRangeRadioConfig } from '~web/date-time/components/date-time-range-radio-dialog/date-time-range-radio-dialog.component';
 import { DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
-import { FormBaseComponent, FormHelperService } from '~web/forms';
+import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
 
 @Component({
   selector: 'foodweb-hybrid-date-time-range',
   templateUrl: './date-time-range.component.html',
-  styleUrls: ['./date-time-range.component.scss']
+  styleUrls: ['./date-time-range.component.scss'],
+  providers: formProvider(DateTimeRangeComponent)
 })
 export class DateTimeRangeComponent extends FormBaseComponent<DateTimeRangeForm> {
 

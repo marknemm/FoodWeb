@@ -14,13 +14,13 @@ export class OperationHoursInfoForm extends TFormGroup<OperationHoursInfo> {
   constructor(value: OperationHours[] = []) {
     super({
       limitOperationHours: false,
-      Sunday: new TimeRangeArray(),
-      Monday: new TimeRangeArray(),
-      Tuesday: new TimeRangeArray(),
-      Wednesday: new TimeRangeArray(),
-      Thursday: new TimeRangeArray(),
-      Friday: new TimeRangeArray(),
-      Saturday: new TimeRangeArray()
+      Sunday: new TimeRangeArray([]),
+      Monday: new TimeRangeArray([]),
+      Tuesday: new TimeRangeArray([]),
+      Wednesday: new TimeRangeArray([]),
+      Thursday: new TimeRangeArray([]),
+      Friday: new TimeRangeArray([]),
+      Saturday: new TimeRangeArray([])
     });
     if (value) {
       this.patchValue(value);

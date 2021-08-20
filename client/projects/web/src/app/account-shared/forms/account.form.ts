@@ -89,7 +89,7 @@ export type AccountFormMode = 'Account' | 'Signup';
 
 export interface AccountFormConfig {
   formMode?: AccountFormMode;
-  value?: Partial<AccountFormT & Account>;
+  value?: Partial<AccountFormT> | Partial<Account>;
 }
 
 export interface AccountFormT extends Omit<Account, 'operationHours'> {

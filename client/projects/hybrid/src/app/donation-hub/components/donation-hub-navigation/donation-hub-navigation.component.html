@@ -1,9 +1,9 @@
 <ion-header>
-  <foodweb-hybrid-header [omitBackHref]="true">Sandwich Army</foodweb-hybrid-header>
+  <foodweb-hybrid-header [hideBackHref]="true">Sandwich Army</foodweb-hybrid-header>
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <ion-list class="borders-vertical">
     <ion-item [routerLink]="['create']">Register Donation Hub</ion-item>
     <ion-item [routerLink]="['list', 'my']">My Donation Hubs</ion-item>
     <ion-item [routerLink]="['list']">Pledge Donation</ion-item>
@@ -15,8 +15,8 @@
       <ion-card class="drop-off-hub-info-card">
         <ion-card-header>
           <ion-card-title>
-            <ion-icon>device_hub</ion-icon>
-            Drop-Off Hub
+            <ion-icon name="share-social"></ion-icon>
+            <ion-label>Drop-Off Hub</ion-label>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
@@ -50,8 +50,8 @@
       <ion-card class="donation-pledge-info-card">
         <ion-card-header>
           <ion-card-title>
-            <!-- <fa-icon [icon]="faHandHoldingHeart"></fa-icon> -->
-            Donation Pledge
+            <ion-icon name="gift"></ion-icon>
+            <ion-label>Donation Pledge</ion-label>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>

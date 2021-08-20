@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { OperationHoursInfoForm } from '~web/account-shared/forms/operation-hours-info.form';
 import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
@@ -10,6 +10,9 @@ import { ConstantsService } from '~web/shared/services/constants/constants.servi
   providers: formProvider(OperationHoursInfoComponent)
 })
 export class OperationHoursInfoComponent extends FormBaseComponent<OperationHoursInfoForm> {
+
+  @HostBinding()
+  readonly class = 'foodweb-operation-hours-info';
 
   constructor(
     public constantsService: ConstantsService,

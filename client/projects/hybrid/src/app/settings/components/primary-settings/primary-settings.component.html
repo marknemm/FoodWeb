@@ -1,0 +1,30 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>{{ pageTitle }}</ion-label>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" color="primary" [disabled]="formGroup.pristine" (click)="save()">Save</ion-button>
+    </ion-buttons>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="formGroup">
+    <foodweb-hybrid-profile-img
+      formControlName="profileImg"
+      [editable]="false">
+    </foodweb-hybrid-profile-img>
+
+    <foodweb-hybrid-volunteer
+      *ngIf="sessionService.isVolunteer"
+      formGroupName="volunteer"
+      [editable]="true">
+    </foodweb-hybrid-volunteer>
+
+    <foodweb-hybrid-organization
+      *ngIf="sessionService.isBusiness"
+      formGroupName="organization"
+      [accountType]="account.accountType"
+      [editable]="true">
+    </foodweb-hybrid-organization>
+  </form>
+</ion-content>

@@ -15,6 +15,7 @@ import { OperationHoursInfoComponent } from './child-components/operation-hours-
 import { OperationHoursComponent } from './child-components/operation-hours/operation-hours.component';
 import { OrganizationComponent } from './child-components/organization/organization.component';
 import { PasswordComponent } from './child-components/password/password.component';
+import { ProfileImgComponent } from './child-components/profile-img/profile-img.component';
 import { ReceiverComponent } from './child-components/receiver/receiver.component';
 import { UsernameComponent } from './child-components/username/username.component';
 import { VolunteerComponent } from './child-components/volunteer/volunteer.component';
@@ -29,6 +30,7 @@ import { WeekdayOperationHoursComponent } from './child-components/weekday-opera
     OperationHoursInfoComponent,
     OrganizationComponent,
     PasswordComponent,
+    ProfileImgComponent,
     ReceiverComponent,
     UsernameComponent,
     VolunteerComponent,
@@ -55,6 +57,7 @@ import { WeekdayOperationHoursComponent } from './child-components/weekday-opera
     OperationHoursInfoComponent,
     OrganizationComponent,
     PasswordComponent,
+    ProfileImgComponent,
     ReceiverComponent,
     UsernameComponent,
     VolunteerComponent,

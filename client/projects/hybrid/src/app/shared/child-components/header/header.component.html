@@ -1,7 +1,7 @@
-<ion-toolbar color="primary" class="main-header-section">
+<ion-toolbar class="main-header-section">
   <ion-buttons slot="start">
-    <ion-back-button *ngIf="!omitBackHref" class="header-primary-button" [defaultHref]="defaultBackHref"></ion-back-button>
-    <ng-content select=".header-primary-button"></ng-content>
+    <ion-back-button *ngIf="!hideBackHref" class="header-primary-button" [defaultHref]="defaultBackHref"></ion-back-button>
+    <ng-content select="[slot='start']"></ng-content>
   </ion-buttons>
 
   <ion-title>
@@ -12,8 +12,9 @@
     <foodweb-hybrid-login-menu class="header-secondary-button" *ngIf="!sessionService.loggedIn"></foodweb-hybrid-login-menu>
     <foodweb-hybrid-notifications-menu class="header-secondary-button" *ngIf="sessionService.loggedIn"></foodweb-hybrid-notifications-menu>
     <foodweb-hybrid-settings-menu class="header-secondary-button" *ngIf="sessionService.loggedIn"></foodweb-hybrid-settings-menu>
-    <ng-content select=".header-secondary-button"></ng-content>
   </ion-buttons> -->
+
+  <ng-content select="[slot='end']"></ng-content>
 
   <div class="non-blocking-page-progress-indicator" *ngIf="pageProgressService.showNonBlockingProgress">
     <foodweb-progress-indicator

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PerpetualSession } from '~shared';
 import { SessionService as WebSessionService } from '~web/session/services/session/session.service';
+export { Account } from '~web/session/services/session/session.service';
 
 /**
  * The hybrid app extension of the base web SessionService,

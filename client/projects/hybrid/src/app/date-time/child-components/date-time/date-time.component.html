@@ -1,19 +1,27 @@
-<ion-item [formField]="formControl" *ngIf="editable; else displayTmpl" [ngClass]="{ stacked: labelPosition !== 'fixed' }">
+<ion-item *ngIf="editable; else displayTmpl" [ngClass]="{ stacked: labelPosition !== 'fixed' }">
   <ion-label [position]="labelPosition">{{ label }}</ion-label>
   <ion-datetime
     [displayFormat]="displayFormat"
     [formControl]="formControl.preConvertControl"
+    [max]="maxDate | date : 'YYYY-MM-dd'"
     [min]="minDate | date : 'YYYY-MM-dd'"
     [minuteValues]="minuteValues">
   </ion-datetime>
 </ion-item>
 
 <ng-template #displayTmpl>
-  <span [ngClass]="{ bold: boldDate | toBoolean }" [style.minWidth]="minDateWidth" class="date-display">
+  <span
+    *ngIf="value && !excludeDate && !excludeDateDisplay"
+    [ngClass]="{ bold: boldDate | toBoolean }"
+    [style.minWidth]="minDateWidth"
+    class="date-display">
     {{ value | foodwebFormatDate }}
   </span>
 
-  <span *ngIf="value" [ngClass]="{ bold: boldTime | toBoolean }" class="time-display">
-    {{ value }}
+  <span
+    *ngIf="value && !excludeTime && !excludeTimeDisplay"
+    [ngClass]="{ bold: boldTime | toBoolean }"
+    class="time-display">
+    {{ value | foodwebFormatTime }}
   </span>
 </ng-template>

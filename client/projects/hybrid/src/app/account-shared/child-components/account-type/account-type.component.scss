@@ -11,7 +11,7 @@
 
       &:not(.selected) {
         box-shadow: none;
-        border: 1px solid #e4e4e4;
+        border    : 1px solid #e4e4e4;
 
         @media only screen and (max-width: 410px) {
           display: none;
@@ -23,13 +23,17 @@
 
 .account-types,
 .account-categories {
+  ion-card {
+    --ion-card-background: #fff;
+  }
+
   ion-button {
     --padding-start: 0;
-    --padding-end: 0;
+    --padding-end  : 0;
 
-    display: inline-block;
-    height: auto;
-    margin: 0px 16px 16px;
+    display      : inline-block;
+    height       : auto;
+    margin       : 0px 16px 16px;
     border-radius: 8px;
 
     &.business {
@@ -37,16 +41,16 @@
         background: -moz-linear-gradient(to right, $donor-color, $receiver-color);
         background: -webkit-linear-gradient(to right, $donor-color, $receiver-color);
         background: linear-gradient(to right, $donor-color, $receiver-color);
-        color: black;
+        color     : black;
       }
     }
 
     ion-card {
-      display: inline-block;
-      min-width: 150px;
-      height: 150px;
-      margin: 0;
-      text-align: center;
+      display       : inline-block;
+      min-width     : 150px;
+      height        : 150px;
+      margin        : 0;
+      text-align    : center;
       vertical-align: top;
 
       ion-toolbar {
@@ -59,20 +63,20 @@
 
       .mat-icon {
         $icon-size: 60px;
-        font-size: $icon-size;
-        width: $icon-size;
-        height: $icon-size;
+        font-size : $icon-size;
+        width     : $icon-size;
+        height    : $icon-size;
         margin-top: 10px;
       }
     }
 
     @media only screen and (max-width: $sm) {
-      margin-left: 5px;
+      margin-left : 5px;
       margin-right: 5px;
 
       ion-card {
         min-width: 135px;
-        height: 135px;
+        height   : 135px;
 
         ion-toolbar {
           font-size: 18px;
@@ -87,18 +91,35 @@
 }
 
 .account-type-descr {
-  margin-top: 15px;
+  background-color: var(--ion-card-background);
+  margin-top      : 15px;
+  padding         : 0;
+  border          : none;
 
-  h2 {
-    margin-top: 5px;
+  &.volunteer {
+    box-shadow: 0px 3px 30px 15px rgb(255 0 0 / 40%),
+                0px 2px 2px 0px rgb(255 0 0 / 14%),
+                0px 2px 6px 0px rgb(255 0 0 / 12%);
   }
 
-  .footer {
-    padding-top: 3px;
-    margin-bottom: 5px;
+  &.donor {
+    box-shadow: 0px 3px 30px 15px rgb(0 255 0 / 40%),
+                0px 2px 2px 0px rgb(0 255 0 / 14%),
+                0px 2px 6px 0px rgb(0 255 0 / 12%);
+  }
 
-    ion-button {
-      font-weight: bold;
-    }
+  &.receiver {
+    box-shadow: 0px 3px 30px 15px rgb(255 215 0 / 40%),
+                0px 2px 2px 0px rgb(255 215 0 / 14%),
+                0px 2px 6px 0px rgb(255 215 0 / 12%);
+  }
+
+  p {
+    margin-bottom: 14px;
+  }
+
+  ion-button {
+    font-weight: bold;
+    margin: 20px 0 5px;
   }
 }

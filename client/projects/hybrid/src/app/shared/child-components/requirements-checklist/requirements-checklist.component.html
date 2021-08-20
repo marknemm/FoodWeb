@@ -1,0 +1,17 @@
+<div class="requirements-checklist" [ngClass]="ngErrorClass">
+
+  <ion-list [formGroup]="checklistForm">
+    <ion-item *ngFor="let checklistMember of checklistMembers; let i=index">
+      <ion-checkbox formControlName="check{{i}}" slot="start" mode="md"></ion-checkbox>
+      <ion-label>{{ checklistMember }}</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-item *ngIf="checkAll">
+    <ion-checkbox [checked]="checklistForm.valid" (ionChange)="toggleSelectAll($event.detail.checked)" slot="start" mode="md"></ion-checkbox>
+    <ion-label>
+      <strong>{{ checkAll }}</strong>
+    </ion-label>
+  </ion-item>
+
+</div>

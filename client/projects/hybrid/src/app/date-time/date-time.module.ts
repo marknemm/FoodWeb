@@ -6,11 +6,13 @@ import { SharedModule } from '~hybrid/shared/shared.module';
 import { DateTimeModule as WebDateTimeModule } from '~web/date-time/date-time.module';
 import { DateTimeRangeComponent } from './child-components/date-time-range/date-time-range.component';
 import { DateTimeComponent } from './child-components/date-time/date-time.component';
+import { DateComponent } from './child-components/date/date.component';
 import { TimeRangeComponent } from './child-components/time-range/time-range.component';
 import { TimeComponent } from './child-components/time/time.component';
 
 @NgModule({
   declarations: [
+    DateComponent,
     DateTimeComponent,
     DateTimeRangeComponent,
     TimeComponent,
@@ -26,6 +28,7 @@ import { TimeComponent } from './child-components/time/time.component';
   ],
   exports: [
     WebDateTimeModule,
+    DateComponent,
     DateTimeComponent,
     DateTimeRangeComponent,
     TimeComponent,

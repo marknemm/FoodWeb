@@ -1,17 +1,21 @@
 @import "../../../../../../web/src/app/session/components/login/login.component.scss";
 
 ion-content {
-  --background: #fff;
   --padding-bottom: 0;
 }
 
 form {
   margin-left: auto;
   margin-right: auto;
-}
 
-.password-item {
-  margin-top: 6px;
+  img {
+    padding-bottom: 10px;
+  }
+
+  .form-buttons {
+    padding: 0 15px;
+    margin-top: 30px;
+  }
 }
 
 .recovery-buttons {
@@ -21,7 +25,8 @@ form {
 ion-footer {
   text-align: center;
   padding: 5px 0 max(var(--ion-safe-area-bottom), 5px);
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--ion-border-color);
+  background-color: var(--ion-tab-bar-background);
 
   ion-button {
     width: 48%;
@@ -29,7 +34,7 @@ ion-footer {
     font-size: 16px;
 
     &:last-child {
-      border-left: 1px solid #eee;
+      border-left: 1px solid var(--ion-border-color);
     }
   }
 }

@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { NotificationService } from '~web/notification/services/notification/notification.service';
 import { SessionService } from '~web/session/services/session/session.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
@@ -8,10 +9,10 @@ import { PageProgressService } from '~web/shared/services/page-progress/page-pro
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnChanges {
 
   @Input() defaultBackHref: string;
-  @Input() omitBackHref = false;
+  @Input() hideBackHref = false;
   @Input() siteIconUri = './assets/IconImgSm.png';
   @Input() siteTitle = 'FoodWeb';
 
@@ -19,7 +20,14 @@ export class HeaderComponent implements OnInit {
     public notificationService: NotificationService,
     public pageProgressService: PageProgressService,
     public sessionService: SessionService,
+    private _router: Router,
   ) {}
 
-  ngOnInit() {}
+  ngOnChanges(changes: SimpleChanges): void {
+    // Allow relative default back href.
+    if (changes.defaultBackHref && /^(\.\.\/?)+$/.test(this.defaultBackHref)) {
+      const backCount: number = this.defaultBackHref.split('/').length;
+      this.defaultBackHref = this._router.url.split('/').slice(0, -backCount).join('/');
+    }
+  }
 }

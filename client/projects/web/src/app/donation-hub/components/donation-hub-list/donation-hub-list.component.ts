@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { DonationHub, DonationHubReadRequest, ListResponse, ReadRequest } from '~shared';
 import { DonationHubReadService } from '~web/donation-hub/services/donation-hub-read/donation-hub-read.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
@@ -54,16 +56,27 @@ export class DonationHubListComponent implements OnInit {
       ? 'My Donation Hubs'
       : 'Pledge Donation';
     this._urlQueryService.listenQueryParamsChange<ReadRequest>(this._activatedRoute).subscribe(
-      (request: ReadRequest) => this.handleQueryParamsChanged(request)
+      (request: ReadRequest) => this.refresh(request).subscribe()
     );
   }
 
-  handleQueryParamsChanged(request: ReadRequest): void {
-    this._activeFilters = <DonationHubReadRequest>request;
-    this._activeFilters.excludeMyHubs = !this.myDonationHubs;
-    this._donationHubReadService.getDonationHubs(this.activeFilters).subscribe((response: ListResponse<DonationHub>) => {
-      this._donationHubs = response.list;
-      this._totalCount = response.totalCount;
-    });
+  /**
+   * Refreshes the Donation Hub List items.
+   * @param request The optional Read Request, contianing filter/sorting parameters.
+   * If not given, will use the last recorded Read Request parameters.
+   * @returns An observable that emits the loaded `DonationHub` items.
+   */
+  refresh(request?: ReadRequest): Observable<DonationHub[]> {
+    if (request) {
+      this._activeFilters = <DonationHubReadRequest>request;
+      this._activeFilters.excludeMyHubs = !this.myDonationHubs;
+    }
+    return this._donationHubReadService.getDonationHubs(this.activeFilters).pipe(
+      map((response: ListResponse<DonationHub>) => {
+        this._donationHubs = response.list;
+        this._totalCount = response.totalCount;
+        return this._donationHubs;
+      })
+    );
   }
 }

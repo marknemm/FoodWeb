@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: 'signup', pathMatch: 'full', redirectTo: 'bootstrap/signup' },
   { path: 'signup/:accountType', redirectTo: 'bootstrap/signup/:accountType' },
   { path: 'bootstrap', loadChildren: () => import('./bootstrap/bootstrap.module').then(mod => mod.BootstrapModule) },
+  { path: 'information', loadChildren: () => import('./information/information.module').then(mod => mod.InformationModule) },
   { path: '', loadChildren: () => import('./tabs/tabs.module').then(mod => mod.TabsModule) },
   { path: '**', redirectTo: 'tabs/home' }
 ];

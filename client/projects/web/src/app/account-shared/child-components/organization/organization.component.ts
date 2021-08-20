@@ -29,6 +29,7 @@ export class OrganizationComponent extends FormBaseComponent<OrganizationForm> i
 
   ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
+
     if (changes.accountType) {
       const accountMod: string = (this.accountType === AccountType.Donor) ? 'Pickup' : 'Delivery';
       this._deliveryInstrLabel = `Donation ${accountMod} Instructions:`;

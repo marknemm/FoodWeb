@@ -1,20 +1,20 @@
 <div class="organization-container" [formGroup]="formGroup" [foodwebDisplayEditTransition]="editable" [form]="organizationForm" [display]="organizationDisplay">
   <div #organizationForm class="row organization-form" [attr.aria-hidden]="!editable">
     <div class="col-sm-12">
-      <ion-item formField="name">
+      <ion-item>
         <ion-label color="secondary">Name:</ion-label>
         <ion-input type="text" inputmode="text" formControlName="name" autocomplete="off"></ion-input>
       </ion-item>
     </div>
     <div class="col-sm-12">
-      <ion-item formField="description">
+      <ion-item>
         <ion-label position="stacked" color="secondary">About Your Organization:</ion-label>
-        <ion-textarea type="text" inputmode="text" formControlName="description" [autoGrow]="true" [rows]="1"></ion-textarea>
+        <ion-textarea type="text" inputmode="text" formControlName="description" [rows]="3"></ion-textarea>
       </ion-item>
 
-      <ion-item formField="deliveryInstructions">
+      <ion-item>
         <ion-label position="stacked" color="secondary">{{ deliveryInstrLabel }}</ion-label>
-        <ion-textarea type="text" inputmode="text" formControlName="deliveryInstructions" [autoGrow]="true" [rows]="1"></ion-textarea>
+        <ion-textarea type="text" inputmode="text" formControlName="deliveryInstructions" [rows]="3"></ion-textarea>
       </ion-item>
 
       <foodweb-hybrid-receiver *ngIf="isReceiver" formGroupName="receiver" [editable]="editable"></foodweb-hybrid-receiver>

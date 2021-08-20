@@ -1,6 +1,6 @@
 <div [formGroup]="formGroup" class="operation-hours-form">
   <div class="weekday-field" [style.width]="weekdayWidth" [style.padding]="weekdayPadding">
-    <ion-item formField="weekday">
+    <ion-item>
       <ion-label color="secondary">Weekday</ion-label>
       <ion-select formControlName="weekday">
         <ion-select-option *ngFor="let weekday of constantsService.WEEKDAYS; let i = index" [value]="weekday">{{ weekday }}</ion-select-option>

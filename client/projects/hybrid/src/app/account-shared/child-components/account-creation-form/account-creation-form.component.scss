@@ -8,4 +8,16 @@ hr {
   ion-card-header {
     padding-bottom: 5px;
   }
+
+  .foodweb-operation-hours-info {
+    display: block;
+    padding-left: 8px;
+  }
+}
+
+.form-footer-buttons {
+  ion-button {
+    margin-left : 15px;
+    margin-right: 15px;
+  }
 }

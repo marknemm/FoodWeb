@@ -1,0 +1,16 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>Pledge Donation</ion-label>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleIonRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-virtual-scroll [items]="donationHubs" approxItemHeight="250px" class="donation-hubs">
+    <div *virtualItem="let item">
+      <foodweb-hybrid-donation-hub-teaser [donationHub]="item"></foodweb-hybrid-donation-hub-teaser>
+    </div>
+  </ion-virtual-scroll>
+</ion-content>

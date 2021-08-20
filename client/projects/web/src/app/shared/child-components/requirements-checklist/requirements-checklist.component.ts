@@ -12,7 +12,7 @@ import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from
 export class RequirementsChecklistComponent extends FormBaseComponent<boolean> implements OnChanges, OnDestroy {
 
   @Input() checklistMembers: string[] = [];
-  @Input() checkAll = 'Check all items';
+  @Input() checkAll: string | false = 'Check all items';
 
   checklistForm = new FormGroup({});
 

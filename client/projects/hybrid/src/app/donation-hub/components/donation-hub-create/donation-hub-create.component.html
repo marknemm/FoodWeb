@@ -1,0 +1,90 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>Register Donation Hub</ion-label>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="formGroup" class="donation-hub-registration-form" (submit)="register()">
+
+    <p class="standalone-statement">
+      <strong>Donation Hubs</strong> are designated locations for sandwich-makers to drop off their bagged lunches between <strong>12:30-2:30 pm</strong> on the date of the sandwich drive.
+      Volunteers from the hubs must transport the sandwiches to <strong>St. Luke’s Mission for Mercy</strong> before <strong>3:30 pm</strong>.
+      <br><br>
+      Drivers will go to the <strong>Good Shepherd House</strong>. It is located by turning left after entering St. Luke’s parking lot, turning left through a side road, and finally taking a quick left.
+      Drop off the sandwiches on the porch, and then call <strong>Gino</strong> at <strong><a href="tel:716-830-1413">(716) 830-1413</a></strong> to let him know to pick them up.
+    </p>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Let Us Know Your Availability</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="row">
+          <div class="col-md-6 col-12">
+            <foodweb-hybrid-date
+              floatLabels="never"
+              formControlName="dropOffDate"
+              label="Pick an upcoming Saturday"
+              placeholder="Drop-off Date"
+              [calendarMode]="true"
+              [dateFilter]="filterDateSaturday"
+              [editable]="true"
+              [minDate]="minRegisterDate"
+            ></foodweb-hybrid-date>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Give Drop-Off Instructions</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item>
+          <ion-textarea formControlName="dropOffInstructions" placeholder="e.g. Ring doorbell and leave the lunches on the porch."></ion-textarea>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Contact Info</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <foodweb-hybrid-contact-info formGroupName="contactOverride" [editable]="true"></foodweb-hybrid-contact-info>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Please Agree To Our Volunteer Guidelines</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ul class="call-to-action-list">
+          <li>
+            <a href="https://www.fda.gov/food/buy-store-serve-safe-food/safe-food-handling">Food Safety Measures</a>
+          </li>
+          <li>
+            <a href="https://www.cdc.gov/coronavirus/2019-ncov/symptoms-testing/symptoms.html">COVID-19 Symptoms</a>
+          </li>
+        </ul>
+        <foodweb-hybrid-requirements-checklist
+          formControlName="agreementChecklist"
+          [checklistMembers]="agreementChecklistMembers"
+          checkAll="Agree to all">
+        </foodweb-hybrid-requirements-checklist>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="action-footer align-right">
+      <ion-button type="submit" color="primary" expand="block">Register</ion-button>
+    </div>
+
+  </form>
+</ion-content>

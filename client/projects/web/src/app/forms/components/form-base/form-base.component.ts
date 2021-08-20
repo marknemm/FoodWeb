@@ -93,14 +93,14 @@ export abstract class _FormBaseComponent<
   ) {
     if (initImmediately) {
       this._initDefaultAbstractControl();
+    } else {
+      // Prevent hard to debug error that occurs when ngOnChanges has been overriden without calling super in a subclass!
+      setTimeout(() => {
+        if (!this._ngOnChangesInvoked) {
+          throw new Error('ngOnChanges has an override in a subclass that does not call `super.ngOnChanges(changes)`.')
+        }
+      }, 100); // 100 so hopefully shows as last error in console output.
     }
-
-    // Prevent hard to debug error that occurs when ngOnChanges has been overriden without calling super in a subclass!
-    setTimeout(() => {
-      if (!this._ngOnChangesInvoked) {
-        throw new Error('ngOnChanges has an override in a subclass that does not call `super.ngOnChanges(changes)`.')
-      }
-    }, 100); // 100 so hopefully shows as last error in console output.
   }
 
   /**

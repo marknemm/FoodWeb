@@ -8,7 +8,7 @@
   <div *ngIf="accountType">
     <div class="row">
       <div class="col-xl-6">
-        <ion-card>
+        <ion-card class="form-card">
           <ion-card-header>
             <ion-card-title class="block-label">Login Credentials</ion-card-title>
           </ion-card-header>
@@ -27,7 +27,7 @@
           </ion-card-content>
         </ion-card>
 
-        <ion-card *ngIf="accountType !== 'Volunteer'">
+        <ion-card *ngIf="accountType !== 'Volunteer'" class="form-card">
           <ion-card-header>
             <ion-card-title class="block-label">Organization</ion-card-title>
           </ion-card-header>
@@ -36,7 +36,7 @@
           </ion-card-content>
         </ion-card>
 
-        <ion-card *ngIf="accountType === 'Volunteer'">
+        <ion-card *ngIf="accountType === 'Volunteer'" class="form-card">
           <ion-card-header>
             <ion-card-title class="block-label">Volunteer Info</ion-card-title>
           </ion-card-header>
@@ -46,7 +46,7 @@
         </ion-card>
       </div>
       <div class="col-xl-6">
-        <ion-card>
+        <ion-card class="form-card">
           <ion-card-header>
             <ion-card-title class="block-label">Contact Info</ion-card-title>
           </ion-card-header>
@@ -60,7 +60,7 @@
     <hr *ngIf="accountType != 'Donor'">
 
     <div class="operation-hours-section" [ngClass]="{ 'full-width': operationHoursFullWidth }">
-      <ion-card *ngIf="accountType !== 'Donor'">
+      <ion-card *ngIf="accountType !== 'Donor'" class="form-card">
         <ion-card-header>
           <ion-card-title class="block-label">
             <span *ngIf="accountType !== 'Volunteer'">Donation Delivery Availability</span>
@@ -84,7 +84,7 @@
     <ng-content></ng-content>
 
     <div class="form-footer-buttons">
-      <ion-button color="primary" type="submit">{{ submitButtonTxt }}</ion-button>
+      <ion-button color="primary" type="submit" expand="block">{{ submitButtonTxt }}</ion-button>
     </div>
   </div>
 </form>

@@ -12,6 +12,7 @@ const routes: Routes = [
       { path: 'home/:login', component: HomeComponent },
       { path: 'donation-hub', loadChildren: () => import('../donation-hub/donation-hub.module').then(mod => mod.DonationHubModule) },
       { path: 'settings', loadChildren: () => import('../settings/settings.module').then(mod => mod.SettingsModule) },
+      { path: '**', redirectTo: '/tabs/home' },
     ]
   },
 ];
