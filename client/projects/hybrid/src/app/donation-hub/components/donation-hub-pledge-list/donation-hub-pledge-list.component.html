@@ -1,1 +1,56 @@
-<p>donation-hub-pledge-list works!</p>
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>{{ pageTitleService.title }}</ion-label>
+    <ion-buttons *ngIf="myPledges" slot="end">
+      <ion-button [routerLink]="['/', 'tabs', 'donation-hub', 'list']" fill="clear">
+        <ion-icon name="add-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" [disabled]="loading" (ionRefresh)="handleIonRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <p *ngIf="noneFound" class="standalone-statement">
+    Could Not Find Any Donation Pledges.
+  </p>
+
+  <ion-virtual-scroll [items]="pledges" approxItemHeight="300px">
+    <!-- <foodweb-hybrid-donation-hub-pledge-teaser
+      *virtualItem="let item"
+      [donationHub]="item">
+    </foodweb-hybrid-donation-hub-pledge-teaser> -->
+  </ion-virtual-scroll>
+
+  <ion-infinite-scroll [disabled]="loadMoreDisabled" (ionInfinite)="handleIonInfinite($event)" threshold="100px">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+
+
+<!-- <foodweb-filtered-list class="donation-hub-pledges">
+
+  <foodweb-filtered-list-title>{{ pageTitleService.title }}</foodweb-filtered-list-title>
+
+  <foodweb-filtered-list-content>
+    <div class="col-lg-6" *ngFor="let pledge of pledges">
+      <foodweb-donation-hub-pledge-teaser [pledge]="pledge"></foodweb-donation-hub-pledge-teaser>
+    </div>
+  </foodweb-filtered-list-content>
+
+  <foodweb-filtered-list-empty *ngIf="noneFound">
+    <p *ngIf="!myPledges">
+      Could Not Find Any Donation Pledges.
+    </p>
+    <p *ngIf="myPledges">
+      Looks Like You Do Not Have Any Upcoming Donation Pledges.<br>
+      Feel Free to <a [routerLink]="['/donation-hub', 'list']" class="bold">Pledge</a> a Donation Any Time!
+    </p>
+  </foodweb-filtered-list-empty>
+
+  <foodweb-paginator [length]="totalCount"></foodweb-paginator>
+
+</foodweb-filtered-list> -->

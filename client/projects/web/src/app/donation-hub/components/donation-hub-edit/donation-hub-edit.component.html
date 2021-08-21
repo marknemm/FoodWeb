@@ -18,26 +18,14 @@
       </mat-card-title>
 
       <mat-card-content>
-        <div class="row">
-          <div class="col-12">
-            Choose a date that you will be willing to be an intermediate drop-off location for sandwiches:
-          </div>
-          <div class="col-md-6 col-12">
-            <foodweb-date
-              floatLabels="never"
-              formControlName="dropOffDate"
-              placeholder="Drop-off Date"
-              [dateFilter]="filterDateSaturday"
-              [editable]="true"
-              [minDate]="minRegisterDate"
-            ></foodweb-date>
-          </div>
-        </div>
-
-        <div>
-          Tell us what times you will be available to accept donation drop-offs:
-          <foodweb-time-range formGroupName="dropOffTimeRange" [editable]="true"></foodweb-time-range>
-        </div>
+        <foodweb-date
+          floatLabels="never"
+          formControlName="dropOffDate"
+          placeholder="Drop-off Date"
+          [dateFilter]="filterDateSaturday"
+          [editable]="true"
+          [minDate]="minRegisterDate">
+        </foodweb-date>
       </mat-card-content>
     </mat-card>
 

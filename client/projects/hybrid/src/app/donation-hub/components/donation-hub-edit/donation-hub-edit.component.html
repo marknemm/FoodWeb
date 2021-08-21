@@ -1,1 +1,69 @@
-<p>donation-hub-edit works!</p>
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>Edit Donation Hub</ion-label>
+    <ion-buttons slot="end">
+      <ion-button type="submit" color="primary" (click)="save()">Save</ion-button>
+    </ion-buttons>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="formGroup" class="donation-hub-registration-form" (submit)="save()">
+
+    <ng-container *ngIf="originalDonationHub">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-label>Let Us Know Your Availabililty</ion-label>
+          </ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <div class="row">
+            <div class="col-md-6 col-12">
+              <foodweb-hybrid-date
+                floatLabels="never"
+                formControlName="dropOffDate"
+                label="Pick an upcoming Saturday"
+                placeholder="Drop-off Date"
+                [calendarMode]="true"
+                [dateFilter]="filterDateSaturday"
+                [editable]="true"
+                [minDate]="minRegisterDate">
+              </foodweb-hybrid-date>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Give Drop-Off Instructions</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item>
+            <ion-textarea formControlName="dropOffInstructions" placeholder="e.g. Ring doorbell and leave the lunches on the porch."></ion-textarea>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-label>Contact Info</ion-label>
+          </ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <foodweb-hybrid-contact-info formGroupName="contactOverride" [editable]="true"></foodweb-hybrid-contact-info>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+
+    <div *ngIf="donationHubNotFound" class="not-found">
+      Donation Hub not found
+    </div>
+
+  </form>
+</ion-content>

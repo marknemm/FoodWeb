@@ -1,0 +1,17 @@
+<div class="row pledge-form" [formGroup]="formGroup">
+  <div class="col-md-6 col-12">
+    <ion-item>
+      <ion-label>Sandwich Type:</ion-label>
+      <ion-input formControlName="foodType" placeholder="e.g. Peanut Butter & Jelly"></ion-input>
+    </ion-item>
+  </div>
+
+  <div class="col-md-6 col-12">
+    <ion-item [ngClass]="{ 'with-err-msg': formGroup.hasFoodCountRangeErr }">
+      <ion-label>Sandwich Count:</ion-label>
+      <ion-input type="number" formControlName="foodCount" placeholder="Must be between 1-100"></ion-input>
+      <div *ngIf="formGroup.get('foodCount').hasError('min')" class="ion-form-error">Cannot be less than 1</div>
+      <div *ngIf="formGroup.get('foodCount').hasError('max')" class="ion-form-error">Cannot be greater than 100</div>
+    </ion-item>
+  </div>
+</div>

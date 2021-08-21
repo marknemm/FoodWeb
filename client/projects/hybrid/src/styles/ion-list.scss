@@ -11,10 +11,17 @@ ion-list {
   ion-content &:last-child {
     margin-bottom: 0;
   }
+}
 
+ion-list,
+ion-virtual-scroll {
   &.borders-vertical {
     border-top   : 1px solid var(--ion-border-color);
     border-bottom: 1px solid var(--ion-border-color);
+
+    ion-item:last-child {
+      --border-style: none;
+    }
   }
 }
 
@@ -22,7 +29,7 @@ ion-item {
   --padding-start      : 0;
   --inner-padding-start: 14px;
   --inner-padding-end  : 14px;
-  background-color     : var(--ion-background-color);
+  background-color     : inherit;
 
   &.item-spacer {
     --inner-padding-bottom: 30px;

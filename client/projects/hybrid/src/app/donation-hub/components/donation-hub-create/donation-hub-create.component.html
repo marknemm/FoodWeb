@@ -1,11 +1,14 @@
 <ion-header>
   <foodweb-hybrid-header defaultBackHref="..">
     <ion-label>Register Donation Hub</ion-label>
+    <ion-buttons slot="end">
+      <ion-button type="submit" fill="clear" (click)="register()">Submit</ion-button>
+    </ion-buttons>
   </foodweb-hybrid-header>
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="formGroup" class="donation-hub-registration-form" (submit)="register()">
+  <form [formGroup]="formGroup" class="donation-hub-registration-form" (ngSubmit)="register()">
 
     <p class="standalone-statement">
       <strong>Donation Hubs</strong> are designated locations for sandwich-makers to drop off their bagged lunches between <strong>12:30-2:30 pm</strong> on the date of the sandwich drive.
@@ -21,20 +24,16 @@
       </ion-card-header>
 
       <ion-card-content>
-        <div class="row">
-          <div class="col-md-6 col-12">
-            <foodweb-hybrid-date
-              floatLabels="never"
-              formControlName="dropOffDate"
-              label="Pick an upcoming Saturday"
-              placeholder="Drop-off Date"
-              [calendarMode]="true"
-              [dateFilter]="filterDateSaturday"
-              [editable]="true"
-              [minDate]="minRegisterDate"
-            ></foodweb-hybrid-date>
-          </div>
-        </div>
+        <foodweb-hybrid-date
+          floatLabels="never"
+          formControlName="dropOffDate"
+          label="Pick an upcoming Saturday"
+          placeholder="Drop-off Date"
+          [calendarMode]="true"
+          [dateFilter]="filterDateSaturday"
+          [editable]="true"
+          [minDate]="minRegisterDate">
+        </foodweb-hybrid-date>
       </ion-card-content>
     </ion-card>
 
@@ -82,8 +81,8 @@
       </ion-card-content>
     </ion-card>
 
-    <div class="action-footer align-right">
-      <ion-button type="submit" color="primary" expand="block">Register</ion-button>
+    <div class="action-footer">
+      <ion-button type="submit" color="primary" expand="block">Submit Registration</ion-button>
     </div>
 
   </form>

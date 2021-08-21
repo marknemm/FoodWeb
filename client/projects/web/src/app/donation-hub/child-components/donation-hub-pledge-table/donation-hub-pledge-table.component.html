@@ -1,6 +1,6 @@
 <foodweb-table-container class="donation-hub-pledge-table-container">
   <foodweb-progress-indicator [trigger]="loading" class="datatable-progress"></foodweb-progress-indicator>
-  <foodweb-table mat-table matSort [dataSource]="dataSource" (selectionChange)="onSelectionChange($event)">
+  <foodweb-table mat-table matSort [dataSource]="dataSource" (selectionChange)="onSelectionChange($event.added)">
     <ng-container matColumnDef="donor">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Donor</th>
       <td mat-cell *matCellDef="let row">

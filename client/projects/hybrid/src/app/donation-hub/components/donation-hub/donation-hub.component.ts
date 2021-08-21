@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { DonationHubComponent as WebDonationHubComponent } from '~web/donation-hub/components/donation-hub/donation-hub.component';
 
 @Component({
   selector: 'foodweb-hybrid-donation-hub',
   templateUrl: './donation-hub.component.html',
   styleUrls: ['./donation-hub.component.scss']
 })
-export class DonationHubComponent implements OnInit {
+export class DonationHubComponent extends WebDonationHubComponent {
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  readonly pledgeSelectRoute = ['/', 'tabs', 'donation-hub', 'pledge'];
+  readonly postDeleteRoute = ['/', 'tabs', 'donation-hub', 'list', 'my'];
 
 }

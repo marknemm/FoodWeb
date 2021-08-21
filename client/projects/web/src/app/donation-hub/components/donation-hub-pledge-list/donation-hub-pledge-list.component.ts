@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { DonationHubPledge, DonationHubPledgeReadRequest, ListResponse, ReadRequest } from '~shared';
 import { DonationHubPledgeReadService } from '~web/donation-hub/services/donation-hub-pledge-read/donation-hub-pledge-read.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
@@ -12,17 +14,17 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class DonationHubPledgeListComponent implements OnInit {
 
-  private _activeFilters: DonationHubPledgeReadRequest = {};
-  private _pledges: DonationHubPledge[] = [];
-  private _myPledges = false;
-  private _totalCount = 0;
+  protected _activeFilters: DonationHubPledgeReadRequest = {};
+  protected _pledges: DonationHubPledge[] = [];
+  protected _myPledges = false;
+  protected _totalCount = 0;
 
   constructor(
     public pageTitleService: PageTitleService,
-    private _activatedRoute: ActivatedRoute,
-    private _pledgeReadService: DonationHubPledgeReadService,
-    private _router: Router,
-    private _urlQueryService: UrlQueryService
+    protected _activatedRoute: ActivatedRoute,
+    protected _pledgeReadService: DonationHubPledgeReadService,
+    protected _router: Router,
+    protected _urlQueryService: UrlQueryService
   ) {}
 
   get activeFilters(): DonationHubPledgeReadRequest {
@@ -51,15 +53,27 @@ export class DonationHubPledgeListComponent implements OnInit {
       ? 'My Donation Pledges'
       : 'Donation Pledges';
     this._urlQueryService.listenQueryParamsChange<ReadRequest>(this._activatedRoute).subscribe(
-      (request: ReadRequest) => this.handleQueryParamsChanged(request)
+      (request: ReadRequest) => this.refresh(request).subscribe()
     );
   }
 
-  handleQueryParamsChanged(request: ReadRequest): void {
-    this._activeFilters = <DonationHubPledgeReadRequest>request;
-    this._pledgeReadService.getDonationHubPledges(this.activeFilters).subscribe((response: ListResponse<DonationHubPledge>) => {
-      this._pledges = response.list;
-      this._totalCount = response.totalCount;
-    });
+  /**
+   * Refreshes the Donation Hub Pledge List items.
+   * @param request The optional Read Request, contianing filter/sorting parameters.
+   * If not given, will use the last recorded Read Request parameters.
+   * @returns An observable that emits the loaded `DonationHubPledge` items.
+   */
+  refresh(request?: ReadRequest): Observable<DonationHubPledge[]> {
+    if (request) {
+      this._activeFilters = <DonationHubPledgeReadRequest>request;
+    }
+    return this._pledgeReadService.getDonationHubPledges(this.activeFilters).pipe(
+      map((response: ListResponse<DonationHubPledge>) => {
+        this._pledges = response.list;
+        this._totalCount = response.totalCount;
+        console.log('done loading...');
+        return this._pledges;
+      })
+    );
   }
 }

@@ -17,17 +17,17 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class DonationHubListComponent implements OnInit {
 
-  private _activeFilters: DonationHubReadRequest = {};
-  private _donationHubs: DonationHub[] = [];
-  private _myDonationHubs = false;
-  private _totalCount = 0;
+  protected _activeFilters: DonationHubReadRequest = {};
+  protected _donationHubs: DonationHub[] = [];
+  protected _myDonationHubs = false;
+  protected _totalCount = 0;
 
   constructor(
     public pageTitleService: PageTitleService,
-    private _activatedRoute: ActivatedRoute,
-    private _donationHubReadService: DonationHubReadService,
-    private _router: Router,
-    private _urlQueryService: UrlQueryService
+    protected _activatedRoute: ActivatedRoute,
+    protected _donationHubReadService: DonationHubReadService,
+    protected _router: Router,
+    protected _urlQueryService: UrlQueryService
   ) {}
 
   get activeFilters(): DonationHubReadRequest {
@@ -51,7 +51,7 @@ export class DonationHubListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._myDonationHubs = this._router.url.indexOf('/my') >= 0;
+    this._myDonationHubs = (this._router.url.indexOf('/my') >= 0);
     this.pageTitleService.title = (this._myDonationHubs)
       ? 'My Donation Hubs'
       : 'Pledge Donation';

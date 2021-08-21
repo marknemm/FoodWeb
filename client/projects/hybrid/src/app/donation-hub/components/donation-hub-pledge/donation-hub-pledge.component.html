@@ -1,1 +1,50 @@
-<p>donation-hub-pledge works!</p>
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="../..">
+    <ion-label>Donation Pledge</ion-label>
+    <!-- <foodweb-hybrid-donation-hub-pledge-actions
+      [donationHubPledge]="donationHubPledge"
+      [canModify]="canModify"
+      slot="end"
+      (delete)="deleteDonationHubPledge()">
+    </foodweb-hybrid-donation-hub-pledge-actions> -->
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="donationHubPledge">
+
+    <div class="row">
+      <div class="donation-hub col-md-6 col-12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <ion-label>Donation Info</ion-label>
+            </ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <div>
+              <div class="inline-label">Sandwich Type:</div>
+              <span>{{ donationHubPledge.foodType }}</span>
+            </div>
+            <div>
+              <div class="inline-label">Sandwich Count:</div>
+              <span>{{ donationHubPledge.foodCount }}</span>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <foodweb-hybrid-donation-hub-teaser [donationHub]="donationHubPledge.donationHub"></foodweb-hybrid-donation-hub-teaser>
+      </div>
+
+      <div class="donation-hub-donor col-md-6 col-12">
+        <foodweb-hybrid-account-teaser [account]="donationHubPledge.account" customTitle="Hub Donor"></foodweb-hybrid-account-teaser>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <div *ngIf="donationHubPledgeNotFound" class="not-found">
+    Donation Pledge not found
+  </div>
+</ion-content>

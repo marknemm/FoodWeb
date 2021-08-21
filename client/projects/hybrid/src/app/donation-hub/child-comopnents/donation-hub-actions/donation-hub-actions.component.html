@@ -1,0 +1,46 @@
+<ion-buttons>
+
+  <ion-button
+    *ngIf="canModify"
+    [disabled]="loading"
+    foodwebConfirmButton
+    fill="clear"
+    class="delete-button"
+    color="danger"
+    confirmMessage="Are you sure you want to permanently delete your donation hub?"
+    confirmTitle="Confirm Delete"
+    (clickConfirm)="delete.emit()">
+    <ion-icon name="trash"></ion-icon>
+  </ion-button>
+
+  <ion-button
+    *ngIf="canModify"
+    [disabled]="loading"
+    [routerLink]="['/', 'tabs', 'donation-hub', donationHub?.id, 'edit']"
+    [state]="{ donationHub: donationHub }"
+    class="edit-button"
+    fill="clear">
+    <ion-icon name="create"></ion-icon>
+  </ion-button>
+
+  <ion-button
+    *ngIf="canDonate"
+    [disabled]="loading"
+    [routerLink]="['/', 'tabs', 'donation-hub', donationHub?.id, 'pledge', 'create']"
+    [state]="{ donationHub: donationHub }"
+    class="donate-button"
+    fill="clear">
+    <ion-label>Donate</ion-label>
+  </ion-button>
+
+  <ion-button
+    *ngIf="canViewDonation"
+    [disabled]="loading"
+    [routerLink]="['/', 'tabs', 'donation-hub', 'pledge', myPledge?.id]"
+    [state]="{ donationHubPledge: myPledge }"
+    class="view-donation-button"
+    fill="clear">
+    <ion-label>My Donation</ion-label>
+  </ion-button>
+
+</ion-buttons>
