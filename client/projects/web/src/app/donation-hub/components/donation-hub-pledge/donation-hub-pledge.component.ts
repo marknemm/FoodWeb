@@ -16,6 +16,8 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class DonationHubPledgeComponent implements OnInit, OnDestroy {
 
+  readonly postDeleteRoute = ['/', 'donation-hub'];
+
   protected _destroy$ = new Subject();
   protected _donationHubPledge: DonationHubPledge;
   protected _donationHubPledgeNotFound = false;
@@ -59,7 +61,7 @@ export class DonationHubPledgeComponent implements OnInit, OnDestroy {
   deleteDonationHubPledge(): void {
     if (this.canModify) {
       this._donationHubPledgeDeleteService.deleteDonationPledge(this.donationHubPledge).subscribe(() =>
-        this._router.navigate(['/donation-hub', this.donationHubPledge.donationHub.id])
+        this._router.navigate(this.postDeleteRoute.concat(`${this.donationHubPledge.donationHub.id}`))
       );
     }
   }

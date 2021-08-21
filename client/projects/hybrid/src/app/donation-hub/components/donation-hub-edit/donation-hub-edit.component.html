@@ -2,7 +2,7 @@
   <foodweb-hybrid-header defaultBackHref="..">
     <ion-label>Edit Donation Hub</ion-label>
     <ion-buttons slot="end">
-      <ion-button type="submit" color="primary" (click)="save()">Save</ion-button>
+      <ion-button fill="clear" (click)="save()">Save</ion-button>
     </ion-buttons>
   </foodweb-hybrid-header>
 </ion-header>
@@ -61,7 +61,7 @@
       </ion-card>
     </ng-container>
 
-    <div *ngIf="donationHubNotFound" class="not-found">
+    <div *ngIf="donationHubNotFound" class="standalone-statement">
       Donation Hub not found
     </div>
 
