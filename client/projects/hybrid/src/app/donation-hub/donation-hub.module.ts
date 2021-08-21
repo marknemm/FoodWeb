@@ -22,6 +22,7 @@ import { DonationHubPortalComponent } from './components/donation-hub-portal/don
 import { DonationHubComponent } from './components/donation-hub/donation-hub.component';
 import { DonationHubRoutingModule } from './donation-hub-routing.module';
 import { DonationHubPledgeFormComponent } from './child-comopnents/donation-hub-pledge-form/donation-hub-pledge-form.component';
+import { DonationHubPledgeTeaserComponent } from './child-comopnents/donation-hub-pledge-teaser/donation-hub-pledge-teaser.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { DonationHubPledgeFormComponent } from './child-comopnents/donation-hub-
     DonationHubPortalComponent,
     DonationHubTeaserComponent,
     DonationHubPledgeFormComponent,
+    DonationHubPledgeTeaserComponent,
   ],
   imports: [
     CommonModule,

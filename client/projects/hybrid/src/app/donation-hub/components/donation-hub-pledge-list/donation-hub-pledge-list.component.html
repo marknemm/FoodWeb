@@ -14,15 +14,15 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <p *ngIf="noneFound" class="standalone-statement">
+  <div *ngIf="noneFound" class="standalone-statement">
     Could Not Find Any Donation Pledges.
-  </p>
+  </div>
 
-  <ion-virtual-scroll [items]="pledges" approxItemHeight="300px">
-    <!-- <foodweb-hybrid-donation-hub-pledge-teaser
+  <ion-virtual-scroll *ngIf="pledges?.length" [items]="pledges" approxItemHeight="350px">
+    <foodweb-hybrid-donation-hub-pledge-teaser
       *virtualItem="let item"
-      [donationHub]="item">
-    </foodweb-hybrid-donation-hub-pledge-teaser> -->
+      [pledge]="item">
+    </foodweb-hybrid-donation-hub-pledge-teaser>
   </ion-virtual-scroll>
 
   <ion-infinite-scroll [disabled]="loadMoreDisabled" (ionInfinite)="handleIonInfinite($event)" threshold="100px">

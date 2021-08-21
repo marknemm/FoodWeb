@@ -18,7 +18,11 @@
     Choose a donation drop-off hub to pledge a donation to.
   </div>
 
-  <ion-virtual-scroll [items]="donationHubs" approxItemHeight="300px">
+  <div *ngIf="noneFound" class="standalone-statement">
+    Could Not Find Any Donation Hub <span style="display: inline-block;">Drop-Off</span> Locations.
+  </div>
+
+  <ion-virtual-scroll *ngIf="donationHubs?.length" [items]="donationHubs" approxItemHeight="300px">
     <foodweb-hybrid-donation-hub-teaser
       *virtualItem="let item"
       [donationHub]="item">

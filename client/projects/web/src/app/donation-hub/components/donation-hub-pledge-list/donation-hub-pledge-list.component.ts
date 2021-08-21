@@ -71,7 +71,6 @@ export class DonationHubPledgeListComponent implements OnInit {
       map((response: ListResponse<DonationHubPledge>) => {
         this._pledges = response.list;
         this._totalCount = response.totalCount;
-        console.log('done loading...');
         return this._pledges;
       })
     );

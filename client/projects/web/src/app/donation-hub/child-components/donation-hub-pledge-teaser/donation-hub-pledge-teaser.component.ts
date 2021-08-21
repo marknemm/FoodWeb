@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Account, DonationHub, DonationHubPledge } from '~shared';
 
 @Component({
@@ -6,7 +6,7 @@ import { Account, DonationHub, DonationHubPledge } from '~shared';
   templateUrl: './donation-hub-pledge-teaser.component.html',
   styleUrls: ['./donation-hub-pledge-teaser.component.scss']
 })
-export class DonationHubPledgeTeaserComponent implements OnInit {
+export class DonationHubPledgeTeaserComponent {
 
   @Input() featureHubAccount = false;
   @Input() pledge: DonationHubPledge;
@@ -30,6 +30,4 @@ export class DonationHubPledgeTeaserComponent implements OnInit {
   get pledgeAccount(): Account {
     return this.pledge?.account;
   }
-
-  ngOnInit() {}
 }
