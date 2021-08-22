@@ -52,7 +52,7 @@ export class AccountTeaserComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.account) {
       this._accountName = this._accountHelper.accountName(this.account);
-      this._accountRouterLink = this._accountHelper.accountDetailsRouterLink(this.account);
+      this._accountRouterLink = this._accountHelper.accountRouterLink(this.account);
     }
   }
 

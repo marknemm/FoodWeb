@@ -4,7 +4,7 @@
     <ng-container matColumnDef="donor">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Donor</th>
       <td mat-cell *matCellDef="let row">
-        <a [routerLink]="['/account', 'details', row.account.id]" (click)="$event.stopPropagation()">
+        <a [routerLink]="['/', 'account', row.account.id]" (click)="$event.stopPropagation()">
           {{ row.account | foodwebAccountName }}
         </a>
       </td>

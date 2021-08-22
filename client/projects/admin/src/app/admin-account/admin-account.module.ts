@@ -21,17 +21,17 @@ import { SharedModule } from '~web/shared/shared.module';
 import { AdminAccountRoutingModule } from './admin-account-routing.module';
 import { AdminAccountFiltersComponent } from './child-components/admin-account-filters/admin-account-filters.component';
 import { AdminAccountCreateComponent } from './components/admin-account-create/admin-account-create.component';
+import { AdminAccountListComponent } from './components/admin-account-list/admin-account-list.component';
 import { AdminAccountMessageComponent } from './components/admin-account-message/admin-account-message.component';
 import { AdminAccountComponent } from './components/admin-account/admin-account.component';
-import { AdminAccountsComponent } from './components/admin-accounts/admin-accounts.component';
 
 @NgModule({
   declarations: [
     AdminAccountCreateComponent,
     AdminAccountComponent,
     AdminAccountFiltersComponent,
+    AdminAccountListComponent,
     AdminAccountMessageComponent,
-    AdminAccountsComponent,
   ],
   imports: [
     AdminAccountRoutingModule,

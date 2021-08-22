@@ -92,7 +92,7 @@ export class AccountComponent extends FormBaseComponent<AccountForm> implements 
         this._seeDonationsLinkParams = this._genSeeDonationLinkParams(account);
         this.formGroup.patchValue(account);
       }
-      this._renavigateToAccountDetailsPage();
+      this._renavigateToAccountPage();
   }
 
   private _genSeeDonationLinkParams(account: Account): DonationReadRequest {
@@ -107,7 +107,7 @@ export class AccountComponent extends FormBaseComponent<AccountForm> implements 
     return {};
   }
 
-  private _renavigateToAccountDetailsPage(): void {
+  private _renavigateToAccountPage(): void {
     this._router.navigate(
       [], {
         relativeTo: this._activatedRoute,

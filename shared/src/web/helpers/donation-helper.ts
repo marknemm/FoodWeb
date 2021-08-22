@@ -300,24 +300,24 @@ export class DonationHelper {
     return this._accountHelper.accountName(donation.donorAccount);
   }
 
-  donorDetailsRouterLink(donation: Partial<Donation>): string[] {
-    return this._accountHelper.accountDetailsRouterLink(donation.donorAccount);
+  donorRouterLink(donation: Partial<Donation>): string[] {
+    return this._accountHelper.accountRouterLink(donation.donorAccount);
   }
 
   receiverName(donation: Partial<Donation>): string {
     return this._accountHelper.accountName(donation.claim?.receiverAccount);
   }
 
-  receiverDetailsRouterLink(donation: Partial<Donation>): string[] {
-    return this._accountHelper.accountDetailsRouterLink(donation.claim?.receiverAccount);
+  receiverRouterLink(donation: Partial<Donation>): string[] {
+    return this._accountHelper.accountRouterLink(donation.claim?.receiverAccount);
   }
 
   delivererName(donation: Partial<Donation>): string {
     return this._accountHelper.accountName(donation.claim?.delivery?.volunteerAccount);
   }
 
-  delivererDetailsRouterLink(donation: Partial<Donation>): string[] {
-    return this._accountHelper.accountDetailsRouterLink(donation.claim?.delivery?.volunteerAccount);
+  delivererRouterLink(donation: Partial<Donation>): string[] {
+    return this._accountHelper.accountRouterLink(donation.claim?.delivery?.volunteerAccount);
   }
 
   hasDonorContactInfoOverride(donation: Partial<Donation>): boolean {

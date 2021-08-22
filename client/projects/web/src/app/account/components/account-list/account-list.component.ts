@@ -7,11 +7,11 @@ import { PageTitleService } from '~web/shared/services/page-title/page-title.ser
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
-  selector: 'foodweb-accounts',
-  templateUrl: './accounts.component.html',
-  styleUrls: ['./accounts.component.scss']
+  selector: 'foodweb-account-list',
+  templateUrl: './account-list.component.html',
+  styleUrls: ['./account-list.component.scss']
 })
-export class AccountsComponent implements OnInit {
+export class AccountListComponent implements OnInit {
 
   protected _accounts: Account[] = [];
   protected _accountType: AccountType;

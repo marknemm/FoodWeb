@@ -16,10 +16,10 @@ const routes: Routes = [
   { path: 'operation-hours', component: OperationHoursSettingsComponent },
   { path: 'password', component: PasswordSettingsComponent },
   { path: 'primary', component: PrimarySettingsComponent },
-  // { path: 'my', component: AccountDetailsComponent, canActivate: [AuthGaurdService] },
-  // { path: 'details', component: AccountDetailsComponent },
-  // { path: 'details/:id', component: AccountDetailsComponent },
-  // { path: 'list', component: AccountsComponent }
+  // { path: 'list', component: AccountsComponent },
+  // { path: '', component: AccountComponent },
+  // { path: 'my', component: AccountComponent, canActivate: [AuthGaurdService] },
+  // { path: ':id', component: AccountComponent },
 ];
 
 @NgModule({
