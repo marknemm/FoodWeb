@@ -5,16 +5,24 @@ import { Account, AccountHelper, AccountType, DonationReadRequest } from '~share
 import { AccountForm } from '~web/account-shared/forms/account.form';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
-import { FormBaseComponent, FormHelperService } from '~web/forms';
+import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
 import { PasswordFormT } from '~web/password/forms/password.form';
 import { SessionService } from '~web/session/services/session/session.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
-@Component({ template: '' })
-export class AccountDetailsBaseComponent extends FormBaseComponent<AccountForm> implements OnInit {
+@Component({
+  selector: 'foodweb-account',
+  templateUrl: './account.component.html',
+  styleUrls: ['./account.component.scss'],
+  providers: formProvider(AccountComponent)
+})
+export class AccountComponent extends FormBaseComponent<AccountForm> implements OnInit {
 
   readonly AccountType = AccountType;
+  readonly contactInfoFields = ['contactInfo.email', 'contactInfo.phoneNumber', 'contactInfo.streetAddress',
+                                'contactInfo.city', 'contactInfo.stateProvince', 'contactInfo.postalCode'];
+  readonly notificationFields = ['contactInfo.enableEmail', 'contactInfo.enablePushNotification', 'contactInfo.notifyForEachDonation'];
 
   protected _originalAccount: Account;
   protected _accountNotFound = false;
@@ -63,7 +71,7 @@ export class AccountDetailsBaseComponent extends FormBaseComponent<AccountForm> 
     return this._seeDonationsLinkParams;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     (this._router.url.indexOf('/my') >= 0)
       ? this._handleAccountChange(this.sessionService.account)
       : this._listenAccountChange();
@@ -136,7 +144,4 @@ export class AccountDetailsBaseComponent extends FormBaseComponent<AccountForm> 
     );
     successCb();
   }
-
 }
-
-export type AccountPanel = 'availability' | 'notifications' | 'password' | 'primary';

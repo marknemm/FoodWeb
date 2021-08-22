@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AdminSessionService } from '~admin/admin-session/services/admin-session/admin-session.service';
 import { ImpersonateService } from '~admin/admin-session/services/impersonate/impersonate.service';
 import { AccountHelper } from '~shared';
-import { AccountDetailsComponent } from '~web/account/components/account-details/account-details.component';
+import { AccountComponent } from '~web/account/components/account/account.component';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
 import { FormHelperService, formProvider } from '~web/forms';
@@ -12,12 +12,12 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
 @Component({
-  selector: 'foodweb-admin-account-details',
-  templateUrl: './admin-account-details.component.html',
-  styleUrls: ['./admin-account-details.component.scss'],
-  providers: formProvider(AdminAccountDetailsComponent)
+  selector: 'foodweb-admin-account',
+  templateUrl: './admin-account.component.html',
+  styleUrls: ['./admin-account.component.scss'],
+  providers: formProvider(AdminAccountComponent)
 })
-export class AdminAccountDetailsComponent extends AccountDetailsComponent implements OnInit {
+export class AdminAccountComponent extends AccountComponent implements OnInit {
 
   constructor(
     public sessionService: AdminSessionService,
