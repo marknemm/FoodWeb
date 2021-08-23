@@ -8,8 +8,4 @@ import { formProvider } from '~web/forms';
   styleUrls: ['./donation-hub-pledge-edit.component.scss'],
   providers: formProvider(DonationHubPledgeEditComponent)
 })
-export class DonationHubPledgeEditComponent extends WebDonationHubPledgeEditComponent {
-
-  readonly postEditRoute = ['/', 'tabs', 'donation-hub', 'pledge'];
-
-}
+export class DonationHubPledgeEditComponent extends WebDonationHubPledgeEditComponent {}

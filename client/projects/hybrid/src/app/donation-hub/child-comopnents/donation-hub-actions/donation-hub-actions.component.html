@@ -16,7 +16,7 @@
   <ion-button
     *ngIf="canModify"
     [disabled]="loading"
-    [routerLink]="['/', 'tabs', 'donation-hub', donationHub?.id, 'edit']"
+    [routerLink]="['/', 'donation-hub', donationHub?.id, 'edit']"
     [state]="{ donationHub: donationHub }"
     class="edit-button"
     fill="clear">
@@ -26,7 +26,7 @@
   <ion-button
     *ngIf="canDonate"
     [disabled]="loading"
-    [routerLink]="['/', 'tabs', 'donation-hub', donationHub?.id, 'pledge', 'create']"
+    [routerLink]="['/', 'donation-hub', donationHub?.id, 'pledge', 'create']"
     [state]="{ donationHub: donationHub }"
     class="donate-button"
     fill="clear">
@@ -36,7 +36,7 @@
   <ion-button
     *ngIf="canViewDonation"
     [disabled]="loading"
-    [routerLink]="['/', 'tabs', 'donation-hub', 'pledge', myPledge?.id]"
+    [routerLink]="['/', 'donation-hub', 'pledge', myPledge?.id]"
     [state]="{ donationHubPledge: myPledge }"
     class="view-donation-button"
     fill="clear">

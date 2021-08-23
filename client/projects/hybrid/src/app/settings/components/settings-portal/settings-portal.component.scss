@@ -4,7 +4,7 @@
   --padding-top: 8px;
   --padding-bottom: var(--padding-top);
 
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   border-top: 1px solid var(--ion-border-color);
   border-bottom: 1px solid var(--ion-border-color);
 
@@ -25,17 +25,45 @@
   }
 }
 
-.message-us,
-.about,
-.logout {
-  --detail-icon-opacity: 1;
+.account-not-verified {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  color: var(--ion-danger-color);
+  font-weight: bold;
+
+  ion-label {
+    display: block;
+    font-size: 16px;
+  }
+
+  ion-button {
+    height: 20px;
+  }
 }
 
-.message-us,
-.about {
-  --detail-icon-color: var(--ion-color-primary);
-}
+.secondary-list {
+  > ion-item {
+    --detail-icon-opacity: 1;
+  }
 
-.logout {
-  --detail-icon-color: var(--ion-color-danger);
+  .message-us {
+    --detail-icon-color: var(--ion-color-primary);
+  }
+
+  .donors {
+    --detail-icon-color: var(--ion-color-donor);
+  }
+
+  .receivers {
+    --detail-icon-color: var(--ion-color-receiver);
+  }
+
+  .about {
+    --detail-icon-color: var(--ion-color-secondary);
+  }
+
+  .logout {
+    --detail-icon-color: var(--ion-color-danger);
+  }
 }

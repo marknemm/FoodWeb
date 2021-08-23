@@ -70,7 +70,7 @@ async function _messagePotentialDeliverers(donation: DonationEntity, potentialDe
       notifyAccounts,
       {
         notificationType: NotificationType.ClaimDonation,
-        notificationLink: `/delivery/details/${donation.id}`,
+        notificationLink: `/delivery/${donation.id}`,
         title: 'Delivery Requested',
         icon: donation.donorAccount.profileImg,
         body: `

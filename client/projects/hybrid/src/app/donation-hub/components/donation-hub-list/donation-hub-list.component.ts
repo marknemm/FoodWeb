@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DonationHubListComponent as WebDonationHubListComponent } from '~web/donation-hub/components/donation-hub-list/donation-hub-list.component';
+import { DonationHub, ListResponse } from '../../../../../../../../shared/src/web';
 
 @Component({
   selector: 'foodweb-hybrid-donation-hub-list',
@@ -7,8 +8,6 @@ import { DonationHubListComponent as WebDonationHubListComponent } from '~web/do
   styleUrls: ['./donation-hub-list.component.scss']
 })
 export class DonationHubListComponent extends WebDonationHubListComponent {
-
-  private _page = 0;
 
   get loading(): boolean {
     return this._donationHubReadService.loading;
@@ -23,7 +22,7 @@ export class DonationHubListComponent extends WebDonationHubListComponent {
    * @param event The ionRefresh event.
    */
   handleIonRefresh(event: any): void {
-    this._page = 0;
+    this.activeFilters.page = 0;
     this.refresh().subscribe(() => event.target.complete());
   }
 
@@ -32,9 +31,15 @@ export class DonationHubListComponent extends WebDonationHubListComponent {
    * @param event The ionInfinite event.
    */
   handleIonInfinite(event: any): void {
-    this.activeFilters.page = ++this._page;
+    this.activeFilters.page++;
     this._donationHubReadService.getDonationHubs(this.activeFilters).subscribe(
-      () => event.target.complete()
+      (response: ListResponse<DonationHub>) => {
+        if (response?.list) {
+          this._donationHubs.concat(response.list);
+          this._totalCount = response.totalCount;
+        }
+        event.target.complete();
+      }
     );
   }
 }

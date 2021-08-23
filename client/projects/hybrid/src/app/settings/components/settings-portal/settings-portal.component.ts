@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Account, SessionService } from '~hybrid/session/services/session/session.service';
+import { AccountType } from '~shared';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
+import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
 @Component({
   selector: 'foodweb-hybrid-settings-portal',
@@ -9,7 +11,10 @@ import { AuthenticationService } from '~web/session/services/authentication/auth
 })
 export class SettingsPortalComponent {
 
+  readonly AccountType = AccountType;
+
   constructor(
+    public signupVerificationService: SignupVerificationService,
     private _authenticationService: AuthenticationService,
     private _sessionService: SessionService,
   ) {}

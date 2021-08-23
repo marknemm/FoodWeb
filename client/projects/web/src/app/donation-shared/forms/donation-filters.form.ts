@@ -20,7 +20,9 @@ export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
       donorOrganizationName: undefined,
       expired: undefined,
       fullTextQuery: undefined,
+      limit: 10,
       myDonations: undefined,
+      page: 0,
       receiverAccountId: undefined,
       receiverOrganizationName: undefined,
       sortBy: undefined,
@@ -47,5 +49,17 @@ export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
    */
   resetFacetFilters(): void {
     this.reset({ fullTextQuery: this.get('fullTextQuery').value });
+  }
+
+  /**
+   * @returns The form value as a `DonationReadRequest`.
+   */
+  toDonationReadRequest(): DonationReadRequest {
+    const request: DonationReadRequest = this.value;
+    for (const prop in request) {
+      if (request[prop] == null) delete request[prop];
+    }
+    console.log(request);
+    return request;
   }
 }

@@ -25,7 +25,7 @@ export class LoginGuardService implements CanActivate {
       map((status: ConnectionStatus) => {
         const activate = (status.connected && !this._sessionService.loggedIn);
         if (!activate) {
-          this._router.navigate(['/tabs/home']);
+          this._router.navigate(['/', 'home']);
         }
         return activate;
       })

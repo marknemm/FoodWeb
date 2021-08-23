@@ -1,4 +1,4 @@
-<div class="delivery-details page">
+<div class="delivery page">
   <div *ngIf="!deliveryNotFound; else notFoundTmpl" class="page-title">
     {{ pageTitleService.title }}
   </div>
@@ -14,8 +14,8 @@
     <foodweb-donation-workflow
       [donation]="donation"
       [myAccount]="sessionService.account"
-      (action)="onDeliveryAction($event)"
-    ></foodweb-donation-workflow>
+      (action)="onDeliveryAction($event)">
+    </foodweb-donation-workflow>
 
     <div *ngIf="!myDelivery" class="row">
       <div class="donation-description-container col-12">

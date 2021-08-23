@@ -17,7 +17,7 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class DonationHubListComponent implements OnInit {
 
-  protected _activeFilters: DonationHubReadRequest = {};
+  protected _activeFilters: DonationHubReadRequest = { page: 0 };
   protected _donationHubs: DonationHub[] = [];
   protected _myDonationHubs = false;
   protected _totalCount = 0;
@@ -69,8 +69,8 @@ export class DonationHubListComponent implements OnInit {
   refresh(request?: ReadRequest): Observable<DonationHub[]> {
     if (request) {
       this._activeFilters = <DonationHubReadRequest>request;
-      this._activeFilters.excludeMyHubs = !this.myDonationHubs;
     }
+
     return this._donationHubReadService.getDonationHubs(this.activeFilters).pipe(
       map((response: ListResponse<DonationHub>) => {
         this._donationHubs = response.list;

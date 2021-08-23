@@ -16,10 +16,6 @@ const routes: Routes = [
   { path: 'operation-hours', component: OperationHoursSettingsComponent },
   { path: 'password', component: PasswordSettingsComponent },
   { path: 'primary', component: PrimarySettingsComponent },
-  // { path: 'list', component: AccountsComponent },
-  // { path: '', component: AccountComponent },
-  // { path: 'my', component: AccountComponent, canActivate: [AuthGaurdService] },
-  // { path: ':id', component: AccountComponent },
 ];
 
 @NgModule({

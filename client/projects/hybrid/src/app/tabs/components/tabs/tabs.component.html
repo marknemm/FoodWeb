@@ -6,12 +6,12 @@
       <ion-label>Army</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="donations" *ngIf="!sessionService.isVolunteer">
+    <ion-tab-button tab="donation" *ngIf="!sessionService.isVolunteer">
       <ion-icon name="gift"></ion-icon>
       <ion-label>Donations</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="deliveries" *ngIf="sessionService.isVolunteer">
+    <ion-tab-button tab="delivery" *ngIf="sessionService.isVolunteer">
       <ion-icon name="car"></ion-icon>
       <ion-label>Deliveries</ion-label>
     </ion-tab-button>

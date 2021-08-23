@@ -7,10 +7,11 @@ const routes: Routes = [
   { path: 'login', pathMatch: 'full', redirectTo: 'bootstrap/login' },
   { path: 'signup', pathMatch: 'full', redirectTo: 'bootstrap/signup' },
   { path: 'signup/:accountType', redirectTo: 'bootstrap/signup/:accountType' },
+  { path: 'account', loadChildren: () => import('./account/account.module').then(mod => mod.AccountModule) },
   { path: 'bootstrap', loadChildren: () => import('./bootstrap/bootstrap.module').then(mod => mod.BootstrapModule) },
   { path: 'information', loadChildren: () => import('./information/information.module').then(mod => mod.InformationModule) },
   { path: '', loadChildren: () => import('./tabs/tabs.module').then(mod => mod.TabsModule) },
-  { path: '**', redirectTo: 'tabs/home' }
+  { path: '**', redirectTo: '/home' }
 ];
 
 @NgModule({

@@ -10,16 +10,16 @@ import { PageTitleService } from '~web/shared/services/page-title/page-title.ser
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
-  selector: 'foodweb-delivery-details',
-  templateUrl: './delivery-details.component.html',
-  styleUrls: ['./delivery-details.component.scss'],
+  selector: 'foodweb-delivery',
+  templateUrl: './delivery.component.html',
+  styleUrls: ['./delivery.component.scss'],
 })
-export class DeliveryDetailsComponent implements OnInit {
+export class DeliveryComponent implements OnInit {
 
-  private _deliveryNotFound = false;
-  private _destroy$ = new Subject();
-  private _donation: Donation;
-  private _myDelivery = false;
+  protected _deliveryNotFound = false;
+  protected _destroy$ = new Subject();
+  protected _donation: Donation;
+  protected _myDelivery = false;
 
   constructor(
     public pageTitleService: PageTitleService,

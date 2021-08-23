@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
 
 @Component({
@@ -8,6 +8,9 @@ import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from
   providers: formProvider(UsernameComponent)
 })
 export class UsernameComponent extends FormBaseComponent<string> {
+
+  @HostBinding()
+  readonly class = 'foodweb-username';
 
   constructor(formHelperService: FormHelperService) {
     super(() => new TFormControl<string>(), formHelperService);

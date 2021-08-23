@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DonationHelper, DonationStatus } from '~shared';
 
 @Component({
@@ -9,6 +9,9 @@ import { DonationHelper, DonationStatus } from '~shared';
 export class DonationStatusComponent implements OnInit, OnChanges {
 
   @Input() donationStatus: DonationStatus;
+
+  @HostBinding()
+  readonly class = 'foodweb-donation-status';
 
   private _donationStatusClass = '';
   private _donationStatusPrefix = '';

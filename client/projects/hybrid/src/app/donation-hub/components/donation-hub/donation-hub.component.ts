@@ -6,9 +6,4 @@ import { DonationHubComponent as WebDonationHubComponent } from '~web/donation-h
   templateUrl: './donation-hub.component.html',
   styleUrls: ['./donation-hub.component.scss']
 })
-export class DonationHubComponent extends WebDonationHubComponent {
-
-  readonly pledgeSelectRoute = ['/', 'tabs', 'donation-hub', 'pledge'];
-  readonly postDeleteRoute = ['/', 'tabs', 'donation-hub', 'list', 'my'];
-
-}
+export class DonationHubComponent extends WebDonationHubComponent {}

@@ -1,20 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { DeliveryListComponent } from './delivery-list.component';
 
-import { DeliveriesComponent } from './deliveries.component';
-
-describe('DeliveriesComponent', () => {
-  let component: DeliveriesComponent;
-  let fixture: ComponentFixture<DeliveriesComponent>;
+describe('DeliveryListComponent', () => {
+  let component: DeliveryListComponent;
+  let fixture: ComponentFixture<DeliveryListComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DeliveriesComponent ]
+      declarations: [ DeliveryListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DeliveriesComponent);
+    fixture = TestBed.createComponent(DeliveryListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

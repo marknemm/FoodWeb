@@ -1,1 +1,33 @@
 @import "../../../../../../web/src/app/account/components/account/account.component.scss";
+
+.foodweb-username {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.account-not-verified {
+  color: var(--ion-danger-color);
+
+  ion-label {
+    display: block;
+    font-size: 16px;
+  }
+
+  ion-button {
+    height: 20px;
+  }
+}
+
+.foodweb-profile-img {
+  width: 150px;
+}
+
+hr {
+  margin: 3px 0;
+}
+
+.account-not-verified {
+  margin-bottom: 18px;
+}

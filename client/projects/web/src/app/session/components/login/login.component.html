@@ -41,10 +41,10 @@
     </div>
     <div *ngIf="!insideDialog" class="signup-link-container">
       <p>
-        <a [routerLink]="['/signup']">Create Account</a>
+        <a [routerLink]="['/', 'signup']">Create Account</a>
       </p>
       <p>
-        <a [routerLink]="['/tabs/home']">Skip Login</a>
+        <a [routerLink]="['/', 'home']">Skip Login</a>
       </p>
     </div>
   </div>

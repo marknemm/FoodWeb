@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { DeliveryHelper, Donation } from '~shared';
 
 @Pipe({
-  name: 'deliveryDetailsRouterLink'
+  name: 'deliveryRouterLink'
 })
-export class DeliveryDetailsRouterLinkPipe implements PipeTransform {
+export class DeliveryRouterLinkPipe implements PipeTransform {
 
   constructor(
     private _deliveryHelper: DeliveryHelper

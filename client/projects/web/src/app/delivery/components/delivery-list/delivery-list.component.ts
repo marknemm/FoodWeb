@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { DeliveryHelper, Donation, DonationHelper, DonationReadRequest, ListResponse } from '~shared';
 import { DeliveryReadService } from '~web/delivery/services/delivery-read/delivery-read.service';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
@@ -7,26 +9,26 @@ import { PageTitleService } from '~web/shared/services/page-title/page-title.ser
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
-  selector: 'foodweb-deliveries',
-  templateUrl: './deliveries.component.html',
-  styleUrls: ['./deliveries.component.scss']
+  selector: 'foodweb-delivery-list',
+  templateUrl: './delivery-list.component.html',
+  styleUrls: ['./delivery-list.component.scss']
 })
-export class DeliveriesComponent implements OnInit {
+export class DeliveryListComponent implements OnInit {
 
   readonly filtersForm = new DonationFiltersForm();
 
-  private _donations: Donation[] = [];
-  private _myDeliveries = false;
-  private _totalCount = 0;
+  protected _donations: Donation[] = [];
+  protected _myDeliveries = false;
+  protected _totalCount = 0;
 
   constructor(
     public deliveryHelper: DeliveryHelper,
     public donationHelper: DonationHelper,
     public pageTitleService: PageTitleService,
-    private _activatedRoute: ActivatedRoute,
-    private _deliveryReadService: DeliveryReadService,
-    private _router: Router,
-    private _urlQueryService: UrlQueryService
+    protected _activatedRoute: ActivatedRoute,
+    protected _deliveryReadService: DeliveryReadService,
+    protected _router: Router,
+    protected _urlQueryService: UrlQueryService
   ) {}
 
   get donations(): Donation[] {
@@ -57,7 +59,7 @@ export class DeliveriesComponent implements OnInit {
       ? 'My Deliveries'
       : 'Schedule Deliveries';
     this._urlQueryService.listenQueryParamsChange<DonationReadRequest>(this._activatedRoute).subscribe(
-      (request: DonationReadRequest) => this.handleQueryParamsChanged(request)
+      (request: DonationReadRequest) => this.refresh(request).subscribe()
     );
   }
 
@@ -65,11 +67,19 @@ export class DeliveriesComponent implements OnInit {
     this._urlQueryService.updateUrlQueryString(filters, this._activatedRoute);
   }
 
-  handleQueryParamsChanged(request: DonationReadRequest): void {
-    this.filtersForm.reset(request);
-    this._deliveryReadService.getDeliveries(request).subscribe((response: ListResponse<Donation>) => {
-      this._donations = response.list;
-      this._totalCount = response.totalCount;
-    });
+  refresh(request?: DonationReadRequest): Observable<Donation[]> {
+    if (request) {
+      this.filtersForm.reset(request);
+    }
+
+    return this._deliveryReadService.getDeliveries(this.filtersForm.toDonationReadRequest()).pipe(
+      map((response: ListResponse<Donation>) => {
+        if (response?.list) {
+          this._donations = response.list;
+          this._totalCount = response.totalCount;
+        }
+        return this._donations;
+      })
+    );
   }
 }

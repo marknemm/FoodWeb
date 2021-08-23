@@ -85,7 +85,7 @@ async function _sendDeliveryReminderMessages(donation: DonationEntity, hour: num
       notificationAccounts,
       {
         notificationType: NotificationType.DeliveryReminder,
-        notificationLink: `delivery/details/${donation.id}`,
+        notificationLink: `delivery/${donation.id}`,
         title: 'Delivery Reminder',
         icon: volunteerAccount.profileImg,
         body: `

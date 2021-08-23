@@ -1,1 +1,54 @@
-<p>account-list works!</p>
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="/home">
+    <ion-label>{{ pageTitleService.title }}</ion-label>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" [disabled]="loading" (ionRefresh)="handleIonRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="noneFound" class="standalone-statement">
+    Could Not Find Any Accounts.
+  </div>
+
+  <ion-virtual-scroll *ngIf="accounts?.length" [items]="accounts" approxItemHeight="300px">
+    <foodweb-hybrid-account-teaser
+      *virtualItem="let item"
+      [account]="item"
+      [addressFirst]="true"
+      [hasEmailSubtitle]="true">
+    </foodweb-hybrid-account-teaser>
+  </ion-virtual-scroll>
+
+  <ion-infinite-scroll [disabled]="loadMoreDisabled" (ionInfinite)="handleIonInfinite($event)" threshold="100px">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+
+<!-- <foodweb-filtered-list class="accounts">
+
+  <foodweb-filtered-list-toolbar listItemsLabel="Accounts">
+    <foodweb-search-bar
+      [placeholder]="searchPlaceholder"
+      [formControl]="filtersForm.get('fullTextQuery')"
+      (search)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
+    ></foodweb-search-bar>
+  </foodweb-filtered-list-toolbar>
+
+  <foodweb-filtered-list-content>
+    <div class="col-lg-6" *ngFor="let account of accounts">
+      <foodweb-account-teaser [account]="account" [addressFirst]="true" [hasEmailSubtitle]="true"></foodweb-account-teaser>
+    </div>
+  </foodweb-filtered-list-content>
+
+  <foodweb-list-filters>
+    <foodweb-account-filters
+      [formGroup]="filtersForm"
+      (clear)="filtersForm.resetFacetFilters()"
+      (filter)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
+    ></foodweb-account-filters>
+  </foodweb-list-filters>
+
+</foodweb-filtered-list> -->

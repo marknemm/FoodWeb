@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Account, AccountHelper, AccountReadRequest, AccountType, ListResponse } from '~shared';
 import { AccountFiltersForm } from '~web/account/forms/account-filters.form';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
@@ -51,7 +53,7 @@ export class AccountListComponent implements OnInit {
     this._urlQueryService.listenQueryParamsChange<AccountReadRequest>(this._activatedRoute).subscribe(
       (request: AccountReadRequest) => {
         this._accountType = request.accountType;
-        this.handleQueryParamsChanged(request);
+        this.refresh(request).subscribe();
       }
     );
   }
@@ -60,15 +62,21 @@ export class AccountListComponent implements OnInit {
     this._urlQueryService.updateUrlQueryString(filters, this._activatedRoute);
   }
 
-  handleQueryParamsChanged(request: AccountReadRequest): void {
-    this.filtersForm.reset(request);
-    this._accountReadService.getAccounts(request).subscribe((response: ListResponse<Account>) => {
-      this._setPageTitle();
-      if (response) {
-        this._accounts = response.list;
-        this._totalCount = response.totalCount;
-      }
-    });
+  refresh(request?: AccountReadRequest): Observable<Account[]> {
+    if (request) {
+      this.filtersForm.reset(request);
+    }
+
+    return this._accountReadService.getAccounts(this.filtersForm.toAccountReadRequest()).pipe(
+      map((response: ListResponse<Account>) => {
+        this._setPageTitle();
+        if (response) {
+          this._accounts = response.list;
+          this._totalCount = response.totalCount;
+        }
+        return this._accounts;
+      })
+    );
   }
 
   protected _setPageTitle(): void {

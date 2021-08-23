@@ -11,8 +11,10 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
       accountType: undefined,
       email: undefined,
       fullTextQuery: undefined,
+      limit: 10,
       operationHours: new OperationHoursForm(undefined, 'none'),
       organizationName: undefined,
+      page: 0,
       signedAgreement: undefined,
       sortBy: undefined,
       sortOrder: undefined,
@@ -53,6 +55,9 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
       value.operationHoursStartTime = value.operationHours.startTime;
       value.operationHoursEndTime = value.operationHours.endTime;
       delete value.operationHours;
+    }
+    for (const prop in value) {
+      if (value[prop] == null) delete value[prop];
     }
     return value;
   }

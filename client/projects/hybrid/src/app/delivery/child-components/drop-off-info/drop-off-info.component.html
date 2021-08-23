@@ -1,0 +1,24 @@
+<ion-card class="drop-off-info" *ngIf="donation?.claim">
+  <ion-card-header>
+    <ion-card-title>
+      <ion-label>Drop-Off Info</ion-label>
+    </ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <div class="row">
+      <div *ngIf="donation.claim.receiverAccount.organization.deliveryInstructions" class="col-sm-12">
+        <div class="inline-label">Instructions:</div>
+        <div class="d-inline-block">{{ donation.claim.receiverAccount.organization.deliveryInstructions }}</div>
+      </div>
+      <div class="col-12">
+        <div class="inline-label">Drop-off Window:</div>
+        <foodweb-hybrid-date-time-range class="d-inline-block" [value]="donation | dropOffWindow" [boldTime]="true"></foodweb-hybrid-date-time-range>
+      </div>
+      <div *ngIf="donation.claim.delivery?.dropOffTime" class="col-sm-6">
+        <div class="inline-label">Dropped Off:</div>
+        <foodweb-hybrid-date-time class="d-inline-block" [value]="donation.claim.delivery.dropOffTime" [boldTime]="true"></foodweb-hybrid-date-time>
+      </div>
+    </div>
+  </ion-card-content>
+</ion-card>
