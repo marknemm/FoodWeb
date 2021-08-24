@@ -6,10 +6,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { IonicModule } from '@ionic/angular';
 import { MapModule as WebMapModule } from '~web/map/map.module';
 import { MapComponent } from './child-components/map/map.component';
+import { MapOptionsComponent } from './child-components/map-options/map-options.component';
+import { DirectionStepsComponent } from './child-components/direction-steps/direction-steps.component';
 
 @NgModule({
   declarations: [
-    MapComponent
+    MapComponent,
+    MapOptionsComponent,
+    DirectionStepsComponent
   ],
   imports: [
     CommonModule,

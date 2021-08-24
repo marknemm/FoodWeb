@@ -218,7 +218,7 @@ async function _sendClaimReassignedMessages(donationDiff: UpdateDiff<DonationEnt
       broadcastAccounts,
       {
         notificationType: NotificationType.ClaimReassigned,
-        notificationLink: `donation/details/${donationDiff.new.id}`,
+        notificationLink: `donation/${donationDiff.new.id}`,
         title: 'Donation Claim Reassigned',
         icon: receiverAccount.profileImg,
         body: `
@@ -249,7 +249,7 @@ async function _sendClaimReassignedMessages(donationDiff: UpdateDiff<DonationEnt
       oldReceiverAccount,
       {
         notificationType: NotificationType.UnclaimDonation,
-        notificationLink: `/donation/details/${donationDiff.new.id}`,
+        notificationLink: `/donation/${donationDiff.new.id}`,
         title: `Donation Unclaimed`,
         icon: oldReceiverAccount.profileImg,
         body: `
@@ -301,7 +301,7 @@ async function _sendDeliveryReassignedMessages(donationDiff: UpdateDiff<Donation
       broadcastAccounts,
       {
         notificationType: NotificationType.DeliveryReassigned,
-        notificationLink: `donation/details/${donationDiff.new.id}`,
+        notificationLink: `donation/${donationDiff.new.id}`,
         title: 'Delivery Reassigned',
         icon: volunteerAccount.profileImg,
         body: `
@@ -327,7 +327,7 @@ async function _sendDeliveryReassignedMessages(donationDiff: UpdateDiff<Donation
       oldVolunteerAccount,
       {
         notificationType: NotificationType.CancelDelivery,
-        notificationLink: `donation/details/${donationDiff.new.id}`,
+        notificationLink: `donation/${donationDiff.new.id}`,
         title: 'Delivery Cancelled',
         icon: oldVolunteerAccount.profileImg,
         body: `

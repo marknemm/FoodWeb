@@ -62,7 +62,7 @@ export class DonationEditComponent implements OnInit {
     this._pageProgressService.deactivate();
     this._donationNotFound = !donation;
     this._originalDonation = donation;
-    this._donationDetailsUrl = `/donation/details/${this.originalDonation.id}`;
+    this._donationDetailsUrl = `/donation/${this.originalDonation.id}`;
     if (!this._donationNotFound) {
       this.editForm.patchFromDonation(donation);
       this.editForm.markAsPristine();

@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGaurdService } from '~web/session/services/auth-gaurd/auth-gaurd.service';
-import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
-import { DonationsComponent } from './components/donations/donations.component';
+import { DonationListComponent } from './components/donation-list/donation-list.component';
+import { DonationComponent } from './components/donation/donation.component';
 
 const routes: Routes = [
-  { path: 'details/:id', component: DonationDetailsComponent },
-  { path: 'list', component: DonationsComponent },
-  { path: 'list/my', component: DonationsComponent, canActivate: [AuthGaurdService] }
+  { path: 'list', component: DonationListComponent },
+  { path: 'list/my', component: DonationListComponent, canActivate: [AuthGaurdService] },
+  { path: ':id', component: DonationComponent },
 ];
 
 @NgModule({

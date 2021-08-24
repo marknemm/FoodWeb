@@ -71,7 +71,7 @@ async function _messagePotentialReceivers(donation: DonationEntity, potentialRec
       notifyAccounts,
       {
         notificationType: NotificationType.Donate,
-        notificationLink: `/donation/details/${donation.id}`,
+        notificationLink: `/donation/${donation.id}`,
         title: 'Donation Available',
         icon: donation.donorAccount.profileImg,
         body: `

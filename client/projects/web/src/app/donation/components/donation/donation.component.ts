@@ -10,18 +10,18 @@ import { PageTitleService } from '~web/shared/services/page-title/page-title.ser
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
-  selector: 'foodweb-donation-details',
-  templateUrl: './donation-details.component.html',
-  styleUrls: ['./donation-details.component.scss']
+  selector: 'foodweb-donation',
+  templateUrl: './donation.component.html',
+  styleUrls: ['./donation.component.scss']
 })
-export class DonationDetailsComponent implements OnInit, OnDestroy {
+export class DonationComponent implements OnInit, OnDestroy {
 
-  private _destroy$ = new Subject();
-  private _donation: Donation;
-  private _donationNotFound = false;
-  private _myClaim = false;
-  private _myDelivery = false;
-  private _myDonation = false;
+  protected _destroy$ = new Subject();
+  protected _donation: Donation;
+  protected _donationNotFound = false;
+  protected _myClaim = false;
+  protected _myDelivery = false;
+  protected _myDonation = false;
 
   constructor(
     public accountHelper: AccountHelper,
@@ -29,12 +29,12 @@ export class DonationDetailsComponent implements OnInit, OnDestroy {
     public deliveryHelper: DeliveryHelper,
     public pageTitleService: PageTitleService,
     public sessionService: SessionService,
-    private _activatedRoute: ActivatedRoute,
-    private _donationActionsService: DonationActionsService,
-    private _donationReadService: DonationReadService,
-    private _router: Router,
-    private _urlQueryService: UrlQueryService
-  ) { }
+    protected _activatedRoute: ActivatedRoute,
+    protected _donationActionsService: DonationActionsService,
+    protected _donationReadService: DonationReadService,
+    protected _router: Router,
+    protected _urlQueryService: UrlQueryService
+  ) {}
 
   get donation(): Donation {
     return this._donation;

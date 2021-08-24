@@ -7,26 +7,26 @@ import { PageTitleService } from '~web/shared/services/page-title/page-title.ser
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
-  selector: 'foodweb-donations',
-  templateUrl: './donations.component.html',
-  styleUrls: ['./donations.component.scss']
+  selector: 'foodweb-donation-list',
+  templateUrl: './donation-list.component.html',
+  styleUrls: ['./donation-list.component.scss']
 })
-export class DonationsComponent implements OnInit {
+export class DonationListComponent implements OnInit {
 
   readonly filtersForm = new DonationFiltersForm();
 
-  private _donations: Donation[] = [];
-  private _myDonations = false;
-  private _totalCount = 0;
+  protected _donations: Donation[] = [];
+  protected _myDonations = false;
+  protected _totalCount = 0;
 
   constructor(
     public donationHelper: DonationHelper,
     public pageTitleService: PageTitleService,
-    private _activatedRoute: ActivatedRoute,
-    private _donationReadService: DonationReadService,
-    private _router: Router,
-    private _urlQueryService: UrlQueryService
-  ) { }
+    protected _activatedRoute: ActivatedRoute,
+    protected _donationReadService: DonationReadService,
+    protected _router: Router,
+    protected _urlQueryService: UrlQueryService
+  ) {}
 
   get donations(): Donation[] {
     return this._donations;

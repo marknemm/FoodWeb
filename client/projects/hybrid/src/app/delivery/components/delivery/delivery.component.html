@@ -1,17 +1,17 @@
 <ion-header>
   <foodweb-hybrid-header defaultBackHref="/delivery/list">
-    <ion-label>{{ pageTitleService.title }}</ion-label>
+    <ion-label>Delivery</ion-label>
   </foodweb-hybrid-header>
 </ion-header>
 
 <ion-content class="delivery">
   <ng-container *ngIf="donation">
 
-    <foodweb-donation-workflow
+    <foodweb-hybrid-donation-workflow
       [donation]="donation"
       [myAccount]="sessionService.account"
       (action)="onDeliveryAction($event)">
-    </foodweb-donation-workflow>
+    </foodweb-hybrid-donation-workflow>
 
     <div *ngIf="!myDelivery" class="row">
       <div class="donation-description-container col-12">
@@ -34,7 +34,7 @@
         <div class="donor-info-container">
           <foodweb-hybrid-account-teaser [account]="donation.donorAccount" customTitle="Donor">
             <div class="donation-submitter">
-              <div class="inline-label">Donation Submitter:</div>
+              <div class="inline-label">Contact Name:</div>
               <div class="d-inline-block">{{ donation.donorFirstName }} {{ donation.donorLastName }}</div>
             </div>
           </foodweb-hybrid-account-teaser>

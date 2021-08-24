@@ -1,1 +1,11 @@
 @import "../../../../../../web/src/app/map/child-components/map/map.component.scss";
+
+.map-navigation-container {
+  margin: 0;
+  border-bottom-color: var(--ion-border-color);
+
+  ion-button {
+    margin: 0;
+    font-weight: bold;
+  }
+}

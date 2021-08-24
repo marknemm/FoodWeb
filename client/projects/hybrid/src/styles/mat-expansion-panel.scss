@@ -1,5 +1,19 @@
 @import "variables.scss";
 
+mat-accordion.mat-accordion {
+  mat-expansion-panel.mat-expansion-panel {
+    border-bottom: 1px solid var(--ion-border-color);
+
+    @media only screen and (max-width: $sm) {
+      &,
+      &:first-of-type,
+      &:last-of-type {
+        border-radius: 0;
+      }
+    }
+  }
+}
+
 mat-expansion-panel.mat-expansion-panel {
 
   &,

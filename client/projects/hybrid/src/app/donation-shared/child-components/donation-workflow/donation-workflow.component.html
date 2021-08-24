@@ -1,0 +1,31 @@
+<ion-card *ngIf="donation" class="donation-workflow-card">
+  <ion-card-content class="donation-workflow-card-content">
+    <ul class="donation-workflow">
+      <ng-container *ngFor="let step of workflowSteps">
+        <li
+          *ngIf="showAllStatuses || isWorkflowStepActive(step)"
+          class="step donation-status {{ step.class }}"
+          [ngClass]="{ 'active with-border': isWorkflowStepActive(step) }">
+
+          <div class="title">{{ step.title }}</div>
+          <p class="description">{{ getStepDescription(step) }}</p>
+
+          <ng-container *ngIf="isWorkflowStepActive(step)">
+            <ion-button (click)="toggleShowAllStatuses()" class="toggle-show-all-statuses" fill="clear" size="small">
+              {{ toggleShowAllStatusesTxt }}
+            </ion-button>
+
+            <span class="actions">
+              <foodweb-hybrid-donation-actions
+                [donation]="donation"
+                [myAccount]="myAccount"
+                (action)="action.emit($event)">
+              </foodweb-hybrid-donation-actions>
+            </span>
+          </ng-container>
+
+        </li>
+      </ng-container>
+    </ul>
+  </ion-card-content>
+</ion-card>

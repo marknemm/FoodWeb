@@ -19,29 +19,29 @@
   </map-polyline>
 
   <map-info-window>
-    <!-- <foodweb-map-marker-info [waypointMarker]="selWaypointMarker"></foodweb-map-marker-info> -->
+    <foodweb-map-marker-info [waypointMarker]="selWaypointMarker"></foodweb-map-marker-info>
   </map-info-window>
 
 </google-map>
 
 <ng-container *ngIf="!displayMapOnly">
   <div class="map-navigation-container">
-    <ion-button [href]="mapService.directionsHref" fill="clear">Open Map Navigation</ion-button>
+    <ion-button [href]="mapService.directionsHref" expand="full" color="tertiary">Open Map Navigation</ion-button>
   </div>
   <mat-accordion displayMode="flat">
     <ng-container *ngIf="mapService.waypointMarkers.length > 2">
       <mat-expansion-panel>
         <mat-expansion-panel-header>Map Options</mat-expansion-panel-header>
-        <foodweb-map-options [optionsForm]="optionsForm"></foodweb-map-options>
+        <foodweb-hybrid-map-options [formGroup]="optionsForm"></foodweb-hybrid-map-options>
       </mat-expansion-panel>
       <mat-expansion-panel>
         <mat-expansion-panel-header>Directions to Donor</mat-expansion-panel-header>
-        <foodweb-direction-steps [directions]="mapService.directions" filter="Donor"></foodweb-direction-steps>
+        <foodweb-hybrid-direction-steps [directions]="mapService.directions" filter="Donor"></foodweb-hybrid-direction-steps>
       </mat-expansion-panel>
     </ng-container>
     <mat-expansion-panel *ngIf="mapService.waypointMarkers.length > 1">
       <mat-expansion-panel-header>Directions to Receiver</mat-expansion-panel-header>
-      <foodweb-direction-steps [directions]="mapService.directions" filter="Receiver"></foodweb-direction-steps>
+      <foodweb-hybrid-direction-steps [directions]="mapService.directions" filter="Receiver"></foodweb-hybrid-direction-steps>
     </mat-expansion-panel>
   </mat-accordion>
 </ng-container>

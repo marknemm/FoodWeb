@@ -72,7 +72,7 @@ async function _sendNotificationToDonor(donation: DonationEntity): Promise<void>
     donation.donorAccount,
     {
       notificationType: NotificationType.UnclaimDonation,
-      notificationLink: `/donation/details/${donation.id}`,
+      notificationLink: `/donation/${donation.id}`,
       title: `Donation Unclaimed`,
       icon: donation.claim.receiverAccount.profileImg,
       body: `
@@ -95,7 +95,7 @@ async function _sendNotificationToDeliverer(donation: DonationEntity): Promise<v
     donation.claim.delivery.volunteerAccount,
     {
       notificationType: NotificationType.UnclaimDonation,
-      notificationLink: `/donation/details/${donation.id}`,
+      notificationLink: `/donation/${donation.id}`,
       title: `Donation Unclaimed`,
       icon: donation.claim.receiverAccount.profileImg,
       body: `

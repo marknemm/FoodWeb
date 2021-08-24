@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AccountType, Donation } from '~shared';
 
 @Component({
@@ -6,14 +6,10 @@ import { AccountType, Donation } from '~shared';
   templateUrl: './donation-teaser.component.html',
   styleUrls: ['./donation-teaser.component.scss'],
 })
-export class DonationTeaserComponent implements OnInit {
+export class DonationTeaserComponent {
 
   readonly AccountType = AccountType;
 
   @Input() donation: Donation;
-
-  constructor() {}
-
-  ngOnInit() {}
 
 }
