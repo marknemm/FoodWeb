@@ -22,7 +22,7 @@ export class DeliveryListComponent extends WebDeliveryListComponent {
    * @param event The ionRefresh event.
    */
   handleIonRefresh(event: any): void {
-    this.filtersForm.get('page').setValue(0);
+    this.filtersForm.get('page').setValue(1);
     this.refresh().subscribe(() => event.target.complete());
   }
 

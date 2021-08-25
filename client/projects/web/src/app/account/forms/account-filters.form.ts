@@ -14,7 +14,7 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
       limit: 10,
       operationHours: new OperationHoursForm(undefined, 'none'),
       organizationName: undefined,
-      page: 0,
+      page: 1,
       signedAgreement: undefined,
       sortBy: undefined,
       sortOrder: undefined,

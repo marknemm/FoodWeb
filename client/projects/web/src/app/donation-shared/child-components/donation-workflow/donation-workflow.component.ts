@@ -58,7 +58,7 @@ export class DonationWorkflowComponent implements OnChanges {
 
   @Output() action = new EventEmitter<DonationAction>();
 
-  private _toggleShowAllStatusesTxt = 'Show all statuses';
+  private _toggleShowAllStatusesTxt = 'Show inactive statuses';
 
   constructor(
     private _donationHelper: DonationHelper
@@ -75,12 +75,12 @@ export class DonationWorkflowComponent implements OnChanges {
   }
 
   /**
-   * Updates the text for the toggle show all statuses button based off of the showAllStatuses state.
+   * Updates the text for the toggle show inactive statuses button based off of the showAllStatuses state.
    */
   private _updateToggleShowAllStatusesTxt(): void {
     this._toggleShowAllStatusesTxt = (this.showAllStatuses)
       ? 'Hide inactive statuses'
-      : 'Show all statuses';
+      : 'Show inactive statuses';
   }
 
   /**

@@ -46,7 +46,7 @@ export class NotificationService {
   }
 
   private _getNotificationsPreview(): void {
-    this._getNotifications({}, 1, 10).subscribe((notificationsResponse: ListResponse<Notification>) =>
+    this._getNotifications({}).subscribe((notificationsResponse: ListResponse<Notification>) =>
       this._notificationsPreview = notificationsResponse.list
     );
   }
@@ -61,38 +61,37 @@ export class NotificationService {
       ServerSentEventType.NotificationsAvailable
     ).subscribe((notificationsAvailableEvent) => {
       this._unseenNotificationsCount = notificationsAvailableEvent.unseenNotificationsCount;
-      this._getNotifications({}, 1, 10).subscribe((notificationsResponse: ListResponse<Notification>) =>
+      this._getNotifications({}).subscribe((notificationsResponse: ListResponse<Notification>) =>
         this._notificationsPreview = notificationsResponse.list
       );
     });
   }
 
-  listenNotificationsQueryChange(activatedRoute: ActivatedRoute): Observable<ListResponse<Notification>> {
-    return activatedRoute.queryParamMap.pipe(
-      switchMap((params: ParamMap) => {
-        const filters: NotificationReadRequest = {};
-        params.keys.forEach((paramKey: string) => {
-          if (paramKey !== 'page' && paramKey !== 'limit') {
-            filters[paramKey] = params.get(paramKey);
-          }
-        });
-        const page: number = (params.has('page') ? parseInt(params.get('page'), 10) : undefined);
-        const limit: number = (params.has('limit') ? parseInt(params.get('limit'), 10) : undefined);
-        return this.getNotifications(filters, page, limit);
-      })
-    );
-  }
-
-  getNotifications(filters: NotificationReadRequest, page: number, limit: number): Observable<ListResponse<Notification>> {
+  getNotifications(request: NotificationReadRequest): Observable<ListResponse<Notification>> {
     this._pageProgressService.activate(true);
-    return this._getNotifications(filters, page, limit).pipe(
+    if (request instanceof ActivatedRoute) {
+      request = this._getNotificationReadRequest(request.snapshot.paramMap);
+    }
+    return this._getNotifications(<NotificationReadRequest>request).pipe(
       finalize(() => this._pageProgressService.deactivate())
     );
   }
 
-  private _getNotifications(request: NotificationReadRequest, page: number, limit: number): Observable<ListResponse<Notification>> {
-    request.page = (page >= 0 ? page : 1);
-    request.limit = (limit >= 0 ? limit : 10);
+  private _getNotificationReadRequest(params: ParamMap): NotificationReadRequest {
+    const request: NotificationReadRequest = {};
+    params.keys.forEach((paramKey: string) => {
+      if (paramKey !== 'page' && paramKey !== 'limit') {
+        request[paramKey] = params.get(paramKey);
+      }
+    });
+    request.page = (params.has('page') ? parseInt(params.get('page'), 10) : undefined);
+    request.limit = (params.has('limit') ? parseInt(params.get('limit'), 10) : undefined);
+    return request;
+  }
+
+  private _getNotifications(request: NotificationReadRequest): Observable<ListResponse<Notification>> {
+    request.page = (request.page >= 0 ? request.page : 1);
+    request.limit = (request.limit >= 0 ? request.limit : 10);
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Notification>>(this.url, { params, withCredentials: true }).pipe(
       this._httpResponseService.handleHttpResponse({ showPageProgressOnLoad: false })
@@ -123,6 +122,10 @@ export class NotificationService {
       notification.read = read;
       this._updateNotification(notification);
     }
+  }
+
+  toggleNotificationFlaggedState(notification: Notification): void {
+    this.updateNotificationFlaggedState(notification, !notification.flagged);
   }
 
   updateNotificationFlaggedState(notification: Notification, flagged: boolean): void {

@@ -15,8 +15,6 @@ export type DonationAction = 'Edit' | 'Save' | 'Delete' | 'Claim' | 'Unclaim' | 
 })
 export class DonationActionsService {
 
-  readonly editUrl: string = '/donor/edit-donation/';
-
   protected _actionsAvailable = false;
   protected _donationActionAccessFlags = new Map<DonationAction, true>();
 

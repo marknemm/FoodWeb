@@ -8,7 +8,7 @@ import { DonationHubPledgeListComponent as WebDonationHubPledgeListComponent } f
 })
 export class DonationHubPledgeListComponent extends WebDonationHubPledgeListComponent {
 
-  private _page = 0;
+  private _page = 1;
 
   get loading(): boolean {
     return this._pledgeReadService.loading;
@@ -23,7 +23,7 @@ export class DonationHubPledgeListComponent extends WebDonationHubPledgeListComp
    * @param event The ionRefresh event.
    */
    handleIonRefresh(event: any): void {
-    this._page = 0;
+    this._page = 1;
     this.refresh().subscribe(() => event.target.complete());
   }
 

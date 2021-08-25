@@ -6,7 +6,11 @@
   <mat-action-list>
     <mat-divider></mat-divider>
     <ng-container *ngFor="let notification of notifications">
-      <foodweb-notification [notification]="notification"></foodweb-notification>
+      <foodweb-notification
+        [notification]="notification"
+        (flag)="notificationService.toggleNotificationFlaggedState($event)"
+        (select)="notificationService.handleNotificationSelect($event)">
+      </foodweb-notification>
       <mat-divider></mat-divider>
     </ng-container>
   </mat-action-list>

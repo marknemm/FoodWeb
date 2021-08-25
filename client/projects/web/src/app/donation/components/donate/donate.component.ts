@@ -3,7 +3,7 @@ import { Donation, DonationSaveData } from '~shared';
 import { DateTimeRangeComponent } from '~web/date-time/child-components/date-time-range/date-time-range.component';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
-import { DonateForm } from '~web/donor/forms/donate.form';
+import { DonateForm } from '~web/donation/forms/donate.form';
 import { SessionService } from '~web/session/services/session/session.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
@@ -37,9 +37,9 @@ export class DonateComponent implements OnInit {
 
   constructor(
     public sessionService: SessionService,
-    private _dateTimeService: DateTimeService,
-    private _donationSaveService: DonationSaveService,
-    private _pageTitleService: PageTitleService
+    protected _dateTimeService: DateTimeService,
+    protected _donationSaveService: DonationSaveService,
+    protected _pageTitleService: PageTitleService
   ) {}
 
   ngOnInit() {

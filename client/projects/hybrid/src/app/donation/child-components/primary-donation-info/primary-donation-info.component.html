@@ -1,1 +1,29 @@
-<p>primary-donation-info works!</p>
+<ion-card *ngIf="donation" class="primary-donation-info">
+  <ion-card-header>
+    <ion-card-title>Donation Description</ion-card-title>
+    <ion-card-subtitle>{{ donation.description }}</ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    <div class="row">
+      <div class="meal-count col-6">
+        <span class="inline-label">Meal Count:</span>
+        <span>{{ donation.estimatedNumFeed }}</span>
+      </div>
+      <div *ngIf="myDonation" class="monetary-value col-6">
+        <span class="inline-label">Value:</span>
+        <span>${{ donation.estimatedValue | number:'1.2-2' }}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="pickup-window col-sm-6">
+        <div class="inline-label">Pickup Window:</div>
+        <foodweb-hybrid-date-time-range class="d-inline-block" [value]="donation | pickupWindow" [boldTime]="true"></foodweb-hybrid-date-time-range>
+      </div>
+      <div *ngIf="donation | dropOffWindow" class="drop-off-window col-sm-6">
+        <div class="inline-label">Drop-off Window:</div>
+        <foodweb-hybrid-date-time-range class="d-inline-block" [value]="donation | dropOffWindow" [boldTime]="true"></foodweb-hybrid-date-time-range>
+      </div>
+    </div>
+  </ion-card-content>
+</ion-card>

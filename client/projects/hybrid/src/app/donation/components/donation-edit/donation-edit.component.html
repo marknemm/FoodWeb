@@ -1,0 +1,57 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>Edit Donation</ion-label>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="editForm.pristine" (click)="saveDonation()" fill="clear">Save</ion-button>
+    </ion-buttons>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="editForm" class="edit-donation" (ngSubmit)="saveDonation()">
+    <ng-container *ngIf="originalDonation">
+      <ion-card class="donation-edit">
+        <ion-card-content>
+          <foodweb-hybrid-donation-form
+            [formGroup]="editForm"
+            class="donation-form">
+          </foodweb-hybrid-donation-form>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-label>Pickup Window</ion-label>
+          </ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <foodweb-hybrid-date-time-range
+            [formGroup]="editForm.get('pickupWindow')"
+            [editable]="true">
+          </foodweb-hybrid-date-time-range>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-label>Contact Info</ion-label>
+          </ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <foodweb-hybrid-contact-info
+            [formGroup]="editForm.get('donorContactOverride')"
+            [editable]="true">
+          </foodweb-hybrid-contact-info>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+  </form>
+
+  <div *ngIf="donationNotFound" class="standalone-statement">
+    Donation not found
+  </div>
+</ion-content>

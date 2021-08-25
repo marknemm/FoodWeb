@@ -22,7 +22,7 @@ export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
       fullTextQuery: undefined,
       limit: 10,
       myDonations: undefined,
-      page: 0,
+      page: 1,
       receiverAccountId: undefined,
       receiverOrganizationName: undefined,
       sortBy: undefined,

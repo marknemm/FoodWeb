@@ -1,1 +1,46 @@
-<p>donation-list works!</p>
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>{{ pageTitleService.title }}</ion-label>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content class="donations">
+  <ion-refresher slot="fixed" [disabled]="loading" (ionRefresh)="handleIonRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- <foodweb-filtered-list-toolbar listItemsLabel="Donations">
+    <foodweb-search-bar
+      placeholder="Search Donations..."
+      [formControl]="filtersForm.get('fullTextQuery')"
+      (search)="updateFilterQueryParams(filtersForm.value)"
+    ></foodweb-search-bar>
+  </foodweb-filtered-list-toolbar> -->
+
+  <div *ngIf="!myDonations && !noneFound" class="standalone-statement">
+    Choose a donation to claim.
+  </div>
+
+  <div *ngIf="noneFound" class="standalone-statement">
+    Could not find any donations.
+  </div>
+
+  <ion-virtual-scroll *ngIf="donations?.length" [items]="donations" approxItemHeight="400px">
+    <foodweb-hybrid-donation-teaser
+      *virtualItem="let item"
+      [donation]="item">
+    </foodweb-hybrid-donation-teaser>
+  </ion-virtual-scroll>
+
+  <!-- <foodweb-list-filters>
+    <foodweb-donation-filters
+      [formGroup]="filtersForm"
+      (clear)="filtersForm.resetFacetFilters()"
+      (filter)="updateFilterQueryParams($event)"
+    ></foodweb-donation-filters>
+  </foodweb-list-filters> -->
+
+  <ion-infinite-scroll [disabled]="loadMoreDisabled" (ionInfinite)="handleIonInfinite($event)" threshold="100px">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

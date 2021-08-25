@@ -5,7 +5,7 @@ import { DonationSaveData } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
-import { DonateForm } from '~web/donor/forms/donate.form';
+import { DonateForm } from '~web/donation/forms/donate.form';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
@@ -17,20 +17,20 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class DonationEditComponent implements OnInit {
 
-  private _donationNotFound = false;
-  private _editForm: DonateForm;
-  private _originalDonation: Donation;
-  private _donationDetailsUrl = '';
+  protected _donationNotFound = false;
+  protected _editForm: DonateForm;
+  protected _originalDonation: Donation;
+  protected _donationDetailsUrl = '';
 
   constructor(
     public pageTitleService: PageTitleService,
-    private _activatedRoute: ActivatedRoute,
-    private _dateTimeService: DateTimeService,
-    private _donationReadService: DonationReadService,
-    private _donationSaveService: DonationSaveService,
-    private _pageProgressService: PageProgressService,
-    private _router: Router,
-    private _urlQueryService: UrlQueryService
+    protected _activatedRoute: ActivatedRoute,
+    protected _dateTimeService: DateTimeService,
+    protected _donationReadService: DonationReadService,
+    protected _donationSaveService: DonationSaveService,
+    protected _pageProgressService: PageProgressService,
+    protected _router: Router,
+    protected _urlQueryService: UrlQueryService
   ) {}
 
   get donationNotFound(): boolean {

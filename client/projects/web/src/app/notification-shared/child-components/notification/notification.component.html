@@ -1,6 +1,6 @@
 <div class="notification-container">
   <button mat-list-item
-    (click)="notificationService.handleNotificationSelect(notification)"
+    (click)="select.emit(notification)"
     [ngClass]="{
       'unread': !notification.read,
       'auto-height': !max2Lines

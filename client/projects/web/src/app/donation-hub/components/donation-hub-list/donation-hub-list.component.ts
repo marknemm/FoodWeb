@@ -17,7 +17,7 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class DonationHubListComponent implements OnInit {
 
-  protected _activeFilters: DonationHubReadRequest = { page: 0 };
+  protected _activeFilters: DonationHubReadRequest = { page: 1 };
   protected _donationHubs: DonationHub[] = [];
   protected _myDonationHubs = false;
   protected _totalCount = 0;

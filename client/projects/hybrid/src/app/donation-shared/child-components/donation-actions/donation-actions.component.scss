@@ -1,1 +1,7 @@
 @import "../../../../../../web/src/app/donation-shared/child-components/donation-actions/donation-actions.component.scss";
+
+.action-footer {
+  ion-button {
+    min-width: 120px;
+  }
+}

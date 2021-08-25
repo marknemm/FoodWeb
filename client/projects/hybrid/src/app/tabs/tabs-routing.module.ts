@@ -11,7 +11,9 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'home/:login', component: HomeComponent },
       { path: 'delivery', loadChildren: () => import('../delivery/delivery.module').then(mod => mod.DeliveryModule) },
+      { path: 'donation', loadChildren: () => import('../donation/donation.module').then(mod => mod.DonationModule) },
       { path: 'donation-hub', loadChildren: () => import('../donation-hub/donation-hub.module').then(mod => mod.DonationHubModule) },
+      { path: 'notifications', loadChildren: () => import('../notification/notification.module').then(mod => mod.NotificationModule) },
       { path: 'settings', loadChildren: () => import('../settings/settings.module').then(mod => mod.SettingsModule) },
       { path: '**', redirectTo: '/home' },
     ]

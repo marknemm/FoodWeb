@@ -1,6 +1,6 @@
 @import "variables.scss";
 
-.mat-card.primary-donation-info {
+.primary-donation-info {
   position: relative;
 
   .mat-card-header {
@@ -28,15 +28,13 @@
     }
   }
 
-  .mat-card-content {
-    .row {
-      > div {
-        margin-bottom: 10px;
-      }
+  .row {
+    > div {
+      margin-bottom: 10px;
+    }
 
-      &:last-child {
-        margin-bottom: -10px;
-      }
+    &:last-child {
+      margin-bottom: -10px;
     }
   }
 }

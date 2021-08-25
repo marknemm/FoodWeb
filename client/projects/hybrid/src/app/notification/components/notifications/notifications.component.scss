@@ -1,0 +1,10 @@
+@import "../../../../../../web/src/app/notification/components/notifications/notifications.component.scss";
+
+ion-content {
+  --padding-top: 0;
+  --padding-bottom: 0;
+
+  &.notifications {
+    background-color: transparent
+  }
+}

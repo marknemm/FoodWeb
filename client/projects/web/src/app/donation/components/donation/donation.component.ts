@@ -44,6 +44,10 @@ export class DonationComponent implements OnInit, OnDestroy {
     return this._donationNotFound;
   }
 
+  get loading(): boolean {
+    return this._donationReadService.loading;
+  }
+
   get myClaim(): boolean {
     return this._myClaim;
   }

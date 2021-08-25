@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { DonationHelper, DonationReadRequest, ListResponse } from '~shared';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
@@ -47,7 +49,7 @@ export class DonationListComponent implements OnInit {
   ngOnInit() {
     this._myDonations = this._router.url.indexOf('/my') >= 0;
     this._urlQueryService.listenQueryParamsChange<DonationReadRequest>(this._activatedRoute).subscribe(
-      (request: DonationReadRequest) => this.handleQueryParamsChanged(request)
+      (request: DonationReadRequest) => this.refresh(request).subscribe()
     );
   }
 
@@ -55,11 +57,19 @@ export class DonationListComponent implements OnInit {
     this._urlQueryService.updateUrlQueryString(filters, this._activatedRoute);
   }
 
-  handleQueryParamsChanged(request: DonationReadRequest): void {
-    this.filtersForm.reset(request);
-    this._donationReadService.getDonations(request).subscribe((response: ListResponse<Donation>) => {
-      this._donations = response.list;
-      this._totalCount = response.totalCount;
-    });
+  refresh(request?: DonationReadRequest): Observable<Donation[]> {
+    if (request) {
+      this.filtersForm.reset(request);
+    }
+
+    return this._donationReadService.getDonations(this.filtersForm.toDonationReadRequest()).pipe(
+      map((response: ListResponse<Donation>) => {
+        if (response) {
+          this._donations = response.list;
+          this._totalCount = response.totalCount;
+        }
+        return this._donations;
+      })
+    );
   }
 }

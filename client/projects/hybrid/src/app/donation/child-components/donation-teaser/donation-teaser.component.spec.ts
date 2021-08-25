@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DonationTeaserComponent } from './donation-teaser.component';
 
 describe('DonationTeaserComponent', () => {

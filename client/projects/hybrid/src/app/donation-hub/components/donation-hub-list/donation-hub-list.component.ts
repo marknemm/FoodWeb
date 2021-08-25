@@ -22,7 +22,7 @@ export class DonationHubListComponent extends WebDonationHubListComponent {
    * @param event The ionRefresh event.
    */
   handleIonRefresh(event: any): void {
-    this.activeFilters.page = 0;
+    this.activeFilters.page = 1;
     this.refresh().subscribe(() => event.target.complete());
   }
 

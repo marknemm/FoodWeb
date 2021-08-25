@@ -1,0 +1,10 @@
+@import "../../../../../../web/src/app/donation/components/donation/donation.component.scss";
+
+.donation-submitter {
+  .inline-label {
+    &,
+    & + .d-inline-block {
+      font-size: 16px;
+    }
+  }
+}

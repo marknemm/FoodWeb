@@ -1,0 +1,51 @@
+@import "../../../../../../web/src/app/notification-shared/child-components/notification/notification.component.scss";
+
+.notification-container {
+  --inner-padding-start: 4px;
+  --inner-padding-end: 6px;
+  --inner-padding-top: 4px;
+  --inner-padding-bottom: 8px;
+
+  &.unread {
+    --background: var(--ion-color-step-150);
+  }
+}
+
+.notification {
+  margin-left: 0;
+  padding-right: 0;
+  background-color: inherit;
+
+  ion-label {
+    display: block;
+  }
+
+  .title {
+    color: var(--ion-color-primary);
+    margin-bottom: 5px;
+    padding-right: 24px;
+  }
+
+  .subtitle {
+    color: var(--ion-placeholder-color);
+  }
+
+  .body {
+    color: var(--ion-text-color);
+
+    ::ng-deep br + i {
+      display: block;
+      margin-top: 3px;
+      color: var(--ion-placeholder-color);
+      font-weight: bold;
+    }
+  }
+}
+
+.flagged-indicator {
+  color: var(--ion-placeholder-color);
+
+  &.flagged {
+    color: var(--ion-color-receiver);
+  }
+}

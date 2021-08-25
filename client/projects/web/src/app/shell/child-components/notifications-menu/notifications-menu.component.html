@@ -25,7 +25,9 @@
       <foodweb-notification
         *ngFor="let notification of notificationService.notificationsPreview"
         [notification]="notification"
-        [max2Lines]="true">
+        [max2Lines]="true"
+        (flag)="notificationService.toggleNotificationFlaggedState(notification)"
+        (select)="notificationService.handleNotificationSelect(notification)">
       </foodweb-notification>
     </mat-action-list>
     <div class="footer">

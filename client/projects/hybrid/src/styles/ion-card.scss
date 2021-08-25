@@ -35,7 +35,6 @@ ion-card {
         &,
         + ion-card-subtitle {
           margin-left: 50px;
-          text-transform: none;
         }
       }
     }
@@ -66,6 +65,10 @@ ion-card {
     @media only screen and (max-width: $mat-mobile) {
       font-size: 16px;
     }
+  }
+
+  ion-card-subtitle {
+    text-transform: none;
   }
 
   ion-card-content {

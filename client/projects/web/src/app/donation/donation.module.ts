@@ -17,6 +17,8 @@ import { SharedModule } from '~web/shared/shared.module';
 import { DonationFiltersComponent } from './child-components/donation-filters/donation-filters.component';
 import { DonationTeaserComponent } from './child-components/donation-teaser/donation-teaser.component';
 import { PrimaryDonationInfoComponent } from './child-components/primary-donation-info/primary-donation-info.component';
+import { DonateComponent } from './components/donate/donate.component';
+import { DonationEditComponent } from './components/donation-edit/donation-edit.component';
 import { DonationListComponent } from './components/donation-list/donation-list.component';
 import { DonationComponent } from './components/donation/donation.component';
 import { DonationRoutingModule } from './donation-routing.module';
@@ -24,7 +26,9 @@ import { DonationRouterLinkPipe } from './pipes/donation-router-link/donation-ro
 
 @NgModule({
   declarations: [
+    DonateComponent,
     DonationComponent,
+    DonationEditComponent,
     DonationFiltersComponent,
     DonationListComponent,
     DonationRouterLinkPipe,

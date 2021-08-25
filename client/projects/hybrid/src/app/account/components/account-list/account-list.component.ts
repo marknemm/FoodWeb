@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Account } from '~shared';
 import { AccountListComponent as WebAccountListComponent } from '~web/account/components/account-list/account-list.component';
-import { ListResponse } from '../../../../../../../../shared/src/web';
+import { ListResponse } from '~shared';
 
 @Component({
   selector: 'foodweb-hybrid-account-list',
@@ -23,7 +23,7 @@ export class AccountListComponent extends WebAccountListComponent {
    * @param event The ionRefresh event.
    */
   handleIonRefresh(event: any): void {
-    this.filtersForm.get('page').setValue(0);
+    this.filtersForm.get('page').setValue(1);
     this.refresh().subscribe(() => event.target.complete());
   }
 
@@ -36,7 +36,9 @@ export class AccountListComponent extends WebAccountListComponent {
     this._accountReadService.getAccounts(this.filtersForm.toAccountReadRequest()).subscribe(
       (response: ListResponse<Account>) => {
         if (response?.list) {
-          this._accounts.concat(response.list);
+          for (const account of response.list) {
+            this._accounts.push(account); // TODO
+          }
           this._totalCount = response.totalCount;
         }
         event.target.complete();

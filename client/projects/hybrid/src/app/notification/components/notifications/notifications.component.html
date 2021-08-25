@@ -1,0 +1,22 @@
+<ion-header>
+  <foodweb-hybrid-header [hideBackHref]="true">
+    <ion-label>Notifications</ion-label>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content class="notifications">
+  <foodweb-hybrid-filtered-list
+    (loadMore)="handleListLoadMore($event)"
+    (refresh)="handleListRefresh($event)">
+
+    <ion-virtual-scroll [items]="notifications" approxItemHeight="70px">
+      <foodweb-hybrid-notification
+        *virtualItem="let item"
+        [notification]="item"
+        (flag)="notificationService.toggleNotificationFlaggedState($event)"
+        (select)="notificationService.handleNotificationSelect($event)">
+      </foodweb-hybrid-notification>
+    </ion-virtual-scroll>
+
+  </foodweb-hybrid-filtered-list>
+</ion-content>
