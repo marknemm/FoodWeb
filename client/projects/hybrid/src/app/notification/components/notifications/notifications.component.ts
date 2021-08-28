@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ListLoadMoreEvent, ListRefreshEvent } from '~hybrid/filtered-list/interfaces/list-refresh-event';
-import { ListResponse, Notification } from '~shared';
+import { Observable } from 'rxjs';
+import { ListResponse, Notification, NotificationReadRequest } from '~shared';
 import { NotificationsComponent as WebNotificationsComponent } from '~web/notification/components/notifications/notifications.component';
 
 @Component({
@@ -10,19 +10,18 @@ import { NotificationsComponent as WebNotificationsComponent } from '~web/notifi
 })
 export class NotificationsComponent extends WebNotificationsComponent {
 
-  /**
-   * Handles an ionRefresh event by refreshing the Notification List items.
-   * @param event The ionRefresh event.
-   */
-  handleListRefresh(event: ListRefreshEvent): void {
-    this.refresh().subscribe(() => event.complete());
+  private _page = 1;
+
+  get page(): number {
+    return this._page;
   }
 
   /**
    * Handles an ionInfinite event by loading the next segment of Notification List items.
    * @param event The ionInfinite event.
    */
-  handleListLoadMore(event: ListLoadMoreEvent): void {
+  handleLoadMore(event: any): void {
+    this._page = event.page;
     this.notificationService.getNotifications({ page: event.page }).subscribe(
       (response: ListResponse<Notification>) => {
         if (response?.list) {
@@ -31,8 +30,21 @@ export class NotificationsComponent extends WebNotificationsComponent {
           }
           this._totalCount = response.totalCount;
         }
-        event.complete();
+        event.target.complete();
       }
     );
+  }
+
+  /**
+   * Handles an ionRefresh event by refreshing the Notification List items.
+   * @param event The ionRefresh event.
+   */
+  handleRefresh(event: any): void {
+    this.refresh().subscribe(() => event.target.complete());
+  }
+
+  refresh(request: NotificationReadRequest = {}): Observable<Notification[]> {
+    this._page = 1;
+    return super.refresh(request);
   }
 }

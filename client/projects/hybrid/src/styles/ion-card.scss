@@ -129,6 +129,10 @@ ion-card {
           width: calc(100% + (var(--mobile-side-padding) * 2));
         }
 
+        ion-checkbox {
+          margin-left: var(--mobile-side-padding);
+        }
+
         .mat-form-field input {
           padding-left: var(--mobile-side-padding);
         }

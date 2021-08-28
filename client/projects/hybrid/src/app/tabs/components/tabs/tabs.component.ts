@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { NotificationService } from '~web/notification/services/notification/notification.service';
 import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
@@ -6,12 +7,11 @@ import { SessionService } from '~web/session/services/session/session.service';
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss']
 })
-export class TabsComponent implements OnInit {
+export class TabsComponent {
 
   constructor(
+    public notificationService: NotificationService,
     public sessionService: SessionService
   ) {}
-
-  ngOnInit(): void {}
 
 }

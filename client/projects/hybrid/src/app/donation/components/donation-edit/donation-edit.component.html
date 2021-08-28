@@ -28,7 +28,7 @@
 
         <ion-card-content>
           <foodweb-hybrid-date-time-range
-            [formGroup]="editForm.get('pickupWindow')"
+            formGroupName="pickupWindow"
             [editable]="true">
           </foodweb-hybrid-date-time-range>
         </ion-card-content>
@@ -43,7 +43,7 @@
 
         <ion-card-content>
           <foodweb-hybrid-contact-info
-            [formGroup]="editForm.get('donorContactOverride')"
+            formGroupName="donorContactOverride"
             [editable]="true">
           </foodweb-hybrid-contact-info>
         </ion-card-content>

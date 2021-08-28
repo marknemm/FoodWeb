@@ -18,6 +18,15 @@ select:-webkit-autofill:focus {
 
 ion-input {
   --padding-bottom: 0;
+
+  &.dollar-prefix {
+    &:focus-within,
+    &.ion-touched {
+      &::before {
+        content: '$';
+      }
+    }
+  }
 }
 
 ion-item.item-label-floating {

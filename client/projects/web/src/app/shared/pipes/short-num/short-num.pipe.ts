@@ -19,24 +19,24 @@ export class ShortNumPipe implements PipeTransform {
     // Is number in thousands?
     num = (num / 1000);
     if (num < 1000) {
-      return `${Math.round(num)}K`;
+      return `${Math.floor(num)}K`;
     }
 
     // Is number in millions?
     num = (num / 1000);
     if (num < 1000) {
-      return `${Math.round(num)}M`
+      return `${Math.floor(num)}M`
     }
 
     // Is number in billions?
     num = (num / 1000);
     if (num < 1000) {
-      return `${Math.round(num)}B`
+      return `${Math.floor(num)}B`
     }
 
     // Is number in trillions?
     num = (num / 1000);
-    return `${Math.round(num)}T`
+    return `${Math.floor(num)}T`
   }
 
 }

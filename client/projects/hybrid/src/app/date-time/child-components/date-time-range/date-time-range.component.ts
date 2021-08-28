@@ -15,12 +15,12 @@ export class DateTimeRangeComponent extends FormBaseComponent<DateTimeRangeForm>
   @Input() allowUndefTime = false;
   @Input() boldTime = false;
   @Input() endDateTime: Date;
-  @Input() endLabel = 'End Date';
+  @Input() endLabel = 'End:';
   @Input() labelPosition: 'fixed' | 'floating' | 'stacked' = 'fixed';
   @Input() maxDate: Date;
   @Input() minDate: Date = new Date();
   @Input() startDateTime: Date;
-  @Input() startLabel = 'Start Date';
+  @Input() startLabel = 'Start:';
 
   @Input() dateTimeRangeRadioConfig: DateTimeRangeRadioConfig;
 

@@ -30,7 +30,7 @@
         </ion-card-header>
 
         <ion-card-content>
-          <foodweb-hybrid-date-time-range #pickupWindowRange formGroupName="pickupWindow" [editable]="true"></foodweb-hybrid-date-time-range>
+          <foodweb-hybrid-date-time-range formGroupName="pickupWindow" [editable]="true"></foodweb-hybrid-date-time-range>
         </ion-card-content>
       </ion-card>
 
@@ -57,7 +57,7 @@
           <foodweb-hybrid-requirements-checklist
             formControlName="safetyChecklist"
             [checklistMembers]="foodSafetyChecklistMembers"
-            checkAll="All food safety requirements are met">
+            checkAll="All requirements are satisfied">
           </foodweb-hybrid-requirements-checklist>
         </ion-card-content>
       </ion-card>
