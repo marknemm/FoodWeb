@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { AccountSharedModule } from '~hybrid/account-shared/account-shared.module';
 import { DateTimeModule } from '~hybrid/date-time/date-time.module';
 import { DonationSharedModule } from '~hybrid/donation-shared/donation-shared.module';
+import { FilteredListModule } from '~hybrid/filtered-list/filtered-list.module';
 import { SharedModule } from '~hybrid/shared/shared.module';
 import { DonationModule as WebDonationModule } from '~web/donation/donation.module';
 import { DonationTeaserComponent } from './child-components/donation-teaser/donation-teaser.component';
@@ -36,6 +37,7 @@ import { DonationRoutingModule } from './donation-routing.module';
     AccountSharedModule,
     DateTimeModule,
     DonationSharedModule,
+    FilteredListModule,
     SharedModule,
   ],
   exports: [

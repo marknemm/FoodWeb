@@ -44,6 +44,14 @@ export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
     this.get('expired').setValue(value ? 'true' : undefined);
   }
 
+  get page(): number {
+    return this.get('page').value;
+  }
+
+  set page(page: number) {
+    this.get('page').setValue(page);
+  }
+
   /**
    * Resets the value of all of the facet filters (while keeping the value of the `fullTextQuery` field).
    */

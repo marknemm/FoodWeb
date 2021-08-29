@@ -34,14 +34,18 @@ export class AccountListComponent implements OnInit {
     return this._accounts;
   }
 
+  get loading(): boolean {
+    return this._accountReadService.loading;
+  }
+
+  get noneFound(): boolean {
+    return (!this.loading && this.totalCount === 0);
+  }
+
   get searchPlaceholder(): string {
     return (this._accountType)
       ? `Search ${this._accountType}s...`
       : 'Search Accounts...';
-  }
-
-  get noneFound(): boolean {
-    return (!this._accountReadService.loading && this.totalCount === 0);
   }
 
   get totalCount(): number {
@@ -62,6 +66,12 @@ export class AccountListComponent implements OnInit {
     this._urlQueryService.updateUrlQueryString(filters, this._activatedRoute);
   }
 
+  /**
+   * Refreshes the Account List items.
+   * @param request The optional Read Request, contianing filter/sorting parameters.
+   * If not given, will use the last recorded Read Request parameters.
+   * @returns An observable that emits the loaded `Account` items.
+   */
   refresh(request?: AccountReadRequest): Observable<Account[]> {
     if (request) {
       this.filtersForm.reset(request);

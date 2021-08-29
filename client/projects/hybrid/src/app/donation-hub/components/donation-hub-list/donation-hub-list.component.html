@@ -9,10 +9,7 @@
   </foodweb-hybrid-header>
 </ion-header>
 
-<ion-content>
-  <ion-refresher slot="fixed" [disabled]="loading" (ionRefresh)="handleIonRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+<ion-content foodwebHybridListPage [disabled]="loading" [page]="activeFilters.page" (loadMore)="handleLoadMore($event)" (refresh)="handleRefresh($event)">
 
   <div *ngIf="!myDonationHubs && !noneFound" class="standalone-statement">
     Choose a donation drop-off hub to pledge a donation to.
@@ -29,7 +26,4 @@
     </foodweb-hybrid-donation-hub-teaser>
   </ion-virtual-scroll>
 
-  <ion-infinite-scroll [disabled]="loadMoreDisabled" (ionInfinite)="handleIonInfinite($event)" threshold="100px">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
 </ion-content>

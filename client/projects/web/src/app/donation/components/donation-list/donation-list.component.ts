@@ -34,12 +34,16 @@ export class DonationListComponent implements OnInit {
     return this._donations;
   }
 
+  get loading(): boolean {
+    return this._donationReadService.loading;
+  }
+
   get myDonations(): boolean {
     return this._myDonations;
   }
 
   get noneFound(): boolean {
-    return (!this._donationReadService.loading && this.totalCount === 0);
+    return (!this.loading && this.totalCount === 0);
   }
 
   get totalCount(): number {
@@ -57,6 +61,12 @@ export class DonationListComponent implements OnInit {
     this._urlQueryService.updateUrlQueryString(filters, this._activatedRoute);
   }
 
+  /**
+   * Refreshes the Donation List items.
+   * @param request The optional Read Request, contianing filter/sorting parameters.
+   * If not given, will use the last recorded Read Request parameters.
+   * @returns An observable that emits the loaded `Donation` items.
+   */
   refresh(request?: DonationReadRequest): Observable<Donation[]> {
     if (request) {
       this.filtersForm.reset(request);

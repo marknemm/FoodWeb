@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { DonationHubPledge, DonationHubPledgeReadRequest, ListResponse } from '~shared';
 import { DonationHubPledgeListComponent as WebDonationHubPledgeListComponent } from '~web/donation-hub/components/donation-hub-pledge-list/donation-hub-pledge-list.component';
 
 @Component({
@@ -8,33 +10,35 @@ import { DonationHubPledgeListComponent as WebDonationHubPledgeListComponent } f
 })
 export class DonationHubPledgeListComponent extends WebDonationHubPledgeListComponent {
 
-  private _page = 1;
-
-  get loading(): boolean {
-    return this._pledgeReadService.loading;
-  }
-
-  get loadMoreDisabled(): boolean {
-    return (this.loading || this.pledges.length % 10 !== 0);
+  /**
+   * Handles an ionInfinite event by loading the next segment of Donation Hub Pledge List items.
+   * @param event The ionInfinite event.
+   */
+  handleLoadMore(event: any): void {
+    this.activeFilters.page = event.page;
+    this._pledgeReadService.getDonationHubPledges(this.activeFilters).subscribe(
+      (response: ListResponse<DonationHubPledge>) => {
+        if (response?.list) {
+          for (const pledge of response.list) {
+            this._pledges.push(pledge);
+          }
+          this._totalCount = response.totalCount;
+        }
+        event.target.complete();
+      }
+    );
   }
 
   /**
    * Handles an ionRefresh event by refreshing the Donation Hub Pledge List items.
    * @param event The ionRefresh event.
    */
-   handleIonRefresh(event: any): void {
-    this._page = 1;
+  handleRefresh(event: any): void {
     this.refresh().subscribe(() => event.target.complete());
   }
 
-  /**
-   * Handles an ionInfinite event by loading the next segment of Donation Hub Pledge List items.
-   * @param event The ionInfinite event.
-   */
-  handleIonInfinite(event: any): void {
-    this.activeFilters.page = ++this._page;
-    this._pledgeReadService.getDonationHubPledges(this.activeFilters).subscribe(
-      () => event.target.complete()
-    );
+  refresh(request?: DonationHubPledgeReadRequest): Observable<DonationHubPledge[]> {
+    this.activeFilters.page = 1;
+    return super.refresh(request);
   }
 }

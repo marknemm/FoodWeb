@@ -44,6 +44,14 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
     return (this.isDonorAccountType || this.isReceiverAccountType);
   }
 
+  get page(): number {
+    return this.get('page').value;
+  }
+
+  set page(page: number) {
+    this.get('page').setValue(page);
+  }
+
   /**
    * Converts the contained form value to a valid AccountReadRequest.
    * @return The converted AccountReadRequest.

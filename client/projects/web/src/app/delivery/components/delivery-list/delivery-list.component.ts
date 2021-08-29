@@ -35,12 +35,16 @@ export class DeliveryListComponent implements OnInit {
     return this._donations;
   }
 
+  get loading(): boolean {
+    return this._deliveryReadService.loading;
+  }
+
   get myDeliveries(): boolean {
     return this._myDeliveries;
   }
 
   get noneFound(): boolean {
-    return (!this._deliveryReadService.loading && this.totalCount === 0);
+    return (!this.loading && this.totalCount === 0);
   }
 
   get searchPlaceholder(): string {
@@ -67,6 +71,12 @@ export class DeliveryListComponent implements OnInit {
     this._urlQueryService.updateUrlQueryString(filters, this._activatedRoute);
   }
 
+  /**
+   * Refreshes the Delivery List items.
+   * @param request The optional Read Request, contianing filter/sorting parameters.
+   * If not given, will use the last recorded Read Request parameters.
+   * @returns An observable that emits the loaded `Donation` items.
+   */
   refresh(request?: DonationReadRequest): Observable<Donation[]> {
     if (request) {
       this.filtersForm.reset(request);

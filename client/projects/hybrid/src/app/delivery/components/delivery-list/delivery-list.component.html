@@ -4,10 +4,12 @@
   </foodweb-hybrid-header>
 </ion-header>
 
-<ion-content class="deliveries">
-  <ion-refresher slot="fixed" [disabled]="loading" (ionRefresh)="handleIonRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+<ion-content foodwebHybridListPage
+  [disabled]="loading"
+  [page]="filtersForm.page"
+  (loadMore)="handleLoadMore($event)"
+  (refresh)="handleRefresh($event)"
+  class="deliveries">
 
   <!-- <foodweb-filtered-list-toolbar listItemsLabel="Deliveries">
     <foodweb-search-bar
@@ -41,7 +43,4 @@
     </foodweb-delivery-filters>
   </foodweb-list-filters> -->
 
-  <ion-infinite-scroll [disabled]="loadMoreDisabled" (ionInfinite)="handleIonInfinite($event)" threshold="100px">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
 </ion-content>

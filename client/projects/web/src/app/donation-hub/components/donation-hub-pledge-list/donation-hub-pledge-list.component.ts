@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DonationHubPledge, DonationHubPledgeReadRequest, ListResponse, ReadRequest } from '~shared';
+import { DonationHubPledge, DonationHubPledgeReadRequest, ListResponse } from '~shared';
 import { DonationHubPledgeReadService } from '~web/donation-hub/services/donation-hub-pledge-read/donation-hub-pledge-read.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
@@ -31,6 +31,10 @@ export class DonationHubPledgeListComponent implements OnInit {
     return this._activeFilters;
   }
 
+  get loading(): boolean {
+    return this._pledgeReadService.loading;
+  }
+
   get pledges(): DonationHubPledge[] {
     return this._pledges;
   }
@@ -40,7 +44,7 @@ export class DonationHubPledgeListComponent implements OnInit {
   }
 
   get noneFound(): boolean {
-    return (!this._pledgeReadService.loading && this.totalCount === 0);
+    return (!this.loading && this.totalCount === 0);
   }
 
   get totalCount(): number {
@@ -52,8 +56,8 @@ export class DonationHubPledgeListComponent implements OnInit {
     this.pageTitleService.title = (this._myPledges)
       ? 'My Donation Pledges'
       : 'Donation Pledges';
-    this._urlQueryService.listenQueryParamsChange<ReadRequest>(this._activatedRoute).subscribe(
-      (request: ReadRequest) => this.refresh(request).subscribe()
+    this._urlQueryService.listenQueryParamsChange<DonationHubPledgeReadRequest>(this._activatedRoute).subscribe(
+      (request: DonationHubPledgeReadRequest) => this.refresh(request).subscribe()
     );
   }
 
@@ -63,10 +67,8 @@ export class DonationHubPledgeListComponent implements OnInit {
    * If not given, will use the last recorded Read Request parameters.
    * @returns An observable that emits the loaded `DonationHubPledge` items.
    */
-  refresh(request?: ReadRequest): Observable<DonationHubPledge[]> {
-    if (request) {
-      this._activeFilters = <DonationHubPledgeReadRequest>request;
-    }
+  refresh(request?: DonationHubPledgeReadRequest): Observable<DonationHubPledge[]> {
+    this._activeFilters = request ?? this._activeFilters;
     return this._pledgeReadService.getDonationHubPledges(this.activeFilters).pipe(
       map((response: ListResponse<DonationHubPledge>) => {
         this._pledges = response.list;

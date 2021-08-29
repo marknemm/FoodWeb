@@ -19,7 +19,8 @@ ion-virtual-scroll {
     border-top   : 1px solid var(--ion-border-color);
     border-bottom: 1px solid var(--ion-border-color);
 
-    ion-item:last-child {
+    > *:last-child ion-item,
+    > ion-item:last-child {
       --border-style: none;
     }
   }
@@ -81,6 +82,10 @@ ion-item {
   &::part(native) {
     transition   : margin-bottom 0.3s linear;
     margin-bottom: 0;
+  }
+
+  .foodweb-profile-img:first-child {
+    margin-left: var(--mobile-side-padding);
   }
 
   .ion-form-error {

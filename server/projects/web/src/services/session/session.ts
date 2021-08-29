@@ -1,11 +1,12 @@
 import { randomBytes } from 'crypto';
 import { getRepository, Repository } from 'typeorm';
-import { AccountEntity, PerpetualSessionEntity, UnverifiedAccountEntity } from '~entity';
+import { AccountEntity, PerpetualSessionEntity } from '~entity';
 import { ListResponse, LoginRequest, LoginResponse } from '~shared';
 import { checkPasswordMatch } from '~web/helpers/misc/password-match';
 import { FoodWebError } from '~web/helpers/response/foodweb-error';
 import { readFullAccount, readFullAccounts } from '~web/services/account/read-accounts';
 import { saveMobileDevice } from '~web/services/mobile-device/save-mobile-device';
+import { isAccountVerified } from '../account/account-verification';
 
 /**
  * Performs the login for a given user.
@@ -54,7 +55,7 @@ async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> 
     throw new Error(`User could not be found with username/email: ${usernameEmail}`);
   }
 
-  account.verified = (await getRepository(UnverifiedAccountEntity).count({ account: { id: account.id } })) === 0;
+  account.verified = await isAccountVerified(account);
   return account;
 }
 
@@ -86,6 +87,7 @@ export async function perpetualTokenLogin(sessionToken: string): Promise<LoginRe
     if (sessionToken) {
       const perpetualSession: PerpetualSessionEntity = await getRepository(PerpetualSessionEntity).findOne({ sessionToken });
       if (perpetualSession) {
+        perpetualSession.account.verified = await isAccountVerified(perpetualSession.account);
         return { account: perpetualSession.account, perpetualSession };
       }
     }

@@ -21,6 +21,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy {
 
+  @Input() disabled = false;
   @Input() loadMoreDisabled = false;
   @Input() omitInfiniteScroll = false;
   @Input() omitRefresher = false;
@@ -51,15 +52,15 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
     setTimeout(() => { // setTimeout: Ensure ionInfiniteScroll & ionRefresher are initialized after content init.
       if (changes.page && this.page <= 1 && this.ionInfiniteScroll) {
         this._itemCount = 0;
-        this.ionInfiniteScroll.disabled = this.loadMoreDisabled;
+        this.ionInfiniteScroll.disabled = (this.loadMoreDisabled || this.disabled);
       }
 
-      if (changes.loadMoreDisabled && this.ionInfiniteScroll) {
-        this.ionInfiniteScroll.disabled = this.loadMoreDisabled || (this._itemCount % this.pageSize !== 0);
+      if ((changes.loadMoreDisabled || changes.disabled) && this.ionInfiniteScroll) {
+        this.ionInfiniteScroll.disabled = this.loadMoreDisabled || this.disabled || (this._itemCount % this.pageSize !== 0);
       }
 
-      if (changes.refreshDisabled && this.ionRefresher) {
-        this.ionRefresher.disabled = this.refreshDisabled;
+      if ((changes.refreshDisabled || changes.disabled) && this.ionRefresher) {
+        this.ionRefresher.disabled = (this.refreshDisabled || this.disabled);
       }
     });
   }
@@ -127,7 +128,7 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
     ).subscribe((event: any) => {
       this.page = 1;
       this._itemCount = 0;
-      this.ionInfiniteScroll.disabled = this.loadMoreDisabled;
+      this.ionInfiniteScroll.disabled = (this.loadMoreDisabled || this.disabled);
       event = this._overloadAllIonEvents(event);
       this.refresh.emit(event);
     });
@@ -150,7 +151,7 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
     if (this.ionVirtualScroll) {
       this.ionVirtualScroll.checkEnd();
       setTimeout(() => { // setTimeout: Ensure all updates have occured to ion-virtual-scroll first.
-        this.ionInfiniteScroll.disabled = this.loadMoreDisabled
+        this.ionInfiniteScroll.disabled = (this.loadMoreDisabled || this.disabled)
           || (this._itemCount === this.ionVirtualScroll.items?.length)
           || (this._itemCount % this.pageSize !== 0);
         this._itemCount = this.ionVirtualScroll.items?.length;

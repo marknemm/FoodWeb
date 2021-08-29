@@ -4,10 +4,12 @@
   </foodweb-hybrid-header>
 </ion-header>
 
-<ion-content class="donations">
-  <ion-refresher slot="fixed" [disabled]="loading" (ionRefresh)="handleIonRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+<ion-content foodwebHybridListPage
+  [disabled]="loading"
+  [page]="filtersForm.page"
+  (loadMore)="handleLoadMore($event)"
+  (refresh)="handleRefresh($event)"
+  class="donations">
 
   <!-- <foodweb-filtered-list-toolbar listItemsLabel="Donations">
     <foodweb-search-bar
@@ -40,7 +42,4 @@
     ></foodweb-donation-filters>
   </foodweb-list-filters> -->
 
-  <ion-infinite-scroll [disabled]="loadMoreDisabled" (ionInfinite)="handleIonInfinite($event)" threshold="100px">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
 </ion-content>

@@ -247,7 +247,9 @@ function _postProcessAccounts(accounts: AccountEntity[], myAccount: Account, ful
     const isMyAccount: boolean = _accountHelper.doesAccountIdMatch(myAccount, account.id);
     fullAccount = (fullAccount || isMyAccount);
     _delVolunteerAddrIfNotMyAccount(account, fullAccount);
-    _setVerifiedIfMyAccount(account, isMyAccount, myAccount);
+    if (isMyAccount) {
+      account.verified = myAccount.verified;
+    }
   });
 }
 
@@ -258,11 +260,5 @@ function _delVolunteerAddrIfNotMyAccount(account: AccountEntity, fullAccount: bo
     delete account.contactInfo.stateProvince;
     delete account.contactInfo.postalCode;
     delete account.contactInfo.location;
-  }
-}
-
-function _setVerifiedIfMyAccount(account: AccountEntity, isMyAccount: boolean, myAccount: Account): void {
-  if (isMyAccount) {
-    account.verified = myAccount.verified;
   }
 }

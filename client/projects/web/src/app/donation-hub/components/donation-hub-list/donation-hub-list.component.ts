@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DonationHub, DonationHubReadRequest, ListResponse, ReadRequest } from '~shared';
+import { DonationHub, DonationHubReadRequest, ListResponse } from '~shared';
 import { DonationHubReadService } from '~web/donation-hub/services/donation-hub-read/donation-hub-read.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
@@ -38,12 +38,16 @@ export class DonationHubListComponent implements OnInit {
     return this._donationHubs;
   }
 
+  get loading(): boolean {
+    return this._donationHubReadService.loading;
+  }
+
   get myDonationHubs(): boolean {
     return this._myDonationHubs;
   }
 
   get noneFound(): boolean {
-    return (!this._donationHubReadService.loading && this.totalCount === 0);
+    return (!this.loading && this.totalCount === 0);
   }
 
   get totalCount(): number {
@@ -55,8 +59,8 @@ export class DonationHubListComponent implements OnInit {
     this.pageTitleService.title = (this._myDonationHubs)
       ? 'My Donation Hubs'
       : 'Pledge Donation';
-    this._urlQueryService.listenQueryParamsChange<ReadRequest>(this._activatedRoute).subscribe(
-      (request: ReadRequest) => this.refresh(request).subscribe()
+    this._urlQueryService.listenQueryParamsChange<DonationHubReadRequest>(this._activatedRoute).subscribe(
+      (request: DonationHubReadRequest) => this.refresh(request).subscribe()
     );
   }
 
@@ -66,11 +70,8 @@ export class DonationHubListComponent implements OnInit {
    * If not given, will use the last recorded Read Request parameters.
    * @returns An observable that emits the loaded `DonationHub` items.
    */
-  refresh(request?: ReadRequest): Observable<DonationHub[]> {
-    if (request) {
-      this._activeFilters = <DonationHubReadRequest>request;
-    }
-
+  refresh(request?: DonationHubReadRequest): Observable<DonationHub[]> {
+    this._activeFilters = request ?? this._activeFilters;
     return this._donationHubReadService.getDonationHubs(this.activeFilters).pipe(
       map((response: ListResponse<DonationHub>) => {
         this._donationHubs = response.list;

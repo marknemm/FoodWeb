@@ -38,6 +38,13 @@ export async function verifyAccount(account: AccountEntity, verificationReq: Acc
   return account;
 }
 
+export async function isAccountVerified(account: AccountEntity): Promise<boolean> {
+  const unverifiedCount: number = await getRepository(UnverifiedAccountEntity).count({
+    account: { id: account.id }
+  });
+  return (unverifiedCount === 0);
+}
+
 function _genUnverifiedAccountEntity(account: AccountEntity): UnverifiedAccountEntity {
   const verificationToken: string = _genVerificationToken();
   const unverifiedAccountEntity = new UnverifiedAccountEntity();

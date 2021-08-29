@@ -4,8 +4,15 @@
   </foodweb-hybrid-header>
 </ion-header>
 
-<ion-content foodwebHybridListPage [page]="page" (loadMore)="handleLoadMore($event)" (refresh)="handleRefresh($event)" class="notifications">
-  <ion-virtual-scroll #virtualScroll [items]="notifications" approxItemHeight="70px">
+<ion-content foodwebHybridListPage
+  [disabled]="loading"
+  [page]="activeFilters.page"
+  [pageSize]="activeFilters.limit || notificationService.defaultReadLimit"
+  (loadMore)="handleLoadMore($event)"
+  (refresh)="handleRefresh($event)"
+  class="notifications">
+
+  <ion-virtual-scroll #virtualScroll [items]="notifications" approxItemHeight="80px" class="borders-vertical">
     <foodweb-hybrid-notification
       *virtualItem="let item"
       [notification]="item"
@@ -13,4 +20,5 @@
       (select)="notificationService.handleNotificationSelect($event)">
     </foodweb-hybrid-notification>
   </ion-virtual-scroll>
+
 </ion-content>

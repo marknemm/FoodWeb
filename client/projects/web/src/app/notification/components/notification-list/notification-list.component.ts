@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,14 +8,13 @@ import { PageTitleService } from '~web/shared/services/page-title/page-title.ser
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
-  selector: 'foodweb-notifications',
-  templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.scss']
+  selector: 'foodweb-notification-list',
+  templateUrl: './notification-list.component.html',
+  styleUrls: ['./notification-list.component.scss']
 })
-export class NotificationsComponent implements OnInit {
+export class NotificationListComponent implements OnInit {
 
-  @Input() notificationsMenu = false;
-
+  protected _activeFilters: NotificationReadRequest = { page: 1 };
   protected _notifications: Notification[] = [];
   protected _totalCount = 0;
 
@@ -26,6 +25,14 @@ export class NotificationsComponent implements OnInit {
     protected _urlQueryService: UrlQueryService,
   ) {}
 
+  get activeFilters(): NotificationReadRequest {
+    return this._activeFilters;
+  }
+
+  get loading(): boolean {
+    return this.notificationService.loading;
+  }
+
   get notifications(): Notification[] {
     return this._notifications;
   }
@@ -34,18 +41,24 @@ export class NotificationsComponent implements OnInit {
     return this._totalCount;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.pageTitleService.title = 'Notifications';
+
     // Only listen for query parameter changes if we are on notifications page (not a menu off of header).
-    if (!this.notificationsMenu) {
-      this._urlQueryService.listenQueryParamsChange<NotificationReadRequest>(this._activatedRoute).subscribe(
-        (request: NotificationReadRequest) => this.refresh(request).subscribe()
-      );
-    }
+    this._urlQueryService.listenQueryParamsChange<NotificationReadRequest>(this._activatedRoute).subscribe(
+      (request: NotificationReadRequest) => this.refresh(request).subscribe()
+    );
   }
 
-  refresh(request: NotificationReadRequest = {}): Observable<Notification[]> {
-    return this.notificationService.getNotifications(request).pipe(
+  /**
+   * Refreshes the Notification List items.
+   * @param request The optional Read Request, contianing filter/sorting parameters.
+   * If not given, will use the last recorded Read Request parameters.
+   * @returns An observable that emits the loaded `Notification` items.
+   */
+  refresh(request: NotificationReadRequest = this.activeFilters): Observable<Notification[]> {
+    this._activeFilters = request;
+    return this.notificationService.getNotifications(this.activeFilters).pipe(
       map((response: ListResponse<Notification>) => {
         if (response) {
           this._notifications = response.list;
