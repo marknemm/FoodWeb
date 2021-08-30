@@ -6,8 +6,14 @@
 
 <ion-content>
   <ion-list class="borders-vertical">
-    <ion-item [routerLink]="['donate']" *ngIf="sessionService.isDonor">Donate</ion-item>
-    <ion-item [routerLink]="['list']" *ngIf="sessionService.isReceiver">Find Donations</ion-item>
-    <ion-item [routerLink]="['list', 'my']">My Donations</ion-item>
+    <ion-item [routerLink]="['donate']" *ngIf="sessionService.isDonor">
+      Donate
+    </ion-item>
+    <ion-item [routerLink]="['list']" *ngIf="!sessionService.isDonor">
+      {{ sessionService.isReceiver ? 'Find Donations' : 'Browse Donations' }}
+    </ion-item>
+    <ion-item [routerLink]="['list', 'my']" *ngIf="sessionService.loggedIn">
+      My Donations
+    </ion-item>
   </ion-list>
 </ion-content>

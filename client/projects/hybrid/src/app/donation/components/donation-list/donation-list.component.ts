@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Donation, DonationReadRequest, ListResponse } from '~shared';
+import { AccountType, Donation, DonationReadRequest, ListResponse } from '~shared';
 import { DonationListComponent as WebDonationListComponent } from '~web/donation/components/donation-list/donation-list.component';
 
 @Component({
@@ -9,6 +9,10 @@ import { DonationListComponent as WebDonationListComponent } from '~web/donation
   styleUrls: ['./donation-list.component.scss']
 })
 export class DonationListComponent extends WebDonationListComponent {
+
+  get canAddDonation(): boolean {
+    return (this.myDonations && this.account.accountType === AccountType.Donor);
+  }
 
   /**
    * Handles an ionInfinite event by loading the next segment of Donation/Delivery List items.

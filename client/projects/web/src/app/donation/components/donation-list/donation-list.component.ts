@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { DonationHelper, DonationReadRequest, ListResponse } from '~shared';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
+import { Account, SessionService } from '~web/session/services/session/session.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
@@ -27,8 +28,13 @@ export class DonationListComponent implements OnInit {
     protected _activatedRoute: ActivatedRoute,
     protected _donationReadService: DonationReadService,
     protected _router: Router,
+    protected _sessionService: SessionService,
     protected _urlQueryService: UrlQueryService
   ) {}
+
+  get account(): Account {
+    return this._sessionService.account;
+  }
 
   get donations(): Donation[] {
     return this._donations;
