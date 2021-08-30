@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { AccountType } from '~shared';
@@ -13,7 +13,7 @@ import { SignupService } from '~web/signup/services/signup/signup.service';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent {
 
   constructor(
     public sessionService: SessionService,
@@ -21,8 +21,6 @@ export class SignupComponent implements OnInit {
     protected _signupService: SignupService,
     private _matDialog: MatDialog,
   ) {}
-
-  ngOnInit(): void {}
 
   signup(accountForm: AccountForm): void {
     if (accountForm.checkValidity()) {

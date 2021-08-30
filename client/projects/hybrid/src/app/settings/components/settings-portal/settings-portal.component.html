@@ -4,7 +4,7 @@
   </foodweb-hybrid-header>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="account">
   <ion-item [routerLink]="['primary']" class="primary-info icon-start" lines="none">
     <foodweb-hybrid-profile-img [value]="account.profileImg" [editable]="false" slot="start"></foodweb-hybrid-profile-img>
 
@@ -49,7 +49,7 @@
   </ion-list>
 
   <ion-list class="secondary-list margin-vertical borders-vertical small">
-    <ion-item [routerLink]="['/', 'information', 'message-us']" detailIcon="mail" class="message-us">
+    <ion-item href="mailto:questions@wnyfoodweb.com" detailIcon="mail" class="message-us">
       <ion-label>Message Us</ion-label>
     </ion-item>
     <ion-item [routerLink]="['/', 'account', 'list']" [queryParams]="{ accountType: AccountType.Donor}" detailIcon="gift" class="donors">

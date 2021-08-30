@@ -10,8 +10,16 @@ import { DonationListComponent as WebDonationListComponent } from '~web/donation
 })
 export class DonationListComponent extends WebDonationListComponent {
 
+  get pageTitle(): string {
+    return (this.myDonations ? 'My Donations' : 'Donations');
+  }
+
   get canAddDonation(): boolean {
     return (this.myDonations && this.account.accountType === AccountType.Donor);
+  }
+
+  get showChooseDonation(): boolean {
+    return (!this.myDonations && !this.noneFound && this._sessionService.isReceiver);
   }
 
   /**

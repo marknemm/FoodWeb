@@ -1,6 +1,6 @@
 <ion-header>
   <foodweb-hybrid-header defaultBackHref="..">
-    <ion-label>{{ pageTitleService.title }}</ion-label>
+    <ion-label>{{ pageTitle }}</ion-label>
     <ion-buttons *ngIf="canAddDonation" slot="end">
       <ion-button [routerLink]="['/', 'delivery', 'list']" fill="clear">
         <ion-icon name="add-circle"></ion-icon>
@@ -24,7 +24,7 @@
     ></foodweb-search-bar>
   </foodweb-filtered-list-toolbar> -->
 
-  <div *ngIf="!myDonations && !noneFound" class="standalone-statement">
+  <div *ngIf="showChooseDonation" class="standalone-statement">
     Choose a donation to claim.
   </div>
 

@@ -1,15 +1,16 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/bootstrap/login"></ion-back-button>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>Signup</ion-label>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="formGroup.invalid" (click)="signup(formGroup)">Submit</ion-button>
     </ion-buttons>
-    <ion-title>Signup</ion-title>
-  </ion-toolbar>
+  </foodweb-hybrid-header>
 </ion-header>
 
 <ion-content>
   <foodweb-hybrid-account-creation-form
-    *ngIf="!sessionService.loggedIn"
+    [formGroup]="formGroup"
+    [hidden]="sessionService.loggedIn"
     (createAccount)="signup($event)"
     accountTypeSelTitle="Select Your Account Type"
     submitButtonTxt="Signup">

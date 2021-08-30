@@ -67,7 +67,6 @@ export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
     for (const prop in request) {
       if (request[prop] == null) delete request[prop];
     }
-    console.log(request);
     return request;
   }
 }

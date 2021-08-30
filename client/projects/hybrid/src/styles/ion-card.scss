@@ -122,7 +122,7 @@ ion-card {
       }
 
       ion-card-content {
-        ion-item,
+        ion-item:not(.item-label-floating),
         .mat-form-field {
           margin-left: calc(var(--mobile-side-padding) * -1);
           margin-right: calc(var(--mobile-side-padding) * -1);
