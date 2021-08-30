@@ -11,6 +11,10 @@ ion-list {
   ion-content &:last-child {
     margin-bottom: 0;
   }
+
+  > ion-item {
+    background-color: inherit;
+  }
 }
 
 ion-list,
@@ -30,7 +34,7 @@ ion-item {
   --padding-start      : 0;
   --inner-padding-start: 14px;
   --inner-padding-end  : 14px;
-  background-color     : inherit;
+  background-color: var(--ion-list-background);
 
   &.item-spacer {
     --inner-padding-bottom: 30px;

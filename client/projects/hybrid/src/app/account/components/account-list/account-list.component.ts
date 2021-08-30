@@ -40,6 +40,6 @@ export class AccountListComponent extends WebAccountListComponent {
 
   refresh(request?: AccountReadRequest): Observable<Account[]> {
     this.filtersForm.page = 1;
-    return this.refresh(request);
+    return super.refresh(request);
   }
 }
