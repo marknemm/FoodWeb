@@ -36,12 +36,15 @@ export class UrlQueryService {
    */
   listenQueryParamsChange<T extends ReadRequest>(activatedRoute: ActivatedRoute, defaultParams: Partial<T> = {}): Observable<T> {
     const initUrl: string = this._router.url;
+    let first = true;
     return activatedRoute.queryParams.pipe(
       switchMap((params: Params) => {
         // Check if this is triggered by a query param change and not a route change.
-        return (this._prevUrl === initUrl)
-          ? of(this.queryParamsToReadRequest<T>(params, defaultParams))
-          : NEVER; // Do not emit a value (and do not terminate); the queryParams emission was due to a route change.
+        if (first || this._prevUrl === initUrl) {
+          first = false;
+          return of(this.queryParamsToReadRequest<T>(params, defaultParams));
+        }
+        return NEVER; // Do not emit a value (and do not terminate); the queryParams emission was due to a route change.
       })
     );
   }

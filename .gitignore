@@ -40,6 +40,8 @@ app.yaml
 startup.sh
 nginx-ssl-setup.sh
 environment.device.ts
+foodweb-*-firebase-adminsdk*
+firebase-service-account.json
 
 # IDEs and editors
 .idea

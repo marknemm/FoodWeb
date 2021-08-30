@@ -5,6 +5,11 @@ ion-content {
   --padding-bottom: 0;
 
   &.notifications {
-    background-color: transparent
+    background-color: transparent;
+    min-height: 0;
+  }
+
+  ion-virtual-scroll {
+    border-top: none;
   }
 }

@@ -25,11 +25,11 @@ export class NotificationSettingsComponent extends FormBaseComponent<AccountForm
    * Saves the notification settings.
    */
    save(): void {
-    if (this.formGroup.get('notificationSettings')) {
+    if (this.formGroup.get('contactInfo').checkValidity()) {
       this._accountSaveService.updateAccountFields(
         this.sessionService.account,
         this.formGroup.toAccount(),
-        ['notificationSettings']
+        ['contactInfo']
       ).subscribe();
     }
   }

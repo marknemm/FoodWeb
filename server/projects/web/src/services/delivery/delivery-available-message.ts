@@ -1,9 +1,9 @@
-import { EntityManager, getConnection } from 'typeorm';
+import { EntityManager, getConnection, QueryBuilder, SelectQueryBuilder } from 'typeorm';
 import { AccountEntity, DeliveryReqHistoryEntity, DonationEntity } from '~entity';
 import { AccountReadRequest, AccountType, DonationHelper, ListResponse, NotificationType, OperationHours, OperationHoursHelper } from '~shared';
 import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
 import { getNotificationClient, NotificationClient } from '~web/helpers/messaging/notification';
-import { readAccounts } from '~web/services/account/read-accounts';
+import { queryAccounts, readAccounts } from '~web/services/account/read-accounts';
 
 const _donationHelper = new DonationHelper();
 const _operationHoursHelper = new OperationHoursHelper();
@@ -29,7 +29,9 @@ export async function sendDeliveryAvailableMessages(donation: DonationEntity): P
       operationHoursStartTime: operationHours.startTime,
       operationHoursEndTime: operationHours.endTime
     };
-    const listRes: ListResponse<AccountEntity> = await readAccounts(readRequest, donation.claim.receiverAccount);
+    const listRes: ListResponse<AccountEntity> = await queryAccounts(readRequest, donation.claim.receiverAccount).modQuery(
+      (queryBuilder: SelectQueryBuilder<AccountEntity>) => queryBuilder.andWhere('contactInfo.notifyForEachDonation = TRUE')
+    ).exec();
     numQueried = listRes.list.length;
     await _messagePotentialDeliverers(donation, listRes.list);
   } while (numQueried === limit);

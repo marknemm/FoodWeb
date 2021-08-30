@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
+import { Router } from '@angular/router';
+import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { Keyboard } from '@capacitor/keyboard';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { AuthenticationService } from '~hybrid/session/services/authentication/authentication.service';
@@ -21,7 +23,9 @@ export class AppComponent {
     authService: AuthenticationService,
     jsonDateReviver: JSONDateReviver,
     matIconReg: MatIconRegistry,
-    mobileDeviceService: MobileDeviceService
+    mobileDeviceService: MobileDeviceService,
+    ngZone: NgZone,
+    router: Router,
   ) {
     matIconReg.registerFontClassAlias('fontawesome', 'fa');
     jsonDateReviver.initJSONDateReviver();
@@ -37,6 +41,11 @@ export class AppComponent {
       setTimeout(() => SplashScreen.hide(), 1500);
     }
 
+    this._initTheming();
+    this._initDeepLinks(ngZone, router);
+  }
+
+  private _initTheming(): void {
     // Use matchMedia to check the user preference
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
     toggleDarkTheme(prefersDark.matches);
@@ -48,5 +57,14 @@ export class AppComponent {
     function toggleDarkTheme(shouldAdd: boolean) {
       document.body.classList.toggle('dark', shouldAdd);
     }
+  }
+
+  private _initDeepLinks(ngZone: NgZone, router: Router): void {
+    App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+      ngZone.run(() => {
+        const route: string = event.url.split('.com').pop();
+        if (route) router.navigateByUrl(route);
+      });
+    });
   }
 }

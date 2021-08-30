@@ -1,7 +1,6 @@
-import { Message, Sender } from 'node-gcm';
 import { MobileDevice, Notification } from '~entity';
 import { toExternalUrl } from '~web/helpers/misc/url';
-import { env } from '../globals/env';
+import { firebase, Message, Messaging, MulticastMessage } from '../firebase/firebase';
 
 /**
  * A push notification client that is used to send (mobile app) push notifications via Google Cloud Messaging (GCM).
@@ -16,7 +15,7 @@ export class PushNotificationClient {
   /**
    * A Google Cloud Messaging (GCM) Sender.
    */
-  private readonly _gcmSender = new Sender(env.FCM_SERVER_KEY);
+  private readonly _firebaseMessaging: Messaging = firebase.messaging();
 
   /**
    * Private constructor to enforce singleton instance.
@@ -42,20 +41,30 @@ export class PushNotificationClient {
    */
   async broadcastPushNotifications(pushTargets: MobileDevice[], notification: Notification): Promise<void> {
     const pushRegistrationIds: string[] = this._pushTargetsToPushRegistrationIds(pushTargets);
-    const notificationMessage: Message = this._genNotificationMessage(notification);
-    this._gcmSender.send(notificationMessage, pushRegistrationIds, () => {});
+    if (pushRegistrationIds?.length) {
+      const notificationMessage: MulticastMessage = this._genMulticastMessage(notification, pushRegistrationIds);
+      await this._firebaseMessaging.sendMulticast(notificationMessage)
+        .then((responseContainer) => {
+          for (const response of responseContainer.responses) {
+            if (response.error) console.error(response.error.toJSON());
+          }
+        })
+        .catch(console.error);
+    }
   }
 
   /**
    * Sends a push notification to a single target device.
    * @param pushTarget The target device.
    * @param notification The notification that is to be sent.
-   * @return A promise that resolves to the push notification result.
+   * @return A promise that resolves once the push notification has been sent.
    */
   async sendPushNotification(pushTarget: MobileDevice, notification: Notification): Promise<void> {
     const pushRegistrationIds: string[] = this._pushTargetsToPushRegistrationIds([pushTarget]);
-    const notificationMessage: Message = this._genNotificationMessage(notification);
-    this._gcmSender.send(notificationMessage, pushRegistrationIds, () => {});
+    if (pushRegistrationIds?.length) {
+      const notificationMessage: Message = this._genMessage(notification, pushRegistrationIds[0]);
+      await this._firebaseMessaging.send(notificationMessage).catch(console.error);
+    }
   }
 
   /**
@@ -68,32 +77,60 @@ export class PushNotificationClient {
   }
 
   /**
-   * Wraps a notification inside a message.
-   * @param notification The notification.
-   * @return The notification message.
+   * Generates a FCM multicast push notification message based off of a `Notification` entity.
+   * @param notification The notification entity form which to generate the message.
+   * @param pushRegistrationIds The Push Notification registration IDs associated with target users' mobile devices.
+   * @return The generated multicast push notification message.
    */
-  private _genNotificationMessage(notification: Notification): Message {
-    return new Message({
-      priority: notification.priority,
-      timeToLive: notification.timeToLive,
-      contentAvailable: notification.contentAvailable,
-      data: {
-        title: notification.title,
-        subtitle: notification.subtitle,
-        body: notification.body,
-        color: notification.color,
-        image: toExternalUrl(notification.image),
-        sound: notification.sound,
-        body_loc_key: notification.locKey,
-        body_loc_args: notification.locArgs,
-        title_loc_key: notification.titleLocKey,
-        title_loc_args: notification.titleLocArgs,
-        click_aciton: notification.clickAction,
-        tag: notification.tag,
-        badge: notification.badge,
-        notificationLink: notification.notificationLink
-      }
-    });
+  private _genMulticastMessage(notification: Notification, pushRegistrationIds: string[]): MulticastMessage {
+    const message: MulticastMessage = { tokens: pushRegistrationIds };
+    this._fillMessageBase(message, notification);
+    return message;
+  }
+
+  private _genMessage(notification: Notification, pushRegistrationId: string): Message {
+    const message: Message = { token: pushRegistrationId };
+    this._fillMessageBase(message, notification);
+    return message;
+  }
+
+  private _fillMessageBase(message: Message | MulticastMessage, notification: Notification): void {
+    message.data = {
+      title: notification.title ?? '',
+      subtitle: notification.subtitle ?? '',
+      body: notification.body ?? '',
+      color: notification.color ?? '',
+      image: toExternalUrl(notification.image) ?? '',
+      sound: notification.sound ?? '',
+      body_loc_key: notification.locKey ?? '',
+      body_loc_args: notification.locArgs ?? '',
+      title_loc_key: notification.titleLocKey ?? '',
+      title_loc_args: notification.titleLocArgs ?? '',
+      click_aciton: notification.clickAction ?? '',
+      tag: notification.tag ?? '',
+      badge: notification.badge ?? '',
+      notificationLink: notification.notificationLink ?? ''
+    };
+
+    message.notification = {};
+    message.android = {};
+    message.apns = {};
+
+    if (notification.title) {
+      message.notification.title = notification.title.replace(/(<([^>]+)>)/gi, "").trim();
+    }
+
+    if (notification.body) {
+      message.notification.body = notification.body.replace(/(<([^>]+)>)/gi, "").replace(/\s+/gi, ' ').trim();
+    }
+
+    if (notification.priority) {
+      message.android.priority = notification.priority;
+    }
+
+    if (notification.timeToLive) {
+      message.android.ttl = notification.timeToLive;
+    }
   }
 
 }
