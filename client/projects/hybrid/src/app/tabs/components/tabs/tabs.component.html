@@ -21,7 +21,7 @@
       <ion-label>Home</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="notifications" (click)="notificationService.updateSeenNotifications()" *ngIf="sessionService.loggedIn">
+    <ion-tab-button tab="notifications" *ngIf="sessionService.loggedIn">
       <ion-icon name="notifications"></ion-icon>
       <ion-badge color="danger" *ngIf="notificationService.hasUnseenNotifications">
         {{ notificationService.unseenNotificationsCount | shortNum }}

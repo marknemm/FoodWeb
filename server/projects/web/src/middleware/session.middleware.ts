@@ -1,5 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
-import { AccountEntity, PerpetualSessionEntity } from '~entity';
+import { AccountEntity, MobileDeviceEntity, PerpetualSessionEntity } from '~entity';
 import { Account } from '~shared';
 import { env } from '~web/helpers/globals/env';
 import { getRedisStore, RedisStore } from '~web/helpers/misc/redis-store';
@@ -63,6 +63,7 @@ export function ensureAccountVerified(request: Request, response: Response, next
 declare module 'express-session' {
   export interface SessionData {
     account: AccountEntity;
+    mobileDevice?: MobileDeviceEntity;
     perpetualSession?: PerpetualSessionEntity;
   }
 }

@@ -1,80 +1,141 @@
-import { Injectable } from '@angular/core';
-import { Capacitor } from '@capacitor/core';
-import { PermissionStatus, PushNotifications, Token } from '@capacitor/push-notifications';
-import { Observable, of, Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, NgZone } from '@angular/core';
+import { ActionPerformed, PermissionStatus, PushNotifications, PushNotificationSchema, Token } from '@capacitor/push-notifications';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { environment } from '~hybrid-env/environment';
+import { AuthenticationService } from '~hybrid/session/services/authentication/authentication.service';
+import { SessionService } from '~hybrid/session/services/session/session.service';
+import { MobileDeviceService } from '~hybrid/shared/services/mobile-device/mobile-device.service';
+import { MobileDevice } from '~shared';
 
+/**
+ * Initializes and maintains Android/iOS client push notification functionality.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class PushNotificationService {
 
-  private _pushRegistrationId = '';
-  private _pushRegistrationSubject = new Subject<string>();
+  readonly url = `${environment.server}/session/push-registration`;
 
-  constructor() {}
+  private _actions$ = new Subject<ActionPerformed>();
+  private _notifications$ = new Subject<PushNotificationSchema>();
+  private _registered$ = new ReplaySubject<string>(1);
+
+  constructor(
+    private _authenticationService: AuthenticationService,
+    private _httpClient: HttpClient,
+    private _mobileDeviceService: MobileDeviceService,
+    private _ngZone: NgZone,
+    private _sessionService: SessionService,
+  ) {}
+
+  /**
+   * An observable that emits each action performed on any push notification associated with this app.
+   */
+  get actions$(): Observable<ActionPerformed> {
+    return this._actions$;
+  }
+
+  /**
+   * An observable that emits each push notification that has been received.
+   */
+  get notifications$(): Observable<PushNotificationSchema> {
+    return this._notifications$;
+  }
 
   /**
    * true if the device is registered with the FCM server for push notifications, false if not.
    */
-  get isRegistered(): boolean {
-    return !!this._pushRegistrationId;
+  get registered(): boolean {
+    return !!this._mobileDeviceService.mobileDevice.pushRegistrationId;
+  }
+
+  /**
+   * An observable that emits the push registration ID whenever the device newly registers for push notifications.
+   * On first subscribe, will emit the latest registration ID if a registration has already occurred.
+   */
+  get registered$(): Observable<string> {
+    return this._registered$.asObservable();
   }
 
   /**
    * The push notification registration ID. An empty string if not registered.
    */
   get pushRegistrationId(): string {
-    return this._pushRegistrationId;
+    return this._mobileDeviceService.mobileDevice.pushRegistrationId;
+  }
+
+  /**
+   * Initializes push notifications for the mobile device.
+   */
+  init(): void {
+    if (!this._mobileDeviceService.native) return; // Only initialize on native Android/iOS platforms.
+
+    // Listen for login and network connection; attempt to (re)register device for push notifications when either is detected.
+    this._authenticationService.login$.subscribe(() => this._register());
+    this._mobileDeviceService.connected$.subscribe(() => this._register());
+
+    // Setup listeners for push notification registration results.
+    PushNotifications.addListener('registration', this._saveRegistration.bind(this));
+    PushNotifications.addListener('registrationError', console.error);
+
+    // Setup listeners for push notification receptions & actions.
+    PushNotifications.addListener('pushNotificationReceived', this._notificationReceived.bind(this));
+    PushNotifications.addListener('pushNotificationActionPerformed', this._actionPerformed.bind(this));
   }
 
   /**
    * Registers this device to receive push notifications.
-   * @returns An observable that emits the push notification registration ID. An empty string if registration failed.
+   * @returns A promise that resolves once registration is complete.
    */
-  register(): Observable<string> {
-    // Ensure only register once.
-    if (this.isRegistered || !Capacitor.isNativePlatform()) {
-      return of(this.pushRegistrationId);
-    }
+  private async _register(): Promise<void> {
+    // Only attempt registration if the user is logged in and the device is connected to the network.
+    if (!this._sessionService.loggedIn || !this._mobileDeviceService.connected) return;
 
-    // Setup listeners for push notification registration results.
-    PushNotifications.addListener('registration', (token: Token) => this._setPushRegistrationId(token.value));
-    PushNotifications.addListener('registrationError', (err: any) => {
+    try {
+      // Request permission to setup push notifications, and register.
+      const status: PermissionStatus = await PushNotifications.requestPermissions();
+      if (status.receive !== 'denied') {
+        await PushNotifications.register();
+      }
+    } catch (err) {
       console.error(err);
-      this._setPushRegistrationId('');
-    });
-
-    // Request permission to setup push notifications, and register.
-    PushNotifications.requestPermissions()
-      .then((status: PermissionStatus) => {
-          if (status.receive === 'denied') {
-            throw new Error('User declined receiving push notifications');
-          }
-      })
-      .then(() => PushNotifications.register().then())
-      .catch((err: Error) => {
-        console.error(err);
-        this._setPushRegistrationId('');
-      });
-
-    return this._pushRegistrationSubject.asObservable();
+    }
   }
 
   /**
-   * Sets a given push notification registration ID, and emits its value.
-   * @param id The push registration ID to set.
+   * Saves the successful push registration (ID) on the server.
+   * @param token The resulting token from the successful push notification registration.
    */
-  private _setPushRegistrationId(id: string) {
-    this._pushRegistrationId = id;
-    this._pushRegistrationSubject.next(this.pushRegistrationId);
-    this._pushRegistrationSubject.complete();
+  private _saveRegistration(token: Token): void {
+    this._ngZone.run(() => {
+      this._mobileDeviceService.mobileDevice.pushRegistrationId = token.value;
+      this._httpClient.post<MobileDevice>(this.url, token.value, { withCredentials: true }).subscribe(() =>
+        () => this._registered$.next(this.pushRegistrationId)
+      );
+    });
   }
 
-  // private _listenForNotifications(): void {
-  //   this._pushNotificationClient.on('notification').subscribe((response: EventResponse) => {
-  //     if (!response.additionalData.foreground && response.additionalData.notificationLink) {
-  //       this._zone.run(() => this._router.navigate([response.additionalData.notificationLink]));
-  //     }
-  //   });
-  // }
+  /**
+   * Handles all received push notifications.
+   * @param notification The received push notification schema.
+   */
+  private _notificationReceived(notification: PushNotificationSchema): void {
+    this._ngZone.run(() => {
+      console.log('Notification Received: ', notification);
+      this._notifications$.next(notification);
+    });
+  }
+
+  /**
+   * Handles all performed push notification actions.
+   * @param action The performed push notification action.
+   */
+  private _actionPerformed(action: ActionPerformed): void {
+    this._ngZone.run(() => {
+      console.log('Notification Action: ', action);
+      this._actions$.next(action);
+    });
+  }
 }

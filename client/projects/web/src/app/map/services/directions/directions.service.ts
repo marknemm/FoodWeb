@@ -181,7 +181,7 @@ export class DirectionsService {
     const mapsEncoder = google.maps.geometry.encoding;
     const directionPolylines: DirectionPolylines = { polylines: [], mapPolylines: [] };
 
-    if (directions.waypointSegments && directions.waypointSegments.length !== 0) {
+    if (directions?.waypointSegments && directions.waypointSegments.length !== 0) {
       directions.waypointSegments.forEach((waypointSeg: WaypointSegment, idx: number) => {
         const path: LatLng[] = (waypointSeg && waypointSeg.encodedPolyline)
           ? mapsEncoder.decodePath(waypointSeg.encodedPolyline)

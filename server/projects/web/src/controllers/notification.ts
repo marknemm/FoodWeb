@@ -3,8 +3,8 @@ import { Request, Response } from 'express';
 import { NotificationEntity } from '~entity';
 import { LastSeenNotificationUpdateRequest, ListResponse, NotificationReadRequest, NotificationUpdateRequest } from '~shared';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
-import { genErrorResponse } from '~web/middlewares/response-error.middleware';
-import { ensureSessionActive } from '~web/middlewares/session.middleware';
+import { genErrorResponse } from '~web/middleware/response-error.middleware';
+import { ensureSessionActive } from '~web/middleware/session.middleware';
 import { readNotifications } from '~web/services/notification/read-notifications';
 import { updateNotification, updateSeenNotifications } from '~web/services/notification/save-notification';
 

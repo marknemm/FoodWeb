@@ -9,6 +9,7 @@ import { SessionService } from '~hybrid/session/services/session/session.service
 import { JSONDateReviver } from '~shared';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 import { MobileDeviceService } from './shared/services/mobile-device/mobile-device.service';
+import { PushNotificationService } from './shared/services/push-notification/push-notification.service';
 
 @Component({
   selector: 'foodweb-hybrid-root',
@@ -25,6 +26,7 @@ export class AppComponent {
     matIconReg: MatIconRegistry,
     mobileDeviceService: MobileDeviceService,
     ngZone: NgZone,
+    pushNotificationService: PushNotificationService,
     router: Router,
   ) {
     matIconReg.registerFontClassAlias('fontawesome', 'fa');
@@ -38,6 +40,7 @@ export class AppComponent {
           setTimeout(() => document.activeElement.scrollIntoView({ block: 'center' }), 20);
         });
       }
+      pushNotificationService.init();
       setTimeout(() => SplashScreen.hide(), 1500);
     }
 

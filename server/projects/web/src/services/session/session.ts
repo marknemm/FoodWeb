@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
 import { getRepository, Repository } from 'typeorm';
-import { AccountEntity, PerpetualSessionEntity } from '~entity';
+import { AccountEntity, MobileDeviceEntity, PerpetualSessionEntity } from '~entity';
 import { ListResponse, LoginRequest, LoginResponse } from '~shared';
 import { checkPasswordMatch } from '~web/helpers/misc/password-match';
 import { FoodWebError } from '~web/helpers/response/foodweb-error';
@@ -21,7 +21,7 @@ export async function login(loginRequest: LoginRequest): Promise<LoginResponse> 
     if (validated) {
       const loginResponse: LoginResponse = { account };
       if (loginRequest.mobileDevice) {
-        await saveMobileDevice(loginRequest.mobileDevice, account);
+        loginResponse.mobileDevice = await saveMobileDevice(loginRequest.mobileDevice, account);
         loginResponse.perpetualSession = await createPerpetualSession(account);
       }
       return loginResponse;
@@ -79,16 +79,30 @@ async function _getAccountEntity(usernameEmail: string): Promise<AccountEntity> 
 /**
  * Performs the login using a given long-lived perpetual session token.
  * @param sessionToken The long-lived perpetual session token.
+ * @param uuid The UUID for the device that the user is using.
  * @return A promise where on success it will provide the Account of the newly logged in user.
  * @throws A FoodWebError with status 401 when the login fails.
  */
-export async function perpetualTokenLogin(sessionToken: string): Promise<LoginResponse> {
+export async function perpetualTokenLogin(sessionToken: string, uuid: string): Promise<LoginResponse> {
   try {
     if (sessionToken) {
       const perpetualSession: PerpetualSessionEntity = await getRepository(PerpetualSessionEntity).findOne({ sessionToken });
       if (perpetualSession) {
         perpetualSession.account.verified = await isAccountVerified(perpetualSession.account);
-        return { account: perpetualSession.account, perpetualSession };
+
+        const loginResponse: LoginResponse = {
+          account: perpetualSession.account,
+          perpetualSession
+        };
+
+        if (uuid) {
+          loginResponse.mobileDevice = await getRepository(MobileDeviceEntity).findOne({
+            uuid,
+            accountId: perpetualSession.account.id
+          });
+        }
+
+        return loginResponse;
       }
     }
     throw new Error('Mobile app session token not found');

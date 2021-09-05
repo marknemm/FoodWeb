@@ -10,7 +10,7 @@ import { SessionService } from '~web/session/services/session/session.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGaurdService implements CanActivate {
+export class AuthGuardService implements CanActivate {
 
   constructor(
     private _alertService: AlertService,

@@ -145,8 +145,7 @@ export class AuthenticationService {
    * @return An observable that emits the user's account if they are (still) logged in, otherwise null.
    */
   refreshSessionStatus(): Observable<Account> {
-    return this._sessionService.loadLocalSession().pipe(
-      switchMap(() => this.checkIfUserLoggedIn()),
+    return this.checkIfUserLoggedIn().pipe(
       map((response: LoginResponse) =>
         (response.account)
           ? this._handleLoginSuccess(response)
@@ -169,7 +168,7 @@ export class AuthenticationService {
   /**
    * Logs the user out as a result of a session refresh (sync with server logged out state),
    * and alerts them of the logout.
-   * @return null, repressenting the new value for the client account session.
+   * @return null, representing the new value for the client account session.
    */
   protected _sessionRefreshLogout(): null {
     if (this._sessionService.account) {

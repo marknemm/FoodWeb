@@ -15,5 +15,10 @@
             "username": "postgres",
             "password": "foodweb"
         }
+    ],
+    "cSpell.words": [
+      "fontawesome",
+      "foodweb",
+      "typeorm"
     ]
 }

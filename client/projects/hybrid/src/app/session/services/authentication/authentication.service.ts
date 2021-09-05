@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { finalize, map, switchMap, take } from 'rxjs/operators';
 import { SessionService } from '~hybrid/session/services/session/session.service';
 import { MobileDeviceService } from '~hybrid/shared/services/mobile-device/mobile-device.service';
 import { Account, AccountHelper, LoginRequest, LoginResponse, MobileDevice } from '~shared';
@@ -14,7 +14,7 @@ import { AuthenticationService as WebAuthenticationService } from '~web/session/
  * which factors a never expiring `perpetualSessionToken` into the authentication
  * process for mobile apps.
  *
- * An `perpetualSessionToken` is used to keep a mobile app logged in even after
+ * A `perpetualSessionToken` is used to keep a mobile app logged in even after
  * its web-based session expires.
  */
 @Injectable({
@@ -36,13 +36,13 @@ export class AuthenticationService extends WebAuthenticationService {
   /**
    * Attempts to log the user in.
    * @param usernameEmail The username or email of the user.
-   * @param password The passwsord of the user.
+   * @param password The password of the user.
    * @param goHomeOnSuccess Whether or not to goto the home page on login success. Defaults to false.
    * @return An observable that emits the user's account when login is successful, and throws error on failure.
    */
   login(usernameEmail: string, password: string, goHomeOnSuccess = false): Observable<Account> {
     const loginRequest: LoginRequest = { usernameEmail, password };
-    return this._mobileDeviceService.getMobileDevice().pipe(
+    return this._mobileDeviceService.mobileDevice$.pipe(
       switchMap((mobileDevice: MobileDevice) => {
         loginRequest.mobileDevice = mobileDevice;
         return super._sendLoginRequest(loginRequest);
@@ -73,32 +73,31 @@ export class AuthenticationService extends WebAuthenticationService {
    * @return An observable that emits the login response from the server login check.
    */
   checkIfUserLoggedIn(): Observable<LoginResponse> {
-    this._loading = true;
-    const params = new HttpParams({
-      fromObject: { perpetualSessionToken: this._sessionService.perpetualSession?.sessionToken }
-    });
-    return this._httpClient.get<LoginResponse>(this.url, { withCredentials: true, params }).pipe(
-      finalize(() => this._loading = false)
+    return this._sessionService.loadLocalSession().pipe(
+      switchMap(() => this._mobileDeviceService.mobileDevice$),
+      switchMap(() => {
+        // Connected to network, so check server for session status (best source of truth).
+        if (this._mobileDeviceService.connected) {
+          this._loading = true;
+          const params = new HttpParams({
+            fromObject: {
+              perpetualSessionToken: this._sessionService.perpetualSession?.sessionToken,
+              uuid: this._mobileDeviceService.mobileDevice.uuid
+            }
+          });
+          return this._httpClient.get<LoginResponse>(this.url, { withCredentials: true, params }).pipe(
+            finalize(() => this._loading = false)
+          );
+        }
+
+        // Not connected to network, so solely rely on local session status for now.
+        return of({
+          account: this._sessionService.account,
+          perpetualSession: this._sessionService.perpetualSession
+        });
+      })
     );
   }
-
-  /**
-   * Attempts to re-establish a session on the server and synchronize the client session with it via perpetual session token.
-   * @param perpetualSession The app's long-lived (perpetual) session.
-   * @return An observable that emits the session account data returned from the server. On failure, null is emitted.
-   */
-  // private _perpetualSessionLogin(perpetualSession: PerpetualSession): Observable<Account> {
-  //   const loginRequest: AppTokenLoginRequest = { perpetualSession };
-  //   return this._httpClient.post<LoginResponse>(`${this.url}/session-token`, loginRequest, { withCredentials: true }).pipe(
-  //     map((response: LoginResponse) =>
-  //       this._handleLoginSuccess(response)
-  //     ),
-  //     catchError((err: HttpErrorResponse) => {
-  //       console.error(err);
-  //       return of(null);
-  //     })
-  //   );
-  // }
 
   /**
    * Logs the user out and returns the user to the login page.
@@ -106,6 +105,5 @@ export class AuthenticationService extends WebAuthenticationService {
   logout(): void {
     this._router.navigate(['/login']);
     super.logout();
-    this._sessionService.deletePerpetualSession();
   }
 }
