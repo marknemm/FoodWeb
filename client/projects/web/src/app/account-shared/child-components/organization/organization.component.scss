@@ -6,8 +6,12 @@
       vertical-align: top;
     }
 
-    .col-sm-12:not(:last-child) {
+    .col-sm-12 {
       margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 }

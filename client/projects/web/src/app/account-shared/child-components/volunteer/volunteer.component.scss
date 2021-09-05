@@ -4,6 +4,10 @@
   .volunteer-display {
     .col-sm-6 {
       margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     .d-inline-block {

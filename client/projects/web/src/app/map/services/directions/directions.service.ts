@@ -1,11 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, Subscriber } from 'rxjs';
+import { from, Observable, of, Subscriber } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Account, DirectionsExtractor, Donation, MapRoute, MapRouteReadRequest, WaypointSegment } from '~shared';
 import { environment } from '~web-env/environment';
 import { Directions, LatLng, LatLngLiteral, MapOptions, Polyline, Waypoint } from '~web/map/interfaces/map';
-import { LocalStorageBucket, LocalStorageCacheService } from '~web/shared/services/local-storage-cache/local-storage-cache.service';
+import { KeyValueStore, KeyValueStoreService } from '~web/shared/services/key-value-store/key-value-store.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +16,15 @@ export class DirectionsService {
   private static readonly DIRECTIONS_CACHE_KEY = 'foodwebDirectionsStore';
 
   readonly url = `${environment.server}/map`;
-  private readonly _directionsCache: LocalStorageBucket<Waypoint[], Directions>;
+  private readonly _directionsCache: KeyValueStore<Waypoint[], Directions>;
   private readonly _googleDirections = new google.maps.DirectionsService();
 
   constructor(
     private _directionsExtractor: DirectionsExtractor,
     private _httpClient: HttpClient,
-    localStorageCacheService: LocalStorageCacheService
+    keyValueStoreService: KeyValueStoreService
   ) {
-    this._directionsCache = localStorageCacheService.getBucket(DirectionsService.DIRECTIONS_CACHE_KEY);
+    this._directionsCache = keyValueStoreService.getStore<Waypoint[], Directions>(DirectionsService.DIRECTIONS_CACHE_KEY);
   }
 
   /**
@@ -116,14 +116,14 @@ export class DirectionsService {
    * @return An observable that emits the generated directions.
    */
   genDirections(route: LatLngLiteral[]): Observable<Directions> {
-    if (this._directionsCache.hasItem(route)) {
-      return of(this._directionsCache.getItem(route));
+    if (this._directionsCache.has(route)) {
+      return from(this._directionsCache.get(route));
     }
 
     return this._queryDirections(route).pipe(
       map((directionsResult: DirectionsResult) => {
         const directions: Directions = this._directionsExtractor.extractDirections(<any>directionsResult);
-        this._directionsCache.addItem(route, directions); // Make sure we cache the result to reduce number of API calls.
+        this._directionsCache.set(route, directions); // Make sure we cache the result to reduce number of API calls.
         return directions;
       })
     );

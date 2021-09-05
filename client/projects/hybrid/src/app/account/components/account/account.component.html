@@ -28,7 +28,9 @@
 
     <div *ngIf="hasAccountOwnership && originalAccount.verified === false" class="account-not-verified">
       <ion-label color="danger">Account Not Verified</ion-label>
-      <ion-button (click)="signupVerificationService.resendVerificationEmail()" fill="clear">Resend Verification Email</ion-button>
+      <ion-button (click)="signupVerificationService.resendVerificationEmail()" fill="clear">
+        Resend Verification Email
+      </ion-button>
     </div>
 
     <div class="row account-section-content">
@@ -42,8 +44,12 @@
           <ion-card-content>
             <foodweb-hybrid-organization formGroupName="organization" [accountType]="accountType"></foodweb-hybrid-organization>
             <ng-container *ngIf="originalAccount">
-              <a *ngIf="!hasAccountOwnership" [routerLink]="['/donation/list']" [queryParams]="seeDonationsLinkParams" class="call-to-action">See Donations</a>
-              <a *ngIf="hasAccountOwnership" [routerLink]="['/donation/list/my']" class="call-to-action">See My Donations</a>
+              <a *ngIf="!hasAccountOwnership" [routerLink]="['/donation/list']" [queryParams]="seeDonationsLinkParams" class="call-to-action">
+                See Donations
+              </a>
+              <a *ngIf="hasAccountOwnership" [routerLink]="['/donation/list/my']" class="call-to-action">
+                See My Donations
+              </a>
             </ng-container>
           </ion-card-content>
         </ion-card>
@@ -56,7 +62,9 @@
           </ion-card-header>
           <ion-card-content>
             <foodweb-hybrid-volunteer formGroupName="volunteer"></foodweb-hybrid-volunteer>
-            <a *ngIf="hasAccountOwnership && originalAccount" [routerLink]="['/delivery/list/my']" class="call-to-action">See My Deliveries</a>
+            <a *ngIf="hasAccountOwnership && originalAccount" [routerLink]="['/delivery/list/my']" class="call-to-action">
+              See My Deliveries
+            </a>
           </ion-card-content>
         </ion-card>
       </div>

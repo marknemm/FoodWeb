@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Keyboard } from '@capacitor/keyboard';
 import { IonInput, IonRouterOutlet } from '@ionic/angular';
 import { UsernameRecoveryService } from '~web/account/services/username-recovery/username-recovery.service';
 import { PasswordResetService } from '~web/password/services/password-reset/password-reset.service';
@@ -31,6 +32,11 @@ export class LoginComponent extends WebLoginComponent {
 
   ionViewWillLeave(): void {
     this._routerOutlet.swipeGesture = true;
+  }
+
+  submit(): void {
+    Keyboard.hide();
+    super.submit();
   }
 
 }

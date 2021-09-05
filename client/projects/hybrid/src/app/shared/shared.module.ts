@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { KeyValueStoreService as WebKeyValueStoreService } from '~web/shared/services/key-value-store/key-value-store.service';
 import { SharedModule as WebSharedModule } from '~web/shared/shared.module';
 import { HeaderComponent } from './child-components/header/header.component';
 import { RequirementsChecklistComponent } from './child-components/requirements-checklist/requirements-checklist.component';
 import { FocusNextDirective } from './directives/focus-next/focus-next.directive';
+import { KeyValueStoreService } from './services/key-value-store/key-value-store.service';
 
 @NgModule({
   declarations: [
@@ -27,4 +29,15 @@ import { FocusNextDirective } from './directives/focus-next/focus-next.directive
     RequirementsChecklistComponent,
   ]
 })
-export class SharedModule {}
+export class SharedModule {
+
+  static forRoot(): ModuleWithProviders<SharedModule> {
+    return {
+      ngModule: SharedModule,
+      providers: [
+        // In base web code, anywhere where KeyValueStoreService is provided, provide Hybrid KeyValueStoreService instead.
+        { provide: WebKeyValueStoreService, useExisting: KeyValueStoreService },
+      ]
+    }
+  }
+}

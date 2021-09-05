@@ -212,10 +212,11 @@ body.dark {
   --ion-toolbar-background: var(--ion-color-step-150);
   --ion-toolbar-color: var(--ion-color-primary);
   --ion-tab-bar-background: var(--ion-color-step-150);
-  --ion-item-background: var(--ion-color-step-75);
-  --ion-card-background: var(--ion-color-step-100);
-  --ion-item-color: var(--ion-text-color);
   --ion-card-color: var(--ion-text-color);
+  --ion-card-background: var(--ion-color-step-100);
+  --ion-list-background: var(--ion-card-background);
+  --ion-item-background: var(--ion-list-background);
+  --ion-item-color: var(--ion-text-color);
 
   --ion-border-color: var(--ion-color-step-300);
   --ion-placeholder-color: #8b8b8b;

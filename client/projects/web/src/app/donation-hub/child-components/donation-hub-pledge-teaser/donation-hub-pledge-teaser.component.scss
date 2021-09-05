@@ -1,7 +1,13 @@
-.mat-card-content .donation-hub-pledge-display {
+@import "variables.scss";
+
+.donation-hub-pledge-display {
   margin-bottom: -16px;
 
   &> div {
     margin-bottom: 12px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }

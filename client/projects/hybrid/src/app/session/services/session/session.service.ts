@@ -19,7 +19,7 @@ export class SessionService extends WebSessionService {
    * Gets saved perpetual session data saved locally on the client device.
    */
   get perpetualSession(): PerpetualSession {
-    return this.get('perpetualSession');
+    return this.sessionStore.snapshot.perpetualSession;
   }
 
   /**
@@ -27,13 +27,13 @@ export class SessionService extends WebSessionService {
    * @param perpetualSession The perpetual session to save.
    */
   savePerpetualSession(perpetualSession: PerpetualSession): void {
-    this.save('perpetualSession', perpetualSession);
+    this.sessionStore.set('perpetualSession', perpetualSession);
   }
 
   /**
    * Deletes perpetual session data held on the client device.
    */
   deletePerpetualSession(): void {
-    this.delete('perpetualSession');
+    this.sessionStore.remove('perpetualSession');
   }
 }

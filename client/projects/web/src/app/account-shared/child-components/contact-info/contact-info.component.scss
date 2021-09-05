@@ -4,6 +4,10 @@
   .contact-info-display {
     .col-sm-12, .col-sm-6, .col-sm-5, .col-sm-7 {
       margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     .d-inline-block {

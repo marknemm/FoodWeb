@@ -23,7 +23,7 @@
     </div>
     <mat-action-list>
       <foodweb-notification
-        *ngFor="let notification of notificationService.notificationsPreview"
+        *ngFor="let notification of previewNotificastions"
         [notification]="notification"
         [max2Lines]="true"
         (flag)="notificationService.toggleNotificationFlaggedState(notification)"

@@ -1,19 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
-import { NotificationService } from '~web/notification/services/notification/notification.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ListResponse } from '~shared';
+import { NotificationService, Notification } from '~web/notification/services/notification/notification.service';
 
 @Component({
   selector: 'foodweb-notifications-menu',
   templateUrl: './notifications-menu.component.html',
   styleUrls: ['./notifications-menu.component.scss'],
 })
-export class NotificationsMenuComponent implements OnInit {
+export class NotificationsMenuComponent implements OnInit, OnDestroy {
 
   readonly faCog = faCog;
+
+  private _destroy$ = new Subject();
+  private _previewNotifications: Notification[] = [];
 
   constructor(
     public notificationService: NotificationService
   ) {}
 
-  ngOnInit() {}
+  get previewNotificastions(): Notification[] {
+    return this._previewNotifications;
+  }
+
+  ngOnInit(): void {
+    this.notificationService.listenNewNotifications().pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(() =>
+      this.notificationService.getNotifications({ limit: 10 }, false).subscribe(
+        (response: ListResponse<Notification>) => this._previewNotifications = response.list
+      )
+    );
+  }
+
+  ngOnDestroy(): void {
+    this._destroy$.next(); // Cleanup RxJS subscription(s).
+  }
 }

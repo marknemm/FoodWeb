@@ -6,12 +6,12 @@
     </ion-button>
   </div>
 
-  <ul class="time-range-list">
-    <li *ngFor="let timeRangeForm of formArray.controls; let idx = index" class="time-range-item">
+  <ion-list class="time-range-list">
+    <ion-item *ngFor="let timeRangeForm of formArray.controls; let idx = index" class="time-range-item" lines="none">
       <foodweb-hybrid-time-range [editable]="editable"></foodweb-hybrid-time-range>
       <ion-button *ngIf="formArray.canRemoveAt(idx)" (click)="formArray.removeAt(idx)" class="remove-time-range" type="button" fill="clear" shape="round">
         <ion-icon name="close"></ion-icon>
       </ion-button>
-    </li>
-  </ul>
+    </ion-item>
+  </ion-list>
 </div>
