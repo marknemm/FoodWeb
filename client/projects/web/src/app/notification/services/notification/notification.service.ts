@@ -91,10 +91,10 @@ export class NotificationService {
     }
 
     if (canCache) {
-      notifications = notifications.slice(0, Math.min(cacheableNotificationCount, notifications.length));
-      const cachedNotifications: Notification[] = await this._sessionService.sessionStore.get('notifications') ?? [];
-      cachedNotifications.splice(insertStartIdx, 0, ...notifications);
-      this._sessionService.sessionStore.set('notifications', cachedNotifications);
+      // notifications = notifications.slice(0, Math.min(cacheableNotificationCount, notifications.length));
+      // const cachedNotifications: Notification[] = await this._sessionService.sessionStore.get('notifications') ?? [];
+      // cachedNotifications.splice(insertStartIdx, 0, ...notifications);
+      // this._sessionService.sessionStore.set('notifications', cachedNotifications);
     }
   }
 
