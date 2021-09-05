@@ -1,7 +1,7 @@
 import express = require('express');
 import { Request, Response, Router } from 'express';
 import { AccountEntity, MobileDeviceEntity, PerpetualSessionEntity } from '~entity';
-import { ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
+import { ImpersonateRequest, LoginRequest, LoginResponse, PushRegistrationRequest } from '~shared';
 import { genErrorResponse } from '~web/middleware/response-error.middleware';
 import { ensureSessionActive } from '~web/middleware/session.middleware';
 import { savePushRegistration } from '~web/services/mobile-device/save-mobile-device';
@@ -44,9 +44,9 @@ export function handlePostSession(req: Request, res: Response) {
 router.put('/push-registration', ensureSessionActive, handlePutPushRegistration)
 export function handlePutPushRegistration(req: Request, res: Response) {
   const mobileDevice: MobileDeviceEntity = req.session.mobileDevice;
-  const pushRegistrationId: string = req.body;
+  const pushRegRequest: PushRegistrationRequest = req.body;
 
-  savePushRegistration(pushRegistrationId, mobileDevice)
+  savePushRegistration(pushRegRequest.pushRegistrationId, mobileDevice)
     .then((mobileDevice: MobileDeviceEntity) => {
       req.session.mobileDevice = mobileDevice;
       res.send(mobileDevice);

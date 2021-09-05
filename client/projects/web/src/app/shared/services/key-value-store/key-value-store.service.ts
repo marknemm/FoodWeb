@@ -113,7 +113,7 @@ export class KeyValueStore<K = any, V = any> {
   /**
    * Determines if an entry with a given key exists.
    * @param key The key of the entry to find.
-   * @return A promsie that resolves to true if the entry was found in the store, false if not.
+   * @return A promise that resolves to true if the entry was found in the store, false if not.
    */
   async has(key: K): Promise<boolean> {
     return (await this.get(key)) != null;

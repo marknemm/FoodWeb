@@ -1,8 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { Device, DeviceInfo } from '@capacitor/device';
+import { Keyboard } from '@capacitor/keyboard';
 import { ConnectionStatus, Network } from '@capacitor/network';
-import { Observable, ReplaySubject } from 'rxjs';
+import { from, Observable, of, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MobileDevice } from '~shared';
 export { ConnectionStatus, DeviceInfo };
@@ -101,6 +102,22 @@ export class MobileDeviceService {
   }
 
   /**
+   * Hides the device soft keyboard if one exists.
+   * @returns An observable that emits once the operation completes (will auto-complete upon emit).
+   */
+  hideKeyboard(): Observable<void> {
+    return (!this.web ? from(Keyboard.hide()) : of(null));
+  }
+
+  /**
+   * Shows the device soft keyboard if one exists.
+   * @returns An observable that emits once the operation completes (will auto-complete upon emit).
+   */
+  showKeyboard(): Observable<void> {
+    return (!this.web ? from(Keyboard.show()) : of(null));
+  }
+
+  /**
    * Initializes the mobile device data, including push notification registration.
    */
    private _initMobileDeviceData(): void {
@@ -110,7 +127,7 @@ export class MobileDeviceService {
 
       this._ngZone.run(() => { // Must run capacitor plugin callback in NgZone for change detection!
         this._networkStatus$.next(this._networkStatus); // Emit init network status.
-        this._mobileDevice$.next({
+        this._mobileDevice = {
           uuid,
           isVirtual: device.isVirtual,
           manufacturer: device.manufacturer,
@@ -119,7 +136,8 @@ export class MobileDeviceService {
           operatingSystem: device.operatingSystem,
           osVersion: device.osVersion,
           platform: device.platform,
-        });
+        };
+        this._mobileDevice$.next(this._mobileDevice);
       });
     });
   }

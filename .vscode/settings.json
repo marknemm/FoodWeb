@@ -17,8 +17,10 @@
         }
     ],
     "cSpell.words": [
+      "cacheable",
       "fontawesome",
       "foodweb",
+      "lscache",
       "typeorm"
     ]
 }

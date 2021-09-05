@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, takeUntil, tap } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { LastSeenNotificationUpdateRequest, ListResponse, Notification, NotificationReadRequest, NotificationsAvailableEvent, NotificationUpdateRequest, ServerSentEventType } from '~shared';
 import { environment } from '~web-env/environment';
 import { ServerSentEventSourceService } from '~web/notification/services/server-sent-event-source/server-sent-event-source.service';
@@ -19,7 +19,6 @@ export class NotificationService {
   readonly defaultReadLimit = 25;
   readonly url = `${environment.server}/notification`;
 
-  private _notificationsPreview: Notification[] = [];
   private _unseenNotificationsCount = 0;
 
   constructor(
@@ -45,7 +44,7 @@ export class NotificationService {
   }
 
   /**
-   * Whether or not unseen notifiations exist.
+   * Whether or not unseen notifications exist.
    */
   get hasUnseenNotifications(): boolean {
     return (this._unseenNotificationsCount > 0);
@@ -72,30 +71,26 @@ export class NotificationService {
    * @returns An observable that emits a notifications list response on successful retrieval.
    */
   getNotifications(request: NotificationReadRequest, showPageProgressOnLoad = true): Observable<ListResponse<Notification>> {
+    // Set defaults for pagination.
     request.page = (request.page >= 1 ? request.page : 1);
     request.limit = (request.limit >= 0 ? request.limit : this.defaultReadLimit);
+
+    // Check if unseen notifications count should be reset (getting fresh first page with no special filters).
+    request.resetUnseenNotifications = (request.page === 1);
+    for (const key in request) {
+      request.resetUnseenNotifications = request.resetUnseenNotifications
+        && (key === 'resetUnseenNotifications' || key === 'maxId' || key === 'latestTimestamp' || key === 'page' || key === 'limit');
+      if (!request.resetUnseenNotifications) break;
+    }
+    if (request.resetUnseenNotifications) {
+      this._unseenNotificationsCount = 0;
+    }
+
+    // Send GET request for notifications.
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Notification>>(this.url, { params, withCredentials: true }).pipe(
-      tap((response: ListResponse<Notification>) => this._cacheNotificationsPage(response.list, request)),
       this._httpResponseService.handleHttpResponse({ showPageProgressOnLoad })
     );
-  }
-
-  private async _cacheNotificationsPage(notifications: Notification[], request: NotificationReadRequest): Promise<void> {
-    const insertStartIdx = ((request.page - 1) * request.limit);
-    const cacheableNotificationCount = (600 - insertStartIdx);
-    let canCache = (cacheableNotificationCount > 0);
-    for (const key in request) {
-      canCache = canCache && (key === 'maxId' || key === 'latestTimestamp' || key === 'page' || key === 'limit');
-      if (!canCache) break;
-    }
-
-    if (canCache) {
-      // notifications = notifications.slice(0, Math.min(cacheableNotificationCount, notifications.length));
-      // const cachedNotifications: Notification[] = await this._sessionService.sessionStore.get('notifications') ?? [];
-      // cachedNotifications.splice(insertStartIdx, 0, ...notifications);
-      // this._sessionService.sessionStore.set('notifications', cachedNotifications);
-    }
   }
 
   /**
@@ -112,7 +107,9 @@ export class NotificationService {
       ServerSentEventType.NotificationsAvailable
     ).pipe(
       takeUntil(this._authService.logout$), // Whenever logout occurs, stop listening for new notifications.
-      map((notificationsAvailableEvent) => this._unseenNotificationsCount = notificationsAvailableEvent.unseenNotificationsCount)
+      map((notificationsAvailableEvent) =>
+        this._unseenNotificationsCount = notificationsAvailableEvent.unseenNotificationsCount
+      )
     );
   }
 
@@ -129,16 +126,21 @@ export class NotificationService {
 
   /**
    * Updates the seen notifications by resetting the count of unseen notifications.
+   * @param lastSeenNotificationId The ID of the last seen notification.
+   * @param resetImmediately Set to true if the unseenNotificationsCount should be set to 0 immediately instead
+   * of waiting for the updated count from the server.
    */
-  updateSeenNotifications(): void {
+  refreshUnseenNotifications(lastSeenNotificationId: number, resetImmediately = false): void {
     if (this._unseenNotificationsCount > 0) {
-      this._unseenNotificationsCount = 0;
-      const lastSeenNotificationUpdateReq: LastSeenNotificationUpdateRequest = {
-        lastSeenNotificationId: this._notificationsPreview[0].id
-      };
-      this._httpClient.put(`${this.url}/last-seen-notification`, lastSeenNotificationUpdateReq, { withCredentials: true }).pipe(
-        this._httpResponseService.handleHttpResponse({ pageProgressBlocking: false })
-      ).subscribe();
+      if (resetImmediately) {
+        this._unseenNotificationsCount = 0;
+      }
+      const request: LastSeenNotificationUpdateRequest = { lastSeenNotificationId };
+      this._httpClient.put<number>(`${this.url}/last-seen-notification`, request, { withCredentials: true }).pipe(
+        this._httpResponseService.handleHttpResponse<number>({ pageProgressBlocking: false })
+      ).subscribe(
+        (unseenNotificationsCount: number) => this._unseenNotificationsCount = unseenNotificationsCount
+      );
     }
   }
 

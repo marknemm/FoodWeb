@@ -21,7 +21,7 @@ export class NotificationsMenuComponent implements OnInit, OnDestroy {
     public notificationService: NotificationService
   ) {}
 
-  get previewNotificastions(): Notification[] {
+  get previewNotifications(): Notification[] {
     return this._previewNotifications;
   }
 
@@ -33,6 +33,12 @@ export class NotificationsMenuComponent implements OnInit, OnDestroy {
         (response: ListResponse<Notification>) => this._previewNotifications = response.list
       )
     );
+  }
+
+  refreshUnseenNotifications(): void {
+    if (this._previewNotifications?.length) {
+      this.notificationService.refreshUnseenNotifications(this._previewNotifications[0].id, true);
+    }
   }
 
   ngOnDestroy(): void {

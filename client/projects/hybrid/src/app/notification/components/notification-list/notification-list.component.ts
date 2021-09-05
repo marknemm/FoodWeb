@@ -1,7 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ListResponse, Notification, NotificationReadRequest } from '~shared';
 import { NotificationListComponent as WebNotificationListComponent } from '~web/notification/components/notification-list/notification-list.component';
+import { NotificationService } from '~web/notification/services/notification/notification.service';
+import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
+import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
   selector: 'foodweb-hybrid-notification-list',
@@ -9,6 +15,27 @@ import { NotificationListComponent as WebNotificationListComponent } from '~web/
   styleUrls: ['./notification-list.component.scss']
 })
 export class NotificationListComponent extends WebNotificationListComponent {
+
+  constructor(
+    public notificationService: NotificationService,
+    public pageTitleService: PageTitleService,
+    protected _activatedRoute: ActivatedRoute,
+    protected _urlQueryService: UrlQueryService,
+    private _authenticationService: AuthenticationService,
+  ) {
+    super(notificationService, pageTitleService, _activatedRoute, _urlQueryService);
+    // Clear notifications on logout, since this component will not leave view or re-initialize upon leaving page.
+    this._authenticationService.logout$.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(() => this._notifications = []);
+  }
+
+  ionViewWillEnter(): void {
+    // If no notifications are present, then refresh upon (re)opening this page.
+    if (!this._notifications?.length) {
+      this.refresh().subscribe();
+    }
+  }
 
   /**
    * Handles an ionInfinite event by loading the next segment of Notification List items.

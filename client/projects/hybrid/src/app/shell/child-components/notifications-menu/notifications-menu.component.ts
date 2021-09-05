@@ -20,7 +20,7 @@ export class NotificationsMenuComponent implements OnInit {
   ngOnInit() {}
 
   present(event: Event): void {
-    this.notificationService.updateSeenNotifications();
+    // this.notificationService.refreshUnseenNotifications();
     this._popoverService.present(NotificationsMenuComponent, event, { cssClass: 'full-width' });
   }
 

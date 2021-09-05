@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Keyboard } from '@capacitor/keyboard';
 import { IonInput, IonRouterOutlet } from '@ionic/angular';
+import { MobileDeviceService } from '~hybrid/shared/services/mobile-device/mobile-device.service';
 import { UsernameRecoveryService } from '~web/account/services/username-recovery/username-recovery.service';
 import { PasswordResetService } from '~web/password/services/password-reset/password-reset.service';
 import { LoginComponent as WebLoginComponent } from '~web/session/components/login/login.component';
@@ -21,6 +21,7 @@ export class LoginComponent extends WebLoginComponent {
     protected _authService: AuthenticationService,
     protected _passwordResetService: PasswordResetService,
     protected _usernameRecoveryService: UsernameRecoveryService,
+    private _mobileDevice: MobileDeviceService,
     private _routerOutlet: IonRouterOutlet,
   ) {
     super(_activatedRoute, _authService, _passwordResetService, _usernameRecoveryService);
@@ -35,7 +36,7 @@ export class LoginComponent extends WebLoginComponent {
   }
 
   submit(): void {
-    Keyboard.hide();
+    this._mobileDevice.hideKeyboard();
     super.submit();
   }
 

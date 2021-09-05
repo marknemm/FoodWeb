@@ -30,7 +30,12 @@ export class KeyValueStoreService extends WebKeyValueStoreService {
   protected async _load(key: string): Promise<V> {
     await Storage.configure({ group: this.bucketId });
     const entry: GetResult = await Storage.get({ key });
-    return (entry ? JSON.parse(entry.value) : null);
+    if (typeof entry?.value === 'string') {
+      return (entry.value !== 'undefined')
+        ? JSON.parse(entry.value)
+        : undefined; // JSON.parse throws error when given 'undefined' string.
+    }
+    return <V>entry.value;
   }
 
   protected async _remove(key: string): Promise<void> {

@@ -1,7 +1,7 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { NotificationEntity } from '~entity';
-import { LastSeenNotificationUpdateRequest, ListResponse, NotificationReadRequest, NotificationUpdateRequest } from '~shared';
+import { LastSeenNotificationUpdateRequest, ListResponse, Notification, NotificationReadRequest, NotificationUpdateRequest } from '~shared';
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { genErrorResponse } from '~web/middleware/response-error.middleware';
 import { ensureSessionActive } from '~web/middleware/session.middleware';
@@ -14,8 +14,22 @@ router.get('/', ensureSessionActive, handleGetNotifications);
 export function handleGetNotifications(req: Request, res: Response) {
   const readRequest: NotificationReadRequest = req.query;
   readNotifications(readRequest, req.session.account)
-    .then((listRes: ListResponse<NotificationEntity>) => res.send(listRes))
-    .catch(genErrorResponse.bind(this, res));
+    .then((listRes: ListResponse<NotificationEntity>) => {
+      res.send(listRes);
+      return listRes.list;
+    })
+    .catch(genErrorResponse.bind(this, res))
+    // Update the last seen notification ID if configured with GET request.
+    .then((notifications: Notification[]) =>
+      (readRequest.resetUnseenNotifications && notifications?.length)
+        ? updateSeenNotifications(req.session.account, notifications[0].id)
+        : req.session.account.lastSeenNotificationId
+    )
+    .then((lastSeenNotificationId: number) => {
+      console.log('Reset last seen notification ID: ', lastSeenNotificationId);
+      req.session.account.lastSeenNotificationId = lastSeenNotificationId;
+    })
+    .catch(console.error);
 }
 
 router.put('/last-seen-notification', ensureSessionActive, handlePutLastSeenNotification);

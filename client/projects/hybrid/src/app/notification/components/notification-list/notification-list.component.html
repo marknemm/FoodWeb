@@ -12,6 +12,10 @@
   (refresh)="handleRefresh($event)"
   class="notifications">
 
+  <ion-item (click)="refresh().subscribe()" [ngClass]="{ show: this.notificationService.hasUnseenNotifications }" class="reload-prompt" color="tertiary">
+    <ion-label>New Notifications Available: Tap to Refresh</ion-label>
+  </ion-item>
+
   <ion-virtual-scroll #virtualScroll [items]="notifications" approxItemHeight="80px" class="borders-vertical">
     <foodweb-hybrid-notification
       *virtualItem="let item"

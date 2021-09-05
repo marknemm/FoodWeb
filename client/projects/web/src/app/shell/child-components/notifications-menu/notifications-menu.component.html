@@ -6,7 +6,7 @@
   matBadgeDescription="{{ notificationService.unseenNotificationsCount }} unread"
   matTooltip="Notifications"
 >
-  <button mat-icon-button class="notifications-button" aria-label="Notifications menu" [matMenuTriggerFor]="notificationsMenu" (menuOpened)="notificationService.updateSeenNotifications()">
+  <button mat-icon-button class="notifications-button" aria-label="Notifications menu" [matMenuTriggerFor]="notificationsMenu" (menuOpened)="refreshUnseenNotifications()">
     <mat-icon>notifications</mat-icon>
   </button>
 </span>
@@ -23,7 +23,7 @@
     </div>
     <mat-action-list>
       <foodweb-notification
-        *ngFor="let notification of previewNotificastions"
+        *ngFor="let notification of previewNotifications"
         [notification]="notification"
         [max2Lines]="true"
         (flag)="notificationService.toggleNotificationFlaggedState(notification)"

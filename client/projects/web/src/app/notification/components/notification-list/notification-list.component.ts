@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ListResponse, Notification, NotificationReadRequest } from '~shared';
 import { NotificationService } from '~web/notification/services/notification/notification.service';
@@ -12,9 +12,10 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
   templateUrl: './notification-list.component.html',
   styleUrls: ['./notification-list.component.scss']
 })
-export class NotificationListComponent implements OnInit {
+export class NotificationListComponent implements OnInit, OnDestroy {
 
   protected _activeFilters: NotificationReadRequest = { page: 1 };
+  protected _destroy$ = new Subject();
   protected _notifications: Notification[] = [];
   protected _totalCount = 0;
 
@@ -52,7 +53,7 @@ export class NotificationListComponent implements OnInit {
 
   /**
    * Refreshes the Notification List items.
-   * @param request The optional Read Request, contianing filter/sorting parameters.
+   * @param request The optional Read Request, containing filter/sorting parameters.
    * If not given, will use the last recorded Read Request parameters.
    * @returns An observable that emits the loaded `Notification` items.
    */
@@ -67,6 +68,10 @@ export class NotificationListComponent implements OnInit {
         return this._notifications;
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this._destroy$.next();
   }
 
 }

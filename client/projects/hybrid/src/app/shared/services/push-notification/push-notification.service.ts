@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
 import { ActionPerformed, PermissionStatus, PushNotifications, PushNotificationSchema, Token } from '@capacitor/push-notifications';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { environment } from '~hybrid-env/environment';
 import { AuthenticationService } from '~hybrid/session/services/authentication/authentication.service';
 import { SessionService } from '~hybrid/session/services/session/session.service';
 import { MobileDeviceService } from '~hybrid/shared/services/mobile-device/mobile-device.service';
-import { MobileDevice } from '~shared';
+import { MobileDevice, PushRegistrationRequest } from '~shared';
 
 /**
  * Initializes and maintains Android/iOS client push notification functionality.
@@ -27,6 +28,7 @@ export class PushNotificationService {
     private _httpClient: HttpClient,
     private _mobileDeviceService: MobileDeviceService,
     private _ngZone: NgZone,
+    private _router: Router,
     private _sessionService: SessionService,
   ) {}
 
@@ -111,7 +113,8 @@ export class PushNotificationService {
   private _saveRegistration(token: Token): void {
     this._ngZone.run(() => {
       this._mobileDeviceService.mobileDevice.pushRegistrationId = token.value;
-      this._httpClient.post<MobileDevice>(this.url, token.value, { withCredentials: true }).subscribe(() =>
+      const request: PushRegistrationRequest = { pushRegistrationId: token.value };
+      this._httpClient.put<MobileDevice>(this.url, request, { withCredentials: true }).subscribe(() =>
         () => this._registered$.next(this.pushRegistrationId)
       );
     });
@@ -134,7 +137,12 @@ export class PushNotificationService {
    */
   private _actionPerformed(action: ActionPerformed): void {
     this._ngZone.run(() => {
-      console.log('Notification Action: ', action);
+      if (action.actionId === 'tap') {
+        const notificationLink: string = action.notification?.data?.notificationLink;
+        if (notificationLink) {
+          this._router.navigate([notificationLink]);
+        }
+      }
       this._actions$.next(action);
     });
   }
