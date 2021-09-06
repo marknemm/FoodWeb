@@ -238,6 +238,14 @@ a.no-hover {
   padding-left: 0;
   padding-inline-start: 0;
   list-style: none;
+
+  .call-to-action {
+    padding-left: 0;
+
+    &:before {
+      content: none;
+    }
+  }
 }
 
 .call-to-action-list > *,
@@ -253,8 +261,7 @@ a.no-hover {
     content: '\203A';
     font-size: 28px;
     line-height: 0;
-    font-weight: bold;
-    top: 9px;
+    top: 7px;
     left: 0;
   }
 }

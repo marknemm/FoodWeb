@@ -40,6 +40,14 @@ h2.section-title,
   margin-right: auto;
 }
 
+.call-to-action-list > *,
+.call-to-action {
+  &:before {
+    font-weight: bold;
+    top: 9px;
+  }
+}
+
 .end-list-message {
   margin: 8px 0;
   font-size: 14px;
