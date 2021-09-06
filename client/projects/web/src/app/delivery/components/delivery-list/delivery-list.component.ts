@@ -73,7 +73,7 @@ export class DeliveryListComponent implements OnInit {
 
   /**
    * Refreshes the Delivery List items.
-   * @param request The optional Read Request, contianing filter/sorting parameters.
+   * @param request The optional Read Request, containing filter/sorting parameters.
    * If not given, will use the last recorded Read Request parameters.
    * @returns An observable that emits the loaded `Donation` items.
    */

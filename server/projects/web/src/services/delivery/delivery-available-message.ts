@@ -1,9 +1,9 @@
-import { EntityManager, getConnection, QueryBuilder, SelectQueryBuilder } from 'typeorm';
+import { EntityManager, getConnection, SelectQueryBuilder } from 'typeorm';
 import { AccountEntity, DeliveryReqHistoryEntity, DonationEntity } from '~entity';
 import { AccountReadRequest, AccountType, DonationHelper, ListResponse, NotificationType, OperationHours, OperationHoursHelper } from '~shared';
 import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
 import { getNotificationClient, NotificationClient } from '~web/helpers/messaging/notification';
-import { queryAccounts, readAccounts } from '~web/services/account/read-accounts';
+import { queryAccounts } from '~web/services/account/read-accounts';
 
 const _donationHelper = new DonationHelper();
 const _operationHoursHelper = new OperationHoursHelper();
@@ -19,7 +19,10 @@ export async function sendDeliveryAvailableMessages(donation: DonationEntity): P
   let numQueried: number;
 
   do {
-    const operationHours: OperationHours = _operationHoursHelper.genOperationHoursFilter(donation);
+    const operationHours: OperationHours = _operationHoursHelper.dateTimeRangeToOperationHours(
+      { startDateTime: donation.pickupWindowStart, endDateTime: donation.pickupWindowEnd },
+      donation.donorAccount.contactInfo.timezone
+    );
     const readRequest: AccountReadRequest = {
       page: page++,
       limit,

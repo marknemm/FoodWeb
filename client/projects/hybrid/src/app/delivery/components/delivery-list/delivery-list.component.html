@@ -12,6 +12,7 @@
 <ion-content foodwebHybridListPage
   [disabled]="loading"
   [page]="filtersForm.page"
+  [pageSize]="filtersForm.limit"
   (loadMore)="handleLoadMore($event)"
   (refresh)="handleRefresh($event)"
   class="deliveries">
@@ -32,7 +33,7 @@
     Could not find any deliveries.
   </div>
 
-  <ion-virtual-scroll *ngIf="donations?.length" [items]="donations" approxItemHeight="400px">
+  <ion-virtual-scroll [items]="donations" approxItemHeight="400px">
     <foodweb-hybrid-delivery-teaser
       *virtualItem="let item"
       [donation]="item">

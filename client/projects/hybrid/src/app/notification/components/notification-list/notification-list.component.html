@@ -16,7 +16,7 @@
     <ion-label>New Notifications Available: Tap to Refresh</ion-label>
   </ion-item>
 
-  <ion-virtual-scroll #virtualScroll [items]="notifications" approxItemHeight="80px" class="borders-vertical">
+  <ion-virtual-scroll [items]="notifications" approxItemHeight="80px" class="borders-vertical">
     <foodweb-hybrid-notification
       *virtualItem="let item"
       [notification]="item"

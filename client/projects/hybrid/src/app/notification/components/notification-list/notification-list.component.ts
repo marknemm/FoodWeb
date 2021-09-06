@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { IonContent } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ListResponse, Notification, NotificationReadRequest } from '~shared';
@@ -15,6 +16,8 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
   styleUrls: ['./notification-list.component.scss']
 })
 export class NotificationListComponent extends WebNotificationListComponent {
+
+  @ViewChild(IonContent, { static: true }) ionContent: IonContent;
 
   constructor(
     public notificationService: NotificationService,
@@ -66,7 +69,7 @@ export class NotificationListComponent extends WebNotificationListComponent {
 
   refresh(request: NotificationReadRequest = this.activeFilters): Observable<Notification[]> {
     this.activeFilters.page = 1;
-    console.log('Refreshing!');
+    this.ionContent.scrollToTop();
     return super.refresh(request);
   }
 }

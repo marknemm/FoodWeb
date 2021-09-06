@@ -22,7 +22,7 @@
     Could Not Find Any Accounts.
   </div>
 
-  <ion-virtual-scroll *ngIf="accounts?.length" [items]="accounts" approxItemHeight="300px">
+  <ion-virtual-scroll [items]="accounts" approxItemHeight="300px">
     <foodweb-hybrid-account-teaser
       *virtualItem="let item"
       [account]="item"

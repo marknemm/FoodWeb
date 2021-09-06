@@ -19,7 +19,7 @@
     Could Not Find Any Donation Hub <span style="display: inline-block;">Drop-Off</span> Locations.
   </div>
 
-  <ion-virtual-scroll *ngIf="donationHubs?.length" [items]="donationHubs" approxItemHeight="300px">
+  <ion-virtual-scroll [items]="donationHubs" approxItemHeight="300px">
     <foodweb-hybrid-donation-hub-teaser
       *virtualItem="let item"
       [donationHub]="item">

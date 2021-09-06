@@ -22,6 +22,7 @@ import { takeUntil } from 'rxjs/operators';
 export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy {
 
   @Input() disabled = false;
+  @Input() endListMessage = 'End of list - Return to top';
   @Input() loadMoreDisabled = false;
   @Input() omitInfiniteScroll = false;
   @Input() omitRefresher = false;
@@ -37,6 +38,7 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
   @Output() refresh = new EventEmitter<any>();
 
   private _destroy$ = new Subject();
+  private _endListMessageElem: HTMLDivElement;
   private _host: HTMLElement;
   private _itemCount = 0;
 
@@ -52,21 +54,26 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
     setTimeout(() => { // setTimeout: Ensure ionInfiniteScroll & ionRefresher are initialized after content init.
       if (changes.page && this.page <= 1 && this.ionInfiniteScroll) {
         this._itemCount = 0;
-        this.ionInfiniteScroll.disabled = (this.loadMoreDisabled || this.disabled);
+        this._refreshIonInfiniteDisabled();
       }
 
       if ((changes.loadMoreDisabled || changes.disabled) && this.ionInfiniteScroll) {
-        this.ionInfiniteScroll.disabled = this.loadMoreDisabled || this.disabled || (this._itemCount % this.pageSize !== 0);
+        this._refreshIonInfiniteDisabled();
       }
 
       if ((changes.refreshDisabled || changes.disabled) && this.ionRefresher) {
         this.ionRefresher.disabled = (this.refreshDisabled || this.disabled);
       }
+
+      if (changes.endListMessage) {
+        this._refreshEndListMessageDisplay();
+      }
     });
   }
 
   ngAfterContentInit(): void {
-    // Create any missing infinite scroll or refresher content children.
+    // Create any missing infinite scroll or refresher content children. Also, create end of list message element.
+    this._createEndListMessageElem();
     if (!this.ionInfiniteScroll && !this.omitInfiniteScroll) {
       this._createIonInfiniteScroll();
     }
@@ -112,6 +119,15 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
     this.ionRefresher = ionRefresherRef.instance;
   }
 
+  private _createEndListMessageElem(): void {
+    this._endListMessageElem = document.createElement('div');
+    this._endListMessageElem.innerText = this.endListMessage;
+    this._endListMessageElem.addEventListener('click', () => document.querySelector('ion-content').scrollToTop(400));
+    this._endListMessageElem.classList.add('standalone-statement', 'end-list-message');
+    this._endListMessageElem.style.display = 'none'; // Only display once end of list is reached when infinite scrolling enabled.
+    this._host.appendChild(this._endListMessageElem);
+  }
+
   private _overloadIonInfiniteEvent(): void {
     this.ionInfiniteScroll.ionInfinite.pipe(
       takeUntil(this._destroy$)
@@ -128,9 +144,7 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
     ).subscribe((event: any) => {
       this.page = 1;
       this._itemCount = 0;
-      if (this.ionInfiniteScroll) {
-        this.ionInfiniteScroll.disabled = (this.loadMoreDisabled || this.disabled);
-      }
+      this._refreshIonInfiniteDisabled();
       event = this._overloadAllIonEvents(event);
       this.refresh.emit(event);
     });
@@ -151,16 +165,32 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
 
   private _onIonEventComplete(): void {
     if (this.ionVirtualScroll) {
-      this.ionVirtualScroll.checkEnd();
-      setTimeout(() => { // setTimeout: Ensure all updates have occurred to ion-virtual-scroll first.
-        if (this.ionInfiniteScroll) {
-          this.ionInfiniteScroll.disabled = (this.loadMoreDisabled || this.disabled)
-            || (this._itemCount === this.ionVirtualScroll.items?.length)
-            || (this._itemCount % this.pageSize !== 0);
-        }
-        this._itemCount = this.ionVirtualScroll.items?.length;
-      });
+      this.ionVirtualScroll.checkEnd(); // Smoothly renders any elements added in place to the virtual scroll list.
+      this._refreshIonInfiniteDisabled(true); // true - check that item count has updated when loading more via infinite scroll.
     }
+  }
+
+  private _refreshIonInfiniteDisabled(ensureItemCountUpdt = false): void {
+    setTimeout(() => { // setTimeout: Ensure all updates have occurred to ion-virtual-scroll first.
+      const prevItemCount = this._itemCount;
+      this._itemCount = this.ionVirtualScroll?.items?.length;
+      if (this.ionInfiniteScroll) {
+        this.ionInfiniteScroll.disabled = (
+             this.loadMoreDisabled
+          || this.disabled
+          || this._itemCount % this.pageSize !== 0
+          || (ensureItemCountUpdt && this._itemCount !== prevItemCount)
+        );
+      }
+      this._refreshEndListMessageDisplay(); // Always update end of list display message based on updated ion infinite disabled state.
+    });
+  }
+
+  private _refreshEndListMessageDisplay(): void {
+    this._endListMessageElem.innerText = this.endListMessage;
+    this._endListMessageElem.style.display = (this.ionInfiniteScroll?.disabled && this.endListMessage)
+      ? 'block'
+      : 'none';
   }
 
 }

@@ -32,7 +32,7 @@
     Could not find any donations.
   </div>
 
-  <ion-virtual-scroll *ngIf="donations?.length" [items]="donations" approxItemHeight="400px">
+  <ion-virtual-scroll [items]="donations" approxItemHeight="400px">
     <foodweb-hybrid-donation-teaser
       *virtualItem="let item"
       [donation]="item">

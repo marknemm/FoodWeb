@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Donation, DonationReadRequest, ListResponse } from '~shared';
+import { Donation, ListResponse } from '~shared';
 import { DeliveryListComponent as WebDeliveryListComponent } from '~web/delivery/components/delivery-list/delivery-list.component';
 
 @Component({
@@ -35,10 +34,5 @@ export class DeliveryListComponent extends WebDeliveryListComponent {
    */
   handleRefresh(event: any): void {
     this.refresh().subscribe(() => event.target.complete());
-  }
-
-  refresh(request?: DonationReadRequest): Observable<Donation[]> {
-    this.filtersForm.page = 1;
-    return super.refresh(request);
   }
 }

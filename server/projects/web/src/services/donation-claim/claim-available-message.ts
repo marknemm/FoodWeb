@@ -19,7 +19,10 @@ export async function sendClaimAvailableMessages(donation: DonationEntity): Prom
   let numQueried: number;
 
   do {
-    const operationHours: OperationHours = _operationHoursHelper.genOperationHoursFilter(donation);
+    const operationHours: OperationHours = _operationHoursHelper.dateTimeRangeToOperationHours(
+      { startDateTime: donation.pickupWindowStart, endDateTime: donation.pickupWindowEnd },
+      donation.donorAccount.contactInfo.timezone
+    );
     const readRequest: AccountReadRequest = {
       page: page++,
       limit,

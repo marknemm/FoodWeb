@@ -19,7 +19,7 @@
     Could Not Find Any Donation Pledges.
   </div>
 
-  <ion-virtual-scroll *ngIf="pledges?.length" [items]="pledges" approxItemHeight="350px">
+  <ion-virtual-scroll [items]="pledges" approxItemHeight="350px">
     <foodweb-hybrid-donation-hub-pledge-teaser
       *virtualItem="let item"
       [pledge]="item">

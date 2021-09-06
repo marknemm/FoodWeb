@@ -3,9 +3,11 @@ import { TFormGroup } from '~web/forms';
 export { DonationReadRequest };
 
 /**
- * A donation filters form that is used to genereate filter query parameters for a list of donations/deliveries.
+ * A donation filters form that is used to generate filter query parameters for a list of donations/deliveries.
  */
 export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
+
+  static readonly DEFAULT_LIMIT = 10;
 
   constructor(filters?: Partial<DonationReadRequest>) {
     super({
@@ -20,7 +22,7 @@ export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
       donorOrganizationName: undefined,
       expired: undefined,
       fullTextQuery: undefined,
-      limit: 10,
+      limit: DonationFiltersForm.DEFAULT_LIMIT,
       myDonations: undefined,
       page: 1,
       receiverAccountId: undefined,
@@ -50,6 +52,10 @@ export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
 
   set page(page: number) {
     this.get('page').setValue(page);
+  }
+
+  get limit(): number {
+    return this.get('limit').value;
   }
 
   /**

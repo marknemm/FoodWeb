@@ -128,6 +128,7 @@ export enum NotificationType {
   DeliveryStateUndo = AuditEventType.DeliveryStateUndo,
   DeliveryReminder = ('Delivery Reminder'),
   DeliveryReassigned = ('Delivery Reassigned'),
+  DonationHubAvailable = ('Donation Hub Available'),
   DonationHubReminder = ('Donation Hub Reminder'),
   DonationPledgeReminder = ('Donation Pledge Reminder')
 }
