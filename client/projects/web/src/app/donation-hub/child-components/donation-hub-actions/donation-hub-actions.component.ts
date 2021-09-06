@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DonationHub, DonationHubPledge } from '~shared';
 
 @Component({
@@ -6,7 +6,7 @@ import { DonationHub, DonationHubPledge } from '~shared';
   templateUrl: './donation-hub-actions.component.html',
   styleUrls: ['./donation-hub-actions.component.scss']
 })
-export class DonationHubActionsComponent implements OnInit {
+export class DonationHubActionsComponent {
 
   @Input() canDonate = false;
   @Input() canModify = false;
@@ -16,8 +16,4 @@ export class DonationHubActionsComponent implements OnInit {
   @Input() myPledge: DonationHubPledge;
 
   @Output() delete = new EventEmitter<void>();
-
-  constructor() {}
-
-  ngOnInit() {}
 }

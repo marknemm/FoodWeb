@@ -1,0 +1,124 @@
+<ion-buttons *ngIf="header">
+
+  <ng-container *ngIf="donationActionsService.canAccessAction('Edit')">
+    <ion-button
+      [disabled]="loading"
+      foodwebConfirmButton
+      fill="clear"
+      class="delete-button"
+      color="danger"
+      confirmMessage="Are you sure you want to permanently delete your donation?"
+      confirmTitle="Confirm Delete"
+      (clickConfirm)="action.emit('Delete')">
+      <ion-icon name="trash"></ion-icon>
+    </ion-button>
+
+    <ion-button
+      [disabled]="loading"
+      [routerLink]="['/', 'donation', donation?.id, 'edit']"
+      [state]="{ donation: donation }"
+      class="edit-button"
+      fill="clear">
+      <ion-icon name="create"></ion-icon>
+    </ion-button>
+  </ng-container>
+
+  <!-- <ion-button
+    *ngIf="canDonate"
+    [disabled]="loading"
+    [routerLink]="['/', 'donation-hub', donationHub?.id, 'pledge', 'create']"
+    [state]="{ donationHub: donationHub }"
+    class="donate-button"
+    fill="clear">
+    <ion-label>Donate</ion-label>
+  </ion-button>
+
+  <ion-button
+    *ngIf="canViewDonation"
+    [disabled]="loading"
+    [routerLink]="['/', 'donation-hub', 'pledge', myPledge?.id]"
+    [state]="{ donationHubPledge: myPledge }"
+    class="view-donation-button"
+    fill="clear">
+    <ion-label>My Donation</ion-label>
+  </ion-button> -->
+
+</ion-buttons>
+
+<div *ngIf="!header" class="action-footer">
+  <div class="action-row" *ngIf="donationActionsService.canAccessAction('Edit')">
+    <hr>
+    <div *ngIf="!hideActionHints" class="action-hint">
+      <strong>Tip</strong>: Feel free to delete or edit your donation any time before its delivery starts.
+    </div>
+    <ion-button
+      *ngIf="donationActionsService.canAccessAction('Delete')"
+      color="danger"
+      class="delete-button"
+      (clickConfirm)="action.emit('Delete')"
+      foodwebConfirmButton
+      confirmTitle="Confirm Delete"
+      confirmMessage="Are you sure you want to permanently delete the donation?">
+      Delete
+    </ion-button>
+    <ion-button
+      [routerLink]="['/', 'donation', donation.id, 'edit']"
+      [state]="{ donation: donation }" class="edit-button">
+      Edit
+    </ion-button>
+  </div>
+
+  <div class="action-row" *ngIf="donationActionsService.canAccessAction('Claim')">
+    <hr>
+    <div *ngIf="!hideActionHints" class="action-hint">
+      <strong>Tip</strong>: Browse this donation's details below, and feel free to claim it if you wish to receive it.
+    </div>
+    <ion-button (click)="action.emit('Claim')">
+      Claim Donation
+    </ion-button>
+  </div>
+
+  <div class="action-row" *ngIf="donationActionsService.canAccessAction('Unclaim')">
+    <hr>
+    <div *ngIf="!hideActionHints" class="action-hint">
+      <strong>Tip</strong>: Feel free to unclaim this donation any time before a volunteer starts the delivery.
+    </div>
+    <ion-button foodwebConfirmButton color="danger"
+      (clickConfirm)="action.emit('Unclaim')" confirmTitle="Confirm Unclaim" confirmMessage="Are you sure you want to unclaim the donation?">
+      Unclaim Donation
+    </ion-button>
+  </div>
+
+  <div class="action-row" *ngIf="donationActionsService.canAccessAction('ScheduleDelivery')">
+    <hr>
+    <div *ngIf="!hideActionHints" class="action-hint">
+      <strong>Tip</strong>: Browse this delivery's details below, and feel free to schedule it if it works well for you.
+    </div>
+    <ion-button (click)="action.emit('ScheduleDelivery')">
+      Schedule Delivery
+    </ion-button>
+  </div>
+
+  <div class="action-row" *ngIf="canAccessDeliveryStatusActions">
+    <hr>
+    <div *ngIf="deliveryActionRequiredTxt && !hideActionHints" class="action-hint">
+      <strong>Action Required</strong>: {{ deliveryActionRequiredTxt }}
+    </div>
+
+    <ion-button
+      *ngIf="donationActionsService.canAccessAction('UndoDeliveryState')"
+      foodwebConfirmButton
+      color="danger"
+      confirmTitle="Confirm {{ deliveryRevertTxt }}"
+      [confirmMessage]="confirmDeliveryUndoMessage"
+      (clickConfirm)="action.emit('UndoDeliveryState')">
+      {{ deliveryRevertTxt }}
+    </ion-button>
+
+    <ion-button
+      *ngIf="donationActionsService.canAccessAction('AdvanceDeliveryState')"
+      (click)="action.emit('AdvanceDeliveryState')">
+      {{ deliveryAdvanceTxt }}
+    </ion-button>
+  </div>
+</div>

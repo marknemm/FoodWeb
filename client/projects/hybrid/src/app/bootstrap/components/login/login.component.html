@@ -1,0 +1,68 @@
+<ion-content>
+  <form #loginFormDirective="ngForm" [formGroup]="loginForm" (submit)="submit()" class="login-container">
+    <img src="./assets/IconImgMd.png" *ngIf="!insideDialog" class="foodweb-img">
+
+    <div *ngIf="!messageSent">
+      <ion-list>
+        <ion-item>
+          <ion-label color="secondary">{{ usernameEmailPlaceholder }}</ion-label>
+          <ion-input type="email" inputmode="email" formControlName="usernameEmail" [clearOnEdit]="true" [focusNext]="password" required></ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="isLogin" [ngClass]="{ 'with-err-msg': loginErr }" class="password-item">
+          <ion-label color="secondary">Password</ion-label>
+          <ion-input #password type="password" formControlName="password" (keyup.enter)="submit()"></ion-input>
+          <div class="ion-form-error" *ngIf="loginErr">
+            {{ loginErr }}
+          </div>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div *ngIf="resetMessageSent">
+      <p>A password reset message has been sent to your email.</p>
+      <p>Follow the link within the email to reset your password.</p>
+    </div>
+
+    <div *ngIf="recoveryMessageSent">
+      <p>Please check your email for a username recovery message.</p>
+      <p>
+        If you did not receive an email, then ensure that the given email is correct:<br>
+        <strong>{{ loginForm.get('usernameEmail').value }}</strong>
+      </p>
+    </div>
+
+    <div class="form-buttons">
+      <div *ngIf="isLogin">
+        <ion-button type="submit" color="primary" [disabled]="loginForm.invalid" expand="block">Login</ion-button>
+        <div class="recovery-buttons">
+          <ion-button (click)="forgotPassword()" color="secondary" fill="clear" expand="block">Forgot Password</ion-button>
+        </div>
+      </div>
+
+      <div *ngIf="!isLogin && !messageSent">
+        <ion-button type="submit" color="primary" expand="block" [disabled]="loginForm.invalid">Send Email</ion-button>
+        <ion-button (click)="returnToLogin()" type="button" color="secondary" fill="clear" expand="block">Login</ion-button>
+      </div>
+
+      <div *ngIf="messageSent">
+        <ion-button type="submit" color="secondary" fill="clear">Resend Email</ion-button>
+        <ion-button type="button" color="primary" mat-dialog-close>Ok</ion-button>
+      </div>
+    </div>
+  </form>
+
+  <foodweb-progress-indicator [trigger]="loading" [blocking]="true" [diameter]="150"></foodweb-progress-indicator>
+</ion-content>
+
+<ion-footer [translucent]="false">
+
+  <ion-button [routerLink]="['/', 'signup']" color="tertiary" fill="clear" size="small">
+    New Account
+  </ion-button>
+
+  <ion-button [routerLink]="['/', 'home']" color="tertiary" fill="clear" size="small">
+    Skip Login
+  </ion-button>
+
+</ion-footer>

@@ -1,117 +1,44 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarDismiss } from '@angular/material/snack-bar';
-import { NEVER, Observable, ObservableInput } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AlertDialogComponent } from '~web/alert/components/alert-dialog/alert-dialog.component';
 import { AlertSnackBarComponent } from '~web/alert/components/alert-snack-bar/alert-snack-bar.component';
-import { Alert, AlertAction, AlertConfig, AlertLevel } from '~web/alert/interfaces/alert';
+import { Alert, AlertDisplayer } from '~web/alert/interfaces/alert';
 export * from '~web/alert/interfaces/alert';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlertService {
+export class AlertService extends AlertDisplayer {
 
   constructor(
     protected _matDialog: MatDialog,
     protected _matSnackBar: MatSnackBar
-  ) {}
+  ) { super(); }
 
-  /**
-   * Displays a given simple message in either a non-blocking snackbar or blocking modal dialog.
-   * @param message The message content that is to be displayed.
-   * @param level The level of the message to display (determines theming of blocking dialog or non-blocking snackbar).
-   * @param blocking Whether or not the message should be blocking (in a modal dialog). Defaults to false for non-blocking.
-   */
-  displayMessage(message: string, level: AlertLevel, blocking = false): void {
-    this.displayAlert({ message, level, blocking});
-  }
-
-  /**
-   * Displays an alert message extracted from a given error in either a non-blocking snackbar or blocking modal dialog.
-   * @param error The error containing the alert message that should be displayed.
-   * @param level The level of the message to display (determines theming of blocking dialog or non-blocking snackbar).
-   * Defaults to `danger`.
-   * @param blocking Whether or not the message should be blocking (in a modal dialog). Defaults to false for non-blocking.
-   * @return `NEVER` in case this is the callback to a `catchError` rxjs pipe operator.
-   */
-  displayError(error: Error | HttpErrorResponse, level: AlertLevel = 'danger', blocking = false): ObservableInput<any> {
-    this.displayAlert({ message: this._extractErrorMessage(error), level, blocking });
-    return NEVER;
-  }
-
-  /**
-   * Displays a given alert message in either a non-blocking snackbar or blocking modal dialog.
-   * @param alert The alert message that is to be displayed.
-   * @param config The alert display configuration.
-   * @return An observable that emits the selected alert action when the dialog closes. Emits null if no action was selected.
-   */
-  displayAlert<T>(alert: Alert<T>, config: AlertConfig<Alert<T>> = {}): Observable<T> {
-    // First set any missing Alert Response data.
-    this._preprocessAlertActions(alert);
+  displayAlert(alert: Alert): Observable<boolean> {
     return alert.blocking ?
-      this._displayBlockingAlert<T>(alert, config) :
-      this._displayNonBlockingAlert<T>(alert, config);
+      this._displayBlockingAlert(alert) :
+      this._displayNonBlockingAlert(alert);
   }
 
-  /**
-   * Extracts the Alert's message from a given error.
-   * @param error The error from which to extract the alert message.
-   * @return The extracted alert message.
-   */
-  private _extractErrorMessage(error: Error | HttpErrorResponse): string {
-    if (error instanceof Error) {
-      return (error.message ? error.message : 'An unexpected error has occured');
-    }
-    // Else dealing with HttpErrorResponse from here on..
-    if (error.error?.message) {
-      return error.error.message;
-    }
-    if (error.message) {
-      return error.message;
-    }
-    if (error.statusText) {
-      return error.statusText;
-    }
-    return 'An unexpected error has occured';
-  }
-
-  protected _preprocessAlertActions(alert: Alert): void {
-    if (!alert.actions) {
-      alert.actions = [];
-    }
-
-    for (const response of alert.actions) {
-      response.buttonType = (response.buttonType ? response.buttonType : 'mat-button');
-      response.text = (response.text ? response.text : response.value.toString());
-      response.color = (response.color ? response.color : `alert-${alert.level}`);
-    }
-
-    alert.primaryAction = alert.actions.filter(
-      (response: AlertAction) => response.focusPrimary
-    )[0];
-    if (!alert.primaryAction) {
-      alert.primaryAction = alert.actions[0];
-    }
-  }
-
-  protected _displayBlockingAlert<T>(alert: Alert<T>, config: MatDialogConfig<Alert<T>>): Observable<T> {
+  protected _displayBlockingAlert(alert: Alert): Observable<boolean> {
+    const config: MatDialogConfig<Alert> = {};
     config.data = alert;
     config.role = this._deriveDialogRole(config, alert);
-    config.panelClass = this._deriveAlertClass(config, alert);
+    config.panelClass = this._deriveAlertClass(alert);
     return this._matDialog.open(AlertDialogComponent, config).afterClosed();
   }
 
-  protected _displayNonBlockingAlert<T>(alert: Alert<T>, config: MatSnackBarConfig<Alert<T>>): Observable<T> {
+  protected _displayNonBlockingAlert(alert: Alert): Observable<boolean> {
+    const config: MatSnackBarConfig<Alert> = {};
     config.data = alert;
-    config.panelClass = this._deriveAlertClass(config, alert);
+    config.panelClass = this._deriveAlertClass(alert);
     config.announcementMessage = this._deriveSnackBarAnnouncement(config, alert);
     return this._matSnackBar.openFromComponent(AlertSnackBarComponent, config).afterDismissed().pipe(
-      map((dismiss: MatSnackBarDismiss) =>
-        (dismiss.dismissedByAction ? alert.primaryAction?.value : null)
-      )
+      map((dismiss: MatSnackBarDismiss) => dismiss.dismissedByAction)
     );
   }
 
@@ -122,14 +49,14 @@ export class AlertService {
     return (['warn', 'danger'].indexOf(alert.level) >= 0) ? 'alertdialog' : 'dialog';
   }
 
-  protected _deriveAlertClass(config: AlertConfig, alert: Alert): string[] {
-    let dialogClass: string[] = [];
-    if (typeof config.panelClass === 'string') {
-      dialogClass = config.panelClass.split(' ');
-    } else if (config.panelClass != null) {
-      dialogClass = config.panelClass;
+  protected _deriveAlertClass(alert: Alert): string[] {
+    let cssClassList: string[] = [];
+    if (typeof alert.cssClass === 'string') {
+      cssClassList = alert.cssClass.split(' ');
+    } else if (alert.cssClass != null) {
+      cssClassList = alert.cssClass;
     }
-    return dialogClass.concat(`mat-alert-${alert.level}`);
+    return cssClassList.concat(`mat-alert-${alert.level}`);
   }
 
   protected _deriveSnackBarAnnouncement(config: MatSnackBarConfig, alert: Alert): string {

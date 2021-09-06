@@ -1,7 +1,7 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { GeneralStats } from '~shared';
-import { genErrorResponse } from '~web/middlewares/response-error.middleware';
+import { genErrorResponse } from '~web/middleware/response-error.middleware';
 import { readGeneralStats } from '~web/services/heuristics/read-general-stats';
 
 export const router = express.Router();

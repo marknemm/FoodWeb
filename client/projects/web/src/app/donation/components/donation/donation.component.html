@@ -1,0 +1,51 @@
+<div class="donation page">
+  <div *ngIf="!donationNotFound; else notFoundTmpl" class="page-title">
+    {{ pageTitleService.title }}
+  </div>
+
+  <ng-template #notFoundTmpl>
+    <div class="not-found">
+      Donation not found
+    </div>
+  </ng-template>
+
+  <ng-container *ngIf="donation">
+
+    <foodweb-donation-workflow
+      [donation]="donation"
+      [myAccount]="sessionService.account"
+      (action)="onDonationAction($event)"
+    ></foodweb-donation-workflow>
+
+    <div class="row">
+      <div class="donation-info-container col-12">
+        <foodweb-primary-donation-info [donation]="donation" [myDonation]="myDonation"></foodweb-primary-donation-info>
+      </div>
+    </div>
+
+    <hr class="offset-top">
+
+    <div class="row">
+      <div class="donor-info-container" [ngClass]="{
+        'col-lg-6': !!donation.claim,
+        'col-lg-12': !donation.claim
+      }">
+        <foodweb-account-teaser [account]="donation.donorAccount" customTitle="Donor">
+          <div class="donation-submitter">
+            <div class="inline-label">Donation Submitter:</div>
+            <div class="d-inline-block">{{ donation.donorFirstName }} {{ donation.donorLastName }}</div>
+          </div>
+        </foodweb-account-teaser>
+      </div>
+
+      <div *ngIf="donation.claim" class="receiver-info-container col-lg-6">
+        <foodweb-account-teaser [account]="donation.claim.receiverAccount" customTitle="Receiver"></foodweb-account-teaser>
+      </div>
+
+      <div *ngIf="donation.claim?.delivery" class="deliverer-info-container col-lg-6">
+        <foodweb-account-teaser [account]="donation.claim.delivery.volunteerAccount" customTitle="Deliverer" [hideAddress]="true"></foodweb-account-teaser>
+      </div>
+    </div>
+
+  </ng-container>
+</div>

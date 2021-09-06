@@ -1,5 +1,4 @@
 version: '2'
-
 services:
 
   foodweb-client-base:
@@ -131,5 +130,6 @@ networks:
     driver: bridge
 
 volumes:
+
   pgdata:
     external: false

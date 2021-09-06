@@ -1,0 +1,141 @@
+@import "variables.scss";
+
+ion-card {
+  margin: 0 14px 25px;
+
+  ion-card-header,
+  ion-card-title,
+  ion-card-content {
+    position: relative;
+  }
+
+  ion-card-header {
+    position      : relative;
+    padding-inline: 14px;
+
+    .ion-card-header-text {
+      margin-top: -3px;
+
+      .ion-card-subtitle:not(:first-child) {
+        margin-top   : -12px;
+        margin-bottom: 10px;
+      }
+
+      @media only screen and (max-width: $mat-mobile) {
+        margin-top: -2px;
+      }
+    }
+
+    ion-avatar:first-child {
+      position: absolute;
+      width: 40px;
+
+      + ion-card-title {
+        &,
+        + ion-card-subtitle {
+          margin-left: 50px;
+        }
+      }
+    }
+  }
+
+  ion-card-title {
+    border-top-left-radius : inherit;
+    border-top-right-radius: inherit;
+    color                  : var(--ion-color-secondary);
+
+    ion-icon:first-child {
+      margin-right  : 6px;
+      vertical-align: -2px;
+    }
+
+    .mat-toolbar:first-child {
+      margin         : -16px 0px 0px -16px;
+      max-height     : 50px;
+      width          : calc(100% + 32px);
+      justify-content: center;
+      border-radius  : inherit;
+    }
+
+    @media only screen and (max-width: $sm) {
+      font-size: 18px;
+    }
+
+    @media only screen and (max-width: $mat-mobile) {
+      font-size: 16px;
+    }
+  }
+
+  ion-card-subtitle {
+    text-transform: none;
+  }
+
+  ion-card-content {
+
+    &,
+    &.card-content-ios {
+      padding-inline-start: 14px;
+      padding-inline-end  : 14px;
+
+      p {
+        margin-bottom: 10px;
+      }
+    }
+
+    +.ion-card-actions {
+      margin-top: -8px;
+    }
+
+    @media only screen and (max-width: $mat-mobile) {
+      font-size: 13px;
+    }
+
+    .actions {
+      margin-top: 20px;
+
+      ion-button {
+        height: 36px;
+      }
+    }
+  }
+
+  &.selectable-card:hover {
+    text-decoration: none;
+    box-shadow     : 0px 3px 2px -1px rgba(0, 0, 0, 0.2),
+      0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  }
+
+  @media only screen and (max-width: $mat-mobile) {
+    margin-top   : 0;
+    margin-left  : 0;
+    margin-right : 0;
+    border-radius: 0;
+
+    form > &:not(.content-card),
+    &.form-card {
+      ion-card-header,
+      ion-card-content {
+        padding-inline-start: var(--mobile-side-padding);
+        padding-inline-end  : var(--mobile-side-padding);
+      }
+
+      ion-card-content {
+        ion-item:not(.item-label-floating),
+        .mat-form-field {
+          margin-left: calc(var(--mobile-side-padding) * -1);
+          margin-right: calc(var(--mobile-side-padding) * -1);
+          width: calc(100% + (var(--mobile-side-padding) * 2));
+        }
+
+        ion-checkbox {
+          margin-left: var(--mobile-side-padding);
+        }
+
+        .mat-form-field input {
+          padding-left: var(--mobile-side-padding);
+        }
+      }
+    }
+  }
+}

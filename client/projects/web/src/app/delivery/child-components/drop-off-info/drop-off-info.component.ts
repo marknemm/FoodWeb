@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Donation } from '~shared';
 
 @Component({
@@ -6,12 +6,8 @@ import { Donation } from '~shared';
   templateUrl: './drop-off-info.component.html',
   styleUrls: ['./drop-off-info.component.scss'],
 })
-export class DropOffInfoComponent implements OnInit {
+export class DropOffInfoComponent {
 
   @Input() donation: Donation;
-
-  constructor() {}
-
-  ngOnInit() {}
 
 }

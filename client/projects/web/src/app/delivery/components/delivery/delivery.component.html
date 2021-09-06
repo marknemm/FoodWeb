@@ -1,0 +1,76 @@
+<div class="delivery page">
+  <div *ngIf="!deliveryNotFound; else notFoundTmpl" class="page-title">
+    {{ pageTitleService.title }}
+  </div>
+
+  <ng-template #notFoundTmpl>
+    <div class="not-found">
+      Delivery not found
+    </div>
+  </ng-template>
+
+  <ng-container *ngIf="donation">
+
+    <foodweb-donation-workflow
+      [donation]="donation"
+      [myAccount]="sessionService.account"
+      (action)="onDeliveryAction($event)">
+    </foodweb-donation-workflow>
+
+    <div *ngIf="!myDelivery" class="row">
+      <div class="donation-description-container col-12">
+        <foodweb-delivery-donation-info [donation]="donation"></foodweb-delivery-donation-info>
+      </div>
+    </div>
+
+    <mat-card *ngIf="donation.claim" class="delivery-map-card">
+      <mat-card-content>
+        <foodweb-map [donation]="donation"></foodweb-map>
+      </mat-card-content>
+    </mat-card>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-md-6 col-12">
+        <div class="pickup-info-container">
+          <foodweb-pickup-info [donation]="donation"></foodweb-pickup-info>
+        </div>
+
+        <div class="donor-info-container">
+          <foodweb-account-teaser [account]="donation.donorAccount" customTitle="Donor">
+            <div class="donation-submitter">
+              <div class="inline-label">Donation Submitter:</div>
+              <div class="d-inline-block">{{ donation.donorFirstName }} {{ donation.donorLastName }}</div>
+            </div>
+          </foodweb-account-teaser>
+        </div>
+      </div>
+
+      <hr class="offset-top col-12 d-md-none d-lg-none d-xl-none">
+
+      <div class="col-md-6 col-12">
+        <div *ngIf="donation.claim" class="drop-off-info-container">
+          <foodweb-drop-off-info [donation]="donation"></foodweb-drop-off-info>
+        </div>
+
+        <div *ngIf="donation.claim" class="receiver-info-container">
+          <foodweb-account-teaser [account]="donation.claim.receiverAccount" customTitle="Receiver"></foodweb-account-teaser>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="myDelivery || donation.claim?.delivery">
+      <hr class="offset-top col-12">
+      <div class="row">
+        <div *ngIf="myDelivery" class="col-md-6 donation-description-container">
+          <foodweb-delivery-donation-info [donation]="donation"></foodweb-delivery-donation-info>
+        </div>
+        <div *ngIf="donation.claim?.delivery" class="col-md-6 volunteer-info-container">
+          <foodweb-account-teaser [account]="donation.claim.delivery.volunteerAccount" customTitle="volunteer"></foodweb-account-teaser>
+        </div>
+      </div>
+    </ng-container>
+
+  </ng-container>
+</div>

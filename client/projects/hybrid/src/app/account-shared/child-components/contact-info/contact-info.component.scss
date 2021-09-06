@@ -1,0 +1,7 @@
+@import "../../../../../../web/src/app/account-shared/child-components/contact-info/contact-info.component.scss";
+
+.row {
+  :last-child {
+    margin-bottom: 0;
+  }
+}

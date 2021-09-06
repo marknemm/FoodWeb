@@ -1,0 +1,26 @@
+<ion-card class="drop-off-info">
+  <ion-card-header>
+    <ion-card-title>
+      <ion-label>Drop-Off Info</ion-label>
+    </ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <div>
+      <div class="inline-label">Time Window:</div>
+      <div>
+        <foodweb-hybrid-date-time-range
+          class="d-inline-block"
+          [startDateTime]="donationHub.dropOffWindowStart"
+          [endDateTime]="donationHub.dropOffWindowEnd"
+          [boldTime]="true">
+        </foodweb-hybrid-date-time-range>
+      </div>
+    </div>
+
+    <div>
+      <div class="inline-label">Instructions:</div>
+      <div>{{ donationHub.dropOffInstructions }}</div>
+    </div>
+  </ion-card-content>
+</ion-card>

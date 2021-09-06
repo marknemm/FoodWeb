@@ -1,0 +1,54 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="/donation-hub/list">
+    <ion-label>Donation Hub</ion-label>
+    <foodweb-hybrid-donation-hub-actions
+      [canDonate]="canDonate"
+      [canModify]="canModify"
+      [canViewDonation]="canViewPledge"
+      [donationHub]="donationHub"
+      [loading]="loadingActions"
+      [myPledge]="myPledge"
+      slot="end"
+      (delete)="deleteDonationHub()">
+    </foodweb-hybrid-donation-hub-actions>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content class="donation-hub-details">
+  <ng-container *ngIf="donationHub">
+
+    <p *ngIf="canModify" class="standalone-statement">
+      After the drop-off window, take all donations to the <strong>Good Shepherd House</strong>. It is located by turning left after entering St. Luke’s parking lot, turning left through a side road, and finally taking a quick left.
+      Drop off the sandwiches on the porch, and then call <strong>Gino</strong> at <strong><a href="tel:716-830-1413">(716) 830-1413</a></strong>.
+    </p>
+
+    <div class="row">
+      <div class="donation-hub-recipient col-md-6">
+        <foodweb-hybrid-account-teaser [account]="donationHub.volunteerAccount" customTitle="Hub Recipient"></foodweb-hybrid-account-teaser>
+      </div>
+
+      <div *ngIf="donationHub.receiverAccount" class="charity-recipient col-md-6">
+        <foodweb-hybrid-account-teaser [account]="donationHub.receiverAccount" customTitle="Charity Recipient"></foodweb-hybrid-account-teaser>
+      </div>
+
+      <div class="drop-off-info col-md-6">
+        <foodweb-hybrid-donation-hub-drop-off-info [donationHub]="donationHub"></foodweb-hybrid-donation-hub-drop-off-info>
+      </div>
+    </div>
+
+    <mat-expansion-panel class="donation-pledges-expansion-panel" (opened)="onDonationPledgesOpened()">
+      <mat-expansion-panel-header>Donation Pledges</mat-expansion-panel-header>
+      <foodweb-hybrid-donation-hub-pledge-mini-list
+        [loading]="loadingPledges"
+        [pledges]="pledges"
+        [selection]="true"
+        (select)="onDonationHubPledgeSelect($event)">
+      </foodweb-hybrid-donation-hub-pledge-mini-list>
+    </mat-expansion-panel>
+
+  </ng-container>
+
+  <div *ngIf="donationHubNotFound" class="not-found">
+    Donation Hub not found
+  </div>
+</ion-content>

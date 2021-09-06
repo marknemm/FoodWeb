@@ -1,7 +1,7 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { MapRouteEntity } from '~entity';
-import { genErrorResponse } from '~web/middlewares/response-error.middleware';
+import { genErrorResponse } from '~web/middleware/response-error.middleware';
 import { genMapRoute } from '~web/services/map/read-map-routes';
 import { MapRouteReadRequest } from '~shared';
 

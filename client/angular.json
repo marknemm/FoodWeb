@@ -199,7 +199,7 @@
       "projectType": "application",
       "root": "projects/admin",
       "sourceRoot": "projects/admin/src",
-      "prefix": "admin",
+      "prefix": "foodweb-admin",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -332,7 +332,7 @@
       "projectType": "application",
       "root": "projects/hybrid",
       "sourceRoot": "projects/hybrid/src",
-      "prefix": "hybrid",
+      "prefix": "foodweb-hybrid",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -352,14 +352,15 @@
               },
               {
                 "glob": "**/*.svg",
-                "input": "node_modules/hybridons/dist/hybridons/svg",
+                "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
               }
             ],
             "styles": [
               "projects/web/src/styles/styles.scss",
               "projects/hybrid/src/styles/hybrid-styles.scss",
-              "./node_modules/material-icons-font/material-icons-font.css"
+              "./node_modules/material-icons-font/material-icons-font.css",
+              "./node_modules/@ionic/core/css/ionic.bundle.css"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -407,15 +408,15 @@
                 }
               ]
             },
-            "web": {
+            "emu": {
               "fileReplacements": [
                 {
                   "replace": "projects/hybrid/src/environments/environment.ts",
-                  "with": "projects/hybrid/src/environments/environment.web.ts"
+                  "with": "projects/hybrid/src/environments/environment.emu.ts"
                 },
                 {
                   "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/hybrid/src/environments/environment.web.ts"
+                  "with": "projects/hybrid/src/environments/environment.emu.ts"
                 }
               ]
             },
@@ -442,8 +443,8 @@
             "production": {
               "browserTarget": "hybrid:build:production"
             },
-            "web": {
-              "browserTarget": "hybrid:build:web"
+            "emu": {
+              "browserTarget": "hybrid:build:emu"
             },
             "device": {
               "browserTarget": "hybrid:build:device"

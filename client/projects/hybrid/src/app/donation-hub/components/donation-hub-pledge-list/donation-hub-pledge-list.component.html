@@ -1,0 +1,29 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>{{ pageTitle }}</ion-label>
+    <ion-buttons *ngIf="myPledges" slot="end">
+      <ion-button [routerLink]="['/', 'donation-hub', 'list']" fill="clear">
+        <ion-icon name="add-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content foodwebHybridListPage
+  [disabled]="loading"
+  [page]="activeFilters.page"
+  (loadMore)="handleLoadMore($event)"
+  (refresh)="handleRefresh($event)">
+
+  <div *ngIf="noneFound" class="standalone-statement">
+    Could Not Find Any Donation Pledges.
+  </div>
+
+  <ion-virtual-scroll [items]="pledges" approxItemHeight="350px">
+    <foodweb-hybrid-donation-hub-pledge-teaser
+      *virtualItem="let item"
+      [pledge]="item">
+    </foodweb-hybrid-donation-hub-pledge-teaser>
+  </ion-virtual-scroll>
+
+</ion-content>

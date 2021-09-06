@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AlertAction, AlertService } from '~web/alert/services/alert/alert.service';
+import { AlertService } from '~web/alert/services/alert/alert.service';
 import { ConfirmDialog } from '~web/shared/interfaces/confirm-dialog';
 
 @Injectable({
@@ -20,24 +20,15 @@ export class ConfirmDialogService implements ConfirmDialog {
    * @param cancelTxt An optional cancel button text.
    * @return An observable that resolves to the confirm dialog result; true for confirm, false for cancel.
    */
-  displayConfirmDialog(message: string, title?: string, confirmTxt?: string, cancelTxt?: string): Observable<boolean> {
-    const cancel: AlertAction<boolean> = {
-      color: 'warn',
-      text: cancelTxt ? cancelTxt : 'Cancel',
-      value: false,
-    };
-    const confirm: AlertAction<boolean> = {
-      focusPrimary: true,
-      text: confirmTxt ? confirmTxt : 'Confirm',
-      value: true,
-    };
-
+  displayConfirmDialog(message: string, title?: string, confirmTxt = 'Confirm', cancelTxt = 'Cancel'): Observable<boolean> {
     return this._alertService.displayAlert({
-      message,
-      title,
       level: 'info',
-      actions: [cancel, confirm],
+      message,
       blocking: true,
-    }, { disableClose: true });
+      cancelButton: cancelTxt,
+      confirmButton: confirmTxt,
+      disableBackdropClose: true,
+      title,
+    });
   }
 }

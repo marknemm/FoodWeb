@@ -2,7 +2,7 @@ import express = require('express');
 import { Request, Response } from 'express';
 import { Account, ServerSentEventType } from '~shared';
 import { getSSEClient, SSEClient } from '~web/helpers/messaging/sse';
-import { ensureSessionActive } from '~web/middlewares/session.middleware';
+import { ensureSessionActive } from '~web/middleware/session.middleware';
 import { readUnseenNotificationsCount } from '~web/services/notification/read-notifications';
 
 const sseClient: SSEClient = getSSEClient();

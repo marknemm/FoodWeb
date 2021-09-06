@@ -6,8 +6,9 @@ import { NotificationType } from './notification';
  */
 export interface NotificationReadRequest extends ReadRequest {
   id?: number;
-  notificationType?: NotificationType | string;
-  unseen?: boolean;
-  read?: boolean;
   flagged?: boolean;
+  notificationType?: NotificationType | string;
+  read?: boolean;
+  resetUnseenNotifications?: boolean;
+  unseen?: boolean;
 }

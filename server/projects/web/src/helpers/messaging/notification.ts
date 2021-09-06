@@ -38,16 +38,18 @@ export class NotificationClient {
    * Also, saves the broadcasted notifications for later lookup within the app/website.
    * @param accounts The accounts to broadcast the notification to.
    * @param notification The notification that is to be broadcasted.
+   * @param forceSend Set to true if the push notification should be sent to accounts even if they have disabled push notifications.
    * @return A promise that resolves to the saved notification entities of broadcasted notifications.
    */
-  async broadcastNotification(accounts: AccountEntity[], notification: Notification): Promise<NotificationEntity[]> {
+  async broadcastNotification(accounts: AccountEntity[], notification: Notification, forceSend = false): Promise<NotificationEntity[]> {
     // Only send push notifications to accounts that have it enabled.
     const pushClient: PushNotificationClient = getPushNotificationClient();
     const pushAccounts: AccountEntity[] = accounts.filter((account: AccountEntity) => account.contactInfo.enablePushNotification);
-    const pushTargets: MobileDeviceEntity[] = await this._getPushTargets(pushAccounts);
+    const pushTargets: MobileDeviceEntity[] = await this._getPushTargets(pushAccounts, forceSend);
     await pushClient.broadcastPushNotifications(pushTargets, notification);
+
     // Send Server Sent Event notifications to all accounts (will show up within in-app/website notifications menu).
-    return (!notification.pushOnly)
+    return (!notification.pushOnly || forceSend)
       ? Promise.all(accounts.map((account: AccountEntity) => this._sendSSE(account, notification)))
       : [];
   }
@@ -57,17 +59,17 @@ export class NotificationClient {
    * Also, saves the sent notification for later lookup within the app/website.
    * @param account The account to send the notification to.
    * @param notification The notification that is to be sent.
+   * @param forceSend Set to true if the push notification should be sent even if the target account has disabled push notifications.
    * @return A promise that resolves to the saved notification entity of the sent notification.
    */
-  async sendNotification(account: AccountEntity, notification: Notification): Promise<NotificationEntity> {
+  async sendNotification(account: AccountEntity, notification: Notification, forceSend = false): Promise<NotificationEntity> {
     // If the user has disabled push notifications, then do not send.
     const pushClient: PushNotificationClient = getPushNotificationClient();
-    if (!account.contactInfo.enablePushNotification) {
-      const pushTargets: MobileDeviceEntity[] = await this._getPushTargets(account);
-      await pushClient.broadcastPushNotifications(pushTargets, notification);
-    }
+    const pushTargets: MobileDeviceEntity[] = await this._getPushTargets(account, forceSend);
+    await pushClient.broadcastPushNotifications(pushTargets, notification);
+
     // Send Server Sent Event notification (will show up within in-app/website notifications menu).
-    return (!notification.pushOnly)
+    return (!notification.pushOnly || forceSend)
       ? this._sendSSE(account, notification)
       : null;
   }
@@ -75,12 +77,17 @@ export class NotificationClient {
   /**
    * Gets the mobile device targets of a push notification.
    * @param accounts The accounts that are to be targeted by push notification.
+   * @param forceSend Set to true if the push notification should be sent to accounts even if they have disabled push notifications.
    * @return A promise that resolves to the mobile device targets.
    */
-  private async _getPushTargets(accounts: AccountEntity[] | AccountEntity): Promise<MobileDeviceEntity[]> {
+  private async _getPushTargets(accounts: AccountEntity[] | AccountEntity, forceSend: boolean): Promise<MobileDeviceEntity[]> {
+    if (!accounts) return []; // If given null/undefined, simply return empty MobileDeviceEntity list.
     accounts = (accounts instanceof Array) ? accounts : [accounts];
+    if (!forceSend) {
+      accounts = accounts.filter((account: AccountEntity) => account.contactInfo.enablePushNotification);
+    }
     const accountIds: number[] = accounts.map((account: AccountEntity) => account.id);
-    return (await readMobileDevice({ accountIds, page: 1, limit: 1000 })).list;
+    return (await readMobileDevice({ accountIds })).list;
   }
 
   /**

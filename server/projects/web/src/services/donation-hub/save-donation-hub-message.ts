@@ -7,7 +7,7 @@ const _dateTimeHelper = new DateTimeHelper();
 /**
  * Sends donation drop-off hub created message(s) to the owning volunteer.
  * @param donationHub The donation drop-off hub that has been newly created.
- * @return A promsie that resolves to the newly created donation drop-off hub.
+ * @return A promise that resolves to the newly created donation drop-off hub.
  */
 export async function sendDonationHubCreateMessages(donationHub: DonationHubEntity): Promise<DonationHubEntity> {
   const mailClient: MailClient = await getMailClient();
@@ -20,6 +20,7 @@ export async function sendDonationHubCreateMessages(donationHub: DonationHubEnti
     `Your Donation Drop-Off Hub For ${dropOffWindowStartStr} Has Been Created`,
     'donation-hub-created',
     { donationHub }
-  ).catch(console.error);
+  ).catch(console.error)
+
   return donationHub;
 }

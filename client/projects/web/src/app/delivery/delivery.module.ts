@@ -17,18 +17,18 @@ import { DeliveryFiltersComponent } from './child-components/delivery-filters/de
 import { DeliveryTeaserComponent } from './child-components/delivery-teaser/delivery-teaser.component';
 import { DropOffInfoComponent } from './child-components/drop-off-info/drop-off-info.component';
 import { PickupInfoComponent } from './child-components/pickup-info/pickup-info.component';
-import { DeliveriesComponent } from './components/deliveries/deliveries.component';
-import { DeliveryDetailsComponent } from './components/delivery-details/delivery-details.component';
+import { DeliveryListComponent } from './components/delivery-list/delivery-list.component';
+import { DeliveryComponent } from './components/delivery/delivery.component';
 import { DeliveryRoutingModule } from './delivery-routing.module';
-import { DeliveryDetailsRouterLinkPipe } from './pipes/delivery-details-router-link/delivery-details-router-link.pipe';
+import { DeliveryRouterLinkPipe } from './pipes/delivery-router-link/delivery-router-link.pipe';
 
 @NgModule({
   declarations: [
-    DeliveriesComponent,
-    DeliveryDetailsComponent,
-    DeliveryDetailsRouterLinkPipe,
+    DeliveryComponent,
     DeliveryDonationInfoComponent,
     DeliveryFiltersComponent,
+    DeliveryListComponent,
+    DeliveryRouterLinkPipe,
     DeliveryTeaserComponent,
     DropOffInfoComponent,
     PickupInfoComponent
@@ -48,6 +48,9 @@ import { DeliveryDetailsRouterLinkPipe } from './pipes/delivery-details-router-l
     FilteredListModule,
     MapModule,
     SharedModule
+  ],
+  exports: [
+    DeliveryRouterLinkPipe,
   ]
 })
 export class DeliveryModule {}

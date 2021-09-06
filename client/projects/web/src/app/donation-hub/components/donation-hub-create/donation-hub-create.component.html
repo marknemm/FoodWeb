@@ -12,20 +12,6 @@
 
   <mat-card>
     <mat-card-title>
-      Take A Moment To Ensure You Are Ready
-    </mat-card-title>
-
-    <mat-card-content>
-      <foodweb-requirements-checklist
-        formControlName="readyChecklist"
-        [checklistMembers]="readyChecklistMembers"
-        checkAll="I am completely ready.">
-      </foodweb-requirements-checklist>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card>
-    <mat-card-title>
       Let Us Know Your Availability
     </mat-card-title>
 
@@ -67,11 +53,19 @@
     </mat-card-title>
 
     <mat-card-content>
+      <ul class="call-to-action-list">
+        <li>
+          <a class="call-to-action" href="https://www.fda.gov/food/buy-store-serve-safe-food/safe-food-handling">Safety Measures</a>
+        </li>
+        <li>
+          <a class="call-to-action" href="https://www.cdc.gov/coronavirus/2019-ncov/symptoms-testing/symptoms.html">COVID-19 Symptoms</a>
+        </li>
+      </ul>
       <foodweb-requirements-checklist
         formControlName="agreementChecklist"
         [checklistMembers]="agreementChecklistMembers"
-        checkAll="I agree to all above."
-      ></foodweb-requirements-checklist>
+        checkAll="Agree to all">
+      </foodweb-requirements-checklist>
     </mat-card-content>
   </mat-card>
 

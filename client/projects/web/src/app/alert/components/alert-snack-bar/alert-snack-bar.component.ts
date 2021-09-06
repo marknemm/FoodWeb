@@ -7,11 +7,11 @@ import { Alert } from '~web/alert/interfaces/alert';
   templateUrl: './alert-snack-bar.component.html',
   styleUrls: ['./alert-snack-bar.component.scss']
 })
-export class AlertSnackBarComponent<T = any> implements OnInit {
+export class AlertSnackBarComponent implements OnInit {
 
   constructor(
-    @Inject(MAT_SNACK_BAR_DATA) public alert: Alert<T>,
-    public matSnackBarRef: MatSnackBarRef<AlertSnackBarComponent<T>>
+    @Inject(MAT_SNACK_BAR_DATA) public alert: Alert,
+    public matSnackBarRef: MatSnackBarRef<AlertSnackBarComponent>
   ) {}
 
   ngOnInit() {}

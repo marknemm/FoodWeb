@@ -11,8 +11,10 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
       accountType: undefined,
       email: undefined,
       fullTextQuery: undefined,
+      limit: 10,
       operationHours: new OperationHoursForm(undefined, 'none'),
       organizationName: undefined,
+      page: 1,
       signedAgreement: undefined,
       sortBy: undefined,
       sortOrder: undefined,
@@ -42,6 +44,14 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
     return (this.isDonorAccountType || this.isReceiverAccountType);
   }
 
+  get page(): number {
+    return this.get('page').value;
+  }
+
+  set page(page: number) {
+    this.get('page').setValue(page);
+  }
+
   /**
    * Converts the contained form value to a valid AccountReadRequest.
    * @return The converted AccountReadRequest.
@@ -53,6 +63,9 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
       value.operationHoursStartTime = value.operationHours.startTime;
       value.operationHoursEndTime = value.operationHours.endTime;
       delete value.operationHours;
+    }
+    for (const prop in value) {
+      if (value[prop] == null) delete value[prop];
     }
     return value;
   }

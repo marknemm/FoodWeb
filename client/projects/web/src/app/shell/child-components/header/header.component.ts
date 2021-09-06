@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
-import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-header',
@@ -14,9 +14,9 @@ export class HeaderComponent implements OnInit {
   @Input() siteTitle = 'FoodWeb';
 
   constructor(
-    public leftNavService: LeftNavService,
     public pageProgressService: PageProgressService,
-    public pageTitleService: PageTitleService
+    public pageTitleService: PageTitleService,
+    public shellService: ShellService,
   ) {}
 
   ngOnInit() {}

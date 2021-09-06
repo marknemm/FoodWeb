@@ -5,7 +5,7 @@ import { DonationHelper } from '~shared';
 import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
 import { SessionService } from '~web/session/services/session/session.service';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
-import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-left-nav-items',
@@ -22,18 +22,18 @@ export class LeftNavItemsComponent implements OnInit {
     public constantsService: ConstantsService,
     public donationHelper: DonationHelper,
     public sessionService: SessionService,
-    private _leftNavService: LeftNavService,
-    private _matDialog: MatDialog
+    private _matDialog: MatDialog,
+    private _shellService: ShellService,
   ) {}
 
   ngOnInit() {}
 
   _onNavigate(): void {
-    this._leftNavService.toggle();
+    this._shellService.toggleLeftNav();
   }
 
   showLoginDialog(): void {
-    this._leftNavService.toggle();
+    this._shellService.toggleLeftNav();
     LoginDialogComponent.openIfNotLoggedIn(this.sessionService, this._matDialog);
   }
 

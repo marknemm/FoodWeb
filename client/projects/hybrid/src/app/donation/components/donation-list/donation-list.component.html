@@ -1,0 +1,50 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>{{ pageTitle }}</ion-label>
+    <ion-buttons *ngIf="canAccessAddAction" slot="end">
+      <ion-button [routerLink]="['/', 'donation', addActionRouteSegment]" fill="clear">
+        <ion-icon name="add-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content foodwebHybridListPage
+  [disabled]="loading"
+  [page]="filtersForm.page"
+  (loadMore)="handleLoadMore($event)"
+  (refresh)="handleRefresh($event)"
+  class="donations">
+
+  <!-- <foodweb-filtered-list-toolbar listItemsLabel="Donations">
+    <foodweb-search-bar
+      placeholder="Search Donations..."
+      [formControl]="filtersForm.get('fullTextQuery')"
+      (search)="updateFilterQueryParams(filtersForm.value)"
+    ></foodweb-search-bar>
+  </foodweb-filtered-list-toolbar> -->
+
+  <div *ngIf="showChooseDonation" class="standalone-statement">
+    Choose a donation to claim.
+  </div>
+
+  <div *ngIf="noneFound" class="standalone-statement">
+    Could not find any donations.
+  </div>
+
+  <ion-virtual-scroll [items]="donations" approxItemHeight="400px">
+    <foodweb-hybrid-donation-teaser
+      *virtualItem="let item"
+      [donation]="item">
+    </foodweb-hybrid-donation-teaser>
+  </ion-virtual-scroll>
+
+  <!-- <foodweb-list-filters>
+    <foodweb-donation-filters
+      [formGroup]="filtersForm"
+      (clear)="filtersForm.resetFacetFilters()"
+      (filter)="updateFilterQueryParams($event)"
+    ></foodweb-donation-filters>
+  </foodweb-list-filters> -->
+
+</ion-content>

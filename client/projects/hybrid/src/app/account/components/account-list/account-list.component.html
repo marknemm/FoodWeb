@@ -1,0 +1,42 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="/home">
+    <ion-label>{{ pageTitleService.title }}</ion-label>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content foodwebHybridListPage
+  [disabled]="loading"
+  [page]="filtersForm.page"
+  (loadMore)="handleLoadMore($event)"
+  (refresh)="handleRefresh($event)">
+
+  <!-- <foodweb-filtered-list-toolbar listItemsLabel="Accounts">
+    <foodweb-search-bar
+      [placeholder]="searchPlaceholder"
+      [formControl]="filtersForm.get('fullTextQuery')"
+      (search)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
+    ></foodweb-search-bar>
+  </foodweb-filtered-list-toolbar> -->
+
+  <div *ngIf="noneFound" class="standalone-statement">
+    Could Not Find Any Accounts.
+  </div>
+
+  <ion-virtual-scroll [items]="accounts" approxItemHeight="300px">
+    <foodweb-hybrid-account-teaser
+      *virtualItem="let item"
+      [account]="item"
+      [addressFirst]="true"
+      [hasEmailSubtitle]="true">
+    </foodweb-hybrid-account-teaser>
+  </ion-virtual-scroll>
+
+  <!-- <foodweb-list-filters>
+    <foodweb-account-filters
+      [formGroup]="filtersForm"
+      (clear)="filtersForm.resetFacetFilters()"
+      (filter)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
+    ></foodweb-account-filters>
+  </foodweb-list-filters> -->
+
+</ion-content>

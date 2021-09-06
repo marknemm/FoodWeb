@@ -1,0 +1,101 @@
+@import "variables.scss";
+
+ion-list {
+  margin-top   : 25px;
+  margin-bottom: 25px;
+
+  ion-content &:first-child {
+    margin-top: 0;
+  }
+
+  ion-content &:last-child {
+    margin-bottom: 0;
+  }
+
+  > ion-item {
+    background-color: inherit;
+  }
+}
+
+ion-list,
+ion-virtual-scroll {
+  &.borders-vertical {
+    border-top   : 1px solid var(--ion-border-color);
+    border-bottom: 1px solid var(--ion-border-color);
+
+    > *:last-child ion-item,
+    > ion-item:last-child {
+      --border-style: none;
+    }
+  }
+}
+
+ion-item {
+  --padding-start      : 0;
+  --inner-padding-start: 14px;
+  --inner-padding-end  : 14px;
+  background-color: var(--ion-list-background);
+
+  &.item-spacer {
+    --inner-padding-bottom: 30px;
+  }
+
+  &.icon-start,
+  .icon-start>& {
+    --padding-start      : 8px;
+    --inner-padding-start: 0;
+  }
+
+  &.small,
+  .small>& {
+    --min-height: 25px;
+
+    >ion-icon:first-child {
+      margin   : 7px 15px 7px 0;
+      font-size: 22px;
+    }
+
+    >ion-label {
+      margin   : 7px 0;
+      font-size: 15px;
+    }
+  }
+
+  &.item-label-floating {
+    --min-height         : 30px;
+    --inner-padding-start: 0;
+    --inner-padding-end  : 0;
+  }
+
+  &.item-interactive.ion-touched {
+    &.with-err-msg::part(native) {
+      margin-bottom: 20px;
+      overflow     : visible;
+    }
+
+    &.ion-invalid,
+    &.with-err-msg {
+
+      *,
+      .ng-invalid.ng-touched {
+        color: var(--ion-color-danger);
+      }
+    }
+  }
+
+  &::part(native) {
+    transition   : margin-bottom 0.3s linear;
+    margin-bottom: 0;
+  }
+
+  .foodweb-profile-img:first-child {
+    margin-left: var(--mobile-side-padding);
+  }
+
+  .ion-form-error {
+    position : absolute;
+    color    : $warn;
+    font-size: 11px;
+    bottom   : -18px;
+  }
+}

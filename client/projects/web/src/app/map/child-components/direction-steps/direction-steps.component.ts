@@ -13,8 +13,6 @@ export class DirectionStepsComponent implements OnChanges {
 
   private _waypointSegmentIdx: number = null;
 
-  constructor() {}
-
   get waypointSegmentIdx(): number {
     return this._waypointSegmentIdx;
   }

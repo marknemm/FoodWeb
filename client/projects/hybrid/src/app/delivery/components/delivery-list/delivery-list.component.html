@@ -1,0 +1,52 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>{{ pageTitleService.title }}</ion-label>
+    <ion-buttons *ngIf="myDeliveries" slot="end">
+      <ion-button [routerLink]="['/', 'delivery', 'list']" fill="clear">
+        <ion-icon name="add-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content foodwebHybridListPage
+  [disabled]="loading"
+  [page]="filtersForm.page"
+  [pageSize]="filtersForm.limit"
+  (loadMore)="handleLoadMore($event)"
+  (refresh)="handleRefresh($event)"
+  class="deliveries">
+
+  <!-- <foodweb-filtered-list-toolbar listItemsLabel="Deliveries">
+    <foodweb-search-bar
+      [placeholder]="searchPlaceholder"
+      [formControl]="filtersForm.get('fullTextQuery')"
+      (search)="updateFilterQueryParams(filtersForm.value)">
+    </foodweb-search-bar>
+  </foodweb-filtered-list-toolbar> -->
+
+  <div *ngIf="!myDeliveries && !noneFound" class="standalone-statement">
+    Choose a delivery to schedule.
+  </div>
+
+  <div *ngIf="noneFound" class="standalone-statement">
+    Could not find any deliveries.
+  </div>
+
+  <ion-virtual-scroll [items]="donations" approxItemHeight="400px">
+    <foodweb-hybrid-delivery-teaser
+      *virtualItem="let item"
+      [donation]="item">
+    </foodweb-hybrid-delivery-teaser>
+  </ion-virtual-scroll>
+
+  <!-- <foodweb-list-filters>
+    <foodweb-delivery-filters
+      [formGroup]="filtersForm"
+      [myDeliveries]="myDeliveries"
+      (clear)="filtersForm.resetFacetFilters()"
+      (filter)="updateFilterQueryParams($event)">
+    </foodweb-delivery-filters>
+  </foodweb-list-filters> -->
+
+</ion-content>

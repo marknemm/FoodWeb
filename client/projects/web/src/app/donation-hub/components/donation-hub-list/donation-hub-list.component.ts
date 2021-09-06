@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DonationHub, DonationHubReadRequest, ListResponse, ReadRequest } from '~shared';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { DonationHub, DonationHubReadRequest, ListResponse } from '~shared';
 import { DonationHubReadService } from '~web/donation-hub/services/donation-hub-read/donation-hub-read.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
@@ -15,17 +17,17 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class DonationHubListComponent implements OnInit {
 
-  private _activeFilters: DonationHubReadRequest = {};
-  private _donationHubs: DonationHub[] = [];
-  private _myDonationHubs = false;
-  private _totalCount = 0;
+  protected _activeFilters: DonationHubReadRequest = { page: 1 };
+  protected _donationHubs: DonationHub[] = [];
+  protected _myDonationHubs = false;
+  protected _totalCount = 0;
 
   constructor(
     public pageTitleService: PageTitleService,
-    private _activatedRoute: ActivatedRoute,
-    private _donationHubReadService: DonationHubReadService,
-    private _router: Router,
-    private _urlQueryService: UrlQueryService
+    protected _activatedRoute: ActivatedRoute,
+    protected _donationHubReadService: DonationHubReadService,
+    protected _router: Router,
+    protected _urlQueryService: UrlQueryService
   ) {}
 
   get activeFilters(): DonationHubReadRequest {
@@ -36,12 +38,16 @@ export class DonationHubListComponent implements OnInit {
     return this._donationHubs;
   }
 
+  get loading(): boolean {
+    return this._donationHubReadService.loading;
+  }
+
   get myDonationHubs(): boolean {
     return this._myDonationHubs;
   }
 
   get noneFound(): boolean {
-    return (!this._donationHubReadService.loading && this.totalCount === 0);
+    return (!this.loading && this.totalCount === 0);
   }
 
   get totalCount(): number {
@@ -49,21 +55,29 @@ export class DonationHubListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._myDonationHubs = this._router.url.indexOf('/my') >= 0;
+    this._myDonationHubs = (this._router.url.indexOf('/my') >= 0);
     this.pageTitleService.title = (this._myDonationHubs)
       ? 'My Donation Hubs'
       : 'Pledge Donation';
-    this._urlQueryService.listenQueryParamsChange<ReadRequest>(this._activatedRoute).subscribe(
-      (request: ReadRequest) => this.handleQueryParamsChanged(request)
+    this._urlQueryService.listenQueryParamsChange<DonationHubReadRequest>(this._activatedRoute).subscribe(
+      (request: DonationHubReadRequest) => this.refresh(request).subscribe()
     );
   }
 
-  handleQueryParamsChanged(request: ReadRequest): void {
-    this._activeFilters = <DonationHubReadRequest>request;
-    this._activeFilters.excludeMyHubs = !this.myDonationHubs;
-    this._donationHubReadService.getDonationHubs(this.activeFilters).subscribe((response: ListResponse<DonationHub>) => {
-      this._donationHubs = response.list;
-      this._totalCount = response.totalCount;
-    });
+  /**
+   * Refreshes the Donation Hub List items.
+   * @param request The optional Read Request, contianing filter/sorting parameters.
+   * If not given, will use the last recorded Read Request parameters.
+   * @returns An observable that emits the loaded `DonationHub` items.
+   */
+  refresh(request?: DonationHubReadRequest): Observable<DonationHub[]> {
+    this._activeFilters = request ?? this._activeFilters;
+    return this._donationHubReadService.getDonationHubs(this.activeFilters).pipe(
+      map((response: ListResponse<DonationHub>) => {
+        this._donationHubs = response.list;
+        this._totalCount = response.totalCount;
+        return this._donationHubs;
+      })
+    );
   }
 }

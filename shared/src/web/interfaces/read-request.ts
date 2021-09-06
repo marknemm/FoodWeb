@@ -15,4 +15,16 @@ export interface ReadRequest<SORT_T = string> {
    * The order by which to sort the 'sortBy' field.
    */
   sortOrder?: 'ASC' | 'DESC';
+  /**
+   * A unique ID which determines the latest record cut-off point when retrieving items.
+   * This ensures that as new records are added and the user is paginating or infinte scrolling,
+   * the new records to not cause an overlap in pagination data.
+   */
+  maxId?: number;
+  /**
+   * A timestamp which determines a latest record creation cut-off point when retrieving items.
+   * This ensures that as new records are added and the user is paginating or infinte scrolling,
+   * the new records to not cause an overlap in pagination data.
+   */
+  latestTimestamp?: Date;
 }

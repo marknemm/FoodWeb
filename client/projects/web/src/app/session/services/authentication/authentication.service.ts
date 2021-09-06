@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
-import { catchError, finalize, map, switchMap, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { catchError, finalize, map, takeUntil } from 'rxjs/operators';
 import { AccountHelper, ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
 import { environment } from '~web-env/environment';
 import { AlertService } from '~web/alert/services/alert/alert.service';
@@ -15,6 +15,7 @@ export class AuthenticationService {
   readonly url = `${environment.server}/session`;
 
   protected _loading = false;
+  protected _loginStatus$ = new BehaviorSubject<boolean>(false);
   protected _login$ = new Subject<Account>();
   protected _logout$ = new Subject<Account>();
 
@@ -40,10 +41,18 @@ export class AuthenticationService {
   }
 
   /**
-   * An observalbe that emits the newly logged in user's account upon login.
+   * An observable that emits the newly logged in user's account upon login.
    */
   get login$(): Observable<Account> {
     return this._login$.asObservable();
+  }
+
+  /**
+   * An observable that emits any change to the login status (boolean), and will emit the current
+   * login status upon initial subscription.
+   */
+  get loginStatus$(): Observable<boolean> {
+    return this._loginStatus$.asObservable();
   }
 
   /**
@@ -56,7 +65,7 @@ export class AuthenticationService {
   /**
    * Attempts to log the user in.
    * @param usernameEmail The username or email of the user.
-   * @param password The passwsord of the user.
+   * @param password The password of the user.
    * @param notifyUser Whether or not to display a login success notification to the user upon successful login. Defaults to false.
    * @return An observable that emits the user's account when login is successful, and throws error on failure.
    */
@@ -88,11 +97,12 @@ export class AuthenticationService {
    * @return The logged in user's account.
    */
   protected _handleLoginSuccess(response: LoginResponse, notifyUser = false): Account {
-    this._sessionService.saveAccount(response.account);
+    this._sessionService.saveSession(response.account);
     if (notifyUser) {
       this._alertService.displayMessage(`Welcome, ${this._accountHelper.accountName(response.account)}`, 'success');
     }
     this._login$.next(response.account);
+    this._loginStatus$.next(true);
     return response.account;
   }
 
@@ -136,10 +146,10 @@ export class AuthenticationService {
    */
   refreshSessionStatus(): Observable<Account> {
     return this.checkIfUserLoggedIn().pipe(
-      switchMap((response: LoginResponse) =>
+      map((response: LoginResponse) =>
         (response.account)
-          ? of(this._handleLoginSuccess(response))
-          : of(this._sessionRefreshLogout())
+          ? this._handleLoginSuccess(response)
+          : this._sessionRefreshLogout()
       )
     );
   }
@@ -158,7 +168,7 @@ export class AuthenticationService {
   /**
    * Logs the user out as a result of a session refresh (sync with server logged out state),
    * and alerts them of the logout.
-   * @return null, repressenting the new value for the client account session.
+   * @return null, representing the new value for the client account session.
    */
   protected _sessionRefreshLogout(): null {
     if (this._sessionService.account) {
@@ -180,11 +190,12 @@ export class AuthenticationService {
     ).subscribe();
 
     const account: Account = this._sessionService.account;
-    this._sessionService.deleteAccount();
+    this._sessionService.clearSession();
     if (notifyUser) {
       this._alertService.displayMessage('Logout successful', 'success');
     }
     this._logout$.next(account);
+    this._loginStatus$.next(false);
   }
 
   /**

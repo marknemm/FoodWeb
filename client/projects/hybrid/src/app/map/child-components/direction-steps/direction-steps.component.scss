@@ -1,0 +1,11 @@
+@import "../../../../../../web/src/app/map/child-components/direction-steps/direction-steps.component.scss";
+
+.direction-steps-container {
+  .direction-steps-summary {
+    margin-top: 0;
+  }
+
+  ol, ul {
+    padding-left: 22px;
+  }
+}

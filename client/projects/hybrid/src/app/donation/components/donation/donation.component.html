@@ -1,0 +1,62 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="/donation/list">
+    <ion-label>Donation</ion-label>
+    <foodweb-hybrid-donation-actions
+      [donation]="donation"
+      [header]="true"
+      [loading]="loading"
+      slot="end">
+    </foodweb-hybrid-donation-actions>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content class="donation">
+  <ng-container *ngIf="donation">
+
+    <foodweb-hybrid-donation-workflow
+      [donation]="donation"
+      [myAccount]="sessionService.account"
+      (action)="onDonationAction($event)">
+    </foodweb-hybrid-donation-workflow>
+
+    <div class="row">
+      <div class="donation-info-container col-12">
+        <foodweb-hybrid-primary-donation-info [donation]="donation" [myDonation]="myDonation"></foodweb-hybrid-primary-donation-info>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="donor-info-container" [ngClass]="{
+        'col-lg-6': !!donation.claim,
+        'col-lg-12': !donation.claim
+      }">
+        <foodweb-hybrid-account-teaser [account]="donation.donorAccount" customTitle="Donor">
+          <div class="donation-submitter">
+            <div class="inline-label">Contact Name:</div>
+            <div class="d-inline-block">{{ donation.donorFirstName }} {{ donation.donorLastName }}</div>
+          </div>
+        </foodweb-hybrid-account-teaser>
+      </div>
+
+      <div *ngIf="donation.claim" class="receiver-info-container col-lg-6">
+        <foodweb-hybrid-account-teaser
+          [account]="donation.claim.receiverAccount"
+          customTitle="Receiver">
+        </foodweb-hybrid-account-teaser>
+      </div>
+
+      <div *ngIf="donation.claim?.delivery" class="deliverer-info-container col-lg-6">
+        <foodweb-hybrid-account-teaser
+          [account]="donation.claim.delivery.volunteerAccount"
+          [hideAddress]="true"
+          customTitle="Deliverer">
+        </foodweb-hybrid-account-teaser>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <div *ngIf="donationNotFound" class="standalone-statement">
+    Donation not found
+  </div>
+</ion-content>

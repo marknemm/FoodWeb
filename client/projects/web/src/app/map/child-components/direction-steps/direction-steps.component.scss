@@ -1,5 +1,5 @@
 .direction-steps-container {
-  table.direction-steps-summary {
+  .direction-steps-summary {
     margin-top: 20px;
     font-size: 16px;
 
@@ -15,7 +15,7 @@
 
     li {
       margin-bottom: 10px;
-  
+
       &:last-child {
         margin-bottom: 0;
       }

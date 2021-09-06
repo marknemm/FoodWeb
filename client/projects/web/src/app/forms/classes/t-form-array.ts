@@ -2,7 +2,7 @@ import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormArray, V
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormState, TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
-import { ExtractControlType } from '~web/forms/interfaces/extract-control-type';
+import { DeriveAbstractControlType } from '~web/forms/interfaces/template-type-util';
 import { TFormControl } from './t-form-control';
 import { TFormGroup } from './t-form-group';
 
@@ -16,7 +16,7 @@ import { TFormGroup } from './t-form-group';
  */
 export class TFormArray<
   T,
-  V = ExtractControlType<T>,
+  V = DeriveAbstractControlType<T>,
   A extends TAbstractControl<V> = T extends TAbstractControl<V> ? T : TFormControl<V>
 > extends FormArray {
 
@@ -89,6 +89,15 @@ export class TFormArray<
    */
   at(index: number): A {
     return <A>super.at(index);
+  }
+
+  /**
+   * Checks the validity of this `TFormArray`. In doing so, marks all members as `touched`.
+   * @return true if this form array and all of its members have passed all of their validaiton tests, false otherwise.
+   */
+  checkValidity(): boolean {
+    this.markAllAsTouched();
+    return this.valid;
   }
 
   /**
@@ -318,3 +327,35 @@ export class TFormArray<
     this._addNeededElements(length);
   }
 }
+
+// Enhance type declaration for FormArray.
+declare module '@angular/forms' {
+  interface FormArray {
+    checkValidity(): boolean;
+    destory(): void;
+    onDeepValueChanges(destroy$?: Observable<any>): Observable<any[]>;
+    onValueChanges(destroy$?: Observable<any>): Observable<any[]>;
+  }
+}
+
+// Add extra methods to basic FormArray so that it is fully compaitble with TFormArray.
+FormArray.prototype.checkValidity = TFormArray.prototype.checkValidity;
+FormArray.prototype.destory = TFormArray.prototype.destroy;
+FormArray.prototype.onDeepValueChanges = TFormArray.prototype.onDeepValueChanges;
+FormArray.prototype.onValueChanges = TFormArray.prototype.onValueChanges;
+
+Object.defineProperty(FormArray.prototype, '_destroySubject$', {
+  get: function(): Subject<any> {
+    if (!this.__destroySubject$) {
+      this.__destroySubject$ = new Subject();
+    }
+    return this.__destroySubject$;
+  },
+  set: function(destroySubject$: Subject<any>) {
+    this.__destroySubject$ = destroySubject$;
+  }
+});
+
+Object.defineProperty(FormArray.prototype, '_destroy$', { get: function() {
+  return this._destroySubject$.asObservable();
+}});

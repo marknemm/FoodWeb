@@ -142,6 +142,6 @@ export class DeliveryHelper {
   }
 
   deliveryDetailsRouterLink(donation: Partial<Donation>): string[] {
-    return ['/delivery/details/', `${donation?.id}`];
+    return ['/delivery/', `${donation?.id}`];
   }
 }

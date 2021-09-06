@@ -1,0 +1,43 @@
+<div class="operation-hours-container" [ngClass]="{ 'limited': formGroup.operationHoursLimited }" [formGroup]="formGroup" [foodwebDisplayEditTransition]="editable"
+  [form]="operationHoursForm" [display]="operationHoursDisplay">
+  <div #operationHoursForm class="operation-hours-form">
+    <ion-item lines="none">
+      <ion-label color="secondary">Specify Availability:</ion-label>
+      <ion-toggle formControlName="limitOperationHours"></ion-toggle>
+    </ion-item>
+    <div class="row operation-hours-grid">
+      <div class="col-lg-6">
+        <div *ngFor="let weekday of constantsService.WEEKDAYS | slice : 0 : 4" class="operation-hours-form-container">
+          <div class="delete-container">
+            <foodweb-hybrid-weekday-operation-hours [weekday]="weekday" [formArrayName]="weekday" [editable]="editable"></foodweb-hybrid-weekday-operation-hours>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div *ngFor="let weekday of constantsService.WEEKDAYS | slice : 4" class="operation-hours-form-container">
+          <div class="delete-container">
+            <foodweb-hybrid-weekday-operation-hours [weekday]="weekday" [formArrayName]="weekday" [editable]="editable"></foodweb-hybrid-weekday-operation-hours>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div #operationHoursDisplay class="operation-hours-display">
+    <div *ngIf="!formGroup.timeRangeCount; else limitedAvailabilityTmpl">Availability Not Limited</div>
+    <ng-template #limitedAvailabilityTmpl>
+      <table>
+        <ng-container *ngFor="let weekday of constantsService.WEEKDAYS">
+          <tr *ngIf="formGroup.doesWeekdayHaveHours(weekday)">
+            <td>{{ weekday }}</td>
+            <td>
+              <div *ngFor="let weekdayTimeRange of value[weekday]">
+                <foodweb-time-range [value]="weekdayTimeRange"></foodweb-time-range>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </table>
+    </ng-template>
+  </div>
+</div>

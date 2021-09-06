@@ -1,0 +1,29 @@
+<foodweb-hybrid-date-time
+  *ngIf="!calendarMode"
+  [allowClear]="allowClear"
+  [boldDate]="bold"
+  [defaultDate]="defaultDate"
+  [editable]="editable"
+  [excludeTime]="true"
+  [formControl]="formControl"
+  [label]="label"
+  [labelPosition]="labelPosition"
+  [maxDate]="maxDate"
+  [minDate]="minDate"
+  [minDateWidth]="minWidth">
+</foodweb-hybrid-date-time>
+
+<foodweb-date
+  *ngIf="calendarMode"
+  [allowClear]="allowClear"
+  [bold]="bold"
+  [dateFilter]="dateFilter"
+  [defaultDate]="defaultDate"
+  [editable]="editable"
+  [floatLabels]="labelPosition === 'floating' ? 'auto' : 'never'"
+  [formControl]="formControl"
+  [maxDate]="maxDate"
+  [minDate]="minDate"
+  [minWidth]="minWidth"
+  [placeholder]="label">
+</foodweb-date>

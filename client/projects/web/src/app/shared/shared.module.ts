@@ -24,6 +24,7 @@ import { FragmentAccordianDirective } from './directives/fragment-accordian/frag
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
 import { WindowSizeDirective } from './directives/window-size/window-size.directive';
 import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
+import { ShortNumPipe } from './pipes/short-num/short-num.pipe';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
     RequirementsChecklistComponent,
     ReturnLinkDirective,
     SearchBarComponent,
+    ShortNumPipe,
     ToBooleanPipe,
     WindowSizeDirective,
     YesNoComponent,
@@ -67,6 +69,7 @@ import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
     RequirementsChecklistComponent,
     ReturnLinkDirective,
     SearchBarComponent,
+    ShortNumPipe,
     ToBooleanPipe,
     WindowSizeDirective,
     YesNoComponent,

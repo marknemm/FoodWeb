@@ -7,7 +7,7 @@ const _donationHelper = new DonationHelper();
 /**
  * Sends donation created message(s) to the donor.
  * @param donation The donation that has been newly created.
- * @return A promsie that resolves to the newly created donation.
+ * @return A promise that resolves to the newly created donation.
  */
 export async function sendDonationCreateMessages(donation: Donation): Promise<Donation> {
   const mailClient: MailClient = await getMailClient();

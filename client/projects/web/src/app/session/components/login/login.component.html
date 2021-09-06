@@ -3,8 +3,8 @@
 
   <div *ngIf="!messageSent">
     <mat-form-field>
-      <input matInput *ngIf="!insideDialog" type="text" [placeholder]="usernameEmailPlaceholder" formControlName="usernameEmail">
-      <input matInput *ngIf="insideDialog" type="text" [placeholder]="usernameEmailPlaceholder" formControlName="usernameEmail" cdkFocusInitial>
+      <input matInput *ngIf="!insideDialog" type="email" [placeholder]="usernameEmailPlaceholder" formControlName="usernameEmail">
+      <input matInput *ngIf="insideDialog" type="email" [placeholder]="usernameEmailPlaceholder" formControlName="usernameEmail" cdkFocusInitial>
     </mat-form-field>
     <mat-form-field *ngIf="isLogin">
       <input matInput type="password" placeholder="Password" formControlName="password">
@@ -40,7 +40,12 @@
       <button mat-raised-button type="button" color="primary" mat-dialog-close>Ok</button>
     </div>
     <div *ngIf="!insideDialog" class="signup-link-container">
-      Don't have an account: <a [routerLink]="['/signup']">Signup</a>
+      <p>
+        <a [routerLink]="['/', 'signup']">Create Account</a>
+      </p>
+      <p>
+        <a [routerLink]="['/', 'home']">Skip Login</a>
+      </p>
     </div>
   </div>
 </form>

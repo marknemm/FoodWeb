@@ -1,0 +1,43 @@
+<div [formGroup]="formGroup" class="operation-hours-form">
+  <div class="weekday-field" [style.width]="weekdayWidth" [style.padding]="weekdayPadding">
+    <ion-item>
+      <ion-label color="secondary">Weekday</ion-label>
+      <ion-select formControlName="weekday">
+        <ion-select-option *ngFor="let weekday of constantsService.WEEKDAYS; let i = index" [value]="weekday">{{ weekday }}</ion-select-option>
+        <ion-select-option [value]="undefined">--</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+  <div class="time-fields-container">
+    <div class="time-field" [style.width]="timeWidth">
+      <foodweb-time
+        [allowClear]="allowClear"
+        [defaultTime]="defaultStartTime"
+        [editable]="editable"
+        [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
+        [minutesGap]="minutesGap"
+        [preventOverlayClick]="!(allowOverlayClick | toBoolean)"
+        formControlName="startTime"
+        placeholder="Start Time"
+      ></foodweb-time>
+    </div>
+    <div class="time-field" [style.width]="timeWidth">
+      <foodweb-time
+        [allowClear]="allowClear"
+        [defaultTime]="defaultEndTime"
+        [editable]="editable"
+        [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
+        [minutesGap]="minutesGap"
+        [preventOverlayClick]="!(allowOverlayClick | toBoolean)"
+        formControlName="endTime"
+        placeholder="End Time"
+      ></foodweb-time>
+    </div>
+  </div>
+  <div *ngIf="formGroup.hasError('timeRangeOrder')" class="operation-hours-error ion-form-error">
+    {{ formGroup.getError('timeRangeOrder') }}
+  </div>
+  <div *ngIf="formGroup.hasError('groupRequired')" class="operation-hours-error ion-form-error">
+    {{ formGroup.getError('groupRequired') }}
+  </div>
+</div>

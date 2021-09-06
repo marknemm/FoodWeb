@@ -1,0 +1,16 @@
+@import "../../../../../../web/src/app/donation-shared/child-components/donation-workflow/donation-workflow.component.scss";
+
+.donation-workflow-card-content {
+  padding: 0;
+
+  .donation-workflow {
+    margin: 0 -2px;
+  }
+}
+
+.toggle-show-all-statuses {
+  --padding-start: 0;
+  margin-bottom: 0;
+  font-size: 14px;
+  text-decoration: none;
+}

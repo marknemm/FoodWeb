@@ -52,8 +52,8 @@ export class AccountHelper {
     return { color: '', backgroundColor: '', letter: '' };
   }
 
-  accountDetailsRouterLink(account: Account): string[] {
-    return (account) ? ['/account/details/', `${account.id}`] : [];
+  accountRouterLink(account: Account): string[] {
+    return (account) ? ['/account/', `${account.id}`] : [];
   }
 
   areContactInfosEqual(contactInfoLhs: ContactInfo, contactInfoRhs: ContactInfo): boolean {

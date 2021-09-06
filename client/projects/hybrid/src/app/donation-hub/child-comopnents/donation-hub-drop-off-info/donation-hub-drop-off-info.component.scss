@@ -1,0 +1,13 @@
+@import "../../../../../../web/src/app/donation-hub/child-components/donation-hub-drop-off-info/donation-hub-drop-off-info.component.scss";
+
+.drop-off-info {
+  ion-card-content {
+    > div {
+      margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

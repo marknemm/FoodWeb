@@ -1,0 +1,48 @@
+<ion-card id="donation-{{ donation.id }}" class="teaser delivery-teaser">
+  <ion-card-header>
+    <ion-avatar>
+      <foodweb-hybrid-profile-img [value]="donation.donorAccount.profileImg"></foodweb-hybrid-profile-img>
+    </ion-avatar>
+    <ion-card-title>
+      <ion-label>
+        {{ donation | donationMemberName : AccountType.Donor }}
+      </ion-label>
+    </ion-card-title>
+    <ion-card-subtitle>
+      <ion-label>
+        <foodweb-donation-status [donationStatus]="donation.donationStatus"></foodweb-donation-status>
+      </ion-label>
+    </ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    <div class="delivery-display row">
+      <div class="col-sm-6">
+        <div class="inline-label">Delivery Window:</div>
+        <div>
+          <foodweb-hybrid-date-time-range
+            [startDateTime]="donation.pickupWindowStart"
+            [endDateTime]="donation.pickupWindowEnd"
+            [boldTime]="true">
+          </foodweb-hybrid-date-time-range>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="inline-label">Pick-up:</div>
+        <br>
+        <foodweb-address [value]="donation.donorAccount.contactInfo"></foodweb-address>
+      </div>
+      <div class="col-sm-6">
+        <div class="inline-label">Drop-off:</div>
+        <br>
+        <foodweb-address [value]="donation.claim.receiverAccount.contactInfo"></foodweb-address>
+      </div>
+    </div>
+
+    <div class="actions">
+      <ion-button [routerLink]="donation | deliveryRouterLink" [state]="{ donation: donation }" class="compact" expand="block">
+        View Delivery
+      </ion-button>
+    </div>
+  </ion-card-content>
+</ion-card>

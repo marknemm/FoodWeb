@@ -1,0 +1,37 @@
+<ion-item class="notification-container" [ngClass]="{ unread: !notification.read }" (click)="select.emit(notification)">
+  <foodweb-hybrid-profile-img
+    *ngIf="notification.icon"
+    [value]="notification.icon"
+    class="icon"
+    slot="start">
+  </foodweb-hybrid-profile-img>
+
+  <div class="notification">
+    <ion-label
+      *ngIf="notification.title"
+      [innerHTML]="notification.title"
+      class="title">
+    </ion-label>
+
+    <ion-label
+      *ngIf="notification.subtitle"
+      [innerHTML]="notification.subtitle"
+      class="subtitle">
+    </ion-label>
+
+    <div #body
+      *ngIf="notification.body"
+      [innerHTML]="notification.body"
+      class="body">
+    </div>
+  </div>
+
+  <ion-button
+    (click)="handleFlaggedIndicatorClick($event)"
+    [ngClass]="{ flagged: notification.flagged }"
+    class="flagged-indicator"
+    fill="clear"
+    shape="round">
+    <ion-icon [name]="notification.flagged ? 'star' : 'star-outline'"></ion-icon>
+  </ion-button>
+</ion-item>

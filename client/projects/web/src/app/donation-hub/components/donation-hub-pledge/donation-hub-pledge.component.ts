@@ -16,18 +16,20 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class DonationHubPledgeComponent implements OnInit, OnDestroy {
 
-  private _destroy$ = new Subject();
-  private _donationHubPledge: DonationHubPledge;
-  private _donationHubPledgeNotFound = false;
+  readonly postDeleteRoute = ['/', 'donation-hub'];
+
+  protected _destroy$ = new Subject();
+  protected _donationHubPledge: DonationHubPledge;
+  protected _donationHubPledgeNotFound = false;
 
   constructor(
     public pagetTitleService: PageTitleService,
-    private _activatedRoute: ActivatedRoute,
-    private _donationHubPledgeDeleteService: DonationHubPledgeDeleteService,
-    private _donationHubPledgeReadService: DonationHubPledgeReadService,
-    private _router: Router,
-    private _sessionService: SessionService,
-    private _urlQueryService: UrlQueryService
+    protected _activatedRoute: ActivatedRoute,
+    protected _donationHubPledgeDeleteService: DonationHubPledgeDeleteService,
+    protected _donationHubPledgeReadService: DonationHubPledgeReadService,
+    protected _router: Router,
+    protected _sessionService: SessionService,
+    protected _urlQueryService: UrlQueryService
   ) {}
 
   get canModify(): boolean {
@@ -59,7 +61,7 @@ export class DonationHubPledgeComponent implements OnInit, OnDestroy {
   deleteDonationHubPledge(): void {
     if (this.canModify) {
       this._donationHubPledgeDeleteService.deleteDonationPledge(this.donationHubPledge).subscribe(() =>
-        this._router.navigate(['/donation-hub', this.donationHubPledge.donationHub.id])
+        this._router.navigate(this.postDeleteRoute.concat(`${this.donationHubPledge.donationHub.id}`))
       );
     }
   }

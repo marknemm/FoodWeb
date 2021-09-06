@@ -1,0 +1,90 @@
+<form [formGroup]="formGroup" class="account-creation-form" (submit)="createAccount.emit(formGroup)">
+  <div class="align-center">
+    <foodweb-hybrid-account-type [editable]="!accountType" formControlName="accountType" class="account-type"></foodweb-hybrid-account-type>
+  </div>
+
+  <hr *ngIf="accountType">
+
+  <div *ngIf="accountType">
+    <div class="row">
+      <div class="col-xl-6">
+        <ion-card class="form-card">
+          <ion-card-header>
+            <ion-card-title class="block-label">Login Credentials</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="row">
+              <div class="col-sm-12">
+                <foodweb-hybrid-username [editable]="true" formControlName="username"></foodweb-hybrid-username>
+              </div>
+              <div class="col-sm-12">
+                <ng-content select=".password-options"></ng-content>
+              </div>
+              <div class="col-sm-12">
+                <foodweb-hybrid-password [editable]="true" [formGroup]="formGroup.get('password')"></foodweb-hybrid-password>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card *ngIf="accountType !== 'Volunteer'" class="form-card">
+          <ion-card-header>
+            <ion-card-title class="block-label">Organization</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <foodweb-hybrid-organization [accountType]="accountType" [editable]="true" [formGroup]="formGroup.get('organization')"></foodweb-hybrid-organization>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card *ngIf="accountType === 'Volunteer'" class="form-card">
+          <ion-card-header>
+            <ion-card-title class="block-label">Volunteer Info</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <foodweb-hybrid-volunteer [editable]="true" [formGroup]="formGroup.get('volunteer')"></foodweb-hybrid-volunteer>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <div class="col-xl-6">
+        <ion-card class="form-card">
+          <ion-card-header>
+            <ion-card-title class="block-label">Contact Info</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <foodweb-hybrid-contact-info [editable]="true" [formGroup]="formGroup.get('contactInfo')"></foodweb-hybrid-contact-info>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <hr *ngIf="accountType != 'Donor'">
+
+    <div class="operation-hours-section" [ngClass]="{ 'full-width': operationHoursFullWidth }">
+      <ion-card *ngIf="accountType !== 'Donor'" class="form-card">
+        <ion-card-header>
+          <ion-card-title class="block-label">
+            <span *ngIf="accountType !== 'Volunteer'">Donation Delivery Availability</span>
+            <span *ngIf="accountType === 'Volunteer'">Delivery Availability</span>
+          </ion-card-title>
+          <ion-card-subtitle>
+            <br>
+            {{ operationHoursDescription }}
+            <br><br>
+            You can update this setting any time under your account.
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <foodweb-hybrid-operation-hours-info [editable]="true" [formGroup]="formGroup.get('operationHours')"></foodweb-hybrid-operation-hours-info>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <hr>
+
+    <ng-content></ng-content>
+
+    <div class="form-footer-buttons">
+      <ion-button color="primary" type="submit" expand="block">{{ submitButtonTxt }}</ion-button>
+    </div>
+  </div>
+</form>

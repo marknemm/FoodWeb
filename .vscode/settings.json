@@ -3,5 +3,28 @@
     "pgsql.connection": "postgres://postgres@localhost:5432/foodweb",
     "java.configuration.updateBuildConfiguration": "disabled",
     "javascript.preferences.quoteStyle": "single",
-    "typescript.preferences.quoteStyle": "single"
+    "typescript.preferences.quoteStyle": "single",
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "Local Dev",
+            "database": "foodweb",
+            "username": "postgres",
+            "password": "foodweb"
+        }
+    ],
+    "cSpell.words": [
+        "cacheable",
+        "fontawesome",
+        "foodweb",
+        "lscache",
+        "recaptcha",
+        "signup",
+        "typeorm",
+        "Updt",
+        "wnyfoodweb"
+    ]
 }

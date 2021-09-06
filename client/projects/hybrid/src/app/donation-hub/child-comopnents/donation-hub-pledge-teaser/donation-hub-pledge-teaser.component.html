@@ -1,0 +1,53 @@
+<ion-card id="donation-hub-pledge-{{ pledge.id }}" class="teaser donation-hub-pledge-teaser">
+  <ion-card-header>
+    <ion-avatar>
+      <foodweb-hybrid-profile-img [value]="featuredAccount.profileImg"></foodweb-hybrid-profile-img>
+    </ion-avatar>
+    <ion-card-title>
+      <ion-label>
+        {{ featuredAccount | foodwebAccountName }}
+      </ion-label>
+    </ion-card-title>
+    <ion-card-subtitle>
+      <ion-label>{{ featuredAccount.contactInfo.email }}</ion-label>
+    </ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    <div class="donation-hub-pledge-display row">
+      <div class="col-md-6 col-12 sandwich-info">
+        <div class="inline-label">Sandwich Type:</div>
+        <span>{{ pledge.foodType }}</span>
+      </div>
+      <div class="col-md-6 sandwich-info">
+        <div class="inline-label">Sandwich Count:</div>
+        <span>{{ pledge.foodCount }}</span>
+      </div>
+      <ng-container *ngIf="donationHub">
+        <div class="col-md-6">
+          <foodweb-hybrid-contact-info
+            [value]="donationHub.contactOverride"
+            [hideEmail]="true"
+            [hidePhone]="true">
+          </foodweb-hybrid-contact-info>
+        </div>
+        <div class="col-md-6">
+          <div class="inline-label">Drop-Off Window:</div>
+          <div>
+            <foodweb-hybrid-date-time-range
+              [boldTime]="true"
+              [startDateTime]="donationHub.dropOffWindowStart"
+              [endDateTime]="donationHub.dropOffWindowEnd">
+            </foodweb-hybrid-date-time-range>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="actions">
+      <ion-button [routerLink]="['/', 'donation-hub', 'pledge', pledge.id]" class="compact" expand="block">
+        View Donation Pledge
+      </ion-button>
+    </div>
+  </ion-card-content>
+</ion-card>
