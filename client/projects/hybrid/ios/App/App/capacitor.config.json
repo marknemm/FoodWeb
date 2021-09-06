@@ -20,5 +20,9 @@
 	"ios": {
 		"contentInset": "automatic"
 	},
-	"cordova": {}
+	"cordova": {},
+	"server": {
+		"hostname": "www.wnyfoodweb.com",
+		"androidScheme": "https"
+	}
 }

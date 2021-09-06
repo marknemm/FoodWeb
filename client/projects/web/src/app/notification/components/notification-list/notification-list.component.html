@@ -15,5 +15,9 @@
     </ng-container>
   </mat-action-list>
 
-  <foodweb-paginator [length]="totalCount"></foodweb-paginator>
+  <foodweb-paginator [length]="totalCount" [pageSizeOptions]="[
+    notificationService.defaultReadLimit,
+    notificationService.defaultReadLimit * 2,
+    notificationService.defaultReadLimit * 4
+  ]"></foodweb-paginator>
 </div>

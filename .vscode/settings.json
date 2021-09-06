@@ -21,8 +21,10 @@
         "fontawesome",
         "foodweb",
         "lscache",
+        "recaptcha",
         "signup",
         "typeorm",
-        "Updt"
+        "Updt",
+        "wnyfoodweb"
     ]
 }

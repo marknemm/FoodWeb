@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Event, NavigationEnd, NavigationStart, ParamMap, Params, Router } from '@angular/router';
+import { ActivatedRoute, Event, NavigationEnd, ParamMap, Params, Router } from '@angular/router';
 import { cloneDeep } from 'lodash-es';
 import { NEVER, Observable, of } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
@@ -19,23 +19,23 @@ export class UrlQueryService {
     private _router: Router
   ) {
     // Track the previous URL to ensure that any query param change is not caused by a route change.
-    this._prevUrl = this._router.url;
+    this._prevUrl = this._router.url.split(/\?|#/g)[0];
     this._router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
-        this._prevUrl = event.url;
+        this._prevUrl = event.url.split(/\?|#/g)[0];
       }
     });
   }
 
   /**
-   * Listens for a change in URL query paramaters and maps the params to a read request on change.
+   * Listens for a change in URL query parameters and maps the params to a read request on change.
    * Will always emit the current query param snapshot upon initial setup.
    * @param activatedRoute The activated route service used to monitor changes to the URL.
    * @param defaultParams The optional default parameter values to assign when not explicitly set via URL query params.
    * @return An observable that emits the `ReadRequest` generated from an update to the URL query params.
    */
   listenQueryParamsChange<T extends ReadRequest>(activatedRoute: ActivatedRoute, defaultParams: Partial<T> = {}): Observable<T> {
-    const initUrl: string = this._router.url;
+    const initUrl: string = this._router.url.split(/\?|#/g)[0];
     let first = true;
     return activatedRoute.queryParams.pipe(
       switchMap((params: Params) => {
@@ -93,9 +93,9 @@ export class UrlQueryService {
    */
   updateUrlQueryString(filters: any, activatedRoute: ActivatedRoute): void {
     // Convert dates into raw ISO strings.
-    for (const filtKey in filters) {
-      if (filters[filtKey] instanceof Date) {
-        filters[filtKey] = (<Date>filters[filtKey]).toISOString();
+    for (const filterKey in filters) {
+      if (filters[filterKey] instanceof Date) {
+        filters[filterKey] = (<Date>filters[filterKey]).toISOString();
       }
     }
 
