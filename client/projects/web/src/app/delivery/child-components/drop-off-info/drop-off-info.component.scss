@@ -1,9 +1,9 @@
-.mat-card.drop-off-info {
-  .row {
-    margin-bottom: -12px;
+@import "variables.scss";
 
-    > div {
-      margin-bottom: 10px;
-    }
+.row {
+  margin-bottom: -12px;
+
+  > div {
+    margin-bottom: 10px;
   }
 }

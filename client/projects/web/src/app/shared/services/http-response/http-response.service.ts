@@ -94,7 +94,7 @@ export class HttpResponseService {
       if (loading && ++this._pageProgressLoadCnt === 1) {
         this._pageProgressService.activate(opts.pageProgressBlocking);
       } else if (this._pageProgressLoadCnt > 0 && --this._pageProgressLoadCnt === 0) {
-        this._pageProgressService.reset();
+        this._pageProgressService.deactivate();
       }
     }
   }

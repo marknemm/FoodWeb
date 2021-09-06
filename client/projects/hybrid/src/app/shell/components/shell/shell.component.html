@@ -1,0 +1,23 @@
+<foodweb-hybrid-header>
+  <ion-menu-button class="header-primary-button" menu="left-nav"><ion-icon icon="menu"></ion-icon></ion-menu-button>
+</foodweb-hybrid-header>
+
+<ion-content #mainScrollPane>
+  <foodweb-hybrid-left-nav>
+    <foodweb-hybrid-left-nav-items class="left-nav-items"></foodweb-hybrid-left-nav-items>
+  </foodweb-hybrid-left-nav>
+
+  <div *ngIf="pageProgressService.showBlockingProgress" class="blocking-page-progress-indicator">
+    <foodweb-progress-indicator
+      [backdropColor]="pageProgressService.backdropColor"
+      [blocking]="pageProgressService.blocking"
+      [color]="pageProgressService.color"
+      [diameter]="pageProgressService.diameter"
+      [trigger]="pageProgressService.trigger">
+    </foodweb-progress-indicator>
+  </div>
+
+  <div id="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</ion-content>

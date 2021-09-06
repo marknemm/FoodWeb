@@ -4,12 +4,12 @@ import { TimeRangeForm } from './time-range.form';
 
 export class TimeRangeArray extends TFormArray<TimeRangeForm> {
 
-  constructor(value?: TimeRange[]) {
+  constructor(value?: TimeRange[], private _neverEmpty = false) {
     super([], () => new TimeRangeForm());
     if (value && value.length > 0) {
       this.patchValue(value);
     }
-    if (this.length === 0) {
+    if (this._neverEmpty && this.length === 0) {
       this.push(); // Add a single empty element to accept user input.
     }
   }
@@ -20,7 +20,11 @@ export class TimeRangeArray extends TFormArray<TimeRangeForm> {
    * @return true if it may be removed, false if not.
    */
   canRemoveAt(idx: number): boolean {
-    return (idx < this.length && (this.length > 1 || !!this.at(idx).startTime || !!this.at(idx).endTime));
+    return (idx < this.length && (
+      (this.length > 0 && (!this._neverEmpty || this.length > 1))
+      || !!this.at(idx).startTime
+      || !!this.at(idx).endTime
+    ));
   }
 
   /**
@@ -32,7 +36,7 @@ export class TimeRangeArray extends TFormArray<TimeRangeForm> {
    */
   removeAt(idx: number): TimeRangeForm {
     const removed: TimeRangeForm = super.removeAt(idx);
-    if (this.length === 0) {
+    if (this._neverEmpty && this.length === 0) {
       this.push();
     }
     return removed;

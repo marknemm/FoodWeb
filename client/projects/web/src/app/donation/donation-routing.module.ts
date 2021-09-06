@@ -1,13 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGaurdService } from '~web/session/services/auth-gaurd/auth-gaurd.service';
-import { DonationDetailsComponent } from './components/donation-details/donation-details.component';
-import { DonationsComponent } from './components/donations/donations.component';
+import { AuthGuardService } from '~web/session/services/auth-guard/auth-guard.service';
+import { DonateComponent } from './components/donate/donate.component';
+import { DonationEditComponent } from './components/donation-edit/donation-edit.component';
+import { DonationListComponent } from './components/donation-list/donation-list.component';
+import { DonationComponent } from './components/donation/donation.component';
 
 const routes: Routes = [
-  { path: 'details/:id', component: DonationDetailsComponent },
-  { path: 'list', component: DonationsComponent },
-  { path: 'list/my', component: DonationsComponent, canActivate: [AuthGaurdService] }
+  { path: 'donate', component: DonateComponent },
+  { path: 'list', children: [
+    { path: '', component: DonationListComponent },
+    { path: 'my', component: DonationListComponent, canActivate: [AuthGuardService] },
+  ]},
+  { path: ':id', children: [
+    { path: '', component: DonationComponent },
+    { path: 'edit', component: DonationEditComponent },
+  ]},
 ];
 
 @NgModule({

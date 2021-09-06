@@ -2,7 +2,7 @@ import express = require('express');
 import { Request, Response } from 'express';
 import { EventRegistrationEntity } from '~entity';
 import { EventRegistrationCreateRequest, FeaturedEvent, FeaturedEventRequest, ListResponse } from '~shared';
-import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
+import { genErrorResponse, genErrorResponseRethrow } from '~web/middleware/response-error.middleware';
 import { sendEventRegistrationMessage } from '~web/services/featured-event/event-registration-message';
 import { readFeaturedEvents } from '~web/services/featured-event/read-featured-events';
 import { saveEventRegistration } from '~web/services/featured-event/save-event-registration';

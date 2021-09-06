@@ -1,4 +1,4 @@
-@import "constants.scss";
+@import "variables.scss";
 
 .account-type-selections {
   position: relative;
@@ -6,7 +6,7 @@
   vertical-align: top;
 
   &.edit {
-    button.selected {
+    .selected {
       @media only screen and (min-width: $sm + 1px) {
         .mat-card {
           min-width: 155px;

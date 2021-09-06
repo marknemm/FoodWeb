@@ -58,7 +58,7 @@ export async function sendDeliveryStateAdvancedMessages(donation: DonationEntity
       notificationAccounts,
       {
         notificationType: NotificationType.DeliveryStateAdvance,
-        notificationLink: `/donation/details/${donation.id}`,
+        notificationLink: `/donation/${donation.id}`,
         title: `Delivery ${advanceAction}`,
         icon: volunteerAccount.profileImg,
         body: `
@@ -145,7 +145,7 @@ async function _sendDeliveryStateUndoMessages(donation: DonationEntity): Promise
       notificationAccounts,
       {
         notificationType: NotificationType.DeliveryStateUndo,
-        notificationLink: `/donation/details/${donation.id}`,
+        notificationLink: `/donation/${donation.id}`,
         title: `Delivery Reverted to ${donation.donationStatus}`,
         icon: volunteerAccount.profileImg,
         body: `

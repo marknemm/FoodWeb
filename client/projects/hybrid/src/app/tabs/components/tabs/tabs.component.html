@@ -1,0 +1,48 @@
+<ion-tabs>
+
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="donation-hub" *ngIf="!sessionService.isBusiness">
+      <ion-icon name="restaurant"></ion-icon>
+      <ion-label>Army</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="donation" *ngIf="!sessionService.isVolunteer">
+      <ion-icon name="gift"></ion-icon>
+      <ion-label>Donations</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="delivery" *ngIf="sessionService.isVolunteer">
+      <ion-icon name="car"></ion-icon>
+      <ion-label>Deliveries</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="home">
+      <ion-icon name="home"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="notifications" *ngIf="sessionService.loggedIn">
+      <ion-icon name="notifications"></ion-icon>
+      <ion-badge color="danger" *ngIf="notificationService.hasUnseenNotifications">
+        {{ notificationService.unseenNotificationsCount | shortNum }}
+      </ion-badge>
+      <ion-label>Messages</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button [routerLink]="['/bootstrap', 'signup']" *ngIf="!sessionService.loggedIn">
+      <ion-icon name="person-add"></ion-icon>
+      <ion-label>Signup</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button [routerLink]="['/bootstrap', 'login']" *ngIf="!sessionService.loggedIn">
+      <ion-icon name="power"></ion-icon>
+      <ion-label>Login</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="settings" *ngIf="sessionService.loggedIn">
+      <ion-icon name="settings"></ion-icon>
+      <ion-label>Settings</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+</ion-tabs>

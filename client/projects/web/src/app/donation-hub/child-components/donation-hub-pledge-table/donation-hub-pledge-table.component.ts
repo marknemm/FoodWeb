@@ -34,9 +34,9 @@ export class DonationHubPledgeTableComponent implements OnChanges {
     }
   }
 
-  onSelectionChange(change: SelectionChange<DonationHubPledge>): void {
-    if (change.added?.length) {
-      this.select.emit(change.added[0]);
+  onSelectionChange(...selected: DonationHubPledge[]): void {
+    if (this.selection && selected?.length) {
+      this.select.emit(selected[0]);
     }
   }
 }

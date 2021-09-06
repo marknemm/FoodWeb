@@ -1,0 +1,15 @@
+@import "../../../../../../web/src/app/account-shared/child-components/operation-hours-info/operation-hours-info.component.scss";
+
+.operation-hours-container {
+  .operation-hours-grid {
+    > .col-lg-6 {
+      .operation-hours-form-container {
+        border-bottom: none;
+
+        &:first-child {
+          border-top: none;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+@import "../../../../../../web/src/app/shared/child-components/requirements-checklist/requirements-checklist.component.scss";
+
+.requirements-checklist {
+  ion-item {
+    --inner-padding-start: 0;
+  }
+
+  ion-checkbox + ion-label {
+    white-space: normal;
+  }
+
+  &.error {
+    ion-checkbox.ng-invalid + ion-label {
+      color: var(--ion-color-danger);
+    }
+  }
+}

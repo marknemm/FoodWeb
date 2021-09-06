@@ -1,1 +1,55 @@
-@import "constants.scss";
+@import "variables.scss";
+@import "./ion-alert.scss";
+@import "./ion-button.scss";
+@import "./ion-card.scss";
+@import "./ion-checkbox.scss";
+@import "./ion-content.scss";
+@import "./ion-datetime.scss";
+@import "./ion-input.scss";
+@import "./ion-label.scss";
+@import "./ion-list.scss";
+@import "./ion-radio.scss";
+@import "./ion-toast.scss";
+@import "./mat-expansion-panel.scss";
+@import "./mat-form-field.scss";
+
+html.ios {
+  height: 100vh;
+  overflow: hidden;
+}
+
+hr {
+  background-color: rgba(0, 0, 0, .12);
+}
+
+h2.section-title,
+.block-label,
+.inline-label {
+  color: var(--ion-text-color);
+}
+
+.standalone-statement {
+  color: var(--ion-color-step-850);
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+.action-footer {
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.call-to-action-list > *,
+.call-to-action {
+  &:before {
+    font-weight: bold;
+    top: 9px;
+  }
+}
+
+.end-list-message {
+  margin: 8px 0;
+  font-size: 14px;
+  color: var(--ion-color-secondary);
+}

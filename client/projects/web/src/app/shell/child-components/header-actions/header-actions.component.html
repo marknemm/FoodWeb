@@ -1,9 +1,0 @@
-<span class="header-actions">
-  <ng-container *ngIf="!sessionService.loggedIn; else loggedInTmpl">
-    <foodweb-login-menu></foodweb-login-menu>
-  </ng-container>
-  <ng-template #loggedInTmpl>
-    <foodweb-notifications-menu></foodweb-notifications-menu>
-    <foodweb-settings-menu></foodweb-settings-menu>
-  </ng-template>
-</span>

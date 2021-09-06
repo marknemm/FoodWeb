@@ -1,0 +1,116 @@
+<div class="account-type-selections" [ngClass]="{ 'edit': editable, 'display': !editable }">
+  <div class="account-categories" *ngIf="editable">
+    <h2 class="section-title">
+      Are you an individual Volunteer or Business?
+    </h2>
+
+    <ion-button
+      *ngFor="let accountCategory of constantsService.ACCOUNT_CATEGORIES"
+      [disabled]="!editable && (accountCategory !== selAccountCategory)"
+      [class]="accountCategory | lowercase"
+      [ngClass]="{ selected: (accountCategory === selAccountCategory) }"
+      (click)="accountCategoryClick(accountCategory)"
+      (blur)="onTouchedCb()">
+      <ion-card>
+        <ion-card-title>
+          <ion-toolbar [color]="accountCategory | lowercase">{{ accountCategory }}</ion-toolbar >
+        </ion-card-title>
+        <ion-card-content>
+          <mat-icon [color]="accountCategory | lowercase">
+            {{ constantsService.ACCOUNT_CATEGORY_ICONS[accountCategory] }}
+          </mat-icon>
+        </ion-card-content>
+        <div class="not-selected-mask"></div>
+      </ion-card>
+      <ion-ripple-effect></ion-ripple-effect>
+    </ion-button>
+  </div>
+
+  <div class="account-types" *ngIf="showAccountTypes">
+    <h2 class="section-title" *ngIf="editable">
+      Are you a Donor or Receiver?
+    </h2>
+
+    <ion-button
+      *ngFor="let accountType of accountTypes"
+      [disabled]="!editable && (accountType !== selAccountType)"
+      [class]="accountType | lowercase"
+      [ngClass]="{ selected: (accountType === selAccountType) }"
+      (click)="accountTypeClick(accountType)"
+      (blur)="onTouchedCb()">
+      <ion-card>
+        <ion-card-title>
+          <ion-toolbar [color]="accountType | lowercase">{{ accountType }}</ion-toolbar >
+        </ion-card-title>
+        <ion-card-content>
+          <mat-icon [color]="accountType | lowercase">
+            {{ constantsService.ACCOUNT_TYPE_ICONS[accountType] }}
+          </mat-icon>
+        </ion-card-content>
+        <div class="not-selected-mask"></div>
+      </ion-card>
+      <ion-ripple-effect></ion-ripple-effect>
+    </ion-button>
+  </div>
+
+  <ion-card class="account-type-descr {{ selAccountType | lowercase }}" *ngIf="showAccountTypeDescr">
+    <ion-card-header>
+      <ion-card-title *ngIf="selAccountType === AccountType.Volunteer">
+        Volunteer
+      </ion-card-title>
+      <ion-card-title *ngIf="selAccountType === AccountType.Donor">
+        Donor Business
+      </ion-card-title>
+      <ion-card-title *ngIf="selAccountType === AccountType.Receiver">
+        Receiver Business
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ng-container *ngIf="selAccountType === AccountType.Volunteer">
+        <p>
+          Our volunteers are the heart and soul of FoodWeb.
+          Your dedication and hard work make our mission possible.
+        </p>
+
+        <div>
+          You can provide vital service to your community:
+          <ul>
+            <li>Enlist as a donation drop-off hub in the Sandwich Army.</li>
+            <li>Pledge a personal donation to the Sandwich Army.</li>
+            <li>Deliver donations between businesses & food pantries.</li>
+          </ul>
+        </div>
+
+        <p>
+          We welcome you to the FoodWeb team, and look forward to working with you!
+        </p>
+      </ng-container>
+
+      <ng-container *ngIf="selAccountType === AccountType.Donor">
+        <p>
+          Local food pantries cherish every donation gifted by our donors.
+          Your generosity can inspire hope, and help your neighbors through their trying times.
+        </p>
+
+        <p>
+          We personally thank you for taking steps to fight poverty and reduce food waste within your community!
+        </p>
+      </ng-container>
+
+      <ng-container *ngIf="selAccountType === AccountType.Receiver">
+        <p>
+          Charitable organizations function as bastions of hope within the community.
+          Many of our neighbors rely on you for sustenance during their hard times.
+        </p>
+
+        <p>
+          We have the deepest gratitude and admiration for your work, and look forward
+          to facilitating your mission.
+        </p>
+      </ng-container>
+
+      <ion-button color="primary" (click)="confirmSelection()" size="medium" expand="block">Continue</ion-button>
+    </ion-card-content>
+  </ion-card>
+</div>

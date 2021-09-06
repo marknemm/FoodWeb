@@ -1,0 +1,20 @@
+@import "variables.scss";
+
+ion-picker {
+  .picker-columns {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+
+  .picker-opt {
+    font-size: 14px;
+    margin-left: 1px;
+  }
+}
+
+ion-item.item-label-floating {
+  ion-datetime {
+    --padding-top: 6px;
+    height: 30px;
+  }
+}

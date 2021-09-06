@@ -9,14 +9,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AdminAccountSharedModule } from '~admin/admin-account-shared/admin-account-shared.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { ShellModule } from '~web/shell/shell.module';
-import { AdminHeaderActionsComponent } from './child-components/admin-header-actions/admin-header-actions.component';
 import { AdminLeftNavItemsComponent } from './child-components/admin-left-nav-items/admin-left-nav-items.component';
 import { AdminSettingsMenuComponent } from './child-components/admin-settings-menu/admin-settings-menu.component';
 import { AdminShellComponent } from './components/admin-shell/admin-shell.component';
 
 @NgModule({
   declarations: [
-    AdminHeaderActionsComponent,
     AdminLeftNavItemsComponent,
     AdminSettingsMenuComponent,
     AdminShellComponent,

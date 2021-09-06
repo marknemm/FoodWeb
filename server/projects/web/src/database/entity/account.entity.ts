@@ -58,9 +58,4 @@ export class AccountEntity implements Account {
   formatOperationHours(): void {
     _opHoursHelper.formatOperationHoursTimes(this.operationHours);
   }
-
-  @OrmAfterLoad()
-  fillVerfied(): void {
-
-  }
 }

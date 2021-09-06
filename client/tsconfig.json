@@ -18,7 +18,9 @@
       "node_modules/@types"
     ],
     "types": [
-      "node"
+      "googlemaps",
+      "node",
+      "resize-observer-browser"
     ],
     "lib": [
       "es2018",

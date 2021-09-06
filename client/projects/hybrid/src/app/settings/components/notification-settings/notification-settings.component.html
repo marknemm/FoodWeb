@@ -1,0 +1,29 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>Notifications</ion-label>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" color="primary" [disabled]="formGroup.pristine" (click)="save()">Save</ion-button>
+    </ion-buttons>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content>
+  <form class="notification-settings-container" [formGroup]="formGroup">
+    <div formGroupName="notificationSettings" class="notification-settings-form">
+      <ion-list>
+        <ion-item>
+          <ion-label color="secondary">Email Notifications</ion-label>
+          <ion-toggle formControlName="enableEmail" slot="end"></ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-label color="secondary">Push Notifications</ion-label>
+          <ion-toggle formControlName="enablePushNotification" slot="end"></ion-toggle>
+        </ion-item>
+        <ion-item *ngIf="!sessionService.isDonor">
+          <ion-label color="secondary">Notify New {{ sessionService.isReceiver ? 'Donation' : 'Delivery' }}</ion-label>
+          <ion-toggle formControlName="notifyForEachDonation" slot="end"></ion-toggle>
+        </ion-item>
+      </ion-list>
+    </div>
+  </form>
+</ion-content>

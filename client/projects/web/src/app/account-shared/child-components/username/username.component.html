@@ -1,9 +1,7 @@
-<div class="username-container">
-  <mat-form-field *ngIf="editable" class="username-input fill">
-    <input matInput [formControl]="formControl" placeholder="Username" type="text">
-  </mat-form-field>
+<mat-form-field *ngIf="editable" class="username-input fill">
+  <input matInput [formControl]="formControl" placeholder="Username" type="text">
+</mat-form-field>
 
-  <div *ngIf="!editable" class="username-display">
-    {{ formControl.value }}
-  </div>
+<div *ngIf="!editable" class="username-display">
+  {{ formControl.value }}
 </div>

@@ -17,6 +17,8 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class DonationHubPledgeEditComponent extends FormBaseComponent<DonationHubPledgeForm> implements OnInit {
 
+  readonly postEditRoute = ['/', 'donation-hub', 'pledge'];
+
   private _donationHubPledgeNotFound = false;
   private _originalDonationHubPledge: DonationHubPledge;
 
@@ -58,7 +60,7 @@ export class DonationHubPledgeEditComponent extends FormBaseComponent<DonationHu
   save(): void {
     if (this.formGroup.checkValidity()) {
       this._donationHubPledgeUpdateService.updateDonationHubPledge(this.formGroup.value).subscribe(
-        (pledge: DonationHubPledge) => this._router.navigate(['/donation-hub', 'pledge', pledge.id])
+        (pledge: DonationHubPledge) => this._router.navigate(this.postEditRoute.concat(`${pledge.id}`))
       );
     }
   }

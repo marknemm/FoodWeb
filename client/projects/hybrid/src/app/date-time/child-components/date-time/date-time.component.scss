@@ -1,0 +1,12 @@
+@import "variables.scss";
+
+ion-label {
+  &.label-fixed {
+    &,
+    &.sc-ion-label-ios-h {
+      min-width: 0;
+      width: auto;
+      flex-basis: auto;
+    }
+  }
+}

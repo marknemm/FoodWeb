@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { from, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Account, AccountHelper } from '~shared';
+import { SessionStore, SESSION_STORE_ID } from '~web/session/interfaces/session-store';
+import { KeyValueStoreService, PropertyStore } from '~web/shared/services/key-value-store/key-value-store.service';
 export { Account };
 
 @Injectable({
@@ -9,19 +11,27 @@ export { Account };
 })
 export class SessionService {
 
-  protected _sessionCache = new Map<string, any>();
-  protected _sessionSaveMonitors = new Map<string, Subject<any>>();
   protected _sessionDeleteMonitors = new Map<string, Subject<any>>();
+  protected _sessionSaveMonitors = new Map<string, Subject<any>>();
 
   constructor(
-    protected _accountHelper: AccountHelper
+    protected _accountHelper: AccountHelper,
+    protected _keyValueStoreService: KeyValueStoreService
   ) {}
 
   /**
    * The current user's account. null if the user is not logged in.
    */
   get account(): Account {
-    return this.get('account');
+    return this.sessionStore.snapshot.account;
+  }
+
+  /**
+   * Gets the key-value store associated with the currently logged in Account.
+   * If no user is logged in, then the universal 'null' account store will be returned.
+   */
+  get sessionStore(): PropertyStore<SessionStore> {
+    return this._keyValueStoreService.getPropertyStore<SessionStore>(SESSION_STORE_ID)
   }
 
   /**
@@ -52,7 +62,14 @@ export class SessionService {
    * The name of the user account.
    */
   get accountName(): string {
-    return this.get('accountName');
+    return this._accountHelper.accountName(this.account);
+  }
+
+  /**
+   * Whether or not the user is a business (donor/receiver).
+   */
+  get isBusiness(): boolean {
+    return (this.isDonor || this.isReceiver);
   }
 
   /**
@@ -83,21 +100,28 @@ export class SessionService {
     return (this.account != null);
   }
 
+  loadLocalSession(): Observable<SessionStore> {
+    return from(
+      Promise.all([
+        this.sessionStore.get('account'),
+        this.sessionStore.get('perpetualSession'),
+      ]).then(() => this.sessionStore.snapshot)
+    );
+  }
+
   /**
    * Saves account session data on the client.
    * @param account The account to save.
    */
-  saveAccount(account: Account): void {
-    this.save('account', account);
-    this.save('accountName', this._accountHelper.accountName(account));
+  saveSession(account: Account): void {
+    this.sessionStore.set('account', account);
   }
 
   /**
    * Deletes account session data held on the client.
    */
-  deleteAccount(): void {
-    this.delete('account');
-    this.delete('accountName');
+  clearSession(): void {
+    this.sessionStore.clear();
   }
 
   /**
@@ -128,92 +152,12 @@ export class SessionService {
   }
 
   /**
-   * Gets session data from the cache if it is present, or loads it from persistent storage if it is not in the cache.
-   * @param key The key of the data to retreive.
-   * @return The retrieved data.
-   */
-  get(key: string): any {
-    return this._sessionCache.get(key) || this.load(key);
-  }
-
-  /**
-   * Loads session data directly from persistent storage and writes it to the cache.
-   * @param key The key of the data to load.
-   * @param noCacheWrite Set to true if the loaded data should not be written to the cache.
-   * @return The loaded data.
-   */
-  load(key: string, noCacheWrite = false): any {
-    const jsonData: string = this._rawLoad(key);
-    if (!jsonData) { return null; }
-
-    const data: any = JSON.parse(jsonData);
-    if (!noCacheWrite) {
-      this._sessionCache.set(key, data);
-    }
-    return data;
-  }
-
-  /**
-   * Performs the raw (most basic) level of the load operation (interacts directly with native API).
-   * @param key The key of the data to load.
-   */
-  protected _rawLoad(key: string): string {
-    return localStorage.getItem(key);
-  }
-
-  /**
-   * Saves session data to persistent storage and a cache.
-   * @param key The key of the data to save.
-   * @param data The data to save.
-   * @param noCacheWrite Optionally set to true if the data should not be cached.
-   */
-  save(key: string, data: any, noCacheWrite = false): void {
-    const jsonData: string = JSON.stringify(data);
-    this._rawSave(key, jsonData);
-
-    if (!noCacheWrite) {
-      this._sessionCache.set(key, data);
-    }
-    this._sessionSaveMonitors.get(key)?.next(data);
-  }
-
-  /**
-   * Performs the raw (most basic) level of the save operation (interacts directly with native API).
-   * @param key The key of the data to save.
-   * @param jsonData The JSON/string data to save.
-   */
-  protected _rawSave(key: string, jsonData: string): void {
-    localStorage.setItem(key, jsonData);
-  }
-
-  /**
-   * Deletes session data from persistent storage and the cache.
-   * @param key The key of the session data to delete.
-   */
-  delete(key: string): void {
-    const data = this.get(key);
-    if (data) {
-      this._rawDelete(key);
-      this._sessionCache.delete(key);
-      this._sessionDeleteMonitors.get(key)?.next(data);
-    }
-  }
-
-  /**
-   * Performs the raw (most basic) level of the delete operation (interacts directly with native API).
-   * @param key The key of the session data to delete.
-   */
-  protected _rawDelete(key: string): void {
-    localStorage.removeItem(key);
-  }
-
-  /**
    * Registers a save monitor for a given key that will emit once an associated value is saved.
    * @param key The key to monitor.
    * @param destroy$ An optional observable that may be used to unsubscribe from the return observable.
    * @return An observable that emits a saved value once a save is detected.
    */
-  onSave(key: string, destroy$ = new Observable<any>()): Observable<any> {
+  onSave<K extends keyof SessionStore>(key: K, destroy$ = new Observable<any>()): Observable<SessionStore[K]> {
     if (!this._sessionSaveMonitors.has(key)) {
       this._sessionSaveMonitors.set(key, new Subject<any>());
     }
@@ -228,7 +172,7 @@ export class SessionService {
    * @param destroy$ An optional observable that may be used to unsubscribe from the return observable.
    * @return An observable that emits a deleted value once a delete is detected.
    */
-  onDelete(key: string, destroy$ = new Observable<any>()): Observable<any> {
+  onDelete<K extends keyof SessionStore>(key: K, destroy$ = new Observable<any>()): Observable<SessionStore[K]> {
     if (!this._sessionDeleteMonitors.has(key)) {
       this._sessionDeleteMonitors.set(key, new Subject<any>());
     }

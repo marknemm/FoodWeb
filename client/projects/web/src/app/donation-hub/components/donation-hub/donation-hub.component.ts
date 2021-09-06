@@ -17,21 +17,24 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class DonationHubComponent implements OnInit, OnDestroy {
 
-  private _destroy$ = new Subject();
-  private _donationHub: DonationHub;
-  private _donationHubNotFound = false;
-  private _pledges: DonationHubPledge[] = [];
-  private _myPledge: DonationHubPledge;
+  readonly pledgeSelectRoute = ['/', 'donation-hub', 'pledge'];
+  readonly postDeleteRoute = ['/', 'home'];
+
+  protected _destroy$ = new Subject();
+  protected _donationHub: DonationHub;
+  protected _donationHubNotFound = false;
+  protected _pledges: DonationHubPledge[] = [];
+  protected _myPledge: DonationHubPledge;
 
   constructor(
     public donationHubDeleteService: DonationHubDeleteService,
     public pageTitleService: PageTitleService,
-    private _activatedRoute: ActivatedRoute,
-    private _donationHubPledgeReadService: DonationHubPledgeReadService,
-    private _donationHubReadService: DonationHubReadService,
-    private _router: Router,
-    private _sessionService: SessionService,
-    private _urlQueryService: UrlQueryService
+    protected _activatedRoute: ActivatedRoute,
+    protected _donationHubPledgeReadService: DonationHubPledgeReadService,
+    protected _donationHubReadService: DonationHubReadService,
+    protected _router: Router,
+    protected _sessionService: SessionService,
+    protected _urlQueryService: UrlQueryService
   ) {}
 
   get canDonate(): boolean {
@@ -105,7 +108,7 @@ export class DonationHubComponent implements OnInit, OnDestroy {
   deleteDonationHub(): void {
     if (this.canModify) {
       this.donationHubDeleteService.deleteDonationHub(this.donationHub).subscribe(() =>
-        this._router.navigate(['/home'])
+        this._router.navigate(this.postDeleteRoute)
       );
     }
   }
@@ -117,7 +120,7 @@ export class DonationHubComponent implements OnInit, OnDestroy {
   }
 
   onDonationHubPledgeSelect(pledge: DonationHubPledge): void {
-    this._router.navigate(['/donation-hub', 'pledge', pledge.id]);
+    this._router.navigate(this.pledgeSelectRoute.concat(`${pledge.id}`));
   }
 
   refreshDonationHubPledges(): void {

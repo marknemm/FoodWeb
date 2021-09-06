@@ -27,12 +27,14 @@ import { DirectionStepsExtractorPipe } from './pipes/direction-steps-extractor/d
     MatCheckboxModule,
     MatExpansionModule,
     MatRadioModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   exports: [
     DirectionStepsComponent,
+    DirectionStepsExtractorPipe,
     MapComponent,
-    MapOptionsComponent
+    MapMarkerInfoComponent,
+    MapOptionsComponent,
   ]
 })
 export class MapModule {}

@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginGuardService } from '~hybrid/bootstrap/services/login-guard/login-guard.service';
 import { SignupComponent } from '~hybrid/bootstrap/components/signup/signup.component';
-import { LoginComponent } from '~web/session/components/login/login.component';
+import { LoginComponent } from '~hybrid/bootstrap/components/login/login.component';
 
 const routes: Routes = [
-  { path: '', canActivate: [LoginGuardService], canDeactivate: [LoginGuardService],
+  { path: '',
+    canActivate: [LoginGuardService],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'login' },
       { path: 'login', component: LoginComponent },

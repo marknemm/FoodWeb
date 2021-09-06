@@ -1,0 +1,38 @@
+<ion-card id="donation-hub-{{ donationHub.id }}" class="teaser donation-hub-teaser">
+  <ion-card-header>
+    <ion-avatar>
+      <foodweb-hybrid-profile-img [value]="hubAccount.profileImg"></foodweb-hybrid-profile-img>
+    </ion-avatar>
+    <ion-card-title>
+      <ion-label>{{ hubAccount | foodwebAccountName }}</ion-label>
+    </ion-card-title>
+    <ion-card-subtitle>{{ hubAccount.contactInfo.email }}</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <div class="donation-hub-display row">
+      <div class="col-md-6 col-12">
+        <foodweb-contact-info
+          [value]="donationHub.contactOverride"
+          [hideEmail]="true"
+          [hidePhone]="true">
+        </foodweb-contact-info>
+      </div>
+      <div class="col-md-6 col-12">
+        <div class="inline-label">Drop-Off Window:</div>
+        <div>
+          <foodweb-hybrid-date-time-range
+            [boldTime]="true"
+            [startDateTime]="donationHub.dropOffWindowStart"
+            [endDateTime]="donationHub.dropOffWindowEnd">
+          </foodweb-hybrid-date-time-range>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <ion-button [routerLink]="['/', 'donation-hub', donationHub.id]" class="compact" color="primary" expand="block">
+        View Donation Hub
+      </ion-button>
+    </div>
+  </ion-card-content>
+</ion-card>

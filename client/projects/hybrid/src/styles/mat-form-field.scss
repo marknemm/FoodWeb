@@ -1,0 +1,40 @@
+@import "variables.scss";
+
+.mat-form-field {
+  font: 16px Roboto,"Helvetica Neue",sans-serif;
+
+  .mat-form-field-wrapper {
+    margin-bottom: -1.25em;
+  }
+
+  .mat-form-field-infix {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .mat-form-field-empty.mat-form-field-label,
+  .mat-form-field-label,
+  ::placeholder {
+    color: var(--ion-placeholder-color);
+    padding-left: var(--mobile-side-padding);
+    padding-right: var(--mobile-side-padding);
+  }
+
+  .mat-form-field-suffix {
+    margin-right: calc(var(--mobile-side-padding) / 2);
+  }
+
+  .mat-datepicker-toggle {
+    color: var(--ion-placeholder-color);
+  }
+
+  .mat-form-field-underline {
+    background-color: var(--ion-border-color);
+  }
+
+  &.mat-form-field-hide-placeholder {
+    .mat-form-field-infix {
+      border-top: 0;
+    }
+  }
+}

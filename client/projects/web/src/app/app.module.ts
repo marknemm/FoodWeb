@@ -42,4 +42,4 @@ import { ShellModule } from '~web/shell/shell.module';
     AppComponent
   ]
 })
-export class AppModule { }
+export class AppModule {}

@@ -5,12 +5,12 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { NotificationSharedModule } from '~web/notification-shared/notification-shared.module';
 import { SharedModule } from '~web/shared/shared.module';
-import { NotificationsComponent } from './components/notifications/notifications.component';
+import { NotificationListComponent } from './components/notification-list/notification-list.component';
 import { NotificationRoutingModule } from './notification-routing.module';
 
 @NgModule({
   declarations: [
-    NotificationsComponent,
+    NotificationListComponent,
   ],
   imports: [
     NotificationRoutingModule,

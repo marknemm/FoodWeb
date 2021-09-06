@@ -1,0 +1,51 @@
+@import "variables.scss";
+
+.donation {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: hidden;
+
+  .donor-info-container,
+  .receiver-info-container,
+  .deliverer-info-container {
+    margin-left: auto;
+    margin-right: auto;
+
+    .donation-submitter {
+      margin-bottom: 12px;
+    }
+  }
+
+  .mat-card-content {
+    margin-bottom: 0;
+  }
+
+  hr {
+    margin: 2rem 0;
+
+    &.offset-top {
+      margin-top: calc(2rem - 20px);
+
+      @media only screen and (max-width: $mat-mobile) {
+        margin-top: calc(2rem - 8px);
+      }
+    }
+
+    @media only screen and (max-width: $mat-mobile) {
+      margin-left: -5px;
+      margin-right: -5px;
+    }
+  }
+
+  @media only screen and (max-width: $mat-mobile) {
+    .mat-card-title {
+      font-size: 16px;
+    }
+
+    .inline-label,
+    .inline-label + * {
+      font-size: 13px;
+    }
+  }
+}

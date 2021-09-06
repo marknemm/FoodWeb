@@ -15,7 +15,7 @@
       confirmMessage="Are you sure you want to permanently delete the donation?">
       Delete Donation
     </button>
-    <a [routerLink]="[donationActionsService.editUrl, donation.id]" [state]="{ donation: donation }">
+    <a [routerLink]="['/', 'donation', donation.id, 'edit']" [state]="{ donation: donation }">
       <button mat-raised-button type="button" color="primary" class="edit-button">
         Edit Donation
       </button>

@@ -1,4 +1,4 @@
-import { FindConditions, getRepository, In, MoreThan } from 'typeorm';
+import { FindConditions, getRepository, In, LessThanOrEqual, MoreThan } from 'typeorm';
 import { AccountEntity, NotificationEntity } from '~entity';
 import { genSkip, genTake } from '~orm';
 import { Account, NotificationReadRequest, NotificationType } from '~shared';
@@ -32,6 +32,9 @@ function _genFindConditions(request: NotificationReadRequest, myAccount: Account
   if (request.id != null) {
     conditions.id = request.id;
   }
+  if (request.maxId != null) {
+    conditions.id = LessThanOrEqual(request.id);
+  }
   if (request.flagged != null) {
     conditions.flagged = request.flagged;
   }
@@ -40,6 +43,9 @@ function _genFindConditions(request: NotificationReadRequest, myAccount: Account
   }
   if (request.unseen && request.id == null) {
     conditions.id = MoreThan(myAccount.lastSeenNotificationId);
+  }
+  if (request.latestTimestamp != null) {
+    conditions.timestamp = LessThanOrEqual(request.latestTimestamp);
   }
   if (request.notificationType != null) {
     // notificationType query param can either be a single NotificationType or comma separated list.

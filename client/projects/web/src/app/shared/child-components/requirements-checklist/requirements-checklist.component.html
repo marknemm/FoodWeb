@@ -6,10 +6,12 @@
     </div>
   </div>
 
-  <hr>
+  <ng-container *ngIf="checkAll">
+    <hr>
 
-  <mat-checkbox [checked]="checklistForm.valid" (change)="toggleSelectAll($event.checked)">
-    <strong>{{ checkAll }}</strong>
-  </mat-checkbox>
+    <mat-checkbox [checked]="checklistForm.valid" (change)="toggleSelectAll($event.checked)">
+      <strong>{{ checkAll }}</strong>
+    </mat-checkbox>
+  </ng-container>
 
 </div>

@@ -1,6 +1,6 @@
-@import "constants.scss";
+@import "variables.scss";
 
-.donation-workflow-card .donation-workflow-card-content {
+.donation-workflow-card-content {
   border-radius: inherit;
 
   .donation-workflow {
@@ -24,42 +24,38 @@
         border-bottom-left-radius: inherit;
         border-bottom-right-radius: inherit;
       }
-
-      .title {
-        font-size: 16px;
-        font-weight: bold;
-      }
-
-      .description {
-        font-size: 14px;
-        font-weight: normal;
-        color: black;
-        margin-bottom: 0;
-
-        @media only screen and (max-width: $mat-mobile) {
-          font-size: 12px;
-        }
-      }
-
-      .toggle-show-all-statuses {
-        padding: 0;
-        text-decoration: underline;
-        font-weight: bold;
-      }
-
-      hr {
-        margin: 10px 0;
-      }
-
-      .actions {
-        position: relative;
-        display: block;
-        margin-top: -4px;
-
-        &:not(.align-right) {
-          text-align: center;
-        }
-      }
     }
+  }
+}
+
+.title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.description {
+  font-size: 14px;
+  font-weight: normal;
+  color: black;
+  margin-bottom: 0;
+}
+
+.toggle-show-all-statuses {
+  padding: 0;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+hr {
+  margin: 10px 0;
+}
+
+.actions {
+  position: relative;
+  display: block;
+  margin-top: -4px;
+
+  &:not(.align-right) {
+    text-align: center;
   }
 }

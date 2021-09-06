@@ -1,0 +1,10 @@
+@import "variables.scss";
+
+ion-button {
+  &[type=button],
+  &[type=submit] {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+  }
+}

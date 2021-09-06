@@ -1,0 +1,33 @@
+<div [formGroup]="formGroup" class="directions-options-container row">
+  <div class="origin-options-container col-sm-6">
+    <ion-label id="origin-options-title" class="inline-label">Show directions from: </ion-label>
+    <ion-list>
+      <ion-radio-group formControlName="useVolunteerCurrentPos" aria-labelledby="origin-options-title">
+        <ion-item lines="none">
+          <ion-radio [value]="true" mode="md"></ion-radio>
+          <ion-label>Current Location</ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-radio [value]="false" mode="md"></ion-radio>
+          <ion-label>My Home</ion-label>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+  </div>
+
+  <div class="display-options-container col-sm-6">
+    <ion-label class="inline-label">Display route: </ion-label>
+    <div class="checkbox-group">
+      <ion-list>
+        <ion-item lines="none">
+          <ion-checkbox formControlName="displayRouteToDonor" mode="md"></ion-checkbox>
+          <ion-label>{{ originDonorRouteName }} <span class="line donor"></span></ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox formControlName="displayRouteToReceiver" mode="md"></ion-checkbox>
+          <ion-label>Donor to Receiver <span class="line receiver"></span></ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+</div>

@@ -21,8 +21,8 @@ export class SessionMonitorService implements HttpInterceptor {
 
   /**
    * Intercepts all HTTP requests so that their responses may be monitored for errors with code 302 for login required.
-   * Upon the detection of a 302 error response, attempts to reauthenticate (automatically & manually), and resends the
-   * request upon successful reauthentication.
+   * Upon the detection of a 302 error response, attempts to reauthenticate (automatically & manually), and re-sends the
+   * request upon successful re-authentication.
    * @param request The HTTP request to intercept.
    * @param next The next Http handler.
    * @returns An observable that emits an `HttpEvent` representing the response for the intercepted request.
@@ -38,7 +38,7 @@ export class SessionMonitorService implements HttpInterceptor {
    * Detects if any incoming error responses have a status code of 302 for login required,
    * and if so, attempts to reauthenticate with the server (first automatically, then manually via login dialog).
    * @param error The `HttpErrorResponse` intercepted by this HTTP interceptor.
-   * @returns An observable that emits the result of the reauthentication attempt.
+   * @returns An observable that emits the result of the re-authentication attempt.
    */
   private _handleError(error: HttpErrorResponse): Observable<ReAuthResult> {
     if (error instanceof HttpErrorResponse && error.status === 302) {
@@ -57,8 +57,8 @@ export class SessionMonitorService implements HttpInterceptor {
 
   /**
    * Prompts the user with a login dialog so that they may manually reauthenticate upon a response with code 302 (login required).
-   * @param error The authentication required `HttpErrorRespone` to display an alert for if login fails.
-   * @returns An observable that emits the result of the manual reauthentication attempt.
+   * @param error The authentication required `HttpErrorResponse` to display an alert for if login fails.
+   * @returns An observable that emits the result of the manual re-authentication attempt.
    */
   private _promptLogin(error: HttpErrorResponse): Observable<ReAuthResult> {
     return LoginDialogComponent.open(this._matDialog, { disableClose: true }).pipe(
@@ -73,23 +73,23 @@ export class SessionMonitorService implements HttpInterceptor {
   }
 
   /**
-   * Handles all responses, and determines if they resulted in a reauthentication attempt, and therefore should receive
-   * special handling, or if no reauthentication was required and can be handled normally.
-   * @param request The request that may be retried if reauthentication was successfully performed.
+   * Handles all responses, and determines if they resulted in a re-authentication attempt, and therefore should receive
+   * special handling, or if no re-authentication was required and can be handled normally.
+   * @param request The request that may be retried if re-authentication was successfully performed.
    * @param next The next HttpHandler.
-   * @param response The response that may be handled normally by forwarding it to the next handler if no reauthentication
-   * attempt occured (302 response code was not detected above), or the result of a reauthentication attempt that happened above.
+   * @param response The response that may be handled normally by forwarding it to the next handler if no re-authentication
+   * attempt occurred (302 response code was not detected above), or the result of a re-authentication attempt that happened above.
    * @returns An observable which emits an `HttpEvent` representing the resulting response which shall be forwarded
    * by this interceptor.
    */
   private _forwardRequestResponse(request: HttpRequest<any>, next: HttpHandler, response: any): Observable<HttpEvent<any>> {
     if (response.reAuthSucc === true) {
-      return next.handle(request); // Re-send the request if a reauthentication has been successful.
+      return next.handle(request); // Re-send the request if a re-authentication has been successful.
     }
     if (response.reAuthSucc === false) {
-      return EMPTY; // If reauthentication is unsuccessful, then return observable that emtis no items and terminates normally.
+      return EMPTY; // If re-authentication is unsuccessful, then return observable that emits no items and terminates normally.
     }
-    return of(response); // No reauthentication was performed, so simply send response to next HTTP handler (normal flow).
+    return of(response); // No re-authentication was performed, so simply send response to next HTTP handler (normal flow).
   }
 }
 

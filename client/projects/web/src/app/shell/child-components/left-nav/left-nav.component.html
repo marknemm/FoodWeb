@@ -1,11 +1,11 @@
-<mat-sidenav-container class="left-nav-container" [foodwebWindowSize]="windowSizeThreshPx" (thresholdCross)="leftNavService.deriveStateFromWindowSize(window.innerWidth)">
+<mat-sidenav-container class="left-nav-container" [foodwebWindowSize]="windowSizeThreshPx" (thresholdCross)="shellService.refreshLeftNavState(window.innerWidth)">
   <mat-sidenav
-    [mode]="leftNavService.mode"
-    [ngClass]="{ sticky: leftNavService.sticky }"
+    [mode]="shellService.leftNavMode"
+    [ngClass]="{ sticky: shellService.sticky }"
     [fixedInViewport]="true"
     [fixedTopGap]="fixedTopGap"
-    [opened]="leftNavService.opened"
-    (openedChange)="leftNavService.opened = $event">
+    [opened]="shellService.leftNavOpened"
+    (openedChange)="shellService.leftNavOpened = $event">
     <ng-content select=".left-nav-items"></ng-content>
   </mat-sidenav>
   <mat-sidenav-content #sidenavContent>

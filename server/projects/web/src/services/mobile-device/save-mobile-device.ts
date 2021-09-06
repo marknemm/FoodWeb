@@ -13,9 +13,23 @@ export function saveMobileDevice(mobileDevice: MobileDevice, account: AccountEnt
   const mobileDeviceToSave: MobileDeviceEntity = plainToClass(MobileDeviceEntity, mobileDevice);
   mobileDeviceToSave.accountId = account.id;
   _fillUuidIfMissing(mobileDeviceToSave, account);
-  return getConnection().transaction((manager: EntityManager) => {
-    return manager.getRepository(MobileDeviceEntity).save(mobileDeviceToSave);
-  });
+  return getConnection().transaction((manager: EntityManager) =>
+    manager.getRepository(MobileDeviceEntity).save(mobileDeviceToSave)
+  );
+}
+
+/**
+ * Saves a given push registration ID to a given mobile device entity.
+ * @param pushRegistrationId The push registration ID to save.
+ * @param mobileDevice The mobile device to save the push registration ID to.
+ * @returns A promise that resolves to the mobile device with push registration ID saved.
+ */
+export function savePushRegistration(pushRegistrationId: string, mobileDevice: MobileDeviceEntity): Promise<MobileDeviceEntity> {
+  const mobileDeviceToSave: MobileDeviceEntity = plainToClass(MobileDeviceEntity, mobileDevice);
+  mobileDeviceToSave.pushRegistrationId = pushRegistrationId;
+  return getConnection().transaction((manager: EntityManager) =>
+    manager.getRepository(MobileDeviceEntity).save(mobileDeviceToSave)
+  );
 }
 
 /**

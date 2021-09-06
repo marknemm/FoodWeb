@@ -7,13 +7,30 @@ use_frameworks!
 install! 'cocoapods', :disable_input_output_paths => true
 
 def capacitor_pods
-  # Automatic Capacitor Pod dependencies, do not delete
-  pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
-  pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
-  # Do not delete
+  pod 'Capacitor', :path => '../../../../node_modules/@capacitor/ios'
+  pod 'CapacitorCordova', :path => '../../../../node_modules/@capacitor/ios'
+  pod 'CapacitorApp', :path => '../../node_modules/@capacitor/app'
+  pod 'CapacitorDevice', :path => '../../node_modules/@capacitor/device'
+  pod 'CapacitorHaptics', :path => '../../node_modules/@capacitor/haptics'
+  pod 'CapacitorKeyboard', :path => '../../node_modules/@capacitor/keyboard'
+  pod 'CapacitorNetwork', :path => '../../node_modules/@capacitor/network'
+  pod 'CapacitorPushNotifications', :path => '../../node_modules/@capacitor/push-notifications'
+  pod 'CapacitorSplashScreen', :path => '../../node_modules/@capacitor/splash-screen'
+  pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
+  pod 'CapacitorStorage', :path => '../../node_modules/@capacitor/storage'
 end
 
 target 'App' do
   capacitor_pods
+
+  # add the Firebase pod for Google Analytics
+  pod 'Firebase/Analytics'
+  # or pod ‘Firebase/AnalyticsWithoutAdIdSupport’
+  # for Analytics without IDFA collection capability
+
+  pod 'Firebase/Messaging'
+  # add pods for any other desired Firebase products
+  # https://firebase.google.com/docs/ios/setup#available-pods
+
   # Add your Pods here
 end

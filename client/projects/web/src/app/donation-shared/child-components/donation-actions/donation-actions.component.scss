@@ -1,3 +1,5 @@
+@import "variables.scss";
+
 .action-footer {
   .action-row {
     margin-bottom: 20px;
@@ -8,6 +10,7 @@
 
     .action-hint {
       font-weight: normal;
+      font-size: 14px;
       color: black;
       margin-bottom: 7px;
     }

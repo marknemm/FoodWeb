@@ -1,11 +1,17 @@
+@import "variables.scss";
+
 .delivery-teaser {
-  .donation-status {
+  .foodweb-donation-status {
     font-size: 11px;
   }
 
   .delivery-display {
     &> div {
       margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     .donation-description {

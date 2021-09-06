@@ -1,0 +1,15 @@
+@import "variables.scss";
+
+.item-inner {
+  padding: 5px 0;
+
+  *:first-child {
+    color: var(--ion-color-primary);
+  }
+}
+
+.truncate {
+  color: var(--ion-placeholder-color);
+  margin-top: 4px;
+  font-weight: bold;
+}

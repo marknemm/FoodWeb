@@ -1,0 +1,33 @@
+<!-- <ion-button (click)="present($event)" class="notifications-menu-button" *ngIf="!isMenu; else menu">
+  <ion-icon icon="notifications"></ion-icon>
+  <ion-badge color="danger" *ngIf="notificationService.hasUnseenNotifications">
+    {{ notificationService.unseenNotificationsCount| shortNum }}
+  </ion-badge>
+</ion-button>
+
+<ng-template #menu>
+  <div class="notifications-menu-content" (click)="dismiss()">
+    <ion-toolbar>
+      <ion-title (click)="$event.stopPropagation()">Notifications</ion-title>
+      <ion-buttons slot="end">
+        <ion-button [routerLink]="['/account', 'my']" fragment="notifications" class="settings-button" color="dark" fill="clear" slot="end" size="small" shape="round">
+          <ion-icon icon="cog"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <mat-action-list>
+      <foodweb-notification
+        *ngFor="let notification of notificationService.notificationsPreview"
+        [notification]="notification"
+        [max2Lines]="true"
+        (flag)="notificationService.toggleNotificationFlaggedState($event)"
+        (select)="notificationService.handleNotificationSelect($event)">
+      </foodweb-notification>
+    </mat-action-list>
+    <div class="footer">
+      <ion-button [routerLink]="['/notification', 'list', 'my']" fill="clear" size="small">
+        <strong>See More</strong>
+      </ion-button>
+    </div>
+  </div>
+</ng-template> -->

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
+import { ActivatedRoute, Event, NavigationEnd, ParamMap, Params, Router } from '@angular/router';
 import { cloneDeep } from 'lodash-es';
-import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { NEVER, Observable, of } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { ReadRequest } from '~shared';
 
 /**
@@ -13,18 +13,39 @@ import { ReadRequest } from '~shared';
 })
 export class UrlQueryService {
 
+  private _prevUrl = '';
+
   constructor(
     private _router: Router
-  ) {}
+  ) {
+    // Track the previous URL to ensure that any query param change is not caused by a route change.
+    this._prevUrl = this._router.url.split(/\?|#/g)[0];
+    this._router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationEnd) {
+        this._prevUrl = event.url.split(/\?|#/g)[0];
+      }
+    });
+  }
 
   /**
-   * Listens for a change in URL query paramaters and maps the params to a read request on change.
-   * @param activatedRout The activated route service used to monitor changes to the URL.
+   * Listens for a change in URL query parameters and maps the params to a read request on change.
+   * Will always emit the current query param snapshot upon initial setup.
+   * @param activatedRoute The activated route service used to monitor changes to the URL.
+   * @param defaultParams The optional default parameter values to assign when not explicitly set via URL query params.
    * @return An observable that emits the `ReadRequest` generated from an update to the URL query params.
    */
-  listenQueryParamsChange<T extends ReadRequest>(activatedRoute: ActivatedRoute): Observable<T> {
+  listenQueryParamsChange<T extends ReadRequest>(activatedRoute: ActivatedRoute, defaultParams: Partial<T> = {}): Observable<T> {
+    const initUrl: string = this._router.url.split(/\?|#/g)[0];
+    let first = true;
     return activatedRoute.queryParams.pipe(
-      map((params: Params) => this.queryParamsToReadRequest<T>(params))
+      switchMap((params: Params) => {
+        // Check if this is triggered by a query param change and not a route change.
+        if (first || this._prevUrl === initUrl) {
+          first = false;
+          return of(this.queryParamsToReadRequest<T>(params, defaultParams));
+        }
+        return NEVER; // Do not emit a value (and do not terminate); the queryParams emission was due to a route change.
+      })
     );
   }
 
@@ -51,12 +72,17 @@ export class UrlQueryService {
   /**
    * Converts (URL) query params to a generic ReadRequest.
    * @param params The query params that are to be converted.
+   * @param defaultParams The default query param values that shall be assigned to any missing URL query params.
    * @return The `ReadRequest` result of the conversion.
    */
-  queryParamsToReadRequest<T extends ReadRequest>(params: Params): T {
-    const request: T = <any>cloneDeep(params);
-    request.page = (params.page ? parseInt(params.page, 10) : 1);
-    request.limit = (params.limit ? parseInt(params.limit, 10) : 10);
+  queryParamsToReadRequest<T extends ReadRequest>(params: Params, defaultParams: any): T {
+    const request: T = Object.assign(<any>cloneDeep(params), defaultParams);
+    if (typeof params.page === 'string') {
+      request.page = parseInt(params.page, 10);
+    }
+    if (typeof params.limit === 'string') {
+      request.limit = parseInt(params.limit, 10);
+    }
     return request;
   }
 
@@ -67,9 +93,9 @@ export class UrlQueryService {
    */
   updateUrlQueryString(filters: any, activatedRoute: ActivatedRoute): void {
     // Convert dates into raw ISO strings.
-    for (const filtKey in filters) {
-      if (filters[filtKey] instanceof Date) {
-        filters[filtKey] = (<Date>filters[filtKey]).toISOString();
+    for (const filterKey in filters) {
+      if (filters[filterKey] instanceof Date) {
+        filters[filterKey] = (<Date>filters[filterKey]).toISOString();
       }
     }
 

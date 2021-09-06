@@ -1,0 +1,21 @@
+@import "variables.scss";
+
+.time-range-form {
+  .time-field {
+    &:not(:first-child):not(.col-6) {
+      margin-top: -10px;
+    }
+
+    &.col-6 {
+      margin-top: 6px;
+
+      &:first-child {
+        padding-right: 6px;
+      }
+
+      &:not(:first-child) {
+        padding-left: 6px;
+      }
+    }
+  }
+}

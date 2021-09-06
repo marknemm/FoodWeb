@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { FormHelperService, formProvider } from '~web/forms';
-import { VolunteerBaseComponent } from './volunteer.base.component';
+import { VolunteerForm } from '~web/account-shared/forms/volunteer.form';
+import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
 
 @Component({
   selector: 'foodweb-volunteer',
@@ -8,9 +8,8 @@ import { VolunteerBaseComponent } from './volunteer.base.component';
   styleUrls: ['./volunteer.component.scss'],
   providers: formProvider(VolunteerComponent)
 })
-export class VolunteerComponent extends VolunteerBaseComponent {
-
+export class VolunteerComponent extends FormBaseComponent<VolunteerForm> {
   constructor(formHelperService: FormHelperService) {
-    super(formHelperService);
+    super(() => new VolunteerForm(), formHelperService);
   }
 }

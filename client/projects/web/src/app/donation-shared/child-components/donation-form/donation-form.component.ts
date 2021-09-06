@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { DonateForm } from '~web/donor/forms/donate.form';
+import { DonateForm } from '~web/donation/forms/donate.form';
 import { FormHelperService } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 

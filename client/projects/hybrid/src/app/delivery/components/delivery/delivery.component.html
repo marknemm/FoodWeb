@@ -1,0 +1,74 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="/delivery/list">
+    <ion-label>Delivery</ion-label>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content class="delivery">
+  <ng-container *ngIf="donation">
+
+    <foodweb-hybrid-donation-workflow
+      [donation]="donation"
+      [myAccount]="sessionService.account"
+      (action)="onDeliveryAction($event)">
+    </foodweb-hybrid-donation-workflow>
+
+    <div *ngIf="!myDelivery" class="row">
+      <div class="donation-description-container col-12">
+        <foodweb-hybrid-delivery-donation-info [donation]="donation"></foodweb-hybrid-delivery-donation-info>
+      </div>
+    </div>
+
+    <ion-card *ngIf="donation.claim" class="delivery-map-card">
+      <ion-card-content>
+        <foodweb-hybrid-map [donation]="donation"></foodweb-hybrid-map>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="row">
+      <div class="col-md-6 col-12">
+        <div class="pickup-info-container">
+          <foodweb-hybrid-pickup-info [donation]="donation"></foodweb-hybrid-pickup-info>
+        </div>
+
+        <div class="donor-info-container">
+          <foodweb-hybrid-account-teaser [account]="donation.donorAccount" customTitle="Donor">
+            <div class="donation-submitter">
+              <div class="inline-label">Contact Name:</div>
+              <div class="d-inline-block">{{ donation.donorFirstName }} {{ donation.donorLastName }}</div>
+            </div>
+          </foodweb-hybrid-account-teaser>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-12">
+        <div *ngIf="donation.claim" class="drop-off-info-container">
+          <foodweb-hybrid-drop-off-info [donation]="donation"></foodweb-hybrid-drop-off-info>
+        </div>
+
+        <div *ngIf="donation.claim" class="receiver-info-container">
+          <foodweb-hybrid-account-teaser [account]="donation.claim.receiverAccount" customTitle="Receiver"></foodweb-hybrid-account-teaser>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="myDelivery || donation.claim?.delivery">
+      <div class="row">
+        <div *ngIf="myDelivery" class="col-md-6 donation-description-container">
+          <foodweb-hybrid-delivery-donation-info [donation]="donation"></foodweb-hybrid-delivery-donation-info>
+        </div>
+        <div *ngIf="donation.claim?.delivery" class="col-md-6 volunteer-info-container">
+          <foodweb-hybrid-account-teaser
+            [account]="donation.claim.delivery.volunteerAccount"
+            customTitle="volunteer">
+          </foodweb-hybrid-account-teaser>
+        </div>
+      </div>
+    </ng-container>
+
+  </ng-container>
+
+  <div *ngIf="deliveryNotFound" class="standalone-statement">
+    Delivery not found
+  </div>
+</ion-content>

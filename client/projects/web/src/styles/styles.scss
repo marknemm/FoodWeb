@@ -1,4 +1,4 @@
-@import './constants.scss';
+@import './variables.scss';
 @import './donation-status.scss';
 @import './header.scss';
 @import './material/material.scss';
@@ -234,3 +234,40 @@ a.no-hover {
   }
 }
 
+.call-to-action-list {
+  padding-left: 0;
+  padding-inline-start: 0;
+  list-style: none;
+
+  .call-to-action {
+    padding-left: 0;
+
+    &:before {
+      content: none;
+    }
+  }
+}
+
+.call-to-action-list > *,
+.call-to-action {
+  position: relative;
+  display: block;
+  padding-left: 15px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+
+  &:before {
+    position: absolute;
+    content: '\203A';
+    font-size: 28px;
+    line-height: 0;
+    top: 7px;
+    left: 0;
+  }
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}

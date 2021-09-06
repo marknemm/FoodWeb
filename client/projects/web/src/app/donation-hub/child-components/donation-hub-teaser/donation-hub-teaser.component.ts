@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Account, DonationHub } from '~shared';
 
 /**
@@ -9,7 +9,7 @@ import { Account, DonationHub } from '~shared';
   templateUrl: './donation-hub-teaser.component.html',
   styleUrls: ['./donation-hub-teaser.component.scss']
 })
-export class DonationHubTeaserComponent implements OnInit {
+export class DonationHubTeaserComponent {
 
   @Input() donationHub: DonationHub;
 
@@ -18,6 +18,4 @@ export class DonationHubTeaserComponent implements OnInit {
   get hubAccount(): Account {
     return this.donationHub?.volunteerAccount;
   }
-
-  ngOnInit() {}
 }

@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { LeftNavService } from '~web/shell/services/left-nav/left-nav.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-paginator',
@@ -17,21 +17,21 @@ export class PaginatorComponent implements OnInit, OnDestroy {
   @Input() pageSizeOptions: number[] = [10, 20, 50];
   @Input() limit: number;
 
-  private _destory$ = new Subject();
+  private destroy$ = new Subject();
 
   constructor(
-    private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    private _leftNavService: LeftNavService
+    private _router: Router,
+    private _shellService: ShellService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._initPageParams();
     this._listenForQueryParamChange();
   }
 
-  ngOnDestroy() {
-    this._destory$.next();
+  ngOnDestroy(): void {
+    this.destroy$.next();
   }
 
   private _initPageParams(): void {
@@ -44,12 +44,12 @@ export class PaginatorComponent implements OnInit, OnDestroy {
 
   private _listenForQueryParamChange(): void {
     this._activatedRoute.queryParamMap.pipe(
-      takeUntil(this._destory$)
+      takeUntil(this.destroy$)
     ).subscribe((params: ParamMap) => {
       const pageParam: string = params.get('page');
       const limitParam: string = params.get('limit');
       this.page = (pageParam ? parseInt(pageParam, 10) : 1);
-      this.limit = (limitParam ? parseInt(limitParam, 10) : 10);
+      this.limit = (limitParam ? parseInt(limitParam, 10) : this.pageSizeOptions[0]);
     });
   }
 
@@ -63,7 +63,7 @@ export class PaginatorComponent implements OnInit, OnDestroy {
         queryParams: { page, limit },
         queryParamsHandling: 'merge'
       }
-    ).then(() => this._leftNavService.scrollContentToTop());
+    ).then(() => this._shellService.scrollContentToTop());
   }
 
 }

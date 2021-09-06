@@ -11,7 +11,7 @@ import { env } from '~web/helpers/globals/env';
 // These must be imported after loading .env into process since they require access to environment variables.
 import { initOrm } from '~orm';
 import { router as webRouter } from '~web/controllers/web';
-import { initMiddleware } from './middlewares/init.middleware';
+import { initMiddleware } from './middleware/init.middleware';
 
 const app: Application = express();
 

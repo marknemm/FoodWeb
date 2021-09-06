@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Account, AccountHelper, AccountType } from '~shared';
 import { MapAnchorType } from '~web/map/interfaces/map';
 
@@ -16,11 +16,14 @@ export class AccountTeaserComponent implements OnInit, OnChanges {
   @Input() hideAddress = false;
   @Input() hasEmailSubtitle = false;
 
-  private _accountName = '';
-  private _accountRouterLink: string[] = [];
+  @HostBinding()
+  readonly class = 'foodweb-account-teaser';
+
+  protected _accountName = '';
+  protected _accountRouterLink: string[] = [];
 
   constructor(
-    private _accountHelper: AccountHelper
+    protected _accountHelper: AccountHelper
   ) {}
 
   get accountName(): string {
@@ -52,7 +55,7 @@ export class AccountTeaserComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.account) {
       this._accountName = this._accountHelper.accountName(this.account);
-      this._accountRouterLink = this._accountHelper.accountDetailsRouterLink(this.account);
+      this._accountRouterLink = this._accountHelper.accountRouterLink(this.account);
     }
   }
 

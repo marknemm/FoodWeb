@@ -1,0 +1,18 @@
+<ion-buttons *ngIf="donationHubPledge && canModify">
+  <ion-button
+    color="danger"
+    class="delete-button"
+    foodwebConfirmButton
+    confirmTitle="Confirm Delete"
+    confirmMessage="Are you sure you want to permanently delete your donation?"
+    (clickConfirm)="delete.emit()">
+    <ion-icon name="trash"></ion-icon>
+  </ion-button>
+
+  <ion-button
+    [routerLink]="['/', 'donation-hub', 'pledge', donationHubPledge.id, 'edit']"
+    [state]="{ donationHubPledge: donationHubPledge }"
+    class="edit-button">
+    <ion-icon name="create"></ion-icon>
+  </ion-button>
+</ion-buttons>

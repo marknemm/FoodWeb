@@ -20,17 +20,18 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 export class DonationHubEditComponent extends FormBaseComponent<DonationHubForm> implements OnInit {
 
   readonly minRegisterDate = new Date();
+  readonly postEditRoute = ['/', 'donation-hub'];
 
-  private _donationHubNotFound = false;
-  private _originalDonationHub: DonationHub;
+  protected _donationHubNotFound = false;
+  protected _originalDonationHub: DonationHub;
 
   constructor(
     public pageTitleService: PageTitleService,
-    private _activatedRoute: ActivatedRoute,
-    private _donationHubReadService: DonationHubReadService,
-    private _donationHubUpdateService: DonationHubUpdateService,
-    private _router: Router,
-    private _urlQueryService: UrlQueryService,
+    protected _activatedRoute: ActivatedRoute,
+    protected _donationHubReadService: DonationHubReadService,
+    protected _donationHubUpdateService: DonationHubUpdateService,
+    protected _router: Router,
+    protected _urlQueryService: UrlQueryService,
     dateTimeService: DateTimeService,
     formHelperService: FormHelperService,
     sessionService: SessionService
@@ -63,7 +64,7 @@ export class DonationHubEditComponent extends FormBaseComponent<DonationHubForm>
   save(): void {
     if (this.formGroup.checkValidity()) {
       this._donationHubUpdateService.updateDonationHub(this.formGroup.toDonationHub()).subscribe(
-        (donationHub: DonationHub) => this._router.navigate(['/donation-hub', donationHub.id])
+        (donationHub: DonationHub) => this._router.navigate(this.postEditRoute.concat(`${donationHub.id}`))
       );
     }
   }

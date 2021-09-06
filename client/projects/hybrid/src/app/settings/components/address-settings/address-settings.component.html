@@ -1,0 +1,19 @@
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>Address</ion-label>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" color="primary" [disabled]="formGroup.pristine" (click)="save()">Save</ion-button>
+    </ion-buttons>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="formGroup">
+    <foodweb-hybrid-contact-info
+      formGroupName="contactInfo"
+      [editable]="true"
+      [hideEmail]="true"
+      [hidePhone]="true">
+    </foodweb-hybrid-contact-info>
+  </form>
+</ion-content>

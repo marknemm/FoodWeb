@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { FormHelperService, formProvider } from '~web/forms';
-import { ReceiverBaseComponent } from './receiver.base.component';
+import { ReceiverForm } from '~web/account-shared/forms/receiver.form';
+import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
 
 @Component({
   selector: 'foodweb-receiver',
@@ -8,9 +8,10 @@ import { ReceiverBaseComponent } from './receiver.base.component';
   styleUrls: ['./receiver.component.scss'],
   providers: formProvider(ReceiverComponent)
 })
-export class ReceiverComponent extends ReceiverBaseComponent {
+export class ReceiverComponent extends FormBaseComponent<ReceiverForm> {
 
   constructor(formHelperService: FormHelperService) {
-    super(formHelperService);
+    super(() => new ReceiverForm(), formHelperService);
   }
+
 }

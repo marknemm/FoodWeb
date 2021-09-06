@@ -1,4 +1,4 @@
-<header>
+<header class="header">
   <mat-toolbar color="primary" class="main-header-section">
     <a [routerLink]="['/']" class="site-icon-title">
       <img [src]="siteIconUri" alt="{{ siteTitle }} Icon" class="site-icon">
@@ -8,17 +8,17 @@
       </h1>
     </a>
 
-    <button mat-button class="sidenav-toggle-button" (click)="leftNavService.toggle()" [attr.aria-expanded]="leftNavService.opened">
+    <button mat-button class="sidenav-toggle-button" (click)="shellService.toggleLeftNav()" [attr.aria-expanded]="shellService.leftNavOpened">
       <img src="./assets/IconImgSm.png" alt="Food Web Icon" class="site-icon">
       <mat-icon aria-label="Toggle Navigation Menu">menu</mat-icon>
     </button>
 
-    <span class="header-navigation-container">
-      <ng-content></ng-content>
+    <span class="header-nav-container">
+      <ng-content select=".header-nav"></ng-content>
     </span>
 
     <span class="header-actions-container">
-      <ng-content select=".actions"></ng-content>
+      <ng-content select=".header-action"></ng-content>
     </span>
 
     <div class="non-blocking-page-progress-indicator" *ngIf="pageProgressService.showNonBlockingProgress">

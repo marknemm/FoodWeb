@@ -1,0 +1,100 @@
+<ion-header>
+  <foodweb-hybrid-header [hideBackHref]="true">
+    <ion-avatar>
+      <ion-img src="./assets/IconImgSm.png"></ion-img>
+    </ion-avatar>
+    <ion-label>FoodWeb</ion-label>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content class="home">
+  <div class="main-content">
+
+    <ng-container *ngIf="donationHubFeatureVisible">
+      <ion-card class="donation-hub-new-feature">
+        <ion-card-header>
+          <ion-card-title class="block-label">
+            FoodWeb’s Sandwich Army - <strong class="warn">NEW</strong>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="donation-hub-intro-block">
+            <p>
+              FoodWeb’s Sandwich Army is a volunteer-driven effort to alleviate food insecurity during the pandemic through
+              <strong>sandwich drives every Saturday</strong>!
+            </p>
+          </div>
+
+          <p>
+            <strong><a [routerLink]="['/', 'donation-hub', 'create']">Register Drop-Off Hub</a></strong><br>
+            Use your home as a donation drop-off hub for a specified time period on a Saturday.
+            Volunteers will pledge donations for drop-off at your residence.
+            After the time period, the lunches are to be transported to St. Luke's Mission for Mercy.
+          </p>
+
+          <p>
+            <strong><a [routerLink]="['/', 'donation-hub', 'list']">Pledge Donation</a></strong><br>
+            Volunteers make bagged sandwich lunches consisting of a sandwich, a piece of fruit, and a snack.
+            The lunches are to be dropped-off at designated "drop-off hubs".
+          </p>
+
+          <a class="call-to-action" [routerLink]="['/', 'donation-hub']"><strong>View more info</strong></a>
+        </ion-card-content>
+      </ion-card>
+
+      <hr>
+    </ng-container>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="block-label">
+          Who We Are
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <blockquote class="stats-quote">
+          <div>Hundreds of pounds of food are thrown out by local food industries.</div>
+          <div>There are more than 8,200 homeless people in Western New York.</div>
+          <div>Over 50% of the youth in the city of Buffalo live below the poverty line.</div>
+        </blockquote>
+        <p>
+          We are a non-profit whose goal is to facilitate the delivery of food from generous donors to those who need it the most.
+          Through our website and community engagement, we hope to address food insecurity while also providing an avenue for citizens to give back to their community.
+        </p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="block-label">
+          What Makes Us Unique
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        Most organizations that target food insecurity do so through donations run by word-of-mouth, rely on long standing relationships, and plan deliveries months in advanced.
+        Through the use of technology, we hope to make the process of donating food quick, easy and accessible to anyone.
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="block-label">
+          How We Operate
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ol class="op-list">
+          <li>Donating organizations upload a description of their donation.</li>
+          <li>Our system automatically finds a local charity as a recipient.</li>
+          <li>The charity confirms that they wish to receive the donation.</li>
+          <li>A driver is automatically scheduled for pickup & delivery.</li>
+        </ol>
+        <p>
+          Donors are protected from liability through the <i>Bill Emerson Good Samaritan Food Donation Act</i> and can claim deductions based on the amount of food they donate.
+          FoodWeb and our community-based drivers do our best to ensure prompt and safe transportation of food so that it remains safe to eat.
+        </p>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>

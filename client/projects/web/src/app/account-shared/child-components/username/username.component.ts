@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import { FormHelperService, formProvider } from '~web/forms';
-import { UsernameBaseComponent } from './username.base.component';
+import { Component, HostBinding } from '@angular/core';
+import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
 
 @Component({
   selector: 'foodweb-username',
@@ -8,9 +7,13 @@ import { UsernameBaseComponent } from './username.base.component';
   styleUrls: ['./username.component.scss'],
   providers: formProvider(UsernameComponent)
 })
-export class UsernameComponent extends UsernameBaseComponent {
+export class UsernameComponent extends FormBaseComponent<string> {
+
+  @HostBinding()
+  readonly class = 'foodweb-username';
 
   constructor(formHelperService: FormHelperService) {
-    super(formHelperService);
+    super(() => new TFormControl<string>(), formHelperService);
   }
+
 }

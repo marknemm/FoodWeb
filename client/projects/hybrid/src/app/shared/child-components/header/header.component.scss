@@ -1,0 +1,187 @@
+@import "variables.scss";
+
+$site-title-font-size-max: 42px;
+
+:host {
+  @media only screen and (max-width: $md) {
+    position: relative;
+    display: block;
+  }
+}
+
+.header {
+  position: relative;
+  display: block;
+  z-index: 20;
+  box-shadow: 0 1px 5px 1px rgba(0, 0, 0, 0.5);
+
+  @media only screen and (max-width: $md) {
+    padding-top: env(safe-area-inset-top);
+    background-color: $primary;
+  }
+
+  .main-header-section {
+    position: relative;
+    background: $primary;
+    height: $header-height;
+
+    @media only screen and (max-width: $md) {
+      height: $header-height-mobile;
+      padding: 0 15px;
+      background: $primary;
+      justify-content: center;
+    }
+
+    .site-icon-title {
+      display: flex;
+      align-items: center;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    .site-icon {
+      height: $site-title-font-size-max + 5px;
+      width: auto;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-crisp-edges;
+      image-rendering: -webkit-optimize-contrast;
+      -ms-interpolation-mode: nearest-neighbor;
+      margin-right: 12px;
+
+      @media only screen and (max-width: $md) {
+        display: none;
+      }
+    }
+
+    .sidenav-toggle-button {
+      height: $header-height-mobile;
+      line-height: $header-height-mobile;
+      vertical-align: top;
+      outline: none;
+      padding: 0;
+
+      .site-icon {
+        display: inline-block;
+        height: calc(100% - 13px);
+        margin-top: -2px;
+        margin-right: 6px;
+      }
+
+      .mat-icon {
+        margin-top: -3px;
+      }
+    }
+
+    .site-title {
+      display: inline-block;
+      color: $accent-darker;
+
+      .site-title-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: ($header-height-mobile - 5px);
+      }
+
+      .main {
+        $site-title-font-size: $site-title-font-size-max;
+        $site-title-font-size-md: 30px;
+        $site-title-font-size-sm: 24px;
+
+        font: $site-title-font-size Baufra;
+        height: $site-title-font-size;
+        line-height: $site-title-font-size;
+
+        @media only screen and (max-width: $md) {
+          font-size: $site-title-font-size-md;
+          line-height: $site-title-font-size-md;
+          height: $site-title-font-size-md;
+          width: 100%;
+          text-align: center;
+        }
+
+        @media only screen and (max-width: $sm) {
+          font-size: $site-title-font-size-sm;
+          font-weight: bold;
+          line-height: $site-title-font-size-sm;
+          height: $site-title-font-size-sm;
+        }
+      }
+
+      &.with-sub {
+        $site-title-font-size: 32px;
+        $site-title-font-size-md: 16px;
+
+        .main {
+          font-size: $site-title-font-size;
+          line-height: $site-title-font-size;
+          height: $site-title-font-size;
+
+          @media only screen and (max-width: $md) {
+            text-align: center;
+            font-weight: bold;
+            font-size: $site-title-font-size-md;
+            line-height: $site-title-font-size-md;
+            height: $site-title-font-size-md;
+            width: 100%;
+          }
+        }
+      }
+
+      .sub {
+        $site-title-sub-font-size: 16px;
+        $site-title-sub-font-size-md: 13px;
+        color: $accent;
+
+        font-weight: bold;
+        font-size: $site-title-sub-font-size;
+        line-height: $site-title-sub-font-size;
+        height: $site-title-sub-font-size;
+
+        @media only screen and (max-width: $md) {
+          text-align: center;
+          font-size: $site-title-sub-font-size-md;
+          line-height: $site-title-sub-font-size-md;
+          height: $site-title-sub-font-size-md;
+          margin-bottom: -3px;
+        }
+      }
+
+      @media only screen and (max-width: $sm) {
+        text-align: center;
+      }
+    }
+
+    .header-actions-container {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      right: 16px;
+      height: 100%;
+
+      >* {
+        &:not(:first-child) {
+          margin-left: 5px;
+        }
+      }
+
+      @media only screen and (max-width: $md) {
+        right: 15px;
+      }
+
+      @media only screen and (max-width: $sm) {
+        right: 5px;
+      }
+    }
+
+    .non-blocking-page-progress-indicator {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+    }
+  }
+}

@@ -1,0 +1,68 @@
+<ion-header>
+  <foodweb-hybrid-header>
+    <ion-label>Settings</ion-label>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content *ngIf="account">
+  <ion-item [routerLink]="['primary']" class="primary-info icon-start" lines="none">
+    <foodweb-hybrid-profile-img [value]="account.profileImg" [editable]="false" slot="start"></foodweb-hybrid-profile-img>
+
+    <div>
+      <ion-label>{{ account | foodwebAccountName }}</ion-label>
+
+      <div *ngIf="account.organization" class="account-descr">
+        {{ account.organization.description }}
+      </div>
+      <div *ngIf="account.volunteer" class="account-descr">
+        {{ account.accountType | titlecase }} - {{ account.username }}
+      </div>
+    </div>
+  </ion-item>
+
+  <div *ngIf="!account.verified" class="account-not-verified">
+    <ion-label color="danger">Account Not Verified</ion-label>
+    <ion-button (click)="signupVerificationService.resendVerificationEmail()" fill="clear">Resend Verification Email</ion-button>
+  </div>
+
+  <ion-list class="primary-list margin-vertical borders-vertical icon-start small">
+    <ion-item [routerLink]="['contact']">
+      <ion-icon name="call" color="receiver" slot="start"></ion-icon>
+      <ion-label>Contact</ion-label>
+    </ion-item>
+    <ion-item [routerLink]="['address']">
+      <ion-icon name="compass" color="volunteer" slot="start"></ion-icon>
+      <ion-label>Address</ion-label>
+    </ion-item>
+    <ion-item [routerLink]="['notifications']">
+      <ion-icon name="notifications" color="secondary" slot="start"></ion-icon>
+      <ion-label>Notifications</ion-label>
+    </ion-item>
+    <ion-item [routerLink]="['operation-hours']" *ngIf="account.accountType !== AccountType.Donor">
+      <ion-icon name="time" color="primary" slot="start"></ion-icon>
+      <ion-label>Operation Hours</ion-label>
+    </ion-item>
+    <ion-item [routerLink]="['password']" lines="none">
+      <ion-icon name="shield" color="tertiary" slot="start"></ion-icon>
+      <ion-label>Password</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list class="secondary-list margin-vertical borders-vertical small">
+    <ion-item href="mailto:questions@wnyfoodweb.com" detailIcon="mail" class="message-us">
+      <ion-label>Message Us</ion-label>
+    </ion-item>
+    <ion-item [routerLink]="['/', 'account', 'list']" [queryParams]="{ accountType: AccountType.Donor}" detailIcon="gift" class="donors">
+      <ion-label>Donors</ion-label>
+    </ion-item>
+    <ion-item [routerLink]="['/', 'account', 'list']" [queryParams]="{ accountType: AccountType.Receiver }" detailIcon="basket" class="receivers">
+      <ion-label>Receivers</ion-label>
+    </ion-item>
+    <ion-item [routerLink]="['/', 'information', 'about']" detailIcon="information-circle" class="about">
+      <ion-label>About</ion-label>
+    </ion-item>
+    <ion-item (click)="logout()" [detail]="true" detailIcon="power" lines="none" class="logout">
+      <ion-label>Logout</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

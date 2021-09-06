@@ -1,0 +1,47 @@
+<div [formGroup]="formGroup" *ngIf="editable | toBoolean; else readonlyTimeRange" class="time-range-form">
+  <div class="row">
+    <div class="time-field" [style.width]="timeWidth" [ngClass]="{ 'col-6': labelPosition !== 'fixed' }">
+      <foodweb-hybrid-time
+        #startTime
+        formControlName="startTime"
+        [allowClear]="allowClear"
+        [bold]="bold"
+        [editable]="true"
+        [defaultTime]="defaultStartTime"
+        [label]="startLabel"
+        [labelPosition]="labelPosition"
+        [minuteValues]="minuteValues">
+      </foodweb-hybrid-time>
+    </div>
+    <div class="time-field" [style.width]="timeWidth" [ngClass]="{ 'col-6': labelPosition !== 'fixed' }">
+      <foodweb-hybrid-time
+        #endTime
+        formControlName="endTime"
+        [allowClear]="allowClear"
+        [bold]="bold"
+        [editable]="true"
+        [defaultTime]="defaultEndTime"
+        [label]="endLabel"
+        [labelPosition]="labelPosition"
+        [minuteValues]="minuteValues">
+      </foodweb-hybrid-time>
+    </div>
+  </div>
+  <div *ngIf="formGroup.hasError('timeRangeOrder')" class="range-order-err ion-form-error">
+    {{ formGroup.getError('timeRangeOrder') }}
+  </div>
+</div>
+
+<ng-template #readonlyTimeRange>
+  <div *ngIf="value" class="time-range-display">
+    <foodweb-time
+      [bold]="bold"
+      [editable]="false"
+      [value]="value.startTime"></foodweb-time>
+    <span class="display-to"> - </span>
+    <foodweb-time
+      [bold]="bold"
+      [editable]="false"
+      [value]="value.endTime"></foodweb-time>
+  </div>
+</ng-template>

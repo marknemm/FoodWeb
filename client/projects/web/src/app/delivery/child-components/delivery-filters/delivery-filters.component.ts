@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { DonationReadRequest, DonationSortBy, DonationStatus } from '~shared';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
 import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
@@ -11,7 +11,7 @@ import { ConstantsService } from '~web/shared/services/constants/constants.servi
   styleUrls: ['./delivery-filters.component.scss'],
   providers: formProvider(DeliveryFiltersComponent)
 })
-export class DeliveryFiltersComponent extends FormBaseComponent<DonationFiltersForm> implements OnInit, OnChanges {
+export class DeliveryFiltersComponent extends FormBaseComponent<DonationFiltersForm> implements OnChanges {
 
   @Input() myDeliveries = false;
 
@@ -40,8 +40,6 @@ export class DeliveryFiltersComponent extends FormBaseComponent<DonationFiltersF
   get donationStatuses(): DonationStatus[] {
     return this._donationStatuses;
   }
-
-  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.myDeliveries) {

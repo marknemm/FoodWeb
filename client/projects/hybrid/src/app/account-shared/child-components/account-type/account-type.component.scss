@@ -1,0 +1,125 @@
+@import "../../../../../../web/src/app/account-shared/child-components/account-type/account-type.component.scss";
+
+.account-type-selections {
+  &.display {
+    ion-button {
+      &.selected {
+        .not-selected-mask {
+          display: none;
+        }
+      }
+
+      &:not(.selected) {
+        box-shadow: none;
+        border    : 1px solid #e4e4e4;
+
+        @media only screen and (max-width: 410px) {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.account-types,
+.account-categories {
+  ion-card {
+    --ion-card-background: #fff;
+  }
+
+  ion-button {
+    --padding-start: 0;
+    --padding-end  : 0;
+
+    display      : inline-block;
+    height       : auto;
+    margin       : 0px 16px 16px;
+    border-radius: 8px;
+
+    &.business {
+      ion-card ion-toolbar {
+        background: -moz-linear-gradient(to right, $donor-color, $receiver-color);
+        background: -webkit-linear-gradient(to right, $donor-color, $receiver-color);
+        background: linear-gradient(to right, $donor-color, $receiver-color);
+        color     : black;
+      }
+    }
+
+    ion-card {
+      display       : inline-block;
+      min-width     : 150px;
+      height        : 150px;
+      margin        : 0;
+      text-align    : center;
+      vertical-align: top;
+
+      ion-toolbar {
+        font-weight: bold;
+      }
+
+      ion-card-content {
+        padding: 11px;
+      }
+
+      .mat-icon {
+        $icon-size: 60px;
+        font-size : $icon-size;
+        width     : $icon-size;
+        height    : $icon-size;
+        margin-top: 10px;
+      }
+    }
+
+    @media only screen and (max-width: $sm) {
+      margin-left : 5px;
+      margin-right: 5px;
+
+      ion-card {
+        min-width: 135px;
+        height   : 135px;
+
+        ion-toolbar {
+          font-size: 18px;
+        }
+
+        .mat-icon {
+          margin-top: 4px;
+        }
+      }
+    }
+  }
+}
+
+.account-type-descr {
+  background-color: var(--ion-card-background);
+  margin-top      : 15px;
+  padding         : 0;
+  border          : none;
+
+  &.volunteer {
+    box-shadow: 0px 3px 30px 15px rgb(255 0 0 / 40%),
+                0px 2px 2px 0px rgb(255 0 0 / 14%),
+                0px 2px 6px 0px rgb(255 0 0 / 12%);
+  }
+
+  &.donor {
+    box-shadow: 0px 3px 30px 15px rgb(0 255 0 / 40%),
+                0px 2px 2px 0px rgb(0 255 0 / 14%),
+                0px 2px 6px 0px rgb(0 255 0 / 12%);
+  }
+
+  &.receiver {
+    box-shadow: 0px 3px 30px 15px rgb(255 215 0 / 40%),
+                0px 2px 2px 0px rgb(255 215 0 / 14%),
+                0px 2px 6px 0px rgb(255 215 0 / 12%);
+  }
+
+  p {
+    margin-bottom: 14px;
+  }
+
+  ion-button {
+    font-weight: bold;
+    margin: 20px 0 5px;
+  }
+}

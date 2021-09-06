@@ -1,4 +1,4 @@
-@import "constants.scss";
+@import "variables.scss";
 
 $site-title-font-size-max: 42px;
 
@@ -6,7 +6,7 @@ $site-title-font-size-max: 42px;
   @media only screen and (max-width: $md) {
     position: relative;
     display: block;
-    padding-top: $header-height-mobile;
+    padding-bottom: $header-height-mobile;
   }
 }
 
@@ -119,9 +119,7 @@ header {
 
       &.with-sub {
         $site-title-font-size: 32px;
-        $site-title-font-size-md: 20px;
-
-        margin-top: -4px;
+        $site-title-font-size-md: 17px;
 
         .main {
           font-size: $site-title-font-size;
@@ -141,7 +139,7 @@ header {
 
       .sub {
         $site-title-sub-font-size: 16px;
-        $site-title-sub-font-size-md: 15px;
+        $site-title-sub-font-size-md: 13px;
         color: $accent;
 
         font-weight: bold;
@@ -162,7 +160,7 @@ header {
       }
     }
 
-    .header-navigation-container {
+    .header-nav-container {
       @media only screen and (max-width: $md) {
         display: none;
       }
@@ -170,7 +168,16 @@ header {
 
     .header-actions-container {
       position: absolute;
+      display: flex;
+      align-items: center;
       right: 16px;
+      height: 100%;
+
+      >* {
+        &:not(:first-child) {
+          margin-left: 5px;
+        }
+      }
 
       @media only screen and (max-width: $md) {
         right: 15px;

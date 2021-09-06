@@ -1,0 +1,30 @@
+@import "../../../../../../web/src/app/notification/components/notification-list/notification-list.component.scss";
+
+ion-content {
+  --padding-top: 0;
+  --padding-bottom: 0;
+
+  .reload-prompt {
+    --min-height: 0;
+    position: sticky;
+    top: 0;
+    height: 0;
+    font-size: 12px;
+    text-align: center;
+    z-index: 10;
+    transition: height .5s ease-in-out;
+
+    &.show {
+      height: 40px;
+    }
+  }
+
+  &.notifications {
+    background-color: transparent;
+    min-height: 0;
+  }
+
+  ion-virtual-scroll {
+    border-top: none;
+  }
+}

@@ -1,0 +1,17 @@
+@import "../../../../../../web/src/app/account-shared/child-components/weekday-operation-hours/weekday-operation-hours.component.scss";
+
+.time-range-item {
+  margin: 5px 0 8px;
+}
+
+ion-button {
+  &.add-time-range,
+  &.remove-time-range {
+    --padding-start: 0;
+    --padding-end: 0;
+  }
+
+  .weekday-header .add-time-range {
+    margin-top: -4px;
+  }
+}

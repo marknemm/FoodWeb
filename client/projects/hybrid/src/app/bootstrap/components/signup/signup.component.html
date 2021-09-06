@@ -1,9 +1,33 @@
-<div class="hybrid-signup-container">
-  <div class="hybrid-signup-content container">
-    <foodweb-signup #signup></foodweb-signup>
-    <div class="login-link align-right">
-      Have an account:
-      <a [routerLink]="['/login']">Login</a>
-    </div>
-  </div>
-</div>
+<ion-header>
+  <foodweb-hybrid-header defaultBackHref="..">
+    <ion-label>Signup</ion-label>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="formGroup.invalid" (click)="signup(formGroup)">Submit</ion-button>
+    </ion-buttons>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content>
+  <foodweb-hybrid-account-creation-form
+    [formGroup]="formGroup"
+    [hidden]="sessionService.loggedIn"
+    (createAccount)="signup($event)"
+    accountTypeSelTitle="Select Your Account Type"
+    submitButtonTxt="Signup">
+  </foodweb-hybrid-account-creation-form>
+
+  <ion-card *ngIf="sessionService.loggedIn">
+    <ion-card-title>Welcome to FoodWeb!</ion-card-title>
+    <ion-card-content>
+      <p>Please confirm your signup by following the link sent to your email.</p>
+      <div class="form-footer-buttons">
+        <ion-button *ngIf="!sessionService.account.verified" color="secondary" type="button" fill="clear" (click)="signupVerificationService.resendVerificationEmail()">
+          Resend Verification Email
+        </ion-button>
+        <ion-button [routerLink]="['/home']" color="primary" type="button">
+          Home
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -17,7 +17,7 @@ export class TFormGroup<T> extends FormGroup {
 
   /**
    * The current value of this `TFormGroup`. Excludes all disabled controls.
-   * Each value property related to a disabled control shall be undefinend.
+   * Each value property related to a disabled control shall be undefined.
    * Use the `getRawValue()` method to get the current value with disabled members included.
    */
   readonly value: T;
@@ -29,13 +29,13 @@ export class TFormGroup<T> extends FormGroup {
   readonly valueChanges: Observable<T>;
 
   /**
-   * A subject that will be used to trigger cleanup for contained observables on a call to `destory()`.
+   * A subject that will be used to trigger cleanup for contained observables on a call to `destroy()`.
    */
   private readonly _destroySubject$ = new Subject();
 
   /**
    * Creates a new `TFormGroup` instance.
-   * @param init The initial value for the form group. Must be an object that has the same structure as the from group's type.
+   * @param initValue The initial value for the form group. Must be an object that has the same structure as the from group's type.
    * Each property within the object may refer to a raw value, an `AbstractFormControl`, or an array whose first member is
    * an `AbstractFormControl`, and next member is either a validator function or validator function array.
    * @param validatorOrOpts A synchronous validator function, an array of such functions,
@@ -43,12 +43,12 @@ export class TFormGroup<T> extends FormGroup {
    * @param asyncValidator A single async validator or array of async validator functions.
    */
   constructor(
-    init: TFormControlMembers<T> = {},
+    public initValue: TFormControlMembers<T> = {},
     validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions,
     asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[]
   ) {
     super(
-      new FormBuilder().group(init ? init : {}).controls,
+      new FormBuilder().group(initValue = initValue ?? {}).controls,
       validatorOrOpts,
       asyncValidator
     );
@@ -76,7 +76,7 @@ export class TFormGroup<T> extends FormGroup {
 
   /**
    * Checks the validity of this `TFormGroup`. In doing so, marks all members as `touched`.
-   * @return true if this form group and all of its members have passed all of their validaiton tests, false otherwise.
+   * @return true if this form group and all of its members have passed all of their validation tests, false otherwise.
    */
   checkValidity(): boolean {
     this.markAllAsTouched();
@@ -95,7 +95,7 @@ export class TFormGroup<T> extends FormGroup {
     if (!onlySelf) {
       // Trigger a call to destroy in all child TFormGroup controls as well.
       for (const controlName in this.controls) {
-        if (this.controls[controlName] instanceof TFormGroup) {
+        if (this.controls[controlName].destroy) {
           (<TFormGroup<any>>this.controls[controlName]).destroy();
         }
       }
@@ -135,7 +135,7 @@ export class TFormGroup<T> extends FormGroup {
    * Gets an observable that emits the value of this `TFormGroup` whenever its value changes in the UI or programmatically.
    * Also, emits an event each time you call `enable()` or `disable()` on this form group without configuring `emitEvent: false`.
    * @param destroy$ An optional observable that, when fired, will cause the returned observable to complete.
-   * If not supplied, then a default internal observable will be used. It will be triggered when the `destory()` method is invoked.
+   * If not supplied, then a default internal observable will be used. It will be triggered when the `destroy()` method is invoked.
    * @return An observable that emits the value of this form group whenever its value changes.
    * This observable will automatically be completed when the `destroy$` input emits.
    */
@@ -151,7 +151,7 @@ export class TFormGroup<T> extends FormGroup {
    * Also, emits an event each time you call `enable()` or `disable()` on the target control without configuring `emitEvent: false`.
    * @param name The name of the target control contained within this form group.
    * @param destroy$ An optional observable that, when fired, will cause the returned observable to complete.
-   * If not supplied, then a default internal observable will be used. It will be triggered when the `destory()` method is invoked.
+   * If not supplied, then a default internal observable will be used. It will be triggered when the `destroy()` method is invoked.
    * @return An observable that emits the value of the target control whenever its value changes.
    * This observable will automatically be completed when the `destroy$` input emits.
    */
@@ -252,6 +252,7 @@ export class TFormGroup<T> extends FormGroup {
     value?: { [K in keyof T]?: FormState<T[K]> },
     options?: UpdateValueOptions
   ): void {
+    value = Object.assign({}, this.initValue, value); // Reset should return values to init form state if not explicitly set.
     super.reset(value, options);
   }
 
@@ -305,3 +306,37 @@ export type TFormControlMembers<T> = {
     | [T[K], ValidatorFn]
     | [T[K], ValidatorFn[]]
 };
+
+// Enhance type declaration for FormGroup.
+declare module '@angular/forms' {
+  interface FormGroup {
+    checkValidity(): boolean;
+    destroy(onlySelf?: boolean): void;
+    mapProperties<TF, TT>(from: Partial<TF>, to?: Partial<TT>, omitProps?: (keyof TF)[]): Partial<TT>;
+    onControlValueChanges(name: string, destroy$?: Observable<any>): Observable<any>;
+    onValueChanges(destroy$?: Observable<any>): Observable<any>;
+  }
+}
+
+// Add extra methods to basic FormGroup so that it is fully compatible with TFormGroup.
+FormGroup.prototype.checkValidity = TFormGroup.prototype.checkValidity;
+FormGroup.prototype.destroy = TFormGroup.prototype.destroy;
+FormGroup.prototype.mapProperties = TFormGroup.prototype.mapProperties;
+FormGroup.prototype.onControlValueChanges = TFormGroup.prototype.onControlValueChanges;
+FormGroup.prototype.onValueChanges = TFormGroup.prototype.onValueChanges;
+
+Object.defineProperty(FormGroup.prototype, '_destroySubject$', {
+  get: function(): Subject<any> {
+    if (!this.__destroySubject$) {
+      this.__destroySubject$ = new Subject();
+    }
+    return this.__destroySubject$;
+  },
+  set: function(destroySubject$: Subject<any>) {
+    this.__destroySubject$ = destroySubject$;
+  }
+});
+
+Object.defineProperty(FormGroup.prototype, '_destroy$', { get: function() {
+  return this._destroySubject$.asObservable();
+}});

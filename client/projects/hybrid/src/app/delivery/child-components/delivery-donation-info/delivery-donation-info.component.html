@@ -1,0 +1,18 @@
+<ion-card *ngIf="donation" class="delivery-donation-description">
+  <ion-card-header>
+    <ion-card-title>
+      <ion-label>Donation Info</ion-label>
+    </ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <div class="donation-description">
+      <span class="inline-label d-inline">Description:</span>
+      <span>{{ donation.description }}</span>
+    </div>
+    <div class="donation-meal-count">
+      <span class="inline-label">Meal Count:</span>
+      <span>{{ donation.estimatedNumFeed }}</span>
+    </div>
+  </ion-card-content>
+</ion-card>

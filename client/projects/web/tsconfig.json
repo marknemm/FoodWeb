@@ -9,11 +9,7 @@
       "~web/*": ["src/app/*"],
       "~web-env/*": ["src/environments/*"]
     },
-    "sourceMap": true,
-    "types": [
-      "googlemaps",
-      "node"
-    ],
+    "sourceMap": true
   },
   "files": [
     "src/main.ts",

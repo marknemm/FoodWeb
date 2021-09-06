@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { formProvider } from '~web/forms';
-import { ContactInfoBaseComponent } from './contact-info.base.component';
+import { Component, Input } from '@angular/core';
+import { ContactInfoForm } from '~web/account-shared/forms/contact-info.form';
+import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { MapAnchorType } from '~web/map/interfaces/map';
 
 @Component({
   selector: 'foodweb-contact-info',
@@ -8,4 +9,22 @@ import { ContactInfoBaseComponent } from './contact-info.base.component';
   styleUrls: ['./contact-info.component.scss'],
   providers: formProvider(ContactInfoComponent)
 })
-export class ContactInfoComponent extends ContactInfoBaseComponent {}
+export class ContactInfoComponent extends FormBaseComponent<ContactInfoForm> {
+
+  @Input() addressAnchorType: MapAnchorType = 'Directions';
+  @Input() addressFirst = false;
+  @Input() hideAddress = false;
+  @Input() hideEmail = false;
+  @Input() hidePhone = false;
+  @Input() includeMap = false;
+
+  constructor(formHelperService: FormHelperService) {
+    super(() => new ContactInfoForm(), formHelperService);
+  }
+
+  get addressColSize(): string {
+    return (!this.hideEmail && this.hidePhone) || (this.hideEmail && !this.hidePhone)
+      ? 'col-sm-6'
+      : 'col-sm-12';
+  }
+}

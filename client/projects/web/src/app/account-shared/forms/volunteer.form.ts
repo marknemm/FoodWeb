@@ -26,6 +26,12 @@ export class VolunteerForm extends TFormGroup<VolunteerFormT> {
     return this.get('fullName').value;
   }
 
+  get fullNameErrorMsg(): string {
+    return this.get('fullName').hasError('pattern')
+      ? 'Both first name and surname are required'
+      : '';
+  }
+
   get lastName(): string {
     return this.get('lastName').value;
   }

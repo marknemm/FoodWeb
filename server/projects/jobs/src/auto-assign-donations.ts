@@ -180,7 +180,7 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
       donation.donorAccount,
       {
         notificationType: NotificationType.ClaimDonation,
-        notificationLink: `/donation/details/${donation.id}`,
+        notificationLink: `/donation/${donation.id}`,
         title: `Donation Claimed`,
         icon: donation.claim.receiverAccount.profileImg,
         body: `
@@ -196,7 +196,7 @@ async function _sendDonationAutoAssignMessages(donation: DonationEntity): Promis
       donation.claim.receiverAccount,
       {
         notificationType: NotificationType.ClaimDonation,
-        notificationLink: `/donation/details/${donation.id}`,
+        notificationLink: `/donation/${donation.id}`,
         title: `Auto-Assigned Donation`,
         icon: donation.donorAccount.profileImg,
         body: `

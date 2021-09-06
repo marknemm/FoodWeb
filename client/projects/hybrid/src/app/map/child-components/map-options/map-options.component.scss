@@ -1,0 +1,23 @@
+@import "../../../../../../web/src/app/map/child-components/map-options/map-options.component.scss";
+
+.directions-options-container {
+  margin: 0;
+  padding: 0;
+
+  .origin-options-container,
+  .display-options-container {
+    padding: 0;
+  }
+
+  .origin-options-container {
+    margin-top: 0;
+  }
+
+  .checkbox-group {
+    margin: 0;
+  }
+
+  ion-item {
+    height: 40px;
+  }
+}

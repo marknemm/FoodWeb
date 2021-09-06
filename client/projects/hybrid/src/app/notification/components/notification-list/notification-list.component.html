@@ -1,0 +1,28 @@
+<ion-header>
+  <foodweb-hybrid-header [hideBackHref]="true">
+    <ion-label>Notifications</ion-label>
+  </foodweb-hybrid-header>
+</ion-header>
+
+<ion-content foodwebHybridListPage
+  [disabled]="loading"
+  [page]="activeFilters.page"
+  [pageSize]="activeFilters.limit || notificationService.defaultReadLimit"
+  (loadMore)="handleLoadMore($event)"
+  (refresh)="handleRefresh($event)"
+  class="notifications">
+
+  <ion-item (click)="refresh().subscribe()" [ngClass]="{ show: this.notificationService.hasUnseenNotifications }" class="reload-prompt" color="tertiary">
+    <ion-label>New Notifications Available: Tap to Refresh</ion-label>
+  </ion-item>
+
+  <ion-virtual-scroll [items]="notifications" approxItemHeight="80px" class="borders-vertical">
+    <foodweb-hybrid-notification
+      *virtualItem="let item"
+      [notification]="item"
+      (flag)="notificationService.toggleNotificationFlaggedState($event)"
+      (select)="notificationService.handleNotificationSelect($event)">
+    </foodweb-hybrid-notification>
+  </ion-virtual-scroll>
+
+</ion-content>

@@ -1,26 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Notification } from '~shared';
-import { NotificationService } from '~web/notification/services/notification/notification.service';
 
 @Component({
   selector: 'foodweb-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss']
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent {
 
   @Input() notification: Notification;
   @Input() max2Lines = false;
 
-  constructor(
-    public notificationService: NotificationService
-  ) {}
-
-  ngOnInit() {}
+  @Output() flag = new EventEmitter<Notification>();
+  @Output() select = new EventEmitter<Notification>();
 
   handleFlaggedIndicatorClick(event: MouseEvent): void {
     event.stopPropagation();
-    this.notificationService.updateNotificationFlaggedState(this.notification, !this.notification.flagged);
+    this.flag.emit(this.notification);
   }
 
   shouldFadeBottom(elem: HTMLElement): boolean {

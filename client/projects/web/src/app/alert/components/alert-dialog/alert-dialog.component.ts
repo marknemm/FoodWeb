@@ -7,12 +7,12 @@ import { Alert } from '~web/alert/interfaces/alert';
   templateUrl: './alert-dialog.component.html',
   styleUrls: ['./alert-dialog.component.scss']
 })
-export class AlertDialogComponent<T = any> implements OnInit {
+export class AlertDialogComponent implements OnInit {
 
   readonly color: string;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public alert: Alert<T>,
+    @Inject(MAT_DIALOG_DATA) public alert: Alert,
     public dialogRef: MatDialogRef<AlertDialogComponent>,
   ) {
     this.color = `alert-${this.alert.level}`;
