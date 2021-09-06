@@ -28,6 +28,7 @@ export function handleGetNotifications(req: Request, res: Response) {
     .then((lastSeenNotificationId: number) => {
       console.log('Reset last seen notification ID: ', lastSeenNotificationId);
       req.session.account.lastSeenNotificationId = lastSeenNotificationId;
+      req.session.save(); // Must explicitly save session since result has already been sent above.
     })
     .catch(console.error);
 }

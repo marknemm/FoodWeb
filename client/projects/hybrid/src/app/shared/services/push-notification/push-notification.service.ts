@@ -125,10 +125,7 @@ export class PushNotificationService {
    * @param notification The received push notification schema.
    */
   private _notificationReceived(notification: PushNotificationSchema): void {
-    this._ngZone.run(() => {
-      console.log('Notification Received: ', notification);
-      this._notifications$.next(notification);
-    });
+    this._ngZone.run(() => this._notifications$.next(notification));
   }
 
   /**

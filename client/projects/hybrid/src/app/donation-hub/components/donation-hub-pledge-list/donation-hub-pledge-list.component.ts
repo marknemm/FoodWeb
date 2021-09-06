@@ -10,6 +10,10 @@ import { DonationHubPledgeListComponent as WebDonationHubPledgeListComponent } f
 })
 export class DonationHubPledgeListComponent extends WebDonationHubPledgeListComponent {
 
+  get pageTitle(): string {
+    return (this._myPledges ? 'My Donations' : 'Donation Pledges');
+  }
+
   /**
    * Handles an ionInfinite event by loading the next segment of Donation Hub Pledge List items.
    * @param event The ionInfinite event.

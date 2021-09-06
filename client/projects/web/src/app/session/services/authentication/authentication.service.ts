@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { catchError, finalize, map, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, finalize, map, takeUntil } from 'rxjs/operators';
 import { AccountHelper, ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
 import { environment } from '~web-env/environment';
 import { AlertService } from '~web/alert/services/alert/alert.service';
@@ -41,7 +41,7 @@ export class AuthenticationService {
   }
 
   /**
-   * An observalbe that emits the newly logged in user's account upon login.
+   * An observable that emits the newly logged in user's account upon login.
    */
   get login$(): Observable<Account> {
     return this._login$.asObservable();
@@ -65,7 +65,7 @@ export class AuthenticationService {
   /**
    * Attempts to log the user in.
    * @param usernameEmail The username or email of the user.
-   * @param password The passwsord of the user.
+   * @param password The password of the user.
    * @param notifyUser Whether or not to display a login success notification to the user upon successful login. Defaults to false.
    * @return An observable that emits the user's account when login is successful, and throws error on failure.
    */

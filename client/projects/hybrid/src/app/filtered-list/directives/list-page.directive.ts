@@ -128,7 +128,9 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
     ).subscribe((event: any) => {
       this.page = 1;
       this._itemCount = 0;
-      this.ionInfiniteScroll.disabled = (this.loadMoreDisabled || this.disabled);
+      if (this.ionInfiniteScroll) {
+        this.ionInfiniteScroll.disabled = (this.loadMoreDisabled || this.disabled);
+      }
       event = this._overloadAllIonEvents(event);
       this.refresh.emit(event);
     });
@@ -150,10 +152,12 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
   private _onIonEventComplete(): void {
     if (this.ionVirtualScroll) {
       this.ionVirtualScroll.checkEnd();
-      setTimeout(() => { // setTimeout: Ensure all updates have occured to ion-virtual-scroll first.
-        this.ionInfiniteScroll.disabled = (this.loadMoreDisabled || this.disabled)
-          || (this._itemCount === this.ionVirtualScroll.items?.length)
-          || (this._itemCount % this.pageSize !== 0);
+      setTimeout(() => { // setTimeout: Ensure all updates have occurred to ion-virtual-scroll first.
+        if (this.ionInfiniteScroll) {
+          this.ionInfiniteScroll.disabled = (this.loadMoreDisabled || this.disabled)
+            || (this._itemCount === this.ionVirtualScroll.items?.length)
+            || (this._itemCount % this.pageSize !== 0);
+        }
         this._itemCount = this.ionVirtualScroll.items?.length;
       });
     }

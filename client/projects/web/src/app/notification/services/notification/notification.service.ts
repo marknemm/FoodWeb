@@ -5,10 +5,10 @@ import { Observable, of } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { LastSeenNotificationUpdateRequest, ListResponse, Notification, NotificationReadRequest, NotificationsAvailableEvent, NotificationUpdateRequest, ServerSentEventType } from '~shared';
 import { environment } from '~web-env/environment';
-import { ServerSentEventSourceService } from '~web/notification/services/server-sent-event-source/server-sent-event-source.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
+import { ServerSentEventService } from '~web/shared/services/server-sent-event/server-sent-event.service';
 export { Notification };
 
 @Injectable({
@@ -27,7 +27,7 @@ export class NotificationService {
     private _httpResponseService: HttpResponseService,
     private _router: Router,
     private _sessionService: SessionService,
-    private _sseSourceService: ServerSentEventSourceService,
+    private _sseService: ServerSentEventService,
   ) {
     // Listen for changes in login status (will immediately get current status on first subscribe).
     this._authService.loginStatus$.subscribe((loggedIn: boolean) => {
@@ -103,10 +103,9 @@ export class NotificationService {
       return of(0); // If user is not logged in, then return that 0 notifications are available and complete.
     }
 
-    return this._sseSourceService.onMessageType<NotificationsAvailableEvent>(
+    return this._sseService.onMessageType<NotificationsAvailableEvent>(
       ServerSentEventType.NotificationsAvailable
     ).pipe(
-      takeUntil(this._authService.logout$), // Whenever logout occurs, stop listening for new notifications.
       map((notificationsAvailableEvent) =>
         this._unseenNotificationsCount = notificationsAvailableEvent.unseenNotificationsCount
       )

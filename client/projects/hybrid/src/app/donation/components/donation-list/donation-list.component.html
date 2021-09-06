@@ -1,8 +1,8 @@
 <ion-header>
   <foodweb-hybrid-header defaultBackHref="..">
     <ion-label>{{ pageTitle }}</ion-label>
-    <ion-buttons *ngIf="canAddDonation" slot="end">
-      <ion-button [routerLink]="['/', 'delivery', 'list']" fill="clear">
+    <ion-buttons *ngIf="canAccessAddAction" slot="end">
+      <ion-button [routerLink]="['/', 'donation', addActionRouteSegment]" fill="clear">
         <ion-icon name="add-circle"></ion-icon>
       </ion-button>
     </ion-buttons>

@@ -1,6 +1,6 @@
-import { ApplicationRef, Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { ServerSentEventType } from '~shared';
 import { environment } from '~web-env/environment';
@@ -8,21 +8,28 @@ import { AuthenticationService } from '~web/session/services/authentication/auth
 
 const EventSource = NativeEventSource || EventSourcePolyfill;
 
+/**
+ * Initializes and maintains server sent event (SSE) functionality.
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class ServerSentEventSourceService {
+export class ServerSentEventService {
 
   readonly url = `${environment.server}/sse`;
 
   private _eventSource: EventSource;
-  private _onMessage = new ReplaySubject<MessageEvent>();
-  private _onError = new ReplaySubject<Event>();
+
+  private _close$ = new Subject<void>();
+  private _message$ = new ReplaySubject<MessageEvent>(100);
+  private _open$ = new Subject<void>();
+  private _error$ = new ReplaySubject<Event>(100);
 
   constructor(
-    private _applicationRef: ApplicationRef,
-    private _authService: AuthenticationService
+    private _authService: AuthenticationService,
+    private _ngZone: NgZone,
   ) {
+    this.error$.subscribe(console.error);
     this._authService.login$.subscribe(() => this.open());
     this._authService.logout$.subscribe(() => this.close());
     if (this._authService.loggedIn) { this.open(); }
@@ -31,37 +38,50 @@ export class ServerSentEventSourceService {
   /**
    * Whether or not a server side event source connection is open.
    */
-  get isOpen(): boolean {
+  get opened(): boolean {
     return (this._eventSource != null);
+  }
+
+  /**
+   * Observable that emits whenever a server side event connection is closed.
+   */
+  get close$(): Observable<void> {
+    return this._close$.asObservable();
   }
 
   /**
    * Observable that emits an event message whenever the server side event client receives a message from the server.
    */
-  get onMessage(): Observable<MessageEvent> {
-    return this._onMessage.asObservable().pipe(
-      map((event: MessageEvent) => {
-        setTimeout(() => this._applicationRef.tick()); // Angular does not monkeypatch SSE, so must run change detection manually!
-        return event;
-      })
-    );
+  get message$(): Observable<MessageEvent> {
+    return this._message$.asObservable();
   }
 
   /**
-   * Observable that emits an event message whenever the server side event client receives an error from the server.
+   * Observable that emits whenever a server side event connection is opened.
    */
-  get onError(): Observable<Event> {
-    return this._onError.asObservable();
+  get open$(): Observable<void> {
+    return this._open$.asObservable();
+  }
+
+  /**
+   * Observable that emits an event whenever the server side event client receives an error from the server.
+   */
+  get error$(): Observable<Event> {
+    return this._error$.asObservable();
   }
 
   /**
    * Opens a server side event connection (idempotent operation - does nothing if connection already open).
    */
   open(): void {
-    if (!this.isOpen) {
+    if (!this.opened) {
       this._eventSource = new EventSource(this.url, { withCredentials: true });
-      this._eventSource.onmessage = (event: MessageEvent) => this._onMessage.next(event);
-      this._eventSource.onerror = (event: Event) => this._onError.next(event);
+      this._eventSource.onopen = () =>
+        this._ngZone.run(() => this._open$.next());
+      this._eventSource.onmessage = (event: MessageEvent) =>
+        this._ngZone.run(() => this._message$.next(event));
+      this._eventSource.onerror = (event: Event) =>
+        this._ngZone.run(() => this._error$.next(event));
     }
   }
 
@@ -72,7 +92,7 @@ export class ServerSentEventSourceService {
    */
   onMessageType<T>(eventTypes: ServerSentEventType | ServerSentEventType[]): Observable<T> {
     eventTypes = (eventTypes instanceof Array) ? eventTypes : [eventTypes];
-    return this.onMessage.pipe(
+    return this.message$.pipe(
       filter((message: MessageEvent) => (<string[]>eventTypes).indexOf(message.lastEventId) >= 0),
       map((message: MessageEvent) => JSON.parse(message.data))
     );
@@ -82,9 +102,10 @@ export class ServerSentEventSourceService {
    * Closes a server side event connection (idempotent operation - does nothing if there is no open connection).
    */
   close(): void {
-    if (this.isOpen) {
+    if (this.opened) {
       this._eventSource.close();
       this._eventSource = null;
+      this._close$.next();
     }
   }
 }

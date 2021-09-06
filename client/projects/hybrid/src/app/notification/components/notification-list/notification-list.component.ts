@@ -66,6 +66,7 @@ export class NotificationListComponent extends WebNotificationListComponent {
 
   refresh(request: NotificationReadRequest = this.activeFilters): Observable<Notification[]> {
     this.activeFilters.page = 1;
+    console.log('Refreshing!');
     return super.refresh(request);
   }
 }

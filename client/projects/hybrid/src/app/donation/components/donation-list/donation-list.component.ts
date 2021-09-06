@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AccountType, Donation, DonationReadRequest, ListResponse } from '~shared';
+import { Donation, DonationReadRequest, ListResponse } from '~shared';
 import { DonationListComponent as WebDonationListComponent } from '~web/donation/components/donation-list/donation-list.component';
 
 @Component({
@@ -14,8 +14,12 @@ export class DonationListComponent extends WebDonationListComponent {
     return (this.myDonations ? 'My Donations' : 'Donations');
   }
 
-  get canAddDonation(): boolean {
-    return (this.myDonations && this.account.accountType === AccountType.Donor);
+  get canAccessAddAction(): boolean {
+    return (this.myDonations && (this._sessionService.isDonor || this._sessionService.isReceiver));
+  }
+
+  get addActionRouteSegment(): string {
+    return (this._sessionService.isDonor ? 'donate' : 'list');
   }
 
   get showChooseDonation(): boolean {

@@ -10,6 +10,10 @@ import { DonationHubListComponent as WebDonationHubListComponent } from '~web/do
 })
 export class DonationHubListComponent extends WebDonationHubListComponent {
 
+  get pageTitle(): string {
+    return (this._myDonationHubs ? 'My Donation Hubs' : 'Donation Hubs');
+  }
+
   /**
    * Handles an ionInfinite event by loading the next segment of Donation Hub List items.
    * @param event The ionInfinite event.
