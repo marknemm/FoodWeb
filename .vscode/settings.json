@@ -18,9 +18,13 @@
     ],
     "cSpell.words": [
         "cacheable",
+        "confighooks",
+        "einaregilsson",
         "fontawesome",
         "foodweb",
         "lscache",
+        "MAILGUN",
+        "mkdir",
         "recaptcha",
         "signup",
         "typeorm",

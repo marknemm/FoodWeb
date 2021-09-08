@@ -1,9 +1,10 @@
+import * as admin from 'firebase-admin';
 import { appPaths } from './paths';
 import dotenv = require('dotenv');
 import path = require('path');
 
 /**
- * A typed version of process.env that should contain all environemnt variables that are converted to their refined types.
+ * A typed version of process.env that should contain all environment variables that are converted to their refined types.
  */
 export const env: FoodWebEnv = initEnv(appPaths.serverProjectDir);
 
@@ -33,6 +34,7 @@ export interface FoodWebEnv {
   DISTANCE_TIME_API_KEY?: string;
   FCM_SENDER_ID?: string;
   FCM_SERVER_KEY?: string;
+  FIREBASE_SERVICE_ACCOUNT?: admin.ServiceAccount;
   GEOCODER_API_KEY?: string;
   GEOCODER_FORMATTER_PATTERN?: string;
   GEOCODER_FORMATTER?: string;
@@ -74,7 +76,7 @@ export interface FoodWebEnv {
 }
 
 /**
- * Initializes Express app environment variables within a local/dockerized dev environment by referencing .env file.
+ * Initializes Express app environment variables within a local/docker dev environment by referencing .env file.
  * If environment variables are set on the host machine/container, those will take precedence, and .env will not be referenced.
  * @param envDir The optional directory containing the `.env` file.
  * @return The initialized FoodWeb environment variable set.
@@ -110,12 +112,17 @@ function refineEnv(rawEnv): FoodWebEnv {
 
   // Perform all standard automatic conversions to boolean and integer types.
   for (const envProp in refinedEnv) {
-    if (refinedEnv[envProp] === 'true') {
-      refinedEnv[envProp] = true;
-    } else if (refinedEnv[envProp] === 'false') {
-      refinedEnv[envProp] = false;
-    } else if (typeof refinedEnv[envProp] === 'string' && /^\d+$/.test(refinedEnv[envProp])) {
-      refinedEnv[envProp] = parseInt(refinedEnv[envProp], 10);
+    if (typeof refinedEnv[envProp] === 'string') {
+      refinedEnv[envProp] = refinedEnv[envProp].trim();
+
+      // Attempt to parse string into primitive type, object, or array.
+      if (refinedEnv[envProp] === 'undefined') {
+        refinedEnv[envProp] = undefined;
+      } else {
+        try {
+          refinedEnv[envProp] = JSON.parse(refinedEnv[envProp]);
+        } catch (err) {} // Do nothing an move on if JSON parse fails.
+      }
     }
   }
 
@@ -134,6 +141,9 @@ function refineEnv(rawEnv): FoodWebEnv {
   refinedEnv.DATABASE_PORT = rawEnv.DATABASE_PORT ?? 5432;
 
   refinedEnv.DEVELOPMENT = refinedEnv.DEVELOPMENT || (!refinedEnv.PRODUCTION && !refinedEnv.QA);
+
+  // The Firebase service account JSON object is base64 encoded in order to properly preserve special characters in private key.
+  refinedEnv.FIREBASE_SERVICE_ACCOUNT = JSON.parse(Buffer.from(refinedEnv.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('ascii'));
 
   refinedEnv.PORT = rawEnv.PORT ?? 0; // Allow SERVER_PORT to take effect if not supplied.
 

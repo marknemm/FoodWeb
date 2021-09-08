@@ -4,7 +4,7 @@ import { adminLogin } from '~admin/services/admin-session/admin-login';
 import { adminSaveImpersonationToken } from '~admin/services/admin-session/admin-save-impersonation-token';
 import { ImpersonateTokenResponse, LoginRequest, LoginResponse } from '~shared';
 import { handleDeleteSession, handleGetSession } from '~web/controllers/session';
-import { genErrorResponse } from '~web/middlewares/response-error.middleware';
+import { genErrorResponse } from '~web/middleware/response-error.middleware';
 import { AccountEntity } from '~entity';
 
 export const router = express.Router();

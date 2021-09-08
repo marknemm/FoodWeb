@@ -1,8 +1,8 @@
 import * as admin from 'firebase-admin';
-import * as serviceAccount from './firebase-service-account.json';
+import { env } from '../globals/env';
 
 export const firebase: admin.app.App = admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount)
+  credential: admin.credential.cert(env.FIREBASE_SERVICE_ACCOUNT)
 });
 
 export type Messaging = admin.messaging.Messaging;
