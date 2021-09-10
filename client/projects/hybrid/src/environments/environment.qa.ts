@@ -1,4 +1,4 @@
-export const environment: FoodWebHybridEnvironment = {
+export const environment = {
   production: false,
   qa: true,
   demo: false,
@@ -9,5 +9,5 @@ export const environment: FoodWebHybridEnvironment = {
   supportEmail: 'support@wnyfoodweb.com',
   recaptchaSiteKey: '',
   googleMapsJSApiKey: 'AIzaSyDQdydkED1Z-nZvQXQQHlOYXnrmdqdFedA',
-  server: 'https://food-web-qa.herokuapp.com/server'
+  server: 'https://qa.wnyfoodweb.com/server'
 };

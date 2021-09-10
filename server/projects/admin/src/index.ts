@@ -10,10 +10,10 @@ initPaths('admin', __dirname);
 import { env } from '~web/helpers/globals/env';
 // These must be imported after loading .env into process since they require access to environment variables.
 import { initOrm } from '~orm';
-import { ensureSessionAdmin } from '~admin/middlewares/admin-session.middleware';
+import { ensureSessionAdmin } from '~admin/middleware/admin-session.middleware';
 import { router as sessionRouter } from '~admin/controllers/admin-session';
 import { router as adminRouter } from '~admin/controllers/admin';
-import { initMiddleware } from '~web/middlewares/init.middleware';
+import { initMiddleware } from '~web/middleware/init.middleware';
 
 // Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();

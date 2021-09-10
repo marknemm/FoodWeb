@@ -1,6 +1,6 @@
 import { MobileDevice, Notification } from '~entity';
 import { toExternalUrl } from '~web/helpers/misc/url';
-import { firebase, Message, Messaging, MulticastMessage } from '../firebase/firebase';
+import { firebase, Message, Messaging, MulticastMessage } from './firebase';
 
 /**
  * A push notification client that is used to send (mobile app) push notifications via Google Cloud Messaging (GCM).
