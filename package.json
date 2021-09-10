@@ -14,6 +14,7 @@
     "prestart": "cd ./server && npm install && cd ../",
     "start": "npm run stop && npm run start:web && npm run start:admin && npm run logs",
     "start:admin": "cross-env ADMIN=true PORT=8081 forever start -a -l admin.log -o admin.log -e admin.log server/dist/server/projects/admin/src/index.js",
+    "start:qa": "cross-env QA=true PORT=8082 forever start -a -l qa.log -o qa.log -e qa.log server/dist/server/projects/web/src/index.js",
     "start:web": "forever start -a -l web.log -o web.log -e web.log server/dist/server/projects/web/src/index.js",
     "stop": "forever stopall && rimraf *.log",
     "test": "npm run lint && cd ./server && npm run test && cd ../client && npm run test && cd ../"

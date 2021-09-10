@@ -65,7 +65,7 @@ Note that it is also recommended that you at least install the psql CLI for Post
 
 ## Recommended VS Code Extensions
 
-  - **Angular Essentials**: Pick the highest version. Provides a ton of necessary support for Angular development such as **Angular Language Service** for template intellisence.
+  - **Angular Essentials**: Pick the highest version. Provides a ton of necessary support for Angular development such as **Angular Language Service** for template intellisense.
   - **Docker**: Provides a Docker VS Code menu with a UI for viewing and interacting with docker entities (container, images, etc).
   - **PostgreSQL**: Pick the one with the highest rating. Provides a VS Code menu with a UI for establishing connections to databases.
   - **easy-redis**: Provides a VS Code explorer panel which contains a UI for establishing connections to Redis Server instances.
