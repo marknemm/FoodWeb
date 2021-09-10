@@ -1,7 +1,7 @@
 import express = require('express');
 import { Request, Response } from 'express';
 import { adminGenDevDataDump } from '~admin/services/admin-developer/admin-data-dump';
-import { genErrorResponse } from '~web/middlewares/response-error.middleware';
+import { genErrorResponse } from '~web/middleware/response-error.middleware';
 
 export const router = express.Router();
 

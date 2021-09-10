@@ -7,7 +7,7 @@ import { adminSaveFeaturedEvent } from '~admin/services/admin-featured-event/adm
 import { FeaturedEventEntity } from '~entity';
 import { FeaturedEvent, FeaturedEventCreateRequest, FeaturedEventUpdateRequest } from '~shared';
 import { handleGetFeaturedEvents, handlePostFeaturedEventRegistration } from '~web/controllers/featured-event';
-import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
+import { genErrorResponse, genErrorResponseRethrow } from '~web/middleware/response-error.middleware';
 import { readFeaturedEvent } from '~web/services/featured-event/read-featured-events';
 
 export const router = express.Router();

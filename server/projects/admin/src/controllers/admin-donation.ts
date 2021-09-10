@@ -7,7 +7,7 @@ import { AccountEntity, DonationEntity } from '~entity';
 import { AdminClaimSaveRequest, AdminDonationSaveRequest } from '~shared';
 import { getDonation, handleDeleteDonation, handleDeleteDonationClaim, handleGetDonations, handleGetMyDonations } from '~web/controllers/donation';
 import { FoodWebError } from '~web/helpers/response/foodweb-error';
-import { genErrorResponse, genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
+import { genErrorResponse, genErrorResponseRethrow } from '~web/middleware/response-error.middleware';
 import { saveDonationClaimAudit, saveDonationCreateAudit, saveDonationUpdateAudit } from '~web/services/audit/save-donation-audit';
 import { claimDonation } from '~web/services/donation-claim/claim-donation';
 import { sendClaimedDonationMessages } from '~web/services/donation-claim/claimed-donation-message';

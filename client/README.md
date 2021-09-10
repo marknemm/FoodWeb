@@ -3,7 +3,7 @@
 An **Angular** monorepo that relies mostly on **Angular Material** for UI components.<br>
 It is composed of 3 projects:
 
-  - **Web**: Located under **/client/projects/web**. Serves as the standared web interface's front-end. It also provides a common base for all other projects.
+  - **Web**: Located under **/client/projects/web**. Serves as the standard web interface's front-end. It also provides a common base for all other projects.
   - **Hybrid**: Located under **/client/projects/hybrid**. Serves as the mobile Android/IOS apps' front-end. It leverages **Capacitor** & **Ionic** for mobile app features, and builds off of the capabilities of the Web project.
   - **Admin**: Located under **/client/projects/admin**. Serves as the admin console's front-end. It extends the capabilities of the Web project.
 

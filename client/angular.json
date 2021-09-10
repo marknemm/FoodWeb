@@ -408,6 +408,26 @@
                 }
               ]
             },
+            "qa": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "projects/web/src/environments/environment.ts",
+                  "with": "projects/web/src/environments/environment.qa.ts"
+                },
+                {
+                  "replace": "projects/web/src/environments/environment.ts",
+                  "with": "projects/hybrid/src/environments/environment.qa.ts"
+                }
+              ]
+            },
             "emu": {
               "fileReplacements": [
                 {
@@ -442,6 +462,9 @@
           "configurations": {
             "production": {
               "browserTarget": "hybrid:build:production"
+            },
+            "qa": {
+              "browserTarget": "hybrid:build:qa"
             },
             "emu": {
               "browserTarget": "hybrid:build:emu"

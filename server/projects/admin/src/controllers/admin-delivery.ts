@@ -5,7 +5,7 @@ import { adminUpdateDelivery } from '~admin/services/admin-delivery/admin-save-d
 import { AccountEntity, DeliveryEntity, DonationEntity } from '~entity';
 import { AdminDeliverySaveRequest, AdminDeliveryScheduleRequest } from '~shared';
 import { handleGetDeliveries, handleGetMyDeliveries, handleGetUnscheduledDeliveries, handlePutAdvanceDeliveryState, handlePutUndoDeliveryState } from '~web/controllers/delivery';
-import { genErrorResponseRethrow } from '~web/middlewares/response-error.middleware';
+import { genErrorResponseRethrow } from '~web/middleware/response-error.middleware';
 import { saveDeliveryScheduleAudit } from '~web/services/audit/save-delivery-audit';
 import { readDelivery } from '~web/services/delivery/read-deliveries';
 import { scheduleDelivery } from '~web/services/delivery/schedule-delivery';
