@@ -9,8 +9,8 @@ const { promises: fs } = require('fs');
 // Get the optional script `project` argument, and setup the project environment (.env) & database schema/contents.
 getOptionalArg('project')
   .then(initProject)
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
  * Performs various initial setup for a given node project.

@@ -6,14 +6,14 @@ const { connect } = require('./client');
 // Get the optional script `sql` argument, and run pg exec.
 getOptionalArg('sql')
   .then(pgQuery)
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
  * Executes a given single-line SQL statement or file.
  * @param {string} sql The SQL string that will be executed.
  * May also be the pathname of a SQL file to execute (must end in either .sql or .pgsql).
- * If falsey, then the user will be prompted for a SQL statement.
+ * If falsy, then the user will be prompted for a SQL statement.
  * @return {Promise<void>} A promise that resolves once the initialization is complete.
  */
 async function pgQuery(sql) {

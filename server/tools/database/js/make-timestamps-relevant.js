@@ -3,8 +3,8 @@ const path = require('path');
 const { connect } = require('./client');
 
 pgMakeTimestampsRelevant()
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
  * Runs a SQL script that makes all timestamps within the database relevant to the current time.

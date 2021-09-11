@@ -7,8 +7,8 @@ const { connect } = require('./client');
 // Get the optional script `dumpFileName` argument, and run pg restore.
 getOptionalArg('dumpFileName')
   .then(pgRestore)
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
  * Restores the database with a given dump file.

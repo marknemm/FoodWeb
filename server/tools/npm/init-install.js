@@ -4,8 +4,8 @@ const path = require('path');
 const { promises: fs } = require('fs');
 
 initialInstall()
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
  * Performs an initial `npm install` for a given Angular project if it is needed.

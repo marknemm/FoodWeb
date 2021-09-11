@@ -9,8 +9,8 @@ const { selectProjectPrompt } = require('../util/prompt');
 // Get the optional script `project` argument, and build the project source.
 getOptionalArg('project')
   .then(buildProject)
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
  * Builds the source code for a given node project.
