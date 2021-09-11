@@ -22,11 +22,11 @@ const commandRegistry = {
 // Get the optional script `command` argument, and run the TypeORM command.
 getOptionalArg('command')
   .then(runTypeorm)
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
- * Runs a given TypeORM command. If the command is falsey, then prompts the user for the command first.
+ * Runs a given TypeORM command. If the command is falsy, then prompts the user for the command first.
  * @param {string} command The TypeORM command that shall be run.
  * @return {Promise<void>} A promise that resolves once the command completes.
  */
@@ -50,7 +50,7 @@ async function runTypeorm(command) {
  * Executes the TypeORM CLI with the correct configuration (either local or docker).
  * @param {string} command The ORM CLI command to execute.
  * @param {string} migrationName The optional name of the migration that will be given as an argument to the CLI command.
- * @return {Promise<void>} A promsie that resolves once this operation completes.
+ * @return {Promise<void>} A promise that resolves once this operation completes.
  */
 async function execOrmCli(command, migrationName) {
   // Before running TypeORM CLI, dump the database in-case something goes wrong, and perform a build to ensure we have most recent compiled entities.
@@ -59,7 +59,7 @@ async function execOrmCli(command, migrationName) {
     await spawn('npm', ['run', 'build', 'web']);
   }
 
-  // Run the TypeORM CLI. Check if the PostgreSQL instance is accessable on localhost or docker network (postgres).
+  // Run the TypeORM CLI. Check if the PostgreSQL instance is accessible on localhost or docker network (postgres).
   const commandArgs = commandRegistry[command].concat(migrationName ? [migrationName] : []);
   if (await isPortReachable(5432)) { // Try local.
     const typeOrmCliArgs = ['--project', tsconfigPathname, '-r', 'tsconfig-paths/register', typeOrmCliPath, '-f', 'ormconfig.json'];

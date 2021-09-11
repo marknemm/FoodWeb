@@ -13,10 +13,10 @@ const path = require('path');
 /**
  * Gets a list of the server project names.
  * @param {boolean} includeAll Whether or not to include an 'all' selection for all projects. Defaults to false.
- * @param {string[]} exlcude A list of project names to exclude. Defaults to an empty list.
+ * @param {string[]} exclude A list of project names to exclude. Defaults to an empty list.
  * @returns {Promise<string[]>} A promise that resolves to a list of the server project names.
  */
-async function getProjects(includeAll = false, exlcude = []) {
+async function getProjects(includeAll = false, exclude = []) {
   // Get all dirents (files & directories) under the server projects directory.
   const projectsDirents = await fs.readdir(
     global['serverProjectsDir'],
@@ -25,7 +25,7 @@ async function getProjects(includeAll = false, exlcude = []) {
 
   // Filter out dirents that are not directories or that are found in the given exclude list, and map to names.
   const projectNames = projectsDirents
-    .filter((dirent) => dirent.isDirectory() && exlcude.indexOf(dirent.name) < 0)
+    .filter((dirent) => dirent.isDirectory() && exclude.indexOf(dirent.name) < 0)
     .map((dirent) => dirent.name);
 
   // If web is found within the projects list, move it to the first (default) index.

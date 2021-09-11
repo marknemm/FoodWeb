@@ -13,14 +13,26 @@ function getProjectDir(project) {
 }
 
 /**
+ * Gets the port associated with a given project.
+ * @param {string} project The project name.
+ * @returns {number} The project's port number.
+ */
+function getProjectPort(project) {
+  const projectIdx = getProjects().findIndex(
+    (proj) => project.startsWith(proj)
+  );
+  return (4200 + projectIdx);
+}
+
+/**
  * Gets a list of the client project names.
  * @param {boolean} includeAll Whether or not to include an 'all' selection for all projects. Defaults to false.
- * @param {string[]} exlcude A list of project names to exclude. Defaults to an empty list.
+ * @param {string[]} exclude A list of project names to exclude. Defaults to an empty list.
  * @returns {string[]} A list of the client project names.
  */
-function getProjects(includeAll = false, exlcude = []) {
+function getProjects(includeAll = false, exclude = []) {
   const projectNames = Object.keys(angular.projects)
-    .filter((projectName) => exlcude.indexOf(projectName) < 0);
+    .filter((projectName) => exclude.indexOf(projectName) < 0);
 
   // If web is found within the projects list, move it to the first (default) index.
   const webProjectIdx = projectNames.indexOf('web');
@@ -60,6 +72,7 @@ async function selectProjectPrompt(includeAll = false, exclude = []) {
 
 module.exports = {
   getProjectDir,
+  getProjectPort,
   getProjects,
   parseProjectInput,
   selectProjectPrompt

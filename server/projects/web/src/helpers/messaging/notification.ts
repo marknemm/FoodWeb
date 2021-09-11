@@ -81,7 +81,7 @@ export class NotificationClient {
    * @return A promise that resolves to the mobile device targets.
    */
   private async _getPushTargets(accounts: AccountEntity[] | AccountEntity, forceSend: boolean): Promise<MobileDeviceEntity[]> {
-    if (!accounts) return []; // If given null/undefined, simply return empty MobileDeviceEntity list.
+    if (!accounts) { return []; } // If given null/undefined, simply return empty MobileDeviceEntity list.
     accounts = (accounts instanceof Array) ? accounts : [accounts];
     if (!forceSend) {
       accounts = accounts.filter((account: AccountEntity) => account.contactInfo.enablePushNotification);

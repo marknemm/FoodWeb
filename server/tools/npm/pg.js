@@ -7,11 +7,11 @@ const { getFileChoices, selectPrompt } = require('../util/prompt');
 // Get the optional script `command` argument, and run the pg command.
 getOptionalArg('command')
   .then((command) => runPg(command, process.argv.slice(3).join(' ')))
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
- * Runs a given pg command. If the command is falsey, then prompts the user for the command first.
+ * Runs a given pg command. If the command is falsy, then prompts the user for the command first.
  * @param {string} command The pg command that shall be run.
  * @return {Promise<void>} A promise that resolves once the command completes.
  */
@@ -28,7 +28,7 @@ async function runPg(command, args) {
   if (command === 'initialize') {
     args = 'true'; // Force re-initialization.
   } else if (!args) {
-    args = ''; // Make sure extra args is an empty string if falsey.
+    args = ''; // Make sure extra args is an empty string if falsy.
   }
 
   return spawn('node', [commandPathname].concat(args.split(' ')), `command: ${command}`);
@@ -36,7 +36,7 @@ async function runPg(command, args) {
 
 /**
  * Gets the available pg (database) command choices based off of the database tools JS scripts.
- * @return {Promise<string[]>} A promise that resolves to the avaialble pg command choices.
+ * @return {Promise<string[]>} A promise that resolves to the available pg command choices.
  */
 async function getCommandChoices() {
   const commandChoices = await getFileChoices(global['databaseToolsJsDir']);

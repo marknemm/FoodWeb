@@ -16,13 +16,13 @@ const projectData = parseProjectInput(args.project);
 
 // Open the project in the native platform's official IDE (Android Studio or XCode).
 openNative(projectData.project, projectData.platform)
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
  * Opens a given hybrid project's platform project within the associated official IDE for that platform.
  * @param {string} project The name of the project that shall be opened.
- * @param {string} platform The platform for which to open the offical IDE.
+ * @param {string} platform The platform for which to open the official IDE.
  * @return {Promise<void>} A promise that resolves once the open operation completes.
  */
 async function openNative(project, platform) {

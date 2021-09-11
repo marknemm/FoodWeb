@@ -8,8 +8,8 @@ const { selectProjectPrompt, projectOptions } = require('../util/prompt');
 // Get the optional script `project` argument, and lint the project source code.
 getOptionalArg('project')
   .then(lintProject)
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1) });
 
 /**
  * Lints the source code for a given project.

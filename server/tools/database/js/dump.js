@@ -10,8 +10,8 @@ const { inputPrompt } = require('../../util/prompt');
 // Get the optional script `dumpFileName` argument, and run pg dump.
 getOptionalArg('dumpFileName')
   .then(pgDump)
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
  * Runs pg dump and outputs the result to a given dump file name. If the dump file name is not provided,

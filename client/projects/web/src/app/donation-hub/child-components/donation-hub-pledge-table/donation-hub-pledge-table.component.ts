@@ -1,4 +1,3 @@
-import { SelectionChange } from '@angular/cdk/collections';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { DonationHubPledge } from '~shared';
 import { TableDataSource, TableSelectionType } from '~web/table/interfaces/table-data-source';
@@ -19,7 +18,7 @@ export class DonationHubPledgeTableComponent implements OnChanges {
   readonly dataSource = new TableDataSource<DonationHubPledge>([], [
     'donor',
     { name: 'foodType', visibleName: 'Sandwich Description' },
-    { name: 'foodCount', visibleName: 'Sandwhich Count' },
+    { name: 'foodCount', visibleName: 'Sandwich Count' },
     { name: 'actions', visibleName: '', width: '50px', minWidth: '50px' }
   ]);
 
