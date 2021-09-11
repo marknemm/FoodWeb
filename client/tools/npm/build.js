@@ -23,8 +23,8 @@ const projectData = parseProjectInput(args.project);
 
 // Build the project source.
 buildProject(projectData.project, projectData.platform)
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
  * Builds the source code for a given client project.

@@ -20,7 +20,7 @@ export async function sendDonationHubCreateMessages(donationHub: DonationHubEnti
     `Your Donation Drop-Off Hub For ${dropOffWindowStartStr} Has Been Created`,
     'donation-hub-created',
     { donationHub }
-  ).catch(console.error)
+  ).catch(console.error);
 
   return donationHub;
 }

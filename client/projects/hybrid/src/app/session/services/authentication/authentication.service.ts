@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { finalize, map, switchMap, take } from 'rxjs/operators';
+import { finalize, map, switchMap } from 'rxjs/operators';
 import { SessionService } from '~hybrid/session/services/session/session.service';
 import { MobileDeviceService } from '~hybrid/shared/services/mobile-device/mobile-device.service';
 import { Account, AccountHelper, LoginRequest, LoginResponse, MobileDevice } from '~shared';

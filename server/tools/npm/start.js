@@ -12,11 +12,11 @@ const { getProjectDir } = require('../util/project');
 // Get the optional script `project` argument, and start the node server.
 getOptionalArg('project')
   .then(startServer)
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
- * Runs a given server project on a nodemon server. If the provided `project` is falsey, then prompts the user for the project.
+ * Runs a given server project on a nodemon server. If the provided `project` is falsy, then prompts the user for the project.
  * @param {string} project The name of the server project that shall be run.
  * @return {Promise<void>} A promise that resolves once the server terminates.
  */
@@ -40,7 +40,7 @@ async function startServer(project) {
 }
 
 /**
- * Initialize the docker services containers (e.g. postgres, redis, fake-smtp-server) if they have not already been intiialized.
+ * Initialize the docker services containers (e.g. postgres, redis, fake-smtp-server) if they have not already been initialized.
  * @return {Promise<void>} A promise that resolves once the docker service containers have been initialized.
  */
 async function initDockerServices() {

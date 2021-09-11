@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AccountHelper } from '~shared';
 import { SessionService } from '~web/session/services/session/session.service';
+import { KeyValueStoreService } from '~web/shared/services/key-value-store/key-value-store.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +9,10 @@ import { SessionService } from '~web/session/services/session/session.service';
 export class AdminSessionService extends SessionService {
 
   constructor(
-    protected _accountHelper: AccountHelper
+    protected _accountHelper: AccountHelper,
+    protected _keyValueStoreService: KeyValueStoreService,
   ) {
-    super(_accountHelper);
+    super(_accountHelper, _keyValueStoreService);
   }
 
   /**

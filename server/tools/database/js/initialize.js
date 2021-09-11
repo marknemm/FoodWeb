@@ -12,8 +12,8 @@ const makeTimestampsRelevantPathname = path.join(global['sqlScriptsDir'], 'make-
 // Get the optional script `force` argument, and run pg initialize.
 getOptionalArg('force')
   .then(pgInitialize)
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
  * Initialize the database schema, and fille the database with test entries that have relevant timestamps.
@@ -30,7 +30,7 @@ async function pgInitialize(force) {
   }
 
   // Init database schema and test/mock data.
-  console.log('Initiailizing database...');
+  console.log('Initializing database...');
   await client.execFile(initPathname);
   console.log('Database initialization complete');
 

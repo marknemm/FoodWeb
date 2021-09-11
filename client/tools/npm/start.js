@@ -1,8 +1,8 @@
 require('../util/constants');
 const spawn = require('../../../shared/tools/util/spawn');
 const yargs = require('yargs');
-const { getProjectDir, parseProjectInput, selectProjectPrompt } = require('../util/project');
-const { selectPlatformPrompt, extractPlatform } = require('../util/platform');
+const { getProjectDir, getProjectPort, parseProjectInput, selectProjectPrompt } = require('../util/project');
+const { selectPlatformPrompt } = require('../util/platform');
 
 // Parse command line arguments.
 const args = yargs.command(`$0 [project] [Options]`, 'Runs a client Ng project on a lightweight dev server.',
@@ -21,11 +21,11 @@ const projectData = parseProjectInput(args.project);
 
 // Start the node server.
 startClient(projectData.project, projectData.platform)
-  .catch(console.error)
-  .finally(process.exit);
+  .then(process.exit)
+  .catch((err) => { console.error(err); process.exit(1); });
 
 /**
- * Runs a given client project on a lightweight Angular server. If the provided `project` is falsey, then prompts the user for the project.
+ * Runs a given client project on a lightweight Angular server. If the provided `project` is falsy, then prompts the user for the project.
  * @param {string} project The name of the client project that shall be run.
  * @param {string} platform The device platform for which to start the client web server.
  * @return {Promise<void>} A promise that resolves once the client terminates.
@@ -34,6 +34,7 @@ async function startClient(project, platform) {
   if (!project) {
     project = await selectProjectPrompt();
   }
+  const port = getProjectPort(project);
 
   if (project.indexOf('hybrid') >= 0 && !platform) {
     platform = await selectPlatformPrompt();
@@ -46,5 +47,5 @@ async function startClient(project, platform) {
   (platform && platform !== 'web')
     ? await spawn('npx', ['ionic', 'cap', 'run', platform, `--project=${project}`, '-l', '--external', '--source-map', '--consolelogs', '--serverlogs'].concat(configOpts),
                   '', getProjectDir(project))
-    : await spawn('ng', ['serve', `--project=${project}`].concat(configOpts));
+    : await spawn('ng', ['serve', `--port=${port}`, `--project=${project}`].concat(configOpts));
 }
