@@ -4,9 +4,7 @@
     autocomplete="none"
     [placeholder]="placeholder"
     [matAutocomplete]="autocomplete"
-    [formControl]="formControl"
-    (ngModelChange)="onChange($event)"
-    (blur)="onTouchedCb()">
+    [formControl]="formControl">
 </mat-form-field>
 
 <mat-autocomplete #autocomplete="matAutocomplete">

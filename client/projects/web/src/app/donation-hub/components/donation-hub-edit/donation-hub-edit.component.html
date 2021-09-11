@@ -1,4 +1,4 @@
-<form [formGroup]="formGroup" class="donation-hub-registration-form page" (submit)="save()">
+<form [formGroup]="donationHubForm" class="donation-hub-registration-form page" (submit)="save()">
 
   <div *ngIf="!donationHubNotFound; else notFoundTmpl" class="page-title">
     {{ pageTitleService.title }}
@@ -14,7 +14,7 @@
 
     <mat-card>
       <mat-card-title>
-        Let Us Know Your Availabililty
+        Let Us Know Your Availability
       </mat-card-title>
 
       <mat-card-content>

@@ -1,15 +1,11 @@
 import { AbstractControl, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { AccountAutocompleteItem, AdminDeliverySaveData, DateTimeRange, Delivery } from '~shared';
 import { DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
 import { TFormGroup } from '~web/forms';
 
 export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
 
-  constructor(
-    destroy$: Observable<unknown>,
-    delivery?: Delivery
-  ) {
+  constructor(delivery?: Delivery) {
     super({
       volunteerAccount: <AccountAutocompleteItem> delivery?.volunteerAccount,
       pickupWindow: new DateTimeRangeForm({
@@ -20,9 +16,9 @@ export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
       pickupTime: delivery?.pickupTime,
       dropOffTime: delivery?.dropOffTime
     });
-    this._listenForVolunteerAccountChange(destroy$);
-    this._listenForStartTimeChange(destroy$);
-    this._listenForPickupTimeChange(destroy$);
+    this._listenForVolunteerAccountChange();
+    this._listenForStartTimeChange();
+    this._listenForPickupTimeChange();
   }
 
   get volunteerAccount(): AccountAutocompleteItem {
@@ -45,8 +41,8 @@ export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
     return this.enabled ? this.value.dropOffTime : null;
   }
 
-  private _listenForVolunteerAccountChange(destroy$: Observable<unknown>): void {
-    this.onControlValueChanges('volunteerAccount', destroy$).subscribe(
+  private _listenForVolunteerAccountChange(): void {
+    this.get('volunteerAccount').valueChanges.subscribe(
       () => this._onVolunteerAccountChange()
     );
     this._onVolunteerAccountChange();
@@ -64,8 +60,8 @@ export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
     setTimeout(() => this._onStartTimeChange()); // Prevent ValueChangedAfterCheckedError.
   }
 
-  private _listenForStartTimeChange(destroy$: Observable<unknown>): void {
-    this.onControlValueChanges('startTime', destroy$).subscribe(
+  private _listenForStartTimeChange(): void {
+    this.get('startTime').valueChanges.subscribe(
       () => this._onStartTimeChange()
     );
     this._onStartTimeChange();
@@ -78,8 +74,8 @@ export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
     this._onPickupTimeChange();
   }
 
-  private _listenForPickupTimeChange(destroy$: Observable<unknown>): void {
-    this.onControlValueChanges('pickupTime', destroy$).subscribe(
+  private _listenForPickupTimeChange(): void {
+    this.get('pickupTime').valueChanges.subscribe(
       () => this._onPickupTimeChange()
     );
     this._onPickupTimeChange();

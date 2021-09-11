@@ -43,7 +43,7 @@ export class DeliveryScheduleService {
 
   /**
    * Shows a delivery pickup window dialog allowing the volunteer to schedule a narrowed pickup window for the donation.
-   * @param donation The donaation that is to have its delivery scheduled.
+   * @param donation The donation that is to have its delivery scheduled.
    * @return An observable that emits the selected date time range on dialog close. If none was selected, then null.
    */
   protected _showPickupWindowDialog(donation: Donation): Observable<DateTimeRange> {
@@ -58,7 +58,7 @@ export class DeliveryScheduleService {
   /**
    * Sends a delivery schedule request to the server.
    * @param request The delivery schedule request.
-   * @return An observable that emits the donation whose delivery was schedueled after the server operation completes.
+   * @return An observable that emits the donation whose delivery was scheduled after the server operation completes.
    */
   protected _sendDeliveryScheduleRequest(request: DeliveryScheduleRequest): Observable<Donation> {
     return this._httpClient.post<Donation>(this.url, request, { withCredentials: true }).pipe(

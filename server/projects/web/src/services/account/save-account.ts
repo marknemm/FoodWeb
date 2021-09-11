@@ -15,17 +15,20 @@ const _opHoursHelper = new OperationHoursHelper();
 
 export async function createAccount(request: SignupRequest): Promise<NewAccountData> {
   const accountToSave: AccountEntity = plainToClass(AccountEntity, request.account);
-  let createdAccount: AccountEntity;
-  let unverifiedAccount: UnverifiedAccountEntity;
 
-  await OrmEntityManager.transaction(async (manager: OrmEntityManager) => {
-    createdAccount = await _saveAccount(manager, accountToSave);
-    await savePassword(manager, createdAccount, request.password);
-    unverifiedAccount = await createUnverifiedAccount(createdAccount, manager);
+  return OrmEntityManager.transaction(async (manager: OrmEntityManager) => {
+    // Save account & password.
+    const account = await _saveAccount(manager, accountToSave);
+    await savePassword(manager, account, request.password);
+
+    // Save account verification status.
+    account.verified = request.skipVerification;
+    const unverifiedAccount = (!account.verified)
+      ? await createUnverifiedAccount(account, manager)
+      : undefined;
+
+    return { account, unverifiedAccount };
   });
-
-  createdAccount.verified = false;
-  return { account: createdAccount, unverifiedAccount };
 }
 
 export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: AccountEntity): Promise<UpdateDiff<AccountEntity>> {

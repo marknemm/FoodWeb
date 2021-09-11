@@ -7,9 +7,9 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
  * If the route fragment matches a contained expansion panel's ID, then it will automatically be opened.
  */
 @Directive({
-  selector: '[foodwebFragmentAccordian]'
+  selector: '[foodwebFragmentAccordion]'
 })
-export class FragmentAccordianDirective implements AfterContentInit {
+export class FragmentAccordionDirective implements AfterContentInit {
 
   /**
    * The ID of the default expansion panel to open upon initialization if no panel is specified via route fragment.

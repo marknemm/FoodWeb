@@ -2,7 +2,8 @@ import { FormControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DateTimeHelper, TimeRange } from '~shared';
 import { DateTimeRange } from '~web/date-time/services/date-time/date-time.service';
-import { GroupRequiredValidationMode, groupRequiredValidator, TFormControlMembers, TFormGroup } from '~web/forms';
+import { TFormControlMembers, TFormGroup } from '~web/forms';
+import { FormValidationService, GroupRequiredValidationMode } from '~web/forms/services/form-validation/form-validation.service';
 export { DateTimeRange };
 
 export class TimeRangeForm extends TFormGroup<TimeRange> {
@@ -10,6 +11,7 @@ export class TimeRangeForm extends TFormGroup<TimeRange> {
   readonly rangeErrStateMatcher: ErrorStateMatcher;
 
   private _dateTimeHelper = new DateTimeHelper();
+  private _formValidation = new FormValidationService(); // TODO
 
   constructor(controls: TFormControlMembers<TimeRange> = {}, validationMode: GroupRequiredValidationMode = 'allOrNothing') {
     super({
@@ -20,7 +22,7 @@ export class TimeRangeForm extends TFormGroup<TimeRange> {
     // init form top-level validators.
     this.setValidators([
       this._timeRangeOrderValidator.bind(this),
-      groupRequiredValidator(this, validationMode)
+      this._formValidation.groupRequiredValidator(this, validationMode)
     ]);
     this.rangeErrStateMatcher = this._genTimeRangeErrStateMatcher();
   }

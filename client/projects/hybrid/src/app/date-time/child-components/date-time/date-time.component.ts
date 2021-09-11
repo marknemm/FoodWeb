@@ -1,14 +1,14 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
+import { FormFieldService, TFormControl } from '~web/forms';
 
 @Component({
   selector: 'foodweb-hybrid-date-time',
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.scss'],
-  providers: formProvider(DateTimeComponent)
+  providers: [FormFieldService]
 })
-export class DateTimeComponent extends FormBaseComponent<Date> implements OnChanges, OnInit {
+export class DateTimeComponent implements OnChanges, OnInit {
 
   @Input() allowClear = false;
   @Input() allowUndefTime = false;
@@ -16,6 +16,7 @@ export class DateTimeComponent extends FormBaseComponent<Date> implements OnChan
   @Input() boldTime = false;
   @Input() defaultDate: Date;
   @Input() defaultTime = '12:00 pm';
+  @Input() editable = false;
   @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() excludeDate = false;
   @Input() excludeDateDisplay = false;
@@ -28,10 +29,21 @@ export class DateTimeComponent extends FormBaseComponent<Date> implements OnChan
   @Input() minDateWidth = '';
   @Input() minuteValues = '0,5,10,15,20,25,30,35,40,45,50,55';
 
+  readonly dateTimeFormControl = new TFormControl<string>();
+
   private _displayFormat = 'MMM D YYYY, h:mm A';
 
-  constructor(formHelperService: FormHelperService) {
-    super(() => new TFormControl<Date, string>(), formHelperService);
+  constructor(
+    private _formFieldService: FormFieldService<string, Date>
+  ) {}
+
+  @Input()
+  get value(): Date {
+    return (this.dateTimeFormControl.value ? new Date(this.dateTimeFormControl.value) : null);
+  }
+
+  set value(date: Date) {
+    this.dateTimeFormControl.setValue(date ? date.toISOString() : '', { emitEvent: false });
   }
 
   get displayFormat(): string {
@@ -39,16 +51,13 @@ export class DateTimeComponent extends FormBaseComponent<Date> implements OnChan
   }
 
   ngOnInit() {
-    this.formControl.registerValueConverter({
-      convert: (str: string) => str ? new Date(str) : null,
-      unconvert: (date: Date) => date ? date.toISOString() : '',
-      formHelperService: this._formHelperService
+    this._formFieldService.registerControl(this.dateTimeFormControl, {
+      valueInConverter: (date: Date) => (date ? date.toISOString() : ''),
+      valueOutConverter: (dateStr: string) => (dateStr ? new Date(dateStr) : null)
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    super.ngOnChanges(changes);
-
     if (changes.excludeDate || changes.excludeTime) {
       this._refreshPickerFormat();
     }
@@ -58,7 +67,7 @@ export class DateTimeComponent extends FormBaseComponent<Date> implements OnChan
     }
 
     if (!this.minDate) {
-      this.minDate = new Date(new Date().getTime() - 1893417100000); // -100 yeaers
+      this.minDate = new Date(new Date().getTime() - 1893417100000); // -100 years
     }
   }
 

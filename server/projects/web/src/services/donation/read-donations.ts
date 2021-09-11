@@ -215,8 +215,8 @@ function _addDeliveryWindowConditions(
   // WARNING: This condition may slow down the query when we have a lot of records. Refactor in future if necessary!
   if (filters.deliveryWindowOverlapStart) {
     queryBuilder = queryBuilder.andWhere(
-      ` (delivery.pickupWindowEnd >= :deliveryWindowOverlapStart)
-        OR (delivery.id IS NULL AND donation.pickupWindowEnd >= :donationWindowOverlapStart)`,
+      ` ((delivery.pickupWindowEnd >= :deliveryWindowOverlapStart)
+        OR (delivery.id IS NULL AND donation.pickupWindowEnd >= :donationWindowOverlapStart))`,
       {
         deliveryWindowOverlapStart: filters.deliveryWindowOverlapStart,
         donationWindowOverlapStart: filters.deliveryWindowOverlapStart
@@ -225,8 +225,8 @@ function _addDeliveryWindowConditions(
   }
   if (filters.deliveryWindowOverlapEnd) {
     queryBuilder = queryBuilder.andWhere(
-      ` (delivery.pickupWindowStart <= :deliveryWindowOverlapEnd)
-        OR (delivery.id IS NULL AND donation.pickupWindowStart <= :donationWindowOverlapEnd)`,
+      ` ((delivery.pickupWindowStart <= :deliveryWindowOverlapEnd)
+        OR (delivery.id IS NULL AND donation.pickupWindowStart <= :donationWindowOverlapEnd))`,
       {
         deliveryWindowOverlapEnd: filters.deliveryWindowOverlapEnd,
         donationWindowOverlapEnd: filters.deliveryWindowOverlapEnd

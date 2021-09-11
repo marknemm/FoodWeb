@@ -3,15 +3,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AccountType } from '~shared';
 import { AccountForm } from '~web/account-shared/forms/account.form';
-import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 
 @Component({
   selector: 'foodweb-account-creation-form',
   templateUrl: './account-creation-form.component.html',
   styleUrls: ['./account-creation-form.component.scss'],
-  providers: formProvider(AccountCreationFormComponent)
+  providers: [FormFieldService]
 })
-export class AccountCreationFormComponent extends FormBaseComponent<AccountForm> implements OnInit {
+export class AccountCreationFormComponent implements OnInit {
 
   readonly AccountType = AccountType;
 
@@ -25,13 +25,15 @@ export class AccountCreationFormComponent extends FormBaseComponent<AccountForm>
     public location: Location,
     protected _activatedRoute: ActivatedRoute,
     protected _router: Router,
-    formHelperService: FormHelperService,
-  ) {
-    super(() => new AccountForm({ formMode: 'Signup' }), formHelperService);
+    private _formFieldService: FormFieldService<AccountForm>
+  ) {}
+
+  get accountForm(): AccountForm {
+    return this._formFieldService.control;
   }
 
   get accountType(): AccountType {
-    return this.formGroup.get('accountType').value;
+    return this.accountForm.get('accountType').value;
   }
 
   get isDonor(): boolean {
@@ -53,17 +55,20 @@ export class AccountCreationFormComponent extends FormBaseComponent<AccountForm>
   }
 
   get operationHoursFullWidth(): boolean {
-    return this.formGroup.get('operationHours').value.limitOperationHours;
+    return this.accountForm.get('operationHours').value.limitOperationHours;
   }
 
   ngOnInit() {
+    this._formFieldService.injectControl({
+      genDefault: () => new AccountForm({ formMode: 'Signup' })
+    });
     this._listenAccountTypeSelect();
     this._listenAccountTypeRoute();
   }
 
   private _listenAccountTypeSelect(): void {
     // When accountType form field is updated, we must update route so user can rely on back button / link directly to correct signup.
-    this.formGroup.onControlValueChanges('accountType').subscribe((accountType: AccountType) => {
+    this.accountForm.get('accountType').valueChanges.subscribe((accountType: AccountType) => {
       if (accountType && !this._activatedRoute.snapshot.url.toString().match(`${accountType}$`)) {
         this._router.navigate(['.', accountType], {
           relativeTo: this._activatedRoute,
@@ -80,6 +85,6 @@ export class AccountCreationFormComponent extends FormBaseComponent<AccountForm>
   }
 
   private _onAccountTypeRoute(accountType: AccountType): void {
-    this.formGroup.get('accountType').setValue(accountType);
+    this.accountForm.get('accountType').setValue(accountType);
   }
 }

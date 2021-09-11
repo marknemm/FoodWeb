@@ -35,7 +35,7 @@ function autoGenPasswordIfConfig(createReq: AdminAccountCreateRequest): string {
  * Auto verifies a newly saved account if a given account create request dictates it.
  * @param createReq The account create request.
  * @param newAccountData The data for the newly saved account that may be auto verified.
- * @return A promsie that resolves to the newly saved account that is verified if the account create request dictates it.
+ * @return A promise that resolves to the newly saved account that is verified if the account create request dictates it.
  */
 async function autoVerifyAccountIfConfig(createReq: AdminAccountCreateRequest, newAccountData: NewAccountData): Promise<AccountEntity> {
   return (createReq.accountCreateOptions?.autoVerify)
@@ -47,7 +47,7 @@ async function autoVerifyAccountIfConfig(createReq: AdminAccountCreateRequest, n
  * Updates an account based off of a given account ID and update request.
  * @param accountId The ID of the account that is to be updated.
  * @param updateReq The account update request.
- * @return A promsie that resolves to the account update diff.
+ * @return A promise that resolves to the account update diff.
  */
 export async function adminUpdateAccount(accountId: number, updateReq: AccountUpdateRequest): Promise<UpdateDiff<AccountEntity>> {
   const origAccount: AccountEntity = await readFullAccount(accountId);

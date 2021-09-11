@@ -25,12 +25,15 @@ export async function initOrm(): Promise<Connection> {
     database: env.DATABASE_DATABASE,
     entities: [entitiesPath],
     migrations: [migrationsPath],
-    migrationsRun: env.DATABASE_MIGRATIONS_RUN,
+    migrationsRun: env.DATABASE_MIGRATIONS_RUN && !env.ADMIN,
     synchronize: env.DATABASE_SYNC,
     logging: env.DATABASE_LOGGING,
     logger: env.DATABASE_LOGGER as any,
     ssl: env.DATABASE_SSL
-      ? { rejectUnauthorized: env.DATABASE_REJECT_UNAUTHORIZED }
+      ? { rejectUnauthorized: !!env.DATABASE_REJECT_UNAUTHORIZED }
       : false
+  }).catch((err) => {
+    console.error('Error connecting to database');
+    throw err;
   });
 }

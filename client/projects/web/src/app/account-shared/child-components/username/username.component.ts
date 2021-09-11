@@ -1,19 +1,30 @@
-import { Component, HostBinding } from '@angular/core';
-import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { FormFieldService, TFormControl } from '~web/forms';
 
 @Component({
   selector: 'foodweb-username',
   templateUrl: './username.component.html',
   styleUrls: ['./username.component.scss'],
-  providers: formProvider(UsernameComponent)
+  providers: [FormFieldService]
 })
-export class UsernameComponent extends FormBaseComponent<string> {
+export class UsernameComponent implements OnInit {
+
+  @Input() editable = false;
+  @Input() get value(): string         { return this._formFieldService.value; }
+           set value(username: string) { this._formFieldService.valueIn(username); }
 
   @HostBinding()
   readonly class = 'foodweb-username';
 
-  constructor(formHelperService: FormHelperService) {
-    super(() => new TFormControl<string>(), formHelperService);
+  constructor(
+    private _formFieldService: FormFieldService<string>
+  ) {}
+
+  get formControl(): TFormControl<string> {
+    return this._formFieldService.control;
   }
 
+  ngOnInit(): void {
+    this._formFieldService.injectControl();
+  }
 }

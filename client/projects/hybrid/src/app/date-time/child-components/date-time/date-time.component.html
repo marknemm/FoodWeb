@@ -2,7 +2,7 @@
   <ion-label [position]="labelPosition" color="secondary">{{ label }}</ion-label>
   <ion-datetime
     [displayFormat]="displayFormat"
-    [formControl]="formControl.valueConvertControl"
+    [formControl]="dateTimeFormControl"
     [max]="maxDate | date : 'YYYY-MM-dd'"
     [min]="minDate | date : 'YYYY-MM-dd'"
     [minuteValues]="minuteValues">

@@ -5,7 +5,7 @@ import { DonationHubPledge } from '~shared';
 import { DonationHubPledgeForm } from '~web/donation-hub/forms/donation-hub-pledge.form';
 import { DonationHubPledgeReadService } from '~web/donation-hub/services/donation-hub-pledge-read/donation-hub-pledge-read.service';
 import { DonationHubPledgeUpdateService } from '~web/donation-hub/services/donation-hub-pledge-update/donation-hub-pledge-update.service';
-import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
@@ -13,9 +13,9 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
   selector: 'foodweb-donation-hub-pledge-edit',
   templateUrl: './donation-hub-pledge-edit.component.html',
   styleUrls: ['./donation-hub-pledge-edit.component.scss'],
-  providers: formProvider(DonationHubPledgeEditComponent)
+  providers: [FormFieldService]
 })
-export class DonationHubPledgeEditComponent extends FormBaseComponent<DonationHubPledgeForm> implements OnInit {
+export class DonationHubPledgeEditComponent implements OnInit {
 
   readonly postEditRoute = ['/', 'donation-hub', 'pledge'];
 
@@ -27,12 +27,10 @@ export class DonationHubPledgeEditComponent extends FormBaseComponent<DonationHu
     private _activatedRoute: ActivatedRoute,
     private _donationHubPledgeReadService: DonationHubPledgeReadService,
     private _donationHubPledgeUpdateService: DonationHubPledgeUpdateService,
+    private _formFieldService: FormFieldService<DonationHubPledgeForm>,
     private _router: Router,
     private _urlQueryService: UrlQueryService,
-    formHelperService: FormHelperService
-  ) {
-    super(() => new DonationHubPledgeForm({ omitChecklist: true }), formHelperService, true);
-  }
+  ) {}
 
   get donationHubPledgeNotFound(): boolean {
     return this._donationHubPledgeNotFound;
@@ -42,7 +40,15 @@ export class DonationHubPledgeEditComponent extends FormBaseComponent<DonationHu
     return this._originalDonationHubPledge;
   }
 
-  ngOnInit() {
+  get pledgeForm(): DonationHubPledgeForm {
+    return this._formFieldService.control;
+  }
+
+  ngOnInit(): void {
+    this._formFieldService.injectControl({
+      genDefault: () => new DonationHubPledgeForm({ omitChecklist: true })
+    });
+
     this.pageTitleService.title = 'Edit Donation Pledge';
     this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
       switchMap((id: number) => this._donationHubPledgeReadService.getDonationHubPledge(id))
@@ -53,13 +59,14 @@ export class DonationHubPledgeEditComponent extends FormBaseComponent<DonationHu
     this._originalDonationHubPledge = pledge;
     this._donationHubPledgeNotFound = !pledge;
     if (!this.donationHubPledgeNotFound) {
-      this.formGroup.reset(pledge);
+      this.pledgeForm.reset(pledge);
     }
   }
 
   save(): void {
-    if (this.formGroup.checkValidity()) {
-      this._donationHubPledgeUpdateService.updateDonationHubPledge(this.formGroup.value).subscribe(
+    this.pledgeForm.markAllAsTouched();
+    if (this.pledgeForm.valid) {
+      this._donationHubPledgeUpdateService.updateDonationHubPledge(this.pledgeForm.value).subscribe(
         (pledge: DonationHubPledge) => this._router.navigate(this.postEditRoute.concat(`${pledge.id}`))
       );
     }

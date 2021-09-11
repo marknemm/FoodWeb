@@ -24,7 +24,7 @@ const _geocoder: Geocoder = NodeGeocoder({
 /**
  * Gets the GPS Coordinates for given Contact Info data.
  * @param contactInfo The Contact Info data containing the address that is to be geocoded.
- * @return A promsie that resolves to the Geography Location (GPS Coordinates) resulting from the geocoding process.
+ * @return A promise that resolves to the Geography Location (GPS Coordinates) resulting from the geocoding process.
  */
 export async function geocode(contactInfo: ContactInfo | string): Promise<GeographyLocation> {
   const query: string | Query = _contactInfoToQuery(contactInfo);
@@ -85,7 +85,7 @@ function _handleErr(err: Error | string, retryCb, retryCnt: number): Promise<Loc
       setTimeout(() => resolve(retryCb()), retryCnt * 500)
     );
   } else {
-    throw new FoodWebError('An unexpected error occured when attempting to lookup the entered address.', 500);
+    throw new FoodWebError('An unexpected error occurred when attempting to lookup the entered address.', 500);
   }
 }
 

@@ -1,4 +1,4 @@
-<div [formGroup]="formGroup" class="operation-hours-form">
+<div [formGroup]="operationHoursForm" class="operation-hours-form">
   <div class="weekday-field" [style.width]="weekdayWidth" [style.padding]="weekdayPadding">
     <mat-form-field class="fill no-pad" floatLabel="never">
       <mat-select placeholder="Weekday" class="accent" formControlName="weekday">
@@ -13,7 +13,7 @@
         [allowClear]="allowClear"
         [defaultTime]="defaultStartTime"
         [editable]="editable"
-        [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
+        [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher"
         [minutesGap]="minutesGap"
         [preventOverlayClick]="!(allowOverlayClick | toBoolean)"
         formControlName="startTime"
@@ -25,7 +25,7 @@
         [allowClear]="allowClear"
         [defaultTime]="defaultEndTime"
         [editable]="editable"
-        [errorStateMatcher]="formGroup.timeRangeErrStateMatcher"
+        [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher"
         [minutesGap]="minutesGap"
         [preventOverlayClick]="!(allowOverlayClick | toBoolean)"
         formControlName="endTime"
@@ -33,10 +33,10 @@
       ></foodweb-time>
     </div>
   </div>
-  <mat-error *ngIf="formGroup.hasError('timeRangeOrder')" class="operation-hours-error">
-    {{ formGroup.getError('timeRangeOrder') }}
+  <mat-error *ngIf="operationHoursForm.hasError('timeRangeOrder')" class="operation-hours-error">
+    {{ operationHoursForm.getError('timeRangeOrder') }}
   </mat-error>
-  <mat-error *ngIf="formGroup.hasError('groupRequired')" class="operation-hours-error">
-    {{ formGroup.getError('groupRequired') }}
+  <mat-error *ngIf="operationHoursForm.hasError('groupRequired')" class="operation-hours-error">
+    {{ operationHoursForm.getError('groupRequired') }}
   </mat-error>
 </div>

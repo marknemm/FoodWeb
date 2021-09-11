@@ -17,6 +17,7 @@
           }
         ],
         "@angular-eslint/no-empty-lifecycle-method": 0,
+        "@angular-eslint/no-input-rename": 0,
         "@angular-eslint/no-output-native": 0,
         "@angular-eslint/template/no-negated-async": 0,
         "@typescript-eslint/ban-types": 0,

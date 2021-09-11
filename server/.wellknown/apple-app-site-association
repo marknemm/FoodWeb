@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "8NR8P94HTK.io.foodweb.hybrid",
+        "paths": ["*"]
+      }
+    ]
+  }
+}

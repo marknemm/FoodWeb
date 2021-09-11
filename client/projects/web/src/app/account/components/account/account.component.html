@@ -3,7 +3,7 @@
     Account not found
   </div>
 
-  <form [formGroup]="formGroup" *ngIf="originalAccount" class="account-form">
+  <form [formGroup]="accountForm" *ngIf="originalAccount" class="account-form">
     <div class="account-main align-center">
       <div class="page-title keep-mobile">
         <foodweb-username *ngIf="hasAccountOwnership" formControlName="username"></foodweb-username>
@@ -29,7 +29,7 @@
       <button mat-button type="button" (click)="signupVerificationService.resendVerificationEmail()">Resend Verification Email</button>
     </p>
 
-    <mat-accordion [multi]="true" displayMode="flat" foodwebFragmentAccordian defaultPanelId="primary">
+    <mat-accordion [multi]="true" displayMode="flat" foodwebFragmentAccordion defaultPanelId="primary">
       <mat-expansion-panel id="primary">
         <mat-expansion-panel-header>
           Primary
@@ -39,7 +39,7 @@
             <mat-card *ngIf="accountType !== 'Volunteer'">
               <foodweb-edit-save-button #organizationSaveEdit
                 [hidden]="!hasAccountOwnership"
-                [control]="formGroup.get('organization')"
+                [control]="accountForm.get('organization')"
                 (save)="saveAccountFields(['organization'], $event)">
               </foodweb-edit-save-button>
               <mat-card-title class="block-label">Organization</mat-card-title>
@@ -55,7 +55,7 @@
             <mat-card *ngIf="accountType === 'Volunteer'">
               <foodweb-edit-save-button #volunteerSaveEdit
                 [hidden]="!hasAccountOwnership"
-                [control]="formGroup.get('volunteer')"
+                [control]="accountForm.get('volunteer')"
                 (save)="saveAccountFields(['volunteer'], $event)">
               </foodweb-edit-save-button>
               <mat-card-title class="block-label">Volunteer Info</mat-card-title>
@@ -71,7 +71,7 @@
             <mat-card>
               <foodweb-edit-save-button #contactInfoSaveEdit
                 [hidden]="!hasAccountOwnership"
-                [control]="formGroup.get('contactInfo')"
+                [control]="accountForm.get('contactInfo')"
                 (save)="saveAccountFields(contactInfoFields, $event)">
               </foodweb-edit-save-button>
               <mat-card-title class="block-label">Contact Info</mat-card-title>
@@ -96,7 +96,7 @@
             <mat-card class="operation-hours-card" [ngClass]="{ 'full-width': operationHoursSaveEdit.editable }">
               <foodweb-edit-save-button #operationHoursSaveEdit
                 [hidden]="!hasAccountOwnership"
-                [control]="formGroup.get('operationHours')"
+                [control]="accountForm.get('operationHours')"
                 (save)="saveAccountFields(['operationHours'], $event)"
               ></foodweb-edit-save-button>
               <mat-card-title class="block-label">
@@ -126,7 +126,7 @@
             <mat-card class="notification-settings-card">
               <foodweb-edit-save-button #notificationSettingsSaveEdit
                 [hidden]="!hasAccountOwnership"
-                [control]="formGroup.get('notificationSettings')"
+                [control]="accountForm.get('notificationSettings')"
                 (save)="saveAccountFields(notificationFields, $event)"
               ></foodweb-edit-save-button>
               <mat-card-title class="block-label">
@@ -136,7 +136,7 @@
                 <foodweb-notifications-settings
                   [accountType]="originalAccount.accountType"
                   [editable]="notificationSettingsSaveEdit.editable"
-                  [formGroup]="formGroup.get('notificationSettings')"
+                  [formGroup]="accountForm.get('notificationSettings')"
                   [notificationSettings]="originalAccount.contactInfo"
                 ></foodweb-notifications-settings>
               </mat-card-content>
@@ -155,7 +155,7 @@
             <mat-card class="password-card">
               <foodweb-edit-save-button #passwordSaveEdit
                 [editable]="true"
-                [control]="formGroup.get('password')"
+                [control]="accountForm.get('password')"
                 [noCancelEdit]="true"
                 (save)="savePassword($event)">
               </foodweb-edit-save-button>

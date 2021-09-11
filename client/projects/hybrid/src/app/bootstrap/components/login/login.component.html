@@ -5,12 +5,12 @@
     <div *ngIf="!messageSent">
       <ion-list>
         <ion-item>
-          <ion-label color="secondary">{{ usernameEmailPlaceholder }}</ion-label>
+          <ion-label color="secondary">{{ usernameEmailPlaceholder }}:</ion-label>
           <ion-input type="email" inputmode="email" formControlName="usernameEmail" [clearOnEdit]="true" [focusNext]="password" required></ion-input>
         </ion-item>
 
         <ion-item *ngIf="isLogin" [ngClass]="{ 'with-err-msg': loginErr }" class="password-item">
-          <ion-label color="secondary">Password</ion-label>
+          <ion-label color="secondary">Password:</ion-label>
           <ion-input #password type="password" formControlName="password" (keyup.enter)="submit()"></ion-input>
           <div class="ion-form-error" *ngIf="loginErr">
             {{ loginErr }}

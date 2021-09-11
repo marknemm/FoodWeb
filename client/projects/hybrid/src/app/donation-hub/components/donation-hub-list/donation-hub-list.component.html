@@ -1,13 +1,11 @@
-<ion-header>
-  <foodweb-hybrid-header defaultBackHref="..">
-    <ion-label>{{ pageTitle }}</ion-label>
-    <ion-buttons *ngIf="myDonationHubs" slot="end">
-      <ion-button [routerLink]="['/', 'donation-hub', 'create']" fill="clear">
-        <ion-icon name="add-circle"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </foodweb-hybrid-header>
-</ion-header>
+<foodweb-hybrid-header defaultBackHref="..">
+  <ion-title>{{ pageTitle }}</ion-title>
+  <ion-buttons *ngIf="myDonationHubs" slot="end">
+    <ion-button [routerLink]="['/', 'donation-hub', 'create']" fill="clear">
+      <ion-icon name="add-circle"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</foodweb-hybrid-header>
 
 <ion-content foodwebHybridListPage [disabled]="loading" [page]="activeFilters.page" (loadMore)="handleLoadMore($event)" (refresh)="handleRefresh($event)">
 

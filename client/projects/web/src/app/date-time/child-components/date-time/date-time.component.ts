@@ -1,21 +1,17 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
-import { NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
-import { DateTimeForm } from '~web/date-time/forms/date-time.form';
+import { DateTimeForm, DateTimeFormT } from '~web/date-time/forms/date-time.form';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 
 @Component({
   selector: 'foodweb-date-time',
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.scss'],
-  providers: [
-    formProvider(DateTimeComponent),
-    { provide: NG_VALIDATORS, useExisting: forwardRef(() => DateTimeComponent), multi: true }
-  ]
+  providers: [FormFieldService]
 })
-export class DateTimeComponent extends FormBaseComponent<Date> implements OnInit, Validator {
+export class DateTimeComponent implements OnInit {
 
   @Input() allowClear = false;
   @Input() allowUndefTime = false;
@@ -24,6 +20,7 @@ export class DateTimeComponent extends FormBaseComponent<Date> implements OnInit
   @Input() datePlaceholder = 'Date';
   @Input() defaultDate: Date;
   @Input() defaultTime = '12:00 pm';
+  @Input() editable = false;
   @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() excludeDateDisplay = false;
   @Input() excludeTimeDisplay = false;
@@ -35,54 +32,35 @@ export class DateTimeComponent extends FormBaseComponent<Date> implements OnInit
   @Input() minutesGap = 5;
   @Input() primaryLabel = '';
   @Input() timePlaceholder = 'Time';
+  @Input() get value(): Date     { return this._formFieldService.valueOut(); }
+           set value(date: Date) { this._formFieldService.valueIn(date); }
+
+  @Output() valueChanges: EventEmitter<Date> = this._formFieldService.valueChangesEmitter;
+
+  constructor(
+    private _dateTimeService: DateTimeService,
+    private _formFieldService: FormFieldService<DateTimeForm, Date>,
+  ) {
+    this._formFieldService.registerControl(new DateTimeForm(this._dateTimeService), {
+      valueInConverter: (date: Date) => ({
+        date: this._dateTimeService.toDate(date),
+        time: this._dateTimeService.formatTime(date)
+      }),
+      valueOutConverter: (dateTime: DateTimeFormT) =>
+        this._dateTimeService.combineDateTime(dateTime.date, dateTime.time)
+    });
+  }
 
   /**
    * Acts an an internal form group. The formControl exposed to the outside will gather this form's data
    * together as a single Date value.
    */
-  readonly dateTimeForm: DateTimeForm;
-
-  constructor(
-    formHelperService: FormHelperService,
-    dateTimeService: DateTimeService
-  ) {
-    super(() => new TFormControl<Date>(), formHelperService);
-    this.dateTimeForm = new DateTimeForm(dateTimeService);
+  get dateTimeForm(): DateTimeForm {
+    return this._formFieldService.control;
   }
 
-  ngOnInit() {
-    this._formHelperService.mapControlStatuses(this.formControl, this.dateTimeForm);
-    this.dateTimeForm.onValueChanges(this._destroy$).subscribe(() =>
-      this.onChangeCb(this.dateTimeForm.toDate())
-    );
-    const required: boolean = this._formHelperService.hasRequiredValidator(this.formControl);
+  ngOnInit(): void {
+    const required: boolean = this._formFieldService.formValidation.hasRequiredValidator(this._formFieldService.externalControl);
     this.dateTimeForm.init({ defaultDate: this.defaultDate, required });
-  }
-
-  /**
-   * @override
-   * @param date The date-time value to write.
-   */
-  writeValue(date: Date): void {
-    this.dateTimeForm.patchFromDate(date, { emitEvent: false });
-  }
-
-  /**
-   * Validates the date time form. Provided using the `NG_VALIDATORS` InjectionToken in component providers array.
-   * @return Any validation errors that are present in the date time form; null if none are present.
-   */
-  validate(): ValidationErrors {
-    return (this.dateTimeForm.invalid ? this.dateTimeForm.errors : null);
-  }
-
-  /**
-   * @override
-   * Sets the disabled state of the contained date & time fields.
-   * @param isDisabled The disabled state to set.
-   */
-  setDisabledState(isDisabled: boolean): void {
-    (isDisabled)
-      ? this.dateTimeForm.disable()
-      : this.dateTimeForm.enable();
   }
 }

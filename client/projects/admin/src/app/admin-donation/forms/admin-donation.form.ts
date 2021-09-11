@@ -18,7 +18,7 @@ export class AdminDonationForm extends TFormGroup<AdminDonationFormT> {
       donateForm: new DonateForm(dateTimeService, { donorAccount: donation?.donorAccount, safetyChecklistInit: true }),
       donorAccount: [<AccountAutocompleteItem>donation?.donorAccount, Validators.required],
       receiverAccount: <AccountAutocompleteItem>donation?.claim?.receiverAccount,
-      delivery: new AdminDeliveryForm(destroy$, donation?.claim?.delivery),
+      delivery: new AdminDeliveryForm(donation?.claim?.delivery),
       sendNotifications: true,
     });
     this._listenForDonorAccountChange(destroy$);

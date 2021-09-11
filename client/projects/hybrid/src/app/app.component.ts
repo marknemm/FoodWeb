@@ -65,6 +65,7 @@ export class AppComponent {
   private _initDeepLinks(ngZone: NgZone, router: Router): void {
     App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
       ngZone.run(() => {
+        console.log(`Received deep link URL: ${event.url}`);
         const route: string = event.url.split('.com').pop();
         if (route) router.navigateByUrl(route);
       });

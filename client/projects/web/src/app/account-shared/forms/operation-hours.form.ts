@@ -1,11 +1,14 @@
 import { AbstractControl, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { OperationHours } from '~shared';
-import { GroupRequiredValidationMode, groupRequiredValidator, TFormControlMembers, TFormGroup } from '~web/forms';
+import { TFormControlMembers, TFormGroup } from '~web/forms';
+import { FormValidationService, GroupRequiredValidationMode } from '~web/forms/services/form-validation/form-validation.service';
 
 export class OperationHoursForm extends TFormGroup<OperationHours> {
 
   readonly timeRangeErrStateMatcher: ErrorStateMatcher;
+
+  private _formValidation = new FormValidationService(); // TODO
 
   constructor(operationHours: TFormControlMembers<OperationHours> = {}, validationMode: GroupRequiredValidationMode = 'allOrNothing') {
     super({
@@ -16,7 +19,7 @@ export class OperationHoursForm extends TFormGroup<OperationHours> {
     });
     this.setValidators([
       this._timeRangeOrderValidator.bind(this),
-      groupRequiredValidator(this, validationMode, { id: true })
+      this._formValidation.groupRequiredValidator(this, validationMode, { id: true })
     ]);
     this.timeRangeErrStateMatcher = this._genTimeRangeErrStateMatcher();
   }

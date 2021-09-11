@@ -186,6 +186,17 @@ export class DateTimeHelper {
   }
 
   /**
+   * Rounds a given time to the nearest minute interval.
+   * @param time The time string or Date to round.
+   * @param minutes The nearest minute interval to round to.
+   * @return The rounded time string.
+   */
+  roundTimeNearestMinutes(time: string | Date, minutes: number): string {
+    const date: Date = this.roundNearestMinutes(time, minutes);
+    return this.toTimeStr(date);
+  }
+
+  /**
    * Converts a given date/time string, timestamp, or object to a Date object.
    * If the non-null input cannot be converted to a date, then an invalid date object is returned.
    * If given null/undefined input, then simply returns the input.
@@ -222,24 +233,26 @@ export class DateTimeHelper {
    * @return The Date object result.
    */
   timeStrToDate(timeStr: Date | string): Date {
-    const date = new Date();
+    if (!timeStr) {
+      return null;
+    }
     if (timeStr instanceof Date) {
       return timeStr;
     }
-    if (timeStr) {
-      timeStr = timeStr.toLowerCase();
-      let timeSplits: string[] = timeStr.split(/[ap ]/);
-      timeSplits = timeSplits[0].split(':');
-      let hours: number = Number.parseInt(timeSplits[0], 10);
-      if (hours !== 12 && timeStr.indexOf('pm') >= 0) {
-         hours += 12;
-      } else if (hours === 12 && timeStr.indexOf('am') >= 0) {
-        hours = 0;
-      }
-      const minutes: number = Number.parseInt(timeSplits[1], 10);
-      date.setHours(hours);
-      date.setMinutes(minutes);
+
+    const date = new Date();
+    timeStr = timeStr.toLowerCase();
+    let timeSplits: string[] = timeStr.split(/[ap ]/);
+    timeSplits = timeSplits[0].split(':');
+    let hours: number = Number.parseInt(timeSplits[0], 10);
+    if (hours !== 12 && timeStr.indexOf('pm') >= 0) {
+        hours += 12;
+    } else if (hours === 12 && timeStr.indexOf('am') >= 0) {
+      hours = 0;
     }
+    const minutes: number = Number.parseInt(timeSplits[1], 10);
+    date.setHours(hours);
+    date.setMinutes(minutes);
     return date;
   }
 
@@ -253,7 +266,7 @@ export class DateTimeHelper {
     const lhsDate: Date = this.toDate(lhs);
     const rhsDate: Date = this.toDate(rhs);
 
-    // If either argument is null/undefined, or an unconvertable string, then skip compare & return equal (0).
+    // If either argument is null/undefined, or an unconvertible string, then skip compare & return equal (0).
     if (lhsDate && rhsDate) {
       const lhsValueMs = lhsDate.getTime();
       const rhsValueMs = rhsDate.getTime();

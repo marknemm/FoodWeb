@@ -1,4 +1,4 @@
-<div [formGroup]="formGroup" class="donation-form">
+<div [formGroup]="donateForm" class="donation-form">
   <div class="row">
     <div class="col-sm-6">
       <mat-form-field class="fill">
@@ -13,16 +13,16 @@
     <div class="col-sm-6">
       <mat-form-field class="fill hide-number-spinner">
         <input matInput type="number" min="0" placeholder="Estimated meal count" formControlName="estimatedNumFeed" autocomplete="off">
-        <mat-error *ngIf="formGroup.get('estimatedNumFeed').hasError('min')">Positive value required</mat-error>
-        <mat-error *ngIf="formGroup.get('estimatedNumFeed').hasError('pattern') && !formGroup.get('estimatedNumFeed').hasError('min')">Integer value required</mat-error>
+        <mat-error *ngIf="donateForm.get('estimatedNumFeed').hasError('min')">Positive value required</mat-error>
+        <mat-error *ngIf="donateForm.get('estimatedNumFeed').hasError('pattern') && !donateForm.get('estimatedNumFeed').hasError('min')">Integer value required</mat-error>
       </mat-form-field>
     </div>
     <div class="col-sm-6">
       <mat-form-field class="fill hide-number-spinner">
-        <span matPrefix *ngIf="!!formGroup.get('estimatedValue').value || estimatedValueInput === document.activeElement">$</span>
+        <span matPrefix *ngIf="!!donateForm.get('estimatedValue').value || estimatedValueInput === document.activeElement">$</span>
         <input matInput #estimatedValueInput type="number" min="0" placeholder="Estimated Value" formControlName="estimatedValue" name="Estimated Value" autocomplete="off">
-        <mat-error *ngIf="formGroup.get('estimatedValue').hasError('min')">Positive value required</mat-error>
-        <mat-error *ngIf="formGroup.get('estimatedValue').hasError('pattern') && !formGroup.get('estimatedValue').hasError('min')">Monetary value required</mat-error>
+        <mat-error *ngIf="donateForm.get('estimatedValue').hasError('min')">Positive value required</mat-error>
+        <mat-error *ngIf="donateForm.get('estimatedValue').hasError('pattern') && !donateForm.get('estimatedValue').hasError('min')">Monetary value required</mat-error>
       </mat-form-field>
     </div>
   </div>
