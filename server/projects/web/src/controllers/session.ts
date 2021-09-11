@@ -41,15 +41,15 @@ export function handlePostSession(req: Request, res: Response) {
     .catch(genErrorResponse.bind(this, res));
 }
 
-router.put('/push-registration', ensureSessionActive, handlePutPushRegistration)
+router.put('/push-registration', ensureSessionActive, handlePutPushRegistration);
 export function handlePutPushRegistration(req: Request, res: Response) {
   const mobileDevice: MobileDeviceEntity = req.session.mobileDevice;
   const pushRegRequest: PushRegistrationRequest = req.body;
 
   savePushRegistration(pushRegRequest.pushRegistrationId, mobileDevice)
-    .then((mobileDevice: MobileDeviceEntity) => {
-      req.session.mobileDevice = mobileDevice;
-      res.send(mobileDevice);
+    .then((updatedMobileDevice: MobileDeviceEntity) => {
+      req.session.mobileDevice = updatedMobileDevice;
+      res.send(updatedMobileDevice);
     })
     .catch(genErrorResponse.bind(this, res));
 }

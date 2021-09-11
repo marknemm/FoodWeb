@@ -46,7 +46,7 @@ export class PushNotificationClient {
       await this._firebaseMessaging.sendMulticast(notificationMessage)
         .then((responseContainer) => {
           for (const response of responseContainer.responses) {
-            if (response.error) console.error(response.error.toJSON());
+            if (response.error) { console.error(response.error.toJSON()); }
           }
         })
         .catch(console.error);
@@ -106,7 +106,7 @@ export class PushNotificationClient {
       body_loc_args: notification.locArgs ?? '',
       title_loc_key: notification.titleLocKey ?? '',
       title_loc_args: notification.titleLocArgs ?? '',
-      click_aciton: notification.clickAction ?? '',
+      click_action: notification.clickAction ?? '',
       tag: notification.tag ?? '',
       badge: notification.badge ?? '',
       notificationLink: notification.notificationLink ?? ''
@@ -117,11 +117,11 @@ export class PushNotificationClient {
     message.apns = {};
 
     if (notification.title) {
-      message.notification.title = notification.title.replace(/(<([^>]+)>)/gi, "").trim();
+      message.notification.title = notification.title.replace(/(<([^>]+)>)/gi, '').trim();
     }
 
     if (notification.body) {
-      message.notification.body = notification.body.replace(/(<([^>]+)>)/gi, "").replace(/\s+/gi, ' ').trim();
+      message.notification.body = notification.body.replace(/(<([^>]+)>)/gi, '').replace(/\s+/gi, ' ').trim();
     }
 
     if (notification.priority) {
