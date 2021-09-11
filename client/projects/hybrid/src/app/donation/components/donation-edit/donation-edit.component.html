@@ -1,11 +1,9 @@
-<ion-header>
-  <foodweb-hybrid-header defaultBackHref="..">
-    <ion-label>Edit Donation</ion-label>
-    <ion-buttons slot="end">
-      <ion-button [disabled]="editForm.pristine" (click)="saveDonation()" fill="clear">Save</ion-button>
-    </ion-buttons>
-  </foodweb-hybrid-header>
-</ion-header>
+<foodweb-hybrid-header defaultBackHref="..">
+  <ion-title>Edit Donation</ion-title>
+  <ion-buttons slot="end">
+    <ion-button [disabled]="editForm.pristine" (click)="saveDonation()" fill="clear">Save</ion-button>
+  </ion-buttons>
+</foodweb-hybrid-header>
 
 <ion-content>
   <form [formGroup]="editForm" class="edit-donation" (ngSubmit)="saveDonation()">

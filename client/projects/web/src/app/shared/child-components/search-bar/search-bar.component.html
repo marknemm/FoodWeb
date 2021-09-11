@@ -1,6 +1,6 @@
 <form (ngSubmit)="search.emit(formControl.value)">
   <mat-form-field class="search-bar fill no-label-border accent-darker-underline" floatLabel="never">
-    <input matInput [placeholder]="placeholder" [formControl]="formControl" (ngModelChange)="onChangeCb(formControl.value)" (blur)="onTouchedCb()">
+    <input matInput [placeholder]="placeholder" [formControl]="formControl">
     <button mat-button matSuffix mat-icon-button aria-label="Submit Search" type="submit">
       <mat-icon class="search-icon">search</mat-icon>
     </button>

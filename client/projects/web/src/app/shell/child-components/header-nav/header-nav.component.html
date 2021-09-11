@@ -32,7 +32,7 @@
 
 <mat-menu #donationsMenu="matMenu" class="header-submenu">
   <mat-nav-list>
-    <a mat-list-item *ngIf="sessionService.isDonor" [routerLink]="['/donor/donate']">
+    <a mat-list-item *ngIf="sessionService.isDonor" [routerLink]="['/donation/donate']">
       <fa-icon [icon]="faHandHoldingHeart"></fa-icon> <span>Donate</span>
     </a>
     <a mat-list-item *ngIf="sessionService.isReceiver" [routerLink]="['/donation/list']" [queryParams]="donationHelper.findDonationsQueryParams(sessionService.account)">

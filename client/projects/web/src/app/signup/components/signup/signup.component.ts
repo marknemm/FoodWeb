@@ -23,13 +23,14 @@ export class SignupComponent {
   ) {}
 
   signup(accountForm: AccountForm): void {
-    if (accountForm.checkValidity()) {
+    accountForm.markAllAsTouched();
+    if (accountForm.valid) {
       const accountType: AccountType = accountForm.get('accountType').value;
       const agreement$: Observable<boolean> = (accountType === AccountType.Receiver)
         ? of(true)
         : this._genAgreementObs(accountType);
       agreement$.subscribe((agreed: boolean) => {
-        this._signupService.createAccount(accountForm, agreed);
+        this._signupService.createAccount(accountForm, agreed).subscribe();
       });
     }
   }

@@ -9,8 +9,7 @@
       [disabled]="!editable"
       [class]="accountCategory | lowercase"
       [ngClass]="{ selected: (accountCategory === selAccountCategory) }"
-      (click)="accountCategoryClick(accountCategory)"
-      (blur)="onTouchedCb()">
+      (click)="accountCategoryClick(accountCategory)">
       <mat-card>
         <mat-card-title>
           <mat-toolbar [color]="accountCategory | lowercase">{{ accountCategory }}</mat-toolbar>
@@ -35,8 +34,7 @@
       [disabled]="!editable"
       [class]="accountType | lowercase"
       [ngClass]="{ selected: (accountType === selAccountType) }"
-      (click)="accountTypeClick(accountType)"
-      (blur)="onTouchedCb()">
+      (click)="accountTypeClick(accountType)">
       <mat-card>
         <mat-card-title>
           <mat-toolbar [color]="accountType | lowercase">{{ accountType }}</mat-toolbar>

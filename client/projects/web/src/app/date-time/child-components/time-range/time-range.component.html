@@ -1,4 +1,4 @@
-<div [formGroup]="formGroup" *ngIf="editable | toBoolean; else readonlyTimeRange" class="time-range-form row">
+<div [formGroup]="timeRangeForm" *ngIf="editable | toBoolean; else readonlyTimeRange" class="time-range-form row">
   <div class="time-field col-sm-6" [style.width]="timeWidth">
     <foodweb-time
       #startTime
@@ -6,7 +6,7 @@
       [allowClear]="allowClear"
       [editable]="true"
       [defaultTime]="defaultStartTime"
-      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
+      [errorStateMatcher]="timeRangeForm.rangeErrStateMatcher"
       [floatLabels]="floatLabels"
       [minutesGap]="minutesGap"
       [placeholder]="startPlaceholder"
@@ -20,15 +20,15 @@
       [allowClear]="allowClear"
       [editable]="true"
       [defaultTime]="defaultEndTime"
-      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
+      [errorStateMatcher]="timeRangeForm.rangeErrStateMatcher"
       [floatLabels]="floatLabels"
       [minutesGap]="minutesGap"
       [placeholder]="endPlaceholder"
       [preventOverlayClick]="preventOverlayClick">
     </foodweb-time>
   </div>
-  <mat-error *ngIf="formGroup.hasError('timeRangeOrder')" class="range-order-err col-12">
-    {{ formGroup.getError('timeRangeOrder') }}
+  <mat-error *ngIf="timeRangeForm.hasError('timeRangeOrder')" class="range-order-err col-12">
+    {{ timeRangeForm.getError('timeRangeOrder') }}
   </mat-error>
 </div>
 

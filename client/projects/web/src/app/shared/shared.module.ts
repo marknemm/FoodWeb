@@ -20,18 +20,18 @@ import { SearchBarComponent } from './child-components/search-bar/search-bar.com
 import { YesNoComponent } from './child-components/yes-no/yes-no.component';
 import { ConfirmButtonDirective } from './directives/confirm-button/confirm-button.directive';
 import { DisplayEditTransitionDirective } from './directives/display-edit-transition/display-edit-transition.directive';
-import { FragmentAccordianDirective } from './directives/fragment-accordian/fragment-accordian.directive';
+import { FragmentAccordionDirective } from './directives/fragment-accordion/fragment-accordion.directive';
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
 import { WindowSizeDirective } from './directives/window-size/window-size.directive';
-import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
 import { ShortNumPipe } from './pipes/short-num/short-num.pipe';
+import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
 
 @NgModule({
   declarations: [
     ConfirmButtonDirective,
     DisplayEditTransitionDirective,
     EditSaveButtonComponent,
-    FragmentAccordianDirective,
+    FragmentAccordionDirective,
     PaginatorComponent,
     ProgressIndicatorComponent,
     RequirementsChecklistComponent,
@@ -63,7 +63,7 @@ import { ShortNumPipe } from './pipes/short-num/short-num.pipe';
     ConfirmButtonDirective,
     DisplayEditTransitionDirective,
     EditSaveButtonComponent,
-    FragmentAccordianDirective,
+    FragmentAccordionDirective,
     PaginatorComponent,
     ProgressIndicatorComponent,
     RequirementsChecklistComponent,

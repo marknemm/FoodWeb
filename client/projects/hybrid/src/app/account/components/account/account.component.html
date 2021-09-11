@@ -1,11 +1,9 @@
-<ion-header>
-  <foodweb-hybrid-header defaultBackHref="/account/list">
-    <ion-label>Account</ion-label>
-  </foodweb-hybrid-header>
-</ion-header>
+<foodweb-hybrid-header defaultBackHref="/account/list">
+  <ion-title>Account</ion-title>
+</foodweb-hybrid-header>
 
 <ion-content class="account-detials">
-  <form [formGroup]="formGroup" *ngIf="originalAccount" class="account-form">
+  <form [formGroup]="accountForm" *ngIf="originalAccount" class="account-form">
     <div class="account-main align-center">
       <div class="page-title keep-mobile">
         <foodweb-hybrid-username *ngIf="hasAccountOwnership" formControlName="username"></foodweb-hybrid-username>

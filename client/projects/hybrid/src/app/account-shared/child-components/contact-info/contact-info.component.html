@@ -1,48 +1,48 @@
-<div class="contact-info-container" [foodwebDisplayEditTransition]="editable" [form]="contactInfoForm" [display]="contactInfoDisplay">
-  <div #contactInfoForm class="row contact-info-form" [formGroup]="formGroup">
-    <div class="col-sm-6" *ngIf="formGroup.get('email') && !hideEmail">
-      <ion-item [ngClass]="{ 'with-err-msg': formGroup.emailErrorMsg }">
+<div class="contact-info-container" [foodwebDisplayEditTransition]="editable" [form]="contactInfoFormTmpl" [display]="contactInfoDisplay">
+  <div #contactInfoFormTmpl class="row contact-info-form" [formGroup]="contactInfoForm">
+    <div class="col-sm-6" *ngIf="contactInfoForm.get('email') && !hideEmail">
+      <ion-item [ngClass]="{ 'with-err-msg': contactInfoForm.emailErrorMsg }">
         <ion-label color="secondary">Email:</ion-label>
         <ion-input type="email" inputmode="email" formControlName="email"></ion-input>
-        <div class="ion-form-error" *ngIf="formGroup.emailErrorMsg">
-          {{ formGroup.emailErrorMsg }}
+        <div class="ion-form-error" *ngIf="contactInfoForm.emailErrorMsg">
+          {{ contactInfoForm.emailErrorMsg }}
         </div>
       </ion-item>
     </div>
-    <div class="col-sm-6" *ngIf="formGroup.get('phoneNumber') && !hidePhone">
-      <ion-item [ngClass]="{ 'with-err-msg': formGroup.phoneNumberErrorMsg }">
+    <div class="col-sm-6" *ngIf="contactInfoForm.get('phoneNumber') && !hidePhone">
+      <ion-item [ngClass]="{ 'with-err-msg': contactInfoForm.phoneNumberErrorMsg }">
         <ion-label color="secondary">Phone:</ion-label>
-        <ion-input type="tel" inputmode="tel" formControlName="phoneNumber"></ion-input>
-        <div class="ion-form-error" *ngIf="formGroup.phoneNumberErrorMsg">
-          {{ formGroup.phoneNumberErrorMsg }}
+        <ion-input type="tel" inputmode="tel" formControlName="phoneNumber" [ionMask]="PHONE_NUMBER_MASK"></ion-input>
+        <div class="ion-form-error" *ngIf="contactInfoForm.phoneNumberErrorMsg">
+          {{ contactInfoForm.phoneNumberErrorMsg }}
         </div>
       </ion-item>
     </div>
     <ng-container *ngIf="!hideAddress">
-      <div class="col-sm-12" *ngIf="formGroup.get('streetAddress')">
+      <div class="col-sm-12" *ngIf="contactInfoForm.get('streetAddress')">
         <ion-item>
           <ion-label color="secondary">Street:</ion-label>
-          <ion-input type="text" inputmode="text" formControlName="streetAddress"></ion-input>
+          <ion-input type="text" inputmode="text" formControlName="streetAddress" autocapitalize="words"></ion-input>
         </ion-item>
       </div>
-      <div class="col-sm-6" *ngIf="formGroup.get('city')">
+      <div class="col-sm-6" *ngIf="contactInfoForm.get('city')">
         <ion-item>
           <ion-label color="secondary">City:</ion-label>
-          <ion-input type="text" inputmode="text" formControlName="city"></ion-input>
+          <ion-input type="text" inputmode="text" formControlName="city" autocapitalize="words"></ion-input>
         </ion-item>
       </div>
-      <div class="col-sm-3" *ngIf="formGroup.get('stateProvince')">
+      <div class="col-sm-3" *ngIf="contactInfoForm.get('stateProvince')">
         <ion-item>
           <ion-label color="secondary">State:</ion-label>
-          <ion-input type="text" inputmode="text" formControlName="stateProvince"></ion-input>
+          <ion-input type="text" inputmode="text" formControlName="stateProvince" autocapitalize="words"></ion-input>
         </ion-item>
       </div>
-      <div class="col-sm-3"  *ngIf="formGroup.get('postalCode')">
-        <ion-item [ngClass]="{ 'with-err-msg': formGroup.postalCodeErrorMsg }">
+      <div class="col-sm-3"  *ngIf="contactInfoForm.get('postalCode')">
+        <ion-item [ngClass]="{ 'with-err-msg': contactInfoForm.postalCodeErrorMsg }">
           <ion-label color="secondary">Zip:</ion-label>
-          <ion-input type="text" inputmode="text" formControlName="postalCode"></ion-input>
-          <div class="ion-form-error" *ngIf="formGroup.postalCodeErrorMsg">
-            {{ formGroup.postalCodeErrorMsg }}
+          <ion-input type="text" inputmode="number" formControlName="postalCode"></ion-input>
+          <div class="ion-form-error" *ngIf="contactInfoForm.postalCodeErrorMsg">
+            {{ contactInfoForm.postalCodeErrorMsg }}
           </div>
         </ion-item>
       </div>

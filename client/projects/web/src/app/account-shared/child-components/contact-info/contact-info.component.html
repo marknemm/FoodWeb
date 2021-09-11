@@ -1,40 +1,40 @@
-<div class="contact-info-container" [foodwebDisplayEditTransition]="editable" [form]="contactInfoForm" [display]="contactInfoDisplay">
-  <div #contactInfoForm class="row contact-info-form" [formGroup]="formGroup">
-    <div class="col-sm-6" *ngIf="formGroup.get('email')">
+<div class="contact-info-container" [foodwebDisplayEditTransition]="editable" [form]="contactInfoFormTmpl" [display]="contactInfoDisplay">
+  <div #contactInfoFormTmpl class="row contact-info-form" [formGroup]="contactInfoForm">
+    <div class="col-sm-6" *ngIf="contactInfoForm.get('email')">
       <mat-form-field class="fill">
         <input matInput placeholder="Email" formControlName="email" type="email">
-        <mat-error *ngIf="formGroup.get('email').hasError('email')">
+        <mat-error *ngIf="contactInfoForm.get('email').hasError('email')">
           Not a valid email address
         </mat-error>
       </mat-form-field>
     </div>
-    <div class="col-sm-6" *ngIf="formGroup.get('phoneNumber')">
+    <div class="col-sm-6" *ngIf="contactInfoForm.get('phoneNumber')">
       <mat-form-field class="fill">
         <input matInput placeholder="Phone Number" formControlName="phoneNumber" type="tel">
-        <mat-error *ngIf="formGroup.get('phoneNumber').hasError('pattern')">
+        <mat-error *ngIf="contactInfoForm.get('phoneNumber').hasError('pattern')">
           Not a valid phone number
         </mat-error>
       </mat-form-field>
     </div>
-    <div class="col-sm-12" *ngIf="formGroup.get('streetAddress')">
+    <div class="col-sm-12" *ngIf="contactInfoForm.get('streetAddress')">
       <mat-form-field class="fill">
         <input matInput placeholder="Street Address" formControlName="streetAddress" type="text">
       </mat-form-field>
     </div>
-    <div class="col-sm-6" *ngIf="formGroup.get('city')">
+    <div class="col-sm-6" *ngIf="contactInfoForm.get('city')">
       <mat-form-field class="fill">
         <input matInput placeholder="City" formControlName="city" type="text">
       </mat-form-field>
     </div>
-    <div class="col-sm-3" *ngIf="formGroup.get('stateProvince')">
+    <div class="col-sm-3" *ngIf="contactInfoForm.get('stateProvince')">
       <mat-form-field class="fill">
         <input matInput placeholder="State/Province" formControlName="stateProvince" type="text">
       </mat-form-field>
     </div>
-    <div class="col-sm-3"  *ngIf="formGroup.get('postalCode')">
+    <div class="col-sm-3"  *ngIf="contactInfoForm.get('postalCode')">
       <mat-form-field class="fill">
         <input matInput placeholder="Zip/Postal Code" formControlName="postalCode" type="text">
-        <mat-error *ngIf="formGroup.get('postalCode').hasError('pattern')">
+        <mat-error *ngIf="contactInfoForm.get('postalCode').hasError('pattern')">
           Not a valid postal code
         </mat-error>
       </mat-form-field>

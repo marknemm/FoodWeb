@@ -1,14 +1,12 @@
-<ion-header>
-  <foodweb-hybrid-header defaultBackHref="..">
-    <ion-label>Operation Hours</ion-label>
-    <ion-buttons slot="end">
-      <ion-button fill="clear" color="primary" [disabled]="formGroup.pristine" (click)="save()">Save</ion-button>
-    </ion-buttons>
-  </foodweb-hybrid-header>
-</ion-header>
+<foodweb-hybrid-header defaultBackHref="..">
+  <ion-title>Operation Hours</ion-title>
+  <ion-buttons slot="end">
+    <ion-button fill="clear" color="primary" [disabled]="accountForm.pristine" (click)="save()">Save</ion-button>
+  </ion-buttons>
+</foodweb-hybrid-header>
 
 <ion-content>
-  <form [formGroup]="formGroup">
+  <form [formGroup]="accountForm">
     <ion-card class="form-card">
       <ion-card-content>
         <foodweb-hybrid-operation-hours-info

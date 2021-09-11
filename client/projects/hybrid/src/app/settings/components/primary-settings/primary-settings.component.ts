@@ -1,28 +1,32 @@
 import { Component } from '@angular/core';
 import { AccountForm } from '~web/account-shared/forms/account.form';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
-import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { Account, SessionService } from '~web/session/services/session/session.service';
 
 @Component({
   selector: 'foodweb-hybrid-primary-settings',
   templateUrl: './primary-settings.component.html',
   styleUrls: ['./primary-settings.component.scss'],
-  providers: formProvider(PrimarySettingsComponent)
+  providers: [FormFieldService]
 })
-export class PrimarySettingsComponent extends FormBaseComponent<AccountForm> {
+export class PrimarySettingsComponent {
 
   constructor(
     public sessionService: SessionService,
     private _accountSaveService: AccountSaveService,
-    formHelperService: FormHelperService,
+    private _formFieldService: FormFieldService<AccountForm>,
   ) {
-    super(() => new AccountForm({ formMode: 'Account' }), formHelperService, true);
-    this.formGroup.patchValue(this.sessionService.account);
+    this._formFieldService.registerControl(new AccountForm({ formMode: 'Account' }));
+    this.accountForm.patchValue(this.sessionService.account);
   }
 
   get account(): Account {
     return this.sessionService.account;
+  }
+
+  get accountForm(): AccountForm {
+    return this._formFieldService.control;
   }
 
   get pageTitle(): string {
@@ -34,10 +38,11 @@ export class PrimarySettingsComponent extends FormBaseComponent<AccountForm> {
    */
    save(): void {
     const subFormGroupName = (this.sessionService.isBusiness ? 'organization' : 'volunteer');
-    if (this.formGroup.get(subFormGroupName).checkValidity()) {
+    this.accountForm.get(subFormGroupName).markAllAsTouched();
+    if (this.accountForm.get(subFormGroupName).valid) {
       this._accountSaveService.updateAccountFields(
         this.sessionService.account,
-        this.formGroup.toAccount(),
+        this.accountForm.toAccount(),
         [subFormGroupName]
       ).subscribe();
     }

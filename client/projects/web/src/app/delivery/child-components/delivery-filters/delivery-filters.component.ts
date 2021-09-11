@@ -1,17 +1,17 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DonationReadRequest, DonationSortBy, DonationStatus } from '~shared';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
 import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
-import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
   selector: 'foodweb-delivery-filters',
   templateUrl: './delivery-filters.component.html',
   styleUrls: ['./delivery-filters.component.scss'],
-  providers: formProvider(DeliveryFiltersComponent)
+  providers: [FormFieldService]
 })
-export class DeliveryFiltersComponent extends FormBaseComponent<DonationFiltersForm> implements OnChanges {
+export class DeliveryFiltersComponent implements OnChanges, OnInit {
 
   @Input() myDeliveries = false;
 
@@ -32,20 +32,25 @@ export class DeliveryFiltersComponent extends FormBaseComponent<DonationFiltersF
 
   constructor(
     public constantsService: ConstantsService,
-    formHelperService: FormHelperService
-  ) {
-    super(() => new DonationFiltersForm(), formHelperService);
-  }
+    private _formFieldService: FormFieldService<DonationFiltersForm>
+  ) {}
 
   get donationStatuses(): DonationStatus[] {
     return this._donationStatuses;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  get filtersForm(): DonationFiltersForm {
+    return this._formFieldService.control;
+  }
+
+  ngOnInit(): void {
+    this._formFieldService.injectControl({ genDefault: () => new DonationFiltersForm() });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.myDeliveries) {
       this._donationStatuses = this.constantsService.getDeliveryStatuses(!this.myDeliveries);
     }
-    super.ngOnChanges(changes);
   }
 
 }

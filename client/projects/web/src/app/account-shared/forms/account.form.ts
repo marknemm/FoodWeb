@@ -26,7 +26,7 @@ export class AccountForm extends TFormGroup<AccountFormT> {
     });
 
     // Listen for accountType value to update.
-    this.onControlValueChanges('accountType').subscribe(
+    this.get('accountType').valueChanges.subscribe(
       this._onAccountTypeUpdate.bind(this)
     );
 
@@ -59,13 +59,6 @@ export class AccountForm extends TFormGroup<AccountFormT> {
      (<NotificationSettingsForm>this.get('notificationSettings')).patchValue(value.contactInfo);
     }
     super.patchValue(<Partial<AccountFormT>>value);
-  }
-
-  setValue(value: Partial<AccountFormT>): void {
-    if (!value['notificationSettings'] && value.contactInfo) {
-      this.get('notificationSettings').setValue(<NotificationSettings>value.contactInfo);
-    }
-    super.setValue(value);
   }
 
   toAccount(): Account {

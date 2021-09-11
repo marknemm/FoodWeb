@@ -130,5 +130,7 @@ export enum NotificationType {
   DeliveryReassigned = ('Delivery Reassigned'),
   DonationHubAvailable = ('Donation Hub Available'),
   DonationHubReminder = ('Donation Hub Reminder'),
-  DonationPledgeReminder = ('Donation Pledge Reminder')
+  DonationPledged = ('Donation Pledged'),
+  DonationPledgeReminder = ('Donation Pledge Reminder'),
+  DonationPledgeRemoved = ('Donation Pledge Removed')
 }

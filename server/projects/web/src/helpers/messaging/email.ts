@@ -44,9 +44,7 @@ export class MailClient {
    */
   private async _initTransporters(): Promise<void> {
     for (const transporterKey of [MailTransporter.NOREPLY, MailTransporter.SUPPORT]) {
-      const port: number = (typeof env[`${transporterKey}_PORT`] === 'string')
-        ? parseInt(env[`${transporterKey}_PORT`], 10)
-        : (env[`${transporterKey}_PORT`] ?? 1025);
+      const port: number = (env[`${transporterKey}_PORT`] ?? 1025);
       const smtpHosts: string[] = [env[`${transporterKey}_SERVER`], 'localhost', 'fake-smtp-server'];
 
       // Can use mailgun or fallback to traditional SMTP mail client for development.
@@ -63,14 +61,13 @@ export class MailClient {
             host: await getReachableUrl(smtpHosts, port),
             port,
             pool: true,
-            secure: env[`${transporterKey}_SECURE`] && (env[`${transporterKey}_SECURE`] !== 'false'),
+            secure: env[`${transporterKey}_SECURE`],
             auth: {
               user: env[`${transporterKey}_USERNAME`],
               pass: env[`${transporterKey}_PASSWORD`]
             },
             tls: {
               rejectUnauthorized: env[`${transporterKey}_TLS_REJECT_UNAUTHORIZED`]
-                              && (env[`${transporterKey}_TLS_REJECT_UNAUTHORIZED`] !== 'false')
             }
           });
 

@@ -1,16 +1,16 @@
-<div [formGroup]="formGroup" class="donation-form">
+<div [formGroup]="donateForm" class="donation-form">
   <div class="row">
 
     <div class="col-sm-6">
       <ion-item>
         <ion-label color="secondary">First Name:</ion-label>
-        <ion-input formControlName="donorFirstName"></ion-input>
+        <ion-input formControlName="donorFirstName" autocapitalize="words"></ion-input>
       </ion-item>
     </div>
     <div class="col-sm-6">
       <ion-item>
         <ion-label color="secondary">Last Name:</ion-label>
-        <ion-input formControlName="donorLastName"></ion-input>
+        <ion-input formControlName="donorLastName" autocapitalize="words"></ion-input>
       </ion-item>
     </div>
 
@@ -18,10 +18,10 @@
       <ion-item>
         <ion-label color="secondary">Meal Count:</ion-label>
         <ion-input formControlName="estimatedNumFeed" min="0" type="number" autocomplete="off"></ion-input>
-        <div *ngIf="formGroup.get('estimatedNumFeed').hasError('min')" class="ion-form-error">
+        <div *ngIf="donateForm.get('estimatedNumFeed').hasError('min')" class="ion-form-error">
           Positive value required
         </div>
-        <div *ngIf="formGroup.get('estimatedNumFeed').hasError('pattern') && !formGroup.get('estimatedNumFeed').hasError('min')" class="ion-form-error">
+        <div *ngIf="donateForm.get('estimatedNumFeed').hasError('pattern') && !donateForm.get('estimatedNumFeed').hasError('min')" class="ion-form-error">
           Integer value required
         </div>
       </ion-item>
@@ -31,10 +31,10 @@
       <ion-item>
         <ion-label color="secondary">Value:</ion-label>
         <ion-input formControlName="estimatedValue" class="dollar-prefix" min="0" type="number" autocomplete="off"></ion-input>
-        <div *ngIf="formGroup.get('estimatedValue').hasError('min')" class="ion-form-error">
+        <div *ngIf="donateForm.get('estimatedValue').hasError('min')" class="ion-form-error">
           Positive value required
         </div>
-        <div *ngIf="formGroup.get('estimatedValue').hasError('pattern') && !formGroup.get('estimatedValue').hasError('min')" class="ion-form-error">
+        <div *ngIf="donateForm.get('estimatedValue').hasError('pattern') && !donateForm.get('estimatedValue').hasError('min')" class="ion-form-error">
           Monetary value required
         </div>
       </ion-item>

@@ -1,15 +1,17 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
+import { SessionService } from '~hybrid/session/services/session/session.service';
+import { PageProgressService } from '~hybrid/shared/services/page-progress/page-progress.service';
 import { NotificationService } from '~web/notification/services/notification/notification.service';
-import { SessionService } from '~web/session/services/session/session.service';
-import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { UnwrapHostService } from '~web/shared/services/unwrap-host/unwrap-host.service';
 
 @Component({
   selector: 'foodweb-hybrid-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  providers: [UnwrapHostService]
 })
-export class HeaderComponent implements OnChanges {
+export class HeaderComponent implements OnChanges, OnInit {
 
   @Input() defaultBackHref: string;
   @Input() hideBackHref = false;
@@ -20,8 +22,13 @@ export class HeaderComponent implements OnChanges {
     public notificationService: NotificationService,
     public pageProgressService: PageProgressService,
     public sessionService: SessionService,
+    private _unwrapHostService: UnwrapHostService,
     private _router: Router,
   ) {}
+
+  ngOnInit(): void {
+    this._unwrapHostService.unwrap();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     // Allow relative default back href.

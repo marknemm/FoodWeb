@@ -1,20 +1,18 @@
-<ion-header>
-  <foodweb-hybrid-header defaultBackHref="..">
-    <ion-label>Edit Donation Hub</ion-label>
-    <ion-buttons slot="end">
-      <ion-button fill="clear" (click)="save()">Save</ion-button>
-    </ion-buttons>
-  </foodweb-hybrid-header>
-</ion-header>
+<foodweb-hybrid-header defaultBackHref="..">
+  <ion-title>Edit Donation Hub</ion-title>
+  <ion-buttons slot="end">
+    <ion-button fill="clear" (click)="save()">Save</ion-button>
+  </ion-buttons>
+</foodweb-hybrid-header>
 
 <ion-content>
-  <form [formGroup]="formGroup" class="donation-hub-registration-form" (submit)="save()">
+  <form [formGroup]="donationHubForm" class="donation-hub-registration-form" (submit)="save()">
 
     <ng-container *ngIf="originalDonationHub">
       <ion-card>
         <ion-card-header>
           <ion-card-title>
-            <ion-label>Let Us Know Your Availabililty</ion-label>
+            <ion-label>Let Us Know Your Availability</ion-label>
           </ion-card-title>
         </ion-card-header>
 

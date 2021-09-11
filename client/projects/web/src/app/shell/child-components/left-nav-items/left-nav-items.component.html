@@ -42,7 +42,7 @@
 
   <ng-container *ngIf="sessionService.isDonor || sessionService.isReceiver">
     <h2 class="submenu-heading">Donations</h2>
-    <a mat-list-item *ngIf="sessionService.isDonor" [routerLink]="['/donor/donate']" (click)="_onNavigate()">
+    <a mat-list-item *ngIf="sessionService.isDonor" [routerLink]="['/donation/donate']" (click)="_onNavigate()">
       <span><fa-icon [icon]="faHandHoldingHeart"></fa-icon> <span>Donate</span></span>
     </a>
     <a mat-list-item *ngIf="sessionService.isReceiver" [routerLink]="['/donation/list']"

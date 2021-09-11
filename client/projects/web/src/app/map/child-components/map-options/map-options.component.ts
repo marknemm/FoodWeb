@@ -1,23 +1,33 @@
-import { Component } from '@angular/core';
-import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormFieldService } from '~web/forms';
 import { MapOptionsForm } from '~web/map/forms/map-options.form';
 
 @Component({
   selector: 'foodweb-map-options',
   templateUrl: './map-options.component.html',
   styleUrls: ['./map-options.component.scss'],
-  providers: formProvider(MapOptionsComponent)
+  providers: [FormFieldService]
 })
-export class MapOptionsComponent extends FormBaseComponent<MapOptionsForm> {
+export class MapOptionsComponent implements OnInit {
 
-  constructor(formHelperService: FormHelperService) {
-    super(() => new MapOptionsForm(), formHelperService);
+  constructor(
+    private _formFieldService: FormFieldService<MapOptionsForm>
+  ) {}
+
+  get mapOptionsForm(): MapOptionsForm {
+    return this._formFieldService.control;
   }
 
   get originDonorRouteName(): string {
-    return this.formGroup.get('useVolunteerCurrentPos').value
+    return this.mapOptionsForm.get('useVolunteerCurrentPos').value
       ? 'Current Location to Donor'
       : 'Home to Donor';
+  }
+
+  ngOnInit(): void {
+    this._formFieldService.injectControl({
+      genDefault: () => new MapOptionsForm()
+    });
   }
 
 }

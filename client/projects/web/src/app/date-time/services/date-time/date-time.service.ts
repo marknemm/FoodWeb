@@ -66,11 +66,18 @@ export class DateTimeService extends DateTimeHelper {
   }
 
   combineDateTime(date: Date, time: Date | string): Date {
+    if (!date || !time) {
+      return date;
+    }
+
     time = this.timeStrToDate(time);
     const dateTime = new Date(date.getTime());
-    dateTime.setHours(time.getHours());
-    dateTime.setMinutes(time.getMinutes());
-    dateTime.setSeconds(time.getSeconds());
+    if (time) {
+      dateTime.setHours(time.getHours());
+      dateTime.setMinutes(time.getMinutes());
+      dateTime.setSeconds(time.getSeconds());
+    }
+
     return dateTime;
   }
 

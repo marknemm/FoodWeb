@@ -1,4 +1,4 @@
-<div [formGroup]="formGroup" class="receiver-container">
+<div [formGroup]="receiverForm" class="receiver-container">
   <ion-item *ngIf="editable" lines="none">
     <ion-label color="secondary">Auto Accept Donations:</ion-label>
     <ion-toggle formControlName="autoReceiver"></ion-toggle>
@@ -6,7 +6,7 @@
 
   <div *ngIf="!editable" class="receiver-display row">
     <div class="col-sm-12">
-      <foodweb-yes-no [yes]="formGroup.get('autoReceiver').value">
+      <foodweb-yes-no [yes]="value.autoReceiver">
         Auto Accept Donations:
       </foodweb-yes-no>
     </div>

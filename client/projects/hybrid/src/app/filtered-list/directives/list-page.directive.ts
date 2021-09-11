@@ -39,6 +39,7 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
 
   private _destroy$ = new Subject();
   private _endListMessageElem: HTMLDivElement;
+  private _endListReached = false;
   private _host: HTMLElement;
   private _itemCount = 0;
 
@@ -54,7 +55,6 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
     setTimeout(() => { // setTimeout: Ensure ionInfiniteScroll & ionRefresher are initialized after content init.
       if (changes.page && this.page <= 1 && this.ionInfiniteScroll) {
         this._itemCount = 0;
-        this._refreshIonInfiniteDisabled();
       }
 
       if ((changes.loadMoreDisabled || changes.disabled) && this.ionInfiniteScroll) {
@@ -144,6 +144,7 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
     ).subscribe((event: any) => {
       this.page = 1;
       this._itemCount = 0;
+      this._endListReached = false;
       this._refreshIonInfiniteDisabled();
       event = this._overloadAllIonEvents(event);
       this.refresh.emit(event);
@@ -175,20 +176,20 @@ export class ListPageDirective implements OnChanges, AfterContentInit, OnDestroy
       const prevItemCount = this._itemCount;
       this._itemCount = this.ionVirtualScroll?.items?.length;
       if (this.ionInfiniteScroll) {
-        this.ionInfiniteScroll.disabled = (
-             this.loadMoreDisabled
-          || this.disabled
-          || this._itemCount % this.pageSize !== 0
-          || (ensureItemCountUpdt && this._itemCount !== prevItemCount)
-        );
+        this._endListReached = this._endListReached
+                            || (this._itemCount % this.pageSize !== 0)
+                            || (ensureItemCountUpdt && this._itemCount === prevItemCount);
+        this.ionInfiniteScroll.disabled = (this.loadMoreDisabled || this.disabled || this._endListReached);
       }
       this._refreshEndListMessageDisplay(); // Always update end of list display message based on updated ion infinite disabled state.
     });
   }
 
   private _refreshEndListMessageDisplay(): void {
+    const listIsLarge = this.ionVirtualScroll
+                     && (this.ionVirtualScroll.items.length * this.ionVirtualScroll.approxItemHeight) > window.innerHeight;
     this._endListMessageElem.innerText = this.endListMessage;
-    this._endListMessageElem.style.display = (this.ionInfiniteScroll?.disabled && this.endListMessage)
+    this._endListMessageElem.style.display = (this._endListReached && this.endListMessage && listIsLarge)
       ? 'block'
       : 'none';
   }

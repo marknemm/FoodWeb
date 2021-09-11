@@ -30,13 +30,14 @@ async function startServer(project) {
   const projectDir = getProjectDir(project);
   const tsconfigPathname = path.join(projectDir, 'tsconfig.json');
   const dotEnvPathname = path.join(projectDir, '.env');
+  const distSharedDir = path.join(global['serverDistDir'], 'shared');
   const distProjectsDir = path.join(global['serverDistDir'], 'server', 'projects');
   const indexJsPathname = path.join(distProjectsDir, project, 'src', 'index.js');
 
   await initDockerServices();
   await spawn('node', ['./tools/npm/init-project.js', project]);
   await cleanBuild(project);
-  await spawn('tsc-watch', ['-p', tsconfigPathname, '--noClear', '--onFirstSuccess', `nodemon -e .js,.hbs,.css --watch ${distProjectsDir} --watch ${global['serverTemplatesDir']} --watch ${dotEnvPathname} --inspect=0.0.0.0:${inspectPort} ${indexJsPathname}`]);
+  await spawn('tsc-watch', ['-p', tsconfigPathname, '--noClear', '--onFirstSuccess', `nodemon -e .js,.hbs,.css --watch ${distProjectsDir} --watch ${distSharedDir} --watch ${global['serverTemplatesDir']} --watch ${dotEnvPathname} --inspect=0.0.0.0:${inspectPort} ${indexJsPathname}`]);
 }
 
 /**

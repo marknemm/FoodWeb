@@ -22,7 +22,7 @@
 	},
 	"cordova": {},
 	"server": {
-		"hostname": "www.wnyfoodweb.com",
+		"hostname": "qa.wnyfoodweb.com",
 		"androidScheme": "https"
 	}
 }

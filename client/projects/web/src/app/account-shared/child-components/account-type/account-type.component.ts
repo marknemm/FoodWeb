@@ -1,15 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AccountCategory, AccountType } from '~shared';
-import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
+import { FormFieldService, TFormControl } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
   selector: 'foodweb-account-type',
   templateUrl: './account-type.component.html',
   styleUrls: ['./account-type.component.scss'],
-  providers: formProvider(AccountTypeComponent)
+  providers: [FormFieldService]
 })
-export class AccountTypeComponent extends FormBaseComponent<AccountType> {
+export class AccountTypeComponent implements OnInit {
 
   readonly AccountCategory = AccountCategory;
   readonly AccountType = AccountType;
@@ -22,17 +22,20 @@ export class AccountTypeComponent extends FormBaseComponent<AccountType> {
 
   constructor(
     public constantsService: ConstantsService,
-    formHelperService: FormHelperService
+    private _formFieldService: FormFieldService<AccountType>
   ) {
-    super(() => new TFormControl<AccountType>(), formHelperService);
     this._accountTypes = this.constantsService.ACCOUNT_TYPES.slice();
   }
 
   /**
    * The displayable AccountType members based off of the set/selected AccountCategory.
    */
-   get accountTypes(): AccountType[] {
+  get accountTypes(): AccountType[] {
     return this._accountTypes;
+  }
+
+  get formControl(): TFormControl<AccountType> {
+    return this._formFieldService.control;
   }
 
   /**
@@ -66,10 +69,16 @@ export class AccountTypeComponent extends FormBaseComponent<AccountType> {
   }
 
   /**
-   * Whether or not to show the selected AccounType description.
+   * Whether or not to show the selected AccountType description.
    */
   get showAccountTypeDescr(): boolean {
     return (this.editable && !!this.selAccountType);
+  }
+
+  ngOnInit(): void {
+    this._formFieldService.injectControl({
+      genDefault: () => new TFormControl<AccountType>()
+    });
   }
 
   /**
