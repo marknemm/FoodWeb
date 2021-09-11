@@ -1,7 +1,7 @@
 require('../util/constants');
 const spawn = require('../../../shared/tools/util/spawn');
 const yargs = require('yargs');
-const { getProjectDir, parseProjectInput, selectProjectPrompt } = require('../util/project');
+const { getProjectDir, getProjectPort, parseProjectInput, selectProjectPrompt } = require('../util/project');
 const { selectPlatformPrompt } = require('../util/platform');
 
 // Parse command line arguments.
@@ -34,6 +34,7 @@ async function startClient(project, platform) {
   if (!project) {
     project = await selectProjectPrompt();
   }
+  const port = getProjectPort(project);
 
   if (project.indexOf('hybrid') >= 0 && !platform) {
     platform = await selectPlatformPrompt();
@@ -46,5 +47,5 @@ async function startClient(project, platform) {
   (platform && platform !== 'web')
     ? await spawn('npx', ['ionic', 'cap', 'run', platform, `--project=${project}`, '-l', '--external', '--source-map', '--consolelogs', '--serverlogs'].concat(configOpts),
                   '', getProjectDir(project))
-    : await spawn('ng', ['serve', `--project=${project}`].concat(configOpts));
+    : await spawn('ng', ['serve', `--port=${port}`, `--project=${project}`].concat(configOpts));
 }
