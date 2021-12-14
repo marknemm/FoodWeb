@@ -73,7 +73,7 @@ export class PushNotificationClient {
    * @return The list of push notification registration IDs.
    */
   private _pushTargetsToPushRegistrationIds(pushTargets: MobileDevice[]): string[] {
-    return pushTargets.map((pushTarget: MobileDevice) => pushTarget.pushRegistrationId);
+    return pushTargets.map((pushTarget: MobileDevice) => pushTarget.pushRegistrationId).filter((id: string) => !!id);
   }
 
   /**

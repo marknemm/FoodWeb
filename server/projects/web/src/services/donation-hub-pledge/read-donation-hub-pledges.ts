@@ -3,7 +3,6 @@ import { AccountEntity } from '~entity';
 import { addPagination, addWhere } from '~orm';
 import { DateTimeHelper, DonationHubPledge, DonationHubPledgeReadRequest, ListResponse } from '~shared';
 import { DonationHubPledgeEntity } from '~web/database/entity/donation-hub-pledge.entity';
-import { addOrder } from '~web/database/orm/query-builder/query-order';
 import { genListResponse, ListResponsePromise } from '~web/helpers/response/list-response';
 import { addDefaultAccountAssociations } from '../account/read-accounts';
 
@@ -70,9 +69,12 @@ export async function readMyDonationHubPledges(
 export async function readDonationHubPledges(request: DonationHubPledgeReadRequest): ListResponsePromise<DonationHubPledgeEntity> {
   const repository: Repository<DonationHubPledgeEntity> = getRepository(DonationHubPledgeEntity);
   let queryBuilder: SelectQueryBuilder<DonationHubPledgeEntity> = repository.createQueryBuilder('donationHubPledge');
+  if (request.loadDonationHub) {
+    queryBuilder.addSelect('CASE WHEN donationHub.dropOffWindowStart > CURRENT_TIMESTAMP THEN 0 ELSE 1 END', '_expired');
+  }
   queryBuilder = _addRelations(queryBuilder, request);
   queryBuilder = _addFilters(queryBuilder, request);
-  queryBuilder = addOrder(queryBuilder, 'donationHubPledge', request, 'createTimestamp', 'DESC');
+  queryBuilder = _addSorting(queryBuilder, request);
   queryBuilder = addPagination(queryBuilder, request);
   const [donationHubPledges, totalCount] = await queryBuilder.getManyAndCount();
   return genListResponse(donationHubPledges, totalCount, request);
@@ -127,8 +129,25 @@ function _addDonationHubFilters(
   }
 
   if (request.dropOffWindowOverlapEnd) {
-    queryBuilder.andWhere('donationHub.dropoffWindowStart <= :windowEnd', { windowEnd: request.dropOffWindowOverlapEnd });
+    queryBuilder.andWhere('donationHub.dropOffWindowStart <= :windowEnd', { windowEnd: request.dropOffWindowOverlapEnd });
   }
 
+  return queryBuilder;
+}
+
+function _addSorting(
+  queryBuilder: SelectQueryBuilder<DonationHubPledgeEntity>,
+  request: DonationHubPledgeReadRequest
+): SelectQueryBuilder<DonationHubPledgeEntity> {
+  if (request.sortBy) {
+    queryBuilder.addOrderBy(request.sortBy, request.sortOrder || 'ASC');
+  }
+  if (request.loadDonationHub) {
+    queryBuilder.addOrderBy('_expired', 'ASC');
+    queryBuilder.addOrderBy('donationHub.dropOffWindowStart', 'ASC');
+  } else {
+    queryBuilder.addOrderBy('pledgeVolunteer.lastName', 'ASC');
+    queryBuilder.addOrderBy('pledgeVolunteer.firstName', 'ASC');
+  }
   return queryBuilder;
 }

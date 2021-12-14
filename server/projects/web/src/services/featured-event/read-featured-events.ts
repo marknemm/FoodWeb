@@ -7,7 +7,7 @@ import { genListResponse, ListResponsePromise } from '~web/helpers/response/list
 /**
  * Reads a single featured event based off of a given featured event ID.
  * @param featuredEventId The ID of the featured event to retrieve.
- * @return A promsie that resolves to the featured event. Resolves to null/undefined if it could not be found.
+ * @return A promise that resolves to the featured event. Resolves to null/undefined if it could not be found.
  */
 export async function readFeaturedEvent(featuredEventId: number): Promise<FeaturedEventEntity> {
   return getOrmRepository(FeaturedEventEntity).findOne({ id: featuredEventId });

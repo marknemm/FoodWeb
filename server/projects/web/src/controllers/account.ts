@@ -90,7 +90,11 @@ router.post('/', handlePostAccount);
 export function handlePostAccount(req: Request, res: Response) {
   const signupRequest: SignupRequest = req.body;
   createAccount(signupRequest)
-    .then((newAccountData: NewAccountData) => sendAccountVerificationMessage(newAccountData))
+    .then((newAccountData: NewAccountData) =>
+      (newAccountData.unverifiedAccount) // Send account verification me
+        ? sendAccountVerificationMessage(newAccountData)
+        : newAccountData.account
+    )
     .then((account: AccountEntity) => { res.send(account); return account; })
     .catch(genErrorResponseRethrow.bind(this, res))
     .then((account: AccountEntity) => saveAudit(AuditEventType.Signup, account, account))

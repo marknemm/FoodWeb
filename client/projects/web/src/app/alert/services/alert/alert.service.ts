@@ -29,6 +29,7 @@ export class AlertService extends AlertDisplayer {
     config.data = alert;
     config.role = this._deriveDialogRole(config, alert);
     config.panelClass = this._deriveAlertClass(alert);
+    console.log(config.data);
     return this._matDialog.open(AlertDialogComponent, config).afterClosed();
   }
 

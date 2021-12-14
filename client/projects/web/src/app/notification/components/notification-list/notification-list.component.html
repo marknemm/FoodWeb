@@ -1,11 +1,11 @@
 <div class="notifications page">
   <div class="notifications-title page-title">
-    {{ pageTitleService.title }}
+    Notifications
   </div>
 
   <mat-action-list>
     <mat-divider></mat-divider>
-    <ng-container *ngFor="let notification of notifications">
+    <ng-container *ngFor="let notification of listQueryService.items">
       <foodweb-notification
         [notification]="notification"
         (flag)="notificationService.toggleNotificationFlaggedState($event)"
@@ -15,7 +15,7 @@
     </ng-container>
   </mat-action-list>
 
-  <foodweb-paginator [length]="totalCount" [pageSizeOptions]="[
+  <foodweb-paginator [length]="listQueryService.totalCount" [pageSizeOptions]="[
     notificationService.defaultReadLimit,
     notificationService.defaultReadLimit * 2,
     notificationService.defaultReadLimit * 4

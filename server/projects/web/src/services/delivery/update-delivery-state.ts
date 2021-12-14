@@ -16,8 +16,8 @@ const _dateTimeHelper = new DateTimeHelper();
  * Advances the delivery state of a specified donation.
  * @param stateChangeReq The delivery state change request specifying the ID of the donation to have its delivery state advanced.
  * @param myAccount The account of the user submitting the delivery state advance request.
- * @return A promsie that resolves to the donation with its delivery state advanced.
- * @throws FoodWebError if the user submitting the request is not authroized to advance the delivery state.
+ * @return A promise that resolves to the donation with its delivery state advanced.
+ * @throws FoodWebError if the user submitting the request is not authorized to advance the delivery state.
  */
 export async function advanceDeliveryState(stateChangeReq: DeliveryStateChangeRequest, myAccount: AccountEntity): Promise<DonationEntity> {
   const donationToAdvance = <DonationEntity> await readDonation(stateChangeReq.donationId);
@@ -39,7 +39,7 @@ export function prepareAdvancedDelivery(donationToAdvance: DonationEntity, myAcc
 }
 
 /**
- * Ensures that a given user is authroized to advance the delivery state of a given donation.
+ * Ensures that a given user is authorized to advance the delivery state of a given donation.
  * @param donation The donation that is to have its delivery state advanced.
  * @param account The user account that is to be checked for authorization.
  * @throws FoodWebError if the given user is not authorized to advance the delivery state of the given donation.
@@ -55,7 +55,7 @@ function _ensureCanAdvanceDeliveryState(donation: DonationEntity, myAccount: Acc
  * Undoes the delivery state advancement of a specified donation.
  * @param stateChangeReq The delivery state change request specifying the ID of the donation to have its delivery state advancement undone.
  * @param myAccount The account of the user submitting the delivery state undo request.
- * @return A promsie that resolves to the donation with its delivery state undone.
+ * @return A promise that resolves to the donation with its delivery state undone.
  * @throws FoodWebError if the user submitting the request is not authorized to undo the delivery state advancement.
  */
 export async function undoDeliveryState(
@@ -65,7 +65,7 @@ export async function undoDeliveryState(
   const donationToUndo = <DonationEntity> await readDonation(stateChangeReq.donationId);
 
   // If moving from 'Scheduled' to 'Matched', then perform delivery cancellation process, otherwise perform undo.
-  const undoneDelivery: DeliveryStatusChangeSaveData = perpareUndoneDelivery(donationToUndo, myAccount);
+  const undoneDelivery: DeliveryStatusChangeSaveData = prepareUndoneDelivery(donationToUndo, myAccount);
   const undoneDonation: DonationStatusChangeSaveData = _genDonationUpdate(donationToUndo, undoneDelivery, 'prev');
   const newDonation: DonationEntity = (undoneDonation.donationStatus === DonationStatus.Matched)
     ? await cancelDelivery(donationToUndo, myAccount)
@@ -80,7 +80,7 @@ export async function undoDeliveryState(
  * @param myAccount The account of the volunteer that is undoing the status of their delivery.
  * @return The delivery update.
  */
-export function perpareUndoneDelivery(donationToUndo: DonationEntity, myAccount: AccountEntity): DeliveryStatusChangeSaveData {
+export function prepareUndoneDelivery(donationToUndo: DonationEntity, myAccount: AccountEntity): DeliveryStatusChangeSaveData {
   _ensureCanUndoDeliveryState(donationToUndo, myAccount);
   const donationStatusUpdt: DonationStatus = _donationHelper.getPrevDonationStatus(donationToUndo);
   return _genDeliveryUpdate(donationToUndo, donationStatusUpdt);
@@ -103,7 +103,7 @@ async function _saveDonationStatusUpdate(
 }
 
 /**
- * Ensures that a given user is authroized to undo the delivery state of a given donation.
+ * Ensures that a given user is authorized to undo the delivery state of a given donation.
  * @param donation The donation that is to have its delivery state advancement undone.
  * @param account The user account that is to be checked for authorization.
  * @throws FoodWebError if the given user is not authorized to undo the delivery state advancement of the given donation.

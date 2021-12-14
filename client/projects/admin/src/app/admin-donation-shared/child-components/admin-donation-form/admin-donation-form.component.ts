@@ -27,7 +27,8 @@ export class AdminDonationFormComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit(): void {
-    if (this.formGroup.checkValidity()) {
+    this.formGroup.markAllAsTouched();
+    if (this.formGroup.valid) {
       this.submitDonation.emit(this.formGroup);
     }
   }

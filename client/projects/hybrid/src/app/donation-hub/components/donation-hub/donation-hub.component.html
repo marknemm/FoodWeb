@@ -1,18 +1,16 @@
-<ion-header>
-  <foodweb-hybrid-header defaultBackHref="/donation-hub/list">
-    <ion-label>Donation Hub</ion-label>
-    <foodweb-hybrid-donation-hub-actions
-      [canDonate]="canDonate"
-      [canModify]="canModify"
-      [canViewDonation]="canViewPledge"
-      [donationHub]="donationHub"
-      [loading]="loadingActions"
-      [myPledge]="myPledge"
-      slot="end"
-      (delete)="deleteDonationHub()">
-    </foodweb-hybrid-donation-hub-actions>
-  </foodweb-hybrid-header>
-</ion-header>
+<foodweb-hybrid-header defaultBackHref="/donation-hub/list">
+  <ion-title>Donation Hub</ion-title>
+  <foodweb-hybrid-donation-hub-actions
+    [canDonate]="canDonate"
+    [canModify]="canModify"
+    [canViewDonation]="canViewPledge"
+    [donationHub]="donationHub"
+    [loading]="loadingActions"
+    [myPledge]="myPledge"
+    slot="end"
+    (delete)="deleteDonationHub()">
+  </foodweb-hybrid-donation-hub-actions>
+</foodweb-hybrid-header>
 
 <ion-content class="donation-hub-details">
   <ng-container *ngIf="donationHub">

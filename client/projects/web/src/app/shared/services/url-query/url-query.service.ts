@@ -92,10 +92,13 @@ export class UrlQueryService {
    * @param activatedRoute The activated route service used to complete query string modification on the current route.
    */
   updateUrlQueryString(filters: any, activatedRoute: ActivatedRoute): void {
-    // Convert dates into raw ISO strings.
+    // Convert dates into raw ISO strings, and remove empty strings.
     for (const filterKey in filters) {
       if (filters[filterKey] instanceof Date) {
         filters[filterKey] = (<Date>filters[filterKey]).toISOString();
+      }
+      if (filters[filterKey] === '') {
+        delete filters[filterKey];
       }
     }
 

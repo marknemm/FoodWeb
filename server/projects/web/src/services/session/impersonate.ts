@@ -9,7 +9,7 @@ import { login } from '~web/services/session/session';
 /**
  * Performs impersonation login.
  * @param impersonateRequest The impersonate (login) request.
- * @return A promsie that resolves to the login response.
+ * @return A promise that resolves to the login response.
  * @throws FoodWebError if the admin login credentials are invalid or if an impersonation record doesn't exist
  * for the given admin account and impersonation record.
  */

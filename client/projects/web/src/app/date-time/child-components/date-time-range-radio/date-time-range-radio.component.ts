@@ -1,87 +1,67 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DateTimeRange, DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
+import { FormFieldService, TFormControl } from '~web/forms';
 
 @Component({
   selector: 'foodweb-date-time-range-radio',
   templateUrl: './date-time-range-radio.component.html',
   styleUrls: ['./date-time-range-radio.component.scss'],
-  providers: formProvider(DateTimeRangeRadioComponent)
+  providers: [FormFieldService]
 })
-export class DateTimeRangeRadioComponent extends FormBaseComponent<DateTimeRange> implements OnChanges {
+export class DateTimeRangeRadioComponent implements OnChanges, OnInit {
 
+  @Input() allowPast = false;
   @Input() ariaLabel: string;
+  @Input() editable = false;
+  @Input() excludeTopDivider = false;
   @Input() rangeWindow: DateTimeRange;
   @Input() rangeWindowStart: Date;
   @Input() rangeWindowEnd: Date;
   @Input() stepMins = 15;
-  @Input() allowPast = false;
-  @Input() excludeTopDivider = false;
-
-  /**
-   * An internally used form control keeping track of the index of the selected date-time range.
-   * Externally, any form control bound to this component (via formControl) will be updated to the actual date-time range at the index.
-   */
-  readonly selIdxFormCtrl = new TFormControl<number>();
 
   private _dateTimeRanges: DateTimeRange[] = [];
 
   constructor(
     private _dateTimeService: DateTimeService,
-    formHelperService: FormHelperService
-  ) {
-    super(() => new TFormControl<DateTimeRange>(), formHelperService);
-  }
+    private _formFieldService: FormFieldService<DateTimeRange>
+  ) {}
 
   /**
    * The available date-time range radio button options.
    */
-  get dateTimeRanges(): DateTimeRange[] {
+  get dateTimeRanges(): readonly DateTimeRange[] {
     return this._dateTimeRanges;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    super.ngOnChanges(changes);
+  get formControl(): TFormControl<DateTimeRange> {
+    return this._formFieldService.control;
+  }
+
+  ngOnInit(): void {
+    this._formFieldService.injectControl();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.rangeWindow || changes.rangeWindowStart || changes.rangeWindowEnd || changes.rangeMins) {
-      this._genRangeWindowFromEndpoints();
+      this._syncRangeWindowInputs();
       this._dateTimeRanges = this._dateTimeService.genDateTimeRangeIncrements(this.rangeWindow, this.stepMins, this.allowPast);
     }
   }
 
   /**
-   * Generates a rangeWindow input from rangeWindowStart & rangeWindowEnd endpoints if both are present.
+   * Syncs a rangeWindow input with rangeWindowStart & rangeWindowEnd endpoints if both are present, and vice-versa.
    */
-  private _genRangeWindowFromEndpoints(): void {
+  private _syncRangeWindowInputs(): void {
     if (this.rangeWindowStart && this.rangeWindowEnd) {
       this.rangeWindow = {
         startDateTime: this.rangeWindowStart,
         endDateTime: this.rangeWindowEnd
       };
     }
-  }
 
-  /**
-   * @override
-   * @param range The date-time range value to write.
-   */
-  writeValue(range: DateTimeRange): void {
-    if (range && this.dateTimeRanges.length) {
-      const selDateTimeRangeIdx: number = this._getDateTimeRangeIdx(range);
-      this.selIdxFormCtrl.setValue(selDateTimeRangeIdx);
-    } else {
-      this.selIdxFormCtrl.setValue(null);
+    if (this.rangeWindow) {
+      this.rangeWindowStart = this.rangeWindow.startDateTime;
+      this.rangeWindowEnd = this.rangeWindow.endDateTime;
     }
-  }
-
-  /**
-   * Gets the index of a given date-time range within the dateTimeRanges array.
-   * @param range The date-time range to get the index of.
-   * @return The index of the date-time range. If not found, then -1.
-   */
-  private _getDateTimeRangeIdx(range: DateTimeRange): number {
-    return this.dateTimeRanges.findIndex((rangeOpt: DateTimeRange) =>
-         rangeOpt.startDateTime.getTime() === range.startDateTime.getTime()
-      && rangeOpt.endDateTime.getTime() === range.endDateTime.getTime()
-    );
   }
 }

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { NEVER, Observable, ObservableInput } from 'rxjs';
+import { EMPTY, Observable, ObservableInput } from 'rxjs';
 
 /**
  * The level of an `Alert`, which determines its color theme.
@@ -21,7 +21,7 @@ export interface Alert {
 }
 
 /**
- * Common base funcitonality for all `Alert` display services.
+ * Common base functionality for all `Alert` display services.
  */
 export abstract class AlertDisplayer {
 
@@ -45,7 +45,7 @@ export abstract class AlertDisplayer {
    */
   displayError(error: Error | HttpErrorResponse, level: AlertLevel = 'danger', blocking = false): ObservableInput<any> {
     this.displayAlert({ message: this._extractErrorMessage(error), level, blocking });
-    return NEVER;
+    return EMPTY;
   }
 
   /**
@@ -63,7 +63,7 @@ export abstract class AlertDisplayer {
    */
   protected _extractErrorMessage(error: Error | HttpErrorResponse): string {
     if (error instanceof Error) {
-      return (error.message ? error.message : 'An unexpected error has occured');
+      return (error.message ? error.message : 'An unexpected error has occurred');
     }
     // Else dealing with HttpErrorResponse from here on..
     if (error.error?.message) {
@@ -75,6 +75,6 @@ export abstract class AlertDisplayer {
     if (error.statusText) {
       return error.statusText;
     }
-    return 'An unexpected error has occured';
+    return 'An unexpected error has occurred';
   }
 }

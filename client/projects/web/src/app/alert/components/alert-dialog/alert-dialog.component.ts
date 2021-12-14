@@ -18,6 +18,8 @@ export class AlertDialogComponent implements OnInit {
     this.color = `alert-${this.alert.level}`;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.alert);
+  }
 
 }

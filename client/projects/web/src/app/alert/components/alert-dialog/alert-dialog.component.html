@@ -13,10 +13,10 @@
 
   <div mat-dialog-actions>
     <div class="align-right">
-      <button mat-button *ngIf="" type="button" color="warn" [mat-dialog-close]="false">
+      <button mat-button *ngIf="alert.cancelButton" type="button" color="warn" [mat-dialog-close]="false">
         <span [innerHTML]="alert.cancelButton"></span>
       </button>
-      <button mat-button *ngIf="alert.confirmButton" type="button" color="action.color" [mat-dialog-close]="true" cdkFocusInitial>
+      <button mat-button *ngIf="alert.confirmButton" type="button" color="primary" [mat-dialog-close]="true" cdkFocusInitial>
         <span [innerHTML]="alert.confirmButton"></span>
       </button>
     </div>

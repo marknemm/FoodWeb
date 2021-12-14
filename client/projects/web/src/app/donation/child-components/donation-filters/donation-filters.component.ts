@@ -2,16 +2,16 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DonationReadRequest, DonationSortBy } from '~shared';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
 import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
-import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
   selector: 'foodweb-donation-filters',
   templateUrl: './donation-filters.component.html',
   styleUrls: ['./donation-filters.component.scss'],
-  providers: formProvider(DonationFiltersComponent)
+  providers: [FormFieldService]
 })
-export class DonationFiltersComponent extends FormBaseComponent<DonationFiltersForm> implements OnInit {
+export class DonationFiltersComponent implements OnInit {
 
   @Output() clear = new EventEmitter<void>();
   @Output() filter = new EventEmitter<DonationReadRequest>();
@@ -26,14 +26,18 @@ export class DonationFiltersComponent extends FormBaseComponent<DonationFiltersF
     { name: 'Donor Organization', value: 'donorOrganizationName' }
   ];
 
-  readonly filtersForm = new DonationFiltersForm();
-
   constructor(
     public constantsService: ConstantsService,
-    formHelperService: FormHelperService
-  ) {
-    super(() => new DonationFiltersForm(), formHelperService);
+    private _formFieldService: FormFieldService<DonationFiltersForm>
+  ) {}
+
+  get filtersForm(): DonationFiltersForm {
+    return this._formFieldService.control;
   }
 
-  ngOnInit() {}
+  ngOnInit(): void {
+    this._formFieldService.injectControl({
+      genDefault: () => new DonationFiltersForm()
+    });
+  }
 }

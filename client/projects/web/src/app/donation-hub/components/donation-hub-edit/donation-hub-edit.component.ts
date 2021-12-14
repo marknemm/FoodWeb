@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { DonationHub } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { DonationHubForm } from '~web/donation-hub/forms/donation-hub.form';
+import { DonationHubForm, DonationHubFormT } from '~web/donation-hub/forms/donation-hub.form';
 import { DonationHubReadService } from '~web/donation-hub/services/donation-hub-read/donation-hub-read.service';
 import { DonationHubUpdateService } from '~web/donation-hub/services/donation-hub-update/donation-hub-update.service';
-import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
@@ -15,9 +15,9 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
   selector: 'foodweb-donation-hub-edit',
   templateUrl: './donation-hub-edit.component.html',
   styleUrls: ['./donation-hub-edit.component.scss'],
-  providers: formProvider(DonationHubEditComponent)
+  providers: [FormFieldService]
 })
-export class DonationHubEditComponent extends FormBaseComponent<DonationHubForm> implements OnInit {
+export class DonationHubEditComponent implements OnInit {
 
   readonly minRegisterDate = new Date();
   readonly postEditRoute = ['/', 'donation-hub'];
@@ -30,13 +30,23 @@ export class DonationHubEditComponent extends FormBaseComponent<DonationHubForm>
     protected _activatedRoute: ActivatedRoute,
     protected _donationHubReadService: DonationHubReadService,
     protected _donationHubUpdateService: DonationHubUpdateService,
+    protected _formFieldService: FormFieldService<DonationHubForm, DonationHub>,
     protected _router: Router,
     protected _urlQueryService: UrlQueryService,
     dateTimeService: DateTimeService,
-    formHelperService: FormHelperService,
     sessionService: SessionService
   ) {
-    super(() => new DonationHubForm(dateTimeService, { account: sessionService.account, omitChecklists: true }), formHelperService, true);
+    this._formFieldService.registerControl(
+      new DonationHubForm(dateTimeService, { account: sessionService.account, omitChecklists: true }),
+      {
+        valueInConverter: (valueIn: DonationHub) => this.donationHubForm.fromDonationHub(valueIn),
+        valueOutConverter: (value: DonationHubFormT) => this.donationHubForm.toDonationHub(value)
+      }
+    );
+  }
+
+  get donationHubForm(): DonationHubForm {
+    return this._formFieldService.control;
   }
 
   get donationHubNotFound(): boolean {
@@ -47,7 +57,7 @@ export class DonationHubEditComponent extends FormBaseComponent<DonationHubForm>
     return this._originalDonationHub;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
       switchMap((id: number) => this._donationHubReadService.getDonationHub(id))
     ).subscribe((donationHub: DonationHub) => this._setDonationHubData(donationHub));
@@ -57,13 +67,14 @@ export class DonationHubEditComponent extends FormBaseComponent<DonationHubForm>
     this._originalDonationHub = donationHub;
     this._donationHubNotFound = !donationHub;
     if (!this.donationHubNotFound) {
-      this.formGroup.reset(donationHub);
+      this.donationHubForm.reset(this._formFieldService.valueIn(donationHub));
     }
   }
 
   save(): void {
-    if (this.formGroup.checkValidity()) {
-      this._donationHubUpdateService.updateDonationHub(this.formGroup.toDonationHub()).subscribe(
+    this.donationHubForm.markAllAsTouched();
+    if (this.donationHubForm.valid) {
+      this._donationHubUpdateService.updateDonationHub(this.donationHubForm.toDonationHub()).subscribe(
         (donationHub: DonationHub) => this._router.navigate(this.postEditRoute.concat(`${donationHub.id}`))
       );
     }

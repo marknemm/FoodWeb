@@ -25,7 +25,7 @@ export class QueryMod<T, R = ListResponse<T>> {
 
   /**
    * Executes the base query and modifications.
-   * @return A promsie that resolves to the query execution result.
+   * @return A promise that resolves to the query execution result.
    */
   exec(): Promise<R> {
     return this._execFn(this._queryBuilder);

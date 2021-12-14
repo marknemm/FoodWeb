@@ -100,7 +100,15 @@ a.no-hover {
     margin-right: 7px;
 
     &:last-child {
-      margin-right: 0px;
+      margin-right: 0;
+    }
+  }
+
+  a {
+    margin-right: 7px;
+
+    &:last-child {
+      margin-right: 0;
     }
   }
 }

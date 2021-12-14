@@ -17,10 +17,10 @@ export class AlertService extends AlertDisplayer {
 
   displayAlert(alert: Alert): Observable<boolean> {
     alert.cssClass = alert.cssClass ?? '';
-    const resultPromsie: Promise<boolean> = alert.blocking ?
+    const resultPromise: Promise<boolean> = alert.blocking ?
       this._presentBlockingAlert(alert) :
       this._presentNonBlockingAlert(alert);
-    return from(resultPromsie);
+    return from(resultPromise);
   }
 
   private async _presentBlockingAlert(alert: Alert): Promise<boolean> {

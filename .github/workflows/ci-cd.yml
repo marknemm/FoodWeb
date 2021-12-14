@@ -1,5 +1,7 @@
 name: CI/CD
 on: [push]
+env:
+  CONFIGURATION: ${{ github.ref == 'refs/heads/release' && 'production' || 'qa' }}
 jobs:
 
   build_client_admin:
@@ -17,23 +19,23 @@ jobs:
       - name: Cache Node Modules
         uses: actions/cache@v2
         env:
-          cache-name: npm-client
+          CACHE_NAME: npm-client
         with:
           path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}
+          key: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}
       - name: Cache Build
         id: cache-build
         uses: actions/cache@v2
         with:
-          key: ${{ runner.os }}-build-client-admin-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/angular.json', './client/**/tsconfig*', './client/package-lock.json', './client/projects/admin/**/*', './client/projects/web/**/*', './shared/**/*') }}
+          key: ${{ runner.os }}-${{ env.CONFIGURATION }}-build-client-admin-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/angular.json', './client/**/tsconfig*', './client/package-lock.json', './client/projects/admin/**/*', './client/projects/web/**/*', './shared/**/*') }}
           path: ./client/dist
       - name: Install Node Modules
         if: steps.cache-build.outputs.cache-hit != 'true'
         run: cd ./client && npm install
       - name: Build Source Code
         if: steps.cache-build.outputs.cache-hit != 'true'
-        run: cd ./client && npm run build admin
+        run: cd ./client && npm run build admin -- --configuration=${{ env.CONFIGURATION }}
       - name: Lint Source Code
         if: steps.cache-build.outputs.cache-hit != 'true'
         run: cd ./client && npm run lint admin
@@ -53,23 +55,23 @@ jobs:
       - name: Cache Node Modules
         uses: actions/cache@v2
         env:
-          cache-name: npm-client
+          CACHE_NAME: npm-client
         with:
           path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}
+          key: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}
       - name: Cache Build
         id: cache-build
         uses: actions/cache@v2
         with:
-          key: ${{ runner.os }}-build-client-hybrid-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/angular.json', './client/**/tsconfig*', './client/package-lock.json', './client/projects/hybrid/**/*', './client/projects/web/**/*', './shared/**/*') }}
+          key: ${{ runner.os }}-${{ env.CONFIGURATION }}-build-client-hybrid-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/angular.json', './client/**/tsconfig*', './client/package-lock.json', './client/projects/hybrid/**/*', './client/projects/web/**/*', './shared/**/*') }}
           path: ./client/dist
       - name: Install Node Modules
         if: steps.cache-build.outputs.cache-hit != 'true'
         run: cd ./client && npm install
       - name: Build Source Code
         if: steps.cache-build.outputs.cache-hit != 'true'
-        run: cd ./client && npm run build hybrid:all
+        run: cd ./client && npm run build hybrid:all -- --configuration=${{ env.CONFIGURATION }}
       - name: Lint Source Code
         if: steps.cache-build.outputs.cache-hit != 'true'
         run: cd ./client && npm run lint hybrid
@@ -89,23 +91,23 @@ jobs:
       - name: Cache Node Modules
         uses: actions/cache@v2
         env:
-          cache-name: npm-client
+          CACHE_NAME: npm-client
         with:
           path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}
+          key: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}
       - name: Cache Build
         id: cache-build
         uses: actions/cache@v2
         with:
-          key: ${{ runner.os }}-build-client-web-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/angular.json', './client/**/tsconfig*', './client/package-lock.json', './client/projects/web/**/*', './shared/**/*') }}
+          key: ${{ runner.os }}-${{ env.CONFIGURATION }}-build-client-web-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/angular.json', './client/**/tsconfig*', './client/package-lock.json', './client/projects/web/**/*', './shared/**/*') }}
           path: ./client/dist
       - name: Install Node Modules
         if: steps.cache-build.outputs.cache-hit != 'true'
         run: cd ./client && npm install
       - name: Build Source Code
         if: steps.cache-build.outputs.cache-hit != 'true'
-        run: cd ./client && npm run build web
+        run: cd ./client && npm run build web -- --configuration=${{ env.CONFIGURATION }}
       - name: Lint Source Code
         if: steps.cache-build.outputs.cache-hit != 'true'
         run: cd ./client && npm run lint web
@@ -125,11 +127,11 @@ jobs:
       - name: Cache Node Modules
         uses: actions/cache@v2
         env:
-          cache-name: npm-server
+          CACHE_NAME: npm-server
         with:
           path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./server/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}
+          key: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./server/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}
       - name: Cache Build
         id: cache-build
         uses: actions/cache@v2
@@ -161,11 +163,11 @@ jobs:
       - name: Cache Node Modules
         uses: actions/cache@v2
         env:
-          cache-name: npm-server
+          CACHE_NAME: npm-server
         with:
           path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./server/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}
+          key: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./server/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}
       - name: Cache Build
         id: cache-build
         uses: actions/cache@v2
@@ -197,11 +199,11 @@ jobs:
       - name: Cache Node Modules
         uses: actions/cache@v2
         env:
-          cache-name: npm-shared
+          CACHE_NAME: npm-shared
         with:
           path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./shared/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}
+          key: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./shared/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}
       - name: Cache Build
         id: cache-build
         uses: actions/cache@v2
@@ -220,12 +222,16 @@ jobs:
 
   deploy_eb:
     name: Deploy to Elastic Beanstalk
-    needs: [build_client_admin, build_client_web, build_server_admin, build_server_web, build_shared]
-    if: github.ref == 'refs/heads/release'
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [14.x]
+    needs: [build_client_admin, build_client_web, build_server_admin, build_server_web, build_shared]
+    if: github.ref == 'refs/heads/release' || github.ref == 'refs/heads/master'
+    env:
+      ADMIN_DOMAIN: ${{ github.ref == 'refs/heads/master' && 'admin.wnyfoodweb.com' || 'qa.admin.wnyfoodweb.com' }}
+      RAW_DOMAIN: ${{ github.ref == 'refs/heads/master' && 'Foodweb-env.eba-swceimpj.us-east-2.elasticbeanstalk.com' || 'foodweb-qa.us-east-2.elasticbeanstalk.com' }}
+      WWW_DOMAIN: ${{ github.ref == 'refs/heads/master' && 'www.wnyfoodweb.com' || 'qa.wnyfoodweb.com' }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js ${{ matrix.node-version }}
@@ -240,12 +246,12 @@ jobs:
       - name: Cache Build Client - Admin
         uses: actions/cache@v2
         with:
-          key: ${{ runner.os }}-build-client-admin-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/angular.json', './client/**/tsconfig*', './client/package-lock.json', './client/projects/admin/**/*', './client/projects/web/**/*', './shared/**/*') }}
+          key: ${{ runner.os }}-${{ env.CONFIGURATION }}-build-client-admin-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/angular.json', './client/**/tsconfig*', './client/package-lock.json', './client/projects/admin/**/*', './client/projects/web/**/*', './shared/**/*') }}
           path: ./client/dist
       - name: Cache Build Client - Web
         uses: actions/cache@v2
         with:
-          key: ${{ runner.os }}-build-client-web-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/angular.json', './client/**/tsconfig*', './client/package-lock.json', './client/projects/web/**/*', './shared/**/*') }}
+          key: ${{ runner.os }}-${{ env.CONFIGURATION }}-build-client-web-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./client/angular.json', './client/**/tsconfig*', './client/package-lock.json', './client/projects/web/**/*', './shared/**/*') }}
           path: ./client/dist
       - name: Cache Build Server - Admin
         uses: actions/cache@v2
@@ -257,8 +263,8 @@ jobs:
         with:
           key: ${{ runner.os }}-build-server-web-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./server/**/tsconfig*', './server/package-lock.json', './server/projects/web/**/*') }}
           path: ./server/dist
-      - name: Generate Config Hooks
-        run: mkdir .platform/confighooks && cp -r .platform/hooks/* .platform/confighooks
+      - name: Preprocess EB hooks and config
+        run: .github/scripts/preprocess-eb.sh
       - name: Zip
         run: zip -r ./foodweb.zip . -x '.git/*' '.github/*' '.vscode/*'
       - name: Get Commit Hash
@@ -277,20 +283,20 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: FoodWeb
-          environment_name: Foodweb-env
+          application_name: 'FoodWeb'
+          environment_name: ${{ env.CONFIGURATION == 'production' && 'Foodweb-env' || 'foodweb-qa' }}
           region: us-east-2
           version_label: ${{ steps.current-time.outputs.time }}--${{ steps.commit-hash.outputs.commit-hash }}
           deployment_package: foodweb.zip
 
   deploy_lambda:
     name: Deploy to Lambda
-    needs: [build_client_web, build_server_web, build_shared]
-    if: github.ref == 'refs/heads/release'
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [14.x]
+    needs: [build_client_web, build_server_web, build_shared]
+    if: github.ref == 'refs/heads/release'
     env:
       SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
     steps:
@@ -302,11 +308,11 @@ jobs:
     - name: Cache Node Modules
       uses: actions/cache@v2
       env:
-        cache-name: npm-server
+        CACHE_NAME: npm-server
       with:
         path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./server/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}
+        key: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./server/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ secrets.CACHE_VERSION }}
     - name: Cache Build
       id: cache-build
       uses: actions/cache@v2

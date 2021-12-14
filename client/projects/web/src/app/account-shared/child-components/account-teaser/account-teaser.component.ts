@@ -17,7 +17,9 @@ export class AccountTeaserComponent implements OnInit, OnChanges {
   @Input() hasEmailSubtitle = false;
 
   @HostBinding()
-  readonly class = 'foodweb-account-teaser';
+  get class(): string {
+    return `foodweb-account-teaser ${this.account?.accountType.toLowerCase()}`;
+  }
 
   protected _accountName = '';
   protected _accountRouterLink: string[] = [];

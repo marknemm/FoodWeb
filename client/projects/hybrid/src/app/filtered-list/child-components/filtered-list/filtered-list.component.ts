@@ -1,76 +1,114 @@
-import { Component, ContentChild, EventEmitter, Input, Output } from '@angular/core';
-import { IonVirtualScroll } from '@ionic/angular';
+import { Component, ContentChild, EventEmitter, Host, Input, OnInit, Optional, Output, SkipSelf, ViewChild } from '@angular/core';
+import { IonContent, IonInfiniteScroll, IonRefresher, IonVirtualScroll } from '@ionic/angular';
 import { ListLoadMoreEvent, ListRefreshEvent } from '~hybrid/filtered-list/interfaces/list-refresh-event';
-import { FilteredListComponent as WebFilteredListComponent } from '~web/filtered-list/child-components/filtered-list/filtered-list.component';
+import { UnwrapHostService } from '~web/shared/services/unwrap-host/unwrap-host.service';
 
 @Component({
   selector: 'foodweb-hybrid-filtered-list',
   templateUrl: './filtered-list.component.html',
-  styleUrls: ['./filtered-list.component.scss']
+  styleUrls: ['./filtered-list.component.scss'],
+  providers: [UnwrapHostService]
 })
-export class FilteredListComponent extends WebFilteredListComponent {
+export class FilteredListComponent implements OnInit {
 
+  @Input() disabled = false;
+  @Input() endListMessage = 'End of list - Return to top';
+  @Input() itemCount = 0; // Only needed if IonVirtualScroll is not ContentChild.
   @Input() loadMoreDisabled = false;
+  @Input() omitInfiniteScroll = false;
+  @Input() omitRefresher = false;
+  @Input() page = 1;
   @Input() pageSize = 10;
   @Input() refreshDisabled = false;
-  @Input() threshold = '100px';
+  @Input() threshold = '400px';
 
   @Output() refresh = new EventEmitter<ListRefreshEvent>();
   @Output() loadMore = new EventEmitter<ListLoadMoreEvent>();
 
-  @ContentChild(IonVirtualScroll) virtualScroll: IonVirtualScroll;
+  @ContentChild(IonVirtualScroll) ionVirtualScroll: IonVirtualScroll;
 
-  private _page = 1;
-  private _itemCount = 0;
-  private _noMoreItems = false;
+  @ViewChild(IonInfiniteScroll) ionInfiniteScroll: IonInfiniteScroll;
+  @ViewChild(IonRefresher) ionRefresher: IonRefresher;
 
-  get noMoreItems(): boolean {
-    return this._noMoreItems;
+  private _endListReached = false;
+  private _listIsScrollable = false;
+  private _prevItemCount = 0;
+
+  constructor(
+    @Host() @SkipSelf() @Optional()
+    public ionContent: IonContent,
+    private _unwrapHostService: UnwrapHostService,
+  ) {}
+
+  get endListReached(): boolean {
+    return this._endListReached;
   }
 
-  get page(): number {
-    return this._page;
+  get listIsScrollable(): boolean {
+    return this._listIsScrollable;
   }
 
-  /**
-   * Handles an ionRefresh event by refreshing the Donation Hub List items.
-   * @param event The ionRefresh event.
-   */
-  handleIonRefresh(event: any): void {
-    if (!this.refreshDisabled) {
-      this._page = 1;
-      this.refresh.emit({
-        complete: () => {
-          this._itemCount = 0;
-          this._noMoreItems = false;
-          return this._complete(event);
-        }
-      });
-    }
+  ngOnInit(): void {
+    this._unwrapHostService.unwrap();
   }
 
   /**
-   * Handles an ionInfinite event by loading the next segment of Donation Hub List items.
+   * Handles an `ionInfinite` event by loading the next segment of list items.
    * @param event The ionInfinite event.
    */
-  handleIonInfinite(event: any): void {
-    if (!this.loadMoreDisabled) {
-      this.loadMore.emit({
-        complete: () => this._complete(event),
-        page: ++this._page
-      });
-    }
+  _handleIonInfinite(event: any): void {
+    ++this.page;
+    event = this._handleAllIonEvents(event);
+    this.loadMore.emit(event);
   }
 
-  private _complete(event: any): Promise<void> {
-    if (this.virtualScroll) {
-      this.virtualScroll.checkEnd();
-      setTimeout(() => {
-        this._noMoreItems = (this._itemCount === this.virtualScroll.items?.length)
-                         || (this._itemCount % this.pageSize !== 0);
-        this._itemCount = this.virtualScroll.items?.length;
-      });
-    }
-    return event.target.complete();
+  /**
+   * Handles an `ionRefresh` event by refreshing the list items.
+   * @param event The ionRefresh event.
+   */
+  _handleIonRefresh(event: any): void {
+    this.page = 1;
+    this.itemCount = 0;
+    this._prevItemCount = 0;
+    this._endListReached = false;
+    event = this._handleAllIonEvents(event);
+    this.refresh.emit(event);
+  }
+
+  private _handleAllIonEvents(event: any): any {
+    const eventOverload: any = Object.assign({}, event, {
+      page: this.page
+    });
+    eventOverload.target = Object.assign({}, event.target, {
+      complete: () => {
+        this._onIonEventComplete();
+        return event.target.complete();
+      }
+    });
+    return eventOverload;
+  }
+
+  private _onIonEventComplete(): void {
+    setTimeout(() => { // setTimeout: Ensure all updates have occurred to ion-virtual-scroll first.
+      let approxItemHeight = 50;
+
+      // update metrics based off of transcluded IonVirtualScroll ContentChild.
+      if (this.ionVirtualScroll) {
+        this.ionVirtualScroll.checkEnd(); // Smoothly renders any elements added in place to the virtual scroll list.
+        this.itemCount = this.ionVirtualScroll?.items?.length;
+        approxItemHeight = this.ionVirtualScroll.approxItemHeight;
+      }
+
+      // Determine if the end of the list has been reached, and if IonInfiniteScroll should be disabled.
+      if (this.ionInfiniteScroll) {
+        this._endListReached = this._endListReached
+                            || (this.itemCount % this.pageSize !== 0)
+                            || (this.itemCount === this._prevItemCount);
+      }
+      this._prevItemCount = this.itemCount;
+
+      // Estimate whether or not list is scrollable based on itemCount and window height.
+      this._listIsScrollable = (this.itemCount * approxItemHeight) > window.innerHeight;
+    });
   }
 }

@@ -1,4 +1,4 @@
-<div [formGroup]="formGroup" *ngIf="editable | toBoolean; else readonlyTimeRange" class="time-range-form">
+<div [formGroup]="timeRangeForm" *ngIf="editable | toBoolean; else readonlyTimeRange" class="time-range-form">
   <div class="row">
     <div class="time-field" [style.width]="timeWidth" [ngClass]="{ 'col-6': labelPosition !== 'fixed' }">
       <foodweb-hybrid-time
@@ -27,8 +27,8 @@
       </foodweb-hybrid-time>
     </div>
   </div>
-  <div *ngIf="formGroup.hasError('timeRangeOrder')" class="range-order-err ion-form-error">
-    {{ formGroup.getError('timeRangeOrder') }}
+  <div *ngIf="timeRangeForm.hasError('timeRangeOrder')" class="range-order-err ion-form-error">
+    {{ timeRangeForm.getError('timeRangeOrder') }}
   </div>
 </div>
 

@@ -3,16 +3,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DonationHubPledge } from '~shared';
 import { DonationHubPledgeForm } from '~web/donation-hub/forms/donation-hub-pledge.form';
 import { DonationHubPledgeCreateService } from '~web/donation-hub/services/donation-hub-pledge-create/donation-hub-pledge-create.service';
-import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
 @Component({
   selector: 'foodweb-donation-hub-pledge-create',
   templateUrl: './donation-hub-pledge-create.component.html',
   styleUrls: ['./donation-hub-pledge-create.component.scss'],
-  providers: formProvider(DonationHubPledgeCreateComponent)
+  providers: [FormFieldService]
 })
-export class DonationHubPledgeCreateComponent extends FormBaseComponent<DonationHubPledgeForm> implements OnInit {
+export class DonationHubPledgeCreateComponent implements OnInit {
 
   readonly postCreateRoute: string[] = ['/', 'donation-hub', 'pledge'];
 
@@ -24,23 +24,28 @@ export class DonationHubPledgeCreateComponent extends FormBaseComponent<Donation
   ];
 
   constructor(
-    formHelperService: FormHelperService,
     public pageTitleService: PageTitleService,
     private _activatedRoute: ActivatedRoute,
+    private _formFieldService: FormFieldService<DonationHubPledgeForm>,
     private _pledgeCreateService: DonationHubPledgeCreateService,
     private _router: Router
-  ) {
-    super(() => new DonationHubPledgeForm(), formHelperService, true);
+  ) {}
+
+  get pledgeForm(): DonationHubPledgeForm {
+    return this._formFieldService.control;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this._formFieldService.injectControl({ genDefault: () => new DonationHubPledgeForm() });
+
     this.pageTitleService.title = 'Pledge Donation';
   }
 
   donate(): void {
-    if (this.formGroup.checkValidity()) {
+    this.pledgeForm.markAllAsTouched();
+    if (this.pledgeForm.valid) {
       const donationHubId: number = parseInt(this._activatedRoute.snapshot.paramMap.get('id'), 10);
-      this._pledgeCreateService.createDonationPledge(this.formGroup.value, donationHubId).subscribe(
+      this._pledgeCreateService.createDonationPledge(this.pledgeForm.value, donationHubId).subscribe(
         (pledge: DonationHubPledge) => this._router.navigate(this.postCreateRoute.concat(`${pledge.id}`))
       );
     }

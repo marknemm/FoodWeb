@@ -9,8 +9,7 @@
       [disabled]="!editable && (accountCategory !== selAccountCategory)"
       [class]="accountCategory | lowercase"
       [ngClass]="{ selected: (accountCategory === selAccountCategory) }"
-      (click)="accountCategoryClick(accountCategory)"
-      (blur)="onTouchedCb()">
+      (click)="accountCategoryClick(accountCategory)">
       <ion-card>
         <ion-card-title>
           <ion-toolbar [color]="accountCategory | lowercase">{{ accountCategory }}</ion-toolbar >
@@ -36,8 +35,7 @@
       [disabled]="!editable && (accountType !== selAccountType)"
       [class]="accountType | lowercase"
       [ngClass]="{ selected: (accountType === selAccountType) }"
-      (click)="accountTypeClick(accountType)"
-      (blur)="onTouchedCb()">
+      (click)="accountTypeClick(accountType)">
       <ion-card>
         <ion-card-title>
           <ion-toolbar [color]="accountType | lowercase">{{ accountType }}</ion-toolbar >

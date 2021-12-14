@@ -7,6 +7,7 @@ import { LastSeenNotificationUpdateRequest, ListResponse, Notification, Notifica
 import { environment } from '~web-env/environment';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
+import { ReadService } from '~web/shared/interfaces/read-service';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 import { ServerSentEventService } from '~web/shared/services/server-sent-event/server-sent-event.service';
 export { Notification };
@@ -14,7 +15,7 @@ export { Notification };
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationService {
+export class NotificationService implements ReadService {
 
   readonly defaultReadLimit = 25;
   readonly url = `${environment.server}/notification`;
@@ -65,12 +66,24 @@ export class NotificationService {
   }
 
   /**
+   * Gets a notification based off of a given notification ID.
+   * @param id The ID of the notification to retrieve.
+   * @return An observable that emits the retrieved notification from the server.
+   */
+  getOne(id: number): Observable<Notification> {
+    const url = `${this.url}/${id}`;
+    return this._httpClient.get<Notification>(url, { withCredentials: true }).pipe(
+      this._httpResponseService.handleHttpResponse()
+    );
+  }
+
+  /**
    * Gets notifications using a given read request.
    * @param request The read request containing filters, pagination, and sorting data for the notifications to retrieve.
    * @param showPageProgressOnLoad Set to false if no page progress indicator should show on load; defaults to true.
    * @returns An observable that emits a notifications list response on successful retrieval.
    */
-  getNotifications(request: NotificationReadRequest, showPageProgressOnLoad = true): Observable<ListResponse<Notification>> {
+  getMany(request: NotificationReadRequest, showPageProgressOnLoad = true): Observable<ListResponse<Notification>> {
     // Set defaults for pagination.
     request.page = (request.page >= 1 ? request.page : 1);
     request.limit = (request.limit >= 0 ? request.limit : this.defaultReadLimit);

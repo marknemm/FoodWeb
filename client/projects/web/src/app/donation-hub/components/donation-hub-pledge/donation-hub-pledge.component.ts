@@ -23,7 +23,7 @@ export class DonationHubPledgeComponent implements OnInit, OnDestroy {
   protected _donationHubPledgeNotFound = false;
 
   constructor(
-    public pagetTitleService: PageTitleService,
+    public pageTitleService: PageTitleService,
     protected _activatedRoute: ActivatedRoute,
     protected _donationHubPledgeDeleteService: DonationHubPledgeDeleteService,
     protected _donationHubPledgeReadService: DonationHubPledgeReadService,
@@ -45,7 +45,7 @@ export class DonationHubPledgeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.pagetTitleService.title = 'Donation Pledge';
+    this.pageTitleService.title = 'Donation Pledge';
     this._listenDonationHubPledgeChange();
   }
 

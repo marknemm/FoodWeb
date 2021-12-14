@@ -5,7 +5,7 @@ export class ValidationHelper {
 
   /**
    * Performs a given list of validation queries on the top level properties of a given object.
-   * @param obj The object that will have validaiton done on its top level properties.
+   * @param obj The object that will have validation done on its top level properties.
    * @param validationQueries The list of validation queries which specify required and/or regex validation that should be
    * performed on specified top level properties of the obj argument. If a property name is only provided in place of a validation
    * query, then it is assumed that the property is required.
@@ -20,7 +20,7 @@ export class ValidationHelper {
         validationQuery.required = validationQuery.required || (!validationQuery.regex && validationQuery.required === undefined);
 
         const requireErrMsg: string = this._testRequiredValidation(validationQuery, value);
-        const regexErrMsg: string = this._testRegexValidation(validationQuery, value);
+        const regexErrMsg: string = this._testRegexValidation(validationQuery, `${value}`);
         if (requireErrMsg || regexErrMsg) {
           return (requireErrMsg || regexErrMsg);
         }
@@ -30,7 +30,7 @@ export class ValidationHelper {
   }
 
   /**
-   * Converts a given raw validaiton query into a validation query.
+   * Converts a given raw validation query into a validation query.
    * @param rawValidationQuery The raw validation query consisting either of the property to perform required validation on or
    * an actual validation query.
    * @return A validation query.
@@ -42,7 +42,7 @@ export class ValidationHelper {
   }
 
   /**
-   * Tests requried validation on a given value according to a given validation query.
+   * Tests required validation on a given value according to a given validation query.
    * @param validationQuery The validation query.
    * @param value The value that is to be tested.
    * @return The required validation error message if value is empty. Otherwise an empty string.
@@ -55,13 +55,13 @@ export class ValidationHelper {
   }
 
   /**
-   * Tests regex validaiton on a given value according to a given validation query.
+   * Tests regex validation on a given value according to a given validation query.
    * @param validationQuery The validation query.
    * @param value The value that is to be tested.
-   * @reutrn The regex validation error message if value does not match the validation query's regex pattern. Otherwise an empty string.
+   * @return The regex validation error message if value does not match the validation query's regex pattern. Otherwise an empty string.
    */
-  private _testRegexValidation<T>(validationQuery: ValidationQuery<T>, value: any): string {
-    if (validationQuery.regex && (typeof value !== 'string' || !validationQuery.regex.test(value))) {
+  private _testRegexValidation<T>(validationQuery: ValidationQuery<T>, value: string): string {
+    if (validationQuery.regex && !validationQuery.regex.test(value)) {
       return (validationQuery.regexErrMsg || validationQuery.errMsg || `Invalid ${this._getErrPropName(validationQuery)}`);
     }
   }
@@ -84,7 +84,7 @@ export class ValidationHelper {
  */
 export interface ValidationQuery<T, K = Extract<keyof T, string>> {
   /**
-   * The top-level entity or object propety that is to be validated.
+   * The top-level entity or object property that is to be validated.
    */
   prop: K;
   /**
@@ -105,7 +105,7 @@ export interface ValidationQuery<T, K = Extract<keyof T, string>> {
    */
   errMsg?: string;
   /**
-   * The optional error message that is presented upon requried validation failure. Takes precedence over errMsg.
+   * The optional error message that is presented upon required validation failure. Takes precedence over errMsg.
    */
   requiredErrMsg?: string;
   /**

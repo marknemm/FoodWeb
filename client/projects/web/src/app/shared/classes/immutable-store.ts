@@ -44,7 +44,7 @@ export class ImmutableStore<T> {
   }
 
   /**
-   * An obervable that emits the next update only, and then completes.
+   * An observable that emits the next update only, and then completes.
    */
   get nextUpdate$(): Observable<DeepReadonly<T>> {
     return this._value$.asObservable().pipe(skip(1), take(1));
@@ -69,8 +69,8 @@ export class ImmutableStore<T> {
   }
 
   /**
-   * Retrieves an oversable which emits a reference to the store's mutable value.
-   * @param cloneLevel An optional falg used to determine the level of cloning that should occur before emitting the value.
+   * Retrieves an observable which emits a reference to the store's mutable value.
+   * @param cloneLevel An optional flag used to determine the level of cloning that should occur before emitting the value.
    * Defaults to CloneLevel.None.
    * @return An observable that emits the store's current mutable value, and any updates to it.
    */

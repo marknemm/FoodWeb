@@ -1,4 +1,4 @@
-<form [formGroup]="formGroup" class="donation-hub-donate-form page" (submit)="donate()">
+<form [formGroup]="pledgeForm" class="donation-hub-donate-form page" (submit)="donate()">
 
   <div class="page-title">
     {{ pageTitleService.title }}
@@ -10,7 +10,7 @@
     </mat-card-title>
 
     <mat-card-content>
-      <foodweb-donation-hub-pledge-form [formGroup]="formGroup"></foodweb-donation-hub-pledge-form>
+      <foodweb-donation-hub-pledge-form [formGroup]="pledgeForm"></foodweb-donation-hub-pledge-form>
     </mat-card-content>
   </mat-card>
 

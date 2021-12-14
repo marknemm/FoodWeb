@@ -31,7 +31,8 @@ export class EventFormComponent implements OnInit, OnChanges {
   }
 
   onSubmit(): void {
-    if (this.eventForm.checkValidity()) {
+    this.eventForm.markAllAsTouched();
+    if (this.eventForm.valid) {
       this.save.emit(this.eventForm.submitValue);
     }
   }

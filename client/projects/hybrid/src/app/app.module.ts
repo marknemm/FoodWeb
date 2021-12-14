@@ -17,6 +17,7 @@ import { EventModule } from '~web/event/event.module';
 import { HeuristicsModule } from '~web/heuristics/heuristics.module';
 import { HomeModule } from '~web/home/home.module';
 import { SessionMonitorService } from '~web/session/services/session-monitor/session-monitor.service';
+import { BootstrapModule } from './bootstrap/bootstrap.module';
 
 @NgModule({
   declarations: [
@@ -32,9 +33,10 @@ import { SessionMonitorService } from '~web/session/services/session-monitor/ses
     NgxMaterialTimepickerModule,
     AppRoutingModule,
     SharedModule.forRoot(),
-    ShellModule,
     AlertModule.forRoot(),
+    BootstrapModule.forRoot(),
     SessionModule.forRoot(),
+    ShellModule,
     HomeModule,
     EventModule,
     HeuristicsModule

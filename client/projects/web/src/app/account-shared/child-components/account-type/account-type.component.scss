@@ -7,7 +7,7 @@
 
   &.edit {
     .selected {
-      @media only screen and (min-width: $sm + 1px) {
+      @media only screen and (min-width: ($sm + 1px)) {
         .mat-card {
           min-width: 155px;
           height: 155px;

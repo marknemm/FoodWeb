@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
-import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { PasswordForm } from '~web/password/forms/password.form';
 import { SessionService } from '~web/session/services/session/session.service';
 
@@ -8,26 +8,31 @@ import { SessionService } from '~web/session/services/session/session.service';
   selector: 'foodweb-hybrid-password-settings',
   templateUrl: './password-settings.component.html',
   styleUrls: ['./password-settings.component.scss'],
-  providers: formProvider(PasswordSettingsComponent)
+  providers: [FormFieldService]
 })
-export class PasswordSettingsComponent extends FormBaseComponent<PasswordForm> {
+export class PasswordSettingsComponent {
 
   constructor(
     private _accountSaveService: AccountSaveService,
+    private _formFieldService: FormFieldService<PasswordForm>,
     private _sessionService: SessionService,
-    formHelperService: FormHelperService,
   ) {
-    super(() => new PasswordForm({ formMode: 'Account' }), formHelperService, true);
+    this._formFieldService.registerControl(new PasswordForm({ formMode: 'Account' }));
+  }
+
+  get passwordForm(): PasswordForm {
+    return this._formFieldService.control;
   }
 
   /**
    * Saves the password settings.
    */
-   save(): void {
-    if (this.formGroup.get('password').checkValidity()) {
+  save(): void {
+    this.passwordForm.get('password').markAllAsTouched();
+    if (this.passwordForm.get('password').valid) {
       this._accountSaveService.updatePassword(
         this._sessionService.account,
-        this.formGroup.value
+        this.passwordForm.value
       ).subscribe();
     }
   }
