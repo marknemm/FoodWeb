@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { ReceiverComponent as WebReceiverComponent } from '~web/account-shared/child-components/receiver/receiver.component';
-import { formProvider } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 
 @Component({
   selector: 'foodweb-hybrid-receiver',
   templateUrl: './receiver.component.html',
   styleUrls: ['./receiver.component.scss'],
-  providers: formProvider(ReceiverComponent)
+  providers: [FormFieldService]
 })
 export class ReceiverComponent extends WebReceiverComponent {}

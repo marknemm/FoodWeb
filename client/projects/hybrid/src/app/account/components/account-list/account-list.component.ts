@@ -1,33 +1,36 @@
 import { Component } from '@angular/core';
-import { Account, AccountReadRequest } from '~shared';
-import { AccountListComponent as WebAccountListComponent } from '~web/account/components/account-list/account-list.component';
-import { ListResponse } from '~shared';
-import { Observable } from 'rxjs';
+import { Account } from '~shared';
+import { AccountFiltersForm } from '~web/account/forms/account-filters.form';
+import { AccountListLabelService } from '~web/account/services/account-list-label/account-list-label.service';
+import { AccountReadService } from '~web/account/services/account-read/account-read.service';
+import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 
 @Component({
   selector: 'foodweb-hybrid-account-list',
   templateUrl: './account-list.component.html',
-  styleUrls: ['./account-list.component.scss']
+  styleUrls: ['./account-list.component.scss'],
+  providers: [AccountListLabelService, ListQueryService]
 })
-export class AccountListComponent extends WebAccountListComponent {
+export class AccountListComponent {
+
+  readonly filtersForm = new AccountFiltersForm();
+
+  constructor(
+    public accountListLabelService: AccountListLabelService,
+    public listQueryService: ListQueryService<Account>,
+    private _accountReadService: AccountReadService,
+  ) {}
+
+  ionViewWillEnter(): void {
+    this.listQueryService.load(this._accountReadService, this.filtersForm);
+  }
 
   /**
    * Handles an ionInfinite event by loading the next segment of Donation Hub List items.
    * @param event The ionInfinite event.
    */
   handleLoadMore(event: any): void {
-    this.filtersForm.page = event.page;
-    this._accountReadService.getAccounts(this.filtersForm.toAccountReadRequest()).subscribe(
-      (response: ListResponse<Account>) => {
-        if (response?.list) {
-          for (const account of response.list) {
-            this._accounts.push(account); // Must iteratively add in-place so no blink in ion-virtual-scroll.
-          }
-          this._totalCount = response.totalCount;
-        }
-        event.target.complete();
-      }
-    );
+    this.listQueryService.loadMore().subscribe(() => event.target.complete());
   }
 
   /**
@@ -35,11 +38,6 @@ export class AccountListComponent extends WebAccountListComponent {
    * @param event The ionRefresh event.
    */
   handleRefresh(event: any): void {
-    this.refresh().subscribe(() => event.target.complete());
-  }
-
-  refresh(request?: AccountReadRequest): Observable<Account[]> {
-    this.filtersForm.page = 1;
-    return super.refresh(request);
+    this.listQueryService.refresh(false).subscribe(() => event.target.complete());
   }
 }

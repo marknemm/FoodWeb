@@ -1,4 +1,4 @@
-<div [formGroup]="formGroup" *ngIf="editable; else readonlyDateTimeRange" class="date-time-range-form row">
+<div [formGroup]="dateTimeRangeForm" *ngIf="editable; else readonlyDateTimeRange" class="date-time-range-form row">
   <div class="date-time-field col-sm-12">
     <foodweb-hybrid-date-time #startDateTime
       formControlName="startDateTime"
@@ -9,8 +9,8 @@
       [labelPosition]="labelPosition"
       [minDate]="minDate"
       [maxDate]="maxDate"
-      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
-      (ngModelChange)="formGroup.fillMissingRangePart()">
+      [errorStateMatcher]="dateTimeRangeForm.rangeErrStateMatcher"
+      (ngModelChange)="dateTimeRangeForm.fillMissingRangePart()">
     </foodweb-hybrid-date-time>
   </div>
   <div class="date-time-field col-sm-12">
@@ -23,17 +23,17 @@
       [labelPosition]="labelPosition"
       [minDate]="minDate"
       [maxDate]="maxDate"
-      [errorStateMatcher]="formGroup.rangeErrStateMatcher"
-      (ngModelChange)="formGroup.fillMissingRangePart()">
+      [errorStateMatcher]="dateTimeRangeForm.rangeErrStateMatcher"
+      (ngModelChange)="dateTimeRangeForm.fillMissingRangePart()">
     </foodweb-hybrid-date-time>
-    <div *ngIf="formGroup.hasError('dateTimeRangeOrder')" class="range-order-err ion-form-error">
+    <div *ngIf="dateTimeRangeForm.hasError('dateTimeRangeOrder')" class="range-order-err ion-form-error">
       End date-time must be later than start date-time
     </div>
   </div>
 
   <!-- If configured to show a date time range radio dialog, then include the intercept overlay here for showing dialog. -->
   <div
-    *ngIf="dateTimeRangeRadioConfig && this.formGroup.enabled"
+    *ngIf="dateTimeRangeRadioConfig && this.dateTimeRangeForm.enabled"
     class="date-time-range-radio-intercept"
     (click)="openDateTimeRangeDialog($event)"
   ></div>
@@ -44,13 +44,13 @@
     <foodweb-hybrid-date-time
       [boldTime]="boldTime"
       [editable]="false"
-      [excludeTimeDisplay]="formGroup.startEndDateSame"
+      [excludeTimeDisplay]="dateTimeRangeForm.startEndDateSame"
       [value]="value.startDateTime">
     </foodweb-hybrid-date-time>
     <!-- For no display of end date due to same begin and end date, make sure we group times together so they end up on same line if line break occurs. -->
     <span class="d-inline-block">
       <foodweb-hybrid-date-time
-        *ngIf="formGroup.startEndDateSame"
+        *ngIf="dateTimeRangeForm.startEndDateSame"
         [boldTime]="boldTime"
         [editable]="false"
         [excludeDateDisplay]="true"
@@ -60,7 +60,7 @@
       <foodweb-hybrid-date-time
         [boldTime]="boldTime"
         [editable]="false"
-        [excludeDateDisplay]="formGroup.startEndDateSame"
+        [excludeDateDisplay]="dateTimeRangeForm.startEndDateSame"
         [value]="value.endDateTime">
       </foodweb-hybrid-date-time>
     </span>

@@ -5,7 +5,7 @@ import { Account, AccountHelper, AccountType, DonationReadRequest } from '~share
 import { AccountForm } from '~web/account-shared/forms/account.form';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
-import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { PasswordFormT } from '~web/password/forms/password.form';
 import { SessionService } from '~web/session/services/session/session.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
@@ -15,9 +15,9 @@ import { SignupVerificationService } from '~web/signup/services/signup-verificat
   selector: 'foodweb-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
-  providers: formProvider(AccountComponent)
+  providers: [FormFieldService]
 })
-export class AccountComponent extends FormBaseComponent<AccountForm> implements OnInit {
+export class AccountComponent implements OnInit {
 
   readonly AccountType = AccountType;
   readonly contactInfoFields = ['contactInfo.email', 'contactInfo.phoneNumber', 'contactInfo.streetAddress',
@@ -37,12 +37,15 @@ export class AccountComponent extends FormBaseComponent<AccountForm> implements 
     protected _accountReadService: AccountReadService,
     protected _accountSaveService: AccountSaveService,
     protected _activatedRoute: ActivatedRoute,
+    protected _formFieldService: FormFieldService<AccountForm>,
     protected _router: Router,
     protected _urlQueryService: UrlQueryService,
-    formHelperService: FormHelperService
   ) {
-    super(() => new AccountForm({ formMode: 'Account' }), formHelperService, true);
     this.savePassword = this.savePassword.bind(this);
+  }
+
+  get accountForm(): AccountForm {
+    return this._formFieldService.control;
   }
 
   get originalAccount(): Account {
@@ -50,7 +53,7 @@ export class AccountComponent extends FormBaseComponent<AccountForm> implements 
   }
 
   get accountType(): AccountType {
-    return this.formGroup.get('accountType').value;
+    return this.accountForm.get('accountType').value;
   }
 
   get accountNotFound(): boolean {
@@ -72,6 +75,10 @@ export class AccountComponent extends FormBaseComponent<AccountForm> implements 
   }
 
   ngOnInit(): void {
+    this._formFieldService.injectControl({
+      genDefault: () => new AccountForm({ formMode: 'Account' })
+    });
+
     (this._router.url.indexOf('/my') >= 0)
       ? this._handleAccountChange(this.sessionService.account)
       : this._listenAccountChange();
@@ -79,20 +86,20 @@ export class AccountComponent extends FormBaseComponent<AccountForm> implements 
 
   private _listenAccountChange(): void {
     this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
-      switchMap((id: number) => this._accountReadService.getAccount(id))
+      switchMap((id: number) => this._accountReadService.getOne(id))
     ).subscribe((account: Account) => this._handleAccountChange(account));
   }
 
   private _handleAccountChange(account: Account): void {
     this._hasAccountOwnership = false;
-      this._accountNotFound = !account;
-      if (!this._accountNotFound) {
-        this._originalAccount = account;
-        this._hasAccountOwnership = this.sessionService.hasAccountOwnership(account.id);
-        this._seeDonationsLinkParams = this._genSeeDonationLinkParams(account);
-        this.formGroup.patchValue(account);
-      }
-      this._renavigateToAccountPage();
+    this._accountNotFound = !account;
+    if (!this._accountNotFound) {
+      this._originalAccount = account;
+      this._hasAccountOwnership = this.sessionService.hasAccountOwnership(account.id);
+      this._seeDonationsLinkParams = this._genSeeDonationLinkParams(account);
+      this.accountForm.patchValue(account);
+    }
+    this._renavigateToAccountPage();
   }
 
   private _genSeeDonationLinkParams(account: Account): DonationReadRequest {
@@ -120,17 +127,17 @@ export class AccountComponent extends FormBaseComponent<AccountForm> implements 
   }
 
   saveAccountFields(fields: string[], successCb: () => void): void {
-    const account: Account = this.formGroup.toAccount();
+    const account: Account = this.accountForm.toAccount();
     this._accountSaveService.updateAccountFields(this.originalAccount, account, fields).subscribe(
       (savedAccount: Account) => this._handleSaveSuccess(savedAccount, fields, successCb)
     );
   }
 
   savePassword(successCb: () => void): void {
-    const passwordUpdate: PasswordFormT = this.formGroup.passwordFormValue;
+    const passwordUpdate: PasswordFormT = this.accountForm.passwordFormValue;
     this._accountSaveService.updatePassword(this._originalAccount, passwordUpdate).subscribe(
       () => {
-        this.formGroup.get('password').setValue({ password: '', oldPassword: '', confirmPassword: '' });
+        this.accountForm.get('password').setValue({ password: '', oldPassword: '', confirmPassword: '' });
         this._handleSaveSuccess(this.originalAccount, [], successCb);
       }
     );
@@ -139,7 +146,7 @@ export class AccountComponent extends FormBaseComponent<AccountForm> implements 
   private _handleSaveSuccess(savedAccount: Account, fields: string[], successCb: () => void): void {
     this._originalAccount = savedAccount;
     // Write saved values back to the account update form group (server may have modified or filled some values).
-    this.formGroup.patchValue(
+    this.accountForm.patchValue(
       this._accountSaveService.mergeAccountUpdateFields(savedAccount, {}, fields)
     );
     successCb();

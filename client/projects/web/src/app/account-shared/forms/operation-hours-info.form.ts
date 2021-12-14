@@ -46,8 +46,8 @@ export class OperationHoursInfoForm extends TFormGroup<OperationHoursInfo> {
     super.patchValue(opHoursInfo);
   }
 
-  setValue(value: Partial<OperationHoursInfo | OperationHours[]>): void {
-    const opHoursInfo: Partial<OperationHoursInfo> = this._operationHoursToInfo(value);
+  setValue(value: OperationHoursInfo | OperationHours[]): void {
+    const opHoursInfo: OperationHoursInfo = this._operationHoursToInfo(value) as OperationHoursInfo;
     this._fillLimitOperationHours(opHoursInfo);
     super.setValue(opHoursInfo);
   }
@@ -72,9 +72,9 @@ export class OperationHoursInfoForm extends TFormGroup<OperationHoursInfo> {
   }
 
   private _operationHoursToInfo(value: Partial<OperationHoursInfo | OperationHours[]>): Partial<OperationHoursInfo> {
-    if (value instanceof Array) {
+    if (!(value as OperationHoursInfo)?.limitOperationHours) {
       const opHoursInfo: Partial<OperationHoursInfo> = {
-        limitOperationHours: (value.length > 0),
+        limitOperationHours: false,
         Sunday: [],
         Monday: [],
         Tuesday: [],
@@ -84,8 +84,11 @@ export class OperationHoursInfoForm extends TFormGroup<OperationHoursInfo> {
         Saturday: []
       };
 
-      for (const opHours of value) {
-        opHoursInfo[opHours.weekday].push(opHours);
+      if (value instanceof Array) {
+        for (const opHours of value) {
+          opHoursInfo[opHours.weekday].push(opHours);
+        }
+        opHoursInfo.limitOperationHours = (value.length > 0);
       }
 
       return opHoursInfo;

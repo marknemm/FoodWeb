@@ -19,12 +19,12 @@ ion-content {
     }
   }
 
-  &.notifications {
-    background-color: transparent;
-    min-height: 0;
-  }
-
   ion-virtual-scroll {
     border-top: none;
+  }
+
+  foodweb-hybrid-notification {
+    display: block;
+    min-height: 64px;
   }
 }

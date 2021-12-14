@@ -2,16 +2,16 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FloatLabelType } from '@angular/material/form-field';
 import { AccountAutocompleteItem, AccountHelper, AccountType, DeepReadonly } from '~shared';
 import { AccountAutocompleteService } from '~web/account-shared/services/account-autocomplete/account-autocomplete.service';
-import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
+import { FormFieldService, TFormControl } from '~web/forms';
 import { ImmutableStore } from '~web/shared/classes/immutable-store';
 
 @Component({
   selector: 'foodweb-account-select',
   templateUrl: './account-select.component.html',
   styleUrls: ['./account-select.component.scss'],
-  providers: formProvider(AccountSelectComponent).concat([AccountAutocompleteService])
+  providers: [FormFieldService, AccountAutocompleteService]
 })
-export class AccountSelectComponent extends FormBaseComponent<AccountAutocompleteItem> implements OnInit {
+export class AccountSelectComponent implements OnInit {
 
   @Input() accountType: AccountType;
   @Input() filterPlaceholder = 'Search Accounts...';
@@ -23,10 +23,8 @@ export class AccountSelectComponent extends FormBaseComponent<AccountAutocomplet
   constructor(
     public accountHelper: AccountHelper,
     public accountAutocompleteService: AccountAutocompleteService,
-    formHelperService: FormHelperService
-  ) {
-    super(() => new TFormControl<AccountAutocompleteItem>(), formHelperService);
-  }
+    private _formFieldService: FormFieldService<AccountAutocompleteItem>
+  ) {}
 
   /**
    * The account autocomplete store which contains account data for the select options.
@@ -35,7 +33,14 @@ export class AccountSelectComponent extends FormBaseComponent<AccountAutocomplet
     return this.accountAutocompleteService.accountAutocompleteStore;
   }
 
+  get formControl(): TFormControl<AccountAutocompleteItem> {
+    return this._formFieldService.control;
+  }
+
   ngOnInit() {
+    this._formFieldService.injectControl({
+      genDefault: () => new TFormControl<AccountAutocompleteItem>()
+    });
     this.syncFilterStr();
   }
 

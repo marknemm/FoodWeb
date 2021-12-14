@@ -26,13 +26,20 @@ initMiddleware(app) // Initialize all app middleware that pre-processes requests
 
     // Public Resource Route Handler (for local image hosting).
     app.get('/public/*', (request: Request, response: Response) =>
-      response.sendFile(path.resolve(appPaths.rootDir + decodeURI(request.url)))
+      response.sendFile(path.join(appPaths.rootDir + decodeURI(request.url)))
     );
 
     // Food Web's Main Asset Files Such as Icon and Banner Images.
     app.get('/assets/*', (request: Request, response: Response) => {
       const assetFile: string = request.url.split('/assets/')[1];
-      response.sendFile(path.resolve(appPaths.assetsDir, assetFile));
+      response.sendFile(path.join(appPaths.assetsDir, assetFile));
+    });
+
+    app.get('/.wellknown/apple-app-site-association', (_: Request, response: Response) => {
+      response.sendFile(
+        path.join(appPaths.serverDir, '.wellknown', 'apple-app-site-association'),
+        { headers: { 'Content-Type': 'json' } }
+      );
     });
 
     // All Remaining Routes Handler (for serving our main web page).

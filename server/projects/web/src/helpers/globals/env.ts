@@ -1,5 +1,5 @@
-import * as admin from 'firebase-admin';
 import { appPaths } from './paths';
+import * as admin from 'firebase-admin';
 import dotenv = require('dotenv');
 import path = require('path');
 
@@ -32,8 +32,6 @@ export interface FoodWebEnv {
   DEVELOPMENT?: boolean;
   DIRECTIONS_API_KEY?: string;
   DISTANCE_TIME_API_KEY?: string;
-  FCM_SENDER_ID?: string;
-  FCM_SERVER_KEY?: string;
   FIREBASE_SERVICE_ACCOUNT?: admin.ServiceAccount;
   GEOCODER_API_KEY?: string;
   GEOCODER_FORMATTER_PATTERN?: string;
@@ -82,12 +80,8 @@ export interface FoodWebEnv {
  * @return The initialized FoodWeb environment variable set.
  */
 function initEnv(envDir?: string): FoodWebEnv {
-  // Check if prod or QA using raw environment variables since they have not been refined yet (happens below).
-  const PRODUCTION: boolean = (process.env.PRODUCTION === 'true');
-  const QA: boolean = (process.env.QA === 'true');
-
   // If in a development environment, load environment variables from .env file.
-  if (!PRODUCTION && !QA) {
+  if (process.env.PRODUCTION !== 'true' && process.env.QA !== 'true') {
     (envDir)
       ? dotenv.config({ path: path.join(envDir, '.env') })
       : dotenv.config(); // Auto-lookup .env in current/parent directories.
@@ -138,12 +132,15 @@ function refineEnv(rawEnv): FoodWebEnv {
     ? (rawEnv.CORS_WHITELIST).trim().split(',')
     : [];
 
+  refinedEnv.COUNTRY = refinedEnv.COUNTRY ?? 'United States';
+
   refinedEnv.DATABASE_PORT = rawEnv.DATABASE_PORT ?? 5432;
 
   refinedEnv.DEVELOPMENT = refinedEnv.DEVELOPMENT || (!refinedEnv.PRODUCTION && !refinedEnv.QA);
 
-  // The Firebase service account JSON object is base64 encoded in order to properly preserve special characters in private key.
-  refinedEnv.FIREBASE_SERVICE_ACCOUNT = JSON.parse(Buffer.from(refinedEnv.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('ascii'));
+  refinedEnv.FIREBASE_SERVICE_ACCOUNT = JSON.parse(
+    Buffer.from(refinedEnv.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf-8')
+  );
 
   refinedEnv.PORT = rawEnv.PORT ?? 0; // Allow SERVER_PORT to take effect if not supplied.
 

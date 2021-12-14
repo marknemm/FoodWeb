@@ -38,7 +38,7 @@ export class DonationHubComponent implements OnInit, OnDestroy {
   ) {}
 
   get canDonate(): boolean {
-    return (!this.canModify && !this.canViewPledge && this._sessionService.account?.accountType !== AccountType.Receiver);
+    return (!this.canViewPledge && this._sessionService.account?.accountType !== AccountType.Receiver);
   }
 
   get canModify(): boolean {
@@ -77,7 +77,7 @@ export class DonationHubComponent implements OnInit, OnDestroy {
     return this._pledges;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._listenAccountChange();
     this._listenDonationHubChange();
   }
@@ -129,7 +129,7 @@ export class DonationHubComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this._destroy$.next();
   }
 }

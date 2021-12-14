@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Account, SignupRequest } from '~shared';
 import { environment } from '~web-env/environment';
@@ -16,24 +17,41 @@ export class SignupService {
   readonly url = `${environment.server}/account`;
 
   constructor(
-    private _alertService: AlertService,
-    private _authService: AuthenticationService,
-    private _httpClient: HttpClient,
-    private _httpResponseService: HttpResponseService,
+    protected _alertService: AlertService,
+    protected _authService: AuthenticationService,
+    protected _httpClient: HttpClient,
+    protected _httpResponseService: HttpResponseService,
   ) {}
 
-  createAccount(accountForm: AccountForm, agreed: boolean): void {
+  /**
+   * Creates and saves a new user account with given user input signup data.
+   * @param accountForm The `AccountForm` containing user input signup data.
+   * @param agreed A flag determining if the user has agreed to signup terms and conditions.
+   * @param successMessage The optional success message to display to the users via alert snackbar.
+   * @return An observable that emits the created account upon success, null if signup agreement was not established.
+   */
+  createAccount(accountForm: AccountForm, agreed: boolean, successMessage = ''): Observable<Account> {
     if (agreed) {
-      const signupRequest: SignupRequest = {
-        account: accountForm.toAccount(),
-        password: accountForm.password
-      };
-      this._httpClient.post<Account>(this.url, signupRequest, { withCredentials: true }).pipe(
+      const signupRequest: SignupRequest = this._genSignupRequest(accountForm);
+      return this._httpClient.post<Account>(this.url, signupRequest, { withCredentials: true }).pipe(
+        this._httpResponseService.handleHttpResponse({ successMessage }),
         mergeMap(() => this._authService.login(signupRequest.account.username, signupRequest.password, true)),
-        this._httpResponseService.handleHttpResponse()
-      ).subscribe();
-    } else {
-      this._alertService.displayMessage('You must accept the terms and conditions to complete signup', 'warn');
+      );
     }
+
+    this._alertService.displayMessage('You must accept the terms and conditions to complete signup', 'warn');
+    return of(null);
+  }
+
+  /**
+   * Generates a `SignupRequest` with given user input signup data.
+   * @param accountForm The `AccountForm` containing user input signup data.
+   * @returns The generated signup request.
+   */
+  protected _genSignupRequest(accountForm: AccountForm): SignupRequest {
+    return {
+      account: accountForm.toAccount(),
+      password: accountForm.password
+    };
   }
 }

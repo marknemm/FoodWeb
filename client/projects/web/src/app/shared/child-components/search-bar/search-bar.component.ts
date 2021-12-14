@@ -1,23 +1,27 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
+import { FormFieldService, TFormControl } from '~web/forms';
 
 @Component({
   selector: 'foodweb-search-bar',
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.scss'],
-  providers: formProvider(SearchBarComponent)
+  providers: [FormFieldService]
 })
-export class SearchBarComponent extends FormBaseComponent<string> implements OnInit {
+export class SearchBarComponent implements OnInit {
 
   @Input() placeholder = 'Search...';
 
   @Output() search = new EventEmitter<string>();
 
   constructor(
-    formHelperService: FormHelperService
-  ) {
-    super(() => new TFormControl<string>(), formHelperService);
+    private _formFieldService: FormFieldService<string>
+  ) {}
+
+  get formControl(): TFormControl<string> {
+    return this._formFieldService.control;
   }
 
-  ngOnInit() {}
+  ngOnInit(): void {
+    this._formFieldService.injectControl();
+  }
 }

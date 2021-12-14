@@ -42,7 +42,7 @@ export class HttpResponseService {
    * An observable pipe that handles an HTTP response based on given options.
    * Some examples of the handling include:
    * - Triggering a blocking page progress indicator until a response is received.
-   * - Processing and displaying HTTP error responses via a non-blocking warnig alert.
+   * - Processing and displaying HTTP error responses via a non-blocking warning alert.
    * - Forwarding the response value to a configured immutable store (See ImmutableStore for more details).
    * - Displaying a configured non-blocking success alert message upon reception of a success response.
    * @param opts An optional set of HTTP response handler options. See HttpResponseHandlerOptions for default values.
@@ -53,9 +53,15 @@ export class HttpResponseService {
       opts = this._fillDefaultHttpHandlerOpts(opts, httpResponse$);
       this._setLoadingStatus(opts, true);
       return httpResponse$.pipe(
-        tap((response: T) => this._handleHttpSuccessResponse(response, opts)),
-        catchError((err: HttpErrorResponse) => this._handleHttpErrorResponse(err, opts)),
-        finalize(() => this._setLoadingStatus(opts, false))
+        tap((response: T) =>
+          this._handleHttpSuccessResponse(response, opts)
+        ),
+        catchError((err: HttpErrorResponse) =>
+          this._handleHttpErrorResponse(err, opts)
+        ),
+        finalize(() =>
+          this._setLoadingStatus(opts, false)
+        )
       );
     };
   }
@@ -80,7 +86,7 @@ export class HttpResponseService {
 
   /**
    * Sets the loading status for a given loadingId contained within HTTP response handler options.
-   * @param opts The HTTP response handler options which contian the `loadingId`.
+   * @param opts The HTTP response handler options which contain the `loadingId`.
    * @param loading The loading status that is to be set.
    */
   private _setLoadingStatus<T>(opts: HttpResponseHandlerOptions<T>, loading: boolean): void {
@@ -102,7 +108,7 @@ export class HttpResponseService {
   /**
    * Performs default handling of successful HTTP responses based off of a set of given HTTP response handler options.
    * @param response The HTTP response value.
-   * @param opts The HTTP response handler options which contian flags for handling successful responses.
+   * @param opts The HTTP response handler options which contain flags for handling successful responses.
    */
   private _handleHttpSuccessResponse<T>(response: T, opts: HttpResponseHandlerOptions<T>): void {
     // If an immutable store is configured, then set its state to the response data.
@@ -119,7 +125,7 @@ export class HttpResponseService {
   /**
    * Performs default handling of error HTTP responses based off of a set of given HTTP response handler options.
    * @param err The HTTP error response.
-   * @param opts The HTTP response handler options which contian flags for handling error responses.
+   * @param opts The HTTP response handler options which contain flags for handling error responses.
    */
   private _handleHttpErrorResponse<T>(err: HttpErrorResponse, opts: HttpResponseHandlerOptions<T>): ObservableInput<T> {
     // Re-throw the error if instructed not to perform default error response handling.

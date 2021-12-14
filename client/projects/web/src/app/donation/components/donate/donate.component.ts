@@ -36,7 +36,7 @@ export class DonateComponent implements OnInit {
     public sessionService: SessionService,
     protected _dateTimeService: DateTimeService,
     protected _donationSaveService: DonationSaveService,
-    protected _pageTitleService: PageTitleService
+    protected _pageTitleService: PageTitleService,
   ) {}
 
   ngOnInit() {
@@ -51,7 +51,8 @@ export class DonateComponent implements OnInit {
    * Submits the donation to be created on the server.
    */
   donate(): void {
-    if (this.formGroup.checkValidity()) {
+    this.formGroup.markAllAsTouched();
+    if (this.formGroup.valid) {
       const donationSaveData: DonationSaveData = this.formGroup.toDonationSaveData();
       this._donationSaveService.createDonation(donationSaveData).subscribe((savedDonation: Donation) => {
         this.savedDonation = savedDonation;

@@ -1,20 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AccountAutocompleteItem, AccountHelper, AccountType } from '~shared';
 import { AccountAutocompleteService } from '~web/account-shared/services/account-autocomplete/account-autocomplete.service';
-import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
+import { FormFieldService, TFormControl } from '~web/forms';
 import { ImmutableStore } from '~web/shared/classes/immutable-store';
 
 @Component({
   selector: 'foodweb-account-autocomplete',
   templateUrl: './account-autocomplete.component.html',
   styleUrls: ['./account-autocomplete.component.scss'],
-  providers: [
-    formProvider(AccountAutocompleteComponent),
-    AccountAutocompleteService,
-    FormHelperService
-  ]
+  providers: [AccountAutocompleteService, FormFieldService]
 })
-export class AccountAutocompleteComponent extends FormBaseComponent<string> {
+export class AccountAutocompleteComponent implements OnInit {
 
   @Input() accountType: AccountType;
   @Input() placeholder = 'Search Accounts...';
@@ -22,18 +18,21 @@ export class AccountAutocompleteComponent extends FormBaseComponent<string> {
   constructor(
     public accountHelper: AccountHelper,
     private _accountAutocompleteService: AccountAutocompleteService,
-    formHelperService: FormHelperService
-  ) {
-    super(() => new TFormControl<string>(), formHelperService);
-  }
+    private _formFieldService: FormFieldService<string>
+  ) {}
 
   get accountAutocompleteStore(): ImmutableStore<AccountAutocompleteItem[]> {
     return this._accountAutocompleteService.accountAutocompleteStore;
   }
 
-  onChange(accountName: string): void {
-    this._accountAutocompleteService.refreshAutocompleteItems(accountName, this.accountType);
-    this.onChangeCb(accountName);
+  get formControl(): TFormControl<string> {
+    return this._formFieldService.control;
+  }
+
+  ngOnInit(): void {
+    this._formFieldService.injectControl({
+      genDefault: () => new TFormControl<string>()
+    });
   }
 
 }

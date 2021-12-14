@@ -6,23 +6,18 @@ import { Observable } from 'rxjs';
  * @extends AbstractControl
  * @param T The type of the contained data.
  */
-export abstract class TAbstractControl<T> extends AbstractControl {
+export interface TAbstractControl<T> extends AbstractControl {
+
+  readonly status: ControlStatus | string;
+  readonly statusChanges: Observable<ControlStatus>;
 
   readonly value: T;
   readonly valueChanges: Observable<T>;
 
-  abstract checkValidity(): boolean;
-  abstract destroy(): void;
-  abstract setValue(value: Partial<T>, options?: UpdateValueOptions): void;
-  abstract patchValue(value: Partial<T>, options?: UpdateValueOptions): void;
-}
-
-// Enhance type declaration for AbstractControl.
-declare module '@angular/forms' {
-  interface AbstractControl {
-    checkValidity(): boolean;
-    destroy(): void;
-  }
+  get(path: (string | number)[] | string): AbstractControl | null;
+  setValue(value: T, options?: UpdateValueOptions): void;
+  patchValue(value: Partial<T>, options?: UpdateValueOptions): void;
+  reset(value?: FormState<T> | { [K in keyof T]?: FormState<T[K]> }, options?: UpdateValueOptions): void;
 }
 
 export interface UpdateValueOptions {
@@ -30,7 +25,9 @@ export interface UpdateValueOptions {
   emitEvent?: boolean;
 }
 
-export type FormState<T> = T | {
+export type FormState<T> = Partial<T> | {
   value: T;
   disabled: boolean;
 };
+
+export type ControlStatus = 'VALID' | 'INVALID' | 'PENDING' | 'DISABLED';

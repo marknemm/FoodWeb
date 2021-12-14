@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import { ListResponse } from '~shared';
-import { NotificationService, Notification } from '~web/notification/services/notification/notification.service';
+import { Notification, NotificationService } from '~web/notification/services/notification/notification.service';
 
 @Component({
   selector: 'foodweb-notifications-menu',
@@ -27,11 +27,10 @@ export class NotificationsMenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.notificationService.listenNewNotifications().pipe(
-      takeUntil(this._destroy$)
-    ).subscribe(() =>
-      this.notificationService.getNotifications({ limit: 10 }, false).subscribe(
-        (response: ListResponse<Notification>) => this._previewNotifications = response.list
-      )
+      takeUntil(this._destroy$),
+      switchMap(() => this.notificationService.getMany({ limit: 10 }, false))
+    ).subscribe(
+      (response: ListResponse<Notification>) => this._previewNotifications = response.list
     );
   }
 

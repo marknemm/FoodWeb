@@ -36,7 +36,7 @@
         [formGroup]="filtersForm"
         [omitSorting]="true"
         (clear)="filtersForm.resetFacetFilters({ resetAccountType: true })"
-        (filter)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
+        (filter)="updateFilterQueryParams(filtersForm.toReadRequest())"
       ></foodweb-admin-account-filters>
     </foodweb-list-filters>
   </mat-sidenav>

@@ -1,6 +1,6 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { AccountProfileImgPlaceholder } from '~shared';
-import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
+import { FormFieldService, TFormControl } from '~web/forms';
 import { SizeThresholds } from '~web/shared/interfaces/size-thresholds';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { ScreenSizeService } from '~web/shared/services/screen-size/screen-size.service';
@@ -9,12 +9,14 @@ import { ScreenSizeService } from '~web/shared/services/screen-size/screen-size.
   selector: 'foodweb-profile-img',
   templateUrl: './profile-img.component.html',
   styleUrls: ['./profile-img.component.scss'],
-  providers: formProvider(ProfileImgComponent)
+  providers: [FormFieldService]
 })
-export class ProfileImgComponent extends FormBaseComponent<string> implements OnInit {
+export class ProfileImgComponent implements OnInit {
 
-  // Default is 40 (px) b/c mat-card-avatar defaults to this size.
-  @Input() size: SizeThresholds | number = 40;
+  @Input() editable = false;
+  @Input() size: SizeThresholds | number = 40; // Default is 40 (px) b/c mat-card-avatar defaults to this size.
+  @Input() get value(): string      { return this._formFieldService.value; }
+           set value(value: string) { this._formFieldService.valueIn(value); }
 
   @HostBinding()
   readonly class = 'foodweb-profile-img';
@@ -27,10 +29,8 @@ export class ProfileImgComponent extends FormBaseComponent<string> implements On
   constructor(
     protected _constants: ConstantsService,
     protected _screenSizeService: ScreenSizeService,
-    formHelperService: FormHelperService
-  ) {
-    super(() => new TFormControl<string>(), formHelperService);
-  }
+    private _formFieldService: FormFieldService<string>
+  ) {}
 
   /**
    * The current size (diameter) of the profile image based on the current viewport size.
@@ -44,6 +44,10 @@ export class ProfileImgComponent extends FormBaseComponent<string> implements On
    */
   get fontSize(): number {
     return Math.floor(this.currentSize * this.fontSizeRatio);
+  }
+
+  get formControl(): TFormControl<string> {
+    return this._formFieldService.control;
   }
 
   /**
@@ -64,20 +68,22 @@ export class ProfileImgComponent extends FormBaseComponent<string> implements On
     return (!this.value || this.value.length <= 1);
   }
 
-  ngOnInit() {
-    this.monitorValue().subscribe((value: string) => {
+  ngOnInit(): void {
+    this._formFieldService.injectControl();
+
+    this._formFieldService.value$.subscribe((value: string) => {
       this._placeholder = (value?.length === 1)
         ? this._constants.ACCOUNT_PROFILE_IMG_PLACEHOLDERS[value.charAt(0)]
         : { backgroundColor: '', color: '', letter: '' };
     });
 
     this._currentSize = this._screenSizeService.getCurrentWidth(this.size);
-    this._screenSizeService.onResize(this._destroy$).subscribe(() =>
+    this._screenSizeService.onResize(this._formFieldService.destroy$).subscribe(() =>
       this._currentSize = this._screenSizeService.getCurrentWidth(this.size)
     );
   }
 
-  onSelectFile(event: HTMLInputEvent) {
+  onSelectFile(event: HTMLInputEvent): void {
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);

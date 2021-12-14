@@ -1,57 +1,65 @@
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { takeUntil } from 'rxjs/operators';
-import { FormBaseComponent, FormHelperService, formProvider, TFormControl } from '~web/forms';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Validators } from '@angular/forms';
+import { FormFieldService, TFormControl, TFormGroup } from '~web/forms';
 
 @Component({
   selector: 'foodweb-requirements-checklist',
   templateUrl: './requirements-checklist.component.html',
   styleUrls: ['./requirements-checklist.component.scss'],
-  providers: formProvider(RequirementsChecklistComponent)
+  providers: [FormFieldService]
 })
-export class RequirementsChecklistComponent extends FormBaseComponent<boolean> implements OnChanges, OnDestroy {
+export class RequirementsChecklistComponent implements OnChanges {
 
   @Input() checklistMembers: string[] = [];
   @Input() checkAll: string | false = 'Check all items';
-
-  checklistForm = new FormGroup({});
+  @Input() get value(): boolean        { return this._formFieldService.valueOut(); }
+           set value(checked: boolean) { this._formFieldService.valueIn(checked); }
 
   constructor(
-    formHelperService: FormHelperService
+    private _formFieldService: FormFieldService<TFormGroup<{ [key: string]: boolean }>, boolean>
   ) {
-    super(() => new TFormControl<boolean>(false), formHelperService);
+    this._formFieldService.registerControl(new TFormGroup<{ [key: string]: boolean }>({}), {
+      valueInConverter: (valueIn: boolean) => {
+        const value: { [key: string]: boolean } = this._formFieldService.value;
+        for (const key in value) {
+          value[key] = valueIn;
+        }
+        return value;
+      },
+      valueOutConverter: (value: { [key: string]: boolean }) => {
+        let valueOut = true;
+        for (const key in value) {
+          valueOut = (valueOut && value[key]);
+        }
+        return valueOut;
+      }
+    });
   }
 
-  get ngErrorClass(): any {
-    return { error: this.formControl.touched && this.checklistForm.invalid };
+  get checklistForm(): TFormGroup<{ [key: string]: boolean }> {
+    return this._formFieldService.control;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  get ngErrorClass(): { error: boolean } {
+    return { error: this._formFieldService.externalControl.touched && this.checklistForm.invalid };
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.checklistMembers) {
-      this.checklistForm = new FormGroup({});
+      for (const controlName in this.checklistForm.controls) {
+        this.checklistForm.removeControl(controlName);
+      }
       for (let i = 0; i < this.checklistMembers.length; i++) {
-        this.checklistForm.addControl(`check${i}`, new FormControl(false, Validators.requiredTrue));
+        this.checklistForm.addControl(`check${i}`, new TFormControl<boolean>(false, Validators.requiredTrue));
       }
     }
-    super.ngOnChanges(changes);
-  }
-
-  writeValue(value: boolean): void {
-    this.toggleSelectAll(value);
-    super.writeValue(value);
-  }
-
-  registerOnChange(cbFunction: (allChecked: boolean) => void): void {
-    this.checklistForm.statusChanges.pipe(
-      takeUntil(this._destroy$)
-    ).subscribe(() => cbFunction(this.checklistForm.valid));
   }
 
   toggleSelectAll(selectAll: boolean): void {
+    const value = {};
     for (const controlName in this.checklistForm.controls) {
-      if (this.checklistForm.controls.hasOwnProperty(controlName)) {
-        this.checklistForm.get(controlName).setValue(selectAll);
-      }
+      value[controlName] = selectAll;
     }
+    this.checklistForm.setValue(value);
   }
 }

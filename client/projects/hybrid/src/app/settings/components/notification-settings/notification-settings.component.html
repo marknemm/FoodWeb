@@ -1,14 +1,12 @@
-<ion-header>
-  <foodweb-hybrid-header defaultBackHref="..">
-    <ion-label>Notifications</ion-label>
-    <ion-buttons slot="end">
-      <ion-button fill="clear" color="primary" [disabled]="formGroup.pristine" (click)="save()">Save</ion-button>
-    </ion-buttons>
-  </foodweb-hybrid-header>
-</ion-header>
+<foodweb-hybrid-header defaultBackHref="..">
+  <ion-title>Notifications</ion-title>
+  <ion-buttons slot="end">
+    <ion-button fill="clear" color="primary" [disabled]="accountForm.pristine" (click)="save()">Save</ion-button>
+  </ion-buttons>
+</foodweb-hybrid-header>
 
 <ion-content>
-  <form class="notification-settings-container" [formGroup]="formGroup">
+  <form class="notification-settings-container" [formGroup]="accountForm">
     <div formGroupName="notificationSettings" class="notification-settings-form">
       <ion-list>
         <ion-item>

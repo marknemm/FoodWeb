@@ -1,4 +1,4 @@
-<div [formGroup]="formGroup" class="receiver-container">
+<div [formGroup]="receiverForm" class="receiver-container">
   <div *ngIf="editable" class="receiver-form row">
     <div class="col-md-12">
       <mat-slide-toggle formControlName="autoReceiver" class="auto-receiver fill">
@@ -9,7 +9,7 @@
 
   <div *ngIf="!editable" class="receiver-display row">
     <div class="col-sm-12">
-      <foodweb-yes-no [yes]="formGroup.get('autoReceiver').value">
+      <foodweb-yes-no [yes]="value.autoReceiver">
         Automatically Accept Donations:
       </foodweb-yes-no>
     </div>

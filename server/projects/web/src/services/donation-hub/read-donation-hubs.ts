@@ -1,6 +1,6 @@
 import { getRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { AccountEntity } from '~entity';
-import { addOrder, addPagination, addWhere, QueryMod } from '~orm';
+import { addPagination, addWhere, QueryMod } from '~orm';
 import { DateTimeHelper, DonationHubReadRequest, ListResponse } from '~shared';
 import { DonationHubEntity } from '~web/database/entity/donation-hub.entity';
 import { genListResponse, ListResponsePromise } from '~web/helpers/response/list-response';
@@ -36,7 +36,7 @@ export async function readMyDonationHubs(
 /**
  * Reads a list of donation hubs from the database.
  * @param request The request sent by the client specifying read filters & options.
- * @param account The optional accoun to of the current user.
+ * @param account The optional account to of the current user.
  * @return A promise that resolves to a `DonationHubEntity` list response.
  */
 export async function readDonationHubs(
@@ -71,6 +71,7 @@ function _buildQuery(
   account: AccountEntity
 ): SelectQueryBuilder<DonationHubEntity> {
   const queryBuilder: SelectQueryBuilder<DonationHubEntity> = repository.createQueryBuilder('donationHub');
+  queryBuilder.addSelect('CASE WHEN donationHub.dropOffWindowStart > CURRENT_TIMESTAMP THEN 0 ELSE 1 END', '_expired');
   _addRelations(queryBuilder, request);
   _addFilters(queryBuilder, request, account);
   _addSorting(queryBuilder, request);
@@ -94,8 +95,7 @@ function _addFilters(queryBuilder: SelectQueryBuilder<DonationHubEntity>, reques
   if (!request.id) {
     if (request.volunteerAccountId) {
       queryBuilder.andWhere('hubAccount.id = :hubAccountId', { hubAccountId: request.volunteerAccountId });
-    } else if (request.excludeMyHubs && account) {
-      queryBuilder.andWhere('hubAccount.id <> :hubAccountId', { hubAccountId: account.id });
+    } else if (request.excludePledgedHubs && account) {
       queryBuilder.andWhere('(pledgeAccount.id IS NULL OR pledgeAccount.id <> :pledgeAccountId)', { pledgeAccountId: account.id });
     }
 
@@ -104,18 +104,19 @@ function _addFilters(queryBuilder: SelectQueryBuilder<DonationHubEntity>, reques
       queryBuilder.andWhere('donationHub.dropOffWindowEnd >= :windowStart', { windowStart: request.dropOffWindowOverlapStart });
     } else if (!request.includeExpired) {
       // If looking for hubs to donate to, expired ones should not show up. Else, give 30 hr buffer show recent expired.
-      const expireHrBuffer: number = (request.excludeMyHubs ? 0 : 30);
+      const expireHrBuffer: number = (request.excludePledgedHubs ? 0 : 30);
       queryBuilder.andWhere('donationHub.dropOffWindowEnd >= :windowStart', {
         windowStart: _dateTimeHelper.addHours(new Date(), -expireHrBuffer)
       });
     }
 
     if (request.dropOffWindowOverlapEnd) {
-      queryBuilder.andWhere('donationHub.dropoffWindowStart <= :windowEnd', { windowEnd: request.dropOffWindowOverlapEnd });
+      queryBuilder.andWhere('donationHub.dropOffWindowStart <= :windowEnd', { windowEnd: request.dropOffWindowOverlapEnd });
     }
   }
 }
 
 function _addSorting(queryBuilder: SelectQueryBuilder<DonationHubEntity>, request: DonationHubReadRequest): void {
-  addOrder(queryBuilder, 'donationHub', request, 'dropOffWindowStart', 'ASC');
+  queryBuilder.addOrderBy('_expired', 'ASC');
+  queryBuilder.addOrderBy(`donationHub.${request.sortBy || 'dropOffWindowStart'}`, (request.sortOrder || 'ASC'));
 }

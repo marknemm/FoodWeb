@@ -1,9 +1,9 @@
 import { AccountReadRequest, AccountType, OperationHours } from '~shared';
 import { OperationHoursForm } from '~web/account-shared/forms/operation-hours.form';
-import { TFormGroup } from '~web/forms';
+import { ListFiltersForm } from '~web/shared/forms/list-filters.form';
 export { AccountReadRequest };
 
-export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
+export class AccountFiltersForm extends ListFiltersForm<AccountFiltersFormT> {
 
   constructor(filters?: Partial<AccountFiltersFormT>) {
     super({
@@ -56,7 +56,7 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
    * Converts the contained form value to a valid AccountReadRequest.
    * @return The converted AccountReadRequest.
    */
-  toAccountReadRequest(): AccountReadRequest {
+  toReadRequest(): AccountReadRequest {
     const value: AccountFiltersFormT = this.value;
     if (value.operationHours) {
       value.operationHoursWeekday = value.operationHours.weekday;
@@ -65,7 +65,7 @@ export class AccountFiltersForm extends TFormGroup<AccountFiltersFormT> {
       delete value.operationHours;
     }
     for (const prop in value) {
-      if (value[prop] == null) delete value[prop];
+      if (value[prop] == null) { delete value[prop]; }
     }
     return value;
   }

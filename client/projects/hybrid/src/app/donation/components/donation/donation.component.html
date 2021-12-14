@@ -1,14 +1,12 @@
-<ion-header>
-  <foodweb-hybrid-header defaultBackHref="/donation/list">
-    <ion-label>Donation</ion-label>
-    <foodweb-hybrid-donation-actions
-      [donation]="donation"
-      [header]="true"
-      [loading]="loading"
-      slot="end">
-    </foodweb-hybrid-donation-actions>
-  </foodweb-hybrid-header>
-</ion-header>
+<foodweb-hybrid-header defaultBackHref="/donation/list">
+  <ion-title>Donation</ion-title>
+  <foodweb-hybrid-donation-actions
+    [donation]="donation"
+    [header]="true"
+    [loading]="loading"
+    slot="end">
+  </foodweb-hybrid-donation-actions>
+</foodweb-hybrid-header>
 
 <ion-content class="donation">
   <ng-container *ngIf="donation">

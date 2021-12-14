@@ -4,7 +4,7 @@ import { DonationHub } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { DonationHubForm } from '~web/donation-hub/forms/donation-hub.form';
 import { DonationHubCreateService } from '~web/donation-hub/services/donation-hub-create/donation-hub-create.service';
-import { FormBaseComponent, FormHelperService, formProvider } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 
@@ -12,9 +12,9 @@ import { PageTitleService } from '~web/shared/services/page-title/page-title.ser
   selector: 'foodweb-donation-hub-create',
   templateUrl: './donation-hub-create.component.html',
   styleUrls: ['./donation-hub-create.component.scss'],
-  providers: formProvider(DonationHubCreateComponent)
+  providers: [FormFieldService]
 })
-export class DonationHubCreateComponent extends FormBaseComponent<DonationHubForm> implements OnInit {
+export class DonationHubCreateComponent implements OnInit {
 
   readonly minRegisterDate = new Date();
 
@@ -26,28 +26,35 @@ export class DonationHubCreateComponent extends FormBaseComponent<DonationHubFor
 
   constructor(
     public pageTitleService: PageTitleService,
+    private _dateTimeService: DateTimeService,
     private _donationHubCreateService: DonationHubCreateService,
+    private _formFieldService: FormFieldService<DonationHubForm>,
     private _router: Router,
-    dateTimeService: DateTimeService,
-    formHelperService: FormHelperService,
-    sessionService: SessionService,
-  ) {
-    super(() => new DonationHubForm(dateTimeService, { account: sessionService.account }), formHelperService, true);
+    private _sessionService: SessionService,
+  ) {}
+
+  get donationHubForm(): DonationHubForm {
+    return this._formFieldService.control;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this._formFieldService.injectControl({
+      genDefault: () => new DonationHubForm(this._dateTimeService, { account: this._sessionService.account })
+    });
     this.pageTitleService.title = 'Register Donation Hub';
   }
 
   register(): void {
-    if (this.formGroup.checkValidity()) {
-      this._donationHubCreateService.createDonationHub(this.formGroup.toDonationHub()).subscribe((donationHub: DonationHub) =>
-        this._router.navigate(['/donation-hub', donationHub.id])
+    this.donationHubForm.markAllAsTouched();
+    if (this.donationHubForm.valid) {
+      this._donationHubCreateService.createDonationHub(this.donationHubForm.toDonationHub()).subscribe(
+        (donationHub: DonationHub) => this._router.navigate(['/donation-hub', donationHub.id])
       );
     }
   }
 
   filterDateSaturday(date: Date): boolean {
-    return (date && date.getDay() === 6);
+    // TODO: Remove very specific christmas eve date exception.
+    return (date && (date.getDay() === 6 || (date.getFullYear() === 2021 && date.getMonth() === 11 && date.getDate() === 24)));
   }
 }

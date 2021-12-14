@@ -21,7 +21,7 @@ export class DateTimeRangeRadioDialogComponent implements OnInit {
     return matDialog.open(DateTimeRangeRadioDialogComponent, { data }).afterClosed();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.config.initValue) {
       this.selectedDateTime = this.config.initValue;
     }

@@ -54,9 +54,9 @@ export class DonationHubListComponent implements OnInit {
     return this._totalCount;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._myDonationHubs = (this._router.url.indexOf('/my') >= 0);
-    this.pageTitleService.title = (this._myDonationHubs)
+    this.pageTitleService.title = (this.myDonationHubs)
       ? 'My Donation Hubs'
       : 'Pledge Donation';
     this._urlQueryService.listenQueryParamsChange<DonationHubReadRequest>(this._activatedRoute).subscribe(
@@ -66,12 +66,13 @@ export class DonationHubListComponent implements OnInit {
 
   /**
    * Refreshes the Donation Hub List items.
-   * @param request The optional Read Request, contianing filter/sorting parameters.
+   * @param request The optional Read Request, containing filter/sorting parameters.
    * If not given, will use the last recorded Read Request parameters.
    * @returns An observable that emits the loaded `DonationHub` items.
    */
   refresh(request?: DonationHubReadRequest): Observable<DonationHub[]> {
     this._activeFilters = request ?? this._activeFilters;
+    this.activeFilters.excludePledgedHubs = !this.myDonationHubs;
     return this._donationHubReadService.getDonationHubs(this.activeFilters).pipe(
       map((response: ListResponse<DonationHub>) => {
         this._donationHubs = response.list;
