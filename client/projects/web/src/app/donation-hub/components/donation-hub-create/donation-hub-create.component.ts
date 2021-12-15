@@ -17,6 +17,7 @@ import { PageTitleService } from '~web/shared/services/page-title/page-title.ser
 export class DonationHubCreateComponent implements OnInit {
 
   readonly minRegisterDate = new Date();
+  readonly christmasDayDate = new Date('12/25/2021');
 
   readonly agreementChecklistMembers = [
     `I'll handle food safely`,

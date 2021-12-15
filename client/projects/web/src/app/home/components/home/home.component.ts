@@ -13,6 +13,9 @@ import { SessionService } from '~web/session/services/session/session.service';
 })
 export class HomeComponent implements OnInit {
 
+  readonly nowDate = new Date();
+  readonly christmasDayDate = new Date('12/25/2021');
+
   private _event: FeaturedEvent;
 
   constructor(
