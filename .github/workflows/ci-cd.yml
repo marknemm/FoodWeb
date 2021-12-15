@@ -1,7 +1,7 @@
 name: CI/CD
 on: [push]
 env:
-  CONFIGURATION: ${{ github.ref == 'refs/heads/release' && 'prod' || 'qa' }}
+  CONFIGURATION: ${{ github.ref == 'refs/heads/release' && 'production' || 'qa' }}
 jobs:
 
   build_client_admin:
@@ -284,7 +284,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: 'FoodWeb'
-          environment_name: ${{ env.CONFIGURATION == 'prod' && 'Foodweb-env' || 'foodweb-qa' }}
+          environment_name: ${{ env.CONFIGURATION == 'production' && 'Foodweb-env' || 'foodweb-qa' }}
           region: us-east-2
           version_label: ${{ steps.current-time.outputs.time }}--${{ steps.commit-hash.outputs.commit-hash }}
           deployment_package: foodweb.zip
