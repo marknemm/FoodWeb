@@ -10,6 +10,19 @@
     Drop off the sandwiches on the porch, and then call <strong>Gino</strong> at <strong><a href="tel:716-830-1413">(716) 830-1413</a></strong> to let him know to pick them up.
   </p>
 
+  <mat-card *ngIf="minRegisterDate < christmasDayDate" class="christmas-special">
+    <mat-card-title>
+      <strong>SPECIAL: Christmas Eve Schedule</strong>
+    </mat-card-title>
+
+    <mat-card-content>
+      <ul>
+        <li><strong>Pledgers</strong>: Drop off your donations between <strong>10:30-11:30 am</strong>.</li>
+        <li><strong>Hub Owners</strong>: Deliver all donation drop-offs to St. Luke's at <strong>12:30 pm</strong>.</li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+
   <mat-card>
     <mat-card-title>
       Let Us Know Your Availability

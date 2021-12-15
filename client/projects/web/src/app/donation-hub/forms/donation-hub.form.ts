@@ -63,6 +63,12 @@ export class DonationHubForm extends TFormGroup<DonationHubFormT> {
         donationHub[propKey] = value[propKey];
       }
     }
+
+    // Christmas Eve Special.
+    if (value.dropOffDate.getMonth() === 11 && value.dropOffDate?.getDate() === 24 && value.dropOffDate?.getFullYear() === 2021) {
+      value.dropOffTimeRange = { startTime: '10:30 AM', endTime: '11:30 AM' };
+    }
+
     // Map over the 'dropOffTimeRange' FormGroup to the individual 'dropOffWindow*' properties in the DonationHub model.
     donationHub.dropOffWindowStart = this._dateTimeService.combineDateTime(value.dropOffDate, value.dropOffTimeRange.startTime);
     donationHub.dropOffWindowEnd = this._dateTimeService.combineDateTime(value.dropOffDate, value.dropOffTimeRange.endTime);

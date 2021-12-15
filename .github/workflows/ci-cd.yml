@@ -1,7 +1,7 @@
 name: CI/CD
 on: [push]
 env:
-  CONFIGURATION: ${{ github.ref == 'refs/heads/release' && 'production' || 'qa' }}
+  CONFIGURATION: ${{ github.ref == 'refs/heads/release' && 'prod' || 'qa' }}
 jobs:
 
   build_client_admin:
@@ -229,9 +229,9 @@ jobs:
     needs: [build_client_admin, build_client_web, build_server_admin, build_server_web, build_shared]
     if: github.ref == 'refs/heads/release' || github.ref == 'refs/heads/master'
     env:
-      ADMIN_DOMAIN: ${{ github.ref == 'refs/heads/master' && 'admin.wnyfoodweb.com' || 'qa.admin.wnyfoodweb.com' }}
-      RAW_DOMAIN: ${{ github.ref == 'refs/heads/master' && 'Foodweb-env.eba-swceimpj.us-east-2.elasticbeanstalk.com' || 'foodweb-qa.us-east-2.elasticbeanstalk.com' }}
-      WWW_DOMAIN: ${{ github.ref == 'refs/heads/master' && 'www.wnyfoodweb.com' || 'qa.wnyfoodweb.com' }}
+      ADMIN_DOMAIN: ${{ github.ref == 'refs/heads/release' && 'admin.wnyfoodweb.com' || 'qa.admin.wnyfoodweb.com' }}
+      RAW_DOMAIN: ${{ github.ref == 'refs/heads/release' && 'Foodweb-env.eba-swceimpj.us-east-2.elasticbeanstalk.com' || 'foodweb-qa.us-east-2.elasticbeanstalk.com' }}
+      WWW_DOMAIN: ${{ github.ref == 'refs/heads/release' && 'www.wnyfoodweb.com' || 'qa.wnyfoodweb.com' }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js ${{ matrix.node-version }}
@@ -284,7 +284,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: 'FoodWeb'
-          environment_name: ${{ env.CONFIGURATION == 'production' && 'Foodweb-env' || 'foodweb-qa' }}
+          environment_name: ${{ env.CONFIGURATION == 'prod' && 'Foodweb-env' || 'foodweb-qa' }}
           region: us-east-2
           version_label: ${{ steps.current-time.outputs.time }}--${{ steps.commit-hash.outputs.commit-hash }}
           deployment_package: foodweb.zip

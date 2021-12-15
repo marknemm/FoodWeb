@@ -1,8 +1,21 @@
 <div class="home page has-side-content">
   <div class="main-content">
     <span class="d-lg-none">
-      <ng-container [ngTemplateOutlet]="traningSignupTmpl"></ng-container>
+      <ng-container [ngTemplateOutlet]="trainingSignupTmpl"></ng-container>
     </span>
+
+    <mat-card *ngIf="nowDate < christmasDayDate" class="christmas-special">
+      <mat-card-title>
+        <strong>Sandwich Army - Christmas Eve Schedule</strong>
+      </mat-card-title>
+
+      <mat-card-content>
+        <ul>
+          <li><strong>Donation Pledgers</strong>: Drop off your donations between <strong>10:30-11:30 am</strong>.</li>
+          <li><strong>Donation Hub Owners</strong>: Deliver all donation drop-offs to St. Luke's at <strong>12:30 pm</strong>.</li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
 
     <ng-container *ngIf="donationHubFeatureVisible">
       <mat-card class="donation-hub-new-feature">
@@ -96,7 +109,7 @@
     </span>
 
     <span class="d-none d-lg-inline">
-      <ng-container [ngTemplateOutlet]="traningSignupTmpl"></ng-container>
+      <ng-container [ngTemplateOutlet]="trainingSignupTmpl"></ng-container>
     </span>
 
     <mat-card>
@@ -115,6 +128,6 @@
   </div>
 </div>
 
-<ng-template #traningSignupTmpl>
+<ng-template #trainingSignupTmpl>
   <foodweb-event-card [event]="event" [linkToEventsPage]="true"></foodweb-event-card>
 </ng-template>

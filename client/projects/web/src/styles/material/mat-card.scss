@@ -69,6 +69,54 @@ mat-card.mat-card {
     box-shadow: 0px 3px 2px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
   }
 
+  &.christmas-special {
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background-image: linear-gradient(
+        to right,
+        red,
+        red 10%,
+        green 10%,
+        green 20%,
+        red 20%,
+        red 30%,
+        green 30%,
+        green 40%,
+        red 40%,
+        red 50%,
+        green 50%,
+        green 60%,
+        red 60%,
+        red 70%,
+        green 70%,
+        green 80%,
+        red 80%,
+        red 90%,
+        green 90%,
+        green 100%);
+      background-size: 100% 6px;
+      background-position: 50% 100%;
+      background-repeat: no-repeat;
+    }
+
+    &:before {
+      top: 0;
+    }
+
+    &:after {
+      bottom: 0;
+      -moz-transform: scaleX(-1);
+      -o-transform: scaleX(-1);
+      -webkit-transform: scaleX(-1);
+      transform: scaleX(-1);
+    }
+  }
+
   @media only screen and (max-width: $mat-mobile) {
     margin-bottom: 10px;
   }
