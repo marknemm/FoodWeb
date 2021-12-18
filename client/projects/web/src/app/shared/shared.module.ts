@@ -23,6 +23,7 @@ import { DisplayEditTransitionDirective } from './directives/display-edit-transi
 import { FragmentAccordionDirective } from './directives/fragment-accordion/fragment-accordion.directive';
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
 import { WindowSizeDirective } from './directives/window-size/window-size.directive';
+import { RangePipe } from './pipes/range/range.pipe';
 import { ShortNumPipe } from './pipes/short-num/short-num.pipe';
 import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
 
@@ -34,6 +35,7 @@ import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
     FragmentAccordionDirective,
     PaginatorComponent,
     ProgressIndicatorComponent,
+    RangePipe,
     RequirementsChecklistComponent,
     ReturnLinkDirective,
     SearchBarComponent,
@@ -66,6 +68,7 @@ import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
     FragmentAccordionDirective,
     PaginatorComponent,
     ProgressIndicatorComponent,
+    RangePipe,
     RequirementsChecklistComponent,
     ReturnLinkDirective,
     SearchBarComponent,

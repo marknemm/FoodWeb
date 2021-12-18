@@ -28,8 +28,8 @@ export class PasswordSettingsComponent {
    * Saves the password settings.
    */
   save(): void {
-    this.passwordForm.get('password').markAllAsTouched();
-    if (this.passwordForm.get('password').valid) {
+    this.passwordForm.markAllAsTouched();
+    if (this.passwordForm.valid) {
       this._accountSaveService.updatePassword(
         this._sessionService.account,
         this.passwordForm.value

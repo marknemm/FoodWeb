@@ -1,6 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
 import { OperationHoursComponent } from './operation-hours.component';
 
 describe('OperationHoursComponent', () => {
@@ -9,8 +7,7 @@ describe('OperationHoursComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ OperationHoursComponent ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      declarations: [ OperationHoursComponent ]
     })
     .compileComponents();
   }));

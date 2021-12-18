@@ -18,7 +18,7 @@ export class TimeRangeComponent implements OnInit {
   @Input() editable = false;
   @Input() endLabel = 'End Time';
   @Input() labelPosition: 'fixed' | 'floating' | 'stacked' = 'floating';
-  @Input() minuteValues = '0,5,10,15,20,25,30,35,40,45,50,55';
+  @Input() minutesGap = 5;
   @Input() startLabel = 'Start Time';
   @Input() timeWidth = '';
   @Input() get value(): TimeRange      { return this._formFieldService.value; }

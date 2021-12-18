@@ -5,7 +5,7 @@
     [formControl]="dateTimeFormControl"
     [max]="maxDate | date : 'YYYY-MM-dd'"
     [min]="minDate | date : 'YYYY-MM-dd'"
-    [minuteValues]="minuteValues">
+    [minuteValues]="0 | range : 60 : minutesGap">
   </ion-datetime>
 </ion-item>
 

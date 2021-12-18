@@ -6,7 +6,7 @@ import { FormFieldService, TFormControl } from '~web/forms';
   selector: 'foodweb-hybrid-time',
   templateUrl: './time.component.html',
   styleUrls: ['./time.component.scss'],
-  providers: []
+  providers: [FormFieldService]
 })
 export class TimeComponent implements OnInit {
 
@@ -16,7 +16,7 @@ export class TimeComponent implements OnInit {
   @Input() editable = false;
   @Input() label: string;
   @Input() labelPosition: 'fixed' | 'floating' | 'stacked' = 'fixed';
-  @Input() minuteValues = '0,5,10,15,20,25,30,35,40,45,50,55';
+  @Input() minutesGap = 5;
 
   readonly dateFormControl = new TFormControl<Date>();
 

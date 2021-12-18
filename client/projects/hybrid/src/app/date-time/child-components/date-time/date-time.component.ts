@@ -1,5 +1,6 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { FormFieldService, TFormControl } from '~web/forms';
 
 @Component({
@@ -8,7 +9,7 @@ import { FormFieldService, TFormControl } from '~web/forms';
   styleUrls: ['./date-time.component.scss'],
   providers: [FormFieldService]
 })
-export class DateTimeComponent implements OnChanges, OnInit {
+export class DateTimeComponent implements OnChanges {
 
   @Input() allowClear = false;
   @Input() allowUndefTime = false;
@@ -27,34 +28,28 @@ export class DateTimeComponent implements OnChanges, OnInit {
   @Input() maxDate: Date;
   @Input() minDate = new Date();
   @Input() minDateWidth = '';
-  @Input() minuteValues = '0,5,10,15,20,25,30,35,40,45,50,55';
-
-  readonly dateTimeFormControl = new TFormControl<string>();
+  @Input() minutesGap = 5;
+  @Input() get value(): Date     { return this._formFieldService.valueOut(); }
+           set value(date: Date) { this._formFieldService.valueIn(date); }
 
   private _displayFormat = 'MMM D YYYY, h:mm A';
 
   constructor(
+    private _dateTimeService: DateTimeService,
     private _formFieldService: FormFieldService<string, Date>
-  ) {}
-
-  @Input()
-  get value(): Date {
-    return (this.dateTimeFormControl.value ? new Date(this.dateTimeFormControl.value) : null);
+  ) {
+    this._formFieldService.registerControl(new TFormControl<string>(), {
+      valueInConverter: (date: Date) => (date ? date.toISOString() : ''),
+      valueOutConverter: (dateStr: string) => (dateStr ? new Date(dateStr) : null)
+    });
   }
 
-  set value(date: Date) {
-    this.dateTimeFormControl.setValue(date ? date.toISOString() : '', { emitEvent: false });
+  get dateTimeFormControl(): TFormControl<string> {
+    return this._formFieldService.control;
   }
 
   get displayFormat(): string {
     return this._displayFormat;
-  }
-
-  ngOnInit() {
-    this._formFieldService.registerControl(this.dateTimeFormControl, {
-      valueInConverter: (date: Date) => (date ? date.toISOString() : ''),
-      valueOutConverter: (dateStr: string) => (dateStr ? new Date(dateStr) : null)
-    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -68,6 +63,11 @@ export class DateTimeComponent implements OnChanges, OnInit {
 
     if (!this.minDate) {
       this.minDate = new Date(new Date().getTime() - 1893417100000); // -100 years
+    }
+
+    if (changes.defaultDate || changes.defaultTime && !this.value) {
+      const defaultDateTime: Date = this._dateTimeService.combineDateTime(this.defaultDate ?? new Date(), this.defaultTime);
+      this._formFieldService.valueIn(defaultDateTime, { emitEvent: true });
     }
   }
 

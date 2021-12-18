@@ -17,7 +17,9 @@
         [formGroup]="timeRangeForm"
         [minutesGap]="minutesGap"
         [preventOverlayClick]="!allowOverlayClick"
-        [timeWidth]="timeWidth"></foodweb-time-range>
+        [timeWidth]="timeWidth">
+      </foodweb-time-range>
+
       <button mat-icon-button *ngIf="timeRangeArray.length > 0" (click)="timeRangeArray.removeAt(idx)" class="remove-time-range" matTooltip="Remove Hours" type="button">
         <mat-icon>close</mat-icon>
       </button>

@@ -36,6 +36,16 @@
       "sourceMaps": true
     },
     {
+      "name": "Client Hybrid Attach",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9222,
+      "urlFilter": "http://localhost:4202/*",
+      "webRoot": "${workspaceRoot}\\client",
+      "trace": true,
+      "sourceMaps": true
+    },
+    {
       "name": "Client Web Attach",
       "type": "chrome",
       "request": "attach",
