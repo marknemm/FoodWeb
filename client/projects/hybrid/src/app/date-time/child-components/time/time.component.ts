@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { FormFieldService, TFormControl } from '~web/forms';
 
@@ -14,6 +15,7 @@ export class TimeComponent implements OnInit {
   @Input() bold = false;
   @Input() defaultTime: string | Date =  '12:00 pm';
   @Input() editable = false;
+  @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() label: string;
   @Input() labelPosition: 'fixed' | 'floating' | 'stacked' = 'fixed';
   @Input() minutesGap = 5;

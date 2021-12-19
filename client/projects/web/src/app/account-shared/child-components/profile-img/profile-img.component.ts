@@ -14,6 +14,7 @@ import { ScreenSizeService } from '~web/shared/services/screen-size/screen-size.
 export class ProfileImgComponent implements OnInit {
 
   @Input() editable = false;
+  @Input() default = './assets/IconImgSm.png';
   @Input() size: SizeThresholds | number = 40; // Default is 40 (px) b/c mat-card-avatar defaults to this size.
   @Input() get value(): string      { return this._formFieldService.value; }
            set value(value: string) { this._formFieldService.valueIn(value); }
@@ -81,6 +82,10 @@ export class ProfileImgComponent implements OnInit {
     this._screenSizeService.onResize(this._formFieldService.destroy$).subscribe(() =>
       this._currentSize = this._screenSizeService.getCurrentWidth(this.size)
     );
+
+    if (!this.value) {
+      this.value = this.default;
+    }
   }
 
   onSelectFile(event: HTMLInputEvent): void {
