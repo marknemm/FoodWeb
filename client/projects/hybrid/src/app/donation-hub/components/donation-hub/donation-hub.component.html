@@ -1,8 +1,8 @@
 <foodweb-hybrid-header defaultBackHref="/donation-hub/list">
-  <ion-title *ngIf="!showActionButtons">Donation Hub</ion-title>
+  <ion-title *ngIf="!showActionButtons || !canModify">Donation Hub</ion-title>
   <ion-buttons slot="end">
     <foodweb-hybrid-donation-hub-actions
-      *ngIf="showActionButtons"
+      *ngIf="showActionButtons || !canModify"
       [canDonate]="canDonate"
       [canModify]="canModify"
       [canViewDonation]="canViewPledge"
@@ -12,7 +12,7 @@
       slot="end"
       (delete)="deleteDonationHub()">
     </foodweb-hybrid-donation-hub-actions>
-    <ion-button (click)="showActionButtons = !showActionButtons">
+    <ion-button *ngIf="canModify" (click)="showActionButtons = !showActionButtons">
       <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
     </ion-button>
   </ion-buttons>
