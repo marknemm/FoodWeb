@@ -33,7 +33,7 @@ export class AdminDonationSaveService {
   /**
    * Updates a donation with data within a given donation update form.
    * @param donationForm The donation update form group.
-   * @return An observable that resolves to theupdated donation once the server opeartion completes.
+   * @return An observable that resolves to the updated donation once the server operation completes.
    */
   updateDonation(donationForm: AdminDonationForm): Observable<Donation> {
     const request: AdminDonationSaveRequest = this._genDonationSaveRequest(donationForm);

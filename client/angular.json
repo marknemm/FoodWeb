@@ -251,6 +251,10 @@
                 {
                   "replace": "projects/admin/src/environments/environment.ts",
                   "with": "projects/admin/src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "projects/web/src/environments/environment.ts",
+                  "with": "projects/admin/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
