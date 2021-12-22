@@ -1,43 +1,43 @@
-<div [formGroup]="operationHoursForm" class="operation-hours-form">
-  <div class="weekday-field" [style.width]="weekdayWidth" [style.padding]="weekdayPadding">
-    <ion-item>
-      <ion-label color="secondary">Weekday</ion-label>
-      <ion-select formControlName="weekday">
-        <ion-select-option *ngFor="let weekday of constantsService.WEEKDAYS; let i = index" [value]="weekday">{{ weekday }}</ion-select-option>
-        <ion-select-option [value]="undefined">--</ion-select-option>
-      </ion-select>
+<div class="operation-hours-container" [ngClass]="{ 'limited': operationHoursForm.operationHoursLimited }" [formGroup]="operationHoursForm" [foodwebDisplayEditTransition]="editable"
+  [form]="operationHoursFormTmpl" [display]="operationHoursDisplay">
+  <div #operationHoursFormTmpl class="operation-hours-form">
+    <ion-item lines="none">
+      <ion-label color="secondary">Specify Availability:</ion-label>
+      <ion-toggle formControlName="limitOperationHours"></ion-toggle>
     </ion-item>
-  </div>
-  <div class="time-fields-container">
-    <div class="time-field" [style.width]="timeWidth">
-      <foodweb-time
-        [allowClear]="allowClear"
-        [defaultTime]="defaultStartTime"
-        [editable]="editable"
-        [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher"
-        [minutesGap]="minutesGap"
-        [preventOverlayClick]="!(allowOverlayClick | toBoolean)"
-        formControlName="startTime"
-        placeholder="Start Time"
-      ></foodweb-time>
-    </div>
-    <div class="time-field" [style.width]="timeWidth">
-      <foodweb-time
-        [allowClear]="allowClear"
-        [defaultTime]="defaultEndTime"
-        [editable]="editable"
-        [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher"
-        [minutesGap]="minutesGap"
-        [preventOverlayClick]="!(allowOverlayClick | toBoolean)"
-        formControlName="endTime"
-        placeholder="End Time"
-      ></foodweb-time>
+    <div class="row operation-hours-grid">
+      <div class="col-lg-6">
+        <div *ngFor="let weekday of constantsService.WEEKDAYS | slice : 0 : 4" class="operation-hours-form-container">
+          <div class="delete-container">
+            <foodweb-hybrid-weekday-operation-hours [weekday]="weekday" [formArrayName]="weekday" [editable]="editable"></foodweb-hybrid-weekday-operation-hours>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div *ngFor="let weekday of constantsService.WEEKDAYS | slice : 4" class="operation-hours-form-container">
+          <div class="delete-container">
+            <foodweb-hybrid-weekday-operation-hours [weekday]="weekday" [formArrayName]="weekday" [editable]="editable"></foodweb-hybrid-weekday-operation-hours>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div *ngIf="operationHoursForm.hasError('timeRangeOrder')" class="operation-hours-error ion-form-error">
-    {{ operationHoursForm.getError('timeRangeOrder') }}
-  </div>
-  <div *ngIf="operationHoursForm.hasError('groupRequired')" class="operation-hours-error ion-form-error">
-    {{ operationHoursForm.getError('groupRequired') }}
+
+  <div #operationHoursDisplay class="operation-hours-display">
+    <div *ngIf="!operationHoursForm.timeRangeCount; else limitedAvailabilityTmpl">Availability Not Limited</div>
+    <ng-template #limitedAvailabilityTmpl>
+      <table>
+        <ng-container *ngFor="let weekday of constantsService.WEEKDAYS">
+          <tr *ngIf="operationHoursForm.doesWeekdayHaveHours(weekday)">
+            <td>{{ weekday }}</td>
+            <td>
+              <div *ngFor="let weekdayTimeRange of value[weekday]">
+                <foodweb-time-range [value]="weekdayTimeRange"></foodweb-time-range>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </table>
+    </ng-template>
   </div>
 </div>

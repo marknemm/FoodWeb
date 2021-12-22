@@ -2,4 +2,10 @@
 
 :host {
   border-radius: 50%;
+
+  .profile-img {
+    * {
+      background-color: white;
+    }
+  }
 }

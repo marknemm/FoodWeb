@@ -1,4 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { OperationHours } from '~shared';
+import { OperationHoursFormT } from '~web/account-shared/forms/account.form';
 import { OperationHoursForm } from '~web/account-shared/forms/operation-hours.form';
 import { FormFieldService } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
@@ -11,26 +13,17 @@ import { ConstantsService } from '~web/shared/services/constants/constants.servi
 })
 export class OperationHoursComponent implements OnInit {
 
-  @Input() allowClear = false;
-  @Input() allowOverlayClick = false;
   @Input() editable = false;
-  @Input() minutesGap = 5;
-  @Input() timeWidth = '110px';
-  @Input() weekdayPadding = '0 20px 0 0';
-  @Input() weekdayWidth = '125px';
+  @Input() get value(): OperationHoursFormT | OperationHours[] { return this._formFieldService.value; }
+           set value(opHoursInfo: OperationHoursFormT | OperationHours[]) { this._formFieldService.valueIn(opHoursInfo); }
+
+  @HostBinding()
+  readonly class = 'foodweb-operation-hours';
 
   constructor(
     public constantsService: ConstantsService,
     private _formFieldService: FormFieldService<OperationHoursForm>
   ) {}
-
-  get defaultStartTime(): string {
-    return (this.operationHoursForm.startTime ? this.operationHoursForm.startTime : '9:00 AM');
-  }
-
-  get defaultEndTime(): string  {
-    return (this.operationHoursForm.endTime ? this.operationHoursForm.endTime : '5:00 PM');
-  }
 
   get operationHoursForm(): OperationHoursForm {
     return this._formFieldService.control;
@@ -41,4 +34,5 @@ export class OperationHoursComponent implements OnInit {
       genDefault: () => new OperationHoursForm()
     });
   }
+
 }

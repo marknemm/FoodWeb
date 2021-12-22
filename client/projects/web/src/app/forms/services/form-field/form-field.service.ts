@@ -324,7 +324,10 @@ abstract class _FormFieldService<
     const value: V = (this._config?.valueInConverter)
       ? this._config.valueInConverter(valueIn)
       : valueIn as any;
-    this.control.patchValue(value, options);
+    this.control.patchValue(value, { emitEvent: false, onlySelf: options.onlySelf });
+    if (options.emitEvent) {
+      setTimeout(() => this.control.updateValueAndValidity()); // Trigger change emit only after change cycle completes.
+    }
     return this.value;
   }
 

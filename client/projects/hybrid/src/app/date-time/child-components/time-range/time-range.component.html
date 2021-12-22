@@ -2,28 +2,28 @@
   <div class="row">
     <div class="time-field" [style.width]="timeWidth" [ngClass]="{ 'col-6': labelPosition !== 'fixed' }">
       <foodweb-hybrid-time
-        #startTime
         formControlName="startTime"
         [allowClear]="allowClear"
         [bold]="bold"
         [editable]="true"
+        [errorStateMatcher]="timeRangeForm.rangeErrStateMatcher"
         [defaultTime]="defaultStartTime"
         [label]="startLabel"
         [labelPosition]="labelPosition"
-        [minuteValues]="minuteValues">
+        [minutesGap]="minutesGap">
       </foodweb-hybrid-time>
     </div>
     <div class="time-field" [style.width]="timeWidth" [ngClass]="{ 'col-6': labelPosition !== 'fixed' }">
       <foodweb-hybrid-time
-        #endTime
         formControlName="endTime"
         [allowClear]="allowClear"
         [bold]="bold"
         [editable]="true"
+        [errorStateMatcher]="timeRangeForm.rangeErrStateMatcher"
         [defaultTime]="defaultEndTime"
         [label]="endLabel"
         [labelPosition]="labelPosition"
-        [minuteValues]="minuteValues">
+        [minutesGap]="minutesGap">
       </foodweb-hybrid-time>
     </div>
   </div>

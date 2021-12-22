@@ -1,5 +1,5 @@
-<div class="volunteer-container" [foodwebDisplayEditTransition]="editable" [form]="volunteerForm" [display]="volunteerDisplay">
-  <div #volunteerForm class="row volunteer-form" [formGroup]="volunteerForm" [attr.aria-hidden]="!editable">
+<div class="volunteer-container" [foodwebDisplayEditTransition]="editable" [form]="volunteerFormTmpl" [display]="volunteerDisplay">
+  <div #volunteerFormTmpl class="row volunteer-form" [formGroup]="volunteerForm" [attr.aria-hidden]="!editable">
     <div class="col-sm-6">
       <mat-form-field class="fill">
         <input matInput placeholder="First Name" formControlName="firstName" type="text" autocomplete="off">

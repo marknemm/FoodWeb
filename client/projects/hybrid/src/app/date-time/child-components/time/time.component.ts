@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { FormFieldService, TFormControl } from '~web/forms';
 
@@ -6,7 +7,7 @@ import { FormFieldService, TFormControl } from '~web/forms';
   selector: 'foodweb-hybrid-time',
   templateUrl: './time.component.html',
   styleUrls: ['./time.component.scss'],
-  providers: []
+  providers: [FormFieldService]
 })
 export class TimeComponent implements OnInit {
 
@@ -14,9 +15,10 @@ export class TimeComponent implements OnInit {
   @Input() bold = false;
   @Input() defaultTime: string | Date =  '12:00 pm';
   @Input() editable = false;
+  @Input() errorStateMatcher: ErrorStateMatcher;
   @Input() label: string;
   @Input() labelPosition: 'fixed' | 'floating' | 'stacked' = 'fixed';
-  @Input() minuteValues = '0,5,10,15,20,25,30,35,40,45,50,55';
+  @Input() minutesGap = 5;
 
   readonly dateFormControl = new TFormControl<Date>();
 

@@ -6,12 +6,13 @@ import { AdminAccountMessageComponent } from './components/admin-account-message
 import { AdminAccountComponent } from './components/admin-account/admin-account.component';
 
 const routes: Routes = [
-  { path: 'my', component: AdminAccountComponent },
   { path: 'compose-message', component: AdminAccountMessageComponent },
   { path: 'create', component: AdminAccountCreateComponent },
   { path: 'create/:accountType', component: AdminAccountCreateComponent },
-  { path: 'details/:id', component: AdminAccountComponent },
-  { path: 'list', component: AdminAccountListComponent }
+  { path: 'list', component: AdminAccountListComponent },
+  { path: '', component: AdminAccountComponent },
+  { path: 'my', component: AdminAccountComponent },
+  { path: ':id', component: AdminAccountComponent },
 ];
 
 @NgModule({

@@ -8,7 +8,8 @@ import { ListQueryService } from '~web/shared/services/list-query/list-query.ser
 @Component({
   selector: 'foodweb-admin-account-list',
   templateUrl: './admin-account-list.component.html',
-  styleUrls: ['./admin-account-list.component.scss']
+  styleUrls: ['./admin-account-list.component.scss'],
+  providers: [AccountListLabelService, ListQueryService]
 })
 export class AdminAccountListComponent implements OnInit {
 

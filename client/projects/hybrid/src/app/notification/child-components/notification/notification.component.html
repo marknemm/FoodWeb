@@ -1,6 +1,5 @@
 <ion-item class="notification-container" [ngClass]="{ unread: !notification.read }" (click)="select.emit(notification)">
   <foodweb-hybrid-profile-img
-    *ngIf="notification.icon"
     [value]="notification.icon"
     class="icon"
     slot="start">

@@ -1,0 +1,37 @@
+@import "variables.scss";
+
+.operation-hours-form {
+  position: relative;
+
+  .weekday-field {
+    display: inline-block;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+  }
+
+  .time-fields-container {
+    display: inline-block;
+
+    @media only screen and (max-width: 410px) {
+      display: block;
+    }
+
+    .time-field {
+      display: inline-block;
+      box-sizing: border-box;
+
+      &:first-child {
+        padding-right: 15px;
+      }
+
+      &:last-child {
+        padding-left: 15px;
+      }
+    }
+  }
+
+  .operation-hours-error {
+    font-size: 12px;
+    margin-top: -18px;
+  }
+}

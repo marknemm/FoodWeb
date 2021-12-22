@@ -126,16 +126,16 @@ export class SessionService {
 
   /**
    * Registers an account save monitor that emits a newly saved account (session) upon save.
-   * @param destory$ An optional observable that may be used to unsubscribe from the return observable.
+   * @param destroy$ An optional observable that may be used to unsubscribe from the return observable.
    * @return An observable that emits a newly saved account upon save.
    */
-  onAccountSave(destory$?: Observable<any>): Observable<Account> {
-    return this.onSave('account', destory$);
+  onAccountSave(destroy$?: Observable<any>): Observable<Account> {
+    return this.onSave('account', destroy$);
   }
 
   /**
    * Registers an account delete monitor that emits a deleted saved account (session) upon delete.
-   * @param destory$ An optional observable that may be used to unsubscribe from the return observable.
+   * @param destroy$ An optional observable that may be used to unsubscribe from the return observable.
    * @return An observable that emits a deleted account upon delete.
    */
   onAccountDelete(destroy$?: Observable<any>): Observable<Account> {

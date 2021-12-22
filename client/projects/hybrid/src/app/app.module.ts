@@ -11,7 +11,6 @@ import { AppRoutingModule } from '~hybrid/app-routing.module';
 import { AppComponent } from '~hybrid/app.component';
 import { SessionModule } from '~hybrid/session/session.module';
 import { SharedModule } from '~hybrid/shared/shared.module';
-import { ShellModule } from '~hybrid/shell/shell.module';
 import { AccountHelper, DeliveryHelper, DirectionsExtractor, DonationHelper, JSONDateReviver, MapWaypointConverter, OperationHoursHelper } from '~shared';
 import { EventModule } from '~web/event/event.module';
 import { HeuristicsModule } from '~web/heuristics/heuristics.module';
@@ -36,7 +35,6 @@ import { BootstrapModule } from './bootstrap/bootstrap.module';
     AlertModule.forRoot(),
     BootstrapModule.forRoot(),
     SessionModule.forRoot(),
-    ShellModule,
     HomeModule,
     EventModule,
     HeuristicsModule

@@ -1,7 +1,7 @@
 import { Validators } from '@angular/forms';
 import { Account, AccountType, NotificationSettings, TimeRange } from '~shared';
 import { ContactInfoForm } from '~web/account-shared/forms/contact-info.form';
-import { OperationHoursInfoForm } from '~web/account-shared/forms/operation-hours-info.form';
+import { OperationHoursForm } from '~web/account-shared/forms/operation-hours.form';
 import { OrganizationForm } from '~web/account-shared/forms/organization.form';
 import { VolunteerForm } from '~web/account-shared/forms/volunteer.form';
 import { NotificationSettingsForm } from '~web/account/forms/notification-settings.form';
@@ -19,7 +19,7 @@ export class AccountForm extends TFormGroup<AccountFormT> {
       notificationSettings: new NotificationSettingsForm(),
       password: new PasswordForm({ formMode: config.formMode }),
       profileImg: '',
-      operationHours: new OperationHoursInfoForm(),
+      operationHours: new OperationHoursForm(),
       organization: new OrganizationForm(),
       username: ['', Validators.required],
       volunteer: new VolunteerForm(),
@@ -64,7 +64,7 @@ export class AccountForm extends TFormGroup<AccountFormT> {
   toAccount(): Account {
     const accountFormVal: AccountFormT & Account = <any>this.getRawValue();
     delete accountFormVal.password;
-    (<Account>accountFormVal).operationHours = (<OperationHoursInfoForm>this.get('operationHours')).toOperationHours();
+    (<Account>accountFormVal).operationHours = (<OperationHoursForm>this.get('operationHours')).toOperationHours();
     Object.keys(accountFormVal.notificationSettings).forEach((notificationSettingKey: string) => {
       if (accountFormVal.notificationSettings[notificationSettingKey] != null) {
         accountFormVal.contactInfo[notificationSettingKey] = accountFormVal.notificationSettings[notificationSettingKey];
@@ -87,11 +87,11 @@ export interface AccountFormConfig {
 
 export interface AccountFormT extends Omit<Account, 'operationHours'> {
   notificationSettings: NotificationSettings;
-  operationHours: OperationHoursInfo;
+  operationHours: OperationHoursFormT;
   password: PasswordFormT;
 }
 
-export interface OperationHoursInfo {
+export interface OperationHoursFormT {
   limitOperationHours: boolean;
   Sunday: TimeRange[];
   Monday: TimeRange[];

@@ -4,7 +4,12 @@
     [style.color]="placeholder.color"
     [style.fontSize.px]="placeholderElement.clientWidth * 0.67"
     class="profile-img-placeholder">
-    {{ placeholder.letter }}
+    <ng-container *ngIf="placeholder.letter; else defaultTmpl">
+      {{ placeholder.letter }}
+    </ng-container>
+    <ng-template #defaultTmpl>
+      <img [src]="default" alt="FoodWeb Icon">
+    </ng-template>
   </div>
 
   <ng-template #profileImgTmpl>

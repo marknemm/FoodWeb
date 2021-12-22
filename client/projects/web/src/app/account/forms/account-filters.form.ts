@@ -1,5 +1,5 @@
 import { AccountReadRequest, AccountType, OperationHours } from '~shared';
-import { OperationHoursForm } from '~web/account-shared/forms/operation-hours.form';
+import { OperationHoursFilterForm } from '~web/account-shared/forms/operation-hours-filter.form';
 import { ListFiltersForm } from '~web/shared/forms/list-filters.form';
 export { AccountReadRequest };
 
@@ -12,7 +12,7 @@ export class AccountFiltersForm extends ListFiltersForm<AccountFiltersFormT> {
       email: undefined,
       fullTextQuery: undefined,
       limit: 10,
-      operationHours: new OperationHoursForm(undefined, 'none'),
+      operationHours: new OperationHoursFilterForm(undefined, 'none'),
       organizationName: undefined,
       page: 1,
       signedAgreement: undefined,
