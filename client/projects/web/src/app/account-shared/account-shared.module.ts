@@ -25,7 +25,7 @@ import { AccountTeaserComponent } from './child-components/account-teaser/accoun
 import { AccountTypeComponent } from './child-components/account-type/account-type.component';
 import { AddressComponent } from './child-components/address/address.component';
 import { ContactInfoComponent } from './child-components/contact-info/contact-info.component';
-import { OperationHoursInfoComponent } from './child-components/operation-hours-info/operation-hours-info.component';
+import { OperationHoursFilterComponent } from './child-components/operation-hours-filter/operation-hours-filter.component';
 import { OperationHoursComponent } from './child-components/operation-hours/operation-hours.component';
 import { OrganizationComponent } from './child-components/organization/organization.component';
 import { PasswordComponent } from './child-components/password/password.component';
@@ -48,7 +48,7 @@ import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
     AddressComponent,
     ContactInfoComponent,
     OperationHoursComponent,
-    OperationHoursInfoComponent,
+    OperationHoursFilterComponent,
     OrganizationComponent,
     PasswordComponent,
     ProfileImgComponent,
@@ -89,7 +89,7 @@ import { AccountNamePipe } from './pipes/account-name/account-name.pipe';
     AddressComponent,
     ContactInfoComponent,
     OperationHoursComponent,
-    OperationHoursInfoComponent,
+    OperationHoursFilterComponent,
     OrganizationComponent,
     PasswordComponent,
     ProfileImgComponent,

@@ -1,6 +1,14 @@
 @import "variables.scss";
 
 .time-range-form {
+  &.ng-invalid.ng-touched {
+    margin-bottom: 18px;
+
+    .range-order-err {
+      bottom: 0;
+    }
+  }
+
   .time-field {
     &:not(:first-child):not(.col-6) {
       margin-top: -10px;

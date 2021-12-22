@@ -29,14 +29,14 @@
       Operation Hours Filters
     </foodweb-list-filters-title>
 
-    <foodweb-operation-hours
+    <foodweb-operation-hours-filter
       [allowClear]="true"
       [formGroup]="filtersForm.get('operationHours')"
       [editable]="true"
       timeWidth="50%"
       weekdayPadding="0"
       weekdayWidth="100%"
-    ></foodweb-operation-hours>
+    ></foodweb-operation-hours-filter>
   </ng-container>
 
   <foodweb-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></foodweb-list-sort>

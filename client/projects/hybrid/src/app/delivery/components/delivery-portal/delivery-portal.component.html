@@ -4,7 +4,7 @@
 
 <ion-content>
   <ion-list class="borders-vertical">
-    <ion-item [routerLink]="['list']">Schedule Delivery</ion-item>
+    <ion-item [routerLink]="['list']" [queryParams]="{ donationStatus: 'Matched' }">Schedule Delivery</ion-item>
     <ion-item [routerLink]="['list', 'my']">My Deliveries</ion-item>
   </ion-list>
 </ion-content>

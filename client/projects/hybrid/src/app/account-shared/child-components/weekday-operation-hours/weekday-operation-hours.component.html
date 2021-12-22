@@ -8,7 +8,15 @@
 
   <ion-list class="time-range-list">
     <ion-item *ngFor="let timeRangeForm of timeRangeArray.controls; let idx = index" class="time-range-item" lines="none">
-      <foodweb-hybrid-time-range [editable]="editable"></foodweb-hybrid-time-range>
+      <foodweb-hybrid-time-range
+        defaultStartTime="9:00 AM"
+        defaultEndTime="5:00 PM"
+        [allowClear]="allowClear"
+        [editable]="editable"
+        [formGroup]="timeRangeForm"
+        [timeWidth]="timeWidth">
+      </foodweb-hybrid-time-range>
+
       <ion-button *ngIf="timeRangeArray.length > 0" (click)="timeRangeArray.removeAt(idx)" class="remove-time-range" type="button" fill="clear" shape="round">
         <ion-icon name="close"></ion-icon>
       </ion-button>

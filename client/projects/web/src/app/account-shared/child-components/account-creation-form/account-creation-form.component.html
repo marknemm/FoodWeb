@@ -62,7 +62,10 @@
           <br><span> You can update this setting any time under your account.</span>
         </mat-card-subtitle>
         <mat-card-content>
-          <foodweb-operation-hours-info [editable]="true" [formGroup]="accountForm.get('operationHours')"></foodweb-operation-hours-info>
+          <foodweb-operation-hours
+            [editable]="true"
+            [formGroup]="accountForm.get('operationHours')">
+          </foodweb-operation-hours>
         </mat-card-content>
       </mat-card>
     </div>

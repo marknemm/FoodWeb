@@ -6,4 +6,8 @@ import { DonationHubComponent as WebDonationHubComponent } from '~web/donation-h
   templateUrl: './donation-hub.component.html',
   styleUrls: ['./donation-hub.component.scss']
 })
-export class DonationHubComponent extends WebDonationHubComponent {}
+export class DonationHubComponent extends WebDonationHubComponent {
+
+  showActionButtons = false;
+
+}

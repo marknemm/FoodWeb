@@ -1,21 +1,21 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { SettingsMenuComponent } from './settings-menu.component';
+import { OperationHoursFilterComponent } from './operation-hours-filter.component';
 
-describe('SettingsMenuComponent', () => {
-  let component: SettingsMenuComponent;
-  let fixture: ComponentFixture<SettingsMenuComponent>;
+describe('OperationHoursFilterComponent', () => {
+  let component: OperationHoursFilterComponent;
+  let fixture: ComponentFixture<OperationHoursFilterComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SettingsMenuComponent ],
+      declarations: [OperationHoursFilterComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SettingsMenuComponent);
+    fixture = TestBed.createComponent(OperationHoursFilterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,37 +1,97 @@
 @import "variables.scss";
 
-.operation-hours-form {
-  position: relative;
-
-  .weekday-field {
-    display: inline-block;
-    box-sizing: border-box;
-    margin-bottom: 8px;
-  }
-
-  .time-fields-container {
-    display: inline-block;
-
-    @media only screen and (max-width: 410px) {
-      display: block;
+.operation-hours-container {
+  &.limited {
+    .limit-availability-toggle {
+      margin-bottom: 18px;
     }
 
-    .time-field {
-      display: inline-block;
-      box-sizing: border-box;
+    .operation-hours-grid {
+      height: auto;
+    }
+  }
 
-      &:first-child {
-        padding-right: 15px;
+  .operation-hours-grid {
+    overflow: hidden;
+    height: 0;
+
+    > .col-lg-6 {
+      .operation-hours-form-container {
+        position: relative;
+        width: 100%;
+        border-bottom: 1px solid #EEE;
+        padding-top: 12px;
+        padding-bottom: 12px;
+
+        &:first-child {
+          border-top: 1px solid #EEE;
+        }
+
+        .delete-container {
+          position: relative;
+          max-width: 360px;
+
+          .delete-button {
+            position: absolute;
+            right: 0px;
+            top: -4px;
+            width: 20px;
+            height: 20px;
+            font-size: 18px;
+            line-height: 18px;
+          }
+        }
       }
 
       &:last-child {
-        padding-left: 15px;
+        @media only screen and (max-width: $md) {
+          .operation-hours-form-container:first-child {
+            border-top: none;
+          }
+        }
       }
     }
   }
 
-  .operation-hours-error {
-    font-size: 12px;
-    margin-top: -18px;
+  .add-button-container {
+    padding-top: 10px;
+  }
+
+  .operation-hours-display {
+    table {
+      display: inline-table;
+
+      &:first-child {
+        margin-right: 30px;
+
+        @media only screen and (max-width: 767px) {
+          margin-right: 20px;
+        }
+      }
+
+      tr {
+        padding-bottom: 5px;
+
+        &:last-child {
+          padding-bottom: 0px;
+        }
+
+        td {
+          vertical-align: top;
+
+          &:first-child {
+            box-sizing: border-box;
+            min-width: 74px;
+            padding-right: 5px;
+          }
+        }
+      }
+    }
+
+    &.contains-wed {
+      table tr td:first-child {
+        min-width: 89px;
+      }
+    }
   }
 }
