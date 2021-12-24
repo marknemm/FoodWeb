@@ -30,6 +30,7 @@ export async function readMyDonationHubs(
   account: AccountEntity
 ): ListResponsePromise<DonationHubEntity> {
   donationHubRequest.volunteerAccountId = account.id;
+  donationHubRequest.includeExpired ??= true;
   return readDonationHubs(donationHubRequest, account);
 }
 
@@ -71,7 +72,13 @@ function _buildQuery(
   account: AccountEntity
 ): SelectQueryBuilder<DonationHubEntity> {
   const queryBuilder: SelectQueryBuilder<DonationHubEntity> = repository.createQueryBuilder('donationHub');
-  queryBuilder.addSelect('CASE WHEN donationHub.dropOffWindowStart > CURRENT_TIMESTAMP THEN 0 ELSE 1 END', '_expired');
+  if (request.includeExpired) {
+    queryBuilder.addSelect(`
+      CASE WHEN donationHub.dropOffWindowStart < CURRENT_TIMESTAMP
+      THEN donationHub.dropOffWindowStart
+      ELSE TO_TIMESTAMP('9999-11-30', 'YYYY-MM-DD') END
+    `, '_expired');
+  }
   _addRelations(queryBuilder, request);
   _addFilters(queryBuilder, request, account);
   _addSorting(queryBuilder, request);
@@ -117,6 +124,11 @@ function _addFilters(queryBuilder: SelectQueryBuilder<DonationHubEntity>, reques
 }
 
 function _addSorting(queryBuilder: SelectQueryBuilder<DonationHubEntity>, request: DonationHubReadRequest): void {
-  queryBuilder.addOrderBy('_expired', 'ASC');
-  queryBuilder.addOrderBy(`donationHub.${request.sortBy || 'dropOffWindowStart'}`, (request.sortOrder || 'ASC'));
+  if (request.sortBy) {
+    queryBuilder.addOrderBy(request.sortBy, request.sortOrder || 'ASC');
+  }
+  if (request.includeExpired) {
+    queryBuilder.addOrderBy('_expired', 'DESC');
+  }
+  queryBuilder.addOrderBy('donationHub.dropOffWindowStart', 'ASC');
 }
