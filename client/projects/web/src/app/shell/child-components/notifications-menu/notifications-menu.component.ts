@@ -28,7 +28,7 @@ export class NotificationsMenuComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.notificationService.listenNewNotifications().pipe(
       takeUntil(this._destroy$),
-      switchMap(() => this.notificationService.getMany({ limit: 10 }, false))
+      switchMap(() => this.notificationService.getNotifications({ limit: 10 }, { showLoader: false }))
     ).subscribe(
       (response: ListResponse<Notification>) => this._previewNotifications = response.list
     );

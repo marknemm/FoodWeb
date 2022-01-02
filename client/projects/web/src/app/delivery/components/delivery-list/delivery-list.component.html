@@ -6,28 +6,28 @@
     <foodweb-search-bar
       [placeholder]="searchPlaceholder"
       [formControl]="filtersForm.get('fullTextQuery')"
-      (search)="updateFilterQueryParams(filtersForm.value)"
+      (search)="listQueryService.refresh()"
     ></foodweb-search-bar>
   </foodweb-filtered-list-toolbar>
 
   <foodweb-filtered-list-content>
-    <div class="col-lg-6" *ngFor="let donation of donations">
+    <div class="col-lg-6" *ngFor="let donation of listQueryService.items">
       <foodweb-delivery-teaser [donation]="donation"></foodweb-delivery-teaser>
     </div>
   </foodweb-filtered-list-content>
 
-  <foodweb-filtered-list-empty *ngIf="noneFound">
+  <foodweb-filtered-list-empty *ngIf="listQueryService.noneFound">
     Could Not Find Any Deliveries
   </foodweb-filtered-list-empty>
 
-  <foodweb-paginator [length]="totalCount"></foodweb-paginator>
+  <foodweb-paginator [length]="listQueryService.totalCount"></foodweb-paginator>
 
   <foodweb-list-filters>
     <foodweb-delivery-filters
       [formGroup]="filtersForm"
       [myDeliveries]="myDeliveries"
       (clear)="filtersForm.resetFacetFilters()"
-      (filter)="updateFilterQueryParams($event)"
+      (filter)="listQueryService.refresh()"
     ></foodweb-delivery-filters>
   </foodweb-list-filters>
 

@@ -7,42 +7,44 @@
   </ion-buttons>
 </foodweb-hybrid-header>
 
-<ion-content foodwebHybridListPage
-  [disabled]="loading"
-  [page]="filtersForm.page"
-  (loadMore)="handleLoadMore($event)"
-  (refresh)="handleRefresh($event)"
-  class="donations">
+<ion-content>
 
-  <!-- <foodweb-filtered-list-toolbar listItemsLabel="Donations">
-    <foodweb-search-bar
-      placeholder="Search Donations..."
-      [formControl]="filtersForm.get('fullTextQuery')"
-      (search)="updateFilterQueryParams(filtersForm.value)"
-    ></foodweb-search-bar>
-  </foodweb-filtered-list-toolbar> -->
+  <foodweb-hybrid-filtered-list
+    class="donations"
+    [disabled]="listQueryService.loading"
+    [itemCount]="listQueryService.items.length"
+    (loadMore)="handleLoadMore($event)"
+    (refresh)="handleRefresh($event)">
 
-  <div *ngIf="showChooseDonation" class="standalone-statement">
-    Choose a donation to claim.
-  </div>
+    <!-- <foodweb-filtered-list-toolbar listItemsLabel="Donations">
+      <foodweb-search-bar
+        placeholder="Search Donations..."
+        [formControl]="filtersForm.get('fullTextQuery')"
+        (search)="updateFilterQueryParams(filtersForm.value)"
+      ></foodweb-search-bar>
+    </foodweb-filtered-list-toolbar> -->
 
-  <div *ngIf="noneFound" class="standalone-statement">
-    Could not find any donations.
-  </div>
+    <div *ngIf="showChooseDonation" class="standalone-statement">
+      Choose a donation to claim.
+    </div>
 
-  <ion-virtual-scroll [items]="donations" approxItemHeight="400px">
+    <div *ngIf="listQueryService.noneFound" class="standalone-statement">
+      Could not find any donations.
+    </div>
+
     <foodweb-hybrid-donation-teaser
-      *virtualItem="let item"
-      [donation]="item">
+      *ngFor="let donation of listQueryService.items"
+      [donation]="donation">
     </foodweb-hybrid-donation-teaser>
-  </ion-virtual-scroll>
 
-  <!-- <foodweb-list-filters>
-    <foodweb-donation-filters
-      [formGroup]="filtersForm"
-      (clear)="filtersForm.resetFacetFilters()"
-      (filter)="updateFilterQueryParams($event)"
-    ></foodweb-donation-filters>
-  </foodweb-list-filters> -->
+    <!-- <foodweb-list-filters>
+      <foodweb-donation-filters
+        [formGroup]="filtersForm"
+        (clear)="filtersForm.resetFacetFilters()"
+        (filter)="updateFilterQueryParams($event)"
+      ></foodweb-donation-filters>
+    </foodweb-list-filters> -->
+
+  </foodweb-hybrid-filtered-list>
 
 </ion-content>

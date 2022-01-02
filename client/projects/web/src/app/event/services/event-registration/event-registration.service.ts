@@ -29,7 +29,7 @@ export class EventRegistrationService {
     const eventRegistrationReq: EventRegistrationCreateRequest = { eventRegistration: <EventRegistration>eventRegistration };
     this._loading = true;
     return this._httpClient.post(this.url, eventRegistrationReq, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ pageProgressBlocking: false }),
+      this._httpResponseService.handleHttpResponse({ loaderBlocking: false }),
       finalize(() => this._loading = false)
     );
   }

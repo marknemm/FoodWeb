@@ -1,5 +1,5 @@
 <foodweb-hybrid-header defaultBackHref="..">
-  <ion-title>{{ pageTitleService.title }}</ion-title>
+  <ion-title>{{ pageTitle }}</ion-title>
   <ion-buttons *ngIf="myDeliveries" slot="end">
     <ion-button [routerLink]="['/', 'delivery', 'list']" [queryParams]="{ donationStatus: 'Matched' }" fill="clear">
       <ion-icon name="add-circle"></ion-icon>
@@ -7,44 +7,45 @@
   </ion-buttons>
 </foodweb-hybrid-header>
 
-<ion-content foodwebHybridListPage
-  [disabled]="loading"
-  [page]="filtersForm.page"
-  [pageSize]="filtersForm.limit"
-  (loadMore)="handleLoadMore($event)"
-  (refresh)="handleRefresh($event)"
-  class="deliveries">
+<ion-content>
 
-  <!-- <foodweb-filtered-list-toolbar listItemsLabel="Deliveries">
-    <foodweb-search-bar
-      [placeholder]="searchPlaceholder"
-      [formControl]="filtersForm.get('fullTextQuery')"
-      (search)="updateFilterQueryParams(filtersForm.value)">
-    </foodweb-search-bar>
-  </foodweb-filtered-list-toolbar> -->
+  <foodweb-hybrid-filtered-list
+    class="deliveries"
+    [disabled]="listQueryService.loading"
+    [itemCount]="listQueryService.items.length"
+    (loadMore)="handleLoadMore($event)"
+    (refresh)="handleRefresh($event)">
 
-  <div *ngIf="!myDeliveries && !noneFound" class="standalone-statement">
-    Choose a delivery to schedule.
-  </div>
+    <!-- <foodweb-filtered-list-toolbar listItemsLabel="Deliveries">
+      <foodweb-search-bar
+        [placeholder]="searchPlaceholder"
+        [formControl]="filtersForm.get('fullTextQuery')"
+        (search)="updateFilterQueryParams(filtersForm.value)">
+      </foodweb-search-bar>
+    </foodweb-filtered-list-toolbar> -->
 
-  <div *ngIf="noneFound" class="standalone-statement">
-    Could not find any deliveries.
-  </div>
+    <div *ngIf="!myDeliveries && !listQueryService.noneFound" class="standalone-statement">
+      Choose a delivery to schedule.
+    </div>
 
-  <ion-virtual-scroll [items]="donations" approxItemHeight="400px">
+    <div *ngIf="listQueryService.noneFound" class="standalone-statement">
+      Could not find any deliveries.
+    </div>
+
     <foodweb-hybrid-delivery-teaser
-      *virtualItem="let item"
-      [donation]="item">
+      *ngFor="let donation of listQueryService.items"
+      [donation]="donation">
     </foodweb-hybrid-delivery-teaser>
-  </ion-virtual-scroll>
 
-  <!-- <foodweb-list-filters>
-    <foodweb-delivery-filters
-      [formGroup]="filtersForm"
-      [myDeliveries]="myDeliveries"
-      (clear)="filtersForm.resetFacetFilters()"
-      (filter)="updateFilterQueryParams($event)">
-    </foodweb-delivery-filters>
-  </foodweb-list-filters> -->
+    <!-- <foodweb-list-filters>
+      <foodweb-delivery-filters
+        [formGroup]="filtersForm"
+        [myDeliveries]="myDeliveries"
+        (clear)="filtersForm.resetFacetFilters()"
+        (filter)="updateFilterQueryParams($event)">
+      </foodweb-delivery-filters>
+    </foodweb-list-filters> -->
+
+  </foodweb-hybrid-filtered-list>
 
 </ion-content>

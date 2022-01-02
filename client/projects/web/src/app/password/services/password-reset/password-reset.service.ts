@@ -20,9 +20,9 @@ export class PasswordResetService {
 
   constructor(
     private _authService: AuthenticationService,
-    private _pageProgressSerivce: PageProgressService,
+    private _pageProgressService: PageProgressService,
     private _httpClient: HttpClient,
-    private _httpResonseService: HttpResponseService,
+    private _httpResponseService: HttpResponseService,
     private _activatedRoute: ActivatedRoute
   ) {}
 
@@ -34,7 +34,7 @@ export class PasswordResetService {
     const params = (new HttpParams()).set('usernameEmail', usernameEmail);
     this._loading = true;
     return this._httpClient.get<void>(this.url, { params, withCredentials: true }).pipe(
-      this._httpResonseService.handleHttpResponse<void>({ pageProgressBlocking: false }),
+      this._httpResponseService.handleHttpResponse<void>({ loaderBlocking: false }),
       finalize(() => this._loading = false)
     );
   }
@@ -44,9 +44,9 @@ export class PasswordResetService {
     const resetToken: string = this._activatedRoute.snapshot.queryParamMap.get('resetToken');
     const request: PasswordResetRequest = { username, password, resetToken };
     this._loading = true;
-    this._pageProgressSerivce.activate(true);
+    this._pageProgressService.activate(true);
     return this._httpClient.put<Account>(this.url, request, { withCredentials: true }).pipe(
-      this._httpResonseService.handleHttpResponse<Account>(),
+      this._httpResponseService.handleHttpResponse<Account>(),
       mergeMap((account: Account) => this._authService.login(account.username, password, true)),
       finalize(() => this._loading = false)
     );

@@ -19,13 +19,13 @@ export class AccountAutocompleteService {
 
   constructor(
     private _httpClient: HttpClient,
-    private _httpResonseService: HttpResponseService
+    private _httpResponseService: HttpResponseService
   ) {
     this._getAccountAutocompleteItems = debounce(this._getAccountAutocompleteItems, 300);
   }
 
   get loading(): boolean {
-    return this._httpResonseService.loading;
+    return this._httpResponseService.loading;
   }
 
   refreshAutocompleteItems(fullTextQuery: string, accountType?: AccountType): Observable<DeepReadonly<AccountAutocompleteItem[]>> {
@@ -44,9 +44,9 @@ export class AccountAutocompleteService {
 
     const params = new HttpParams({ fromObject: <any>request });
     this._httpSubscription = this._httpClient.get<AccountAutocompleteItem>(this.url, { withCredentials: true, params }).pipe(
-      this._httpResonseService.handleHttpResponse({
+      this._httpResponseService.handleHttpResponse({
         immutableStore: this.accountAutocompleteStore,
-        showPageProgressOnLoad: false
+        showLoader: false
       })
     ).subscribe();
   }

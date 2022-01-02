@@ -36,7 +36,10 @@ export class NotificationListComponent implements OnDestroy {
   ionViewWillEnter(): void {
     // If no notifications are present, then refresh upon (re)opening this page.
     if (!this.listQueryService.items?.length) {
-      this.listQueryService.load(this.notificationService, this.notificationFilters);
+      this.listQueryService.load(
+        this.notificationService.getNotifications.bind(this.notificationService),
+        this.notificationFilters
+      );
     }
   }
 
@@ -53,7 +56,7 @@ export class NotificationListComponent implements OnDestroy {
    * @param event The ionRefresh event.
    */
   handleRefresh(event: any): void {
-    this.listQueryService.refresh(false).subscribe(() => event.target.complete());
+    this.listQueryService.refresh({ showLoader: false }).subscribe(() => event.target.complete());
   }
 
   ngOnDestroy(): void {

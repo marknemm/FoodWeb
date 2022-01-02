@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { CanActivate } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AlertService } from '~web/alert/services/alert/alert.service';
-import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
 import { SessionService } from '~web/session/services/session/session.service';
+import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +13,7 @@ export class AuthGuardService implements CanActivate {
 
   constructor(
     private _alertService: AlertService,
-    private _matDialog: MatDialog,
+    private _authService: AuthenticationService,
     private _sessionService: SessionService,
   ) {}
 
@@ -29,7 +28,7 @@ export class AuthGuardService implements CanActivate {
   }
 
   private _attemptLogin(): Observable<boolean> {
-    return LoginDialogComponent.openIfNotLoggedIn(this._sessionService, this._matDialog, { disableClose: true }).pipe(
+    return this._authService.openLoginDialogIfNotLoggedIn(true).pipe(
       map(() => this._sessionService.loggedIn)
     );
   }

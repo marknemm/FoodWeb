@@ -77,10 +77,10 @@ export class HttpResponseService {
     httpResponse$: Observable<T>
   ): HttpResponseHandlerOptions<T> {
     opts = (opts != null) ? Object.assign({}, opts) : {};
-    opts.handleErrorResponse = opts.handleErrorResponse ?? true;
-    opts.loadingId = opts.loadingId ?? httpResponse$;
-    opts.pageProgressBlocking = opts.pageProgressBlocking ?? true;
-    opts.showPageProgressOnLoad = opts.showPageProgressOnLoad ?? true;
+    opts.handleErrorResponse ??= true;
+    opts.loadingId ??= httpResponse$;
+    opts.loaderBlocking ??= true;
+    opts.showLoader ??= true;
     return opts;
   }
 
@@ -96,9 +96,9 @@ export class HttpResponseService {
       : this._loadingRecords.delete(opts.loadingId);
 
     // If configured to show blocking page progress on load, then activate it as long as any response is loading.
-    if (opts.showPageProgressOnLoad) {
+    if (opts.showLoader) {
       if (loading && ++this._pageProgressLoadCnt === 1) {
-        this._pageProgressService.activate(opts.pageProgressBlocking);
+        this._pageProgressService.activate(opts.loaderBlocking);
       } else if (this._pageProgressLoadCnt > 0 && --this._pageProgressLoadCnt === 0) {
         this._pageProgressService.deactivate();
       }

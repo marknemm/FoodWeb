@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { PasswordForm } from '~web/password/forms/password.form';
 import { PasswordResetService } from '~web/password/services/password-reset/password-reset.service';
 
@@ -7,7 +7,7 @@ import { PasswordResetService } from '~web/password/services/password-reset/pass
   templateUrl: './password-reset.component.html',
   styleUrls: ['./password-reset.component.scss']
 })
-export class PasswordResetComponent implements OnInit {
+export class PasswordResetComponent {
 
   passwordResetForm = new PasswordForm({ formMode: 'Signup' });
   passwordResetComplete = false;
@@ -15,8 +15,6 @@ export class PasswordResetComponent implements OnInit {
   constructor(
     private _passwordResetService: PasswordResetService
   ) {}
-
-  ngOnInit() {}
 
   submit(): void {
     if (this.passwordResetForm.valid) {

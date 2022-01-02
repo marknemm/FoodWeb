@@ -3,8 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Account, AccountReadRequest, ListResponse } from '~shared';
 import { environment } from '~web-env/environment';
-import { ReadService } from '~web/shared/interfaces/read-service';
-import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
+import { HttpResponseHandlerOptions, HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 /**
  * A service responsible for reading accounts from the server.
@@ -12,7 +11,7 @@ import { HttpResponseService } from '~web/shared/services/http-response/http-res
 @Injectable({
   providedIn: 'root'
 })
-export class AccountReadService implements ReadService {
+export class AccountReadService {
 
   /**
    * The REST endpoint URL for an account resource.
@@ -36,7 +35,7 @@ export class AccountReadService implements ReadService {
    * @param id The ID of the account to retrieve.
    * @return An observable that emits the retrieved account from the server.
    */
-  getOne(id: number): Observable<Account> {
+  getAccount(id: number): Observable<Account> {
     const url = `${this.url}/${id}`;
     return this._httpClient.get<Account>(url, { withCredentials: true }).pipe(
       this._httpResponseService.handleHttpResponse()
@@ -46,16 +45,16 @@ export class AccountReadService implements ReadService {
   /**
    * Gets accounts based off of given filter and paging parameters.
    * @param request The account read request.
-   * @param showPageProgressOnLoad Set to false if no page progress indicator should show on load; defaults to true.
+   * @param opts Options for the HTTP response handler.
    * @return An observable that emits the account list that was retrieved from the server.
    */
-  getMany(filters: AccountReadRequest, showPageProgressOnLoad = true): Observable<ListResponse<Account>> {
+  getAccounts(filters: AccountReadRequest, opts: HttpResponseHandlerOptions = {}): Observable<ListResponse<Account>> {
     const request = <AccountReadRequest>filters;
     request.page = request.page ?? 1;
     request.limit = request.limit ?? 10;
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Account>>(this.url, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ showPageProgressOnLoad })
+      this._httpResponseService.handleHttpResponse(opts)
     );
   }
 }
