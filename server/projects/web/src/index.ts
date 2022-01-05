@@ -35,9 +35,9 @@ initMiddleware(app) // Initialize all app middleware that pre-processes requests
       response.sendFile(path.join(appPaths.assetsDir, assetFile));
     });
 
-    app.get('/.wellknown/apple-app-site-association', (_: Request, response: Response) => {
+    app.get('/.well-known/apple-app-site-association', (_: Request, response: Response) => {
       response.sendFile(
-        path.join(appPaths.serverDir, '.wellknown', 'apple-app-site-association'),
+        path.join(appPaths.serverDir, '.well-known', 'apple-app-site-association'),
         { headers: { 'Content-Type': 'json' } }
       );
     });
