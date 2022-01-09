@@ -1,21 +1,21 @@
 <form #loginFormDirective="ngForm" [formGroup]="loginForm" (submit)="submit()" class="login-container" [ngClass]="{ container: !insideDialog }">
   <img src="./assets/IconImgMd.png" *ngIf="!insideDialog" class="foodweb-img">
 
-  <div *ngIf="!messageSent">
+  <div *ngIf="!loginSubmitService.messageSent">
     <mat-form-field>
-      <input matInput *ngIf="!insideDialog" type="email" [placeholder]="usernameEmailPlaceholder" formControlName="usernameEmail">
-      <input matInput *ngIf="insideDialog" type="email" [placeholder]="usernameEmailPlaceholder" formControlName="usernameEmail" cdkFocusInitial>
+      <input matInput *ngIf="!insideDialog" type="email" [placeholder]="loginForm.usernameEmailPlaceholder" formControlName="usernameEmail">
+      <input matInput *ngIf="insideDialog" type="email" [placeholder]="loginForm.usernameEmailPlaceholder" formControlName="usernameEmail" cdkFocusInitial>
     </mat-form-field>
-    <mat-form-field *ngIf="isLogin">
+    <mat-form-field *ngIf="loginForm.isLogin">
       <input matInput type="password" placeholder="Password" formControlName="password">
     </mat-form-field>
-    <mat-error *ngIf="loginErr && loginFormDirective.submitted" class="login-err">{{ loginErr }}</mat-error>
+    <mat-error *ngIf="loginSubmitService.loginErr && loginFormDirective.submitted" class="login-err">{{ loginSubmitService.loginErr }}</mat-error>
   </div>
-  <div *ngIf="resetMessageSent">
+  <div *ngIf="loginSubmitService.resetMessageSent">
     <p>A password reset message has been sent to your email.</p>
     <p>Follow the link within the email to reset your password.</p>
   </div>
-  <div *ngIf="recoveryMessageSent">
+  <div *ngIf="loginSubmitService.recoveryMessageSent">
     <p>Please check your email for a username recovery message.</p>
     <p>
       If you did not receive an email, then ensure that the given email is correct:<br>
@@ -24,18 +24,18 @@
   </div>
 
   <div class="align-right">
-    <div *ngIf="isLogin">
+    <div *ngIf="loginForm.isLogin">
       <button mat-raised-button type="submit" color="primary" [disabled]="loginForm.invalid">Login</button>
       <div class="recovery-links">
-        <a role="button" (click)="forgotUsername()" tabindex="0">Forgot Username</a>
-        <a role="button" (click)="forgotPassword()" tabindex="0">Forgot Password</a>
+        <a role="button" (click)="loginForm.activateUsernameRecovery()" tabindex="0">Forgot Username</a>
+        <a role="button" (click)="loginForm.activatePasswordReset()" tabindex="0">Forgot Password</a>
       </div>
     </div>
-    <div *ngIf="!isLogin && !messageSent">
-      <button mat-button type="button" color="accent" (click)="returnToLogin()">Login</button>
+    <div *ngIf="!loginForm.isLogin && !loginSubmitService.messageSent">
+      <button mat-button type="button" color="accent" (click)="loginForm.activateLogin()">Login</button>
       <button mat-raised-button type="submit" color="primary" [disabled]="loginForm.invalid">Send Email</button>
     </div>
-    <div *ngIf="messageSent">
+    <div *ngIf="loginSubmitService.messageSent">
       <button mat-button type="submit" color="accent">Resend Email</button>
       <button mat-raised-button type="button" color="primary" mat-dialog-close>Ok</button>
     </div>
@@ -50,4 +50,4 @@
   </div>
 </form>
 
-<foodweb-progress-indicator [trigger]="loading" [blocking]="true" [diameter]="150"></foodweb-progress-indicator>
+<foodweb-progress-indicator [trigger]="loginSubmitService.loading" [blocking]="true" [diameter]="150"></foodweb-progress-indicator>

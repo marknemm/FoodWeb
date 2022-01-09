@@ -21,7 +21,6 @@ export class PageProgressService {
     protected _router: Router,
   ) {
     this._listenForRouteChange();
-    this.reset();
   }
 
   /**

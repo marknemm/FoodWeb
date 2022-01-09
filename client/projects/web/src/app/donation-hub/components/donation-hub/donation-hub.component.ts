@@ -100,7 +100,7 @@ export class DonationHubComponent implements OnInit, OnDestroy {
 
   private _refreshMyPledge(): void {
     const myPledgeUpdate$: Observable<DonationHubPledge> = (this.donationHub && this._sessionService.loggedIn)
-      ? this._donationHubPledgeReadService.getMyPledgeUnderDonationHub(this.donationHub.id, { showPageProgressOnLoad: false })
+      ? this._donationHubPledgeReadService.getMyPledgeUnderDonationHub(this.donationHub.id, { showLoader: false })
       : of(undefined);
     myPledgeUpdate$.subscribe((myPledge: DonationHubPledge) => this._myPledge = myPledge);
   }
@@ -124,7 +124,7 @@ export class DonationHubComponent implements OnInit, OnDestroy {
   }
 
   refreshDonationHubPledges(): void {
-    this._donationHubPledgeReadService.getPledgesUnderDonationHub(this.donationHub.id, {}, { showPageProgressOnLoad: false }).subscribe(
+    this._donationHubPledgeReadService.getPledgesUnderDonationHub(this.donationHub.id, {}, { showLoader: false }).subscribe(
       (results: ListResponse<DonationHubPledge>) => this._pledges = results.list
     );
   }

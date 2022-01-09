@@ -1,31 +1,56 @@
 import { Component } from '@angular/core';
-import { Donation, ListResponse } from '~shared';
-import { DeliveryListComponent as WebDeliveryListComponent } from '~web/delivery/components/delivery-list/delivery-list.component';
+import { Router } from '@angular/router';
+import { Donation } from '~shared';
+import { DeliveryReadService } from '~web/delivery/services/delivery-read/delivery-read.service';
+import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
+import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 
 @Component({
   selector: 'foodweb-hybrid-delivery-list',
   templateUrl: './delivery-list.component.html',
-  styleUrls: ['./delivery-list.component.scss']
+  styleUrls: ['./delivery-list.component.scss'],
+  providers: [ListQueryService]
 })
-export class DeliveryListComponent extends WebDeliveryListComponent {
+export class DeliveryListComponent {
+
+  readonly filtersForm = new DonationFiltersForm();
+
+  private _myDeliveries = false;
+  private _pageTitle = '';
+
+  constructor(
+    public listQueryService: ListQueryService<Donation>,
+    private _deliveryReadService: DeliveryReadService,
+    private _router: Router
+  ) {}
+
+  get myDeliveries(): boolean {
+    return this._myDeliveries;
+  }
+
+  get pageTitle(): string {
+    return this._pageTitle;
+  }
+
+  ionViewWillEnter(): void {
+    this._myDeliveries = this._router.url.indexOf('/my') >= 0;
+    this._pageTitle = (this._myDeliveries)
+      ? 'My Deliveries'
+      : 'Schedule Deliveries';
+    if (!this.listQueryService.items.length) {
+      this.listQueryService.load(
+        this._deliveryReadService.getDeliveries.bind(this._deliveryReadService),
+        this.filtersForm
+      );
+    }
+  }
 
   /**
    * Handles an ionInfinite event by loading the next segment of Donation/Delivery List items.
    * @param event The ionInfinite event.
    */
   handleLoadMore(event: any): void {
-    this.filtersForm.page = event.page;
-    this._deliveryReadService.getDeliveries(this.filtersForm.toDonationReadRequest()).subscribe(
-      (response: ListResponse<Donation>) => {
-        if (response?.list) {
-          for (const donation of response.list) {
-            this._donations.push(donation); // Must iteratively add in-place so no blink in ion-virtual-scroll.
-          }
-          this._totalCount = response.totalCount;
-        }
-        event.target.complete();
-      }
-    );
+    this.listQueryService.loadMore().subscribe(() => event.target.complete());
   }
 
   /**
@@ -33,6 +58,6 @@ export class DeliveryListComponent extends WebDeliveryListComponent {
    * @param event The ionRefresh event.
    */
   handleRefresh(event: any): void {
-    this.refresh().subscribe(() => event.target.complete());
+    this.listQueryService.refresh({ showLoader: false }).subscribe(() => event.target.complete());
   }
 }

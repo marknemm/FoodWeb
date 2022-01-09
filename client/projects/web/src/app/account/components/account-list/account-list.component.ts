@@ -22,7 +22,14 @@ export class AccountListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.listQueryService.load(this._accountReadService, this.filtersForm);
+    this.listQueryService.load(
+      this._accountReadService.getAccounts.bind(this._accountReadService),
+      this.filtersForm
+    );
+  }
+
+  resetFacetFilters(): void {
+    this.filtersForm.reset({ fullTextQuery: this.filtersForm.value.fullTextQuery });
   }
 
 }

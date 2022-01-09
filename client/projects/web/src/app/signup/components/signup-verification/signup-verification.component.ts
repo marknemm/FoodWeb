@@ -1,10 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { NEVER, Observable, ObservableInput } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '~web-env/environment';
-import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
+import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
@@ -23,7 +22,7 @@ export class SignupVerificationComponent implements OnInit {
   constructor(
     public sessionService: SessionService,
     public signupVerificationService: SignupVerificationService,
-    private _matDialog: MatDialog
+    private _authService: AuthenticationService
   ) {}
 
   get verifySuccess(): boolean {
@@ -41,7 +40,7 @@ export class SignupVerificationComponent implements OnInit {
 
   private _verifyAccount(): void {
     // If the user is not logged in, then give them a chance to login before verifying account.
-    const login$: Observable<any> = LoginDialogComponent.openIfNotLoggedIn(this.sessionService, this._matDialog);
+    const login$: Observable<any> = this._authService.openLoginDialogIfNotLoggedIn();
 
     login$.subscribe(() => {
       (!this.sessionService.loggedIn || !this.sessionService.account.verified)

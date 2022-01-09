@@ -86,7 +86,7 @@ export class AccountComponent implements OnInit {
 
   private _listenAccountChange(): void {
     this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
-      switchMap((id: number) => this._accountReadService.getOne(id))
+      switchMap((id: number) => this._accountReadService.getAccount(id))
     ).subscribe((account: Account) => this._handleAccountChange(account));
   }
 

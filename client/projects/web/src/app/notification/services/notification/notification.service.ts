@@ -7,15 +7,14 @@ import { LastSeenNotificationUpdateRequest, ListResponse, Notification, Notifica
 import { environment } from '~web-env/environment';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
-import { ReadService } from '~web/shared/interfaces/read-service';
-import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
+import { HttpResponseHandlerOptions, HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 import { ServerSentEventService } from '~web/shared/services/server-sent-event/server-sent-event.service';
 export { Notification };
 
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationService implements ReadService {
+export class NotificationService {
 
   readonly defaultReadLimit = 25;
   readonly url = `${environment.server}/notification`;
@@ -70,7 +69,7 @@ export class NotificationService implements ReadService {
    * @param id The ID of the notification to retrieve.
    * @return An observable that emits the retrieved notification from the server.
    */
-  getOne(id: number): Observable<Notification> {
+  getNotification(id: number): Observable<Notification> {
     const url = `${this.url}/${id}`;
     return this._httpClient.get<Notification>(url, { withCredentials: true }).pipe(
       this._httpResponseService.handleHttpResponse()
@@ -80,10 +79,10 @@ export class NotificationService implements ReadService {
   /**
    * Gets notifications using a given read request.
    * @param request The read request containing filters, pagination, and sorting data for the notifications to retrieve.
-   * @param showPageProgressOnLoad Set to false if no page progress indicator should show on load; defaults to true.
+   * @param opts Options for the HTTP response handler.
    * @returns An observable that emits a notifications list response on successful retrieval.
    */
-  getMany(request: NotificationReadRequest, showPageProgressOnLoad = true): Observable<ListResponse<Notification>> {
+  getNotifications(request: NotificationReadRequest, opts: HttpResponseHandlerOptions = {}): Observable<ListResponse<Notification>> {
     // Set defaults for pagination.
     request.page = (request.page >= 1 ? request.page : 1);
     request.limit = (request.limit >= 0 ? request.limit : this.defaultReadLimit);
@@ -102,7 +101,7 @@ export class NotificationService implements ReadService {
     // Send GET request for notifications.
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Notification>>(this.url, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ showPageProgressOnLoad })
+      this._httpResponseService.handleHttpResponse(opts)
     );
   }
 
@@ -141,15 +140,21 @@ export class NotificationService implements ReadService {
    * @param lastSeenNotificationId The ID of the last seen notification.
    * @param resetImmediately Set to true if the unseenNotificationsCount should be set to 0 immediately instead
    * of waiting for the updated count from the server.
+   * @param opts Options for the HTTP response handler.
    */
-  refreshUnseenNotifications(lastSeenNotificationId: number, resetImmediately = false): void {
+  refreshUnseenNotifications(
+    lastSeenNotificationId: number,
+    resetImmediately = false,
+    opts: HttpResponseHandlerOptions = { loaderBlocking: false }
+  ): void {
     if (this._unseenNotificationsCount > 0) {
+      opts.loaderBlocking ??= false;
       if (resetImmediately) {
         this._unseenNotificationsCount = 0;
       }
       const request: LastSeenNotificationUpdateRequest = { lastSeenNotificationId };
       this._httpClient.put<number>(`${this.url}/last-seen-notification`, request, { withCredentials: true }).pipe(
-        this._httpResponseService.handleHttpResponse<number>({ pageProgressBlocking: false })
+        this._httpResponseService.handleHttpResponse<number>(opts)
       ).subscribe(
         (unseenNotificationsCount: number) => this._unseenNotificationsCount = unseenNotificationsCount
       );
@@ -177,7 +182,7 @@ export class NotificationService implements ReadService {
   private _updateNotificationState(notification: Notification): void {
     const notificationUpdateRequest: NotificationUpdateRequest = { notification };
       this._httpClient.put(this.url, notificationUpdateRequest, { withCredentials: true }).pipe(
-        this._httpResponseService.handleHttpResponse({ pageProgressBlocking: false })
+        this._httpResponseService.handleHttpResponse({ loaderBlocking: false })
       ).subscribe();
   }
 }

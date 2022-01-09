@@ -99,7 +99,7 @@ export class DonationHubPledgeReadService {
   }
 
   /**
-   * Gets donation hub pledges that fall under a given doantoin hub form the server.
+   * Gets donation hub pledges that fall under a given donation hub form the server.
    * @param donationHubId The ID of the donation that the pledge belongs to.
    * @param request The donation hub pledge read request.
    * @param opts The optional HTTP response handler options.

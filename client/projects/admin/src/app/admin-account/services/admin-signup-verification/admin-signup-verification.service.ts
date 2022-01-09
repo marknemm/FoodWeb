@@ -21,14 +21,14 @@ export class AdminSignupVerificationService extends SignupVerificationService {
   }
 
   /**
-   * Resends a signup verification email for a given account.
+   * Re-sends a signup verification email for a given account.
    * @param account The account for which to resend the signup verification email.
    */
   resendVerificationEmailFor(account: DeepReadonly<Account>): void {
     if (!this.loading) {
       const url = `${this.url}/resend-verification-email/${account.id}`;
       this._httpClient.get(url, { withCredentials: true }).pipe(
-        this._httpResponseService.handleHttpResponse({ pageProgressBlocking: false, successMessage: 'Verification Email Resent' })
+        this._httpResponseService.handleHttpResponse({ loaderBlocking: false, successMessage: 'Verification Email Resent' })
       ).subscribe();
     }
   }

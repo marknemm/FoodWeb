@@ -35,7 +35,7 @@ export class EventRegistrationsService {
     this._httpClient.get<FeaturedEvent>(url, { withCredentials: true }).pipe(
       this._httpResponseService.handleHttpResponse({
         immutableStore: this.featuredEventStore,
-        showPageProgressOnLoad: false
+        showLoader: false
       })
     ).subscribe();
   }

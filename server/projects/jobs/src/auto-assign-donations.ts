@@ -94,7 +94,10 @@ function _shouldDelayAutoMatch(donation: DonationEntity): boolean {
  * @return A promise that resolves to the found automatic receiver. Will return null/undefined if no receiver is found.
  */
 async function _findAutoReceiver(donation: DonationEntity): Promise<AccountEntity> {
-  const operationHours: OperationHours = _operationHoursHelper.genOperationHoursFilter(donation);
+  const operationHours: OperationHours = _operationHoursHelper.dateTimeRangeToOperationHours({
+    startDateTime: donation.pickupWindowStart,
+    endDateTime: donation.pickupWindowEnd
+  });
   const readRequest: AccountReadRequest = {
     page: 1,
     limit: 1,
