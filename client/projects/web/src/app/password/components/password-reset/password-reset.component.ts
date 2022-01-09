@@ -13,7 +13,7 @@ export class PasswordResetComponent {
   passwordResetComplete = false;
 
   constructor(
-    private _passwordResetService: PasswordResetService
+    protected _passwordResetService: PasswordResetService
   ) {}
 
   submit(): void {

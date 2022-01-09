@@ -23,10 +23,9 @@
       "resize-observer-browser"
     ],
     "lib": [
-      "es2018",
-      "es2017",
+      "es2020",
       "dom",
-      "es6"
+      "dom.iterable"
     ]
   },
   "angularCompilerOptions": {

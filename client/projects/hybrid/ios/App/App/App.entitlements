@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:wnyfoodweb.com</string>
+		<string>applinks:www.wnyfoodweb.com</string>
 		<string>applinks:qa.wnyfoodweb.com</string>
 	</array>
 </dict>

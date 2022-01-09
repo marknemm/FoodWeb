@@ -4,6 +4,7 @@
       <ion-back-button
         *ngIf="!hideBackHref"
         [defaultHref]="defaultBackHref"
+        [text]="backText"
         class="header-primary-button">
       </ion-back-button>
       <ng-content select="[slot='start']"></ng-content>
