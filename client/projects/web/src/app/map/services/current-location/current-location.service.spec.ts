@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { CurrentLocationService } from './current-location.service';
 
 describe('CurrentLocationService', () => {

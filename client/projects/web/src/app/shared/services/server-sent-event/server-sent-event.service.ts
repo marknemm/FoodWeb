@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { debounceTime, filter, map, take } from 'rxjs/operators';
 import { ServerSentEventType } from '~shared';
 import { environment } from '~web-env/environment';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
@@ -29,7 +29,11 @@ export class ServerSentEventService {
     private _authService: AuthenticationService,
     private _ngZone: NgZone,
   ) {
-    this.error$.subscribe(console.error);
+    this.error$.pipe(take(1)).subscribe((event: Event) =>
+      console.error('The following error event may be a false alarm, and may have occurred because several local instances of FoodWeb'
+                  + ' (website/app) are attempting to establish an SSE connection at same time:', event)
+    );
+    this.error$.pipe(debounceTime(5000)).subscribe(console.error);
     this._authService.login$.subscribe(() => this.open());
     this._authService.logout$.subscribe(() => this.close());
     if (this._authService.loggedIn) { this.open(); }

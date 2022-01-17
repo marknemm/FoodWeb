@@ -1,5 +1,9 @@
 @import "variables.scss";
 
+ion-back-button.md {
+  display: none;
+}
+
 .non-blocking-page-progress-indicator {
   position: absolute;
   width: 100%;

@@ -11,7 +11,11 @@ ion-avatar {
   }
 
   + ion-label {
-    padding-left: 30px;
+    padding-left: 32px;
+  }
+
+  &.md {
+    margin-top: 3px;
   }
 }
 

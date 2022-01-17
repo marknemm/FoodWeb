@@ -75,8 +75,13 @@
       margin-right: 5px;
 
       ion-card {
-        min-width: 135px;
-        height   : 135px;
+        box-sizing: border-box;
+        min-width : 135px;
+        height    : 135px;
+
+        &.md {
+          height: 147px;
+        }
 
         ion-toolbar {
           font-size: 18px;
@@ -93,25 +98,27 @@
 .account-type-descr {
   background-color: var(--ion-card-background);
   margin-top      : 15px;
+  margin-left     : 14px;
+  margin-right    : 14px;
   padding         : 0;
   border          : none;
 
   &.volunteer {
     box-shadow: 0px 3px 30px 15px rgb(255 0 0 / 40%),
-                0px 2px 2px 0px rgb(255 0 0 / 14%),
-                0px 2px 6px 0px rgb(255 0 0 / 12%);
+      0px 2px 2px 0px rgb(255 0 0 / 14%),
+      0px 2px 6px 0px rgb(255 0 0 / 12%);
   }
 
   &.donor {
     box-shadow: 0px 3px 30px 15px rgb(0 255 0 / 40%),
-                0px 2px 2px 0px rgb(0 255 0 / 14%),
-                0px 2px 6px 0px rgb(0 255 0 / 12%);
+      0px 2px 2px 0px rgb(0 255 0 / 14%),
+      0px 2px 6px 0px rgb(0 255 0 / 12%);
   }
 
   &.receiver {
     box-shadow: 0px 3px 30px 15px rgb(255 215 0 / 40%),
-                0px 2px 2px 0px rgb(255 215 0 / 14%),
-                0px 2px 6px 0px rgb(255 215 0 / 12%);
+      0px 2px 2px 0px rgb(255 215 0 / 14%),
+      0px 2px 6px 0px rgb(255 215 0 / 12%);
   }
 
   p {
@@ -120,6 +127,6 @@
 
   ion-button {
     font-weight: bold;
-    margin: 20px 0 5px;
+    margin     : 20px 0 5px;
   }
 }

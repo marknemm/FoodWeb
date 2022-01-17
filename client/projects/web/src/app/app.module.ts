@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AccountHelper, DeliveryHelper, DirectionsExtractor, DonationHelper, JSONDateReviver, MapWaypointConverter, OperationHoursHelper } from '~shared';
+import { AccountHelper, DeliveryHelper, DonationHelper, JSONDateReviver, MapWaypointConverter, OperationHoursHelper } from '~shared';
 import { AppRoutingModule } from '~web/app-routing.module';
 import { AppComponent } from '~web/app.component';
 import { HomeModule } from '~web/home/home.module';
@@ -32,7 +32,6 @@ import { ShellModule } from '~web/shell/shell.module';
     // Provide classes from root shared project.
     AccountHelper,
     DeliveryHelper,
-    DirectionsExtractor,
     DonationHelper,
     JSONDateReviver,
     MapWaypointConverter,

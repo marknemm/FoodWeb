@@ -10,7 +10,7 @@
     },
     "strict": false,
     "types": [
-      "googlemaps",
+      "google.maps",
       "jasmine",
       "node"
     ]

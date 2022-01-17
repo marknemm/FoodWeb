@@ -221,11 +221,3 @@ body.dark {
   --ion-border-color: var(--ion-color-step-300);
   --ion-placeholder-color: #8b8b8b;
 }
-
-.ios ion-popover {
-  --width: 250px;
-
-  &.full-width {
-    --width: calc(100vw - 10px);
-  }
-}
