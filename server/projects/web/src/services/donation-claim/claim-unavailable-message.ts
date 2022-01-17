@@ -11,7 +11,7 @@ const _donationHelper = new DonationHelper();
  * Sends claim unavailable messages for a given donation that has either been claimed or deleted.
  * The messages will be sent to all user's that were previously sent message(s) giving them the opportunity to claim the donation.
  * @param donation The donation.
- * @param manager The optional Entity Manager used to encompase all internal database writes within a transaction.
+ * @param manager The optional Entity Manager used to encompass all internal database writes within a transaction.
  * @return A promise that resolves to the claimed donation on completion.
  */
 export async function sendClaimUnavailableMessages(donation: DonationEntity, manager?: OrmEntityManager): Promise<DonationEntity> {
