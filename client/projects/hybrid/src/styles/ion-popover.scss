@@ -1,0 +1,9 @@
+@import "variables.scss";
+
+ion-popover.ios {
+  --width: 250px;
+
+  &.full-width {
+    --width: calc(100vw - 10px);
+  }
+}

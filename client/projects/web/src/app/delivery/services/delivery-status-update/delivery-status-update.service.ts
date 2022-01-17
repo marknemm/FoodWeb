@@ -4,7 +4,7 @@ import { Observable, Subscriber } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { DeliveryStateChangeRequest, Donation, DonationHelper, DonationStatus, LatLngLiteral } from '~shared';
 import { environment } from '~web-env/environment';
-import { CurrentLocationService } from '~web/shared/services/current-location/current-location.service';
+import { CurrentLocationService } from '~web/map/services/current-location/current-location.service';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 @Injectable({

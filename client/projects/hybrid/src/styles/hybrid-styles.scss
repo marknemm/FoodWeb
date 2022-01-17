@@ -8,6 +8,7 @@
 @import "./ion-input.scss";
 @import "./ion-label.scss";
 @import "./ion-list.scss";
+@import "./ion-popover.scss";
 @import "./ion-radio.scss";
 @import "./ion-toast.scss";
 @import "./mat-expansion-panel.scss";
@@ -26,6 +27,10 @@ h2.section-title,
 .block-label,
 .inline-label {
   color: var(--ion-text-color);
+}
+
+h2.section-title {
+  padding: 0 14px;
 }
 
 .standalone-statement {
@@ -51,4 +56,10 @@ h2.section-title,
 cdk-virtual-scroll-viewport {
   height: 100%;
   width: 100%;
+}
+
+.light {
+  a {
+    color: var(--ion-color-tertiary);
+  }
 }

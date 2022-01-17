@@ -30,6 +30,7 @@
       }
     ],
     "cSpell.words": [
+      "alertdialog",
       "applinks",
       "Buildable",
       "builtins",
@@ -57,6 +58,7 @@
       "Inlines",
       "ionicons",
       "keyname",
+      "lngs",
       "lscache",
       "MAILGUN",
       "mkdir",
@@ -83,6 +85,7 @@
       "reinitialization",
       "resave",
       "routable",
+      "Segs",
       "serverlogs",
       "sidenav",
       "signup",
