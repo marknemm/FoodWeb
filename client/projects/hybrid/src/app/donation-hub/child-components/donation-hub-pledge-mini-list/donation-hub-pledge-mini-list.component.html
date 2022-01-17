@@ -1,8 +1,8 @@
 <ion-list class="borders-vertical">
-  <ion-item *ngFor="let pledge of pledges" (click)="onSelectionChange(pledge)">
+  <ion-item *ngFor="let pledge of pledges" (click)="select.emit(pledge)">
     <div class="item-inner">
       <div>
-          {{ pledge.account | foodwebAccountName }}
+        {{ pledge.account | foodwebAccountName }}
       </div>
       <div class="truncate">
         {{ pledge.foodCount }} - {{ pledge.foodType }}

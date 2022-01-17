@@ -1,10 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, finalize, map, takeUntil } from 'rxjs/operators';
 import { AccountHelper, ImpersonateRequest, LoginRequest, LoginResponse } from '~shared';
 import { environment } from '~web-env/environment';
 import { AlertService } from '~web/alert/services/alert/alert.service';
+import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
 import { Account, SessionService } from '../session/session.service';
 
 @Injectable({
@@ -23,7 +25,8 @@ export class AuthenticationService {
     protected _accountHelper: AccountHelper,
     protected _alertService: AlertService,
     protected _httpClient: HttpClient,
-    protected _sessionService: SessionService
+    protected _sessionService: SessionService,
+    private _matDialog: MatDialog
   ) {}
 
   /**
@@ -152,6 +155,28 @@ export class AuthenticationService {
           : this._sessionRefreshLogout()
       )
     );
+  }
+
+  /**
+   * Opens a login dialog if the user is not currently logged in.
+   * @param disableClose Whether or not to disable closing of the dialog by clicking on the backdrop. Defaults to false.
+   * @return An observable that emits the session account on dialog close if the login was successful,
+   * or immediately if the user was already logged in. Returns null/undefined if the user was not logged in
+   * and the dialog closes without successful login.
+   */
+  openLoginDialogIfNotLoggedIn(disableClose = false): Observable<Account> {
+    return (!this._sessionService.loggedIn)
+      ? this.openLoginDialog(disableClose)
+      : of(this._sessionService.account);
+  }
+
+  /**
+   * Opens a login dialog.
+   * @param disableClose Whether or not to disable closing of the dialog by clicking on the backdrop. Defaults to false.
+   * @return An observable that emits the session account on dialog close if the login was successful, null/undefined otherwise.
+   */
+  openLoginDialog(disableClose = false): Observable<Account> {
+    return this._matDialog.open(LoginDialogComponent, { disableClose, maxWidth: '400px' }).afterClosed();
   }
 
   /**

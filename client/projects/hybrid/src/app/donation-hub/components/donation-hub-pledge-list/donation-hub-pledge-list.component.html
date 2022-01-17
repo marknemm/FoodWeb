@@ -7,21 +7,24 @@
   </ion-buttons>
 </foodweb-hybrid-header>
 
-<ion-content foodwebHybridListPage
-  [disabled]="loading"
-  [page]="activeFilters.page"
-  (loadMore)="handleLoadMore($event)"
-  (refresh)="handleRefresh($event)">
+<ion-content>
 
-  <div *ngIf="noneFound" class="standalone-statement">
-    Could Not Find Any Donation Pledges.
-  </div>
+  <foodweb-hybrid-filtered-list
+    class="donation-hub-pledges"
+    [disabled]="listQueryService.loading"
+    [itemCount]="listQueryService.items.length"
+    (loadMore)="handleLoadMore($event)"
+    (refresh)="handleRefresh($event)">
 
-  <ion-virtual-scroll [items]="pledges" approxItemHeight="350px">
+    <div *ngIf="listQueryService.noneFound" class="standalone-statement">
+      Could Not Find Any Donation Pledges.
+    </div>
+
     <foodweb-hybrid-donation-hub-pledge-teaser
-      *virtualItem="let item"
-      [pledge]="item">
+      *ngFor="let pledge of listQueryService.items"
+      [pledge]="pledge">
     </foodweb-hybrid-donation-hub-pledge-teaser>
-  </ion-virtual-scroll>
+
+  </foodweb-hybrid-filtered-list>
 
 </ion-content>

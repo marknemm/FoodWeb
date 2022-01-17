@@ -1,7 +1,7 @@
 @import "variables.scss";
 
-:host {
-  display: contents;
+ion-back-button.md {
+  display: none;
 }
 
 .non-blocking-page-progress-indicator {

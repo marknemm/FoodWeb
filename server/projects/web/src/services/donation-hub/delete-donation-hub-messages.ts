@@ -62,7 +62,7 @@ async function _sendDeleteMessageToHubOwner(donationHub: DonationHubEntity): Pro
         notificationLink: `donation-hub/create`,
         title: 'Donation Drop-Off Hub Deleted',
         body: `
-          Your doantion drop-off hub for <strong>${dropOffWindowStartStr}</strong> has been deleted.
+          Your donation drop-off hub for <strong>${dropOffWindowStartStr}</strong> has been deleted.
           Click this notification to register another drop-off hub.
         `
       }

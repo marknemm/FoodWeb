@@ -31,7 +31,7 @@ export class MapService {
   ) {}
 
   /**
-   * The map direcitons.
+   * The map directions.
    */
   get directions(): Directions {
     return this._directions;
@@ -136,14 +136,14 @@ export class MapService {
   }
 
   /**
-   * Generates the volunteer waypoint config for the contianing map based off of the associated donation and map options.
+   * Generates the volunteer waypoint config for the containing map based off of the associated donation and map options.
    * @param donation The donation from which the waypoints are generated.
    * @param options The map options.
    * @return The volunteer waypoint config.
    */
   private _genVolunteerWaypointConfig(donation: Donation, options: MapOptions): VolunteerWaypointConfig {
     let volunteerWaypointConfig = VolunteerWaypointConfig.Home;
-    // Exlcude the volunteer waypoint for users who are viewing a scheduled delivery which are not the volunteer.
+    // Exclude the volunteer waypoint for users who are viewing a scheduled delivery which are not the volunteer.
     if (donation.claim && donation.claim.delivery && !this._sessionService.hasAccountOwnership(donation.claim.delivery.volunteerAccount.id)) {
       volunteerWaypointConfig = VolunteerWaypointConfig.Exclude;
     } else if (options.useVolunteerCurrentPos) {
@@ -175,7 +175,7 @@ export class MapService {
   }
 
   /**
-   * Refeshes the directions.
+   * Refreshes the directions.
    * @param donation The donation that the directions are for.
    * @param options The map (direction) options.
    */
@@ -189,11 +189,9 @@ export class MapService {
       directions$ = this._directionsService.genDirections(this.latLngWaypoints);
     }
 
-    if (directions$) {
-      directions$.subscribe((directions: Directions) => {
-        this._directions = directions;
-        this._directionPolylines = this._directionsService.directionsToPolylines(directions, options);
-      });
-    }
+    directions$?.subscribe((directions: Directions) => {
+      this._directions = directions;
+      this._directionPolylines = this._directionsService.directionsToPolylines(directions, options);
+    });
   }
 }

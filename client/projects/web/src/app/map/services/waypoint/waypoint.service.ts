@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, Subscriber } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Account, AccountHelper, Donation, MapWaypointConverter, Waypoint } from '~shared';
 import { ClientWaypoint, LatLngLiteral, WaypointMarker } from '~web/map/interfaces/map';
-import { CurrentLocationService } from '~web/shared/services/current-location/current-location.service';
+import { CurrentLocationService } from '~web/map/services/current-location/current-location.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class WaypointService {
    * @param donation The donation to extract waypoints out of.
    * @param potentialVolunteer The account of a potential volunteer for the donation (used if the donation does not have a volunteer).
    * @param useVolunteerCurrentPos Whether or not to use the user's current position as the waypoint for the donation volunteer.
-   * @return An observable that emits the extracted donation wayoints.
+   * @return An observable that emits the extracted donation waypoints.
    */
   extractWaypoints(
     donation: Donation,
@@ -40,7 +40,10 @@ export class WaypointService {
       clientWaypoints.forEach((waypoint: ClientWaypoint, idx: number) => {
         if (waypoint === 'My+Location') {
           currentPositionIdx = idx;
-          currentPosition$ = this._currentLocationService.getCurrentLatLngLiteral();
+          currentPosition$ = this._currentLocationService.getCurrentLatLngLiteral().pipe(tap((position: LatLngLiteral) => {
+            position.lat = Math.round(position.lat * 10000) / 10000; // Round to nearest thousandths place for caching.
+            position.lng = Math.round(position.lng * 10000) / 10000; // Round to nearest thousandths place for caching.
+          }));
         } else {
           latLngLiterals.push(
             this._waypointToLatLngLiteral(waypoint)
@@ -134,7 +137,7 @@ export class WaypointService {
 
   /**
    * Generates a new waypoint marker with given account, GPS (lat-lng) coordinate, & ordered index data.
-   * @param waypointAccount The account assocaited with the waypoint.
+   * @param waypointAccount The account associated with the waypoint.
    * @param latLng The GPS (lat-lng) coordinate.
    * @param clientWaypoint The client waypoint used to generate the given latLng coordinate.
    * @param idx The ordered (0-based) index of the waypoint along an associated path.

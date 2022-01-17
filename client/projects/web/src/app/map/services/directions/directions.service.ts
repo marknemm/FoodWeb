@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { from, Observable, of, Subscriber } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Account, DirectionsExtractor, Donation, MapRoute, MapRouteReadRequest, WaypointSegment } from '~shared';
+import { map, switchMap } from 'rxjs/operators';
+import { Account, Donation, MapRoute, MapRouteReadRequest, StepSegment, WaypointSegment } from '~shared';
 import { environment } from '~web-env/environment';
 import { Directions, LatLng, LatLngLiteral, MapOptions, Polyline, Waypoint } from '~web/map/interfaces/map';
 import { KeyValueStore, KeyValueStoreService } from '~web/shared/services/key-value-store/key-value-store.service';
@@ -20,7 +20,6 @@ export class DirectionsService {
   private readonly _googleDirections = new google.maps.DirectionsService();
 
   constructor(
-    private _directionsExtractor: DirectionsExtractor,
     private _httpClient: HttpClient,
     keyValueStoreService: KeyValueStoreService
   ) {
@@ -107,7 +106,7 @@ export class DirectionsService {
       encodedPolylines.push(directionsToReceiver.encodedPolyline);
     }
 
-    return this._directionsExtractor.combineEncodedPolylines(encodedPolylines);
+    return this._combinePolylines(encodedPolylines);
   }
 
   /**
@@ -116,16 +115,17 @@ export class DirectionsService {
    * @return An observable that emits the generated directions.
    */
   genDirections(route: LatLngLiteral[]): Observable<Directions> {
-    if (this._directionsCache.has(route)) {
-      return from(this._directionsCache.get(route));
-    }
-
-    return this._queryDirections(route).pipe(
-      map((directionsResult: DirectionsResult) => {
-        const directions: Directions = this._directionsExtractor.extractDirections(<any>directionsResult);
-        this._directionsCache.set(route, directions); // Make sure we cache the result to reduce number of API calls.
-        return directions;
-      })
+    return from(this._directionsCache.has(route)).pipe(
+      switchMap((isCached: boolean) => (isCached)
+        ? this._directionsCache.get(route)
+        : this._queryDirections(route).pipe(
+          map((directionsResult: DirectionsResult) => {
+            const directions: Directions = this._extractDirections(<any>directionsResult);
+            this._directionsCache.set(route, directions); // Make sure we cache the result to reduce number of API calls.
+            return directions;
+          })
+        )
+      )
     );
   }
 
@@ -211,6 +211,85 @@ export class DirectionsService {
     return (polylineCnt === 2)
       ? (idx !== 0 || options.displayRouteToDonor) && (idx !== 1 || options.displayRouteToReceiver)
       : options.displayRouteToReceiver;
+  }
+
+  /**
+   * Extracts the refined directions result from a given raw directions query response.
+   * @param result The raw directions query result from which to extract the directions result.
+   * @return The refined directions result.
+   */
+  private _extractDirections(result: DirectionsResult): Directions {
+    if (result?.routes?.length > 0) {
+      const waypointSegments: WaypointSegment[] = this._extractWaypointSegments(result.routes[0]);
+      let distanceMi = 0;
+      let durationMin = 0;
+      waypointSegments.forEach((seg: WaypointSegment) => {
+        distanceMi += seg.distanceMi;
+        durationMin += seg.durationMin;
+      });
+      return {
+        distanceMi,
+        durationMin,
+        encodedPolyline: result.routes[0].overview_polyline,
+        waypointSegments
+      };
+    }
+    return { distanceMi: 0, durationMin: 0, encodedPolyline: '', waypointSegments: [] };
+  }
+
+  /**
+   * Extracts the direction waypoint segments. The waypoint segments consist of the paths between each set of adjacent waypoints.
+   * @param route The raw optimal route from the directions query response.
+   * @return The extracted directions waypoint segments.
+   */
+  private _extractWaypointSegments(route: google.maps.DirectionsRoute): WaypointSegment[] {
+    return (route?.legs) ? route.legs.map(this._extractWaypointSegment.bind(this)) : [];
+  }
+
+  /**
+   * Extracts a waypoint segment from a given raw directions leg.
+   * @param leg The directions leg (raw segment between an adjacent pair of waypoints).
+   * @return The extracted directions waypoint segment.
+   */
+  private _extractWaypointSegment(leg: google.maps.DirectionsLeg): WaypointSegment {
+    return {
+      distanceMi: Math.round((leg.distance.value / 1609.34) * 10) / 10, // Round to nearest tenths place.
+      durationMin: Math.ceil(leg.duration.value / 60),
+      encodedPolyline: this._combinePolylines(leg.steps.map((step) => step.encoded_lat_lngs)),
+      steps: leg.steps.map(this._extractStepSegment.bind(this))
+    };
+  }
+
+  /**
+   * Combines direction step (encoded) polylines into the encoded GPS (lat-lng) coordinates for a single polyline path.
+   * @param polylines The list of direction step (encoded) polylines that shall be combined.
+   * @return The combined encoded polylines.
+   */
+  private _combinePolylines(polylines: string[]): string {
+    const decodedPolylinePath: google.maps.LatLng[] = [];
+    for (const polyline of polylines)  {
+      if (polyline) {
+        const decPolyline: google.maps.LatLng[] = google.maps.geometry.encoding.decodePath(polyline);
+        decodedPolylinePath.push(...decPolyline);
+      }
+    }
+    return google.maps.geometry.encoding.encodePath(decodedPolylinePath);
+  }
+
+  /**
+   * Extracts a step segment from a given raw directions step.
+   * @param step The raw directions step.
+   * @return The extracted directions step segment.
+   */
+  private _extractStepSegment(step: google.maps.DirectionsStep): StepSegment {
+    return {
+      distanceMi: Math.round((step.distance.value / 1609.34) * 10) / 10, // Round to nearest tenths place.
+      durationMin: Math.ceil(step.duration.value / 60),
+      encodedPolyline: step.encoded_lat_lngs,
+      endLatLng: { lat: step.end_location.lat(), lng: step.end_location.lng() },
+      htmlInstructions: step.instructions,
+      startLatLng: { lat: step.start_location.lat(), lng: step.start_location.lng() }
+    };
   }
 
 }

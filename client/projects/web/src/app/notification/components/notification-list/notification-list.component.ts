@@ -20,7 +20,10 @@ export class NotificationListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.listQueryService.load(this.notificationService, this.notificationFilters);
+    this.listQueryService.load(
+      this.notificationService.getNotifications.bind(this.notificationService),
+      this.notificationFilters
+    );
   }
 
 }

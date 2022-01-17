@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { DonationHub, DonationHubReadRequest, ListResponse } from '~shared';
+import { Router } from '@angular/router';
+import { DonationHub } from '~shared';
+import { DonationHubFiltersForm } from '~web/donation-hub/forms/donation-hub-filters.form';
 import { DonationHubReadService } from '~web/donation-hub/services/donation-hub-read/donation-hub-read.service';
+import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
-import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 /**
  * A list of donation hub drop-off point teasers.
@@ -13,45 +12,24 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 @Component({
   selector: 'foodweb-donation-hub-list',
   templateUrl: './donation-hub-list.component.html',
-  styleUrls: ['./donation-hub-list.component.scss']
+  styleUrls: ['./donation-hub-list.component.scss'],
+  providers: [ListQueryService]
 })
 export class DonationHubListComponent implements OnInit {
 
-  protected _activeFilters: DonationHubReadRequest = { page: 1 };
-  protected _donationHubs: DonationHub[] = [];
-  protected _myDonationHubs = false;
-  protected _totalCount = 0;
+  readonly filtersForm = new DonationHubFiltersForm();
+
+  private _myDonationHubs = false;
 
   constructor(
+    public listQueryService: ListQueryService<DonationHub>,
     public pageTitleService: PageTitleService,
-    protected _activatedRoute: ActivatedRoute,
-    protected _donationHubReadService: DonationHubReadService,
-    protected _router: Router,
-    protected _urlQueryService: UrlQueryService
+    private _donationHubReadService: DonationHubReadService,
+    private _router: Router,
   ) {}
-
-  get activeFilters(): DonationHubReadRequest {
-    return this._activeFilters;
-  }
-
-  get donationHubs(): DonationHub[] {
-    return this._donationHubs;
-  }
-
-  get loading(): boolean {
-    return this._donationHubReadService.loading;
-  }
 
   get myDonationHubs(): boolean {
     return this._myDonationHubs;
-  }
-
-  get noneFound(): boolean {
-    return (!this.loading && this.totalCount === 0);
-  }
-
-  get totalCount(): number {
-    return this._totalCount;
   }
 
   ngOnInit(): void {
@@ -59,26 +37,10 @@ export class DonationHubListComponent implements OnInit {
     this.pageTitleService.title = (this.myDonationHubs)
       ? 'My Donation Hubs'
       : 'Pledge Donation';
-    this._urlQueryService.listenQueryParamsChange<DonationHubReadRequest>(this._activatedRoute).subscribe(
-      (request: DonationHubReadRequest) => this.refresh(request).subscribe()
+    this.listQueryService.load(
+      this._donationHubReadService.getDonationHubs.bind(this._donationHubReadService),
+      this.filtersForm
     );
   }
 
-  /**
-   * Refreshes the Donation Hub List items.
-   * @param request The optional Read Request, containing filter/sorting parameters.
-   * If not given, will use the last recorded Read Request parameters.
-   * @returns An observable that emits the loaded `DonationHub` items.
-   */
-  refresh(request?: DonationHubReadRequest): Observable<DonationHub[]> {
-    this._activeFilters = request ?? this._activeFilters;
-    this.activeFilters.excludePledgedHubs = !this.myDonationHubs;
-    return this._donationHubReadService.getDonationHubs(this.activeFilters).pipe(
-      map((response: ListResponse<DonationHub>) => {
-        this._donationHubs = response.list;
-        this._totalCount = response.totalCount;
-        return this._donationHubs;
-      })
-    );
-  }
 }

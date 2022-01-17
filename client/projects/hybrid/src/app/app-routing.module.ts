@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'account', loadChildren: () => import('./account/account.module').then(mod => mod.AccountModule) },
   { path: 'bootstrap', loadChildren: () => import('./bootstrap/bootstrap.module').then(mod => mod.BootstrapModule) },
   { path: 'information', loadChildren: () => import('./information/information.module').then(mod => mod.InformationModule) },
+  { path: 'password', loadChildren: () => import('./password/password.module').then(mod => mod.PasswordModule) },
   { path: '', loadChildren: () => import('./tabs/tabs.module').then(mod => mod.TabsModule) },
   { path: '**', redirectTo: '/home' }
 ];

@@ -1,43 +1,41 @@
-import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { IonInput, IonRouterOutlet } from '@ionic/angular';
+import { Component, Input } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { MobileDeviceService } from '~hybrid/shared/services/mobile-device/mobile-device.service';
-import { UsernameRecoveryService } from '~web/account/services/username-recovery/username-recovery.service';
-import { PasswordResetService } from '~web/password/services/password-reset/password-reset.service';
-import { LoginComponent as WebLoginComponent } from '~web/session/components/login/login.component';
-import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
+import { LoginForm } from '~web/session/forms/login.form';
+import { LoginSubmitService } from '~web/session/services/login-submit/login-submit.service';
 
 @Component({
   selector: 'foodweb-hybrid-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  providers: [LoginSubmitService]
 })
-export class LoginComponent extends WebLoginComponent {
+export class LoginComponent {
 
-  @ViewChild('password', { static: false }) password: IonInput;
+  readonly loginForm = new LoginForm();
+
+  @Input() insideDialog = false;
 
   constructor(
-    protected _activatedRoute: ActivatedRoute,
-    protected _authService: AuthenticationService,
-    protected _passwordResetService: PasswordResetService,
-    protected _usernameRecoveryService: UsernameRecoveryService,
+    public loginSubmitService: LoginSubmitService,
     private _mobileDevice: MobileDeviceService,
-    private _routerOutlet: IonRouterOutlet,
+    private _modalController: ModalController,
   ) {
-    super(_activatedRoute, _authService, _passwordResetService, _usernameRecoveryService);
-  }
-
-  ionViewWillEnter(): void {
-    this._routerOutlet.swipeGesture = false;
-  }
-
-  ionViewWillLeave(): void {
-    this._routerOutlet.swipeGesture = true;
+    this.loginForm.mode$.subscribe(() => this.loginSubmitService.reset());
+    this.loginSubmitService.loggedIn$.subscribe(() => this.dismiss());
   }
 
   submit(): void {
     this._mobileDevice.hideKeyboard();
-    super.submit();
+    if (this.loginForm.valid) {
+      this.loginSubmitService.submit(this.loginForm.usernameEmail, this.loginForm.password, this.loginForm.mode);
+    }
+  }
+
+  dismiss(): void {
+    if (this.insideDialog) {
+      this._modalController.dismiss();
+    }
   }
 
 }

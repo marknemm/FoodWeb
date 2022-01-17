@@ -27,7 +27,7 @@ export class UsernameRecoveryService {
     const params = (new HttpParams()).set('email', email);
     this._loading = true;
     return this._httpClient.get<void>(this.url, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse<void>({ pageProgressBlocking: false }),
+      this._httpResponseService.handleHttpResponse<void>({ loaderBlocking: false }),
       finalize(() => this._loading = false)
     );
   }

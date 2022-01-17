@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { QuillModule } from 'ngx-quill';
-import { AccountHelper, DeliveryHelper, DirectionsExtractor, DonationHelper, JSONDateReviver, MapWaypointConverter, OperationHoursHelper } from '~shared';
+import { AccountHelper, DeliveryHelper, DonationHelper, JSONDateReviver, MapWaypointConverter, OperationHoursHelper } from '~shared';
 import { DeliveryScheduleService } from '~web/delivery/services/delivery-schedule/delivery-schedule.service';
 import { DonationActionsService } from '~web/donation-shared/services/donation-actions/donation-actions.service';
 import { DonationClaimService } from '~web/donation/services/donation-claim/donation-claim.service';
@@ -59,7 +59,6 @@ import { AppComponent } from './app.component';
     // Provide classes from root shared project.
     AccountHelper,
     DeliveryHelper,
-    DirectionsExtractor,
     DonationHelper,
     JSONDateReviver,
     MapWaypointConverter,

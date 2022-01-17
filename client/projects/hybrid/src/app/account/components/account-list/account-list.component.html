@@ -6,6 +6,7 @@
 
   <foodweb-hybrid-filtered-list
     [disabled]="listQueryService.loading"
+    [itemCount]="listQueryService.items.length"
     (loadMore)="handleLoadMore($event)"
     (refresh)="handleRefresh($event)">
 
@@ -21,14 +22,12 @@
       Could Not Find Any Accounts.
     </div>
 
-    <ion-virtual-scroll [items]="listQueryService.items" approxItemHeight="300px">
-      <foodweb-hybrid-account-teaser
-        *virtualItem="let item"
-        [account]="item"
-        [addressFirst]="true"
-        [hasEmailSubtitle]="true">
-      </foodweb-hybrid-account-teaser>
-    </ion-virtual-scroll>
+    <foodweb-hybrid-account-teaser
+      *ngFor="let account of listQueryService.items"
+      [account]="account"
+      [addressFirst]="true"
+      [hasEmailSubtitle]="true">
+    </foodweb-hybrid-account-teaser>
 
     <!-- <foodweb-list-filters>
       <foodweb-account-filters

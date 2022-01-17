@@ -13,8 +13,11 @@ import { UnwrapHostService } from '~web/shared/services/unwrap-host/unwrap-host.
 })
 export class HeaderComponent implements OnChanges, OnInit {
 
+  @Input() class = '';
   @Input() defaultBackHref: string;
   @Input() hideBackHref = false;
+  @Input() backText = 'Back';
+  @Input() ngClass: {[cssClass: string]: boolean};
   @Input() siteIconUri = './assets/IconImgSm.png';
   @Input() siteTitle = 'FoodWeb';
 

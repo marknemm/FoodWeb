@@ -64,15 +64,4 @@ export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
   resetFacetFilters(): void {
     this.reset({ fullTextQuery: this.get('fullTextQuery').value });
   }
-
-  /**
-   * @returns The form value as a `DonationReadRequest`.
-   */
-  toDonationReadRequest(): DonationReadRequest {
-    const request: DonationReadRequest = this.value;
-    for (const prop in request) {
-      if (request[prop] == null) delete request[prop];
-    }
-    return request;
-  }
 }

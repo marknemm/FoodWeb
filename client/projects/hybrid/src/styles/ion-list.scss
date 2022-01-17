@@ -1,8 +1,11 @@
 @import "variables.scss";
 
-ion-list {
-  margin-top   : 25px;
-  margin-bottom: 25px;
+ion-list,
+.list-md {
+  margin-top    : 25px;
+  margin-bottom : 25px;
+  padding-top   : 0;
+  padding-bottom: 0;
 
   ion-content &:first-child {
     margin-top: 0;
@@ -12,7 +15,7 @@ ion-list {
     margin-bottom: 0;
   }
 
-  > ion-item {
+  >ion-item {
     background-color: inherit;
   }
 }
@@ -23,8 +26,8 @@ ion-virtual-scroll {
     border-top   : 1px solid var(--ion-border-color);
     border-bottom: 1px solid var(--ion-border-color);
 
-    > *:last-child ion-item,
-    > ion-item:last-child {
+    >*:last-child ion-item,
+    >ion-item:last-child {
       --border-style: none;
     }
   }
@@ -34,7 +37,7 @@ ion-item {
   --padding-start      : 0;
   --inner-padding-start: 14px;
   --inner-padding-end  : 14px;
-  background-color: var(--ion-list-background);
+  background-color     : var(--ion-list-background);
 
   &.item-spacer {
     --inner-padding-bottom: 30px;

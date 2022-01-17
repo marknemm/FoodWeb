@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
 import { AuthenticationService as WebAuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService as WebSessionService } from '~web/session/services/session/session.service';
 import { SessionModule as WebSessionModule } from '~web/session/session.module';
@@ -10,6 +11,7 @@ import { SessionService } from './services/session/session.service';
   declarations: [],
   imports: [
     CommonModule,
+    IonicModule,
     WebSessionModule
   ],
   exports: [

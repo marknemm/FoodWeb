@@ -22,7 +22,12 @@ export class AccountListComponent {
   ) {}
 
   ionViewWillEnter(): void {
-    this.listQueryService.load(this._accountReadService, this.filtersForm);
+    if (!this.listQueryService.items?.length) {
+      this.listQueryService.load(
+        this._accountReadService.getAccounts.bind(this._accountReadService),
+        this.filtersForm
+      );
+    }
   }
 
   /**
@@ -38,6 +43,6 @@ export class AccountListComponent {
    * @param event The ionRefresh event.
    */
   handleRefresh(event: any): void {
-    this.listQueryService.refresh(false).subscribe(() => event.target.complete());
+    this.listQueryService.refresh({ showLoader: false }).subscribe(() => event.target.complete());
   }
 }

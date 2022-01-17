@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Donation, DonationReadRequest, ListResponse } from '~shared';
 import { environment } from '~web-env/environment';
-import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
+import { HttpResponseHandlerOptions, HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 export { Donation };
 
 /**
@@ -55,35 +55,42 @@ export class DonationReadService {
    * Gets a list of donations from the server based off of a given donation read request.
    * If it is detected that the user is on a `/my` route, then their donations will be retrieved.
    * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @param opts Options for the HTTP response handler.
    * @return An observable that emits a list response containing the retrieved donations.
    */
-  getDonations(request: DonationReadRequest): Observable<ListResponse<Donation>> {
+  getDonations(request: DonationReadRequest, opts: HttpResponseHandlerOptions = {}): Observable<ListResponse<Donation>> {
     const myDonations: boolean = (this._router.url.indexOf('my') >= 0);
-    return this._getDonations(request, myDonations);
+    return this._getDonations(request, myDonations, opts);
   }
 
   /**
    * Gets a list of the user's donations from the server based off of a given donation read request.
    * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @param opts Options for the HTTP response handler.
    * @return An observable that emits a list response containing the retrieved donations belonging to the current user.
    */
-  getMyDonations(request: DonationReadRequest): Observable<ListResponse<Donation>> {
-    return this._getDonations(request, true);
+  getMyDonations(request: DonationReadRequest, opts: HttpResponseHandlerOptions = {}): Observable<ListResponse<Donation>> {
+    return this._getDonations(request, true, opts);
   }
 
   /**
    * Gets a list of donations from the server based off of a given donation read request.
    * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
    * @param myDonations Whether or not to retrieve donations that only belong to the current user.
+   * @param opts Options for the HTTP response handler.
    * @return An observable that emits a list response containing the retrieved donations.
    */
-  private _getDonations(request: DonationReadRequest, myDonations: boolean): Observable<ListResponse<Donation>> {
+  private _getDonations(
+    request: DonationReadRequest,
+    myDonations: boolean,
+    opts: HttpResponseHandlerOptions
+  ): Observable<ListResponse<Donation>> {
     const getUrl: string = this.url + (myDonations ? '/my' : '');
     request.page = request.page ? request.page : 1;
     request.limit = request.limit ? request.limit : 10;
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Donation>>(getUrl, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse()
+      this._httpResponseService.handleHttpResponse(opts)
     );
   }
 }

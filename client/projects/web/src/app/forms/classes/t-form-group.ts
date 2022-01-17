@@ -37,7 +37,7 @@ export class TFormGroup<T> extends FormGroup implements TAbstractControl<T> {
    * @param asyncValidator A single async validator or array of async validator functions.
    */
   constructor(
-    public initValue: TFormControlMembers<T> = {},
+    initValue: TFormControlMembers<T> = {},
     validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions,
     asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[]
   ) {

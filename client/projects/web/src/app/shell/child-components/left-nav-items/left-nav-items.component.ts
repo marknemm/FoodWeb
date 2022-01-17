@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { faDonate, faGifts, faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons';
 import { DonationHelper } from '~shared';
-import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
+import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { ShellService } from '~web/shell/services/shell/shell.service';
@@ -22,7 +21,7 @@ export class LeftNavItemsComponent implements OnInit {
     public constantsService: ConstantsService,
     public donationHelper: DonationHelper,
     public sessionService: SessionService,
-    private _matDialog: MatDialog,
+    private _authService: AuthenticationService,
     private _shellService: ShellService,
   ) {}
 
@@ -34,7 +33,7 @@ export class LeftNavItemsComponent implements OnInit {
 
   showLoginDialog(): void {
     this._shellService.toggleLeftNav();
-    LoginDialogComponent.openIfNotLoggedIn(this.sessionService, this._matDialog);
+    this._authService.openLoginDialogIfNotLoggedIn();
   }
 
 }

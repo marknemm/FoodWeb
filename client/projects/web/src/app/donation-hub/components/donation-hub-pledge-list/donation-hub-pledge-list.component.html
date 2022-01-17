@@ -3,12 +3,12 @@
   <foodweb-filtered-list-title>{{ pageTitleService.title }}</foodweb-filtered-list-title>
 
   <foodweb-filtered-list-content>
-    <div class="col-lg-6" *ngFor="let pledge of pledges">
+    <div class="col-lg-6" *ngFor="let pledge of listQueryService.items">
       <foodweb-donation-hub-pledge-teaser [pledge]="pledge"></foodweb-donation-hub-pledge-teaser>
     </div>
   </foodweb-filtered-list-content>
 
-  <foodweb-filtered-list-empty *ngIf="noneFound">
+  <foodweb-filtered-list-empty *ngIf="listQueryService.noneFound">
     <p *ngIf="!myPledges">
       Could Not Find Any Donation Pledges.
     </p>
@@ -18,6 +18,6 @@
     </p>
   </foodweb-filtered-list-empty>
 
-  <foodweb-paginator [length]="totalCount"></foodweb-paginator>
+  <foodweb-paginator [length]="listQueryService.totalCount"></foodweb-paginator>
 
 </foodweb-filtered-list>

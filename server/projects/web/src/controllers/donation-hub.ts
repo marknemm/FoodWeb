@@ -12,7 +12,8 @@ import { readDonationHubPledge, readDonationHubPledges, readMyDonationHubPledges
 import { createDonationHubPledge, updateDonationHubPledge } from '~web/services/donation-hub-pledge/save-donation-hub-pledge';
 import { sendDonationHubPledgeCreateMessages } from '~web/services/donation-hub-pledge/save-donation-hub-pledge-message';
 import { deleteDonationHub } from '~web/services/donation-hub/delete-donation-hub';
-import { sendDonationHubDeleteMessages } from '~web/services/donation-hub/delete-donation-hub-messges';
+import { sendDonationHubDeleteMessages } from '~web/services/donation-hub/delete-donation-hub-messages';
+import { sendDonationHubAvailableMessages } from '~web/services/donation-hub/donation-hub-available-message';
 import { readDonationHub, readDonationHubs, readMyDonationHubs } from '~web/services/donation-hub/read-donation-hubs';
 import { createDonationHub, updateDonationHub } from '~web/services/donation-hub/save-donation-hub';
 import { sendDonationHubCreateMessages } from '~web/services/donation-hub/save-donation-hub-message';
@@ -120,6 +121,7 @@ export async function handlePostDonationHub(req: Request, res: Response) {
   try {
     const savedDonationHub: DonationHubEntity = await createDonationHub(donationHub, account);
     sendDonationHubCreateMessages(savedDonationHub); // Do not wait for message(s) to be sent, simply kick-off the process.
+    sendDonationHubAvailableMessages(savedDonationHub);
     res.send(savedDonationHub);
   } catch (err) {
     genErrorResponse(res, err);

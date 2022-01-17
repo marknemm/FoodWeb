@@ -1,13 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { ThemingService } from './theming.service';
 
-import { PopoverService } from './popover.service';
-
-describe('PopoverService', () => {
-  let service: PopoverService;
+describe('ThemingService', () => {
+  let service: ThemingService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PopoverService);
+    service = TestBed.inject(ThemingService);
   });
 
   it('should be created', () => {

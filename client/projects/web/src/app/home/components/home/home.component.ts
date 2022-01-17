@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { FeaturedEvent, EventReadService } from '~web/event/services/event-read/event-read.service';
-import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
+import { EventReadService, FeaturedEvent } from '~web/event/services/event-read/event-read.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
 
@@ -23,7 +21,6 @@ export class HomeComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _authService: AuthenticationService,
     private _eventReadService: EventReadService,
-    private _matDialog: MatDialog,
   ) {}
 
   get event(): FeaturedEvent {
@@ -48,7 +45,7 @@ export class HomeComponent implements OnInit {
   }
 
   openLoginDialog(): void {
-    LoginDialogComponent.openIfNotLoggedIn(this.sessionService, this._matDialog);
+    this._authService.openLoginDialogIfNotLoggedIn();
   }
 
 }

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, skip, take } from 'rxjs/operators';
+import { finalize, map, skip, take } from 'rxjs/operators';
 import { ListResponse, ReadRequest } from '~shared';
-import { ListFiltersForm } from '~web/shared/forms/list-filters.form';
-import { ReadService } from '~web/shared/interfaces/read-service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
+import { HttpResponseHandlerOptions } from '../http-response/http-response.service';
 
 /**
  * A stateful service that queries the server for a list and maintains the associated query & response data.
@@ -15,8 +15,9 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 @Injectable()
 export class ListQueryService<T> {
 
-  private _filtersForm: ListFiltersForm;
-  private _readService: ReadService;
+  private _filtersForm: AbstractControl;
+  private _loading = false;
+  private _reader: Reader<T>;
   private _response$ = new BehaviorSubject<ListResponse<T>>({ list: [], totalCount: 0 });
 
   constructor(
@@ -27,7 +28,7 @@ export class ListQueryService<T> {
   /**
    * The most recently loaded list of items. An empty list if none have been loaded (yet).
    */
-  get items(): readonly T[]              { return this._response$.value.list; }
+  get items(): readonly T[] { return this._response$.value.list; }
 
   /**
    * An observable that emits the current list of loaded items, and each future loaded list of items.
@@ -37,17 +38,17 @@ export class ListQueryService<T> {
   /**
    * Whether or not items are currently being loaded.
    */
-  get loading(): boolean                { return this._readService?.loading; }
+  get loading(): boolean { return this._loading; }
 
   /**
    * Wether or not no items have been found.
    */
-  get noneFound(): boolean              { return (!this.loading && this.totalCount === 0); }
+  get noneFound(): boolean { return (!this.loading && this.totalCount === 0); }
 
   /**
    * The total count of items available to load, not factoring in any filters or pagination.
    */
-  get totalCount(): number              { return this._response$.value.totalCount; }
+  get totalCount(): number { return this._response$.value.totalCount; }
 
   /**
    * Clears the list and total count of items.
@@ -63,8 +64,8 @@ export class ListQueryService<T> {
    * @param filtersForm The filters form which will contain the filters & pagination parameters that shall be applied on each load.
    * @returns An observable that emits the loaded list once the load operation has completed.
    */
-  load(readService: ReadService, filtersForm: ListFiltersForm): Observable<readonly T[]> {
-    this._readService = readService;
+  load(readerFn: Reader<T>, filtersForm: AbstractControl): Observable<readonly T[]> {
+    this._reader = readerFn;
     this._filtersForm = filtersForm;
     this.clear();
 
@@ -83,13 +84,18 @@ export class ListQueryService<T> {
 
   /**
    * Loads more entries within the list using the current filters and incrementing the page by 1.
+   * @param opts Options for the HTTP response handler. Show loader defaults to false if not explicitly set.
    * @returns An observable that emits the updated list once the load operation has completed.
    */
-  loadMore(): Observable<readonly T[]> {
+  loadMore(opts: HttpResponseHandlerOptions = { showLoader: false }): Observable<readonly T[]> {
     this._filtersForm.patchValue({ page: this._filtersForm.value.page + 1 });
+    this._loading = true;
+    opts.showLoader ??= false;
     const request: ReadRequest = this._getReadRequest();
 
-    this._readService.getMany(request, false).subscribe(
+    this._reader(request, opts).pipe(
+      finalize(() => this._loading = false )
+    ).subscribe(
       (response: ListResponse<T>) => {
         // Must iteratively add in-place so no blink in ion-virtual-scroll.
         const newItems: T[] = response.list;
@@ -106,16 +112,19 @@ export class ListQueryService<T> {
 
   /**
    * Refreshes the list items using the current filters and resetting the page to 1.
-   * @param showPageProgressOnLoad Whether or not to show a page progress indicator on refresh. Defaults to true.
+   * @param opts Options for the HTTP response handler.
    * @returns An observable that emits the refreshed list once the refresh operation has completed.
    */
-  refresh(showPageProgressOnLoad = true): Observable<readonly T[]> {
+  refresh(opts: HttpResponseHandlerOptions = {}): Observable<readonly T[]> {
     this._filtersForm.get('page').setValue(1);
+    this._loading = true;
     const request: ReadRequest = this._getReadRequest();
     this._urlQueryService.updateUrlQueryString(request, this._activatedRoute);
 
     // Send request to server, and wait for response.
-    this._readService.getMany(request, showPageProgressOnLoad).subscribe(
+    this._reader(request, opts).pipe(
+      finalize(() => this._loading = false)
+    ).subscribe(
       (response: ListResponse<T>) => this._response$.next(response)
     );
 
@@ -126,11 +135,6 @@ export class ListQueryService<T> {
    * @returns The {@link ReadRequest} from the {@link FiltersForm}.
    */
   private _getReadRequest(): ReadRequest {
-    // Check if there is a custom method defined for converting form value to read request.
-    if (this._filtersForm.toReadRequest) {
-      return this._filtersForm.toReadRequest();
-    }
-
     // By default, get non-disabled form values, and filter out null values.
     const value = this._filtersForm.value;
     for (const prop in value) {
@@ -139,3 +143,5 @@ export class ListQueryService<T> {
     return value;
   }
 }
+
+export type Reader<T> = (request: ReadRequest<any>, showLoader?: HttpResponseHandlerOptions<ListResponse<T>>) => Observable<ListResponse<T>>;

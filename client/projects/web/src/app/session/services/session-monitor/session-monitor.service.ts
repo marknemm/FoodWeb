@@ -1,11 +1,9 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { Account, LoginResponse } from '~shared';
 import { AlertService } from '~web/alert/services/alert/alert.service';
-import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
 import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable({
@@ -16,7 +14,6 @@ export class SessionMonitorService implements HttpInterceptor {
   constructor(
     private _alertService: AlertService,
     private _authService: AuthenticationService,
-    private _matDialog: MatDialog
   ) {}
 
   /**
@@ -61,7 +58,7 @@ export class SessionMonitorService implements HttpInterceptor {
    * @returns An observable that emits the result of the manual re-authentication attempt.
    */
   private _promptLogin(error: HttpErrorResponse): Observable<ReAuthResult> {
-    return LoginDialogComponent.open(this._matDialog, { disableClose: true }).pipe(
+    return this._authService.openLoginDialog(true).pipe(
       map((loginAccount: Account) => {
         if (!loginAccount) {
           this._alertService.displayError(error);

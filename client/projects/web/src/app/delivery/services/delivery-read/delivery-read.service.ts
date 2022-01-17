@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Donation, DonationReadRequest, ListResponse } from '~shared';
 import { environment } from '~web-env/environment';
-import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
+import { HttpResponseHandlerOptions, HttpResponseService } from '~web/shared/services/http-response/http-response.service';
 
 /**
  * A service responsible for reading (donation) deliveries from the server.
@@ -38,47 +38,55 @@ export class DeliveryReadService {
    * If it is detected that the user is on a `/my` route, then their deliveries will be retrieved.
    * If it is detected that the user is on a `/unscheduled` route, then only unscheduled deliveries will be retrieved.
    * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @param opts Options for the HTTP response handler.
    * @return An observable that emits a list response containing the retrieved (donation) deliveries.
    */
-  getDeliveries(request: DonationReadRequest): Observable<ListResponse<Donation>> {
+  getDeliveries(request: DonationReadRequest, opts: HttpResponseHandlerOptions = {}): Observable<ListResponse<Donation>> {
     return (this._router.url.indexOf('my') >= 0)
-      ? this.getMyDeliveries(request)
+      ? this.getMyDeliveries(request, opts)
       : (this._router.url.indexOf('unscheduled') >= 0)
-        ? this.getUnscheduledDeliveries(request)
-        : this._getDeliveries(request);
+        ? this.getUnscheduledDeliveries(request, opts)
+        : this._getDeliveries(request, undefined, opts);
   }
 
   /**
    * Gets a list of the user's (donation) deliveries from the server based off of a given donation read request.
    * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @param opts Options for the HTTP response handler.
    * @return An observable that emits a list response containing the retrieved (donation) deliveries belonging to the current user.
    */
-  getMyDeliveries(request: DonationReadRequest): Observable<ListResponse<Donation>> {
-    return this._getDeliveries(request, '/my');
+  getMyDeliveries(request: DonationReadRequest, opts: HttpResponseHandlerOptions = {}): Observable<ListResponse<Donation>> {
+    return this._getDeliveries(request, '/my', opts);
   }
 
   /**
    * Gets a list of unscheduled (donation) deliveries from the server based off of a given donation read request.
    * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
+   * @param opts Options for the HTTP response handler.
    * @return An observable that emits a list response containing the retrieved unscheduled (donation) deliveries.
    */
-  getUnscheduledDeliveries(request: DonationReadRequest): Observable<ListResponse<Donation>> {
-    return this._getDeliveries(request, '/unscheduled');
+  getUnscheduledDeliveries(request: DonationReadRequest, opts: HttpResponseHandlerOptions = {}): Observable<ListResponse<Donation>> {
+    return this._getDeliveries(request, '/unscheduled', opts);
   }
 
   /**
    * Gets a list of (donation) deliveries from the server based off of a given donation read request.
    * @param request The donation read request containing filter, pagination, and sorting parameters for the retrieval.
    * @param subRoute The optional sub-route that is to be used for delivery retrieval (can be `/my` or `/unscheduled`).
+   * @param opts Options for the HTTP response handler.
    * @return An observable that emits a list response containing the retrieved (donation) deliveries.
    */
-  private _getDeliveries(request: DonationReadRequest, subRoute: '/my' | '/unscheduled' | '' = ''): Observable<ListResponse<Donation>> {
+  private _getDeliveries(
+    request: DonationReadRequest,
+    subRoute: '/my' | '/unscheduled' | '' = '',
+    opts: HttpResponseHandlerOptions
+  ): Observable<ListResponse<Donation>> {
     const getUrl: string = (this.url + subRoute);
     request.page = request.page ? request.page : 1;
     request.limit = request.limit ? request.limit : 10;
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Donation>>(getUrl, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse()
+      this._httpResponseService.handleHttpResponse(opts)
     );
   }
 }

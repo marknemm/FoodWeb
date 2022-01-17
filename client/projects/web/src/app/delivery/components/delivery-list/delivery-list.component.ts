@@ -1,50 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { DeliveryHelper, Donation, DonationHelper, DonationReadRequest, ListResponse } from '~shared';
+import { Router } from '@angular/router';
+import { DeliveryHelper, Donation, DonationHelper } from '~shared';
 import { DeliveryReadService } from '~web/delivery/services/delivery-read/delivery-read.service';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
+import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
-import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
   selector: 'foodweb-delivery-list',
   templateUrl: './delivery-list.component.html',
-  styleUrls: ['./delivery-list.component.scss']
+  styleUrls: ['./delivery-list.component.scss'],
+  providers: [ListQueryService]
 })
 export class DeliveryListComponent implements OnInit {
 
   readonly filtersForm = new DonationFiltersForm();
 
-  protected _donations: Donation[] = [];
   protected _myDeliveries = false;
-  protected _totalCount = 0;
 
   constructor(
     public deliveryHelper: DeliveryHelper,
     public donationHelper: DonationHelper,
+    public listQueryService: ListQueryService<Donation>,
     public pageTitleService: PageTitleService,
-    protected _activatedRoute: ActivatedRoute,
-    protected _deliveryReadService: DeliveryReadService,
-    protected _router: Router,
-    protected _urlQueryService: UrlQueryService
+    private _deliveryReadService: DeliveryReadService,
+    private _router: Router,
   ) {}
-
-  get donations(): Donation[] {
-    return this._donations;
-  }
-
-  get loading(): boolean {
-    return this._deliveryReadService.loading;
-  }
 
   get myDeliveries(): boolean {
     return this._myDeliveries;
-  }
-
-  get noneFound(): boolean {
-    return (!this.loading && this.totalCount === 0);
   }
 
   get searchPlaceholder(): string {
@@ -53,43 +37,15 @@ export class DeliveryListComponent implements OnInit {
       : 'Search For Deliveries...';
   }
 
-  get totalCount(): number {
-    return this._totalCount;
-  }
-
-  ngOnInit() {
+  ngOnInit(): void {
     this._myDeliveries = this._router.url.indexOf('/my') >= 0;
     this.pageTitleService.title = (this._myDeliveries)
       ? 'My Deliveries'
       : 'Schedule Deliveries';
-    this._urlQueryService.listenQueryParamsChange<DonationReadRequest>(this._activatedRoute).subscribe(
-      (request: DonationReadRequest) => this.refresh(request).subscribe()
+    this.listQueryService.load(
+      this._deliveryReadService.getMyDeliveries.bind(this._deliveryReadService),
+      this.filtersForm
     );
   }
 
-  updateFilterQueryParams(filters: DonationReadRequest): void {
-    this._urlQueryService.updateUrlQueryString(filters, this._activatedRoute);
-  }
-
-  /**
-   * Refreshes the Delivery List items.
-   * @param request The optional Read Request, containing filter/sorting parameters.
-   * If not given, will use the last recorded Read Request parameters.
-   * @returns An observable that emits the loaded `Donation` items.
-   */
-  refresh(request?: DonationReadRequest): Observable<Donation[]> {
-    if (request) {
-      this.filtersForm.reset(request);
-    }
-
-    return this._deliveryReadService.getDeliveries(this.filtersForm.toDonationReadRequest()).pipe(
-      map((response: ListResponse<Donation>) => {
-        if (response?.list) {
-          this._donations = response.list;
-          this._totalCount = response.totalCount;
-        }
-        return this._donations;
-      })
-    );
-  }
 }

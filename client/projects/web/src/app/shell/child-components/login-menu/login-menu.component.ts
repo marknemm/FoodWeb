@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
-import { SessionService } from '~web/session/services/session/session.service';
+import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 
 @Component({
   selector: 'foodweb-login-menu',
@@ -11,12 +9,11 @@ import { SessionService } from '~web/session/services/session/session.service';
 export class LoginMenuComponent {
 
   constructor(
-    private _matDialog: MatDialog,
-    private _sessionService: SessionService
+    private _authService: AuthenticationService,
   ) {}
 
   showLoginDialog(): void {
-    LoginDialogComponent.openIfNotLoggedIn(this._sessionService, this._matDialog);
+    this._authService.openLoginDialogIfNotLoggedIn();
   }
 
 }

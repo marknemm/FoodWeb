@@ -1,10 +1,12 @@
 import { AccountEntity } from '~entity';
-import { AccountReadRequest, AccountType, ListResponse, OperationHours, OperationHoursHelper } from '~shared';
+import { AccountHelper, AccountReadRequest, AccountType, DateTimeHelper, ListResponse, NotificationType, OperationHours, OperationHoursHelper } from '~shared';
 import { DonationHubEntity } from '~web/database/entity/donation-hub.entity';
-import { getMailClient, MailClient } from '~web/helpers/messaging/email';
+import { getMailClient, MailClient, MailTransporter } from '~web/helpers/messaging/email';
 import { getNotificationClient, NotificationClient } from '~web/helpers/messaging/notification';
 import { readAccounts } from '../account/read-accounts';
 
+const _accountHelper = new AccountHelper();
+const _dateTimeHelper = new DateTimeHelper();
 const _operationHoursHelper = new OperationHoursHelper();
 
 /**
@@ -47,62 +49,44 @@ const _operationHoursHelper = new OperationHoursHelper();
  * @param potentialPledgers The accounts of volunteers that are to be messaged/notified.
  * @return A promise that resolves to void once all messages/notifications have been sent.
  */
- async function _messagePotentialPledgers(donationHub: DonationHubEntity, potentialPledgers: AccountEntity[]): Promise<void> {
+async function _messagePotentialPledgers(donationHub: DonationHubEntity, potentialPledgers: AccountEntity[]): Promise<void> {
   const mailClient: MailClient = await getMailClient();
   const notificationClient: NotificationClient = getNotificationClient();
 
   const messagePromises: Promise<any>[] = [];
-  // const donorName: string = _donationHelper.donorName(donation);
-  // Filter for accounts that have notifications enabled for each (new) donation.
-  // const notifyAccounts: AccountEntity[] = potentialPledgers.filter(
-  //   (account: AccountEntity) => account.contactInfo.notifyForEachDonation
-  // );
+  const hubAccount: AccountEntity = donationHub.volunteerAccount;
+  const hubAccountName: string = _accountHelper.accountName(hubAccount);
+  const timezone: string = donationHub.contactOverride.timezone;
+  const dropOffWindowStartDateStr: string = _dateTimeHelper.toLocalDateStr(donationHub.dropOffWindowStart, timezone);
+  const dropOffWindowStartTimeStr: string = _dateTimeHelper.toLocalTimeStr(donationHub.dropOffWindowStart, timezone);
+  // Filter for accounts that have notifications enabled for each (new) donation hub registration.
+  const notifyAccounts: AccountEntity[] = potentialPledgers.filter(
+    (account: AccountEntity) => account.contactInfo.notifyForEachDonation
+  );
 
-  // messagePromises.push(
-  //   mailClient.broadcastEmail(
-  //     MailTransporter.NOREPLY,
-  //     notifyAccounts,
-  //     _donationHelper.genDonationEmailSubject(donation),
-  //     'donation-hub-available',
-  //     { donationHub }
-  //   )
-  // );
+  messagePromises.push(
+    mailClient.broadcastEmail(
+      MailTransporter.NOREPLY,
+      notifyAccounts,
+      `Donation Drop-Off Hub Available on ${dropOffWindowStartDateStr} at ${dropOffWindowStartTimeStr}`,
+      'donation-hub-available',
+      { donationHub }
+    )
+  );
 
-  // messagePromises.push(
-  //   notificationClient.broadcastNotification(
-  //     notifyAccounts,
-  //     {
-  //       notificationType: NotificationType.Donate,
-  //       notificationLink: `/donation/${donation.id}`,
-  //       title: 'Donation Available',
-  //       icon: donation.donorAccount.profileImg,
-  //       body: `
-  //         New donation from <strong>${donorName}</strong>.<br>
-  //         <i>${donation.description}</i>
-  //       `
-  //     }
-  //   )
-  // );
-
-  // messagePromises.push(
-  //   _saveClaimReqHistories(donation, notifyAccounts)
-  // );
+  messagePromises.push(
+    notificationClient.broadcastNotification(
+      notifyAccounts,
+      {
+        notificationType: NotificationType.DonationHubAvailable,
+        notificationLink: `/donation-hub/${donationHub.id}`,
+        title: 'Donation Drop-Off Hub Available',
+        icon: donationHub.volunteerAccount.profileImg,
+        body: `New donation drop-off hub hosted by <strong>${hubAccountName}</strong> available`
+            + ` on <strong>${dropOffWindowStartDateStr}</strong> at <strong>${dropOffWindowStartTimeStr}</strong>.`
+      }
+    )
+  );
 
   await Promise.all(messagePromises);
 }
-
-/**
- * Saves histories of claim request messages that have been sent out for a given donation to a given list of (receiver) accounts.
- * NOTE: This is used later on to re-message all receivers so that they may know that the donation has been claimed.
- * @param donation The donation for which the claim request history is being created.
- * @param accounts The (receiver) accounts that have received the claim request message(s).
- * @return A promise that resolves once all histories have been saved.
- */
-// async function _saveClaimReqHistories(donation: DonationEntity, accounts: AccountEntity[]): Promise<void> {
-//   const claimReqHistories: ClaimReqHistoryEntity[] = accounts.map((receiverAccount: AccountEntity) =>
-//     ({ id: undefined, donation, receiverAccount })
-//   );
-//   return getConnection().transaction(async (manager: EntityManager) => {
-//     await manager.getRepository(ClaimReqHistoryEntity).save(claimReqHistories);
-//   });
-// }

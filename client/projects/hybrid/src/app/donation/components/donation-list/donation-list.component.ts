@@ -1,60 +1,71 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Donation, DonationReadRequest, ListResponse } from '~shared';
-import { DonationListComponent as WebDonationListComponent } from '~web/donation/components/donation-list/donation-list.component';
+import { SessionService } from '~hybrid/session/services/session/session.service';
+import { Donation } from '~shared';
+import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
+import { DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
+import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 
 @Component({
   selector: 'foodweb-hybrid-donation-list',
   templateUrl: './donation-list.component.html',
-  styleUrls: ['./donation-list.component.scss']
+  styleUrls: ['./donation-list.component.scss'],
+  providers: [ListQueryService]
 })
-export class DonationListComponent extends WebDonationListComponent {
+export class DonationListComponent {
 
-  get pageTitle(): string {
-    return (this.myDonations ? 'My Donations' : 'Donations');
+  readonly filtersForm = new DonationFiltersForm();
+
+  private _myDonations = false;
+
+  get addActionRouteSegment(): string {
+    return (this._sessionService.isDonor ? 'donate' : 'list');
   }
 
   get canAccessAddAction(): boolean {
     return (this.myDonations && (this._sessionService.isDonor || this._sessionService.isReceiver));
   }
 
-  get addActionRouteSegment(): string {
-    return (this._sessionService.isDonor ? 'donate' : 'list');
+  get myDonations(): boolean {
+    return this._myDonations;
+  }
+
+  get pageTitle(): string {
+    return (this.myDonations ? 'My Donations' : 'Donations');
   }
 
   get showChooseDonation(): boolean {
-    return (!this.myDonations && !this.noneFound && this._sessionService.isReceiver);
+    return (!this.myDonations && !this.listQueryService.noneFound && this._sessionService.isReceiver);
+  }
+
+  constructor(
+    public listQueryService: ListQueryService<Donation>,
+    private _donationReadService: DonationReadService,
+    private _sessionService: SessionService,
+  ) {}
+
+  ionViewWillEnter(): void {
+    if (!this.listQueryService.items.length) {
+      this.listQueryService.load(
+        this._donationReadService.getDonations.bind(this._donationReadService),
+        this.filtersForm
+      );
+    }
   }
 
   /**
-   * Handles an ionInfinite event by loading the next segment of Donation/Delivery List items.
+   * Handles an ionInfinite event by loading the next segment of Donation List items.
    * @param event The ionInfinite event.
    */
   handleLoadMore(event: any): void {
-    this.filtersForm.page = event.page;
-    this._donationReadService.getDonations(this.filtersForm.toDonationReadRequest()).subscribe(
-      (response: ListResponse<Donation>) => {
-        if (response?.list) {
-          for (const donation of response.list) {
-            this._donations.push(donation); // Must iteratively add in-place so no blink in ion-virtual-scroll.
-          }
-          this._totalCount = response.totalCount;
-        }
-        event.target.complete();
-      }
-    );
+    this.listQueryService.loadMore().subscribe(() => event.target.complete());
   }
 
   /**
-   * Handles an ionRefresh event by refreshing the Donation/Delivery List items.
+   * Handles an ionRefresh event by refreshing the Donation List items.
    * @param event The ionRefresh event.
    */
-   handleRefresh(event: any): void {
-    this.refresh().subscribe(() => event.target.complete());
+  handleRefresh(event: any): void {
+    this.listQueryService.refresh({ showLoader: false }).subscribe(() => event.target.complete());
   }
 
-  refresh(request?: DonationReadRequest): Observable<Donation[]> {
-    this.filtersForm.page = 1;
-    return super.refresh(request);
-  }
 }
