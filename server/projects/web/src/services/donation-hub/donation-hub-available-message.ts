@@ -28,7 +28,7 @@ const _operationHoursHelper = new OperationHoursHelper();
       page: page++,
       limit,
       accountType: AccountType.Volunteer,
-      distanceRangeMi: 20,
+      distanceRangeMi: 8,
       lon: donationHub.contactOverride.location.coordinates[0],
       lat: donationHub.contactOverride.location.coordinates[1],
       operationHoursWeekday: operationHours.weekday,
@@ -70,7 +70,7 @@ async function _messagePotentialPledgers(donationHub: DonationHubEntity, potenti
       notifyAccounts,
       `Donation Drop-Off Hub Available on ${dropOffWindowStartDateStr} at ${dropOffWindowStartTimeStr}`,
       'donation-hub-available',
-      { donationHub }
+      { donationHub, hubAccountName }
     )
   );
 

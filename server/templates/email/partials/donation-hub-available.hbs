@@ -1,7 +1,27 @@
 <div>
-  <div><strong>{{ donationHub.volunteerAccount.organization.name }}</strong> has registered a new donation drop-off hub:</div>
-  <p class="donation-description">{{ donationHub.description }}</p>
-  <hr>
+  <p>A new donation drop-off hub hosted by <strong>{{ hubAccountName }}</strong> is available near you!</p>
+
+  <p>
+    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-hub/{{ donationHub.id }}">link</a> to view the donation drop-off hub,
+    and pledge a donation at your convenience.
+  </p>
+
+  <hr class="no-margin-top">
+
+  <div class="col-6">
+    <div class="inline-label">
+      Drop-Off Location:
+    </div>
+    <div class="indented-data">
+      <div>{{ donationHub.contactOverride.streetAddress }}</div>
+      <div>
+        {{ donationHub.contactOverride.city }}, {{ donationHub.contactOverride.state }}
+        {{ donationHub.contactOverride.postalCode }}
+      </div>
+    </div>
+  </div>
+
+  <hr class="no-margin-top">
 
   <div class="col-6">
     <div class="inline-label">
@@ -22,10 +42,4 @@
       <strong class="time">{{toLocalTimeStr donationHub.dropOffWindowEnd timezone }}</strong>
     </div>
   </div>
-
-  <hr class="no-margin-top">
-  <p>
-    Follow this <a href="{{ env.SERVER_HOST_ADDRESS }}/donation-hub/{{ donationHub.id }}">link</a> to view the donation drop-off hub.
-    At your convenience, you may pledge a donation to this hub.
-  </p>
 </div>
