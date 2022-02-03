@@ -5,9 +5,10 @@ $sm: 767px;
 $mat-mobile: 600px;
 $xs: 575px;
 
-/* Header Consts */
+/* Header/Footer Consts */
 $header-height: 60px;
 $header-height-mobile: 40px;
+$footer-height: 45px;
 
 /* Main (Page) Content Consts */
 $page-vert-pad: 20px;
@@ -80,4 +81,4 @@ $delivery-complete-color: rgb(60, 120, 60);
 $quill-doc-max-width: 830px;
 $quill-doc-padding: 65px;
 $quill-doc-horz-padding-mobile: 25px;
-$quill-tooblar-single-line-min-width: 1380px;
+$quill-toolbar-single-line-min-width: 1380px;

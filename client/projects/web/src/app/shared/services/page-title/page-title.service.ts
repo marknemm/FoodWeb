@@ -8,7 +8,7 @@ export class PageTitleService {
 
   title = '';
 
-  private _previousRoute = '';
+  private _previousRoute = window.location.pathname;
 
   constructor(router: Router) {
     router.events.subscribe((event: Event) => {

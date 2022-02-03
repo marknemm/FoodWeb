@@ -1,0 +1,9 @@
+@import "variables.scss";
+
+footer {
+  bottom: 0;
+  width: 100%;
+  height: $footer-height;
+  text-align: center;
+  padding-top: 12px;
+}

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
 import { ShellService } from '~web/shell/services/shell/shell.service';
@@ -8,7 +8,7 @@ import { ShellService } from '~web/shell/services/shell/shell.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
   @Input() siteIconUri = './assets/IconImgSm.png';
   @Input() siteTitle = 'FoodWeb';
@@ -18,6 +18,4 @@ export class HeaderComponent implements OnInit {
     public pageTitleService: PageTitleService,
     public shellService: ShellService,
   ) {}
-
-  ngOnInit() {}
 }
