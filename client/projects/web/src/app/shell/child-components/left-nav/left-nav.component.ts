@@ -10,7 +10,7 @@ import { ShellService } from '~web/shell/services/shell/shell.service';
 })
 export class LeftNavComponent implements OnInit {
 
-  @ViewChild('sidenavContent', { static: true }) sidnavContent: MatSidenavContent;
+  @ViewChild('sidenavContent', { static: true }) sidenavContent: MatSidenavContent;
 
   /**
    * A maximum width in pixels. When set, determines that when the window width is equal to or lower,
@@ -29,7 +29,7 @@ export class LeftNavComponent implements OnInit {
     return (this.window.innerWidth > 990) ? 60 : 40;
   }
 
-  ngOnInit() {
-    this.shellService.setMainContent(this.sidnavContent.getElementRef().nativeElement);
+  ngOnInit(): void {
+    this.shellService.setMainContent(this.sidenavContent.getElementRef().nativeElement);
   }
 }

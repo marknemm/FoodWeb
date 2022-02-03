@@ -11,7 +11,7 @@ import { GeneralStats, GeneralStatsService } from '~web/heuristics/services/heur
 export class GeneralStatsCardComponent implements OnInit, OnDestroy {
 
   private _generalStats: GeneralStats;
-  private _destory$ = new Subject();
+  private _destroy$ = new Subject();
 
   constructor(
     public generalStatsService: GeneralStatsService
@@ -25,15 +25,15 @@ export class GeneralStatsCardComponent implements OnInit, OnDestroy {
     return (!this.generalStatsService.loading || !!this.generalStats);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Retrieve latest stats every 30 seconds.
     this.generalStatsService.watchGeneralStats().pipe(
-      takeUntil(this._destory$)
+      takeUntil(this._destroy$)
     ).subscribe((generalStats: GeneralStats) => this._generalStats = generalStats);
   }
 
-  ngOnDestroy() {
-    this._destory$.next();
+  ngOnDestroy(): void {
+    this._destroy$.next();
   }
 
 }

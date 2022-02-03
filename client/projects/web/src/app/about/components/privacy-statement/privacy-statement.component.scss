@@ -1,0 +1,84 @@
+@import "variables.scss";
+
+h2 {
+  margin-bottom: 0;
+}
+
+h3 {
+  font-size: 1.4rem;
+  margin: 35px 0 20px;
+}
+
+h4 {
+  font-size: 1.25rem;
+
+}
+
+ul {
+  list-style-type: square;
+}
+
+li {
+  margin-bottom: 7px;
+}
+
+ul > li > ul {
+  list-style-type: circle;
+}
+
+ul > li > ul > li > ul {
+  list-style-type: square;
+}
+
+.regulations-list {
+  counter-reset: regulations-list;
+  padding-left: 25px;
+  color: #555;
+
+  > li {
+    list-style: none;
+    margin-bottom: 2px;
+
+    &:before {
+      content: "(" counter(regulations-list) ") ";
+      counter-increment: regulations-list;
+      display: inline-block;
+      width: 25px;
+    }
+  }
+}
+
+.card-table {
+  padding: 0;
+}
+
+th, td {
+  border: 1px solid #ccc;
+}
+
+th, td {
+  padding: 5px;
+}
+
+td:last-child {
+  text-align: center;
+}
+
+strong {
+  color: #333;
+}
+
+i > strong {
+  color: #555;
+}
+
+.last-updated {
+  margin-top: -5px;
+  color: #666;
+}
+
+.strong-underline {
+  color: #222;
+  text-decoration: underline;
+  font-weight: 500;
+}

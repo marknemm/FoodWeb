@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 import { FilteredListService } from '~web/filtered-list/services/filtered-list/filtered-list.service';
 
 /**
@@ -9,13 +9,13 @@ import { FilteredListService } from '~web/filtered-list/services/filtered-list/f
   templateUrl: './filtered-list.component.html',
   styleUrls: ['./filtered-list.component.scss']
 })
-export class FilteredListComponent implements OnInit {
+export class FilteredListComponent {
 
   /**
    * The opened state of the filters right drawer.
    */
   @Input() set filtersOpened(open: boolean) { this.filteredListService.opened = open; }
-  get filtersOpened(): boolean              { return this.filteredListService.opened; }
+           get filtersOpened(): boolean     { return this.filteredListService.opened; }
 
   @HostBinding() class = 'foodweb-filtered-list';
 
@@ -25,6 +25,4 @@ export class FilteredListComponent implements OnInit {
     // Important to reset service value here instead of in ngOnInit() so we don't overwrite @Input value if one is given.
     this.filteredListService.opened = false;
   }
-
-  ngOnInit() {}
 }

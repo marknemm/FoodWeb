@@ -134,7 +134,7 @@ function refineEnv(rawEnv): FoodWebEnv {
 
   refinedEnv.COUNTRY = refinedEnv.COUNTRY ?? 'United States';
 
-  refinedEnv.DATABASE_PORT = rawEnv.DATABASE_PORT ?? 5432;
+  refinedEnv.DATABASE_PORT = refinedEnv.DATABASE_PORT ?? 5432;
 
   refinedEnv.DEVELOPMENT = refinedEnv.DEVELOPMENT || (!refinedEnv.PRODUCTION && !refinedEnv.QA);
 
@@ -142,21 +142,21 @@ function refineEnv(rawEnv): FoodWebEnv {
     Buffer.from(refinedEnv.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf-8')
   );
 
-  refinedEnv.PORT = rawEnv.PORT ?? 0; // Allow SERVER_PORT to take effect if not supplied.
+  refinedEnv.PORT = refinedEnv.PORT ?? 0; // Allow SERVER_PORT to take effect if not supplied.
 
-  refinedEnv.PRODUCTION_HOST_ADDRESS = rawEnv.PRODUCTION_HOST_ADDRESS ?? refinedEnv.SERVER_HOST_ADDRESS;
-  refinedEnv.PRODUCTION_HOST_ADDRESS_READABLE = rawEnv.PRODUCTION_HOST_ADDRESS_READABLE ?? refinedEnv.SERVER_HOST_ADDRESS;
+  refinedEnv.PRODUCTION_HOST_ADDRESS = refinedEnv.PRODUCTION_HOST_ADDRESS ?? refinedEnv.SERVER_HOST_ADDRESS;
+  refinedEnv.PRODUCTION_HOST_ADDRESS_READABLE = refinedEnv.PRODUCTION_HOST_ADDRESS_READABLE ?? refinedEnv.SERVER_HOST_ADDRESS;
 
-  refinedEnv.SERVER_HOST_ADDRESS = rawEnv.SERVER_HOST_ADDRESS ?? '';
-  refinedEnv.SERVER_HOST_ADDRESS_READABLE = rawEnv.SERVER_HOST_ADDRESS_READABLE ?? refinedEnv.SERVER_HOST_ADDRESS_READABLE;
-  refinedEnv.SERVER_PORT = rawEnv.SERVER_PORT ?? 5000;
+  refinedEnv.SERVER_HOST_ADDRESS = refinedEnv.SERVER_HOST_ADDRESS ?? '';
+  refinedEnv.SERVER_HOST_ADDRESS_READABLE = refinedEnv.SERVER_HOST_ADDRESS_READABLE ?? refinedEnv.SERVER_HOST_ADDRESS;
+  refinedEnv.SERVER_PORT = refinedEnv.SERVER_PORT ?? 5000;
 
-  refinedEnv.SESSION_TTL_MS = rawEnv.SESSION_TTL_MS ?? 9000000;
+  refinedEnv.SESSION_TTL_MS = refinedEnv.SESSION_TTL_MS ?? 9000000;
 
-  refinedEnv.SUPPORT_PORT = rawEnv.SUPPORT_PORT ?? 1025;
+  refinedEnv.SUPPORT_PORT = refinedEnv.SUPPORT_PORT ?? 1025;
 
-  refinedEnv.UNRECORDED_DONATION_COUNT = rawEnv.UNRECORDED_DONATION_COUNT ?? 0;
-  refinedEnv.UNRECORDED_MEAL_COUNT = rawEnv.UNRECORDED_MEAL_COUNT ?? 0;
+  refinedEnv.UNRECORDED_DONATION_COUNT = refinedEnv.UNRECORDED_DONATION_COUNT ?? 0;
+  refinedEnv.UNRECORDED_MEAL_COUNT = refinedEnv.UNRECORDED_MEAL_COUNT ?? 0;
 
   return refinedEnv;
 }
