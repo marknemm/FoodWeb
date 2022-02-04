@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { AboutRoutingModule } from './about-routing.module';
 import { AboutComponent } from './components/about/about.component';
 import { PrivacyStatementComponent } from './components/privacy-statement/privacy-statement.component';
+import { InformationRoutingModule } from './information-routing.module';
 
 @NgModule({
   declarations: [
@@ -12,8 +12,8 @@ import { PrivacyStatementComponent } from './components/privacy-statement/privac
   ],
   imports: [
     CommonModule,
-    AboutRoutingModule,
+    InformationRoutingModule,
     MatCardModule,
   ]
 })
-export class AboutModule {}
+export class InformationModule {}
