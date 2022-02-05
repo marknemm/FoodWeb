@@ -53,7 +53,7 @@
           }
         }
 
-        @media only screen and (max-width: $quill-tooblar-single-line-min-width - 1px) {
+        @media only screen and (max-width: $quill-toolbar-single-line-min-width - 1px) {
           min-height: calc(100vh - #{$header-height} - 118px);
         }
 

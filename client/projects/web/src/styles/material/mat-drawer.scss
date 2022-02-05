@@ -1,16 +1,25 @@
 @import "../variables.scss";
 
 .mat-drawer-container {
-  height: calc(100vh - #{$header-height});
+  height: calc(100% - #{$header-height});
+  box-sizing: border-box;
 
   @media only screen and (max-width: $md) {
     height: auto;
   }
 
+  .mat-drawer-backdrop {
+    min-height: 100vh;
+  }
+
   .mat-drawer {
     width: 220px;
-    min-height: 100%;
+    height: calc(100vh - #{$header-height});
     box-shadow: 1px 0px 5px 1px rgba(0, 0, 0, 0.5);
+
+    @media only screen and (max-width: $md) {
+      height: calc(100vh - #{$header-height-mobile});
+    }
   }
 
   .mat-drawer-content {

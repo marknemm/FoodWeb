@@ -20,6 +20,7 @@ import { LoginMenuComponent } from './child-components/login-menu/login-menu.com
 import { NotificationsMenuComponent } from './child-components/notifications-menu/notifications-menu.component';
 import { SettingsMenuComponent } from './child-components/settings-menu/settings-menu.component';
 import { ShellComponent } from './components/shell/shell.component';
+import { FooterComponent } from './child-components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ShellComponent } from './components/shell/shell.component';
     NotificationsMenuComponent,
     HeaderNavComponent,
     LoginMenuComponent,
+    FooterComponent,
   ],
   imports: [
     CommonModule,

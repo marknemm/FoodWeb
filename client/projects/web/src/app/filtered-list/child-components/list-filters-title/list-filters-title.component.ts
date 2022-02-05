@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 import { FilteredListService } from '~web/filtered-list/services/filtered-list/filtered-list.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { FilteredListService } from '~web/filtered-list/services/filtered-list/f
   templateUrl: './list-filters-title.component.html',
   styleUrls: ['./list-filters-title.component.scss'],
 })
-export class ListFiltersTitleComponent implements OnInit {
+export class ListFiltersTitleComponent {
 
   @Input() primary = false;
 
@@ -15,7 +15,5 @@ export class ListFiltersTitleComponent implements OnInit {
   constructor(
     public filteredListService: FilteredListService
   ) {}
-
-  ngOnInit() {}
 
 }

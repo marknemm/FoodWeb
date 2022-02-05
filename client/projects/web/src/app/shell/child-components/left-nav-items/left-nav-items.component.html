@@ -64,7 +64,7 @@
   <a mat-list-item [routerLink]="['/account/list']" [queryParams]="{ accountType: 'Receiver' }" (click)="_onNavigate()">
     <span><mat-icon>{{ constantsService.ACCOUNT_TYPE_ICONS['Receiver'] }}</mat-icon> <span>Receivers</span></span>
   </a>
-  <a mat-list-item [routerLink]="['/about']" (click)="_onNavigate()">
+  <a mat-list-item [routerLink]="['/information/about']" (click)="_onNavigate()">
     <span><mat-icon>info</mat-icon> <span>About Us</span></span>
   </a>
 </mat-nav-list>
