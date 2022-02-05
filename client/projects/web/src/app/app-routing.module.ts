@@ -9,7 +9,6 @@ const routes: Routes = [
     path: '',
     component: ShellComponent,
     children: [
-      { path: 'about', loadChildren: () => import ('~web/about/about.module').then(mod => mod.AboutModule) },
       { path: 'account', loadChildren: () => import('~web/account/account.module').then(mod => mod.AccountModule) },
       { path: 'delivery', loadChildren: () => import('~web/delivery/delivery.module').then(mod => mod.DeliveryModule) },
       { path: 'donation', loadChildren: () => import('~web/donation/donation.module').then(mod => mod.DonationModule) },
@@ -17,6 +16,7 @@ const routes: Routes = [
       { path: 'event', loadChildren: () => import('~web/event/event.module').then(mod => mod.EventModule) },
       { path: 'home/:login', component: HomeComponent },
       { path: 'home', component: HomeComponent },
+      { path: 'information', loadChildren: () => import ('~web/information/information.module').then(mod => mod.InformationModule) },
       { path: 'notification', loadChildren: () => import('~web/notification/notification.module').then(mod => mod.NotificationModule) },
       { path: 'password', loadChildren: () => import('~web/password/password.module').then(mod => mod.PasswordModule) },
       { path: 'signup', loadChildren: () => import('~web/signup/signup.module').then(mod => mod.SignupModule) }
