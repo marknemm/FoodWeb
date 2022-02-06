@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { IonicModule } from '@ionic/angular';
 import { MapModule as WebMapModule } from '~web/map/map.module';
-import { MapComponent } from './child-components/map/map.component';
-import { MapOptionsComponent } from './child-components/map-options/map-options.component';
+import { CurrentLocationService as WebCurrentLocationService } from '~web/map/services/current-location/current-location.service';
 import { DirectionStepsComponent } from './child-components/direction-steps/direction-steps.component';
+import { MapOptionsComponent } from './child-components/map-options/map-options.component';
+import { MapComponent } from './child-components/map/map.component';
+import { CurrentLocationService } from './services/current-location/current-location.service';
 
 @NgModule({
   declarations: [
@@ -28,4 +30,15 @@ import { DirectionStepsComponent } from './child-components/direction-steps/dire
     MapComponent,
   ]
 })
-export class MapModule {}
+export class MapModule {
+
+  static forRoot(): ModuleWithProviders<MapModule> {
+    return {
+      ngModule: MapModule,
+      providers: [
+        // In base web code, anywhere where AlertService is provided, provide Hybrid AlertService instead.
+        { provide: WebCurrentLocationService, useExisting: CurrentLocationService },
+      ]
+    }
+  }
+}
