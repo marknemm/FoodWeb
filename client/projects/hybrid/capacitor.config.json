@@ -17,12 +17,12 @@
       "launchShowDuration": 3000
     }
   },
+  "android": {
+    "allowMixedContent": true
+  },
   "ios": {
     "contentInset": "automatic"
   },
   "cordova": {},
-  "server": {
-    "hostname": "www.wnyfoodweb.com",
-    "androidScheme": "https"
-  }
+  "server": {}
 }

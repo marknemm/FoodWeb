@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject, Subscriber } from 'rxjs';
+import { Geolocation } from '@capacitor/geolocation';
+import { from, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LatLngLiteral } from '~shared';
 
@@ -9,21 +10,10 @@ import { LatLngLiteral } from '~shared';
 export class CurrentLocationService {
 
   protected _watchPosition$: Subject<GeolocationPosition> = null;
-  protected _watchId: number = null;
-
-  constructor() {}
+  protected _watchId: string = null;
 
   getCurrentPosition(): Observable<GeolocationPosition> {
-    return new Observable((subscriber: Subscriber<GeolocationPosition>) =>
-      navigator.geolocation.getCurrentPosition(
-        (position: GeolocationPosition) => {
-          subscriber.next(position);
-          subscriber.complete();
-        },
-        (err: GeolocationPositionError) => subscriber.error(err),
-        { enableHighAccuracy: true }
-      )
-    );
+    return from(Geolocation.getCurrentPosition({ enableHighAccuracy: true }));
   }
 
   getCurrentLatLngLiteral(): Observable<LatLngLiteral> {
@@ -35,11 +25,12 @@ export class CurrentLocationService {
   watchPosition(): Observable<GeolocationPosition> {
     if (!this._watchPosition$) {
       this._watchPosition$ = new Subject();
-      this._watchId = navigator.geolocation.watchPosition(
-        (position: GeolocationPosition) => this._watchPosition$.next(position),
-        (err: GeolocationPositionError) => this._watchPosition$.error(err),
-        { enableHighAccuracy: true }
-      );
+      Geolocation.watchPosition(
+        { enableHighAccuracy: true },
+        (position: GeolocationPosition) => this._watchPosition$.next(position)
+      )
+      .then((id: string) => this._watchId = id)
+      .catch((err: Error) => this._watchPosition$.error(err));
     }
     return this._watchPosition$.asObservable();
   }
@@ -52,7 +43,7 @@ export class CurrentLocationService {
 
   clearWatch(): void {
     if (this._watchPosition$) {
-      navigator.geolocation.clearWatch(this._watchId);
+      Geolocation.clearWatch({ id: this._watchId });
       this._watchPosition$.complete();
       this._watchId = null;
       this._watchPosition$ = null;
