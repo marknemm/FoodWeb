@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>foodweb</string>
+	<string>foodweb</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -27,6 +27,12 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Allow "FoodWeb" to access your location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Allow "FoodWeb" to access your location</string>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>Allow "FoodWeb" to access your location</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

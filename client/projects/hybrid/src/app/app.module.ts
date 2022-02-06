@@ -9,6 +9,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AlertModule } from '~hybrid/alert/alert.module';
 import { AppRoutingModule } from '~hybrid/app-routing.module';
 import { AppComponent } from '~hybrid/app.component';
+import { MapModule } from '~hybrid/map/map.module';
 import { SessionModule } from '~hybrid/session/session.module';
 import { SharedModule } from '~hybrid/shared/shared.module';
 import { AccountHelper, DeliveryHelper, DonationHelper, JSONDateReviver, MapWaypointConverter, OperationHoursHelper } from '~shared';
@@ -35,6 +36,7 @@ import { BootstrapModule } from './bootstrap/bootstrap.module';
     AlertModule.forRoot(),
     BootstrapModule.forRoot(),
     SessionModule.forRoot(),
+    MapModule.forRoot(),
     HomeModule,
     EventModule,
     HeuristicsModule
