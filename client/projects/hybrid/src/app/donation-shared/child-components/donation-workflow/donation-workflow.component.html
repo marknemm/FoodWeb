@@ -1,9 +1,9 @@
-<ion-card *ngIf="donation" class="donation-workflow-card">
+<ion-card class="donation-workflow-card">
   <ion-card-content class="donation-workflow-card-content">
     <ul class="donation-workflow">
       <ng-container *ngFor="let step of workflowSteps">
         <li
-          *ngIf="showAllStatuses || isWorkflowStepActive(step)"
+          *ngIf="canShowWorkflowStep(step)"
           class="step donation-status {{ step.class }}"
           [ngClass]="{ 'active with-border': isWorkflowStepActive(step) }">
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Account, Donation, DonationHelper, DonationStatus } from '~shared';
 import { DonationAction } from '~web/donation-shared/services/donation-actions/donation-actions.service';
 
@@ -7,19 +7,19 @@ import { DonationAction } from '~web/donation-shared/services/donation-actions/d
   templateUrl: './donation-workflow.component.html',
   styleUrls: ['./donation-workflow.component.scss'],
 })
-export class DonationWorkflowComponent implements OnChanges {
+export class DonationWorkflowComponent implements OnChanges, OnInit {
 
   readonly DonationStatus = DonationStatus;
   readonly workflowSteps: DonationWorkflowStep[] = [
     {
       class: 'unmatched', status: DonationStatus.Unmatched, title: 'Donation Unmatched',
-      description: 'The donation has not yet been matched with a receiving chairty.',
+      description: 'The donation has not yet been matched with a receiving charity.',
       donorDescription: 'Your donation has not yet been matched with a receiving charity.'
     },
     {
       class: 'matched', status: DonationStatus.Matched, title: 'Donation Matched',
       description: 'The donation has been matched with a receiving charity, and is awaiting a volunteer to schedule its delivery.',
-      donorDescription: 'Your donation has been matched with a receiving chairty, and is awaiting to be scheduled for delivery.',
+      donorDescription: 'Your donation has been matched with a receiving charity, and is awaiting to be scheduled for delivery.',
       receiverDescription: 'You have been matched with this donation, and it is awaiting to be scheduled for delivery.'
     },
     {
@@ -55,6 +55,7 @@ export class DonationWorkflowComponent implements OnChanges {
   @Input() donation: Donation;
   @Input() myAccount: Account;
   @Input() showAllStatuses = false;
+  @Input() deliveryStatusesOnly = false;
 
   @Output() action = new EventEmitter<DonationAction>();
 
@@ -68,9 +69,15 @@ export class DonationWorkflowComponent implements OnChanges {
     return this._toggleShowAllStatusesTxt;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.showAllStatuses) {
       this._updateToggleShowAllStatusesTxt();
+    }
+  }
+
+  ngOnInit(): void {
+    if (!this.donation) {
+      this.showAllStatuses = true;
     }
   }
 
@@ -84,12 +91,22 @@ export class DonationWorkflowComponent implements OnChanges {
   }
 
   /**
+   * Determines whether or not to show a given donation workflow step.
+   * @param workflowStep The workflow step to check.
+   * @returns true if it can be shown, false if not.
+   */
+  canShowWorkflowStep(workflowStep: DonationWorkflowStep): boolean {
+    return (this.showAllStatuses || this.isWorkflowStepActive(workflowStep))
+      && (!this.deliveryStatusesOnly || this._donationHelper.isDonationStatusLaterThan(workflowStep.status, DonationStatus.Matched));
+  }
+
+  /**
    * Determines whether or not a given donation workflow step is active.
    * @param workflowStep The workflow step to check.
    * @return true if it is active, false if not.
    */
   isWorkflowStepActive(workflowStep: DonationWorkflowStep): boolean {
-    return (workflowStep.status === this.donation.donationStatus);
+    return (workflowStep.status === this.donation?.donationStatus);
   }
 
   /**

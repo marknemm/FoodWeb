@@ -45,7 +45,7 @@ export class AdminDonationActionsService extends DonationActionsService {
    * @override
    */
   protected _updateDeleteAccess(donation: Donation): void {
-    super._updateDeleteAccess(donation, this._donationHelper.donorAccout(donation));
+    super._updateDeleteAccess(donation, this._donationHelper.donorAccount(donation));
   }
 
   /**

@@ -212,15 +212,15 @@ export class DonationHelper {
   }
 
   isDonationDonor(donation: Partial<Donation>, account: Partial<Account>): boolean {
-    return (donation?.donorAccount.id === account?.id);
+    return (!!donation && donation?.donorAccount.id === account?.id);
   }
 
   isDonationReceiver(donation: Partial<Donation>, account: Partial<Account>): boolean {
-    return (donation?.claim?.receiverAccount.id === account?.id);
+    return (!!donation && donation?.claim?.receiverAccount.id === account?.id);
   }
 
   isDonationVolunteer(donation: Partial<Donation>, account: Partial<Account>): boolean {
-    return (donation?.claim?.delivery?.volunteerAccount.id === account?.id);
+    return (!!donation && donation?.claim?.delivery?.volunteerAccount.id === account?.id);
   }
 
   getNextDonationStatus(nextOf: Partial<Donation> | DonationStatus): DonationStatus {
@@ -261,13 +261,13 @@ export class DonationHelper {
 
   memberAccounts(donation: Partial<Donation>): DonationAccounts {
     return {
-      donorAccount: this.donorAccout(donation),
+      donorAccount: this.donorAccount(donation),
       receiverAccount: this.receiverAccount(donation),
       volunteerAccount: this.volunteerAccount(donation)
     };
   }
 
-  donorAccout(donation: Partial<Donation>): Account {
+  donorAccount(donation: Partial<Donation>): Account {
     return donation?.donorAccount;
   }
 

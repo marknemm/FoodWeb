@@ -4,23 +4,10 @@
       <ng-container [ngTemplateOutlet]="trainingSignupTmpl"></ng-container>
     </span>
 
-    <mat-card *ngIf="nowDate < christmasDayDate" class="christmas-special">
-      <mat-card-title>
-        <strong>Sandwich Army - Christmas Eve Schedule</strong>
-      </mat-card-title>
-
-      <mat-card-content>
-        <ul>
-          <li><strong>Donation Pledgers</strong>: Drop off your donations between <strong>10:30-11:30 am</strong>.</li>
-          <li><strong>Donation Hub Owners</strong>: Deliver all donation drop-offs to St. Luke's at <strong>12:30 pm</strong>.</li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
-
     <ng-container *ngIf="donationHubFeatureVisible">
       <mat-card class="donation-hub-new-feature">
         <mat-card-title class="block-label">
-          FoodWeb’s Sandwich Army - <strong class="warn">NEW</strong>
+          FoodWeb’s Sandwich Army
         </mat-card-title>
         <mat-card-content>
           <div class="donation-hub-intro-block">
