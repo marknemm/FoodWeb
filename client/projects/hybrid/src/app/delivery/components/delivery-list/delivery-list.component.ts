@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Donation } from '~shared';
+import { Donation, DonationStatus } from '~shared';
 import { DeliveryReadService } from '~web/delivery/services/delivery-read/delivery-read.service';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
+import { SessionService } from '~web/session/services/session/session.service';
 import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 
 @Component({
@@ -16,27 +17,36 @@ export class DeliveryListComponent {
   readonly filtersForm = new DonationFiltersForm();
 
   private _myDeliveries = false;
-  private _pageTitle = '';
 
   constructor(
     public listQueryService: ListQueryService<Donation>,
     private _deliveryReadService: DeliveryReadService,
-    private _router: Router
+    private _router: Router,
+    private _sessionService: SessionService,
   ) {}
+
+  get defaultBackHref(): string {
+    return (this._sessionService.isVolunteer ? '..' : '/donation');
+  }
+
+  get isScheduleList(): boolean {
+    return (this.filtersForm.get('donationStatus').value === DonationStatus.Matched);
+  }
 
   get myDeliveries(): boolean {
     return this._myDeliveries;
   }
 
   get pageTitle(): string {
-    return this._pageTitle;
+    return (this._myDeliveries)
+      ? 'My Deliveries'
+      : (this.isScheduleList)
+        ? 'Schedule Deliveries'
+        : 'Deliveries';
   }
 
   ionViewWillEnter(): void {
     this._myDeliveries = this._router.url.indexOf('/my') >= 0;
-    this._pageTitle = (this._myDeliveries)
-      ? 'My Deliveries'
-      : 'Schedule Deliveries';
     if (!this.listQueryService.items.length) {
       this.listQueryService.load(
         this._deliveryReadService.getDeliveries.bind(this._deliveryReadService),

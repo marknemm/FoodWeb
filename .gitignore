@@ -42,6 +42,8 @@ nginx-ssl-setup.sh
 environment.device.ts
 foodweb-*-firebase-adminsdk*
 firebase-service-account.json
+!.env.example
+!**/util/env.js
 
 # IDEs and editors
 .idea

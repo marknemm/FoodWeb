@@ -7,4 +7,54 @@
     <ion-item [routerLink]="['list']" [queryParams]="{ donationStatus: 'Matched' }">Schedule Delivery</ion-item>
     <ion-item [routerLink]="['list', 'my']">My Deliveries</ion-item>
   </ion-list>
+
+  <div class="row">
+    <div class="col-12">
+      <ion-card class="claim-info-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="location"></ion-icon>
+            <ion-label>Schedule Delivery</ion-label>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>
+            <strong><a [routerLink]="['list']" [queryParams]="{ donationStatus: 'Matched' }">Schedule Deliveries</a></strong> of food donations
+            gifted by local businesses to nearby charities.
+          </p>
+          <p>
+            Donations will only be shown from organizations within a reasonable distance
+            from your address.
+          </p>
+          <p>
+            You can adjust various filter settings, or search for a specific donation using our
+            search and filter features.
+          </p>
+          <p>
+            Never hesitate to review or delete <strong><a [routerLink]="['list', 'my']">Your Deliveries</a></strong>
+            in order to accommodate your schedule.
+          </p>
+          <p>
+            We value your unwavering support to help our neighbors who are in need!
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <ion-card class="donation-steps-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="footsteps"></ion-icon>
+            <ion-label>Delivery Steps</ion-label>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <foodweb-hybrid-donation-workflow [deliveryStatusesOnly]="true"></foodweb-hybrid-donation-workflow>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
 </ion-content>

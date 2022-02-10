@@ -1,6 +1,8 @@
 require('../util/constants');
 const spawn = require('../../../shared/tools/util/spawn');
+const path = require('path');
 const yargs = require('yargs');
+const { writeFileSync } = require('fs');
 const { getProjects, parseProjectInput, selectProjectPrompt } = require('../util/project');
 const { getPlatforms, selectPlatformPrompt } = require('../util/platform');
 
@@ -73,5 +75,25 @@ async function buildOneProject(project, platform, configuration) {
   }
   if (platform && platform !== 'web') {
     await spawn('npx', ['nx', 'run', `${project}:sync:${platform}`]);
+
+    if (platform === 'ios') {
+      setIosServerPathname(); // Ensure we fix cross-domain cookie limitation on ios VKWebView.
+    }
   }
+}
+
+/**
+ * Sets the server pathname for ios builds within the capacitor.config.json file.
+ * Necessary to fix a bug where cookies are not shared between domains in VKWebView used by ios.
+ * See: https://github.com/ionic-team/capacitor/issues/1373#issuecomment-707822708
+ *
+ * `Note`: Cannot be applied to Android, since setting the server hostname will cause android to make local requests
+ * when JSON api calls are issued to get data from the server specified by hostname.
+ */
+function setIosServerPathname() {
+  const capacitorPathname = path.join(global['clientProjectsDir'], 'hybrid', 'ios', 'App', 'App', 'capacitor.config.json');
+  const capacitorConfig = require(capacitorPathname);
+  capacitorConfig.server = capacitorConfig.server ?? {};
+  capacitorConfig.server.hostname = 'www.wnyfoodweb.com';
+  writeFileSync(capacitorPathname, JSON.stringify(capacitorConfig, null, 2));
 }

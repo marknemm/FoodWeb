@@ -1,4 +1,4 @@
-<foodweb-hybrid-header defaultBackHref="..">
+<foodweb-hybrid-header [defaultBackHref]="defaultBackHref">
   <ion-title>{{ pageTitle }}</ion-title>
   <ion-buttons *ngIf="canAccessAddAction" slot="end">
     <ion-button [routerLink]="['/', 'donation', addActionRouteSegment]" fill="clear">

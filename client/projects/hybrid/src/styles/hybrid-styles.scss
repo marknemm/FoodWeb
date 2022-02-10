@@ -59,7 +59,13 @@ cdk-virtual-scroll-viewport {
 }
 
 .light {
-  a {
+  a, .link {
     color: var(--ion-color-tertiary);
+  }
+}
+
+.dark {
+  a, .link {
+    color: var(--ion-color-primary);
   }
 }
