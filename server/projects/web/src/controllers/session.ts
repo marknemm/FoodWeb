@@ -59,7 +59,7 @@ export function handleDeleteSession(req: Request, res: Response) {
   if (req.query.isApp === 'true') {
     logout(req.session['account']);
   }
-  req.session.destroy(console.error);
+  req.session.destroy((err: any) => err && console.error(err));
   res.send();
 }
 

@@ -60,11 +60,8 @@ async function _sendDeleteMessageToHubOwner(donationHub: DonationHubEntity): Pro
       {
         notificationType: NotificationType.DonationHubReminder,
         notificationLink: `donation-hub/create`,
-        title: 'Donation Drop-Off Hub Deleted',
-        body: `
-          Your donation drop-off hub for <strong>${dropOffWindowStartStr}</strong> has been deleted.
-          Click this notification to register another drop-off hub.
-        `
+        title: 'Donation Hub Deleted',
+        body: `Your donation drop-off hub for <strong>${dropOffWindowStartStr}</strong> has been deleted.`
       }
     ).catch(console.error)
   );
@@ -112,7 +109,7 @@ async function _sendDeleteMessageBatchToPledgers(pledges: DonationHubPledgeEntit
       mailClient.sendEmail(
         MailTransporter.NOREPLY,
         pledgeAccount,
-        `Donation Drop-Off Hub Deleted - Your Pledge For ${dropOffWindowStartStr} Has Been Cancelled`,
+        `Donation Hub Deleted - Your Pledge For ${dropOffWindowStartStr} Has Been Cancelled`,
         'donation-hub-deleted',
         { donationHub, hubAccountName, pledge, isPledgeAccount: true }
       ).catch(console.error)
@@ -126,7 +123,7 @@ async function _sendDeleteMessageBatchToPledgers(pledges: DonationHubPledgeEntit
           notificationLink: `donation-hub/list`,
           title: 'Donation Pledge Cancelled',
           body: `
-            Donation drop-off hub deleted - your pledge For <strong>${dropOffWindowStartStr}</strong> has been cancelled.
+            Donation hub deleted - your pledge For <strong>${dropOffWindowStartStr}</strong> has been cancelled.
             Click this notification to pledge your donation to another hub.
           `
         }

@@ -3,25 +3,34 @@
 </foodweb-hybrid-header>
 
 <ion-content>
-  <ion-list class="borders-vertical">
-    <ion-item [routerLink]="['create']">Register Donation Hub</ion-item>
-    <ion-item [routerLink]="['list', 'my']">My Donation Hubs</ion-item>
-    <ion-item [routerLink]="['list']">Pledge Donation</ion-item>
-    <ion-item [routerLink]="['pledge', 'list', 'my']">My Donation Pledges</ion-item>
+  <ng-container *ngIf="sessionService.isVolunteer">
+    <ion-list class="borders-vertical">
+      <ion-item [routerLink]="['create']">Register Donation Hub</ion-item>
+      <ion-item [routerLink]="['list', 'my']">My Donation Hubs</ion-item>
+    </ion-list>
+    <ion-list class="borders-vertical">
+      <ion-item [routerLink]="['list']">Pledge Donation</ion-item>
+      <ion-item [routerLink]="['pledge', 'list', 'my']">My Donation Pledges</ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ion-list *ngIf="!sessionService.isVolunteer" class="borders-vertical">
+    <ion-item [routerLink]="['list']">Browse Donation Hubs</ion-item>
   </ion-list>
 
-  <div class="row">
+  <div *ngIf="sessionService.isVolunteer" class="row">
     <div class="col-md-6">
-      <ion-card class="drop-off-hub-info-card">
+      <ion-card class="donation-hub-info-card">
         <ion-card-header>
           <ion-card-title>
             <ion-icon name="share-social"></ion-icon>
-            <ion-label>Drop-Off Hub</ion-label>
+            <ion-label>Donation Hub</ion-label>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <p>
-            Every <strong>Saturday</strong>, we rely on volunteers to serve as donation drop-off hubs within the Sandwich Army.
+            Every <strong>Saturday</strong>, we rely on volunteers to serve as <strong><a [routerLink]="['list']">Donation Hubs</a></strong>
+            within the Sandwich Army.
           </p>
           <p>
             You can <strong><a [routerLink]="['create']">register</a></strong> your home as a drop-off hub,
@@ -32,7 +41,7 @@
             <strong><a [routerLink]="['list', 'my']">your Donation Drop-Off Hubs</a></strong>.
           </p>
           <p>
-            You will be sent <strong>reminder emails</strong> 24 hours and 1 hour before your hub's drop-off window.
+            You will be sent <strong>reminder notifications</strong> 24 hours and 1 hour before your hub's drop-off window.
           </p>
           <p>
             After the drop-off window ends, you are expected to transport all sandwiches to the <strong>Good Shepherd House</strong>,
@@ -56,7 +65,7 @@
         </ion-card-header>
         <ion-card-content>
           <p>
-            You can pledge donations to our <strong><a [routerLink]="['list']">Donation Drop-Off Hubs</a></strong>,
+            You can pledge donations to local <strong><a [routerLink]="['list']">Donation Hubs</a></strong>,
             which should be available each <strong>Saturday</strong>.
           </p>
           <p>
@@ -67,7 +76,7 @@
             You are expected to prepare and package all sandwiches before the drop-off window for your chosen hub.
           </p>
           <p>
-            You will be sent <strong>reminder emails</strong> 24 hours and 1 hour before your donation's drop-off window.
+            You will be sent <strong>reminder notifications</strong> 24 hours and 1 hour before your donation's drop-off window.
           </p>
           <p>
             Please follow any instructions provided by the owner of the donation drop-off hub.
@@ -75,6 +84,36 @@
           <p>
             Feel free to contact the drop-off hub if you have any questions.
             The hub's contact information can be seen when viewing <strong><a [routerLink]="['pledge', 'list', 'my']">your Donation Pledges</a></strong>.
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <div *ngIf="!sessionService.isVolunteer" class="row">
+    <div class="col-md-12">
+      <ion-card class="donation-hub-info-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="share-social"></ion-icon>
+            <ion-label>Donation Hub</ion-label>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>
+            Every <strong>Saturday</strong>, we rely on volunteers to serve as <strong><a [routerLink]="['list']">Donation Hubs</a></strong>
+            within the Sandwich Army.
+          </p>
+          <p>
+            Donation hubs serve as intermediate drop-off points within one's neighborhood for food donations during a specified
+            drop-off window.
+          </p>
+          <p>
+            After the drop-off window ends, you are expected to transport all sandwiches to a designated local charity.
+          </p>
+          <p>
+            <strong><a [routerLink]="['/', 'bootstrap', 'login']">Login</a></strong> or <strong><a [routerLink]="['/', 'bootstrap', 'signup']">Signup</a></strong>
+            as a <strong>Volunteer</strong> to register a donation hub or pledge a donation.
           </p>
         </ion-card-content>
       </ion-card>

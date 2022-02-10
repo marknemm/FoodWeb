@@ -1,4 +1,4 @@
-<foodweb-hybrid-header defaultBackHref="..">
+<foodweb-hybrid-header [defaultBackHref]="defaultBackHref">
   <ion-title>{{ pageTitle }}</ion-title>
   <ion-buttons *ngIf="myDeliveries" slot="end">
     <ion-button [routerLink]="['/', 'delivery', 'list']" [queryParams]="{ donationStatus: 'Matched' }" fill="clear">
@@ -24,7 +24,7 @@
       </foodweb-search-bar>
     </foodweb-filtered-list-toolbar> -->
 
-    <div *ngIf="!myDeliveries && !listQueryService.noneFound" class="standalone-statement">
+    <div *ngIf="isScheduleList && !listQueryService.noneFound" class="standalone-statement">
       Choose a delivery to schedule.
     </div>
 

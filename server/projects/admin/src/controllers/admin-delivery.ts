@@ -22,7 +22,7 @@ async function handlePostDelivery(req: Request, res: Response): Promise<void> {
   const scheduleReq: AdminDeliveryScheduleRequest = req.body;
   let donation: DonationEntity;
 
-  // Perform delivery schedule operation and respond to client immeidately on success/failure.
+  // Perform delivery schedule operation and respond to client immediately on success/failure.
   try {
     const volunteerAccount: AccountEntity = await adminReadAccount(scheduleReq.volunteerAccountId);
     donation = await scheduleDelivery(scheduleReq, volunteerAccount);

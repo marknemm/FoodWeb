@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { SessionService } from '~hybrid/session/services/session/session.service';
 import { Donation } from '~shared';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
@@ -25,6 +26,10 @@ export class DonationListComponent {
     return (this.myDonations && (this._sessionService.isDonor || this._sessionService.isReceiver));
   }
 
+  get defaultBackHref(): string {
+    return (this._sessionService.isVolunteer ? '/delivery' : '..');
+  }
+
   get myDonations(): boolean {
     return this._myDonations;
   }
@@ -40,10 +45,12 @@ export class DonationListComponent {
   constructor(
     public listQueryService: ListQueryService<Donation>,
     private _donationReadService: DonationReadService,
+    private _router: Router,
     private _sessionService: SessionService,
   ) {}
 
   ionViewWillEnter(): void {
+    this._myDonations = this._router.url.indexOf('/my') >= 0;
     if (!this.listQueryService.items.length) {
       this.listQueryService.load(
         this._donationReadService.getDonations.bind(this._donationReadService),
