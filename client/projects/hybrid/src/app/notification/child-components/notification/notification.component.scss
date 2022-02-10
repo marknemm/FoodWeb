@@ -43,6 +43,14 @@
 }
 
 :host-context(body.dark) {
+  .notification-container {
+    --background: var(--ion-color-step-50);
+
+    &.unread {
+      --background: var(--ion-color-step-150);
+    }
+  }
+
   .notification .title {
     color: var(--ion-color-primary);
   }

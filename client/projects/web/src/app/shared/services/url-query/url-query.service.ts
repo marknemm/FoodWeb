@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Event, NavigationEnd, ParamMap, Params, Router } from '@angular/router';
+import { ActivatedRoute, Event, NavigationEnd, NavigationExtras, ParamMap, Params, Router } from '@angular/router';
 import { cloneDeep } from 'lodash-es';
 import { NEVER, Observable, of } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
@@ -88,23 +88,23 @@ export class UrlQueryService {
 
   /**
    * Updates the URL query string to contain given donation filter values.
-   * @param filters The filter values that are to be set in the query string.
+   * @param queryParams An object containing members that construct URL query string key-value pairs.
    * @param activatedRoute The activated route service used to complete query string modification on the current route.
+   * @param extras Optional {@link NavigationExtras} options used when navigating with the built-in Angular Router.
    */
-  updateUrlQueryString(filters: any, activatedRoute: ActivatedRoute): void {
+  updateUrlQueryString(queryParams: any, activatedRoute: ActivatedRoute, extras: NavigationExtras = {}): void {
     // Convert dates into raw ISO strings, and remove empty strings.
-    for (const filterKey in filters) {
-      if (filters[filterKey] instanceof Date) {
-        filters[filterKey] = (<Date>filters[filterKey]).toISOString();
+    for (const filterKey in queryParams) {
+      if (queryParams[filterKey] instanceof Date) {
+        queryParams[filterKey] = (<Date>queryParams[filterKey]).toISOString();
       }
-      if (filters[filterKey] === '') {
-        delete filters[filterKey];
+      if (queryParams[filterKey] === '') {
+        delete queryParams[filterKey];
       }
     }
 
-    this._router.navigate([], {
-      relativeTo: activatedRoute,
-      queryParams: filters
-    });
+    extras.relativeTo = extras.relativeTo ?? activatedRoute;
+    extras.queryParams = extras.queryParams ?? queryParams;
+    this._router.navigate([], extras);
   }
 }

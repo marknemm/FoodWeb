@@ -43,7 +43,7 @@ export class DeliveryListComponent implements OnInit {
       ? 'My Deliveries'
       : 'Schedule Deliveries';
     this.listQueryService.load(
-      this._deliveryReadService.getMyDeliveries.bind(this._deliveryReadService),
+      this._deliveryReadService.getDeliveries.bind(this._deliveryReadService),
       this.filtersForm
     );
   }

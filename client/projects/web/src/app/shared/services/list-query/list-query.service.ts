@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize, map, skip, take } from 'rxjs/operators';
 import { ListResponse, ReadRequest } from '~shared';
+import { ListFiltersForm } from '~web/shared/forms/list-filters.form';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 import { HttpResponseHandlerOptions } from '../http-response/http-response.service';
 
@@ -15,7 +15,7 @@ import { HttpResponseHandlerOptions } from '../http-response/http-response.servi
 @Injectable()
 export class ListQueryService<T> {
 
-  private _filtersForm: AbstractControl;
+  private _filtersForm: ListFiltersForm;
   private _loading = false;
   private _reader: Reader<T>;
   private _response$ = new BehaviorSubject<ListResponse<T>>({ list: [], totalCount: 0 });
@@ -64,10 +64,14 @@ export class ListQueryService<T> {
    * @param filtersForm The filters form which will contain the filters & pagination parameters that shall be applied on each load.
    * @returns An observable that emits the loaded list once the load operation has completed.
    */
-  load(readerFn: Reader<T>, filtersForm: AbstractControl): Observable<readonly T[]> {
+  load(readerFn: Reader<T>, filtersForm: ListFiltersForm): Observable<readonly T[]> {
     this._reader = readerFn;
     this._filtersForm = filtersForm;
     this.clear();
+
+    // Ensure initial filter values are set in URL query string without changing history.
+    const request: ReadRequest = this._getReadRequest();
+    this._urlQueryService.updateUrlQueryString(request, this._activatedRoute, { replaceUrl: true });
 
     this._urlQueryService.listenQueryParamsChange<ReadRequest>(this._activatedRoute).subscribe(
       (request: ReadRequest) => {
@@ -116,7 +120,9 @@ export class ListQueryService<T> {
    * @returns An observable that emits the refreshed list once the refresh operation has completed.
    */
   refresh(opts: HttpResponseHandlerOptions = {}): Observable<readonly T[]> {
-    this._filtersForm.get('page').setValue(1);
+    if (this._filtersForm.get('page').value > 1) {
+      this._filtersForm.get('page').setValue(1);
+    }
     this._loading = true;
     const request: ReadRequest = this._getReadRequest();
     this._urlQueryService.updateUrlQueryString(request, this._activatedRoute);
@@ -136,7 +142,9 @@ export class ListQueryService<T> {
    */
   private _getReadRequest(): ReadRequest {
     // By default, get non-disabled form values, and filter out null values.
-    const value = this._filtersForm.value;
+    const value = this._filtersForm.toReadRequest
+      ? this._filtersForm.toReadRequest()
+      : this._filtersForm.value;
     for (const prop in value) {
       if (value[prop] == null) { delete value[prop]; }
     }
