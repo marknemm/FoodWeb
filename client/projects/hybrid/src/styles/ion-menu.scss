@@ -1,0 +1,13 @@
+@import "variables.scss";
+
+ion-menu {
+  ion-content {
+    &:first-child {
+      --padding-top: var(--ion-safe-area-top);
+    }
+
+    &:last-child {
+      --padding-bottom: var(--ion-safe-area-bottom);
+    }
+  }
+}

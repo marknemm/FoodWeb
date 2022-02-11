@@ -1,0 +1,20 @@
+<foodweb-hybrid-page-list-filters-section [formGroup]="formGroup">
+  <ion-item>
+    <ion-label position="floating" color="secondary">Sort By</ion-label>
+    <ion-select [formControlName]="sortByFormControlName">
+      <ion-select-option *ngFor="let sortByOpt of sortByOpts" [value]="sortByOpt.value">
+        {{ sortByOpt.name }}
+      </ion-select-option>
+      <ion-select-option [value]="null">--</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+    <ion-item>
+      <ion-label position="floating" color="secondary">Order</ion-label>
+      <ion-select [formControlName]="sortOrderFormControlName">
+        <ion-select-option value="ASC">ASC</ion-select-option>
+        <ion-select-option value="DESC">DESC</ion-select-option>
+        <ion-select-option [value]="null">--</ion-select-option>
+      </ion-select>
+    </ion-item>
+</foodweb-hybrid-page-list-filters-section>

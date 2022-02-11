@@ -1,0 +1,10 @@
+@import "../../../../../../web/src/app/page-list/child-components/page-list/page-list.component.scss";
+
+ion-refresher {
+  position: static;
+}
+
+.end-list-message {
+  font-size: 14px;
+  color: var(--ion-color-secondary);
+}

@@ -1,0 +1,10 @@
+@import "variables.scss";
+
+.ios {
+  ion-title {
+    &.fill {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+}

@@ -1,35 +1,35 @@
-<foodweb-filtered-list class="accounts">
+<foodweb-page-list class="accounts">
 
-  <foodweb-filtered-list-title>
+  <foodweb-page-list-title>
     {{ accountListLabelService.pageTitle }}
-  </foodweb-filtered-list-title>
+  </foodweb-page-list-title>
 
-  <foodweb-filtered-list-toolbar listItemsLabel="Accounts">
+  <foodweb-page-list-toolbar listItemsLabel="Accounts">
     <foodweb-search-bar
       [placeholder]="accountListLabelService.searchPlaceholder"
       [formControl]="filtersForm.get('fullTextQuery')"
       (search)="listQueryService.refresh()"
     ></foodweb-search-bar>
-  </foodweb-filtered-list-toolbar>
+  </foodweb-page-list-toolbar>
 
-  <foodweb-filtered-list-content>
+  <foodweb-page-list-content>
     <div class="col-lg-6" *ngFor="let account of listQueryService.items">
       <foodweb-account-teaser [account]="account" [addressFirst]="true" [hasEmailSubtitle]="true"></foodweb-account-teaser>
     </div>
-  </foodweb-filtered-list-content>
+  </foodweb-page-list-content>
 
-  <foodweb-filtered-list-empty *ngIf="listQueryService.noneFound">
+  <foodweb-page-list-empty *ngIf="listQueryService.noneFound">
     Could Not Find Any Accounts
-  </foodweb-filtered-list-empty>
+  </foodweb-page-list-empty>
 
   <foodweb-paginator [length]="listQueryService.totalCount"></foodweb-paginator>
 
-  <foodweb-list-filters>
+  <foodweb-page-list-filters>
     <foodweb-account-filters
       [formGroup]="filtersForm"
       (clear)="filtersForm.resetFacetFilters()"
       (filter)="listQueryService.refresh()"
     ></foodweb-account-filters>
-  </foodweb-list-filters>
+  </foodweb-page-list-filters>
 
-</foodweb-filtered-list>
+</foodweb-page-list>

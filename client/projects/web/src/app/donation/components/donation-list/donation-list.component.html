@@ -1,35 +1,35 @@
-<foodweb-filtered-list class="donations">
+<foodweb-page-list class="donations">
 
-  <foodweb-filtered-list-title>
+  <foodweb-page-list-title>
     {{ pageTitleService.title }}
-  </foodweb-filtered-list-title>
+  </foodweb-page-list-title>
 
-  <foodweb-filtered-list-toolbar listItemsLabel="Donations">
+  <foodweb-page-list-toolbar listItemsLabel="Donations">
     <foodweb-search-bar
       placeholder="Search Donations..."
       [formControl]="filtersForm.get('fullTextQuery')"
       (search)="listQueryService.refresh()"
     ></foodweb-search-bar>
-  </foodweb-filtered-list-toolbar>
+  </foodweb-page-list-toolbar>
 
-  <foodweb-filtered-list-content>
+  <foodweb-page-list-content>
     <div class="col-lg-6" *ngFor="let donation of listQueryService.items">
       <foodweb-donation-teaser [donation]="donation"></foodweb-donation-teaser>
     </div>
-  </foodweb-filtered-list-content>
+  </foodweb-page-list-content>
 
-  <foodweb-filtered-list-empty *ngIf="listQueryService.noneFound">
+  <foodweb-page-list-empty *ngIf="listQueryService.noneFound">
     Could Not Find Any Donations
-  </foodweb-filtered-list-empty>
+  </foodweb-page-list-empty>
 
   <foodweb-paginator [length]="listQueryService.totalCount"></foodweb-paginator>
 
-  <foodweb-list-filters>
+  <foodweb-page-list-filters>
     <foodweb-donation-filters
       [formGroup]="filtersForm"
       (clear)="filtersForm.resetFacetFilters()"
       (filter)="listQueryService.refresh()"
     ></foodweb-donation-filters>
-  </foodweb-list-filters>
+  </foodweb-page-list-filters>
 
-</foodweb-filtered-list>
+</foodweb-page-list>

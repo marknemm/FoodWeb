@@ -1,0 +1,17 @@
+@import "variables.scss";
+
+.mat-sidenav-container {
+  overflow: visible;
+
+  @media only screen and (max-width: $md) {
+    height: auto;
+  }
+
+  .mat-drawer {
+    width: 320px;
+
+    @media only screen and (max-width: $mat-mobile) {
+      width: 100vw;
+    }
+  }
+}

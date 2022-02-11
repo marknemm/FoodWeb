@@ -4,19 +4,19 @@
 
 <ion-content>
 
-  <foodweb-hybrid-filtered-list
+  <foodweb-hybrid-page-list
     [disabled]="listQueryService.loading"
     [pageSize]="notificationFilters.value.limit || notificationService.defaultReadLimit"
     (loadMore)="handleLoadMore($event)"
     (refresh)="handleRefresh($event)">
 
-    <!-- <foodweb-filtered-list-toolbar listItemsLabel="Accounts">
+    <!-- <foodweb-page-list-toolbar listItemsLabel="Accounts">
       <foodweb-search-bar
         [placeholder]="searchPlaceholder"
         [formControl]="filtersForm.get('fullTextQuery')"
         (search)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
       ></foodweb-search-bar>
-    </foodweb-filtered-list-toolbar> -->
+    </foodweb-page-list-toolbar> -->
 
     <!-- <div *ngIf="noneFound" class="standalone-statement">
       Could Not Find Any Notifications.
@@ -35,14 +35,14 @@
       </foodweb-hybrid-notification>
     </ion-virtual-scroll>
 
-    <!-- <foodweb-list-filters>
+    <!-- <foodweb-page-list-filters>
       <foodweb-account-filters
         [formGroup]="filtersForm"
         (clear)="filtersForm.resetFacetFilters()"
         (filter)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
       ></foodweb-account-filters>
-    </foodweb-list-filters> -->
+    </foodweb-page-list-filters> -->
 
-  </foodweb-hybrid-filtered-list>
+  </foodweb-hybrid-page-list>
 
 </ion-content>

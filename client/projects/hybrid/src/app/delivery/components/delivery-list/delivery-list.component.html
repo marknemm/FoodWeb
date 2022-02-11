@@ -9,20 +9,20 @@
 
 <ion-content>
 
-  <foodweb-hybrid-filtered-list
+  <foodweb-hybrid-page-list
     class="deliveries"
     [disabled]="listQueryService.loading"
     [itemCount]="listQueryService.items.length"
     (loadMore)="handleLoadMore($event)"
     (refresh)="handleRefresh($event)">
 
-    <!-- <foodweb-filtered-list-toolbar listItemsLabel="Deliveries">
+    <!-- <foodweb-page-list-toolbar listItemsLabel="Deliveries">
       <foodweb-search-bar
         [placeholder]="searchPlaceholder"
         [formControl]="filtersForm.get('fullTextQuery')"
         (search)="updateFilterQueryParams(filtersForm.value)">
       </foodweb-search-bar>
-    </foodweb-filtered-list-toolbar> -->
+    </foodweb-page-list-toolbar> -->
 
     <div *ngIf="isScheduleList && !listQueryService.noneFound" class="standalone-statement">
       Choose a delivery to schedule.
@@ -37,15 +37,15 @@
       [donation]="donation">
     </foodweb-hybrid-delivery-teaser>
 
-    <!-- <foodweb-list-filters>
+    <!-- <foodweb-page-list-filters>
       <foodweb-delivery-filters
         [formGroup]="filtersForm"
         [myDeliveries]="myDeliveries"
         (clear)="filtersForm.resetFacetFilters()"
         (filter)="updateFilterQueryParams($event)">
       </foodweb-delivery-filters>
-    </foodweb-list-filters> -->
+    </foodweb-page-list-filters> -->
 
-  </foodweb-hybrid-filtered-list>
+  </foodweb-hybrid-page-list>
 
 </ion-content>

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DonationReadRequest, DonationSortBy, DonationStatus } from '~shared';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
-import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
+import { SortByOpt } from '~web/page-list/interfaces/sort-by-opt';
 import { FormFieldService } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 

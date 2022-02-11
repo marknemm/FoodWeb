@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { AccountReadRequest, AccountSortBy, AccountType } from '~shared';
 import { AccountFiltersForm } from '~web/account/forms/account-filters.form';
-import { SortByOpt } from '~web/filtered-list/interfaces/sort-by-opt';
+import { SortByOpt } from '~web/page-list/interfaces/sort-by-opt';
 import { FormFieldService } from '~web/forms';
 
 @Component({

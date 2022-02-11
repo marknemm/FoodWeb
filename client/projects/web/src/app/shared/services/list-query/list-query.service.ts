@@ -4,7 +4,7 @@ import { isEqual } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize, map, skip, take } from 'rxjs/operators';
 import { ListResponse, ReadRequest } from '~shared';
-import { ListFiltersForm } from '~web/shared/forms/list-filters.form';
+import { PageListFiltersForm } from '~web/shared/forms/list-filters.form';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 import { HttpResponseHandlerOptions } from '../http-response/http-response.service';
 
@@ -15,7 +15,7 @@ import { HttpResponseHandlerOptions } from '../http-response/http-response.servi
 @Injectable()
 export class ListQueryService<T> {
 
-  private _filtersForm: ListFiltersForm;
+  private _filtersForm: PageListFiltersForm;
   private _loading = false;
   private _reader: Reader<T>;
   private _response$ = new BehaviorSubject<ListResponse<T>>({ list: [], totalCount: 0 });
@@ -64,7 +64,7 @@ export class ListQueryService<T> {
    * @param filtersForm The filters form which will contain the filters & pagination parameters that shall be applied on each load.
    * @returns An observable that emits the loaded list once the load operation has completed.
    */
-  load(readerFn: Reader<T>, filtersForm: ListFiltersForm): Observable<readonly T[]> {
+  load(readerFn: Reader<T>, filtersForm: PageListFiltersForm): Observable<readonly T[]> {
     this._reader = readerFn;
     this._filtersForm = filtersForm;
     this.clear();

@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { IonMenu } from '@ionic/angular';
 import { SessionService } from '~hybrid/session/services/session/session.service';
 import { Donation } from '~shared';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
 import { DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
+import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 
 @Component({
@@ -43,6 +45,7 @@ export class DonationListComponent {
   }
 
   constructor(
+    public constantsService: ConstantsService,
     public listQueryService: ListQueryService<Donation>,
     private _donationReadService: DonationReadService,
     private _router: Router,
@@ -73,6 +76,20 @@ export class DonationListComponent {
    */
   handleRefresh(event: any): void {
     this.listQueryService.refresh({ showLoader: false }).subscribe(() => event.target.complete());
+  }
+
+  clearFilters(): void {
+    this.filtersForm.resetFacetFilters();
+    if (this.filtersForm.valid) {
+      this.listQueryService.refresh();
+    }
+  }
+
+  submitFilters(filterMenu: IonMenu): void {
+    if (this.filtersForm.valid) {
+      filterMenu.close();
+      this.listQueryService.refresh();
+    }
   }
 
 }

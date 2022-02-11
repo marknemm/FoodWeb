@@ -4,9 +4,9 @@ import { AccountEntity, MobileDeviceEntity, PerpetualSessionEntity } from '~enti
 import { ListResponse, LoginRequest, LoginResponse } from '~shared';
 import { checkPasswordMatch } from '~web/helpers/misc/password-match';
 import { FoodWebError } from '~web/helpers/response/foodweb-error';
+import { isAccountVerified } from '~web/services/account/account-verification';
 import { readFullAccount, readFullAccounts } from '~web/services/account/read-accounts';
 import { saveMobileDevice } from '~web/services/mobile-device/save-mobile-device';
-import { isAccountVerified } from '../account/account-verification';
 
 /**
  * Performs the login for a given user.

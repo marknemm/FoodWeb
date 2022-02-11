@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ListQueryService } from './list-query.service';
+import { ListQueryService } from './page-list-query.service';
 
 describe('ListQueryService', () => {
   let service: ListQueryService;

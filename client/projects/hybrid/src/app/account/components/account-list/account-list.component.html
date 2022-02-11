@@ -4,19 +4,19 @@
 
 <ion-content>
 
-  <foodweb-hybrid-filtered-list
+  <foodweb-hybrid-page-list
     [disabled]="listQueryService.loading"
     [itemCount]="listQueryService.items.length"
     (loadMore)="handleLoadMore($event)"
     (refresh)="handleRefresh($event)">
 
-    <!-- <foodweb-filtered-list-toolbar listItemsLabel="Accounts">
+    <!-- <foodweb-page-list-toolbar listItemsLabel="Accounts">
       <foodweb-search-bar
         [placeholder]="searchPlaceholder"
         [formControl]="filtersForm.get('fullTextQuery')"
         (search)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
       ></foodweb-search-bar>
-    </foodweb-filtered-list-toolbar> -->
+    </foodweb-page-list-toolbar> -->
 
     <div *ngIf="listQueryService.noneFound" class="standalone-statement">
       Could Not Find Any Accounts.
@@ -29,14 +29,14 @@
       [hasEmailSubtitle]="true">
     </foodweb-hybrid-account-teaser>
 
-    <!-- <foodweb-list-filters>
+    <!-- <foodweb-page-list-filters>
       <foodweb-account-filters
         [formGroup]="filtersForm"
         (clear)="filtersForm.resetFacetFilters()"
         (filter)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
       ></foodweb-account-filters>
-    </foodweb-list-filters> -->
+    </foodweb-page-list-filters> -->
 
-  </foodweb-hybrid-filtered-list>
+  </foodweb-hybrid-page-list>
 
 </ion-content>

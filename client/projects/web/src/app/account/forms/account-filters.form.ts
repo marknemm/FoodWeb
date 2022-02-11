@@ -1,9 +1,9 @@
 import { AccountReadRequest, AccountType, OperationHours } from '~shared';
 import { OperationHoursFilterForm } from '~web/account-shared/forms/operation-hours-filter.form';
-import { ListFiltersForm } from '~web/shared/forms/list-filters.form';
+import { PageListFiltersForm } from '~web/shared/forms/list-filters.form';
 export { AccountReadRequest };
 
-export class AccountFiltersForm extends ListFiltersForm<AccountFiltersFormT> {
+export class AccountFiltersForm extends PageListFiltersForm<AccountFiltersFormT> {
 
   constructor(filters?: Partial<AccountFiltersFormT>) {
     super({

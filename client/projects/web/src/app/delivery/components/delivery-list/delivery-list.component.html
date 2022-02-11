@@ -1,34 +1,34 @@
-<foodweb-filtered-list class="deliveries">
+<foodweb-page-list class="deliveries">
 
-  <foodweb-filtered-list-title>{{ pageTitleService.title }}</foodweb-filtered-list-title>
+  <foodweb-page-list-title>{{ pageTitleService.title }}</foodweb-page-list-title>
 
-  <foodweb-filtered-list-toolbar listItemsLabel="Deliveries">
+  <foodweb-page-list-toolbar listItemsLabel="Deliveries">
     <foodweb-search-bar
       [placeholder]="searchPlaceholder"
       [formControl]="filtersForm.get('fullTextQuery')"
       (search)="listQueryService.refresh()"
     ></foodweb-search-bar>
-  </foodweb-filtered-list-toolbar>
+  </foodweb-page-list-toolbar>
 
-  <foodweb-filtered-list-content>
+  <foodweb-page-list-content>
     <div class="col-lg-6" *ngFor="let donation of listQueryService.items">
       <foodweb-delivery-teaser [donation]="donation"></foodweb-delivery-teaser>
     </div>
-  </foodweb-filtered-list-content>
+  </foodweb-page-list-content>
 
-  <foodweb-filtered-list-empty *ngIf="listQueryService.noneFound">
+  <foodweb-page-list-empty *ngIf="listQueryService.noneFound">
     Could Not Find Any Deliveries
-  </foodweb-filtered-list-empty>
+  </foodweb-page-list-empty>
 
   <foodweb-paginator [length]="listQueryService.totalCount"></foodweb-paginator>
 
-  <foodweb-list-filters>
+  <foodweb-page-list-filters>
     <foodweb-delivery-filters
       [formGroup]="filtersForm"
       [myDeliveries]="myDeliveries"
       (clear)="filtersForm.resetFacetFilters()"
       (filter)="listQueryService.refresh()"
     ></foodweb-delivery-filters>
-  </foodweb-list-filters>
+  </foodweb-page-list-filters>
 
-</foodweb-filtered-list>
+</foodweb-page-list>

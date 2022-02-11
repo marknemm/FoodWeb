@@ -12,8 +12,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
-import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { MapModule } from '~web/map/map.module';
+import { PageListModule } from '~web/page-list/page-list.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { AccountRoutingModule } from './account-routing.module';
 import { AccountFiltersComponent } from './child-components/account-filters/account-filters.component';
@@ -33,7 +33,7 @@ import { AccountComponent } from './components/account/account.component';
     CommonModule,
     ReactiveFormsModule,
     DateTimeModule,
-    FilteredListModule,
+    PageListModule,
     MapModule,
     MatButtonModule,
     MatCardModule,

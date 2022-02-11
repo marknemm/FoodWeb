@@ -11,8 +11,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
 import { DonationSharedModule } from '~web/donation-shared/donation-shared.module';
-import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { MapModule } from '~web/map/map.module';
+import { PageListModule } from '~web/page-list/page-list.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { DonationFiltersComponent } from './child-components/donation-filters/donation-filters.component';
 import { DonationTeaserComponent } from './child-components/donation-teaser/donation-teaser.component';
@@ -42,7 +42,7 @@ import { DonationRouterLinkPipe } from './pipes/donation-router-link/donation-ro
     AccountSharedModule,
     DateTimeModule,
     DonationSharedModule,
-    FilteredListModule,
+    PageListModule,
     MapModule,
     MatButtonModule,
     MatCardModule,
