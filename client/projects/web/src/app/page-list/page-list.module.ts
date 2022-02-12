@@ -11,7 +11,6 @@ import { SharedModule } from '~web/shared/shared.module';
 import { PageListFiltersFooterComponent } from './child-components/page-list-filters-footer/page-list-filters-footer.component';
 import { PageListFiltersTitleComponent } from './child-components/page-list-filters-title/page-list-filters-title.component';
 import { PageListFiltersComponent } from './child-components/page-list-filters/page-list-filters.component';
-import { PageListInstructionsComponent } from './child-components/page-list-instructions/page-list-instructions.component';
 import { PageListSortComponent } from './child-components/page-list-sort/page-list-sort.component';
 import { PageListToolbarComponent } from './child-components/page-list-toolbar/page-list-toolbar.component';
 import { PageListComponent } from './child-components/page-list/page-list.component';
@@ -22,7 +21,6 @@ import { PageListComponent } from './child-components/page-list/page-list.compon
     PageListFiltersComponent,
     PageListFiltersFooterComponent,
     PageListFiltersTitleComponent,
-    PageListInstructionsComponent,
     PageListSortComponent,
     PageListToolbarComponent,
   ],
@@ -42,7 +40,6 @@ import { PageListComponent } from './child-components/page-list/page-list.compon
     PageListFiltersComponent,
     PageListFiltersFooterComponent,
     PageListFiltersTitleComponent,
-    PageListInstructionsComponent,
     PageListSortComponent,
     PageListToolbarComponent,
   ]

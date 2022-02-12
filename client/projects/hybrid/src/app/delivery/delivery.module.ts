@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { AccountSharedModule } from '~hybrid/account-shared/account-shared.module';
 import { DateTimeModule } from '~hybrid/date-time/date-time.module';
 import { DonationSharedModule } from '~hybrid/donation-shared/donation-shared.module';
-import { PageListModule } from '~hybrid/page-list/page-list.module';
 import { MapModule } from '~hybrid/map/map.module';
+import { PageListModule } from '~hybrid/page-list/page-list.module';
 import { SharedModule } from '~hybrid/shared/shared.module';
 import { DeliveryModule as WebDeliveryModule } from '~web/delivery/delivery.module';
 import { DeliveryDonationInfoComponent } from './child-components/delivery-donation-info/delivery-donation-info.component';
@@ -30,6 +31,7 @@ import { DeliveryRoutingModule } from './delivery-routing.module';
   imports: [
     CommonModule,
     IonicModule,
+    ReactiveFormsModule,
     DeliveryRoutingModule,
     WebDeliveryModule,
     AccountSharedModule,

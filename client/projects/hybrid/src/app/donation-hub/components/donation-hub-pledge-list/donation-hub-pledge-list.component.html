@@ -16,7 +16,7 @@
     (loadMore)="handleLoadMore($event)"
     (refresh)="handleRefresh($event)">
 
-    <div *ngIf="listQueryService.noneFound" class="standalone-statement">
+    <div *ngIf="listQueryService.noneFound" class="not-found">
       Could Not Find Any Donation Pledges.
     </div>
 

@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { Account } from '~shared';
+import { IonMenu } from '@ionic/angular';
+import { Account, AccountSortBy } from '~shared';
 import { AccountFiltersForm } from '~web/account/forms/account-filters.form';
 import { AccountListLabelService } from '~web/account/services/account-list-label/account-list-label.service';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
+import { SortByOpt } from '~web/page-list/interfaces/sort-by-opt';
+import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 
 @Component({
@@ -15,8 +18,17 @@ export class AccountListComponent {
 
   readonly filtersForm = new AccountFiltersForm();
 
+  /**
+   * Options for sorting dropdown.
+   */
+  readonly sortByOpts: SortByOpt<AccountSortBy>[] = [
+    { name: 'Organization Name', value: 'name' },
+    { name: 'Email Address', value: 'email' }
+  ];
+
   constructor(
     public accountListLabelService: AccountListLabelService,
+    public constantsService: ConstantsService,
     public listQueryService: ListQueryService<Account>,
     private _accountReadService: AccountReadService,
   ) {}
@@ -44,5 +56,19 @@ export class AccountListComponent {
    */
   handleRefresh(event: any): void {
     this.listQueryService.refresh({ showLoader: false }).subscribe(() => event.target.complete());
+  }
+
+  clearFilters(): void {
+    this.filtersForm.resetFacetFilters();
+    if (this.filtersForm.valid) {
+      this.listQueryService.refresh();
+    }
+  }
+
+  submitFilters(filterMenu: IonMenu): void {
+    if (this.filtersForm.valid) {
+      filterMenu.close();
+      this.listQueryService.refresh();
+    }
   }
 }

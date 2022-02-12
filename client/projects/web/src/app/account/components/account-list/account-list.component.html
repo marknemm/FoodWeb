@@ -1,26 +1,26 @@
 <foodweb-page-list class="accounts">
 
-  <foodweb-page-list-title>
+  <div class="page-title">
     {{ accountListLabelService.pageTitle }}
-  </foodweb-page-list-title>
+  </div>
 
   <foodweb-page-list-toolbar listItemsLabel="Accounts">
     <foodweb-search-bar
       [placeholder]="accountListLabelService.searchPlaceholder"
       [formControl]="filtersForm.get('fullTextQuery')"
-      (search)="listQueryService.refresh()"
-    ></foodweb-search-bar>
+      (search)="listQueryService.refresh()">
+    </foodweb-search-bar>
   </foodweb-page-list-toolbar>
 
-  <foodweb-page-list-content>
+  <div class="row">
     <div class="col-lg-6" *ngFor="let account of listQueryService.items">
       <foodweb-account-teaser [account]="account" [addressFirst]="true" [hasEmailSubtitle]="true"></foodweb-account-teaser>
     </div>
-  </foodweb-page-list-content>
+  </div>
 
-  <foodweb-page-list-empty *ngIf="listQueryService.noneFound">
+  <div *ngIf="listQueryService.noneFound" class="not-found">
     Could Not Find Any Accounts
-  </foodweb-page-list-empty>
+  </div>
 
   <foodweb-paginator [length]="listQueryService.totalCount"></foodweb-paginator>
 
@@ -28,8 +28,8 @@
     <foodweb-account-filters
       [formGroup]="filtersForm"
       (clear)="filtersForm.resetFacetFilters()"
-      (filter)="listQueryService.refresh()"
-    ></foodweb-account-filters>
+      (filter)="listQueryService.refresh()">
+    </foodweb-account-filters>
   </foodweb-page-list-filters>
 
 </foodweb-page-list>

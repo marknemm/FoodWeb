@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonMenu } from '@ionic/angular';
 import { SessionService } from '~hybrid/session/services/session/session.service';
-import { Donation } from '~shared';
+import { Donation, DonationSortBy } from '~shared';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
 import { DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
+import { SortByOpt } from '~web/page-list/interfaces/sort-by-opt';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 
@@ -17,6 +18,16 @@ import { ListQueryService } from '~web/shared/services/list-query/list-query.ser
 export class DonationListComponent {
 
   readonly filtersForm = new DonationFiltersForm();
+
+  /**
+   * Options for sorting dropdown.
+   */
+   readonly sortByOpts: SortByOpt<DonationSortBy>[] = [
+    { name: 'Donation Window', value: 'deliveryWindowStart' },
+    { name: 'Date Created', value: 'createTimestamp' },
+    { name: 'Donation Status', value: 'donationStatus' },
+    { name: 'Donor Organization', value: 'donorOrganizationName' }
+  ];
 
   private _myDonations = false;
 

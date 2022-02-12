@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Donation, DonationStatus } from '~shared';
+import { IonMenu } from '@ionic/angular';
+import { Donation, DonationSortBy, DonationStatus } from '~shared';
 import { DeliveryReadService } from '~web/delivery/services/delivery-read/delivery-read.service';
 import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters.form';
+import { SortByOpt } from '~web/page-list/interfaces/sort-by-opt';
 import { SessionService } from '~web/session/services/session/session.service';
+import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 
 @Component({
@@ -16,9 +19,20 @@ export class DeliveryListComponent {
 
   readonly filtersForm = new DonationFiltersForm();
 
+  /**
+   * Options for sorting dropdown.
+   */
+   readonly sortByOpts: SortByOpt<DonationSortBy>[] = [
+    { name: 'Delivery Window', value: 'deliveryWindowStart' },
+    { name: 'Donation Status', value: 'donationStatus' },
+    { name: 'Donor Organization', value: 'donorOrganizationName' },
+    { name: 'Receiver Organization', value: 'receiverOrganizationName' }
+  ];
+
   private _myDeliveries = false;
 
   constructor(
+    public constantsService: ConstantsService,
     public listQueryService: ListQueryService<Donation>,
     private _deliveryReadService: DeliveryReadService,
     private _router: Router,
@@ -69,5 +83,19 @@ export class DeliveryListComponent {
    */
   handleRefresh(event: any): void {
     this.listQueryService.refresh({ showLoader: false }).subscribe(() => event.target.complete());
+  }
+
+  clearFilters(): void {
+    this.filtersForm.resetFacetFilters();
+    if (this.filtersForm.valid) {
+      this.listQueryService.refresh();
+    }
+  }
+
+  submitFilters(filterMenu: IonMenu): void {
+    if (this.filtersForm.valid) {
+      filterMenu.close();
+      this.listQueryService.refresh();
+    }
   }
 }

@@ -19,15 +19,15 @@
     (loadMore)="handleLoadMore($event)"
     (refresh)="handleRefresh($event)">
 
-    <form [formGroup]="filtersForm" (ngSubmit)="listQueryService.refresh()">
-      <ion-searchbar placeholder="Search Donations..." formControlName="fullTextQuery"></ion-searchbar>
-    </form>
-
     <div *ngIf="showChooseDonation" class="standalone-statement">
       Choose a donation to claim.
     </div>
 
-    <div *ngIf="listQueryService.noneFound" class="standalone-statement">
+    <form [formGroup]="filtersForm" (ngSubmit)="listQueryService.refresh()">
+      <ion-searchbar placeholder="Search Donations..." formControlName="fullTextQuery"></ion-searchbar>
+    </form>
+
+    <div *ngIf="listQueryService.noneFound" class="not-found">
       Could not find any donations.
     </div>
 
@@ -35,14 +35,6 @@
       *ngFor="let donation of listQueryService.items"
       [donation]="donation">
     </foodweb-hybrid-donation-teaser>
-
-    <!-- <foodweb-hybrid-page-list-filters>
-      <foodweb-donation-filters
-        [formGroup]="filtersForm"
-        (clear)="filtersForm.resetFacetFilters()"
-        (filter)="updateFilterQueryParams($event)">
-      </foodweb-donation-filters>
-    </foodweb-hybrid-page-list-filters> -->
 
   </foodweb-hybrid-page-list>
 
@@ -55,6 +47,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
+
     <form [formGroup]="filtersForm" (ngSubmit)="submitFilters(filterMenu)" class="item-margins">
       <foodweb-hybrid-page-list-filters-section>
         <ion-item>
@@ -108,9 +101,10 @@
         </foodweb-hybrid-date-time>
       </foodweb-hybrid-page-list-filters-section>
 
-      <foodweb-hybrid-page-list-sort [formGroup]="filtersForm" [sortByOpts]="filtersForm.sortByOpts"></foodweb-hybrid-page-list-sort>
+      <foodweb-hybrid-page-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></foodweb-hybrid-page-list-sort>
 
       <foodweb-hybrid-page-list-filters-footer (clear)="clearFilters()" (submit)="submitFilters(filterMenu)"></foodweb-hybrid-page-list-filters-footer>
     </form>
+
   </ion-content>
 </ion-menu>

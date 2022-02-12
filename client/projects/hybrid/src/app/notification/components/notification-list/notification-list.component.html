@@ -5,26 +5,19 @@
 <ion-content>
 
   <foodweb-hybrid-page-list
+    class="notifications"
     [disabled]="listQueryService.loading"
     [pageSize]="notificationFilters.value.limit || notificationService.defaultReadLimit"
     (loadMore)="handleLoadMore($event)"
     (refresh)="handleRefresh($event)">
 
-    <!-- <foodweb-page-list-toolbar listItemsLabel="Accounts">
-      <foodweb-search-bar
-        [placeholder]="searchPlaceholder"
-        [formControl]="filtersForm.get('fullTextQuery')"
-        (search)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
-      ></foodweb-search-bar>
-    </foodweb-page-list-toolbar> -->
-
-    <!-- <div *ngIf="noneFound" class="standalone-statement">
-      Could Not Find Any Notifications.
-    </div> -->
-
-    <!-- <ion-item (click)="refresh().subscribe()" [ngClass]="{ show: this.notificationService.hasUnseenNotifications }" class="reload-prompt" color="tertiary">
+    <ion-item (click)="listQueryService.refresh()" [ngClass]="{ show: this.notificationService.hasUnseenNotifications }" class="reload-prompt" color="tertiary">
       <ion-label>New Notifications Available: Tap to Refresh</ion-label>
-    </ion-item> -->
+    </ion-item>
+
+    <div *ngIf="listQueryService.noneFound" class="not-found">
+      Could Not Find Any Notifications.
+    </div>
 
     <ion-virtual-scroll [items]="listQueryService.items" approxItemHeight="64px">
       <foodweb-hybrid-notification
@@ -34,14 +27,6 @@
         (select)="notificationService.handleNotificationSelect($event)">
       </foodweb-hybrid-notification>
     </ion-virtual-scroll>
-
-    <!-- <foodweb-page-list-filters>
-      <foodweb-account-filters
-        [formGroup]="filtersForm"
-        (clear)="filtersForm.resetFacetFilters()"
-        (filter)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
-      ></foodweb-account-filters>
-    </foodweb-page-list-filters> -->
 
   </foodweb-hybrid-page-list>
 

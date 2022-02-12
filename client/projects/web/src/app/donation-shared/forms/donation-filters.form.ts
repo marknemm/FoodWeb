@@ -1,5 +1,4 @@
-import { DonationReadRequest, DonationSortBy } from '~shared';
-import { SortByOpt } from '~web/page-list/interfaces/sort-by-opt';
+import { DonationReadRequest } from '~shared';
 import { TFormGroup } from '~web/forms';
 export { DonationReadRequest };
 
@@ -9,16 +8,6 @@ export { DonationReadRequest };
 export class DonationFiltersForm extends TFormGroup<DonationReadRequest> {
 
   static readonly DEFAULT_LIMIT = 10;
-
-  /**
-   * Options for sorting dropdown.
-   */
-  readonly sortByOpts: SortByOpt<DonationSortBy>[] = [
-    { name: 'Donation Window', value: 'deliveryWindowStart' },
-    { name: 'Date Created', value: 'createTimestamp' },
-    { name: 'Donation Status', value: 'donationStatus' },
-    { name: 'Donor Organization', value: 'donorOrganizationName' }
-  ];
 
   constructor(filters?: Partial<DonationReadRequest>) {
     super({

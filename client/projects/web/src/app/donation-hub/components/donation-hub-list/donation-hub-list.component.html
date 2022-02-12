@@ -1,18 +1,20 @@
 <foodweb-page-list class="donation-hubs">
 
-  <foodweb-page-list-title>{{ pageTitleService.title }}</foodweb-page-list-title>
+  <div class="page-title">
+    {{ pageTitleService.title }}
+  </div>
 
-  <foodweb-page-list-instructions *ngIf="!myDonationHubs && !listQueryService.noneFound">
+  <div *ngIf="!myDonationHubs && !listQueryService.noneFound" class="standalone-statement">
     Choose a donation drop-off hub to pledge a donation to.
-  </foodweb-page-list-instructions>
+  </div>
 
-  <foodweb-page-list-content>
+  <div class="row">
     <div class="col-lg-6" *ngFor="let donationHub of listQueryService.items">
       <foodweb-donation-hub-teaser [donationHub]="donationHub"></foodweb-donation-hub-teaser>
     </div>
-  </foodweb-page-list-content>
+  </div>
 
-  <foodweb-page-list-empty *ngIf="listQueryService.noneFound">
+  <div *ngIf="listQueryService.noneFound" class="not-found">
     <p *ngIf="!myDonationHubs">
       Could Not Find Any Drop-Off Hubs That Can Accept Your Donation.<br>
       Please Consider <a [routerLink]="['/donation-hub', 'create']" class="bold">Registering</a> Your Home As a Donation Drop-Off Hub!
@@ -21,7 +23,7 @@
       Looks Like You Do Not Have Any Upcoming Donation Drop-Off Hubs.<br>
       Feel Free to <a [routerLink]="['/donation-hub', 'create']" class="bold">Register</a> One Any Time!
     </p>
-  </foodweb-page-list-empty>
+  </div>
 
   <foodweb-paginator *ngIf="listQueryService.items.length" [length]="listQueryService.totalCount"></foodweb-paginator>
 
