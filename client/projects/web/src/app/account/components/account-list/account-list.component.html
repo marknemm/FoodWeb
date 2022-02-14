@@ -25,11 +25,51 @@
   <foodweb-paginator [length]="listQueryService.totalCount"></foodweb-paginator>
 
   <foodweb-page-list-filters>
-    <foodweb-account-filters
-      [formGroup]="filtersForm"
-      (clear)="filtersForm.resetFacetFilters()"
-      (filter)="listQueryService.refresh()">
-    </foodweb-account-filters>
+    <form [formGroup]="filtersForm" class="account-filters" (ngSubmit)="listQueryService.refresh()">
+      <foodweb-page-list-filters-title [primary]="true">
+        Account Filters
+      </foodweb-page-list-filters-title>
+
+      <mat-form-field class="fill" *ngIf="!filtersForm.isVolunteerAccountType">
+        <input matInput type="text" placeholder="Organization Name" formControlName="organizationName">
+      </mat-form-field>
+
+      <div class="row" *ngIf="!filtersForm.isOrganizationAccountType">
+        <div class="col-6">
+          <mat-form-field class="fill">
+            <input matInput type="text" placeholder="Volunteer First" formControlName="volunteerFirstName">
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field class="fill">
+            <input matInput type="text" placeholder="Volunteer Last" formControlName="volunteerLastName">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <mat-form-field class="fill">
+        <input matInput type="email" placeholder="Email Address" formControlName="email">
+      </mat-form-field>
+
+      <ng-container *ngIf="!filtersForm.isDonorAccountType">
+        <foodweb-page-list-filters-title>
+          Operation Hours Filters
+        </foodweb-page-list-filters-title>
+
+        <foodweb-operation-hours-filter
+          [allowClear]="true"
+          [formGroup]="filtersForm.get('operationHours')"
+          [editable]="true"
+          timeWidth="50%"
+          weekdayPadding="0"
+          weekdayWidth="100%"
+        ></foodweb-operation-hours-filter>
+      </ng-container>
+
+      <foodweb-page-list-sort [formGroup]="filtersForm" [sortOptions]="accountSortOptionsService.options"></foodweb-page-list-sort>
+
+      <foodweb-page-list-filters-footer (clear)="filtersForm.resetFacetFilters()"></foodweb-page-list-filters-footer>
+    </form>
   </foodweb-page-list-filters>
 
 </foodweb-page-list>

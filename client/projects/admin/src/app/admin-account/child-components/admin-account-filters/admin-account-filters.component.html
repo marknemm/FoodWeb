@@ -1,4 +1,4 @@
-<form [formGroup]="filtersForm" class="account-filters" (ngSubmit)="filter.emit(filtersForm.toReadRequest())">
+<form [formGroup]="formGroup" class="account-filters" (ngSubmit)="filter.emit(formGroup.toReadRequest())">
   <foodweb-page-list-filters-title [primary]="true">
     Account Filters
   </foodweb-page-list-filters-title>
@@ -12,11 +12,11 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field class="fill" *ngIf="!filtersForm.isVolunteerAccountType">
+  <mat-form-field class="fill" *ngIf="!formGroup.isVolunteerAccountType">
     <input matInput type="text" placeholder="Organization Name" formControlName="organizationName">
   </mat-form-field>
 
-  <div class="row" *ngIf="!filtersForm.isOrganizationAccountType">
+  <div class="row" *ngIf="!formGroup.isOrganizationAccountType">
     <div class="col-6">
       <mat-form-field class="fill">
         <input matInput type="text" placeholder="Volunteer First" formControlName="volunteerFirstName">
@@ -41,7 +41,7 @@
     <input matInput type="number" placeholder="Account ID" formControlName="id">
   </mat-form-field>
 
-  <mat-form-field class="fill" *ngIf="!filtersForm.isOrganizationAccountType">
+  <mat-form-field class="fill" *ngIf="!formGroup.isOrganizationAccountType">
     <mat-select placeholder="Attended Training" formControlName="signedAgreement">
       <mat-option value="true">True</mat-option>
       <mat-option value="false">False</mat-option>
@@ -57,7 +57,7 @@
     </mat-select>
   </mat-form-field>
 
-  <ng-container *ngIf="!filtersForm.isDonorAccountType">
+  <ng-container *ngIf="!formGroup.isDonorAccountType">
     <foodweb-page-list-filters-title>
       Operation Hours Filters
     </foodweb-page-list-filters-title>
@@ -65,14 +65,14 @@
     <foodweb-operation-hours-filter
       [allowClear]="true"
       [editable]="true"
-      [formGroup]="filtersForm.get('operationHours')"
+      [formGroup]="formGroup.get('operationHours')"
       timeWidth="50%"
       weekdayPadding="0"
       weekdayWidth="100%"
     ></foodweb-operation-hours-filter>
   </ng-container>
 
-  <foodweb-page-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts" *ngIf="!omitSorting"></foodweb-page-list-sort>
+  <foodweb-page-list-sort *ngIf="!omitSorting" [formGroup]="formGroup" [sortOptions]="accountSortOptionsService.options"></foodweb-page-list-sort>
 
   <foodweb-page-list-filters-footer (clear)="clear.emit()"></foodweb-page-list-filters-footer>
 </form>

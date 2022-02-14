@@ -1,4 +1,4 @@
-export interface SortByOpt<T> {
+export interface SortOption<T> {
   name: string;
   value: T;
 }

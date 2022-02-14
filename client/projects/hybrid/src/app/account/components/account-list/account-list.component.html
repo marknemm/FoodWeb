@@ -12,8 +12,8 @@
   <foodweb-hybrid-page-list
     [disabled]="listQueryService.loading"
     [itemCount]="listQueryService.items.length"
-    (loadMore)="handleLoadMore($event)"
-    (refresh)="handleRefresh($event)">
+    (loadMore)="listQueryService.loadMore({ complete: $event.target.complete })"
+    (refresh)="listQueryService.refresh({ complete: $event.target.complete, showLoader: false })">
 
     <form [formGroup]="filtersForm" (ngSubmit)="listQueryService.refresh()">
       <ion-searchbar [placeholder]="accountListLabelService.searchPlaceholder" formControlName="fullTextQuery"></ion-searchbar>
@@ -76,9 +76,9 @@
         </foodweb-hybrid-operation-hours-filter>
       </foodweb-hybrid-page-list-filters-section>
 
-      <foodweb-hybrid-page-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></foodweb-hybrid-page-list-sort>
+      <foodweb-hybrid-page-list-sort [formGroup]="filtersForm" [sortOptions]="accountSortOptionsService.options"></foodweb-hybrid-page-list-sort>
 
-      <foodweb-hybrid-page-list-filters-footer (clear)="clearFilters()"></foodweb-hybrid-page-list-filters-footer>
+      <foodweb-hybrid-page-list-filters-footer (clear)="filtersForm.resetFacetFilters()" (submit)="filterMenu.close()"></foodweb-hybrid-page-list-filters-footer>
     </form>
 
   </ion-content>

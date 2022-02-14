@@ -2,8 +2,8 @@
   <ion-item>
     <ion-label position="floating" color="secondary">Sort By</ion-label>
     <ion-select [formControlName]="sortByFormControlName">
-      <ion-select-option *ngFor="let sortByOpt of sortByOpts" [value]="sortByOpt.value">
-        {{ sortByOpt.name }}
+      <ion-select-option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">
+        {{ sortOption.name }}
       </ion-select-option>
       <ion-select-option [value]="null">--</ion-select-option>
     </ion-select>

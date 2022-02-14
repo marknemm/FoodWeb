@@ -8,10 +8,10 @@
     class="notifications"
     [disabled]="listQueryService.loading"
     [pageSize]="notificationFilters.value.limit || notificationService.defaultReadLimit"
-    (loadMore)="handleLoadMore($event)"
-    (refresh)="handleRefresh($event)">
+    (loadMore)="listQueryService.loadMore({ complete: $event.target.complete })"
+    (refresh)="listQueryService.refresh({ complete: $event.target.complete, showLoader: false })">
 
-    <ion-item (click)="listQueryService.refresh()" [ngClass]="{ show: this.notificationService.hasUnseenNotifications }" class="reload-prompt" color="tertiary">
+    <ion-item (click)="listQueryService.refresh()" [ngClass]="{ show: notificationService.hasUnseenNotifications }" class="reload-prompt" color="tertiary">
       <ion-label>New Notifications Available: Tap to Refresh</ion-label>
     </ion-item>
 

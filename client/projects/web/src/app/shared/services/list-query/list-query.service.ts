@@ -88,17 +88,22 @@ export class ListQueryService<T> {
 
   /**
    * Loads more entries within the list using the current filters and incrementing the page by 1.
-   * @param opts Options for the HTTP response handler. Show loader defaults to false if not explicitly set.
+   * @param opts {@link RefreshOptions} for the HTTP response handler. Show loader defaults to false if not explicitly set.
    * @returns An observable that emits the updated list once the load operation has completed.
    */
-  loadMore(opts: HttpResponseHandlerOptions = { showLoader: false }): Observable<readonly T[]> {
+  loadMore(opts: RefreshOptions = { showLoader: false }): Observable<readonly T[]> {
     this._filtersForm.patchValue({ page: this._filtersForm.value.page + 1 });
     this._loading = true;
     opts.showLoader ??= false;
     const request: ReadRequest = this._getReadRequest();
 
     this._reader(request, opts).pipe(
-      finalize(() => this._loading = false )
+      finalize(() => {
+        this._loading = false;
+        if (opts.complete) {
+          opts.complete();
+        }
+      })
     ).subscribe(
       (response: ListResponse<T>) => {
         // Must iteratively add in-place so no blink in ion-virtual-scroll.
@@ -116,10 +121,10 @@ export class ListQueryService<T> {
 
   /**
    * Refreshes the list items using the current filters and resetting the page to 1.
-   * @param opts Options for the HTTP response handler.
+   * @param opts {@link RefreshOptions} for the HTTP response handler.
    * @returns An observable that emits the refreshed list once the refresh operation has completed.
    */
-  refresh(opts: HttpResponseHandlerOptions = {}): Observable<readonly T[]> {
+  refresh(opts: RefreshOptions = {}): Observable<readonly T[]> {
     if (this._filtersForm.get('page').value > 1) {
       this._filtersForm.get('page').setValue(1);
     }
@@ -129,7 +134,12 @@ export class ListQueryService<T> {
 
     // Send request to server, and wait for response.
     this._reader(request, opts).pipe(
-      finalize(() => this._loading = false)
+      finalize(() => {
+        this._loading = false;
+        if (opts.complete) {
+          opts.complete();
+        }
+      })
     ).subscribe(
       (response: ListResponse<T>) => this._response$.next(response)
     );
@@ -153,3 +163,9 @@ export class ListQueryService<T> {
 }
 
 export type Reader<T> = (request: ReadRequest<any>, showLoader?: HttpResponseHandlerOptions<ListResponse<T>>) => Observable<ListResponse<T>>;
+export type RefreshOptions = HttpResponseHandlerOptions & {
+  /**
+   * An optional callback that is invoked when the refresh operation is complete.
+   */
+  complete?: () => void
+};

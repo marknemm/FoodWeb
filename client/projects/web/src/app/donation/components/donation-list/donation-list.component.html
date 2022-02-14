@@ -98,7 +98,7 @@
         </div>
       </div>
 
-      <foodweb-page-list-sort [formGroup]="filtersForm" [sortByOpts]="sortByOpts"></foodweb-page-list-sort>
+      <foodweb-page-list-sort [formGroup]="filtersForm" [sortOptions]="donationSortOptionsService.options"></foodweb-page-list-sort>
 
       <foodweb-page-list-filters-footer (clear)="filtersForm.resetFacetFilters()"></foodweb-page-list-filters-footer>
     </form>

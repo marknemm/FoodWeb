@@ -4,8 +4,8 @@
   <div class="col-8">
     <mat-form-field class="fill">
       <mat-select placeholder="Sort By" [formControlName]="sortByFormControlName">
-        <mat-option *ngFor="let sortByOpt of sortByOpts" [value]="sortByOpt.value">
-          {{ sortByOpt.name }}
+        <mat-option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">
+          {{ sortOption.name }}
         </mat-option>
         <mat-option [value]="null">--</mat-option>
       </mat-select>

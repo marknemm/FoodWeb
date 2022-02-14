@@ -16,7 +16,6 @@ import { MapModule } from '~web/map/map.module';
 import { PageListModule } from '~web/page-list/page-list.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { AccountRoutingModule } from './account-routing.module';
-import { AccountFiltersComponent } from './child-components/account-filters/account-filters.component';
 import { NotificationSettingsComponent } from './child-components/notification-settings/notification-settings.component';
 import { AccountListComponent } from './components/account-list/account-list.component';
 import { AccountComponent } from './components/account/account.component';
@@ -24,7 +23,6 @@ import { AccountComponent } from './components/account/account.component';
 @NgModule({
   declarations: [
     AccountComponent,
-    AccountFiltersComponent,
     AccountListComponent,
     NotificationSettingsComponent,
   ],
