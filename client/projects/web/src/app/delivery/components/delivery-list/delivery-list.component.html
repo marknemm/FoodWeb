@@ -1,34 +1,99 @@
-<foodweb-filtered-list class="deliveries">
+<foodweb-page-list class="deliveries">
 
-  <foodweb-filtered-list-title>{{ pageTitleService.title }}</foodweb-filtered-list-title>
+  <div class="page-title">
+    {{ pageTitleService.title }}
+  </div>
 
-  <foodweb-filtered-list-toolbar listItemsLabel="Deliveries">
+  <foodweb-page-list-toolbar listItemsLabel="Deliveries">
     <foodweb-search-bar
-      [placeholder]="searchPlaceholder"
+      placeholder="Search Deliveries..."
       [formControl]="filtersForm.get('fullTextQuery')"
-      (search)="listQueryService.refresh()"
-    ></foodweb-search-bar>
-  </foodweb-filtered-list-toolbar>
+      (search)="listQueryService.refresh()">
+    </foodweb-search-bar>
+  </foodweb-page-list-toolbar>
 
-  <foodweb-filtered-list-content>
+  <div class="row">
     <div class="col-lg-6" *ngFor="let donation of listQueryService.items">
       <foodweb-delivery-teaser [donation]="donation"></foodweb-delivery-teaser>
     </div>
-  </foodweb-filtered-list-content>
+  </div>
 
-  <foodweb-filtered-list-empty *ngIf="listQueryService.noneFound">
+  <div *ngIf="listQueryService.noneFound" class="not-found">
     Could Not Find Any Deliveries
-  </foodweb-filtered-list-empty>
+  </div>
 
   <foodweb-paginator [length]="listQueryService.totalCount"></foodweb-paginator>
 
-  <foodweb-list-filters>
-    <foodweb-delivery-filters
-      [formGroup]="filtersForm"
-      [myDeliveries]="myDeliveries"
-      (clear)="filtersForm.resetFacetFilters()"
-      (filter)="listQueryService.refresh()"
-    ></foodweb-delivery-filters>
-  </foodweb-list-filters>
+  <foodweb-page-list-filters>
+    <form [formGroup]="filtersForm" class="delivery-filters" (ngSubmit)="listQueryService.refresh()">
+      <foodweb-page-list-filters-title [primary]="true">
+        Delivery Filters
+      </foodweb-page-list-filters-title>
 
-</foodweb-filtered-list>
+      <mat-form-field class="fill">
+        <mat-select placeholder="Donation Status" formControlName="donationStatus">
+          <mat-option *ngFor="let status of donationStatuses" [value]="status">{{ status }}</mat-option>
+          <mat-option [value]="null">--</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="fill">
+        <input matInput placeholder="Donor Organization" formControlName="donorOrganizationName">
+      </mat-form-field>
+
+      <div class="row">
+        <div class="col-6">
+          <mat-form-field class="fill">
+            <input matInput placeholder="Donor Last Name" formControlName="donorLastName">
+          </mat-form-field>
+        </div>
+
+        <div class="col-6">
+          <mat-form-field class="fill">
+            <input matInput placeholder="Donor First Name" formControlName="donorFirstName">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <mat-form-field class="fill">
+        <input matInput placeholder="Receiver Organization" formControlName="receiverOrganizationName">
+      </mat-form-field>
+
+      <foodweb-page-list-filters-title>
+        Delivery Window Filters
+      </foodweb-page-list-filters-title>
+
+      <div class="row">
+        <div class="col-12">
+          <foodweb-date-time
+            [allowClear]="true"
+            [allowUndefTime]="true"
+            [editable]="true"
+            [inlineFields]="true"
+            [minDate]="null"
+            floatLabels="never"
+            formControlName="deliveryWindowOverlapStart"
+            primaryLabel="Overlap Start"
+          ></foodweb-date-time>
+        </div>
+        <div class="col-12">
+          <foodweb-date-time
+            [allowClear]="true"
+            [allowUndefTime]="true"
+            [editable]="true"
+            [inlineFields]="true"
+            [minDate]="null"
+            floatLabels="never"
+            formControlName="deliveryWindowOverlapEnd"
+            primaryLabel="Overlap End"
+          ></foodweb-date-time>
+        </div>
+      </div>
+
+      <foodweb-page-list-sort [formGroup]="filtersForm" [sortOptions]="donationSortOptionsService.options"></foodweb-page-list-sort>
+
+      <foodweb-page-list-filters-footer (clear)="filtersForm.resetFacetFilters()"></foodweb-page-list-filters-footer>
+    </form>
+  </foodweb-page-list-filters>
+
+</foodweb-page-list>

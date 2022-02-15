@@ -1,7 +1,7 @@
 import { NotificationReadRequest } from '~shared';
-import { ListFiltersForm } from '~web/shared/forms/list-filters.form';
+import { PageListFiltersForm } from '~web/shared/forms/list-filters.form';
 
-export class NotificationFiltersForm extends ListFiltersForm<NotificationReadRequest> {
+export class NotificationFiltersForm extends PageListFiltersForm<NotificationReadRequest> {
 
   constructor(filters?: Partial<NotificationReadRequest>) {
     super({

@@ -1,0 +1,32 @@
+@import "../../../../../../web/src/app/information/components/privacy-policy/privacy-policy.component.scss";
+
+ion-content {
+  --padding-start: 12px;
+  --padding-end: 12px;
+}
+
+.regulations-list {
+  color: var(--ion-color-step-800);
+}
+
+.card-table {
+  &, > ion-card-content {
+    padding: 0;
+  }
+}
+
+strong {
+  color: var(--ion-color-step-600);
+}
+
+i > strong {
+  color: var(--ion-color-step-700);
+}
+
+.last-updated {
+  color: var(--ion-color-step-800);
+}
+
+.strong-underline {
+  color: var(--ion-color-step-800);
+}

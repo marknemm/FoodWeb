@@ -109,7 +109,11 @@ export class SSEClient {
     if (!this._connections.has(account.id)) { return; }
     const connection: SSEConnection = this._connections.get(account.id);
     const payload: string = this._genSSEPayload(sse);
-    connection.res.write(payload);
+    connection.res.write(payload, (error: Error) => {
+      if (error) {
+        console.error(error);
+      }
+    });
   }
 
   /**

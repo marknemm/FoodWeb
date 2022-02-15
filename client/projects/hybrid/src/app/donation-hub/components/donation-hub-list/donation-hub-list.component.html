@@ -9,18 +9,18 @@
 
 <ion-content>
 
-  <foodweb-hybrid-filtered-list
+  <foodweb-hybrid-page-list
     class="donation-hubs"
     [disabled]="listQueryService.loading"
     [itemCount]="listQueryService.items.length"
     (loadMore)="handleLoadMore($event)"
     (refresh)="handleRefresh($event)">
 
-    <div *ngIf="!myDonationHubs && !listQueryService.noneFound" class="standalone-statement">
+    <div *ngIf="!myDonationHubs && !listQueryService.noneFound" class="standalone-statement low-margin">
       Choose a donation drop-off hub to pledge a donation to.
     </div>
 
-    <div *ngIf="listQueryService.noneFound" class="standalone-statement">
+    <div *ngIf="listQueryService.noneFound" class="not-found">
       Could Not Find Any Donation Hub <span style="display: inline-block;">Drop-Off</span> Locations.
     </div>
 
@@ -29,6 +29,6 @@
       [donationHub]="donationHub">
     </foodweb-hybrid-donation-hub-teaser>
 
-  </foodweb-hybrid-filtered-list>
+  </foodweb-hybrid-page-list>
 
 </ion-content>

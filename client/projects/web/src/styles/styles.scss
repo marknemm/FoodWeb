@@ -280,3 +280,9 @@ a.no-hover {
   overflow-x: hidden;
   text-overflow: ellipsis;
 }
+
+@media screen and (max-width: $sm) {
+  .d-sm-none {
+    display: none;
+  }
+}

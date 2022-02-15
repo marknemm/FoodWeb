@@ -1,0 +1,21 @@
+<ion-refresher
+  *ngIf="!omitRefresher"
+  slot="fixed"
+  [disabled]="refreshDisabled || disabled"
+  (ionRefresh)="_handleIonRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
+
+<ng-content></ng-content>
+
+<div *ngIf="endListReached && listIsScrollable" class="standalone-statement end-list-message" (click)="ionContent?.scrollToTop(400)">
+  {{ endListMessage }}
+</div>
+
+<ion-infinite-scroll
+  *ngIf="!omitInfiniteScroll"
+  [disabled]="loadMoreDisabled || disabled || endListReached"
+  (ionInfinite)="_handleIonInfinite($event)"
+  [threshold]="threshold">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+</ion-infinite-scroll>

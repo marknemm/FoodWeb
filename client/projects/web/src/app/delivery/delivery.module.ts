@@ -9,11 +9,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
 import { DonationSharedModule } from '~web/donation-shared/donation-shared.module';
-import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
 import { MapModule } from '~web/map/map.module';
+import { PageListModule } from '~web/page-list/page-list.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { DeliveryDonationInfoComponent } from './child-components/delivery-donation-info/delivery-donation-info.component';
-import { DeliveryFiltersComponent } from './child-components/delivery-filters/delivery-filters.component';
 import { DeliveryTeaserComponent } from './child-components/delivery-teaser/delivery-teaser.component';
 import { DropOffInfoComponent } from './child-components/drop-off-info/drop-off-info.component';
 import { PickupInfoComponent } from './child-components/pickup-info/pickup-info.component';
@@ -26,7 +25,6 @@ import { DeliveryRouterLinkPipe } from './pipes/delivery-router-link/delivery-ro
   declarations: [
     DeliveryComponent,
     DeliveryDonationInfoComponent,
-    DeliveryFiltersComponent,
     DeliveryListComponent,
     DeliveryRouterLinkPipe,
     DeliveryTeaserComponent,
@@ -45,7 +43,7 @@ import { DeliveryRouterLinkPipe } from './pipes/delivery-router-link/delivery-ro
     AccountSharedModule,
     DateTimeModule,
     DonationSharedModule,
-    FilteredListModule,
+    PageListModule,
     MapModule,
     SharedModule
   ],

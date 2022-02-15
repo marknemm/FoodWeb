@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Alert } from '~web/alert/interfaces/alert';
 
@@ -7,7 +7,7 @@ import { Alert } from '~web/alert/interfaces/alert';
   templateUrl: './alert-dialog.component.html',
   styleUrls: ['./alert-dialog.component.scss']
 })
-export class AlertDialogComponent implements OnInit {
+export class AlertDialogComponent {
 
   readonly color: string;
 
@@ -16,10 +16,6 @@ export class AlertDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<AlertDialogComponent>,
   ) {
     this.color = `alert-${this.alert.level}`;
-  }
-
-  ngOnInit() {
-    console.log(this.alert);
   }
 
 }

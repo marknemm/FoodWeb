@@ -30,8 +30,8 @@ export async function adminUpdateDelivery(deliverySaveReq: AdminDeliverySaveRequ
 
 /**
  * Gets the donation associated with a delivery that is to be updated.
- * @param donationId The ID of the donation to retreive.
- * @return A promise that resolves to the retreived donation.
+ * @param donationId The ID of the donation to retrieve.
+ * @return A promise that resolves to the retrieved donation.
  * @throws FoodWebError if the associated donation could not be found.
  */
 async function _getAssocDonation(donationId: number): Promise<DonationEntity> {

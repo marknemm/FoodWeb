@@ -16,7 +16,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { QuillModule } from 'ngx-quill';
 import { AdminAccountSharedModule } from '~admin/admin-account-shared/admin-account-shared.module';
 import { AccountModule } from '~web/account/account.module';
-import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
+import { PageListModule } from '~web/page-list/page-list.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { AdminAccountRoutingModule } from './admin-account-routing.module';
 import { AdminAccountFiltersComponent } from './child-components/admin-account-filters/admin-account-filters.component';
@@ -38,7 +38,7 @@ import { AdminAccountComponent } from './components/admin-account/admin-account.
     CommonModule,
     AccountModule,
     AdminAccountSharedModule,
-    FilteredListModule,
+    PageListModule,
     FontAwesomeModule,
     MatButtonModule,
     MatCardModule,

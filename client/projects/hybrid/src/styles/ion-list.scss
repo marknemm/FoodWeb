@@ -66,8 +66,13 @@ ion-item {
 
   &.item-label-floating {
     --min-height         : 30px;
+    --padding-top        : 8px;
     --inner-padding-start: 0;
     --inner-padding-end  : 0;
+
+    &.no-pad-top {
+      --padding-top: 0;
+    }
   }
 
   &.item-interactive.ion-touched {
@@ -100,5 +105,14 @@ ion-item {
     color    : $warn;
     font-size: 11px;
     bottom   : -18px;
+  }
+}
+
+.item-margins {
+  ion-item {
+    --padding-start: 15px;
+    --padding-end: var(--padding-start);
+    --inner-padding-start: 0;
+    --inner-padding-end: 0;
   }
 }

@@ -3,6 +3,7 @@ import { Account } from '~shared';
 import { AccountFiltersForm } from '~web/account/forms/account-filters.form';
 import { AccountListLabelService } from '~web/account/services/account-list-label/account-list-label.service';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
+import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class AdminAccountListComponent implements OnInit {
 
   constructor(
     public accountListLabelService: AccountListLabelService,
+    public constantsService: ConstantsService,
     public listQueryService: ListQueryService<Account>,
     private _accountReadService: AccountReadService,
   ) {}

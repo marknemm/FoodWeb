@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
     return (!this.sessionService.isDonor && !this.sessionService.isReceiver);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this._activatedRoute.snapshot.params['login']) {
       // Logout if directed to '/home/login' with an impersonationToken query param present.
       if (this._activatedRoute.snapshot.queryParams['impersonationToken']) {

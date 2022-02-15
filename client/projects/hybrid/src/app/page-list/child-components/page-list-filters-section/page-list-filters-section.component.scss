@@ -1,0 +1,10 @@
+@import "variables.scss";
+
+:host {
+  position: relative;
+  display: block;
+  background-color: var(--ion-item-background);
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  padding-top: 2px;
+}

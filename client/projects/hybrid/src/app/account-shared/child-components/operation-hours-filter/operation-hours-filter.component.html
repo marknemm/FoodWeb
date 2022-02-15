@@ -1,7 +1,7 @@
 <div [formGroup]="operationHoursForm" class="operation-hours-form">
-  <div class="weekday-field" [style.width]="weekdayWidth" [style.padding]="weekdayPadding">
+  <div class="weekday-field">
     <ion-item>
-      <ion-label color="secondary">Weekday</ion-label>
+      <ion-label position="floating" color="secondary">Operating Weekday</ion-label>
       <ion-select formControlName="weekday">
         <ion-select-option *ngFor="let weekday of constantsService.WEEKDAYS; let i = index" [value]="weekday">{{ weekday }}</ion-select-option>
         <ion-select-option [value]="undefined">--</ion-select-option>
@@ -9,29 +9,25 @@
     </ion-item>
   </div>
   <div class="time-fields-container">
-    <div class="time-field" [style.width]="timeWidth">
-      <foodweb-time
+    <div class="time-field">
+      <foodweb-hybrid-time
         [allowClear]="allowClear"
-        [defaultTime]="defaultStartTime"
         [editable]="editable"
         [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher"
         [minutesGap]="minutesGap"
-        [preventOverlayClick]="!(allowOverlayClick | toBoolean)"
         formControlName="startTime"
-        placeholder="Start Time"
-      ></foodweb-time>
+        label="Start Time">
+      </foodweb-hybrid-time>
     </div>
-    <div class="time-field" [style.width]="timeWidth">
-      <foodweb-time
+    <div class="time-field">
+      <foodweb-hybrid-time
         [allowClear]="allowClear"
-        [defaultTime]="defaultEndTime"
         [editable]="editable"
         [errorStateMatcher]="operationHoursForm.timeRangeErrStateMatcher"
         [minutesGap]="minutesGap"
-        [preventOverlayClick]="!(allowOverlayClick | toBoolean)"
         formControlName="endTime"
-        placeholder="End Time"
-      ></foodweb-time>
+        label="End Time">
+      </foodweb-hybrid-time>
     </div>
   </div>
   <div *ngIf="operationHoursForm.hasError('timeRangeOrder')" class="operation-hours-error ion-form-error">
