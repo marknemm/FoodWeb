@@ -1,0 +1,19 @@
+<table>
+  <tr>
+    <td>
+      <ng-content select="foodweb-search-bar"></ng-content>
+    </td>
+    <td>
+      <ng-content select="foodweb-page-list-toolbar"></ng-content>
+    </td>
+    <td [hidden]="excludeFilterButton"> <!-- Always include in DOM for :last-child CSS rule. -->
+      <button mat-button
+        type="button"
+        class="filter-button"
+        matTooltip="Filter & Sort {{ listItemsLabel }}"
+        (click)="pageListService.opened = !pageListService.opened">
+        <mat-icon>filter_list</mat-icon>
+      </button>
+    </td>
+  </tr>
+</table>

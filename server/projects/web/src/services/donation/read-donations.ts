@@ -292,9 +292,11 @@ function _orderByQueryArg(
   const sortOrder: 'ASC' | 'DESC' = sortOpts.sortOrder ? sortOpts.sortOrder : 'DESC';
   if (sortOpts.sortBy) {
     if (sortOpts.sortBy === 'donorOrganizationName') {
-      queryBuilder.addOrderBy(`donorOrganization.name`, sortOrder);
+      queryBuilder.addOrderBy('donorOrganization.name', sortOrder);
     } else if (sortOpts.sortBy === 'receiverOrganizationName') {
-      queryBuilder.addOrderBy(`receiverOrganization.name`, sortOrder);
+      queryBuilder.addOrderBy('receiverOrganization.name', sortOrder);
+    } else if (sortOpts.sortBy === 'deliveryWindowStart') {
+      queryBuilder.addOrderBy('donation.pickupWindowStart', sortOrder);
     } else {
       queryBuilder.addOrderBy(`donation.${sortOpts.sortBy}`, sortOrder);
     }

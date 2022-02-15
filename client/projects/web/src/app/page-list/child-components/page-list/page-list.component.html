@@ -1,0 +1,11 @@
+<mat-sidenav-container [autosize]="true">
+  <mat-sidenav-content>
+    <div class="page container">
+      <ng-content></ng-content>
+    </div>
+  </mat-sidenav-content>
+
+  <mat-sidenav [opened]="pageListService.opened" (openedChange)="this.pageListService.opened = $event" mode="over" position="end" [autoFocus]="false">
+    <ng-content select="foodweb-page-list-filters"></ng-content>
+  </mat-sidenav>
+</mat-sidenav-container>

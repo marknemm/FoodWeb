@@ -1,0 +1,9 @@
+@import "variables.scss";
+
+:host {
+  position: relative;
+  display: block;
+  padding: 10px;
+  width: 100%;
+  overflow-x: hidden;
+}

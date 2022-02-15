@@ -173,7 +173,9 @@ header {
       right: 16px;
       height: 100%;
 
-      >* {
+      ::ng-deep > * {
+        display: inline-block;
+
         &:not(:first-child) {
           margin-left: 5px;
         }

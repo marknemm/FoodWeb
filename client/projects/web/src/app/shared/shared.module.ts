@@ -22,7 +22,6 @@ import { ConfirmButtonDirective } from './directives/confirm-button/confirm-butt
 import { DisplayEditTransitionDirective } from './directives/display-edit-transition/display-edit-transition.directive';
 import { FragmentAccordionDirective } from './directives/fragment-accordion/fragment-accordion.directive';
 import { ReturnLinkDirective } from './directives/return-link/return-link.directive';
-import { WindowSizeDirective } from './directives/window-size/window-size.directive';
 import { RangePipe } from './pipes/range/range.pipe';
 import { ShortNumPipe } from './pipes/short-num/short-num.pipe';
 import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
@@ -41,7 +40,6 @@ import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
     SearchBarComponent,
     ShortNumPipe,
     ToBooleanPipe,
-    WindowSizeDirective,
     YesNoComponent,
   ],
   imports: [
@@ -74,7 +72,6 @@ import { ToBooleanPipe } from './pipes/to-boolean/to-boolean.pipe';
     SearchBarComponent,
     ShortNumPipe,
     ToBooleanPipe,
-    WindowSizeDirective,
     YesNoComponent,
   ]
 })

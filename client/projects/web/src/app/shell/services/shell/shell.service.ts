@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatDrawerMode } from '@angular/material/sidenav';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -9,13 +10,22 @@ export class ShellService {
   readonly windowSizeThreshPx = 991;
 
   sticky = false;
-  leftNavMode: 'side' | 'over' = 'over';
 
-  protected _leftNavOpened = false;
-  protected _leftNavOpenedChanged = new Subject<boolean>();
-  protected _mainContent: HTMLElement;
+  private _leftNavMode: MatDrawerMode = 'over';
+  private _leftNavOpened = false;
+  private _leftNavOpenedChanged = new Subject<boolean>();
+  private _mainContent: HTMLElement;
 
   constructor() {}
+
+  get leftNavMode(): MatDrawerMode {
+    return this._leftNavMode;
+  }
+
+  set leftNavMode(mode: MatDrawerMode) {
+    this._leftNavMode = mode;
+    this.leftNavOpened = (this.leftNavMode === 'side');
+  }
 
   get leftNavOpened(): boolean {
     return this._leftNavOpened;
@@ -46,16 +56,5 @@ export class ShellService {
     if (this._mainContent) {
       this._mainContent.scrollTo({ top: 0, behavior: scrollBehavior });
     }
-  }
-
-  refreshLeftNavState(widthPx: number): 'side' | 'over' {
-    if (widthPx > this.windowSizeThreshPx && this.leftNavMode !== 'side') {
-      this.leftNavMode = 'side';
-      this._setLeftNavOpened(true);
-    } else if (widthPx <= this.windowSizeThreshPx && this.leftNavMode !== 'over') {
-      this.leftNavMode = 'over';
-      this._setLeftNavOpened(false);
-    }
-    return this.leftNavMode;
   }
 }

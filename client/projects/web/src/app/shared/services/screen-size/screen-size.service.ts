@@ -1,22 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { NEVER, Observable, of, Subject } from 'rxjs';
+import { finalize, map, switchMap, takeUntil } from 'rxjs/operators';
 import { SizeThresholds } from '~web/shared/interfaces/size-thresholds';
-export { SizeThresholds };
+import { ThresholdSide } from '~web/shared/interfaces/threshold-side';
+export { SizeThresholds, ThresholdSide };
 
 /**
- * Provides screen size data for the webapps.
+ * Provides screen size data for the web apps.
  */
 @Injectable({
   providedIn: 'root'
 })
 export class ScreenSizeService {
 
-  static readonly WIDTH_XL = Number.MAX_VALUE;
+  static readonly WIDTH_XL = Number.MAX_SAFE_INTEGER;
   static readonly WIDTH_LG = 1199;
   static readonly WIDTH_MD = 991;
   static readonly WIDTH_SM = 767;
   static readonly WIDTH_XS = 575;
+
+  private _prevWidthPx: number;
 
   constructor() {}
 
@@ -71,10 +74,10 @@ export class ScreenSizeService {
 
   /**
    * Gets an observable that emits the current screen/display width whenever a resize or orientation change occurs.
-   * @param destroy$ An optional observable that will be used to destroy the returned observable once it first emits.
+   * @param destroy$ An optional observable that will be used to destroy the returned observable on component destroy.
    * @return The resize observable.
    */
-  onResize(destroy$: Observable<any> = new Observable()): Observable<number> {
+  onResize(destroy$ = new Observable()): Observable<number> {
     const resizeSubject = new Subject<number>();
     const resizeHandlerFn = () => resizeSubject.next(this.width);
     window.addEventListener('resize', resizeHandlerFn);
@@ -82,6 +85,29 @@ export class ScreenSizeService {
     return resizeSubject.asObservable().pipe(
       takeUntil(destroy$),
       finalize(() => window.removeEventListener('resize', resizeHandlerFn))
+    );
+  }
+
+  /**
+   * Emits the {@link ThresholdSide} that was crossed over to upon window resize.
+   * @param widthThresholdPx The width threshold in pixels.
+   * @param destroy$ An optional observable that will be used to destroy the returned observable on component destroy.
+   * @returns An observable that emits the {@link ThresholdSide} that was crossed over to upon window resize.
+   */
+  onWidthThresholdCross(widthThresholdPx: number, destroy$ = new Observable<any>()): Observable<ThresholdSide> {
+    return this.onResize(destroy$).pipe(
+      switchMap((width: number) => {
+        let thresholdCrossSide: ThresholdSide;
+        if (width > widthThresholdPx && (!this._prevWidthPx || this._prevWidthPx <= widthThresholdPx)) {
+          thresholdCrossSide = 'above';
+        } else if (width <= widthThresholdPx && (!this._prevWidthPx || this._prevWidthPx > widthThresholdPx)) {
+          thresholdCrossSide = 'below';
+        }
+        this._prevWidthPx = width;
+        return (thresholdCrossSide)
+          ? of(thresholdCrossSide)
+          : NEVER; // Do not emit (and do not complete) if width threshold was not crossed.
+      })
     );
   }
 

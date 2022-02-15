@@ -46,7 +46,9 @@ export class PushNotificationClient {
       await this._firebaseMessaging.sendMulticast(notificationMessage)
         .then((responseContainer) => {
           for (const response of responseContainer.responses) {
-            if (response.error) { console.error(response.error.toJSON()); }
+            if (response.error) {
+              console.error('Error when broadcasting push notifications:', response.error.toJSON());
+            }
           }
         })
         .catch(console.error);

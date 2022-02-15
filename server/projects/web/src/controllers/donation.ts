@@ -5,7 +5,6 @@ import { DonationClaimRequest, DonationDeleteRequest, DonationReadRequest, Donat
 import { UpdateDiff } from '~web/helpers/misc/update-diff';
 import { genErrorResponse, genErrorResponseRethrow } from '~web/middleware/response-error.middleware';
 import { ensureAccountVerified, ensureSessionActive } from '~web/middleware/session.middleware';
-import { saveDonationClaimAudit, saveDonationCreateAudit, saveDonationDeleteAudit, saveDonationUnclaimAudit, saveDonationUpdateAudit } from '~web/services/audit/save-donation-audit';
 import { sendDeliveryAvailableMessages } from '~web/services/delivery/delivery-available-message';
 import { sendClaimAvailableMessages } from '~web/services/donation-claim/claim-available-message';
 import { claimDonation } from '~web/services/donation-claim/claim-donation';
@@ -55,7 +54,6 @@ export function handlePostDonation(req: Request, res: Response) {
   createDonation(createReq, myAccount)
     .then((donation: DonationEntity) => { res.send(donation); return donation; })
     .catch(genErrorResponseRethrow.bind(this, res))
-    .then((donation: DonationEntity) => saveDonationCreateAudit(createReq, donation))
     .then((donation: DonationEntity) => sendDonationCreateMessages(donation))
     .then((donation: DonationEntity) => sendClaimAvailableMessages(donation))
     .catch((err: Error) => console.error(err));
@@ -67,7 +65,6 @@ export function handlePostDonationClaim(req: Request, res: Response) {
   claimDonation(claimReq, req.session.account)
     .then((claimedDonation: DonationEntity) => { res.send(claimedDonation); return claimedDonation; })
     .catch(genErrorResponseRethrow.bind(this, res))
-    .then((claimedDonation: DonationEntity) => saveDonationClaimAudit(claimReq, claimedDonation))
     .then((claimedDonation: DonationEntity) => sendClaimedDonationMessages(claimedDonation))
     .then((claimedDonation: DonationEntity) => sendDeliveryAvailableMessages(claimedDonation))
     .catch((err: Error) => console.error(err));
@@ -79,7 +76,6 @@ export function handlePutDonation(req: Request, res: Response) {
   updateDonation(updateReq, req.session.account)
     .then((donationDiff: UpdateDiff<DonationEntity>) => { res.send(donationDiff.new); return donationDiff; })
     .catch(genErrorResponseRethrow.bind(this, res))
-    .then((donationDiff: UpdateDiff<DonationEntity>) => saveDonationUpdateAudit(updateReq, donationDiff))
     .then((donationDiff: UpdateDiff<DonationEntity>) => sendDonationUpdateMessages(donationDiff))
     .catch((err: Error) => console.error(err));
 }
@@ -95,7 +91,6 @@ export function handleDeleteDonation(req: Request, res: Response, account: Accou
   deleteDonation(deleteReq, account)
     .then((deletedDonation: DonationEntity) => { res.send(); return deletedDonation; })
     .catch(genErrorResponseRethrow.bind(this, res))
-    .then((deletedDonation: DonationEntity) => saveDonationDeleteAudit(deleteReq, deletedDonation))
     .then((deletedDonation: DonationEntity) => sendDonationDeleteMessages(deletedDonation))
     .catch((err: Error) => console.error(err));
 }
@@ -111,7 +106,6 @@ export function handleDeleteDonationClaim(req: Request, res: Response, account: 
   unclaimDonation(unclaimReq, account)
     .then((unclaimDonationDiff: UpdateDiff<DonationEntity>) => { res.send(unclaimDonationDiff.new); return unclaimDonationDiff; })
     .catch(genErrorResponseRethrow.bind(this, res))
-    .then((unclaimDonationDiff: UpdateDiff<DonationEntity>) => saveDonationUnclaimAudit(unclaimReq, unclaimDonationDiff))
     .then((unclaimDonationDiff: UpdateDiff<DonationEntity>) => sendUnclaimedDonationMessages(unclaimDonationDiff))
     .catch((err: Error) => console.error(err));
 }

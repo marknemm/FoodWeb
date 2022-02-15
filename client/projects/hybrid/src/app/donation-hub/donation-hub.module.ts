@@ -5,7 +5,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { IonicModule } from '@ionic/angular';
 import { AccountSharedModule } from '~hybrid/account-shared/account-shared.module';
 import { DateTimeModule } from '~hybrid/date-time/date-time.module';
-import { FilteredListModule } from '~hybrid/filtered-list/filtered-list.module';
+import { PageListModule } from '~hybrid/page-list/page-list.module';
 import { SharedModule } from '~hybrid/shared/shared.module';
 import { DonationHubModule as WebDonationHubModule } from '~web/donation-hub/donation-hub.module';
 import { DonationHubActionsComponent } from './child-components/donation-hub-actions/donation-hub-actions.component';
@@ -54,7 +54,7 @@ import { DonationHubRoutingModule } from './donation-hub-routing.module';
     WebDonationHubModule,
     SharedModule,
     DateTimeModule,
-    FilteredListModule,
+    PageListModule,
     AccountSharedModule,
   ],
   exports: [

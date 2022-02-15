@@ -10,16 +10,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { IonicModule } from '@ionic/angular';
 import { AccountSharedModule } from '~web/account-shared/account-shared.module';
 import { DateTimeModule } from '~web/date-time/date-time.module';
-import { FilteredListModule } from '~web/filtered-list/filtered-list.module';
+import { PageListModule } from '~web/page-list/page-list.module';
 import { SharedModule } from '~web/shared/shared.module';
 import { TableModule } from '~web/table/table.module';
 import { DonationHubActionsComponent } from './child-components/donation-hub-actions/donation-hub-actions.component';
 import { DonationHubDropOffInfoComponent } from './child-components/donation-hub-drop-off-info/donation-hub-drop-off-info.component';
 import { DonationHubPledgeActionsComponent } from './child-components/donation-hub-pledge-actions/donation-hub-pledge-actions.component';
 import { DonationHubPledgeFormComponent } from './child-components/donation-hub-pledge-form/donation-hub-pledge-form.component';
-import { IonicModule } from '@ionic/angular';
 import { DonationHubPledgeTableComponent } from './child-components/donation-hub-pledge-table/donation-hub-pledge-table.component';
 import { DonationHubPledgeTeaserComponent } from './child-components/donation-hub-pledge-teaser/donation-hub-pledge-teaser.component';
 import { DonationHubTeaserComponent } from './child-components/donation-hub-teaser/donation-hub-teaser.component';
@@ -59,7 +59,7 @@ import { DonationHubRoutingModule } from './donation-hub-routing.module';
     IonicModule,
     AccountSharedModule,
     DateTimeModule,
-    FilteredListModule,
+    PageListModule,
     FontAwesomeModule,
     ReactiveFormsModule,
     MatButtonModule,

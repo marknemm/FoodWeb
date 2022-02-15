@@ -1,38 +1,41 @@
-<foodweb-filtered-list class="accounts">
-  <foodweb-filtered-list-title>{{ accountListLabelService.pageTitle }}</foodweb-filtered-list-title>
+<foodweb-page-list class="accounts">
 
-  <foodweb-filtered-list-toolbar listItemsLabel="Accounts">
+  <div class="page-title">
+    {{ accountListLabelService.pageTitle }}
+  </div>
+
+  <foodweb-page-list-toolbar listItemsLabel="Accounts">
     <foodweb-search-bar
       placeholder="Search Accounts..."
       [formControl]="filtersForm.get('fullTextQuery')"
-      (search)="listQueryService.refresh()"
-    ></foodweb-search-bar>
+      (search)="listQueryService.refresh()">
+    </foodweb-search-bar>
 
     <a [routerLink]="['/account', 'compose-message']" queryParamsHandling="preserve" class="compose-message-link">
       <button mat-button type="button" matTooltip="Compose Message">
         <mat-icon>email</mat-icon>
       </button>
     </a>
-  </foodweb-filtered-list-toolbar>
+  </foodweb-page-list-toolbar>
 
-  <foodweb-filtered-list-content>
+  <div class="row">
     <div class="col-lg-6" *ngFor="let account of listQueryService.items">
       <foodweb-account-teaser [account]="account" [addressFirst]="true" [hasEmailSubtitle]="true"></foodweb-account-teaser>
     </div>
-  </foodweb-filtered-list-content>
+  </div>
 
-  <foodweb-filtered-list-empty *ngIf="listQueryService.noneFound">
+  <div *ngIf="listQueryService.noneFound" class="not-found">
     Could Not Find Any Accounts
-  </foodweb-filtered-list-empty>
+  </div>
 
   <foodweb-paginator [length]="listQueryService.totalCount"></foodweb-paginator>
 
-  <foodweb-list-filters>
+  <foodweb-page-list-filters>
     <foodweb-admin-account-filters
       [formGroup]="filtersForm"
       (clear)="filtersForm.resetFacetFilters({ resetAccountType: true })"
-      (filter)="listQueryService.refresh()"
-    ></foodweb-admin-account-filters>
-  </foodweb-list-filters>
+      (filter)="listQueryService.refresh()">
+    </foodweb-admin-account-filters>
+  </foodweb-page-list-filters>
 
-</foodweb-filtered-list>
+</foodweb-page-list>

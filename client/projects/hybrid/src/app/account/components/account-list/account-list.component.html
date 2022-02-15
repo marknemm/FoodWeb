@@ -1,24 +1,25 @@
 <foodweb-hybrid-header defaultBackHref="/home">
   <ion-title>{{ accountListLabelService.pageTitle }}</ion-title>
+  <ion-buttons slot="end">
+    <ion-button fill="clear" (click)="filterMenu.toggle()">
+      <ion-icon name="filter-circle"></ion-icon>
+    </ion-button>
+  </ion-buttons>
 </foodweb-hybrid-header>
 
-<ion-content>
+<ion-content id="page">
 
-  <foodweb-hybrid-filtered-list
+  <foodweb-hybrid-page-list
     [disabled]="listQueryService.loading"
     [itemCount]="listQueryService.items.length"
-    (loadMore)="handleLoadMore($event)"
-    (refresh)="handleRefresh($event)">
+    (loadMore)="listQueryService.loadMore({ complete: $event.target.complete })"
+    (refresh)="listQueryService.refresh({ complete: $event.target.complete, showLoader: false })">
 
-    <!-- <foodweb-filtered-list-toolbar listItemsLabel="Accounts">
-      <foodweb-search-bar
-        [placeholder]="searchPlaceholder"
-        [formControl]="filtersForm.get('fullTextQuery')"
-        (search)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
-      ></foodweb-search-bar>
-    </foodweb-filtered-list-toolbar> -->
+    <form [formGroup]="filtersForm" (ngSubmit)="listQueryService.refresh()">
+      <ion-searchbar [placeholder]="accountListLabelService.searchPlaceholder" formControlName="fullTextQuery"></ion-searchbar>
+    </form>
 
-    <div *ngIf="listQueryService.noneFound" class="standalone-statement">
+    <div *ngIf="listQueryService.noneFound" class="not-found">
       Could Not Find Any Accounts.
     </div>
 
@@ -29,14 +30,56 @@
       [hasEmailSubtitle]="true">
     </foodweb-hybrid-account-teaser>
 
-    <!-- <foodweb-list-filters>
-      <foodweb-account-filters
-        [formGroup]="filtersForm"
-        (clear)="filtersForm.resetFacetFilters()"
-        (filter)="updateFilterQueryParams(filtersForm.toAccountReadRequest())"
-      ></foodweb-account-filters>
-    </foodweb-list-filters> -->
-
-  </foodweb-hybrid-filtered-list>
+  </foodweb-hybrid-page-list>
 
 </ion-content>
+
+<ion-menu #filterMenu contentId="page" side="end">
+  <ion-header>
+    <ion-toolbar color="tertiary">
+      <ion-title class="fill">Account Filters</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+
+    <form [formGroup]="filtersForm" (ngSubmit)="listQueryService.refresh()" class="item-margins">
+      <foodweb-hybrid-page-list-filters-section *ngIf="!filtersForm.isVolunteerAccountType">
+        <ion-item>
+          <ion-label position="floating" color="secondary">Organization Name</ion-label>
+          <ion-input formControlName="organizationName"></ion-input>
+        </ion-item>
+      </foodweb-hybrid-page-list-filters-section>
+
+      <foodweb-hybrid-page-list-filters-section *ngIf="!filtersForm.isVolunteerAccountType">
+        <ion-item>
+          <ion-label position="floating" color="secondary">Volunteer First</ion-label>
+          <ion-input formControlName="volunteerFirstName"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating" color="secondary">Volunteer Last</ion-label>
+          <ion-input formControlName="volunteerLastName"></ion-input>
+        </ion-item>
+      </foodweb-hybrid-page-list-filters-section>
+
+      <foodweb-hybrid-page-list-filters-section>
+        <ion-item>
+          <ion-label position="floating" color="secondary">Email Address</ion-label>
+          <ion-input formControlName="email"></ion-input>
+        </ion-item>
+      </foodweb-hybrid-page-list-filters-section>
+
+      <foodweb-hybrid-page-list-filters-section *ngIf="!filtersForm.isDonorAccountType">
+        <foodweb-hybrid-operation-hours-filter
+          [allowClear]="true"
+          [formGroup]="filtersForm.get('operationHours')"
+          [editable]="true">
+        </foodweb-hybrid-operation-hours-filter>
+      </foodweb-hybrid-page-list-filters-section>
+
+      <foodweb-hybrid-page-list-sort [formGroup]="filtersForm" [sortOptions]="accountSortOptionsService.options"></foodweb-hybrid-page-list-sort>
+
+      <foodweb-hybrid-page-list-filters-footer (clear)="filtersForm.resetFacetFilters()" (submit)="filterMenu.close()"></foodweb-hybrid-page-list-filters-footer>
+    </form>
+
+  </ion-content>
+</ion-menu>

@@ -5,3 +5,9 @@ ion-item {
     margin-right: 14px;
   }
 }
+
+.ios {
+  ion-checkbox + ion-label {
+    margin-top: 2px;
+  }
+}

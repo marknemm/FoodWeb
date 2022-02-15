@@ -52,7 +52,9 @@ async function _saveAccount(manager: OrmEntityManager, account: AccountEntity, m
   const operationHoursRepo: OrmRepository<OperationHoursEntity> = manager.getRepository(OperationHoursEntity);
   _ensureEitherOrganizationOrVolunteer(account);
   _ensureAccountHasProfileImg(account);
-  _validateAccount(account);
+  const accountErr: string = _accountHelper.validateAccount(account);
+  if (accountErr) { throw new FoodWebError(accountErr); }
+  _trimAccountFields(account);
   await _checkForAndProcessNewAddress(manager, account, myAccount);
   account.contactInfo.phoneNumber = _accountHelper.formatPhoneNumber(account.contactInfo.phoneNumber);
 
@@ -65,13 +67,6 @@ async function _saveAccount(manager: OrmEntityManager, account: AccountEntity, m
   );
   await _insertOperationHours(operationHoursRepo, savedAccount.id, account.operationHours);
   return accountRepo.findOne({ id: account.id });
-}
-
-function _validateAccount(account: AccountEntity): void {
-  const accountErr: string = _accountHelper.validateAccount(account);
-  if (accountErr) {
-    throw new FoodWebError(accountErr);
-  }
 }
 
 function _ensureEitherOrganizationOrVolunteer(account: AccountEntity): void {
@@ -97,6 +92,12 @@ function _ensureAccountHasProfileImg(account: AccountEntity): void {
       ? account.volunteer.lastName.charAt(0).toUpperCase()
       : account.organization.name.charAt(0).toUpperCase();
   }
+}
+
+function _trimAccountFields(account: AccountEntity): void {
+  account.username = account.username.trim();
+  account.contactInfo.email = account.contactInfo.email.trim();
+  account.contactInfo.phoneNumber = account.contactInfo.phoneNumber.trim();
 }
 
 async function _checkForAndProcessNewAddress(manager: OrmEntityManager, account: AccountEntity, myAccount: AccountEntity): Promise<void> {

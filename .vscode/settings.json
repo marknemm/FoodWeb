@@ -3,36 +3,11 @@
     "java.configuration.updateBuildConfiguration": "disabled",
     "javascript.preferences.quoteStyle": "single",
     "typescript.preferences.quoteStyle": "single",
-    "sqltools.connections": [
-      {
-        "previewLimit": 50,
-        "server": "localhost",
-        "port": 5432,
-        "driver": "PostgreSQL",
-        "name": "Local Dev",
-        "database": "foodweb",
-        "username": "postgres",
-        "password": "foodweb"
-      },
-      {
-        "pgOptions": {
-          "ssl": {
-            "rejectUnauthorized": false
-          }
-        },
-        "previewLimit": 50,
-        "server": "foodweb-qa.ceyty2esgj1c.us-east-2.rds.amazonaws.com",
-        "port": 5432,
-        "driver": "PostgreSQL",
-        "name": "Quality Assurance",
-        "username": "nqjwhsafwekhhs",
-        "database": "rtwiedscs32skq"
-      }
-    ],
     "cSpell.words": [
       "aboutads",
       "alertdialog",
       "applinks",
+      "Baufra",
       "Buildable",
       "builtins",
       "cacheable",
@@ -57,6 +32,7 @@
       "geocoded",
       "GEOCODER",
       "geolocation",
+      "gifs",
       "googlemaps",
       "haptics",
       "horz",
@@ -67,6 +43,7 @@
       "leftnav",
       "lngs",
       "lscache",
+      "Macromedia",
       "MAILGUN",
       "mkdir",
       "Nemmer",
@@ -93,6 +70,7 @@
       "reinitialization",
       "resave",
       "routable",
+      "searchbar",
       "Segs",
       "serverlogs",
       "sidenav",

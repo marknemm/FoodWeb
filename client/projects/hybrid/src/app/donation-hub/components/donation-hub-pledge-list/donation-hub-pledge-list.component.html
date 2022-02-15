@@ -9,14 +9,14 @@
 
 <ion-content>
 
-  <foodweb-hybrid-filtered-list
+  <foodweb-hybrid-page-list
     class="donation-hub-pledges"
     [disabled]="listQueryService.loading"
     [itemCount]="listQueryService.items.length"
     (loadMore)="handleLoadMore($event)"
     (refresh)="handleRefresh($event)">
 
-    <div *ngIf="listQueryService.noneFound" class="standalone-statement">
+    <div *ngIf="listQueryService.noneFound" class="not-found">
       Could Not Find Any Donation Pledges.
     </div>
 
@@ -25,6 +25,6 @@
       [pledge]="pledge">
     </foodweb-hybrid-donation-hub-pledge-teaser>
 
-  </foodweb-hybrid-filtered-list>
+  </foodweb-hybrid-page-list>
 
 </ion-content>

@@ -1,9 +1,9 @@
 import { AccountReadRequest, AccountType, OperationHours } from '~shared';
 import { OperationHoursFilterForm } from '~web/account-shared/forms/operation-hours-filter.form';
-import { ListFiltersForm } from '~web/shared/forms/list-filters.form';
+import { PageListFiltersForm } from '~web/shared/forms/list-filters.form';
 export { AccountReadRequest };
 
-export class AccountFiltersForm extends ListFiltersForm<AccountFiltersFormT> {
+export class AccountFiltersForm extends PageListFiltersForm<AccountFiltersFormT> {
 
   constructor(filters?: Partial<AccountFiltersFormT>) {
     super({
@@ -70,17 +70,13 @@ export class AccountFiltersForm extends ListFiltersForm<AccountFiltersFormT> {
     return value;
   }
 
-  /**
-   * @override
-   */
+  /** @override */
   patchValue(value: Partial<AccountFiltersFormT>, options?: { onlySelf?: boolean, emitEvent?: boolean }): void {
     value = this._fillOperationHoursForm(value);
     super.patchValue(value, options);
   }
 
-  /**
-   * @override
-   */
+  /** @override */
   reset(value?: Partial<AccountFiltersFormT>, options?: { resetAccountType?: boolean, onlySelf?: boolean, emitEvent?: boolean }): void {
     const accountType: AccountType = this.get('accountType').value;
     value = this._fillOperationHoursForm(value);
@@ -100,9 +96,7 @@ export class AccountFiltersForm extends ListFiltersForm<AccountFiltersFormT> {
     this.reset({ fullTextQuery: this.get('fullTextQuery').value }, options);
   }
 
-  /**
-   * @override
-   */
+  /** @override */
   setValue(value: Partial<AccountFiltersFormT>, options?: { onlySelf?: boolean, emitEvent?: boolean }): void {
     value = this._fillOperationHoursForm(value);
     super.setValue(value, options);
