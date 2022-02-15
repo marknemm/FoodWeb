@@ -9,5 +9,5 @@ export const environment = {
   supportEmail: 'support@wnyfoodweb.com',
   googleMapsJSApiKey: 'AIzaSyDQdydkED1Z-nZvQXQQHlOYXnrmdqdFedA',
   server: 'https://admin.wnyfoodweb.com/server',
-  webServer: 'https://www.wnyfoodweb.com/server'
+  webClient: 'https://www.wnyfoodweb.com'
 };

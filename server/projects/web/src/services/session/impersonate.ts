@@ -18,6 +18,7 @@ export async function impersonateLogin(impersonateRequest: ImpersonateRequest): 
   const impersonateRecord: ImpersonateRecord = await redisStore.get(impersonateRequest.impersonationToken);
   await _ensureCanImpersonate(impersonateRequest, impersonateRecord);
   const impersonateResponse: LoginResponse = await _genImpersonateLoginResponse(impersonateRecord);
+  impersonateResponse.account.verified = true; // Admin impersonation will always act as verified account!
   redisStore.del(impersonateRequest.impersonationToken); // Delete one-time use token on successful login.
   return impersonateResponse;
 }
