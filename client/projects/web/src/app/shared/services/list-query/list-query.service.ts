@@ -76,9 +76,11 @@ export class ListQueryService<T> {
     this._urlQueryService.listenQueryParamsChange<ReadRequest>(this._activatedRoute).subscribe(
       (request: ReadRequest) => {
         // Only refresh if filter request has new values.
-        if (!isEqual(request, this._getReadRequest)) {
+        const prevRequest: ReadRequest = this._getReadRequest();
+        if (!isEqual(request, prevRequest)) {
           this._filtersForm.reset(request);
-          this.refresh();
+          // Preserve the page in new request if result of pagination or page size (limit) change.
+          this.refresh({ preservePage: (prevRequest.page !== request.page) || (prevRequest.limit !== request.limit) });
         }
       }
     );
@@ -125,7 +127,7 @@ export class ListQueryService<T> {
    * @returns An observable that emits the refreshed list once the refresh operation has completed.
    */
   refresh(opts: RefreshOptions = {}): Observable<readonly T[]> {
-    if (this._filtersForm.get('page').value > 1) {
+    if (this._filtersForm.get('page').value > 1 && !opts.preservePage) {
       this._filtersForm.get('page').setValue(1);
     }
     this._loading = true;
@@ -164,6 +166,10 @@ export class ListQueryService<T> {
 
 export type Reader<T> = (request: ReadRequest<any>, showLoader?: HttpResponseHandlerOptions<ListResponse<T>>) => Observable<ListResponse<T>>;
 export type RefreshOptions = HttpResponseHandlerOptions & {
+  /**
+   * Whether or not to preserve the current page. Defaults to false and resets the page to 1.
+   */
+  preservePage?: boolean;
   /**
    * An optional callback that is invoked when the refresh operation is complete.
    */
