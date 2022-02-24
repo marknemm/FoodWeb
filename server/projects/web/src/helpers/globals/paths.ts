@@ -19,7 +19,7 @@ export const appPaths = {
 
 /**
  * Initializes all global path constants and path mappings for the Express app.
- * @param project The name of the project that the paths are being intialized for (e.g. 'web', 'admin').
+ * @param project The name of the project that the paths are being initialized for (e.g. 'web', 'admin').
  * @param indexDirname The directory containing the index.js file in transpiled dist output.
  */
 export function initPaths(project: string, indexDir: string): void {

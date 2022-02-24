@@ -1,6 +1,6 @@
 # Serverless config for deployment to AWS Lambda: docs.serverless.com
 
-frameworkVersion: '2'
+frameworkVersion: '^3.1.0'
 service: FoodWebJobs
 app: foodweb
 org: marknemm
@@ -14,12 +14,10 @@ provider:
   name: aws
   region: us-east-2
   runtime: nodejs14.x
-  lambdaHashingVersion: 20201221
-  environment: ${file(.env.yml):}
   timeout: 900 # Maximum - 15 minutes timeout.
   vpc:
     securityGroupIds:
-      - sg-08c2d5030e060406c
+      - sg-0888b39f430dedfd8
     subnetIds:
       - subnet-1e1ab175
       - subnet-d37e369f
@@ -27,6 +25,8 @@ provider:
   layers: # Layers shared among all Lambda Functions.
     - { Ref: CoreDependenciesLambdaLayer }
     - { Ref: GeoTzDependenciesLambdaLayer }
+    - { Ref: CoreWebServerLambdaLayer }
+    - { Ref: SharedLambdaLayer }
 
 # Package config which details patterns of directories/files to include & exclude in each Lambda Function.
 package:
@@ -39,17 +39,7 @@ package:
     # Top level project include(s).
     - 'package.json'
     # Server project include(s).
-    - 'server/dist/**'
-    - 'server/projects/jobs/**'
-    - 'server/projects/web/**'
-    - 'server/templates/**'
-    - 'server/package.json'
-    - 'server/tsconfig.base.json'
-    - 'server/tsconfig.json'
-    # Shared project include(s).
-    - 'shared/src/web/**'
-    - 'shared/package.json'
-    - 'shared/tsconfig.json'
+    - 'server/dist/server/projects/jobs/src/*'
 
 layers:
   CoreDependencies:
@@ -68,13 +58,30 @@ layers:
     package:
       patterns:
         - 'nodejs/**'
+  CoreWebServer:
+    path: server/lambda-layers/core-web-server
+    description: Core web server as deployed on elastic beanstalk
+    compatibleRuntimes:
+      - nodejs14.x
+    package:
+      patterns:
+        - '~web/**'
+  Shared:
+    path: server/lambda-layers/shared
+    description: Shared utilities for server and client
+    compatibleRuntimes:
+      - nodejs14.x
+    package:
+      patterns:
+        - '~shared/**'
 
 functions:
   AutoAssignDonations:
     handler: server/dist/server/projects/jobs/src/index.handler
     description: Auto assigns unclaimed donations to an eligible receiver organization
     environment:
-      JOB_NAME: auto-assign-donations
+      JOB_NAME: auto-assign-donation
+      PRODUCTION: true
     events:
       - schedule: cron(*/10 * * * ? *) # Run every 10th minute of hour (eg. 1:00, 1:10, 1:20, 1:30, 1:40, 1:50, 2:00, etc...)
   DeletePasswordReset:
@@ -82,6 +89,7 @@ functions:
     description: Deletes all password reset tokens older than 5 minutes
     environment:
       JOB_NAME: delete-password-reset
+      PRODUCTION: true
     events:
       - schedule: cron(*/10 * * * ? *) # Run every 10th minute of hour (eg. 1:00, 1:10, 1:20, 1:30, 1:40, 1:50, 2:00, etc...)
   SendDeliveryReminders:
@@ -89,6 +97,7 @@ functions:
     description: Sends delivery reminders to all parties associated with a donation delivery 24 hours and 1 hour before delivery window start
     environment:
       JOB_NAME: send-delivery-reminders
+      PRODUCTION: true
     events:
       - schedule: cron(*/10 * * * ? *) # Run every 10th minute of hour (eg. 1:00, 1:10, 1:20, 1:30, 1:40, 1:50, 2:00, etc...)
   SendDonationHubReminders:
@@ -96,5 +105,6 @@ functions:
     description: Sends donation hub drop-off reminders to all parties associated with a donation hub 24 hours and 1 hour before drop-off window start
     environment:
       JOB_NAME: send-donation-hub-reminders
+      PRODUCTION: true
     events:
       - schedule: cron(*/10 * * * ? *) # Run every 10th minute of hour (eg. 1:00, 1:10, 1:20, 1:30, 1:40, 1:50, 2:00, etc...)
