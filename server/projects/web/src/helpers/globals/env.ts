@@ -1,12 +1,13 @@
-import { appPaths } from './paths';
+import { GetParametersByPathCommand, GetParametersByPathCommandOutput, SSMClient } from '@aws-sdk/client-ssm';
 import * as admin from 'firebase-admin';
+import { appPaths } from './paths';
 import dotenv = require('dotenv');
 import path = require('path');
 
 /**
  * A typed version of process.env that should contain all environment variables that are converted to their refined types.
  */
-export const env: FoodWebEnv = initEnv(appPaths.serverProjectDir);
+export const env: FoodWebEnv = initEnv();
 
 /**
  * FoodWeb environment variables.
@@ -74,12 +75,39 @@ export interface FoodWebEnv {
 }
 
 /**
+ * Initializes Express app environment variables from SSM (Simple Site Manager) Parameter Store variables.
+ * If the environment is DEVELOPMENT, then initializes the environment variables from a local .env file.
+ * @return A promise that resolves to the initialized FoodWeb environment variable set.
+ */
+export async function initEnvFromSSM(): Promise<FoodWebEnv> {
+  if (process.env.DEVELOPMENT !== 'true') {
+    const ssmClient = new SSMClient({ region: 'us-east-2' });
+
+    let nextToken: string;
+    do {
+      const command = new GetParametersByPathCommand({
+        Path: `/foodweb/${process.env.PRODUCTION === 'true' ? 'production' : 'qa'}`,
+        NextToken: nextToken
+      });
+      const ssmResponse: GetParametersByPathCommandOutput = await ssmClient.send(command);
+
+      for (const parameter of ssmResponse.Parameters) {
+        process.env[parameter.Name.split('/').pop()] = parameter.Value;
+      }
+      nextToken = ssmResponse.NextToken;
+    } while (nextToken);
+  }
+  return initEnv();
+}
+
+/**
  * Initializes Express app environment variables within a local/docker dev environment by referencing .env file.
  * If environment variables are set on the host machine/container, those will take precedence, and .env will not be referenced.
- * @param envDir The optional directory containing the `.env` file.
  * @return The initialized FoodWeb environment variable set.
  */
-function initEnv(envDir?: string): FoodWebEnv {
+function initEnv(): FoodWebEnv {
+  const envDir: string = appPaths.serverProjectDir;
+
   // If in a development environment, load environment variables from .env file.
   if (process.env.PRODUCTION !== 'true' && process.env.QA !== 'true') {
     (envDir)

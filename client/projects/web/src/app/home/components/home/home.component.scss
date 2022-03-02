@@ -1,3 +1,4 @@
+@import "variables.scss";
 $side-container-max-width: 270px;
 
 .home {
@@ -13,6 +14,44 @@ $side-container-max-width: 270px;
       position: relative;
       width: $side-container-max-width;
       float: right;
+    }
+
+    .app-download {
+      text-align: center;
+
+      img {
+        height: auto;
+      }
+
+      .app-store-badge {
+        width: 113%;
+        box-sizing: border-box;
+        padding: 6%;
+        margin-left: -6%;
+        margin-bottom: -6%;
+      }
+
+      .google-play-badge {
+        width: 130%;
+        margin-left: -21%;
+        margin-top: -2.5%;
+        margin-bottom: -6%;
+      }
+
+      @media only screen and (max-width: $md) {
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 14px;
+
+        .app-store-badge {
+          margin-top: -6%;
+        }
+
+        .google-play-badge {
+          margin-top: -8%;
+        }
+      }
     }
 
     .login-signup {

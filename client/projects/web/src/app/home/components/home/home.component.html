@@ -1,5 +1,9 @@
 <div class="home page has-side-content">
   <div class="main-content">
+    <div class="d-lg-none app-download-mobile">
+      <ng-container [ngTemplateOutlet]="appDownloadTmpl"></ng-container>
+    </div>
+
     <span class="d-lg-none">
       <ng-container [ngTemplateOutlet]="trainingSignupTmpl"></ng-container>
     </span>
@@ -87,16 +91,15 @@
 
   <div class="side-content">
     <span class="d-none d-lg-inline">
-      <mat-card *ngIf="!sessionService.loggedIn">
+      <mat-card >
         <mat-card-content>
-          <button class="login-signup" mat-raised-button type="button" color="primary" (click)="openLoginDialog()">Login</button>
-          <a routerLink="/signup"><button class="login-signup" mat-raised-button type="button" color="primary">Signup</button></a>
+          <ng-container *ngIf="!sessionService.loggedIn">
+            <button class="login-signup" mat-raised-button type="button" color="primary" (click)="openLoginDialog()">Login</button>
+            <a routerLink="/signup"><button class="login-signup" mat-raised-button type="button" color="primary">Signup</button></a>
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="appDownloadTmpl"></ng-container>
         </mat-card-content>
       </mat-card>
-    </span>
-
-    <span class="d-none d-lg-inline">
-      <ng-container [ngTemplateOutlet]="trainingSignupTmpl"></ng-container>
     </span>
 
     <mat-card>
@@ -114,6 +117,21 @@
     <foodweb-general-stats-card></foodweb-general-stats-card>
   </div>
 </div>
+
+<ng-template #appDownloadTmpl>
+  <div class="row app-download">
+    <div class="col-6">
+      <a href="https://apps.apple.com/us/app/wny-foodweb/id1584697655">
+        <img class="app-store-badge" src="./assets/app-store-badge.svg" alt="Download on the App Store">
+      </a>
+    </div>
+    <div class="col-6">
+      <a href="https://play.google.com/store/apps/details?id=io.foodweb.hybrid">
+        <img class="google-play-badge" src="./assets/google-play-badge.png" alt="Download on Google Play">
+      </a>
+    </div>
+  </div>
+</ng-template>
 
 <ng-template #trainingSignupTmpl>
   <foodweb-event-card [event]="event" [linkToEventsPage]="true"></foodweb-event-card>
