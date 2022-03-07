@@ -1,5 +1,6 @@
 import { GetParametersByPathCommand, GetParametersByPathCommandOutput, SSMClient } from '@aws-sdk/client-ssm';
 import * as admin from 'firebase-admin';
+import { isEmpty } from 'lodash';
 import { appPaths } from './paths';
 import dotenv = require('dotenv');
 import path = require('path');
@@ -7,7 +8,7 @@ import path = require('path');
 /**
  * A typed version of process.env that should contain all environment variables that are converted to their refined types.
  */
-export const env: FoodWebEnv = initEnv();
+export let env: FoodWebEnv = {};
 
 /**
  * FoodWeb environment variables.
@@ -79,25 +80,34 @@ export interface FoodWebEnv {
  * If the environment is DEVELOPMENT, then initializes the environment variables from a local .env file.
  * @return A promise that resolves to the initialized FoodWeb environment variable set.
  */
-export async function initEnvFromSSM(): Promise<FoodWebEnv> {
-  if (process.env.DEVELOPMENT !== 'true') {
-    const ssmClient = new SSMClient({ region: 'us-east-2' });
-
-    let nextToken: string;
-    do {
-      const command = new GetParametersByPathCommand({
-        Path: `/foodweb/${process.env.PRODUCTION === 'true' ? 'production' : 'qa'}`,
-        NextToken: nextToken
-      });
-      const ssmResponse: GetParametersByPathCommandOutput = await ssmClient.send(command);
-
-      for (const parameter of ssmResponse.Parameters) {
-        process.env[parameter.Name.split('/').pop()] = parameter.Value;
-      }
-      nextToken = ssmResponse.NextToken;
-    } while (nextToken);
+export async function initEnv(): Promise<FoodWebEnv> {
+  if (isEmpty(env)) {
+    env = (process.env.DEVELOPMENT !== 'true' || process.env.PRODUCTION === 'true' || process.env.QA === 'true')
+      ? await initFromSSMParamStore()
+      : initFromDotEnvFile();
   }
-  return initEnv();
+  return env;
+}
+
+async function initFromSSMParamStore(): Promise<FoodWebEnv> {
+  const ssmClient = new SSMClient({ region: 'us-east-2' });
+
+  let nextToken: string;
+  do {
+    const command = new GetParametersByPathCommand({
+      Path: `/foodweb/${process.env.PRODUCTION === 'true' ? 'production' : 'qa'}`,
+      NextToken: nextToken
+    });
+    const ssmResponse: GetParametersByPathCommandOutput = await ssmClient.send(command);
+
+    for (const parameter of ssmResponse.Parameters) {
+      process.env[parameter.Name.split('/').pop()] = parameter.Value;
+    }
+    nextToken = ssmResponse.NextToken;
+  } while (nextToken);
+
+
+  return refineEnv();
 }
 
 /**
@@ -105,7 +115,7 @@ export async function initEnvFromSSM(): Promise<FoodWebEnv> {
  * If environment variables are set on the host machine/container, those will take precedence, and .env will not be referenced.
  * @return The initialized FoodWeb environment variable set.
  */
-function initEnv(): FoodWebEnv {
+function initFromDotEnvFile(): FoodWebEnv {
   const envDir: string = appPaths.serverProjectDir;
 
   // If in a development environment, load environment variables from .env file.
@@ -119,18 +129,16 @@ function initEnv(): FoodWebEnv {
     }
   }
 
-  // Shallow copy process.env to global env object, and refine the types & values of its members.
-  const rawEnv = Object.assign({}, process.env);
-  return refineEnv(rawEnv);
+  return refineEnv();
 }
 
 /**
- * Refines the types & values of the members of the global env object.
- * @param rawEnv The raw FoodWeb environment variable set that is to be refined.
+ * Refines the types & values of the members of the raw global process.env object without modifying it directly.
  * @return The refined FoodWeb environment variable set.
  */
-function refineEnv(rawEnv): FoodWebEnv {
-  const refinedEnv = Object.assign({}, rawEnv);
+function refineEnv(): FoodWebEnv {
+  const rawEnv: any = process.env;
+  const refinedEnv: FoodWebEnv = Object.assign({}, process.env);
 
   // Perform all standard automatic conversions to boolean and integer types.
   for (const envProp in refinedEnv) {
@@ -167,7 +175,7 @@ function refineEnv(rawEnv): FoodWebEnv {
   refinedEnv.DEVELOPMENT = refinedEnv.DEVELOPMENT || (!refinedEnv.PRODUCTION && !refinedEnv.QA);
 
   refinedEnv.FIREBASE_SERVICE_ACCOUNT = JSON.parse(
-    Buffer.from(refinedEnv.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf-8')
+    Buffer.from(rawEnv.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf-8')
   );
 
   refinedEnv.PORT = refinedEnv.PORT ?? 0; // Allow SERVER_PORT to take effect if not supplied.

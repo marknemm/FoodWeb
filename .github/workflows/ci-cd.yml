@@ -325,15 +325,6 @@ jobs:
     - name: Build Source Code
       if: steps.cache-build.outputs.cache-hit != 'true'
       run: cd ./server && npm run build jobs
-    - name: Package Lambda Layers
-      if: steps.cache-build.outputs.cache-hit != 'true'
-      run: cd ./server && npm run lambda:pkg
-    - name: Load Secrets Into Env File
-      if: steps.cache-build.outputs.cache-hit != 'true'
-      run: |
-        cat > .env.yml << EOF
-        ${{ secrets.ENV }}
-        EOF
     - name: Install Serverless Framework
       if: steps.cache-build.outputs.cache-hit != 'true'
       run: npm install -g serverless

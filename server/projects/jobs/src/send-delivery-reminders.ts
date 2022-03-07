@@ -9,11 +9,14 @@ const _dateTimeHelper = new DateTimeHelper();
 const _donationHelper = new DonationHelper();
 const _reminderIntervalMins = 10; // Job will be scheduled to run every 10 minutes.
 
+// Entrypoint for AWS Lambda Function (see serverless.yml).
+exports.handler = () => sendDeliveryReminders();
+
 /**
  * Notifies all individuals associated with a donation that is to be delivered in the next hour and 24 hours.
  * @return A promise that resolves to void when the operation finishes.
  */
-export default async function sendDeliveryReminders(): Promise<void> {
+async function sendDeliveryReminders(): Promise<void> {
   for (const hour of [1, 24]) {
     const earliestDeliveryWindowStart: Date = _genEarliestDeliveryWindowStart(hour);
     const latestDeliveryWindowStart: Date = _genLatestDeliveryWindowStart(earliestDeliveryWindowStart);
