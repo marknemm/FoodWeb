@@ -12,11 +12,14 @@ const _accountHelper = new AccountHelper();
 const _dateTimeHelper = new DateTimeHelper();
 const _reminderIntervalMins = 10; // Job will be scheduled to run every 10 minutes.
 
+// Entrypoint for AWS Lambda Function (see serverless.yml).
+exports.handler = () => sendDonationHubReminders();
+
 /**
  * Notifies all individuals associated with a donation hub that its drop-off window is starting in the next 24 hours and hour.
  * @return A promise that resolves to void when the operation finishes.
  */
-export default async function sendDonationHubReminders(): Promise<void> {
+async function sendDonationHubReminders(): Promise<void> {
   for (const hour of [1, 24]) {
     const dateRoundedToInterval: Date = _dateTimeHelper.roundNearestMinutes(new Date(), _reminderIntervalMins);
     const earliestDropOffWindowStart: Date = _dateTimeHelper.addHours(dateRoundedToInterval, hour);

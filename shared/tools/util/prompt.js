@@ -17,7 +17,7 @@ async function getFileChoices(dirName, excludeFiles = []) {
 
 /**
  * Generates an input prompt in stdin.
- * @param {string} message The imput prompt main message/question.
+ * @param {string} message The input prompt main message/question.
  * @param {string} defaultValue An optional default value that shall be set when the user inputs an empty string.
  * @return {Promise<string>} A promise that resolves to the user input value.
  */

@@ -1,26 +1,26 @@
+import { Application, Request, RequestHandler, Response, Router } from 'express';
 import 'reflect-metadata';
-import { Application, Request, Response } from 'express';
-import { appPaths, initPaths } from '../../web/src/helpers/globals/paths'; // Cannot use ~web/ path map until initPaths is called.
+import { env, initEnv } from '../../web/src/helpers/globals/env'; // Cannot use ~web/ path map until initPaths is called.
+import { appPaths, initPaths } from '../../web/src/helpers/globals/paths';
 import express = require('express');
 import path = require('path');
 
 // Initialize all global path constants, path mappings, and environment variables for the Express app.
 initPaths('admin', __dirname);
-
-import { env } from '~web/helpers/globals/env';
-// These must be imported after loading .env into process since they require access to environment variables.
-import { initOrm } from '~orm';
-import { ensureSessionAdmin } from '~admin/middleware/admin-session.middleware';
-import { router as sessionRouter } from '~admin/controllers/admin-session';
-import { router as adminRouter } from '~admin/controllers/admin';
-import { initMiddleware } from '~web/middleware/init.middleware';
-
-// Initialize & Configure Express App (Establish App-Wide Middleware).
 const app: Application = express();
 
-initMiddleware(app) // Initialize all app middleware that pre-processes requests before being handled by REST route handlers.
-  .then(initOrm)    // Initialize TypeORM layer & connection so that the app may interact with the database.
-  .then(() => {     // Register REST route handlers & setup the Express app to listen for requests on the configured port.
+// Initialize & preprocess env variables either form AWS SSM Parm Store or local `.env` file.
+initEnv()
+  // Initialize all app middleware that pre-processes requests before being handled by REST route handlers.
+  .then(() => require('~web/middleware/init.middleware').initMiddleware(app))
+  // Initialize TypeORM layer & connection so that the app may interact with the database.
+  .then(require('~orm').initOrm)
+  // Register REST route handlers & setup the Express app to listen for requests on the configured port.
+  .then(() => {
+
+    const sessionRouter: Router = require('~admin/controllers/admin-session').router;
+    const adminRouter: Router = require('~admin/controllers/admin').router;
+    const ensureSessionAdmin: RequestHandler = require('~admin/middleware/admin-session.middleware').ensureSessionAdmin;
 
     app.set('port', (env.PORT || env.SERVER_PORT || 5001));
 
