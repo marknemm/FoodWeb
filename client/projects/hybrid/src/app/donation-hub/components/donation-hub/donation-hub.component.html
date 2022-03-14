@@ -27,14 +27,6 @@
     </p>
 
     <div class="row">
-      <div class="donation-hub-recipient col-md-6">
-        <foodweb-hybrid-account-teaser [account]="donationHub.volunteerAccount" customTitle="Hub Recipient"></foodweb-hybrid-account-teaser>
-      </div>
-
-      <div *ngIf="donationHub.receiverAccount" class="charity-recipient col-md-6">
-        <foodweb-hybrid-account-teaser [account]="donationHub.receiverAccount" customTitle="Charity Recipient"></foodweb-hybrid-account-teaser>
-      </div>
-
       <div class="drop-off-info col-md-6">
         <foodweb-hybrid-donation-hub-drop-off-info [donationHub]="donationHub"></foodweb-hybrid-donation-hub-drop-off-info>
       </div>

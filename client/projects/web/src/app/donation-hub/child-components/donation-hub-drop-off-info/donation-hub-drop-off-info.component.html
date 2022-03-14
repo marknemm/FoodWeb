@@ -4,6 +4,14 @@
   </mat-card-title>
 
   <mat-card-content>
+    <div *ngIf="!hideAddress">
+      <foodweb-contact-info
+        [hideEmail]="true"
+        [hidePhone]="true"
+        [value]="donationHub.volunteerAccount.contactInfo">
+      </foodweb-contact-info>
+    </div>
+
     <div>
       <div class="inline-label">Time Window:</div>
       <div>
