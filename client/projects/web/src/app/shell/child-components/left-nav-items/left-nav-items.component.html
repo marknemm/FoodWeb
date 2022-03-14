@@ -30,14 +30,16 @@
       <fa-icon [icon]="faGifts"></fa-icon> <span>My Donations</span>
     </a>
 
-    <h2 class="submenu-heading">Deliveries</h2>
-    <a mat-list-item [routerLink]="['/delivery', 'list']"
-       [queryParams]="donationHelper.findDonationsQueryParams(sessionService.account)" (click)="_onNavigate()">
-      <mat-icon>schedule</mat-icon> <span>Schedule Delivery</span>
-    </a>
-    <a mat-list-item [routerLink]="['/delivery', 'list', 'my']" (click)="_onNavigate()">
-      <mat-icon>place</mat-icon> <span>My Deliveries</span>
-    </a>
+    <ng-container *ngIf="showDeliveries">
+      <h2 class="submenu-heading">Deliveries</h2>
+      <a mat-list-item [routerLink]="['/delivery', 'list']"
+        [queryParams]="donationHelper.findDonationsQueryParams(sessionService.account)" (click)="_onNavigate()">
+        <mat-icon>schedule</mat-icon> <span>Schedule Delivery</span>
+      </a>
+      <a mat-list-item [routerLink]="['/delivery', 'list', 'my']" (click)="_onNavigate()">
+        <mat-icon>place</mat-icon> <span>My Deliveries</span>
+      </a>
+    </ng-container>
   </ng-container>
 
   <ng-container *ngIf="sessionService.isDonor || sessionService.isReceiver">

@@ -9,5 +9,6 @@ import { DonationHub } from '~shared';
 export class DonationHubDropOffInfoComponent {
 
   @Input() donationHub: DonationHub;
+  @Input() hideAddress = false;
 
 }
