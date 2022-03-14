@@ -11,7 +11,7 @@
       <ion-label>Donations</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="delivery" *ngIf="sessionService.isVolunteer">
+    <ion-tab-button tab="delivery" *ngIf="sessionService.isVolunteer && showDeliveries">
       <ion-icon name="car"></ion-icon>
       <ion-label>Deliveries</ion-label>
     </ion-tab-button>
