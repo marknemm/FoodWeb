@@ -6,6 +6,14 @@
   </ion-card-header>
 
   <ion-card-content>
+    <div *ngIf="!hideAddress">
+      <foodweb-hybrid-contact-info
+        [hideEmail]="true"
+        [hidePhone]="true"
+        [value]="donationHub.volunteerAccount.contactInfo">
+      </foodweb-hybrid-contact-info>
+    </div>
+
     <div>
       <div class="inline-label">Time Window:</div>
       <div>
