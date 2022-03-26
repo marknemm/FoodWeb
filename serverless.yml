@@ -17,20 +17,19 @@ provider:
   timeout: 900 # Maximum - 15 minutes timeout.
   vpc:
     securityGroupIds:
-      - sg-0888b39f430dedfd8
+      - sg-0888b39f430dedfd8 # Access to DB & ElastiCache within VPC.
     subnetIds:
-      - subnet-1e1ab175
-      - subnet-d37e369f
-      - subnet-5e806023
+      - subnet-0490e7d052f348602 # lambda-private-1 (subnet) -> lambda-public-1 (subnet) -> NAT Gateway 1 -> Internet Gateway
+      - subnet-084c9968678eee263 # lambda-private-2 (subnet) -> lambda-public-2 (subnet) -> NAT Gateway 2 -> Internet Gateway
   iam:
     role:
       managedPolicies:
-        - arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess # Create basic lambda iam role with policy to read SSM Param Store for env vars.
   ecr:
     images:
       foodweb-jobs:
         path: .
-        file: ./server/projects/jobs/Dockerfile
+        file: ./server/projects/jobs/Dockerfile # Jobs Dockerfile is separate from top-level development Dockerfile.
 
 functions:
   AutoAssignDonations:

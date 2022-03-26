@@ -82,7 +82,7 @@ export interface FoodWebEnv {
  */
 export async function initEnv(): Promise<FoodWebEnv> {
   if (isEmpty(env)) {
-    env = (process.env.DEVELOPMENT !== 'true' || process.env.PRODUCTION === 'true' || process.env.QA === 'true')
+    env = (process.env.PRODUCTION === 'true' || process.env.QA === 'true')
       ? await initFromSSMParamStore()
       : initFromDotEnvFile();
   }
