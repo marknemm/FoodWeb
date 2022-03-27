@@ -2,6 +2,7 @@
 
 # Check if configured to skip this script.
 if [ "$SKIP_DOWNLOAD_CERTS" == "true" ] || [ "$SKIP_PREBUILD_HOOKS" == "true" ] || [ "$SKIP_HOOKS" == "true" ]; then
+  echo "Skipping 02-download-certs.sh"
   exit 0
 fi
 

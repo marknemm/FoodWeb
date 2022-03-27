@@ -2,6 +2,7 @@
 
 # Check if configured to skip this script.
 if [ "$SKIP_RENEW_CERTS_CRON" == "true" ] || [ "$SKIP_PREBUILD_HOOKS" == "true" ] || [ "$SKIP_HOOKS" == "true" ]; then
+  echo "Skipping 01-renew-certs-cron.sh"
   exit 0
 fi
 

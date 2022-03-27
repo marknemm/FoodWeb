@@ -2,6 +2,7 @@
 
 # Check if configured to skip this script.
 if [ "$SKIP_ENSURE_NGINX_CONF" == "true" ] || [ "$SKIP_POSTDEPLOY_HOOKS" == "true" ] || [ "$SKIP_HOOKS" == "true" ]; then
+  echo "Skipping 01-ensure-nginx-conf.sh"
   exit 0
 fi
 
