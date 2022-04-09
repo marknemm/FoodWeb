@@ -10,7 +10,7 @@
 
   <div class="row">
     <div class="col-lg-6" *ngFor="let donationHub of listQueryService.items">
-      <foodweb-donation-hub-teaser [donationHub]="donationHub"></foodweb-donation-hub-teaser>
+      <foodweb-donation-hub-teaser [donationHub]="donationHub" [hideDonateButton]="myDonationHubs"></foodweb-donation-hub-teaser>
     </div>
   </div>
 

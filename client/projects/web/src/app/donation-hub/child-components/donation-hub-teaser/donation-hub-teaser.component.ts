@@ -12,6 +12,7 @@ import { Account, DonationHub } from '~shared';
 export class DonationHubTeaserComponent {
 
   @Input() donationHub: DonationHub;
+  @Input() hideDonateButton = false;
 
   constructor() {}
 

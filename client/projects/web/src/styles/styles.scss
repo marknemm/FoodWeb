@@ -39,6 +39,12 @@ button {
   text-align: right;
 }
 
+.align-center-xs {
+  @media only screen and (max-width: $mat-mobile) {
+    text-align: center;
+  }
+}
+
 .bold {
   font-weight: bold;
 }
