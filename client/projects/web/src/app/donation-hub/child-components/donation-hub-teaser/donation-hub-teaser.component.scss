@@ -9,3 +9,18 @@
     }
   }
 }
+
+.mat-card-actions.donation-hub-actions {
+  display: block;
+
+  > a > button {
+    width: 110px;
+    margin: 0 10px;
+  }
+
+  &.single-action {
+    > a > button {
+      width: 220px;
+    }
+  }
+}
