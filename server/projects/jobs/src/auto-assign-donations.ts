@@ -13,12 +13,15 @@ const _donationHelper = new DonationHelper();
 const _operationHoursHelper = new OperationHoursHelper();
 const _runTimestamp = new Date();
 
+// Entrypoint for AWS Lambda Function (see serverless.yml).
+exports.handler = () => autoAssignDonations();
+
 /**
  * Automatically claims all donations that are to occur within 1/6 of the duration of time between donation creation
  * and the start of the pickup window, or donations that have less than 1 hour left until the start of the pickup window.
  * @return A promise that resolves once the operation is finished.
  */
-export default async function autoAssignDonations(): Promise<void> {
+async function autoAssignDonations(): Promise<void> {
   const limit = 300;
   let page = 1;
   let totalDonations = (limit * page) + 1; // +1 to trigger first loop.

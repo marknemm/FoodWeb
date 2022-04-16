@@ -17,92 +17,52 @@ provider:
   timeout: 900 # Maximum - 15 minutes timeout.
   vpc:
     securityGroupIds:
-      - sg-0888b39f430dedfd8
+      - sg-0888b39f430dedfd8 # Access to DB & ElastiCache within VPC.
     subnetIds:
-      - subnet-1e1ab175
-      - subnet-d37e369f
-      - subnet-5e806023
-  layers: # Layers shared among all Lambda Functions.
-    - { Ref: CoreDependenciesLambdaLayer }
-    - { Ref: GeoTzDependenciesLambdaLayer }
-    - { Ref: CoreWebServerLambdaLayer }
-    - { Ref: SharedLambdaLayer }
-
-# Package config which details patterns of directories/files to include & exclude in each Lambda Function.
-package:
-  patterns:
-    # Exclude all - specify include overrides below.
-    - '!**'
-    # Auto-generated serverless platform include(s).
-    - 's_*'
-    - 'serverless_sdk/*'
-    # Top level project include(s).
-    - 'package.json'
-    # Server project include(s).
-    - 'server/dist/server/projects/jobs/src/*'
-
-layers:
-  CoreDependencies:
-    path: server/lambda-layers/core-dependencies
-    description: Core node module dependencies
-    compatibleRuntimes:
-      - nodejs14.x
-    package:
-      patterns:
-        - 'nodejs/**'
-  GeoTzDependencies:
-    path: server/lambda-layers/geo-tz-dependencies
-    description: Geo timezone node module dependencies
-    compatibleRuntimes:
-      - nodejs14.x
-    package:
-      patterns:
-        - 'nodejs/**'
-  CoreWebServer:
-    path: server/lambda-layers/core-web-server
-    description: Core web server as deployed on elastic beanstalk
-    compatibleRuntimes:
-      - nodejs14.x
-    package:
-      patterns:
-        - '~web/**'
-  Shared:
-    path: server/lambda-layers/shared
-    description: Shared utilities for server and client
-    compatibleRuntimes:
-      - nodejs14.x
-    package:
-      patterns:
-        - '~shared/**'
+      - subnet-0490e7d052f348602 # lambda-private-1 (subnet) -> lambda-public-1 (subnet) -> NAT Gateway 1 -> Internet Gateway
+      - subnet-084c9968678eee263 # lambda-private-2 (subnet) -> lambda-public-2 (subnet) -> NAT Gateway 2 -> Internet Gateway
+  iam:
+    role:
+      managedPolicies:
+        - arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess # Create basic lambda iam role with policy to read SSM Param Store for env vars.
+  ecr:
+    images:
+      foodweb-jobs:
+        path: .
+        file: ./server/projects/jobs/Dockerfile # Jobs Dockerfile is separate from top-level development Dockerfile.
 
 functions:
   AutoAssignDonations:
-    handler: server/dist/server/projects/jobs/src/index.handler
     description: Auto assigns unclaimed donations to an eligible receiver organization
+    image:
+      name: foodweb-jobs
     environment:
-      JOB_NAME: auto-assign-donation
+      JOB_NAME: auto-assign-donations
       PRODUCTION: true
     events:
       - schedule: cron(*/10 * * * ? *) # Run every 10th minute of hour (eg. 1:00, 1:10, 1:20, 1:30, 1:40, 1:50, 2:00, etc...)
   DeletePasswordReset:
-    handler: server/dist/server/projects/jobs/src/index.handler
     description: Deletes all password reset tokens older than 5 minutes
+    image:
+      name: foodweb-jobs
     environment:
       JOB_NAME: delete-password-reset
       PRODUCTION: true
     events:
       - schedule: cron(*/10 * * * ? *) # Run every 10th minute of hour (eg. 1:00, 1:10, 1:20, 1:30, 1:40, 1:50, 2:00, etc...)
   SendDeliveryReminders:
-    handler: server/dist/server/projects/jobs/src/index.handler
     description: Sends delivery reminders to all parties associated with a donation delivery 24 hours and 1 hour before delivery window start
+    image:
+      name: foodweb-jobs
     environment:
       JOB_NAME: send-delivery-reminders
       PRODUCTION: true
     events:
       - schedule: cron(*/10 * * * ? *) # Run every 10th minute of hour (eg. 1:00, 1:10, 1:20, 1:30, 1:40, 1:50, 2:00, etc...)
   SendDonationHubReminders:
-    handler: server/dist/server/projects/jobs/src/index.handler
     description: Sends donation hub drop-off reminders to all parties associated with a donation hub 24 hours and 1 hour before drop-off window start
+    image:
+      name: foodweb-jobs
     environment:
       JOB_NAME: send-donation-hub-reminders
       PRODUCTION: true

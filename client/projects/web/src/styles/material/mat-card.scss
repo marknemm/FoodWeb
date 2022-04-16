@@ -55,12 +55,23 @@ mat-card.mat-card {
   }
 
   mat-card-content.mat-card-content {
-    + .mat-card-actions {
-      margin-top: -8px;
-    }
-
     @media only screen and (max-width: $mat-mobile) {
       font-size: 13px;
+    }
+  }
+
+  mat-card-actions.mat-card-actions {
+    > a, > button {
+      margin-left: 10px;
+
+      &:first-child {
+        margin-left: 0;
+
+        &.mat-button,
+        .mat-button {
+          margin-left: -16px;
+        }
+      }
     }
   }
 

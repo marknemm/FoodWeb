@@ -10,9 +10,12 @@
       </div>
     </div>
   </mat-card-content>
-  <mat-card-actions>
+  <mat-card-actions class="donation-hub-actions" [ngClass]="{ 'single-action': hideDonateButton }">
     <a [routerLink]="['/donation-hub', donationHub.id]" class="no-hover">
-      <button mat-raised-button type="button" class="compact" color="primary">View Donation Hub</button>
+      <button mat-raised-button type="button" class="compact" color="accent">View Details</button>
+    </a>
+    <a *ngIf="!hideDonateButton" [routerLink]="['/donation-hub', donationHub.id, 'pledge', 'create']">
+      <button mat-raised-button type="button" class="compact" color="primary">Donate</button>
     </a>
   </mat-card-actions>
 </mat-card>

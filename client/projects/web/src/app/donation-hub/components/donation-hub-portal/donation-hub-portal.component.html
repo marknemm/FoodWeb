@@ -6,32 +6,30 @@
       <mat-card class="drop-off-hub-info-card">
         <mat-card-title>
           <mat-icon>device_hub</mat-icon>
-          Drop-Off Hub
+          Donation Drop-Off Hub
         </mat-card-title>
         <mat-card-content>
           <p>
-            Every <strong>Saturday</strong>, we rely on volunteers to serve as donation drop-off hubs within the Sandwich Army.
-          </p>
-          <p>
-            You can <strong><a [routerLink]="['/donation-hub', 'create']">register</a></strong> your home as a drop-off hub,
+            You can <strong>register</strong> your home as a drop-off hub for an upcoming <strong>Saturday</strong>,
             and other volunteers will pledge donations to it.
           </p>
           <p>
-            You can easily monitor expected donation drop-offs &amp; edit or remove
-            <strong><a [routerLink]="['/donation-hub', 'list', 'my']">your Donation Drop-Off Hubs</a></strong>.
-          </p>
-          <p>
-            You will be sent <strong>reminder emails</strong> 24 hours and 1 hour before your hub's drop-off window.
-          </p>
-          <p>
-            After the drop-off window ends, you are expected to transport all sandwiches to the <strong>Good Shepherd House</strong>,
+            After the drop-off window ends, you are expected to deliver all sandwiches to the <strong>Good Shepherd House</strong>,
             which is located at <strong>St. Luke's Mission for Mercy</strong>.
           </p>
           <p>
-            After delivering the sandwiches, you should notify <strong>Gino</strong> about the delivery at
+            After delivery, you should notify <strong>Gino</strong> about the drop-off at
             <strong><a href="tel:716-830-1413">(716) 830-1413</a></strong>.
           </p>
         </mat-card-content>
+        <mat-card-actions class="align-right align-center-xs">
+          <a [routerLink]="['/donation-hub', 'list', 'my']">
+            <button mat-button type="button" class="compact" color="accent">View My Hubs</button>
+          </a>
+          <a [routerLink]="['/donation-hub', 'create']">
+            <button mat-raised-button type="button" class="compact" color="primary">Register</button>
+          </a>
+        </mat-card-actions>
       </mat-card>
     </div>
 
@@ -43,27 +41,24 @@
         </mat-card-title>
         <mat-card-content>
           <p>
-            You can pledge donations to our <strong><a [routerLink]="['/donation-hub', 'list']">Donation Drop-Off Hubs</a></strong>,
+            You can <strong>donate</strong> to our <strong>Donation Drop-Off Hubs</strong>,
             which should be available each <strong>Saturday</strong>.
           </p>
           <p>
-            You can easily view &amp; cancel <strong><a [routerLink]="['/donation-hub', 'pledge', 'list', 'my']">your Donation Pledges</a></strong>
-            whenever you wish.
+            You are expected to prepare and package a <strong>minimum of 20 sandwiches</strong> before the drop-off window for your chosen hub.
           </p>
           <p>
-            You are expected to prepare and package all sandwiches before the drop-off window for your chosen hub.
-          </p>
-          <p>
-            You will be sent <strong>reminder emails</strong> 24 hours and 1 hour before your donation's drop-off window.
-          </p>
-          <p>
-            Please follow any instructions provided by the owner of the donation drop-off hub.
-          </p>
-          <p>
-            Feel free to contact the drop-off hub if you have any questions.
-            The hub's contact information can be seen when viewing <strong><a [routerLink]="['/donation-hub', 'pledge', 'list', 'my']">your Donation Pledges</a></strong>.
+            Please also try to <strong>include a snack</strong> such as a piece of fruit with each sandwich.
           </p>
         </mat-card-content>
+        <mat-card-actions class="align-right align-center-xs">
+          <a [routerLink]="['/donation-hub', 'pledge', 'list', 'my']">
+            <button mat-button type="button" class="compact" color="accent">View My Donations</button>
+          </a>
+          <a [routerLink]="['/donation-hub', 'list']">
+            <button mat-raised-button type="button" class="compact" color="primary">Donate</button>
+          </a>
+        </mat-card-actions>
       </mat-card>
     </div>
   </div>

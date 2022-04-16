@@ -2,6 +2,7 @@
 
 # Check if configured to skip this script.
 if [ "$SKIP_INSTALL_CERTBOT" == "true" ] || [ "$SKIP_PREBUILD_HOOKS" == "true" ] || [ "$SKIP_HOOKS" == "true" ]; then
+  echo "Skipping 00-install-certbot.sh"
   exit 0
 fi
 

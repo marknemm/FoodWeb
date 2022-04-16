@@ -10,3 +10,4 @@ find ${GITHUB_WORKSPACE}/.ebextensions -type f -exec sed -i -e "s/\${ENV}/$CONFI
 find ${GITHUB_WORKSPACE}/.platform/nginx/conf.d -type f -exec sed -i -e "s/\${ADMIN_DOMAIN}/$ADMIN_DOMAIN/g" {} \;
 find ${GITHUB_WORKSPACE}/.platform/nginx/conf.d -type f -exec sed -i -e "s/\${RAW_DOMAIN}/$RAW_DOMAIN/g" {} \;
 find ${GITHUB_WORKSPACE}/.platform/nginx/conf.d -type f -exec sed -i -e "s/\${WWW_DOMAIN}/$WWW_DOMAIN/g" {} \;
+find ${GITHUB_WORKSPACE}/.platform/nginx/conf.d -type f -exec sed -i -e "s/\${MAIN_EMAIL}/$MAIN_EMAIL/g" {} \;

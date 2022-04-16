@@ -9,7 +9,7 @@ export class DonationHubPledgeForm extends TFormGroup<DonationHubPledgeFormT> {
       id: undefined,
       agreementChecklist: [false, (config.omitChecklist ? [] : [Validators.requiredTrue])],
       foodType: ['', Validators.required],
-      foodCount: [null, [Validators.required, Validators.min(1), Validators.max(100)]]
+      foodCount: [null, [Validators.required, Validators.min(20), Validators.max(100)]]
     });
     if (config.value) {
       this.patchValue(config.value);

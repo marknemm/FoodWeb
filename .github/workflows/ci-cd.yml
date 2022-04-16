@@ -230,6 +230,7 @@ jobs:
     if: github.ref == 'refs/heads/release' || github.ref == 'refs/heads/master'
     env:
       ADMIN_DOMAIN: ${{ github.ref == 'refs/heads/release' && 'admin.wnyfoodweb.com' || 'qa.admin.wnyfoodweb.com' }}
+      MAIN_EMAIL: foodweb.main@gmail.com
       RAW_DOMAIN: ${{ github.ref == 'refs/heads/release' && 'Foodweb-env.eba-swceimpj.us-east-2.elasticbeanstalk.com' || 'foodweb-qa.us-east-2.elasticbeanstalk.com' }}
       WWW_DOMAIN: ${{ github.ref == 'refs/heads/release' && 'www.wnyfoodweb.com' || 'qa.wnyfoodweb.com' }}
     steps:
@@ -325,15 +326,6 @@ jobs:
     - name: Build Source Code
       if: steps.cache-build.outputs.cache-hit != 'true'
       run: cd ./server && npm run build jobs
-    - name: Package Lambda Layers
-      if: steps.cache-build.outputs.cache-hit != 'true'
-      run: cd ./server && npm run lambda:pkg
-    - name: Load Secrets Into Env File
-      if: steps.cache-build.outputs.cache-hit != 'true'
-      run: |
-        cat > .env.yml << EOF
-        ${{ secrets.ENV }}
-        EOF
     - name: Install Serverless Framework
       if: steps.cache-build.outputs.cache-hit != 'true'
       run: npm install -g serverless

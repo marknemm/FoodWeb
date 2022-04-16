@@ -79,6 +79,32 @@ services:
       - foodweb-services
     command: bash -c "npm start admin"
 
+  # To run Lambda Funciton:        curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
+  # To install/build in container: docker-compose run -w /var/task/server --entrypoint npm foodweb-jobs <install | run build>
+  foodweb-jobs:
+    container_name: foodweb-jobs
+    build:
+      context: .
+      dockerfile: ./server/projects/jobs/Dockerfile
+    networks:
+      - foodweb
+    depends_on:
+      - foodweb-services
+    ports:
+      - "9000:8080"
+    volumes:
+      - ./server:/var/task/server
+      - ./shared:/var/task/shared
+      # Exclude the following generated directories from shared volume by overwriting with blank directory
+      - /var/task/server/node_modules
+      - /var/task/shared/node_modules
+      # Add build dist and node_modules dependency installations to shared volumes so they can be rebuilt.
+      - foodweb-jobs-dist:/var/task/server/dist
+      - foodweb-jobs-node_modules:/var/task/server/node_modules
+    environment:
+      - DEVELOPMENT=true
+      - JOB_NAME=$JOB_NAME # Can set JOB_NAME variable before invoking `docker-compose up foodweb-jobs`
+
   foodweb-services:
     extends: "fake-smtp-server"
     depends_on:
@@ -132,4 +158,8 @@ networks:
 volumes:
 
   pgdata:
+    external: false
+  foodweb-jobs-dist:
+    external: false
+  foodweb-jobs-node_modules:
     external: false
