@@ -75,7 +75,11 @@ export class ProfileImgComponent implements OnInit {
     this._formFieldService.value$.subscribe((value: string) => {
       this._placeholder = (value?.length === 1)
         ? this._constants.ACCOUNT_PROFILE_IMG_PLACEHOLDERS[value.charAt(0)]
-        : { backgroundColor: '', color: '', letter: '' };
+        : null;
+
+      if (!this._placeholder) {
+        this._placeholder = { backgroundColor: '#00bfa5', color: '#fff', letter: '' }
+      }
     });
 
     this._currentSize = this._screenSizeService.getCurrentWidth(this.size);

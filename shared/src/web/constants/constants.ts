@@ -13,6 +13,16 @@ export class Constants {
     Volunteer: [AccountType.Volunteer]
   };
   readonly ACCOUNT_PROFILE_IMG_PLACEHOLDERS: { [letter: string]: AccountProfileImgPlaceholder } = {
+    '0': { backgroundColor: '#00bfa5', color: '#fff', letter: '0' },
+    '1': { backgroundColor: '#6200ea', color: '#fff', letter: '1' },
+    '2': { backgroundColor: '#ffd600', color: '#fff', letter: '2' },
+    '3': { backgroundColor: '#263238', color: '#fff', letter: '3' },
+    '4': { backgroundColor: '#aa00ff', color: '#fff', letter: '4' },
+    '5': { backgroundColor: '#c51162', color: '#fff', letter: '5' },
+    '6': { backgroundColor: '#2962ff', color: '#fff', letter: '6' },
+    '7': { backgroundColor: '#00c853', color: '#fff', letter: '7' },
+    '8': { backgroundColor: '#3e2723', color: '#fff', letter: '9' },
+    '9': { backgroundColor: '#304ffe', color: '#fff', letter: '9' },
     A: { backgroundColor: '#00bfa5', color: '#fff', letter: 'A' },
     B: { backgroundColor: '#6200ea', color: '#fff', letter: 'B' },
     C: { backgroundColor: '#ffd600', color: '#fff', letter: 'C' },
