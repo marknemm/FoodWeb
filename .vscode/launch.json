@@ -106,7 +106,7 @@
       "type": "python",
       "request": "launch",
       "program": "${file}",
-      "pythonPath": "c:/python27/python.exe"
+      "python": "c:/python27/python.exe"
     },
   ],
   "compounds": [
