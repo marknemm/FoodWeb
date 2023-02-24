@@ -35,7 +35,7 @@ export class TimeRangeForm extends TFormGroup<TimeRange> {
   }
 
   /**
-   * The raw `endTime` value contianed within the form.
+   * The raw `endTime` value contained within the form.
    */
   get endTime(): string {
     return this.get('endTime').value;

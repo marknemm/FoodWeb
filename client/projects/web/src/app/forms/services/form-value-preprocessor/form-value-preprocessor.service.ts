@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { FlexFormArray } from '~web/forms/classes/flex-form-array';
 import { TFormControl } from '~web/forms/classes/t-form-control';
 
@@ -60,7 +60,7 @@ export class FormValuePreprocessorService<V> {
       value = this._autoCorrectNullValue(control, value);
     }
 
-    if (control instanceof FormArray && !(control instanceof FlexFormArray)) {
+    if (control instanceof UntypedFormArray && !(control instanceof FlexFormArray)) {
       this._autoCorrectFormArraySize(control, value as any);
     }
 
@@ -73,7 +73,7 @@ export class FormValuePreprocessorService<V> {
    * @param value The array value that is to be set in the given control.
    */
   private _autoCorrectFormArraySize(control: AbstractControl, value: any[]): void {
-    const formArray: FormArray = (control as any); // Should know control is FormArray once here.
+    const formArray: UntypedFormArray = (control as any); // Should know control is FormArray once here.
 
     // If not enough controls in FormArray, then clone last one and push until resized correctly.
     if (value.length > formArray.length) {
@@ -97,12 +97,12 @@ export class FormValuePreprocessorService<V> {
    */
   private _autoCorrectNullValue(control: AbstractControl, value: any): V {
     // Protect against setting null/undefined value in FormArray/Group (would result in error).
-    if (control instanceof FormGroup) {
+    if (control instanceof UntypedFormGroup) {
       value = <any>{}; // Must maintain structure of contained FormGroup.
       for (const key of Object.keys(control.controls)) {
         value[key] = null;
       }
-    } else if (control instanceof FormArray) {
+    } else if (control instanceof UntypedFormArray) {
       value = ([] as any);
     }
     return value;

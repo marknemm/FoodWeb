@@ -470,4 +470,26 @@ abstract class _FormFieldService<
  * Defaults to raw data type of `T`.
  */
 @Injectable()
-export class FormFieldService<T, E = T> extends _FormFieldService<T, DeriveAbstractControlType<E>> {}
+export class FormFieldService<T, E = T> extends _FormFieldService<T, DeriveAbstractControlType<E>> {
+  /**
+   * Constructs a new {@link FormFieldService}.
+   * @param formMonitor A service that provides augmented monitoring functionality for reactive form controls.
+   * @param formValuePreprocessor A service that pre-processes a raw value that is to be set to a reactive form control
+   * in order to prevent various possible errors.
+   * @param _controlContainer Holds a reference to any {@link FormGroup} or {@link FormArray} instance that is found
+   * in the parent components template, and is bound to an element that surrounds this component's host element.
+   * @param _ngControl A form directive base that also acts as an input binding through which an external {@link AbstractControl}
+   * is bound to this element. e.g) `formArrayName`, `formControl`, `formControlName`, `formGroup`, `formGroupName`, or `ngModel`.
+   */
+  constructor(
+    public formMonitor: FormMonitorService,
+    public formValidation: FormValidationService,
+    public formValuePreprocessor: FormValuePreprocessorService<any>,
+    @Self() @Optional()
+    _controlContainer: ControlContainer,
+    @Self() @Optional()
+    _ngControl: NgControl,
+  ) {
+    super(formMonitor, formValidation, formValuePreprocessor, _controlContainer, _ngControl);
+  }
+}

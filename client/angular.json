@@ -2,9 +2,10 @@
   "version": 1,
   "cli": {
     "analytics": false,
-    "defaultCollection": "@nrwl/angular"
+    "schematicCollections": [
+      "@nrwl/angular"
+    ]
   },
-  "defaultProject": "web",
   "projects": {
     "web": {
       "projectType": "application",
