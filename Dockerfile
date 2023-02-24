@@ -1,4 +1,4 @@
-FROM node:14.16.0
+FROM node:latest
 
 # Install python & build-essential for dependencies that require c-make build (e.g. bcrypt).
 RUN apt-get update || : \
@@ -15,6 +15,3 @@ EXPOSE 5000
 EXPOSE 5001
 EXPOSE 4200
 EXPOSE 4201
-
-# Ensure we can run npm install with root user permissions.
-RUN npm set unsafe-perm true
