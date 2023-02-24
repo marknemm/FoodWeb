@@ -1,3 +1,5 @@
+@use '~@angular/material' as mat;
+
 /* Window width thresh consts */
 $lg: 1200px;
 $md: 991px;
@@ -16,13 +18,12 @@ $page-horz-pad: 15px;
 $page-horz-pad-mobile: 15px;
 
 /* Define color palette constants */
-@import '~@angular/material/theming';
 
-$primary-palette: mat-palette($mat-green, 400, 300, 500);
-$accent-palette: mat-palette($mat-brown);
-$warn-palette: mat-palette($mat-red);
+$primary-palette: mat.define-palette(mat.$green-palette, 400, 300, 500);
+$accent-palette: mat.define-palette(mat.$brown-palette);
+$warn-palette: mat.define-palette(mat.$red-palette);
 
-$light-theme: mat-light-theme($primary-palette, $accent-palette, $warn-palette);
+$light-theme: mat.define-light-theme($primary-palette, $accent-palette, $warn-palette);
 
 $primary: map-get($primary-palette, default);
 $primary-lightest: map-get($primary-palette, 100);
