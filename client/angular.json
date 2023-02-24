@@ -79,9 +79,6 @@
                 }
               ]
             },
-            "es5": {
-              "tsConfig": "tsconfig.es5.json"
-            },
             "hmr": {
               "fileReplacements": [
                 {
@@ -139,9 +136,6 @@
             "browserTarget": "web:build"
           },
           "configurations": {
-            "es5": {
-              "browserTarget": "web:build:es5"
-            },
             "hmr": {
               "hmr": true,
               "browserTarget": "web:build:hmr"
