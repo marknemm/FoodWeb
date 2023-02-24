@@ -10,6 +10,7 @@ dump
 dist
 www
 *.zip
+.angular
 
 # temp space
 tmp

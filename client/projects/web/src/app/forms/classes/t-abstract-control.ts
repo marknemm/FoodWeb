@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
  */
 export interface TAbstractControl<T> extends AbstractControl {
 
-  readonly status: ControlStatus | string;
+  readonly status: ControlStatus;
   readonly statusChanges: Observable<ControlStatus>;
 
   readonly value: T;
