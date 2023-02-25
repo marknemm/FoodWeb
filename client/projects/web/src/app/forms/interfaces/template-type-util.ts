@@ -1,6 +1,5 @@
 import { AbstractControl, FormControl } from '@angular/forms';
 import { TAbstractControl } from '~web/forms/classes/t-abstract-control';
-import { TFormArray } from '../classes/t-form-array';
 import { TFormGroup } from '../classes/t-form-group';
 
 /**
@@ -31,16 +30,6 @@ export type DeriveAbstractControl<T, V> = T extends TAbstractControl<V>
  * @param A The abstract control type.
  */
 export type DeriveFormGroupType<V, A> = A extends TFormGroup<V>
-  ? A
-  : undefined;
-
-/**
- * A type extension that is used to derive the type of a `TFormArray` based off of an
- * `AbstractControl` type. Will be undefined if the abstract control type isn't a form array.
- * @param V The raw value type of the abstract control.
- * @param A The abstract control type.
- */
-export type DeriveFormArrayType<V, A> = A extends TFormArray<any, ExtractArrayType<V>>
   ? A
   : undefined;
 

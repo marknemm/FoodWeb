@@ -1,7 +1,5 @@
-import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormControl, ValidatorFn } from '@angular/forms';
-import { FormState, TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
-import { DeriveAbstractControlType } from '~web/forms/interfaces/template-type-util';
-import { TFormArray } from './t-form-array';
+import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormArray, FormControl, ValidatorFn, ɵFormArrayRawValue, ɵFormArrayValue, ɵTypedOrUntyped } from '@angular/forms';
+import { UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
 
 /**
  * A typed auto-resizing version of the built-in `FormArray`.
@@ -11,14 +9,10 @@ import { TFormArray } from './t-form-array';
  * @param V The type of each raw element within the array.
  * @param A The type of each `AbstractControl` in the array. Defaults to `TAbstractControl<any>`.
  */
-export class FlexFormArray<
-  T,
-  V = DeriveAbstractControlType<T>,
-  A extends TAbstractControl<V> = T extends TAbstractControl<V> ? T : FormControl<V>
-> extends TFormArray<T, V, A> {
+export class FlexFormArray<A extends AbstractControl> extends FormArray<A> {
 
   /**
-   * Creates a new `TFormArray` instance.
+   * Creates a new `FlexFormArray` instance.
    * @param init The initial raw value or abstract control elements of this form array. Defaults to an empty array.
    * @param memberInit A callback that is used to generate a new abstract control member
    * whenever raw values are added to the this form array. Defaults to generating a basic FormControl.
@@ -27,19 +21,21 @@ export class FlexFormArray<
    * @param asyncValidator A single async validator or array of async validator functions.
    */
   constructor(
-    public init: (V | A)[] = [],
+    public init: (ɵFormArrayValue<A> | A) = [],
     public memberInit?: () => A,
     validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions,
     asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[]
   ) {
     super([], validatorOrOpts, asyncValidator);
-    for (const member of init) {
-      this.push(<any>member);
+    if (init instanceof Array) {
+      for (const member of init) {
+        this.push(<any>member);
+      }
     }
   }
 
   /**
-   * Patches the value of this `TFormArray`. It accepts an array whose elements match the type of this form array.
+   * Patches the value of this `FormArray`. It accepts an array whose elements match the type of this form array.
    * Will expand this form array in order to accommodate the patch value.
    * Will not truncate this form array if the patch value is smaller than the size of this form array.
    *
@@ -47,7 +43,7 @@ export class FlexFormArray<
    * ### Patch the values for controls in this form array
    *
    * ```
-   * const arr = new TFormArray<string>(['', '']);
+   * const arr = new FormArray<FormControl<string>>(['', '']);
    * console.log(arr.value);   // ['', '']
    *
    * arr.patchValue(['Nancy']);
@@ -64,26 +60,26 @@ export class FlexFormArray<
    * the latest status and value when the control value is updated. When false, no events are emitted.
    * The configuration options are passed to the {@link AbstractControl#updateValueAndValidity updateValueAndValidity} method.
    */
-  patchValue(value: V[], options?: UpdateValueOptions): void {
+  patchValue(value: ɵFormArrayValue<A>, options?: UpdateValueOptions): void {
     this._restructureFormArray(value.length);
     super.patchValue(value, options);
   }
 
   /**
-   * Pushes a new empty `AbstractFormControl` to the end of this `TFormArray`.
+   * Pushes a new empty `AbstractFormControl` to the end of this `FormArray`.
    */
   push(): void;
   /**
-   * Pushes a new raw value to the end of this `TFormArray`.
+   * Pushes a new raw value to the end of this `FormArray`.
    * @param control The raw value to push.
    */
-  push(value: V): void;
+  push(value: ɵFormArrayValue<A>): void;
   /**
-   * Pushes a new `AbstractFormControl` to the end of this `TFormArray`.
+   * Pushes a new `AbstractFormControl` to the end of this `FormArray`.
    * @param control The abstract form control control to push.
    */
   push(control: A): void;
-  push(value: V | A = this._genEmptyMember()): void {
+  push(value: ɵFormArrayValue<A> | A = this._genEmptyMember()): void {
     if (value instanceof AbstractControl) {
       super.push(value);
       this.at(this.length - 1).valueChanges.subscribe(this._onElementValueChanges.bind(this, this.at(this.length - 1)));
@@ -104,14 +100,14 @@ export class FlexFormArray<
   }
 
   /**
-   * Resets this `TFormArray` to a specified value/state.
+   * Resets this `FormArray` to a specified value/state.
    * Marks all contained `TAbstractControl` elements as `pristine` and `untouched`.
    *
    * @usageNotes
    * ### Reset the values in a form array
    *
    * ```
-   * const arr = new TFormArray<string>(['first name', 'last name']);
+   * const arr = new FormArray<FormControl<string>>(['first name', 'last name']);
    * arr.reset();
    *
    * console.log(this.arr.value);  // []
@@ -136,7 +132,7 @@ export class FlexFormArray<
    * the latest status and value when the control value is updated. When false, no events are emitted.
    * The configuration options are passed to the {@link AbstractControl#updateValueAndValidity updateValueAndValidity} method.
    */
-  reset(resetState: FormState<V>[] = [], options?: UpdateValueOptions): void {
+  reset(resetState: ɵTypedOrUntyped<A, ɵFormArrayValue<A>, any> = [], options?: UpdateValueOptions): void {
     if (resetState instanceof Array) {
       this._restructureFormArray(resetState.length);
     }
@@ -144,7 +140,7 @@ export class FlexFormArray<
   }
 
   /**
-   * Sets the value of this `TFormArray`. It accepts an array whose elements match the type of this form array.
+   * Sets the value of this `FormArray`. It accepts an array whose elements match the type of this form array.
    * Will expand this form array in order to accommodate the set value.
    * Will truncate this form array if the set value is smaller than the size of this form array.
    *
@@ -152,7 +148,7 @@ export class FlexFormArray<
    * ### Sets the values for controls in this form array
    *
    * ```
-   * const arr = new TFormArray<string>(['', '']);
+   * const arr = new FormArray<FormControl<string>>(['', '']);
    * console.log(arr.value);   // ['', '']
    *
    * arr.setValue(['Nancy']);
@@ -169,7 +165,7 @@ export class FlexFormArray<
    * the latest status and value when the control value is updated. When false, no events are emitted.
    * The configuration options are passed to the {@link AbstractControl#updateValueAndValidity updateValueAndValidity} method.
    */
-  setValue(value: V[], options?: UpdateValueOptions): void {
+  setValue(value: ɵFormArrayRawValue<A>, options?: UpdateValueOptions): void {
     this._restructureFormArray(value.length);
     super.setValue(value, options);
   }
@@ -187,7 +183,7 @@ export class FlexFormArray<
   protected _genEmptyMember(): A {
     return (this.memberInit)
       ? this.memberInit()
-      : <any>new FormControl<V>(null);
+      : <any>new FormControl<ɵFormArrayValue<A>>(null);
   }
 
   protected _onElementValueChanges(source: AbstractControl): void {
