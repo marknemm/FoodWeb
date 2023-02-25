@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { FlexFormArray } from '~web/forms/classes/flex-form-array';
-import { TFormControl } from '~web/forms/classes/t-form-control';
 
 /**
  * A stateless service that preprocesses a value and form control before the value is set to the control.
@@ -78,7 +77,7 @@ export class FormValuePreprocessorService<V> {
     // If not enough controls in FormArray, then clone last one and push until resized correctly.
     if (value.length > formArray.length) {
       for (let i = 0; i <= value.length - formArray.length; i++) {
-        formArray.push(new TFormControl<V>());
+        formArray.push(new FormControl<V>(null));
       }
     }
 

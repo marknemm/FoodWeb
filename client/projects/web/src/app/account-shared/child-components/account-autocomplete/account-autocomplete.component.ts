@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { AccountAutocompleteItem, AccountHelper, AccountType } from '~shared';
 import { AccountAutocompleteService } from '~web/account-shared/services/account-autocomplete/account-autocomplete.service';
-import { FormFieldService, TFormControl } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { ImmutableStore } from '~web/shared/classes/immutable-store';
 
 @Component({
@@ -25,13 +26,13 @@ export class AccountAutocompleteComponent implements OnInit {
     return this._accountAutocompleteService.accountAutocompleteStore;
   }
 
-  get formControl(): TFormControl<string> {
+  get formControl(): FormControl<string> {
     return this._formFieldService.control;
   }
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new TFormControl<string>()
+      genDefault: () => new FormControl<string>('')
     });
   }
 

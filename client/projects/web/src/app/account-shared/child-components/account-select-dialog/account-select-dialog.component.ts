@@ -1,8 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Account, AccountType } from '~shared';
-import { TFormControl } from '~web/forms';
 
 @Component({
   selector: 'foodweb-account-select-dialog',
@@ -11,7 +10,7 @@ import { TFormControl } from '~web/forms';
 })
 export class AccountSelectDialogComponent implements OnInit {
 
-  accountCtrl = new TFormControl<Account>(null, [Validators.required]);
+  accountCtrl = new FormControl<Account>(null, [Validators.required]);
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public config: AccountSelectConfig = {},

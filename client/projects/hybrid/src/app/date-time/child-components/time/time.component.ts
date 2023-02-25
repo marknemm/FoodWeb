@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormFieldService, TFormControl } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 
 @Component({
   selector: 'foodweb-hybrid-time',
@@ -20,7 +21,7 @@ export class TimeComponent implements OnInit {
   @Input() labelPosition: 'fixed' | 'floating' | 'stacked' = 'fixed';
   @Input() minutesGap = 5;
 
-  readonly dateFormControl = new TFormControl<Date>();
+  readonly dateFormControl = new FormControl<Date>(null);
 
   constructor(
     private _dateTimeService: DateTimeService,

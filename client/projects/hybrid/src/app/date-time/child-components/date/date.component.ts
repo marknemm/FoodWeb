@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DateFilterFn } from '@angular/material/datepicker';
-import { FormFieldService, TFormControl } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 
 @Component({
   selector: 'foodweb-hybrid-date',
@@ -30,7 +31,7 @@ export class DateComponent implements OnInit {
     private _formFieldService: FormFieldService<Date>
   ) {}
 
-  get formControl(): TFormControl<Date> {
+  get formControl(): FormControl<Date> {
     return this._formFieldService.control;
   }
 

@@ -2,7 +2,7 @@ import { AbstractControl, FormControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DateTimeHelper } from '~shared';
 import { DateTimeRange } from '~web/date-time/services/date-time/date-time.service';
-import { TFormControl, TFormControlMembers, TFormGroup } from '~web/forms';
+import { TFormControlMembers, TFormGroup } from '~web/forms';
 export { DateTimeRange };
 
 export class DateTimeRangeForm extends TFormGroup<DateTimeRange> {
@@ -44,7 +44,7 @@ export class DateTimeRangeForm extends TFormGroup<DateTimeRange> {
   public fillMissingRangePart(): void {
     // Auto-fill endDateTime if startDateTime is non-empty, and endDateTime is empty.
     if (this.startDateTime && !this.endDateTime) {
-      (<TFormControl<Date>>this.get('endDateTime')).setValue(
+      (<FormControl<Date>>this.get('endDateTime')).setValue(
         this._dateTimeHelper.addHours(this.startDateTime, 1),
         { emitEvent: false, emitViewToModelChange: false }
       );
@@ -52,7 +52,7 @@ export class DateTimeRangeForm extends TFormGroup<DateTimeRange> {
 
     // Auto-fill startDateTime if endDateTime is non-empty, and startDateTime is empty.
     if (!this.startDateTime && this.endDateTime) {
-      (<TFormControl<Date>>this.get('startDateTime')).setValue(
+      (<FormControl<Date>>this.get('startDateTime')).setValue(
         this._dateTimeHelper.addHours(this.endDateTime, -1),
         <any>{ emitEvent: false, emitViewToModelChange: false }
       );

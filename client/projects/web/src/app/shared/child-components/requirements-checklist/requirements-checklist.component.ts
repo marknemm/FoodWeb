@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { FormFieldService, TFormControl, TFormGroup } from '~web/forms';
+import { FormControl, Validators } from '@angular/forms';
+import { FormFieldService, TFormGroup } from '~web/forms';
 
 @Component({
   selector: 'foodweb-requirements-checklist',
@@ -50,7 +50,7 @@ export class RequirementsChecklistComponent implements OnChanges {
         this.checklistForm.removeControl(controlName);
       }
       for (let i = 0; i < this.checklistMembers.length; i++) {
-        this.checklistForm.addControl(`check${i}`, new TFormControl<boolean>(false, Validators.requiredTrue));
+        this.checklistForm.addControl(`check${i}`, new FormControl<boolean>(false, Validators.requiredTrue));
       }
     }
   }

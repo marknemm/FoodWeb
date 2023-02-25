@@ -1,8 +1,7 @@
-import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, ValidatorFn } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormControl, ValidatorFn } from '@angular/forms';
 import { FormState, TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
 import { DeriveAbstractControlType } from '~web/forms/interfaces/template-type-util';
 import { TFormArray } from './t-form-array';
-import { TFormControl } from './t-form-control';
 
 /**
  * A typed auto-resizing version of the built-in `FormArray`.
@@ -15,7 +14,7 @@ import { TFormControl } from './t-form-control';
 export class FlexFormArray<
   T,
   V = DeriveAbstractControlType<T>,
-  A extends TAbstractControl<V> = T extends TAbstractControl<V> ? T : TFormControl<V>
+  A extends TAbstractControl<V> = T extends TAbstractControl<V> ? T : FormControl<V>
 > extends TFormArray<T, V, A> {
 
   /**
@@ -188,7 +187,7 @@ export class FlexFormArray<
   protected _genEmptyMember(): A {
     return (this.memberInit)
       ? this.memberInit()
-      : <any>new TFormControl<V>();
+      : <any>new FormControl<V>(null);
   }
 
   protected _onElementValueChanges(source: AbstractControl): void {

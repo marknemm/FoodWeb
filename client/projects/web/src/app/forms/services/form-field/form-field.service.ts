@@ -1,9 +1,8 @@
 import { EventEmitter, Injectable, OnDestroy, Optional, Self } from '@angular/core';
-import { ControlContainer, ControlValueAccessor, NgControl, NgModel } from '@angular/forms';
+import { ControlContainer, ControlValueAccessor, FormControl, NgControl, NgModel } from '@angular/forms';
 import { BehaviorSubject, merge, Observable, OperatorFunction, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
-import { TFormControl } from '~web/forms/classes/t-form-control';
 import { FormFieldConfig } from '~web/forms/interfaces/form-field-config';
 import { DeriveAbstractControl, DeriveAbstractControlType } from '~web/forms/interfaces/template-type-util';
 import { FormMonitorService } from '~web/forms/services/form-monitor/form-monitor.service';
@@ -46,7 +45,7 @@ abstract class _FormFieldService<
   /**
    * The registered abstract control that will have external values and disabled state changes written to it.
    */
-  private _control: C = new TFormControl<V>() as any; // Default control to handle value input before ngOnInit registration/injection.
+  private _control: C = new FormControl<V>(null) as any; // Default control to handle value input before ngOnInit registration/injection.
 
   /**
    * Emits all value changes within the registered {@link control} that do not have the `{ emitEvent: false }` option.

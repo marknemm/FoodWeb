@@ -1,5 +1,6 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
-import { FormFieldService, TFormControl } from '~web/forms';
+import { FormControl } from '@angular/forms';
+import { FormFieldService } from '~web/forms';
 
 @Component({
   selector: 'foodweb-username',
@@ -20,7 +21,7 @@ export class UsernameComponent implements OnInit {
     private _formFieldService: FormFieldService<string>
   ) {}
 
-  get formControl(): TFormControl<string> {
+  get formControl(): FormControl<string> {
     return this._formFieldService.control;
   }
 

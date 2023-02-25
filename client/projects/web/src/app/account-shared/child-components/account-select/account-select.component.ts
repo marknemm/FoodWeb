@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { FloatLabelType } from '@angular/material/form-field';
 import { AccountAutocompleteItem, AccountHelper, AccountType, DeepReadonly } from '~shared';
 import { AccountAutocompleteService } from '~web/account-shared/services/account-autocomplete/account-autocomplete.service';
-import { FormFieldService, TFormControl } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { ImmutableStore } from '~web/shared/classes/immutable-store';
 
 @Component({
@@ -18,7 +19,7 @@ export class AccountSelectComponent implements OnInit {
   @Input() floatLabel: FloatLabelType = 'auto';
   @Input() placeholder = 'Select an Account';
 
-  readonly filterCtrl = new TFormControl<string>();
+  readonly filterCtrl = new FormControl<string>('');
 
   constructor(
     public accountHelper: AccountHelper,
@@ -33,13 +34,13 @@ export class AccountSelectComponent implements OnInit {
     return this.accountAutocompleteService.accountAutocompleteStore;
   }
 
-  get formControl(): TFormControl<AccountAutocompleteItem> {
+  get formControl(): FormControl<AccountAutocompleteItem> {
     return this._formFieldService.control;
   }
 
   ngOnInit() {
     this._formFieldService.injectControl({
-      genDefault: () => new TFormControl<AccountAutocompleteItem>()
+      genDefault: () => new FormControl<AccountAutocompleteItem>(null)
     });
     this.syncFilterStr();
   }

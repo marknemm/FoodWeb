@@ -1,7 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormFieldService, TFormControl } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 
 @Component({
   selector: 'foodweb-hybrid-date-time',
@@ -38,13 +39,13 @@ export class DateTimeComponent implements OnChanges {
     private _dateTimeService: DateTimeService,
     private _formFieldService: FormFieldService<string, Date>
   ) {
-    this._formFieldService.registerControl(new TFormControl<string>(), {
+    this._formFieldService.registerControl(new FormControl<string>(''), {
       valueInConverter: (date: Date) => (date ? date.toISOString() : ''),
       valueOutConverter: (dateStr: string) => (dateStr ? new Date(dateStr) : null)
     });
   }
 
-  get dateTimeFormControl(): TFormControl<string> {
+  get dateTimeFormControl(): FormControl<string> {
     return this._formFieldService.control;
   }
 

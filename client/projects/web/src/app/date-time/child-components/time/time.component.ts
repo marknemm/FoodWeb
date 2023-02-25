@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormFieldService, TFormControl } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 
 @Component({
   selector: 'foodweb-time',
@@ -39,7 +40,7 @@ export class TimeComponent implements OnInit {
     return (this.value ? this.value : this.defaultTime);
   }
 
-  get formControl(): TFormControl<string> {
+  get formControl(): FormControl<string> {
     return this._formFieldService.control;
   }
 

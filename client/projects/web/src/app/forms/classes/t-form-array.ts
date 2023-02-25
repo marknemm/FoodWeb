@@ -1,8 +1,7 @@
-import { AbstractControlOptions, AsyncValidatorFn, FormArray, ValidatorFn } from '@angular/forms';
+import { AbstractControlOptions, AsyncValidatorFn, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { FormState, TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
 import { DeriveAbstractControlType } from '~web/forms/interfaces/template-type-util';
-import { TFormControl } from './t-form-control';
 
 /**
  * A typed version of the built-in `FormArray`.
@@ -13,7 +12,7 @@ import { TFormControl } from './t-form-control';
 export class TFormArray<
   T,
   V = DeriveAbstractControlType<T>,
-  A extends TAbstractControl<V> = T extends TAbstractControl<V> ? T : TFormControl<V>
+  A extends TAbstractControl<V> = T extends TAbstractControl<V> ? T : FormControl<V>
 > extends FormArray implements TAbstractControl<V[]> {
 
   /**

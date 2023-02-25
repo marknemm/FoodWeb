@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { AccountCategory, AccountType } from '~shared';
-import { FormFieldService, TFormControl } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
@@ -34,7 +35,7 @@ export class AccountTypeComponent implements OnInit {
     return this._accountTypes;
   }
 
-  get formControl(): TFormControl<AccountType> {
+  get formControl(): FormControl<AccountType> {
     return this._formFieldService.control;
   }
 
@@ -77,7 +78,7 @@ export class AccountTypeComponent implements OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new TFormControl<AccountType>()
+      genDefault: () => new FormControl<AccountType>(null)
     });
   }
 

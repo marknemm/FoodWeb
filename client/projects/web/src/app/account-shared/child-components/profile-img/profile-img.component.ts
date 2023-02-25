@@ -1,6 +1,7 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { AccountProfileImgPlaceholder } from '~shared';
-import { FormFieldService, TFormControl } from '~web/forms';
+import { FormFieldService } from '~web/forms';
 import { SizeThresholds } from '~web/shared/interfaces/size-thresholds';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { ScreenSizeService } from '~web/shared/services/screen-size/screen-size.service';
@@ -47,7 +48,7 @@ export class ProfileImgComponent implements OnInit {
     return Math.floor(this.currentSize * this.fontSizeRatio);
   }
 
-  get formControl(): TFormControl<string> {
+  get formControl(): FormControl<string> {
     return this._formFieldService.control;
   }
 
