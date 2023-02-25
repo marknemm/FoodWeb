@@ -22,7 +22,7 @@ export class LeftNavComponent implements OnInit, OnChanges, OnDestroy {
    */
   @Input() windowSizeThreshPx: number;
 
-  private readonly _destroyThresholdObs$ = new Subject();
+  private readonly _destroyThresholdObs$ = new Subject<void>();
 
   constructor(
     public pageProgressService: PageProgressService,

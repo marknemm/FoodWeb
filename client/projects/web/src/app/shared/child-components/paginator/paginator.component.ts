@@ -17,7 +17,7 @@ export class PaginatorComponent implements OnInit, OnDestroy {
   @Input() pageSizeOptions: number[] = [10, 20, 50];
   @Input() limit: number;
 
-  private destroy$ = new Subject();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private _activatedRoute: ActivatedRoute,

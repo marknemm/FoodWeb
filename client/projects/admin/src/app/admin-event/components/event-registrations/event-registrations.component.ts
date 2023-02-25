@@ -21,7 +21,7 @@ export class EventRegistrationsComponent implements OnInit, OnDestroy {
   ]);
   readonly registrationsDisplayCols = ['fullName', 'email', 'phoneNumber'];
 
-  private _destroy$ = new Subject();
+  private _destroy$ = new Subject<void>();
   private _eventRegistrationsTitle = 'Loading Registrations...';
 
   constructor(

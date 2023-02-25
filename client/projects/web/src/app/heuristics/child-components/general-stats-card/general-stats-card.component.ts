@@ -11,7 +11,7 @@ import { GeneralStats, GeneralStatsService } from '~web/heuristics/services/heur
 export class GeneralStatsCardComponent implements OnInit, OnDestroy {
 
   private _generalStats: GeneralStats;
-  private _destroy$ = new Subject();
+  private _destroy$ = new Subject<void>();
 
   constructor(
     public generalStatsService: GeneralStatsService

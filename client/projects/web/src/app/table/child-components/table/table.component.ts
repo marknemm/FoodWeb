@@ -53,7 +53,7 @@ export class TableComponent<T = any> implements OnChanges, AfterContentInit, OnD
   private _prevRowDefs: MatRowDef<T>[] = [];
   private _prevFooterRowDefs: MatFooterRowDef[] = [];
   private _prevColumnDefs: MatColumnDef[] = [];
-  private _destroy$ = new Subject();
+  private _destroy$ = new Subject<void>();
 
   constructor() {}
 

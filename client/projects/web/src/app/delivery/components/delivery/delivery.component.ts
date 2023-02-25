@@ -17,7 +17,7 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 export class DeliveryComponent implements OnInit {
 
   protected _deliveryNotFound = false;
-  protected _destroy$ = new Subject();
+  protected _destroy$ = new Subject<void>();
   protected _donation: Donation;
   protected _myDelivery = false;
 

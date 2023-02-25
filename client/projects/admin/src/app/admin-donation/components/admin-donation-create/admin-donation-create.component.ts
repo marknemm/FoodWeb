@@ -13,7 +13,7 @@ import { SessionService } from '~web/session/services/session/session.service';
 })
 export class AdminDonationCreateComponent implements OnInit, OnDestroy {
 
-  private _destroy$ = new Subject();
+  private _destroy$ = new Subject<void>();
   private _formGroup: AdminDonationForm;
   private _savedDonation: Donation = null;
 

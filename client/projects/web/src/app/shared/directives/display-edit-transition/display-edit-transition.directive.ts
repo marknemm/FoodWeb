@@ -18,7 +18,7 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
 
   readonly container: HTMLElement;
 
-  private _destory$ = new Subject();
+  private _destroy$ = new Subject<void>();
   private _resizeObserver = new ResizeObserver(() => this._recalcContainerHeight());
 
   constructor(elementRef: ElementRef) {
@@ -56,7 +56,7 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
   }
 
   /**
-   * Recalculates the display/opaicty (visibility) styles and the height for the host container element.
+   * Recalculates the display/opacity (visibility) styles and the height for the host container element.
    */
   recalcStyles(): void {
     const initContainerOverflow = this.container.style.overflow;
@@ -86,6 +86,6 @@ export class DisplayEditTransitionDirective implements OnInit, OnChanges, OnDest
 
   ngOnDestroy(): void {
     // Cleanup any RxJS subscriptions.
-    this._destory$.next();
+    this._destroy$.next();
   }
 }

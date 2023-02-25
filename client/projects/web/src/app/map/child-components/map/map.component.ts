@@ -28,7 +28,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
   optionsForm = new MapOptionsForm();
 
-  private _destroy$ = new Subject();
+  private _destroy$ = new Subject<void>();
   private _selWaypointMarker: WaypointMarker;
 
   constructor(

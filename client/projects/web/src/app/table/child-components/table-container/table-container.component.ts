@@ -24,7 +24,7 @@ export class TableContainerComponent<T = any> implements AfterViewInit, OnDestro
 
   dataSource: TableDataSource<T>;
 
-  private _destroy$ = new Subject();
+  private _destroy$ = new Subject<void>();
 
   ngAfterViewInit() {
     setTimeout(() => {

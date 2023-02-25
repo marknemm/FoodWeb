@@ -17,7 +17,7 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class AdminDonationEditComponent implements OnInit, OnDestroy {
 
-  private _destroy$ = new Subject();
+  private _destroy$ = new Subject<void>();
   private _donationDetailsUrl = '';
   private _donationNotFound = false;
   private _formGroup: AdminDonationForm;

@@ -20,7 +20,7 @@ export class NotificationListComponent implements OnInit, OnDestroy {
 
   @ViewChild(IonContent, { static: true }) ionContent: IonContent;
 
-  private readonly _destroy$ = new Subject();
+  private readonly _destroy$ = new Subject<void>();
 
   constructor(
     public listQueryService: ListQueryService<Notification>,

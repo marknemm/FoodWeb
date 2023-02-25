@@ -14,7 +14,7 @@ export class NotificationsMenuComponent implements OnInit, OnDestroy {
 
   readonly faCog = faCog;
 
-  private _destroy$ = new Subject();
+  private _destroy$ = new Subject<void>();
   private _previewNotifications: Notification[] = [];
 
   constructor(

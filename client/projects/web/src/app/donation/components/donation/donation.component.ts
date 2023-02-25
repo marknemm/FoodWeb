@@ -16,7 +16,7 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 })
 export class DonationComponent implements OnInit, OnDestroy {
 
-  protected _destroy$ = new Subject();
+  protected _destroy$ = new Subject<void>();
   protected _donation: Donation;
   protected _donationNotFound = false;
   protected _myClaim = false;

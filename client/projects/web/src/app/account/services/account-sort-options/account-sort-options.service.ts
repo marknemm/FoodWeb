@@ -16,7 +16,7 @@ export class AccountSortOptionsService implements OnDestroy {
     { name: 'Email Address', value: 'email' }
   ];
 
-  private readonly _destroy$ = new Subject();
+  private readonly _destroy$ = new Subject<void>();
 
   constructor(activatedRoute: ActivatedRoute) {
     this.refresh(activatedRoute.snapshot.paramMap.get('accountType') as AccountType);

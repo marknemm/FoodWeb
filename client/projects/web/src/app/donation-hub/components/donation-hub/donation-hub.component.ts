@@ -20,7 +20,7 @@ export class DonationHubComponent implements OnInit, OnDestroy {
   readonly pledgeSelectRoute = ['/', 'donation-hub', 'pledge'];
   readonly postDeleteRoute = ['/', 'home'];
 
-  protected _destroy$ = new Subject();
+  protected _destroy$ = new Subject<void>();
   protected _donationHub: DonationHub;
   protected _donationHubNotFound = false;
   protected _pledges: DonationHubPledge[] = [];

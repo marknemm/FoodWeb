@@ -18,7 +18,7 @@ export class DonationHubPledgeComponent implements OnInit, OnDestroy {
 
   readonly postDeleteRoute = ['/', 'donation-hub'];
 
-  protected _destroy$ = new Subject();
+  protected _destroy$ = new Subject<void>();
   protected _donationHubPledge: DonationHubPledge;
   protected _donationHubPledgeNotFound = false;
 

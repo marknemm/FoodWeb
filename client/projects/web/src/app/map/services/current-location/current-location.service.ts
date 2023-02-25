@@ -34,7 +34,7 @@ export class CurrentLocationService {
 
   watchPosition(): Observable<GeolocationPosition> {
     if (!this._watchPosition$) {
-      this._watchPosition$ = new Subject();
+      this._watchPosition$ = new Subject<GeolocationPosition>();
       this._watchId = navigator.geolocation.watchPosition(
         (position: GeolocationPosition) => this._watchPosition$.next(position),
         (err: GeolocationPositionError) => this._watchPosition$.error(err),
