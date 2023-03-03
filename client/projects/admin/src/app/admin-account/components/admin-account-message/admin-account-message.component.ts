@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { faFlask } from '@fortawesome/free-solid-svg-icons';
 import { AdminAccountMessageForm } from '~admin/admin-account/forms/admin-account-message.form';
 import { AdminAccountMessageService } from '~admin/admin-account/services/admin-account-message/admin-account-message.service';
-import { AccountReadRequest } from '~shared';
+import { AccountReadRequest, SendMessageRequest } from '~shared';
 import { AccountFiltersForm } from '~web/account/forms/account-filters.form';
 import { ShellService } from '~web/shell/services/shell/shell.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
@@ -43,12 +43,12 @@ export class AdminAccountMessageComponent implements OnInit {
   sendMessage(): void {
     if (this.accountMessageForm.valid) {
       const accountFilters: AccountReadRequest = this._activatedRoute.snapshot.queryParams;
-      this._accountMessageService.sendMessage(this.accountMessageForm.value, accountFilters).subscribe(() => {});
+      this._accountMessageService.sendMessage(<SendMessageRequest> this.accountMessageForm.value, accountFilters).subscribe(() => {});
     }
   }
 
   testMessage(): void {
-    this._accountMessageService.testMessage(this.accountMessageForm.value).subscribe(() => {});
+    this._accountMessageService.testMessage(<SendMessageRequest> this.accountMessageForm.value).subscribe(() => {});
   }
 
   updateFilterQueryParams(filters: AccountReadRequest): void {

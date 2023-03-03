@@ -1,4 +1,4 @@
-import { AbstractControlOptions, AsyncValidatorFn, FormBuilder, FormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormBuilder, FormGroup, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { FormState, TAbstractControl, UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
 
@@ -218,3 +218,7 @@ export type TFormControlMembers<T> = {
     | [T[K], ValidatorFn]
     | [T[K], ValidatorFn[]]
 };
+
+export type FormGroupT<T> = {
+  [K in keyof T]?: AbstractControl<T[K]>
+}

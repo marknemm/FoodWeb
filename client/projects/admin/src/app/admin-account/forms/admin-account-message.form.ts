@@ -1,13 +1,17 @@
-import { Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SendMessageRequest } from '~shared';
-import { TFormGroup } from '~web/forms';
 
-export class AdminAccountMessageForm extends TFormGroup<SendMessageRequest> {
+export interface AdminAccountMessageFormT {
+  messageBodyHTML: FormControl<string>,
+  messageSubject: FormControl<string>
+}
+
+export class AdminAccountMessageForm extends FormGroup<AdminAccountMessageFormT> {
 
   constructor(sendMessageReq?: Partial<SendMessageRequest>) {
     super({
-      messageBodyHTML: ['', Validators.required],
-      messageSubject: ['', Validators.required]
+      messageBodyHTML: new FormControl('', { validators: Validators.required, nonNullable: true }),
+      messageSubject: new FormControl('', { validators: Validators.required, nonNullable: true })
     });
     if (sendMessageReq) {
       this.patchValue(sendMessageReq);
