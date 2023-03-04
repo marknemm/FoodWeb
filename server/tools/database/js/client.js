@@ -45,7 +45,7 @@ async function connect() {
 }
 
 /**
- * Gets the FoodWeb development database client configruation based on the server web project's .env settings.
+ * Gets the FoodWeb development database client configuration based on the server web project's .env settings.
  * @return {Promise<ClientConfig>} A promise that resolves to the database client configuration.
  */
 async function getDbConfig() {

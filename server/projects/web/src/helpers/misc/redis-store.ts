@@ -67,6 +67,10 @@ export class RedisStore {
    * @return A promise that resolves to the redis URL.
    */
   private async getUrl(): Promise<string> {
+    if (env.REDIS_TLS_URL) { // Have full (prod) URL configured with TLS built-in.
+      return env.REDIS_TLS_URL;
+    }
+
     // Check for a reachable redis host. First check the configured environment variable for the URL, then check common dev URLs.
     const redisHosts: string[] = [env.REDIS_URL, 'localhost', 'redis'];
     const redisPort: number = getPort(env.REDIS_URL, 6379);

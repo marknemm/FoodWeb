@@ -57,6 +57,7 @@ export interface FoodWebEnv {
   QA?: boolean;
   REDIS_PASSWORD?: string;
   REDIS_SSL?: boolean;
+  REDIS_TLS_URL?: string;
   REDIS_URL?: string;
   SERVER_HOST_ADDRESS_READABLE?: string;
   SERVER_HOST_ADDRESS?: string;
@@ -100,18 +101,6 @@ export async function initEnv(): Promise<FoodWebEnv> {
 }
 
 /**
- * Initializes Express app environment variables within a local/docker dev environment by referencing .env file.
- * If environment variables are set on the host machine/container, those will take precedence, and .env will not be referenced.
- * @return The initialized FoodWeb environment variable set.
- */
-function initFromDotEnvFile(): FoodWebEnv {
-
-
-
-  return refineEnv();
-}
-
-/**
  * Refines the types & values of the members of the raw global process.env object without modifying it directly.
  * @return The refined FoodWeb environment variable set.
  */
@@ -149,7 +138,9 @@ function refineEnv(): FoodWebEnv {
 
   refinedEnv.COUNTRY = refinedEnv.COUNTRY ?? 'United States';
 
-  refinedEnv.DATABASE_PORT = refinedEnv.DATABASE_PORT ?? 5432;
+  if (!refinedEnv.DATABASE_PORT && !refinedEnv.DATABASE_URL) {
+    refinedEnv.DATABASE_PORT = 5432;
+  }
 
   refinedEnv.DEVELOPMENT = refinedEnv.DEVELOPMENT || (!refinedEnv.PRODUCTION && !refinedEnv.QA);
 
