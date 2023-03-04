@@ -6,7 +6,7 @@
   "main": "server/dist/server/src/index.js",
   "scripts": {
     "archive": "rimraf foodweb.zip && git archive -o foodweb.zip $(git stash create)",
-    "build": "cd ./server && npm run build web && cd ../client && npm run build && cd ../",
+    "build": "cd ./server && npm run build web && cd ../client && npm run build web && cd ../",
     "clean": "cd ./server && npm run clean && cd ../client && npm run clean && cd ../shared && npm run clean && cd ../ && rimraf foodweb.zip && rimraf *.log",
     "deploy": "npm run archive && eb deploy",
     "lint": "cd ./server && npm run lint all && cd ../client && npm run lint && cd ../",
