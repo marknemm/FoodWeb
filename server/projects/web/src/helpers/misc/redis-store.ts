@@ -50,7 +50,9 @@ export class RedisStore {
     this._client = redis.createClient({
       url: await this.getUrl(),
       password: env.REDIS_PASSWORD,
-      tls: { rejectUnauthorized: (env.REDIS_REJECT_UNAUTHORIZED ?? true) },
+      tls: (env.REDIS_SSL || env.REDIS_TLS_URL)
+        ? { rejectUnauthorized: (env.REDIS_REJECT_UNAUTHORIZED ?? true) }
+        : false,
       retry_strategy: (retryOpts: RetryStrategyOptions) => {
         if (retryOpts.error && retryOpts.error.code === 'ECONNREFUSED') {
           return new Error('The server refused the connection');
