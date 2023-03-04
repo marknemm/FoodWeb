@@ -25,6 +25,7 @@ export async function initOrm(): Promise<Connection> {
     connection = await createConnection({
       type: 'postgres',
       host,
+      url: env.DATABASE_URL,
       port: env.DATABASE_PORT,
       username: env.DATABASE_USERNAME,
       password: env.DATABASE_PASSWORD,
