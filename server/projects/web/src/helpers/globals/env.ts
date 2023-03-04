@@ -1,4 +1,3 @@
-import { GetParametersByPathCommand, GetParametersByPathCommandOutput, SSMClient } from '@aws-sdk/client-ssm';
 import * as admin from 'firebase-admin';
 import { isEmpty } from 'lodash';
 import { appPaths } from './paths';
@@ -82,32 +81,22 @@ export interface FoodWebEnv {
  */
 export async function initEnv(): Promise<FoodWebEnv> {
   if (isEmpty(env)) {
-    env = (process.env.PRODUCTION === 'true' || process.env.QA === 'true')
-      ? await initFromSSMParamStore()
-      : initFromDotEnvFile();
+    // If in a development environment, load environment variables from .env file.
+    if (process.env.PRODUCTION !== 'true' && process.env.QA !== 'true') {
+      const envDir: string = appPaths.serverProjectDir;
+
+      (envDir)
+        ? dotenv.config({ path: path.join(envDir, '.env') })
+        : dotenv.config(); // Auto-lookup .env in current/parent directories.
+
+      if (!process.env.SERVER_PORT) {
+        throw new Error('Could not resolve the .env file' + envDir ? ` with envDir: ${envDir}` : '');
+      }
+    }
+
+    env = refineEnv();
   }
   return env;
-}
-
-async function initFromSSMParamStore(): Promise<FoodWebEnv> {
-  const ssmClient = new SSMClient({ region: 'us-east-2' });
-
-  let nextToken: string;
-  do {
-    const command = new GetParametersByPathCommand({
-      Path: `/foodweb/${process.env.PRODUCTION === 'true' ? 'production' : 'qa'}`,
-      NextToken: nextToken
-    });
-    const ssmResponse: GetParametersByPathCommandOutput = await ssmClient.send(command);
-
-    for (const parameter of ssmResponse.Parameters) {
-      process.env[parameter.Name.split('/').pop()] = parameter.Value;
-    }
-    nextToken = ssmResponse.NextToken;
-  } while (nextToken);
-
-
-  return refineEnv();
 }
 
 /**
@@ -116,18 +105,8 @@ async function initFromSSMParamStore(): Promise<FoodWebEnv> {
  * @return The initialized FoodWeb environment variable set.
  */
 function initFromDotEnvFile(): FoodWebEnv {
-  const envDir: string = appPaths.serverProjectDir;
 
-  // If in a development environment, load environment variables from .env file.
-  if (process.env.PRODUCTION !== 'true' && process.env.QA !== 'true') {
-    (envDir)
-      ? dotenv.config({ path: path.join(envDir, '.env') })
-      : dotenv.config(); // Auto-lookup .env in current/parent directories.
 
-    if (!process.env.SERVER_PORT) {
-      throw new Error('Could not resolve the .env file' + envDir ? ` with envDir: ${envDir}` : '');
-    }
-  }
 
   return refineEnv();
 }
