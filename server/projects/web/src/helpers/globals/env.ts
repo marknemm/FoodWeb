@@ -18,6 +18,7 @@ export interface FoodWebEnv {
   ADMIN_EMAILS?: string[];
   CORS_WHITELIST?: string[];
   COUNTRY?: string;
+  DATABASE_CA_ROOT_PEM?: string;
   DATABASE_DATABASE?: string;
   DATABASE_HOST?: string;
   DATABASE_LOGGER?: string;
