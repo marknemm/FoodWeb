@@ -56,6 +56,7 @@ export interface FoodWebEnv {
   PRODUCTION?: boolean;
   QA?: boolean;
   REDIS_PASSWORD?: string;
+  REDIS_REJECT_UNAUTHORIZED?: boolean;
   REDIS_SSL?: boolean;
   REDIS_TLS_URL?: string;
   REDIS_URL?: string;

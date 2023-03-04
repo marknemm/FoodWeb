@@ -37,7 +37,7 @@ export async function initOrm(): Promise<Connection> {
       logging: env.DATABASE_LOGGING,
       logger: env.DATABASE_LOGGER as any,
       ssl: env.DATABASE_SSL
-        ? { rejectUnauthorized: !!env.DATABASE_REJECT_UNAUTHORIZED }
+        ? { rejectUnauthorized: (env.DATABASE_REJECT_UNAUTHORIZED ?? true) }
         : false
     }).catch((err) => {
       console.error('Error connecting to database');
