@@ -9,6 +9,7 @@ import multer = require('multer');
 import boolParser = require('express-query-boolean');
 import intParser = require('express-query-int');
 import express = require('express');
+import { requireHTTPS } from './require-https.middleware';
 
 /**
  * Initializes all middleware for a given Express app.
@@ -28,6 +29,7 @@ export async function initMiddleware(app: Application) {
   app.use(intParser());
   app.use(express.static(appPaths.clientBuildDir));
   app.use(express.static(appPaths.publicDir));
+  app.use(requireHTTPS);
 
   // Init all middleware with async init processing.
   app.use(await session());
