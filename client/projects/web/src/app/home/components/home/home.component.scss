@@ -2,82 +2,44 @@
 $side-container-max-width: 270px;
 
 .home {
-  &.has-side-content {
-    .main-content {
-      max-width: calc(100% - #{$side-container-max-width});
-      padding-right: 20px;
+  .app-download {
+    text-align: center;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+
+    img {
+      height: auto;
+    }
+
+    .app-store-badge {
+      width: 113%;
       box-sizing: border-box;
-      float: left;
+      padding: 6%;
+      margin-left: -6%;
+      margin-bottom: -6%;
+    }
+
+    .google-play-badge {
+      width: 130%;
+      margin-left: -21%;
+      margin-top: -2.5%;
+      margin-bottom: -6%;
+    }
+  }
+
+  @media only screen and (max-width: 1060px) {
+    .main-content {
+      max-width: 100%;
+      padding-right: 0;
+      float: none;
     }
 
     .side-content {
-      position: relative;
-      width: $side-container-max-width;
-      float: right;
-    }
-
-    .app-download {
-      text-align: center;
-
-      img {
-        height: auto;
-      }
-
-      .app-store-badge {
-        width: 113%;
-        box-sizing: border-box;
-        padding: 6%;
-        margin-left: -6%;
-        margin-bottom: -6%;
-      }
-
-      .google-play-badge {
-        width: 130%;
-        margin-left: -21%;
-        margin-top: -2.5%;
-        margin-bottom: -6%;
-      }
-
-      @media only screen and (max-width: $md) {
-        max-width: 300px;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 14px;
-
-        .app-store-badge {
-          margin-top: -6%;
-        }
-
-        .google-play-badge {
-          margin-top: -8%;
-        }
-      }
-    }
-
-    .login-signup {
-      display: inline-block;
-      margin: 2% 0%;
       width: 100%;
-      /** Display buttons inline
-       *display: inline-grid;
-       *margin:2%;
-       *width: 46%;
-      **/
-    }
-
-    @media only screen and (max-width: 1060px) {
-      .main-content {
-        max-width: 100%;
-        padding-right: 0;
-        float: none;
-      }
-
-      .side-content {
-        width: 100%;
-        float: none;
-        margin-left: auto;
-        margin-right: auto;
-      }
+      float: none;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 
