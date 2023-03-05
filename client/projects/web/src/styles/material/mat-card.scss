@@ -34,8 +34,6 @@ mat-card.mat-card {
   mat-card-title.mat-card-title {
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
-    color: $accent;
-    font: 500 20px Avenir;
 
     .mat-toolbar:first-child {
       margin: -16px 0px 0px -16px;
@@ -45,12 +43,17 @@ mat-card.mat-card {
       border-radius: inherit;
     }
 
-    @media only screen and (max-width: $sm) {
-      font-size: 18px;
-    }
+    &, h2 {
+      color: $accent;
+      font: 500 20px Avenir;
 
-    @media only screen and (max-width: $mat-mobile) {
-      font-size: 16px;
+      @media only screen and (max-width: $sm) {
+        font-size: 18px;
+      }
+
+      @media only screen and (max-width: $mat-mobile) {
+        font-size: 16px;
+      }
     }
   }
 

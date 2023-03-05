@@ -1,8 +1,10 @@
 <footer>
   <small>
     &copy; <span class="d-sm-none">Copyright</span> {{ year }}, WNY Food Web Inc. |
-    <a [routerLink]="['/', 'information', 'about']">About Us</a> |
     <a [routerLink]="['/', 'information', 'privacy-policy']">Privacy Policy</a> |
     <a [routerLink]="['/', 'information', 'cookie-policy']">Cookie Policy</a>
+    <ng-container *ngFor="let attribution of attributions">
+      | <span class="attribution" [innerHTML]="attribution"></span>
+    </ng-container>
   </small>
 </footer>

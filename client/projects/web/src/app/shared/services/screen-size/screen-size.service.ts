@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NEVER, Observable, of, Subject } from 'rxjs';
-import { finalize, map, switchMap, takeUntil } from 'rxjs/operators';
+import { finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { SizeThresholds } from '~web/shared/interfaces/size-thresholds';
 import { ThresholdSide } from '~web/shared/interfaces/threshold-side';
 export { SizeThresholds, ThresholdSide };

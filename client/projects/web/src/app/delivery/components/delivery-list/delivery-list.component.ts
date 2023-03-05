@@ -6,7 +6,7 @@ import { DonationFiltersForm } from '~web/donation-shared/forms/donation-filters
 import { DonationSortOptionsService } from '~web/donation-shared/services/donation-sort-options/donation-sort-options.service';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-delivery-list',
@@ -27,7 +27,7 @@ export class DeliveryListComponent implements OnInit {
     public donationHelper: DonationHelper,
     public donationSortOptionsService: DonationSortOptionsService,
     public listQueryService: ListQueryService<Donation>,
-    public pageTitleService: PageTitleService,
+    public shellService: ShellService,
     private _deliveryReadService: DeliveryReadService,
     private _router: Router,
   ) {}
@@ -43,7 +43,7 @@ export class DeliveryListComponent implements OnInit {
   ngOnInit(): void {
     this._myDeliveries = this._router.url.indexOf('/my') >= 0;
     this._donationStatuses = this.constantsService.getDeliveryStatuses(!this.myDeliveries);
-    this.pageTitleService.title = (this.myDeliveries)
+    this.shellService.pageTitle = (this.myDeliveries)
       ? 'My Deliveries'
       : 'Schedule Deliveries';
     this.listQueryService.load(

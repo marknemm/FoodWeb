@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EventReadService, FeaturedEvent } from '~web/event/services/event-read/event-read.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 import { SessionService } from '~web/session/services/session/session.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-home',
@@ -12,7 +13,6 @@ import { SessionService } from '~web/session/services/session/session.service';
 export class HomeComponent implements OnInit {
 
   readonly nowDate = new Date();
-  readonly christmasDayDate = new Date('12/25/2021');
 
   private _event: FeaturedEvent;
 
@@ -21,7 +21,12 @@ export class HomeComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _authService: AuthenticationService,
     private _eventReadService: EventReadService,
-  ) {}
+    shellService: ShellService,
+  ) {
+    shellService.footerAttributions = [
+      'Image by <a href="https://www.freepik.com/free-photo/copy-space-ingredients-noodles_8361833.htm#query=food%20background&position=23&from_view=search&track=ais#position=23&query=food%20background" target="_blank">Freepik</a>'
+    ];
+  }
 
   get event(): FeaturedEvent {
     return this._event;

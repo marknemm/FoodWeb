@@ -6,7 +6,7 @@ import { AccountHelper, DeliveryHelper, DonationHelper } from '~shared';
 import { DonationAction, DonationActionsService } from '~web/donation-shared/services/donation-actions/donation-actions.service';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
@@ -27,7 +27,7 @@ export class DonationComponent implements OnInit, OnDestroy {
     public accountHelper: AccountHelper,
     public donationHelper: DonationHelper,
     public deliveryHelper: DeliveryHelper,
-    public pageTitleService: PageTitleService,
+    public shellService: ShellService,
     public sessionService: SessionService,
     protected _activatedRoute: ActivatedRoute,
     protected _donationActionsService: DonationActionsService,

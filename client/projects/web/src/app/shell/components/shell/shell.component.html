@@ -1,13 +1,13 @@
-<foodweb-header>
+<foodweb-header navMenuId="leftnav" [pageTitle]="pageTitle" (toggleNavMenu)="toggleLeftNav()">
   <foodweb-header-nav class="header-nav"></foodweb-header-nav>
   <foodweb-login-menu class="header-action" *ngIf="!sessionService.loggedIn"></foodweb-login-menu>
   <foodweb-notifications-menu class="header-action" *ngIf="sessionService.loggedIn"></foodweb-notifications-menu>
   <foodweb-settings-menu class="header-action" *ngIf="sessionService.loggedIn"></foodweb-settings-menu>
 </foodweb-header>
-<foodweb-left-nav>
+<foodweb-left-nav navMenuId="leftnav">
   <foodweb-left-nav-items class="left-nav-items"></foodweb-left-nav-items>
   <div class="page-container">
     <router-outlet></router-outlet>
-    <foodweb-footer></foodweb-footer>
+    <foodweb-footer [attributions]="footerAttributions"></foodweb-footer>
   </div>
 </foodweb-left-nav>

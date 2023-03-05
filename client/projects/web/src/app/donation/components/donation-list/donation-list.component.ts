@@ -6,7 +6,7 @@ import { Donation, DonationReadService } from '~web/donation/services/donation-r
 import { SessionService } from '~web/session/services/session/session.service';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-donation-list',
@@ -24,7 +24,7 @@ export class DonationListComponent implements OnInit {
     public constantsService: ConstantsService,
     public donationSortOptionsService: DonationSortOptionsService,
     public listQueryService: ListQueryService<Donation>,
-    public pageTitleService: PageTitleService,
+    public shellService: ShellService,
     private _donationReadService: DonationReadService,
     private _router: Router,
     private _sessionService: SessionService

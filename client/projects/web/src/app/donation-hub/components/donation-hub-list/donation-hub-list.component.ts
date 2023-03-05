@@ -4,7 +4,7 @@ import { DonationHub } from '~shared';
 import { DonationHubFiltersForm } from '~web/donation-hub/forms/donation-hub-filters.form';
 import { DonationHubReadService } from '~web/donation-hub/services/donation-hub-read/donation-hub-read.service';
 import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 /**
  * A list of donation hub drop-off point teasers.
@@ -23,7 +23,7 @@ export class DonationHubListComponent implements OnInit {
 
   constructor(
     public listQueryService: ListQueryService<DonationHub>,
-    public pageTitleService: PageTitleService,
+    public shellService: ShellService,
     private _donationHubReadService: DonationHubReadService,
     private _router: Router,
   ) {}
@@ -34,7 +34,7 @@ export class DonationHubListComponent implements OnInit {
 
   ngOnInit(): void {
     this._myDonationHubs = (this._router.url.indexOf('/my') >= 0);
-    this.pageTitleService.title = (this.myDonationHubs)
+    this.shellService.pageTitle = (this.myDonationHubs)
       ? 'My Donation Hubs'
       : 'Pledge Donation';
     this.listQueryService.load(

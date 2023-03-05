@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'foodweb-footer',
@@ -7,8 +7,8 @@ import { Component } from '@angular/core';
 })
 export class FooterComponent {
 
-  readonly year = new Date().getFullYear();
+  @Input() attributions: string[] = [];
 
-  constructor() {}
+  readonly year = new Date().getFullYear();
 
 }

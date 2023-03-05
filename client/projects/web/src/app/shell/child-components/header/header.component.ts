@@ -1,7 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
-import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-header',
@@ -10,12 +8,15 @@ import { ShellService } from '~web/shell/services/shell/shell.service';
 })
 export class HeaderComponent {
 
+  @Input() navMenuId = '';
+  @Input() navOpened = false;
+  @Input() pageTitle = '';
   @Input() siteIconUri = './assets/IconImgSm.png';
   @Input() siteTitle = 'FoodWeb';
 
+  @Output() toggleNavMenu = new EventEmitter<void>();
+
   constructor(
     public pageProgressService: PageProgressService,
-    public pageTitleService: PageTitleService,
-    public shellService: ShellService,
   ) {}
 }

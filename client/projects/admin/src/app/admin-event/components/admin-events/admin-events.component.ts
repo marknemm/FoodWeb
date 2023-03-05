@@ -3,7 +3,7 @@ import { EventDeleteService } from '~admin/admin-event/services/event-delete/eve
 import { FeaturedEvent } from '~shared';
 import { EventsComponent } from '~web/event/components/events/events.component';
 import { EventReadService } from '~web/event/services/event-read/event-read.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-admin-events',
@@ -14,10 +14,10 @@ export class AdminEventsComponent extends EventsComponent {
 
   constructor(
     eventReadService: EventReadService,
-    pageTitleService: PageTitleService,
+    shellService: ShellService,
     private _eventDelete: EventDeleteService
   ) {
-    super(pageTitleService, eventReadService);
+    super(shellService, eventReadService);
   }
 
   deleteEvent(event: FeaturedEvent, idx: number): void {

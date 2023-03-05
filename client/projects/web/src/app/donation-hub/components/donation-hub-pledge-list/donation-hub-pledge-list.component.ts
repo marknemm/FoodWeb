@@ -4,7 +4,7 @@ import { DonationHubPledge } from '~shared';
 import { DonationHubPledgeFiltersForm } from '~web/donation-hub/forms/donation-hub-pledge-filters.form';
 import { DonationHubPledgeReadService } from '~web/donation-hub/services/donation-hub-pledge-read/donation-hub-pledge-read.service';
 import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-donation-hub-pledge-list',
@@ -20,7 +20,7 @@ export class DonationHubPledgeListComponent implements OnInit {
 
   constructor(
     public listQueryService: ListQueryService<DonationHubPledge>,
-    public pageTitleService: PageTitleService,
+    public shellService: ShellService,
     private _pledgeReadService: DonationHubPledgeReadService,
     private _router: Router,
   ) {}
@@ -31,7 +31,7 @@ export class DonationHubPledgeListComponent implements OnInit {
 
   ngOnInit(): void {
     this._myPledges = this._router.url.indexOf('/my') >= 0;
-    this.pageTitleService.title = (this._myPledges)
+    this.shellService.pageTitle = (this._myPledges)
       ? 'My Donation Pledges'
       : 'Donation Pledges';
     this.listQueryService.load(

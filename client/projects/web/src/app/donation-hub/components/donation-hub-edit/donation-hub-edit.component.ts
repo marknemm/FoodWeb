@@ -8,7 +8,7 @@ import { DonationHubReadService } from '~web/donation-hub/services/donation-hub-
 import { DonationHubUpdateService } from '~web/donation-hub/services/donation-hub-update/donation-hub-update.service';
 import { FormFieldService } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class DonationHubEditComponent implements OnInit {
   protected _originalDonationHub: DonationHub;
 
   constructor(
-    public pageTitleService: PageTitleService,
+    public shellService: ShellService,
     protected _activatedRoute: ActivatedRoute,
     protected _donationHubReadService: DonationHubReadService,
     protected _donationHubUpdateService: DonationHubUpdateService,

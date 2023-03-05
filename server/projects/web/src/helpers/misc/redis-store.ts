@@ -63,6 +63,7 @@ export class RedisStore {
         return (retryOpts.attempt * 200); // Max out during attempt 10 at 2000ms.
       }
     });
+    this._client.on('error', console.error);
   }
 
   /**

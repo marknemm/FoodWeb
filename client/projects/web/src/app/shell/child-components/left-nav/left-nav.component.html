@@ -1,5 +1,6 @@
 <mat-sidenav-container class="left-nav-container">
   <mat-sidenav
+    [id]="navMenuId"
     [mode]="shellService.leftNavMode"
     [ngClass]="{ sticky: shellService.sticky }"
     [fixedInViewport]="true"

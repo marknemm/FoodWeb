@@ -8,7 +8,7 @@ import path = require('path');
 initPaths('web', __dirname); // Initialize all global path constants and TS config path mappings for server.
 const app: Application = express();
 
-// Initialize & preprocess env variables either form AWS SSM Parm Store or local `.env` file.
+// Initialize & preprocess env variables either directly set in production server ENV or local `.env` file.
 initEnv()
   // Initialize all app middleware that pre-processes requests before being handled by REST route handlers.
   .then(() => require('~web/middleware/init.middleware').initMiddleware(app))
