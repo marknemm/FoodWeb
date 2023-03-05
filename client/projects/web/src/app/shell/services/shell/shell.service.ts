@@ -27,7 +27,7 @@ export class ShellService {
       filter((event: Event) => event instanceof NavigationStart),
       map((event: Event) => event as NavigationStart),
     ).subscribe((event: NavigationStart) => this._handleRouteChange(event));
-    setTimeout(() => this._handleRouteChange(router)); // Must invoke initially since NavigationStart will be missed on webapp load.
+    this._handleRouteChange(router); // Must invoke initially since NavigationStart will be missed on webapp load.
   }
 
   get leftNavMode(): MatDrawerMode {
@@ -76,7 +76,6 @@ export class ShellService {
       this._previousRoute = route;
       const preProcessedRoute: string = this._preprocessRoute(route);
       this.pageTitle = this._deriveDefaultPageTitle(preProcessedRoute);
-      console.log(this.pageTitle);
       this.footerAttributions = [];
     }
   }
