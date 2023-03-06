@@ -3,19 +3,20 @@ $side-container-max-width: 270px;
 
 .home {
   &:before {
-    position: fixed;
+    position: absolute;
     box-sizing: border-box;
     display: block;
     z-index: -1;
     content: "";
-    background: url("/assets/Copy-space-ingredients-for-noodles.jpg") no-repeat;
+    background: url("/assets/Copy-space-ingredients-for-noodles.jpg") no-repeat fixed;
     background-size: cover;
     top: 0;
     left: calc(50% - 50vw);
     width: 100vw;
     height: 100%;
 
-    @media only screen and (max-width: $md) {
+    @media only screen and (max-width: 991px) {
+      position: fixed;
       background: url("/assets/Copy-space-ingredients-for-noodles-mobile.jpg") no-repeat;
     }
   }
