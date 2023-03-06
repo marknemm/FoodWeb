@@ -212,6 +212,10 @@ a.no-hover {
   .d-inline-block.desktop {
     display: block !important;
   }
+
+  .desktop {
+    display: none;
+  }
 }
 
 .standalone-statement {

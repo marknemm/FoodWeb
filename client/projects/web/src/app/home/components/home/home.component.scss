@@ -3,7 +3,7 @@ $side-container-max-width: 270px;
 
 .home {
   &:before {
-    position: absolute;
+    position: fixed;
     box-sizing: border-box;
     display: block;
     z-index: 0;
@@ -64,8 +64,22 @@ $side-container-max-width: 270px;
     margin-bottom: 80px;
     padding-bottom: 30px;
 
+    a {
+      display: block;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     .mat-card {
       text-align: center;
+      border-radius: 20%;
+      color: $accent-darker;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
 
       .mat-card-content {
         font-size: 1.25em;
@@ -87,6 +101,10 @@ $side-container-max-width: 270px;
     @media only screen and (max-width: $mat-mobile) {
       padding-top: 10px;
 
+      a {
+        max-width: 200px;
+      }
+
       .mat-card {
         .mat-icon {
           font-size: 100px;
@@ -94,14 +112,22 @@ $side-container-max-width: 270px;
       }
     }
 
-    @media only screen and (max-width: 410px) {
-      .mat-card-content {
-        font-size: 1em;
-      }
-
+    @media only screen and (max-width: 420px) {
       .mat-card {
+        .mat-card-content {
+          font-size: 1.1em;
+        }
+
         .mat-icon {
           font-size: 70px;
+        }
+      }
+    }
+
+    @media only screen and (max-width: 375px) {
+      .mat-card {
+        .mat-card-content {
+          font-size: 1em;
         }
       }
     }

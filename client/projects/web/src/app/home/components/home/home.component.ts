@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
     shellService: ShellService,
   ) {
     shellService.footerAttributions = [
-      'Image by <a href="https://www.freepik.com/free-photo/copy-space-ingredients-noodles_8361833.htm#query=food%20background&position=23&from_view=search&track=ais#position=23&query=food%20background" target="_blank">Freepik</a>'
+      '<span class="desktop">Image by</span> <a href="https://www.freepik.com/free-photo/copy-space-ingredients-noodles_8361833.htm#query=food%20background&position=23&from_view=search&track=ais#position=23&query=food%20background" target="_blank">Freepik</a>'
     ];
   }
 

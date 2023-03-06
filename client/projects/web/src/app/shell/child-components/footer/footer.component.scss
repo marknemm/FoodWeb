@@ -6,6 +6,7 @@ footer {
   height: $footer-height;
   text-align: center;
   padding-top: 10px;
+  background-color: $content-background;
 
   small {
     @media screen and (max-width: $sm) {
