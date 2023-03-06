@@ -8,11 +8,15 @@ $side-container-max-width: 270px;
     display: block;
     z-index: 0;
     content: "";
-    background: url("/assets/Copy-space-ingredients-for-noodles.png") no-repeat fixed;
+    background: url("/assets/Copy-space-ingredients-for-noodles.jpg") no-repeat fixed;
     top: 0;
     left: calc(50% - 50vw);
     width: 100vw;
     height: 100%;
+
+    @media only screen and (max-width: $md) {
+      background: url("/assets/Copy-space-ingredients-for-noodles-mobile.jpg") no-repeat fixed;
+    }
   }
 
   .mission-statement {
