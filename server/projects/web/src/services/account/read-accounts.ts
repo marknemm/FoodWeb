@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { SelectQueryBuilder } from 'typeorm';
 import { AccountEntity } from '~entity';
 import { addPagination, addWhere, getOrmRepository, OrmSelectQueryBuilder, preprocessFullTextQuery, QueryMod } from '~orm';
@@ -154,11 +155,11 @@ function _addOperationHoursCondition(
     }
     if (filters.operationHoursStartTime) {
       operationHoursCondition += 'AND operationHours.endTime > :startTime ';
-      operationHoursBindings.startTime = filters.operationHoursStartTime;
+      operationHoursBindings.startTime = moment(filters.operationHoursStartTime, 'hh:mm a').format('HH:mm:ss');
     }
     if (filters.operationHoursEndTime) {
       operationHoursCondition += 'AND operationHours.startTime < :endTime ';
-      operationHoursBindings.endTime = filters.operationHoursEndTime;
+      operationHoursBindings.endTime = moment(filters.operationHoursEndTime, 'hh:mm a').format('HH:mm:ss');
     }
     operationHoursCondition = operationHoursCondition.replace(/^AND/, '').trim();
 
