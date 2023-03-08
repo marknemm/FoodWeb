@@ -21,6 +21,7 @@ export async function initMiddleware(app: Application) {
   new JSONDateReviver().initJSONDateReviver();
 
   // Init all middleware with sync init processing.
+  app.use(requireHTTPS);
   app.use(cors);
   app.use(compression());
   app.use(json());
@@ -29,7 +30,6 @@ export async function initMiddleware(app: Application) {
   app.use(intParser());
   app.use(express.static(appPaths.clientBuildDir));
   app.use(express.static(appPaths.publicDir));
-  app.use(requireHTTPS);
 
   // Init all middleware with async init processing.
   app.use(await session());

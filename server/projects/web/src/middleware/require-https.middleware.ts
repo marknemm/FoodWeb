@@ -8,8 +8,7 @@ import { env } from '~web/helpers/globals/env';
  * @param next A callback that when called will execute the next route handler.
  */
 export function requireHTTPS(req: Request, res: Response, next: NextFunction) {
-  // The 'x-forwarded-proto' check is for Heroku
-  (!req.secure && req.get('x-forwarded-proto') !== 'https' && !env.DEVELOPMENT)
-    ? res.redirect('https://' + req.get('host') + req.url)
+  (req.header('x-forwarded-proto') !== 'https' && !env.DEVELOPMENT && !env.NO_HTTPS)
+    ? res.redirect('https://' + req.headers.host + req.url)
     : next();
 }

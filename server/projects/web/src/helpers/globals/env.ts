@@ -43,6 +43,7 @@ export interface FoodWebEnv {
   JOB_NAME?: string;
   MAILGUN_API_KEY?: string;
   MAILGUN_DOMAIN?: string;
+  NO_HTTPS?: boolean;
   NOREPLY_EMAIL?: string;
   NOREPLY_PASSWORD?: string;
   NOREPLY_PORT?: number;

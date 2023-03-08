@@ -15,7 +15,7 @@
     "affected:dep-graph": "nx affected:dep-graph",
     "affected": "nx affected",
     "build": "node ./tools/npm/build.js",
-    "build:env": "ng build --configuration=${environment}",
+    "build:env": "ng build --project=${project} --configuration=${environment}",
     "clean": "rimraf ./dist ./coverage",
     "clean:all": "npm run clean && rimraf ./node_modules",
     "install:shared": "cd ../shared && npm install && cd ../client",

@@ -8,7 +8,10 @@
       "~orm": ["../web/src/database/orm/index"],
       "~shared": ["../../../shared/src/admin/index"],
       "~web/*": ["../web/src/*"]
-    }
+    },
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "./src/**/*",

@@ -7,7 +7,7 @@ import { env } from '~web/helpers/globals/env';
  * @return true if it is an admin account, false if not.
  */
 export function verifyAccountIsAdmin(account: Account): boolean {
-  return (account)
-    ? (env.ADMIN_ACCOUNT_IDS.indexOf(account.id) >= 0)
-    : false;
+  return account
+      && env.ADMIN_ACCOUNT_IDS
+      && env.ADMIN_ACCOUNT_IDS.indexOf(account.id) >= 0;
 }
