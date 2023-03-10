@@ -1,6 +1,6 @@
 <div class="delivery page">
   <div *ngIf="!deliveryNotFound; else notFoundTmpl" class="page-title">
-    {{ pageTitleService.title }}
+    {{ shellService.pageTitle }}
   </div>
 
   <ng-template #notFoundTmpl>

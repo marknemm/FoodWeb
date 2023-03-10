@@ -1,7 +1,7 @@
 <form [formGroup]="pledgeForm" class="donation-hub-donate-form page" (submit)="save()">
 
   <div *ngIf="!donationHubPledgeNotFound; else notFoundTmpl" class="page-title">
-    {{ pageTitleService.title }}
+    {{ shellService.pageTitle }}
   </div>
 
   <ng-template #notFoundTmpl>

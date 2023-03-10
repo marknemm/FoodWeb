@@ -1,4 +1,3 @@
-import { GetParametersByPathCommand, GetParametersByPathCommandOutput, SSMClient } from '@aws-sdk/client-ssm';
 import * as admin from 'firebase-admin';
 import { isEmpty } from 'lodash';
 import { appPaths } from './paths';
@@ -19,6 +18,7 @@ export interface FoodWebEnv {
   ADMIN_EMAILS?: string[];
   CORS_WHITELIST?: string[];
   COUNTRY?: string;
+  DATABASE_CA_ROOT_PEM?: string;
   DATABASE_DATABASE?: string;
   DATABASE_HOST?: string;
   DATABASE_LOGGER?: string;
@@ -43,6 +43,7 @@ export interface FoodWebEnv {
   JOB_NAME?: string;
   MAILGUN_API_KEY?: string;
   MAILGUN_DOMAIN?: string;
+  NO_HTTPS?: boolean;
   NOREPLY_EMAIL?: string;
   NOREPLY_PASSWORD?: string;
   NOREPLY_PORT?: number;
@@ -57,7 +58,9 @@ export interface FoodWebEnv {
   PRODUCTION?: boolean;
   QA?: boolean;
   REDIS_PASSWORD?: string;
+  REDIS_REJECT_UNAUTHORIZED?: boolean;
   REDIS_SSL?: boolean;
+  REDIS_TLS_URL?: string;
   REDIS_URL?: string;
   SERVER_HOST_ADDRESS_READABLE?: string;
   SERVER_HOST_ADDRESS?: string;
@@ -82,54 +85,22 @@ export interface FoodWebEnv {
  */
 export async function initEnv(): Promise<FoodWebEnv> {
   if (isEmpty(env)) {
-    env = (process.env.PRODUCTION === 'true' || process.env.QA === 'true')
-      ? await initFromSSMParamStore()
-      : initFromDotEnvFile();
+    // If in a development environment, load environment variables from .env file.
+    if (process.env.PRODUCTION !== 'true' && process.env.QA !== 'true') {
+      const envDir: string = appPaths.serverProjectDir;
+
+      (envDir)
+        ? dotenv.config({ path: path.join(envDir, '.env') })
+        : dotenv.config(); // Auto-lookup .env in current/parent directories.
+
+      if (!process.env.SERVER_PORT) {
+        throw new Error('Could not resolve the .env file' + envDir ? ` with envDir: ${envDir}` : '');
+      }
+    }
+
+    env = refineEnv();
   }
   return env;
-}
-
-async function initFromSSMParamStore(): Promise<FoodWebEnv> {
-  const ssmClient = new SSMClient({ region: 'us-east-2' });
-
-  let nextToken: string;
-  do {
-    const command = new GetParametersByPathCommand({
-      Path: `/foodweb/${process.env.PRODUCTION === 'true' ? 'production' : 'qa'}`,
-      NextToken: nextToken
-    });
-    const ssmResponse: GetParametersByPathCommandOutput = await ssmClient.send(command);
-
-    for (const parameter of ssmResponse.Parameters) {
-      process.env[parameter.Name.split('/').pop()] = parameter.Value;
-    }
-    nextToken = ssmResponse.NextToken;
-  } while (nextToken);
-
-
-  return refineEnv();
-}
-
-/**
- * Initializes Express app environment variables within a local/docker dev environment by referencing .env file.
- * If environment variables are set on the host machine/container, those will take precedence, and .env will not be referenced.
- * @return The initialized FoodWeb environment variable set.
- */
-function initFromDotEnvFile(): FoodWebEnv {
-  const envDir: string = appPaths.serverProjectDir;
-
-  // If in a development environment, load environment variables from .env file.
-  if (process.env.PRODUCTION !== 'true' && process.env.QA !== 'true') {
-    (envDir)
-      ? dotenv.config({ path: path.join(envDir, '.env') })
-      : dotenv.config(); // Auto-lookup .env in current/parent directories.
-
-    if (!process.env.SERVER_PORT) {
-      throw new Error('Could not resolve the .env file' + envDir ? ` with envDir: ${envDir}` : '');
-    }
-  }
-
-  return refineEnv();
 }
 
 /**
@@ -170,7 +141,9 @@ function refineEnv(): FoodWebEnv {
 
   refinedEnv.COUNTRY = refinedEnv.COUNTRY ?? 'United States';
 
-  refinedEnv.DATABASE_PORT = refinedEnv.DATABASE_PORT ?? 5432;
+  if (!refinedEnv.DATABASE_PORT && !refinedEnv.DATABASE_URL) {
+    refinedEnv.DATABASE_PORT = 5432;
+  }
 
   refinedEnv.DEVELOPMENT = refinedEnv.DEVELOPMENT || (!refinedEnv.PRODUCTION && !refinedEnv.QA);
 

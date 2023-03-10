@@ -2,13 +2,18 @@
   <mat-toolbar color="primary" class="main-header-section">
     <a [routerLink]="['/']" class="site-icon-title">
       <img [src]="siteIconUri" alt="{{ siteTitle }} Icon" class="site-icon">
-      <h1 class="site-title" [ngClass]="{ 'with-sub': !!pageTitleService.title }">
+      <h1 class="site-title" [ngClass]="{ 'with-sub': !!pageTitle }">
         <div class="main">{{ siteTitle }}</div>
-        <div class="sub" *ngIf="pageTitleService.title">{{ pageTitleService.title }}</div>
+        <div class="sub" *ngIf="pageTitle">{{ pageTitle }}</div>
       </h1>
     </a>
 
-    <button mat-button class="sidenav-toggle-button" (click)="shellService.toggleLeftNav()" [attr.aria-expanded]="shellService.leftNavOpened">
+    <button mat-button
+      class="sidenav-toggle-button"
+      title="Toggle nav menu"
+      [attr.aria-controls]="navMenuId"
+      [attr.aria-expanded]="navOpened"
+      (click)="toggleNavMenu.emit()">
       <img src="./assets/IconImgSm.png" alt="Food Web Icon" class="site-icon">
       <mat-icon aria-label="Toggle Navigation Menu">menu</mat-icon>
     </button>

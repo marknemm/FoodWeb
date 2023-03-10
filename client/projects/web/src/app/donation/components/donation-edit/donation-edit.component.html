@@ -1,6 +1,6 @@
 <form [formGroup]="editForm" class="edit-donation page">
   <div *ngIf="!donationNotFound; else notFoundTmpl" class="page-title">
-    {{ pageTitleService.title }}
+    {{ shellService.pageTitle }}
   </div>
 
   <ng-template #notFoundTmpl>

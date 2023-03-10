@@ -25,6 +25,7 @@ export async function initOrm(): Promise<Connection> {
     connection = await createConnection({
       type: 'postgres',
       host,
+      url: env.DATABASE_URL,
       port: env.DATABASE_PORT,
       username: env.DATABASE_USERNAME,
       password: env.DATABASE_PASSWORD,
@@ -36,7 +37,8 @@ export async function initOrm(): Promise<Connection> {
       logging: env.DATABASE_LOGGING,
       logger: env.DATABASE_LOGGER as any,
       ssl: env.DATABASE_SSL
-        ? { rejectUnauthorized: !!env.DATABASE_REJECT_UNAUTHORIZED }
+        ? { ca: env.DATABASE_CA_ROOT_PEM,
+            rejectUnauthorized: (env.DATABASE_REJECT_UNAUTHORIZED ?? true) }
         : false
     }).catch((err) => {
       console.error('Error connecting to database');

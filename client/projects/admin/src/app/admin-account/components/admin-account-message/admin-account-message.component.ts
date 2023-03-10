@@ -5,7 +5,7 @@ import { AdminAccountMessageForm } from '~admin/admin-account/forms/admin-accoun
 import { AdminAccountMessageService } from '~admin/admin-account/services/admin-account-message/admin-account-message.service';
 import { AccountReadRequest } from '~shared';
 import { AccountFiltersForm } from '~web/account/forms/account-filters.form';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
@@ -26,16 +26,17 @@ export class AdminAccountMessageComponent implements OnInit {
   constructor(
     private _accountMessageService: AdminAccountMessageService,
     private _activatedRoute: ActivatedRoute,
-    private _pageTitleService: PageTitleService,
-    private _urlQueryService: UrlQueryService
-  ) {}
+    private _urlQueryService: UrlQueryService,
+    shellService: ShellService,
+  ) {
+    shellService.pageTitle = 'Compose Message';
+  }
 
   get activeFilters(): AccountReadRequest {
     return this._activeFilters;
   }
 
   ngOnInit() {
-    this._pageTitleService.title = 'Compose Message';
     this._activatedRoute.queryParams.subscribe((params: Params) => this._activeFilters = params);
   }
 

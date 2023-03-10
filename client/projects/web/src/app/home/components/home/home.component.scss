@@ -2,82 +2,239 @@
 $side-container-max-width: 270px;
 
 .home {
-  &.has-side-content {
-    .main-content {
-      max-width: calc(100% - #{$side-container-max-width});
-      padding-right: 20px;
+  &:before {
+    position: absolute;
+    box-sizing: border-box;
+    display: block;
+    z-index: -1;
+    content: "";
+    background: url("/assets/Copy-space-ingredients-for-noodles.jpg") no-repeat fixed;
+    background-size: cover;
+    top: 0;
+    left: calc(50% - 50vw);
+    width: 100vw;
+    height: 100%;
+
+    @media only screen and (max-width: 991px) {
+      position: fixed;
+      background: url("/assets/Copy-space-ingredients-for-noodles-mobile.jpg") no-repeat;
+    }
+  }
+
+  .mission-statement {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 350px;
+    margin-top: -20px;
+    margin-bottom: 0;
+    padding-left: calc(400px - (50vw - 50%));
+    font-size: 2em;
+    font-weight: 500;
+    color: #fff;
+    text-shadow: -1px -1px 0 #000,
+                 1px -1px 0 #000,
+                 -1px 1px 0 #000,
+                 1px 1px 0 #000;
+
+    &:before {
+      display: none;
+    }
+
+    @media only screen and (max-width: $lg) {
+      font-size: 1.8em;
+    }
+
+    @media only screen and (max-width: $md) {
+      padding-left: 0;
+      text-align: center;
+      font-size: 1.5em;
+    }
+
+    @media only screen and (max-width: $md) {
+      min-height: 200px;
+      padding: 20px 50px 0;
+
+      &:before {
+        display: block;
+      }
+    }
+
+    @media only screen and (max-width: $sm) {
+      padding: 20px 10px 0;
+    }
+  }
+
+  .nav-grid {
+    margin-top: 0;
+    margin-bottom: 80px;
+    padding-bottom: 30px;
+
+    a {
+      display: block;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .mat-card {
+      text-align: center;
+      border-radius: 20%;
+      color: $accent-darker;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      .mat-card-content {
+        font-size: 1.25em;
+        font-weight: 500;
+      }
+
+      .mat-icon {
+        font-size: 180px;
+        width: auto;
+        height: auto;
+      }
+    }
+
+    @media only screen and (max-width: $md) {
+      margin-bottom: 30px;
+      padding-top: 30px;
+    }
+
+    @media only screen and (max-width: $mat-mobile) {
+      padding-top: 10px;
+
+      a {
+        max-width: 200px;
+      }
+
+      .mat-card {
+        .mat-icon {
+          font-size: 100px;
+        }
+      }
+    }
+
+    @media only screen and (max-width: 420px) {
+      .mat-card {
+        .mat-card-content {
+          font-size: 1.1em;
+        }
+
+        .mat-icon {
+          font-size: 70px;
+        }
+      }
+    }
+
+    @media only screen and (max-width: 375px) {
+      .mat-card {
+        .mat-card-content {
+          font-size: 1em;
+        }
+      }
+    }
+  }
+
+  .app-download {
+    text-align: center;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+
+    img {
+      height: auto;
+    }
+
+    .app-store-badge {
+      width: 113%;
       box-sizing: border-box;
+      padding: 6%;
+      margin-left: -6%;
+      margin-bottom: -6%;
+    }
+
+    .google-play-badge {
+      width: 130%;
+      margin-left: -21%;
+      margin-top: -2.5%;
+      margin-bottom: -6%;
+    }
+  }
+
+  .origin-story-container {
+    margin-bottom: 40px;
+
+    .origin-story-title {
+      color: $accent;
+      margin-bottom: 10px;
+
+      &.mobile {
+        display: none;
+        text-align: center;
+      }
+    }
+
+    hr {
+      display: none;
+      opacity: 0.3;
+    }
+
+    .origin-story-img {
+      display: block;
       float: left;
+      margin-left: -3px;
+      margin-right: 10px;
+    }
+
+    @media only screen and (max-width: $md) {
+      .origin-story-title {
+        &.desktop {
+          display: none;
+        }
+
+        &.mobile {
+          display: block;
+        }
+      }
+
+      hr {
+        display: block;
+      }
+
+      .origin-story-img {
+        float: none;
+        width: 100%;
+        max-width: 270px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 12px;
+      }
+    }
+  }
+
+  .our-team-container {
+    .mat-card-subtitle {
+      font-weight: bold;
+      margin-top: -8px;
+    }
+  }
+
+  @media only screen and (max-width: 1060px) {
+    .main-content {
+      max-width: 100%;
+      padding-right: 0;
+      float: none;
     }
 
     .side-content {
-      position: relative;
-      width: $side-container-max-width;
-      float: right;
-    }
-
-    .app-download {
-      text-align: center;
-
-      img {
-        height: auto;
-      }
-
-      .app-store-badge {
-        width: 113%;
-        box-sizing: border-box;
-        padding: 6%;
-        margin-left: -6%;
-        margin-bottom: -6%;
-      }
-
-      .google-play-badge {
-        width: 130%;
-        margin-left: -21%;
-        margin-top: -2.5%;
-        margin-bottom: -6%;
-      }
-
-      @media only screen and (max-width: $md) {
-        max-width: 300px;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 14px;
-
-        .app-store-badge {
-          margin-top: -6%;
-        }
-
-        .google-play-badge {
-          margin-top: -8%;
-        }
-      }
-    }
-
-    .login-signup {
-      display: inline-block;
-      margin: 2% 0%;
       width: 100%;
-      /** Display buttons inline
-       *display: inline-grid;
-       *margin:2%;
-       *width: 46%;
-      **/
-    }
-
-    @media only screen and (max-width: 1060px) {
-      .main-content {
-        max-width: 100%;
-        padding-right: 0;
-        float: none;
-      }
-
-      .side-content {
-        width: 100%;
-        float: none;
-        margin-left: auto;
-        margin-right: auto;
-      }
+      float: none;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 

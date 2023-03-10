@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FeaturedEvent, EventReadService } from '~web/event/services/event-read/event-read.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-events',
@@ -13,9 +13,11 @@ export class EventsComponent implements OnInit {
   private _eventsNotFound = false;
 
   constructor(
-    public pageTitleService: PageTitleService,
+    public shellService: ShellService,
     private _eventReadService: EventReadService
-  ) {}
+  ) {
+    this.shellService.pageTitle = 'Featured Events';
+  }
 
   get eventsNotFound(): boolean {
     return this._eventsNotFound;
@@ -26,7 +28,6 @@ export class EventsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pageTitleService.title = 'Featured Events';
     this._eventReadService.getEvents().subscribe(
       (events: FeaturedEvent[]) => {
         this._events = events;

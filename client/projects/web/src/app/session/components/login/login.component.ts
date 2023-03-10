@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
 import { LoginForm, LoginFormMode } from '~web/session/forms/login.form';
 import { LoginSubmitService } from '~web/session/services/login-submit/login-submit.service';
 
@@ -12,7 +14,7 @@ export class LoginComponent {
 
   readonly loginForm = new LoginForm();
 
-  @Input() insideDialog = false;
+  @Input() dialogRef: MatDialogRef<LoginDialogComponent> = null;
 
   @Output() formChanged = new EventEmitter<LoginFormMode>();
   @Output() loggedIn = new EventEmitter<void>();

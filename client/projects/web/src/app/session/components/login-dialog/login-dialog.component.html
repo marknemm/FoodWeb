@@ -7,6 +7,6 @@
   </mat-toolbar>
 
   <mat-dialog-content>
-    <foodweb-login [insideDialog]="true" (formChanged)="loginFormChanged($event)" (loggedIn)="matDialogRef.close(true)"></foodweb-login>
+    <foodweb-login [dialogRef]="dialogRef" (formChanged)="loginFormChanged($event)" (loggedIn)="dialogRef.close(true)"></foodweb-login>
   </mat-dialog-content>
 </div>

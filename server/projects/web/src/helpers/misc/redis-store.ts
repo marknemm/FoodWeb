@@ -50,6 +50,9 @@ export class RedisStore {
     this._client = redis.createClient({
       url: await this.getUrl(),
       password: env.REDIS_PASSWORD,
+      tls: (env.REDIS_SSL || env.REDIS_TLS_URL)
+        ? { rejectUnauthorized: (env.REDIS_REJECT_UNAUTHORIZED ?? true) }
+        : false,
       retry_strategy: (retryOpts: RetryStrategyOptions) => {
         if (retryOpts.error && retryOpts.error.code === 'ECONNREFUSED') {
           return new Error('The server refused the connection');
@@ -60,6 +63,7 @@ export class RedisStore {
         return (retryOpts.attempt * 200); // Max out during attempt 10 at 2000ms.
       }
     });
+    this._client.on('error', console.error);
   }
 
   /**
@@ -67,6 +71,10 @@ export class RedisStore {
    * @return A promise that resolves to the redis URL.
    */
   private async getUrl(): Promise<string> {
+    if (env.REDIS_TLS_URL) { // Have full (prod) URL configured with TLS built-in.
+      return env.REDIS_TLS_URL;
+    }
+
     // Check for a reachable redis host. First check the configured environment variable for the URL, then check common dev URLs.
     const redisHosts: string[] = [env.REDIS_URL, 'localhost', 'redis'];
     const redisPort: number = getPort(env.REDIS_URL, 6379);

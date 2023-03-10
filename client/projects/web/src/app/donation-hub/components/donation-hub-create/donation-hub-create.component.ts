@@ -6,7 +6,7 @@ import { DonationHubForm } from '~web/donation-hub/forms/donation-hub.form';
 import { DonationHubCreateService } from '~web/donation-hub/services/donation-hub-create/donation-hub-create.service';
 import { FormFieldService } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-donation-hub-create',
@@ -26,13 +26,15 @@ export class DonationHubCreateComponent implements OnInit {
   ];
 
   constructor(
-    public pageTitleService: PageTitleService,
+    public shellService: ShellService,
     private _dateTimeService: DateTimeService,
     private _donationHubCreateService: DonationHubCreateService,
     private _formFieldService: FormFieldService<DonationHubForm>,
     private _router: Router,
     private _sessionService: SessionService,
-  ) {}
+  ) {
+    this.shellService.pageTitle = 'Register Donation Hub';
+  }
 
   get donationHubForm(): DonationHubForm {
     return this._formFieldService.control;
@@ -42,7 +44,6 @@ export class DonationHubCreateComponent implements OnInit {
     this._formFieldService.injectControl({
       genDefault: () => new DonationHubForm(this._dateTimeService, { account: this._sessionService.account })
     });
-    this.pageTitleService.title = 'Register Donation Hub';
   }
 
   register(): void {

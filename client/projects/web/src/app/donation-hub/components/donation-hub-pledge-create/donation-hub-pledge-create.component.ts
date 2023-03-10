@@ -4,7 +4,7 @@ import { DonationHubPledge } from '~shared';
 import { DonationHubPledgeForm } from '~web/donation-hub/forms/donation-hub-pledge.form';
 import { DonationHubPledgeCreateService } from '~web/donation-hub/services/donation-hub-pledge-create/donation-hub-pledge-create.service';
 import { FormFieldService } from '~web/forms';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-donation-hub-pledge-create',
@@ -24,7 +24,7 @@ export class DonationHubPledgeCreateComponent implements OnInit {
   ];
 
   constructor(
-    public pageTitleService: PageTitleService,
+    public shellService: ShellService,
     private _activatedRoute: ActivatedRoute,
     private _formFieldService: FormFieldService<DonationHubPledgeForm>,
     private _pledgeCreateService: DonationHubPledgeCreateService,
@@ -38,7 +38,7 @@ export class DonationHubPledgeCreateComponent implements OnInit {
   ngOnInit(): void {
     this._formFieldService.injectControl({ genDefault: () => new DonationHubPledgeForm() });
 
-    this.pageTitleService.title = 'Pledge Donation';
+    this.shellService.pageTitle = 'Pledge Donation';
   }
 
   donate(): void {

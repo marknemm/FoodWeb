@@ -1,137 +1,239 @@
-<div class="home page has-side-content">
+<div class="home page">
   <div class="main-content">
-    <div class="d-lg-none app-download-mobile">
-      <ng-container [ngTemplateOutlet]="appDownloadTmpl"></ng-container>
+    <div class="mission-statement banner semi-transparent-bg">
+      <div class="content">
+        FoodWeb's mission is to alleviate hunger and prevent food waste.
+        With our platform and network of volunteers, we aim to facilitate the donation of food in our community.
+      </div>
     </div>
+
+    <nav class="nav-grid banner semi-transparent-bg row justify-content-center">
+      <div class="col-lg-4 col-6">
+        <a *ngIf="!sessionService.loggedIn" class="login-signup-button" (click)="openLoginDialog()">
+          <mat-card>
+            <mat-card-content>
+              <mat-icon>account_circle</mat-icon>
+              <div>Login / Signup</div>
+            </mat-card-content>
+          </mat-card>
+        </a>
+        <a *ngIf="sessionService.loggedIn" class="login-signup-button" [routerLink]="['/account/my']">
+          <mat-card>
+            <mat-card-content>
+              <mat-icon>account_circle</mat-icon>
+              <div>My Account</div>
+            </mat-card-content>
+          </mat-card>
+        </a>
+      </div>
+      <div class="col-lg-4 col-6">
+        <a class="sandwich-army-button" [routerLink]="['/', 'donation-hub', 'portal']">
+          <mat-card>
+            <mat-card-content>
+              <mat-icon>breakfast_dining</mat-icon>
+              <div>Sandwich Army</div>
+            </mat-card-content>
+          </mat-card>
+        </a>
+      </div>
+      <div class="col-lg-4 col-6">
+        <a class="contact-us-button" href="mailto:questions@wnyfoodweb.com" target="_blank">
+          <mat-card>
+            <mat-card-content>
+              <mat-icon>contact_support</mat-icon>
+              <div>Contact us</div>
+            </mat-card-content>
+          </mat-card>
+        </a>
+      </div>
+      <!-- <div class="col-lg-4 col-6">
+        <a [routerLink]="['/']">
+          <mat-card>
+            <mat-card-content>
+
+              <div>Help Fund Us</div>
+            </mat-card-content>
+          </mat-card>
+        </a>
+      </div>
+      <div class="col-lg-4 col-6">
+        <a [routerLink]="['/']">
+          <mat-card>
+            <mat-card-content>
+
+              <div>Donor Organization Connect</div>
+            </mat-card-content>
+          </mat-card>
+        </a>
+      </div> -->
+    </nav>
+
+    <mat-card class="d-lg-none app-download-mobile">
+      <mat-card-title class="align-center">
+        <h2>Download the FoodWeb Mobile App</h2>
+      </mat-card-title>
+      <mat-card-content>
+        <div class="row app-download">
+          <div class="col-6">
+            <a href="https://apps.apple.com/us/app/wny-foodweb/id1584697655">
+              <img class="app-store-badge" src="./assets/app-store-badge.svg" alt="Download on the App Store">
+            </a>
+          </div>
+          <div class="col-6">
+            <a href="https://play.google.com/store/apps/details?id=io.foodweb.hybrid">
+              <img class="google-play-badge" src="./assets/google-play-badge.png" alt="Download on Google Play">
+            </a>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
 
     <span class="d-lg-none">
       <ng-container [ngTemplateOutlet]="trainingSignupTmpl"></ng-container>
     </span>
 
-    <ng-container *ngIf="donationHubFeatureVisible">
-      <mat-card class="donation-hub-new-feature">
-        <mat-card-title class="block-label">
-          FoodWeb’s Sandwich Army
-        </mat-card-title>
-        <mat-card-content>
-          <div class="donation-hub-intro-block">
-            <p>
-              FoodWeb’s Sandwich Army is a volunteer-driven effort to alleviate food insecurity during the pandemic through
-              <strong>sandwich drives every Saturday</strong>!
-            </p>
-          </div>
-
-          <p>
-            <strong><a [routerLink]="['/donation-hub', 'create']">Register Drop-Off Hub</a></strong><br>
-            Use your home as a donation drop-off hub for a specified time period on a Saturday.
-            Volunteers will pledge donations for drop-off at your residence.
-            After the time period, the lunches are to be transported to St. Luke's Mission for Mercy.
-          </p>
-
-          <p>
-            <strong><a [routerLink]="['/donation-hub', 'list']">Pledge Donation</a></strong><br>
-            Volunteers make bagged sandwich lunches consisting of a sandwich, a piece of fruit, and a snack.
-            The lunches are to be dropped-off at designated "drop-off hubs".
-          </p>
-
-          <p class="sandwich-army-view-more">
-            <strong><a [routerLink]="['/donation-hub', 'portal']"><mat-icon>info</mat-icon>View more info</a></strong>
-          </p>
-        </mat-card-content>
-      </mat-card>
-
+    <mat-card class="origin-story-container">
+      <mat-card-title class="origin-story-title mobile">
+        <h2>Our Origin Story</h2>
+      </mat-card-title>
       <hr>
-    </ng-container>
-
-    <mat-card>
-      <mat-card-title class="block-label">
-        Who We Are
-      </mat-card-title>
       <mat-card-content>
-        <blockquote class="stats-quote">
-          <div>Hundreds of pounds of food are thrown out by local food industries.</div>
-          <div>There are more than 8,200 homeless people in Western New York.</div>
-          <div>Over 50% of the youth in the city of Buffalo live below the poverty line.</div>
-        </blockquote>
+        <img src="./assets/IconImgMd.png" class="origin-story-img">
+
+        <div class="origin-story-title desktop">
+          <h2>Origin Story</h2>
+        </div>
+
         <p>
-          We are a non-profit whose goal is to facilitate the delivery of food from generous donors to those who need it the most.
-          Through our website and community engagement, we hope to address food insecurity while also providing an avenue for citizens to give back to their community.
+          In 2015, Reena was on the board of the United Way (yes, she's kind of a big deal... or at least she was) and was helping to start a new initiative challenging
+          young professionals to get involved in the community. That initiative turned into a massive "pitch" convention. (OK, it was more of a gala. Or like a
+          small festival. Actually, it was a happy hour. And it wasn’t at a bar. And the drinks weren’t free.) The idea was to give a forum to anyone willing to
+          pitch an idea to the community (also known as happy hour attendees), who would then vote on the ideas and the top 3 would be provided with United Way support
+          to turn the idea into a reality.
+        </p>
+
+        <p>
+          In anticipation of this event, Reena and her colleague, PJ Hines, came up with the FoodWeb concept. Well, actually,
+          PJ came up with the idea, but since Reena put him on the spot and demanded that he come up with something, she likes to take credit. PJ was struck by how much
+          food was thrown out - at sporting events, meetings, networking opportunities - when it could have been given to people who were hungry. So, PJ pitched his idea:
+          Let’s mobilize volunteer drivers to volunteer a few minutes of their time, on their own schedule, to take food from places that would throw it out and give it
+          to people who will use it! The crowd went wild....and FoodWeb was born!
+        </p>
+
+        <p>
+          Well... not quite yet. While PJ (and Reena and lots of happy hour attendees) loved the idea, they needed a little help to put it into action.
+          So... enter Shayan Ghose. Shayan and Reena go back (like...really back; Reena used to babysit Shayan, and according to her, she still has to babysit him).
+          Reena knew that Shayan was back in the Buffalo area and looking for a project to sink his teeth into, and so she brought him into the “Web” (see how we did that?).
+          Shayan was immediately intrigued... and dismayed that really good food was being wasted when he (and others, of course) could be eating it. And FoodWeb was born!
+        </p>
+
+        <p>
+          Actually... still not quite yet. Shayan put together a team of volunteer coders and software developers (i.e., really smart high school students who were willing
+          to code for pizza) who spent a TON of time creating a website to coordinate donors, drivers, and receivers. Shayan then brought in Mark Nemmer (Shayan had to beg,
+          it was pathetic), who became our fearless head of technology, to bring together all the hard work and get the website into final form! And surely then, FoodWeb was born!
+        </p>
+
+        <p>
+          Not exactly... Andrew Freedman, another colleague of Reena’s (see how she’s the lynchpin of all things??), heard about FoodWeb and immediately thought about how he could
+          involve his clients (school districts) in the fun!  So, he decided to join the team and focus on food recovery and volunteer opportunities with school districts.
+          And then... FoodWeb was born!!!
+        </p>
+
+        <p>
+          Well... at least preliminarily. But the pandemic hit, and FoodWeb had to change its operations since, you know, there were no events to attend or food to collect and
+          leaving the house in general seemed... unwise. So, the fearless team came up with the idea of weekly sandwich drives! The sandwich army (i.e., people stuck at home) would
+          make sandwich lunches on a Saturday morning and drop them off to a local “hub” who would collect sandwiches and transport them to St. Luke’s Mission of Mercy for
+          distribution to those who needed a lunch!
         </p>
       </mat-card-content>
     </mat-card>
 
-    <mat-card>
-      <mat-card-title class="block-label">
-        What Makes Us Unique
-      </mat-card-title>
-      <mat-card-content>
-        Most organizations that target food insecurity do so through donations run by word-of-mouth, rely on long standing relationships, and plan deliveries months in advanced.
-        Through the use of technology, we hope to make the process of donating food quick, easy and accessible to anyone.
-      </mat-card-content>
-    </mat-card>
+    <div class="our-team-container">
 
-    <mat-card>
-      <mat-card-title class="block-label">
-        How We Operate
-      </mat-card-title>
-      <mat-card-content>
-        <ol class="op-list">
-          <li>Donating organizations upload a description of their donation.</li>
-          <li>Our system automatically finds a local charity as a recipient.</li>
-          <li>The charity confirms that they wish to receive the donation.</li>
-          <li>A driver is automatically scheduled for pickup & delivery.</li>
-        </ol>
-        <p>
-          Donors are protected from liability through the <i>Bill Emerson Good Samaritan Food Donation Act</i> and can claim deductions based on the amount of food they donate.
-          FoodWeb and our community-based drivers do our best to ensure prompt and safe transportation of food so that it remains safe to eat.
-        </p>
-      </mat-card-content>
-    </mat-card>
-  </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-card>
+            <mat-card-title><h2>Shayan Ghose</h2></mat-card-title>
+            <mat-card-subtitle>Executive Chairperson</mat-card-subtitle>
+            <mat-card-content>
+              <p>
+                Shayan grew up in Amherst and graduated from Williamsville North before completing his undergrad and masters education from Cornell University.
+                He currently works in the financial sector. In his free time, he spends a bit too much time theorizing about Game of Thrones or watching the NBA and NFL.
+                His friends know that he's always ready for a ping pong battle.
+              </p>
 
-  <div class="side-content">
-    <span class="d-none d-lg-inline">
-      <mat-card >
-        <mat-card-content>
-          <ng-container *ngIf="!sessionService.loggedIn">
-            <button class="login-signup" mat-raised-button type="button" color="primary" (click)="openLoginDialog()">Login</button>
-            <a routerLink="/signup"><button class="login-signup" mat-raised-button type="button" color="primary">Signup</button></a>
-          </ng-container>
-          <ng-container [ngTemplateOutlet]="appDownloadTmpl"></ng-container>
-        </mat-card-content>
-      </mat-card>
-    </span>
+              <p>
+                Shayan was first introduced to the idea of food rescue in WNY by PJ Hines and Reena Dutta at a Next Generation United event in 2017.
+                The idea caught hold with him and a few months later FoodWeb was born with the mission of facilitating food donations with the use of technology.
+              </p>
+            </mat-card-content>
+          </mat-card>
+        </div>
 
-    <mat-card>
-      <mat-card-title class="block-label">
-        Questions &amp; Feedback
-      </mat-card-title>
-      <mat-card-content>
-        <p>
-          If you have questions or feedback, then feel free to
-          <strong><a href="mailto:questions@wnyfoodweb.com">Email Us</a></strong>.
-        </p>
-      </mat-card-content>
-    </mat-card>
+        <div class="col-md-6">
+          <mat-card>
+            <mat-card-title><h2>Mark Nemmer</h2></mat-card-title>
+            <mat-card-subtitle>Vice Chairperson and CTO</mat-card-subtitle>
+            <mat-card-content>
+              <p>
+                Mark works as a software developer at the University at Buffalo. He strives to improve and maintain various web apps across the university.
+                In his free time he can be found hanging out with family and friends, playing video games, or programming.
+              </p>
 
-    <foodweb-general-stats-card></foodweb-general-stats-card>
+              <p>
+                Mark was introduced to the FoodWeb team by Shayan Ghose. He loves to code, and wishes to use his abilities to help others, so the position of
+                technical lead is a great fit. Mark is excited to see FoodWeb thrive and bring about positive change within the community.
+              </p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-md-6">
+          <mat-card>
+            <mat-card-title><h2>Andrew Freedman</h2></mat-card-title>
+            <mat-card-subtitle>Treasurer</mat-card-subtitle>
+            <mat-card-content>
+              <p>
+                Andrew is a Buffalo native graduating from Williamsville East High School.
+                He moved into the city during law school and hasn’t looked back.
+                Taking advantage of all that this vibrant city has to offer is Andrew’s forte.
+                Whether it’s strolling the waterfront during the summer months, eating at the fantastic restaurants, or spending time at
+                the Albright-Knox Art Gallery, Andrew knows how to enjoy city life.  During the day Andrew is a private practice education
+                attorney representing school districts throughout the Western New York Area and Southern Tier.
+              </p>
+
+              <p>
+                Andrew was fortunate enough to be asked by Reena to join the food web team and it’s been honor working with this philanthropic
+                group of individuals. While I don’t have the technology skills that some members of our team have, I assist with bringing food
+                donors together with food recipients. Thank you for taking the time to read about this incredible project.
+              </p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-md-6">
+          <mat-card>
+            <mat-card-title><h2>Reena Dutta</h2></mat-card-title>
+            <mat-card-subtitle>Secretary</mat-card-subtitle>
+            <mat-card-content>
+              <p>
+                Reena is an attorney by day and... also an attorney by night. While she can usually be found reading briefs in her spare time, she does occasionally enjoy
+                some non-legal activities, including running (it counts as a hobby if you do it once), yoga, and, of course, food (cooking, but especially eating)!
+              </p>
+
+              <p>
+                Reena's service on the United Way board started this all (as she reminds everyone fairly regularly) because it led to her forcing really smart people
+                (pretty much everyone else involved with FoodWeb) to get involved with FoodWeb (for which they are now eternally grateful)!  Reena LOVES the weekly
+                sandwich drives and is so excited to harass everyone she knows into participating!!  Reena is looking forward to watching FoodWeb grow and growing old
+                with her FoodWeb colleagues (not that she's old yet... far from it... really).
+              </p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
-<ng-template #appDownloadTmpl>
-  <div class="row app-download">
-    <div class="col-6">
-      <a href="https://apps.apple.com/us/app/wny-foodweb/id1584697655">
-        <img class="app-store-badge" src="./assets/app-store-badge.svg" alt="Download on the App Store">
-      </a>
-    </div>
-    <div class="col-6">
-      <a href="https://play.google.com/store/apps/details?id=io.foodweb.hybrid">
-        <img class="google-play-badge" src="./assets/google-play-badge.png" alt="Download on Google Play">
-      </a>
-    </div>
-  </div>
-</ng-template>
 
 <ng-template #trainingSignupTmpl>
   <foodweb-event-card [event]="event" [linkToEventsPage]="true"></foodweb-event-card>

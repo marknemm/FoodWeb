@@ -1,6 +1,6 @@
 <div class="donation-hub-details page">
   <div *ngIf="!donationHubNotFound; else notFoundTmpl" class="page-title">
-    {{ pageTitleService.title }}
+    {{ shellService.pageTitle }}
   </div>
 
   <ng-template #notFoundTmpl>

@@ -9,6 +9,7 @@ import multer = require('multer');
 import boolParser = require('express-query-boolean');
 import intParser = require('express-query-int');
 import express = require('express');
+import { requireHTTPS } from './require-https.middleware';
 
 /**
  * Initializes all middleware for a given Express app.
@@ -20,6 +21,7 @@ export async function initMiddleware(app: Application) {
   new JSONDateReviver().initJSONDateReviver();
 
   // Init all middleware with sync init processing.
+  app.use(requireHTTPS);
   app.use(cors);
   app.use(compression());
   app.use(json());

@@ -1,10 +1,10 @@
-<form #loginFormDirective="ngForm" [formGroup]="loginForm" (submit)="submit()" class="login-container" [ngClass]="{ container: !insideDialog }">
-  <img src="./assets/IconImgMd.png" *ngIf="!insideDialog" class="foodweb-img">
+<form #loginFormDirective="ngForm" [formGroup]="loginForm" (submit)="submit()" class="login-container" [ngClass]="{ container: !dialogRef }">
+  <img src="./assets/IconImgMd.png" *ngIf="!dialogRef" class="foodweb-img">
 
   <div *ngIf="!loginSubmitService.messageSent">
     <mat-form-field>
-      <input matInput *ngIf="!insideDialog" type="email" [placeholder]="loginForm.usernameEmailPlaceholder" formControlName="usernameEmail">
-      <input matInput *ngIf="insideDialog" type="email" [placeholder]="loginForm.usernameEmailPlaceholder" formControlName="usernameEmail" cdkFocusInitial>
+      <input matInput *ngIf="!dialogRef" type="email" [placeholder]="loginForm.usernameEmailPlaceholder" formControlName="usernameEmail">
+      <input matInput *ngIf="!!dialogRef" type="email" [placeholder]="loginForm.usernameEmailPlaceholder" formControlName="usernameEmail" cdkFocusInitial>
     </mat-form-field>
     <mat-form-field *ngIf="loginForm.isLogin">
       <input matInput type="password" placeholder="Password" formControlName="password">
@@ -39,10 +39,10 @@
       <button mat-button type="submit" color="accent">Resend Email</button>
       <button mat-raised-button type="button" color="primary" mat-dialog-close>Ok</button>
     </div>
-    <div *ngIf="!insideDialog" class="signup-link-container">
-      <p>
-        <a [routerLink]="['/', 'signup']">Create Account</a>
-      </p>
+    <p>
+      <a [routerLink]="['/', 'signup']" (click)="dialogRef?.close()">Create Account</a>
+    </p>
+    <div *ngIf="!dialogRef" class="signup-link-container">
       <p>
         <a [routerLink]="['/', 'home']">Skip Login</a>
       </p>

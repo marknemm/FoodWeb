@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-cookie-policy',
@@ -8,8 +8,8 @@ import { PageTitleService } from '~web/shared/services/page-title/page-title.ser
 })
 export class CookiePolicyComponent {
 
-  constructor(pageTitleService: PageTitleService) {
-    pageTitleService.title = 'Cookie Policy';
+  constructor(shellService: ShellService) {
+    shellService.pageTitle = 'Cookie Policy';
   }
 
 }

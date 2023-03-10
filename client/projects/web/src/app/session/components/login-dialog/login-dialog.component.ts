@@ -12,7 +12,7 @@ export class LoginDialogComponent implements OnInit {
   private _title: string;
 
   constructor(
-    @Optional() public matDialogRef: MatDialogRef<LoginDialogComponent>
+    @Optional() public dialogRef: MatDialogRef<LoginDialogComponent>
   ) {}
 
   get title(): string {

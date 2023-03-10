@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-privacy-policy',
@@ -8,8 +8,8 @@ import { PageTitleService } from '~web/shared/services/page-title/page-title.ser
 })
 export class PrivacyPolicyComponent {
 
-  constructor(pageTitleService: PageTitleService) {
-    pageTitleService.title = 'Privacy Policy';
+  constructor(shellService: ShellService) {
+    shellService.pageTitle = 'Privacy Policy';
   }
 
 }

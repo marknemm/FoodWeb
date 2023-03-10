@@ -7,7 +7,7 @@ import { Donation, DonationReadService } from '~web/donation/services/donation-r
 import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
 import { DonateForm } from '~web/donation/forms/donate.form';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
-import { PageTitleService } from '~web/shared/services/page-title/page-title.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class DonationEditComponent implements OnInit {
   protected _donationDetailsUrl = '';
 
   constructor(
-    public pageTitleService: PageTitleService,
+    public shellService: ShellService,
     protected _activatedRoute: ActivatedRoute,
     protected _dateTimeService: DateTimeService,
     protected _donationReadService: DonationReadService,
@@ -46,7 +46,7 @@ export class DonationEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pageTitleService.title = 'Edit Donation';
+    this.shellService.pageTitle = 'Edit Donation';
     this._editForm = new DonateForm(this._dateTimeService, { safetyChecklistInit: true });
     this._listenDonationChange();
   }
