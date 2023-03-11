@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EMPTY, Observable, ObservableInput } from 'rxjs';
 
@@ -23,6 +24,7 @@ export interface Alert {
 /**
  * Common base functionality for all `Alert` display services.
  */
+@Injectable()
 export abstract class AlertDisplayer {
 
   /**

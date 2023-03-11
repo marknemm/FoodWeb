@@ -1,4 +1,4 @@
-<span class="notifications-button-container"
+<div class="notifications-button-container"
   [matBadge]="notificationService.unseenNotificationsCount"
   [matBadgeHidden]="!(notificationService.unseenNotificationsCount)"
   matBadgeSize="small"
@@ -9,7 +9,7 @@
   <button mat-icon-button class="notifications-button" aria-label="Notifications menu" [matMenuTriggerFor]="notificationsMenu" (menuOpened)="refreshUnseenNotifications()">
     <mat-icon>notifications</mat-icon>
   </button>
-</span>
+</div>
 
 <mat-menu #notificationsMenu="matMenu" class="notifications-menu" backdropClass="notifications-menu-backdrop">
   <div class="notifications-menu-content">

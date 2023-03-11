@@ -1,37 +1,7 @@
 @import "variables.scss";
 
-$title-font-size: 16px;
-$icon-size      : 38px;
-
 .notifications-button-container {
-  display       : inline-block;
-  height        : 100%;
-  margin-top    : -2px;
-  vertical-align: top;
-
-  @media screen and (max-width: $md) {
-    margin-top: -1px;
-  }
-
-  @media screen and (max-width: $sm) {
-    margin-top: 0;
-  }
-
-  button.mat-button.notifications-button {
-    $button-width: 35px;
-    height       : 100%;
-    min-width    : $button-width;
-    padding      : 0;
-    width        : $button-width;
-
-    .mat-icon {
-      $icon-size: 24px;
-      font-size : $icon-size;
-      height    : $icon-size;
-      margin-top: -2px;
-      width     : $icon-size;
-    }
-  }
+  line-height: normal;
 }
 
 .notifications-menu-content {
