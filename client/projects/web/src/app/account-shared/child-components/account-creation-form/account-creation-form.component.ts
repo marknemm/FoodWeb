@@ -1,8 +1,9 @@
 import { Location } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { AccountType } from '~shared';
-import { AccountForm } from '~web/account-shared/forms/account.form';
+import { AccountForm, AccountFormAdapter } from '~web/account-shared/services/account-form-adapter/account-form-adapter.service';
 import { FormFieldService } from '~web/forms';
 
 @Component({
@@ -11,7 +12,7 @@ import { FormFieldService } from '~web/forms';
   styleUrls: ['./account-creation-form.component.scss'],
   providers: [FormFieldService]
 })
-export class AccountCreationFormComponent implements OnInit {
+export class AccountCreationFormComponent implements OnInit, OnDestroy {
 
   readonly AccountType = AccountType;
 
@@ -21,8 +22,11 @@ export class AccountCreationFormComponent implements OnInit {
 
   @Output() createAccount = new EventEmitter<AccountForm>();
 
+  private readonly _destroy$ = new Subject<void>();
+
   constructor(
     public location: Location,
+    protected _accountFormAdapter: AccountFormAdapter,
     protected _activatedRoute: ActivatedRoute,
     protected _router: Router,
     private _formFieldService: FormFieldService<AccountForm>
@@ -58,9 +62,9 @@ export class AccountCreationFormComponent implements OnInit {
     return this.accountForm.get('operationHours').value.limitOperationHours;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new AccountForm({ formMode: 'Signup' })
+      genDefault: () => this._accountFormAdapter.toForm({ destroy$: this._destroy$, formMode: 'Signup' })
     });
     this._listenAccountTypeSelect();
     this._listenAccountTypeRoute();
@@ -86,5 +90,9 @@ export class AccountCreationFormComponent implements OnInit {
 
   private _onAccountTypeRoute(accountType: AccountType): void {
     this.accountForm.get('accountType').setValue(accountType);
+  }
+
+  ngOnDestroy(): void {
+      this._destroy$.next();
   }
 }

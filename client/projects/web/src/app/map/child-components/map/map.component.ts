@@ -1,9 +1,10 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Donation } from '~shared';
-import { MapOptionsForm } from '~web/map/forms/map-options.form';
+import { Directions, Donation } from '~shared';
+import { RenderPolyline } from '~web/map/services/directions/directions.service';
+import { MapOptionsForm, MapOptionsFormAdapter } from '~web/map/services/map-options-form-adapter/map-options-form-adapter.service';
 import { MapOptions, MapService, WaypointMarker } from '~web/map/services/map/map.service';
 
 @Component({
@@ -26,20 +27,41 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(GoogleMap, { static: true }) map: GoogleMap;
   @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow;
 
-  optionsForm = new MapOptionsForm();
+  readonly optionsForm: MapOptionsForm = this._mapOptionsFormAdapter.toForm();
 
   private _destroy$ = new Subject<void>();
   private _selWaypointMarker: WaypointMarker;
 
   constructor(
-    public mapService: MapService
+    private _mapOptionsFormAdapter: MapOptionsFormAdapter,
+    private _mapService: MapService,
   ) {}
+
+  get directions(): Directions {
+    return this._mapService.directions;
+  }
+
+  get directionsHref(): string {
+    return this._mapService.directionsHref;
+  }
+
+  get mapCenter(): google.maps.LatLng {
+    return this._mapService.mapCenter;
+  }
+
+  get mapPolylines(): RenderPolyline[] {
+    return this._mapService.mapPolylines;
+  }
 
   get selWaypointMarker(): WaypointMarker {
     return this._selWaypointMarker;
   }
 
-  ngOnInit() {
+  get waypointMarkers(): WaypointMarker[] {
+    return this._mapService.waypointMarkers;
+  }
+
+  ngOnInit(): void {
     this.optionsForm.valueChanges.pipe(
       takeUntil(this._destroy$)
     ).subscribe((options: MapOptions) =>
@@ -47,7 +69,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.donation || changes.useVolunteerCurrentPos || changes.displayRouteToDonor || changes.displayRouteToReceiver) {
       if (changes.useVolunteerCurrentPos) {
         this.optionsForm.patchValue({ useVolunteerCurrentPos: this.useVolunteerCurrentPos });
@@ -67,13 +89,13 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this._destroy$.next(); // Prevent rxjs memory leaks.
   }
 
   refreshMap(options: MapOptions): void {
     setTimeout(() => // Wait until we are sure view is fully initialized to access map ViewChild.
-      this.mapService.refreshMap(this.map, this.donation, options)
+      this._mapService.refreshMap(this.map, this.donation, options)
     );
   }
 

@@ -1,4 +1,4 @@
-<form [formGroup]="formGroup" class="donate-form page" [ngClass]="{ 'submitted': !!savedDonation }" (submit)="donate()">
+<form [formGroup]="donateForm" class="donate-form page" [ngClass]="{ 'submitted': !!savedDonation }" (submit)="donate()">
 
   <div class="donate-form-title page-title">
     {{ !savedDonation ? 'Donation Form' : 'Thank-you For Your Donation' }}
@@ -15,7 +15,7 @@
     <mat-card class="donate-card">
       <mat-card-title>Donation Information</mat-card-title>
       <mat-card-content>
-        <foodweb-donation-form [formGroup]="formGroup" *ngIf="!savedDonation"></foodweb-donation-form>
+        <foodweb-donation-form [formGroup]="donateForm" *ngIf="!savedDonation"></foodweb-donation-form>
       </mat-card-content>
     </mat-card>
 
@@ -37,7 +37,7 @@
       <mat-card-title>Food Safety Checklist</mat-card-title>
       <mat-card-content>
         <foodweb-requirements-checklist formControlName="safetyChecklist" [checklistMembers]="foodSafetyChecklistMembers" checkAll="All food safety requirements are met"></foodweb-requirements-checklist>
-        <mat-error class="safety-checklist-err" *ngIf="formGroup.get('safetyChecklist').touched && formGroup.get('safetyChecklist').hasError('required')">
+        <mat-error class="safety-checklist-err" *ngIf="isSafetyChecklistErrVisible">
           Safety Checklist Required
         </mat-error>
       </mat-card-content>

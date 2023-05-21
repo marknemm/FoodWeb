@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
-import { DateTimeForm, DateTimeFormT } from '~web/date-time/forms/date-time.form';
-import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { DateTimeForm, DateTimeFormAdapter, DateTimeFormData } from '~web/date-time/services/date-time-form-adapter/date-time-form-adapter.service';
 import { FormFieldService } from '~web/forms';
 
 @Component({
@@ -35,20 +34,19 @@ export class DateTimeComponent implements OnInit {
   @Input() get value(): Date     { return this._formFieldService.valueOut(); }
            set value(date: Date) { this._formFieldService.valueIn(date); }
 
-  @Output() valueChanges: EventEmitter<Date> = this._formFieldService.valueChangesEmitter;
+  @Output() valueChanges = new EventEmitter<Date>();
 
   constructor(
-    private _dateTimeService: DateTimeService,
-    private _formFieldService: FormFieldService<DateTimeForm, Date>,
+    private _dateTimeFormAdapter: DateTimeFormAdapter,
+    private _formFieldService: FormFieldService<DateTimeFormData, DateTimeForm, Date>,
   ) {
-    this._formFieldService.registerControl(new DateTimeForm(this._dateTimeService), {
-      valueInConverter: (date: Date) => ({
-        date: this._dateTimeService.toDate(date),
-        time: this._dateTimeService.formatTime(date)
-      }),
-      valueOutConverter: (dateTime: DateTimeFormT) =>
-        this._dateTimeService.combineDateTime(dateTime.date, dateTime.time)
+    this._formFieldService.registerControl(this._dateTimeFormAdapter.toForm(), {
+      valueInConverter: (date: Date) => this._dateTimeFormAdapter.toViewModel(date),
+      valueOutConverter: (data: DateTimeFormData) => this._dateTimeFormAdapter.toModel(data)
     });
+    this._formFieldService.valueChanges$.subscribe((value: DateTimeFormData) =>
+      this.valueChanges.emit(this._dateTimeFormAdapter.toModel(value))
+    );
   }
 
   /**
@@ -60,7 +58,8 @@ export class DateTimeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const required: boolean = this._formFieldService.formValidation.hasRequiredValidator(this._formFieldService.externalControl);
-    this.dateTimeForm.init({ defaultDate: this.defaultDate, required });
+    if (!this.dateTimeForm.value.date || !this.dateTimeForm.value.time) {
+      this.dateTimeForm.patchValue(this._dateTimeFormAdapter.toViewModel(this.defaultDate));
+    }
   }
 }

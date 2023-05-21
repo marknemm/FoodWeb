@@ -1,11 +1,11 @@
 <google-map
   [height]="height"
   [width]="width"
-  [center]="mapService.mapCenter"
+  [center]="mapCenter"
   [options]="options"
 >
   <map-marker #marker
-    *ngFor="let waypointMarker of mapService.waypointMarkers"
+    *ngFor="let waypointMarker of waypointMarkers"
     [label]="waypointMarker.label"
     [position]="waypointMarker.latLng"
     [title]="waypointMarker.title"
@@ -13,7 +13,7 @@
   ></map-marker>
 
   <map-polyline
-    *ngFor="let polyline of mapService.mapPolylines"
+    *ngFor="let polyline of mapPolylines"
     [path]="polyline.path"
     [options]="polyline.options"
   ></map-polyline>
@@ -25,24 +25,24 @@
 
 <ng-container *ngIf="!displayMapOnly">
   <div class="map-navigation-container">
-    <a [href]="mapService.directionsHref" target="_blank">
+    <a [href]="directionsHref" target="_blank">
       <button mat-button color="primary" type="button">Open Map Navigation</button>
     </a>
   </div>
   <mat-accordion displayMode="flat">
-    <ng-container *ngIf="mapService.waypointMarkers.length > 2">
+    <ng-container *ngIf="waypointMarkers.length > 2">
       <mat-expansion-panel>
         <mat-expansion-panel-header>Map Options</mat-expansion-panel-header>
         <foodweb-map-options [formGroup]="optionsForm"></foodweb-map-options>
       </mat-expansion-panel>
       <mat-expansion-panel>
         <mat-expansion-panel-header>Directions to Donor</mat-expansion-panel-header>
-        <foodweb-direction-steps [directions]="mapService.directions" filter="Donor"></foodweb-direction-steps>
+        <foodweb-direction-steps [directions]="directions" filter="Donor"></foodweb-direction-steps>
       </mat-expansion-panel>
     </ng-container>
-    <mat-expansion-panel *ngIf="mapService.waypointMarkers.length > 1">
+    <mat-expansion-panel *ngIf="waypointMarkers.length > 1">
       <mat-expansion-panel-header>Directions to Receiver</mat-expansion-panel-header>
-      <foodweb-direction-steps [directions]="mapService.directions" filter="Receiver"></foodweb-direction-steps>
+      <foodweb-direction-steps [directions]="directions" filter="Receiver"></foodweb-direction-steps>
     </mat-expansion-panel>
   </mat-accordion>
 </ng-container>

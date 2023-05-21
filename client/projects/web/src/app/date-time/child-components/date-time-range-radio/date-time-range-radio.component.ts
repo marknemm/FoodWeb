@@ -24,7 +24,7 @@ export class DateTimeRangeRadioComponent implements OnChanges, OnInit {
 
   constructor(
     private _dateTimeService: DateTimeService,
-    private _formFieldService: FormFieldService<DateTimeRange>
+    private _formFieldService: FormFieldService<DateTimeRange, FormControl<DateTimeRange>>
   ) {}
 
   /**

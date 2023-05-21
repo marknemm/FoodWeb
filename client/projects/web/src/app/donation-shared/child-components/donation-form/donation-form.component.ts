@@ -1,8 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { DonateForm } from '~web/donation/forms/donate.form';
+import { DonateForm, DonateFormAdapter } from '~web/donation/services/donate-form-adapter/donate-form-adapter.service';
 import { FormFieldService } from '~web/forms';
+import { SessionService } from '~web/session/services/session/session.service';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
@@ -16,8 +16,9 @@ export class DonationFormComponent implements OnInit {
   constructor(
     @Inject(DOCUMENT) public document: Document,
     public constantsService: ConstantsService,
-    private _dateTimeService: DateTimeService,
-    private _formFieldService: FormFieldService<DonateForm>
+    private _donateFormAdapter: DonateFormAdapter,
+    private _formFieldService: FormFieldService<DonateForm>,
+    private _sessionService: SessionService,
   ) {}
 
   get donateForm(): DonateForm {
@@ -26,7 +27,7 @@ export class DonationFormComponent implements OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new DonateForm(this._dateTimeService)
+      genDefault: () => this._donateFormAdapter.toForm({ donorAccount: this._sessionService.account })
     });
   }
 

@@ -1,8 +1,8 @@
-import { TFormGroup } from '~web/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
-export class EventIdentifierForm extends TFormGroup<{ eventIdentifierStr: string }> {
+export class EventIdentifierForm extends FormGroup<{ eventIdentifierStr: FormControl<string> }> {
 
   constructor(eventIdentifierStr = '') {
-    super({ eventIdentifierStr });
+    super({ eventIdentifierStr: new FormControl(eventIdentifierStr) });
   }
 }

@@ -1,9 +1,11 @@
+@use 'sass:math';
+
 $mat-snack-bar-button-horizontal-margin: 8px !default;
 $mat-snack-bar-button-height: 36px !default;
 $mat-snack-bar-line-height: 20px !default;
 // Button vertical margin is used to ensure that a button height of 36px, when the containing
 // space falls below 36px.
-$mat-snack-bar-button-vertical-margin: -(($mat-snack-bar-button-height - $mat-snack-bar-line-height) / 2);
+$mat-snack-bar-button-vertical-margin: math.div($mat-snack-bar-button-height - $mat-snack-bar-line-height, -2);
 
 .alert-snack-bar-container {
   display: flex;
@@ -18,7 +20,7 @@ $mat-snack-bar-button-vertical-margin: -(($mat-snack-bar-button-height - $mat-sn
     flex-shrink: 0;
     margin: $mat-snack-bar-button-vertical-margin $mat-snack-bar-button-horizontal-margin * -1
             $mat-snack-bar-button-vertical-margin $mat-snack-bar-button-horizontal-margin;
-  
+
     button {
       display: inline-block;
       max-height: $mat-snack-bar-button-height;
@@ -26,7 +28,7 @@ $mat-snack-bar-button-vertical-margin: -(($mat-snack-bar-button-height - $mat-sn
       outline: none;
       background-color: rgba(0, 0, 0, 0.035);
     }
-  
+
     [dir='rtl'] & {
       margin-left: -$mat-snack-bar-button-horizontal-margin;
       margin-right: $mat-snack-bar-button-horizontal-margin;

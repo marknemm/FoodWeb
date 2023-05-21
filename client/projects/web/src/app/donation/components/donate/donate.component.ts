@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Donation, DonationSaveData } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { DonateForm } from '~web/donation/forms/donate.form';
+import { DonateForm, DonateFormAdapter } from '~web/donation/services/donate-form-adapter/donate-form-adapter.service';
 import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
 import { SessionService } from '~web/session/services/session/session.service';
 import { ShellService } from '~web/shell/services/shell/shell.service';
@@ -13,7 +13,7 @@ import { ShellService } from '~web/shell/services/shell/shell.service';
 })
 export class DonateComponent implements OnInit {
 
-  readonly foodSafetyChecklistMembers = [
+  readonly foodSafetyChecklistMembers: ReadonlyArray<string> = [
     'Food storage area is clean',
     'Proper personal hygiene observed',
     'Food has been temperature controlled',
@@ -25,37 +25,43 @@ export class DonateComponent implements OnInit {
   /**
    * Reactive form model used for donation.
    */
-  formGroup: DonateForm;
+  readonly donateForm: DonateForm = this._donateFormAdapter.toForm({ donorAccount: this._sessionService.account });
   /**
    * The newly saved donation that is only set once the donation is complete.
    * Will be unset if the user chooses to donate again.
    */
-  savedDonation: Donation = null;
+  private _savedDonation: Donation = null;
 
   constructor(
-    public sessionService: SessionService,
     protected _dateTimeService: DateTimeService,
+    protected _donateFormAdapter: DonateFormAdapter,
     protected _donationSaveService: DonationSaveService,
+    protected _sessionService: SessionService,
     protected _shellService: ShellService,
   ) {}
 
-  ngOnInit() {
+  get isSafetyChecklistErrVisible(): boolean {
+    return this.donateForm.controls.safetyChecklist.touched
+        && this.donateForm.controls.safetyChecklist.hasError('required');
+  }
+
+  get savedDonation(): Donation {
+    return this._savedDonation;
+  }
+
+  ngOnInit(): void {
     this._shellService.pageTitle = 'Donate';
-    this.formGroup = new DonateForm(
-      this._dateTimeService,
-      { donorAccount: this.sessionService.account, safetyChecklistInit: false }
-    );
   }
 
   /**
    * Submits the donation to be created on the server.
    */
   donate(): void {
-    this.formGroup.markAllAsTouched();
-    if (this.formGroup.valid) {
-      const donationSaveData: DonationSaveData = this.formGroup.toDonationSaveData();
+    this.donateForm.markAllAsTouched();
+    if (this.donateForm.valid) {
+      const donationSaveData: DonationSaveData = this._donateFormAdapter.toModel(this.donateForm);
       this._donationSaveService.createDonation(donationSaveData).subscribe((savedDonation: Donation) => {
-        this.savedDonation = savedDonation;
+        this._savedDonation = savedDonation;
       });
     }
   }
@@ -64,8 +70,8 @@ export class DonateComponent implements OnInit {
    * Resets the donation form to create another donation.
    */
   donateAgain(): void {
-    this.formGroup.reset();
-    this.savedDonation = null;
+    this.donateForm.reset();
+    this._savedDonation = null;
   }
 
 }

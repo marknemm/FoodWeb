@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { SessionService } from '~hybrid/session/services/session/session.service';
-import { AccountForm } from '~web/account-shared/forms/account.form';
+import { AccountForm } from '~web/account-shared/services/account-form-adapter/account-form-adapter.service';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
 import { FormFieldService } from '~web/forms';
 

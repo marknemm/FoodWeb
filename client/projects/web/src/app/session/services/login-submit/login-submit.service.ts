@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { Account } from '~shared';
 import { UsernameRecoveryService } from '~web/account/services/username-recovery/username-recovery.service';
 import { PasswordResetService } from '~web/password/services/password-reset/password-reset.service';
-import { LoginFormMode } from '~web/session/forms/login.form';
+import { LoginFormMode } from '~web/session/services/login-form-adapter/login-form-adapter.service';
 import { AuthenticationService } from '~web/session/services/authentication/authentication.service';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class LoginSubmitService {
     private _passwordResetService: PasswordResetService,
     private _router: Router,
     private _usernameRecoveryService: UsernameRecoveryService,
-  ) { }
+  ) {}
 
   get loading(): boolean {
     return (this._authService.loading || this._usernameRecoveryService.loading || this._passwordResetService.loading);

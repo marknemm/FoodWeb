@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormFieldService } from '~web/forms';
-import { PasswordForm } from '~web/password/forms/password.form';
+import { PasswordForm, PasswordFormAdapter, PasswordFormMode } from '~web/password/services/password-form-adapter/password-form-adapter.service';
 
 @Component({
   selector: 'foodweb-password',
@@ -11,11 +11,13 @@ import { PasswordForm } from '~web/password/forms/password.form';
 export class PasswordComponent implements OnInit {
 
   @Input() editable = false;
+  @Input() formMode: PasswordFormMode = 'Signup';
 
   protected _passwordLabel: string;
 
   constructor(
-    private _formFieldService: FormFieldService<PasswordForm>
+    private _formFieldService: FormFieldService<PasswordForm>,
+    private _passwordFormAdapter: PasswordFormAdapter,
   ) {}
 
   get passwordForm(): PasswordForm {
@@ -26,12 +28,12 @@ export class PasswordComponent implements OnInit {
     return this._passwordLabel;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new PasswordForm()
+      genDefault: () => this._passwordFormAdapter.toForm()
     });
 
-    this._passwordLabel = (this.passwordForm.formMode === 'Account')
+    this._passwordLabel = (this.formMode === 'Signup')
       ? 'New Password'
       : 'Password';
   }

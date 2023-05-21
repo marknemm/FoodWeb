@@ -1,6 +1,7 @@
 import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { TimeRange } from '~shared';
-import { TimeRangeForm } from '~web/date-time/forms/time-range.form';
+import { TimeRangeForm, TimeRangeFormAdapter } from '~web/date-time/services/time-range-form-adapter/time-range-form-adapter.service';
 import { FormFieldService } from '~web/forms';
 
 @Component({
@@ -22,7 +23,7 @@ export class TimeRangeComponent implements OnInit {
   @Input() minutesGap = 5;
   @Input() preventOverlayClick = false;
   @Input() timeWidth = '';
-  @Input() get value(): TimeRange      { return this._formFieldService.value; }
+  @Input() get value(): TimeRange      { return this._formFieldService.valueOut(); }
            set value(range: TimeRange) { this._formFieldService.valueIn(range); }
 
   @Output() valueChanges: EventEmitter<TimeRange> = this._formFieldService.valueChangesEmitter;
@@ -30,8 +31,13 @@ export class TimeRangeComponent implements OnInit {
   @HostBinding() class = 'foodweb-time-range';
 
   constructor(
-    private _formFieldService: FormFieldService<TimeRangeForm>
+    private _formFieldService: FormFieldService<TimeRange, TimeRangeForm>,
+    private _timeRangeFormAdapter: TimeRangeFormAdapter,
   ) {}
+
+  get rangeErrStateMatcher(): ErrorStateMatcher {
+    return this._timeRangeFormAdapter.rangeErrStateMatcher;
+  }
 
   get timeRangeForm(): TimeRangeForm {
     return this._formFieldService.control;
@@ -39,8 +45,7 @@ export class TimeRangeComponent implements OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new TimeRangeForm()
+      genDefault: () => this._timeRangeFormAdapter.toForm()
     });
-
   }
 }

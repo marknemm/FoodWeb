@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormFieldService } from '~web/forms';
-import { MapOptionsForm } from '~web/map/forms/map-options.form';
+import { MapOptionsForm, MapOptionsFormAdapter } from '~web/map/services/map-options-form-adapter/map-options-form-adapter.service';
 
 @Component({
   selector: 'foodweb-map-options',
@@ -11,7 +11,8 @@ import { MapOptionsForm } from '~web/map/forms/map-options.form';
 export class MapOptionsComponent implements OnInit {
 
   constructor(
-    private _formFieldService: FormFieldService<MapOptionsForm>
+    private _formFieldService: FormFieldService<MapOptionsForm>,
+    private _mapOptionsFormAdapter: MapOptionsFormAdapter,
   ) {}
 
   get mapOptionsForm(): MapOptionsForm {
@@ -26,7 +27,7 @@ export class MapOptionsComponent implements OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new MapOptionsForm()
+      genDefault: () => this._mapOptionsFormAdapter.toForm()
     });
   }
 

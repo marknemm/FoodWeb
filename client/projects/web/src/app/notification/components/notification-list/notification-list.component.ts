@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Notification } from '~shared';
-import { NotificationFiltersForm } from '~web/notification/forms/notification-filters.form';
+import { NotificationFilterForm, NotificationFilterFormAdapter } from '~web/notification/services/notification-filter-form-adapter/notification-filter-form-adapter.service';
 import { NotificationService } from '~web/notification/services/notification/notification.service';
 import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 
@@ -12,18 +12,44 @@ import { ListQueryService } from '~web/shared/services/list-query/list-query.ser
 })
 export class NotificationListComponent implements OnInit {
 
-  readonly notificationFilters = new NotificationFiltersForm();
+  readonly notificationFilters: NotificationFilterForm = this._notificationFilterFormAdapter.toForm();
 
   constructor(
-    public listQueryService: ListQueryService<Notification>,
-    public notificationService: NotificationService,
+    private _listQueryService: ListQueryService<Notification>,
+    private _notificationFilterFormAdapter: NotificationFilterFormAdapter,
+    private _notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {
-    this.listQueryService.load(
-      this.notificationService.getNotifications.bind(this.notificationService),
-      this.notificationFilters
+    this._listQueryService.load(
+      this._notificationService.getNotifications.bind(this._notificationService),
+      this.notificationFilters,
+      this._notificationFilterFormAdapter
     );
+  }
+
+  get notifications(): readonly Notification[] {
+    return this._listQueryService.items;
+  }
+
+  get pageSizeOptions(): number[] {
+    return [
+      this._notificationService.defaultReadLimit,
+      this._notificationService.defaultReadLimit * 2,
+      this._notificationService.defaultReadLimit * 4
+    ];
+  }
+
+  get totalCount(): number {
+    return this._listQueryService.totalCount;
+  }
+
+  handleNotificationFlagToggle(notification: Notification): void {
+    this._notificationService.toggleNotificationFlaggedState(notification);
+  }
+
+  handleNotificationSelect(notification: Notification): void {
+    this._notificationService.handleNotificationSelect(notification);
   }
 
 }

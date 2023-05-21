@@ -2,14 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { DonationHub } from '~shared';
-import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { DonationHubForm, DonationHubFormT } from '~web/donation-hub/forms/donation-hub.form';
+import { DonationHubForm, DonationHubFormAdapter, DonationHubFormData } from '~web/donation-hub/services/donation-hub-form-adapter/donation-hub-form-adapter.service';
 import { DonationHubReadService } from '~web/donation-hub/services/donation-hub-read/donation-hub-read.service';
 import { DonationHubUpdateService } from '~web/donation-hub/services/donation-hub-update/donation-hub-update.service';
 import { FormFieldService } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
-import { ShellService } from '~web/shell/services/shell/shell.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-donation-hub-edit',
@@ -26,22 +25,18 @@ export class DonationHubEditComponent implements OnInit {
   protected _originalDonationHub: DonationHub;
 
   constructor(
-    public shellService: ShellService,
     protected _activatedRoute: ActivatedRoute,
+    protected _donationHubFormAdapter: DonationHubFormAdapter,
     protected _donationHubReadService: DonationHubReadService,
     protected _donationHubUpdateService: DonationHubUpdateService,
-    protected _formFieldService: FormFieldService<DonationHubForm, DonationHub>,
+    protected _formFieldService: FormFieldService<DonationHubFormData, DonationHubForm>,
     protected _router: Router,
+    protected _shellService: ShellService,
     protected _urlQueryService: UrlQueryService,
-    dateTimeService: DateTimeService,
     sessionService: SessionService
   ) {
     this._formFieldService.registerControl(
-      new DonationHubForm(dateTimeService, { account: sessionService.account, omitChecklists: true }),
-      {
-        valueInConverter: (valueIn: DonationHub) => this.donationHubForm.fromDonationHub(valueIn),
-        valueOutConverter: (value: DonationHubFormT) => this.donationHubForm.toDonationHub(value)
-      }
+      this._donationHubFormAdapter.toForm({ account: sessionService.account, omitChecklists: true })
     );
   }
 
@@ -57,6 +52,10 @@ export class DonationHubEditComponent implements OnInit {
     return this._originalDonationHub;
   }
 
+  get pageTitle(): string {
+    return this._shellService.pageTitle;
+  }
+
   ngOnInit(): void {
     this._urlQueryService.listenUrlParamChange<number>('id', this._activatedRoute).pipe(
       switchMap((id: number) => this._donationHubReadService.getDonationHub(id))
@@ -67,14 +66,17 @@ export class DonationHubEditComponent implements OnInit {
     this._originalDonationHub = donationHub;
     this._donationHubNotFound = !donationHub;
     if (!this.donationHubNotFound) {
-      this.donationHubForm.reset(this._formFieldService.valueIn(donationHub));
+      this.donationHubForm.reset(
+        this._donationHubFormAdapter.toViewModel(donationHub));
     }
   }
 
   save(): void {
     this.donationHubForm.markAllAsTouched();
     if (this.donationHubForm.valid) {
-      this._donationHubUpdateService.updateDonationHub(this.donationHubForm.toDonationHub()).subscribe(
+      this._donationHubUpdateService.updateDonationHub(
+        this._donationHubFormAdapter.toModel(this.donationHubForm)
+      ).subscribe(
         (donationHub: DonationHub) => this._router.navigate(this.postEditRoute.concat(`${donationHub.id}`))
       );
     }

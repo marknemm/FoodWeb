@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { OperationHoursFilterForm } from '~web/account-shared/forms/operation-hours-filter.form';
+import { OperationHoursFilterForm, OperationHoursFilterFormAdapter } from '~web/account-shared/services/operation-hours-filter-form-adapter/operation-hours-filter-form-adapter.service';
 import { FormFieldService } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
@@ -21,15 +21,16 @@ export class OperationHoursFilterComponent implements OnInit {
 
   constructor(
     public constantsService: ConstantsService,
-    private _formFieldService: FormFieldService<OperationHoursFilterForm>
+    private _formFieldService: FormFieldService<OperationHoursFilterForm>,
+    private _operationHoursFilterFormAdapter: OperationHoursFilterFormAdapter,
   ) {}
 
   get defaultStartTime(): string {
-    return (this.operationHoursForm.startTime ? this.operationHoursForm.startTime : '9:00 AM');
+    return (this.operationHoursForm.value.startTime ? this.operationHoursForm.value.startTime : '9:00 AM');
   }
 
   get defaultEndTime(): string  {
-    return (this.operationHoursForm.endTime ? this.operationHoursForm.endTime : '5:00 PM');
+    return (this.operationHoursForm.value.endTime ? this.operationHoursForm.value.endTime : '5:00 PM');
   }
 
   get operationHoursForm(): OperationHoursFilterForm {
@@ -38,7 +39,7 @@ export class OperationHoursFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new OperationHoursFilterForm()
+      genDefault: () => this._operationHoursFilterFormAdapter.toForm()
     });
   }
 }

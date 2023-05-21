@@ -1,13 +1,13 @@
-import { Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AdminDeliveryForm, AdminDeliveryFormT } from '~admin/admin-delivery/forms/admin-delivery.form';
-import { AccountAutocompleteItem, Donation, DonationSaveData } from '~shared';
+import { AdminDeliveryForm, AdminDeliveryFormData } from '~admin/admin-delivery/forms/admin-delivery.form';
+import { AccountAutocompleteItem, Donation, DonationSaveData, GeographyLocation } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { DonateForm, DonationFormT } from '~web/donation/forms/donate.form';
-import { TFormGroup } from '~web/forms';
+import { DonateForm, DonateFormData } from '~web/donation/forms/donate.form';
+import { Controls, Flatten } from '~web/forms';
 
-export class AdminDonationForm extends TFormGroup<AdminDonationFormT> {
+export class AdminDonationForm extends FormGroup<AdminDonationControls> {
 
   constructor(
     dateTimeService: DateTimeService,
@@ -19,7 +19,7 @@ export class AdminDonationForm extends TFormGroup<AdminDonationFormT> {
       donorAccount: [<AccountAutocompleteItem>donation?.donorAccount, Validators.required],
       receiverAccount: <AccountAutocompleteItem>donation?.claim?.receiverAccount,
       delivery: new AdminDeliveryForm(donation?.claim?.delivery),
-      sendNotifications: true,
+      sendNotifications: new FormControl(true),
     });
     this._listenForDonorAccountChange(destroy$);
     this._listenForReceiverAccountChange(destroy$);
@@ -34,15 +34,15 @@ export class AdminDonationForm extends TFormGroup<AdminDonationFormT> {
   }
 
   get donorAccount(): AccountAutocompleteItem {
-    return this.value.donorAccount;
+    return this.getRawValue().donorAccount;
   }
 
   get receiverAccount(): AccountAutocompleteItem {
-    return this.get('receiverAccount').enabled ? this.value.receiverAccount : null;
+    return this.get('receiverAccount').enabled ? this.getRawValue().receiverAccount : null;
   }
 
-  get delivery(): AdminDeliveryFormT {
-    return this.deliveryEnabled ? this.value.delivery : null;
+  get delivery(): AdminDeliveryFormData {
+    return this.deliveryEnabled ? this.getRawValue().delivery : null;
   }
 
   get deliveryEnabled(): boolean {
@@ -107,10 +107,11 @@ export class AdminDonationForm extends TFormGroup<AdminDonationFormT> {
   }
 }
 
-export interface AdminDonationFormT {
-  donateForm: DonationFormT;
+export type AdminDonationControls = Controls<AdminDonationFormData, Flatten<GeographyLocation>>;
+export interface AdminDonationFormData {
+  donateForm: DonateFormData;
   donorAccount: AccountAutocompleteItem;
   receiverAccount: AccountAutocompleteItem;
-  delivery: AdminDeliveryFormT;
+  delivery: AdminDeliveryFormData;
   sendNotifications: boolean;
 }

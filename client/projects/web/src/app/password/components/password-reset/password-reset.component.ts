@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PasswordForm } from '~web/password/forms/password.form';
+import { PasswordForm, PasswordFormAdapter } from '~web/password/services/password-form-adapter/password-form-adapter.service';
 import { PasswordResetService } from '~web/password/services/password-reset/password-reset.service';
 
 @Component({
@@ -9,17 +9,23 @@ import { PasswordResetService } from '~web/password/services/password-reset/pass
 })
 export class PasswordResetComponent {
 
-  passwordResetForm = new PasswordForm({ formMode: 'Signup' });
-  passwordResetComplete = false;
+  readonly passwordResetForm: PasswordForm = this._passwordFormAdapter.toForm({ formMode: 'Signup' });
+
+  private _passwordResetComplete = false;
 
   constructor(
+    protected _passwordFormAdapter: PasswordFormAdapter,
     protected _passwordResetService: PasswordResetService
   ) {}
+
+  get passwordResetComplete(): boolean {
+    return this._passwordResetComplete;
+  }
 
   submit(): void {
     if (this.passwordResetForm.valid) {
       this._passwordResetService.resetPassword(this.passwordResetForm.get('password').value).subscribe(
-        () => this.passwordResetComplete = true
+        () => this._passwordResetComplete = true
       );
     }
   }

@@ -18,7 +18,7 @@ export class ProfileImgComponent implements OnInit {
   @Input() default = './assets/IconImgSm.png';
   @Input() size: SizeThresholds | number = 40; // Default is 40 (px) b/c mat-card-avatar defaults to this size.
   @Input() get value(): string      { return this._formFieldService.value; }
-           set value(value: string) { this._formFieldService.valueIn(value); }
+           set value(value: string) { this.formControl.patchValue(value, { emitEvent: false }); }
 
   @HostBinding()
   readonly class = 'foodweb-profile-img';

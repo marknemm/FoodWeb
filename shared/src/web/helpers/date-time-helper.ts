@@ -52,7 +52,7 @@ export class DateTimeHelper {
       const formatterOpts: Intl.DateTimeFormatOptions = Object.assign(customOpts, this.dateTimeFormatOpts);
       return new Intl.DateTimeFormat(this.locale, formatterOpts).format(date);
     }
-    return <string>date;
+    return date as string;
   }
 
   /**
@@ -78,7 +78,7 @@ export class DateTimeHelper {
       const formatterOpts: Intl.DateTimeFormatOptions = Object.assign(customOpts, this.dateFormatOpts);
       return new Intl.DateTimeFormat(this.locale, formatterOpts).format(date);
     }
-    return <string>date;
+    return date as string;
   }
 
   /**
@@ -103,7 +103,7 @@ export class DateTimeHelper {
       const formatterOpts: Intl.DateTimeFormatOptions = Object.assign(customOpts, this.timeFormatOpts);
       return new Intl.DateTimeFormat(this.locale, formatterOpts).format(date);
     }
-    return <string>date;
+    return date as string;
   }
 
   /**
@@ -137,7 +137,7 @@ export class DateTimeHelper {
       const formatterOpts: Intl.DateTimeFormatOptions = Object.assign(customOpts, this.weekdayFormatOpts);
       return new Intl.DateTimeFormat(this.locale, formatterOpts).format(date);
     }
-    return <string>date;
+    return date as string;
   }
 
   /**
@@ -203,7 +203,7 @@ export class DateTimeHelper {
    * @param date The date/time string to convert.
    * @return The Date object result.
    */
-  toDate(date: any): Date {
+  toDate(date: string | number | Date | { toString(): string }): Date {
     if (date instanceof Date) {
       return date;
     }
@@ -224,7 +224,7 @@ export class DateTimeHelper {
 
     return date
       ? new Date(date.toString())
-      : <Date>date;
+      : date as Date;
   }
 
   /**
@@ -254,6 +254,16 @@ export class DateTimeHelper {
     date.setHours(hours);
     date.setMinutes(minutes);
     return date;
+  }
+
+  /**
+   * Compares date/time strings or objects while omitting time data.
+   * @param lhs The left-hand side date/time object or string.
+   * @param rhs The right-hand side date/time object or string.
+   * @return -1 if lhs < rhs, 0 if lhs == rhs, 1 if lhs > rhs.
+   */
+  compareDateOnly(lhs: Date | string, rhs: Date | string): number {
+    return this.compare(this.toDateStr(lhs), this.toDateStr(rhs));
   }
 
   /**

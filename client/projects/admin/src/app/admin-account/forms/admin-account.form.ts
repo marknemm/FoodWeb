@@ -1,14 +1,14 @@
+import { FormGroup } from '@angular/forms';
 import { Account } from '~shared';
-import { AccountForm, AccountFormConfig, AccountFormT, PasswordFormT } from '~web/account-shared/forms/account.form';
-import { TFormGroup } from '~web/forms';
-export { PasswordFormT };
+import { AccountForm, AccountFormConfig, AccountFormData, PasswordFormData } from '~web/account-shared/forms/account.form';
+export { PasswordFormData };
 
-export class AdminAccountForm extends TFormGroup<AdminAccountFormT> {
+export class AdminAccountForm extends FormGroup<AdminAccountFormT> {
 
   constructor(config: AccountFormConfig) {
     super({
       account: new AccountForm(config),
-      accountCreateOptions: new TFormGroup<AccountCreateOptions>({
+      accountCreateOptions: new FormGroup<AccountCreateOptions>({
         autoGenPassword: false,
         autoVerify: false
       })
@@ -16,11 +16,11 @@ export class AdminAccountForm extends TFormGroup<AdminAccountFormT> {
   }
 
   get accountForm(): AccountForm {
-    return <AccountForm>this.get('account');
+    return this.get('account') as AccountForm;
   }
 
-  get accountCreateOptionsForm(): TFormGroup<AccountCreateOptions> {
-    return <TFormGroup<AccountCreateOptions>>this.get('accountCreateOptions');
+  get accountCreateOptionsForm(): FormGroup<AccountCreateOptions> {
+    return this.get('accountCreateOptions') as FormGroup<AccountCreateOptions>;
   }
 
   get accountCreateOptions(): AccountCreateOptions {
@@ -38,7 +38,7 @@ export class AdminAccountForm extends TFormGroup<AdminAccountFormT> {
 }
 
 export interface AdminAccountFormT {
-  account: AccountFormT;
+  account: AccountFormData;
   accountCreateOptions: AccountCreateOptions;
 }
 

@@ -12,7 +12,7 @@ export class UsernameComponent implements OnInit {
 
   @Input() editable = false;
   @Input() get value(): string         { return this._formFieldService.value; }
-           set value(username: string) { this._formFieldService.valueIn(username); }
+           set value(username: string) { this.formControl.patchValue(username, { emitEvent: false }); }
 
   @HostBinding()
   readonly class = 'foodweb-username';

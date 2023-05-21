@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { FormArray } from '@angular/forms';
 import { OperationHours, Weekday } from '~shared';
-import { TimeRangeArray } from '~web/date-time/forms/time-range.array';
-import { TimeRangeForm } from '~web/date-time/forms/time-range.form';
+import { TimeRangeForm, TimeRangeFormAdapter } from '~web/date-time/services/time-range-form-adapter/time-range-form-adapter.service';
 import { FormFieldService } from '~web/forms';
 
 @Component({
@@ -21,16 +21,17 @@ export class WeekdayOperationHoursComponent implements OnChanges, OnInit {
   @Input() weekday: Weekday;
 
   constructor(
-    private _formFieldService: FormFieldService<TimeRangeArray>
+    private _formFieldService: FormFieldService<FormArray<TimeRangeForm>>,
+    private _timeRangeFormAdapter: TimeRangeFormAdapter,
   ) {}
 
-  get timeRangeArray(): TimeRangeArray {
+  get timeRangeArray(): FormArray<TimeRangeForm> {
     return this._formFieldService.control;
   }
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new TimeRangeArray()
+      genDefault: () => new FormArray<TimeRangeForm>([])
     });
   }
 
@@ -41,6 +42,6 @@ export class WeekdayOperationHoursComponent implements OnChanges, OnInit {
   }
 
   addTimeRange(): void {
-    this.timeRangeArray.push(new TimeRangeForm());
+    this.timeRangeArray.push(this._timeRangeFormAdapter.toForm());
   }
 }

@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AccountType, Organization } from '~shared';
-import { OrganizationForm } from '~web/account-shared/forms/organization.form';
+import { OrganizationForm, OrganizationFormAdapter, OrganizationFormData } from '~web/account-shared/services/organization-form-adapter/organization-form-adapter.service';
 import { FormFieldService } from '~web/forms';
 
 @Component({
@@ -13,13 +13,15 @@ export class OrganizationComponent implements OnChanges, OnInit {
 
   @Input() accountType: AccountType;
   @Input() editable = false;
-  @Input() get value(): Organization             { return this._formFieldService.value; }
-           set value(organization: Organization) { this._formFieldService.valueIn(organization); }
+  @Input() get value(): Organization              { return this._organizationFormAdapter.toModel(this.organizationForm); }
+           set value(organization: Organization)  { this.organizationForm.patchValue(
+                                                      this._organizationFormAdapter.toViewModel(organization), { emitEvent: false }); }
 
   protected _deliveryInstrLabel = '';
 
   constructor(
-    private _formFieldService: FormFieldService<OrganizationForm>
+    private _formFieldService: FormFieldService<OrganizationFormData, OrganizationForm>,
+    private _organizationFormAdapter: OrganizationFormAdapter,
   ) {}
 
   get deliveryInstrLabel(): string {
@@ -36,7 +38,7 @@ export class OrganizationComponent implements OnChanges, OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new OrganizationForm()
+      genDefault: () => this._organizationFormAdapter.toForm()
     });
   }
 

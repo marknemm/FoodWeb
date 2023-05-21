@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Receiver } from '~shared';
-import { ReceiverForm } from '~web/account-shared/forms/receiver.form';
+import { ReceiverForm, ReceiverFormAdapter } from '~web/account-shared/services/receiver-form-adapter/receiver-form-adapter.service';
 import { FormFieldService } from '~web/forms';
 
 @Component({
@@ -12,11 +12,13 @@ import { FormFieldService } from '~web/forms';
 export class ReceiverComponent implements OnInit {
 
   @Input() editable = false;
-  @Input() get value(): Receiver         { return this._formFieldService.value; }
-           set value(receiver: Receiver) { this._formFieldService.valueIn(receiver); }
+  @Input() get value(): Receiver          { return this._receiverFormAdapter.toModel(this.receiverForm.value); }
+           set value(receiver: Receiver)  { this.receiverForm.patchValue(
+                                              this._receiverFormAdapter.toViewModel(receiver), { emitEvent: false }); }
 
   constructor(
-    private _formFieldService: FormFieldService<ReceiverForm>
+    private _formFieldService: FormFieldService<ReceiverForm>,
+    private _receiverFormAdapter: ReceiverFormAdapter,
   ) {}
 
   get receiverForm(): ReceiverForm {
@@ -25,7 +27,7 @@ export class ReceiverComponent implements OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new ReceiverForm()
+      genDefault: () => this._receiverFormAdapter.toForm()
     });
   }
 

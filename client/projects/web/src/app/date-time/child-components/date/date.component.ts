@@ -24,7 +24,7 @@ export class DateComponent implements OnInit {
   @Input() minDate: Date;
   @Input() minWidth = '';
   @Input() placeholder = '';
-  @Input() get value(): Date     { return this._formFieldService.value; }
+  @Input() get value(): Date     { return this._formFieldService.valueOut(); }
            set value(date: Date) { this._formFieldService.valueIn(date); }
 
   @Output() valueChanges: EventEmitter<Date> = this._formFieldService.valueChangesEmitter;

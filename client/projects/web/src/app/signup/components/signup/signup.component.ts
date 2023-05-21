@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
-import { AccountType } from '~shared';
-import { AccountForm } from '~web/account-shared/forms/account.form';
+import { Account, AccountType } from '~shared';
+import { AccountForm, AccountFormAdapter } from '~web/account-shared/services/account-form-adapter/account-form-adapter.service';
 import { SessionService } from '~web/session/services/session/session.service';
 import { TermsConditionsDialogComponent } from '~web/signup/components/terms-conditions-dialog/terms-conditions-dialog.component';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
@@ -19,6 +19,7 @@ export class SignupComponent {
     public sessionService: SessionService,
     public signupVerificationService: SignupVerificationService,
     protected _signupService: SignupService,
+    private _accountFormAdapter: AccountFormAdapter,
     private _matDialog: MatDialog,
   ) {}
 
@@ -30,7 +31,9 @@ export class SignupComponent {
         ? of(true)
         : this._genAgreementObs(accountType);
       agreement$.subscribe((agreed: boolean) => {
-        this._signupService.createAccount(accountForm, agreed).subscribe();
+        const account: Account = this._accountFormAdapter.toModel(accountForm);
+        const password: string = accountForm.controls.password.value.password;
+        this._signupService.createAccount(account, password, agreed).subscribe();
       });
     }
   }

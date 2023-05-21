@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { Account, AccountHelper, AccountType, DonationReadRequest } from '~shared';
-import { AccountForm } from '~web/account-shared/forms/account.form';
+import { AccountForm, AccountFormAdapter, AccountFormData } from '~web/account-shared/services/account-form-adapter/account-form-adapter.service';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
 import { FormFieldService } from '~web/forms';
-import { PasswordFormT } from '~web/password/forms/password.form';
+import { PasswordFormData } from '~web/password/services/password-form-adapter/password-form-adapter.service';
 import { SessionService } from '~web/session/services/session/session.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
@@ -34,10 +34,11 @@ export class AccountComponent implements OnInit {
     public sessionService: SessionService,
     public accountHelper: AccountHelper,
     public signupVerificationService: SignupVerificationService,
+    protected _accountFormAdapter: AccountFormAdapter,
     protected _accountReadService: AccountReadService,
     protected _accountSaveService: AccountSaveService,
     protected _activatedRoute: ActivatedRoute,
-    protected _formFieldService: FormFieldService<AccountForm>,
+    protected _formFieldService: FormFieldService<AccountFormData>,
     protected _router: Router,
     protected _urlQueryService: UrlQueryService,
   ) {
@@ -76,7 +77,7 @@ export class AccountComponent implements OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new AccountForm({ formMode: 'Account' })
+      genDefault: () => this._accountFormAdapter.toForm({ destroy$: this._formFieldService.destroy$ })
     });
 
     (this._router.url.indexOf('/my') >= 0)
@@ -97,7 +98,7 @@ export class AccountComponent implements OnInit {
       this._originalAccount = account;
       this._hasAccountOwnership = this.sessionService.hasAccountOwnership(account.id);
       this._seeDonationsLinkParams = this._genSeeDonationLinkParams(account);
-      this.accountForm.patchValue(account);
+      this.accountForm.patchValue(this._accountFormAdapter.toViewModel(account));
     }
     this._renavigateToAccountPage();
   }
@@ -127,28 +128,24 @@ export class AccountComponent implements OnInit {
   }
 
   saveAccountFields(fields: string[], successCb: () => void): void {
-    const account: Account = this.accountForm.toAccount();
+    const account: Account = this._accountFormAdapter.toModel(this.accountForm);
     this._accountSaveService.updateAccountFields(this.originalAccount, account, fields).subscribe(
-      (savedAccount: Account) => this._handleSaveSuccess(savedAccount, fields, successCb)
-    );
-  }
-
-  savePassword(successCb: () => void): void {
-    const passwordUpdate: PasswordFormT = this.accountForm.passwordFormValue;
-    this._accountSaveService.updatePassword(this._originalAccount, passwordUpdate).subscribe(
-      () => {
-        this.accountForm.get('password').setValue({ password: '', oldPassword: '', confirmPassword: '' });
-        this._handleSaveSuccess(this.originalAccount, [], successCb);
+      (savedAccount: Account) => {
+        this._originalAccount = savedAccount;
+        // Write saved values back to the account update form group (server may have modified or filled some values).
+        this._accountFormAdapter.patchFromModel(this.accountForm, savedAccount, { fields });
+        successCb();
       }
     );
   }
 
-  private _handleSaveSuccess(savedAccount: Account, fields: string[], successCb: () => void): void {
-    this._originalAccount = savedAccount;
-    // Write saved values back to the account update form group (server may have modified or filled some values).
-    this.accountForm.patchValue(
-      this._accountSaveService.mergeAccountUpdateFields(savedAccount, {}, fields)
+  savePassword(successCb: () => void): void {
+    const passwordUpdate: PasswordFormData = this.accountForm.controls.password.getRawValue();
+    this._accountSaveService.updatePassword(this._originalAccount, passwordUpdate).subscribe(
+      () => {
+        this.accountForm.get('password').setValue({ password: '', oldPassword: '', confirmPassword: '' });
+        successCb();
+      }
     );
-    successCb();
   }
 }

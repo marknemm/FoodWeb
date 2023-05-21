@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { merge, Observable, Subscriber } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { TAbstractControl, UpdateValueOptions } from '~web/forms';
+import { UpdateValueOptions } from '~web/forms';
 
 /**
  * A utility service that provides `AbstractControl` monitoring capabilities.
@@ -178,7 +178,7 @@ export class FormMonitorService {
    * @param control The `AbstractControl` to monitor.
    * @return An observable that emits the value & options used when a call to `patchValue` or `setValue` is made on the given `control`.
    */
-  onMutateValue<T>(control: TAbstractControl<T>): Observable<T> {
+  onMutateValue<T>(control: AbstractControl<T>): Observable<T> {
     control['onMutateValue'] ??= merge(
       merge(
         this.onPatchValue<T>(control),
@@ -198,7 +198,7 @@ export class FormMonitorService {
    * @param control The `AbstractControl` to monitor.
    * @returns An observable that emits the value & options used when a call to `reset` is made on the given `control`.
    */
-  onReset<T>(control: TAbstractControl<T>): Observable<{ value: T; options: any }> {
+  onReset<T>(control: AbstractControl<T>): Observable<{ value: T; options: any }> {
     control['onReset'] ??= new Observable((subscriber: Subscriber<{ value: any; options: any }>) => {
       const origReset = control.reset.bind(control);
       control.reset = (value?: any, options?: any) => {
@@ -214,7 +214,7 @@ export class FormMonitorService {
    * @param control The `AbstractControl` to monitor.
    * @return An observable that emits the value & options used when a call to `setValue` is made on the given `control`.
    */
-  onSetValue<T>(control: TAbstractControl<T>): Observable<{ value: T; options: any }> {
+  onSetValue<T>(control: AbstractControl<T>): Observable<{ value: T; options: any }> {
     control['onSetValue'] ??=  new Observable((subscriber: Subscriber<{ value: any; options: any }>) => {
       const origSetValue = control.setValue.bind(control);
       control.setValue = (value: any, options: any) => {

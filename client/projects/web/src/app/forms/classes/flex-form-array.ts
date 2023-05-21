@@ -1,19 +1,17 @@
 import { AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormArray, FormControl, ValidatorFn, ɵFormArrayRawValue, ɵFormArrayValue, ɵTypedOrUntyped } from '@angular/forms';
-import { UpdateValueOptions } from '~web/forms/classes/t-abstract-control';
+import { UpdateValueOptions } from '~web/forms/interfaces/form-type-util';
 
 /**
  * A typed auto-resizing version of the built-in `FormArray`.
- * Auto-resizes itself and auto-generates its `TAbstractControl` elements whenever raw values are inserted.
+ * Auto-resizes itself and auto-generates its `AbstractControl` elements whenever raw values are inserted.
  * @extends FormArray
- * @param T The type of each each raw element within the array or `TAbstractControl` in the array.
- * @param V The type of each raw element within the array.
- * @param A The type of each `AbstractControl` in the array. Defaults to `TAbstractControl<any>`.
+ * @param A The type of each `AbstractControl` in the array. Defaults to `any`.
  */
 export class FlexFormArray<A extends AbstractControl> extends FormArray<A> {
 
   /**
    * Creates a new `FlexFormArray` instance.
-   * @param init The initial raw value or abstract control elements of this form array. Defaults to an empty array.
+   * @param controls The initial abstract control elements of this form array. Defaults to an empty array.
    * @param memberInit A callback that is used to generate a new abstract control member
    * whenever raw values are added to the this form array. Defaults to generating a basic FormControl.
    * @param validatorOrOpts A synchronous validator function, or an array of such functions,
@@ -21,17 +19,12 @@ export class FlexFormArray<A extends AbstractControl> extends FormArray<A> {
    * @param asyncValidator A single async validator or array of async validator functions.
    */
   constructor(
-    public init: (ɵFormArrayValue<A> | A) = [],
+    public controls: A[] = [],
     public memberInit?: () => A,
     validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions,
     asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[]
   ) {
-    super([], validatorOrOpts, asyncValidator);
-    if (init instanceof Array) {
-      for (const member of init) {
-        this.push(<any>member);
-      }
-    }
+    super(controls, validatorOrOpts, asyncValidator);
   }
 
   /**
@@ -66,42 +59,8 @@ export class FlexFormArray<A extends AbstractControl> extends FormArray<A> {
   }
 
   /**
-   * Pushes a new empty `AbstractFormControl` to the end of this `FormArray`.
-   */
-  push(): void;
-  /**
-   * Pushes a new raw value to the end of this `FormArray`.
-   * @param control The raw value to push.
-   */
-  push(value: ɵFormArrayValue<A>): void;
-  /**
-   * Pushes a new `AbstractFormControl` to the end of this `FormArray`.
-   * @param control The abstract form control control to push.
-   */
-  push(control: A): void;
-  push(value: ɵFormArrayValue<A> | A = this._genEmptyMember()): void {
-    if (value instanceof AbstractControl) {
-      super.push(value);
-      this.at(this.length - 1).valueChanges.subscribe(this._onElementValueChanges.bind(this, this.at(this.length - 1)));
-    } else {
-      this._addNeededElements(this.length + 1);
-      this.at(this.length - 1).patchValue(value);
-    }
-    this.markAsDirty();
-  }
-
-  /**
-   * Removes an element within this `FlexFormArray` at a given index, and marks the array as dirty.
-   * @param index The index of the element to remove.
-   */
-  removeAt(index: number): void {
-    super.removeAt(index);
-    super.markAsDirty();
-  }
-
-  /**
    * Resets this `FormArray` to a specified value/state.
-   * Marks all contained `TAbstractControl` elements as `pristine` and `untouched`.
+   * Marks all contained `AbstractControl` elements as `pristine` and `untouched`.
    *
    * @usageNotes
    * ### Reset the values in a form array
@@ -170,7 +129,7 @@ export class FlexFormArray<A extends AbstractControl> extends FormArray<A> {
     super.setValue(value, options);
   }
 
-  protected _addNeededElements(length: number): void {
+  private _addNeededElements(length: number): void {
     while (this.length < length) {
       const memberCopy: A = this._genEmptyMember();
       this.controls.push(memberCopy);
@@ -180,20 +139,20 @@ export class FlexFormArray<A extends AbstractControl> extends FormArray<A> {
     }
   }
 
-  protected _genEmptyMember(): A {
+  private _genEmptyMember(): A {
     return (this.memberInit)
       ? this.memberInit()
       : <any>new FormControl<ɵFormArrayValue<A>>(null);
   }
 
-  protected _onElementValueChanges(source: AbstractControl): void {
+  private _onElementValueChanges(source: AbstractControl): void {
     this.updateValueAndValidity();
     if (source.dirty) {
       this.markAsDirty();
     }
   }
 
-  protected _restructureFormArray(length: number): void {
+  private _restructureFormArray(length: number): void {
     while (this.length > length) {
       this.controls.pop();
     }

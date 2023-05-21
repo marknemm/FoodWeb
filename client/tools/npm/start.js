@@ -47,5 +47,5 @@ async function startClient(project, platform) {
   (platform && platform !== 'web')
     ? await spawn('npx', ['ionic', 'cap', 'run', platform, `--project=${project}`, '-livereload', '--external', '--source-map=false', '--consolelogs', '--serverlogs'].concat(configOpts),
                   '', getProjectDir(project))
-    : await spawn('ng', ['serve', `--port=${port}`, `--project=${project}`].concat(configOpts));
+    : await spawn('ng', ['serve', `--port=${port}`, `--project=${project}`, '--host=127.0.0.1'].concat(configOpts));
 }

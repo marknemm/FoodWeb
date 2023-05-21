@@ -10,8 +10,8 @@
       [minDate]="minDate"
       [maxDate]="maxDate"
       [floatLabels]="floatLabels"
-      [errorStateMatcher]="dateTimeRangeForm.rangeErrStateMatcher"
-      (ngModelChange)="dateTimeRangeForm.fillMissingRangePart()">
+      [errorStateMatcher]="rangeErrStateMatcher"
+      (ngModelChange)="_onRangeEndChange()">
     </foodweb-date-time>
   </div>
   <div class="date-time-field col-sm-12">
@@ -25,8 +25,8 @@
       [minDate]="minDate"
       [maxDate]="maxDate"
       [floatLabels]="floatLabels"
-      [errorStateMatcher]="dateTimeRangeForm.rangeErrStateMatcher"
-      (ngModelChange)="dateTimeRangeForm.fillMissingRangePart()">
+      [errorStateMatcher]="rangeErrStateMatcher"
+      (ngModelChange)="_onRangeEndChange()">
     </foodweb-date-time>
     <mat-error *ngIf="dateTimeRangeForm.hasError('dateTimeRangeOrder')" class="range-order-err">
       End date-time must be later than start date-time
@@ -46,13 +46,13 @@
     <foodweb-date-time
       [boldTime]="boldTime"
       [editable]="false"
-      [excludeTimeDisplay]="dateTimeRangeForm.startEndDateSame"
+      [excludeTimeDisplay]="startEndDateSame"
       [value]="value.startDateTime">
     </foodweb-date-time>
     <!-- For no display of end date due to same begin and end date, make sure we group times together so they end up on same line if line break occurs. -->
     <span class="d-inline-block">
       <foodweb-date-time
-        *ngIf="dateTimeRangeForm.startEndDateSame"
+        *ngIf="startEndDateSame"
         [boldTime]="boldTime"
         [editable]="false"
         [excludeDateDisplay]="true"
@@ -62,7 +62,7 @@
       <foodweb-date-time
         [boldTime]="boldTime"
         [editable]="false"
-        [excludeDateDisplay]="dateTimeRangeForm.startEndDateSame"
+        [excludeDateDisplay]="startEndDateSame"
         [value]="value.endDateTime">
       </foodweb-date-time>
     </span>

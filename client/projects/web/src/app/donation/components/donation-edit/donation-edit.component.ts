@@ -5,10 +5,11 @@ import { DonationSaveData } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
-import { DonateForm } from '~web/donation/forms/donate.form';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 import { ShellService } from '~web/shell/services/shell/shell.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
+import { DonateForm, DonateFormAdapter } from '~web/donation/services/donate-form-adapter/donate-form-adapter.service';
+import { SessionService } from '~web/session/services/session/session.service';
 
 @Component({
   selector: 'foodweb-donation-edit',
@@ -18,19 +19,24 @@ import { UrlQueryService } from '~web/shared/services/url-query/url-query.servic
 export class DonationEditComponent implements OnInit {
 
   protected _donationNotFound = false;
-  protected _editForm: DonateForm;
+  protected _editForm: DonateForm = this._donateFormAdapter.toForm({
+    donorAccount: this._sessionService.account,
+    initSafetyChecklist: true
+  });
   protected _originalDonation: Donation;
   protected _donationDetailsUrl = '';
 
   constructor(
-    public shellService: ShellService,
     protected _activatedRoute: ActivatedRoute,
     protected _dateTimeService: DateTimeService,
+    protected _donateFormAdapter: DonateFormAdapter,
     protected _donationReadService: DonationReadService,
     protected _donationSaveService: DonationSaveService,
     protected _pageProgressService: PageProgressService,
     protected _router: Router,
-    protected _urlQueryService: UrlQueryService
+    protected _sessionService: SessionService,
+    protected _shellService: ShellService,
+    protected _urlQueryService: UrlQueryService,
   ) {}
 
   get donationNotFound(): boolean {
@@ -45,9 +51,12 @@ export class DonationEditComponent implements OnInit {
     return this._originalDonation;
   }
 
-  ngOnInit() {
-    this.shellService.pageTitle = 'Edit Donation';
-    this._editForm = new DonateForm(this._dateTimeService, { safetyChecklistInit: true });
+  get pageTitle(): string {
+    return this._shellService.pageTitle;
+  }
+
+  ngOnInit(): void {
+    this._shellService.pageTitle = 'Edit Donation';
     this._listenDonationChange();
   }
 
@@ -64,14 +73,14 @@ export class DonationEditComponent implements OnInit {
     this._originalDonation = donation;
     this._donationDetailsUrl = `/donation/${this.originalDonation.id}`;
     if (!this._donationNotFound) {
-      this.editForm.patchFromDonation(donation);
+      this.editForm.patchValue(this._donateFormAdapter.toViewModel(donation));
       this.editForm.markAsPristine();
       this.editForm.markAsUntouched();
     }
   }
 
   saveDonation(): void {
-    const donationUpdate: DonationSaveData = this.editForm.toDonationSaveData();
+    const donationUpdate: DonationSaveData = this._donateFormAdapter.toModel(this.editForm);
     this._donationSaveService.updateDonation(this.originalDonation, donationUpdate).subscribe(
       (savedDonation: Donation) => this._router.navigate([this._donationDetailsUrl], { state: savedDonation })
     );

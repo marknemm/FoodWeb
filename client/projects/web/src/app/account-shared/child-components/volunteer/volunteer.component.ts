@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Volunteer } from '~shared';
-import { VolunteerForm } from '~web/account-shared/forms/volunteer.form';
+import { VolunteerForm, VolunteerFormAdapter, VolunteerFormData } from '~web/account-shared/services/volunteer-form-adapter/volunteer-form-adapter.service';
 import { FormFieldService } from '~web/forms';
 
 @Component({
@@ -12,11 +12,12 @@ import { FormFieldService } from '~web/forms';
 export class VolunteerComponent implements OnInit {
 
   @Input() editable = false;
-  @Input() get value(): Volunteer          { return this._formFieldService.value; }
-           set value(volunteer: Volunteer) { this._formFieldService.valueIn(volunteer); }
+  @Input() get value(): Volunteer           { return this._volunteerFormAdapter.toModel(this.volunteerForm.value); }
+           set value(volunteer: Volunteer)  { this._formFieldService.valueIn(this._volunteerFormAdapter.toViewModel(volunteer)); }
 
   constructor(
-    private _formFieldService: FormFieldService<VolunteerForm, Volunteer>
+    private _formFieldService: FormFieldService<VolunteerFormData, VolunteerForm>,
+    private _volunteerFormAdapter: VolunteerFormAdapter,
   ) {}
 
   get volunteerForm(): VolunteerForm {
@@ -25,7 +26,7 @@ export class VolunteerComponent implements OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new VolunteerForm()
+      genDefault: () => this._volunteerFormAdapter.toForm({ destroy$: this._formFieldService.destroy$ })
     });
   }
 }

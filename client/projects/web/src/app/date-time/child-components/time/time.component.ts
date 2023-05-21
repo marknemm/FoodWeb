@@ -22,7 +22,7 @@ export class TimeComponent implements OnInit {
   @Input() minutesGap = 5;
   @Input() placeholder = '';
   @Input() preventOverlayClick = false;
-  @Input() get value(): string     { return this._formFieldService.value; }
+  @Input() get value(): string     { return this._formFieldService.valueOut(); }
            set value(time: string) { this._formFieldService.valueIn(time); }
 
   @Output() valueChanges: EventEmitter<string> = this._formFieldService.valueChangesEmitter;
@@ -30,7 +30,11 @@ export class TimeComponent implements OnInit {
   constructor(
     private _dateTimeService: DateTimeService,
     private _formFieldService: FormFieldService<string>
-  ) {}
+  ) {
+    this._formFieldService.registerControl(null, {
+      valueInConverter: (time: string) => this._dateTimeService.roundTimeNearestMinutes(time, this.minutesGap)
+    })
+  }
 
   /**
    * If the current value of this time control is empty, then uses the `defaultTime` input binding.
@@ -52,9 +56,7 @@ export class TimeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._formFieldService.injectControl({
-      valueInConverter: (time: string) => this._dateTimeService.roundTimeNearestMinutes(time, this.minutesGap)
-    });
+    this._formFieldService.injectControl();
   }
 
   /**

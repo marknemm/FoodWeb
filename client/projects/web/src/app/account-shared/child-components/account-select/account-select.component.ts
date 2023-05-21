@@ -22,20 +22,24 @@ export class AccountSelectComponent implements OnInit {
   readonly filterCtrl = new FormControl<string>('');
 
   constructor(
-    public accountHelper: AccountHelper,
-    public accountAutocompleteService: AccountAutocompleteService,
-    private _formFieldService: FormFieldService<AccountAutocompleteItem>
+    private _accountAutocompleteService: AccountAutocompleteService,
+    private _accountHelper: AccountHelper,
+    private _formFieldService: FormFieldService<AccountAutocompleteItem, FormControl<AccountAutocompleteItem>>
   ) {}
 
   /**
    * The account autocomplete store which contains account data for the select options.
    */
   get accountAutocompleteStore(): ImmutableStore<AccountAutocompleteItem[]> {
-    return this.accountAutocompleteService.accountAutocompleteStore;
+    return this._accountAutocompleteService.accountAutocompleteStore;
   }
 
   get formControl(): FormControl<AccountAutocompleteItem> {
     return this._formFieldService.control;
+  }
+
+  get loading(): boolean {
+    return this._accountAutocompleteService.loading;
   }
 
   ngOnInit() {
@@ -54,6 +58,15 @@ export class AccountSelectComponent implements OnInit {
   }
 
   /**
+   * Refreshes the account auto-complete items.
+   * @param fullTextQuery The full-text query used to filter the items.
+   * @param accountType The account type to filter by.
+   */
+  refreshAutocompleteItems(fullTextQuery: string, accountType?: AccountType) {
+    this._accountAutocompleteService.refreshAutocompleteItems(fullTextQuery, accountType);
+  }
+
+  /**
    * Synchronizes the account filter string with the set selected account.
    * If the selected account exists in the account autocomplete store data, then the filter is unchanged.
    * If it is not present, then the filter is updated so that the account will be included in the autocomplete store.
@@ -69,9 +82,9 @@ export class AccountSelectComponent implements OnInit {
         this.accountAutocompleteStore.getMutableValue().push(selectedAccount);
         // Must set again so that underlying select control can select newly added autocomplete store option.
         this.formControl.setValue(selectedAccount);
-        this.filterCtrl.setValue(this.accountHelper.accountName(selectedAccount));
+        this.filterCtrl.setValue(this._accountHelper.accountName(selectedAccount));
         // Query the server for the total set of autocomplete entries.
-        this.accountAutocompleteService.refreshAutocompleteItems(this.filterCtrl.value, this.accountType).subscribe(
+        this._accountAutocompleteService.refreshAutocompleteItems(this.filterCtrl.value, this.accountType).subscribe(
           () => this._setValueToFoundItem(selectedAccount)
         );
       }

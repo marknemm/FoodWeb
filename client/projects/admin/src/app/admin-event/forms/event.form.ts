@@ -1,10 +1,10 @@
-import { Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FeaturedEvent } from '~shared';
-import { TFormGroup } from '~web/forms';
+import { Controls, toControls } from '~web/forms';
 export { FeaturedEvent };
 
-export class EventForm extends TFormGroup<FeaturedEvent> {
+export class EventForm extends FormGroup<EventControls> {
 
   /**
    * Ensures that the date-time component's error state updates when form submit is attempted.
@@ -12,20 +12,20 @@ export class EventForm extends TFormGroup<FeaturedEvent> {
   readonly dateErrorStateMatcher = new ErrorStateMatcher();
 
   constructor(event?: Partial<FeaturedEvent>) {
-    super({
-      id: undefined,
-      city: [ undefined, Validators.required ],
-      date: [ undefined, Validators.required ],
-      description: [ undefined, Validators.required ],
-      durationMins: [ undefined, Validators.pattern(/^[0-9]*$/) ],
-      postalCode: [ undefined, Validators.required ],
-      showUntil: undefined,
-      signupCompleteMsg: [ undefined, Validators.required ],
-      signupTitle: [ undefined, Validators.required ],
-      stateProvince: [ undefined, Validators.required ],
-      streetAddress: [ undefined, Validators.required ],
-      title: [ undefined, Validators.required ]
-    });
+    super(toControls({
+      id: undefined as number,
+      city: [ undefined as string, Validators.required ],
+      date: [ undefined as Date, Validators.required ],
+      description: [ undefined as string, Validators.required ],
+      durationMins: [ undefined as number, Validators.pattern(/^[0-9]*$/) ],
+      postalCode: [ undefined as string, Validators.required ],
+      showUntil: undefined as Date,
+      signupCompleteMsg: [ undefined as string, Validators.required ],
+      signupTitle: [ undefined as string, Validators.required ],
+      stateProvince: [ undefined as string, Validators.required ],
+      streetAddress: [ undefined as string, Validators.required ],
+      title: [ undefined as string, Validators.required ]
+    }));
     this.enableSignupFields(false); // Default signup fields to disabled.
     if (event) {
       this.patchValue(event);
@@ -37,7 +37,7 @@ export class EventForm extends TFormGroup<FeaturedEvent> {
    * Gets the featured event form value, refined for submission.
    */
   get submitValue(): FeaturedEvent {
-    const featuredEvent: FeaturedEvent = this.value;
+    const featuredEvent: FeaturedEvent = this.getRawValue();
     // Must explicitly set signup fields to empty strings if disabled so that empty value will be saved.
     if (this.get('signupTitle').disabled) {
       featuredEvent.signupTitle = '';
@@ -69,3 +69,6 @@ export class EventForm extends TFormGroup<FeaturedEvent> {
     this.enableSignupFields(!!this.get('signupTitle').value || !!this.get('signupCompleteMsg').value);
   }
 }
+
+export type EventControls = Controls<EventFormData>;
+export type EventFormData = FeaturedEvent;

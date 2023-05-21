@@ -1,6 +1,6 @@
 import { Component, OnInit, Optional } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { LoginFormMode } from '~web/session/forms/login.form';
+import { LoginFormMode } from '~web/session/services/login-form-adapter/login-form-adapter.service';
 
 @Component({
   selector: 'foodweb-login-dialog',
@@ -9,7 +9,7 @@ import { LoginFormMode } from '~web/session/forms/login.form';
 })
 export class LoginDialogComponent implements OnInit {
 
-  private _title: string;
+  private _title = '';
 
   constructor(
     @Optional() public dialogRef: MatDialogRef<LoginDialogComponent>
@@ -19,12 +19,12 @@ export class LoginDialogComponent implements OnInit {
     return this._title;
   }
 
-  ngOnInit() {
-    this.loginFormChanged(LoginFormMode.Login);
+  ngOnInit(): void {
+    this.formModeChanged(LoginFormMode.Login);
   }
 
-  loginFormChanged(change: LoginFormMode): void {
-    switch (change) {
+  formModeChanged(formMode: LoginFormMode): void {
+    switch (formMode) {
       case LoginFormMode.Login:             this._title = 'Login';            break;
       case LoginFormMode.UsernameRecovery:  this._title = 'Recover Username'; break;
       case LoginFormMode.PasswordReset:     this._title = 'Reset Password';   break;

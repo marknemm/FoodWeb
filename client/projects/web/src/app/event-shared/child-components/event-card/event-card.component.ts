@@ -1,7 +1,7 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FeaturedEvent } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { EventRegistrationForm } from '~web/event/forms/event-registration.form';
+import { EventRegistrationForm, EventRegistrationFormAdapter } from '~web/event/services/event-registration-form-adapter/event-registration-form-adapter.service';
 import { EventRegistrationService } from '~web/event/services/event-registration/event-registration.service';
 import { MapAppLinkService } from '~web/map/services/map-app-link/map-app-link.service';
 import { SessionService } from '~web/session/services/session/session.service';
@@ -12,12 +12,12 @@ import { SessionService } from '~web/session/services/session/session.service';
   styleUrls: ['./event-card.component.scss'],
   providers: [EventRegistrationService]
 })
-export class EventCardComponent implements OnInit, OnChanges {
+export class EventCardComponent implements OnChanges {
 
   @Input() event: FeaturedEvent;
   @Input() linkToEventsPage = false;
 
-  formGroup: EventRegistrationForm;
+  readonly formGroup: EventRegistrationForm = this._eventRegistrationFormAdapter.toForm({ account: this._sessionService.account });
 
   private _directionsHref: string;
   private _endTime: Date;
@@ -25,12 +25,12 @@ export class EventCardComponent implements OnInit, OnChanges {
   private _signupPanelShouldGlow = false;
 
   constructor(
-    public eventRegistrationService: EventRegistrationService,
-    public window: Window,
     private _dateTimeService: DateTimeService,
+    private _eventRegistrationFormAdapter: EventRegistrationFormAdapter,
+    private _eventRegistrationService: EventRegistrationService,
     private _mapAppLinkService: MapAppLinkService,
     private _sessionService: SessionService,
-  ) { }
+  ) {}
 
   get directionsHref(): string {
     return this._directionsHref;
@@ -38,6 +38,10 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   get endTime(): Date {
     return this._endTime;
+  }
+
+  get loading(): boolean {
+    return this._eventRegistrationService.loading;
   }
 
   get signupComplete(): boolean {
@@ -48,11 +52,7 @@ export class EventCardComponent implements OnInit, OnChanges {
     return this._signupPanelShouldGlow;
   }
 
-  ngOnInit() {
-    this.formGroup = new EventRegistrationForm(this._sessionService);
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.event && this.event) {
       setTimeout(() => {
         this._signupPanelShouldGlow = (localStorage.getItem(`foodweb-event-selected-${this.event.showUntil?.getTime()}`) !== 'true');
@@ -73,7 +73,7 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   submitSignup(): void {
     if (this.formGroup.valid) {
-      this.eventRegistrationService.register(this.event, this.formGroup.value).subscribe(
+      this._eventRegistrationService.register(this.event, this.formGroup.value).subscribe(
         () => this._signupComplete = true
       );
     }

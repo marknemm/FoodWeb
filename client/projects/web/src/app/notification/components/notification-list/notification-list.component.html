@@ -5,19 +5,15 @@
 
   <mat-action-list>
     <mat-divider></mat-divider>
-    <ng-container *ngFor="let notification of listQueryService.items">
+    <ng-container *ngFor="let notification of notifications">
       <foodweb-notification
         [notification]="notification"
-        (flag)="notificationService.toggleNotificationFlaggedState($event)"
-        (select)="notificationService.handleNotificationSelect($event)">
+        (flag)="handleNotificationFlagToggle($event)"
+        (select)="handleNotificationSelect($event)">
       </foodweb-notification>
       <mat-divider></mat-divider>
     </ng-container>
   </mat-action-list>
 
-  <foodweb-paginator [length]="listQueryService.totalCount" [pageSizeOptions]="[
-    notificationService.defaultReadLimit,
-    notificationService.defaultReadLimit * 2,
-    notificationService.defaultReadLimit * 4
-  ]"></foodweb-paginator>
+  <foodweb-paginator [length]="totalCount" [pageSizeOptions]="pageSizeOptions"></foodweb-paginator>
 </div>

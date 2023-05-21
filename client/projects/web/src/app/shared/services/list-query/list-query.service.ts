@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { isEqual } from 'lodash-es';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { finalize, map, skip, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { finalize, map, skip, take, takeUntil } from 'rxjs/operators';
 import { ListResponse, ReadRequest } from '~shared';
-import { PageListFiltersForm } from '~web/shared/forms/list-filters.form';
+import { Controls } from '~web/forms';
+import { FormAdapter } from '~web/forms/classes/form-adapter';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 import { HttpResponseHandlerOptions } from '../http-response/http-response.service';
 
@@ -13,16 +15,19 @@ import { HttpResponseHandlerOptions } from '../http-response/http-response.servi
  * @param T The type of data that is being queried.
  */
 @Injectable()
-export class ListQueryService<T> {
+export class ListQueryService<T> implements OnDestroy {
 
-  private _filtersForm: PageListFiltersForm;
+  private _filtersForm: FormGroup<{ page: FormControl<number> }>;
+  private _formAdapter: FormAdapter<{ page?: number }, any>;
   private _loading = false;
   private _reader: Reader<T>;
   private _response$ = new BehaviorSubject<ListResponse<T>>({ list: [], totalCount: 0 });
 
+  private readonly _destroy$ = new Subject<void>();
+
   constructor(
     private _activatedRoute: ActivatedRoute,
-    private _urlQueryService: UrlQueryService
+    private _urlQueryService: UrlQueryService,
   ) {}
 
   /**
@@ -60,13 +65,23 @@ export class ListQueryService<T> {
 
   /**
    * Loads a list, and listens for URL query param changes in order to perform additional filtered loads.
-   * @param readService The service that is used to perform the actual read query.
+   * @param readerFn The function that is used to perform the actual (single) read query.
    * @param filtersForm The filters form which will contain the filters & pagination parameters that shall be applied on each load.
+   * @param formAdapter The adapter for the given `filtersForm`, which is used to generate the filter read request model from the form.
    * @returns An observable that emits the loaded list once the load operation has completed.
    */
-  load(readerFn: Reader<T>, filtersForm: PageListFiltersForm): Observable<readonly T[]> {
+  load<
+    FILTER_T extends ReadRequest,
+    FILTER_VIEW_MODEL_T extends { page: number },
+    FILTER_CONTROLS_T extends Controls<FILTER_VIEW_MODEL_T>
+  >(
+    readerFn: Reader<T>,
+    filtersForm: FormGroup<FILTER_CONTROLS_T>,
+    formAdapter: FormAdapter<FILTER_T, FILTER_VIEW_MODEL_T>
+  ): Observable<readonly T[]> {
     this._reader = readerFn;
-    this._filtersForm = filtersForm;
+    this._filtersForm = filtersForm as any;
+    this._formAdapter = formAdapter as any;
     this.clear();
 
     // Ensure initial filter values are set in URL query string without changing history.
@@ -94,7 +109,7 @@ export class ListQueryService<T> {
    * @returns An observable that emits the updated list once the load operation has completed.
    */
   loadMore(opts: RefreshOptions = { showLoader: false }): Observable<readonly T[]> {
-    this._filtersForm.patchValue({ page: this._filtersForm.value.page + 1 });
+    this._filtersForm.patchValue({ page: (this._filtersForm.value.page + 1) });
     this._loading = true;
     opts.showLoader ??= false;
     const request: ReadRequest = this._getReadRequest();
@@ -105,7 +120,8 @@ export class ListQueryService<T> {
         if (opts.complete) {
           opts.complete();
         }
-      })
+      }),
+      takeUntil(this._destroy$)
     ).subscribe(
       (response: ListResponse<T>) => {
         // Must iteratively add in-place so no blink in ion-virtual-scroll.
@@ -127,8 +143,8 @@ export class ListQueryService<T> {
    * @returns An observable that emits the refreshed list once the refresh operation has completed.
    */
   refresh(opts: RefreshOptions = {}): Observable<readonly T[]> {
-    if (this._filtersForm.get('page').value > 1 && !opts.preservePage) {
-      this._filtersForm.get('page').setValue(1);
+    if (this._filtersForm.controls.page.value > 1 && !opts.preservePage) {
+      this._filtersForm.controls.page.setValue(1);
     }
     this._loading = true;
     const request: ReadRequest = this._getReadRequest();
@@ -141,7 +157,8 @@ export class ListQueryService<T> {
         if (opts.complete) {
           opts.complete();
         }
-      })
+      }),
+      takeUntil(this._destroy$)
     ).subscribe(
       (response: ListResponse<T>) => this._response$.next(response)
     );
@@ -154,13 +171,16 @@ export class ListQueryService<T> {
    */
   private _getReadRequest(): ReadRequest {
     // By default, get non-disabled form values, and filter out null values.
-    const value = this._filtersForm.toReadRequest
-      ? this._filtersForm.toReadRequest()
-      : this._filtersForm.value;
+    const value: ReadRequest = this._formAdapter.toModel(this._filtersForm);
     for (const prop in value) {
       if (value[prop] == null) { delete value[prop]; }
     }
     return value;
+  }
+
+  ngOnDestroy(): void {
+      this._destroy$.next();
+      this._response$.complete();
   }
 }
 
@@ -175,3 +195,5 @@ export type RefreshOptions = HttpResponseHandlerOptions & {
    */
   complete?: () => void
 };
+
+export type ReadRequestFormData = Omit<Required<ReadRequest>, ''>;

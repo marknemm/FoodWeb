@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Controls } from '~web/forms/interfaces/form-type-util';
 
 export type GroupRequiredValidationMode = 'all' | 'allOrNothing' | 'none';
 
@@ -12,31 +13,57 @@ export type GroupRequiredValidationMode = 'all' | 'allOrNothing' | 'none';
 export class FormValidationService {
 
   /**
-   * Checks whether or not a given `AbstractControl` has a required validator.
-   * @param control The control to check.
-   * @returns true if the control has a required validator, false if not.
+   * Adds validator(s) to controls within a given `form`.
+   * @param form The `FormGroup` whose controls will have validator(s) added to them.
+   * @param validators An object literal map of form control name keys to validator(s) values.
    */
-  hasRequiredValidator(control: AbstractControl): boolean {
-    return (control?.validator && control.validator(new FormControl())?.required);
+  addValidators<T extends Controls>(form: FormGroup<T>, validators: { [K in keyof T]?: ValidatorFn | ValidatorFn[] }): void;
+
+  /**
+   * Adds `validators` to all `controls` directly inside a given `form`.
+   * @param form The `FormGroup` whose `controls` will have `validators` added to them.
+   * @param validators The validator(s) that shall be added.
+   * @param controls A list of the names of `controls` in `form` to add the `validators` to.
+   */
+  addValidators<T extends Controls>(form: FormGroup<T>, validators: ValidatorFn | ValidatorFn[], controls: (keyof T)[]): void;
+
+  addValidators<T extends Controls>(
+    form: FormGroup<T>,
+    validators: ValidatorFn | ValidatorFn[] | { [K in keyof T]?: ValidatorFn | ValidatorFn[] },
+    controls?: (keyof T)[]
+  ): void {
+    if (form) {
+      if (validators instanceof Object && !controls) {
+        for (const key in validators) {
+          form.controls[key].addValidators(validators[key]);
+          form.controls[key].updateValueAndValidity();
+        }
+      } else if (validators && controls) {
+        for (const control of controls) {
+          form.controls[control as string].addValidators(validators);
+          form.controls[control as string].updateValueAndValidity();
+        }
+      }
+    }
   }
 
   /**
    * Generates a validator function for recursively validating the required status of a form group's members
    * based off of a given validation mode.
-   * @param formGroup The `FormGroup` that is to be validated.
+   * @param form The `FormGroup` that is to be validated.
    * @param validationMode The `GroupRequiredValidationMode` that is to be used.
    * @param excludeMap A map of the fields to exclude from the required validation.
    * @param validationMsg The validation message that should be displayed upon invalid form state.
    * @return The validator function.
    */
   groupRequiredValidator(
-    formGroup: FormGroup,
-    validationMode: GroupRequiredValidationMode,
+    form: FormGroup,
+    validationMode: GroupRequiredValidationMode = 'none',
     excludeMap: object = {},
     validationMsg = 'Must fill in all fields'
   ): ValidatorFn {
     return () => {
-      const presenceResults = this._determineGroupMemberPresence(formGroup, excludeMap);
+      const presenceResults = this._determineGroupMemberPresence(form, excludeMap);
       switch (validationMode) {
         case 'all':           return (presenceResults.allPresent)
           ? null
@@ -79,7 +106,7 @@ export class FormValidationService {
   }
 
   /**
-   * Synchronizes validation from on control to another.
+   * Synchronizes validation from one control to another.
    * @param fromControl The control to sync the validation from.
    * @param toControl The control to sync the validation to.
    */

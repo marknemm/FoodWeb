@@ -1,66 +1,64 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormControl, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
-import { FlexFormArray } from '~web/forms/classes/flex-form-array';
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { ObjectService } from '~web/shared/services/object/object.service';
 
 /**
  * A stateless service that preprocesses a value and form control before the value is set to the control.
  * Auto-corrects simple errors in the best way possible by modifying the control and value when necessary.
- * @param V The type of the raw form control value.
  */
 @Injectable({
   providedIn: 'root'
 })
-export class FormValuePreprocessorService<V> {
+export class FormValuePreprocessorService {
+
+
+
+  constructor(
+    private _objectService: ObjectService
+  ) {}
 
   /**
-   * Configures a given `AbstractControl` so that any value written to it will be preprocessed.
+   * Preprocesses a given `AbstractControl` that shall be updated, and the associated update value.
    *
-   * If the value is null/undefined, will ensure that it is transformed to a value that will not render an error if
-   * the control is a FormGroup (object with null properties) or FormArray (empty array).
+   * If the value is `null`/`undefined`, will ensure that it is transformed to a value that will not render an error if
+   * the control is a `FormGroup` (object with null properties) or `FormArray` (empty array).
    *
-   * If the value is an array that doesn't match the size of a given FormArray control, then the FormArray will be auto-resized.
+   * If the value is an array that doesn't match the size of a given `FormArray` control, then the `FormArray` will be auto-resized.
    *
-   * @param control The control that shall be configured to auto-preprocess write values.
-   */
-  autoPreprocess(control: AbstractControl): void {
-    const origPatchValue = control.patchValue.bind(control);
-    control.patchValue = (value: any, options: object) => {
-      value = this.preprocess(control, value);
-      return origPatchValue(value, options);
-    };
-
-    const origReset = control.reset.bind(control);
-    control.reset = (value: any, options: object) => {
-      value = this.preprocess(control, value);
-      return origReset(value, options);
-    };
-
-    const origSetValue = control.setValue.bind(control);
-    control.setValue = (value: any, options: object) => {
-      value = this.preprocess(control, value);
-      return origSetValue(value, options);
-    };
-  }
-
-  /**
-   * Preprocesses a given value that shall be set to a given form control.
-   *
-   * If the value is null/undefined, will ensure that it is transformed to a value that will not render an error if
-   * the control is a FormGroup (object with null properties) or FormArray (empty array).
-   *
-   * If the value is an array that doesn't match the size of a given FormArray control, then the FormArray will be auto-resized.
-   *
-   * @param control The {@link AbstractControl} that will have its value set.
-   * @param value The value that shall be set.
+   * @param control The {@link AbstractControl} that will have its value updated (may be internally modified).
+   * @param value The update value.
+   * @param omitByPredicate An optional predicate that shall be matched against every field in `value` recursively,
+   * and if it returns `true`, then the field shall be deleted.
    * @returns The resulting preprocessed value.
    */
-  preprocess(control: AbstractControl, value: V): V {
+  prepareForUpdate<C extends AbstractControl<V>, V>(
+    control: C,
+    value: Partial<V>,
+    omitByPredicate?: (memberValue: any) => boolean
+  ): Partial<V> {
+    if (!control) { return value; } // Handle bad input.
+
+    if (omitByPredicate) {
+      value = this._objectService.omitByRecursive(value, omitByPredicate);
+    }
+
     if (value == null) {
       value = this._autoCorrectNullValue(control, value);
     }
 
-    if (control instanceof UntypedFormArray && !(control instanceof FlexFormArray)) {
+    if (control instanceof FormArray) {
       this._autoCorrectFormArraySize(control, value as any);
+      for (let i = 0; i < control.length; i++) {
+        value[i] = this.prepareForUpdate(control.at(i), value[i]);
+      }
+    }
+
+    if (control instanceof FormGroup) {
+      for (const key in control.controls) {
+        (value[key] !== undefined)
+          ? value[key] = this.prepareForUpdate(control.controls[key], value[key])
+          : delete value[key];
+      }
     }
 
     return value;
@@ -72,12 +70,14 @@ export class FormValuePreprocessorService<V> {
    * @param value The array value that is to be set in the given control.
    */
   private _autoCorrectFormArraySize(control: AbstractControl, value: any[]): void {
-    const formArray: UntypedFormArray = (control as any); // Should know control is FormArray once here.
+    const formArray: FormArray = (control as any); // Should know control is FormArray once here.
 
     // If not enough controls in FormArray, then clone last one and push until resized correctly.
     if (value.length > formArray.length) {
       for (let i = 0; i <= value.length - formArray.length; i++) {
-        formArray.push(new FormControl<V>(null));
+        (formArray['memberFormAdapter'])
+          ? formArray.push(formArray['memberFormAdapter'].toForm())
+          : formArray.push(new FormControl<any>(null));
       }
     }
 
@@ -94,14 +94,14 @@ export class FormValuePreprocessorService<V> {
    * @param value The null value that is to be preprocessed.
    * @return The pre-processed value.
    */
-  private _autoCorrectNullValue(control: AbstractControl, value: any): V {
+  private _autoCorrectNullValue(control: AbstractControl, value: any): any {
     // Protect against setting null/undefined value in FormArray/Group (would result in error).
-    if (control instanceof UntypedFormGroup) {
-      value = <any>{}; // Must maintain structure of contained FormGroup.
+    if (control instanceof FormGroup) {
+      value = {}; // Must maintain structure of contained FormGroup.
       for (const key of Object.keys(control.controls)) {
         value[key] = null;
       }
-    } else if (control instanceof UntypedFormArray) {
+    } else if (control instanceof FormArray) {
       value = ([] as any);
     }
     return value;

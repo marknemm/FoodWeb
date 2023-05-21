@@ -1,6 +1,6 @@
 <foodweb-page-list class="donations">
   <div class="page-title">
-    {{ shellService.pageTitle }}
+    {{ pageTitle }}
   </div>
 
   <div *ngIf="showChooseDonation" class="standalone-statement">
@@ -11,24 +11,24 @@
     <foodweb-search-bar
       placeholder="Search Donations..."
       [formControl]="filtersForm.get('fullTextQuery')"
-      (search)="listQueryService.refresh()">
+      (search)="refresh()">
     </foodweb-search-bar>
   </foodweb-page-list-toolbar>
 
   <div class="row">
-    <div class="col-lg-6" *ngFor="let donation of listQueryService.items">
+    <div class="col-lg-6" *ngFor="let donation of donations">
       <foodweb-donation-teaser [donation]="donation"></foodweb-donation-teaser>
     </div>
   </div>
 
-  <div *ngIf="listQueryService.noneFound" class="not-found">
+  <div *ngIf="noneFound" class="not-found">
     Could Not Find Any Donations
   </div>
 
-  <foodweb-paginator [length]="listQueryService.totalCount"></foodweb-paginator>
+  <foodweb-paginator [length]="totalCount"></foodweb-paginator>
 
   <foodweb-page-list-filters>
-    <form [formGroup]="filtersForm" class="donation-filters" (ngSubmit)="listQueryService.refresh()">
+    <form [formGroup]="filtersForm" class="donation-filters" (ngSubmit)="refresh()">
       <foodweb-page-list-filters-title [primary]="true">
         Donation Filters
       </foodweb-page-list-filters-title>
@@ -60,8 +60,8 @@
 
       <div class="toggles-container">
         <mat-slide-toggle
-          [checked]="filtersForm.expired"
-          (change)="filtersForm.expired = $event.checked"
+          [checked]="filtersForm.value.expired"
+          (change)="filtersForm.value.expired= $event.checked"
           formControlName="expired">
           Include Expired Donations
         </mat-slide-toggle>
@@ -98,9 +98,9 @@
         </div>
       </div>
 
-      <foodweb-page-list-sort [formGroup]="filtersForm" [sortOptions]="donationSortOptionsService.options"></foodweb-page-list-sort>
+      <foodweb-page-list-sort [formGroup]="filtersForm" [sortOptions]="sortOptions"></foodweb-page-list-sort>
 
-      <foodweb-page-list-filters-footer (clear)="filtersForm.resetFacetFilters()"></foodweb-page-list-filters-footer>
+      <foodweb-page-list-filters-footer (clear)="resetFacetFilters()"></foodweb-page-list-filters-footer>
     </form>
   </foodweb-page-list-filters>
 </foodweb-page-list>

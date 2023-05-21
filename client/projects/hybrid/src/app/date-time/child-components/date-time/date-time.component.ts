@@ -30,19 +30,16 @@ export class DateTimeComponent implements OnChanges {
   @Input() minDate = new Date();
   @Input() minDateWidth = '';
   @Input() minutesGap = 5;
-  @Input() get value(): Date     { return this._formFieldService.valueOut(); }
-           set value(date: Date) { this._formFieldService.valueIn(date); }
+  @Input() get value(): Date     { return this._toDate(this.dateTimeFormControl.value) }
+           set value(date: Date) { this.dateTimeFormControl.patchValue(this._toString(date), { emitEvent: false }) }
 
   private _displayFormat = 'MMM D YYYY, h:mm A';
 
   constructor(
     private _dateTimeService: DateTimeService,
-    private _formFieldService: FormFieldService<string, Date>
+    private _formFieldService: FormFieldService<string>
   ) {
-    this._formFieldService.registerControl(new FormControl<string>(''), {
-      valueInConverter: (date: Date) => (date ? date.toISOString() : ''),
-      valueOutConverter: (dateStr: string) => (dateStr ? new Date(dateStr) : null)
-    });
+    this._formFieldService.registerControl(new FormControl<string>(''));
   }
 
   get dateTimeFormControl(): FormControl<string> {
@@ -68,7 +65,7 @@ export class DateTimeComponent implements OnChanges {
 
     if (changes.defaultDate || changes.defaultTime && !this.value) {
       const defaultDateTime: Date = this._dateTimeService.combineDateTime(this.defaultDate ?? new Date(), this.defaultTime);
-      this._formFieldService.valueIn(defaultDateTime, { emitEvent: true });
+      this.dateTimeFormControl.patchValue(this._toString(defaultDateTime));
     }
   }
 
@@ -86,6 +83,14 @@ export class DateTimeComponent implements OnChanges {
     if (!this.excludeTime) {
       this._displayFormat += 'h:mm A';
     }
+  }
+
+  private _toDate(dateStr: string): Date {
+    return (dateStr ? new Date(dateStr) : null);
+  }
+
+  private _toString(date: Date): string {
+    return (date ? date.toISOString() : '');
   }
 
 }

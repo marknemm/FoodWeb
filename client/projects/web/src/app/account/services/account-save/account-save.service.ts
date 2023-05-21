@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { cloneDeep, get, set } from 'lodash-es';
+import { cloneDeep } from 'lodash-es';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Account, AccountUpdateRequest, PasswordUpdateRequest } from '~shared';
 import { environment } from '~web-env/environment';
-import { PasswordFormT } from '~web/account-shared/forms/account.form';
+import { PasswordFormData } from '~web/password/services/password-form-adapter/password-form-adapter.service';
 import { SessionService } from '~web/session/services/session/session.service';
 import { HttpResponseService } from '~web/shared/services/http-response/http-response.service';
+import { ObjectService } from '~web/shared/services/object/object.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,9 @@ export class AccountSaveService {
 
   constructor(
     private _httpClient: HttpClient,
-    private _httpRepsonseService: HttpResponseService,
-    private _sessionService: SessionService
+    private _httpResponseService: HttpResponseService,
+    private _objectService: ObjectService,
+    private _sessionService: SessionService,
   ) {}
 
   /**
@@ -33,30 +35,14 @@ export class AccountSaveService {
     const url = `${this.url}/${originalAccount.id}`;
 
     // Generate the account update that shall be saved on the server.
-    const accountUpdate = <Account>this.mergeAccountUpdateFields(updateData, cloneDeep(originalAccount), fields);
+    const accountUpdate = this._objectService.mergeFields(updateData, cloneDeep(originalAccount), fields) as Account;
     const accountSectionUpdtReq: AccountUpdateRequest = { account: accountUpdate };
 
     // Send the account update request to the server.
     return this._httpClient.put<Account>(url, accountSectionUpdtReq, { withCredentials: true }).pipe(
       tap((savedAccount: Account) => this._updateAccountSessionData(savedAccount)),
-      this._httpRepsonseService.handleHttpResponse({ successMessage: 'Account update successful' })
+      this._httpResponseService.handleHttpResponse({ successMessage: 'Account update successful' })
     );
-  }
-
-  /**
-   * Merges a given list of account update fields from a given src account to a dest account.
-   * @param src The source account that shall have its fields merged into dest.
-   * @param dest The dest account that will be internally modified by the merge.
-   * @param fields The names of the account fields that should be merged. Supports dot-notation for nested fields.
-   * @return The dest account.
-   */
-  mergeAccountUpdateFields(src: Partial<Account>, dest: Partial<Account>, fields: string[]): Partial<Account> {
-    if (fields) {
-      for (const field of fields) {
-        set(dest, field, get(src, field));
-      }
-    }
-    return dest;
   }
 
   /**
@@ -76,11 +62,11 @@ export class AccountSaveService {
    * @param passwordUpdate The password update data.
    * @return An observable that emits once the password update operation completes on the server.
    */
-  updatePassword(account: Account, passwordUpdate: PasswordFormT): Observable<void> {
+  updatePassword(account: Account, passwordUpdate: PasswordFormData): Observable<void> {
     const url = `${this.url}/${account.id}/password`;
     const request: PasswordUpdateRequest = passwordUpdate;
     return this._httpClient.put<void>(url, request, { withCredentials: true }).pipe(
-      this._httpRepsonseService.handleHttpResponse({ successMessage: 'Password update successful' })
+      this._httpResponseService.handleHttpResponse({ successMessage: 'Password update successful' })
     );
   }
 }

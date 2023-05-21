@@ -1,4 +1,5 @@
-@import "./variables.scss";
+@use 'sass:math';
+@use "./variables.scss";
 
 .timepicker {
 
@@ -6,7 +7,7 @@
     $width: 300px;
     position: fixed !important;
     top: $header-height;
-    left: calc(50vw - #{$width / 2});
+    left: calc(50vw - math.div($width, 2));
 
     .timepicker__header {
       padding: 10px 15px !important;

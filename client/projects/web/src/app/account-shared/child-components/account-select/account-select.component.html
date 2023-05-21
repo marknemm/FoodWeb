@@ -17,8 +17,8 @@
         [formControl]="filterCtrl"
         [placeholder]="filterPlaceholder"
         (keydown)="$event.stopPropagation()"
-        (ngModelChange)="accountAutocompleteService.refreshAutocompleteItems($event, accountType)">
-        <foodweb-progress-indicator class="filter-progress-indicator" [trigger]="accountAutocompleteService.loading"></foodweb-progress-indicator>
+        (ngModelChange)="refreshAutocompleteItems($event, accountType)">
+        <foodweb-progress-indicator class="filter-progress-indicator" [trigger]="loading"></foodweb-progress-indicator>
     </mat-form-field>
 
     <mat-option *ngFor="let account of accountAutocompleteStore.value" [value]="account" class="auto-height">

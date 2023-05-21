@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DonationHubPledge } from '~shared';
-import { DonationHubPledgeFiltersForm } from '~web/donation-hub/forms/donation-hub-pledge-filters.form';
+import { DonationHubPledgeFilterForm, DonationHubPledgeFilterFormAdapter } from '~web/donation-hub/services/donation-hub-pledge-filter-form-adapter/donation-hub-pledge-filter-form-adapter.service';
 import { DonationHubPledgeReadService } from '~web/donation-hub/services/donation-hub-pledge-read/donation-hub-pledge-read.service';
 import { ListQueryService } from '~web/shared/services/list-query/list-query.service';
 import { ShellService } from '~web/shell/services/shell/shell.service';
@@ -14,29 +14,47 @@ import { ShellService } from '~web/shell/services/shell/shell.service';
 })
 export class DonationHubPledgeListComponent implements OnInit {
 
-  readonly filtersForm = new DonationHubPledgeFiltersForm();
+  readonly filtersForm: DonationHubPledgeFilterForm = this._donationHubPledgeFilterFormAdapter.toForm();
 
   private _myPledges = false;
 
   constructor(
-    public listQueryService: ListQueryService<DonationHubPledge>,
-    public shellService: ShellService,
+    private _donationHubPledgeFilterFormAdapter: DonationHubPledgeFilterFormAdapter,
+    private _listQueryService: ListQueryService<DonationHubPledge>,
     private _pledgeReadService: DonationHubPledgeReadService,
     private _router: Router,
+    private _shellService: ShellService,
   ) {}
+
+  get pledges(): readonly DonationHubPledge[] {
+    return this._listQueryService.items;
+  }
 
   get myPledges(): boolean {
     return this._myPledges;
   }
 
+  get noneFound(): boolean {
+    return this._listQueryService.noneFound;
+  }
+
+  get pageTitle(): string {
+    return this._shellService.pageTitle;
+  }
+
+  get totalCount(): number {
+    return this._listQueryService.totalCount;
+  }
+
   ngOnInit(): void {
     this._myPledges = this._router.url.indexOf('/my') >= 0;
-    this.shellService.pageTitle = (this._myPledges)
+    this._shellService.pageTitle = (this._myPledges)
       ? 'My Donation Pledges'
       : 'Donation Pledges';
-    this.listQueryService.load(
+    this._listQueryService.load(
       this._pledgeReadService.getDonationHubPledges.bind(this._pledgeReadService),
-      this.filtersForm
+      this.filtersForm,
+      this._donationHubPledgeFilterFormAdapter
     );
   }
 }

@@ -1,21 +1,20 @@
-import { TAbstractControl } from '~web/forms/classes/t-abstract-control';
+import { AbstractControl } from '@angular/forms';
+import { Control } from '~web/forms/interfaces/form-type-util';
 
 /**
- * Configures a `FormFieldService` by specifying how a injected/registered form control interacts with a default
- * `ControlValueAccessor` interface.
+ * Configures a `FormFieldService` by specifying how a injected/registered form control interacts with
+ * a default `ControlValueAccessor` interface.
  *
  * Additionally, contains some configuration for control injection/registration.
  *
- * @param V The type of the value contained within the component provider's form control.
- * @param C The type of the component provider's form control. Defaults to `TAbstractControl<V>`.
- * @param E The optional type of the form data exposed to eternal bindings
- * (before {@link valueInConverter} and after {@link valueOutConverter}). Defaults to `V`.
+ * @param FORM_T The type of the form control managed by the `FormFieldService`.
  */
 export interface FormFieldConfig<
-  V,
-  C extends TAbstractControl<V> = TAbstractControl<V>,
-  E = V,
+  VIEW_MODEL_T,
+  CONTROL_T extends AbstractControl = Control<VIEW_MODEL_T>,
+  EXTERNAL_VIEW_MODEL_T = VIEW_MODEL_T
 > {
+
   /**
    * Set to true if the default (value) change emitter should be omitted from use.
    * The default change emitter listens for all emitted `valueChanges` within the registered `AbstractControl`.
@@ -33,14 +32,21 @@ export interface FormFieldConfig<
   omitDefaultTouchedEmitter?: boolean;
 
   /**
-   * A callback function that is invoked to generate and register a fallback `AbstractControl` if injection is not possible.
+   * Whether or not to sync validation setup on an internally registered control with validation on a bound external control.
+   *
+   * Defaults to `false`.
+   */
+  syncValidation?: boolean;
+
+  /**
+   * A callback function that is invoked to generate and register a fallback {@link AbstractControl}
+   * if injection is not possible or if a `null` control is registered.
+   *
    * Defaults to generating a basic `FormControl`.
    *
-   * `Note`: Does not apply if the internal control is not injected.
-   *
-   * @return The fallback `AbstractControl` that is to be generated upon injection failure.
+   * @return The fallback {@link AbstractControl} that is to be generated upon injection/registration failure.
    */
-  genDefault?: () => C;
+  genDefault?(): CONTROL_T;
 
   /**
    * Converts values coming into the component from externally bound form controls. Defaults to an `identity` function.
@@ -50,7 +56,7 @@ export interface FormFieldConfig<
    * @param value The value that is to be converted, which is coming into the component from the outside.
    * @returns The converted value.
    */
-  valueInConverter?: (value: E) => V;
+  valueInConverter?(value: EXTERNAL_VIEW_MODEL_T): VIEW_MODEL_T;
 
   /**
    * Converts values going out of the component from the internal form control. Defaults to an `identity` function.
@@ -60,5 +66,6 @@ export interface FormFieldConfig<
    * @param value The value that is to be converted, which is going out from within the component.
    * @returns The converted value.
    */
-  valueOutConverter?: (value: V) => E;
+  valueOutConverter?(value: VIEW_MODEL_T): EXTERNAL_VIEW_MODEL_T;
+
 }

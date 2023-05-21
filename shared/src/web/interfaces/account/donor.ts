@@ -1,5 +1,5 @@
 /**
- * Donor information that is assocaited with `Donor` type accounts on the platform.
+ * Donor information that is associated with `Donor` type accounts on the platform.
  */
 export interface Donor {
   /**

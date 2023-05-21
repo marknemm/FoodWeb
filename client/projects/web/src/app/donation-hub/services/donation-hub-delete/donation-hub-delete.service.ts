@@ -20,7 +20,7 @@ export class DonationHubDeleteService {
   /**
    * Deletes a given donation hub on the server.
    * @param donationHub The `DonationHub` that is to be deleted.
-   * @return An obervable that emits once the delete operation completes.
+   * @return An observable that emits once the delete operation completes.
    */
   deleteDonationHub(donationHub: DonationHub): Observable<void> {
     const deleteUrl = `${this.url}/${donationHub.id}`;

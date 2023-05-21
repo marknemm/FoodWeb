@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DateTimeRange } from '~shared';
 import { DateTimeRangeRadioConfig, DateTimeRangeRadioDialogComponent } from '~web/date-time/components/date-time-range-radio-dialog/date-time-range-radio-dialog.component';
-import { DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
+import { DateTimeRangeForm, DateTimeRangeFormAdapter } from '~web/date-time/services/date-time-range-form-adapter/date-time-range-form-adapter.service';
+import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { FormFieldService } from '~web/forms';
 
 @Component({
@@ -36,7 +38,9 @@ export class DateTimeRangeComponent implements OnInit {
   @Output() valueChanges: EventEmitter<DateTimeRange> = this._formFieldService.valueChangesEmitter;
 
   constructor(
-    private _formFieldService: FormFieldService<DateTimeRangeForm>,
+    private _dateTimeRangeFormAdapter: DateTimeRangeFormAdapter,
+    private _dateTimeService: DateTimeService,
+    private _formFieldService: FormFieldService<DateTimeRange, DateTimeRangeForm>,
     private _matDialog: MatDialog
   ) {}
 
@@ -44,18 +48,30 @@ export class DateTimeRangeComponent implements OnInit {
     return this._formFieldService.control;
   }
 
+  get rangeErrStateMatcher(): ErrorStateMatcher {
+    return this._dateTimeRangeFormAdapter.rangeErrStateMatcher;
+  }
+
+  get startEndDateSame(): boolean {
+    return this._dateTimeService.compareDateOnly(this.value.startDateTime, this.value.endDateTime) === 0;
+  }
+
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new DateTimeRangeForm()
+      genDefault: () => this._dateTimeRangeFormAdapter.toForm()
     });
   }
 
   openDateTimeRangeDialog(event: MouseEvent): void {
     event.stopPropagation();
-    this.dateTimeRangeRadioConfig.initValue = this.dateTimeRangeForm.value;
+    this.dateTimeRangeRadioConfig.initValue = this.dateTimeRangeForm.getRawValue();
     DateTimeRangeRadioDialogComponent.open(this._matDialog, this.dateTimeRangeRadioConfig).subscribe(
       (dateTimeRange: DateTimeRange) => this.dateTimeRangeForm.patchValue(dateTimeRange)
     );
+  }
+
+  _onRangeEndChange(): void {
+    this._dateTimeRangeFormAdapter.fillMissingRangePart(this.dateTimeRangeForm);
   }
 
 }

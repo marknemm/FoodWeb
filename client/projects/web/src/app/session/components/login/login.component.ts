@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Subject, takeUntil } from 'rxjs';
 import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
-import { LoginForm, LoginFormMode } from '~web/session/forms/login.form';
+import { LoginForm, LoginFormAdapter, LoginFormMode } from '~web/session/services/login-form-adapter/login-form-adapter.service';
 import { LoginSubmitService } from '~web/session/services/login-submit/login-submit.service';
 
 @Component({
@@ -10,29 +11,95 @@ import { LoginSubmitService } from '~web/session/services/login-submit/login-sub
   styleUrls: ['./login.component.scss'],
   providers: [LoginSubmitService]
 })
-export class LoginComponent {
+export class LoginComponent implements OnDestroy {
 
-  readonly loginForm = new LoginForm();
+  readonly loginForm: LoginForm = this._loginFormAdapter.toForm();
+
+  private _formMode = LoginFormMode.Login;
+  private _destroy$ = new Subject<void>();
 
   @Input() dialogRef: MatDialogRef<LoginDialogComponent> = null;
 
-  @Output() formChanged = new EventEmitter<LoginFormMode>();
+  @Output() formModeChanged = new EventEmitter<LoginFormMode>();
   @Output() loggedIn = new EventEmitter<void>();
 
   constructor(
-    public loginSubmitService: LoginSubmitService,
+    private _loginFormAdapter: LoginFormAdapter,
+    private _loginSubmitService: LoginSubmitService,
   ) {
-    this.loginForm.mode$.subscribe((mode: LoginFormMode) => {
-      this.loginSubmitService.reset();
-      this.formChanged.emit(mode);
-    });
-    this.loginSubmitService.loggedIn$.subscribe(() => this.loggedIn.emit());
+    this._loginSubmitService.loggedIn$.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(() => this.loggedIn.emit());
+  }
+
+  get loginErr(): string {
+    return this._loginSubmitService.loginErr;
+  }
+
+  get formMode(): LoginFormMode {
+    return this._formMode;
+  }
+
+  get loading(): boolean {
+    return this._loginSubmitService.loading;
+  }
+
+  get messageSent(): boolean {
+    return this._loginSubmitService.messageSent;
+  }
+
+  get isLogin(): boolean {
+    return (this.formMode === LoginFormMode.Login);
+  }
+
+  get isPasswordReset(): boolean {
+    return (this.formMode === LoginFormMode.PasswordReset);
+  }
+
+  get isUsernameRecovery(): boolean {
+    return (this.formMode === LoginFormMode.UsernameRecovery);
+  }
+
+  get recoveryMessageSent(): boolean {
+    return this._loginSubmitService.recoveryMessageSent;
+  }
+
+  get resetMessageSent(): boolean {
+    return this._loginSubmitService.resetMessageSent;
+  }
+
+  get usernameEmailPlaceholder(): string {
+    return this.isUsernameRecovery
+      ? 'Email'
+      : 'Username / Email';
   }
 
   submit(): void {
     if (this.loginForm.valid) {
-      this.loginSubmitService.submit(this.loginForm.usernameEmail, this.loginForm.password, this.loginForm.mode);
+      this._loginSubmitService.submit(this.loginForm.value.usernameEmail, this.loginForm.value.password, this.formMode);
     }
+  }
+
+  toLogin(): void {
+    this._toFormMode(LoginFormMode.Login);
+  }
+
+  toPasswordReset(): void {
+    this._toFormMode(LoginFormMode.PasswordReset);
+  }
+
+  toUsernameRecovery(): void {
+    this._toFormMode(LoginFormMode.UsernameRecovery);
+  }
+
+  private _toFormMode(mode: LoginFormMode): void {
+    this._loginFormAdapter.toMode(this.loginForm, mode);
+    this._formMode = mode;
+    this.formModeChanged.emit(this.formMode);
+  }
+
+  ngOnDestroy(): void {
+
   }
 
 }

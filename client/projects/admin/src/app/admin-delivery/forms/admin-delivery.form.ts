@@ -1,12 +1,12 @@
-import { AbstractControl, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 import { AccountAutocompleteItem, AdminDeliverySaveData, DateTimeRange, Delivery } from '~shared';
 import { DateTimeRangeForm } from '~web/date-time/forms/date-time-range.form';
-import { TFormGroup } from '~web/forms';
+import { Controls, toControls } from '~web/forms';
 
-export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
+export class AdminDeliveryForm extends FormGroup<AdminDeliveryControls> {
 
   constructor(delivery?: Delivery) {
-    super({
+    super(toControls({
       volunteerAccount: <AccountAutocompleteItem> delivery?.volunteerAccount,
       pickupWindow: new DateTimeRangeForm({
         startDateTime: [delivery?.pickupWindowStart, Validators.required],
@@ -15,18 +15,18 @@ export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
       startTime: delivery?.startTime,
       pickupTime: delivery?.pickupTime,
       dropOffTime: delivery?.dropOffTime
-    });
+    }));
     this._listenForVolunteerAccountChange();
     this._listenForStartTimeChange();
     this._listenForPickupTimeChange();
   }
 
   get volunteerAccount(): AccountAutocompleteItem {
-    return this.enabled ? this.value.volunteerAccount : null;
+    return this.enabled ? this.getRawValue().volunteerAccount : null;
   }
 
   get pickupWindow(): DateTimeRange {
-    return this.enabled ? this.value.pickupWindow : null;
+    return this.enabled ? this.getRawValue().pickupWindow : null;
   }
 
   get startTime(): Date {
@@ -134,7 +134,8 @@ export class AdminDeliveryForm extends TFormGroup<AdminDeliveryFormT> {
   }
 }
 
-export interface AdminDeliveryFormT {
+export type AdminDeliveryControls = Controls<AdminDeliveryFormData>;
+export interface AdminDeliveryFormData {
   volunteerAccount: AccountAutocompleteItem;
   pickupWindow: DateTimeRange;
   startTime: Date;

@@ -1,7 +1,7 @@
 <form [formGroup]="pledgeForm" class="donation-hub-donate-form page" (submit)="save()">
 
-  <div *ngIf="!donationHubPledgeNotFound; else notFoundTmpl" class="page-title">
-    {{ shellService.pageTitle }}
+  <div *ngIf="!pledgeNotFound; else notFoundTmpl" class="page-title">
+    {{ pageTitle }}
   </div>
 
   <ng-template #notFoundTmpl>
@@ -10,7 +10,7 @@
     </div>
   </ng-template>
 
-  <ng-container *ngIf="originalDonationHubPledge">
+  <ng-container *ngIf="originalPledge">
 
     <mat-card>
       <mat-card-title>
@@ -23,7 +23,7 @@
     </mat-card>
 
     <div class="action-footer align-right">
-      <a [routerLink]="['/donation-hub', 'pledge', originalDonationHubPledge.id]">
+      <a [routerLink]="['/donation-hub', 'pledge', originalPledge.id]">
         <button mat-button type="button" color="warn">Cancel</button>
       </a>
       <button mat-raised-button type="submit" color="primary">Save</button>

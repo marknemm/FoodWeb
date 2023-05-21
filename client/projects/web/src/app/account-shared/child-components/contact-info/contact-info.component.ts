@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ContactInfo } from '~shared';
-import { ContactInfoForm } from '~web/account-shared/forms/contact-info.form';
+import { ContactInfoForm, ContactInfoFormAdapter } from '~web/account-shared/services/contact-info-form-adapter/contact-info-form-adapter.service';
 import { FormFieldService } from '~web/forms';
 import { MapAnchorType } from '~web/map/interfaces/map';
 
@@ -19,10 +19,12 @@ export class ContactInfoComponent implements OnInit {
   @Input() hideEmail = false;
   @Input() hidePhone = false;
   @Input() includeMap = false;
-  @Input() get value(): ContactInfo            { return this.contactInfoForm.value; }
-           set value(contactInfo: ContactInfo) { this._formFieldService.valueIn(contactInfo); }
+  @Input() get value(): ContactInfo             { return this._contactInfoFormAdapter.toModel(this.contactInfoForm); }
+           set value(contactInfo: ContactInfo)  { this.contactInfoForm.patchValue(
+                                                    this._contactInfoFormAdapter.toViewModel(contactInfo), { emitEvent: false }); }
 
   constructor(
+    private _contactInfoFormAdapter: ContactInfoFormAdapter,
     private _formFieldService: FormFieldService<ContactInfoForm>
   ) {}
 
@@ -38,7 +40,7 @@ export class ContactInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new ContactInfoForm()
+      genDefault: () => this._contactInfoFormAdapter.toForm()
     });
   }
 }

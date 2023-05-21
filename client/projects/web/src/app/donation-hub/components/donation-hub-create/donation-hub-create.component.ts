@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DonationHub } from '~shared';
-import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { DonationHubForm } from '~web/donation-hub/forms/donation-hub.form';
 import { DonationHubCreateService } from '~web/donation-hub/services/donation-hub-create/donation-hub-create.service';
+import { DonationHubForm, DonationHubFormAdapter } from '~web/donation-hub/services/donation-hub-form-adapter/donation-hub-form-adapter.service';
 import { FormFieldService } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
 import { ShellService } from '~web/shell/services/shell/shell.service';
@@ -17,39 +16,44 @@ import { ShellService } from '~web/shell/services/shell/shell.service';
 export class DonationHubCreateComponent implements OnInit {
 
   readonly minRegisterDate = new Date();
-  readonly christmasDayDate = new Date('12/25/2021');
 
-  readonly agreementChecklistMembers = [
+  readonly agreementChecklistMembers: ReadonlyArray<string> = [
     `I'll handle food safely`,
     `I won't participate if I'm sick`,
     `I'll notify FoodWeb if I'm ill`
   ];
 
   constructor(
-    public shellService: ShellService,
-    private _dateTimeService: DateTimeService,
     private _donationHubCreateService: DonationHubCreateService,
+    private _donationHubFormAdapter: DonationHubFormAdapter,
     private _formFieldService: FormFieldService<DonationHubForm>,
     private _router: Router,
     private _sessionService: SessionService,
+    private _shellService: ShellService,
   ) {
-    this.shellService.pageTitle = 'Register Donation Hub';
+    this._shellService.pageTitle = 'Register Donation Hub';
   }
 
   get donationHubForm(): DonationHubForm {
     return this._formFieldService.control;
   }
 
+  get pageTitle(): string {
+    return this._shellService.pageTitle;
+  }
+
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => new DonationHubForm(this._dateTimeService, { account: this._sessionService.account })
+      genDefault: () => this._donationHubFormAdapter.toForm({ account: this._sessionService.account })
     });
   }
 
   register(): void {
     this.donationHubForm.markAllAsTouched();
     if (this.donationHubForm.valid) {
-      this._donationHubCreateService.createDonationHub(this.donationHubForm.toDonationHub()).subscribe(
+      this._donationHubCreateService.createDonationHub(
+        this._donationHubFormAdapter.toModel(this.donationHubForm)
+      ).subscribe(
         (donationHub: DonationHub) => this._router.navigate(['/donation-hub', donationHub.id])
       );
     }

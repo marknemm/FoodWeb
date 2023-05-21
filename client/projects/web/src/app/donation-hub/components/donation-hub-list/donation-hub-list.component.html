@@ -1,20 +1,20 @@
 <foodweb-page-list class="donation-hubs">
 
   <div class="page-title">
-    {{ shellService.pageTitle }}
+    {{ pageTitle }}
   </div>
 
-  <div *ngIf="!myDonationHubs && !listQueryService.noneFound" class="standalone-statement">
+  <div *ngIf="!myDonationHubs && !noneFound" class="standalone-statement">
     Choose a donation drop-off hub to pledge a donation to.
   </div>
 
   <div class="row">
-    <div class="col-lg-6" *ngFor="let donationHub of listQueryService.items">
+    <div class="col-lg-6" *ngFor="let donationHub of donationHubs">
       <foodweb-donation-hub-teaser [donationHub]="donationHub" [hideDonateButton]="myDonationHubs"></foodweb-donation-hub-teaser>
     </div>
   </div>
 
-  <div *ngIf="listQueryService.noneFound" class="not-found">
+  <div *ngIf="noneFound" class="not-found">
     <p *ngIf="!myDonationHubs">
       Could Not Find Any Drop-Off Hubs That Can Accept Your Donation.<br>
       Please Consider <a [routerLink]="['/donation-hub', 'create']" class="bold">Registering</a> Your Home As a Donation Drop-Off Hub!
@@ -25,6 +25,6 @@
     </p>
   </div>
 
-  <foodweb-paginator *ngIf="listQueryService.items.length" [length]="listQueryService.totalCount"></foodweb-paginator>
+  <foodweb-paginator *ngIf="donationHubs.length" [length]="totalCount"></foodweb-paginator>
 
 </foodweb-page-list>

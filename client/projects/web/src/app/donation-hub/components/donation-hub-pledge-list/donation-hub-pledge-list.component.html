@@ -1,16 +1,16 @@
 <foodweb-page-list class="donation-hub-pledges">
 
   <div class="page-title">
-    {{ shellService.pageTitle }}
+    {{ pageTitle }}
   </div>
 
   <div class="row">
-    <div class="col-lg-6" *ngFor="let pledge of listQueryService.items">
+    <div class="col-lg-6" *ngFor="let pledge of pledges">
       <foodweb-donation-hub-pledge-teaser [pledge]="pledge"></foodweb-donation-hub-pledge-teaser>
     </div>
   </div>
 
-  <div *ngIf="listQueryService.noneFound" class="not-found">
+  <div *ngIf="noneFound" class="not-found">
     <p *ngIf="!myPledges">
       Could Not Find Any Donation Pledges.
     </p>
@@ -20,6 +20,6 @@
     </p>
   </div>
 
-  <foodweb-paginator [length]="listQueryService.totalCount"></foodweb-paginator>
+  <foodweb-paginator [length]="totalCount"></foodweb-paginator>
 
 </foodweb-page-list>

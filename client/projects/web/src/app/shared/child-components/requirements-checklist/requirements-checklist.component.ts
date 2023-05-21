@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { FormFieldService, TFormGroup } from '~web/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormFieldService } from '~web/forms';
 
 @Component({
   selector: 'foodweb-requirements-checklist',
@@ -12,13 +12,13 @@ export class RequirementsChecklistComponent implements OnChanges {
 
   @Input() checklistMembers: string[] = [];
   @Input() checkAll: string | false = 'Check all items';
-  @Input() get value(): boolean        { return this._formFieldService.valueOut(); }
+  @Input() get value(): boolean        { return this._formFieldService.valueOut() }
            set value(checked: boolean) { this._formFieldService.valueIn(checked); }
 
   constructor(
-    private _formFieldService: FormFieldService<TFormGroup<{ [key: string]: boolean }>, boolean>
+    private _formFieldService: FormFieldService<{ [key: string]: boolean }, FormGroup<{ [key: string]: FormControl<boolean> }>, boolean>
   ) {
-    this._formFieldService.registerControl(new TFormGroup<{ [key: string]: boolean }>({}), {
+    this._formFieldService.registerControl(new FormGroup<{ [key: string]: FormControl<boolean> }>({}), {
       valueInConverter: (valueIn: boolean) => {
         const value: { [key: string]: boolean } = this._formFieldService.value;
         for (const key in value) {
@@ -36,7 +36,7 @@ export class RequirementsChecklistComponent implements OnChanges {
     });
   }
 
-  get checklistForm(): TFormGroup<{ [key: string]: boolean }> {
+  get checklistForm(): FormGroup<{ [key: string]: FormControl<boolean> }> {
     return this._formFieldService.control;
   }
 
@@ -62,4 +62,5 @@ export class RequirementsChecklistComponent implements OnChanges {
     }
     this.checklistForm.setValue(value);
   }
+
 }
