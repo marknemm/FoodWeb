@@ -32,14 +32,11 @@ export class OperationHoursFormAdapter extends FormAdapter<OperationHours[], Ope
     }, config);
 
     for (const weekday of this._constantsService.WEEKDAYS) {
-      form.controls[weekday]['memberFormAdapter'] = this._timeRangeFormAdapter;
+      this._formValuePreprocessorService.autoPreprocess(form.controls[weekday], () => this._timeRangeFormAdapter.toForm());
+      this._formValuePreprocessorService.autoPreprocess(form);
     }
 
-    if (config?.initValue) {
-      this.patchFromModel(form, config.initValue, { onlySelf: true });
-    }
-
-    return form;
+    return this._initForm(form, config);
   }
 
   toModel(viewModel?: OperationHoursForm | Partial<OperationHoursFormData>): OperationHours[] {
@@ -63,29 +60,24 @@ export class OperationHoursFormAdapter extends FormAdapter<OperationHours[], Ope
     return opHoursArr;
   }
 
-  toPartialViewModel(model?: OperationHours[]): Partial<OperationHoursFormData> {
-    return (model)
-      ? super.toPartialViewModel(model)
-      : {};
-  }
-
   toViewModel(model?: Partial<OperationHours>[]): OperationHoursFormData {
     const opHoursInfo: OperationHoursFormData = {
-      limitOperationHours: false,
-      Sunday: [],
-      Monday: [],
-      Tuesday: [],
-      Wednesday: [],
-      Thursday: [],
-      Friday: [],
-      Saturday: []
+      limitOperationHours: model ? false : undefined,
+      Sunday: model ? [] : undefined,
+      Monday: model ? [] : undefined,
+      Tuesday: model ? [] : undefined,
+      Wednesday: model ? [] : undefined,
+      Thursday: model ? [] : undefined,
+      Friday: model ? [] : undefined,
+      Saturday: model ? [] : undefined
     };
 
-    for (const opHours of model ?? []) {
-      opHoursInfo[opHours.weekday].push(this._timeRangeFormAdapter.toViewModel(opHours));
+    if (model) {
+      for (const opHours of model) {
+        opHoursInfo[opHours.weekday].push(this._timeRangeFormAdapter.toViewModel(opHours));
+      }
+      opHoursInfo.limitOperationHours = (model.length > 0);
     }
-    opHoursInfo.limitOperationHours = (model?.length > 0);
-    console.log(opHoursInfo.limitOperationHours, console.log(model?.length));
 
     return opHoursInfo;
   }

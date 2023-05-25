@@ -11,7 +11,7 @@ import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
 export class VolunteerFormAdapter extends FormAdapter<Volunteer, VolunteerFormData> {
 
   toForm(config: VolunteerFormConfig): VolunteerForm {
-    const form = this._formBuilder.group(this.toViewModel(config?.initValue), config);
+    const form: VolunteerForm = this._initForm(config);
 
     this._formValidationService.addValidators(form, Validators.required,
       ['firstName', 'fullName', 'lastName', 'signedAgreement']);

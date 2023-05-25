@@ -28,11 +28,11 @@ export class DateTimeRangeComponent implements OnInit {
   @Input() startDatePlaceholder = 'Start Date';
   @Input() startTimePlaceholder = 'Start Time';
 
-  @Input() get endDateTime(): Date     { return this._formFieldService.value.endDateTime; }
+  @Input() get endDateTime(): Date     { return this._formFieldService.valueOut().endDateTime; }
            set endDateTime(date: Date) { this._formFieldService.valuePropIn('endDateTime', date); }
-  @Input() get startDateTime(): Date     { return this._formFieldService.value.startDateTime; }
+  @Input() get startDateTime(): Date     { return this._formFieldService.valueOut().startDateTime; }
            set startDateTime(date: Date) { this._formFieldService.valuePropIn('startDateTime', date); }
-  @Input() get value(): DateTimeRange      { return this._formFieldService.value; }
+  @Input() get value(): DateTimeRange      { return this._formFieldService.valueOut(); }
            set value(range: DateTimeRange) { this._formFieldService.valueIn(range); }
 
   @Output() valueChanges: EventEmitter<DateTimeRange> = this._formFieldService.valueChangesEmitter;

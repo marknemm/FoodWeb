@@ -10,7 +10,7 @@ import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
 export class LoginFormAdapter extends FormAdapter<LoginRequest, LoginFormData> {
 
   toForm(config?: LoginFormConfig): LoginForm {
-    const form: LoginForm = this._formBuilder.group(this.toViewModel(config?.initValue), config);
+    const form: LoginForm = this._initForm(config);
     this.toMode(form, config?.mode ?? LoginFormMode.Login);
     return form;
   }

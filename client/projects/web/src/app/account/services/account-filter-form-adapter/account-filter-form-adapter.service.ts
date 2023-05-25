@@ -35,11 +35,7 @@ export class AccountFilterFormAdapter extends FormAdapter<AccountReadRequest, Ac
       volunteerLastName: undefined as string
     }, config);
 
-    if (config?.initValue) {
-      this.patchFromModel(form, config.initValue, { emitEvent: false });
-    }
-
-    return form;
+    return this._initForm(form, config);
   }
 
   toModel(viewModel?: AccountFilterForm | Partial<AccountFilterFormData>): AccountReadRequest {

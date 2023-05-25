@@ -11,7 +11,7 @@ import { GroupRequiredValidationMode } from '~web/forms/services/form-validation
 export class OperationHoursFilterFormAdapter extends FormAdapter<OperationHours, OperationHoursFilterFormData> {
 
   toForm(config?: OperationHoursFilterFormConfig): OperationHoursFilterForm {
-    const form = this._formBuilder.group(this.toViewModel(config?.initValue), config);
+    const form = this._initForm(config);
 
     form.addValidators([
       this._timeRangeOrderValidator.bind(form),

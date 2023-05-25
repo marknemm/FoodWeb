@@ -47,7 +47,7 @@
       [boldTime]="boldTime"
       [editable]="false"
       [excludeTimeDisplay]="startEndDateSame"
-      [value]="value.startDateTime">
+      [value]="startDateTime">
     </foodweb-date-time>
     <!-- For no display of end date due to same begin and end date, make sure we group times together so they end up on same line if line break occurs. -->
     <span class="d-inline-block">
@@ -56,14 +56,14 @@
         [boldTime]="boldTime"
         [editable]="false"
         [excludeDateDisplay]="true"
-        [value]="value.startDateTime">
+        [value]="startDateTime">
       </foodweb-date-time>
       <span class="display-to"> -- </span>
       <foodweb-date-time
         [boldTime]="boldTime"
         [editable]="false"
         [excludeDateDisplay]="startEndDateSame"
-        [value]="value.endDateTime">
+        [value]="endDateTime">
       </foodweb-date-time>
     </span>
   </div>

@@ -29,11 +29,7 @@ export class OrganizationFormAdapter extends FormAdapter<Organization, Organizat
       receiver: this._receiverFormAdapter.toForm()
     }, config);
 
-    if (config?.initValue) {
-      this.patchFromModel(form, config?.initValue, { onlySelf: true });
-    }
-
-    return form;
+    return this._initForm(form, config);
   }
 
   toModel(viewModel?: OrganizationForm | Partial<OrganizationFormData>): Organization {

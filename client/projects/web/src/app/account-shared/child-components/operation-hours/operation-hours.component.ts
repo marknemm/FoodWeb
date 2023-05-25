@@ -13,16 +13,15 @@ import { ConstantsService } from '~web/shared/services/constants/constants.servi
 export class OperationHoursComponent implements OnInit {
 
   @Input() editable = false;
-  @Input() get value(): OperationHours[]        { return this._operationHoursFormAdapter.toModel(this.operationHoursForm); }
-           set value(opHours: OperationHours[]) { this.operationHoursForm.patchValue(
-                                                    this._operationHoursFormAdapter.toViewModel(opHours), { emitEvent: false }); }
+  @Input() get value(): OperationHours[]        { return this._formFieldService.valueOut(); }
+           set value(opHours: OperationHours[]) { this._formFieldService.valueIn(opHours); }
 
   @HostBinding()
   readonly class = 'foodweb-operation-hours';
 
   constructor(
     public constantsService: ConstantsService,
-    private _formFieldService: FormFieldService<OperationHoursFormData, OperationHoursForm>,
+    private _formFieldService: FormFieldService<OperationHoursFormData, OperationHoursForm, OperationHours[]>,
     private _operationHoursFormAdapter: OperationHoursFormAdapter,
   ) {}
 
@@ -44,7 +43,9 @@ export class OperationHoursComponent implements OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => this._operationHoursFormAdapter.toForm()
+      genDefault: () => this._operationHoursFormAdapter.toForm(),
+      valueInConverter: (opHours: OperationHours[]) => this._operationHoursFormAdapter.toViewModel(opHours),
+      valueOutConverter: (opHoursData: OperationHoursFormData) => this._operationHoursFormAdapter.toModel(opHoursData)
     });
   }
 

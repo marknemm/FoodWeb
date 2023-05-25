@@ -10,7 +10,7 @@ import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
 export class ReceiverFormAdapter extends FormAdapter<Receiver, ReceiverFormData> {
 
   toForm(config?: FormConfig<Receiver>): ReceiverForm {
-    return this._formBuilder.group(this.toViewModel(config?.initValue), config);
+    return this._initForm(config);
   }
 
   toModel(viewModel?: ReceiverForm | Partial<ReceiverFormData>): Receiver {

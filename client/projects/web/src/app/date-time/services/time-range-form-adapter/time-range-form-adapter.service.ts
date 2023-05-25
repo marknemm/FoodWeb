@@ -36,11 +36,13 @@ export class TimeRangeFormAdapter extends FormAdapter<TimeRange> {
   }
 
   toForm(config?: TimeRangeFormConfig): TimeRangeForm {
-    const form = this._formBuilder.group(this.toViewModel(config?.initValue), config);
+    const form: TimeRangeForm = this._initForm(config);
+
     form.addValidators([
       () => this._timeRangeOrderValidator(form),
       () => this._formValidationService.groupRequiredValidator(form, config?.validationMode)
     ]);
+
     return form;
   }
 

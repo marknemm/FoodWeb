@@ -18,7 +18,7 @@ export class DateTimeFormAdapter extends FormAdapter<Date, DateTimeFormData> {
   }
 
   toForm(config?: DateTimeFormConfig): DateTimeForm {
-    const form = this._formBuilder.group(this.toViewModel(config?.initValue), config);
+    const form: DateTimeForm = this._initForm(config);
 
     this._formValidationService.addValidators(form, (config?.required ? Validators.required : null), ['date', 'time']);
 

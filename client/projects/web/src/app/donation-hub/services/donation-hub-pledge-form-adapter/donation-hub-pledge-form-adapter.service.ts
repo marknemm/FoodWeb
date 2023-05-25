@@ -10,15 +10,14 @@ import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
 export class DonationHubPledgeFormAdapter extends FormAdapter<DonationHubPledge, DonationHubPledgeFormData> {
 
   toForm(config?: DonationHubPledgeFormConfig): DonationHubPledgeForm {
-    const form: DonationHubPledgeForm = this._formBuilder.group(this.toViewModel(config?.initValue), config);
+    const form: DonationHubPledgeForm = this._formBuilder.group({
+      id: undefined as number,
+      agreementChecklist: [false as boolean, Validators.requiredTrue],
+      foodCount: [undefined as number, Validators.required, Validators.min(10), Validators.max(100)],
+      foodType: ['', Validators.required]
+    }, config);
 
-    this._formValidationService.addValidators(form, {
-      agreementChecklist: [Validators.requiredTrue],
-      foodCount: [Validators.required, Validators.min(10), Validators.max(100)],
-      foodType: [Validators.required]
-    });
-
-    return form;
+    return this._initForm(form, config);
   }
 
   toModel(viewModel?: DonationHubPledgeForm | Partial<DonationHubPledgeFormData>): DonationHubPledge {

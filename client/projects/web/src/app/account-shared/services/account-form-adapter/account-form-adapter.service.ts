@@ -46,9 +46,7 @@ export class AccountFormAdapter extends FormAdapter<Account, AccountFormData> {
       .pipe(takeUntil(config.destroy$))
       .subscribe(this._onAccountTypeUpdate.bind(this, form));
 
-    if (config?.initValue) {
-      this.patchFromModel(form, config.initValue, { emitEvent: false });
-    }
+    this._initForm(form, config);
     this._onAccountTypeUpdate(form, form.controls.accountType.value);
 
     return form;
@@ -91,14 +89,14 @@ export class AccountFormAdapter extends FormAdapter<Account, AccountFormData> {
     return {
       id: model?.id,
       accountType: model?.accountType,
-      contactInfo: this._contactInfoFormAdapter.toViewModel(model?.contactInfo),
-      notificationSettings: this._notificationSettingsFormAdapter.toViewModel(model?.contactInfo as NotificationSettings),
+      contactInfo: this._contactInfoFormAdapter.toViewModel(model.contactInfo),
+      notificationSettings: this._notificationSettingsFormAdapter.toViewModel(model.contactInfo as NotificationSettings),
       profileImg: model?.profileImg,
-      operationHours: this._operationHoursFormAdapter.toViewModel(model?.operationHours),
-      organization: this._organizationFormAdapter.toViewModel(model?.organization),
-      password: this._passwordFormAdapter.toViewModel(''),
+      operationHours: this._operationHoursFormAdapter.toViewModel(model.operationHours),
+      organization: this._organizationFormAdapter.toViewModel(model.organization),
+      password: undefined,
       username: model?.username,
-      volunteer: this._volunteerFormAdapter.toViewModel(model?.volunteer)
+      volunteer: this._volunteerFormAdapter.toViewModel(model.volunteer)
     };
   }
 

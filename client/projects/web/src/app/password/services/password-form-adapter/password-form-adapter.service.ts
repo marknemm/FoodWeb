@@ -17,12 +17,10 @@ export class PasswordFormAdapter extends FormAdapter<string, PasswordFormData> {
       oldPassword: ['', config?.formMode !== 'Signup' ? Validators.required : []]
     }, config);
 
-    if (config?.initValue) {
-      this.patchFromModel(form, config.initValue);
-    }
+    this._initForm(form, config);
     form.addValidators(this._validatePasswordMatch);
 
-    return form;
+    return this._initForm(form, config);
   }
 
   toModel(viewModel?: PasswordForm | PasswordFormData): string {

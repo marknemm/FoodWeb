@@ -8,6 +8,7 @@ import { AccountSaveService } from '~web/account/services/account-save/account-s
 import { FormFieldService } from '~web/forms';
 import { PasswordFormData } from '~web/password/services/password-form-adapter/password-form-adapter.service';
 import { SessionService } from '~web/session/services/session/session.service';
+import { ObjectService } from '~web/shared/services/object/object.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 import { SignupVerificationService } from '~web/signup/services/signup-verification/signup-verification.service';
 
@@ -39,6 +40,7 @@ export class AccountComponent implements OnInit {
     protected _accountSaveService: AccountSaveService,
     protected _activatedRoute: ActivatedRoute,
     protected _formFieldService: FormFieldService<AccountFormData>,
+    protected _objectService: ObjectService,
     protected _router: Router,
     protected _urlQueryService: UrlQueryService,
   ) {
@@ -132,8 +134,9 @@ export class AccountComponent implements OnInit {
     this._accountSaveService.updateAccountFields(this.originalAccount, account, fields).subscribe(
       (savedAccount: Account) => {
         this._originalAccount = savedAccount;
+        const patchAccount: Partial<Account> = this._objectService.mergeFields(savedAccount, {}, fields);
         // Write saved values back to the account update form group (server may have modified or filled some values).
-        this._accountFormAdapter.patchFromModel(this.accountForm, savedAccount, { fields });
+        this.accountForm.patchValue(this._accountFormAdapter.toViewModel(patchAccount));
         successCb();
       }
     );

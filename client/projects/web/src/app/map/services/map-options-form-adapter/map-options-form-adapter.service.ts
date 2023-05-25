@@ -10,7 +10,7 @@ import { MapOptions } from '~web/map/interfaces/map';
 export class MapOptionsFormAdapter extends FormAdapter<MapOptions, MapOptionsFormData> {
 
   toForm(config?: FormConfig<MapOptions>): MapOptionsForm {
-    return this._formBuilder.group(this.toViewModel(config?.initValue), config);
+    return this._initForm(config);
   }
 
   toModel(viewModel?: MapOptionsForm | Partial<MapOptionsFormData>): MapOptions {

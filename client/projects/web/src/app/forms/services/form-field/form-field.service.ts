@@ -6,7 +6,6 @@ import { FormFieldConfig } from '~web/forms/interfaces/form-field-config';
 import { Control, UpdateValueOptions } from '~web/forms/interfaces/form-type-util';
 import { FormMonitorService } from '~web/forms/services/form-monitor/form-monitor.service';
 import { FormValidationService } from '../form-validation/form-validation.service';
-import { FormValuePreprocessorService } from '../form-value-preprocessor/form-value-preprocessor.service';
 
 /**
  * A stateful service that either:
@@ -89,7 +88,6 @@ export class FormFieldService<
    */
   constructor(
     private _formMonitorService: FormMonitorService,
-    private _formValuePreprocessorService: FormValuePreprocessorService,
     private _formValidationService: FormValidationService,
     @Self() @Optional()
     private _controlContainer: ControlContainer,
@@ -264,7 +262,7 @@ export class FormFieldService<
           : newControl.enable({ emitEvent: false }); // No emit, make transfer seamless.
       }
 
-      if (oldControl.getRawValue() != null && oldControl.getRawValue() !== newControl.getRawValue()) {
+      if (oldControl.getRawValue() != null) {
         newControl.patchValue(oldControl.getRawValue(), { emitEvent: false }); // no emit, make transfer seamless.
       }
     }
@@ -338,8 +336,7 @@ export class FormFieldService<
     const value: VIEW_MODEL_T = (this._config?.valueInConverter)
       ? this._config.valueInConverter(valueIn)
       : valueIn as any;
-    const patchValue = this._formValuePreprocessorService.prepareForUpdate(this.control, value);
-    this.control.patchValue(patchValue, { emitEvent: false, onlySelf: options?.onlySelf });
+    this.control.patchValue(value, { emitEvent: false, onlySelf: options?.onlySelf });
     if (options?.emitEvent) {
       setTimeout(() => this.control.updateValueAndValidity()); // Trigger change emit only after change cycle completes.
     }

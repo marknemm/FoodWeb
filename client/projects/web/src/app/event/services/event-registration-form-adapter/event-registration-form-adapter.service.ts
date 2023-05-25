@@ -10,11 +10,12 @@ import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
 export class EventRegistrationFormAdapter extends FormAdapter<EventRegistration, EventRegistrationFormData> {
 
   toForm(config: EventRegistrationFormConfig): EventRegistrationForm {
-    return this._formBuilder.group(this.toViewModel(config?.initValue ?? {
+    config.initValue ??= {
       timezone: (Intl.DateTimeFormat().resolvedOptions().timeZone)
         ? Intl.DateTimeFormat().resolvedOptions().timeZone
         : 'America/New_York'
-    }, config?.account), config);
+    }
+    return this._initForm(config);
   }
 
   toModel(viewModel?: EventRegistrationForm | Partial<EventRegistration>): EventRegistration {

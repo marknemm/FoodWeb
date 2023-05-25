@@ -22,6 +22,7 @@ export class DonateFormAdapter extends FormAdapter<Donation, DonateFormData> {
   toForm(config: DonateFormConfig): DonateForm {
     const startDateTime: Date = this._dateTimeService.dateCeil5Mins(new Date());
     const endDateTime: Date = this._dateTimeService.addHours(startDateTime, 1);
+
     const form: DonateForm = this._formBuilder.group({
       donorFirstName: ['', Validators.required],
       donorLastName: ['', Validators.required],
@@ -37,11 +38,7 @@ export class DonateFormAdapter extends FormAdapter<Donation, DonateFormData> {
       safetyChecklist: [config?.initSafetyChecklist ?? false, Validators.requiredTrue]
     }, config);
 
-    if (config?.initValue) {
-      this.patchFromModel(form, config.initValue);
-    }
-
-    return form;
+    return this._initForm(form, config);
   }
 
   toModel(viewModel?: DonateForm | Partial<DonateFormData>): Donation {

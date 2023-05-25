@@ -10,10 +10,9 @@ import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
 export class DonationFilterFormAdapter extends FormAdapter<DonationReadRequest, DonationFilterFormData> {
 
   toForm(config?: FormConfig<DonationReadRequest>): DonationFilterForm {
-    return this._formBuilder.group(this.toViewModel(config?.initValue ?? {
-      limit: 10,
-      page: 1
-    }), config);
+    config ??= {};
+    config.initValue ??= { limit: 10, page: 1 };
+    return this._initForm(config);
   }
 
   toModel(viewModel?: DonationFilterForm | Partial<DonationFilterFormData>): DonationReadRequest {

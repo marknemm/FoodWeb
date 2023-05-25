@@ -10,10 +10,9 @@ import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
 export class NotificationFilterFormAdapter extends FormAdapter<NotificationReadRequest, NotificationFilterFormData> {
 
   toForm(config?: FormConfig<NotificationReadRequest>): NotificationFilterForm {
-    return this._formBuilder.group(this.toViewModel(config?.initValue ?? {
-      limit: 10,
-      page: 1
-    }), config);
+    config ??= {};
+    config.initValue ??= { limit: 10, page: 1 };
+    return this._initForm(config);
   }
 
   toModel(viewModel?: NotificationFilterForm | Partial<NotificationFilterFormData>): NotificationReadRequest {

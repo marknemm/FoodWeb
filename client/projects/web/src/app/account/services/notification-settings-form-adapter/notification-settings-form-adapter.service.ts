@@ -16,11 +16,7 @@ export class NotificationSettingsFormAdapter extends FormAdapter<NotificationSet
       notifyForEachDonation: false
     }, config);
 
-    if (config?.initValue) {
-      this.patchFromModel(form, config.initValue, { emitEvent: false });
-    }
-
-    return form;
+    return this._initForm(form, config);
   }
 
   toModel(viewModel?: NotificationSettingsForm | NotificationSettings): NotificationSettings {

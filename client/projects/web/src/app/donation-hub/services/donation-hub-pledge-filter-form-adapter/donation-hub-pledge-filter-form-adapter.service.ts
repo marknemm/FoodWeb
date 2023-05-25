@@ -18,10 +18,9 @@ export class DonationHubPledgeFilterFormAdapter extends FormAdapter<DonationHubP
   }
 
   toForm(config?: FormConfig<DonationHubPledgeReadRequest>): DonationHubPledgeFilterForm {
-    return this._formBuilder.group(this.toViewModel(config?.initValue ?? {
-      limit: 10,
-      page: 1
-    }), config);
+    config ??= {};
+    config.initValue ??= { limit: 10, page: 1 };
+    return this._initForm(config);
   }
 
   toModel(viewModel?: DonationHubPledgeFilterForm | DonationHubPledgeFormData): DonationHubPledgeReadRequest {

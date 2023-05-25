@@ -1,10 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
-import { AbstractControl, AbstractControlOptions, FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import * as _ from 'lodash';
-import { Controls, UpdateValueOptions } from '~web/forms/interfaces/form-type-util';
+import { AbstractControl, AbstractControlOptions, FormBuilder, FormGroup } from '@angular/forms';
+import { Controls } from '~web/forms/interfaces/form-type-util';
 import { FormValidationService } from '~web/forms/services/form-validation/form-validation.service';
 import { FormValuePreprocessorService } from '~web/forms/services/form-value-preprocessor/form-value-preprocessor.service';
-import { ObjectService } from '~web/shared/services/object/object.service';
 
 /**
  * Adapter for data from a (backend) `model` to a `view-model`/`FormGroup` and vice-versa.
@@ -22,7 +20,6 @@ export abstract class FormAdapter<
   protected readonly _formBuilder: FormBuilder;
   protected readonly _formValidationService: FormValidationService;
   protected readonly _formValuePreprocessorService: FormValuePreprocessorService;
-  protected readonly _objectService: ObjectService;
 
   constructor(
     injector: Injector
@@ -30,7 +27,6 @@ export abstract class FormAdapter<
     this._formBuilder = injector.get(FormBuilder);
     this._formValidationService = injector.get(FormValidationService);
     this._formValuePreprocessorService = injector.get(FormValuePreprocessorService);
-    this._objectService = injector.get(ObjectService);
   }
 
   abstract toForm(config?: FormConfig<MODEL_T>): FORM_T;
@@ -38,28 +34,6 @@ export abstract class FormAdapter<
   abstract toModel(viewModel?: FORM_T | Partial<VIEW_MODEL_T>): MODEL_T;
 
   abstract toViewModel(model?: Partial<MODEL_T>): VIEW_MODEL_T;
-
-  toPartialViewModel(model?: Partial<MODEL_T>): Partial<VIEW_MODEL_T> {
-    const viewModel: VIEW_MODEL_T = this.toViewModel(model);
-    return this._objectService.omitByRecursive(viewModel, (value: any) =>
-         _.isUndefined(value)
-      || (_.isObject(value) && _.isEmpty(value)));
-  }
-
-  /**
-   * Patches the value of a given `form` from a given `model`.
-   * @param form The `FormGroup` to patch.
-   * @param model The model containing the patch value.
-   * @param options The options used during the `FormGroup` patch operation.
-   */
-  patchFromModel(form: FORM_T, model: Partial<MODEL_T>, options?: UpdateOptions): void {
-    if (options?.fields) {
-      model = this._objectService.mergeFields(model, {}, options.fields);
-    }
-    let viewModel: Partial<VIEW_MODEL_T> = this.toPartialViewModel(model);
-    viewModel = this._formValuePreprocessorService.prepareForUpdate(form, viewModel);
-    form.patchValue(viewModel, options);
-  }
 
   /**
    * Gets view model data from a given `viewModel`.
@@ -72,31 +46,24 @@ export abstract class FormAdapter<
       : (viewModel ?? this.toViewModel()); // Always return a non-null instance of view model.
   }
 
+  protected _initForm(form: FORM_T, config: FormConfig<MODEL_T>): FORM_T;
+  protected _initForm(config: FormConfig<MODEL_T>): FORM_T;
+
+  protected _initForm(formOrConfig: FORM_T | FormConfig<MODEL_T>, config?: FormConfig<MODEL_T>): FORM_T {
+    const form: FORM_T = (formOrConfig instanceof AbstractControl)
+      ? formOrConfig
+      : this._formBuilder.group(this.toViewModel(formOrConfig?.initValue), formOrConfig) as any;
+
+    if (config?.initValue) {
+      form.patchValue(this.toViewModel(config.initValue), { emitEvent: false });
+    }
+
+    this._formValuePreprocessorService.autoPreprocess(form);
+    return form;
+  }
+
 }
 
 export interface FormConfig<MODEL_T> extends AbstractControlOptions {
   initValue?: Partial<MODEL_T>
-}
-
-/**
- * Options for performing a `FormGroup` patch operation.
- */
-export interface UpdateOptions extends UpdateValueOptions {
-  /**
-   * Subset of fields to include in the patch. If not set, then all fields are included.
-   * Supports dot notation for nested fields.
-   */
-  fields?: string[];
-  /**
-   * Set to `true` if `''` values should be omitted form the patch operation. Defaults to `false`.
-   */
-  omitEmptyStr?: boolean;
-  /**
-   * Set to `true` if `null` values should be omitted from the patch operation. Defaults to `false`.
-   */
-  omitNull?: boolean;
-}
-
-export interface ViewModelOptions {
-  fullViewModel?: boolean;
 }

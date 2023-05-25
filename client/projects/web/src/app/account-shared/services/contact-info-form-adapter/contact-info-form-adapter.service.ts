@@ -25,11 +25,7 @@ export class ContactInfoFormAdapter extends FormAdapter<ContactInfo, ContactInfo
       notifyForEachDonation: true as boolean,
     }, config);
 
-    if (config?.initValue) {
-      this.patchFromModel(form, config.initValue, { emitEvent: false });
-    }
-
-    return form;
+    return this._initForm(form, config);
   }
 
   toModel(viewModel?: ContactInfoForm | Partial<ContactInfoFormData>): ContactInfo {

@@ -10,7 +10,7 @@ import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
 export class DonorFormAdapter extends FormAdapter<Donor, DonorFormData> {
 
   toForm(config?: FormConfig<Donor>): DonorForm {
-    return this._formBuilder.group(this.toViewModel(config?.initValue), config);
+    return this._initForm(config);
   }
 
   toModel(viewModel?: DonorForm | Partial<DonorFormData>): Donor {

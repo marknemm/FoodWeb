@@ -28,7 +28,7 @@ export class DateTimeRangeFormAdapter extends FormAdapter<DateTimeRange> {
   }
 
   toForm(config?: FormConfig<DateTimeRange>): DateTimeRangeForm {
-    const form = this._formBuilder.group(this.toViewModel(config?.initValue), config);
+    const form = this._initForm(config);
 
     form.addValidators(this._dateTimeRangeOrderValidator);
     this.fillMissingRangePart(form);

@@ -34,11 +34,7 @@ export class DonationHubFormAdapter extends FormAdapter<DonationHub, DonationHub
       }),
     }, config);
 
-    if (config?.initValue) {
-      this.patchFromModel(form, config.initValue);
-    }
-
-    return form;
+    return this._initForm(form, config);
   }
 
   toModel(viewModel?: DonationHubForm | Partial<DonationHubFormData>): DonationHub {

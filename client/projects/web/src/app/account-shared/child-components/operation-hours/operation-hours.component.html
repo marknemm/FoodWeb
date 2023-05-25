@@ -30,7 +30,7 @@
           <tr *ngIf="doesWeekdayHaveHours(weekday)">
             <td>{{ weekday }}</td>
             <td>
-              <div *ngFor="let weekdayTimeRange of value[weekday]">
+              <div *ngFor="let weekdayTimeRange of operationHoursForm.value[weekday]">
                 <foodweb-time-range [value]="weekdayTimeRange"></foodweb-time-range>
               </div>
             </td>
