@@ -62,7 +62,9 @@ export class DeliveryScheduleService {
    */
   protected _sendDeliveryScheduleRequest(request: DeliveryScheduleRequest): Observable<Donation> {
     return this._httpClient.post<Donation>(this.url, request, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse<Donation>({ successMessage: 'Successfully started delivery' })
+      this._httpResponseService.handleHttpResponse<Donation>(this.scheduleDelivery, {
+        successMessage: 'Successfully started delivery'
+      })
     );
   }
 }

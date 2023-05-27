@@ -27,7 +27,7 @@ export class AccountReadService {
    * Whether or not an account read request is loading.
    */
   get loading(): boolean {
-    return this._httpResponseService.loading;
+    return this._httpResponseService.anyLoading(this);
   }
 
   /**
@@ -35,10 +35,10 @@ export class AccountReadService {
    * @param id The ID of the account to retrieve.
    * @return An observable that emits the retrieved account from the server.
    */
-  getAccount(id: number): Observable<Account> {
+  getAccount(id: number, opts: HttpResponseHandlerOptions = {}): Observable<Account> {
     const url = `${this.url}/${id}`;
     return this._httpClient.get<Account>(url, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse()
+      this._httpResponseService.handleHttpResponse(this.getAccount, opts)
     );
   }
 
@@ -54,7 +54,7 @@ export class AccountReadService {
     request.limit = request.limit ?? 10;
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Account>>(this.url, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse(opts)
+      this._httpResponseService.handleHttpResponse(this.getAccounts, opts)
     );
   }
 }

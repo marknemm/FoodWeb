@@ -30,7 +30,7 @@ export class DeliveryReadService {
    * Whether or not a delivery read request is loading.
    */
   get loading(): boolean {
-    return this._httpResponseService.loading;
+    return this._httpResponseService.anyLoading(this);
   }
 
   /**
@@ -86,7 +86,7 @@ export class DeliveryReadService {
     request.limit = request.limit ? request.limit : 10;
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Donation>>(getUrl, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse(opts)
+      this._httpResponseService.handleHttpResponse(this._getDeliveries, opts)
     );
   }
 }

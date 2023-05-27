@@ -23,13 +23,6 @@ export class DonationHubPledgeReadService {
   ) {}
 
   /**
-   * Whether or not a donation hub read request is loading.
-   */
-  get loading(): boolean {
-    return this._httpResponseService.loading;
-  }
-
-  /**
    * Checks if a given method within this service is loading its HTTP response.
    * @param loadingFn The method within this service to check.
    * @return true if loading, false if not.
@@ -46,7 +39,7 @@ export class DonationHubPledgeReadService {
   getDonationHubPledge(id: number): Observable<DonationHubPledge> {
     const readUrl = `${this.url}/${id}`;
     return this._httpClient.get<DonationHubPledge>(readUrl, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ loadingId: this.getDonationHubPledge })
+      this._httpResponseService.handleHttpResponse(this.getDonationHubPledge)
     );
   }
 
@@ -61,7 +54,6 @@ export class DonationHubPledgeReadService {
     opts: HttpResponseHandlerOptions<ListResponse<DonationHubPledge>> = {}
   ): Observable<ListResponse<DonationHubPledge>> {
     const myPledges: boolean = (this._router.url.indexOf('my') >= 0);
-    opts.loadingId = this.getDonationHubPledges;
     return this._getDonationHubPledges(request, opts, myPledges);
   }
 
@@ -74,7 +66,6 @@ export class DonationHubPledgeReadService {
     request: DonationHubPledgeReadRequest,
     opts: HttpResponseHandlerOptions<ListResponse<DonationHubPledge>> = {}
   ): Observable<ListResponse<DonationHubPledge>> {
-    opts.loadingId = this.getMyDonationHubPledges;
     return this._getDonationHubPledges(request, opts, true);
   }
 
@@ -94,7 +85,7 @@ export class DonationHubPledgeReadService {
     request.limit = request.limit ? request.limit : Number.MAX_SAFE_INTEGER;
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<DonationHubPledge>>(readUrl, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse(opts)
+      this._httpResponseService.handleHttpResponse(this._getDonationHubPledges, opts)
     );
   }
 
@@ -114,9 +105,8 @@ export class DonationHubPledgeReadService {
     request.page = request.page ? request.page : 1;
     request.limit = request.limit ? request.limit : Number.MAX_SAFE_INTEGER;
     const params = new HttpParams({ fromObject: <any>request });
-    opts.loadingId = this.getPledgesUnderDonationHub;
     return this._httpClient.get<ListResponse<DonationHubPledge>>(readUrl, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse(opts)
+      this._httpResponseService.handleHttpResponse(this.getPledgesUnderDonationHub, opts)
     );
   }
 
@@ -131,9 +121,8 @@ export class DonationHubPledgeReadService {
     opts: HttpResponseHandlerOptions<DonationHubPledge> = {}
   ): Observable<DonationHubPledge> {
     const readUrl = `${this._insertDonationHubIdIntoUrl(donationHubId)}/my`;
-    opts.loadingId = this.getMyPledgeUnderDonationHub;
     return this._httpClient.get<DonationHubPledge>(readUrl, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse(opts)
+      this._httpResponseService.handleHttpResponse(this.getMyPledgeUnderDonationHub, opts)
     );
   }
 

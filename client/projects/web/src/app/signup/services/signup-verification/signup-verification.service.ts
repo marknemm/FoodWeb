@@ -26,7 +26,7 @@ export class SignupVerificationService {
    * Whether or not a signup verification request is loading.
    */
   get loading(): boolean {
-    return this._httpResponseService.loading;
+    return this._httpResponseService.anyLoading(this);
   }
 
   /**
@@ -36,7 +36,10 @@ export class SignupVerificationService {
     if (!this.loading) {
       const url = `${this.url}/resend-verification-email`;
       this._httpClient.get(url, { withCredentials: true }).pipe(
-        this._httpResponseService.handleHttpResponse({ loaderBlocking: false, successMessage: 'Verification Email Resent' })
+        this._httpResponseService.handleHttpResponse(this.resendVerificationEmail, {
+          loaderBlocking: false,
+          successMessage: 'Verification Email Resent'
+        })
       ).subscribe();
     }
   }
@@ -49,7 +52,10 @@ export class SignupVerificationService {
     const verificationToken: string = this._activatedRoute.snapshot.queryParamMap.get('verificationToken');
     const request: AccountVerificationRequest = { verificationToken };
     return this._httpClient.post<Account>(`${this.url}/verify`, request, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse<Account>({ handleErrorResponse: false, showLoader: false }),
+      this._httpResponseService.handleHttpResponse<Account>(this.verifyAccount, {
+        handleErrorResponse: false,
+        showLoader: false
+      }),
       tap((account: Account) => this._sessionService.saveSession(account))
     );
   }

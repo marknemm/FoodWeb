@@ -23,7 +23,7 @@ export class AdminAccountCreateService {
   createAccount(account: Account, password: string, accountCreateOptions: AccountCreateOptions): Observable<Account> {
     const accountCreateRequest: AdminAccountCreateRequest = { account, password, accountCreateOptions };
     return this._httpClient.post<Account>(this.url, accountCreateRequest, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ immutableStore: this.createdAccountStore })
+      this._httpResponseService.handleHttpResponse(this.createAccount, { immutableStore: this.createdAccountStore })
     );
   }
 }

@@ -42,7 +42,8 @@ export class DonationHubComponent implements OnInit, OnDestroy {
   }
 
   get canModify(): boolean {
-    return (this.donationHub?.volunteerAccount?.id === this._sessionService.account?.id);
+    return (this.donationHub?.volunteerAccount?.id === this._sessionService.account?.id)
+        && (this.donationHub?.dropOffWindowEnd.getTime() >= new Date().getTime());
   }
 
   get canViewPledge(): boolean {

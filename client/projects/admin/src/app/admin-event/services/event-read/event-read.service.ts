@@ -38,7 +38,7 @@ export class EventReadService {
     // Get featured event from server.
     const url = `${this.url}/${id}`;
     return this._httpClient.get<FeaturedEvent>(url, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse()
+      this._httpResponseService.handleHttpResponse(this.findEvent)
     );
   }
 

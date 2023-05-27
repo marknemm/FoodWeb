@@ -20,7 +20,7 @@ export class DonationHubPledgeCreateService {
   createDonationPledge(donationHubPledge: DonationHubPledge, donationHubId: number): Observable<DonationHubPledge> {
     const postUrl: string = this.url.replace('/:id/', `/${donationHubId}/`);
     return this._httpClient.post<DonationHubPledge>(postUrl, donationHubPledge, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Donation Hub Successfully Created' })
+      this._httpResponseService.handleHttpResponse(this.createDonationPledge, { successMessage: 'Donation Hub Successfully Created' })
     );
   }
 }

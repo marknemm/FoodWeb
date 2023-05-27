@@ -28,7 +28,7 @@ export class EventUpdateService {
     const request: FeaturedEventUpdateRequest = { featuredEvent };
     this._pageProgressService.activate(true);
     return this._httpClient.put<FeaturedEvent>(`${this.url}/${featuredEvent.id}`, request, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Event Update Successful' })
+      this._httpResponseService.handleHttpResponse(this.updateEvent, { successMessage: 'Event Update Successful' })
     );
   }
 }

@@ -25,7 +25,7 @@ export class DonationDeleteService {
   deleteDonation(donation: Donation): Observable<void> {
     const deleteUrl = `${this.url}/${donation.id}`;
     return this._httpClient.delete(deleteUrl, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Donation deletion successful' })
+      this._httpResponseService.handleHttpResponse(this.deleteDonation, { successMessage: 'Donation deletion successful' })
     );
   }
 }

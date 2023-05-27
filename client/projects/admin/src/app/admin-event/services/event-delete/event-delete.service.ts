@@ -24,7 +24,7 @@ export class EventDeleteService {
    */
   deleteEvent(featuredEvent: FeaturedEvent): Observable<void> {
     return this._httpClient.delete<void>(`${this.url}/${featuredEvent.id}`, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Event Deletion Successful' })
+      this._httpResponseService.handleHttpResponse(this.deleteEvent, { successMessage: 'Event Deletion Successful' })
     );
   }
 }

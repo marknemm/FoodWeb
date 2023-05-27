@@ -12,7 +12,7 @@ export class DonationHubPledgeFormAdapter extends FormAdapter<DonationHubPledge,
   toForm(config?: DonationHubPledgeFormConfig): DonationHubPledgeForm {
     const form: DonationHubPledgeForm = this._formBuilder.group({
       id: undefined as number,
-      agreementChecklist: [false as boolean, (config?.omitChecklist ? undefined : Validators.requiredTrue)],
+      agreementChecklist: [false, config?.omitChecklist ? [] : [Validators.requiredTrue]],
       foodCount: [undefined as number, [Validators.required, Validators.min(10), Validators.max(100)]],
       foodType: ['', Validators.required]
     }, config);

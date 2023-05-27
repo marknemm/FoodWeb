@@ -20,7 +20,9 @@ export class DonationHubPledgeUpdateService {
   updateDonationHubPledge(donationHubPledge: DonationHubPledge): Observable<DonationHubPledge> {
     const updateUrl = `${this.url}/${donationHubPledge.id}`;
     return this._httpClient.put<DonationHubPledge>(updateUrl, donationHubPledge, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Donation Hub Pledge Successfully Updated' })
+      this._httpResponseService.handleHttpResponse(this.updateDonationHubPledge, {
+        successMessage: 'Donation Hub Pledge Successfully Updated'
+      })
     );
   }
 }

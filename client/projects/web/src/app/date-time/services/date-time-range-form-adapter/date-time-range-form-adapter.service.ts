@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DateTimeRange } from '~shared';
 import { Controls } from '~web/forms';
@@ -12,12 +12,8 @@ import { DateTimeService } from '../date-time/date-time.service';
 export class DateTimeRangeFormAdapter extends FormAdapter<DateTimeRange> {
 
   readonly rangeErrStateMatcher: ErrorStateMatcher = {
-    isErrorState: (control: FormControl) => {
-      if (control.hasError('dateTimeRangeOrder')) {
-        return true;
-      }
-      return (control && control.invalid && control.touched);
-    }
+    isErrorState: (control: FormControl, form: FormGroupDirective | NgForm) =>
+      form?.hasError('dateTimeRangeOrder') || (control && control.invalid && control.touched)
   }
 
   constructor(

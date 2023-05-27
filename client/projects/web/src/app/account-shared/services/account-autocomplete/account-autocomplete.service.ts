@@ -25,7 +25,7 @@ export class AccountAutocompleteService {
   }
 
   get loading(): boolean {
-    return this._httpResponseService.loading;
+    return this._httpResponseService.anyLoading(this);
   }
 
   refreshAutocompleteItems(fullTextQuery: string, accountType?: AccountType): Observable<DeepReadonly<AccountAutocompleteItem[]>> {
@@ -44,7 +44,7 @@ export class AccountAutocompleteService {
 
     const params = new HttpParams({ fromObject: <any>request });
     this._httpSubscription = this._httpClient.get<AccountAutocompleteItem>(this.url, { withCredentials: true, params }).pipe(
-      this._httpResponseService.handleHttpResponse({
+      this._httpResponseService.handleHttpResponse(this.refreshAutocompleteItems, {
         immutableStore: this.accountAutocompleteStore,
         showLoader: false
       })

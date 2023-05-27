@@ -25,7 +25,7 @@ export class EventCreateService {
   createEvent(featuredEvent: FeaturedEvent): Observable<FeaturedEvent> {
     const request: FeaturedEventCreateRequest = { featuredEvent };
     return this._httpClient.post<FeaturedEvent>(this.url, request, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Event Creation Successful' })
+      this._httpResponseService.handleHttpResponse(this.createEvent, { successMessage: 'Event Creation Successful' })
     );
   }
 }

@@ -34,7 +34,7 @@ export class SignupService {
     if (agreed) {
       const signupRequest: SignupRequest = { account, password };
       return this._httpClient.post<Account>(this.url, signupRequest, { withCredentials: true }).pipe(
-        this._httpResponseService.handleHttpResponse({ successMessage }),
+        this._httpResponseService.handleHttpResponse(this.createAccount, { successMessage }),
         mergeMap(() => this._authService.login(signupRequest.account.username, signupRequest.password, true)),
       );
     }

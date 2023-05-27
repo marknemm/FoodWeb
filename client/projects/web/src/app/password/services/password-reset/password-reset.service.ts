@@ -23,13 +23,13 @@ export class PasswordResetService {
   ) {}
 
   get loading(): boolean {
-    return this._httpResponseService.loading;
+    return this._httpResponseService.isLoading(this);
   }
 
   sendPasswordResetEmail(usernameEmail: string): Observable<void> {
     const params = (new HttpParams()).set('usernameEmail', usernameEmail);
     return this._httpClient.get<void>(this.url, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse<void>({ loaderBlocking: false })
+      this._httpResponseService.handleHttpResponse<void>(this.sendPasswordResetEmail, { loaderBlocking: false })
     );
   }
 
@@ -38,7 +38,7 @@ export class PasswordResetService {
     const resetToken: string = this._activatedRoute.snapshot.queryParamMap.get('resetToken');
     const request: PasswordResetRequest = { username, password, resetToken };
     return this._httpClient.put<Account>(this.url, request, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse<Account>(),
+      this._httpResponseService.handleHttpResponse<Account>(this.resetPassword),
       mergeMap((account: Account) => this._authService.login(account.username, password, true))
     );
   }

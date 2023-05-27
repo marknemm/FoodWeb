@@ -30,7 +30,7 @@ export class EventReadService {
 
   /**
    * Gets the next (nearest) upcoming featured event.
-   * @retun An observable the emits the next upcoming event. Emits null/undefined if one does not exist.
+   * @return An observable the emits the next upcoming event. Emits null/undefined if one does not exist.
    */
   getNextEvent(): Observable<FeaturedEvent> {
     const request: FeaturedEventRequest = { sortBy: 'date', sortOrder: 'ASC', page: 1, limit: 1 };

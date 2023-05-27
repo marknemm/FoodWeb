@@ -20,23 +20,19 @@ export class EventRegistrationsService {
   ) {}
 
   get loading(): boolean {
-    return this._httpResponseService.loading;
+    return this._httpResponseService.anyLoading(this);
   }
 
   getEventOnIdUrlParamChange(activatedRoute: ActivatedRoute): void {
     activatedRoute.paramMap.subscribe((paramMap: ParamMap) => {
       const eventIdStr: string = paramMap.get('id');
-      this._getEventWithRegistrations(eventIdStr);
+      const url: string = this.url.replace(':id', eventIdStr);
+      this._httpClient.get<FeaturedEvent>(url, { withCredentials: true }).pipe(
+        this._httpResponseService.handleHttpResponse(this.getEventOnIdUrlParamChange, {
+          immutableStore: this.featuredEventStore,
+          showLoader: false
+        })
+      ).subscribe();
     });
-  }
-
-  private _getEventWithRegistrations(eventIdStr: string): void {
-    const url: string = this.url.replace(':id', eventIdStr);
-    this._httpClient.get<FeaturedEvent>(url, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({
-        immutableStore: this.featuredEventStore,
-        showLoader: false
-      })
-    ).subscribe();
   }
 }

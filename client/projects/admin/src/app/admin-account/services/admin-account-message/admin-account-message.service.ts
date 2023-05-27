@@ -27,7 +27,7 @@ export class AdminAccountMessageService {
     const url = `${this.url}/send-message`;
     const params = new HttpParams({ fromObject: <{ [param: string]: string }>accountFilters });
     return this._httpClient.post(url, sendMessageReq, { withCredentials: true, params }).pipe(
-      this._httpResponseService.handleHttpResponse<void>({ successMessage: 'Message Successfully Sent' })
+      this._httpResponseService.handleHttpResponse<void>(this.sendMessage, { successMessage: 'Message Successfully Sent' })
     );
   }
 
@@ -39,7 +39,7 @@ export class AdminAccountMessageService {
   testMessage(sendMessageReq: SendMessageRequest): Observable<void> {
     const url = `${this.url}/test-message`;
     return this._httpClient.post(url, sendMessageReq, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse<void>({ successMessage: 'Test Message Successfully Sent' })
+      this._httpResponseService.handleHttpResponse<void>(this.testMessage,{ successMessage: 'Test Message Successfully Sent' })
     );
   }
 }

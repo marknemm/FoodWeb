@@ -15,7 +15,7 @@ export * from '~web/shared/interfaces/http-response-handler-options';
 })
 export class HttpResponseService {
 
-  private _loadingRecords = new Map<any, boolean>();
+  private _loadingRecords = new Set<any>();
   private _pageProgressLoadCnt = 0;
 
   constructor(
@@ -25,17 +25,24 @@ export class HttpResponseService {
 
   /**
    * Whether or not any HTTP request is in progress.
+   * @param service The service to check for loading requests. If not set then checks for any loading request for any service.
    */
-  get loading(): boolean {
-    return (this._loadingRecords.size > 0);
+  anyLoading(service?: any): boolean {
+    let loading = (!service && this._loadingRecords.size > 0) || this.isLoading(service);
+    for (const key in service ?? {}) {
+      if (loading) { break; }
+      loading = this.isLoading(service[key]);
+    }
+    return loading;
   }
 
   /**
-   * Checks if an HTTP request, which is associated with a given ID, is in progress.
+   * Checks if an HTTP request, which is associated with a given ID (function ref), is in progress.
    * @param loadingId The ID associated with the HTTP request that is loading.
+   * Can be any unique value, but usually will be reference to the function that triggered the HTTP request that is loading.
    */
   isLoading(loadingId: any): boolean {
-    return !!this._loadingRecords.get(loadingId);
+    return !!this._loadingRecords.has(loadingId);
   }
 
   /**
@@ -45,13 +52,15 @@ export class HttpResponseService {
    * - Processing and displaying HTTP error responses via a non-blocking warning alert.
    * - Forwarding the response value to a configured immutable store (See ImmutableStore for more details).
    * - Displaying a configured non-blocking success alert message upon reception of a success response.
+   * @param loadingId The ID associated with the HTTP request that is loading.
+   * Can be any unique value, but usually will be reference to the function that triggered the HTTP request that is loading.
    * @param opts An optional set of HTTP response handler options. See HttpResponseHandlerOptions for default values.
    * @return A pipeable rxjs operator function.
    */
-  handleHttpResponse<T>(opts: HttpResponseHandlerOptions<T> = {}): OperatorFunction<any, T> {
+  handleHttpResponse<T>(loadingId: any, opts: HttpResponseHandlerOptions<T> = {}): OperatorFunction<any, T> {
     return (httpResponse$: Observable<T>): Observable<T> => {
-      opts = this._fillDefaultHttpHandlerOpts(opts, httpResponse$);
-      this._setLoadingStatus(opts, true);
+      opts = this._fillDefaultHttpHandlerOpts(opts);
+      this._setLoadingStatus(loadingId, opts, true);
       return httpResponse$.pipe(
         tap((response: T) =>
           this._handleHttpSuccessResponse(response, opts)
@@ -60,7 +69,7 @@ export class HttpResponseService {
           this._handleHttpErrorResponse(err, opts)
         ),
         finalize(() =>
-          this._setLoadingStatus(opts, false)
+          this._setLoadingStatus(loadingId, opts, false)
         )
       );
     };
@@ -69,16 +78,15 @@ export class HttpResponseService {
   /**
    * Fills given HTTP response handler options with default values wherever an option is missing.
    * @param opts A set of HTTP response handler options, which will be filled with default values.
-   * @param httpResponse$ The HTTP response observable that the options are associated with.
+   * @param defaultLoadingId The default ID associated with the HTTP request that is loading.
+   * Can be any unique value, but usually will be reference to the function that triggered the HTTP request that is loading.
    * @return A copy of the input HTTP response handler options with default values filled.
    */
   private _fillDefaultHttpHandlerOpts<T>(
     opts: HttpResponseHandlerOptions<T>,
-    httpResponse$: Observable<T>
   ): HttpResponseHandlerOptions<T> {
     opts = (opts != null) ? Object.assign({}, opts) : {};
     opts.handleErrorResponse ??= true;
-    opts.loadingId ??= httpResponse$;
     opts.loaderBlocking ??= true;
     opts.showLoader ??= true;
     return opts;
@@ -86,14 +94,16 @@ export class HttpResponseService {
 
   /**
    * Sets the loading status for a given loadingId contained within HTTP response handler options.
+   * @param loadingId The ID associated with the HTTP request that is loading.
+   * Can be any unique value, but usually will be reference to the function that triggered the HTTP request that is loading.
    * @param opts The HTTP response handler options which contain the `loadingId`.
    * @param loading The loading status that is to be set.
    */
-  private _setLoadingStatus<T>(opts: HttpResponseHandlerOptions<T>, loading: boolean): void {
+  private _setLoadingStatus<T>(loadingId: any, opts: HttpResponseHandlerOptions<T>, loading: boolean): void {
     // Keep track of each separate loading HTTP response.
     (loading)
-      ? this._loadingRecords.set(opts.loadingId, true)
-      : this._loadingRecords.delete(opts.loadingId);
+      ? this._loadingRecords.add(loadingId)
+      : this._loadingRecords.delete(loadingId);
 
     // If configured to show blocking page progress on load, then activate it as long as any response is loading.
     if (opts.showLoader) {

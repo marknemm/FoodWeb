@@ -31,7 +31,7 @@ export class DonationReadService {
    * Whether or not a donation read request is loading.
    */
   get loading(): boolean {
-    return this._httpResponseService.loading;
+    return this._httpResponseService.isLoading(this);
   }
 
   /**
@@ -47,7 +47,7 @@ export class DonationReadService {
     // Get donation from server.
     const url = `${this.url}/${id}`;
     return this._httpClient.get<Donation>(url, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse()
+      this._httpResponseService.handleHttpResponse(this.getDonation)
     );
   }
 
@@ -90,7 +90,7 @@ export class DonationReadService {
     request.limit = request.limit ? request.limit : 10;
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Donation>>(getUrl, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse(opts)
+      this._httpResponseService.handleHttpResponse(this._getDonations, opts)
     );
   }
 }

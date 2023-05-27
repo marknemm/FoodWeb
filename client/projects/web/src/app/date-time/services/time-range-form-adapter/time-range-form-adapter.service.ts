@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { TimeRange } from '~shared';
 import { Controls } from '~web/forms';
@@ -17,14 +17,12 @@ export class TimeRangeFormAdapter extends FormAdapter<TimeRange> {
    * Factors in form-wide validation (e.g. `timeRangeOrder`, `allOrNothing`) when displaying the invalid state of the internal controls.
    */
   readonly rangeErrStateMatcher: ErrorStateMatcher = {
-    isErrorState: (control: FormControl) => {
+    isErrorState: (control: FormControl, form: FormGroupDirective | NgForm) => {
       const controlTouched = (control && !control.value && control.touched);
       const controlInvalid = (control && control.invalid);
-      return (
-        control.hasError('timeRangeOrder')                       // Make both inputs look invalid.
-        || (control.hasError('groupRequired') && controlTouched) // Make missing input look invalid.
-        || (controlInvalid && controlTouched)                    // Pass through regular validity check for input.
-      );
+      return form.hasError('timeRangeOrder')                    // Make both inputs look invalid.
+          || (form.hasError('groupRequired') && controlTouched) // Make missing input look invalid.
+          || (controlInvalid && controlTouched);                // Pass through regular validity check for input.
     }
   };
 

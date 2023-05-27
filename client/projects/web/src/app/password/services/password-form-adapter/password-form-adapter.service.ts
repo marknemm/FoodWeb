@@ -10,6 +10,15 @@ import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
 })
 export class PasswordFormAdapter extends FormAdapter<string, PasswordFormData> {
 
+  readonly passwordErrStateMatcher: ErrorStateMatcher = {
+    isErrorState: (control: FormControl, form: FormGroupDirective | NgForm): boolean => {
+      if (control === form.control.get('confirmPassword') && form.hasError('passwordConfirmMatch')) {
+        return control.touched;
+      }
+      return (control && control.invalid && control.touched);
+    }
+  };
+
   toForm(config?: PasswordFormConfig): PasswordForm {
     const form = this._formBuilder.group({
       password: ['', [Validators.required, Validators.pattern(Validation.PASSWORD_REGEX)]],
@@ -32,17 +41,6 @@ export class PasswordFormAdapter extends FormAdapter<string, PasswordFormData> {
       confirmPassword: model,
       password: model,
       oldPassword: model
-    };
-  }
-
-  public genPasswordMatchErrStateMatcher(): ErrorStateMatcher {
-    return {
-      isErrorState: (control: FormControl, form: FormGroupDirective | NgForm): boolean => {
-        if (control === form.control.get('confirmPassword') && form.hasError('passwordConfirmMatch')) {
-          return control.touched;
-        }
-        return (control && control.invalid && control.touched);
-      }
     };
   }
 

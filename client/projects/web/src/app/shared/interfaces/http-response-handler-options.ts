@@ -13,11 +13,6 @@ export interface HttpResponseHandlerOptions<T = any> {
    */
   immutableStore?: ImmutableStore<T>;
   /**
-   * An ID that can be specifically given to the current HTTP request to check if it is specifically loading.
-   * Note that this can be any type (e.g. string, number, object).
-   */
-  loadingId?: any;
-  /**
    * Whether or not the page progress indicator should be a blocking spinner. Defaults to true.
    */
   loaderBlocking?: boolean;

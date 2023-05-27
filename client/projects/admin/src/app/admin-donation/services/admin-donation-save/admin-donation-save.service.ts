@@ -26,7 +26,7 @@ export class AdminDonationSaveService {
   createDonation(donationForm: AdminDonationForm): Observable<Donation> {
     const request: AdminDonationSaveRequest = this._genDonationSaveRequest(donationForm);
     return this._httpClient.post<Donation>(this.url, request, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse()
+      this._httpResponseService.handleHttpResponse(this.createDonation)
     );
   }
 
@@ -38,7 +38,7 @@ export class AdminDonationSaveService {
   updateDonation(donationForm: AdminDonationForm): Observable<Donation> {
     const request: AdminDonationSaveRequest = this._genDonationSaveRequest(donationForm);
     return this._httpClient.put<Donation>(this.url, request, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse()
+      this._httpResponseService.handleHttpResponse(this.updateDonation)
     );
   }
 

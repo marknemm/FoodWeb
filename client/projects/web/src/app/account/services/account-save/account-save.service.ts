@@ -41,7 +41,7 @@ export class AccountSaveService {
     // Send the account update request to the server.
     return this._httpClient.put<Account>(url, accountSectionUpdtReq, { withCredentials: true }).pipe(
       tap((savedAccount: Account) => this._updateAccountSessionData(savedAccount)),
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Account update successful' })
+      this._httpResponseService.handleHttpResponse(this.updateAccountFields, { successMessage: 'Account update successful' })
     );
   }
 
@@ -66,7 +66,7 @@ export class AccountSaveService {
     const url = `${this.url}/${account.id}/password`;
     const request: PasswordUpdateRequest = passwordUpdate;
     return this._httpClient.put<void>(url, request, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Password update successful' })
+      this._httpResponseService.handleHttpResponse(this.updatePassword, { successMessage: 'Password update successful' })
     );
   }
 }

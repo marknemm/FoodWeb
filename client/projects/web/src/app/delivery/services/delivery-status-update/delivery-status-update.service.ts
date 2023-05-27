@@ -31,7 +31,7 @@ export class DeliveryStatusUpdateService {
     return this._genStateChangeRequest(donation).pipe(
       switchMap((request: DeliveryStateChangeRequest) =>
         this._httpClient.put<Donation>(advanceUrl, request, { withCredentials: true }).pipe(
-          this._httpResponseService.handleHttpResponse<Donation>({ successMessage })
+          this._httpResponseService.handleHttpResponse<Donation>(this.advanceDeliveryState, { successMessage })
         )
       )
     );
@@ -44,7 +44,7 @@ export class DeliveryStatusUpdateService {
     return this._genStateChangeRequest(donation).pipe(
       switchMap((request: DeliveryStateChangeRequest) =>
         this._httpClient.put<Donation>(undoUrl, request, { withCredentials: true }).pipe(
-          this._httpResponseService.handleHttpResponse<Donation>({ successMessage })
+          this._httpResponseService.handleHttpResponse<Donation>(this.undoDeliveryState, { successMessage })
         )
       )
     );

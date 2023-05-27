@@ -25,7 +25,7 @@ export class DonationClaimService {
   claimDonation(donation: Donation): Observable<Donation> {
     const request: DonationClaimRequest = { donationId: donation.id };
     return this._httpClient.post<Donation>(this.url, request, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Donation successfully claimed' })
+      this._httpResponseService.handleHttpResponse(this.claimDonation, { successMessage: 'Donation successfully claimed' })
     );
   }
 
@@ -37,7 +37,7 @@ export class DonationClaimService {
   unclaimDonation(donation: Donation): Observable<Donation> {
     const unclaimUrl = `${this.url}/${donation.id}`;
     return this._httpClient.delete<Donation>(unclaimUrl, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Donation successfully unclaimed' })
+      this._httpResponseService.handleHttpResponse(this.unclaimDonation, { successMessage: 'Donation successfully unclaimed' })
     );
   }
 }

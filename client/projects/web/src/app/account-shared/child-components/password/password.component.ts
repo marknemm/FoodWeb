@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { FormFieldService } from '~web/forms';
 import { PasswordForm, PasswordFormAdapter, PasswordFormMode } from '~web/password/services/password-form-adapter/password-form-adapter.service';
 
@@ -13,7 +14,7 @@ export class PasswordComponent implements OnInit {
   @Input() editable = false;
   @Input() formMode: PasswordFormMode = 'Signup';
 
-  protected _passwordLabel: string;
+  protected _passwordLabel = '';
 
   constructor(
     private _formFieldService: FormFieldService<PasswordForm>,
@@ -26,6 +27,10 @@ export class PasswordComponent implements OnInit {
 
   get passwordLabel(): string {
     return this._passwordLabel;
+  }
+
+  get passwordMatchErrStateMatcher(): ErrorStateMatcher {
+    return this._passwordFormAdapter.passwordErrStateMatcher;
   }
 
   ngOnInit(): void {

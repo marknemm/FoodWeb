@@ -19,7 +19,7 @@ export class DonationHubCreateService {
 
   createDonationHub(donationHub: DonationHub): Observable<DonationHub> {
     return this._httpClient.post<DonationHub>(this.url, donationHub, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Donation Hub Successfully Created' })
+      this._httpResponseService.handleHttpResponse(this.createDonationHub, { successMessage: 'Donation Hub Successfully Created' })
     );
   }
 }

@@ -29,7 +29,7 @@ export class DonationHubReadService {
    * Whether or not a donation hub read request is loading.
    */
   get loading(): boolean {
-    return this._httpResponseService.loading;
+    return this._httpResponseService.anyLoading(this);
   }
 
   /**
@@ -40,7 +40,7 @@ export class DonationHubReadService {
   getDonationHub(id: number): Observable<DonationHub> {
     const url = `${this.url}/${id}`;
     return this._httpClient.get<DonationHub>(url, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse()
+      this._httpResponseService.handleHttpResponse(this.getDonationHub)
     );
   }
 
@@ -83,7 +83,7 @@ export class DonationHubReadService {
     request.limit = request.limit ? request.limit : 10;
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<DonationHub>>(readUrl, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse(opts)
+      this._httpResponseService.handleHttpResponse(this._getDonationHubs, opts)
     );
   }
 }

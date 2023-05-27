@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormGroupDirective, NgForm } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { OperationHours } from '~shared';
 import { Controls } from '~web/forms';
 import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
@@ -9,6 +10,16 @@ import { GroupRequiredValidationMode } from '~web/forms/services/form-validation
   providedIn: 'root'
 })
 export class OperationHoursFilterFormAdapter extends FormAdapter<OperationHours, OperationHoursFilterFormData> {
+
+  readonly timeRangeErrStateMatcher: ErrorStateMatcher = {
+    isErrorState: (control: FormControl, form: FormGroupDirective | NgForm) => {
+      const controlTouched = (control && !control.value && control.touched);
+      const controlInvalid = (control && control.invalid);
+      return form.hasError('timeRangeOrder')                    // Make both inputs look invalid.
+          || (form.hasError('groupRequired') && controlTouched) // Make missing input look invalid.
+          || (controlInvalid && controlTouched);                // Pass through regular validity check for input.
+    }
+  };
 
   toForm(config?: OperationHoursFilterFormConfig): OperationHoursFilterForm {
     const form = this._initForm(config);

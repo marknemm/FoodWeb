@@ -30,11 +30,11 @@
         Account Filters
       </foodweb-page-list-filters-title>
 
-      <mat-form-field class="fill" *ngIf="!filtersForm.isVolunteerAccountType">
+      <mat-form-field class="fill" *ngIf="!isVolunteerAccountType">
         <input matInput type="text" placeholder="Organization Name" formControlName="organizationName">
       </mat-form-field>
 
-      <div class="row" *ngIf="!filtersForm.isOrganizationAccountType">
+      <div class="row" *ngIf="!isOrganizationAccountType">
         <div class="col-6">
           <mat-form-field class="fill">
             <input matInput type="text" placeholder="Volunteer First" formControlName="volunteerFirstName">
@@ -51,7 +51,7 @@
         <input matInput type="email" placeholder="Email Address" formControlName="email">
       </mat-form-field>
 
-      <ng-container *ngIf="!filtersForm.isDonorAccountType">
+      <ng-container *ngIf="!isDonorAccountType">
         <foodweb-page-list-filters-title>
           Operation Hours Filters
         </foodweb-page-list-filters-title>
@@ -68,7 +68,7 @@
 
       <foodweb-page-list-sort [formGroup]="filtersForm" [sortOptions]="accountSortOptionsService.options"></foodweb-page-list-sort>
 
-      <foodweb-page-list-filters-footer (clear)="filtersForm.resetFacetFilters()"></foodweb-page-list-filters-footer>
+      <foodweb-page-list-filters-footer (clear)="resetFacetFilters()"></foodweb-page-list-filters-footer>
     </form>
   </foodweb-page-list-filters>
 

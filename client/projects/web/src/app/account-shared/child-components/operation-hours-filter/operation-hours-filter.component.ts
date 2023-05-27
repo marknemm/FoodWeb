@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { OperationHoursFilterForm, OperationHoursFilterFormAdapter } from '~web/account-shared/services/operation-hours-filter-form-adapter/operation-hours-filter-form-adapter.service';
 import { FormFieldService } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
@@ -35,6 +36,10 @@ export class OperationHoursFilterComponent implements OnInit {
 
   get operationHoursForm(): OperationHoursFilterForm {
     return this._formFieldService.control;
+  }
+
+  get timeRangeErrStateMatcher(): ErrorStateMatcher {
+    return this._operationHoursFilterFormAdapter.timeRangeErrStateMatcher;
   }
 
   ngOnInit(): void {

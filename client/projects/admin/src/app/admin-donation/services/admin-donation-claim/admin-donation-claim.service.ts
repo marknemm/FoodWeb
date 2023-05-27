@@ -59,7 +59,9 @@ export class AdminDonationClaimService extends DonationClaimService {
   private _sendClaimRequest(donationId: number, receiverAccountId: number): Observable<Donation> {
     const request: AdminClaimSaveRequest = { donationId, receiverAccountId, sendNotifications: true };
     return this._httpClient.post<Donation>(this.url, request, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse<Donation>({ successMessage: 'Donation successfully claimed' })
+      this._httpResponseService.handleHttpResponse<Donation>(this.claimDonation, {
+        successMessage: 'Donation successfully claimed'
+      })
     );
   }
 }

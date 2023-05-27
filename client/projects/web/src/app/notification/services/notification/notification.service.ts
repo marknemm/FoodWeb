@@ -54,7 +54,7 @@ export class NotificationService {
    * The loading state for notifications.
    */
   get loading(): boolean {
-    return this._httpResponseService.loading;
+    return this._httpResponseService.anyLoading(this);
   }
 
   /**
@@ -72,7 +72,7 @@ export class NotificationService {
   getNotification(id: number): Observable<Notification> {
     const url = `${this.url}/${id}`;
     return this._httpClient.get<Notification>(url, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse()
+      this._httpResponseService.handleHttpResponse(this.getNotification)
     );
   }
 
@@ -101,7 +101,7 @@ export class NotificationService {
     // Send GET request for notifications.
     const params = new HttpParams({ fromObject: <any>request });
     return this._httpClient.get<ListResponse<Notification>>(this.url, { params, withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse(opts)
+      this._httpResponseService.handleHttpResponse(this.getNotifications, opts)
     );
   }
 
@@ -142,11 +142,7 @@ export class NotificationService {
    * of waiting for the updated count from the server.
    * @param opts Options for the HTTP response handler.
    */
-  refreshUnseenNotifications(
-    lastSeenNotificationId: number,
-    resetImmediately = false,
-    opts: HttpResponseHandlerOptions = { loaderBlocking: false }
-  ): void {
+  refreshUnseenNotifications(lastSeenNotificationId: number, resetImmediately = false, opts: HttpResponseHandlerOptions = {}): void {
     if (this._unseenNotificationsCount > 0) {
       opts.loaderBlocking ??= false;
       if (resetImmediately) {
@@ -154,7 +150,7 @@ export class NotificationService {
       }
       const request: LastSeenNotificationUpdateRequest = { lastSeenNotificationId };
       this._httpClient.put<number>(`${this.url}/last-seen-notification`, request, { withCredentials: true }).pipe(
-        this._httpResponseService.handleHttpResponse<number>(opts)
+        this._httpResponseService.handleHttpResponse<number>(this.refreshUnseenNotifications, opts)
       ).subscribe(
         (unseenNotificationsCount: number) => this._unseenNotificationsCount = unseenNotificationsCount
       );
@@ -165,24 +161,21 @@ export class NotificationService {
     this.updateNotificationFlaggedState(notification, !notification.flagged);
   }
 
-  updateNotificationFlaggedState(notification: Notification, flagged: boolean): void {
-    if (notification.flagged !== flagged) {
+  updateNotificationFlaggedState(notification: Notification, flagged: boolean, opts: HttpResponseHandlerOptions = {}): void {
+    if (notification && notification.flagged !== flagged) {
       notification.flagged = flagged;
-      this._updateNotificationState(notification);
-    }
-  }
-
-  updateNotificationReadState(notification: Notification, read: boolean): void {
-    if (notification.read !== read) {
-      notification.read = read;
-      this._updateNotificationState(notification);
-    }
-  }
-
-  private _updateNotificationState(notification: Notification): void {
-    const notificationUpdateRequest: NotificationUpdateRequest = { notification };
-      this._httpClient.put(this.url, notificationUpdateRequest, { withCredentials: true }).pipe(
-        this._httpResponseService.handleHttpResponse({ loaderBlocking: false })
+      this._httpClient.put(this.url, { notification }, { withCredentials: true }).pipe(
+        this._httpResponseService.handleHttpResponse(this.updateNotificationFlaggedState, opts)
       ).subscribe();
+    }
+  }
+
+  updateNotificationReadState(notification: Notification, read: boolean, opts: HttpResponseHandlerOptions = {}): void {
+    if (notification && notification.read !== read) {
+      notification.read = read;
+      this._httpClient.put(this.url, { notification }, { withCredentials: true }).pipe(
+        this._httpResponseService.handleHttpResponse(this.updateNotificationReadState, opts)
+      ).subscribe();
+    }
   }
 }

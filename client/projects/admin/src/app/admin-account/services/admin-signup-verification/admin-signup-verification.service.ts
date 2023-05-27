@@ -28,7 +28,10 @@ export class AdminSignupVerificationService extends SignupVerificationService {
     if (!this.loading) {
       const url = `${this.url}/resend-verification-email/${account.id}`;
       this._httpClient.get(url, { withCredentials: true }).pipe(
-        this._httpResponseService.handleHttpResponse({ loaderBlocking: false, successMessage: 'Verification Email Resent' })
+        this._httpResponseService.handleHttpResponse(this.resendVerificationEmailFor, {
+          loaderBlocking: false,
+          successMessage: 'Verification Email Resent'
+        })
       ).subscribe();
     }
   }

@@ -11,18 +11,25 @@ export class DownloadDevDbService {
   readonly url = `${environment.server}/developer/dev-db`;
 
   constructor(
-    public httpResponseService: HttpResponseService,
     private _httpClient: HttpClient,
+    private _httpResponseService: HttpResponseService,
   ) {}
+
+  get loading(): boolean {
+    return this._httpResponseService.anyLoading(this);
+  }
 
   /**
    * Downloads a dev version of the production database.
    */
   downloadDevDb(): void {
-    if (!this.httpResponseService.loading) {
+    if (!this._httpResponseService.isLoading(this)) {
       const headers = new HttpHeaders({ 'Content-Disposition': 'attachment' });
       this._httpClient.get(this.url, { withCredentials: true, headers, responseType: 'blob' }).pipe(
-        this.httpResponseService.handleHttpResponse({ successMessage: 'Dev DB Download Successful', loaderBlocking: false })
+        this._httpResponseService.handleHttpResponse(this.downloadDevDb, {
+          loaderBlocking: false,
+          successMessage: 'Dev DB Download Successful'
+        })
       ).subscribe((fileBlob: any) => {
         // Requires entire file to be loaded in memory, kind of hacky, but works for now...
         const downloadLink = document.createElement('a');

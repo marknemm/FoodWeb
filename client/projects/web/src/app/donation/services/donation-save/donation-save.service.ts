@@ -29,7 +29,7 @@ export class DonationSaveService {
   createDonation(donation: DonationSaveData): Observable<Donation> {
     const createRequest: DonationSaveRequest = { donationSaveData: donation };
     return this._httpClient.post<Donation>(this.url, createRequest, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Donation successful' })
+      this._httpResponseService.handleHttpResponse(this.createDonation, { successMessage: 'Donation successful' })
     );
   }
 
@@ -42,7 +42,7 @@ export class DonationSaveService {
   updateDonation(originalDonation: Donation, donationSaveData: DonationSaveData): Observable<Donation> {
     const updateRequest: DonationSaveRequest = this._genDonationUpdateRequest(originalDonation, donationSaveData);
     return this._httpClient.put<Donation>(this.url, updateRequest, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse({ successMessage: 'Donation update successful' })
+      this._httpResponseService.handleHttpResponse(this.updateDonation, { successMessage: 'Donation update successful' })
     );
   }
 

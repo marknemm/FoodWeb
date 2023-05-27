@@ -25,7 +25,9 @@ export class ImpersonateService {
   impersonateUser(account: Account): void {
     const url = `${this.url}/${account.id}`;
     this._httpClient.get<ImpersonateTokenResponse>(url, { withCredentials: true }).pipe(
-      this._httpResponseService.handleHttpResponse<ImpersonateTokenResponse>({ successMessage: 'User Impersonation Successful' })
+      this._httpResponseService.handleHttpResponse<ImpersonateTokenResponse>(this.impersonateUser, {
+        successMessage: 'User Impersonation Successful'
+      })
     ).subscribe((response: ImpersonateTokenResponse) => {
       this._window.open(`${environment.webClient}/home/login?impersonationToken=${response.impersonationToken}`, '_blank');
     });

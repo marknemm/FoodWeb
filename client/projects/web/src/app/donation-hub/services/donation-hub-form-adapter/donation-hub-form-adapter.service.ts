@@ -24,7 +24,7 @@ export class DonationHubFormAdapter extends FormAdapter<DonationHub, DonationHub
   toForm(config: DonationHubFormConfig): DonationHubForm {
     const form: DonationHubForm = this._formBuilder.group({
       id: [undefined as number],
-      agreementChecklist: [false, config.omitChecklists ? [] : [Validators.requiredTrue]],
+      agreementChecklist: [false, config?.omitChecklists ? [] : [Validators.requiredTrue]],
       contactOverride: this._contactInfoFormAdapter.toForm({ initValue: config?.account?.contactInfo }),
       dropOffDate: [undefined as Date, Validators.required],
       dropOffInstructions: ['', Validators.required],
