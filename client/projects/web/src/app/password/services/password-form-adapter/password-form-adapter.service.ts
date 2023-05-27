@@ -11,12 +11,9 @@ import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
 export class PasswordFormAdapter extends FormAdapter<string, PasswordFormData> {
 
   readonly passwordErrStateMatcher: ErrorStateMatcher = {
-    isErrorState: (control: FormControl, form: FormGroupDirective | NgForm): boolean => {
-      if (control === form.control.get('confirmPassword') && form.hasError('passwordConfirmMatch')) {
-        return control.touched;
-      }
-      return (control && control.invalid && control.touched);
-    }
+    isErrorState: (control: FormControl, form: FormGroupDirective | NgForm): boolean =>
+         (control === form?.control.get('confirmPassword') && form?.hasError('passwordConfirmMatch'))
+      || (control && control.invalid && control.touched)
   };
 
   toForm(config?: PasswordFormConfig): PasswordForm {

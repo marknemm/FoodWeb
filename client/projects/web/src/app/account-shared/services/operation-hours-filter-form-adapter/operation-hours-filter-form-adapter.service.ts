@@ -15,9 +15,9 @@ export class OperationHoursFilterFormAdapter extends FormAdapter<OperationHours,
     isErrorState: (control: FormControl, form: FormGroupDirective | NgForm) => {
       const controlTouched = (control && !control.value && control.touched);
       const controlInvalid = (control && control.invalid);
-      return form.hasError('timeRangeOrder')                    // Make both inputs look invalid.
-          || (form.hasError('groupRequired') && controlTouched) // Make missing input look invalid.
-          || (controlInvalid && controlTouched);                // Pass through regular validity check for input.
+      return form?.hasError('timeRangeOrder')                    // Make both inputs look invalid.
+          || (form?.hasError('groupRequired') && controlTouched) // Make missing input look invalid.
+          || (controlInvalid && controlTouched);                 // Pass through regular validity check for input.
     }
   };
 
