@@ -11,18 +11,18 @@ export class ContactInfoFormAdapter extends FormAdapter<ContactInfo, ContactInfo
 
   toForm(config?: FormConfig<ContactInfo>): ContactInfoForm {
     const form: ContactInfoForm = this._formBuilder.group({
-      id: undefined as number,
+      id: [undefined],
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', [Validators.required, Validators.pattern(Validation.PHONE_REGEX)]],
       streetAddress: ['', [Validators.required]],
       city: ['', [Validators.required]],
       stateProvince: ['', [Validators.required]],
       postalCode: ['', [Validators.required, Validators.pattern(Validation.POSTAL_CODE_REGEX)]],
-      location: undefined as GeographyLocation,
-      timezone: '',
-      enableEmail: true as boolean,
-      enablePushNotification: true as boolean,
-      notifyForEachDonation: true as boolean,
+      location: [undefined],
+      timezone: [''],
+      enableEmail: [true],
+      enablePushNotification: [true],
+      notifyForEachDonation: [true],
     }, config);
 
     return this._initForm(form, config);

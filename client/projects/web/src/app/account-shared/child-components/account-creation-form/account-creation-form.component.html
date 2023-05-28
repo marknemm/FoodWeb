@@ -25,14 +25,14 @@
           </mat-card-content>
         </mat-card>
 
-        <mat-card *ngIf="accountType !== 'Volunteer'">
+        <mat-card *ngIf="!isVolunteer">
           <mat-card-title class="block-label">Organization</mat-card-title>
           <mat-card-content>
             <foodweb-organization [accountType]="accountType" [editable]="true" [formGroup]="accountForm.get('organization')"></foodweb-organization>
           </mat-card-content>
         </mat-card>
 
-        <mat-card *ngIf="accountType === 'Volunteer'">
+        <mat-card *ngIf="isVolunteer">
           <mat-card-title>Volunteer Info</mat-card-title>
           <mat-card-content>
             <foodweb-volunteer [editable]="true" [formGroup]="accountForm.get('volunteer')"></foodweb-volunteer>
@@ -49,13 +49,13 @@
       </div>
     </div>
 
-    <hr *ngIf="accountType != 'Donor'">
+    <hr *ngIf="!isDonor">
 
     <div class="operation-hours-section" [ngClass]="{ 'full-width': operationHoursFullWidth }">
-      <mat-card *ngIf="accountType !== 'Donor'">
+      <mat-card *ngIf="!isDonor">
         <mat-card-title class="block-label">
-          <span *ngIf="accountType !== 'Volunteer'">Donation Delivery Availability</span>
-          <span *ngIf="accountType === 'Volunteer'">Delivery Availability</span>
+          <span *ngIf="!isVolunteer">Donation Delivery Availability</span>
+          <span *ngIf="isVolunteer">Delivery Availability</span>
         </mat-card-title>
         <mat-card-subtitle>
           <span>{{ operationHoursDescription }}</span>

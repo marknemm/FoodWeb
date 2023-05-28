@@ -14,7 +14,7 @@ export class VolunteerFormAdapter extends FormAdapter<Volunteer, VolunteerFormDa
     const form: VolunteerForm = this._initForm(config);
 
     this._formValidationService.addValidators(form, Validators.required,
-      ['firstName', 'fullName', 'lastName', 'signedAgreement']);
+      ['firstName', 'fullName', 'lastName']);
     form.controls.fullName.addValidators(Validators.pattern(/^(\s*[^\s]+\s+[^\s]+\s*)+$/));
     form.controls.fullName.updateValueAndValidity();
 
@@ -23,7 +23,7 @@ export class VolunteerFormAdapter extends FormAdapter<Volunteer, VolunteerFormDa
     return form;
   }
 
-  toModel(viewModel?: VolunteerForm | Partial<VolunteerFormData>): VolunteerFormData {
+  toModel(viewModel?: VolunteerForm | Partial<VolunteerFormData>): Volunteer {
     return this._getViewModelData(viewModel);
   }
 

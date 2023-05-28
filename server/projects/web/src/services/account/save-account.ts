@@ -50,7 +50,7 @@ export async function updateAccount(updateReq: AccountUpdateRequest, myAccount: 
 async function _saveAccount(manager: OrmEntityManager, account: AccountEntity, myAccount?: AccountEntity): Promise<AccountEntity> {
   const accountRepo: OrmRepository<AccountEntity> = manager.getRepository(AccountEntity);
   const operationHoursRepo: OrmRepository<OperationHoursEntity> = manager.getRepository(OperationHoursEntity);
-  _ensureEitherOrganizationOrVolunteer(account);
+  _refineOrganizationOrVolunteer(account);
   _ensureAccountHasProfileImg(account);
   const accountErr: string = _accountHelper.validateAccount(account);
   if (accountErr) { throw new FoodWebError(accountErr); }
@@ -69,20 +69,19 @@ async function _saveAccount(manager: OrmEntityManager, account: AccountEntity, m
   return accountRepo.findOne({ id: account.id });
 }
 
-function _ensureEitherOrganizationOrVolunteer(account: AccountEntity): void {
+function _refineOrganizationOrVolunteer(account: AccountEntity): void {
   if (account.accountType === AccountType.Volunteer) {
     account.organization = null;
+    if (account.volunteer?.signedAgreement == null) {
+      delete account.volunteer?.signedAgreement;
+    }
   } else {
     account.volunteer = null;
-    _ensureEitherDonorOrReceiver(account);
-  }
-}
-
-function _ensureEitherDonorOrReceiver(account: AccountEntity): void {
-  if (account.organization) {
-    (account.accountType === AccountType.Donor)
-      ? account.organization.receiver = null
-      : account.organization.donor = null;
+    if (account.organization) {
+      (account.accountType === AccountType.Donor)
+        ? account.organization.receiver = null
+        : account.organization.donor = null;
+    }
   }
 }
 

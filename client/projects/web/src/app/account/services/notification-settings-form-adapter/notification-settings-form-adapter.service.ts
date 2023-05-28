@@ -11,9 +11,9 @@ export class NotificationSettingsFormAdapter extends FormAdapter<NotificationSet
 
   toForm(config?: FormConfig<NotificationSettings>): NotificationSettingsForm {
     const form = this._formBuilder.group({
-      enableEmail: false,
-      enablePushNotification: false,
-      notifyForEachDonation: false
+      enableEmail: [true],
+      enablePushNotification: [true],
+      notifyForEachDonation: [true]
     }, config);
 
     return this._initForm(form, config);
