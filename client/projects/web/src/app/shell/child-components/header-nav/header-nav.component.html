@@ -16,13 +16,18 @@
     <button mat-button type="button" [matMenuTriggerFor]="sandwichArmyMenu">
       <mat-icon>breakfast_dining</mat-icon> <span>Sandwich Army</span>
     </button>
-    <button mat-button type="button" [matMenuTriggerFor]="deliveriesMenu">
+    <button mat-button *ngIf="showDeliveries" type="button" [matMenuTriggerFor]="deliveriesMenu">
       <mat-icon>directions_car</mat-icon> <span>Deliveries</span>
     </button>
   </ng-container>
   <button mat-button type="button" [matMenuTriggerFor]="usersMenu">
     <mat-icon>people_alt</mat-icon> <span>Users</span>
   </button>
+  <a href="https://linktr.ee/wnyfoodweb" target="_blank">
+    <button mat-button type="button">
+      <mat-icon>park</mat-icon> <span>Link Tree</span>
+    </button>
+  </a>
 </span>
 
 <mat-menu #donationsMenu="matMenu" class="header-submenu">
