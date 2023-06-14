@@ -1,19 +1,19 @@
-import { AfterViewInit, Component, ContentChildren, ElementRef, OnDestroy, QueryList } from '@angular/core';
+import { AfterViewInit, Component, ContentChildren, ElementRef, QueryList } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { TableDataSource } from '~web/table/interfaces/table-data-source';
+import { DestroyService } from '~web/shared/services/destroy/destroy.service';
 import { TableTitleComponent } from '~web/table/child-components/table-title/table-title.component';
 import { TableComponent } from '~web/table/child-components/table/table.component';
+import { TableDataSource } from '~web/table/interfaces/table-data-source';
 
 @Component({
   selector: 'foodweb-table-container,[foodweb-table-container]',
   templateUrl: './table-container.component.html',
-  styleUrls: ['./table-container.component.scss']
+  styleUrls: ['./table-container.component.scss'],
+  providers: [DestroyService]
 })
-export class TableContainerComponent<T = any> implements AfterViewInit, OnDestroy {
+export class TableContainerComponent<T = any> implements AfterViewInit {
 
   @ContentChildren(TableTitleComponent, { descendants: true }) tableTitleQuery: QueryList<TableTitleComponent<T>>;
   @ContentChildren(TableComponent, { descendants: true }) tableQuery: QueryList<TableComponent<T>>;
@@ -24,23 +24,20 @@ export class TableContainerComponent<T = any> implements AfterViewInit, OnDestro
 
   dataSource: TableDataSource<T>;
 
-  private _destroy$ = new Subject<void>();
+  constructor(
+    private _destroyService: DestroyService
+  ) {}
 
   ngAfterViewInit() {
     setTimeout(() => {
       this._handleContentUpdates();
-      this.tableTitleQuery.changes.pipe(takeUntil(this._destroy$)).subscribe(this._handleContentUpdates.bind(this));
-      this.tableQuery.changes.pipe(takeUntil(this._destroy$)).subscribe(this._handleContentUpdates.bind(this));
-      this.matTableQuery.changes.pipe(takeUntil(this._destroy$)).subscribe(this._handleContentUpdates.bind(this));
-      this.matTableElemRefQuery.changes.pipe(takeUntil(this._destroy$)).subscribe(this._handleContentUpdates.bind(this));
-      this.matSortQuery.changes.pipe(takeUntil(this._destroy$)).subscribe(this._handleContentUpdates.bind(this));
-      this.matPaginatorQuery.changes.pipe(takeUntil(this._destroy$)).subscribe(this._handleContentUpdates.bind(this));
+      this.tableTitleQuery.changes.pipe(this._destroyService.untilDestroy()).subscribe(this._handleContentUpdates.bind(this));
+      this.tableQuery.changes.pipe(this._destroyService.untilDestroy()).subscribe(this._handleContentUpdates.bind(this));
+      this.matTableQuery.changes.pipe(this._destroyService.untilDestroy()).subscribe(this._handleContentUpdates.bind(this));
+      this.matTableElemRefQuery.changes.pipe(this._destroyService.untilDestroy()).subscribe(this._handleContentUpdates.bind(this));
+      this.matSortQuery.changes.pipe(this._destroyService.untilDestroy()).subscribe(this._handleContentUpdates.bind(this));
+      this.matPaginatorQuery.changes.pipe(this._destroyService.untilDestroy()).subscribe(this._handleContentUpdates.bind(this));
     });
-  }
-
-  ngOnDestroy() {
-    // Prevent RxJs memory leaks.
-    this._destroy$.next();
   }
 
   private _handleContentUpdates(): void {

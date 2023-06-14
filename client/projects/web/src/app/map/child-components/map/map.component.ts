@@ -1,19 +1,19 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { Directions, Donation } from '~shared';
 import { RenderPolyline } from '~web/map/services/directions/directions.service';
 import { MapOptionsForm, MapOptionsFormAdapter } from '~web/map/services/map-options-form-adapter/map-options-form-adapter.service';
 import { MapOptions, MapService, WaypointMarker } from '~web/map/services/map/map.service';
+import { DestroyService } from '~web/shared/services/destroy/destroy.service';
 
 @Component({
   selector: 'foodweb-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
-  providers: [MapService]
+  providers: [DestroyService, MapService]
 })
-export class MapComponent implements OnInit, OnChanges, OnDestroy {
+export class MapComponent implements OnInit, OnChanges {
 
   @Input() displayMapOnly = false;
   @Input() displayRouteToDonor = true;
@@ -33,6 +33,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
   private _selWaypointMarker: WaypointMarker;
 
   constructor(
+    private _destroyService: DestroyService,
     private _mapOptionsFormAdapter: MapOptionsFormAdapter,
     private _mapService: MapService,
   ) {}
@@ -63,7 +64,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.optionsForm.valueChanges.pipe(
-      takeUntil(this._destroy$)
+      this._destroyService.untilDestroy()
     ).subscribe((options: MapOptions) =>
       this.refreshMap(options)
     );
@@ -87,10 +88,6 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy {
         useVolunteerCurrentPos: this.useVolunteerCurrentPos
       });
     }
-  }
-
-  ngOnDestroy(): void {
-    this._destroy$.next(); // Prevent rxjs memory leaks.
   }
 
   refreshMap(options: MapOptions): void {

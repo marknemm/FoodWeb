@@ -1,12 +1,12 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 
 @Component({
   selector: 'foodweb-requirements-checklist',
   templateUrl: './requirements-checklist.component.html',
   styleUrls: ['./requirements-checklist.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class RequirementsChecklistComponent implements OnChanges {
 

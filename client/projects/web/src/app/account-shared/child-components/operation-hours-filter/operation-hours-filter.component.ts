@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { OperationHoursFilterForm, OperationHoursFilterFormAdapter } from '~web/account-shared/services/operation-hours-filter-form-adapter/operation-hours-filter-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
   selector: 'foodweb-operation-hours-filter',
   templateUrl: './operation-hours-filter.component.html',
   styleUrls: ['./operation-hours-filter.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class OperationHoursFilterComponent implements OnInit {
 

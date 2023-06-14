@@ -6,7 +6,7 @@ import { AccountForm } from '~web/account-shared/forms/account.form';
 import { AccountComponent } from '~web/account/components/account/account.component';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService } from '~web/forms';
 import { PasswordForm } from '~web/password/forms/password.form';
 import { SessionService } from '~web/session/services/session/session.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
@@ -16,7 +16,7 @@ import { SignupVerificationService } from '~web/signup/services/signup-verificat
   selector: 'foodweb-admin-account',
   templateUrl: './admin-account.component.html',
   styleUrls: ['./admin-account.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class AdminAccountComponent extends AccountComponent implements OnInit {
 

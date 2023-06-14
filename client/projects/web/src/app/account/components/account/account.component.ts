@@ -5,7 +5,7 @@ import { Account, AccountHelper, AccountType, DonationReadRequest } from '~share
 import { AccountForm, AccountFormAdapter, AccountFormData } from '~web/account-shared/services/account-form-adapter/account-form-adapter.service';
 import { AccountReadService } from '~web/account/services/account-read/account-read.service';
 import { AccountSaveService } from '~web/account/services/account-save/account-save.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService } from '~web/forms';
 import { PasswordFormData } from '~web/password/services/password-form-adapter/password-form-adapter.service';
 import { SessionService } from '~web/session/services/session/session.service';
 import { ObjectService } from '~web/shared/services/object/object.service';
@@ -16,7 +16,7 @@ import { SignupVerificationService } from '~web/signup/services/signup-verificat
   selector: 'foodweb-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class AccountComponent implements OnInit {
 

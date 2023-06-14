@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { AccountCategory, AccountType } from '~shared';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
   selector: 'foodweb-account-type',
   templateUrl: './account-type.component.html',
   styleUrls: ['./account-type.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class AccountTypeComponent implements OnInit {
 

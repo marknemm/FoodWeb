@@ -1,24 +1,22 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { DonationHubPledge } from '~shared';
 import { DonationHubPledgeDeleteService } from '~web/donation-hub/services/donation-hub-pledge-delete/donation-hub-pledge-delete.service';
 import { DonationHubPledgeReadService } from '~web/donation-hub/services/donation-hub-pledge-read/donation-hub-pledge-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
-import { ShellService } from '~web/shell/services/shell/shell.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-donation-hub-pledge',
   templateUrl: './donation-hub-pledge.component.html',
-  styleUrls: ['./donation-hub-pledge.component.scss']
+  styleUrls: ['./donation-hub-pledge.component.scss'],
 })
-export class DonationHubPledgeComponent implements OnInit, OnDestroy {
+export class DonationHubPledgeComponent implements OnInit {
 
   readonly postDeleteRoute = ['/', 'donation-hub'];
 
-  protected _destroy$ = new Subject<void>();
   protected _donationHubPledge: DonationHubPledge;
   protected _donationHubPledgeNotFound = false;
 
@@ -65,9 +63,5 @@ export class DonationHubPledgeComponent implements OnInit, OnDestroy {
         this._router.navigate(this.postDeleteRoute.concat(`${this.donationHubPledge.donationHub.id}`))
       );
     }
-  }
-
-  ngOnDestroy() {
-    this._destroy$.next();
   }
 }

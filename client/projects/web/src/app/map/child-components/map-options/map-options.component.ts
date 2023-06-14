@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { MapOptionsForm, MapOptionsFormAdapter } from '~web/map/services/map-options-form-adapter/map-options-form-adapter.service';
 
 @Component({
   selector: 'foodweb-map-options',
   templateUrl: './map-options.component.html',
   styleUrls: ['./map-options.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class MapOptionsComponent implements OnInit {
 

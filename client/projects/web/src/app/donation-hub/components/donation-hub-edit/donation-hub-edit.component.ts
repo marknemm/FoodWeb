@@ -5,7 +5,7 @@ import { DonationHub } from '~shared';
 import { DonationHubForm, DonationHubFormAdapter, DonationHubFormData } from '~web/donation-hub/services/donation-hub-form-adapter/donation-hub-form-adapter.service';
 import { DonationHubReadService } from '~web/donation-hub/services/donation-hub-read/donation-hub-read.service';
 import { DonationHubUpdateService } from '~web/donation-hub/services/donation-hub-update/donation-hub-update.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 import { ShellService } from '~web/shell/services/shell/shell.service';
@@ -14,7 +14,7 @@ import { ShellService } from '~web/shell/services/shell/shell.service';
   selector: 'foodweb-donation-hub-edit',
   templateUrl: './donation-hub-edit.component.html',
   styleUrls: ['./donation-hub-edit.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class DonationHubEditComponent implements OnInit {
 

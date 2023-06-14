@@ -5,13 +5,13 @@ import { DateTimeRange } from '~shared';
 import { DateTimeRangeRadioConfig, DateTimeRangeRadioDialogComponent } from '~web/date-time/components/date-time-range-radio-dialog/date-time-range-radio-dialog.component';
 import { DateTimeRangeForm, DateTimeRangeFormAdapter } from '~web/date-time/services/date-time-range-form-adapter/date-time-range-form-adapter.service';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService } from '~web/forms';
 
 @Component({
   selector: 'foodweb-date-time-range',
   templateUrl: './date-time-range.component.html',
   styleUrls: ['./date-time-range.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class DateTimeRangeComponent implements OnInit {
 
@@ -37,6 +37,8 @@ export class DateTimeRangeComponent implements OnInit {
 
   @Output() valueChanges: EventEmitter<DateTimeRange> = this._formFieldService.valueChangesEmitter;
 
+  private _rangeErrStateMatcher: ErrorStateMatcher;
+
   constructor(
     private _dateTimeRangeFormAdapter: DateTimeRangeFormAdapter,
     private _dateTimeService: DateTimeService,
@@ -49,7 +51,7 @@ export class DateTimeRangeComponent implements OnInit {
   }
 
   get rangeErrStateMatcher(): ErrorStateMatcher {
-    return this._dateTimeRangeFormAdapter.rangeErrStateMatcher;
+    return this._rangeErrStateMatcher;
   }
 
   get startEndDateSame(): boolean {
@@ -58,8 +60,9 @@ export class DateTimeRangeComponent implements OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => this._dateTimeRangeFormAdapter.toForm()
+      genDefault: () => this._dateTimeRangeFormAdapter.toForm({ destroy$: this._formFieldService.destroy$ })
     });
+    this._rangeErrStateMatcher = this._dateTimeRangeFormAdapter.genRangeErrStateMatcher(this.dateTimeRangeForm);
   }
 
   openDateTimeRangeDialog(event: MouseEvent): void {
@@ -68,10 +71,6 @@ export class DateTimeRangeComponent implements OnInit {
     DateTimeRangeRadioDialogComponent.open(this._matDialog, this.dateTimeRangeRadioConfig).subscribe(
       (dateTimeRange: DateTimeRange) => this.dateTimeRangeForm.patchValue(dateTimeRange)
     );
-  }
-
-  _onRangeEndChange(): void {
-    this._dateTimeRangeFormAdapter.fillMissingRangePart(this.dateTimeRangeForm);
   }
 
 }

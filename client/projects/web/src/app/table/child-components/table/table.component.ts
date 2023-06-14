@@ -1,18 +1,18 @@
 import { SelectionChange } from '@angular/cdk/collections';
-import { AfterContentInit, Component, ContentChild, ContentChildren, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, ContentChildren, ElementRef, EventEmitter, Input, OnChanges, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatColumnDef, MatFooterRowDef, MatHeaderRowDef, MatRowDef, MatTable } from '@angular/material/table';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { DestroyService } from '~web/shared/services/destroy/destroy.service';
 import { TableColumn, TableDataSource, TableSelectionType } from '~web/table/interfaces/table-data-source';
 export { TableColumn, TableDataSource, TableSelectionType };
 
 @Component({
   selector: 'foodweb-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss']
+  styleUrls: ['./table.component.scss'],
+  providers: [DestroyService]
 })
-export class TableComponent<T = any> implements OnChanges, AfterContentInit, OnDestroy {
+export class TableComponent<T = any> implements OnChanges, AfterContentInit {
 
   /**
    * The datasource used for the table. If not set, will be auto-set by encompassing TableCOntainer component.
@@ -53,9 +53,10 @@ export class TableComponent<T = any> implements OnChanges, AfterContentInit, OnD
   private _prevRowDefs: MatRowDef<T>[] = [];
   private _prevFooterRowDefs: MatFooterRowDef[] = [];
   private _prevColumnDefs: MatColumnDef[] = [];
-  private _destroy$ = new Subject<void>();
 
-  constructor() {}
+  constructor(
+    private _destroyService: DestroyService
+  ) {}
 
   get defaultStdColumns(): TableColumn[] {
     return this._defaultStdColumns;
@@ -68,9 +69,9 @@ export class TableComponent<T = any> implements OnChanges, AfterContentInit, OnD
   ngOnChanges(changes: SimpleChanges) {
     if (changes.dataSource && this.dataSource) {
       // Subscribe to any structural changes for the table so we can rebuild definitions on change.
-      this.dataSource.structureUpdate$.pipe(takeUntil(this._destroy$)).subscribe(this.refreshTableDefs.bind(this));
+      this.dataSource.structureUpdate$.pipe(this._destroyService.untilDestroy()).subscribe(this.refreshTableDefs.bind(this));
       if (this.dataSource.selectionModel) {
-        this.dataSource.selectionModel.changed.pipe(takeUntil(this._destroy$)).subscribe(
+        this.dataSource.selectionModel.changed.pipe(this._destroyService.untilDestroy()).subscribe(
           (change: SelectionChange<T>) => this.selectionChange.emit(change)
         );
       }
@@ -80,15 +81,10 @@ export class TableComponent<T = any> implements OnChanges, AfterContentInit, OnD
   ngAfterContentInit() {
     this.refreshTableDefs();
     // Listen for any changes in projected content related to angular material table definitions.
-    this.columnDefs.changes.pipe(takeUntil(this._destroy$)).subscribe(this.refreshTableDefs.bind(this));
-    this.headerRowDefs.changes.pipe(takeUntil(this._destroy$)).subscribe(this.refreshTableDefs.bind(this));
-    this.rowDefs.changes.pipe(takeUntil(this._destroy$)).subscribe(this.refreshTableDefs.bind(this));
-    this.footerRowDefs.changes.pipe(takeUntil(this._destroy$)).subscribe(this.refreshTableDefs.bind(this));
-  }
-
-  ngOnDestroy() {
-    // Prevent rxjs memory leaks from ContentChildren subscriptions.
-    this._destroy$.next();
+    this.columnDefs.changes.pipe(this._destroyService.untilDestroy()).subscribe(this.refreshTableDefs.bind(this));
+    this.headerRowDefs.changes.pipe(this._destroyService.untilDestroy()).subscribe(this.refreshTableDefs.bind(this));
+    this.rowDefs.changes.pipe(this._destroyService.untilDestroy()).subscribe(this.refreshTableDefs.bind(this));
+    this.footerRowDefs.changes.pipe(this._destroyService.untilDestroy()).subscribe(this.refreshTableDefs.bind(this));
   }
 
   /**

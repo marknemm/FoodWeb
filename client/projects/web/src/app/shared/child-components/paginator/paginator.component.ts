@@ -1,26 +1,25 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { DestroyService } from '~web/shared/services/destroy/destroy.service';
 import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-paginator',
   templateUrl: './paginator.component.html',
-  styleUrls: ['./paginator.component.scss']
+  styleUrls: ['./paginator.component.scss'],
+  providers: [DestroyService]
 })
-export class PaginatorComponent implements OnInit, OnDestroy {
+export class PaginatorComponent implements OnInit {
 
   @Input() length: number;
   @Input() page: number;
   @Input() pageSizeOptions: number[] = [10, 20, 50];
   @Input() limit: number;
 
-  private destroy$ = new Subject<void>();
-
   constructor(
     private _activatedRoute: ActivatedRoute,
+    private _destroyService: DestroyService,
     private _router: Router,
     private _shellService: ShellService
   ) {}
@@ -28,10 +27,6 @@ export class PaginatorComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._initPageParams();
     this._listenForQueryParamChange();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
   }
 
   private _initPageParams(): void {
@@ -44,7 +39,7 @@ export class PaginatorComponent implements OnInit, OnDestroy {
 
   private _listenForQueryParamChange(): void {
     this._activatedRoute.queryParamMap.pipe(
-      takeUntil(this.destroy$)
+      this._destroyService.untilDestroy()
     ).subscribe((params: ParamMap) => {
       const pageParam: string = params.get('page');
       const limitParam: string = params.get('limit');

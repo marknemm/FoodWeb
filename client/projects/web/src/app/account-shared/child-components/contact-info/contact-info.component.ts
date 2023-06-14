@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ContactInfo } from '~shared';
 import { ContactInfoForm, ContactInfoFormAdapter } from '~web/account-shared/services/contact-info-form-adapter/contact-info-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { MapAnchorType } from '~web/map/interfaces/map';
 
 @Component({
   selector: 'foodweb-contact-info',
   templateUrl: './contact-info.component.html',
   styleUrls: ['./contact-info.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class ContactInfoComponent implements OnInit {
 

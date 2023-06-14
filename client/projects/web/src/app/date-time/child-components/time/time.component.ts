@@ -3,13 +3,13 @@ import { FormControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 
 @Component({
   selector: 'foodweb-time',
   templateUrl: './time.component.html',
   styleUrls: ['./time.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class TimeComponent implements OnInit {
 

@@ -2,13 +2,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FloatLabelType } from '@angular/material/form-field';
 import { DateTimeForm, DateTimeFormAdapter, DateTimeFormData } from '~web/date-time/services/date-time-form-adapter/date-time-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 
 @Component({
   selector: 'foodweb-date-time',
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class DateTimeComponent implements OnInit {
 

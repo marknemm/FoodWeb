@@ -10,8 +10,7 @@
       [minDate]="minDate"
       [maxDate]="maxDate"
       [floatLabels]="floatLabels"
-      [errorStateMatcher]="rangeErrStateMatcher"
-      (ngModelChange)="_onRangeEndChange()">
+      [errorStateMatcher]="rangeErrStateMatcher">
     </foodweb-date-time>
   </div>
   <div class="date-time-field col-sm-12">
@@ -25,8 +24,7 @@
       [minDate]="minDate"
       [maxDate]="maxDate"
       [floatLabels]="floatLabels"
-      [errorStateMatcher]="rangeErrStateMatcher"
-      (ngModelChange)="_onRangeEndChange()">
+      [errorStateMatcher]="rangeErrStateMatcher">
     </foodweb-date-time>
     <mat-error *ngIf="dateTimeRangeForm.hasError('dateTimeRangeOrder')" class="range-order-err">
       End date-time must be later than start date-time

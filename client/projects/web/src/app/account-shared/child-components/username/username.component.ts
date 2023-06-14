@@ -1,12 +1,12 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 
 @Component({
   selector: 'foodweb-username',
   templateUrl: './username.component.html',
   styleUrls: ['./username.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class UsernameComponent implements OnInit {
 

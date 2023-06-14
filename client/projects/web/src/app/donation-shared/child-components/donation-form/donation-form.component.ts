@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { DonateForm, DonateFormAdapter } from '~web/donation/services/donate-form-adapter/donate-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
@@ -9,7 +9,7 @@ import { ConstantsService } from '~web/shared/services/constants/constants.servi
   selector: 'foodweb-donation-form',
   templateUrl: './donation-form.component.html',
   styleUrls: ['./donation-form.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class DonationFormComponent implements OnInit {
 
@@ -27,7 +27,10 @@ export class DonationFormComponent implements OnInit {
 
   ngOnInit(): void {
     this._formFieldService.injectControl({
-      genDefault: () => this._donateFormAdapter.toForm({ donorAccount: this._sessionService.account })
+      genDefault: () => this._donateFormAdapter.toForm({
+        destroy$: this._formFieldService.destroy$,
+        donorAccount: this._sessionService.account
+      })
     });
   }
 

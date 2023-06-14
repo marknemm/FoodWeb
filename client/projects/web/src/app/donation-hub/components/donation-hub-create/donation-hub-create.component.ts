@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { DonationHub } from '~shared';
 import { DonationHubCreateService } from '~web/donation-hub/services/donation-hub-create/donation-hub-create.service';
 import { DonationHubForm, DonationHubFormAdapter } from '~web/donation-hub/services/donation-hub-form-adapter/donation-hub-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { SessionService } from '~web/session/services/session/session.service';
 import { ShellService } from '~web/shell/services/shell/shell.service';
 
@@ -11,7 +11,7 @@ import { ShellService } from '~web/shell/services/shell/shell.service';
   selector: 'foodweb-donation-hub-create',
   templateUrl: './donation-hub-create.component.html',
   styleUrls: ['./donation-hub-create.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class DonationHubCreateComponent implements OnInit {
 

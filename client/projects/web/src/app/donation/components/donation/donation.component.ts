@@ -1,22 +1,22 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AccountHelper, DeliveryHelper, DonationHelper } from '~shared';
 import { DonationAction, DonationActionsService } from '~web/donation-shared/services/donation-actions/donation-actions.service';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
-import { ShellService } from '~web/shell/services/shell/shell.service';
+import { DestroyService } from '~web/shared/services/destroy/destroy.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-donation',
   templateUrl: './donation.component.html',
-  styleUrls: ['./donation.component.scss']
+  styleUrls: ['./donation.component.scss'],
+  providers: [DestroyService]
 })
-export class DonationComponent implements OnInit, OnDestroy {
+export class DonationComponent implements OnInit {
 
-  protected _destroy$ = new Subject<void>();
   protected _donation: Donation;
   protected _donationNotFound = false;
   protected _myClaim = false;
@@ -30,6 +30,7 @@ export class DonationComponent implements OnInit, OnDestroy {
     public shellService: ShellService,
     public sessionService: SessionService,
     protected _activatedRoute: ActivatedRoute,
+    protected _destroyService: DestroyService,
     protected _donationActionsService: DonationActionsService,
     protected _donationReadService: DonationReadService,
     protected _router: Router,
@@ -66,7 +67,7 @@ export class DonationComponent implements OnInit, OnDestroy {
   }
 
   private _listenAccountChange(): void {
-    this.sessionService.onAccountSave(this._destroy$).subscribe(() =>
+    this.sessionService.onAccountSave(this._destroyService.destroy$).subscribe(() =>
       this._updateDonationPrivileges(this._donation)
     );
   }
@@ -93,10 +94,6 @@ export class DonationComponent implements OnInit, OnDestroy {
     this._donationNotFound = !donation;
     this._donation = donation;
     this._updateDonationPrivileges(donation);
-  }
-
-  ngOnDestroy() {
-    this._destroy$.next();
   }
 
   onDonationAction(action: DonationAction): void {

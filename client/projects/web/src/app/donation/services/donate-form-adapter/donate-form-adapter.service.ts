@@ -1,7 +1,9 @@
 import { Injectable, Injector } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { Account, ContactInfo, DateTimeRange, Donation, DonationStatus, Validation } from '~shared';
 import { ContactInfoFormAdapter } from '~web/account-shared/services/contact-info-form-adapter/contact-info-form-adapter.service';
+import { DateTimeRangeFormAdapter } from '~web/date-time/services/date-time-range-form-adapter/date-time-range-form-adapter.service';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
 import { Controls } from '~web/forms';
 import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
@@ -14,15 +16,13 @@ export class DonateFormAdapter extends FormAdapter<Donation, DonateFormData> {
   constructor(
     injector: Injector,
     private _contactInfoFormAdapter: ContactInfoFormAdapter,
+    private _dateTimeRangeFormAdapter: DateTimeRangeFormAdapter,
     private _dateTimeService: DateTimeService,
   ) {
     super(injector);
   }
 
   toForm(config: DonateFormConfig): DonateForm {
-    const startDateTime: Date = this._dateTimeService.dateCeil5Mins(new Date());
-    const endDateTime: Date = this._dateTimeService.addHours(startDateTime, 1);
-
     const form: DonateForm = this._formBuilder.group({
       donorFirstName: ['', Validators.required],
       donorLastName: ['', Validators.required],
@@ -30,10 +30,10 @@ export class DonateFormAdapter extends FormAdapter<Donation, DonateFormData> {
       estimatedNumFeed: [null as number, [Validators.required, Validators.min(0), Validators.pattern(/^\d*$/)]],
       estimatedValue: [null as number, [Validators.min(0), Validators.pattern(Validation.MONEY_REGEX)]],
       description: ['', Validators.required],
-      pickupWindow: this._formBuilder.group(({
-        startDateTime: [startDateTime, Validators.required],
-        endDateTime: [endDateTime, Validators.required]
-      })),
+      pickupWindow: this._dateTimeRangeFormAdapter.toForm({
+        destroy$: config?.destroy$,
+        initValue: { startDateTime: this._dateTimeService.dateCeil5Mins(new Date()) },
+      }),
       donorContactOverride: this._contactInfoFormAdapter.toForm({ initValue: config?.donorAccount?.contactInfo }),
       safetyChecklist: [config?.initSafetyChecklist ?? false, Validators.requiredTrue]
     }, config);
@@ -92,6 +92,7 @@ export interface DonateFormData {
 }
 
 export interface DonateFormConfig extends FormConfig<Donation> {
+  destroy$: Observable<void>;
   donorAccount: Account;
   initSafetyChecklist?: boolean;
 }

@@ -1,20 +1,16 @@
 import { Injectable, Injector } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, FormGroupDirective, NgForm } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DateTimeRange } from '~shared';
 import { Controls } from '~web/forms';
 import { FormAdapter, FormConfig } from '~web/forms/classes/form-adapter';
 import { DateTimeService } from '../date-time/date-time.service';
+import { Observable, takeUntil } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DateTimeRangeFormAdapter extends FormAdapter<DateTimeRange> {
-
-  readonly rangeErrStateMatcher: ErrorStateMatcher = {
-    isErrorState: (control: FormControl, form: FormGroupDirective | NgForm) =>
-      form?.hasError('dateTimeRangeOrder') || (control && control.invalid && control.touched)
-  }
 
   constructor(
     injector: Injector,
@@ -23,11 +19,14 @@ export class DateTimeRangeFormAdapter extends FormAdapter<DateTimeRange> {
     super(injector);
   }
 
-  toForm(config?: FormConfig<DateTimeRange>): DateTimeRangeForm {
+  toForm(config: DateTimeRangeFormConfig): DateTimeRangeForm {
     const form = this._initForm(config);
 
     form.addValidators(this._dateTimeRangeOrderValidator);
-    this.fillMissingRangePart(form);
+    form.valueChanges.pipe(
+      takeUntil(config?.destroy$)
+    ).subscribe(() => this._fillMissingRangePart(form));
+    this._fillMissingRangePart(form);
 
     return form;
   }
@@ -51,7 +50,7 @@ export class DateTimeRangeFormAdapter extends FormAdapter<DateTimeRange> {
    * Fills in a missing part of the date-time range if one is present without the other.
    * Simply sets the missing part an hour away from the present part.
    */
-  fillMissingRangePart(form: DateTimeRangeForm): void {
+  private _fillMissingRangePart(form: DateTimeRangeForm): void {
     // Auto-fill endDateTime if startDateTime is non-empty, and endDateTime is empty.
     if (form.value.startDateTime && !form.value.endDateTime) {
       form.controls.endDateTime.setValue(
@@ -69,15 +68,25 @@ export class DateTimeRangeFormAdapter extends FormAdapter<DateTimeRange> {
     }
   }
 
+  genRangeErrStateMatcher(form: DateTimeRangeForm): ErrorStateMatcher {
+    return {
+      isErrorState: (control: FormControl) =>
+        form?.hasError('dateTimeRangeOrder') || (control && control.invalid && control.touched)
+    };
+  }
+
   private _dateTimeRangeOrderValidator(form: AbstractControl): { dateTimeRangeOrder: string } {
     const startDate: Date = form.get('startDateTime').value;
     const endDate: Date = form.get('endDateTime').value;
     if (!startDate || !endDate || startDate < endDate) {
       return null;
     }
-    return { dateTimeRangeOrder: 'Start date must be earlier than end date' };
+    return { dateTimeRangeOrder: 'Start date-time must be earlier than end date-time' };
   }
 
 }
 
 export type DateTimeRangeForm = FormGroup<Controls<DateTimeRange>>;
+export interface DateTimeRangeFormConfig extends FormConfig<DateTimeRange> {
+  destroy$: Observable<void>;
+}

@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { PasswordForm, PasswordFormAdapter, PasswordFormMode } from '~web/password/services/password-form-adapter/password-form-adapter.service';
 
 @Component({
   selector: 'foodweb-password',
   templateUrl: './password.component.html',
   styleUrls: ['./password.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class PasswordComponent implements OnInit {
 

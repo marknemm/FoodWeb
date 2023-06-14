@@ -1,10 +1,10 @@
-import { EventEmitter, Injectable, OnDestroy, Optional, Self } from '@angular/core';
+import { EventEmitter, Injectable, Optional, Self } from '@angular/core';
 import { AbstractControl, ControlContainer, ControlValueAccessor, FormControl, NgControl, NgModel } from '@angular/forms';
-import { BehaviorSubject, merge, Observable, OperatorFunction, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FormFieldConfig } from '~web/forms/interfaces/form-field-config';
 import { Control, UpdateValueOptions } from '~web/forms/interfaces/form-type-util';
 import { FormMonitorService } from '~web/forms/services/form-monitor/form-monitor.service';
+import { DestroyService } from '~web/shared/services/destroy/destroy.service';
 import { FormValidationService } from '../form-validation/form-validation.service';
 
 /**
@@ -33,12 +33,7 @@ export class FormFieldService<
   VIEW_MODEL_T,
   CONTROL_T extends AbstractControl = Control<VIEW_MODEL_T>,
   EXTERNAL_VIEW_MODEL_T = VIEW_MODEL_T
-> implements ControlValueAccessor, OnDestroy {
-
-  /**
-   * An RxJs {@link Observable} destroy trigger that emits a value during the {@link ngOnDestroy} lifecycle hook invocation.
-   */
-  readonly destroy$ = new Subject<void>();
+> implements ControlValueAccessor {
 
   /**
    * An {@link EventEmitter} that may be used by the provider component as a valueChanges `@Output` binding.
@@ -89,6 +84,7 @@ export class FormFieldService<
   constructor(
     private _formMonitorService: FormMonitorService,
     private _formValidationService: FormValidationService,
+    private _destroyService: DestroyService,
     @Self() @Optional()
     private _controlContainer: ControlContainer,
     @Self() @Optional()
@@ -116,6 +112,13 @@ export class FormFieldService<
   }
 
   /**
+   * An RxJs {@link Observable} destroy trigger that emits a value during the {@link ngOnDestroy} lifecycle hook invocation.
+   */
+  get destroy$(): Subject<void> {
+    return this._destroyService.destroy$;
+  }
+
+  /**
    * The form control that is externally bound to the provider component, and may be injected (registered).
    */
   get externalControl(): AbstractControl<EXTERNAL_VIEW_MODEL_T> {
@@ -139,7 +142,7 @@ export class FormFieldService<
    * `Note`: The RxJS subscription is automatically destroyed upon the `ngOnDestroy` lifecycle hook.
    */
   get valueChanges$(): Observable<VIEW_MODEL_T> {
-    return this._valueChanges$.asObservable().pipe(this.untilDestroy());
+    return this._valueChanges$.asObservable().pipe(this._destroyService.untilDestroy());
   }
 
   /**
@@ -150,7 +153,7 @@ export class FormFieldService<
    * `Note`: The RxJS subscription is automatically destroyed upon the `ngOnDestroy` lifecycle hook.
    */
   get value$(): Observable<VIEW_MODEL_T> {
-    return this._value$.asObservable().pipe(this.untilDestroy());
+    return this._value$.asObservable().pipe(this._destroyService.untilDestroy());
   }
 
   /**
@@ -294,7 +297,7 @@ export class FormFieldService<
     // Init default onTouched callback emitter.
     if (!this._config?.omitDefaultTouchedEmitter) {
       this._formMonitorService.onMarkAsTouched(this.control).pipe(
-        this.untilDestroy(this._register$)
+        this._destroyService.untilDestroy(this._register$)
       ).subscribe(
         () => this.emitTouched()
       );
@@ -307,14 +310,14 @@ export class FormFieldService<
   private _initValueChangeObservers(): void {
     // Observer ignores value changes with { emitValue: false } option.
     this.control.valueChanges.pipe(
-      this.untilDestroy(this._register$)
+      this._destroyService.untilDestroy(this._register$)
     ).subscribe(
       (value: VIEW_MODEL_T) => this._valueChanges$.next(value)
     );
 
     // Observer oversees all changes regardless of { emitValue: false } option.
     this._formMonitorService.onMutateValue(this.control).pipe(
-      this.untilDestroy(this._register$)
+      this._destroyService.untilDestroy(this._register$)
     ).subscribe(
       (value: VIEW_MODEL_T) => this._value$.next(value)
     );
@@ -368,44 +371,6 @@ export class FormFieldService<
     const valueIn: EXTERNAL_VIEW_MODEL_T = (this.valueOut() ?? {}) as any;
     valueIn[valueProp] = valuePropIn;
     this.valueIn(valueIn, options);
-  }
-
-  /*************************************************************************/
-  /**************** RxJS Cleanup/Unsubscribe Functionality *****************/
-  /*************************************************************************/
-
-  /**
-   * Cleanup all RxJS subscriptions associated with this service and provider component ({@link untilDestroy}).
-   * Automatically invoked when the component provider is destroyed (removed from DOM).
-   */
-  ngOnDestroy(): void {
-    this.destroy$.next();
-  }
-
-  /**
-   * Generates a pipeable RxJs operator that is shorthand for `takeUntil(this._destroy$)`.
-   *
-   * `this.destroy$.next()` shall be invoked during {@link ngOnDestroy}, which will cause any piped observable to unsubscribe.
-   *
-   * @usageNotes
-   * ### Auto-unsubscribe
-   *
-   * The following example results in an observable that auto-unsubscribes during `ngOnDestroy`.
-   *
-   * ```ts
-   *   myObservable$.pipe(this._untilDestroy()).subscribe((value: any) => {
-   *     ...
-   *   });
-   * ```
-   *
-   * @param extraDestroy$ Optional extra observable(s) that will trigger the completion of the source observable.
-   * @returns The pipe operator function.
-   */
-  untilDestroy<A>(...extraDestroy$: Observable<any>[]): OperatorFunction<A, A> {
-    const destroy$: Observable<any> = (extraDestroy$.length)
-      ? merge(this.destroy$, ...extraDestroy$)
-      : this.destroy$;
-    return (source: Observable<A>) => source.pipe(takeUntil(destroy$));
   }
 
   /*************************************************************************/
@@ -470,3 +435,5 @@ export class FormFieldService<
     }
   }
 }
+
+export const FormFieldProviders = [FormFieldService, DestroyService];

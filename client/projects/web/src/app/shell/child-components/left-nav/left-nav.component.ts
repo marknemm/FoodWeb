@@ -1,6 +1,6 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatSidenavContent } from '@angular/material/sidenav';
-import { Subject } from 'rxjs';
+import { DestroyService } from '~web/shared/services/destroy/destroy.service';
 import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
 import { ScreenSizeService, ThresholdSide } from '~web/shared/services/screen-size/screen-size.service';
 import { ShellService } from '~web/shell/services/shell/shell.service';
@@ -8,9 +8,10 @@ import { ShellService } from '~web/shell/services/shell/shell.service';
 @Component({
   selector: 'foodweb-left-nav',
   templateUrl: './left-nav.component.html',
-  styleUrls: ['./left-nav.component.scss']
+  styleUrls: ['./left-nav.component.scss'],
+  providers: [DestroyService]
 })
-export class LeftNavComponent implements OnInit, OnChanges, OnDestroy {
+export class LeftNavComponent implements OnInit, OnChanges {
 
   @ViewChild('sidenavContent', { static: true }) sidenavContent: MatSidenavContent;
 
@@ -22,11 +23,10 @@ export class LeftNavComponent implements OnInit, OnChanges, OnDestroy {
    */
   @Input() windowSizeThreshPx: number;
 
-  private readonly _destroyThresholdObs$ = new Subject<void>();
-
   constructor(
     public pageProgressService: PageProgressService,
     public shellService: ShellService,
+    private _destroyService: DestroyService,
     private _screenSizeService: ScreenSizeService
   ) {}
 
@@ -45,20 +45,16 @@ export class LeftNavComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    this._destroyThresholdObs$.next();
-  }
-
   private _refreshScreenSizeListener(): void {
-    this._destroyThresholdObs$.next();
+    this._destroyService.destroy$.next();
     if (this.windowSizeThreshPx) {
       this.shellService.leftNavMode = (this._screenSizeService.width > this.windowSizeThreshPx) ? 'side' : 'over';
-      this._screenSizeService.onWidthThresholdCross(this.windowSizeThreshPx, this._destroyThresholdObs$).subscribe(
+      this._screenSizeService.onWidthThresholdCross(this.windowSizeThreshPx, this._destroyService.destroy$).subscribe(
         (side: ThresholdSide) => this.shellService.leftNavMode = (side === 'above') ? 'side' : 'over'
       );
     } else {
       this.shellService.leftNavMode = 'over';
-      this._screenSizeService.onWidthThresholdCross(991, this._destroyThresholdObs$).subscribe(
+      this._screenSizeService.onWidthThresholdCross(991, this._destroyService.destroy$).subscribe(
         (side: ThresholdSide) => {
           if (side === 'above') {
             this.shellService.leftNavOpened = false;

@@ -3,13 +3,13 @@ import { FormControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DateFilterFn } from '@angular/material/datepicker';
 import { FloatLabelType } from '@angular/material/form-field';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 
 @Component({
   selector: 'foodweb-date',
   templateUrl: './date.component.html',
   styleUrls: ['./date.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class DateComponent implements OnInit {
 

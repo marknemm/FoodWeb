@@ -1,7 +1,7 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { AccountProfileImgPlaceholder } from '~shared';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { SizeThresholds } from '~web/shared/interfaces/size-thresholds';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 import { ScreenSizeService } from '~web/shared/services/screen-size/screen-size.service';
@@ -10,7 +10,7 @@ import { ScreenSizeService } from '~web/shared/services/screen-size/screen-size.
   selector: 'foodweb-profile-img',
   templateUrl: './profile-img.component.html',
   styleUrls: ['./profile-img.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class ProfileImgComponent implements OnInit {
 

@@ -3,14 +3,14 @@ import { FormControl } from '@angular/forms';
 import { FloatLabelType } from '@angular/material/form-field';
 import { AccountAutocompleteItem, AccountHelper, AccountType, DeepReadonly } from '~shared';
 import { AccountAutocompleteService } from '~web/account-shared/services/account-autocomplete/account-autocomplete.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { ImmutableStore } from '~web/shared/classes/immutable-store';
 
 @Component({
   selector: 'foodweb-account-select',
   templateUrl: './account-select.component.html',
   styleUrls: ['./account-select.component.scss'],
-  providers: [FormFieldService, AccountAutocompleteService]
+  providers: [FormFieldProviders, AccountAutocompleteService]
 })
 export class AccountSelectComponent implements OnInit {
 

@@ -1,26 +1,27 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Account, AccountType, DonationHub, DonationHubPledge, ListResponse } from '~shared';
 import { DonationHubDeleteService } from '~web/donation-hub/services/donation-hub-delete/donation-hub-delete.service';
 import { DonationHubPledgeReadService } from '~web/donation-hub/services/donation-hub-pledge-read/donation-hub-pledge-read.service';
 import { DonationHubReadService } from '~web/donation-hub/services/donation-hub-read/donation-hub-read.service';
 import { SessionService } from '~web/session/services/session/session.service';
-import { ShellService } from '~web/shell/services/shell/shell.service';
+import { DestroyService } from '~web/shared/services/destroy/destroy.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-donation-hub',
   templateUrl: './donation-hub.component.html',
-  styleUrls: ['./donation-hub.component.scss']
+  styleUrls: ['./donation-hub.component.scss'],
+  providers: [DestroyService]
 })
-export class DonationHubComponent implements OnInit, OnDestroy {
+export class DonationHubComponent implements OnInit {
 
   readonly pledgeSelectRoute = ['/', 'donation-hub', 'pledge'];
   readonly postDeleteRoute = ['/', 'home'];
 
-  protected _destroy$ = new Subject<void>();
   protected _donationHub: DonationHub;
   protected _donationHubNotFound = false;
   protected _pledges: DonationHubPledge[] = [];
@@ -30,6 +31,7 @@ export class DonationHubComponent implements OnInit, OnDestroy {
     public donationHubDeleteService: DonationHubDeleteService,
     public shellService: ShellService,
     protected _activatedRoute: ActivatedRoute,
+    protected _destroyService: DestroyService,
     protected _donationHubPledgeReadService: DonationHubPledgeReadService,
     protected _donationHubReadService: DonationHubReadService,
     protected _router: Router,
@@ -84,7 +86,7 @@ export class DonationHubComponent implements OnInit, OnDestroy {
   }
 
   private _listenAccountChange(): void {
-    this._sessionService.onAccountSave(this._destroy$).subscribe(
+    this._sessionService.onAccountSave(this._destroyService.destroy$).subscribe(
       () => this._refreshMyPledge()
     );
   }
@@ -128,9 +130,5 @@ export class DonationHubComponent implements OnInit, OnDestroy {
     this._donationHubPledgeReadService.getPledgesUnderDonationHub(this.donationHub.id, {}, { showLoader: false }).subscribe(
       (results: ListResponse<DonationHubPledge>) => this._pledges = results.list
     );
-  }
-
-  ngOnDestroy(): void {
-    this._destroy$.next();
   }
 }

@@ -3,23 +3,26 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { DonationSaveData } from '~shared';
 import { DateTimeService } from '~web/date-time/services/date-time/date-time.service';
+import { DonateForm, DonateFormAdapter } from '~web/donation/services/donate-form-adapter/donate-form-adapter.service';
 import { Donation, DonationReadService } from '~web/donation/services/donation-read/donation-read.service';
 import { DonationSaveService } from '~web/donation/services/donation-save/donation-save.service';
-import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
-import { ShellService } from '~web/shell/services/shell/shell.service';
-import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
-import { DonateForm, DonateFormAdapter } from '~web/donation/services/donate-form-adapter/donate-form-adapter.service';
 import { SessionService } from '~web/session/services/session/session.service';
+import { DestroyService } from '~web/shared/services/destroy/destroy.service';
+import { PageProgressService } from '~web/shared/services/page-progress/page-progress.service';
+import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
+import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-donation-edit',
   templateUrl: './donation-edit.component.html',
   styleUrls: ['./donation-edit.component.scss'],
+  providers: [DestroyService]
 })
 export class DonationEditComponent implements OnInit {
 
   protected _donationNotFound = false;
   protected _editForm: DonateForm = this._donateFormAdapter.toForm({
+    destroy$: this._destroyService.destroy$,
     donorAccount: this._sessionService.account,
     initSafetyChecklist: true
   });
@@ -29,6 +32,7 @@ export class DonationEditComponent implements OnInit {
   constructor(
     protected _activatedRoute: ActivatedRoute,
     protected _dateTimeService: DateTimeService,
+    protected _destroyService: DestroyService,
     protected _donateFormAdapter: DonateFormAdapter,
     protected _donationReadService: DonationReadService,
     protected _donationSaveService: DonationSaveService,

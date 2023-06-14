@@ -3,13 +3,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AccountType } from '~shared';
 import { AccountForm, AccountFormAdapter } from '~web/account-shared/services/account-form-adapter/account-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 
 @Component({
   selector: 'foodweb-account-creation-form',
   templateUrl: './account-creation-form.component.html',
   styleUrls: ['./account-creation-form.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class AccountCreationFormComponent implements OnInit {
 

@@ -1,13 +1,13 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DateTimeRange, DateTimeService } from '~web/date-time/services/date-time/date-time.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 
 @Component({
   selector: 'foodweb-date-time-range-radio',
   templateUrl: './date-time-range-radio.component.html',
   styleUrls: ['./date-time-range-radio.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class DateTimeRangeRadioComponent implements OnChanges, OnInit {
 

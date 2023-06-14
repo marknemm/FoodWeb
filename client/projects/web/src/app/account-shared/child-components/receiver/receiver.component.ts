@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Receiver } from '~shared';
 import { ReceiverForm, ReceiverFormAdapter } from '~web/account-shared/services/receiver-form-adapter/receiver-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 
 @Component({
   selector: 'foodweb-receiver',
   templateUrl: './receiver.component.html',
   styleUrls: ['./receiver.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class ReceiverComponent implements OnInit {
 

@@ -2,13 +2,13 @@ import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@an
 import { ErrorStateMatcher } from '@angular/material/core';
 import { TimeRange } from '~shared';
 import { TimeRangeForm, TimeRangeFormAdapter } from '~web/date-time/services/time-range-form-adapter/time-range-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 
 @Component({
   selector: 'foodweb-time-range',
   templateUrl: './time-range.component.html',
   styleUrls: ['./time-range.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class TimeRangeComponent implements OnInit {
 

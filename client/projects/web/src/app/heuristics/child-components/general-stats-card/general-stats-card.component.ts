@@ -1,20 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
 import { GeneralStats, GeneralStatsService } from '~web/heuristics/services/heuristics/general-stats.service';
+import { DestroyService } from '~web/shared/services/destroy/destroy.service';
 
 @Component({
   selector: 'foodweb-general-stats-card',
   templateUrl: './general-stats-card.component.html',
-  styleUrls: ['./general-stats-card.component.scss']
+  styleUrls: ['./general-stats-card.component.scss'],
+  providers: [DestroyService]
 })
-export class GeneralStatsCardComponent implements OnInit, OnDestroy {
+export class GeneralStatsCardComponent implements OnInit {
 
   private _generalStats: GeneralStats;
-  private _destroy$ = new Subject<void>();
 
   constructor(
-    public generalStatsService: GeneralStatsService
+    public generalStatsService: GeneralStatsService,
+    private _destroyService: DestroyService
   ) {}
 
   get generalStats(): GeneralStats {
@@ -28,12 +28,8 @@ export class GeneralStatsCardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Retrieve latest stats every 30 seconds.
     this.generalStatsService.watchGeneralStats().pipe(
-      takeUntil(this._destroy$)
+      this._destroyService.untilDestroy()
     ).subscribe((generalStats: GeneralStats) => this._generalStats = generalStats);
-  }
-
-  ngOnDestroy(): void {
-    this._destroy$.next();
   }
 
 }

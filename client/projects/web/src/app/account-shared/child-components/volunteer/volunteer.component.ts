@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Volunteer } from '~shared';
 import { VolunteerForm, VolunteerFormAdapter, VolunteerFormData } from '~web/account-shared/services/volunteer-form-adapter/volunteer-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 
 @Component({
   selector: 'foodweb-volunteer',
   templateUrl: './volunteer.component.html',
   styleUrls: ['./volunteer.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class VolunteerComponent implements OnInit {
 

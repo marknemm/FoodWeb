@@ -2,13 +2,13 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { OperationHours, Weekday } from '~shared';
 import { TimeRangeForm, TimeRangeFormAdapter } from '~web/date-time/services/time-range-form-adapter/time-range-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 
 @Component({
   selector: 'foodweb-weekday-operation-hours',
   templateUrl: './weekday-operation-hours.component.html',
   styleUrls: ['./weekday-operation-hours.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class WeekdayOperationHoursComponent implements OnChanges, OnInit {
 

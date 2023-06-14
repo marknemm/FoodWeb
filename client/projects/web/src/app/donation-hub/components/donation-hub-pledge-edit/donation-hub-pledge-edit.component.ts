@@ -4,7 +4,7 @@ import { switchMap } from 'rxjs/operators';
 import { DonationHubPledge } from '~shared';
 import { DonationHubPledgeReadService } from '~web/donation-hub/services/donation-hub-pledge-read/donation-hub-pledge-read.service';
 import { DonationHubPledgeUpdateService } from '~web/donation-hub/services/donation-hub-pledge-update/donation-hub-pledge-update.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { ShellService } from '~web/shell/services/shell/shell.service';
 import { UrlQueryService } from '~web/shared/services/url-query/url-query.service';
 import { DonationHubPledgeForm, DonationHubPledgeFormAdapter } from '~web/donation-hub/services/donation-hub-pledge-form-adapter/donation-hub-pledge-form-adapter.service';
@@ -13,7 +13,7 @@ import { DonationHubPledgeForm, DonationHubPledgeFormAdapter } from '~web/donati
   selector: 'foodweb-donation-hub-pledge-edit',
   templateUrl: './donation-hub-pledge-edit.component.html',
   styleUrls: ['./donation-hub-pledge-edit.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class DonationHubPledgeEditComponent implements OnInit {
 

@@ -1,13 +1,13 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AccountType, Organization } from '~shared';
 import { OrganizationForm, OrganizationFormAdapter, OrganizationFormData } from '~web/account-shared/services/organization-form-adapter/organization-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 
 @Component({
   selector: 'foodweb-organization',
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class OrganizationComponent implements OnChanges, OnInit {
 

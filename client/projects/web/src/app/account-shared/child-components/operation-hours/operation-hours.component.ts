@@ -1,14 +1,14 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { OperationHours, Weekday } from '~shared';
 import { OperationHoursForm, OperationHoursFormAdapter, OperationHoursFormData } from '~web/account-shared/services/operation-hours-form-adapter/operation-hours-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { ConstantsService } from '~web/shared/services/constants/constants.service';
 
 @Component({
   selector: 'foodweb-operation-hours',
   templateUrl: './operation-hours.component.html',
   styleUrls: ['./operation-hours.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class OperationHoursComponent implements OnInit {
 

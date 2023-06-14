@@ -1,22 +1,21 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Subject, takeUntil } from 'rxjs';
 import { LoginDialogComponent } from '~web/session/components/login-dialog/login-dialog.component';
 import { LoginForm, LoginFormAdapter, LoginFormMode } from '~web/session/services/login-form-adapter/login-form-adapter.service';
 import { LoginSubmitService } from '~web/session/services/login-submit/login-submit.service';
+import { DestroyService } from '~web/shared/services/destroy/destroy.service';
 
 @Component({
   selector: 'foodweb-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  providers: [LoginSubmitService]
+  providers: [DestroyService, LoginSubmitService]
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent {
 
   readonly loginForm: LoginForm = this._loginFormAdapter.toForm();
 
   private _formMode = LoginFormMode.Login;
-  private _destroy$ = new Subject<void>();
 
   @Input() dialogRef: MatDialogRef<LoginDialogComponent> = null;
 
@@ -24,11 +23,12 @@ export class LoginComponent implements OnDestroy {
   @Output() loggedIn = new EventEmitter<void>();
 
   constructor(
+    private _destroyService: DestroyService,
     private _loginFormAdapter: LoginFormAdapter,
     private _loginSubmitService: LoginSubmitService,
   ) {
     this._loginSubmitService.loggedIn$.pipe(
-      takeUntil(this._destroy$)
+      this._destroyService.untilDestroy()
     ).subscribe(() => this.loggedIn.emit());
   }
 
@@ -96,10 +96,6 @@ export class LoginComponent implements OnDestroy {
     this._loginFormAdapter.toMode(this.loginForm, mode);
     this._formMode = mode;
     this.formModeChanged.emit(this.formMode);
-  }
-
-  ngOnDestroy(): void {
-
   }
 
 }

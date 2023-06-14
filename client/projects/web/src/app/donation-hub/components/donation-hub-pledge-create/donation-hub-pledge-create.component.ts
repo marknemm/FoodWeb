@@ -3,14 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DonationHubPledge } from '~shared';
 import { DonationHubPledgeCreateService } from '~web/donation-hub/services/donation-hub-pledge-create/donation-hub-pledge-create.service';
 import { DonationHubPledgeForm, DonationHubPledgeFormAdapter } from '~web/donation-hub/services/donation-hub-pledge-form-adapter/donation-hub-pledge-form-adapter.service';
-import { FormFieldService } from '~web/forms';
+import { FormFieldProviders, FormFieldService  } from '~web/forms';
 import { ShellService } from '~web/shell/services/shell/shell.service';
 
 @Component({
   selector: 'foodweb-donation-hub-pledge-create',
   templateUrl: './donation-hub-pledge-create.component.html',
   styleUrls: ['./donation-hub-pledge-create.component.scss'],
-  providers: [FormFieldService]
+  providers: [FormFieldProviders]
 })
 export class DonationHubPledgeCreateComponent implements OnInit {
 
