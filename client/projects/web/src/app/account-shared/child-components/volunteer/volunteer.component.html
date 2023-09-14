@@ -15,16 +15,5 @@
       <div class="inline-label">Full Name:</div>
       <div class="d-inline-block">{{ value.firstName }} {{ value.lastName }}</div>
     </div>
-    <div class="col-sm-6">
-      <div class="inline-label">Attended Training:</div>
-      <div class="d-inline-block">
-        <span *ngIf="value.signedAgreement" class="check-yes">
-          <mat-icon>check</mat-icon> <span>Yes</span>
-        </span>
-        <span *ngIf="!value.signedAgreement" class="cross-no">
-          <mat-icon>close</mat-icon> <span>No</span>
-        </span>
-      </div>
-    </div>
   </div>
 </div>

@@ -1,0 +1,12 @@
+@import "variables.scss";
+@import "../privacy-policy/privacy-policy.component.scss";
+
+.mat-expansion-panel-header-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: $accent;
+}
+
+.answer {
+  font-size: .9rem !important;
+}
